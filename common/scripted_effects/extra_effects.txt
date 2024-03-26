@@ -1,0 +1,278 @@
+﻿
+update_barracks_training_effect = {
+	
+}
+
+space_elevator_construction = {
+	if = {
+		limit = {
+			NOT = { has_variable = space_elevator_progress_var }
+		}
+		set_variable = {
+			name = space_elevator_progress_var
+			value = 0
+		}
+	}
+	if = {
+		limit = {
+			has_variable = space_elevator_progress_var
+			any_scope_building = {
+				is_building_type = building_space_elevator_construction_site
+				building_has_goods_shortage = no
+			}
+		}
+		change_variable = {
+			name = space_elevator_progress_var
+			add = {
+				value = b:building_space_elevator_construction_site.occupancy
+				divide = 12
+				if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_space_elevator_construction_slow }
+					}
+					multiply = 0.25
+				}
+				else_if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_space_elevator_construction_medium }
+					}
+					multiply = 0.5
+				}
+				else_if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_space_elevator_construction_fast }
+					}
+					multiply = 1
+				}
+				else = {
+					multiply = 0
+				}
+				multiply = 1000
+				ceiling = yes
+				divide = 1000
+			}
+		}
+	}
+	if = {
+		limit = {
+			var:space_elevator_progress_var >= 1
+		}
+		set_variable = {
+			name = space_elevator_progress_var
+			value = 0
+		}
+		remove_building = building_space_elevator_construction_site
+		if = {
+			limit = { has_building = building_space_elevator }
+			switch = {
+                trigger = b:building_space_elevator.level
+				1 = {create_building = { building = building_space_elevator level = 2}}
+				2 = {create_building = { building = building_space_elevator level = 3}}
+				3 = {create_building = { building = building_space_elevator level = 4}}
+				4 = {create_building = { building = building_space_elevator level = 5}}
+				5 = {create_building = { building = building_space_elevator level = 6}}
+				6 = {create_building = { building = building_space_elevator level = 7}}
+				7 = {create_building = { building = building_space_elevator level = 8}}
+				8 = {create_building = { building = building_space_elevator level = 9}}
+				9 = {create_building = { building = building_space_elevator level = 10}}
+				10 = {create_building = { building = building_space_elevator level = 11}}
+				11 = {create_building = { building = building_space_elevator level = 12}}
+				12 = {create_building = { building = building_space_elevator level = 13}}
+				13 = {create_building = { building = building_space_elevator level = 14}}
+				14 = {create_building = { building = building_space_elevator level = 15}}
+				15 = {create_building = { building = building_space_elevator level = 16}}
+				16 = {create_building = { building = building_space_elevator level = 17}}
+				17 = {create_building = { building = building_space_elevator level = 18}}
+				18 = {create_building = { building = building_space_elevator level = 19}}
+				19 = {create_building = { building = building_space_elevator level = 20}}
+			}
+		}
+		else = {
+			create_building = {
+				building = building_space_elevator
+			}
+		}
+	}
+}
+
+emergency_response_devastation_update = {
+	if = {
+		limit = {
+			owner = {
+				has_law = law_type:law_ministry_of_emergency_response
+			}
+		}
+
+		if = {
+			limit = {
+				owner = {
+					institution_investment_level = {
+						institution = institution_ministry_of_emergency_response
+						value = 1
+					}
+				}
+			}
+			state_region = {
+				add_devastation = {
+					value = ministry_of_emergency_response_monthly_effect
+					multiply = 1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					institution_investment_level = {
+						institution = institution_ministry_of_emergency_response
+						value = 2
+					}
+				}
+			}
+			state_region = {
+				add_devastation = {
+					value = ministry_of_emergency_response_monthly_effect
+					multiply = 2
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					institution_investment_level = {
+						institution = institution_ministry_of_emergency_response
+						value = 3
+					}
+				}
+			}
+			state_region = {
+				add_devastation = {
+					value = ministry_of_emergency_response_monthly_effect
+					multiply = 3
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					institution_investment_level = {
+						institution = institution_ministry_of_emergency_response
+						value = 4
+					}
+				}
+			}
+			state_region = {
+				add_devastation = {
+					value = ministry_of_emergency_response_monthly_effect
+					multiply = 4
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					institution_investment_level = {
+						institution = institution_ministry_of_emergency_response
+						value = 5
+					}
+				}
+			}
+			state_region = {
+				add_devastation = {
+					value = ministry_of_emergency_response_monthly_effect
+					multiply = 5
+				}
+			}
+		}
+	}
+}
+
+thought_control_loyalists_update = {
+	if = {
+		limit = {
+			owner = {
+				has_law = law_type:law_ministry_of_thought_control
+			}
+		}
+
+		if = {
+			limit = {
+				owner = {
+					institution_investment_level = {
+						institution = institution_ministry_of_thought_control
+						value = 1
+					}
+				}
+			}
+			add_loyalists = {
+				value = {
+					value = ministry_of_thought_control_monthly_effect
+					multiply = 1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					institution_investment_level = {
+						institution = institution_ministry_of_thought_control
+						value = 2
+					}
+				}
+			}
+			add_loyalists = {
+				value = {
+					value = ministry_of_thought_control_monthly_effect
+					multiply = 2
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					institution_investment_level = {
+						institution = institution_ministry_of_thought_control
+						value = 3
+					}
+				}
+			}
+			add_loyalists = {
+				value = {
+					value = ministry_of_thought_control_monthly_effect
+					multiply = 3
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					institution_investment_level = {
+						institution = institution_ministry_of_thought_control
+						value = 4
+					}
+				}
+			}
+			add_loyalists = {
+				value = {
+					value = ministry_of_thought_control_monthly_effect
+					multiply = 4
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					institution_investment_level = {
+						institution = institution_ministry_of_thought_control
+						value = 5
+					}
+				}
+			}
+			add_loyalists = {
+				value = {
+					value = ministry_of_thought_control_monthly_effect
+					multiply = 5
+				}
+			}
+		}
+	}
+}

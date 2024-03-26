@@ -1,0 +1,540 @@
+machine_learning = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		wireless_internet
+		e-commerce
+	}
+	
+	modifier = {
+		country_weekly_innovation_max_add = 100
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+modern_material_science = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+
+	modifier = {
+		building_synthetics_plants_rubber_throughput_add = 0.5
+	}
+	
+	unlocking_technologies = {	
+		nanotechnology
+		biotechnology
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+quantum_computing = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		machine_learning
+		nanotechnology
+	}
+	
+	modifier = {
+		building_economy_of_scale_level_cap_add = 50
+		country_weekly_innovation_max_add = 100
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+generative_ai = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+
+	modifier = {
+		country_weekly_innovation_max_add = 100
+	}
+	
+	unlocking_technologies = {	
+		machine_learning
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+additive_manufacturing = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		robotics
+		modern_material_science
+	}
+	
+	modifier = {
+		state_construction_mult = 0.5
+		country_max_weekly_construction_progress_add = 25
+		state_building_construction_sector_max_level_add = 50
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+smart_grids = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+
+	modifier = {
+		country_bureaucracy_investment_cost_factor_mult = 0.4
+	}
+	
+	unlocking_technologies = {	
+		clean_energy_technologies
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+autonomous_vehicles = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		machine_learning
+	}
+
+	modifier = {
+		state_market_access_price_impact = 0.01
+		building_group_bg_trade_employee_mult = -0.1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+genetic_engineering = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		biotechnology
+	}
+	
+	modifier = {
+		country_weekly_innovation_max_add = 100
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+synthetic_biology = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		genetic_engineering
+		modern_material_science
+	}
+
+	modifier = {
+		building_synthetics_plants_rubber_throughput_add = 0.5
+		state_mortality_mult = -0.05
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+hypersonic_weapons = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		precision_guided_munitions
+		supersonic_aircraft
+	}
+	modifier = {
+		unit_combat_unit_type_nuclear_submarine_offense_mult = 2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+cyber_warfare = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+
+	modifier = {
+		country_weekly_innovation_max_add = 100
+		country_tech_spread_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		network_centric_warfare
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+directed_energy_weapons = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		stealth_technology
+	}
+
+	modifier = {
+		unit_combat_unit_type_asw_destroyers_defense_mult = 1
+		unit_combat_unit_type_asw_destroyers_offense_mult = 1
+		unit_combat_unit_type_carrier_group_defense_mult = 1
+		unit_combat_unit_type_carrier_group_offense_mult = 1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+space_militarization = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		space_exploration
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+electronic_warfare = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		network_centric_warfare
+	}
+
+	modifier = {
+		unit_combat_unit_type_asw_destroyers_defense_mult = 0.5
+		unit_combat_unit_type_asw_destroyers_offense_mult = 0.5
+		unit_combat_unit_type_carrier_group_defense_mult = 0.5
+		unit_combat_unit_type_carrier_group_offense_mult = 0.5
+		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.5
+		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.5
+		country_tech_spread_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+swarm_technology = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		rapid_deployment_forces
+		unmanned_aerial_vehicles
+	}
+
+	modifier = {
+		unit_combat_unit_type_asw_destroyers_defense_mult = 0.5
+		unit_combat_unit_type_asw_destroyers_offense_mult = 0.5
+		unit_combat_unit_type_carrier_group_defense_mult = 1
+		unit_combat_unit_type_carrier_group_offense_mult = 1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+quantum_communications = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		network_centric_warfare
+		cryptography
+	}
+	
+	modifier = {
+		country_weekly_innovation_max_add = 100
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+bioenhanced_soldiers = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		swarm_technology
+	}
+	
+	modifier = {
+		country_weekly_innovation_max_add = 100
+		unit_recovery_rate_add = 0.5
+		unit_army_offense_mult = 0.1
+		unit_army_defense_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+augmented_reality_warfare = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		network_centric_warfare
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+asteroid_mining = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		space_exploration
+		directed_energy_weapons
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+fusion_power = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		directed_energy_weapons
+	}
+
+	modifier = {
+		unit_combat_unit_type_asw_destroyers_defense_mult = 1
+		unit_combat_unit_type_asw_destroyers_offense_mult = 1
+		unit_combat_unit_type_carrier_group_defense_mult = 1
+		unit_combat_unit_type_carrier_group_offense_mult = 1
+		unit_combat_unit_type_nuclear_submarine_defense_mult = 2
+		unit_combat_unit_type_nuclear_submarine_offense_mult = 2
+		country_weekly_innovation_max_add = 100
+		military_formation_movement_speed_mult = 1
+		country_bureaucracy_investment_cost_factor_mult = 0.4
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+decline_of_organized_religion = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		globalization
+		digital_education
+		social_media
+	}
+
+	modifier = {
+		country_loan_interest_rate_add = -0.02
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+telemedicine = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		globalization
+		modern_pharmaceuticals
+	}
+
+	modifier = {
+		state_mortality_mult = -0.05
+		country_tech_spread_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+brain_computer_interfaces = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+
+	modifier = {
+		country_weekly_innovation_max_add = 100
+		country_bureaucracy_investment_cost_factor_mult = 0.4
+	}
+	
+	unlocking_technologies = {	
+		cybersecurity
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+personalized_medicine = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		telemedicine
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+	
+	modifier = {
+		building_economy_of_scale_level_cap_add = 10
+		country_weekly_innovation_max_add = 100
+		state_mortality_mult = -0.1
+	}
+}
+
+universal_basic_income = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		digital_education
+	}
+	
+	modifier = {
+		state_poor_expected_sol = 2
+		state_middle_expected_sol = 2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+mental_health_awareness = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		modern_pharmaceuticals
+		social_media
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+	
+	modifier = {
+		state_standard_of_living_add = 1
+		state_mortality_mult = -0.05
+		country_weekly_innovation_max_add = 100
+	}
+}
+
+lab-grown_food = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		animal_rights_movement
+		globalization
+	}
+
+	modifier = {
+		country_max_companies_add = 1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+biohacking_and_human_augmentation = {
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		brain_computer_interfaces
+	}
+	
+	modifier = {
+		country_weekly_innovation_max_add = 100
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}

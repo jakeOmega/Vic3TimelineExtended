@@ -1,0 +1,34 @@
+market_name = {
+    type = market
+    random_valid = no
+    log_loc_errors = no
+
+    text = {
+        trigger = {
+            owner = {
+                any_country = {
+                    has_diplomatic_pact = {
+                        who = PREV
+                        type = free_trade_association
+                    }
+                }
+            }
+        }
+        localization_key = free_trade_association_market_name
+    }
+    text = {
+        trigger = {
+            owner = {
+                NOT = {
+                    any_country = {
+                        has_diplomatic_pact = {
+                            who = PREV
+                            type = free_trade_association
+                        }
+                    }
+                }
+            }
+        }
+        localization_key = EMPTY
+    }
+}

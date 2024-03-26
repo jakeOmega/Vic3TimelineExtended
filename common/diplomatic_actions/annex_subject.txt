@@ -1,0 +1,61 @@
+annex_subject_peaceful = {
+	requires_approval = yes
+	
+	show_confirmation_box = yes
+
+    unlocking_technologies = {
+		mass_media
+	}
+
+	potential = {
+        scope:target_country = {
+            is_direct_subject_of = root
+        }
+    }
+	
+	possible = {
+        scope:target_country = {
+            NOT = { has_truce_with = ROOT }
+            any_primary_culture = {
+                NOT = { culture_is_discriminated_in = ROOT }
+            }
+        }
+        custom_tooltip = {
+            text = DIPLO_ACTION_GDP_REQUIREMENT
+            scope:target_country = {
+                is_direct_subject_of = root
+                gdp < peaceful_annex_gdp_requirement
+            }
+        }
+        custom_tooltip = {
+			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER
+			scope:target_country.relations:root >= relations_threshold:cordial
+		}
+    }
+
+	accept_effect = {
+        if = {
+            limit = {
+                scope:target_country = {
+                    OR = {
+                        has_diplomatic_pact = { who = root type = puppet }
+                        has_diplomatic_pact = { who = root type = vassal }
+                    }
+                }
+            }
+            annex = scope:target_country
+        }
+        else = {
+            create_diplomatic_pact = { country = scope:target_country type = puppet }
+            create_truce = { country = scope:target_country months = 60 }
+        }
+    }
+
+	is_hostile = no
+	
+	ai = {
+		accept_score = {
+            value = 1
+        }	
+	}
+}

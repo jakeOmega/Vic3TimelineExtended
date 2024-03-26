@@ -1,0 +1,491 @@
+﻿goods_output_consumer_appliances_add = {
+	good = yes
+	percent = no
+}
+
+goods_output_electronic_components_add = {
+	good = yes
+	percent = no
+}
+
+goods_output_digital_access_add = {
+	good = yes
+	percent = no
+}
+
+goods_output_digital_assets_add = {
+	good = yes
+	percent = no
+}
+
+goods_output_advanced_materials_add = {
+	good = yes
+	percent = no
+}
+
+goods_input_electronic_components_add = {
+	good = no
+	percent = no
+}
+
+goods_input_gold_add = {
+	good = no
+	percent = no
+}
+
+goods_input_digital_access_add = {
+	good = no
+	percent = no
+}
+
+goods_input_digital_assets_add = {
+	good = no
+	percent = no
+}
+
+goods_input_launch_capacity_add = {
+	good = no
+	percent = no
+}
+
+goods_output_launch_capacity_add = {
+	good = yes
+	percent = no
+}
+
+goods_input_robotics_add = {
+	good = no
+	percent = no
+}
+
+goods_output_robotics_add = {
+	good = yes
+	percent = no
+}
+
+goods_input_advanced_materials_add = {
+	good = no
+	percent = no
+}
+
+goods_input_consumer_appliances_add = {
+	good = no
+	percent = no
+}
+
+goods_input_services_add = {
+	good = no
+	percent = no
+}
+
+goods_input_luxury_clothes_add = {
+	good = no
+	percent = no
+}
+
+goods_input_fine_art_add = {
+	good = no
+	percent = no
+}
+
+goods_input_coffee_add = {
+	good = no
+	percent = no
+}
+
+goods_output_luxury_furniture_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_radios_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_furniture_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_services_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_consumer_appliances_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_digital_access_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_fine_art_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_clothes_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_luxury_clothes_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_glass_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_steel_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_groceries_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_porcelain_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_fertilizer_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_explosives_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_ammunition_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_radios_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_telephones_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_grain_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_fish_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_meat_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_wood_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_coal_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_iron_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_lead_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_gold_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_sulfur_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_rubber_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_coffee_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_dye_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_opium_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_tea_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_tobacco_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_paper_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+goods_output_transportation_mult = {
+	good = yes
+	percent = yes
+	
+	ai_value = 250
+}
+
+building_employment_clerks_mult = {
+	good = no
+	percent = yes
+	
+	ai_value = -2500
+}
+
+building_employment_engineers_mult = {
+	good = no
+	percent = yes
+	
+	ai_value = -2500
+}
+
+building_employment_farmers_mult = {
+	good = no
+	percent = yes
+	
+	ai_value = -2500
+}
+
+building_employment_machinists_mult = {
+	good = no
+	percent = yes
+	
+	ai_value = -2500
+}
+
+building_employment_shopkeepers_mult = {
+	good = no
+	percent = yes
+	
+	ai_value = -2500
+}
+
+state_building_hydro_plant_max_level_add = {
+	good = yes
+	percent = no
+}
+
+building_trade_center_throughput_add = {
+	good = yes
+	percent = yes
+}
+
+building_aeroplanes_industry_throughput_add = {
+	good = yes
+	percent = yes
+}
+
+building_airport_throughput_add = {
+	good = yes
+	percent = yes
+}
+
+building_synthetics_plants_rubber_throughput_add = {
+	good = yes
+	percent = yes
+}
+
+building_synthetics_plants_oil_throughput_add = {
+	good = yes
+	percent = yes
+}
+
+building_network_infrastructure_throughput_add = {
+	good = yes
+	percent = yes
+}
+
+building_group_bg_arts_throughput_add = {
+	good = yes
+	percent = yes
+}
+
+building_launch_facility_throughput_add = {
+	good = yes
+	percent = yes
+}
+
+building_weekly_space_elevator_progress = {
+	good = yes
+	percent = yes
+
+	ai_value = 50000000
+}
+
+building_total_space_elevator_progress = {
+	good = yes
+	percent = yes
+}
+
+unit_combat_unit_type_jet_powered_fighters_offense_mult = {
+	good = yes
+	percent = yes
+}
+
+unit_combat_unit_type_asw_destroyers_defense_mult = {
+	good = yes
+	percent = yes
+}
+
+unit_combat_unit_type_asw_destroyers_offense_mult = {
+	good = yes
+	percent = yes
+}
+
+unit_combat_unit_type_carrier_group_defense_mult = {
+	good = yes
+	percent = yes
+}
+
+unit_combat_unit_type_carrier_group_offense_mult = {
+	good = yes
+	percent = yes
+}
+
+unit_combat_unit_type_nuclear_submarine_defense_mult = {
+	good = yes
+	percent = yes
+}
+
+unit_combat_unit_type_nuclear_submarine_offense_mult = {
+	good = yes
+	percent = yes
+}
+
+building_group_bg_trade_employee_mult = {
+	good = no
+	percent = yes
+}
+
+building_group_bg_urban_facilities_employee_mult = {
+	good = no
+	percent = yes
+}
+
+state_pollution_generation_mult = {
+	good = no
+	percent = yes
+}
+
+state_devastation_monthly_add = {
+	good = no
+	percent = no
+}
+
+country_monthly_loyalists_add = {
+	good = yes
+	percent = yes
+}

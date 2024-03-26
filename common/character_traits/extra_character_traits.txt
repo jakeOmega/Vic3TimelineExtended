@@ -1,0 +1,81 @@
+biological_immortality = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/honorable.dds"
+
+	character_modifier = {
+		character_health_add = 100
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+		
+		if = {
+			limit = {
+                owner = {
+                    has_technology_researched = biological_immortality
+                    NOT = { has_technology_researched = mind_backups }
+                }
+			}
+			add = 10000
+		}
+	}
+
+	replace = {
+	}
+}
+
+mind_backups = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/honorable.dds"
+
+	character_modifier = {
+		character_health_add = 10000
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+		
+		if = {
+			limit = {
+                owner = {
+                    has_technology_researched = mind_backups
+                }
+			}
+			add = 10000
+		}
+	}
+
+	replace = {
+        biological_immortality
+	}
+}

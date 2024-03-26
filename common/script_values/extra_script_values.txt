@@ -1,0 +1,160 @@
+﻿gdp_per_capita = {
+	value = gdp
+	divide = state_population
+}
+
+peaceful_annex_gdp_requirement = {
+	value = overlord.gdp
+	multiply = peaceful_annex_gdp_requirement_multiplier
+	divide = 100
+}
+
+peaceful_annex_gdp_requirement_multiplier = 5
+
+ministry_of_emergency_response_monthly_effect = -1
+ministry_of_thought_control_monthly_effect = 0.001
+
+construction_cost_super_high = 2000
+construction_cost_mega_high = 5000
+
+war_support_training_decrease = {
+	value = 0
+	every_combat_unit = {
+		add = -1
+	}
+	owner = {
+		divide = army_size
+	}
+	multiply = 100
+}
+
+assassinate_success_chance_domestic = {
+	value = 0
+	owner = {
+		institution:institution_ministry_of_intelligence_and_security = {
+			add = investment
+			multiply = 5
+		}
+		if = {
+			limit = {
+				has_law = law_type:law_secret_police
+			}
+			institution:institution_home_affairs = {
+				add = investment
+				multiply = 15
+			}
+		}
+	}
+	max = 90
+}
+
+assassinate_success_chance_foreign = {
+	value = 0
+	owner = {
+		institution:institution_ministry_of_intelligence_and_security = {
+			add = investment
+			multiply = 20
+		}
+	}
+	max = 90
+}
+
+reveal_assassination_chance_domestic = {
+	value = 100
+	subtract = assassinate_success_chance_domestic
+	min = 10
+}
+
+reveal_assassination_chance_foreign = {
+	value = 90
+	subtract = assassinate_success_chance_foreign
+	min = 10
+}
+
+institution_level = {
+	value = 0
+	owner = {
+		institution:institution_health_system = {
+			add = investment
+		}
+		institution:institution_schools = {
+			add = investment
+		}
+		institution:institution_police = {
+			add = investment
+		}
+	}
+}
+
+government_service_need = {
+	value = state_population
+	multiply = institution_level
+	divide = 1000000
+	ceiling = yes
+}
+
+government_service_have = {
+	value = 0
+	if = {
+		limit = {
+			has_building = building_government_administration
+		}
+		b:building_government_administration = {
+			add = level
+			if = {
+				limit = {
+					has_active_production_method = pm_simple_organization
+				}
+				multiply = 35
+			}
+			if = {
+				limit = {
+					has_active_production_method = pm_horizontal_drawer_cabinets
+				}
+				multiply = 50
+			}
+			if = {
+				limit = {
+					has_active_production_method = pm_vertical_filing_cabinets
+				}
+				multiply = 65
+			}
+			if = {
+				limit = {
+					has_active_production_method = pm_switch_boards
+				}
+				multiply = 100
+			}
+			if = {
+				limit = {
+					has_active_production_method = pm_teletype_communications
+				}
+				multiply = 200
+			}
+			if = {
+				limit = {
+					has_active_production_method = pm_internet_communications
+				}
+				multiply = 250
+			}
+			if = {
+				limit = {
+					has_active_production_method = pm_ai_governance
+				}
+				multiply = 300
+			}
+		}
+		divide = 10
+		ceiling = yes
+	}
+}
+
+government_service_net = {
+	value = government_service_have
+	subtract = government_service_need
+}
+
+government_service_ratio = {
+	value = government_service_have
+	divide = government_service_need
+}

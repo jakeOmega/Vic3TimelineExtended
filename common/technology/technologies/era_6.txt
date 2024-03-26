@@ -1,0 +1,730 @@
+bergius_process = {
+	# Unlocks Synthetic Oil Plants building
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/aniline.dds"
+	category = production
+
+	modifier = {
+		country_weekly_innovation_max_add = 25
+	}
+	
+	unlocking_technologies = {	
+		aniline
+        combustion_engine
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+isoprene = {
+	# Unlocks Synthetic Rubber Plants building
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/rubber.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		plastics
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+computing_machines = {
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	modifier = {
+		country_weekly_innovation_max_add = 25
+		state_pop_qualifications_mult = 0.1
+	}
+	
+	unlocking_technologies = {	
+		analytical_philosophy
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+personal_appliances = {
+	# refrigerators, electric stoves, washing machines, dishwashers, A/C, etc. - workforce ratio!!!
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/electrical_generation.dds"
+	category = production
+	
+	modifier = {
+		state_working_adult_ratio_add = 0.025
+	}
+	
+	unlocking_technologies = {	
+		flash_freezing
+		radio
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+rocketry = {
+	# WW2 era rocketry
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/artillery.dds"
+	category = military
+	
+	modifier = {
+		goods_output_artillery_mult = 0.2
+		country_weekly_innovation_max_add = 25
+	}
+	
+	unlocking_technologies = {	
+		bombing_aircraft
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+bombing_aircraft = {
+	# CAS, strategic bombers
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		military_aviation
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+advanced_military_aircraft = {
+	# WW2 aircraft through jet aircraft
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		bombing_aircraft
+		radar
+	}
+
+	modifier = {
+		unit_combat_unit_type_carrier_group_defense_mult = 0.2
+		unit_combat_unit_type_carrier_group_offense_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+commercial_aviation = {
+	# started earlier, but became significant towards the end of game period
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		zeppelins
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+keynesian_economics = {
+	# The General Theory of Employment, Interest and Money came out in 1936
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/macroeconomics.dds"
+	category = society
+	
+	modifier = {
+		state_construction_mult = 0.1
+		state_poor_expected_sol = 1
+		state_middle_expected_sol = 1
+		state_rich_expected_sol = 1
+		country_bureaucracy_investment_cost_factor_mult = 0.1
+		country_loan_interest_rate_add = -0.02
+	}
+	
+	unlocking_technologies = {	
+		macroeconomics
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+combined_arms = {
+	# Doctrinal aspect
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/military_drill.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		mobile_armor
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+advanced_materials = {
+	# Fiberglass mass production, fibre-reinforced plastic, Nylon, Teflon, Polyester, etc.
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/plastics.dds"
+	category = production
+	
+	modifier = {
+	}
+	
+	unlocking_technologies = {	
+		arc_welding
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+modern_tools = {
+	# Material-handling equipment like forklifts and such
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/mechanical_tools.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		advanced_materials
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+modern_skyscapers = {
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/steel_frame_buildings.dds"
+	category = production
+	
+	modifier = {
+		building_urban_center_throughput_add = 0.1
+		country_tech_spread_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		advanced_materials
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+advanced_agricultural_statistics = {
+	# In USA, USDA's Crop Reporting Board created in 1905, but including in 6 anyway
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/intensive_agriculture.dds"
+	category = society
+	
+	modifier = {
+		building_group_bg_plantations_throughput_add = 0.1
+		building_group_bg_ranching_throughput_add = 0.1
+		building_group_bg_agriculture_throughput_add = 0.1
+	}
+	
+	unlocking_technologies = {	
+		modern_financial_instruments
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+modern_automotive_technology = {
+	# coil spring suspension, electric ignition starters, cigarette lighters, etc. 
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/combustion_engine.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		compression_ignition
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+radar = {
+	# Invented in the 30s, sorta
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/radio.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		military_aviation
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+television = {
+	# Experimental television broadcasts were started in 1929, limited regular broadcasts began in 1934, and an expanded service in November 1936
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	modifier = {
+		country_tech_spread_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		personal_appliances
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+marketing_research = {
+	# Starch test and such
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/mass_propaganda.dds"
+	category = society
+	
+	modifier = {
+		country_legitimacy_ideological_incoherence_mult = -0.1
+		building_group_bg_service_throughput_add = 0.2
+		state_poor_expected_sol = 1
+		state_middle_expected_sol = 1
+		state_rich_expected_sol = 1
+	}
+	
+	unlocking_technologies = {	
+		behaviorism
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+moterized_artillery = {
+	# Starch test and such
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/artillery.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		mobile_armor
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+semiautomatic_rifle = {
+	# M1 Garand in 1937
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/bolt_action_rifles.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		bolt_action_rifles
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+modern_vaccines = {
+	# diphtheria, pertussis, tuberculosis, tetanus, etc.
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/pharmaceuticals.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		antibiotics
+	}
+
+	modifier = {
+		state_mortality_mult = -0.05
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+mass_media = {
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		film
+	}
+
+	modifier = {
+		country_company_construction_efficiency_bonus_add = 0.05
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+animation = {
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/film.dds"
+	category = society
+	
+	modifier = {
+		building_arts_academy_throughput_add = 0.25
+		building_urban_center_throughput_add = 0.05
+	}
+	
+	unlocking_technologies = {	
+		mass_media
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+rural_electrification = {
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/electrical_generation.dds"
+	category = society
+	
+	modifier = {
+		country_company_construction_efficiency_bonus_add = 0.1
+		state_infrastructure_from_population_max_add = 100
+		state_infrastructure_from_population_add = 5
+		state_poor_expected_sol = 1
+		state_middle_expected_sol = 1
+		state_rich_expected_sol = 1
+		building_power_plant_throughput_add = 0.5
+	}
+	
+	unlocking_technologies = {	
+		paved_roads
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+fluorescent_lamps = {
+	#Dunno about this name, meant to represent move from arc lamps to more modern flourecent or incandecent electrical lighting
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/electrical_capacitors.dds"
+	category = production
+	
+	modifier = {
+		building_economy_of_scale_level_cap_add = 30
+		country_bureaucracy_investment_cost_factor_mult = 0.1
+	}
+	
+	unlocking_technologies = {	
+		radio
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+modern_chemical_processes = {
+	#ostwald and haber processes
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/chemical_bleaching.dds"
+	category = production
+	
+	modifier = {
+		building_synthetics_plants_rubber_throughput_add = 0.25
+		country_weekly_innovation_max_add = 25
+	}
+	
+	unlocking_technologies = {	
+		nitrogen_fixation
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+aluminum_mass_production = {
+	#abc
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/steelworking.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		arc_welding
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+stainless_steel_mass_production = {
+	#abc
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/steelworking.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		aluminum_mass_production
+	}
+
+	modifier = {
+		country_max_weekly_construction_progress_add = 10
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+modern_management_techniques = {
+	#abc
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/central_planning.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		mass_surveillance
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+naval_convoy_defense = {
+	#abc
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/sea_lane_strategies.dds"
+	category = military
+	
+	modifier = {
+		unit_convoy_defense_mult = 0.75
+	}
+	
+	unlocking_technologies = {	
+		sonar
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+sonar = {
+	#abc
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/radio.dds"
+	category = military
+	
+	modifier = {
+		unit_navy_defense_mult = 0.25
+		unit_convoy_raiding_interception_mult = 0.5
+		unit_convoy_defense_mult = 0.5
+	}
+	
+	unlocking_technologies = {	
+		battlefleet_tactics
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+naval_fire_control_systems = {
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/battleship_tech.dds"
+	category = military
+	
+	modifier = {
+		unit_navy_offense_mult = 0.25
+		unit_navy_defense_mult = 0.1
+	}
+	
+	unlocking_technologies = {	
+		battlefleet_tactics
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+cryptography = {
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/mass_surveillance.dds"
+	category = military
+	
+	modifier = {
+		country_weekly_innovation_max_add = 25
+		unit_army_defense_mult = 0.05
+		unit_army_offense_mult = 0.05
+		country_institution_ministry_of_intelligence_and_security_max_investment_add = 2
+		country_tech_spread_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		radar
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+public_works_programs = {
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/urban_planning.dds"
+	category = society
+	
+	modifier = {
+		state_building_hydro_plant_max_level_add = 5
+		country_weekly_innovation_max_add = 10
+	}
+	
+	unlocking_technologies = {	
+		keynesian_economics
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+art_deco_architecture = {
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/urban_planning.dds"
+	category = society
+	
+	modifier = {
+		country_prestige_mult = 0.1
+		country_weekly_innovation_max_add = 15
+		country_company_throughput_bonus_add = 0.1
+		country_tech_spread_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		marketing_research
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+consumer_credit = {
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/modern_financial_instruments.dds"
+	category = society
+	
+	modifier = {
+		building_group_bg_service_throughput_add = 0.2
+	}
+	
+	unlocking_technologies = {	
+		modern_financial_instruments
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+intergovernmental_organizations = {
+	era = era_6
+	texture = "gfx/interface/icons/invention_icons/multilateral_alliances.dds"
+	category = society
+	
+	modifier = {
+		country_legitimacy_ideological_incoherence_mult = -0.1
+		country_institution_size_change_speed_mult = 0.25
+	}
+	
+	unlocking_technologies = {	
+		modern_financial_instruments
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+#public libraries and such goods_output_tools_mult
+
+#tank concentration doctrine (tank roll)
+
+#Air-to-ground radio
+
+#Fast food (e.g. white castle)
+
+#Large-scale infrastructure projects (e.g. Hoover Dam)
+
+#Public health initiatives (e.g. fluoridation of water) - a bit out of period, but I like the idea
+
+#Intergovernmental Organizations (The League of Nations, League of Red Cross Societies, etc.) 
+
+#Synthetic detergents
+
+#The five-day workweek
+
+#Strowger switch (automatic telephone switching)
+
+#Intercontinental broadcasts (e.g. "first transatlantic telephone call")
+
+#Ostwald process & Haber process - is this what the highest level already represent?
+
+#Interwar sound recording (Vitaphone and such)
+
+#WPA, public works, Hoover dam
+
+#Consumer credit
+
+#family planning and birth control/contraception
+
+#Fuel injection/petrol direct injection
+
+#FM radio
+
+#logistics as prod method for armies
+
+#"teraforming" -> more farmable land
+
+#Department of Natural Resources
+
+#tree farms
+

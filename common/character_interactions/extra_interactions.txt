@@ -1,0 +1,93 @@
+﻿#icon					Path to icon for both right click menu and character panel buttons
+#clicksound				Clicksound for both right click menu and character panel buttons
+
+#						All scopes are character scopes with the interacting country stored as the actor
+#potential				Trigger to check if the interaction should be shown
+#possible 				Trigger to check if the interaction is available
+#effect					The effects of the interaction
+#cooldown				Scriptable duration that this interaction will be unavailable for the interacting country
+
+#show_requirements		Whether to always show requirements, similar to highlighted options in events
+#show_confirmation_box	Whether to require confirmation
+
+#ai_chance				Scriptable value for the chance (0-100) that the AI will use this interaction when available, default 0
+
+assassinate_domestic = {
+	potential = {
+		owner = scope:actor
+	}
+
+	possible = {
+		interest_group = {
+			is_in_government = no
+		}
+		owner = {
+			OR = {
+				has_law = law_type:law_secret_police
+				has_law = law_type:law_ministry_of_intelligence_and_security
+			}
+		}
+	}
+
+	effect = {
+		random = {
+			chance = assassinate_success_chance_domestic
+			kill_character = yes
+		}
+
+		random = {
+			chance = reveal_assassination_chance_domestic
+			owner = {
+				add_radicals = {
+					value = large_radicals
+					interest_group = ROOT.interest_group
+				}
+			}
+		}
+	}
+
+	ai_chance = {
+		value = 0		
+	}
+
+	cooldown = { months = short_modifier_time }
+
+	show_confirmation_box = yes
+}
+
+assassinate_foreign = { # doesn't work D:
+	potential = {
+		NOT = { owner = scope:actor }
+	}
+
+	possible = {
+		scope:actor = {
+			has_law = law_type:law_ministry_of_intelligence_and_security
+		}
+	}
+
+	effect = {
+		random = {
+			chance = assassinate_success_chance_foreign
+			kill_character = yes
+		}
+
+		random = {
+			chance = reveal_assassination_chance_foreign
+			scope:actor = {
+				change_infamy = 10
+				change_relations = {
+					country = root.owner value = -50
+				}
+			}
+		}
+	}
+
+	ai_chance = {
+		value = 0		
+	}
+
+	cooldown = { months = short_modifier_time }
+
+	show_confirmation_box = yes
+}

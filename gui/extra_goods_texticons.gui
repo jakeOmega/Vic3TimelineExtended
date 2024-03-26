@@ -1,0 +1,68 @@
+texticon = {
+	icon = digital_access
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/digital_access.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}
+
+texticon = {
+	icon = consumer_appliances
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/consumer_appliances.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}
+
+texticon = {
+	icon = electronic_components
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/electronic_components.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}
+
+texticon = {
+	icon = robotics
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/robot.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}
+
+texticon = {
+	icon = launch_capacity
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/rocket.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}
+
+texticon = {
+	icon = advanced_materials
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/buckyball.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}
+
+texticon = {
+  icon = combat_unit_group_tanks   # same as database key
+  iconsize = {
+    offset = { 0 20 }
+    texture = "gfx/interface/icons/generic_icons/battalions.dds"
+    fontsize = 91
+  }
+}

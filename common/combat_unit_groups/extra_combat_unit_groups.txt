@@ -1,0 +1,13 @@
+﻿combat_unit_group_tanks = {
+    type = army
+    manpower_max = 1000
+    color = { 172 235 121 }
+    icon = "gfx/interface/icons/generic_icons/battalions.dds"
+}
+
+combat_unit_group_aircraft = {
+    type = army
+    manpower_max = 1000
+    color = { 172 235 121 }
+    icon = "gfx/interface/icons/generic_icons/battalions.dds"
+}

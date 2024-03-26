@@ -1,0 +1,523 @@
+transistors = {
+	# Unlocks Transistors Factory building
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+
+	modifier = {
+		building_power_plant_throughput_add = 0.5
+		country_bureaucracy_investment_cost_factor_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		modern_tools
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+nuclear_energy = {
+	# Unlocks nuclear power plants
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+
+	modifier = {
+		country_weekly_innovation_max_add = 50
+	}
+	
+	unlocking_technologies = {	
+		nuclear_weapons
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+jet_engine_technology = {
+	# Unlocks better aircraft in barracks, better aircraft carrier in naval bases
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		  advanced_military_aircraft
+	}
+
+	modifier = {
+		unit_combat_unit_type_carrier_group_defense_mult = 0.2
+		unit_combat_unit_type_carrier_group_offense_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+green_revolution = {
+	# Unlocks Modern Farming PM in farms
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		modern_chemical_processes
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+civil_rights_movement = {
+	# Unlocks Multiculturalism
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		mass_media
+		intergovernmental_organizations 
+	}
+	
+	modifier = {
+		state_poor_expected_sol = 1
+		state_middle_expected_sol = 1
+		state_rich_expected_sol = 1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+laser_technology = {
+	# Better telecoms PM? Laser cutting PM?
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	modifier = {
+		country_weekly_innovation_max_add = 50
+	}
+	
+	unlocking_technologies = {	
+		modern_chemical_processes 
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+space_exploration = {
+	# Prestige?
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		  ICBMs 
+	}
+	
+	modifier = {
+		country_prestige_mult = 0.2
+		country_weekly_innovation_max_add = 50
+		country_tech_spread_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+pollution_control = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		  advanced_agricultural_statistics
+		  public_works_programs
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+advanced_submarine_technology = {
+	# Unlocks Transistors Factory building
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		sonar 
+		nuclear_energy
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+guided_missiles = {
+	# Better artillery
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		inertial_navigation_systems		
+	}
+
+	modifier = {
+		unit_combat_unit_type_asw_destroyers_defense_mult = 0.3
+		unit_combat_unit_type_asw_destroyers_offense_mult = 0.3
+		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.2
+		unit_combat_unit_type_nuclear_submarine_offense_mult =0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+decolonization = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/decolonization.dds"
+	category = society
+	
+	modifier = {
+		country_infamy_generation_mult = 0.1
+		country_infamy_decay_mult = 0.2
+		country_institution_colonial_affairs_max_investment_add = -4
+		country_diplomatic_play_maneuvers_add = 25
+		country_influence_mult = 0.2
+		state_poor_expected_sol = 1
+		state_middle_expected_sol = 1
+		state_rich_expected_sol = 1
+		country_weekly_innovation_max_add = 50
+	}
+	
+	unlocking_technologies = {	
+		civil_rights_movement 
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+plastic_mass_production = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	modifier = {
+	}
+	
+	unlocking_technologies = {	
+		bergius_process 
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+mainframe_computers = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	modifier = {
+		country_weekly_innovation_max_add = 50
+		country_tech_spread_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		transistors 
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+photocopiers = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	modifier = {
+		country_weekly_innovation_max_add = 50
+		goods_output_services_mult = 0.05
+	}
+	
+	unlocking_technologies = {	
+		transistors 
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+anti_sub_warfare = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	modifier = {
+		unit_navy_defense_mult = 0.1
+		unit_convoy_defense_mult = 0.5
+		unit_combat_unit_type_asw_destroyers_defense_mult = 0.2
+		unit_combat_unit_type_asw_destroyers_offense_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		advanced_submarine_technology 
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+nuclear_weapons = {
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/multilateral_alliances.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		rocketry
+	}
+	modifier = {
+		country_diplomatic_play_maneuvers_add = 25
+		country_influence_mult = 0.2
+		country_prestige_mult = 0.2
+		country_infamy_generation_mult = -0.25
+		country_weekly_innovation_max_add = 50
+		country_tech_spread_mult = 0.2
+		country_bureaucracy_investment_cost_factor_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+ICBMs = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	modifier = {
+		country_diplomatic_play_maneuvers_add = 50
+		country_infamy_generation_mult = -0.15
+		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.2
+		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		guided_missiles 
+		nuclear_weapons
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+recon_satellites = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	modifier = {
+	}
+	
+	unlocking_technologies = {	
+		space_exploration 
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+inertial_navigation_systems = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		rocketry 
+		radar
+	}
+
+	modifier = {
+		unit_combat_unit_type_asw_destroyers_defense_mult = 0.2
+		unit_combat_unit_type_asw_destroyers_offense_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+television_broadcasting = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	modifier = {
+		building_arts_academy_throughput_add = 0.05
+		goods_output_consumer_appliances_mult = 0.05
+		country_weekly_innovation_max_add = 50
+		country_bureaucracy_investment_cost_factor_mult = 0.1
+		country_tech_spread_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		animation
+		rural_electrification
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+antibiotic_mass_production = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		antibiotics
+		modern_management_techniques
+	}
+
+	modifier = {
+		state_mortality_mult = -0.05
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+contraceptive_pill = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	modifier = {
+		state_dependent_wage_mult = 0.1
+		state_working_adult_ratio_add = 0.05
+		state_pop_qualifications_mult = 0.05
+		state_education_access_add = 0.05
+		state_birth_rate_mult = -0.20
+		state_poor_expected_sol = 1
+		state_middle_expected_sol = 1
+		state_rich_expected_sol = 1
+		country_weekly_innovation_max_add = 50
+	}
+	
+	unlocking_technologies = {	
+		modern_vaccines
+		marketing_research
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+second_wave_feminism = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	modifier = {
+		state_dependent_wage_mult = 0.1
+		state_working_adult_ratio_add = 0.025
+		state_pop_qualifications_mult = 0.05
+		state_education_access_add = 0.05
+		state_birth_rate_mult = -0.05
+		state_poor_expected_sol = 1
+		state_middle_expected_sol = 1
+		state_rich_expected_sol = 1
+	}
+	
+	unlocking_technologies = {	
+		feminism
+		marketing_research
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+anti_war_movement = {
+	# TODO
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	modifier = {
+		country_influence_mult = 0.2
+		country_radicals_from_conquest_mult = 0.25
+		country_infamy_generation_mult = 0.1
+		country_infamy_decay_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		decolonization
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+modern_urban_planning = {
+	# Maybe economies of scale?
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		  art_deco_architecture 
+	}
+
+	modifier = {
+		country_max_companies_add = 1
+		country_max_weekly_construction_progress_add = 10
+		country_bureaucracy_investment_cost_factor_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}

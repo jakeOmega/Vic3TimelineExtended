@@ -1,0 +1,71 @@
+﻿consumer_appliances = {
+	texture = "gfx/interface/icons/goods_icons/consumer_appliances.dds"
+	cost = 80 
+	category = luxury
+	
+	obsession_chance = 1.0
+	prestige_factor = 10
+}
+
+electronic_components = {
+	texture = "gfx/interface/icons/goods_icons/electronic_components.dds"
+	cost = 80 
+	category = industrial
+	
+	obsession_chance = 0
+	prestige_factor = 10
+}
+
+robotics = {
+	texture = "gfx/interface/icons/goods_icons/robot.dds"
+	cost = 80 
+	category = industrial
+	
+	obsession_chance = 0
+	prestige_factor = 10
+}
+
+digital_assets = {
+	texture = "gfx/interface/icons/goods_icons/digital_access.dds"
+	cost = 100 
+	category = luxury
+	
+	convoy_cost_multiplier = 0.0
+	
+	obsession_chance = 0
+	prestige_factor = 10
+}
+
+digital_access = {
+	texture = "gfx/interface/icons/goods_icons/digital_access.dds"
+	cost = 100 
+	category = luxury
+	
+	convoy_cost_multiplier = 0.0
+	
+	obsession_chance = 1.0
+	prestige_factor = 10
+	local = yes
+}
+
+launch_capacity = {
+	texture = "gfx/interface/icons/goods_icons/rocket.dds"
+	cost = 200 
+	category = industrial
+	
+	convoy_cost_multiplier = 0.0
+	
+	obsession_chance = 0.0
+	prestige_factor = 20
+}
+
+advanced_materials = {
+	texture = "gfx/interface/icons/goods_icons/buckyball.dds"
+	cost = 4000 
+	category = industrial
+	
+	convoy_cost_multiplier = 1.0
+	
+	obsession_chance = 0.0
+	prestige_factor = 20
+}

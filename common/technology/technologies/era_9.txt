@@ -1,0 +1,470 @@
+biotechnology = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		gene_splicing
+		computer_networks
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+nanotechnology = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		computer_networks
+		computer_aided_design
+	}
+	
+	modifier = {
+		country_weekly_innovation_max_add = 100
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+world_wide_web = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		fiber_optics
+		computer_networks
+	}
+	
+	modifier = {
+		country_weekly_innovation_max_add = 100
+		country_tech_spread_mult = 0.2
+		building_network_infrastructure_throughput_add = 0.25
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+digital_telecommunications = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		fiber_optics
+		cellular_networks
+	}
+	
+	modifier = {
+		country_weekly_innovation_max_add = 100
+		country_tech_spread_mult = 0.2
+		goods_output_telephones_mult = 0.2
+		goods_output_radios_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+clean_energy_technologies = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		personal_computers
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+supply_chain_management = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		computer_networks
+		advanced_assembly_lines
+	}
+	
+	modifier = {
+		goods_output_transportation_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+e-commerce = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		world_wide_web
+		supply_chain_management
+	}
+
+	modifier = {
+		state_market_access_price_impact = 0.01
+		building_group_bg_trade_employee_mult = -0.1
+		country_bureaucracy_investment_cost_factor_mult = 0.3
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+wireless_internet = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		world_wide_web
+		personal_computers
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+unmanned_aerial_vehicles = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		supersonic_aircraft
+	}
+
+	modifier = {
+		country_weekly_innovation_max_add = 100
+		unit_combat_unit_type_asw_destroyers_offense_mult = 0.1
+		unit_combat_unit_type_carrier_group_offense_mult = 0.5
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+network_centric_warfare = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+
+	modifier = {
+		country_weekly_innovation_max_add = 100
+	}
+	
+	unlocking_technologies = {	
+		satellite_communications
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+missile_defense_systems = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		guided_missiles
+	}
+
+	modifier = {
+		country_weekly_innovation_max_add = 100
+		unit_combat_unit_type_asw_destroyers_defense_mult = 0.3
+		unit_combat_unit_type_carrier_group_defense_mult = 0.2
+		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+automated_surveillance = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		network_centric_warfare
+	}
+	
+	modifier = {
+		political_movement_radicalism_mult = -0.1
+		unit_army_offense_add = 20
+		unit_combat_unit_type_asw_destroyers_defense_mult = 0.1
+		unit_combat_unit_type_asw_destroyers_offense_mult = 0.1
+		unit_combat_unit_type_carrier_group_defense_mult = 0.1
+		unit_combat_unit_type_carrier_group_offense_mult = 0.1
+		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.4
+		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.4
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+advanced_body_armor = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		semiautomatic_rifle
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+rapid_deployment_forces = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		satellite_communications
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+globalization = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		containerization
+	}
+	
+	modifier = {
+		building_economy_of_scale_level_cap_add = 50
+		state_market_access_price_impact = 0.01
+		building_group_bg_trade_employee_mult = -0.25
+		country_max_companies_add = 1
+		country_tech_spread_mult = 0.4
+	 }
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+social_media = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		home_video_systems
+	}
+	
+	modifier = {
+		political_movement_radicalism_mult = 0.25
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+virtual_reality = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		social_media
+		knowledge_economy
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+knowledge_economy = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		decolonization
+		home_video_systems
+	}
+	
+	modifier = {
+		country_weekly_innovation_max_add = 100
+		country_max_companies_add = 1
+		country_tech_spread_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+digital_entertainment = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+
+	modifier = {
+		country_weekly_innovation_max_add = 100
+	}
+	
+	unlocking_technologies = {	
+		video_games
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+digital_education = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		knowledge_economy
+	}
+	
+	modifier = {
+		state_education_access_add = 0.2
+		state_pop_qualifications_mult = 0.2
+		country_weekly_innovation_max_add = 100
+		state_birth_rate_mult = -0.01
+		country_bureaucracy_investment_cost_factor_mult = 0.3
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+alternative_media = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		social_media
+	}
+	
+	modifier = {
+		political_movement_radicalism_mult = 0.25
+		building_arts_academy_throughput_add = 0.2
+		country_loan_interest_rate_add = -0.02
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+animal_rights_movement = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		environmental_movement
+		anti_war_movement
+	}
+	
+	modifier = {
+		country_institution_ministry_of_the_environment_max_investment_add = 1
+		building_synthetics_plants_rubber_throughput_add = 0.1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+LGBTQ_rights_movement = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		sexual_revolution
+		civil_rights_movement
+	}
+	
+	modifier = {
+		state_dependent_wage_mult = 0.1
+		state_birth_rate_mult = -0.01
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+cybersecurity = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		knowledge_economy
+	}
+	
+	modifier = {
+		building_network_infrastructure_throughput_add = 0.1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+advanced_workflow_optimization = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		knowledge_economy
+		globalization
+	}
+
+	modifier = {
+		country_max_weekly_construction_progress_add = 15
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}

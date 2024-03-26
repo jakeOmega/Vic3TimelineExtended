@@ -1,0 +1,24 @@
+﻿NEconomy = {
+#	MAX_WEEKLY_CONSTRUCTION_PROGRESS = 500				# Max construction progress per week on a single project
+#	MAX_WEEKLY_CONSTRUCTION_ALLOCATION = 200				# Max construction points allocated to a project per week
+#	MIN_CONSTRUCTION_EFFICIENCY = 0.25					# Construction efficiency cannot go below this amount
+	
+    MIN_GOODS_PRICE = 0.0001							# A good cannot have a lower base price than this                                                                                                      
+    EXPENSIVE_GOODS_THRESHOLD = 1.50			# Used for some triggers and gui functions
+	CHEAP_GOODS_THRESHOLD = 0.50				# Used for some triggers and gui functions
+    PRICE_RANGE = 0.99							    # min price of a good is base * (1 - PRICE_RANGE), Max price is base * (1 + PRICE_RANGE), PRICE_RANGE is locked to [0-1]                                
+                                                                                                           
+	TRADE_ROUTE_MAX_LEVEL = 10000							# Trade routes cannot be higher level than this
+
+}
+
+NWar = {
+	DEVASTATION_INCREASE_RATE = 0.05 # Per day, scales with level of occupation
+	DEVASTATION_DECAY_RATE = -0.025 # Per day, when there are no occupations
+	DEVASTATION_FROM_BATTLES = 0.2 # For each battle
+}
+
+NAI = {
+	CONSTRUCTION_MAX_NUM_PRODUCTION_BUILDING_CONSTRUCTIONS_SCALED_MAX = 9999 # CONSTRUCTION_MAX_NUM_PRODUCTION_BUILDING_CONSTRUCTIONS_SCALED can't be higher than this	
+	CONSTRUCTION_MAX_NUM_GOVERNMENT_BUILDING_CONSTRUCTIONS_SCALED_MAX = 9999 # CONSTRUCTION_MAX_NUM_GOVERNMENT_CONSTRUCTIONS_SCALED can't be higher than this	
+}

@@ -1,0 +1,35 @@
+ban_opium = {
+	is_shown = {
+		always = no
+	}
+	possible = {
+		always = no
+	}
+}
+
+remove_opium_ban = {
+	is_shown = {
+		always = no
+	}
+	possible = {
+		always = no
+	}
+}
+
+ban_liquor = {
+	is_shown = {
+		always = no
+	}
+	possible = {
+		always = no
+	}
+}
+
+remove_liquor_ban = {
+	is_shown = {
+		always = no
+	}
+	possible = {
+		always = no
+	}
+}

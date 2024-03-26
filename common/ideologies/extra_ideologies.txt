@@ -1,0 +1,214 @@
+﻿ideology_feminist = {
+	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_womens_liberation.dds"
+	
+	character_ideology = yes
+	
+	lawgroup_LGBTQ_rights = {
+		law_full_equality_and_protection = strongly_approve
+		law_comprehensive_rights = approve
+		law_basic_protections = neutral
+		law_legal_limbo = disapprove
+		law_active_persecution = strongly_disapprove
+	}
+	
+	possible = {
+		owner = { 
+			has_technology_researched = LGBTQ_rights_movement
+			NOT = { has_law = law_type:law_full_equality_and_protection }
+		}
+		# Agitators should have an ideology at odds with current laws
+		NAND = {
+			has_role = agitator
+			owner = {
+				has_law = law_type:law_full_equality_and_protection
+			}
+		}
+		scope:interest_group = {
+			OR = {
+				is_interest_group_type = ig_rural_folk
+				is_interest_group_type = ig_intelligentsia
+				is_interest_group_type = ig_trade_unions
+				is_interest_group_type = ig_petty_bourgeoisie
+				is_interest_group_type = ig_industrialists
+			}
+		}
+		scope:interest_group = {
+			NOR = {
+				has_variable = communist_ig_var
+				has_variable = chose_vanguardism
+				has_variable = chose_fascism
+				has_variable = chose_conservatism
+				has_variable = chose_ethno_nationalism
+			}
+		}
+	}
+	
+	leader_weight = {
+		value = {
+			value = 100
+			# more likely with limited lgbtq rights
+			if = {
+				limit = {
+					owner = { 
+						OR = {
+							has_law = law_type:law_active_persecution
+							has_law = law_type:law_legal_limbo
+							has_law = law_type:law_basic_protections
+						}
+					}
+				}
+				multiply = {
+					value = 2
+				}
+			}
+			# less likely if humanitarian is an option
+			if = {
+				limit = {
+					OR = {
+						is_interest_group_type = ig_intelligentsia
+						is_interest_group_type = ig_trade_unions
+					}
+				}
+				add = -50
+			}
+		}
+	}
+}
+
+ideology_environmentalists = {
+	icon = "gfx/interface/icons/ig_icons/rural_folk.dds"
+	
+	character_ideology = yes
+	
+	lawgroup_economic_system = {
+		law_cooperative_ownership = neutral
+		law_interventionism = neutral
+		law_agrarianism = neutral
+		law_command_economy = neutral
+		law_traditionalism = neutral	
+		law_laissez_faire = disapprove
+	}
+	
+	lawgroup_ministry_of_the_environment = {
+		law_no_ministry_of_the_environment = strongly_disapprove
+		law_ministry_of_the_environment = strongly_approve
+	}
+	
+	lawgroup_ministry_of_commerce = {
+		law_no_ministry_of_commerce = neutral
+		law_ministry_of_commerce = disapprove
+	}
+	
+	possible = {
+		owner = { has_technology_researched = pollution_control }
+	}
+	
+	leader_weight = {
+		value = {
+			value = 10
+			 # less likely if issues are not relevant
+			if = {
+				limit = {
+					owner = {
+						has_law = law_type:law_ministry_of_the_environment
+					}
+				}
+				add = -10
+			}
+			if = {
+				limit = {
+					owner = { has_technology_researched = environmental_movement }
+				}
+				multiply = {
+					value = 5
+				}
+			}
+			if = {
+				limit = {
+					owner = { has_technology_researched = clean_energy_technologies }
+				}
+				multiply = {
+					value = 5
+				}
+			}
+		}
+	}
+}
+
+ideology_optimist_transhumanist = {
+	icon = "gfx/interface/icons/ideology_icons/meritocratic.dds"
+	
+	character_ideology = yes
+	
+	lawgroup_artificial_intelligence_governance = {
+		law_unrestricted_ai_development = strongly_approve
+		law_moderate_ai_governance = neutral
+		law_strict_ai_ethics_and_control = strongly_disapprove
+	}
+	
+	lawgroup_human_augmentation = {
+		law_unrestricted_augmentation = strongly_approve
+		law_human_purity = strongly_disapprove
+		law_medical_augmentation_only = disapprove
+		law_regulated_augmentation_market = approve
+		law_mandatory_augmentation = neutral
+	}
+	
+	lawgroup_drug_laws = {
+		law_no_drug_regulation = strongly_approve
+		law_punitive_drug_policy = strongly_disapprove
+		law_harm_reduction_policy = approve
+		law_drug_legalization_and_regulation = strongly_approve
+	}
+	
+	lawgroup_intellectual_property = {
+		law_no_ip_protection = neutral
+		law_creative_commons = approve
+		law_traditional_ip_protection = disapprove
+		law_strict_ip_protection = strongly_disapprove
+		law_open_source_innovation = strongly_approve
+	}
+	
+	lawgroup_welfare = {
+		law_poor_laws = neutral
+		law_no_social_security = neutral
+		law_wage_subsidies = neutral
+		law_old_age_pension = neutral
+		law_universal_basic_income = approve
+		law_post-scarcity = strongly_approve
+	}
+	
+	possible = {
+		owner = { has_technology_researched = brain_computer_interfaces }
+	}
+	
+	leader_weight = {
+		value = {
+			value = 50
+		}
+		if = {
+			limit = {
+				owner = { has_technology_researched = biohacking_and_human_augmentation }
+			}
+			multiply = {
+				value = 2
+			}
+		}
+		if = {
+			limit = {
+				owner = { has_technology_researched = mind_backups }
+			}
+			multiply = {
+				value = 2
+			}
+		}
+		if = {
+			limit = {
+				owner = { has_technology_researched = post-scarcity_economy }
+			}
+			multiply = {
+				value = 2
+			}
+		}
+	}
+}

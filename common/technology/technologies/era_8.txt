@@ -1,0 +1,498 @@
+satellite_communications = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		space_exploration
+		cryptography
+	}
+
+	modifier = {
+		country_weekly_innovation_max_add = 50
+		country_tech_spread_mult = 0.2
+		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.5
+		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.5
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+integrated_circuits = {
+	# Unlocks Microelectronics PM in transistor factories
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		transistors
+		television
+		stainless_steel_mass_production
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+advanced_assembly_lines = {
+	# Unlocks Advanced Assemly Line PM in various factories
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		transistors
+		modern_skyscapers
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+modern_pharmaceuticals = {
+	# Lower mortality?
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+
+	modifier = {
+		building_synthetics_plants_rubber_throughput_add = 0.1
+		country_weekly_innovation_max_add = 50
+		state_mortality_mult = -0.1
+	}
+	
+	unlocking_technologies = {	
+		antibiotic_mass_production
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+containerization = {
+	# More trade volume?
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	modifier = {
+		building_group_bg_trade_employee_mult = -0.5
+		state_market_access_price_impact = 0.01
+		country_loan_interest_rate_add = -0.02
+		country_tech_spread_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		  commercial_aviation
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+fiber_optics = {
+	# Better telecoms PM?
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+
+	modifier = {
+		country_weekly_innovation_max_add = 50
+	}
+	
+	unlocking_technologies = {	
+		  computer_aided_design
+		  isoprene
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+computer_networks = {
+	# Better telecoms PM?
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	modifier = {
+		goods_output_telephones_mult = 0.2
+		country_weekly_innovation_max_add = 50
+		country_tech_spread_mult = 0.2
+		country_bureaucracy_investment_cost_factor_mult = 0.2
+	}
+	
+	unlocking_technologies = {	
+		  mainframe_computers
+		  cellular_networks 
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+personal_computers = {
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+
+	modifier = {
+		country_weekly_innovation_max_add = 50
+	}
+	
+	unlocking_technologies = {	
+		microprocessor
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+robotics = {
+	# Better automobile, motor, etc. PMs
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		computer_networks
+		advanced_assembly_lines
+	}
+
+	modifier = {
+		country_max_weekly_construction_progress_add = 15
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+supersonic_aircraft = {
+	# Better aircraft PM for barracks and aircraft carrier PM for naval bases
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	modifier = {
+		unit_combat_unit_type_jet_powered_fighters_offense_mult = 0.25
+		unit_combat_unit_type_carrier_group_defense_mult = 0.5
+		unit_combat_unit_type_carrier_group_offense_mult = 0.5
+		country_weekly_innovation_max_add = 50
+	}
+	
+	unlocking_technologies = {	
+		inertial_navigation_systems
+		jet_engine_technology
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+stealth_technology = {
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		supersonic_aircraft
+		advanced_submarine_technology
+	}
+
+	modifier = {
+		unit_combat_unit_type_asw_destroyers_defense_mult = 0.2
+		unit_combat_unit_type_asw_destroyers_offense_mult = 0.2
+		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.3
+		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.3
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+tactical_nuclear_weapons = {
+	# Powerful, extremely high collateral damage PM for barracks - also increases infamy?
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		ICBMs
+	}
+	
+	modifier = {
+		country_diplomatic_play_maneuvers_add = 25
+		country_prestige_mult = 0.1
+		country_infamy_generation_mult = -0.1
+		country_weekly_innovation_max_add = 50
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+environmental_movement = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	modifier = {
+		country_institution_ministry_of_the_environment_max_investment_add = 2
+		state_birth_rate_mult = -0.03
+	}
+	
+	unlocking_technologies = {	
+		pollution_control 
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+sexual_revolution = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		second_wave_feminism
+		contraceptive_pill
+	}
+	
+	modifier = {
+		state_dependent_wage_mult = 0.1
+		state_birth_rate_mult = -0.05
+		country_weekly_innovation_max_add = 50
+		country_bureaucracy_investment_cost_factor_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+microprocessor = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		integrated_circuits
+		plastic_mass_production
+	}
+	
+	modifier = {
+		country_weekly_innovation_max_add = 50
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+gene_splicing = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		green_revolution
+	}
+	
+	modifier = {
+		building_group_bg_plantations_throughput_add = 0.1
+		building_group_bg_ranching_throughput_add = 0.1
+		building_group_bg_agriculture_throughput_add = 0.1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+computer_aided_design = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		mainframe_computers
+		integrated_circuits
+	}
+	
+	modifier = {
+		state_construction_mult = 0.1
+		country_company_construction_efficiency_bonus_add = 0.1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+cellular_networks = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		barcodes_and_scanners
+	}
+	
+	modifier = {
+		goods_output_radios_mult = 0.2
+		country_tech_spread_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+barcodes_and_scanners = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		laser_technology
+		photocopiers
+	}
+	
+	modifier = {
+		goods_output_services_mult = 0.1
+		country_company_throughput_bonus_add = 0.1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+precision_guided_munitions = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		guided_missiles
+	}
+
+	modifier = {
+		unit_combat_unit_type_asw_destroyers_defense_mult = 0.5
+		unit_combat_unit_type_asw_destroyers_offense_mult = 0.5
+		unit_combat_unit_type_carrier_group_defense_mult = 0.5
+		unit_combat_unit_type_carrier_group_offense_mult = 0.5
+		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.5
+		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.5
+		country_weekly_innovation_max_add = 50
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+infrared_night_vision = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		nuclear_energy
+	}
+
+	modifier = {
+		unit_combat_unit_type_asw_destroyers_defense_mult = 0.2
+		unit_combat_unit_type_asw_destroyers_offense_mult = 0.2
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+personal_audio_technology = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		art_deco_architecture
+		television_broadcasting
+	}
+	
+	modifier = {
+		goods_output_consumer_appliances_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+video_games = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		personal_audio_technology
+	}
+	
+	modifier = {
+		goods_output_consumer_appliances_mult = 0.05
+		goods_output_digital_access_mult = 0.05
+		country_weekly_innovation_max_add = 50
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+home_video_systems = {
+	# TODO
+	era = era_8
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		personal_audio_technology
+	}
+	
+	modifier = {
+		goods_output_digital_access_mult = 0.1
+		country_weekly_innovation_max_add = 50
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}

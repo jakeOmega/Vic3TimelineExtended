@@ -1,0 +1,69 @@
+on_monthly_pulse_state = {
+	on_actions = {
+		space_elevator_on_action
+		ministry_of_emergency_response_on_action
+		#update_gov_services
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		#cheaty_on_action
+		ministry_of_thought_control_on_action
+	}
+}
+
+space_elevator_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_building = building_space_elevator_construction_site
+			}
+			space_elevator_construction = yes
+			every_scope_building = {
+				limit = {
+					is_building_type = building_space_elevator_construction_site
+				}
+				remove_modifier = space_elevator_progress
+				add_modifier = {
+					name = space_elevator_progress
+					multiplier = this.var:space_elevator_progress_var
+				}
+			}
+		}
+	}
+}
+
+ministry_of_emergency_response_on_action = {
+	effect = {
+		emergency_response_devastation_update = yes
+	}
+}
+
+ministry_of_thought_control_on_action = {
+	effect = {
+		thought_control_loyalists_update = yes
+	}
+}
+
+update_gov_services = {
+	effect = {
+		update_gov_services_effect = yes
+	}
+}
+
+cheaty_on_action = {
+	effect = {
+		if = {
+			limit = {
+				is_ai = yes
+				not = {
+					has_modifier = cheaty
+				}
+			}
+			add_modifier = {
+				name = cheaty
+			}
+		}
+	}
+}

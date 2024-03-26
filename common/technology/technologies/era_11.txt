@@ -1,0 +1,344 @@
+artificial_intelligence = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		generative_ai
+		additive_manufacturing
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+advanced_nanofabrication = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		synthetic_biology
+		additive_manufacturing
+	}
+
+	modifier = {
+		country_max_weekly_construction_progress_add = 25
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+molecular_assemblers = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		advanced_nanofabrication
+	}
+	
+	modifier = {
+		state_construction_mult = 1
+		country_max_weekly_construction_progress_add = 50
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+quantum_materials = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		quantum_computing
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+orbital_manufacturing = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		smart_grids
+		additive_manufacturing
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+programmable_matter = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		molecular_assemblers
+		quantum_materials
+	}
+
+	modifier = {
+		country_max_weekly_construction_progress_add = 75
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+
+compact_fusion_reactors = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		fusion_power
+	}
+
+	modifier = {
+		country_max_weekly_construction_progress_add = 50
+		unit_combat_unit_type_asw_destroyers_defense_mult = 2
+		unit_combat_unit_type_asw_destroyers_offense_mult = 2
+		unit_combat_unit_type_carrier_group_defense_mult = 2
+		unit_combat_unit_type_carrier_group_offense_mult = 2
+		unit_combat_unit_type_nuclear_submarine_defense_mult = 2
+		unit_combat_unit_type_nuclear_submarine_offense_mult = 2
+		military_formation_movement_speed_mult = 1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+fusion_batteries = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		compact_fusion_reactors
+	}
+
+	modifier = {
+		state_market_access_price_impact = 0.01
+		building_group_bg_trade_employee_mult = -0.04
+		unit_combat_unit_type_asw_destroyers_defense_mult = 1
+		unit_combat_unit_type_asw_destroyers_offense_mult = 1
+		unit_combat_unit_type_carrier_group_defense_mult = 1
+		unit_combat_unit_type_carrier_group_offense_mult = 1
+		unit_combat_unit_type_nuclear_submarine_defense_mult = 1
+		unit_combat_unit_type_nuclear_submarine_offense_mult = 1
+		military_formation_movement_speed_mult = 1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+space_elevator = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		asteroid_mining
+		compact_fusion_reactors
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+orbital_weapon_platforms = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		space_militarization
+		asteroid_mining
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+space_based_solar_power = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		quantum_communications
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+antimatter_production = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		fusion_power
+		quantum_communications
+	}
+	
+	modifier = {
+		building_launch_facility_throughput_add = 0.25
+		unit_combat_unit_type_asw_destroyers_offense_mult = 2
+		unit_combat_unit_type_carrier_group_offense_mult = 2
+		unit_combat_unit_type_nuclear_submarine_offense_mult = 3
+		military_formation_movement_speed_mult = 1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+biological_immortality = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		biohacking_and_human_augmentation
+		personalized_medicine
+	}
+	
+	modifier = {
+		building_economy_of_scale_level_cap_add = 10
+		country_company_throughput_bonus_add = 0.25
+		state_mortality_mult = -0.2
+		character_health_add = 100
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+space_colonization = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		biohacking_and_human_augmentation
+		lab-grown_food
+	}
+
+	modifier = {
+		country_company_throughput_bonus_add = 0.25
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+telepathic_communities = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		neural_lace
+		mental_health_awareness
+	}
+	
+	modifier = {
+		country_influence_mult = 1
+		country_max_companies_add = 2
+		country_radicals_from_conquest_mult = -0.5
+		country_infamy_generation_mult = -0.1
+		building_economy_of_scale_level_cap_add = 100
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+mind_backups = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		biological_immortality
+		neural_lace
+	}
+	
+	modifier = {
+		building_economy_of_scale_level_cap_add = 10
+		country_max_weekly_construction_progress_add = 50
+		state_mortality_mult = -0.05
+		character_health_add = 10000
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+post-scarcity_economy = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		universal_basic_income
+	}
+	
+	modifier = {
+		state_poor_expected_sol = 3
+		state_middle_expected_sol = 1
+		country_max_weekly_construction_progress_add = 50
+		country_loan_interest_rate_add = -0.01
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+neural_lace = {
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+	
+	unlocking_technologies = {	
+		biohacking_and_human_augmentation
+	}
+
+	modifier = {
+		country_max_companies_add = 1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}

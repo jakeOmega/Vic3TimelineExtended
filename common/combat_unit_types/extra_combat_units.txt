@@ -1,0 +1,1218 @@
+﻿###
+### Keep "unit tiers" per group in ascending order; the system will determine the default unit type for a country
+### by the last defined unit type that it can build
+###
+
+### ARMY
+
+### Infantry
+
+combat_unit_type_combined_arms = {
+    group = combat_unit_group_infantry
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    upkeep_modifier = {
+        goods_input_small_arms_add = 3
+        goods_input_ammunition_add = 3
+        goods_input_tanks_add = 3
+        goods_input_aeroplanes_add = 1
+        goods_input_oil_add = 1
+        goods_input_radios_add = 1
+    }
+    
+    battle_modifier = {
+        unit_offense_add = 80
+        unit_defense_add = 80
+        unit_morale_loss_add = 3
+        unit_defense_mult = 0.1
+        unit_devastation_mult = 0.2
+        unit_provinces_lost_mult = -0.2
+    }
+
+	unlocking_technologies = { combined_arms }
+
+    combat_unit_image = {
+		# fallback
+        texture = "gfx/unit_illustrations/combined_arms.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_robotic_soldiers
+        combat_unit_type_swarm_bots
+        combat_unit_type_grey_goo
+    }
+}
+
+combat_unit_type_robotic_soldiers = {
+    group = combat_unit_group_infantry
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    upkeep_modifier = {
+        goods_input_ammunition_add = 8
+        goods_input_tanks_add = 5
+        goods_input_aeroplanes_add = 1
+        goods_input_oil_add = 1
+        goods_input_radios_add = 5
+        goods_input_robotics_add = 10
+        goods_input_small_arms_add = 15
+    }
+    
+    battle_modifier = {
+        unit_offense_add = 160
+        unit_defense_add = 160
+        unit_morale_loss_add = 1
+        unit_defense_mult = 0.2
+        unit_devastation_mult = 0.2
+        unit_provinces_lost_mult = -0.4
+    }
+
+	unlocking_technologies = { network_centric_warfare }
+
+    combat_unit_image = {
+		# fallback
+        texture = "gfx/unit_illustrations/robotic.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_swarm_bots
+        combat_unit_type_grey_goo
+    }
+}
+
+combat_unit_type_swarm_bots = {
+    group = combat_unit_group_infantry
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    upkeep_modifier = {
+        goods_input_ammunition_add = 8
+        goods_input_tanks_add = 10
+        goods_input_aeroplanes_add = 3
+        goods_input_radios_add = 10
+        goods_input_robotics_add = 30
+        goods_input_small_arms_add = 25
+    }
+    
+    battle_modifier = {
+        unit_offense_add = 400
+        unit_defense_add = 400
+        unit_morale_loss_add = 1
+        unit_defense_mult = 0.2
+        unit_devastation_mult = 0.25
+        unit_provinces_lost_mult = -0.6
+    }
+
+	unlocking_technologies = { swarm_technology }
+
+    combat_unit_image = {
+		# fallback
+        texture = "gfx/unit_illustrations/swarm.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_grey_goo
+    }
+}
+
+combat_unit_type_grey_goo = {
+    group = combat_unit_group_infantry
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    upkeep_modifier = {
+        goods_input_ammunition_add = 8
+        goods_input_tanks_add = 10
+        goods_input_aeroplanes_add = 3
+        goods_input_radios_add = 10
+        goods_input_robotics_add = 30
+        goods_input_small_arms_add = 100
+        goods_input_advanced_materials_add = 1
+    }
+    
+    battle_modifier = {
+        unit_offense_add = 1000
+        unit_defense_add = 1000
+        unit_morale_loss_add = 1
+        unit_defense_mult = 0.1
+        unit_devastation_mult = 0.1
+        unit_provinces_lost_mult = -0.8
+    }
+
+	unlocking_technologies = { molecular_assemblers }
+
+    combat_unit_image = {
+		# fallback
+        texture = "gfx/unit_illustrations/grey_goo.dds"
+    }
+}
+
+### Artillery
+
+combat_unit_type_moterized_artillery = {
+    group = combat_unit_group_artillery
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    upkeep_modifier = {
+        goods_input_tanks_add = 2
+        goods_input_artillery_add = 4
+        goods_input_radios_add = 1
+        goods_input_oil_add = 3
+        goods_input_automobiles_add = 1
+        goods_input_ammunition_add = 4
+    }
+
+    battle_modifier = {
+        unit_offense_add = 70
+        unit_defense_add = 60
+        unit_morale_loss_add = 5
+        unit_kill_rate_add = 0.3
+        unit_morale_damage_mult = 0.15
+        unit_devastation_mult = 0.2
+    }
+
+	unlocking_technologies = { moterized_artillery }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/mobile_art.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_guided_artillery_projectiles
+        combat_unit_type_networked_guided_artillery_projectiles
+        combat_unit_type_orbital_bombardment
+        combat_unit_type_orbital_precision_antimatter_strikes
+    }
+}
+
+combat_unit_type_guided_artillery_projectiles = {
+    group = combat_unit_group_artillery
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    upkeep_modifier = {
+        goods_input_tanks_add = 3
+        goods_input_artillery_add = 4
+        goods_input_radios_add = 1
+        goods_input_oil_add = 3
+        goods_input_automobiles_add = 1
+        goods_input_ammunition_add = 8
+        goods_input_electronic_components_add = 1
+    }
+
+    battle_modifier = {
+        unit_offense_add = 120
+        unit_defense_add = 100
+        unit_morale_loss_add = 3
+        unit_kill_rate_add = 0.3
+        unit_morale_damage_mult = 0.25
+        unit_devastation_mult = 0.2
+    }
+
+	unlocking_technologies = { guided_missiles }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/precision_art.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_networked_guided_artillery_projectiles
+        combat_unit_type_orbital_bombardment
+        combat_unit_type_orbital_precision_antimatter_strikes
+    }
+}
+
+combat_unit_type_networked_guided_artillery_projectiles = {
+    group = combat_unit_group_artillery
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    upkeep_modifier = {
+        goods_input_tanks_add = 3
+        goods_input_artillery_add = 6
+        goods_input_radios_add = 1
+        goods_input_oil_add = 3
+        goods_input_automobiles_add = 1
+        goods_input_ammunition_add = 8
+        goods_input_electronic_components_add = 3
+    }
+
+    battle_modifier = {
+        unit_offense_add = 220
+		unit_defense_add = 200
+        unit_morale_loss_add = 3
+        unit_kill_rate_add = 0.4
+        unit_morale_damage_mult = 0.5
+        unit_devastation_mult = 0.1
+    }
+
+	unlocking_technologies = { network_centric_warfare }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/precision_art2.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_orbital_bombardment
+        combat_unit_type_orbital_precision_antimatter_strikes
+    }
+}
+
+combat_unit_type_orbital_bombardment = {
+    group = combat_unit_group_artillery
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    upkeep_modifier = {
+        goods_input_tanks_add = 3
+        goods_input_artillery_add = 8
+        goods_input_radios_add = 1
+        goods_input_oil_add = 3
+        goods_input_automobiles_add = 1
+        goods_input_launch_capacity_add = 3
+        goods_input_electronic_components_add = 6
+        goods_input_ammunition_add = 16
+    }
+
+    battle_modifier = {
+        unit_offense_add = 560
+		unit_defense_add = 480
+        unit_morale_loss_add = 1
+        unit_kill_rate_add = 0.5
+        unit_morale_damage_mult = 1
+        unit_devastation_mult = 0.2
+    }
+
+	unlocking_technologies = { space_militarization }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/orbital1.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_orbital_precision_antimatter_strikes
+    }
+}
+
+combat_unit_type_orbital_precision_antimatter_strikes = {
+    group = combat_unit_group_artillery
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    upkeep_modifier = {
+        goods_input_tanks_add = 3
+        goods_input_artillery_add = 10
+        goods_input_radios_add = 1
+        goods_input_oil_add = 3
+        goods_input_automobiles_add = 1
+        goods_input_launch_capacity_add = 15
+        goods_input_electronic_components_add = 8
+        goods_input_ammunition_add = 16
+    }
+
+    battle_modifier = {
+        unit_offense_add = 880
+		unit_defense_add = 800
+        unit_morale_loss_add = 1
+        unit_kill_rate_add = 0.75
+        unit_morale_damage_mult = 2
+        unit_devastation_mult = 0.1
+    }
+
+	unlocking_technologies = { antimatter_production }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/orbital2.dds"
+    }
+}
+
+### Cavalry
+
+
+combat_unit_type_light_tanks = {
+    group = combat_unit_group_cavalry
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_tanks_add = 2
+        goods_input_artillery_add = 2
+        goods_input_oil_add = 2
+        goods_input_ammunition_add = 2
+        goods_input_radios_add = 2
+    }
+
+    battle_modifier = {
+        unit_offense_add = 45
+        unit_defense_add = 45
+        unit_morale_loss_add = 4
+        unit_devastation_mult = 0.1
+        unit_occupation_mult = 0.3
+    }
+
+    formation_modifier = {
+        military_formation_mobilization_speed_mult = 0.2
+    }
+
+	unlocking_technologies = { mobile_armor }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/cavalry_light_tank.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_light_scout_tanks
+        combat_unit_type_stealth_reconnaissance_drone_carrier
+        combat_unit_type_holographic_ambush_combat_vehicle
+    }
+}
+
+combat_unit_type_light_scout_tanks = {
+    group = combat_unit_group_cavalry
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_tanks_add = 4
+        goods_input_artillery_add = 2
+        goods_input_oil_add = 2
+        goods_input_ammunition_add = 4
+        goods_input_radios_add = 3
+        goods_input_electronic_components_add = 1
+    }
+
+    battle_modifier = {
+        unit_offense_add = 70
+        unit_defense_add = 70
+        unit_morale_loss_add = 3
+        unit_devastation_mult = 0.1
+        unit_occupation_mult = 0.5
+    }
+
+	unlocking_technologies = { inertial_navigation_systems }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/scout_tank.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_stealth_reconnaissance_drone_carrier
+        combat_unit_type_holographic_ambush_combat_vehicle
+    }
+}
+
+combat_unit_type_stealth_reconnaissance_drone_carrier = {
+    group = combat_unit_group_cavalry
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_tanks_add = 6
+        goods_input_artillery_add = 2
+        goods_input_oil_add = 2
+        goods_input_ammunition_add = 4
+        goods_input_radios_add = 4
+        goods_input_electronic_components_add = 3
+        goods_input_robotics_add = 2
+    }
+
+    battle_modifier = {
+        unit_offense_add = 150
+        unit_defense_add = 150
+        unit_morale_loss_add = 2
+        unit_devastation_mult = 0.1
+        unit_occupation_mult = 0.75
+    }
+
+	unlocking_technologies = { rapid_deployment_forces }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/stealth_drone.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_holographic_ambush_combat_vehicle
+    }
+}
+
+combat_unit_type_holographic_ambush_combat_vehicle = {
+    group = combat_unit_group_cavalry
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_tanks_add = 6
+        goods_input_artillery_add = 2
+        goods_input_oil_add = 2
+        goods_input_ammunition_add = 4
+        goods_input_radios_add = 4
+        goods_input_electronic_components_add = 3
+        goods_input_robotics_add = 2
+    }
+
+    battle_modifier = {
+        unit_offense_add = 300
+        unit_defense_add = 300
+        unit_morale_loss_add = 1
+        unit_devastation_mult = 0.1
+        unit_occupation_mult = 1.5
+    }
+
+	unlocking_technologies = { augmented_reality_warfare }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/hologram_tank.dds"
+    }
+}
+
+### Tanks
+combat_unit_type_heavy_tank = {
+    group = combat_unit_group_tanks
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_tanks_add = 3
+        goods_input_artillery_add = 4
+        goods_input_radios_add = 1
+        goods_input_oil_add = 3
+        goods_input_ammunition_add = 4
+    }
+
+    battle_modifier = {
+        unit_offense_add = 70
+        unit_defense_add = 35
+        unit_morale_loss_add = 4
+        unit_kill_rate_add = 0.25
+        unit_morale_damage_mult = 0.15
+        unit_devastation_mult = 0.2
+    }
+
+    formation_modifier = {
+        military_formation_mobilization_speed_mult = -0.2
+        military_formation_movement_speed_mult = -0.2
+    }
+
+	unlocking_technologies = { mobile_armor }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/artillery_heavy_tank.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_main_battle_tank
+        combat_unit_type_reactive_armor_tank
+        combat_unit_type_railgun_tank
+        combat_unit_type_DEW_tank
+    }
+}
+
+combat_unit_type_main_battle_tank = {
+    group = combat_unit_group_tanks
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_tanks_add = 6
+        goods_input_artillery_add = 6
+        goods_input_radios_add = 3
+        goods_input_oil_add = 4
+        goods_input_ammunition_add = 8
+        goods_input_electronic_components_add = 2
+    }
+
+    battle_modifier = {
+        unit_offense_add = 140
+        unit_defense_add = 70
+        unit_morale_loss_add = 3
+        unit_kill_rate_add = 0.25
+        unit_morale_damage_mult = 0.3
+        unit_devastation_mult = 0.2
+    }
+
+	unlocking_technologies = { guided_missiles }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/main_battle_tanks.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_reactive_armor_tank
+        combat_unit_type_railgun_tank
+        combat_unit_type_DEW_tank
+    }
+}
+
+combat_unit_type_reactive_armor_tank = {
+    group = combat_unit_group_tanks
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_tanks_add = 10
+        goods_input_artillery_add = 8
+        goods_input_radios_add = 5
+        goods_input_oil_add = 4
+        goods_input_ammunition_add = 16
+        goods_input_electronic_components_add = 8
+    }
+
+    battle_modifier = {
+        unit_offense_add = 280
+        unit_defense_add = 140
+        unit_morale_loss_add = 2
+        unit_kill_rate_add = 0.25
+        unit_morale_damage_mult = 0.6
+        unit_devastation_mult = 0.2
+    }
+
+	unlocking_technologies = { precision_guided_munitions }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/modern_MBT.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_railgun_tank
+        combat_unit_type_DEW_tank
+    }
+}
+
+combat_unit_type_railgun_tank = {
+    group = combat_unit_group_tanks
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_tanks_add = 20
+        goods_input_artillery_add = 12
+        goods_input_radios_add = 8
+        goods_input_oil_add = 4
+        goods_input_ammunition_add = 20
+        goods_input_electronic_components_add = 12
+        goods_input_robotics_add = 4
+    }
+
+    battle_modifier = {
+        unit_offense_add = 700
+        unit_defense_add = 700
+        unit_morale_loss_add = 1
+        unit_kill_rate_add = 0.5
+        unit_morale_damage_mult = 1.2
+        unit_devastation_mult = 0.2
+    }
+
+	unlocking_technologies = { hypersonic_weapons }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/railgun_tank.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_DEW_tank
+    }
+}
+
+combat_unit_type_DEW_tank = { #directed energy weapon tank
+    group = combat_unit_group_tanks
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_tanks_add = 40
+        goods_input_artillery_add = 16
+        goods_input_radios_add = 12
+        goods_input_oil_add = 4
+        goods_input_ammunition_add = 32
+        goods_input_electronic_components_add = 24
+        goods_input_robotics_add = 8
+        goods_input_advanced_materials_add = 0.1
+    }
+
+    battle_modifier = {
+        unit_offense_add = 1100
+        unit_defense_add = 200
+        unit_morale_loss_add = 1
+        unit_kill_rate_add = 1
+        unit_morale_damage_mult = 1.2
+        unit_devastation_mult = 0.2
+    }
+
+	unlocking_technologies = { directed_energy_weapons }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/DEW_tank.dds"
+    }
+}
+
+### Aircraft
+combat_unit_type_bomber_aircraft = {
+    group = combat_unit_group_aircraft
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_ammunition_add = 1
+        goods_input_aeroplanes_add = 2
+        goods_input_oil_add = 1
+        goods_input_radios_add = 1
+    }
+
+    battle_modifier = {
+        unit_offense_add = 75
+        unit_defense_add = 25
+        unit_morale_loss_add = 8
+        unit_kill_rate_add = 0.25
+        unit_morale_damage_mult = 0.5
+        unit_devastation_mult = 0.25
+    }
+
+	unlocking_technologies = { bombing_aircraft }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/bomber.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_advanced_bomber_aircraft
+        combat_unit_type_jet_powered_fighters
+        combat_unit_type_stealth_aircraft
+        combat_unit_type_orbital_tactical_vehicles
+        combat_unit_type_orbital_weapons_platforms
+    }
+}
+
+combat_unit_type_advanced_bomber_aircraft = {
+    group = combat_unit_group_aircraft
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_ammunition_add = 3
+        goods_input_aeroplanes_add = 3
+        goods_input_oil_add = 2
+        goods_input_radios_add = 5
+    }
+
+    battle_modifier = {
+        unit_offense_add = 100
+        unit_defense_add = 50
+        unit_morale_loss_add = 6
+        unit_kill_rate_add = 0.5
+        unit_morale_damage_mult = 1
+        unit_devastation_mult = 0.5
+    }
+
+	unlocking_technologies = { advanced_military_aircraft }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/advanced_bomber.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_jet_powered_fighters
+        combat_unit_type_stealth_aircraft
+        combat_unit_type_orbital_tactical_vehicles
+        combat_unit_type_orbital_weapons_platforms
+    }
+}
+
+combat_unit_type_jet_powered_fighters = {
+    group = combat_unit_group_aircraft
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_ammunition_add = 5
+        goods_input_aeroplanes_add = 10
+        goods_input_oil_add = 2
+        goods_input_radios_add = 5
+        goods_input_electronic_components_add = 4
+    }
+
+    battle_modifier = {
+        unit_offense_add = 200
+        unit_defense_add = 100
+        unit_morale_loss_add = 6
+        unit_kill_rate_add = 0.75
+        unit_morale_damage_mult = 2
+        unit_devastation_mult = 0.75
+    }
+
+	unlocking_technologies = { jet_engine_technology }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/jet_bomber.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_stealth_aircraft
+        combat_unit_type_orbital_tactical_vehicles
+        combat_unit_type_orbital_weapons_platforms
+    }
+}
+
+combat_unit_type_stealth_aircraft = {
+    group = combat_unit_group_aircraft
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_ammunition_add = 10
+        goods_input_aeroplanes_add = 20
+        goods_input_oil_add = 2
+        goods_input_radios_add = 5
+        goods_input_electronic_components_add = 4
+    }
+
+    battle_modifier = {
+        unit_offense_add = 400
+        unit_defense_add = 200
+        unit_morale_loss_add = 5
+        unit_kill_rate_add = 1
+        unit_morale_damage_mult = 3
+        unit_devastation_mult = 1
+    }
+
+	unlocking_technologies = { stealth_technology }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/stealth_bomber.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_orbital_tactical_vehicles
+        combat_unit_type_orbital_weapons_platforms
+    }
+}
+
+combat_unit_type_orbital_tactical_vehicles = {
+    group = combat_unit_group_aircraft
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_ammunition_add = 20
+        goods_input_aeroplanes_add = 40
+        goods_input_oil_add = 2
+        goods_input_radios_add = 5
+        goods_input_robotics_add = 4
+        goods_input_launch_capacity_add = 5
+    }
+
+    battle_modifier = {
+        unit_offense_add = 700
+        unit_defense_add = 500
+        unit_morale_loss_add = 4
+        unit_kill_rate_add = 1.5
+        unit_morale_damage_mult = 3
+        unit_devastation_mult = 1
+    }
+
+	unlocking_technologies = { space_militarization }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/OTC.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_orbital_weapons_platforms
+    }
+}
+
+combat_unit_type_orbital_weapons_platforms = {
+    group = combat_unit_group_aircraft
+
+    can_build = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_ammunition_add = 40
+        goods_input_aeroplanes_add = 80
+        goods_input_oil_add = 2
+        goods_input_radios_add = 5
+        goods_input_robotics_add = 4
+        goods_input_launch_capacity_add = 20
+    }
+
+    battle_modifier = {
+        unit_offense_add = 1200
+        unit_defense_add = 1000
+        unit_morale_loss_add = 3
+        unit_kill_rate_add = 2
+        unit_morale_damage_mult = 4
+        unit_devastation_mult = 1
+    }
+
+	unlocking_technologies = { orbital_weapon_platforms }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/OTC2.dds"
+    }
+}
+
+### NAVY
+
+### Light ship group
+
+combat_unit_type_asw_destroyers = {
+    group = combat_unit_group_light_ship
+
+    upkeep_modifier = {
+        goods_input_ironclads_add = 5
+        goods_input_ammunition_add = 10
+        goods_input_artillery_add = 3
+        goods_input_radios_add = 10
+    }
+
+    battle_modifier = {
+        unit_offense_add = 30
+		unit_defense_add = 160
+        unit_morale_loss_add = 4
+        unit_convoy_defense_mult = 1
+        unit_convoy_raiding_interception_mult = 1
+    }
+
+    formation_modifier = {
+        military_formation_movement_speed_mult = 0.5
+    }
+
+	unlocking_technologies = { sonar }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/light_ships_scout_cruiser.dds"
+    }
+}
+
+### Flagship group
+combat_unit_type_carrier_group = {
+    group = combat_unit_group_capital_ship
+
+    upkeep_modifier = {
+        goods_input_artillery_add = 4
+        goods_input_ironclads_add = 12
+        goods_input_ammunition_add = 10
+        goods_input_radios_add = 5
+        goods_input_aeroplanes_add = 10
+    }
+
+    battle_modifier = {
+        unit_offense_add = 300
+		unit_defense_add = 100
+        unit_morale_loss_add = 4
+        unit_convoy_defense_mult = 0.5
+    }
+
+    formation_modifier = {
+        military_formation_movement_speed_mult = 0.2
+    }
+
+	unlocking_technologies = { bombing_aircraft }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/support_ships_carrier.dds"
+    }
+}
+
+### Support Ship group
+
+combat_unit_type_mine_warfare_ship = {
+    group = combat_unit_group_support_ship
+
+    upkeep_modifier = {
+        goods_input_ironclads_add = 2
+        goods_input_ammunition_add = 8
+        goods_input_explosives_add = 8
+        goods_input_radios_add = 1
+    }
+
+    battle_modifier = {
+        unit_offense_add = 50
+        unit_defense_add = 40
+        unit_morale_loss_add = 8
+        unit_morale_damage_mult = 1
+    }
+
+    formation_modifier = {
+        military_formation_movement_speed_mult = -0.2
+    }
+
+	unlocking_technologies = { naval_fire_control_systems }
+
+    upgrades = {
+        combat_unit_type_nuclear_submarine
+    }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/light_ships_scout_cruiser.dds"
+    }
+}
+
+combat_unit_type_nuclear_submarine = {
+    group = combat_unit_group_support_ship
+
+    upkeep_modifier = {
+        goods_input_ironclads_add = 2
+        goods_input_ammunition_add = 2
+        goods_input_radios_add = 1
+        goods_input_electronic_components_add = 4
+    }
+
+    battle_modifier = {
+        unit_offense_add = 100
+        unit_defense_add = 40
+        unit_morale_loss_add = 8
+        unit_convoy_raiding_mult = 2
+    }
+
+    formation_modifier = {
+        military_formation_movement_speed_mult = 0.5
+    }
+
+	unlocking_technologies = { advanced_submarine_technology }
+
+    combat_unit_image = {
+        texture = "gfx/unit_illustrations/support_ships_submarine.dds"
+    }
+}
