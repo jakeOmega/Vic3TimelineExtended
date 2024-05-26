@@ -1,6 +1,7 @@
 import re
 import codecs
 import json
+import copy
 
 
 INDENT_SIZE = 4
@@ -12,7 +13,7 @@ class ParadoxFileParser:
         self.data = {}
 
     def tokenize(self, text):
-        token_pattern = r'\{|\}|\s*[><=]+\s*|"[^"]*"|[\w\-\.:]+'
+        token_pattern = r'hsv\{\s*\d+(?:\.\d+)?\s+\d+(?:\.\d+)?\s+\d+(?:\.\d+)?\s*\}|\{|\}|\s*[><=]+\s*|"[^"]*"|[\w\-\.:\|/]+'
         text = "\n".join(
             [
                 line.split("#")[0]
@@ -83,6 +84,17 @@ class ParadoxFileParser:
     def parse_simple_value(self, tokens):
         return tokens[0], tokens[1:]
 
+    def _listify(self, obj):
+        obj_list = []
+        for key, value in obj.items():
+            operator = value[0]
+            if isinstance(value[1], list):
+                for item in value[1]:
+                    obj_list.append({key: (operator, item)})
+            else:
+                obj_list.append({key: (operator, value[1])})
+        return obj_list
+
     def parse_object(self, tokens):
         first_token, tokens = self.next_token(tokens)
         if first_token != "{":
@@ -90,9 +102,12 @@ class ParadoxFileParser:
                 f"Expected '{first_token}' to be '{{' when parsing object, got '{first_token}'"
             )
         obj = {}
+        list_flag = False
         while True:
             token, tokens = self.next_token(tokens)
             if token is None or token == "}":
+                if list_flag:
+                    obj = self._listify(obj)
                 return obj, tokens
             else:
                 key = token
@@ -105,9 +120,16 @@ class ParadoxFileParser:
                     )
                 value, tokens = self.parse_value(tokens)
                 if key in obj.keys() and obj[key] != (symbol, value):
-                    obj[key] += (symbol, value)
+                    if not list_flag:
+                        for all_key in obj.keys():
+                            obj[all_key] = (symbol, [obj[all_key][1]])
+                        list_flag = True
+                    obj[key][1].append(value)
                 else:
-                    obj[key] = (symbol, value)
+                    if list_flag:
+                        obj[key] = (symbol, [value])
+                    else:
+                        obj[key] = (symbol, value)
 
     def parse_file(self, file_path):
         # Update self.data with the parsed content
@@ -174,17 +196,22 @@ class ParadoxFileParser:
 
     def _compare_lists(self, mod_list, base_list):
         list_changes = []
-        base_set = set(base_list)
-        mod_set = set(mod_list)
-
-        added_items = mod_set - base_set
-        removed_items = base_set - mod_set
+        added_items = [
+            item
+            for item in mod_list
+            if not any(item == base_item for base_item in base_list)
+        ]
+        removed_items = [
+            item
+            for item in base_list
+            if not any(item == mod_item for mod_item in mod_list)
+        ]
 
         for item in added_items:
-            list_changes.append(("added", item))
+            list_changes.append({"change_type": "added", "change_value:": item})
 
         for item in removed_items:
-            list_changes.append(("removed", item))
+            list_changes.append({"change_type": "removed", "change_value:": item})
 
         return list_changes if list_changes else None
 
@@ -196,96 +223,127 @@ class ParadoxFileParser:
     def set_data_from_changes_json(self, base_parser, changes_file_path):
         with open(changes_file_path, "r") as json_file:
             changes = json.load(json_file)
-        data = base_parser.data.copy()
+        data = copy.deepcopy(base_parser.data)
         self.data = self._apply_changes(data, changes)
 
     def _apply_changes(self, data, changes):
+        changed_data = copy.deepcopy(data)
         for key, value in changes.items():
             change_type, change_value = value["change_type"], value["change_value"]
             if change_type == "added":
                 operator, right_value = change_value[0], change_value[1]
-                data[key] = (operator, self._format_to_tuples(right_value))
-            elif change_type == "removed" and key in data:
-                del data[key]
+                changed_data[key] = (operator, self._format_from_json(right_value))
+            elif change_type == "removed" and key in changed_data:
+                del changed_data[key]
             elif change_type == "modified":
                 operator, right_value = change_value[0], change_value[1]
-                _, original_value = data[key]
+                if len(changed_data[key]) > 2:
+                    original_value = changed_data[key][1:]
+                else:
+                    _, original_value = changed_data[key]
                 if isinstance(right_value, dict) and isinstance(original_value, dict):
-                    data[key] = (
+                    changed_data[key] = (
                         operator,
                         self._apply_changes(original_value, right_value),
                     )
                 elif isinstance(right_value, list) and isinstance(original_value, list):
-                    data[key] = (
+                    changed_data[key] = (
                         operator,
                         self._merge_lists(original_value, right_value),
                     )
                 else:
-                    data[key] = (operator, self._format_to_tuples(right_value))
+                    changed_data[key] = (operator, self._format_from_json(right_value))
+            else:
+                raise ValueError(f"Invalid change type: {change_type}")
 
-        return data
+        return changed_data
 
-    def _format_to_tuples(self, change_value):
-        if isinstance(change_value, dict):
-            for key, value in change_value.items():
-                operator, right_value = value[0], value[1]
-                change_value[key] = (operator, self._format_to_tuples(right_value))
-        elif isinstance(change_value, list):
-            return tuple(change_value)
+    def _is_conditional_tuple(self, value):
+        """json doesn't support tuples, so this checks for the tuples format as well"""
+        if len(value) == 2 and value[0] in conditional_tokens:
+            return True
         else:
-            return change_value
+            return False
+
+    def _format_from_json(self, json_value):
+        if isinstance(json_value, dict):
+            result = {}
+            for key, value in json_value.items():
+                if self._is_conditional_tuple(value):
+                    operator, right_value = value[0], value[1]
+                    result[key] = (operator, self._format_from_json(right_value))
+                elif isinstance(value, list):
+                    result[key] = [self._format_from_json(item) for item in value]
+                else:
+                    result[key] = self.format_data_to_string(value)
+            return result
+        elif self._is_conditional_tuple(json_value):
+            return (json_value[0], self._format_from_json(json_value[1]))
+        elif isinstance(json_value, list):
+            return [self._format_from_json(item) for item in json_value]
+        else:
+            return json_value
 
     def _merge_lists(self, base_list, changes):
         for change_type, item in changes:
             if change_type == "added":
                 base_list.append(item)
-            elif change_type == "removed":
+            elif change_type == "removed" and item in base_list:
                 base_list.remove(item)
         return base_list
 
     def __repr__(self):
-        return self.format_dict_to_string(self.data)
+        return self.format_data_to_string(self.data)
 
-    def format_dict_to_string(self, d, indent=0):
+    def format_data_to_string(self, data, indent=0):
         # Convert self.data into the game's file format and write to file_path
-        lines = []
-        for key, value in d.items() if isinstance(d, dict) else enumerate(d):
-            done = False
-            while not done:
-                # For lists, the key is the index and is not used in formatting
-                line_prefix = " " * indent
-
-                if type(value) == tuple:
-                    symbol, actual_value = value[0], value[1]
-                    formatted_value = f"{symbol} {actual_value}"
-                    value = value[2:]
-                    if len(value) == 0:
+        line_prefix = " " * indent
+        if isinstance(data, list):
+            return "\n".join(
+                [self.format_data_to_string(item, indent) for item in data]
+            )
+        elif isinstance(data, dict):
+            lines = []
+            for key, value in data.items():
+                done = False
+                while not done:
+                    if isinstance(value, tuple):
+                        symbol, actual_value = value[0], value[1]
+                        value = value[2:]
+                        if isinstance(actual_value, dict) or isinstance(
+                            actual_value, list
+                        ):
+                            lines.append(f"{line_prefix}{key} {symbol} {{")
+                            lines.append(
+                                self.format_data_to_string(
+                                    actual_value, indent + INDENT_SIZE
+                                )
+                            )
+                            lines.append(line_prefix + "}")
+                        else:
+                            lines.append(f"{line_prefix}{key} {symbol} {actual_value}")
+                        if len(value) == 0:
+                            done = True
+                    else:
+                        if isinstance(value, list):
+                            for item in value:
+                                lines.append(
+                                    f"{line_prefix}{key} = "
+                                    + self.format_data_to_string(
+                                        item, indent + INDENT_SIZE
+                                    )
+                                )
+                        else:
+                            lines.append(f"{line_prefix}{key} = {value}")
                         done = True
-                else:
-                    actual_value = value
-                    formatted_value = f"{actual_value}"
-                    done = True
 
-                # For dictionaries, include the key in the line
-                if isinstance(d, dict):
-                    line = f"{line_prefix}{key} {formatted_value}"
-                else:  # For lists, just format the value
-                    line = f"{line_prefix}{formatted_value}"
-
-                if isinstance(actual_value, dict) or isinstance(actual_value, list):
-                    lines.append(f"{line_prefix}{key} {symbol} {{")
-                    lines.append(
-                        self.format_dict_to_string(actual_value, indent + INDENT_SIZE)
-                    )
-                    lines.append(" " * indent + "}")
-                else:
-                    lines.append(line)
-
-        return "\n".join(lines)
+            return "\n".join(lines)
+        else:
+            return line_prefix + str(data)
 
     def write_file(self, file_path, base_parser):
         modified_data = self._get_modified_data(self.data, base_parser)
-        formatted_data = self.format_dict_to_string(modified_data)
+        formatted_data = self.format_data_to_string(modified_data)
         with open(file_path, "w") as file:
             file.write(formatted_data)
 

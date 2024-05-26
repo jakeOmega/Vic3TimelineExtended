@@ -63,6 +63,8 @@ class ModState:
             self.mod_parsers[entity_type].write_file(
                 file_path, self.base_parsers[entity_type]
             )
+        else:
+            raise Exception(f"entity_type {entity_type} not found")
 
     def save_changes_to_json(self, file_path, entity_type=None):
         if entity_type is None:
