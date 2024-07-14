@@ -1,0 +1,170 @@
+extend_influence = {
+	groups= {
+		general
+	}
+	
+	requires_approval = no
+	show_confirmation_box = no
+	
+	selectable = {
+		NOT = { is_country_type = decentralized }
+        is_power_bloc_leader = yes
+		power_bloc ?= {
+			modifier:power_bloc_can_use_extend_influence_bool = yes
+		}	
+	}
+	
+	potential = {
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+		}
+	}
+
+	possible = {
+		NOT = { has_diplomatic_pact = { who = scope:target_country type = damage_relations } }	
+	}	
+
+	pact = {	
+		cost = 500
+		is_two_sided_pact = no
+		show_in_outliner = yes	
+
+		second_modifier = {
+			country_pact_leverage_generation_add = 500
+		}
+		
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
+			}
+		}
+		
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
+					NOT = { has_war_with = scope:target_country }
+				}			
+			}
+		}		
+		
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
+					NOT = { is_country_type = decentralized }
+					scope:target_country = {
+						NOT = { is_country_type = decentralized }
+					}				
+				}
+			}
+		}			
+		
+		requirement_to_maintain = {
+			trigger = {
+				NOT = { has_diplomats_expelled = scope:target_country }
+			}
+		}
+		
+		requirement_to_maintain = {
+			trigger = {				
+				NOT = { scope:target_country = { has_diplomats_expelled = root } }
+			}
+		}		
+	}
+	
+	ai = {
+		max_influence_spending_fraction = 0.25
+	
+		evaluation_chance = {
+			value = 0.25
+		}	
+	
+		propose_score = {
+			value = 5
+
+			if = {
+				limit = {	
+					has_attitude = {
+						who = scope:target_country
+						attitude = protective
+					}						
+				}
+				
+				add = 5
+			}
+			
+			if = {
+				limit = {
+					has_attitude = {
+						who = scope:target_country
+						attitude = conciliatory
+					}					
+				}
+				
+				add = 20
+			}
+			
+			add = {
+				value = scope:target_country.country_rank
+				multiply = 3
+			}
+			
+			if = {
+				limit = {	
+					OR = {
+						is_subject_of = scope:target_country
+						scope:target_country = { is_subject_of = root }
+					}		
+				}
+				
+				multiply = 2
+			}				
+		}		
+	
+		will_propose = { 
+			OR = {
+				AND = {
+					has_attitude = {
+						who = scope:target_country
+						attitude = cooperative
+					}
+					country_rank <= scope:target_country.country_rank				
+				}
+				has_attitude = {
+					who = scope:target_country
+					attitude = conciliatory
+				}	
+				has_attitude = {
+					who = scope:target_country
+					attitude = genial
+				}
+				has_attitude = {
+					who = scope:target_country
+					attitude = protective
+				}	
+			}
+		}	
+		
+		will_break = { 
+			NOR = {
+				has_attitude = {
+					who = scope:target_country
+					attitude = genial
+				}	
+				has_attitude = {
+					who = scope:target_country
+					attitude = conciliatory
+				}	
+				has_attitude = {
+					who = scope:target_country
+					attitude = cooperative
+				}
+				has_attitude = {
+					who = scope:target_country
+					attitude = protective
+				}					
+			}		
+		}
+	}
+}

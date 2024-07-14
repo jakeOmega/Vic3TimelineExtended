@@ -1,0 +1,28 @@
+﻿l_english:
+
+ construction:0 "Construction Services"
+ 
+ building_construction_sector:0 "Construction Site"
+
+ building_construction_sector_mod:0 "Construction Sector"
+ building_construction_sector_mod_lens_option:0 "Expand $building_construction_sector_mod$"
+ 
+ modifier_building_output_construction_add:0 "@construction! Construction Services output per level"
+ modifier_building_output_construction_add_desc:0 "The amount of @construction! Construction Services produced by buildings"
+ modifier_building_input_construction_add:0 "@construction! Construction Services input per level"
+ modifier_building_input_construction_add_desc:0 "The amount of @construction! Construction Services consumed by buildings" 
+
+ 
+ pmg_base_building_construction_sector_mod:1 "$pm_base$"
+ pm_wooden_buildings_mod:0 "Wooden Buildings"
+ pm_iron_frame_buildings_mod:0 "Iron-Frame Buildings"
+ pm_steel_frame_buildings_mod:0 "Steel-Frame Buildings"
+ pm_arc_welded_buildings_mod:0 "Arc-Welded Buildings" 
+ 
+GOVERNMENT_CONSTRUCTION_BOUGHT:0 "Construction Services @construction! purchased by the government:"
+
+rule_free_market_construction:0 "Free Market Construction"
+setting_free_market_construction:0 "Free Market Construction"
+setting_free_market_construction_desc:0 "If enabled, the construction sector will be a free market sector. If disabled, the government will control the construction sector."
+setting_legacy_construction:0 "Legacy Construction"
+setting_legacy_construction_desc:0 "If enabled, the construction sector will be a legacy sector. If disabled, the construction sector will be a free market sector."

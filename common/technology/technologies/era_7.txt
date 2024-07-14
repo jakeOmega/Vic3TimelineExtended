@@ -6,7 +6,7 @@ transistors = {
 
 	modifier = {
 		building_power_plant_throughput_add = 0.5
-		country_bureaucracy_investment_cost_factor_mult = 0.2
+		state_bureaucracy_population_base_cost_factor_mult = 0.5
 	}
 	
 	unlocking_technologies = {	
@@ -48,8 +48,7 @@ jet_engine_technology = {
 	}
 
 	modifier = {
-		unit_combat_unit_type_carrier_group_defense_mult = 0.2
-		unit_combat_unit_type_carrier_group_offense_mult = 0.2
+		state_building_airport_max_level_add = 5
 	}
 	
 	ai_weight = {
@@ -84,9 +83,7 @@ civil_rights_movement = {
 	}
 	
 	modifier = {
-		state_poor_expected_sol = 1
-		state_middle_expected_sol = 1
-		state_rich_expected_sol = 1
+		state_expected_sol_from_literacy = 1
 	}
 	
 	ai_weight = {
@@ -126,7 +123,7 @@ space_exploration = {
 	modifier = {
 		country_prestige_mult = 0.2
 		country_weekly_innovation_max_add = 50
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 40
 	}
 	
 	ai_weight = {
@@ -177,10 +174,8 @@ guided_missiles = {
 	}
 
 	modifier = {
-		unit_combat_unit_type_asw_destroyers_defense_mult = 0.3
-		unit_combat_unit_type_asw_destroyers_offense_mult = 0.3
-		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.2
-		unit_combat_unit_type_nuclear_submarine_offense_mult =0.2
+		unit_navy_defense_mult = 0.3
+		unit_navy_offense_mult = 0.3
 	}
 	
 	ai_weight = {
@@ -197,12 +192,9 @@ decolonization = {
 	modifier = {
 		country_infamy_generation_mult = 0.1
 		country_infamy_decay_mult = 0.2
-		country_institution_colonial_affairs_max_investment_add = -4
 		country_diplomatic_play_maneuvers_add = 25
 		country_influence_mult = 0.2
-		state_poor_expected_sol = 1
-		state_middle_expected_sol = 1
-		state_rich_expected_sol = 1
+		state_expected_sol_from_literacy = 1
 		country_weekly_innovation_max_add = 50
 	}
 	
@@ -241,7 +233,7 @@ mainframe_computers = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 50
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 40
 	}
 	
 	unlocking_technologies = {	
@@ -262,6 +254,7 @@ photocopiers = {
 	modifier = {
 		country_weekly_innovation_max_add = 50
 		goods_output_services_mult = 0.05
+		country_gold_reserve_limit_mult = 0.25
 	}
 	
 	unlocking_technologies = {	
@@ -282,8 +275,8 @@ anti_sub_warfare = {
 	modifier = {
 		unit_navy_defense_mult = 0.1
 		unit_convoy_defense_mult = 0.5
-		unit_combat_unit_type_asw_destroyers_defense_mult = 0.2
-		unit_combat_unit_type_asw_destroyers_offense_mult = 0.2
+		unit_navy_defense_mult = 0.2
+		unit_navy_offense_mult = 0.2
 	}
 	
 	unlocking_technologies = {	
@@ -309,8 +302,8 @@ nuclear_weapons = {
 		country_prestige_mult = 0.2
 		country_infamy_generation_mult = -0.25
 		country_weekly_innovation_max_add = 50
-		country_tech_spread_mult = 0.2
-		country_bureaucracy_investment_cost_factor_mult = 0.2
+		country_tech_spread_add = 40
+		state_bureaucracy_population_base_cost_factor_mult = 0.5
 	}
 	
 	ai_weight = {
@@ -327,8 +320,6 @@ ICBMs = {
 	modifier = {
 		country_diplomatic_play_maneuvers_add = 50
 		country_infamy_generation_mult = -0.15
-		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.2
-		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.2
 	}
 	
 	unlocking_technologies = {	
@@ -371,8 +362,8 @@ inertial_navigation_systems = {
 	}
 
 	modifier = {
-		unit_combat_unit_type_asw_destroyers_defense_mult = 0.2
-		unit_combat_unit_type_asw_destroyers_offense_mult = 0.2
+		unit_navy_defense_mult = 0.2
+		unit_navy_offense_mult = 0.2
 	}
 	
 	ai_weight = {
@@ -390,8 +381,8 @@ television_broadcasting = {
 		building_arts_academy_throughput_add = 0.05
 		goods_output_consumer_appliances_mult = 0.05
 		country_weekly_innovation_max_add = 50
-		country_bureaucracy_investment_cost_factor_mult = 0.1
-		country_tech_spread_mult = 0.2
+		state_bureaucracy_population_base_cost_factor_mult = 0.2
+		country_tech_spread_add = 40
 	}
 	
 	unlocking_technologies = {	
@@ -435,10 +426,8 @@ contraceptive_pill = {
 		state_working_adult_ratio_add = 0.05
 		state_pop_qualifications_mult = 0.05
 		state_education_access_add = 0.05
-		state_birth_rate_mult = -0.20
-		state_poor_expected_sol = 1
-		state_middle_expected_sol = 1
-		state_rich_expected_sol = 1
+		state_birth_rate_mult = -0.10
+		state_expected_sol_from_literacy = 1
 		country_weekly_innovation_max_add = 50
 	}
 	
@@ -463,10 +452,8 @@ second_wave_feminism = {
 		state_working_adult_ratio_add = 0.025
 		state_pop_qualifications_mult = 0.05
 		state_education_access_add = 0.05
-		state_birth_rate_mult = -0.05
-		state_poor_expected_sol = 1
-		state_middle_expected_sol = 1
-		state_rich_expected_sol = 1
+		state_birth_rate_mult = -0.025
+		state_expected_sol_from_literacy = 1
 	}
 	
 	unlocking_technologies = {	
@@ -514,7 +501,8 @@ modern_urban_planning = {
 	modifier = {
 		country_max_companies_add = 1
 		country_max_weekly_construction_progress_add = 10
-		country_bureaucracy_investment_cost_factor_mult = 0.1
+		state_bureaucracy_population_base_cost_factor_mult = 0.2
+		country_gold_reserve_limit_mult = 0.5
 	}
 	
 	ai_weight = {

@@ -177,6 +177,13 @@ ideology_optimist_transhumanist = {
 		law_universal_basic_income = approve
 		law_post-scarcity = strongly_approve
 	}
+
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = neutral
+		law_fiat_currency = neutral
+		law_digital_currency = strongly_approve
+	}
 	
 	possible = {
 		owner = { has_technology_researched = brain_computer_interfaces }

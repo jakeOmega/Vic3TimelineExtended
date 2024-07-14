@@ -1,0 +1,2349 @@
+﻿### See power_bloc_principle_groups for grouping, primary groups for identities etc.
+
+### CONSTRUCTION
+
+principle_construction_4 = {
+	icon  = "gfx/interface/icons/principles_icons/construction.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = modern_tools
+	}
+
+	member_modifier = {
+		state_construction_mult = 0.1
+		building_group_bg_construction_infrastructure_usage_mult = -0.75
+		country_construction_goods_cost_mult = -0.05
+		country_max_weekly_construction_progress_add = 20
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}	
+}
+
+principle_construction_5 = {
+	icon  = "gfx/interface/icons/principles_icons/construction.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = robotics
+	}
+
+	member_modifier = {	
+		state_construction_mult = 0.15
+		building_group_bg_construction_infrastructure_usage_mult = -0.75
+		country_construction_goods_cost_mult = -0.1
+		country_max_weekly_construction_progress_add = 50
+		state_infrastructure_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}	
+}
+
+### INTERNAL TRADE
+
+principle_internal_trade_4 = {
+	icon = "gfx/interface/icons/principles_icons/internal_trade.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = keynesian_economics
+	}
+
+	member_modifier = {
+		country_company_throughput_bonus_add = 0.1
+		country_convoy_contribution_to_market_owner_add = 0.4
+		tariff_import_outside_power_bloc_mult = 0.2
+		tariff_export_outside_power_bloc_mult = 0.2
+		country_port_connection_cost_mult = -0.25
+		state_pop_support_law_ministry_of_commerce_add = 0.5
+		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
+		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		country_trade_route_quantity_mult = 0.2
+		state_infrastructure_mult = 0.05
+		building_group_bg_heavy_industry_infrastructure_usage_mult = -0.02
+		building_group_bg_power_infrastructure_usage_mult = -0.02
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_internal_trade_5 = {
+	icon = "gfx/interface/icons/principles_icons/internal_trade.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = containerization
+	}
+
+	member_modifier = {
+		country_company_throughput_bonus_add = 0.1
+		country_convoy_contribution_to_market_owner_add = 0.5
+		tariff_import_outside_power_bloc_mult = 0.2
+		tariff_export_outside_power_bloc_mult = 0.2
+		country_port_connection_cost_mult = -0.25
+		state_pop_support_law_ministry_of_commerce_add = 0.5
+		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
+		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		country_trade_route_quantity_mult = 0.4
+		state_infrastructure_mult = 0.1
+		building_group_bg_heavy_industry_infrastructure_usage_mult = -0.04
+		building_group_bg_power_infrastructure_usage_mult = -0.04
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### MARKET UNIFICATION
+
+principle_market_unification_4 = {
+	icon = "gfx/interface/icons/principles_icons/market_unification.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = intergovernmental_organizations
+	}
+
+	leader_modifier = {
+		country_convoys_capacity_mult = 0.2
+	}
+
+	member_modifier = {
+		country_company_throughput_bonus_add = 0.1
+		tariff_import_outside_power_bloc_mult = 0.2
+		tariff_export_outside_power_bloc_mult = 0.2
+		state_infrastructure_mult = 0.2
+		country_convoy_contribution_to_market_owner_add = 0.6
+		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	power_bloc_modifier = {
+		# Members are permanently part of the same Customs Union
+		power_bloc_customs_union_bool = yes
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		state_infrastructure_mult = 0.05
+		building_group_bg_heavy_industry_infrastructure_usage_mult = -0.02
+		building_group_bg_power_infrastructure_usage_mult = -0.02
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_market_unification_5 = {
+	icon = "gfx/interface/icons/principles_icons/market_unification.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = satellite_communications
+	}
+
+	leader_modifier = {
+		country_convoys_capacity_mult = 0.4
+	}
+
+	member_modifier = {
+		country_company_throughput_bonus_add = 0.2
+		tariff_import_outside_power_bloc_mult = 0.2
+		tariff_export_outside_power_bloc_mult = 0.2
+		state_infrastructure_mult = 0.3
+		country_convoy_contribution_to_market_owner_add = 0.8
+		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	power_bloc_modifier = {
+		# Members are permanently part of the same Customs Union
+		power_bloc_customs_union_bool = yes
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		state_infrastructure_mult = 0.1
+		building_group_bg_heavy_industry_infrastructure_usage_mult = -0.04
+		building_group_bg_power_infrastructure_usage_mult = -0.04
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+
+### SOVEREIGN EMPIRE
+### Vassal Subjects
+
+principle_vassalization_4 = {
+	icon = "gfx/interface/icons/principles_icons/vassals_subjects.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = rocketry
+	}
+
+	power_bloc_modifier = {
+		power_bloc_leader_can_peacefully_annex_bool = yes
+	}
+
+	member_modifier = {
+		country_authority_per_subject_add = 25
+		country_subject_income_transfer_mult = 0.25
+
+		country_allow_enacting_decrees_in_subject_bool = yes
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_vassalization_5 = {
+	icon = "gfx/interface/icons/principles_icons/vassals_subjects.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = tactical_nuclear_weapons
+	}
+
+	leader_modifier = {
+		country_liberty_desire_of_subjects_add = -0.1
+		country_radicals_from_conquest_mult = -0.25
+	}
+
+	power_bloc_modifier = {
+		power_bloc_leader_can_peacefully_annex_bool = yes
+	}
+
+	member_modifier = {
+		country_authority_per_subject_add = 50
+		country_subject_income_transfer_mult = 0.25
+
+		country_allow_enacting_decrees_in_subject_bool = yes
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### RESEARCH CONGLOMERATE
+
+principle_advanced_research_4 = {
+	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = nuclear_weapons
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_education_system_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool = yes
+		country_weekly_innovation_max_add = 25
+	}
+
+	member_modifier = {
+		country_institution_size_change_speed_institution_schools_mult = 0.5
+		country_institution_cost_institution_schools_mult = -0.5
+		country_disallow_law_no_schools_bool = yes
+		country_enactment_success_chance_law_ministry_of_science_add = 0.1
+	}
+
+	institution = institution_ministry_of_science
+	institution_modifier = {
+		# School institution gives more tech spread
+		country_tech_spread_add = 20
+		country_tech_spread_mult = 0.05
+
+		country_ahead_of_time_research_penalty_mult = -0.05
+
+		# Increase Country max innovation
+		country_weekly_innovation_max_add = 15
+
+		country_tech_group_research_speed_mult = 0.01
+		country_academics_pol_str_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}	
+}
+
+principle_advanced_research_5 = {
+	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = knowledge_economy
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_education_system_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool = yes
+		country_weekly_innovation_max_add = 100
+	}
+
+	member_modifier = {
+		country_institution_size_change_speed_institution_schools_mult = 0.5
+		country_institution_cost_institution_schools_mult = -0.5
+		country_disallow_law_no_schools_bool = yes
+		country_enactment_success_chance_law_ministry_of_science_add = 0.2
+	}
+
+	institution = institution_ministry_of_science
+	institution_modifier = {
+		# School institution gives more tech spread
+		country_tech_spread_add = 20
+		country_tech_spread_mult = 0.05
+
+		country_ahead_of_time_research_penalty_mult = -0.05
+
+		# Increase Country max innovation
+		country_weekly_innovation_max_add = 45
+
+		country_tech_group_research_speed_mult = 0.01
+		country_academics_pol_str_mult = 0.3
+		country_authority_add = 50
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}	
+}
+
+### DEFENSIVE COOPERATION
+
+principle_defensive_cooperation_4 = {
+	icon = "gfx/interface/icons/principles_icons/defensive_coorperation.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = combined_arms
+	}
+
+	leader_modifier = {
+		country_influence_mult = 0.1
+	}
+
+	member_modifier = {
+		country_join_power_bloc_member_in_defensive_plays_bool = yes
+		state_conscription_rate_add = 0.01
+		building_mobilization_cost_mult = -0.1
+		country_military_tech_spread_mult = 0.2
+		state_building_conscription_center_max_level_add = 25
+	}
+
+	power_bloc_modifier = {
+		power_bloc_disallow_war_bool = yes
+		power_bloc_target_sway_cost_mult = -0.5
+		power_bloc_cohesion_add = 5
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_defensive_cooperation_5 = {
+	icon = "gfx/interface/icons/principles_icons/defensive_coorperation.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = anti_war_movement
+	}
+
+	leader_modifier = {
+		country_influence_mult = 0.2
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_join_power_bloc_member_in_defensive_plays_bool = yes
+		state_conscription_rate_add = 0.02
+		building_mobilization_cost_mult = -0.2
+		country_military_tech_spread_mult = 0.4
+		state_building_conscription_center_max_level_add = 50
+		country_infamy_decay_mult = 0.25
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)
+		power_bloc_disallow_war_bool = yes
+		power_bloc_target_sway_cost_mult = -0.5
+		power_bloc_cohesion_add = 10
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### AGGRESSIVE COORDINATION
+
+principle_aggressive_coordination_4 = {
+	icon = "gfx/interface/icons/principles_icons/aggressive_coordination.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	power_bloc_modifier = {	
+		# Reduces cohesion
+		power_bloc_cohesion_add = -15
+	}
+	
+	member_modifier = {
+		country_initiator_war_goal_maneuver_cost_mult = -0.4
+		country_war_exhaustion_casualties_mult = -0.2
+		country_join_power_bloc_member_in_plays_bool = yes
+		country_infamy_generation_mult = 0.15
+		state_pop_support_law_ministry_of_war_add = 0.5
+		country_enactment_success_chance_law_ministry_of_war_add = 0.1
+		country_institution_cost_institution_ministry_of_war_mult = -0.5
+	}
+
+	institution = institution_ministry_of_war
+	institution_modifier = {
+		interest_group_ig_armed_forces_pol_str_mult = 0.05
+		country_military_wages_mult = 0.05
+		unit_experience_gain_mult = 0.05
+		building_training_rate_mult = 0.05
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_aggressive_coordination_5 = {
+	icon = "gfx/interface/icons/principles_icons/aggressive_coordination.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	power_bloc_modifier = {
+		# Reduces cohesion
+		power_bloc_cohesion_add = -20
+	}
+
+	leader_modifier = {
+		country_influence_mult = -0.1
+		power_bloc_leverage_generation_mult = 0.1
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_initiator_war_goal_maneuver_cost_mult = -0.5
+		country_war_exhaustion_casualties_mult = -0.25
+		country_join_power_bloc_member_in_plays_bool = yes
+		country_infamy_generation_mult = 0.15
+		state_pop_support_law_ministry_of_war_add = 0.5
+		country_enactment_success_chance_law_ministry_of_war_add = 0.1
+		country_institution_cost_institution_ministry_of_war_mult = -0.5
+	}
+
+	institution = institution_ministry_of_war
+	institution_modifier = {
+		interest_group_ig_armed_forces_pol_str_mult = 0.1
+		country_military_wages_mult = 0.1
+		unit_experience_gain_mult = 0.1
+		building_training_rate_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### EXTERNAL TRADE
+
+principle_external_trade_4 = {
+	icon = "gfx/interface/icons/principles_icons/external_trade.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = television
+	}
+	
+	power_bloc_modifier = {
+		power_bloc_trade_route_cost_mult = -0.75
+	}
+	
+	member_modifier = {
+		country_allow_trade_routes_without_interest_bool = yes
+		country_max_companies_add = 1
+		state_pop_support_law_ministry_of_commerce_add = 0.5
+		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
+		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		country_trade_route_competitiveness_mult = 0.1
+		country_convoys_capacity_mult = 0.2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_external_trade_5 = {
+	icon = "gfx/interface/icons/principles_icons/external_trade.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = cellular_networks
+	}
+	
+	power_bloc_modifier = {
+		power_bloc_trade_route_cost_mult = -0.75
+	}
+	
+	member_modifier = {
+		country_allow_trade_routes_without_interest_bool = yes
+		country_max_companies_add = 2
+		state_pop_support_law_ministry_of_commerce_add = 0.5
+		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
+		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		country_trade_route_competitiveness_mult = 0.2
+		country_convoys_capacity_mult = 0.4
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Food Standardization
+
+principle_food_standardization_4 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = modern_vaccines
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		building_group_bg_agriculture_throughput_add = 0.1
+		building_food_industry_throughput_add = 0.2
+		state_standard_of_living_add = 1
+		state_pop_support_law_ministry_of_consumer_protection_add = 0.5
+		country_enactment_success_chance_law_ministry_of_consumer_protection_add = 0.1
+		country_institution_cost_institution_ministry_of_consumer_protection_mult = -0.25
+	}
+
+	institution = institution_ministry_of_consumer_protection
+	institution_modifier = {
+		country_production_tech_research_speed_mult = 0.02
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_food_standardization_5 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = gene_splicing
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		building_group_bg_agriculture_throughput_add = 0.2
+		building_food_industry_throughput_add = 0.3
+		state_standard_of_living_add = 1
+		state_pop_support_law_ministry_of_consumer_protection_add = 1
+		country_enactment_success_chance_law_ministry_of_consumer_protection_add = 0.2
+		country_institution_cost_institution_ministry_of_consumer_protection_mult = -0.5
+	}
+
+	institution = institution_ministry_of_consumer_protection
+	institution_modifier = {
+		country_production_tech_research_speed_mult = 0.04
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Police Coordination
+
+principle_police_coordination_4 = {
+	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = mass_surveillance
+	}
+
+	member_modifier = {
+		# Cheaper and faster police institution
+		country_institution_size_change_speed_institution_police_mult = 0.5
+		country_institution_cost_institution_police_mult = -0.5
+		country_disallow_law_no_police_bool = yes
+		country_suppression_cost_mult = -0.25
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_policing_in_power_bloc_bool = yes
+	}
+
+	institution = institution_police
+	institution_modifier = {
+		country_authority_add = 100
+		political_movement_radicalism_mult = -0.05
+		interest_group_in_government_attraction_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_police_coordination_5 = {
+	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = automated_surveillance
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_institution_size_change_speed_institution_police_mult = 0.5
+		country_institution_cost_institution_police_mult = -0.5	
+		country_disallow_law_no_police_bool = yes
+		country_suppression_cost_mult = -0.5
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_policing_in_power_bloc_bool = yes
+	}
+
+	institution = institution_police
+	institution_modifier = {
+		country_authority_add = 100
+		country_authority_mult = 0.05
+		political_movement_radicalism_mult = -0.05
+		interest_group_in_government_attraction_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+
+### TRANSPORT INFRASTRUCTURE
+
+principle_transport_4 = {
+	icon = "gfx/interface/icons/principles_icons/transport.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = modern_skyscrapers
+	}
+
+	member_modifier = {
+		country_convoys_capacity_mult = 0.3
+		state_infrastructure_from_population_mult = 0.33
+		state_infrastructure_from_population_max_mult = 0.33 
+		market_land_trade_capacity_add = 100
+		building_railway_throughput_add = 0.2
+		state_infrastructure_from_transportation_consumption_add = 0.1
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_transport_5 = {
+	icon = "gfx/interface/icons/principles_icons/transport.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = supply_chain_management
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_convoys_capacity_mult = 0.4
+		state_infrastructure_from_population_mult = 0.33
+		state_infrastructure_from_population_max_mult = 0.33 
+		market_land_trade_capacity_add = 150
+		building_railway_throughput_add = 0.2
+		building_airport_throughput_add = 0.2
+		building_highway_throughput_add = 0.2
+		state_infrastructure_from_transportation_consumption_add = 0.1
+		country_production_tech_spread_mult = 0.25
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Military Industry
+
+principle_military_industry_4 = {
+	icon = "gfx/interface/icons/principles_icons/military_industry.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = moterized_artillery
+	}
+	
+	member_modifier = {
+		building_war_machine_industry_throughput_add = 0.15
+		building_arms_industry_throughput_add = 0.15
+		building_artillery_foundries_throughput_add = 0.15
+		building_military_shipyards_throughput_add = 0.15
+		country_military_goods_cost_mult = -0.15
+		character_supply_route_cost_mult = -0.33
+		building_mobilization_cost_mult = -0.1
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_military_industry_5 = {
+	icon = "gfx/interface/icons/principles_icons/military_industry.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = ICBMs
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)
+		building_war_machine_industry_throughput_add = 0.25
+		building_arms_industry_throughput_add = 0.25
+		building_artillery_foundries_throughput_add = 0.25
+		building_military_shipyards_throughput_add = 0.25
+		country_military_goods_cost_mult = -0.25
+		character_supply_route_cost_mult = -0.5
+		building_mobilization_cost_mult = -0.1
+		country_military_tech_spread_mult = 0.25
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Colonial Offices
+
+principle_colonial_offices_4 = {
+	icon = "gfx/interface/icons/principles_icons/colonial_offices.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = decolonization
+	}
+
+	leader_modifier = {
+		country_radicals_from_conquest_mult = -0.25
+	}
+	
+	member_modifier = {
+		country_institution_size_change_speed_institution_colonial_affairs_mult = 0.5
+		country_institution_cost_institution_colonial_affairs_mult = -0.5
+		country_disallow_law_no_colonial_affairs_bool = yes
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_colonization_in_power_bloc_bool = yes
+	}
+	
+	institution = institution_colonial_affairs
+	institution_modifier = {
+		state_colony_growth_creation_mult = 0.05
+		country_infamy_generation_against_unrecognized_mult = -0.05
+		country_infamy_generation_mult = -0.05
+		country_influence_mult = 0.1
+		country_liberty_desire_of_subjects_add = -0.02
+	}		
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_colonial_offices_5 = {
+	icon = "gfx/interface/icons/principles_icons/colonial_offices.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = globalization
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_colonization_in_power_bloc_bool = yes
+		country_radicals_from_conquest_mult = -0.5
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_institution_size_change_speed_institution_colonial_affairs_mult = 0.5
+		country_institution_cost_institution_colonial_affairs_mult = -0.5
+		country_disallow_law_no_colonial_affairs_bool = yes
+	}
+	
+	institution = institution_colonial_affairs
+	institution_modifier = {
+		# Modifiers from previous level(s)
+		state_colony_growth_creation_mult = 0.1
+		country_infamy_generation_against_unrecognized_mult = -0.05
+		country_infamy_generation_mult = -0.05
+		country_influence_mult = 0.2
+		country_leverage_generation_mult = 0.1
+		country_liberty_desire_of_subjects_add = -0.04
+	}		
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Foreign Investment
+
+principle_foreign_investment_4 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	# Members can always invest in power bloc coutries of lower rank
+	# Does not generate a tooltip, so a dummy modifier is required to show this effect
+	allows_foreign_investment_in_lower_rank = yes
+
+	possible = {
+		has_technology_researched = keynesian_economics
+	}
+	
+	member_modifier = {
+		country_nationalization_cost_non_members_mult = -0.5
+
+		# This modifier is just here to generate a tooltip. It doesn't actually do anything on its own
+		country_higher_leverage_from_economic_dependence_bool = yes
+
+		state_pop_support_law_national_bank_add = 0.5
+		country_enactment_success_chance_law_national_bank_add = 0.1
+		country_institution_cost_institution_national_bank_mult = -0.5
+	}
+	
+	power_bloc_modifier = {
+		# This modifier has no effects and is only here to generate a tooltip
+		power_bloc_allow_foreign_investment_lower_rank_bool = yes 
+	}
+
+	institution = institution_national_bank
+	institution_modifier = {
+		country_influence_mult = 0.1
+		country_leverage_generation_mult = 0.05
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_foreign_investment_5 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	# Members can always invest in power bloc coutries of lower rank
+	# Does not generate a tooltip, so a dummy modifier is required to show this effect
+	allows_foreign_investment_in_lower_rank = yes
+
+	possible = {
+		has_technology_researched = globalization
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_nationalization_cost_non_members_mult = -0.5
+
+		# This modifier is just here to generate a tooltip. It doesn't actually do anything on its own
+		country_higher_leverage_from_economic_dependence_bool = yes
+
+		state_pop_support_law_national_bank_add = 1.0
+		country_enactment_success_chance_law_national_bank_add = 0.2
+		country_institution_cost_institution_national_bank_mult = -0.5
+	}
+	
+	power_bloc_modifier = {
+		# This modifier has no effects and is only here to generate a tooltip
+		power_bloc_allow_foreign_investment_lower_rank_bool = yes 
+	}
+
+	institution = institution_national_bank
+	institution_modifier = {
+		# Modifiers from previous level(s)
+		country_influence_mult = 0.2
+		country_leverage_generation_mult = 0.1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Creative Legislature
+
+principle_creative_legislature_4 = {
+	icon = "gfx/interface/icons/principles_icons/creative_legislature.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = mass_media
+	}
+	
+	member_modifier = {
+		country_law_enactment_stall_mult = -0.33
+		political_movement_preserve_support_mult = -0.33
+		political_movement_restore_support_mult = -0.33
+		country_law_enactment_max_setbacks_add = 1
+		country_legitimacy_base_add = 10
+		country_lobby_leverage_generation_mult = 0.1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_creative_legislature_5 = {
+	icon = "gfx/interface/icons/principles_icons/creative_legislature.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = world_wide_web
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_law_enactment_stall_mult = -0.33
+		political_movement_preserve_support_mult = -0.33
+		political_movement_restore_support_mult = -0.33
+		country_law_enactment_max_setbacks_add = 2
+		country_legitimacy_min_add = 20
+		country_legitimacy_base_add = 20
+		country_lobby_leverage_generation_mult = 0.2
+		country_opposition_ig_approval_add = 2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Freedom of Movement
+
+principle_freedom_of_movement_4 = {
+	icon = "gfx/interface/icons/principles_icons/freedom_of_movement.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = mass_media
+	}
+	
+	member_modifier = {
+		state_migration_quota_mult = 0.25
+		country_mass_migration_attraction_mult = 0.5	
+	}
+
+	power_bloc_modifier = {
+		# Unlocks a new PM for Universities and Art Academies that increases migration attraction, unlocked per trigger in the PM
+
+		power_bloc_can_enact_greenest_grass_campaign_bool = yes
+		power_bloc_allow_wider_migration_area_bool = yes
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_freedom_of_movement_5 = {
+	icon = "gfx/interface/icons/principles_icons/freedom_of_movement.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = world_wide_web
+	}
+	
+	member_modifier = {
+		state_migration_quota_mult = 0.25
+		country_mass_migration_attraction_mult = 0.5	
+		country_society_tech_spread_mult = 0.25
+	}
+
+	power_bloc_modifier = {
+		# Unlocks a new PM for Universities and Art Academies that increases migration attraction, unlocked per trigger in the PM
+
+		power_bloc_can_enact_greenest_grass_campaign_bool = yes
+		power_bloc_allow_wider_migration_area_bool = yes
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Divine Economics
+
+principle_divine_economics_4 = {
+	icon = "gfx/interface/icons/principles_icons/divine_economy.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = mass_media
+	}
+	
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)		
+		power_bloc_religion_trade_route_competitiveness_mult = 0.5
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)		
+		country_subject_income_transfer_heathen_mult = 0.5		
+	
+		# SoL changes less radical/more loyalist for accepted religion pops
+		state_radicals_from_sol_change_accepted_religion_mult = -0.25
+		state_loyalists_from_sol_change_accepted_religion_mult = 0.25
+		
+		# New PM for Financial Districts/Manor Houses unlocked via trigger
+
+		state_clergymen_investment_pool_contribution_add = 0.1
+	}
+
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_divine_economics_5 = {
+	icon = "gfx/interface/icons/principles_icons/divine_economy.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = social_media
+	}
+	
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)		
+		power_bloc_religion_trade_route_competitiveness_mult = 0.5
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)		
+		country_subject_income_transfer_heathen_mult = 0.5		
+	
+		# SoL changes less radical/more loyalist for accepted religion pops
+		state_radicals_from_sol_change_accepted_religion_mult = -0.25
+		state_loyalists_from_sol_change_accepted_religion_mult = 0.25
+
+		state_clergymen_investment_pool_contribution_add = 0.1
+		
+		# New PM for Financial Districts/Manor Houses unlocked via trigger
+	}
+
+	institution = institution_ministry_of_religion
+	institution_modifier = {
+		state_clergymen_investment_pool_contribution_add = 0.04
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Exploit Members
+
+principle_exploit_members_4 = {
+	icon = "gfx/interface/icons/principles_icons/exploitation_of_members.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	leader_modifier = {
+		country_authority_mult = 0.2
+		country_influence_mult = 0.2
+		country_legitimacy_base_add = 20
+	}
+	
+	non_leader_modifier = {
+		country_authority_mult = -0.2
+		country_influence_mult = -0.2
+		state_tax_collection_mult = 0.25
+		country_legitimacy_base_add = -10
+	}
+
+	power_bloc_modifier = {
+		power_bloc_cohesion_add = -30
+		# Income transfer from members to leader
+		power_bloc_income_transfer_to_leader_factor = 0.1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+		
+		if = {
+			limit = {
+				current_cohesion_number < 50
+			}
+			multiply = 0.0
+		}
+	}
+}
+
+principle_exploit_members_5 = {
+	icon = "gfx/interface/icons/principles_icons/exploitation_of_members.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	leader_modifier = {
+		country_authority_mult = 0.2
+		country_influence_mult = 0.2
+		country_legitimacy_base_add = 30
+	}
+	
+	non_leader_modifier = {
+		country_authority_mult = -0.2
+		country_influence_mult = -0.2
+		state_tax_collection_mult = 0.5
+		country_legitimacy_base_add = -10
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)
+		power_bloc_cohesion_add = -40
+		# Income transfer from members to leader
+		power_bloc_income_transfer_to_leader_factor = 0.2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+		
+		if = {
+			limit = {
+				current_cohesion_number < 50
+			}
+			multiply = 0.0
+		}
+	}
+}
+
+### Sacred Civics
+
+principle_sacred_civics_4 = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	member_modifier = {
+		country_higher_diplomatic_acceptance_same_religion_bool = yes
+		country_reduced_liberty_desire_same_religion_bool = yes
+		country_law_enactment_stall_mult = -0.25
+		state_pop_support_law_ministry_of_religion_add = 0.5
+		country_enactment_success_chance_law_ministry_of_religion_add = 0.1
+		country_institution_cost_institution_ministry_of_religion_mult = -0.5
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_church_and_state_in_power_bloc_bool = yes
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+
+	institution = institution_ministry_of_religion
+	institution_modifier = {
+		# Modifiers from previous level(s)		
+		country_authority_add = 50
+		country_clergymen_pol_str_mult = 0.05
+	}
+}
+
+principle_sacred_civics_5 = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	member_modifier = {
+		# Modifiers from previous level(s)		
+		country_higher_diplomatic_acceptance_same_religion_bool = yes
+		country_reduced_liberty_desire_same_religion_bool = yes
+		country_law_enactment_stall_mult = -0.25
+		state_pop_support_law_ministry_of_religion_add = 1.0
+		country_enactment_success_chance_law_ministry_of_religion_add = 0.2
+		country_institution_cost_institution_ministry_of_religion_mult = -0.5
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s)		
+		country_can_impose_same_lawgroup_church_and_state_in_power_bloc_bool = yes
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+
+	institution = institution_ministry_of_religion
+	institution_modifier = {
+		# Modifiers from previous level(s)		
+		country_authority_add = 100
+		country_clergymen_pol_str_mult = 0.1
+	}
+}
+
+### Ideological Truth
+
+
+principle_ideological_truth_4 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = mass_media
+	}
+	
+	member_modifier = {
+		interest_group_in_opposition_agitator_popularity_add = -33
+		country_bolster_cost_mult = -0.25
+		country_suppression_cost_mult = -0.25		
+		country_party_whip_impact_mult = 0.2
+		country_legitimacy_min_add = 25		
+		country_enactment_success_chance_law_ministry_of_propaganda_add = 0.1
+		state_pop_support_law_ministry_of_propaganda_add = 0.5
+		country_institution_cost_institution_ministry_of_propaganda_mult = -0.5
+	}
+
+	institution = institution_ministry_of_propaganda
+	institution_modifier = {
+		interest_group_in_government_approval_add = 1
+		interest_group_in_government_attraction_mult = 0.01
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_ideological_truth_5 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = social_media
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		interest_group_in_opposition_agitator_popularity_add = -33
+		country_bolster_cost_mult = -0.25
+		country_suppression_cost_mult = -0.25		
+		country_party_whip_impact_mult = 0.2
+		country_legitimacy_min_add = 25		
+		country_enactment_success_chance_law_ministry_of_propaganda_add = 0.2
+		state_pop_support_law_ministry_of_propaganda_add = 1.0
+		country_institution_cost_institution_ministry_of_propaganda_mult = -0.5
+	}
+
+	institution = institution_ministry_of_propaganda
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		interest_group_in_government_approval_add = 2
+		interest_group_in_government_attraction_mult = 0.02
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Cultural Unity
+
+principle_cultural_unity_1 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	possible = {
+		OR = {
+			has_law = law_type:law_ethnostate
+			has_law = law_type:law_national_supremacy
+		}
+	}
+
+	member_modifier = {
+		state_assimilation_mult = 0.25	
+	}
+	
+	ai_weight = {
+		value = 200 # High base weight if the leader has colonies
+		
+		if = {
+			limit = { has_strategy = ai_strategy_reactionary_agenda }
+			multiply = 2.0
+		}
+
+		if = {
+			limit = { has_strategy = ai_strategy_colonial_expansion }
+			multiply = 2.0
+		}		
+	}
+}
+
+principle_cultural_unity_2 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	possible = {
+		OR = {
+			has_law = law_type:law_ethnostate
+			has_law = law_type:law_national_supremacy
+		}
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		state_assimilation_mult = 0.25
+	}
+
+	power_bloc_modifier = {
+		power_bloc_homelands_can_decay_bool = yes
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_unity_3 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		OR = {
+			has_law = law_type:law_ethnostate
+			has_law = law_type:law_national_supremacy
+		}
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		state_assimilation_mult = 0.25
+
+		state_accepted_birth_rate_mult = 0.1
+	}
+
+	power_bloc_modifier = {
+		power_bloc_homelands_can_decay_bool = yes
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_unity_4 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = marketing_research
+		OR = {
+			has_law = law_type:law_ethnostate
+			has_law = law_type:law_national_supremacy
+		}
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		state_assimilation_mult = 0.25
+
+		state_accepted_birth_rate_mult = 0.1
+		state_pop_support_law_ministry_of_culture_add = 0.5
+		country_institution_cost_institution_ministry_of_culture_mult = -0.25
+	}
+
+	power_bloc_modifier = {
+		power_bloc_homelands_can_decay_bool = yes
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		state_loyalists_from_sol_change_accepted_culture_mult = 0.05
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_unity_5 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = globalization
+		OR = {
+			has_law = law_type:law_ethnostate
+			has_law = law_type:law_national_supremacy
+		}
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		state_assimilation_mult = 0.25
+		state_accepted_birth_rate_mult = 0.1
+
+		state_pop_support_law_ministry_of_culture_add = 1.0
+		country_institution_cost_institution_ministry_of_culture_mult = -0.25
+	}
+
+	power_bloc_modifier = {
+		power_bloc_homelands_can_decay_bool = yes
+		power_bloc_leader_can_force_cultural_adoption_bool = yes
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		state_loyalists_from_sol_change_accepted_culture_mult = 0.05
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Cultural Plurality
+
+principle_cultural_plurality_1 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	possible = {
+		OR = {
+			has_law = law_type:law_racial_segregation
+			has_law = law_type:law_cultural_exclusion
+			has_law = law_type:law_multicultural
+		}
+	}
+
+	member_modifier = {
+		# Members get cheaper and faster cultural institution
+		country_mass_migration_attraction_mult = 0.25
+		state_radicals_from_discrimination_mult = -0.25
+		state_political_strength_from_discrimination_mult = 0.1	
+	}
+	
+	ai_weight = {
+		value = 50
+		
+		if = {
+			limit = { has_strategy = ai_strategy_progressive_agenda }
+			multiply = 2.0
+		}
+
+		if = {
+			limit = {
+				has_law = law_type:law_cultural_exclusion
+			}
+			multiply = 2.0
+		}			
+
+		if = {
+			limit = {
+				has_law = law_type:law_multiculturalism
+			}
+			multiply = 4.0
+		}
+	}
+}
+
+principle_cultural_plurality_2 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	possible = {
+		OR = {
+			has_law = law_type:law_racial_segregation
+			has_law = law_type:law_cultural_exclusion
+			has_law = law_type:law_multicultural
+		}
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_mass_migration_attraction_mult = 0.25
+		state_radicals_from_discrimination_mult = -0.5
+		state_political_strength_from_discrimination_mult = 0.2	
+		state_education_access_add = 0.05
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_plurality_3 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		OR = {
+			has_law = law_type:law_racial_segregation
+			has_law = law_type:law_cultural_exclusion
+			has_law = law_type:law_multicultural
+		}
+	}
+
+	leader_modifier = {
+		country_influence_mult = 0.2
+		goods_output_fine_art_mult = 0.1
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_mass_migration_attraction_mult = 0.25
+		state_radicals_from_discrimination_mult = -0.5
+		state_political_strength_from_discrimination_mult = 0.3	
+		state_education_access_add = 0.05
+		country_tech_spread_mult = 0.25
+		state_pop_support_law_no_migration_controls_add = 0.25
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_plurality_4 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = civil_rights_movement
+		OR = {
+			has_law = law_type:law_racial_segregation
+			has_law = law_type:law_cultural_exclusion
+			has_law = law_type:law_multicultural
+		}
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s)	
+		country_influence_mult = 0.2
+		goods_output_fine_art_mult = 0.1
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_mass_migration_attraction_mult = 0.25
+		state_radicals_from_discrimination_mult = -0.5
+		state_political_strength_from_discrimination_mult = 0.4
+		state_education_access_add = 0.05
+		country_tech_spread_mult = 0.25
+		state_pop_support_law_multicultural_add = 1.5
+		state_pop_support_law_ministry_of_culture_add = 1.0
+		state_pop_support_law_no_migration_controls_add = 0.25
+		state_pop_support_law_ministry_of_refugee_affairs_add = 0.25
+		state_pop_support_law_full_equality_and_protection_add = 0.1
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		country_society_tech_research_speed_mult = 0.02
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_plurality_5 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = globalization
+		OR = {
+			has_law = law_type:law_racial_segregation
+			has_law = law_type:law_cultural_exclusion
+			has_law = law_type:law_multicultural
+		}
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s)	
+		country_influence_mult = 0.2
+		goods_output_fine_art_mult = 0.1
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_mass_migration_attraction_mult = 0.25
+		state_radicals_from_discrimination_mult = -0.5
+		state_political_strength_from_discrimination_mult = 0.5
+		state_education_access_add = 0.05
+		country_tech_spread_mult = 0.25
+		state_pop_support_law_multicultural_add = 1.5
+		state_pop_support_law_ministry_of_culture_add = 1.0
+		state_pop_support_law_no_migration_controls_add = 0.25
+		state_pop_support_law_ministry_of_refugee_affairs_add = 0.25
+		state_pop_support_law_full_equality_and_protection_add = 0.1
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		country_society_tech_research_speed_mult = 0.04
+		country_leverage_generation_mult = 0.1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_education_1 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+	
+	member_modifier = {
+		state_education_access_add = 0.1
+	}
+	
+	ai_weight = {
+		value = 200
+	}
+}
+
+principle_education_2 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		state_education_access_add = 0.1
+	}
+
+	institution = institution_schools
+	institution_modifier = {
+		country_weekly_innovation_max_add = 5
+		country_tech_spread_add = 5
+	}
+	
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_education_3 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		state_education_access_add = 0.1
+
+		interest_group_ig_intelligentsia_pol_str_mult = 0.1
+	}
+
+	institution = institution_schools
+	institution_modifier = {
+		country_weekly_innovation_max_add = 10
+		country_tech_spread_add = 5
+		state_pop_qualifications_mult = 0.05
+	}
+	
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_education_4 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	possible = {
+		has_technology_researched = mass_media
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		state_education_access_add = 0.1
+		interest_group_ig_intelligentsia_pol_str_mult = 0.1
+
+		# New PM for Universities, producing art and services, unlocked via trigger
+	}
+
+	institution = institution_schools
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		country_weekly_innovation_max_add = 10
+		country_tech_spread_add = 5
+		country_tech_spread_mult = 0.1
+		state_pop_qualifications_mult = 0.05
+	}
+	
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_education_5 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	possible = {
+		has_technology_researched = world_wide_web
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		state_education_access_add = 0.1
+		interest_group_ig_intelligentsia_pol_str_mult = 0.1
+		# New PM for Universities, producing art and services, unlocked via trigger
+	}
+
+	institution = institution_schools
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		country_weekly_innovation_max_add = 10
+		country_tech_spread_add = 5
+		country_tech_spread_mult = 0.1
+		state_pop_qualifications_mult = 0.05
+		country_weekly_innovation_mult = 0.02
+		country_bureaucracy_mult = 0.02
+	}
+	
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_diplomacy_1 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+	
+	member_modifier = {
+		country_influence_mult = 0.2
+		country_improve_relations_speed_mult = 0.1
+		country_damage_relations_speed_mult = -0.1
+	}
+	
+	ai_weight = {
+		value = 200
+	}
+}
+
+principle_diplomacy_2 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_influence_mult = 0.2
+		country_improve_relations_speed_mult = 0.1
+		country_damage_relations_speed_mult = -0.1
+	}
+
+	institution = institution_ministry_of_foreign_affairs
+	institution_modifier = {
+		country_lobby_leverage_generation_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_diplomacy_3 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_influence_mult = 0.2
+		country_improve_relations_speed_mult = 0.1
+		country_damage_relations_speed_mult = -0.1
+		country_institution_cost_institution_ministry_of_foreign_affairs_mult = -0.25
+	}
+
+	institution = institution_ministry_of_foreign_affairs
+	institution_modifier = {
+		country_lobby_leverage_generation_mult = 0.2
+	}
+
+	power_bloc_modifier = {
+		power_bloc_target_sway_cost_mult = -0.25
+	}
+	
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_diplomacy_4 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	possible = {
+		has_technology_researched = mass_media
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_influence_mult = 0.2
+		country_improve_relations_speed_mult = 0.1
+		country_damage_relations_speed_mult = -0.1
+		country_institution_cost_institution_ministry_of_foreign_affairs_mult = -0.25
+	}
+
+	institution = institution_ministry_of_foreign_affairs
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		country_lobby_leverage_generation_mult = 0.2
+
+		country_legitimacy_base_add = 2
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)	
+		power_bloc_target_sway_cost_mult = -0.25
+		power_bloc_can_use_extend_influence_bool = yes
+	}
+	
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_diplomacy_5 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	possible = {
+		has_technology_researched = world_wide_web
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_influence_mult = 0.2
+		country_improve_relations_speed_mult = 0.1
+		country_damage_relations_speed_mult = -0.1
+		country_institution_cost_institution_ministry_of_foreign_affairs_mult = -0.5
+		country_infamy_decay_mult = 0.25
+	}
+
+	institution = institution_ministry_of_foreign_affairs
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		country_lobby_leverage_generation_mult = 0.2
+		country_legitimacy_base_add = 2
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)	
+		power_bloc_target_sway_cost_mult = -0.25
+		power_bloc_can_use_extend_influence_bool = yes
+	}
+	
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_environmental_sustainability_1 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	possible = {
+		has_technology_researched = environmental_movement
+	}
+
+	member_modifier = {
+		goods_input_oil_mult = -0.05
+		goods_output_oil_mult = -0.05
+		goods_input_coal_mult = -0.05
+		goods_output_coal_mult = -0.05
+		country_institution_cost_institution_ministry_of_the_environment_mult = -0.25
+	}
+	
+	ai_weight = {
+		value = 100
+		
+		if = {
+			limit = { has_strategy = ai_strategy_progressive_agenda }
+			multiply = 2.0
+		}
+
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_the_environment
+			}
+			multiply = 2.0
+		}			
+	}
+}
+
+principle_environmental_sustainability_2 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	possible = {
+		has_technology_researched = environmental_movement
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		goods_input_oil_mult = -0.1
+		goods_output_oil_mult = -0.1
+		goods_input_coal_mult = -0.1
+		goods_output_coal_mult = -0.1
+		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
+
+		state_pop_support_law_ministry_of_the_environment_add = 0.5
+	}
+
+	institution = institution_ministry_of_the_environment
+	institution_modifier = {
+		state_standard_of_living_add = 0.2
+	}
+	
+	ai_weight = {
+		value = 1000  # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_environmental_sustainability_3 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = environmental_movement
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		goods_input_oil_mult = -0.15
+		goods_output_oil_mult = -0.15
+		goods_input_coal_mult = -0.15
+		goods_output_coal_mult = -0.15
+		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
+		state_pop_support_law_ministry_of_the_environment_add = 0.5
+	}
+
+	institution = institution_ministry_of_the_environment
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		state_standard_of_living_add = 0.2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_environmental_sustainability_4 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = clean_energy_technologies
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		building_renewable_energy_plant_throughput_add = 0.5
+		building_power_plant_throughput_add = -0.5
+		goods_input_oil_mult = -0.2
+		goods_output_oil_mult = -0.2
+		goods_input_coal_mult = -0.2
+		goods_output_coal_mult = -0.2
+		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
+		state_pop_support_law_ministry_of_the_environment_add = 1
+	}
+
+	institution = institution_ministry_of_the_environment
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		state_standard_of_living_add = 0.2
+
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_environmental_sustainability_5 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = clean_energy_technologies
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		building_renewable_energy_plant_throughput_add = 0.5
+		building_power_plant_throughput_add = -0.5
+		goods_input_oil_mult = -0.25
+		goods_output_oil_mult = -0.25
+		goods_input_coal_mult = -0.25
+		goods_output_coal_mult = -0.25
+		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
+		state_pop_support_law_ministry_of_the_environment_add = 1.5
+	}
+
+	institution = institution_ministry_of_the_environment
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		state_standard_of_living_add = 0.2
+		country_legitimacy_base_add = 5
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_urban_planning_1 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	possible = {
+		has_technology_researched = modern_urban_planning
+	}
+
+	member_modifier = {
+		state_pop_support_law_ministry_of_urban_planning_add = 0.5
+		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
+	}
+
+	institution = institution_ministry_of_urban_planning
+	institution_modifier = {
+		building_group_bg_service_standard_of_living_add = 0.5
+	}
+	
+	ai_weight = {
+		value = 100
+		
+		if = {
+			limit = { has_strategy = ai_strategy_progressive_agenda }
+			multiply = 2.0
+		}
+
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_urban_planning
+			}
+			multiply = 2.0
+		}			
+	}
+}
+
+principle_urban_planning_2 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	possible = {
+		has_technology_researched = modern_urban_planning
+	}
+
+	member_modifier = {
+		#Modifiers from previous level(s)	
+		state_pop_support_law_ministry_of_urban_planning_add = 0.5
+		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
+		state_shopkeepers_investment_pool_contribution_add = 0.1
+	}
+
+	institution = institution_ministry_of_urban_planning
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		building_group_bg_service_standard_of_living_add = 0.5
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_urban_planning_3 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = modern_urban_planning
+	}
+
+	member_modifier = {
+		#Modifiers from previous level(s)	
+		state_pop_support_law_ministry_of_urban_planning_add = 1.0
+		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
+		state_shopkeepers_investment_pool_contribution_add = 0.1
+	}
+
+	institution = institution_ministry_of_urban_planning
+	institution_modifier = {
+		#Modifiers from previous level(s)	
+		building_group_bg_service_standard_of_living_add = 0.5
+		interest_group_ig_rural_folk_pol_str_mult = -0.1
+		interest_group_ig_landowners_pol_str_mult = -0.05
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_urban_planning_4 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = home_video_systems
+	}
+
+	member_modifier = {
+		#Modifiers from previous level(s)	
+		state_pop_support_law_ministry_of_urban_planning_add = 1.0
+		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
+		state_shopkeepers_investment_pool_contribution_add = 0.1
+		goods_output_services_mult = 0.05
+	}
+
+	institution = institution_ministry_of_urban_planning
+	institution_modifier = {
+		#Modifiers from previous level(s)	
+		building_group_bg_service_standard_of_living_add = 0.5
+		interest_group_ig_rural_folk_pol_str_mult = -0.1
+		interest_group_ig_landowners_pol_str_mult = -0.05
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_urban_planning_5 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = digital_education
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		state_pop_support_law_ministry_of_urban_planning_add = 1.0
+		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
+		state_shopkeepers_investment_pool_contribution_add = 0.1
+		state_shopkeepers_investment_pool_efficiency_mult = 0.1
+		goods_output_services_mult = 0.1
+	}
+
+	institution = institution_ministry_of_urban_planning
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		building_group_bg_service_standard_of_living_add = 0.5
+		interest_group_ig_rural_folk_pol_str_mult = -0.1
+		interest_group_ig_landowners_pol_str_mult = -0.05
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_global_security_1 = {
+	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	possible = {
+		has_technology_researched = nuclear_weapons
+	}
+
+	leader_modifier = {
+		country_diplomatic_play_maneuvers_add = 20
+		country_infamy_generation_mult = -0.1
+		country_prestige_from_army_power_projection_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 100		
+	}
+}
+
+principle_global_security_2 = {
+	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	possible = {
+		has_technology_researched = nuclear_weapons
+	}
+
+	leader_modifier = {
+		country_diplomatic_play_maneuvers_add = 20
+		country_infamy_generation_mult = -0.1
+		country_prestige_from_army_power_projection_mult = 0.1
+		country_institution_cost_institution_ministry_of_war_mult = -0.25
+	}
+
+	institution = institution_ministry_of_war
+	institution_modifier = {
+		country_military_tech_research_speed_mult = 0.02
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_global_security_3 = {
+	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = nuclear_weapons
+	}
+
+	leader_modifier = {
+		country_diplomatic_play_maneuvers_add = 20
+		country_infamy_generation_mult = -0.1
+		country_prestige_from_army_power_projection_mult = 0.1
+		country_institution_cost_institution_ministry_of_war_mult = -0.25
+	}
+
+	member_modifier = {
+		state_pop_support_law_ministry_of_war_add = 0.5
+		country_war_exhaustion_casualties_mult = -0.25
+	}
+
+	institution = institution_ministry_of_war
+	institution_modifier = {
+		country_military_tech_research_speed_mult = 0.04
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_global_security_4 = {
+	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = tactical_nuclear_weapons
+	}
+
+	leader_modifier = {
+		country_diplomatic_play_maneuvers_add = 40
+		country_infamy_generation_mult = -0.2
+		country_prestige_from_army_power_projection_mult = 0.2
+		country_institution_cost_institution_ministry_of_war_mult = -0.25
+	}
+
+	member_modifier = {
+		state_pop_support_law_ministry_of_war_add = 0.5
+		country_war_exhaustion_casualties_mult = -0.25
+	}
+
+	institution = institution_ministry_of_war
+	institution_modifier = {
+		country_military_tech_research_speed_mult = 0.04
+		country_authority_add = 100
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_global_security_5 = {
+	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = rapid_deployment_forces
+	}
+
+	leader_modifier = {
+		country_diplomatic_play_maneuvers_add = 40
+		country_infamy_generation_mult = -0.2
+		country_prestige_from_army_power_projection_mult = 0.2
+		country_institution_cost_institution_ministry_of_war_mult = -0.25
+	}
+
+	member_modifier = {
+		state_pop_support_law_ministry_of_war_add = 0.5
+		country_war_exhaustion_casualties_mult = -0.25
+	}
+
+	institution = institution_ministry_of_war
+	institution_modifier = {
+		country_military_tech_research_speed_mult = 0.04
+		country_authority_add = 100
+		building_training_rate_mult = 0.5
+		military_formation_organization_gain_add = 0.1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}

@@ -1,10 +1,16 @@
 annex_subject_peaceful = {
-	requires_approval = yes
+    groups= {
+		overlord
+	}
+	requires_approval = no
 	
 	show_confirmation_box = yes
 
-    unlocking_technologies = {
-		mass_media
+    selectable = {
+		is_power_bloc_leader = yes
+		power_bloc ?= {
+			modifier:power_bloc_leader_can_peacefully_annex_bool = yes
+		}		
 	}
 
 	potential = {
@@ -27,6 +33,10 @@ annex_subject_peaceful = {
                 gdp < peaceful_annex_gdp_requirement
             }
         }
+        scope:target_country = {
+            has_diplomatic_pact = { who = root type = puppet }
+            liberty_desire < 25
+        }
         custom_tooltip = {
 			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER
 			scope:target_country.relations:root >= relations_threshold:cordial
@@ -34,21 +44,7 @@ annex_subject_peaceful = {
     }
 
 	accept_effect = {
-        if = {
-            limit = {
-                scope:target_country = {
-                    OR = {
-                        has_diplomatic_pact = { who = root type = puppet }
-                        has_diplomatic_pact = { who = root type = vassal }
-                    }
-                }
-            }
-            annex = scope:target_country
-        }
-        else = {
-            create_diplomatic_pact = { country = scope:target_country type = puppet }
-            create_truce = { country = scope:target_country months = 60 }
-        }
+        annex = scope:target_country
     }
 
 	is_hostile = no
@@ -57,5 +53,9 @@ annex_subject_peaceful = {
 		accept_score = {
             value = 1
         }	
+
+        evaluation_chance = {
+            value = 100
+        }
 	}
 }

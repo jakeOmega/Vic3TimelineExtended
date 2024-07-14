@@ -44,7 +44,7 @@ world_wide_web = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 80
 		building_network_infrastructure_throughput_add = 0.25
 	}
 	
@@ -65,7 +65,7 @@ digital_telecommunications = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 80
 		goods_output_telephones_mult = 0.2
 		goods_output_radios_mult = 0.2
 	}
@@ -121,7 +121,7 @@ e-commerce = {
 	modifier = {
 		state_market_access_price_impact = 0.01
 		building_group_bg_trade_employee_mult = -0.1
-		country_bureaucracy_investment_cost_factor_mult = 0.3
+		state_bureaucracy_population_base_cost_factor_mult = 1
 	}
 	
 	ai_weight = {
@@ -155,8 +155,8 @@ unmanned_aerial_vehicles = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		unit_combat_unit_type_asw_destroyers_offense_mult = 0.1
-		unit_combat_unit_type_carrier_group_offense_mult = 0.5
+		unit_navy_offense_mult = 0.1
+		state_building_airport_max_level_add = 5
 	}
 	
 	ai_weight = {
@@ -193,9 +193,7 @@ missile_defense_systems = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		unit_combat_unit_type_asw_destroyers_defense_mult = 0.3
-		unit_combat_unit_type_carrier_group_defense_mult = 0.2
-		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.1
+		unit_navy_defense_mult = 0.3
 	}
 	
 	ai_weight = {
@@ -215,12 +213,8 @@ automated_surveillance = {
 	modifier = {
 		political_movement_radicalism_mult = -0.1
 		unit_army_offense_add = 20
-		unit_combat_unit_type_asw_destroyers_defense_mult = 0.1
-		unit_combat_unit_type_asw_destroyers_offense_mult = 0.1
-		unit_combat_unit_type_carrier_group_defense_mult = 0.1
-		unit_combat_unit_type_carrier_group_offense_mult = 0.1
-		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.4
-		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.4
+		unit_navy_defense_mult = 0.1
+		unit_navy_offense_mult = 0.1
 	}
 	
 	ai_weight = {
@@ -270,11 +264,14 @@ globalization = {
 		state_market_access_price_impact = 0.01
 		building_group_bg_trade_employee_mult = -0.25
 		country_max_companies_add = 1
-		country_tech_spread_mult = 0.4
+		country_tech_spread_add = 80
+		country_gold_reserve_limit_mult = 1.0
+		country_allow_trade_routes_without_interest_bool = yes
+		country_leverage_threshold_change_add = -100
 	 }
 	
 	ai_weight = {
-		value = 1
+		value = 5 # This is a very important technology
 	}
 }
 
@@ -324,7 +321,7 @@ knowledge_economy = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_max_companies_add = 1
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 80
 	}
 	
 	ai_weight = {
@@ -364,7 +361,7 @@ digital_education = {
 		state_pop_qualifications_mult = 0.2
 		country_weekly_innovation_max_add = 100
 		state_birth_rate_mult = -0.01
-		country_bureaucracy_investment_cost_factor_mult = 0.3
+		state_bureaucracy_population_base_cost_factor_mult = 1
 	}
 	
 	ai_weight = {

@@ -1,20 +1,4 @@
-﻿building_government_services = {
-	building_group = bg_infrastructure
-
-	buildable = no
-	expandable = no
-	downsizeable = no
-
-	production_method_groups = {
-		pmg_government_administration_education
-		pmg_government_administration_healthcare
-		pmg_government_administration_police
-	}
-
-	texture = "gfx/interface/icons/building_icons/building_government_administration.dds"
-}
-
-building_oil_rig = {
+﻿building_oil_rig = {
 	building_group = bg_oil_extraction
 	texture = "gfx/interface/icons/building_icons/oil_rig.dds"
 	city_type = mine
@@ -29,8 +13,10 @@ building_oil_rig = {
 		pmg_base_building_oil_rig
 		pmg_depth_oil_rig
 		pmg_transportation_building_oil_rig
-		pmg_ownership_capital_building_oil_rig
+		#pmg_ownership_capital_building_oil_rig
 	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_textile_mills = {
@@ -48,10 +34,12 @@ building_textile_mills = {
 		pmg_luxury_building_textile_mills
 		pmg_automation_building_textile_mills
 		pmg_branding_building_textile_mills
-		pmg_ownership_capital_building_textile_mills
+		#pmg_ownership_capital_building_textile_mills
 	}
 	
 	required_construction = construction_cost_high
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_furniture_manufacturies = {
@@ -69,10 +57,12 @@ building_furniture_manufacturies = {
 		pmg_luxury_building_furniture_manufacturies
 		pmg_automation_building_furniture_manufacturies
 		pmg_branding_building_furniture_manufacturies
-		pmg_ownership_capital_building_furniture_manufacturies
+		#pmg_ownership_capital_building_furniture_manufacturies
 	}
 
 	required_construction = construction_cost_high
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_urban_center = {
@@ -87,7 +77,7 @@ building_urban_center = {
 	
 	production_method_groups = {
 		pmg_amenities
-		pmg_housing
+		#pmg_housing
 		pmg_street_lighting
 		pmg_public_transport
 		#pmg_entertainment
@@ -97,8 +87,11 @@ building_urban_center = {
 	buildable = no
 	expandable = no
 	downsizeable = no	
+	cannot_switch_owner = yes
 	
 	terrain_manipulator = urban_city
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_synthetics_plants = {
@@ -115,10 +108,20 @@ building_synthetics_plants = {
 		pmg_synthetic_dyes
 		# pmg_distribution_building_synthetics_plants_dyes
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 	}
 	
-	required_construction = construction_cost_high
+	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_synthetics_plants_silk = {
@@ -135,10 +138,21 @@ building_synthetics_plants_silk = {
 		pmg_synthetic_silk
 		# pmg_distribution_building_synthetics_plants_silk
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 	}
 	
-	required_construction = construction_cost_high
+	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	
 }
 
 building_synthetics_plants_oil = {
@@ -155,10 +169,20 @@ building_synthetics_plants_oil = {
 		pmg_synthetic_oil
 		# pmg_distribution_building_synthetics_plants_oil
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 	}
 	
-	required_construction = construction_cost_high
+	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_synthetics_plants_rubber = {
@@ -175,10 +199,20 @@ building_synthetics_plants_rubber = {
 		pmg_synthetic_rubber
 		# pmg_distribution_building_synthetics_plants_rubber
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 	}
 	
-	required_construction = construction_cost_high
+	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_synthetics_plants_opium = {
@@ -195,10 +229,20 @@ building_synthetics_plants_opium = {
 		pmg_synthetic_opium
 		# pmg_distribution_building_synthetics_plants_rubber
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 	}
 	
-	required_construction = construction_cost_high
+	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_synthetics_plants_coal = {
@@ -212,11 +256,21 @@ building_synthetics_plants_coal = {
 	production_method_groups = {
 		pmg_synthetic_coal
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 		
 	}
 
 	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_synthetics_plants_wood = {
@@ -230,11 +284,21 @@ building_synthetics_plants_wood = {
 	production_method_groups = {
 		pmg_synthetic_wood
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 		
 	}
 
 	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_synthetics_plants_sugar = {
@@ -248,11 +312,21 @@ building_synthetics_plants_sugar = {
 	production_method_groups = {
 		pmg_synthetic_sugar
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 		
 	}
 
 	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_synthetics_plants_meat = {
@@ -266,11 +340,21 @@ building_synthetics_plants_meat = {
 	production_method_groups = {
 		pmg_synthetic_meat
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 		
 	}
 
 	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_synthetics_plants_fish = {
@@ -284,11 +368,21 @@ building_synthetics_plants_fish = {
 	production_method_groups = {
 		pmg_synthetic_fish
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 		
 	}
 
 	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_synthetics_plants_fruit = {
@@ -302,11 +396,21 @@ building_synthetics_plants_fruit = {
 	production_method_groups = {
 		pmg_synthetic_fruit
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 		
 	}
 
 	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_synthetics_plants_drinks = {
@@ -320,11 +424,49 @@ building_synthetics_plants_drinks = {
 	production_method_groups = {
 		pmg_synthetic_drinks
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_synthetics_plants
+		#pmg_ownership_capital_building_synthetics_plants
 		
 	}
 
 	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_synthetics_plants_biomass = {
+	building_group = bg_heavy_industry	
+	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	
+	unlocking_technologies = {
+		genetic_engineering
+	}
+
+	production_method_groups = {
+		pmg_synthetic_biomass
+		pmg_automation_building_chemical_plants
+		#pmg_ownership_capital_building_synthetics_plants
+		
+	}
+
+	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_chemical_plants = {
@@ -341,21 +483,20 @@ building_chemical_plants = {
 	production_method_groups = {
 		pmg_fertilizer_production
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_chemical_plants
+		#pmg_ownership_capital_building_chemical_plants
 	}
 
 	required_construction = construction_cost_very_high
 
 	possible = {
-		error_check = {
-			severity = fail
-			this = {
-				owner = { 
-					NOT = { has_law = law_type:law_industry_banned } 
-				}
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
 			}
 		}
 	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_explosives_factory = {
@@ -372,21 +513,20 @@ building_explosives_factory = {
 	production_method_groups = {
 		pmg_explosives_building_chemical_plants
 		pmg_automation_building_chemical_plants
-		pmg_ownership_capital_building_chemical_plants
+		#pmg_ownership_capital_building_chemical_plants
 	}
 
 	required_construction = construction_cost_very_high
 
 	possible = {
-		error_check = {
-			severity = fail
-			this = {
-				owner = { 
-					NOT = { has_law = law_type:law_industry_banned } 
-				}
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
 			}
 		}
 	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_motor_industry = {
@@ -402,21 +542,20 @@ building_motor_industry = {
 	production_method_groups = {
 		pmg_base_building_motor_industry
 		pmg_automation_building_motor_industry
-		pmg_ownership_capital_building_motor_industry
+		#pmg_ownership_capital_building_motor_industry
 	}
 	
 	required_construction = construction_cost_very_high
 
 	possible = {
-		error_check = {
-			severity = fail
-			this = {
-				owner = { 
-					NOT = { has_law = law_type:law_industry_banned } 
-				}
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
 			}
 		}
 	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_car_industry = {
@@ -432,10 +571,12 @@ building_car_industry = {
 	production_method_groups = {
 		pmg_base_building_car_industry
 		pmg_automation_building_motor_industry
-		pmg_ownership_capital_building_car_industry
+		#pmg_ownership_capital_building_car_industry
 	}
 	
 	required_construction = construction_cost_very_high
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_electrics_industry = {
@@ -452,10 +593,20 @@ building_electrics_industry = {
 		pmg_telephones_category
 		# pmg_distribution_building_electrics_industry
 		pmg_automation_building_electronic_components
-		pmg_ownership_capital_building_electrics_industry
+		#pmg_ownership_capital_building_electrics_industry
 	}
 	
 	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_electrics_industry_radio = {
@@ -472,10 +623,20 @@ building_electrics_industry_radio = {
 		pmg_radios_category
 		# pmg_distribution_building_electrics_industry
 		pmg_automation_building_electronic_components
-		pmg_ownership_capital_building_electrics_industry
+		#pmg_ownership_capital_building_electrics_industry
 	}
 	
 	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_electrics_industry_appliances = {
@@ -492,10 +653,20 @@ building_electrics_industry_appliances = {
 		pmg_consumer_appliances
 		# pmg_distribution_building_electrics_industry
 		pmg_automation_building_electronic_components
-		pmg_ownership_capital_building_electrics_industry
+		#pmg_ownership_capital_building_electrics_industry
 	}
 	
-	required_construction = construction_cost_very_high
+	required_construction = construction_cost_super_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 
@@ -511,21 +682,20 @@ building_power_plant = {
 	production_method_groups = {
 		pmg_base_building_power_plant
 		pmg_power_automation
-		pmg_ownership_capital_building_power_plant
+		#pmg_ownership_capital_building_power_plant
 	}
 	
 	required_construction = construction_cost_very_high
 
 	possible = {
-		error_check = {
-			severity = fail
-			this = {
-				owner = { 
-					NOT = { has_law = law_type:law_industry_banned } 
-				}
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
 			}
 		}
 	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_war_machine_industry = {
@@ -541,10 +711,19 @@ building_war_machine_industry = {
 	production_method_groups = {
 		pmg_tanks
 		pmg_automation_tanks
-		pmg_ownership_capital_building_war_machine_industry
 	}
 	
 	required_construction = construction_cost_very_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_aeroplanes_industry = {
@@ -560,38 +739,20 @@ building_aeroplanes_industry = {
 	production_method_groups = {
 		pmg_aeroplanes
 		pmg_automation_planes
-		pmg_ownership_capital_building_war_machine_industry
+		#pmg_ownership_capital_building_war_machine_industry
 	}
 	
 	required_construction = construction_cost_very_high
-}
 
-building_port = {
-	building_group = bg_private_infrastructure
-	city_type = port
-	texture = "gfx/interface/icons/building_icons/building_port.dds"
-
-	has_max_level = yes
-	ignore_stateregion_max_level = yes
-	port = yes
-
-	unlocking_technologies = { navigation }
-
-	production_method_groups = {
-		pmg_base_building_port
-		pmg_ownership_capital_building_railway
-	}
-
-	required_construction = construction_cost_medium
-
-	terrain_manipulator = urban_port
-	
 	possible = {
-		error_check = {
-			severity = fail
-			is_coastal = yes
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
 		}
 	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_airport = {
@@ -599,6 +760,7 @@ building_airport = {
 	texture = "gfx/interface/icons/building_icons/building_railway.dds"
 	
 	enable_air_connection = yes # does this do anything??
+	has_max_level = yes
 	
 	unlocking_technologies = {
 		commercial_aviation
@@ -606,15 +768,35 @@ building_airport = {
 
 	production_method_groups = {
 		pmg_base_building_airport
-		pmg_ownership_capital_building_railway
 	}
 
 	required_construction = construction_cost_very_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_space_program = {
+	building_group = bg_government	
+	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	
+	unlocking_technologies = {
+		space_exploration
+	}
+
+	production_method_groups = {
+		pmg_base_building_space_program
+	}
+
+	required_construction = construction_cost_super_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_highway = {
 	building_group = bg_private_infrastructure	
 	texture = "gfx/interface/icons/building_icons/building_railway.dds"
+
+	has_max_level = yes
 	
 	unlocking_technologies = {
 		paved_roads
@@ -622,15 +804,16 @@ building_highway = {
 
 	production_method_groups = {
 		pmg_base_building_highway
-		pmg_ownership_capital_building_railway
 	}
 
 	required_construction = construction_cost_very_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_software_industry = {
 	building_group = bg_light_industry
-	texture = "gfx/interface/icons/building_icons/building_railway.dds"
+	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
 	
 	unlocking_technologies = {
 		computer_networks
@@ -639,10 +822,11 @@ building_software_industry = {
 	production_method_groups = {
 		pmg_base_building_software_industry
 		pmg_automation_building_software
-		pmg_ownership_capital_building_electrics_industry
 	}
 
 	required_construction = construction_cost_very_high
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_network_infrastructure = {
@@ -656,10 +840,11 @@ building_network_infrastructure = {
 	production_method_groups = {
 		pmg_base_building_network
 		pmg_automation_building_network
-		pmg_ownership_capital_building_network_infrastructure
 	}
 
 	required_construction = construction_cost_super_high
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_hydro_plant = {
@@ -669,7 +854,6 @@ building_hydro_plant = {
 	production_method_groups = {
 		pmg_base_building_hydro_power
 		pmg_power_automation
-		pmg_ownership_capital_building_power_plant
 	}
 
 	unlocking_technologies = { 
@@ -681,13 +865,12 @@ building_hydro_plant = {
 	has_max_level = yes
 	
 	possible = {
-		error_check = {
-			severity = invalid
-			this = {
-				on_river = yes
-			}
+		this = {
+			on_river = yes
 		}
 	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_nuclear_plant = {
@@ -697,7 +880,6 @@ building_nuclear_plant = {
 	production_method_groups = {
 		pmg_base_building_nuclear_power
 		pmg_power_automation
-		pmg_ownership_capital_building_power_plant
 	}
 
 	unlocking_technologies = { 
@@ -705,6 +887,8 @@ building_nuclear_plant = {
 	}
 	
 	required_construction = construction_cost_super_high
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_fusion_plant = {
@@ -714,7 +898,6 @@ building_fusion_plant = {
 	production_method_groups = {
 		pmg_base_building_fusion_power
 		pmg_power_automation
-		pmg_ownership_capital_building_power_plant
 	}
 
 	unlocking_technologies = { 
@@ -722,6 +905,8 @@ building_fusion_plant = {
 	}
 	
 	required_construction = construction_cost_mega_high
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_renewable_energy_plant = {
@@ -731,14 +916,15 @@ building_renewable_energy_plant = {
 	production_method_groups = {
 		pmg_base_building_renewable_power
 		pmg_power_automation
-		pmg_ownership_capital_building_power_plant
 	}
 
 	unlocking_technologies = { 
 		clean_energy_technologies 
 	}
 	
-	required_construction = construction_cost_very_high
+	required_construction = construction_cost_super_high
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_electronic_components_and_semiconductor_industry = {
@@ -752,11 +938,20 @@ building_electronic_components_and_semiconductor_industry = {
 	production_method_groups = {
 		pmg_base_building_electronic_components
 		pmg_automation_building_electronic_components
-		pmg_ownership_capital_building_electrics_industry
 		
 	}
 
 	required_construction = construction_cost_super_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_robotics_industry = {
@@ -770,11 +965,20 @@ building_robotics_industry = {
 	production_method_groups = {
 		pmg_base_building_robotics
 		pmg_automation_building_electronic_components
-		pmg_ownership_capital_building_electrics_industry
 		
 	}
 
 	required_construction = construction_cost_super_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_advanced_material_fabricator = {
@@ -788,11 +992,20 @@ building_advanced_material_fabricator = {
 	production_method_groups = {
 		pmg_base_building_advanced_material_fabricator
 		pmg_automation_building_advanced_material_fabricator
-		pmg_ownership_capital_building_electrics_industry
 		
 	}
 
 	required_construction = construction_cost_mega_high
+
+	possible = {
+		this = {
+			owner = { 
+				NOT = { has_law = law_type:law_industry_banned } 
+			}
+		}
+	}
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_launch_facility = {
@@ -806,11 +1019,12 @@ building_launch_facility = {
 	production_method_groups = {
 		pmg_base_building_lauch_facility
 		pmg_automation_building_lauch_facility
-		pmg_ownership_capital_building_electrics_industry
 		
 	}
 
 	required_construction = construction_cost_mega_high
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_space_elevator_construction_site = {
@@ -830,106 +1044,104 @@ building_space_elevator_construction_site = {
 	expandable = no
 	
 	possible = {
-		error_check = {
-			severity = invalid
-			#OR = {
-			#	b:building_space_elevator.level < 20
-			#	NOT = { has_building = building_space_elevator }
-			#}
-			OR = {
-                state_region = s:STATE_RIFT_VALLEY
-                state_region = s:STATE_IVORY_COAST
-                state_region = s:STATE_SIERRA_LEONE
-                state_region = s:STATE_AMHARA
-                state_region = s:STATE_LIBERIA
-                state_region = s:STATE_BENIN
-                state_region = s:STATE_NIGER_DELTA
-                state_region = s:STATE_NIGERIA
-                state_region = s:STATE_GHANA
-                state_region = s:STATE_TOGO
-                state_region = s:STATE_DAHOMEY
-                state_region = s:STATE_LINDI
-                state_region = s:STATE_ZANZIBAR
-                state_region = s:STATE_TANGANYIKA
-                state_region = s:STATE_KENYA
-                state_region = s:STATE_OROMIA
-                state_region = s:STATE_KAZEMBE
-                state_region = s:STATE_SOMALILAND
-                state_region = s:STATE_NORTH_MADAGASCAR
-                state_region = s:STATE_UGANDA
-                state_region = s:STATE_EQUATORIA
-                state_region = s:STATE_NORTH_CAMEROON
-                state_region = s:STATE_SOUTH_CAMEROON
-                state_region = s:STATE_CONGO
-                state_region = s:STATE_CONGO_ORIENTALE
-                state_region = s:STATE_KASAI
-                state_region = s:STATE_BAS_CONGO
-                state_region = s:STATE_EQUATEUR
-                state_region = s:STATE_KATANGA
-                state_region = s:STATE_GABON
-                state_region = s:STATE_PANAMA
-                state_region = s:STATE_ECUADOR
-                state_region = s:STATE_GUAYANA
-                state_region = s:STATE_ANTIOQUIA
-                state_region = s:STATE_GUAVIARE
-                state_region = s:STATE_CUNDINAMARCA
-                state_region = s:STATE_CAUCA
-                state_region = s:STATE_PASTAZA
-                state_region = s:STATE_CAJAMARCA
-                state_region = s:STATE_YORUBA_STATES
-                state_region = s:STATE_UBANGI_SHARI
-                state_region = s:STATE_PARA
-                state_region = s:STATE_MARANHAO
-                state_region = s:STATE_AMAZONAS
-                state_region = s:STATE_ACRE
-                state_region = s:STATE_RIO_GRANDE_DO_NORTE
-                state_region = s:STATE_CEARA
-                state_region = s:STATE_PIAUI
-                state_region = s:STATE_PARAIBA
-                state_region = s:STATE_PERNAMBUCO
-                state_region = s:STATE_MADRAS
-                state_region = s:STATE_CEYLON
-                state_region = s:STATE_INDIAN_OCEAN_TERRITORY
-                state_region = s:STATE_WEST_BORNEO
-                state_region = s:STATE_WEST_JAVA
-                state_region = s:STATE_EAST_JAVA
-                state_region = s:STATE_CENTRAL_JAVA
-                state_region = s:STATE_NORTH_SUMATRA
-                state_region = s:STATE_SOUTH_SUMATRA
-                state_region = s:STATE_ACEH
-                state_region = s:STATE_WESTERN_NEW_GUINEA
-                state_region = s:STATE_MOLUCCAS
-                state_region = s:STATE_CELEBES
-                state_region = s:STATE_SUNDA_ISLANDS
-                state_region = s:STATE_MINDANAO
-                state_region = s:STATE_SOLOMON_ISLANDS
-                state_region = s:STATE_NAURU
-                state_region = s:STATE_HORN_OF_AFRICA
-				state_region = s:STATE_ZULIA
-				state_region = s:STATE_MIRANDA
-				state_region = s:STATE_BOLIVAR
-				state_region = s:STATE_WEST_INDIES
-				state_region = s:STATE_LIMA
-				state_region = s:STATE_GUINEA
-				state_region = s:STATE_WINDWARD_COAST
-				state_region = s:STATE_YEMEN
-				state_region = s:STATE_TRAVANCORE
-				state_region = s:STATE_MEKONG
-				state_region = s:STATE_TENASSERIM
-				state_region = s:STATE_MALAYA
-				state_region = s:STATE_NORTH_BORNEO
-				state_region = s:STATE_EAST_BORNEO
-				state_region = s:STATE_EASTERN_NEW_GUINEA
-				state_region = s:STATE_EAST_MICRONESIA
-				state_region = s:STATE_TONGA
-				state_region = s:STATE_HAUSALAND
-				state_region = s:STATE_EAST_HAUSALAND
-				state_region = s:STATE_NORTH_ANGOLA
-				state_region = s:STATE_LUZON
-				state_region = s:STATE_VISAYAS
-			}
+		#OR = {
+		#	b:building_space_elevator.level < 20
+		#	NOT = { has_building = building_space_elevator }
+		#}
+		OR = {
+			state_region = s:STATE_RIFT_VALLEY
+			state_region = s:STATE_IVORY_COAST
+			state_region = s:STATE_SIERRA_LEONE
+			state_region = s:STATE_AMHARA
+			state_region = s:STATE_LIBERIA
+			state_region = s:STATE_BENIN
+			state_region = s:STATE_NIGER_DELTA
+			state_region = s:STATE_NIGERIA
+			state_region = s:STATE_GHANA
+			state_region = s:STATE_TOGO
+			state_region = s:STATE_DAHOMEY
+			state_region = s:STATE_LINDI
+			state_region = s:STATE_ZANZIBAR
+			state_region = s:STATE_TANGANYIKA
+			state_region = s:STATE_KENYA
+			state_region = s:STATE_OROMIA
+			state_region = s:STATE_KAZEMBE
+			state_region = s:STATE_SOMALILAND
+			state_region = s:STATE_NORTH_MADAGASCAR
+			state_region = s:STATE_UGANDA
+			state_region = s:STATE_EQUATORIA
+			state_region = s:STATE_NORTH_CAMEROON
+			state_region = s:STATE_SOUTH_CAMEROON
+			state_region = s:STATE_CONGO
+			state_region = s:STATE_CONGO_ORIENTALE
+			state_region = s:STATE_KASAI
+			state_region = s:STATE_BAS_CONGO
+			state_region = s:STATE_EQUATEUR
+			state_region = s:STATE_KATANGA
+			state_region = s:STATE_GABON
+			state_region = s:STATE_PANAMA
+			state_region = s:STATE_ECUADOR
+			state_region = s:STATE_GUAYANA
+			state_region = s:STATE_ANTIOQUIA
+			state_region = s:STATE_GUAVIARE
+			state_region = s:STATE_CUNDINAMARCA
+			state_region = s:STATE_CAUCA
+			state_region = s:STATE_PASTAZA
+			state_region = s:STATE_CAJAMARCA
+			state_region = s:STATE_YORUBA_STATES
+			state_region = s:STATE_UBANGI_SHARI
+			state_region = s:STATE_PARA
+			state_region = s:STATE_MARANHAO
+			state_region = s:STATE_AMAZONAS
+			state_region = s:STATE_ACRE
+			state_region = s:STATE_RIO_GRANDE_DO_NORTE
+			state_region = s:STATE_CEARA
+			state_region = s:STATE_PIAUI
+			state_region = s:STATE_PARAIBA
+			state_region = s:STATE_PERNAMBUCO
+			state_region = s:STATE_MADRAS
+			state_region = s:STATE_CEYLON
+			state_region = s:STATE_INDIAN_OCEAN_TERRITORY
+			state_region = s:STATE_WEST_BORNEO
+			state_region = s:STATE_WEST_JAVA
+			state_region = s:STATE_EAST_JAVA
+			state_region = s:STATE_CENTRAL_JAVA
+			state_region = s:STATE_NORTH_SUMATRA
+			state_region = s:STATE_SOUTH_SUMATRA
+			state_region = s:STATE_ACEH
+			state_region = s:STATE_WESTERN_NEW_GUINEA
+			state_region = s:STATE_MOLUCCAS
+			state_region = s:STATE_CELEBES
+			state_region = s:STATE_SUNDA_ISLANDS
+			state_region = s:STATE_MINDANAO
+			state_region = s:STATE_SOLOMON_ISLANDS
+			state_region = s:STATE_NAURU
+			state_region = s:STATE_HORN_OF_AFRICA
+			state_region = s:STATE_ZULIA
+			state_region = s:STATE_MIRANDA
+			state_region = s:STATE_BOLIVAR
+			state_region = s:STATE_WEST_INDIES
+			state_region = s:STATE_LIMA
+			state_region = s:STATE_GUINEA
+			state_region = s:STATE_WINDWARD_COAST
+			state_region = s:STATE_YEMEN
+			state_region = s:STATE_TRAVANCORE
+			state_region = s:STATE_MEKONG
+			state_region = s:STATE_TENASSERIM
+			state_region = s:STATE_MALAYA
+			state_region = s:STATE_NORTH_BORNEO
+			state_region = s:STATE_EAST_BORNEO
+			state_region = s:STATE_EASTERN_NEW_GUINEA
+			state_region = s:STATE_EAST_MICRONESIA
+			state_region = s:STATE_TONGA
+			state_region = s:STATE_HAUSALAND
+			state_region = s:STATE_EAST_HAUSALAND
+			state_region = s:STATE_NORTH_ANGOLA
+			state_region = s:STATE_LUZON
+			state_region = s:STATE_VISAYAS
 		}
 	}
+	ownership_type = no_ownership
 }
 
 building_space_elevator = {
@@ -938,13 +1150,14 @@ building_space_elevator = {
 
 	production_method_groups = {
 		pmg_base_building_space_elevator
-		pmg_ownership_capital_building_power_plant
 	}
 
 	required_construction = construction_cost_canal
 	
 	buildable = no
 	expandable = no
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_space_mine = {
@@ -957,9 +1170,117 @@ building_space_mine = {
 
 	production_method_groups = {
 		pmg_base_building_space_mine
-		pmg_ownership_capital_building_electrics_industry
 		
 	}
 
 	required_construction = construction_cost_mega_high
+	ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
+
+building_university = {
+
+	building_group = bg_technology
+
+	city_type = city
+
+	levels_per_mesh = 5
+
+	unlocking_technologies = {
+		academia
+	}
+
+	production_method_groups = {
+		pmg_base_building_university
+		pmg_university_academia
+		pmg_principle_freedom_of_movement_3
+		pmg_principle_education_3
+	}
+
+	texture = "gfx/interface/icons/building_icons/building_university.dds"
+
+	required_construction = construction_cost_medium
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_space_program = {
+	building_group = bg_monuments	
+	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+
+	expandable = no
+	
+	unlocking_technologies = {
+		space_exploration
+	}
+
+	production_method_groups = {
+		pmg_base_building_space_program
+	}
+
+	possible = {
+		owner.market_capital = THIS
+	}
+
+	required_construction = construction_cost_mega_high
+
+	can_build_government = {
+		always = yes
+	}
+
+	can_build_private = {
+		always = no
+	}	
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_national_park = {
+	building_group = bg_parks	
+	texture = "gfx/interface/icons/building_icons/logging_camp.dds"
+	
+	unlocking_technologies = {
+		environmental_movement
+	}
+
+	production_method_groups = {
+		pmg_base_building_national_park
+	}
+
+	required_construction = construction_cost_very_high
+
+	can_build_government = {
+		always = yes
+	}
+
+	can_build_private = {
+		always = no
+	}	
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+#building_naval_base = {
+#	building_group = bg_navy
+#	recruits_combat_units = yes
+#	city_type = port
+#	levels_per_mesh = 25
+	
+#	has_max_level = yes
+	
+#	texture = "gfx/interface/icons/building_icons/naval_base.dds"
+#	naval = yes
+#	unlocking_technologies = { admiralty }
+	
+#	production_method_groups = {
+#		pmg_naval_theory
+#		pmg_naval_construction
+#	}
+	
+#	required_construction = construction_cost_very_low
+	
+	# Can only build naval bases on the coast
+#	possible = {
+#		is_coastal = yes
+#	}
+#}

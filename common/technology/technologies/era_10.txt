@@ -85,9 +85,8 @@ additive_manufacturing = {
 	}
 	
 	modifier = {
-		state_construction_mult = 0.5
+		state_construction_mult = 0.1
 		country_max_weekly_construction_progress_add = 25
-		state_building_construction_sector_max_level_add = 50
 	}
 	
 	ai_weight = {
@@ -101,7 +100,7 @@ smart_grids = {
 	category = production
 
 	modifier = {
-		country_bureaucracy_investment_cost_factor_mult = 0.4
+		state_bureaucracy_population_base_cost_factor_mult = 2
 	}
 	
 	unlocking_technologies = {	
@@ -179,9 +178,6 @@ hypersonic_weapons = {
 		precision_guided_munitions
 		supersonic_aircraft
 	}
-	modifier = {
-		unit_combat_unit_type_nuclear_submarine_offense_mult = 2
-	}
 	
 	ai_weight = {
 		value = 1
@@ -195,7 +191,7 @@ cyber_warfare = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 100
 	}
 	
 	unlocking_technologies = {	
@@ -217,10 +213,8 @@ directed_energy_weapons = {
 	}
 
 	modifier = {
-		unit_combat_unit_type_asw_destroyers_defense_mult = 1
-		unit_combat_unit_type_asw_destroyers_offense_mult = 1
-		unit_combat_unit_type_carrier_group_defense_mult = 1
-		unit_combat_unit_type_carrier_group_offense_mult = 1
+		unit_navy_defense_mult = 1
+		unit_navy_offense_mult = 1
 	}
 	
 	ai_weight = {
@@ -252,13 +246,9 @@ electronic_warfare = {
 	}
 
 	modifier = {
-		unit_combat_unit_type_asw_destroyers_defense_mult = 0.5
-		unit_combat_unit_type_asw_destroyers_offense_mult = 0.5
-		unit_combat_unit_type_carrier_group_defense_mult = 0.5
-		unit_combat_unit_type_carrier_group_offense_mult = 0.5
-		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.5
-		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.5
-		country_tech_spread_mult = 0.2
+		unit_navy_defense_mult = 0.5
+		unit_navy_offense_mult = 0.5
+		country_tech_spread_add = 100
 	}
 	
 	ai_weight = {
@@ -277,10 +267,8 @@ swarm_technology = {
 	}
 
 	modifier = {
-		unit_combat_unit_type_asw_destroyers_defense_mult = 0.5
-		unit_combat_unit_type_asw_destroyers_offense_mult = 0.5
-		unit_combat_unit_type_carrier_group_defense_mult = 1
-		unit_combat_unit_type_carrier_group_offense_mult = 1
+		unit_navy_defense_mult = 0.5
+		unit_navy_offense_mult = 0.5
 	}
 	
 	ai_weight = {
@@ -367,15 +355,12 @@ fusion_power = {
 	}
 
 	modifier = {
-		unit_combat_unit_type_asw_destroyers_defense_mult = 1
-		unit_combat_unit_type_asw_destroyers_offense_mult = 1
-		unit_combat_unit_type_carrier_group_defense_mult = 1
-		unit_combat_unit_type_carrier_group_offense_mult = 1
-		unit_combat_unit_type_nuclear_submarine_defense_mult = 2
-		unit_combat_unit_type_nuclear_submarine_offense_mult = 2
+		unit_navy_defense_mult = 1
+		unit_navy_offense_mult = 1
 		country_weekly_innovation_max_add = 100
 		military_formation_movement_speed_mult = 1
-		country_bureaucracy_investment_cost_factor_mult = 0.4
+		state_bureaucracy_population_base_cost_factor_mult = 2
+		state_building_airport_max_level_add = 5
 	}
 	
 	ai_weight = {
@@ -415,7 +400,7 @@ telemedicine = {
 
 	modifier = {
 		state_mortality_mult = -0.05
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 100
 	}
 	
 	ai_weight = {
@@ -430,7 +415,8 @@ brain_computer_interfaces = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		country_bureaucracy_investment_cost_factor_mult = 0.4
+		state_bureaucracy_population_base_cost_factor_mult = 2
+		country_tech_spread_add = 100
 	}
 	
 	unlocking_technologies = {	
@@ -532,6 +518,7 @@ biohacking_and_human_augmentation = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 100
+		state_building_airport_max_level_add = 5
 	}
 	
 	ai_weight = {

@@ -1,0 +1,24 @@
+﻿pm_wooden_buildings = {
+	texture = "gfx/interface/icons/production_method_icons/wooden_buildings.dds"
+	
+	is_default = yes
+
+			
+
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_construction_add = 1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_construction_add = 1
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 100
+		}
+	}
+}

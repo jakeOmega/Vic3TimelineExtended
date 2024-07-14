@@ -5,7 +5,8 @@ artificial_intelligence = {
 	
 	unlocking_technologies = {	
 		generative_ai
-		additive_manufacturing
+		advanced_nanofabrication
+		autonomous_vehicles
 	}
 	
 	ai_weight = {
@@ -43,7 +44,7 @@ molecular_assemblers = {
 	
 	modifier = {
 		state_construction_mult = 1
-		country_max_weekly_construction_progress_add = 50
+		country_max_weekly_construction_progress_add = 200
 	}
 	
 	ai_weight = {
@@ -73,6 +74,10 @@ orbital_manufacturing = {
 	unlocking_technologies = {	
 		smart_grids
 		additive_manufacturing
+	}
+
+	modifier = {
+		state_building_airport_max_level_add = 10
 	}
 	
 	ai_weight = {
@@ -111,13 +116,10 @@ compact_fusion_reactors = {
 
 	modifier = {
 		country_max_weekly_construction_progress_add = 50
-		unit_combat_unit_type_asw_destroyers_defense_mult = 2
-		unit_combat_unit_type_asw_destroyers_offense_mult = 2
-		unit_combat_unit_type_carrier_group_defense_mult = 2
-		unit_combat_unit_type_carrier_group_offense_mult = 2
-		unit_combat_unit_type_nuclear_submarine_defense_mult = 2
-		unit_combat_unit_type_nuclear_submarine_offense_mult = 2
+		unit_navy_defense_mult = 2
+		unit_navy_offense_mult = 2
 		military_formation_movement_speed_mult = 1
+		state_building_airport_max_level_add = 10
 	}
 	
 	ai_weight = {
@@ -137,13 +139,10 @@ fusion_batteries = {
 	modifier = {
 		state_market_access_price_impact = 0.01
 		building_group_bg_trade_employee_mult = -0.04
-		unit_combat_unit_type_asw_destroyers_defense_mult = 1
-		unit_combat_unit_type_asw_destroyers_offense_mult = 1
-		unit_combat_unit_type_carrier_group_defense_mult = 1
-		unit_combat_unit_type_carrier_group_offense_mult = 1
-		unit_combat_unit_type_nuclear_submarine_defense_mult = 1
-		unit_combat_unit_type_nuclear_submarine_offense_mult = 1
+		unit_navy_defense_mult = 1
+		unit_navy_offense_mult = 1
 		military_formation_movement_speed_mult = 1
+		state_building_airport_max_level_add = 10
 	}
 	
 	ai_weight = {
@@ -207,9 +206,7 @@ antimatter_production = {
 	
 	modifier = {
 		building_launch_facility_throughput_add = 0.25
-		unit_combat_unit_type_asw_destroyers_offense_mult = 2
-		unit_combat_unit_type_carrier_group_offense_mult = 2
-		unit_combat_unit_type_nuclear_submarine_offense_mult = 3
+		unit_navy_offense_mult = 2
 		military_formation_movement_speed_mult = 1
 	}
 	
@@ -318,6 +315,7 @@ post-scarcity_economy = {
 		state_middle_expected_sol = 1
 		country_max_weekly_construction_progress_add = 50
 		country_loan_interest_rate_add = -0.01
+		state_building_airport_max_level_add = 10
 	}
 	
 	ai_weight = {

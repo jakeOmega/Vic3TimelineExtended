@@ -1,0 +1,690 @@
+﻿
+replace_building = {
+	every_scope_building = { 
+		limit = { is_building_type = $OLD_TYPE$ } 
+		state = {
+			set_variable = {
+				name = building_level
+				value = prev.level
+			}
+			change_variable = {
+				name = building_level
+				multiply = 2
+			}
+			add_specified_building_level = {
+				ADD_LEVEL = var:building_level
+				SPEC_TYPE = $NEW_TYPE$
+			}
+			remove_building = $OLD_TYPE$
+		}
+	}
+}
+
+set_specified_building_level = {
+
+	if = {
+		limit = {
+			has_building = $SPEC_TYPE$
+		}
+		if = {
+			limit = {
+				b:$SPEC_TYPE$.level < $SPEC_LEVEL$
+			}
+			remove_building = $SPEC_TYPE$
+		}
+	}
+
+	build_specified_building_level = {
+		SPEC_TYPE = $SPEC_TYPE$
+		SPEC_LEVEL = $SPEC_LEVEL$
+		SPEC_OWNER = owner
+	}
+}
+
+add_specified_building_level = {
+	if = {
+		limit = { owner = { is_subject = yes } }
+		build_specified_building_level = {
+			SPEC_TYPE = $SPEC_TYPE$
+			SPEC_LEVEL = $ADD_LEVEL$
+			SPEC_OWNER = owner.overlord
+		}
+	}
+	else = {
+		build_specified_building_level = {
+			SPEC_TYPE = $SPEC_TYPE$
+			SPEC_LEVEL = $ADD_LEVEL$
+			SPEC_OWNER = owner
+		}
+	}	
+}
+
+remove_specified_building_level_amount = {
+	if = {
+		limit = {
+			has_building = $SPEC_TYPE$
+		}
+		owner = {
+			set_variable = {
+				name = add_level
+				value = prev.b:$SPEC_TYPE$.level
+			}
+			change_variable = {
+				name = add_level
+				subtract = prev.$REMOVE_LEVEL$
+			}
+		}
+		set_specified_building_level = {
+			SPEC_TYPE = $SPEC_TYPE$
+			SPEC_LEVEL = owner.var:add_level
+		}
+
+	}
+}
+
+
+build_specified_building_level = {
+	switch = {
+		trigger = $SPEC_LEVEL$
+		1 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 1} }
+			}
+		}
+		2 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 2} }
+			}
+		}
+		3 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 3} }
+			}
+		}
+		4 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 4} }
+			}
+		}
+		5 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 5} }
+			}
+		}
+		6 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 6} }
+			}
+		}
+		7 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 7} }
+			}
+		}
+		8 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 8} }
+			}
+		}
+		9 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 9} }
+			}
+		}
+		10 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 10} }
+			}
+		}
+		11 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 11} }
+			}
+		}
+		12 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 12} }
+			}
+		}
+		13 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 13} }
+			}
+		}
+		14 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 14} }
+			}
+		}
+		15 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 15} }
+			}
+		}
+		16 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 16} }
+			}
+		}
+		17 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 17} }
+			}
+		}
+		18 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 18} }
+			}
+		}
+		19 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 19} }
+			}
+		}
+		20 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 20} }
+			}
+		}
+		21 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 21} }
+			}
+		}
+		22 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 22} }
+			}
+		}
+		23 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 23} }
+			}
+		}
+		24 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 24} }
+			}
+		}
+		25 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 25} }
+			}
+		}
+		26 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 26} }
+			}
+		}
+		27 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 27} }
+			}
+		}
+		28 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 28} }
+			}
+		}
+		29 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 29} }
+			}
+		}
+		30 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 30} }
+			}
+		}
+		31 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 31} }
+			}
+		}
+		32 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 32} }
+			}
+		}
+		33 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 33} }
+			}
+		}
+		34 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 34} }
+			}
+		}
+		35 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 35} }
+			}
+		}
+		36 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 36} }
+			}
+		}
+		37 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 37} }
+			}
+		}
+		38 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 38} }
+			}
+		}
+		39 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 39} }
+			}
+		}
+		40 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 40} }
+			}
+		}
+		41 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 41} }
+			}
+		}
+		42 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 42} }
+			}
+		}
+		43 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 43} }
+			}
+		}
+		44 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 44} }
+			}
+		}
+		45 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 45} }
+			}
+		}
+		46 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 46} }
+			}
+		}
+		47 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 47} }
+			}
+		}
+		48 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 48} }
+			}
+		}
+		49 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 49} }
+			}
+		}
+		50 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 50} }
+			}
+		}
+		51 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 51} }
+			}
+		}
+		52 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 52} }
+			}
+		}
+		53 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 53} }
+			}
+		}
+		54 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 54} }
+			}
+		}
+		55 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 55} }
+			}
+		}
+		56 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 56} }
+			}
+		}
+		57 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 57} }
+			}
+		}
+		58 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 58} }
+			}
+		}
+		59 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 59} }
+			}
+		}
+		60 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 60} }
+			}
+		}
+		61 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 61} }
+			}
+		}
+		62 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 62} }
+			}
+		}
+		63 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 63} }
+			}
+		}
+		64 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 64} }
+			}
+		}
+		65 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 65} }
+			}
+		}
+		66 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 66} }
+			}
+		}
+		67 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 67} }
+			}
+		}
+		68 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 68} }
+			}
+		}
+		69 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 69} }
+			}
+		}
+		70 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 70} }
+			}
+		}
+		71 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 71} }
+			}
+		}
+		72 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 72} }
+			}
+		}
+		73 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 73} }
+			}
+		}
+		74 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 74} }
+			}
+		}
+		75 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 75} }
+			}
+		}
+		76 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 76} }
+			}
+		}
+		77 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 77} }
+			}
+		}
+		78 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 78} }
+			}
+		}
+		79 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 79} }
+			}
+		}
+		80 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 80} }
+			}
+		}
+		81 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 81} }
+			}
+		}
+		82 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 82} }
+			}
+		}
+		83 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 83} }
+			}
+		}
+		84 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 84} }
+			}
+		}
+		85 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 85} }
+			}
+		}
+		86 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 86} }
+			}
+		}
+		87 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 87} }
+			}
+		}
+		88 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 88} }
+			}
+		}
+		89 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 89} }
+			}
+		}
+		90 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 90} }
+			}
+		}
+		91 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 91} }
+			}
+		}
+		92 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 92} }
+			}
+		}
+		93 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 93} }
+			}
+		}
+		94 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 94} }
+			}
+		}
+		95 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 95} }
+			}
+		}
+		96 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 96} }
+			}
+		}
+		97 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 97} }
+			}
+		}
+		98 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 98} }
+			}
+		}
+		99 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 99} }
+			}
+		}
+		100 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				add_ownership = { country = { country = $SPEC_OWNER$ levels = 100} }
+			}
+		}
+	}
+}

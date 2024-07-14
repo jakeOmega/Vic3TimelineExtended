@@ -1,0 +1,29 @@
+﻿fmc_ai_construction_purchase_target = {
+	if = {
+		limit = {
+			is_construction_paused = no
+			construction_queue_num_queued_government_levels > 0
+		}
+		value = weekly_net_fixed_income
+		min = 0
+		divide = {
+			value = construction_price
+			min = 500
+			max = 1500
+		}
+		multiply = {
+			add = scaled_gold_reserves
+			subtract = scaled_debt
+			add = 1
+		}
+		round_to = 10
+		min = 10
+		max = {
+			value = construction_queue_num_queued_government_levels
+			multiply = modifier:country_max_weekly_construction_progress_add
+		}
+	}
+	else = {
+		value = 0
+	}
+}

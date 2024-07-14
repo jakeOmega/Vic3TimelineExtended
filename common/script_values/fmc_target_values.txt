@@ -1,0 +1,46 @@
+﻿private_construction_spending_target = {
+	value = investment_pool
+	subtract = {
+		value = investment_pool_gross_income
+		multiply = 13
+	}
+	divide = 52 #investment pool should reach equillibrium in a year
+	min = 0
+	# multiply = investment_price_incentive
+}
+
+public_construction_use_target = {
+	if = {
+		limit = {
+			has_variable = num_gov_factories
+		}
+		value = var:num_gov_factories
+	}
+	else = {
+		value = 1
+	}
+}
+
+private_construction_use_target = {
+	value = private_construction_spending_target
+	divide = 1000 #construction_price
+}
+
+total_construction_use_target = {
+	value = private_construction_use_target
+	add = public_construction_use_target
+}
+
+private_public_construction_ratio_target = {
+	if = {
+		limit = {
+			total_construction_use_target = 0
+		}
+		value = 1
+	}
+	else = {
+		value = private_construction_use_target
+		divide = total_construction_use_target
+	}
+	multiply = 100
+}

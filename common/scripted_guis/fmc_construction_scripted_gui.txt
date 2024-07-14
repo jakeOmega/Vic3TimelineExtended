@@ -1,0 +1,54 @@
+﻿add_construction_scriptedgui = {
+
+	scope = country 
+
+	is_shown = {
+        always = yes
+    } 
+    
+	ai_is_valid = {
+        always = yes
+    }
+
+	is_valid = {
+        always = yes
+    } 
+    
+    effect = {	
+		#custom_tooltip = ""
+        initialize_gov_factories_variable = yes
+        change_variable = { 
+            name = num_gov_factories 
+            add = 10
+        }
+        country_update_private_public = yes
+        update_construction_effect = yes
+    }
+}
+
+remove_construction_scriptedgui = {
+
+    scope = country    
+
+    is_shown = {
+        always = yes
+    }
+    
+    ai_is_valid = {
+        always = no
+    }       
+    is_valid = {
+        var:num_gov_factories >= 10
+    }       
+
+    effect = {          
+        #custom_tooltip = "" 
+        initialize_gov_factories_variable = yes
+        change_variable = { 
+            name = num_gov_factories 
+            subtract = 10
+        }
+        country_update_private_public = yes
+        update_construction_effect = yes
+    }
+}

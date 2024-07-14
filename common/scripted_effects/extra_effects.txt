@@ -1,9 +1,4 @@
-﻿
-update_barracks_training_effect = {
-	
-}
-
-space_elevator_construction = {
+﻿space_elevator_construction = {
 	if = {
 		limit = {
 			NOT = { has_variable = space_elevator_progress_var }
@@ -90,97 +85,7 @@ space_elevator_construction = {
 		else = {
 			create_building = {
 				building = building_space_elevator
-			}
-		}
-	}
-}
-
-emergency_response_devastation_update = {
-	if = {
-		limit = {
-			owner = {
-				has_law = law_type:law_ministry_of_emergency_response
-			}
-		}
-
-		if = {
-			limit = {
-				owner = {
-					institution_investment_level = {
-						institution = institution_ministry_of_emergency_response
-						value = 1
-					}
-				}
-			}
-			state_region = {
-				add_devastation = {
-					value = ministry_of_emergency_response_monthly_effect
-					multiply = 1
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				owner = {
-					institution_investment_level = {
-						institution = institution_ministry_of_emergency_response
-						value = 2
-					}
-				}
-			}
-			state_region = {
-				add_devastation = {
-					value = ministry_of_emergency_response_monthly_effect
-					multiply = 2
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				owner = {
-					institution_investment_level = {
-						institution = institution_ministry_of_emergency_response
-						value = 3
-					}
-				}
-			}
-			state_region = {
-				add_devastation = {
-					value = ministry_of_emergency_response_monthly_effect
-					multiply = 3
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				owner = {
-					institution_investment_level = {
-						institution = institution_ministry_of_emergency_response
-						value = 4
-					}
-				}
-			}
-			state_region = {
-				add_devastation = {
-					value = ministry_of_emergency_response_monthly_effect
-					multiply = 4
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				owner = {
-					institution_investment_level = {
-						institution = institution_ministry_of_emergency_response
-						value = 5
-					}
-				}
-			}
-			state_region = {
-				add_devastation = {
-					value = ministry_of_emergency_response_monthly_effect
-					multiply = 5
-				}
+				level = 1
 			}
 		}
 	}
@@ -271,6 +176,262 @@ thought_control_loyalists_update = {
 				value = {
 					value = ministry_of_thought_control_monthly_effect
 					multiply = 5
+				}
+			}
+		}
+	}
+}
+
+queue_more_private_investment = {
+	if = {
+		limit = {
+			needed_private_levels > 0
+			investment_pool > max_investment_pool_before_on_action
+			has_wasted_construction = yes
+		}
+		while = {
+			count = needed_private_levels
+			random_scope_building = {
+				limit = {
+					weekly_profit > 0
+					occupancy > 0.9
+					OR = {
+						is_building_type = building_textile_mills
+						is_building_type = building_furniture_manufacturies
+						is_building_type = building_synthetics_plants
+						is_building_type = building_synthetics_plants_silk
+						is_building_type = building_synthetics_plants_oil
+						is_building_type = building_synthetics_plants_rubber
+						is_building_type = building_synthetics_plants_opium
+						is_building_type = building_synthetics_plants_coal
+						is_building_type = building_synthetics_plants_wood
+						is_building_type = building_synthetics_plants_sugar
+						is_building_type = building_synthetics_plants_meat
+						is_building_type = building_synthetics_plants_fish
+						is_building_type = building_synthetics_plants_fruit
+						is_building_type = building_synthetics_plants_drinks
+						is_building_type = building_chemical_plants
+						is_building_type = building_explosives_factory
+						is_building_type = building_motor_industry
+						is_building_type = building_car_industry
+						is_building_type = building_electrics_industry
+						is_building_type = building_electrics_industry_radio
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_power_plant
+						is_building_type = building_war_machine_industry
+						is_building_type = building_aeroplanes_industry
+						is_building_type = building_software_industry
+						is_building_type = building_network_infrastructure
+						is_building_type = building_nuclear_plant
+						is_building_type = building_fusion_plant
+						is_building_type = building_renewable_energy_plant
+						is_building_type = building_electronic_components_and_semiconductor_industry
+						is_building_type = building_robotics_industry
+						is_building_type = building_advanced_material_fabricator
+						is_building_type = building_launch_facility
+						is_building_type = building_space_mine
+						is_building_type = building_steel_mills
+						is_building_type = building_food_industry
+						is_building_type = building_glassworks
+						is_building_type = building_tooling_workshops
+						is_building_type = building_paper_mills
+						is_building_type = building_shipyards
+						is_building_type = building_military_shipyards
+						is_building_type = building_arms_industry
+						is_building_type = building_artillery_foundries
+						is_building_type = building_munition_plants
+						is_building_type = building_arts_academy
+						is_building_type = building_railway
+						is_building_type = building_construction_sector_mod
+					}
+				}
+				if = {
+					limit = { is_building_type = building_textile_mills }
+					state = { start_privately_funded_building_construction = building_textile_mills }
+				}
+				else_if = {
+					limit = { is_building_type = building_furniture_manufacturies }
+					state = { start_privately_funded_building_construction = building_furniture_manufacturies }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants }
+					state = { start_privately_funded_building_construction = building_synthetics_plants }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants_silk }
+					state = { start_privately_funded_building_construction = building_synthetics_plants_silk }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants_oil }
+					state = { start_privately_funded_building_construction = building_synthetics_plants_oil }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants_rubber }
+					state = { start_privately_funded_building_construction = building_synthetics_plants_rubber }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants_opium }
+					state = { start_privately_funded_building_construction = building_synthetics_plants_opium }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants_coal }
+					state = { start_privately_funded_building_construction = building_synthetics_plants_coal }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants_wood }
+					state = { start_privately_funded_building_construction = building_synthetics_plants_wood }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants_sugar }
+					state = { start_privately_funded_building_construction = building_synthetics_plants_sugar }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants_meat }
+					state = { start_privately_funded_building_construction = building_synthetics_plants_meat }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants_fish }
+					state = { start_privately_funded_building_construction = building_synthetics_plants_fish }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants_fruit }
+					state = { start_privately_funded_building_construction = building_synthetics_plants_fruit }
+				}
+				else_if = {
+					limit = { is_building_type = building_synthetics_plants_drinks }
+					state = { start_privately_funded_building_construction = building_synthetics_plants_drinks }
+				}
+				else_if = {
+					limit = { is_building_type = building_chemical_plants }
+					state = { start_privately_funded_building_construction = building_chemical_plants }
+				}
+				else_if = {
+					limit = { is_building_type = building_explosives_factory }
+					state = { start_privately_funded_building_construction = building_explosives_factory }
+				}
+				else_if = {
+					limit = { is_building_type = building_motor_industry }
+					state = { start_privately_funded_building_construction = building_motor_industry }
+				}
+				else_if = {
+					limit = { is_building_type = building_car_industry }
+					state = { start_privately_funded_building_construction = building_car_industry }
+				}
+				else_if = {
+					limit = { is_building_type = building_electrics_industry }
+					state = { start_privately_funded_building_construction = building_electrics_industry }
+				}
+				else_if = {
+					limit = { is_building_type = building_electrics_industry_radio }
+					state = { start_privately_funded_building_construction = building_electrics_industry_radio }
+				}
+				else_if = {
+					limit = { is_building_type = building_electrics_industry_appliances }
+					state = { start_privately_funded_building_construction = building_electrics_industry_appliances }
+				}
+				if = {
+					limit = { is_building_type = building_power_plant }
+					state = { start_privately_funded_building_construction = building_power_plant }
+				}
+				else_if = {
+					limit = { is_building_type = building_war_machine_industry }
+					state = { start_privately_funded_building_construction = building_war_machine_industry }
+				}
+				else_if = {
+					limit = { is_building_type = building_aeroplanes_industry }
+					state = { start_privately_funded_building_construction = building_aeroplanes_industry }
+				}
+				else_if = {
+					limit = { is_building_type = building_software_industry }
+					state = { start_privately_funded_building_construction = building_software_industry }
+				}
+				else_if = {
+					limit = { is_building_type = building_network_infrastructure }
+					state = { start_privately_funded_building_construction = building_network_infrastructure }
+				}
+				else_if = {
+					limit = { is_building_type = building_nuclear_plant }
+					state = { start_privately_funded_building_construction = building_nuclear_plant }
+				}
+				else_if = {
+					limit = { is_building_type = building_fusion_plant }
+					state = { start_privately_funded_building_construction = building_fusion_plant }
+				}
+				else_if = {
+					limit = { is_building_type = building_renewable_energy_plant }
+					state = { start_privately_funded_building_construction = building_renewable_energy_plant }
+				}
+				else_if = {
+					limit = { is_building_type = building_electronic_components_and_semiconductor_industry }
+					state = { start_privately_funded_building_construction = building_electronic_components_and_semiconductor_industry }
+				}
+				else_if = {
+					limit = { is_building_type = building_robotics_industry }
+					state = { start_privately_funded_building_construction = building_robotics_industry }
+				}
+				else_if = {
+					limit = { is_building_type = building_advanced_material_fabricator }
+					state = { start_privately_funded_building_construction = building_advanced_material_fabricator }
+				}
+				else_if = {
+					limit = { is_building_type = building_launch_facility }
+					state = { start_privately_funded_building_construction = building_launch_facility }
+				}
+				else_if = {
+					limit = { is_building_type = building_space_mine }
+					state = { start_privately_funded_building_construction = building_space_mine }
+				}
+				else_if = {
+					limit = { is_building_type = building_steel_mills }
+					state = { start_privately_funded_building_construction = building_steel_mills }
+				}
+				else_if = {
+					limit = { is_building_type = building_food_industry }
+					state = { start_privately_funded_building_construction = building_food_industry }
+				}
+				else_if = {
+					limit = { is_building_type = building_glassworks }
+					state = { start_privately_funded_building_construction = building_glassworks }
+				}
+				else_if = {
+					limit = { is_building_type = building_tooling_workshops }
+					state = { start_privately_funded_building_construction = building_tooling_workshops }
+				}
+				else_if = {
+					limit = { is_building_type = building_paper_mills }
+					state = { start_privately_funded_building_construction = building_paper_mills }
+				}
+				else_if = {
+					limit = { is_building_type = building_shipyards }
+					state = { start_privately_funded_building_construction = building_shipyards }
+				}
+				else_if = {
+					limit = { is_building_type = building_military_shipyards }
+					state = { start_privately_funded_building_construction = building_military_shipyards }
+				}
+				else_if = {
+					limit = { is_building_type = building_arms_industry }
+					state = { start_privately_funded_building_construction = building_arms_industry }
+				}
+				else_if = {
+					limit = { is_building_type = building_artillery_foundries }
+					state = { start_privately_funded_building_construction = building_artillery_foundries }
+				}
+				else_if = {
+					limit = { is_building_type = building_munition_plants }
+					state = { start_privately_funded_building_construction = building_munition_plants }
+				}
+				else_if = {
+					limit = { is_building_type = building_arts_academy }
+					state = { start_privately_funded_building_construction = building_arts_academy }
+				}
+				else_if = {
+					limit = { is_building_type = building_railway }
+					state = { start_privately_funded_building_construction = building_railway }
+				}
+				else_if = {
+					limit = { is_building_type = building_construction_sector_mod }
+					state = { start_privately_funded_building_construction = building_construction_sector_mod }
 				}
 			}
 		}

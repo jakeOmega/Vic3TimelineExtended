@@ -1,0 +1,73 @@
+force_cultural_acceptance = {
+	groups= {
+		power_bloc_leader
+	}
+	show_in_lens = no
+
+	texture = "gfx/interface/icons/diplomatic_action_icons/force_state_religion.dds"
+	
+	selectable = {
+		is_power_bloc_leader = yes
+		power_bloc ?= {
+			modifier:power_bloc_leader_can_force_cultural_acceptance_bool = yes
+		}		
+	}
+	
+	potential = {
+		power_bloc ?= {
+			scope:target_country.power_bloc ?= this
+		}
+	}
+	
+	possible = {
+        any_primary_culture = {
+            NOT = { is_primary_culture_of = scope:target_country }
+        }
+
+		power_bloc = {
+			current_cohesion_percentage >= 0.5
+		}
+		scope:target_country = {
+			tenure_in_current_power_bloc_years >= 5
+		}
+		prestige >= {
+			value = scope:target_country.prestige
+			multiply = 3
+		}
+	}
+	
+	accept_effect = {
+        every_primary_culture = {
+            limit = {
+                NOT = { is_primary_culture_of = scope:target_country }
+            }
+            scope:target_country = {
+                add_primary_culture = PREV
+            }
+        }
+		
+		power_bloc = {
+			add_cohesion_percent = scaled_cohesion_cost
+		}
+	}
+	
+	ai = {
+		evaluation_chance = {
+			value = 0.025 # AI shouldn't use this very often
+		}
+		
+		will_propose = {
+			power_bloc = { current_cohesion_percentage >= 0.75 }
+			OR = {
+				has_attitude = {
+					who = scope:target_country
+					attitude = domineering
+				}									
+			}
+		}
+
+		propose_score = {								
+			value = 10			
+		}
+	}
+}

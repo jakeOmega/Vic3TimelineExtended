@@ -7,35 +7,45 @@ Created on Sun Nov 27 01:28:43 2022
 
 import re, math
 from pyparsing import nestedExpr, Word, alphanums, OneOrMore, ParseResults
-import matplotlib.pyplot as plt
+import numpy as np
 
 
 def convenience_need(i):
-    if i < 10:
+    if i < 20:
         return 0
     else:
-        return int(0.8 * ((i - 8) ** 3 / 4 + 1) * (1 + 3 * math.tanh(i / 200)))
+        return int(0.7 * ((i - 19) ** 3 / 4 + 1) * (1 + 3 * math.tanh(i / 200)))
 
 
 def services_need(i):
     if i < 9:
         return 0
+    elif i < 20:
+        return 12 * (i - 9)
     else:
-        return int(12 * math.exp(0.18 * i))
+        return services_need(19) + int(50 * (math.exp(0.15 * (i - 19)) - 1))
 
 
 def art_need(i):
-    if i < 20:
+    if i < 25:
         return 0
     else:
-        return int(1 * (i - 19) ** 3)
+        return int(0.02 * (i - 24) ** 4 + 1)
+
+
+def housing_need(i):
+    if i < 10:
+        return 1
+    else:
+        return int(0.5 * (i - 9) ** 2 + 1)
 
 
 # Define the needs and their corresponding functions
 needs = {
     "popneed_convenience": convenience_need,
-    "popneed_services": services_need,
+    # "popneed_services": services_need,
     "popneed_art": art_need,
+    "popneed_housing": housing_need,
 }
 
 
@@ -46,6 +56,47 @@ def change_one(i, input_match, need_func):
     key, val = match.group(1), float(match.group(2))
     # print(i, key + " = " + str(need_func(i)))
     return key + " = " + str(need_func(i))
+
+
+def extract_all_needs(matches):
+    all_needs = set()
+    for match in matches:
+        goods = re.findall(r"popneed_\w+ = \d+", match)
+        for good in goods:
+            need = good.split(" = ")[0]
+            all_needs.add(need)
+    return list(all_needs)
+
+
+def fit_power_law(x, y):
+    def power_law(x, a, b):
+        return a * (x**b)
+
+    x = np.array(x)
+    y = np.array(y)
+
+    if len(x) < 2 or np.any(y <= 0):  # Not enough data points or non-positive values
+        return None
+
+    try:
+        # Use logarithmic transformation
+        log_x = np.log(x)
+        log_y = np.log(y)
+
+        # Linear fit on log-transformed data
+        slope, intercept = np.polyfit(log_x, log_y, 1)
+
+        # Convert back to power law parameters
+        a = np.exp(intercept)
+        b = slope
+
+        return a, b
+    except:
+        return None
+
+
+def extrapolate_power_law(x, a, b):
+    return a * (x**b)
 
 
 input_file_name = r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\buy_packages\00_buy_packages.txt"
@@ -68,6 +119,8 @@ for need_name, need_func in needs.items():
         else:
             matches_line = matches[i].split("\n")
             matches_line = [line for line in matches_line if line != ""]
+            if need_func(i) == 0:
+                continue
             matches[i] = (
                 "\n".join(matches_line[:-2])
                 + "\n\t\t"
@@ -78,13 +131,62 @@ for need_name, need_func in needs.items():
             )
             values += [(i + 1, 0)]
 
-    plt.plot([x[0] for x in values], [x[1] for x in values])
-    plt.plot([x[0] for x in values], [need_func(x[0] - 1) for x in values])
+# After processing existing wealth levels
+all_needs = extract_all_needs(matches)
+
+
+# Function to get the value for a specific need and wealth level
+def get_need_value(need, wealth_level):
+    for match in matches:
+        if f"wealth_{wealth_level}" in match:
+            need_match = re.search(f"{need} = (\d+)", match)
+            if need_match:
+                return int(need_match.group(1))
+    return 0
+
+
+# Extrapolate for wealth levels 100 to 200
+for need in all_needs:
+    # Extract data for wealth levels 90 to 99
+    x_data = list(range(90, 100))
+    y_data = [get_need_value(need, i) for i in x_data]
+
+    # Only proceed if we have non-zero data
+    if any(y_data):
+        # Fit power law
+        params = fit_power_law(x_data, y_data)
+
+        # Extrapolate for wealth levels 100 to 200
+        for i in range(100, 201):
+            extrapolated_value = max(0, int(extrapolate_power_law(i, *params)))
+
+            # Find or create the entry for this wealth level
+            wealth_entry = next(
+                (entry for entry in matches if f"wealth_{i} = {{" in entry), None
+            )
+            if wealth_entry:
+                # Update existing entry
+                updated_entry = re.sub(
+                    r"(wealth_\d+ = \{.*?goods = \{)(.*?)(\}.*?\})",
+                    rf"\1\2\t{need} = {extrapolated_value}\n\t\3",
+                    wealth_entry,
+                    flags=re.DOTALL,
+                )
+                matches[matches.index(wealth_entry)] = updated_entry
+            else:
+                # Create new entry
+                new_entry = f"""wealth_{i} = {{
+    political_strength = {25 * i - 975:}
+    goods = {{
+\t\t{need} = {extrapolated_value}
+    }}
+}}"""
+                matches.append(new_entry)
+
+# Sort matches by wealth level
+matches.sort(key=lambda x: int(re.search(r"wealth_(\d+)", x).group(1)))
 
 result = "\n\n".join(matches)
-plt.xlim([8, 100])
-plt.ylim([10, 10**6])
-plt.semilogy()
 
 with open(pop_needs_out_path, "w", encoding="utf-8-sig") as file_obj:
     file_obj.write(result)
@@ -191,5 +293,3 @@ output_file_path = r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\P
 calculate_and_write_costs(
     buy_packages_file_paths, pop_needs_file_paths, goods_file_paths, output_file_path
 )
-
-# plt.show()

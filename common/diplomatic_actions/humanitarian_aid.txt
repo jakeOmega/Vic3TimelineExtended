@@ -1,0 +1,270 @@
+humanitarian_aid = {
+	groups= {
+		general
+	}
+	requires_approval = no
+	should_notify_third_parties = no
+
+	unlocking_technologies = {
+		intergovernmental_organizations
+	}
+	
+	selectable = {
+		power_bloc ?= {
+            modifier:power_bloc_can_give_humanitarian_aid_bool = yes
+        }
+	}
+	
+	potential = {
+		always = yes
+	}
+	
+	possible = {}
+	
+	pact = {	
+		cost = 100
+	
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		relations_progress_per_day = 3 # At 100, +1 relations
+		relations_improvement_max = 30
+		
+		income_transfer = 0.5
+        second_country_gets_income_transfer = yes
+		income_transfer_to_pops = {
+            allow_discriminated = yes
+
+            upper_strata_pops = 0
+            middle_strata_pops = 10
+            lower_strata_pops = 90
+        }
+		income_transfer_based_on_second_country = yes
+		
+		second_modifier = {
+			country_pact_leverage_generation_add = 200
+		}
+		
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
+			}
+		}
+
+	 	requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
+				}		
+			}
+			
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17 # this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}					
+		}	
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
+					NOT = { is_country_type = decentralized }
+					scope:target_country = {
+						NOT = { is_country_type = decentralized }
+					}				
+				}
+			}
+		}				
+	
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
+					NOT = { has_war_with = scope:target_country }
+				}			
+			}
+		}		
+
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}			
+	}
+	
+	ai = {
+		max_influence_spending_fraction = 0.20
+		
+		evaluation_chance = {
+			value = 0.0
+			
+			if = {
+				limit = { country_rank >= rank_value:major_power }
+				add = {
+					value = country_rank
+					multiply = 0.05
+				}				
+			}			
+		}		
+		
+		accept_score = {
+			value = 0
+		}		
+	
+		junior_accept_score = {
+			value = 0
+		}	
+	
+		propose_score = {
+			value = 10
+		}
+	
+		will_propose = { 
+			scaled_debt <= 0
+			is_at_war = no
+			weekly_net_fixed_income > 0	
+			has_attitude = {
+				who = scope:target_country
+				attitude = protective
+			}
+			OR = {
+				num_income_transfer_pacts < 1
+				AND = {
+					num_income_transfer_pacts < 2
+					income >= 200000
+				}
+				AND = {
+					num_income_transfer_pacts < 3
+					income >= 400000
+				}				
+			}
+				
+			# We want to have at least five times their income, and at least 50k income in general
+			OR = {
+				AND = {
+					income >= 50000
+					weekly_net_fixed_income >= 4000
+					scope:target_country.income <= 10000
+				}
+				AND = {
+					income >= 75000
+					weekly_net_fixed_income >= 6000
+					scope:target_country.income <= 15000
+				}				
+				AND = {
+					income >= 100000
+					weekly_net_fixed_income >= 8000
+					scope:target_country.income <= 20000
+				}
+				AND = {
+					income >= 125000
+					weekly_net_fixed_income >= 10000
+					scope:target_country.income <= 25000
+				}
+				AND = {
+					income >= 150000
+					weekly_net_fixed_income >= 12000
+					scope:target_country.income <= 30000
+				}	
+				AND = {
+					income >= 175000
+					weekly_net_fixed_income >= 14000
+					scope:target_country.income <= 35000
+				}
+				AND = {
+					income >= 200000
+					weekly_net_fixed_income >= 16000
+					scope:target_country.income <= 40000
+				}
+				AND = {
+					income >= 225000
+					weekly_net_fixed_income >= 18000
+					scope:target_country.income <= 45000
+				}	
+				AND = {
+					income >= 250000
+					weekly_net_fixed_income >= 20000
+					scope:target_country.income <= 50000
+				}					
+			}			
+		}
+		
+		will_break = { 
+			OR = {		
+				scaled_debt > 0.25
+				AND = {
+					scaled_debt > 0
+					OR = {
+						weekly_net_fixed_income < 0	
+						is_at_war = yes
+					}				
+				}				
+				NOT = {
+					has_attitude = {
+						who = scope:target_country
+						attitude = protective
+					}				
+				}
+				num_income_transfer_pacts > 3
+				AND = {
+					num_income_transfer_pacts > 1
+					OR = {
+						weekly_net_fixed_income < -10000	
+						income < 300000
+					}			
+				}
+				AND = {
+					num_income_transfer_pacts > 2
+					OR = {
+						weekly_net_fixed_income < -5000					
+						income < 500000
+					}
+				}					
+				NOR = {
+					AND = {
+						income >= 40000
+						scope:target_country.income <= 12500
+					}				
+					AND = {
+						income >= 50000
+						scope:target_country.income <= 15000
+					}
+					AND = {
+						income >= 75000
+						scope:target_country.income <= 20000
+					}				
+					AND = {
+						income >= 100000
+						scope:target_country.income <= 25000
+					}
+					AND = {
+						income >= 125000
+						scope:target_country.income <= 30000
+					}
+					AND = {
+						income >= 150000
+						scope:target_country.income <= 35000
+					}	
+					AND = {
+						income >= 175000
+						scope:target_country.income <= 40000
+					}
+					AND = {
+						income >= 200000
+						scope:target_country.income <= 45000
+					}
+					AND = {
+						income >= 225000
+						scope:target_country.income <= 50000
+					}
+					AND = {
+						income >= 250000
+						scope:target_country.income <= 55000
+					}					
+				}						
+			}
+		}			
+	}
+}
+

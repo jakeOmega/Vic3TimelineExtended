@@ -38,7 +38,7 @@ digital_assets = {
 
 digital_access = {
 	texture = "gfx/interface/icons/goods_icons/digital_access.dds"
-	cost = 100 
+	cost = 120
 	category = luxury
 	
 	convoy_cost_multiplier = 0.0
@@ -63,9 +63,43 @@ advanced_materials = {
 	texture = "gfx/interface/icons/goods_icons/buckyball.dds"
 	cost = 4000 
 	category = industrial
-	
-	convoy_cost_multiplier = 1.0
-	
+		
 	obsession_chance = 0.0
 	prestige_factor = 20
+}
+
+construction = {
+	texture = "gfx/interface/icons/state_status_icons/has_construction.dds"
+	cost = 1000
+	category = industrial
+
+	convoy_cost_multiplier = 10.0
+	
+	prestige_factor = 5
+	traded_quantity = 1
+}
+
+
+transportation = {
+	texture = "gfx/interface/icons/goods_icons/transportation.dds"
+	cost = 30
+	category = staple
+	local = yes
+
+	prestige_factor = 4
+	
+	consumption_tax_cost = 200
+	pop_consumption_can_add_infrastructure = yes
+}
+
+aeroplanes = {
+	texture = "gfx/interface/icons/goods_icons/aeroplanes.dds"
+	cost = 80
+	category = military
+	
+	obsession_chance = 0.5
+	prestige_factor = 10
+	traded_quantity = 3
+	convoy_cost_multiplier = 2.0
+	pop_consumption_can_add_infrastructure = yes
 }

@@ -11,9 +11,7 @@ satellite_communications = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 50
-		country_tech_spread_mult = 0.2
-		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.5
-		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.5
+		country_tech_spread_add = 60
 	}
 	
 	ai_weight = {
@@ -46,7 +44,7 @@ advanced_assembly_lines = {
 	
 	unlocking_technologies = {	
 		transistors
-		modern_skyscapers
+		modern_skyscrapers
 	}
 	
 	ai_weight = {
@@ -85,7 +83,7 @@ containerization = {
 		building_group_bg_trade_employee_mult = -0.5
 		state_market_access_price_impact = 0.01
 		country_loan_interest_rate_add = -0.02
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 60
 	}
 	
 	unlocking_technologies = {	
@@ -126,8 +124,8 @@ computer_networks = {
 	modifier = {
 		goods_output_telephones_mult = 0.2
 		country_weekly_innovation_max_add = 50
-		country_tech_spread_mult = 0.2
-		country_bureaucracy_investment_cost_factor_mult = 0.2
+		country_tech_spread_add = 60
+		state_bureaucracy_population_base_cost_factor_mult = 0.5
 	}
 	
 	unlocking_technologies = {	
@@ -186,9 +184,8 @@ supersonic_aircraft = {
 	
 	modifier = {
 		unit_combat_unit_type_jet_powered_fighters_offense_mult = 0.25
-		unit_combat_unit_type_carrier_group_defense_mult = 0.5
-		unit_combat_unit_type_carrier_group_offense_mult = 0.5
 		country_weekly_innovation_max_add = 50
+		state_building_airport_max_level_add = 5
 	}
 	
 	unlocking_technologies = {	
@@ -212,10 +209,8 @@ stealth_technology = {
 	}
 
 	modifier = {
-		unit_combat_unit_type_asw_destroyers_defense_mult = 0.2
-		unit_combat_unit_type_asw_destroyers_offense_mult = 0.2
-		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.3
-		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.3
+		unit_navy_defense_mult = 0.2
+		unit_navy_offense_mult = 0.2
 	}
 	
 	ai_weight = {
@@ -253,7 +248,7 @@ environmental_movement = {
 	
 	modifier = {
 		country_institution_ministry_of_the_environment_max_investment_add = 2
-		state_birth_rate_mult = -0.03
+		state_birth_rate_mult = -0.01
 	}
 	
 	unlocking_technologies = {	
@@ -278,9 +273,9 @@ sexual_revolution = {
 	
 	modifier = {
 		state_dependent_wage_mult = 0.1
-		state_birth_rate_mult = -0.05
+		state_birth_rate_mult = -0.025
 		country_weekly_innovation_max_add = 50
-		country_bureaucracy_investment_cost_factor_mult = 0.2
+		state_bureaucracy_population_base_cost_factor_mult = 0.5
 	}
 	
 	ai_weight = {
@@ -362,7 +357,7 @@ cellular_networks = {
 	
 	modifier = {
 		goods_output_radios_mult = 0.2
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 60
 	}
 	
 	ai_weight = {
@@ -384,6 +379,7 @@ barcodes_and_scanners = {
 	modifier = {
 		goods_output_services_mult = 0.1
 		country_company_throughput_bonus_add = 0.1
+		country_gold_reserve_limit_mult = 0.25
 	}
 	
 	ai_weight = {
@@ -402,12 +398,8 @@ precision_guided_munitions = {
 	}
 
 	modifier = {
-		unit_combat_unit_type_asw_destroyers_defense_mult = 0.5
-		unit_combat_unit_type_asw_destroyers_offense_mult = 0.5
-		unit_combat_unit_type_carrier_group_defense_mult = 0.5
-		unit_combat_unit_type_carrier_group_offense_mult = 0.5
-		unit_combat_unit_type_nuclear_submarine_defense_mult = 0.5
-		unit_combat_unit_type_nuclear_submarine_offense_mult = 0.5
+		unit_navy_defense_mult = 0.5
+		unit_navy_offense_mult = 0.5
 		country_weekly_innovation_max_add = 50
 	}
 	
@@ -427,8 +419,8 @@ infrared_night_vision = {
 	}
 
 	modifier = {
-		unit_combat_unit_type_asw_destroyers_defense_mult = 0.2
-		unit_combat_unit_type_asw_destroyers_offense_mult = 0.2
+		unit_navy_defense_mult = 0.2
+		unit_navy_offense_mult = 0.2
 	}
 	
 	ai_weight = {

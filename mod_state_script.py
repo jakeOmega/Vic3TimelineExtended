@@ -2,72 +2,88 @@ from mod_state import ModState
 import os
 
 base_game_dir = {
-    # "Building Groups": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\building_groups",
+    "Building Groups": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\building_groups",
     "Buildings": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\buildings",
-    # "Technologies": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\technology\technologies",
-    # "PM Groups": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\production_method_groups",
-    # "PMs": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\production_methods",
-    # "Ideologies": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\ideologies",
-    # "Buy Packages": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\buy_packages",
-    # "Character Interactions": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\character_interactions",
-    # "Character Traits": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\character_traits",
-    # "Combat Unit Groups": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\combat_unit_groups",
-    # "Combat Unit Types": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\combat_unit_types",
-    # "Company Types": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\company_types",
-    # # "Customizable Localization": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\customizable_localization",
-    # "Decisions": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\decisions",
-    # # "Defines": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\defines",
-    # "Diplomatic Actions": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\diplomatic_actions",
-    # "Diplomatic Plays": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\diplomatic_plays",
-    # "Goods": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\goods",
-    # "Institutions": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\institutions",
-    # "Interest Groups": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\interest_groups",
-    # "Laws": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\laws",
-    # "Mobilization Option Groups": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\mobilization_option_groups",
-    # "Mobilization Options": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\mobilization_options",
-    # "Modifier Types": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\modifier_types",
-    # "Modifiers": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\modifiers",
-    # # "On Actions": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\on_actions",
-    # "Pop Needs": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\pop_needs",
-    # # "Script Values": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\script_values",
-    # "Scripted Effects": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\scripted_effects",
-    # "Subject Types": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\subject_types",
+    "Technologies": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\technology\technologies",
+    "PM Groups": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\production_method_groups",
+    "PMs": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\production_methods",
+    "Ideologies": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\ideologies",
+    "Buy Packages": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\buy_packages",
+    "Character Interactions": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\character_interactions",
+    "Character Traits": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\character_traits",
+    "Combat Unit Groups": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\combat_unit_groups",
+    "Combat Unit Types": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\combat_unit_types",
+    "Company Types": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\company_types",
+    # "Customizable Localization": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\customizable_localization",
+    "Decisions": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\decisions",
+    # "Defines": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\defines",
+    "Diplomatic Actions": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\diplomatic_actions",
+    "Diplomatic Plays": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\diplomatic_plays",
+    "Goods": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\goods",
+    "Institutions": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\institutions",
+    "Interest Groups": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\interest_groups",
+    "Law Groups": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\law_groups",
+    "Laws": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\laws",
+    "Mobilization Option Groups": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\mobilization_option_groups",
+    "Mobilization Options": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\mobilization_options",
+    "Modifier Types": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\modifier_types",
+    "Modifiers": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\modifiers",
+    # "On Actions": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\on_actions",
+    "Pop Needs": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\pop_needs",
+    # "Script Values": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\script_values",
+    "Scripted Effects": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\scripted_effects",
+    "Subject Types": r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\subject_types",
 }
 
 mod_dir = {
-    # "Building Groups": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\building_groups",
+    "Building Groups": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\building_groups",
     "Buildings": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\buildings",
-    # "Technologies": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\technology\technologies",
-    # "PM Groups": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\production_method_groups",
-    # "PMs": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\production_methods",
-    # "Ideologies": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\ideologies",
-    # "Buy Packages": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\buy_packages",
-    # "Character Interactions": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\character_interactions",
-    # "Character Traits": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\character_traits",
-    # "Combat Unit Groups": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\combat_unit_groups",
-    # "Combat Unit Types": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\combat_unit_types",
-    # "Company Types": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\company_types",
-    # # "Customizable Localization": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\customizable_localization",
-    # "Decisions": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\decisions",
-    # # "Defines": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\defines",
-    # "Diplomatic Actions": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\diplomatic_actions",
-    # "Diplomatic Plays": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\diplomatic_plays",
-    # "Goods": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\goods",
-    # "Institutions": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\institutions",
-    # "Interest Groups": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\interest_groups",
-    # "Laws": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\laws",
-    # "Mobilization Option Groups": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\mobilization_option_groups",
-    # "Mobilization Options": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\mobilization_options",
-    # "Modifier Types": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\modifier_types",
-    # "Modifiers": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\modifiers",
-    # # "On Actions": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\on_actions",
-    # "Pop Needs": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\pop_needs",
-    # # "Script Values": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\script_values",
-    # "Scripted Effects": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\scripted_effects",
-    # "Subject Types": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\subject_types",
+    "Technologies": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\technology\technologies",
+    "PM Groups": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\production_method_groups",
+    "PMs": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\production_methods",
+    "Ideologies": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\ideologies",
+    "Buy Packages": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\buy_packages",
+    "Character Interactions": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\character_interactions",
+    "Character Traits": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\character_traits",
+    "Combat Unit Groups": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\combat_unit_groups",
+    "Combat Unit Types": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\combat_unit_types",
+    "Company Types": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\company_types",
+    # "Customizable Localization": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\customizable_localization",
+    "Decisions": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\decisions",
+    # "Defines": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\defines",
+    "Diplomatic Actions": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\diplomatic_actions",
+    "Diplomatic Plays": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\diplomatic_plays",
+    "Goods": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\goods",
+    "Institutions": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\institutions",
+    "Interest Groups": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\interest_groups",
+    "Laws": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\laws",
+    "Law Groups": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\law_groups",
+    "Mobilization Option Groups": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\mobilization_option_groups",
+    "Mobilization Options": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\mobilization_options",
+    "Modifier Types": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\modifier_types",
+    "Modifiers": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\modifiers",
+    # "On Actions": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\on_actions",
+    "Pop Needs": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\pop_needs",
+    # "Script Values": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\script_values",
+    "Scripted Effects": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\scripted_effects",
+    "Subject Types": r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\subject_types",
 }
 
 mod_state = ModState(base_game_dir, mod_dir)
+laws = mod_state.get_data("Laws")
+laws_dict = {}
+for law_id, (_, law_data) in laws.items():
+    law_group = law_data["group"][1]
+    if law_group not in laws_dict.keys():
+        laws_dict[law_group] = []
+    laws_dict[law_group].append(law_id)
+
+for law_group in laws_dict.keys():
+    print(law_group)
+    for law_id in laws_dict[law_group]:
+        print("\t", law_id)
+
+"""
 mod_state.save_changes_to_json(r"F:\Libraries\Documents\testing")
 
 loaded_mod_state = ModState(base_game_dir, r"F:\Libraries\Documents\testing", diff=True)
@@ -75,6 +91,7 @@ for type, loc in mod_dir.items():
     os.makedirs(r"F:\Libraries\Documents\testing\loaded_mod\\" + type, exist_ok=True)
     new_loc = r"F:\Libraries\Documents\testing\loaded_mod\\" + type + r"\modded.txt"
     loaded_mod_state.update_and_write_file(type, new_loc)
+"""
 
 """
 ideologies = mod_state.get_data("Ideologies")

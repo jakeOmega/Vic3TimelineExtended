@@ -34,6 +34,25 @@ def ministry_constructor(ministry_name, attitude):
         raise ValueError
 
 
+def ministry_constructor_typed(ministry_name, types, attitudes):
+    attitude_list = [("law_no_" + ministry_name, "neutral")]
+    for ministry_type, attitude in zip(types, attitudes):
+        if attitude == "+":
+            attitude_text = "approve"
+        elif attitude == "-":
+            attitude_text = "disapprove"
+        elif attitude == "++":
+            attitude_text = "strongly_approve"
+        elif attitude == "--":
+            attitude_text = "strongly_disapprove"
+        else:
+            raise ValueError
+        attitude_list.append(
+            ("law_" + ministry_type + "_" + ministry_name, attitude_text)
+        )
+    return attitude_list
+
+
 def parse_file(file_path):
     with open(file_path, "r", encoding="utf-8-sig") as f:
         content = f.read()
@@ -179,45 +198,72 @@ light_ai_governance = [
     ("law_moderate_ai_governance", "neutral"),
     ("law_strict_ai_ethics_and_control", "disapprove"),
 ]
-punitive_drug_laws = [
-    ("law_no_drug_regulation", "strongly_disapprove"),
-    ("law_liquor_prohibition", "neutral"),
-    ("law_lax_drug_policy", "disapprove"),
-    ("law_punitive_drug_policy", "strongly_approve"),
-    ("law_harm_reduction_policy", "neutral"),
-    ("law_drug_legalization_and_regulation", "disapprove"),
+aggressive_rules_of_war = [
+    ("law_traditional_rules_of_war", "approve"),
+    ("law_war_crimes_forbidden", "neutral"),
+    ("law_humanitarian_regulations", "disapprove"),
+    ("law_limited_war", "strongly_disapprove"),
+    ("law_total_war", "strongly_approve"),
 ]
-trad_punitive_drug_laws = [
-    ("law_no_drug_regulation", "disapprove"),
-    ("law_punitive_drug_policy", "neutral"),
-    ("law_liquor_prohibition", "neutral"),
-    ("law_lax_drug_policy", "disapprove"),
-    ("law_harm_reduction_policy", "strongly_disapprove"),
-    ("law_drug_legalization_and_regulation", "strongly_disapprove"),
+moderate_rules_of_war = [
+    ("law_traditional_rules_of_war", "neutral"),
+    ("law_war_crimes_forbidden", "approve"),
+    ("law_humanitarian_regulations", "neutral"),
+    ("law_limited_war", "disapprove"),
+    ("law_total_war", "disapprove"),
 ]
-liberal_drug_laws = [
-    ("law_no_drug_regulation", "neutral"),
-    ("law_punitive_drug_policy", "disapprove"),
-    ("law_liquor_prohibition", "disapprove"),
-    ("law_lax_drug_policy", "strongly_approve"),
-    ("law_harm_reduction_policy", "approve"),
-    ("law_drug_legalization_and_regulation", "strongly_approve"),
+peaceful_rules_of_war = [
+    ("law_traditional_rules_of_war", "disapprove"),
+    ("law_war_crimes_forbidden", "neutral"),
+    ("law_humanitarian_regulations", "approve"),
+    ("law_limited_war", "strongly_approve"),
+    ("law_total_war", "strongly_disapprove"),
 ]
-moderate_drug_laws = [
-    ("law_no_drug_regulation", "disapprove"),
-    ("law_punitive_drug_policy", "neutral"),
-    ("law_liquor_prohibition", "disapprove"),
-    ("law_lax_drug_policy", "approve"),
-    ("law_harm_reduction_policy", "strongly_approve"),
-    ("law_drug_legalization_and_regulation", "approve"),
+traditional_rules_of_war = [
+    ("law_traditional_rules_of_war", "approve"),
+    ("law_war_crimes_forbidden", "neutral"),
+    ("law_humanitarian_regulations", "disapprove"),
+    ("law_limited_war", "disapprove"),
+    ("law_total_war", "neutral"),
 ]
-religious_drug_laws = [
-    ("law_no_drug_regulation", "disapprove"),
-    ("law_punitive_drug_policy", "approve"),
-    ("law_liquor_prohibition", "strongly_approve"),
-    ("law_lax_drug_policy", "neutral"),
-    ("law_harm_reduction_policy", "strongly_disapprove"),
-    ("law_drug_legalization_and_regulation", "strongly_disapprove"),
+advanced_curency = [
+    ("law_commodity_money", "disapprove"),
+    ("law_gold_standard", "neutral"),
+    ("law_fiat_currency", "approve"),
+    ("law_digital_currency", "strongly_approve"),
+]
+simple_currency = [
+    ("law_commodity_money", "neutral"),
+    ("law_gold_standard", "approve"),
+    ("law_fiat_currency", "disapprove"),
+    ("law_digital_currency", "disapprove"),
+]
+pro_secrecy = [
+    ("law_informal_government_secrecy", "neutral"),
+    ("law_state_secrets", "approve"),
+    ("law_freedom_of_information", "disapprove"),
+    ("law_open_government", "strongly_disapprove"),
+]
+anti_secrecy = [
+    ("law_informal_government_secrecy", "neutral"),
+    ("law_state_secrets", "disapprove"),
+    ("law_freedom_of_information", "approve"),
+    ("law_open_government", "strongly_approve"),
+]
+regressive_criminal_justice = [
+    ("law_punishment_focused_criminal_justice", "strongly_approve"),
+    ("law_rehabilitation_focused_criminal_justice", "disapprove"),
+    ("law_restorative_justice", "neutral"),
+]
+progressive_criminal_justice = [
+    ("law_punishment_focused_criminal_justice", "disapprove"),
+    ("law_rehabilitation_focused_criminal_justice", "strongly_approve"),
+    ("law_restorative_justice", "neutral"),
+]
+moderate_criminal_justice = [
+    ("law_punishment_focused_criminal_justice", "disapprove"),
+    ("law_rehabilitation_focused_criminal_justice", "neutral"),
+    ("law_restorative_justice", "approve"),
 ]
 anti_augmentation = [
     ("law_no_augmentation", "neutral"),
@@ -352,7 +398,6 @@ modifications = {
     "ideology_paternalistic": {
         "lawgroup_privacy_rights": anti_privacy_entry,
         "lawgroup_artificial_intelligence_governance": pro_ai_governance,
-        "lawgroup_drug_laws": punitive_drug_laws,
         "lawgroup_human_augmentation": highly_regulated_augmentation,
         "lawgroup_ministry_of_thought_control": ministry_constructor(
             "ministry_of_thought_control", "++"
@@ -366,12 +411,13 @@ modifications = {
     },
     "ideology_particularist": {
         "lawgroup_privacy_rights": pro_privacy_entry,
+        "lawgroup_monetary_policy": simple_currency,
         "lawgroup_national_bank": ministry_constructor("national_bank", "--"),
         "lawgroup_ministry_of_population_control": ministry_constructor(
             "ministry_of_population_control", "--"
         ),
-        "lawgroup_ministry_of_emergency_response": ministry_constructor(
-            "ministry_of_emergency_response", "++"
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "-"
         ),
         "lawgroup_ministry_of_urban_planning": ministry_constructor(
             "ministry_of_urban_planning", "--"
@@ -382,7 +428,7 @@ modifications = {
     },
     "ideology_patriotic": {
         "lawgroup_privacy_rights": anti_privacy_entry,
-        "lawgroup_drug_laws": punitive_drug_laws,
+        "lawgroup_rules_of_war": aggressive_rules_of_war,
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
             "ministry_of_foreign_affairs", "+"
         ),
@@ -408,9 +454,11 @@ modifications = {
     },
     "ideology_liberal": {
         "lawgroup_privacy_rights": pro_privacy_entry,
-        "lawgroup_drug_laws": moderate_drug_laws,
+        "lawgroup_right_to_information": anti_secrecy,
         "lawgroup_human_augmentation": lightly_regulated_augmentation,
         "lawgroup_LGBTQ_rights": lgbtq_like,
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_rights_of_women": [("law_protected_class", "disapprove")],
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
             "ministry_of_foreign_affairs", "+"
@@ -436,9 +484,10 @@ modifications = {
     },
     "ideology_liberal_modern": {
         "lawgroup_privacy_rights": pro_privacy_entry,
-        "lawgroup_drug_laws": moderate_drug_laws,
         "lawgroup_human_augmentation": lightly_regulated_augmentation,
         "lawgroup_LGBTQ_rights": lgbtq_like,
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_rights_of_women": [("law_protected_class", "disapprove")],
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
             "ministry_of_foreign_affairs", "+"
@@ -471,10 +520,11 @@ modifications = {
     "ideology_market_liberal": {
         "lawgroup_privacy_rights": reform_privacy_entry,
         "lawgroup_artificial_intelligence_governance": anti_ai_governance,
-        "lawgroup_drug_laws": moderate_drug_laws,
         "lawgroup_human_augmentation": lightly_regulated_augmentation,
         "lawgroup_intellectual_property": moderate_ip_laws,
         "lawgroup_LGBTQ_rights": lgbtq_indifference,
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_criminal_justice": moderate_criminal_justice,
         "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
             "ministry_of_intelligence_and_security", "-"
         ),
@@ -486,8 +536,8 @@ modifications = {
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "-"
         ),
-        "lawgroup_ministry_of_emergency_response": ministry_constructor(
-            "ministry_of_emergency_response", "-"
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
         ),
         "lawgroup_ministry_of_thought_control": ministry_constructor(
             "ministry_of_thought_control", "-"
@@ -507,10 +557,11 @@ modifications = {
     },
     "ideology_traditionalist": {
         "lawgroup_privacy_rights": trad_privacy_entry,
-        "lawgroup_drug_laws": trad_punitive_drug_laws,
         "lawgroup_human_augmentation": anti_augmentation,
         "lawgroup_intellectual_property": moderate_ip_laws,
         "lawgroup_LGBTQ_rights": lgbtq_dislike,
+        "lawgroup_rules_of_war": traditional_rules_of_war,
+        "lawgroup_criminal_justice": regressive_criminal_justice,
         "lawgroup_rights_of_women": [("law_protected_class", "strongly_disapprove")],
         "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
             "ministry_of_refugee_affairs", "-"
@@ -525,13 +576,14 @@ modifications = {
     "ideology_reformer": {
         "lawgroup_privacy_rights": reform_privacy_entry,
         "lawgroup_artificial_intelligence_governance": moderate_ai_governance,
-        "lawgroup_drug_laws": moderate_drug_laws,
         "lawgroup_human_augmentation": medical_augmentation,
         "lawgroup_intellectual_property": moderate_ip_laws,
         "lawgroup_LGBTQ_rights": lgbtq_like,
+        "lawgroup_rules_of_war": moderate_rules_of_war,
+        "lawgroup_criminal_justice": moderate_criminal_justice,
         "lawgroup_rights_of_women": [("law_protected_class", "disapprove")],
-        "lawgroup_ministry_of_emergency_response": ministry_constructor(
-            "ministry_of_emergency_response", "+"
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
         ),
         "lawgroup_ministry_of_urban_planning": ministry_constructor(
             "ministry_of_urban_planning", "+"
@@ -539,18 +591,17 @@ modifications = {
     },
     "ideology_populist": {
         "lawgroup_privacy_rights": reform_privacy_entry,
+        "lawgroup_right_to_information": anti_secrecy,
         "lawgroup_artificial_intelligence_governance": pro_ai_governance,
         "lawgroup_human_augmentation": populist_augmentation,
-        "lawgroup_national_bank": ministry_constructor("national_bank", "-"),
         "lawgroup_ministry_of_culture": ministry_constructor(
             "ministry_of_culture", "+"
         ),
-        "lawgroup_ministry_of_labor": ministry_constructor("ministry_of_labor", "+"),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["+", "-"]
+        ),
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "+"
-        ),
-        "lawgroup_ministry_of_emergency_response": ministry_constructor(
-            "ministry_of_emergency_response", "+"
         ),
         "lawgroup_ministry_of_population_control": ministry_constructor(
             "ministry_of_population_control", "-"
@@ -561,9 +612,9 @@ modifications = {
     },
     "ideology_radical": {
         "lawgroup_privacy_rights": pro_privacy_entry,
-        "lawgroup_drug_laws": liberal_drug_laws,
         "lawgroup_intellectual_property": loose_ip_laws,
         "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
             "ministry_of_intelligence_and_security", "-"
         ),
@@ -585,10 +636,10 @@ modifications = {
     },
     "ideology_social_democrat": {
         "lawgroup_privacy_rights": reform_privacy_entry,
-        "lawgroup_drug_laws": moderate_drug_laws,
         "lawgroup_human_augmentation": medical_augmentation,
         "lawgroup_intellectual_property": loose_ip_laws,
         "lawgroup_LGBTQ_rights": lgbtq_like,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
             "ministry_of_intelligence_and_security", "-"
         ),
@@ -612,8 +663,8 @@ modifications = {
         "lawgroup_ministry_of_urban_planning": ministry_constructor(
             "ministry_of_urban_planning", "+"
         ),
-        "lawgroup_ministry_of_emergency_response": ministry_constructor(
-            "ministry_of_emergency_response", "+"
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
         ),
         "lawgroup_ministry_of_thought_control": ministry_constructor(
             "ministry_of_thought_control", "--"
@@ -622,6 +673,8 @@ modifications = {
     "ideology_vanguardist": {
         "lawgroup_privacy_rights": extremist_privacy_entry,
         "lawgroup_intellectual_property": communal_ip_laws,
+        "lawgroup_rules_of_war": aggressive_rules_of_war,
+        "lawgroup_criminal_justice": regressive_criminal_justice,
         "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
             "ministry_of_intelligence_and_security", "+"
         ),
@@ -637,9 +690,10 @@ modifications = {
     },
     "ideology_fascist": {
         "lawgroup_privacy_rights": extremist_privacy_entry,
-        "lawgroup_drug_laws": trad_punitive_drug_laws,
         "lawgroup_human_augmentation": extremist_augmentation,
         "lawgroup_LGBTQ_rights": lgbtq_hate,
+        "lawgroup_rules_of_war": aggressive_rules_of_war,
+        "lawgroup_right_to_information": pro_secrecy,
         "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
             "ministry_of_intelligence_and_security", "++"
         ),
@@ -649,12 +703,6 @@ modifications = {
         "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
             "ministry_of_refugee_affairs", "--"
         ),
-        "lawgroup_slavery": [
-            ("law_slavery_banned", "disapprove"),
-            ("law_debt_slavery", "neutral"),
-            ("law_slave_trade", "strongly_approve"),
-            ("law_legacy_slavery", "approve"),
-        ],
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "++"
         ),
@@ -671,10 +719,11 @@ modifications = {
     "ideology_anarchist": {
         "lawgroup_privacy_rights": pro_privacy_entry,
         "lawgroup_artificial_intelligence_governance": light_ai_governance,
-        "lawgroup_drug_laws": liberal_drug_laws,
         "lawgroup_human_augmentation": unregulated_augmentation,
         "lawgroup_intellectual_property": communal_ip_laws,
         "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "--"
         ),
@@ -697,7 +746,9 @@ modifications = {
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "--"
         ),
-        "lawgroup_ministry_of_labor": ministry_constructor("ministry_of_labor", "-"),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["--", "+"]
+        ),
         "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
             "ministry_of_refugee_affairs", "-"
         ),
@@ -713,7 +764,6 @@ modifications = {
     },
     "ideology_moralist": {
         "lawgroup_artificial_intelligence_governance": pro_ai_governance,
-        "lawgroup_drug_laws": religious_drug_laws,
         "lawgroup_human_augmentation": anti_augmentation,
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "++"
@@ -729,9 +779,8 @@ modifications = {
         ),
     },
     "ideology_egalitarian": {
-        "lawgroup_drug_laws": liberal_drug_laws,
         "lawgroup_LGBTQ_rights": lgbtq_indifference,
-        "lawgroup_rights_of_women": [("law_protected_class", "neutral")],
+        "lawgroup_criminal_justice": moderate_criminal_justice,
         "lawgroup_colonization": [
             ("law_neocolonialism", "neutral"),
             ("law_no_colonial_affairs", "neutral"),
@@ -745,10 +794,13 @@ modifications = {
         "lawgroup_ministry_of_population_control": ministry_constructor(
             "ministry_of_population_control", "-"
         ),
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
+        ),
     },
     "ideology_egalitarian_modern": {
-        "lawgroup_drug_laws": liberal_drug_laws,
         "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_rights_of_women": [("law_protected_class", "approve")],
         "lawgroup_colonization": [
             ("law_neocolonialism", "neutral"),
@@ -767,14 +819,17 @@ modifications = {
     "ideology_meritocratic": {
         "lawgroup_human_augmentation": unregulated_augmentation,
         "lawgroup_intellectual_property": strict_ip_laws,
+        "lawgroup_monetary_policy": advanced_curency,
         "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "+"),
         "lawgroup_ministry_of_commerce": ministry_constructor(
             "ministry_of_commerce", "+"
         ),
         "lawgroup_national_bank": ministry_constructor("national_bank", "+"),
-        "lawgroup_ministry_of_labor": ministry_constructor("ministry_of_labor", "-"),
-        "lawgroup_ministry_of_emergency_response": ministry_constructor(
-            "ministry_of_emergency_response", "-"
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["--", "-"]
+        ),
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
         ),
         "lawgroup_ministry_of_consumer_protection": ministry_constructor(
             "ministry_of_consumer_protection", "-"
@@ -788,6 +843,7 @@ modifications = {
     },
     "ideology_jingoist": {
         "lawgroup_human_augmentation": militarist_augmentation,
+        "lawgroup_right_to_information": pro_secrecy,
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
             "ministry_of_foreign_affairs", "+"
         ),
@@ -807,6 +863,7 @@ modifications = {
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "+"
         ),
+        "lawgroup_rules_of_war": aggressive_rules_of_war,
     },
     "ideology_individualist": {
         "lawgroup_human_augmentation": unregulated_augmentation,
@@ -818,8 +875,8 @@ modifications = {
             ("law_universal_basic_income", "strongly_disapprove"),
             ("law_post-scarcity", "disapprove"),
         ],
-        "lawgroup_ministry_of_emergency_response": ministry_constructor(
-            "ministry_of_emergency_response", "-"
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
         ),
         "lawgroup_ministry_of_consumer_protection": ministry_constructor(
             "ministry_of_consumer_protection", "--"
@@ -827,8 +884,9 @@ modifications = {
     },
     "ideology_proletarian": {
         "lawgroup_intellectual_property": communal_ip_laws,
-        "lawgroup_national_bank": ministry_constructor("national_bank", "-"),
-        "lawgroup_ministry_of_labor": ministry_constructor("ministry_of_labor", "++"),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
+        ),
         "lawgroup_welfare": [
             ("law_no_social_security", "strongly_disapprove"),
             ("law_poor_laws", "strongly_disapprove"),
@@ -846,7 +904,9 @@ modifications = {
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "+"
         ),
-        "lawgroup_ministry_of_labor": ministry_constructor("ministry_of_labor", "++"),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
+        ),
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "-"
         ),
@@ -860,9 +920,11 @@ modifications = {
         "lawgroup_ministry_of_international_aid": ministry_constructor(
             "ministry_of_international_aid", "++"
         ),
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
     },
     "ideology_plutocratic": {
         "lawgroup_intellectual_property": strict_ip_laws,
+        "lawgroup_monetary_policy": advanced_curency,
         "lawgroup_ministry_of_culture": ministry_constructor(
             "ministry_of_culture", "-"
         ),
@@ -906,9 +968,12 @@ modifications = {
     },
     "ideology_humanitarian": {
         "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_right_to_information": anti_secrecy,
         "lawgroup_rights_of_women": [("law_protected_class", "strongly_approve")],
-        "lawgroup_ministry_of_emergency_response": ministry_constructor(
-            "ministry_of_emergency_response", "++"
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
         ),
         "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
             "ministry_of_refugee_affairs", "+"
@@ -925,9 +990,10 @@ modifications = {
     },
     "ideology_humanitarian_royalist": {
         "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_rights_of_women": [("law_protected_class", "strongly_approve")],
-        "lawgroup_ministry_of_emergency_response": ministry_constructor(
-            "ministry_of_emergency_response", "++"
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
         ),
         "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
             "ministry_of_refugee_affairs", "+"
@@ -944,6 +1010,8 @@ modifications = {
     },
     "ideology_reactionary": {
         "lawgroup_LGBTQ_rights": lgbtq_hate,
+        "lawgroup_right_to_information": pro_secrecy,
+        "lawgroup_criminal_justice": regressive_criminal_justice,
         "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
             "ministry_of_intelligence_and_security", "++"
         ),
@@ -953,7 +1021,9 @@ modifications = {
         "lawgroup_ministry_of_culture": ministry_constructor(
             "ministry_of_culture", "+"
         ),
-        "lawgroup_ministry_of_labor": ministry_constructor("ministry_of_labor", "-"),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["-", "+"]
+        ),
         "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
             "ministry_of_refugee_affairs", "--"
         ),
@@ -969,6 +1039,7 @@ modifications = {
     },
     "ideology_theocrat": {
         "lawgroup_LGBTQ_rights": lgbtq_hate,
+        "lawgroup_rules_of_war": traditional_rules_of_war,
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "++"
         ),
@@ -1068,6 +1139,7 @@ modifications = {
         ),
     },
     "ideology_pious": {
+        "lawgroup_rules_of_war": moderate_rules_of_war,
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
             "ministry_of_foreign_affairs", "+"
         ),
@@ -1095,12 +1167,14 @@ modifications = {
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "+"
         ),
-        "lawgroup_ministry_of_labor": ministry_constructor("ministry_of_labor", "+"),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["+", "-"]
+        ),
         "lawgroup_ministry_of_urban_planning": ministry_constructor(
             "ministry_of_urban_planning", "-"
         ),
-        "lawgroup_ministry_of_emergency_response": ministry_constructor(
-            "ministry_of_emergency_response", "+"
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "-"
         ),
     },
     "ideology_stratocratic": {
@@ -1112,9 +1186,10 @@ modifications = {
             ("law_universal_basic_income", "strongly_disapprove"),
             ("law_post-scarcity", "disapprove"),
         ],
-        "lawgroup_ministry_of_emergency_response": ministry_constructor(
-            "ministry_of_emergency_response", "-"
-        ),
+        "lawgroup_rules_of_war": traditional_rules_of_war,
+        "lawgroup_right_to_information": pro_secrecy,
+        "lawgroup_criminal_justice": regressive_criminal_justice,
+        "lawgroup_monetary_policy": simple_currency,
     },
 }
 

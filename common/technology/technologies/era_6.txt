@@ -119,8 +119,6 @@ advanced_military_aircraft = {
 	}
 
 	modifier = {
-		unit_combat_unit_type_carrier_group_defense_mult = 0.2
-		unit_combat_unit_type_carrier_group_offense_mult = 0.2
 	}
 	
 	ai_weight = {
@@ -137,6 +135,10 @@ commercial_aviation = {
 	unlocking_technologies = {	
 		zeppelins
 	}
+
+	modifier = {
+		state_building_airport_max_level_add = 5
+	}
 	
 	ai_weight = {
 		value = 1
@@ -151,10 +153,8 @@ keynesian_economics = {
 	
 	modifier = {
 		state_construction_mult = 0.1
-		state_poor_expected_sol = 1
-		state_middle_expected_sol = 1
-		state_rich_expected_sol = 1
-		country_bureaucracy_investment_cost_factor_mult = 0.1
+		state_expected_sol_from_literacy = 1
+		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		country_loan_interest_rate_add = -0.02
 	}
 	
@@ -215,14 +215,14 @@ modern_tools = {
 	}
 }
 
-modern_skyscapers = {
+modern_skyscrapers = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/steel_frame_buildings.dds"
 	category = production
 	
 	modifier = {
 		building_urban_center_throughput_add = 0.1
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 20
 	}
 	
 	unlocking_technologies = {	
@@ -292,7 +292,7 @@ television = {
 	category = production
 	
 	modifier = {
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 20
 	}
 	
 	unlocking_technologies = {	
@@ -313,9 +313,7 @@ marketing_research = {
 	modifier = {
 		country_legitimacy_ideological_incoherence_mult = -0.1
 		building_group_bg_service_throughput_add = 0.2
-		state_poor_expected_sol = 1
-		state_middle_expected_sol = 1
-		state_rich_expected_sol = 1
+		state_expected_sol_from_literacy = 1
 	}
 	
 	unlocking_technologies = {	
@@ -401,7 +399,6 @@ animation = {
 	
 	modifier = {
 		building_arts_academy_throughput_add = 0.25
-		building_urban_center_throughput_add = 0.05
 	}
 	
 	unlocking_technologies = {	
@@ -422,9 +419,7 @@ rural_electrification = {
 		country_company_construction_efficiency_bonus_add = 0.1
 		state_infrastructure_from_population_max_add = 100
 		state_infrastructure_from_population_add = 5
-		state_poor_expected_sol = 1
-		state_middle_expected_sol = 1
-		state_rich_expected_sol = 1
+		state_expected_sol_from_literacy = 1
 		building_power_plant_throughput_add = 0.5
 	}
 	
@@ -445,7 +440,7 @@ fluorescent_lamps = {
 	
 	modifier = {
 		building_economy_of_scale_level_cap_add = 30
-		country_bureaucracy_investment_cost_factor_mult = 0.1
+		state_bureaucracy_population_base_cost_factor_mult = 0.2
 	}
 	
 	unlocking_technologies = {	
@@ -552,7 +547,7 @@ sonar = {
 	category = military
 	
 	modifier = {
-		unit_navy_defense_mult = 0.25
+		unit_navy_defense_mult = 0.2
 		unit_convoy_raiding_interception_mult = 0.5
 		unit_convoy_defense_mult = 0.5
 	}
@@ -572,7 +567,7 @@ naval_fire_control_systems = {
 	category = military
 	
 	modifier = {
-		unit_navy_offense_mult = 0.25
+		unit_navy_offense_mult = 0.2
 		unit_navy_defense_mult = 0.1
 	}
 	
@@ -595,7 +590,7 @@ cryptography = {
 		unit_army_defense_mult = 0.05
 		unit_army_offense_mult = 0.05
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = 2
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 20
 	}
 	
 	unlocking_technologies = {	
@@ -615,6 +610,7 @@ public_works_programs = {
 	modifier = {
 		state_building_hydro_plant_max_level_add = 5
 		country_weekly_innovation_max_add = 10
+		country_gold_reserve_limit_mult = 0.25
 	}
 	
 	unlocking_technologies = {	
@@ -635,7 +631,7 @@ art_deco_architecture = {
 		country_prestige_mult = 0.1
 		country_weekly_innovation_max_add = 15
 		country_company_throughput_bonus_add = 0.1
-		country_tech_spread_mult = 0.2
+		country_tech_spread_add = 20
 	}
 	
 	unlocking_technologies = {	
@@ -673,6 +669,8 @@ intergovernmental_organizations = {
 	modifier = {
 		country_legitimacy_ideological_incoherence_mult = -0.1
 		country_institution_size_change_speed_mult = 0.25
+		country_gold_reserve_limit_mult = 0.25
+		country_leverage_threshold_change_add = -100
 	}
 	
 	unlocking_technologies = {	

@@ -19,7 +19,18 @@ def parse_goods(file_paths):
     return goods_dict
 
 
-def calculate_costs_with_error(pm_content, goods_dict):
+def calculate_employment(pm_content):
+    """
+    Calculates the total employment for a production method.
+    """
+    employment_pattern = re.compile(r"building_employment_(\w+)_add = (-?[\d\.]+)")
+    employment_total = sum(
+        int(qty) for occupation, qty in employment_pattern.findall(pm_content)
+    )
+    return employment_total
+
+
+def calculate_costs(pm_content, goods_dict):
     """
     Calculates the total input and output costs for a production method.
     Throws an error if a good is not found in the goods dictionary.
@@ -42,7 +53,11 @@ def calculate_costs_with_error(pm_content, goods_dict):
 
 
 def process_and_update_production_methods_grouped(
-    pms_file_path, goods_dict, calculate_costs_func, write_path=None
+    pms_file_path,
+    goods_dict,
+    calculate_costs_func,
+    calculate_employment_func,
+    write_path=None,
 ):
     """
     Processes the production methods file and updates the 'workforce_scaled' section with input and output goods
@@ -62,12 +77,20 @@ def process_and_update_production_methods_grouped(
     for match in re.finditer(pms_pattern, pms_data):
         pm_name, pm_content = match.groups()
 
-        # Targeting the 'workforce_scaled' section
+        # Targeting the 'workforce_scaled' section for goods
         workforce_scaled_pattern = re.compile(
             r"(workforce_scaled = \{.*?\})", re.DOTALL
         )
+        # Targeting the 'level_scaled' section for employment
+        level_scaled_pattern = re.compile(r"(level_scaled = \{.*?\})", re.DOTALL)
         workforce_scaled_match = workforce_scaled_pattern.findall(pm_content)
+        level_scaled_match = level_scaled_pattern.findall(pm_content)
         updated_pm_content = pm_content
+        employment = (
+            calculate_employment_func(level_scaled_match[0])
+            if level_scaled_match
+            else 0
+        )
         for workforce_scaled_content in workforce_scaled_match:
             original_workforce_scaled_content = workforce_scaled_content
             # Clear existing comments
@@ -102,6 +125,10 @@ def process_and_update_production_methods_grouped(
             )
             profit = output_cost - input_cost
             profit_margin = (profit / input_cost) * 100 if input_cost != 0 else 0
+            zero_profit_price_multiplier = (
+                input_cost / output_cost if output_cost != 0 else 0
+            )
+            wage_breakeven = profit / employment if employment != 0 else 0
 
             # Construct the updated workforce_scaled content
             updated_workforce_scaled_content = (
@@ -114,6 +141,9 @@ def process_and_update_production_methods_grouped(
                 f"\t\t\t# Total output cost: {output_cost}\n"
                 f"\t\t\t# Profit: {profit}\n"
                 f"\t\t\t# Profit margin: {profit_margin:.2f}%\n"
+                f"\t\t\t# Zero profit price multiplier: {zero_profit_price_multiplier:.2f}\n"
+                f"\t\t\t# Employment: {employment}\n"
+                f"\t\t\t# Wage breakeven: {wage_breakeven:.2f}\n"
                 + "\n".join(other_lines_content)
                 + "\n" * (len(other_lines_content) > 0)
                 + "\t\t}"
@@ -159,10 +189,14 @@ output_file_path = r"F:\Libraries\Documents\commented.txt"
 goods_dict = parse_goods(goods_file_paths)
 
 process_and_update_production_methods_grouped(
-    pms_file_path, goods_dict, calculate_costs_with_error
+    pms_file_path, goods_dict, calculate_costs, calculate_employment
 )
 
 process_and_update_production_methods_grouped(
-    vanilla_pm_file_paths, goods_dict, calculate_costs_with_error, output_file_path
+    vanilla_pm_file_paths,
+    goods_dict,
+    calculate_costs,
+    calculate_employment,
+    output_file_path,
 )
 print("Production methods file updated successfully.")

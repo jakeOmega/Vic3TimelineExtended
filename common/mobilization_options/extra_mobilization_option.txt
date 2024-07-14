@@ -29,8 +29,8 @@
 	}
 	
 	upkeep_modifier = {
-		goods_input_radios_add = 0.25
-		goods_input_telephones_add = 0.5
+		goods_input_radios_add = 0.5
+		goods_input_telephones_add = 1
 	}
 	unit_modifier = {
 		unit_morale_recovery_mult = 0.25
@@ -70,11 +70,13 @@ mobilization_option_robotic_assistance = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_robotics_add = 1
+		goods_input_robotics_add = 4
 	}
 	unit_modifier = {
 		unit_morale_recovery_mult = 0.25
 		unit_morale_loss_mult = -0.2
+		unit_army_offense_mult = 0.05
+		unit_army_defense_mult = 0.05
 	}
 	ai_weight = {
 		value = 1
@@ -188,13 +190,13 @@ mobilization_option_modern_logistical_support = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_radios_add = 1
-		goods_input_telephones_add = 1
-		goods_input_automobiles_add = 1
+		goods_input_radios_add = 2
+		goods_input_telephones_add = 2
+		goods_input_automobiles_add = 2
 		goods_input_launch_capacity_add = 1
 		goods_input_aeroplanes_add = 1
-		goods_input_electronic_components_add = 1
-		goods_input_consumer_appliances_add = 1
+		goods_input_electronic_components_add = 2
+		goods_input_consumer_appliances_add = 2
 	}
 	unit_modifier = {
 		military_formation_attrition_risk_mult = -0.15
@@ -233,8 +235,8 @@ mobilization_option_advanced_logistical_support = {
 	
 	upkeep_modifier = {
 		goods_input_launch_capacity_add = 5
-		goods_input_aeroplanes_add = 1
-		goods_input_electronic_components_add = 1
+		goods_input_aeroplanes_add = 5
+		goods_input_electronic_components_add = 5
 		goods_input_consumer_appliances_add = 1
 		goods_input_advanced_materials_add = 0.1
 	}
@@ -345,7 +347,7 @@ mobilization_option_forced_march = {
 	}
 	unit_modifier = {
 		military_formation_movement_speed_mult = 0.1
-		unit_mobilization_speed_mult = 0.25
+		military_formation_mobilization_speed_mult = 0.25
 		unit_morale_loss_mult = 0.1
 	}
 	ai_weight = {
@@ -417,7 +419,7 @@ mobilization_option_truck_transport = {
 	}
 	unit_modifier = {
 		military_formation_movement_speed_mult = 0.3
-		unit_mobilization_speed_mult = 0.4
+		military_formation_mobilization_speed_mult = 0.4
 	}
 	ai_weight = {
 		value = 1
@@ -528,7 +530,7 @@ mobilization_option_air_transport = {
 	}
 	unit_modifier = {
 		military_formation_movement_speed_mult = 1.5
-		unit_mobilization_speed_mult = 1
+		military_formation_mobilization_speed_mult = 1
 	}
 	ai_weight = {
 		value = 1
@@ -585,7 +587,7 @@ mobilization_option_space_transport = {
 	}
 	unit_modifier = {
 		military_formation_movement_speed_mult = 3
-		unit_mobilization_speed_mult = 3
+		military_formation_mobilization_speed_mult = 3
 	}
 	ai_weight = {
 		value = 1
@@ -695,7 +697,7 @@ mobilization_option_radar = {
 
 	possible = {
 		market ?= {
-			mg:electronic_components = {
+			mg:consumer_appliances = {
 				market_goods_sell_orders > 0
 			}
 			mg:radios = {
@@ -728,12 +730,13 @@ mobilization_option_radar = {
 		radar
 	}
 	upkeep_modifier = {
-		goods_input_electronic_components_add = 1
-		goods_input_radios_add = 1
+		goods_input_consumer_appliances_add = 1
+		goods_input_radios_add = 4
 	}
 	unit_modifier = {
 		unit_morale_loss_mult = -0.1
 		unit_army_defense_mult = 0.1
+		unit_army_offense_mult = 0.05
 	}
 	ai_weight = {
 		value = 1
@@ -777,11 +780,15 @@ mobilization_option_night_vision_gear = {
 		infrared_night_vision
 	}
 	upkeep_modifier = {
-		goods_input_electronic_components_add = 1
+		goods_input_electronic_components_add = 3
+		goods_input_consumer_appliances_add = 1
+		goods_input_radios_add = 1
 	}
 	unit_modifier = {
 		unit_morale_loss_mult = -0.1
 		unit_advancement_speed_mult = 0.1
+		unit_army_defense_mult = 0.05
+		unit_army_offense_mult = 0.05
 	}
 	ai_weight = {
 		value = 1
@@ -828,12 +835,15 @@ mobilization_option_missile_defense_system = {
 		missile_defense_systems
 	}
 	upkeep_modifier = {
-		goods_input_ammunition_add = 3
-		goods_input_electronic_components_add = 1
+		goods_input_ammunition_add = 6
+		goods_input_electronic_components_add = 3
+		goods_input_consumer_appliances_add = 1
+		goods_input_radios_add = 1
 	}
 	unit_modifier = {
 		unit_morale_loss_mult = -0.1
 		unit_army_defense_mult = 0.1
+		unit_army_offense_mult = 0.05
 	}
 	ai_weight = {
 		value = 1
@@ -880,12 +890,16 @@ mobilization_option_cyberwarfare_team = {
 		cyber_warfare
 	}
 	upkeep_modifier = {
-		goods_input_digital_access_add = 2
+		goods_input_digital_access_add = 5
+		goods_input_digital_assets_add = 1
 		goods_input_electronic_components_add = 2
+		goods_input_consumer_appliances_add = 1
 	}
 	unit_modifier = {
 		unit_morale_damage_mult = 0.2
 		unit_morale_loss_mult = -0.2
+		unit_army_defense_mult = 0.05
+		unit_army_offense_mult = 0.05
 	}
 	ai_weight = {
 		value = 1
@@ -932,12 +946,14 @@ mobilization_option_electronic_warfare = {
 		electronic_warfare
 	}
 	upkeep_modifier = {
-		goods_input_consumer_appliances_add = 2
-		goods_input_electronic_components_add = 2
+		goods_input_consumer_appliances_add = 5
+		goods_input_electronic_components_add = 5
+		goods_input_digital_assets_add = 1
 	}
 	unit_modifier = {
 		unit_morale_damage_mult = 0.2
 		unit_army_offense_mult = 0.1
+		unit_army_defense_mult = 0.05
 	}
 	ai_weight = {
 		value = 1
@@ -981,12 +997,14 @@ mobilization_option_exoskeleton_suits = {
 		advanced_body_armor
 	}
 	upkeep_modifier = {
-		goods_input_robotics_add = 2
-		goods_input_ammunition_add = 4
+		goods_input_robotics_add = 4
+		goods_input_ammunition_add = 8
+		goods_input_consumer_appliances_add = 1
+		goods_input_electronic_components_add = 1
 	}
 	unit_modifier = {
-		unit_offense_mult = 0.05
-		unit_defense_mult = 0.05
+		unit_offense_mult = 0.15
+		unit_defense_mult = 0.15
 	}
 	ai_weight = {
 		value = 1
@@ -1254,7 +1272,7 @@ mobilization_option_medevac_helicopters = {
 # 	}
 
 # 	unit_modifier = {
-# 		unit_mobilization_speed_mult = -0.75
+# 		military_formation_mobilization_speed_mult = -0.75
 # 	}
 # 	ai_weight = {
 # 		value = 1
@@ -1356,8 +1374,8 @@ mobilization_option_voluntary_enhancement = {
 		goods_input_electronic_components_add = 4
 	}
 	unit_modifier = {
-		unit_offense_mult = 0.2
-		unit_defense_mult = 0.2
+		unit_offense_mult = 0.25
+		unit_defense_mult = 0.25
 	}
 	ai_weight = {
 		value = 1
@@ -1400,8 +1418,8 @@ mobilization_option_mandatory_enhancement = {
 		goods_input_electronic_components_add = 8
 	}
 	unit_modifier = {
-		unit_offense_mult = 0.4
-		unit_defense_mult = 0.4
+		unit_offense_mult = 0.5
+		unit_defense_mult = 0.5
 	}
 	ai_weight = {
 		value = 1

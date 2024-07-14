@@ -1,0 +1,35 @@
+﻿space_elevator_progress = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_total_space_elevator_progress = 1
+}
+
+state_region_devastation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_infrastructure_mult = -1.0
+	state_mortality_mult = 2.0
+	state_migration_pull_mult = -2.0
+	state_construction_mult = -1.0
+}
+
+cheaty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_minting_add = 1000000
+}
+
+extra_training_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_training_rate_add = -1
+}
+
+free_market_construction_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_construction_add = -10
+	state_building_highway_max_level_add = 10
+	country_institution_cost_institution_migration_controls_mult = -1
+}
+
+legacy_construction_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_building_highway_max_level_add = 10
+	country_institution_cost_institution_migration_controls_mult = -1
+}

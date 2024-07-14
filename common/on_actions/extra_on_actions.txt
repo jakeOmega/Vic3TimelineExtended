@@ -1,15 +1,15 @@
 on_monthly_pulse_state = {
 	on_actions = {
 		space_elevator_on_action
-		ministry_of_emergency_response_on_action
-		#update_gov_services
+		remove_or_create_homelands_on_action
 	}
 }
 
 on_monthly_pulse_country = {
 	on_actions = {
-		#cheaty_on_action
 		ministry_of_thought_control_on_action
+		remove_invalid_buildings
+		cheaty_on_action
 	}
 }
 
@@ -34,21 +34,23 @@ space_elevator_on_action = {
 	}
 }
 
-ministry_of_emergency_response_on_action = {
-	effect = {
-		emergency_response_devastation_update = yes
-	}
-}
-
 ministry_of_thought_control_on_action = {
 	effect = {
 		thought_control_loyalists_update = yes
 	}
 }
 
-update_gov_services = {
+remove_invalid_buildings = {
 	effect = {
-		update_gov_services_effect = yes
+		every_scope_state = {
+			limit = {
+				AND = {
+					NOT = { owner.market_capital = THIS }
+					has_building = building_space_program
+				}
+			}
+			remove_building = building_space_program
+		}
 	}
 }
 
@@ -56,13 +58,67 @@ cheaty_on_action = {
 	effect = {
 		if = {
 			limit = {
-				is_ai = yes
-				not = {
-					has_modifier = cheaty
+				always = no
+			}
+			if = {
+				limit = { NOT = { has_modifier = cheaty }}
+				add_modifier = {
+					name = cheaty
 				}
 			}
-			add_modifier = {
-				name = cheaty
+		}
+		else_if = {
+			limit = {
+				has_modifier = cheaty
+			}
+			remove_modifier = cheaty
+		}
+	}
+}
+
+remove_or_create_homelands_on_action = {
+	effect = {
+		if = {
+			limit = {
+				owner = {
+					power_bloc ?= {
+						has_identity = identity:identity_cultural
+					}
+				}
+			}
+			every_scope_culture = {
+				limit = {
+					ROOT = {
+						culture_percent_state = {
+							target = PREV
+							value < homeland_culture_disappear_threshold
+						}
+					}
+					NOT = { is_primary_culture_of = ROOT.owner }
+				}
+				save_scope_as = removal_culture
+				ROOT = {
+					state_region = {
+						remove_homeland = scope:removal_culture
+					}
+				}
+			}
+			every_scope_culture = {
+				limit = {
+					ROOT = {
+						culture_percent_state = {
+							target = PREV
+							value >= homeland_culture_form_threshold
+						}
+					}
+					is_primary_culture_of = ROOT.owner
+				}
+				save_scope_as = form_culture
+				ROOT = {
+					state_region = {
+						add_homeland = scope:form_culture
+					}
+				}
 			}
 		}
 	}

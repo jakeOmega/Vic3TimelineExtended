@@ -9,9 +9,9 @@ peaceful_annex_gdp_requirement = {
 	divide = 100
 }
 
-peaceful_annex_gdp_requirement_multiplier = 5
+peaceful_annex_gdp_requirement_multiplier = 10
 
-ministry_of_emergency_response_monthly_effect = -1
+ministry_of_science_monthly_effect = -1
 ministry_of_thought_control_monthly_effect = 0.001
 
 construction_cost_super_high = 2000
@@ -71,90 +71,405 @@ reveal_assassination_chance_foreign = {
 	min = 10
 }
 
-institution_level = {
-	value = 0
-	owner = {
-		institution:institution_health_system = {
-			add = investment
-		}
-		institution:institution_schools = {
-			add = investment
-		}
-		institution:institution_police = {
-			add = investment
-		}
-	}
+max_investment_pool_before_on_action = {
+	value = investment_pool_gross_income
+	multiply = 75
+	min = 1000000
 }
 
-government_service_need = {
-	value = state_population
-	multiply = institution_level
-	divide = 1000000
-	ceiling = yes
+needed_private_levels = {
+	value = total_construction_use_target
+	divide = modifier:country_max_weekly_construction_progress_add
+	multiply = 1.5
+	subtract = construction_queue_num_queued_private_levels
+	floor = yes
 }
 
-government_service_have = {
+used_principle_group_slots = {
 	value = 0
 	if = {
 		limit = {
-			has_building = building_government_administration
+			has_principle_group = principle_group:principle_group_construction
 		}
-		b:building_government_administration = {
-			add = level
-			if = {
-				limit = {
-					has_active_production_method = pm_simple_organization
-				}
-				multiply = 35
-			}
-			if = {
-				limit = {
-					has_active_production_method = pm_horizontal_drawer_cabinets
-				}
-				multiply = 50
-			}
-			if = {
-				limit = {
-					has_active_production_method = pm_vertical_filing_cabinets
-				}
-				multiply = 65
-			}
-			if = {
-				limit = {
-					has_active_production_method = pm_switch_boards
-				}
-				multiply = 100
-			}
-			if = {
-				limit = {
-					has_active_production_method = pm_teletype_communications
-				}
-				multiply = 200
-			}
-			if = {
-				limit = {
-					has_active_production_method = pm_internet_communications
-				}
-				multiply = 250
-			}
-			if = {
-				limit = {
-					has_active_production_method = pm_ai_governance
-				}
-				multiply = 300
-			}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_internal_trade
 		}
-		divide = 10
-		ceiling = yes
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_market_unification
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_vassalization
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_advanced_research
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_defensive_cooperation
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_aggressive_coordination
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_external_trade
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_food_standardization
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_police_coordination
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_transport
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_military_industry
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_colonial_offices
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_foreign_investment
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_creative_legislature
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_freedom_of_movement
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_education
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_diplomacy
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_divine_economics
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_exploit_members
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_sacred_civics
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_ideological_truth
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_cultural_unity
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_cultural_plurality
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_environmental_sustainability
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_urban_planning
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_principle_group = principle_group:principle_group_global_security
+		}
+		add = 1
 	}
 }
 
-government_service_net = {
-	value = government_service_have
-	subtract = government_service_need
+available_principle_slots = {
+	value = 1
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_dlc_feature = power_bloc_features
+			}
+		}
+		add = 1
+		if = {
+			limit = {
+				power_bloc_rank <= 5
+				num_power_bloc_members >= 5
+			}
+			add = 1
+		}
+		if = {
+			limit = {
+				power_bloc_rank <= 3
+				num_power_bloc_members >= 10
+			}
+			add = 1
+		}
+		if = {
+			limit = {
+				power_bloc_leader = { has_technology_researched = intergovernmental_organizations }
+			}
+			add = 1
+		}
+		if = {
+			limit = {
+				power_bloc_leader = { has_technology_researched = decolonization }
+			}
+			add = 1
+		}
+		if = {
+			limit = {
+				power_bloc_leader = { has_technology_researched = cellular_networks }
+			}
+			add = 1
+		}
+		if = {
+			limit = {
+				power_bloc_leader = { has_technology_researched = globalization }
+			}
+			add = 1
+		}
+	}
 }
 
-government_service_ratio = {
-	value = government_service_have
-	divide = government_service_need
+starting_investment_pool = {
+	value = gdp
+	multiply = literacy_rate
+	multiply = literacy_rate
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_traditionalism
+				has_law = law_type:law_industry_banned
+			}
+		}
+		multiply = 0.5
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_serfdom
+		}
+		multiply = 0.5
+	}
+}
+
+homeland_culture_disappear_threshold = 0.33
+homeland_culture_form_threshold = 0.66
+
+primary_culture_state_count_threshold = 0.5
+
+primary_culture_state_count = {
+	value = 0
+	every_power_bloc_member = {
+		every_scope_state = {
+			limit = {
+				any_scope_culture = {
+					is_primary_culture_of = PREV.owner.power_bloc.power_bloc_leader
+					PREV = {
+						culture_percent_state = {
+							target = PREV
+							value >= primary_culture_state_count_threshold
+						}
+					}
+				}
+			}
+			add = 1
+		}
+	}
+}
+
+accepted_culture_state_count_threshold = 0.1
+
+accepted_culture_state_count = {
+	value = 0
+	every_power_bloc_member = {
+		every_scope_state = {
+			limit = {
+				any_scope_culture = {
+					NOT = { culture_is_discriminated_in = PREV.owner.power_bloc.power_bloc_leader }
+					PREV = {
+						culture_percent_state = {
+							target = PREV
+							value >= accepted_culture_state_count_threshold
+						}
+					}
+				}
+			}
+			add = 1
+		}
+	}
+}
+
+multicultural_state_count = {
+	value = 0
+	every_power_bloc_member = {
+		every_scope_state = {
+			limit = {
+				owner = {
+					has_law = law_type:law_multicultural
+				}
+			}
+			add = 1
+		}
+	}
+}
+
+total_state_count = {
+	value = 0
+	every_power_bloc_member = {
+		every_scope_state = {
+			add = 1
+		}
+	}
+	min = 1
+}
+
+leverage_threshold_to_invite = {
+	value = 200
+	power_bloc_leader = {
+		if = {
+			limit = { has_technology_researched = intergovernmental_organizations }
+			subtract = 100
+		}
+		if = {
+			limit = { has_technology_researched = globalization }
+			subtract = 100
+		}
+	}
+}
+
+power_bloc_population = {
+	value = 0
+	every_power_bloc_member = {
+		add = total_population
+	}
+}
+
+power_bloc_population_share = {
+	value = 0
+	every_power_bloc_member = {
+		add = total_population
+	}
+	divide = global_population
+	multiply = 100
+}
+
+power_bloc_gdp = {
+	value = 0
+	every_power_bloc_member = {
+		add = gdp
+	}
+}
+
+power_bloc_gdp_share = {
+	value = 0
+	every_power_bloc_member = {
+		add = gdp
+	}
+	divide = global_gdp
+	multiply = 100
+}
+
+power_bloc_avg_literacy = {
+	value = 0
+	every_power_bloc_member = {
+		add = literacy_rate
+	}
+	divide = num_power_bloc_members
+	multiply = 100
+}
+
+bloc_states_script_value = {
+	value = num_power_bloc_states
+}
+
+power_bloc_mandate_progress_diplomatic_identity = {
+	value = power_bloc_mandate_progress_by_rank
+	add = {
+		value = power_bloc_population_share
+		desc = POWER_BLOC_MANDATE_PROGRESS_GLOBAL_POPULATION
+	}
+	add = {
+		value = power_bloc_gdp_share
+		desc = POWER_BLOC_MANDATE_PROGRESS_GLOBAL_GDP
+	}
+	add = {
+		value = power_bloc_avg_literacy
+		divide = 10
+		desc = POWER_BLOC_MANDATE_PROGRESS_AVERAGE_LITERACY
+	}
+	add = {
+		value = num_power_bloc_states
+		divide = 10
+		desc = POWER_BLOC_MANDATE_PROGRESS_NUM_STATES
+	}
 }

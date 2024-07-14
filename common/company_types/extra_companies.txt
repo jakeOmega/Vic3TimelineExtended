@@ -1,3 +1,35 @@
+company_construction_power_bloc = {
+	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	
+	building_types = {  
+        building_construction_sector_mod
+	}
+
+	potential = {
+		is_in_power_bloc = yes
+	}
+
+	unlocking_principles = {
+		principle_construction_3
+        principle_construction_4
+        principle_construction_5
+	}
+
+	possible = { 
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_construction_sector_mod
+				level >= 10
+			}
+		}
+	}
+	
+	prosperity_modifier = { 
+		country_production_tech_research_speed_mult = 0.1
+	}	
+}
+
 company_basic_entertainment = {
 	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"

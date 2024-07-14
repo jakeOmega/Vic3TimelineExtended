@@ -1,0 +1,47 @@
+﻿############ GOVERNMENT BUILDINGS
+
+
+building_construction_sector = {
+	building_group = bg_construction_dummy
+	texture = "gfx/interface/icons/building_icons/construction_camp.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	levels_per_mesh = 2
+	buildable = no
+	expandable = no
+	downsizeable = no
+	min_raise_to_hire = -1.0
+	residence_points_per_level = 0
+	#economic_contribution = 0.0
+	production_method_groups = {
+		pmg_base_building_construction_sector
+	}
+}
+
+
+
+
+
+building_construction_sector_mod = {
+	building_group = bg_construction
+	texture = "gfx/interface/icons/building_icons/construction_camp.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	ai_nationalization_desire = 0.25 # AI will generally not privatize steel mills due to importance for construction
+	ownership_type = self
+	required_construction = construction_cost_low
+	unlocking_technologies = {
+		urbanization
+	}
+	production_method_groups = {
+		pmg_base_building_construction_sector_mod
+		pmg_construction_principle
+	}
+
+	possible = {
+		has_game_rule = free_market_construction
+	}
+	
+	ai_value = 3000 # Construction sector should generally be preferred over other equal-priority spending items
+}

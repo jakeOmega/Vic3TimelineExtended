@@ -2,12 +2,15 @@
 	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 	modifier = {
-		unit_army_defense_mult = 0.05
-		unit_army_offense_mult = 0.05
-		unit_navy_defense_mult = 0.05
-		unit_navy_offense_mult = 0.05
-		interest_group_ig_armed_forces_pol_str_mult = 0.025
-		country_military_wages_mult = 0.05
+		unit_army_experience_gain_mult = 0.2
+		character_battle_condition_blunder_mult = -0.1
+		character_battle_condition_broken_supply_line_mult = -0.1
+		interest_group_ig_armed_forces_pol_str_mult = 0.05
+		country_military_wages_mult = 0.2
+		country_military_goods_cost_mult = 0.05
+		country_military_tech_research_speed_mult = 0.05
+		unit_offense_mult = 0.02
+		unit_defense_mult = 0.02
 	}
 }
 
@@ -26,11 +29,12 @@ institution_ministry_of_foreign_affairs = {
 	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 	modifier = {
-		country_improve_relations_speed_mult = 0.2
-		country_damage_relations_speed_mult = 0.2
-		country_influence_mult = 0.2
+		country_improve_relations_speed_mult = 0.1
+		country_damage_relations_speed_mult = 0.1
+		country_influence_mult = 0.1
+		country_leverage_generation_mult = 0.05
 		country_max_declared_interests_add = 1
-		country_infamy_decay_mult = 0.2
+		country_infamy_decay_mult = 0.05
 		country_infamy_generation_mult = -0.02
 	}
 }
@@ -41,7 +45,7 @@ institution_national_bank = {
 	modifier = {
 		country_loan_interest_rate_mult = -0.05
 		country_gold_reserve_limit_mult = 0.2
-		country_authority_mult = 0.1
+		building_cash_reserves_mult = 0.2
 	}
 }
 
@@ -52,7 +56,7 @@ institution_ministry_of_culture = {
 		state_assimilation_mult = 0.2
 		state_conversion_mult = 0.2
 		building_arts_academy_throughput_add = 0.2
-		country_authority_add = 50
+		country_society_tech_research_speed_mult = 0.05
 	}
 }
 
@@ -60,9 +64,6 @@ institution_ministry_of_labor = {
 	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 	modifier = {
-		state_pop_qualifications_mult = 0.1
-		state_working_adult_ratio_add = 0.01
-		interest_group_ig_trade_unions_pol_str_mult = 0.05
 	}
 }
 
@@ -72,10 +73,11 @@ institution_ministry_of_the_environment = {
 	modifier = {
 		building_group_bg_mining_throughput_add = -0.02
 		building_group_bg_oil_extraction_throughput_add = -0.02
-		building_construction_sector_throughput_add = -0.02
-		state_pollution_reduction_health_mult = -0.18
-		building_urban_center_throughput_add = 0.01
-		state_standard_of_living_add = 0.2
+		building_group_bg_construction_throughput_add = -0.02
+		building_group_bg_manufacturing_throughput_add = -0.01
+		state_migration_pull_mult = 0.02
+		state_pollution_reduction_health_mult = -0.08
+		state_standard_of_living_add = 0.6
 	}
 }
 
@@ -83,9 +85,9 @@ institution_ministry_of_intelligence_and_security = {
 	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 	modifier = {
-		country_tech_spread_mult = 0.2
+		country_tech_spread_mult = 0.1
 		political_movement_radicalism_mult = -0.05
-		country_diplomatic_play_maneuvers_add = 10
+		country_leverage_generation_mult = 0.02
 	}
 }
 
@@ -108,12 +110,12 @@ institution_ministry_of_propaganda = {
 	}
 }
 
-institution_ministry_of_emergency_response = {
+institution_ministry_of_science = {
 	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 	modifier = {
-		state_infrastructure_add = 100
-		state_devastation_monthly_add = -1
+		country_academics_pol_str_mult = 0.1
+		country_tech_research_speed_mult = 0.05
 	}
 }
 
@@ -131,8 +133,11 @@ institution_ministry_of_consumer_protection = {
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 
 	modifier = {
-		state_standard_of_living_add = 0.2
+		goods_output_consumer_appliances_mult = -0.02
+		goods_output_groceries_mult = -0.02 
 		state_mortality_mult = -0.01
+		country_production_tech_research_speed_mult = 0.05
+		state_standard_of_living_add = 0.6
 	}
 }
 
@@ -142,6 +147,7 @@ institution_ministry_of_urban_planning = {
 
 	modifier = {
 		building_group_bg_urban_facilities_employee_mult = -0.05
+		state_urbanization_per_level_add = -10
 	}
 }
 
@@ -153,6 +159,7 @@ institution_ministry_of_population_control = {
 		state_birth_rate_mult = -0.1
 		state_accepted_birth_rate_mult = 0.15
 		state_radicals_from_discrimination_mult = 0.25
+		country_infamy_decay_mult = -0.05
 	}
 }
 
@@ -173,7 +180,19 @@ institution_ministry_of_international_aid = {
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 
 	modifier = {
-		country_infamy_decay_mult = 0.2
+		country_infamy_decay_mult = 0.05
+		country_leverage_generation_mult = 0.05
 		country_minting_mult = -0.05
+	}
+}
+
+institution_migration_controls = {
+	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
+	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
+
+	modifier = {
+		state_migration_quota_mult = -0.2
+		country_mass_migration_attraction_mult = -0.2
+		state_radicals_from_sol_change_accepted_culture_mult = -0.1
 	}
 }
