@@ -325,3 +325,23 @@ principle_group_global_security = {
 		principle_global_security_5
 	}
 }
+
+principle_group_healthcare = {
+	levels = {
+		principle_healthcare_1
+		principle_healthcare_2
+		principle_healthcare_3
+		principle_healthcare_4
+		principle_healthcare_5
+	}
+}
+
+principle_group_welfare = {
+	levels = {
+		principle_welfare_1
+		principle_welfare_2
+		principle_welfare_3
+		principle_welfare_4
+		principle_welfare_5
+	}
+}

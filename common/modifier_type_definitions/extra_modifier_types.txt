@@ -829,6 +829,16 @@ country_institution_cost_institution_migration_controls_mult = {
 	percent = yes
 }
 
+country_institution_cost_institution_health_system_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_cost_institution_social_security_mult = {
+	color = bad
+	percent = yes
+}
+
 state_pop_support_law_ministry_of_urban_planning_add = {
 	color = good
 	percent = no
@@ -890,4 +900,25 @@ building_highway_throughput_add = {
 power_bloc_principle_groups_max_add = {
 	color = good
 	percent = no
+}
+
+country_add_multicultural_ideology_to_intelligentsia_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_poor_expected_sol={
+	decimals=1
+	color=neutral
+	game_data={
+		ai_value=0
+	}
+}
+
+state_academics_investment_pool_contribution_add = {
+	color = good
+	percent = yes
 }

@@ -1,0 +1,67 @@
+add_accepted_culture_scriptedgui = {
+
+	scope = country 
+
+    saved_scopes = {
+        curr_culture
+    }
+
+	is_shown = {
+        scope:curr_culture = {
+            culture_is_discriminated_in = ROOT
+        }
+    } 
+    
+	ai_is_valid = {
+        always = yes
+    }
+
+	is_valid = {
+        always = yes
+    } 
+    
+    effect = {	
+		#custom_tooltip = ""
+        add_to_variable_list = {
+            name = accepted_cultures
+            target = scope:curr_culture
+        }
+    }
+}
+
+remove_accepted_culture_scriptedgui = {
+
+    scope = country    
+
+    saved_scopes = {
+        curr_culture
+    }
+
+    is_shown = {
+        scope:curr_culture = {
+            NOT = { culture_is_discriminated_in = ROOT }
+        }
+    } 
+    
+    ai_is_valid = {
+        is_target_in_variable_list = {
+            name = accepted_cultures
+            target = scope:curr_culture
+        }
+    }
+
+    is_valid = {
+        is_target_in_variable_list = {
+            name = accepted_cultures
+            target = scope:curr_culture
+        }
+    } 
+    
+    effect = {	
+        #custom_tooltip = ""
+        remove_list_variable = {
+            name = accepted_cultures
+            target = scope:curr_culture
+        }
+    }
+}

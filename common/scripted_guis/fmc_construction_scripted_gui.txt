@@ -19,6 +19,34 @@
         initialize_gov_factories_variable = yes
         change_variable = { 
             name = num_gov_factories 
+            add = 1
+        }
+        country_update_private_public = yes
+        update_construction_effect = yes
+    }
+}
+
+add_construction_shift_scriptedgui = {
+
+	scope = country 
+
+	is_shown = {
+        always = yes
+    } 
+    
+	ai_is_valid = {
+        always = yes
+    }
+
+	is_valid = {
+        always = yes
+    } 
+    
+    effect = {	
+		#custom_tooltip = ""
+        initialize_gov_factories_variable = yes
+        change_variable = { 
+            name = num_gov_factories 
             add = 10
         }
         country_update_private_public = yes
@@ -26,7 +54,118 @@
     }
 }
 
+add_construction_ctrl_scriptedgui = {
+
+	scope = country 
+
+	is_shown = {
+        always = yes
+    } 
+    
+	ai_is_valid = {
+        always = yes
+    }
+
+	is_valid = {
+        always = yes
+    } 
+    
+    effect = {	
+		#custom_tooltip = ""
+        initialize_gov_factories_variable = yes
+        change_variable = { 
+            name = num_gov_factories 
+            add = 100
+        }
+        country_update_private_public = yes
+        update_construction_effect = yes
+    }
+}
+
+add_construction_alt_scriptedgui = {
+
+	scope = country 
+
+	is_shown = {
+        always = yes
+    } 
+    
+	ai_is_valid = {
+        always = yes
+    }
+
+	is_valid = {
+        always = yes
+    } 
+    
+    effect = {	
+		#custom_tooltip = ""
+        initialize_gov_factories_variable = yes
+        change_variable = { 
+            name = num_gov_factories 
+            add = 1000
+        }
+        country_update_private_public = yes
+        update_construction_effect = yes
+    }
+}
+
+add_construction_rightclick_scriptedgui = {
+
+    scope = country 
+
+    is_shown = {
+        always = yes
+    } 
+    
+    ai_is_valid = {
+        always = yes
+    }
+
+    is_valid = {
+        always = yes
+    } 
+    
+    effect = {	
+        #custom_tooltip = ""
+        initialize_gov_factories_variable = yes
+        change_variable = { 
+            name = num_gov_factories 
+            add = 10000
+        }
+        country_update_private_public = yes
+        update_construction_effect = yes
+    }
+}
+
 remove_construction_scriptedgui = {
+
+    scope = country    
+
+    is_shown = {
+        always = yes
+    }
+    
+    ai_is_valid = {
+        always = no
+    }       
+    is_valid = {
+        var:num_gov_factories >= 1
+    }       
+
+    effect = {          
+        #custom_tooltip = "" 
+        initialize_gov_factories_variable = yes
+        change_variable = { 
+            name = num_gov_factories 
+            subtract = 1
+        }
+        country_update_private_public = yes
+        update_construction_effect = yes
+    }
+}
+
+remove_construction_shift_scriptedgui = {
 
     scope = country    
 
@@ -47,6 +186,87 @@ remove_construction_scriptedgui = {
         change_variable = { 
             name = num_gov_factories 
             subtract = 10
+        }
+        country_update_private_public = yes
+        update_construction_effect = yes
+    }
+}
+
+remove_construction_ctrl_scriptedgui = {
+
+    scope = country    
+
+    is_shown = {
+        always = yes
+    }
+    
+    ai_is_valid = {
+        always = no
+    }       
+    is_valid = {
+        var:num_gov_factories >= 100
+    }       
+
+    effect = {          
+        #custom_tooltip = "" 
+        initialize_gov_factories_variable = yes
+        change_variable = { 
+            name = num_gov_factories 
+            subtract = 100
+        }
+        country_update_private_public = yes
+        update_construction_effect = yes
+    }
+}
+
+remove_construction_alt_scriptedgui = {
+
+    scope = country    
+
+    is_shown = {
+        always = yes
+    }
+    
+    ai_is_valid = {
+        always = no
+    }       
+    is_valid = {
+        var:num_gov_factories >= 1000
+    }       
+
+    effect = {          
+        #custom_tooltip = "" 
+        initialize_gov_factories_variable = yes
+        change_variable = { 
+            name = num_gov_factories 
+            subtract = 1000
+        }
+        country_update_private_public = yes
+        update_construction_effect = yes
+    }
+}
+
+remove_construction_rightclick_scriptedgui = {
+
+    scope = country    
+
+    is_shown = {
+        always = yes
+    }
+    
+    ai_is_valid = {
+        always = no
+    }       
+    is_valid = {
+        var:num_gov_factories >= 1
+    }       
+
+    effect = {          
+        #custom_tooltip = "" 
+        initialize_gov_factories_variable = yes
+        set_variable = { 
+            name = num_gov_factories 
+            value = 0
         }
         country_update_private_public = yes
         update_construction_effect = yes

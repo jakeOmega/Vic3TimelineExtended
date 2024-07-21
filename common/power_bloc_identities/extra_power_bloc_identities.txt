@@ -212,6 +212,7 @@ identity_diplomatic = {
 			add = legitimacy
 			divide = 100 # legitimacy max value
 			multiply = define:NPowerBlocs|COHESION_TARGET_MAX
+			multiply = 0.7
 			desc = POWER_BLOC_COHESION_LEGITIMACY_DIPLOMATIC
 		}
 		

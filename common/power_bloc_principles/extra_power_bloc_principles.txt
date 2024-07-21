@@ -237,6 +237,7 @@ principle_vassalization_5 = {
 		country_subject_income_transfer_mult = 0.25
 
 		country_allow_enacting_decrees_in_subject_bool = yes
+		country_leader_has_law_enactment_success_mult = 0.1
 	}
 	
 	ai_weight = {
@@ -638,6 +639,7 @@ principle_police_coordination_5 = {
 		country_institution_cost_institution_police_mult = -0.5	
 		country_disallow_law_no_police_bool = yes
 		country_suppression_cost_mult = -0.5
+		country_leader_has_law_enactment_success_mult = 0.05
 	}
 
 	leader_modifier = {
@@ -776,6 +778,7 @@ principle_colonial_offices_4 = {
 		country_institution_size_change_speed_institution_colonial_affairs_mult = 0.5
 		country_institution_cost_institution_colonial_affairs_mult = -0.5
 		country_disallow_law_no_colonial_affairs_bool = yes
+		country_leader_has_law_enactment_success_mult = 0.05
 	}
 
 	leader_modifier = {
@@ -814,6 +817,7 @@ principle_colonial_offices_5 = {
 		country_institution_size_change_speed_institution_colonial_affairs_mult = 0.5
 		country_institution_cost_institution_colonial_affairs_mult = -0.5
 		country_disallow_law_no_colonial_affairs_bool = yes
+		country_leader_has_law_enactment_success_mult = 0.1
 	}
 	
 	institution = institution_colonial_affairs
@@ -931,6 +935,7 @@ principle_creative_legislature_4 = {
 		country_law_enactment_max_setbacks_add = 1
 		country_legitimacy_base_add = 10
 		country_lobby_leverage_generation_mult = 0.1
+		country_leader_has_law_enactment_success_mult = 0.05
 	}
 
 	ai_weight = {
@@ -956,6 +961,7 @@ principle_creative_legislature_5 = {
 		country_legitimacy_base_add = 20
 		country_lobby_leverage_generation_mult = 0.2
 		country_opposition_ig_approval_add = 2
+		country_leader_has_law_enactment_success_mult = 0.1
 	}
 
 	ai_weight = {
@@ -999,7 +1005,7 @@ principle_freedom_of_movement_5 = {
 	}
 	
 	member_modifier = {
-		state_migration_quota_mult = 0.25
+		state_migration_quota_mult = 0.5
 		country_mass_migration_attraction_mult = 0.5	
 		country_society_tech_spread_mult = 0.25
 	}
@@ -1103,6 +1109,7 @@ principle_exploit_members_4 = {
 		country_influence_mult = -0.2
 		state_tax_collection_mult = 0.25
 		country_legitimacy_base_add = -10
+		country_leader_has_law_enactment_success_mult = 0.1
 	}
 
 	power_bloc_modifier = {
@@ -1138,6 +1145,7 @@ principle_exploit_members_5 = {
 		country_influence_mult = -0.2
 		state_tax_collection_mult = 0.5
 		country_legitimacy_base_add = -10
+		country_leader_has_law_enactment_success_mult = 0.2
 	}
 
 	power_bloc_modifier = {
@@ -1172,6 +1180,7 @@ principle_sacred_civics_4 = {
 		state_pop_support_law_ministry_of_religion_add = 0.5
 		country_enactment_success_chance_law_ministry_of_religion_add = 0.1
 		country_institution_cost_institution_ministry_of_religion_mult = -0.5
+		country_leader_has_law_enactment_success_mult = 0.05
 	}
 
 	leader_modifier = {
@@ -1202,6 +1211,7 @@ principle_sacred_civics_5 = {
 		state_pop_support_law_ministry_of_religion_add = 1.0
 		country_enactment_success_chance_law_ministry_of_religion_add = 0.2
 		country_institution_cost_institution_ministry_of_religion_mult = -0.5
+		country_leader_has_law_enactment_success_mult = 0.1
 	}
 
 	leader_modifier = {
@@ -1241,6 +1251,7 @@ principle_ideological_truth_4 = {
 		country_enactment_success_chance_law_ministry_of_propaganda_add = 0.1
 		state_pop_support_law_ministry_of_propaganda_add = 0.5
 		country_institution_cost_institution_ministry_of_propaganda_mult = -0.5
+		country_leader_has_law_enactment_success_mult = 0.1
 	}
 
 	institution = institution_ministry_of_propaganda
@@ -1272,6 +1283,7 @@ principle_ideological_truth_5 = {
 		country_enactment_success_chance_law_ministry_of_propaganda_add = 0.2
 		state_pop_support_law_ministry_of_propaganda_add = 1.0
 		country_institution_cost_institution_ministry_of_propaganda_mult = -0.5
+		country_leader_has_law_enactment_success_mult = 0.2
 	}
 
 	institution = institution_ministry_of_propaganda
@@ -2341,6 +2353,293 @@ principle_global_security_5 = {
 		country_authority_add = 100
 		building_training_rate_mult = 0.5
 		military_formation_organization_gain_add = 0.1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_healthcare_1 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	possible = {
+		has_technology_researched = pharmaceuticals
+	}
+
+	member_modifier = {
+		country_institution_cost_institution_health_system_mult = -0.1
+	}
+
+	institution = institution_health_system
+	institution_modifier = {
+		state_birth_rate_mult = 0.02
+	}
+	
+	ai_weight = {
+		value = 100
+		
+		if = {
+			limit = { has_strategy = ai_strategy_progressive_agenda }
+			multiply = 2.0
+		}
+
+		if = {
+			limit = {
+				has_law = law_type:law_public_health_insurance
+			}
+			multiply = 2.0
+		}			
+	}
+}
+
+principle_healthcare_2 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	possible = {
+		has_technology_researched = pharmaceuticals
+	}
+
+	member_modifier = {
+		country_institution_cost_institution_health_system_mult = -0.2
+	}
+
+	institution = institution_health_system
+	institution_modifier = {
+		unit_recovery_rate_add = 0.05
+		state_birth_rate_mult = 0.02
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_healthcare_3 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = pharmaceuticals
+	}
+
+	member_modifier = {
+		country_institution_cost_institution_health_system_mult = -0.3
+	}
+
+	institution = institution_health_system
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		unit_recovery_rate_add = 0.05
+		state_birth_rate_mult = 0.02
+		political_movement_radicalism_mult = -0.02
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_healthcare_4 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = modern_vaccines
+	}
+
+	member_modifier = {
+		country_institution_cost_institution_health_system_mult = -0.4
+	}
+
+	institution = institution_health_system
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		unit_recovery_rate_add = 0.05
+		state_birth_rate_mult = 0.02
+		political_movement_radicalism_mult = -0.02
+		country_authority_add = 50
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_healthcare_5 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = modern_pharmaceuticals
+	}
+
+	member_modifier = {
+		country_institution_cost_institution_health_system_mult = -0.5
+	}
+
+	institution = institution_health_system
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		unit_recovery_rate_add = 0.05
+		state_birth_rate_mult = 0.02
+		political_movement_radicalism_mult = -0.02
+		country_authority_add = 100
+		state_radicals_from_sol_change_mult = -0.1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_welfare_1 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		country_institution_cost_institution_social_security_mult = -0.1
+		state_welfare_payments_add = 0.1
+	}
+
+	institution = institution_social_security
+	institution_modifier = {
+		state_radicals_from_sol_change_mult = -0.05
+	}
+	
+	ai_weight = {
+		value = 100
+		
+		if = {
+			limit = { has_strategy = ai_strategy_progressive_agenda }
+			multiply = 2.0
+		}
+
+		if = {
+			limit = {
+				has_law = law_type:law_wage_subsidies
+			}
+			multiply = 2.0
+		}	
+
+		if = {
+			limit = {
+				has_law = law_type:law_old_age_pension
+			}
+			multiply = 3.0
+		}		
+	}
+}
+
+principle_welfare_2 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_institution_cost_institution_social_security_mult = -0.2
+		state_welfare_payments_add = 0.1
+	}
+
+	institution = institution_social_security
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		state_radicals_from_sol_change_mult = -0.05
+		state_education_access_add = 0.02
+		state_pop_qualifications_mult = 0.05
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_welfare_3 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_institution_cost_institution_social_security_mult = -0.3
+		state_welfare_payments_add = 0.1
+	}
+
+	institution = institution_social_security
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		state_radicals_from_sol_change_mult = -0.05
+		state_education_access_add = 0.02
+		state_pop_qualifications_mult = 0.05
+		state_poor_expected_sol = -0.5
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_welfare_4 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = public_works_programs
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_institution_cost_institution_social_security_mult = -0.4
+		state_welfare_payments_add = 0.2
+	}
+
+	institution = institution_social_security
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		state_radicals_from_sol_change_mult = -0.05
+		state_education_access_add = 0.02
+		state_pop_qualifications_mult = 0.05
+		state_poor_expected_sol = -0.5
+		state_construction_mult = 0.02
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_welfare_5 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = social_media
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_institution_cost_institution_social_security_mult = -0.5
+		state_welfare_payments_add = 0.2
+	}
+
+	institution = institution_social_security
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		state_radicals_from_sol_change_mult = -0.05
+		state_education_access_add = 0.02
+		state_pop_qualifications_mult = 0.05
+		state_poor_expected_sol = -0.5
+		state_construction_mult = 0.02
+		country_authority_add = 100
 	}
 
 	ai_weight = {

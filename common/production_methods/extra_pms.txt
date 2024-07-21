@@ -4657,12 +4657,13 @@ pm_continuous_bleaching = {
 			# Profit: -1000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -3000
-			# Wage breakeven: 0.33
+			# Employment: -3400
+			# Wage breakeven: 0.29
 		}
 
 		level_scaled = {
 			building_employment_laborers_add = -3000
+			building_employment_shopkeepers_add = -400
 		}
 	}
 }
@@ -5186,14 +5187,15 @@ pm_bioplastics = {
 			# Profit: 4100.0
 			# Profit margin: 178.26%
 			# Zero profit price multiplier: 0.36
-			# Employment: 3750
-			# Wage breakeven: 1.09
+			# Employment: 5000
+			# Wage breakeven: 0.82
 		}
 
 		level_scaled = {
 			building_employment_laborers_add = 2500
-			building_employment_machinists_add = 750
-			building_employment_engineers_add = 500
+			building_employment_machinists_add = 1250
+			building_employment_engineers_add = 750
+			building_employment_shopkeepers_add = 500
 		}
 	}
 
@@ -5286,13 +5288,15 @@ pm_massed_produced_plastics = {
 			# Profit: -950.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -3250
-			# Wage breakeven: 0.29
+			# Employment: -4250
+			# Wage breakeven: 0.22
 		}
 
 		level_scaled = {
 			building_employment_laborers_add = -2500
-			building_employment_machinists_add = -750
+			building_employment_machinists_add = -1000
+			building_employment_engineers_add = -250
+			building_employment_shopkeepers_add = -500
 		}
 	}
 
@@ -5323,14 +5327,15 @@ pm_programmable_plastics = {
 			# Profit: -1600.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -3740
-			# Wage breakeven: 0.43
+			# Employment: -4990
+			# Wage breakeven: 0.32
 		}
 
 		level_scaled = {
 			building_employment_laborers_add = -2500
-			building_employment_machinists_add = -750
-			building_employment_engineers_add = -490
+			building_employment_machinists_add = -1250
+			building_employment_engineers_add = -740
+			building_employment_shopkeepers_add = -500
 		}
 	}
 
@@ -5782,42 +5787,14 @@ pm_synthetic_meat = {
 			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
 			# Output goods
 			goods_output_meat_add = 200                          # Price:   30, Total cost: 6000.0
+			goods_output_fish_add = 125                          # Price:   20, Total cost: 2500.0
 			# Total input cost: 3500.0
-			# Total output cost: 6000.0
-			# Profit: 2500.0
-			# Profit margin: 71.43%
-			# Zero profit price multiplier: 0.58
+			# Total output cost: 8500.0
+			# Profit: 5000.0
+			# Profit margin: 142.86%
+			# Zero profit price multiplier: 0.41
 			# Employment: 5000
-			# Wage breakeven: 0.50
-		}
-
-		level_scaled = {
-			building_employment_laborers_add = 2000
-			building_employment_machinists_add = 1000
-			building_employment_engineers_add = 2000
-		}
-	}
-}
-
-pm_synthetic_fish = {
-	texture = "gfx/interface/icons/production_method_icons/chemical_fertilizers.dds"
-	
-
-	building_modifiers = {
-		workforce_scaled = {
-			# Input goods
-			goods_input_grain_add = 60                           # Price:   20, Total cost: 1200.0
-			goods_input_electronic_components_add = 25           # Price:   80, Total cost: 2000.0
-			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
-			# Output goods
-			goods_output_fish_add = 250                          # Price:   20, Total cost: 5000.0
-			# Total input cost: 3500.0
-			# Total output cost: 5000.0
-			# Profit: 1500.0
-			# Profit margin: 42.86%
-			# Zero profit price multiplier: 0.70
-			# Employment: 5000
-			# Wage breakeven: 0.30
+			# Wage breakeven: 1.00
 		}
 
 		level_scaled = {
@@ -5868,17 +5845,17 @@ pm_synthetic_drinks = {
 			goods_input_electronic_components_add = 10           # Price:   80, Total cost: 800.0
 			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
 			# Output goods
-			goods_output_coffee_add = 20                         # Price:   50, Total cost: 1000.0
-			goods_output_tea_add = 20                            # Price:   50, Total cost: 1000.0
-			goods_output_liquor_add = 20                         # Price:   30, Total cost: 600.0
+			goods_output_coffee_add = 30                         # Price:   50, Total cost: 1500.0
+			goods_output_tea_add = 30                            # Price:   50, Total cost: 1500.0
+			goods_output_liquor_add = 10                         # Price:   30, Total cost: 300.0
 			goods_output_wine_add = 20                           # Price:   50, Total cost: 1000.0
 			# Total input cost: 2300.0
-			# Total output cost: 3600.0
-			# Profit: 1300.0
-			# Profit margin: 56.52%
-			# Zero profit price multiplier: 0.64
+			# Total output cost: 4300.0
+			# Profit: 2000.0
+			# Profit margin: 86.96%
+			# Zero profit price multiplier: 0.53
 			# Employment: 5000
-			# Wage breakeven: 0.26
+			# Wage breakeven: 0.40
 		}
 
 		level_scaled = {
@@ -8358,6 +8335,10 @@ pm_autonomous_highway = {
 			# Employment: 0
 			# Wage breakeven: 0.00
 		}
+		level_scaled = {
+			# employment
+			building_employment_engineers_add = 20
+		}
 	}
 	
 	state_modifiers = {
@@ -9077,7 +9058,7 @@ pm_programmable_food_synthesis = {
 			# profit = 1200
 			building_employment_laborers_add = 3500
 			building_employment_machinists_add = 500
-			building_employment_engineers_add = 500
+			building_employment_engineers_add = 10
 		}
 	}
 
@@ -11986,6 +11967,23 @@ pm_hobbyist_ownership = {
 	}
 }
 
+pm_manor_house_ai_ownership = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+
+	unlocking_laws = {
+		law_post-scarcity
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 5
+		}
+		unscaled = {
+			building_academics_shares_add = 10
+		}	
+	}
+}
+
 pm_very_slow_ship_construction = {
 	texture = "gfx/interface/icons/production_method_icons/arc_welded_steam_ships.dds"
 	
@@ -12760,6 +12758,7 @@ pm_construction_no_effect = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 	replacement_if_valid = pm_construction_principle_2
 }
+
 
 
 

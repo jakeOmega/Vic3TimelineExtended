@@ -1,8 +1,7 @@
 decree_political_patronage = {
 	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
 	modifier = {
-		state_pop_pol_str_mult = 0.5
-		state_political_strength_from_wealth_mult = 0.25
+		state_pop_pol_str_mult = 1.0
 	}
 	unlocking_technologies = { 
 		mass_media

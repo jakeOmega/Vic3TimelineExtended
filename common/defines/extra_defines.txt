@@ -1,6 +1,6 @@
 ﻿NEconomy = {
     MIN_GOODS_PRICE = 0.01							# A good cannot have a lower base price than this                                                                                                      
-    PRICE_RANGE = 0.9							    # min price of a good is base * (1 - PRICE_RANGE), Max price is base * (1 + PRICE_RANGE), PRICE_RANGE is locked to [0-1]                                
+    PRICE_RANGE = 0.999							    # min price of a good is base * (1 - PRICE_RANGE), Max price is base * (1 + PRICE_RANGE), PRICE_RANGE is locked to [0-1]                                
     QUALITY_OF_LIFE_MAX = 1000                                                                                                       
 	TRADE_ROUTE_MAX_LEVEL = 10000							# Trade routes cannot be higher level than this
 }

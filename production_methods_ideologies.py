@@ -532,7 +532,6 @@ modifications = {
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "-"
         ),
-        "lawgroup_colonization": [("law_neocolonialism", "approve")],
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "-"
         ),
@@ -781,13 +780,6 @@ modifications = {
     "ideology_egalitarian": {
         "lawgroup_LGBTQ_rights": lgbtq_indifference,
         "lawgroup_criminal_justice": moderate_criminal_justice,
-        "lawgroup_colonization": [
-            ("law_neocolonialism", "neutral"),
-            ("law_no_colonial_affairs", "neutral"),
-            ("law_frontier_colonization", "neutral"),
-            ("law_colonial_resettlement", "disapprove"),
-            ("law_colonial_exploitation", "strongly_disapprove"),
-        ],
         "lawgroup_ministry_of_consumer_protection": ministry_constructor(
             "ministry_of_consumer_protection", "++"
         ),
@@ -802,13 +794,6 @@ modifications = {
         "lawgroup_LGBTQ_rights": lgbtq_love,
         "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_rights_of_women": [("law_protected_class", "approve")],
-        "lawgroup_colonization": [
-            ("law_neocolonialism", "neutral"),
-            ("law_no_colonial_affairs", "neutral"),
-            ("law_frontier_colonization", "neutral"),
-            ("law_colonial_resettlement", "disapprove"),
-            ("law_colonial_exploitation", "strongly_disapprove"),
-        ],
         "lawgroup_ministry_of_consumer_protection": ministry_constructor(
             "ministry_of_consumer_protection", "++"
         ),
@@ -848,7 +833,6 @@ modifications = {
             "ministry_of_foreign_affairs", "+"
         ),
         "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "++"),
-        "lawgroup_colonization": [("law_neocolonialism", "neutral")],
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "+"
         ),
@@ -859,7 +843,6 @@ modifications = {
             "ministry_of_foreign_affairs", "++"
         ),
         "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "++"),
-        "lawgroup_colonization": [("law_neocolonialism", "neutral")],
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "+"
         ),
@@ -915,7 +898,6 @@ modifications = {
         ),
     },
     "ideology_pacifist": {
-        "lawgroup_colonization": [("law_neocolonialism", "disapprove")],
         "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "--"),
         "lawgroup_ministry_of_international_aid": ministry_constructor(
             "ministry_of_international_aid", "++"
@@ -928,7 +910,6 @@ modifications = {
         "lawgroup_ministry_of_culture": ministry_constructor(
             "ministry_of_culture", "-"
         ),
-        "lawgroup_colonization": [("law_neocolonialism", "strongly_approve")],
     },
     "ideology_patriarchal": {
         "lawgroup_LGBTQ_rights": lgbtq_dislike,
@@ -1155,7 +1136,6 @@ modifications = {
         "lawgroup_ministry_of_commerce": ministry_constructor(
             "ministry_of_commerce", "-"
         ),
-        "lawgroup_colonization": [("law_neocolonialism", "neutral")],
         "lawgroup_ministry_of_international_aid": ministry_constructor(
             "ministry_of_international_aid", "-"
         ),

@@ -51,12 +51,6 @@ crisis_resolution = {
 			}
 		}
 
-        requirement_to_maintain = {
-            trigger = {
-                authority > 0      
-            }
-        }
-
 	 	requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {

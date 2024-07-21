@@ -137,7 +137,13 @@ types construction_panel
 								datacontext = "[GetScriptedGui('remove_construction_scriptedgui')]"
 								visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
 								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
-								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								click_modifiers = {
+									ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+									onshift = "[GetScriptedGui('remove_construction_shift_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+									onctrl = "[GetScriptedGui('remove_construction_ctrl_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+									onalt = "[GetScriptedGui('remove_construction_alt_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								}
+								onrightclick = "[GetScriptedGui('remove_construction_rightclick_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 								#tooltip = "[ScriptedGui.BuildTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
 							}
 				
@@ -163,12 +169,19 @@ types construction_panel
 				
 							### EXPAND
 							button_icon_plus_action = {
+								name = "add_construction"
 								size = { 35 35 }
 								parentanchor = vcenter
 								datacontext = "[GetScriptedGui('add_construction_scriptedgui')]"
 								visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
 								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
-								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								click_modifiers = {
+									ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+									onshift = "[GetScriptedGui('add_construction_shift_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+									onctrl = "[GetScriptedGui('add_construction_ctrl_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+									onalt = "[GetScriptedGui('add_construction_alt_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								}
+								onrightclick = "[GetScriptedGui('add_construction_rightclick_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 								#tooltip = "[ScriptedGui.BuildTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
 								#using = tooltip_below
 							}

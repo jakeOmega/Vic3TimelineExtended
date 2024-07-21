@@ -404,7 +404,6 @@ ideology_isolationist = {
 		law_ministry_of_foreign_affairs = strongly_disapprove
 	}
 	lawgroup_colonization = {
-		law_neocolonialism = neutral
 		law_frontier_colonization = strongly_approve
 		law_no_colonial_affairs = approve
 		law_colonial_resettlement = disapprove
@@ -655,7 +654,6 @@ ideology_jingoist = {
 		law_peasant_levies = disapprove
 	}
 	lawgroup_colonization = {
-		law_neocolonialism = neutral
 		law_colonial_resettlement = approve
 		law_colonial_exploitation = approve
 		law_frontier_colonization = approve
@@ -881,13 +879,6 @@ ideology_egalitarian = {
 	lawgroup_ministry_of_consumer_protection = {
 		law_no_ministry_of_consumer_protection = disapprove
 		law_ministry_of_consumer_protection = strongly_approve
-	}
-	lawgroup_colonization = {
-		law_neocolonialism = neutral
-		law_no_colonial_affairs = neutral
-		law_frontier_colonization = neutral
-		law_colonial_resettlement = disapprove
-		law_colonial_exploitation = strongly_disapprove
 	}
 	lawgroup_criminal_justice = {
 		law_punishment_focused_criminal_justice = disapprove
@@ -1143,7 +1134,6 @@ ideology_plutocratic = {
 		law_graduated_taxation = disapprove
 	}	
 	lawgroup_colonization = {
-		law_neocolonialism = strongly_approve
 		law_colonial_exploitation = approve
 		law_no_colonial_affairs = neutral
 		law_colonial_resettlement = neutral
@@ -1347,13 +1337,6 @@ ideology_egalitarian_modern = {
 	lawgroup_ministry_of_consumer_protection = {
 		law_no_ministry_of_consumer_protection = disapprove
 		law_ministry_of_consumer_protection = strongly_approve
-	}
-	lawgroup_colonization = {
-		law_neocolonialism = neutral
-		law_no_colonial_affairs = neutral
-		law_frontier_colonization = neutral
-		law_colonial_resettlement = disapprove
-		law_colonial_exploitation = strongly_disapprove
 	}
 	lawgroup_criminal_justice = {
 		law_punishment_focused_criminal_justice = disapprove
@@ -3242,8 +3225,7 @@ ideology_pacifist = {
 		law_peasant_levies = disapprove
 		law_mass_conscription = disapprove
 	}
-	lawgroup_colonization = {
-		law_neocolonialism = disapprove		
+	lawgroup_colonization = {		
 		law_no_colonial_affairs = approve
 		law_colonial_resettlement = strongly_disapprove
 		law_colonial_exploitation = strongly_disapprove
@@ -3377,8 +3359,7 @@ ideology_jingoist_leader = {
 		law_national_militia = neutral
 		law_peasant_levies = disapprove
 	}
-	lawgroup_colonization = {
-		law_neocolonialism = neutral		
+	lawgroup_colonization = {		
 		law_no_colonial_affairs = neutral
 		law_colonial_resettlement = approve
 		law_frontier_colonization = approve
@@ -5020,9 +5001,6 @@ ideology_market_liberal = {
 	lawgroup_ministry_of_propaganda = {
 		law_no_ministry_of_propaganda = approve
 		law_ministry_of_propaganda = neutral
-	}
-	lawgroup_colonization = {
-		law_neocolonialism = approve
 	}
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = approve

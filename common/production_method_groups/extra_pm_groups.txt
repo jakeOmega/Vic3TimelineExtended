@@ -992,12 +992,6 @@ pmg_synthetic_meat = {
         pm_synthetic_meat
     }
 }
-pmg_synthetic_fish = {
-    texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
-    production_methods = {
-        pm_synthetic_fish
-    }
-}
 pmg_synthetic_fruit = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
     production_methods = {
@@ -1454,4 +1448,25 @@ pmg_construction_principle = {
         pm_construction_principle_2
         pm_construction_no_effect
     }
+}
+pmg_ownership_building_manor_house = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_ownership.dds"
+	ai_selection = most_productive
+
+	production_methods = {
+		pm_manor_house_privately_owned
+		pm_manor_house_principle_divine_economics_2
+        pm_hobbyist_ownership
+	}
+}
+
+pmg_additional_ownership_building_manor_house = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_ownership.dds"
+	ai_selection = most_productive
+
+	production_methods = {
+		pm_manor_house_clergy_ownership
+		pm_manor_house_bureaucrat_ownership
+        pm_manor_house_ai_ownership
+	}
 }

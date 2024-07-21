@@ -25,11 +25,11 @@ free_market_construction_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_construction_add = -10
 	state_building_highway_max_level_add = 10
-	country_institution_cost_institution_migration_controls_mult = -1
+	country_institution_cost_institution_migration_controls_mult = -0.8
 }
 
 legacy_construction_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	state_building_highway_max_level_add = 10
-	country_institution_cost_institution_migration_controls_mult = -1
+	country_institution_cost_institution_migration_controls_mult = -0.8
 }

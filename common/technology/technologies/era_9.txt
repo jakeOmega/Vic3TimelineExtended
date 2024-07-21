@@ -267,7 +267,7 @@ globalization = {
 		country_tech_spread_add = 80
 		country_gold_reserve_limit_mult = 1.0
 		country_allow_trade_routes_without_interest_bool = yes
-		country_leverage_threshold_change_add = -100
+		country_leverage_threshold_change_add = -50
 	 }
 	
 	ai_weight = {

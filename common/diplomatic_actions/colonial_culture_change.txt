@@ -1,0 +1,89 @@
+colonial_culture_change = {
+	groups= {
+		overlord
+	}
+	show_in_lens = no
+
+	texture = "gfx/interface/icons/diplomatic_action_icons/force_state_religion.dds"
+	
+	selectable = {
+        always = yes
+	}
+	
+	potential = {
+        scope:target_country = {
+            is_direct_subject_of = ROOT
+            OR = {
+                has_government_type = gov_chartered_company
+                has_government_type = gov_colonial_administration
+                has_government_type = gov_crown_colony
+            }
+        }
+	}
+	
+	possible = {
+        OR = {
+            scope:target_country = {
+                any_primary_culture = {
+                    NOT = { is_primary_culture_of = ROOT }
+                }
+            }
+            any_primary_culture = {
+                NOT = { is_primary_culture_of = scope:target_country }
+            }
+        }
+
+		prestige >= {
+			value = scope:target_country.prestige
+			multiply = 3
+		}
+	}
+	
+	accept_effect = {
+        every_primary_culture = {
+            limit = {
+                NOT = { is_primary_culture_of = scope:target_country }
+            }
+            scope:target_country = {
+                add_primary_culture = PREV
+            }
+        }
+        
+        scope:target_country = {
+            every_primary_culture = {
+                limit = {
+                    NOT = { is_primary_culture_of = ROOT }
+                }
+                scope:target_country = {
+                    remove_primary_culture = PREV
+                }
+            }
+        }
+
+        if = {
+            limit = {
+                NOT = { scope:target_country.religion = ROOT.religion }
+            }
+            scope:target_country = { set_state_religion = ROOT.religion }
+        }
+
+		scope:target_country = { add_liberty_desire = 20 }
+    }
+	
+	ai = {
+		evaluation_chance = {
+			value = 0.25
+		}
+		
+		will_propose = {
+            scope:target_country = {
+                is_direct_subject_of = ROOT
+                liberty_desire < 50
+            }
+		}
+
+		propose_score = {								
+			value = 10			
+		}
+	}
+}

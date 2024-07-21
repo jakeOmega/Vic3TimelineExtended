@@ -10,6 +10,13 @@ on_monthly_pulse_country = {
 		ministry_of_thought_control_on_action
 		remove_invalid_buildings
 		cheaty_on_action
+		civil_rights_on_action
+	}
+}
+
+on_acquired_technology = {
+	on_actions = {
+		civil_rights_on_action
 	}
 }
 
@@ -119,6 +126,18 @@ remove_or_create_homelands_on_action = {
 						add_homeland = scope:form_culture
 					}
 				}
+			}
+		}
+	}
+}
+
+civil_rights_on_action = {
+	effect = {
+		if = {
+			limit = { has_technology_researched = civil_rights_movement }
+			ig:ig_intelligentsia = {
+				
+				add_ideology = ideology_multicultural
 			}
 		}
 	}

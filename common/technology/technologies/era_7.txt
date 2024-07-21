@@ -84,6 +84,7 @@ civil_rights_movement = {
 	
 	modifier = {
 		state_expected_sol_from_literacy = 1
+		country_add_multicultural_ideology_to_intelligentsia_bool = yes
 	}
 	
 	ai_weight = {

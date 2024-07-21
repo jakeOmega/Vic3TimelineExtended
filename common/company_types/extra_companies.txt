@@ -394,6 +394,7 @@ company_basic_biotechnology = {
         building_synthetics_plants_fish
 		building_synthetics_plants_fruit
 		building_synthetics_plants_drinks	
+        building_synthetics_plants_biomass
 	}
 
 	possible = { 
