@@ -33,3 +33,8 @@ legacy_construction_modifier = {
 	state_building_highway_max_level_add = 10
 	country_institution_cost_institution_migration_controls_mult = -0.8
 }
+
+accepted_cultures_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_bureaucracy_investment_cost_factor_mult = 1
+}

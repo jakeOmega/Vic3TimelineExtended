@@ -357,6 +357,14 @@ law_national_supremacy = {
 			AND = {
 				shares_heritage_trait_with_any_primary_culture = scope:country
 				shares_non_heritage_trait_with_any_primary_culture = scope:country
+				NOT = {
+					scope:country = {
+						is_target_in_variable_list = {
+							name = unaccepted_cultures
+							target = ROOT
+						}
+					}
+				}
 			}
 			scope:country = {
 				is_target_in_variable_list = {
@@ -409,7 +417,25 @@ law_racial_segregation = {
 	}
 
 	cultural_acceptance_rule = {
-		shares_heritage_trait_with_any_primary_culture = scope:country
+		OR = {
+			AND = {
+				shares_heritage_trait_with_any_primary_culture = scope:country
+				NOT = {
+					scope:country = {
+						is_target_in_variable_list = {
+							name = unaccepted_cultures
+							target = ROOT
+						}
+					}
+				}
+			}
+			scope:country = {
+				is_target_in_variable_list = {
+					name = accepted_cultures
+					target = ROOT
+				}
+			}
+		}
 	}
 	
 	modifier = {
@@ -477,7 +503,17 @@ law_cultural_exclusion = {
 
 	cultural_acceptance_rule = {
 		OR = {
-			shares_trait_with_any_primary_culture = scope:country
+			AND = {
+				shares_trait_with_any_primary_culture = scope:country
+				NOT = {
+					scope:country = {
+						is_target_in_variable_list = {
+							name = unaccepted_cultures
+							target = ROOT
+						}
+					}
+				}
+			}
 			scope:country = {
 				is_target_in_variable_list = {
 					name = accepted_cultures

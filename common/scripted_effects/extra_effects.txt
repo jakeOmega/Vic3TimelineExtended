@@ -443,3 +443,72 @@ queue_more_private_investment = {
 		}
 	}
 }
+
+recalculate_culture_acceptance_cost = {
+	remove_modifier = accepted_cultures_cost
+	add_modifier = {
+		name = accepted_cultures_cost
+		multiplier = total_cultural_acceptance_cost_script_value
+	}
+}
+
+
+accept_culture = {
+	if = {
+		limit = {
+			is_target_in_variable_list = {
+				name = unaccepted_cultures
+				target = $CULTURE$
+			}
+		}
+		remove_list_variable = {
+			name = unaccepted_cultures
+			target = $CULTURE$
+		}
+	}
+	else = {
+		add_to_variable_list = {
+			name = accepted_cultures
+			target = $CULTURE$
+		}
+	}
+}
+
+unaccept_culture = {
+	if = {
+		limit = {
+			is_target_in_variable_list = {
+				name = accepted_cultures
+				target = $CULTURE$
+			}
+		}
+		remove_list_variable = {
+			name = accepted_cultures
+			target = $CULTURE$
+		}
+	}
+	else = {
+		add_to_variable_list = {
+			name = unaccepted_cultures
+			target = $CULTURE$
+		}
+	}
+}
+
+change_acceptance = {
+	if = {
+		limit = {
+			$CULTURE$ = {
+				culture_is_discriminated_in = ROOT
+			}
+		}
+		accept_culture = {
+			CULTURE = $CULTURE$
+		}
+	}
+	else = {
+		unaccept_culture = {
+			CULTURE = $CULTURE$
+		}
+	}
+}

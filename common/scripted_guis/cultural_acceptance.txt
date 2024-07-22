@@ -7,26 +7,34 @@ add_accepted_culture_scriptedgui = {
     }
 
 	is_shown = {
+        OR = { 
+            NOT = { has_variable = culture_changing }
+            NOT = { var:culture_changing = scope:curr_culture }
+        }
+        exists = scope:curr_culture
         scope:curr_culture = {
             culture_is_discriminated_in = ROOT
         }
     } 
     
 	ai_is_valid = {
-        always = yes
+        always = no
     }
 
 	is_valid = {
-        always = yes
+        NOT = { has_variable = culture_changing }
     } 
     
     effect = {	
 		#custom_tooltip = ""
-        add_to_variable_list = {
-            name = accepted_cultures
-            target = scope:curr_culture
+        set_variable = {
+            name = culture_changing
+            value = scope:curr_culture
         }
     }
+
+    confirm_title = "accept_culture_title"
+    confirm_text = "This will cost [GetPlayer.MakeScope.ScriptValue('culture_acceptance_cost_script_value')] bureaucracy investment. Are you sure you want to accept this culture?"
 }
 
 remove_accepted_culture_scriptedgui = {
@@ -38,30 +46,64 @@ remove_accepted_culture_scriptedgui = {
     }
 
     is_shown = {
+        OR = { 
+            NOT = { has_variable = culture_changing }
+            NOT = { var:culture_changing = scope:curr_culture }
+        }
+        exists = scope:curr_culture
         scope:curr_culture = {
             NOT = { culture_is_discriminated_in = ROOT }
         }
     } 
     
     ai_is_valid = {
-        is_target_in_variable_list = {
-            name = accepted_cultures
-            target = scope:curr_culture
-        }
+        always = no
     }
 
     is_valid = {
-        is_target_in_variable_list = {
-            name = accepted_cultures
-            target = scope:curr_culture
+        scope:curr_culture = {
+            NOT = { is_primary_culture_of = ROOT }
         }
+        NOT = { has_variable = culture_changing }
     } 
     
     effect = {	
         #custom_tooltip = ""
-        remove_list_variable = {
-            name = accepted_cultures
-            target = scope:curr_culture
+        set_variable = {
+            name = culture_changing
+            value = scope:curr_culture
         }
     }
+
+    confirm_title = "remove_culture_title"
+    confirm_text = "remove_culture_text"
+}
+
+change_culture_acceptance_bar = {
+    scope = country    
+
+    saved_scopes = {
+        curr_culture
+    }
+
+    is_shown = {
+        has_variable = culture_changing
+        var:culture_changing = scope:curr_culture 
+    } 
+
+    ai_is_valid = {
+        always = no
+    }
+
+    is_valid = {
+        always = yes
+    }
+
+    effect = {	
+        #custom_tooltip = ""
+        remove_variable = culture_changing
+    }
+
+    confirm_title = "cancel_culture_title"
+    confirm_text = "cancel_culture_text"
 }

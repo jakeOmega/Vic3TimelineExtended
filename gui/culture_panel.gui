@@ -162,11 +162,30 @@ types culture_panel
 				}		
 			}
 
-			textbox = {
-				text = "Total Cultural Acceptance Cost: [GetPlayer.MakeScope.ScriptValue('total_cultural_acceptance_cost_script_value')]"
-				size = { @panel_width 30 }
-				align = left|nobaseline
-				using = fontsize_large
+			divider_decorative = {
+				size = { 460 10 }
+			}
+
+			container = {
+				minimumsize = { @panel_width 40 }
+				maximumsize = { @panel_width 40 }
+				parentanchor = top
+			
+				background = {
+					using = entry_bg
+				}
+
+				textbox = {
+					text = "Total Cultural Acceptance Cost: [GetPlayer.MakeScope.ScriptValue('total_cultural_acceptance_cost_script_value')]%"
+					size = { @panel_width 30 }
+					align = hcenter|vcenter
+					using = fontsize_large
+					tooltip = "CULTURAL_ACCEPTANCE_COST_TOOLTIP"
+				}
+			}
+
+			divider_decorative = {
+				size = { 460 10 }
 			}
 			
 			### SORT BUTTONS
@@ -175,21 +194,9 @@ types culture_panel
 				visible = "[InformationPanel.IsTabSelected('default')]"
 				
 				sort_button = {
-					size = { 180 30 }
+					size = { 195 30 }
 					text = "CULTURE_TITLE"
 					onclick = "[AccessPlayer.SortCultures('name')]"
-				}
-				sort_button = {
-					size = { 110 30 }
-					tooltip = "MAJORITY_RELIGION_TITLE"
-					onclick = "[AccessPlayer.SortCultures('religion')]"
-					button = {
-						texture = "gfx/interface/buttons/sort_button_icons/sort_icon_religion.dds"
-						size = { 25 25 }
-						parentanchor = center
-						alwaystransparent = yes
-					}
-
 				}
 				sort_button = {
 					size = { 65 30 }
@@ -225,7 +232,7 @@ types culture_panel
 					}
 				}			
 				sort_button = {
-					size = { 65 30 }
+					size = { 165 30 }
 					button = {
 						texture = "gfx/interface/icons/generic_icons/accepted_icon.dds"
 						size = { 25 25 }
@@ -279,7 +286,7 @@ types culture_panel
 									button = {
 										name = "tutorial_highlight_specific_culture_button"
 										using = clean_button
-										size = { 180 35 }
+										size = { 195 35 }
 										parentanchor = vcenter
 										onclick = "[InformationPanelBar.OpenCultureInfoPanel(Culture.AccessSelf)]"
 										using = tooltip_above
@@ -313,32 +320,8 @@ types culture_panel
 										}
 									}
 									
-									widget = { size = { 5 5 }}
-
-									button = {
-										using = clean_button
-										size = { 108 35 }
-										parentanchor = vcenter
-										onclick = "[InformationPanelBar.OpenReligionInfoPanel(Culture.AccessReligion)]"
-										using = tooltip_above
-										datacontext = "[Culture.GetReligion]"
-										
-										tooltipwidget = {
-											FancyTooltip_Religion = {}
-										}
-										
-										textbox = {
-											size = { 100% 100% }
-											text = "[Religion.GetNameNoFormatting]"
-											align = left|nobaseline
-											parentanchor = vcenter
-											multiline = yes
-											margin = { 10 0 }
-										}
-									}
-									
 									widget = {
-										size = { 65 100% }
+										size = { 45 100% }
 
 										textbox = {
 											name = "tutorial_highlight_turmoil_value"
@@ -368,6 +351,8 @@ types culture_panel
 										}
 									}
 
+									widget = { size = { 5 5 } }
+
 									textbox = {
 										text = "[GetPlayer.GetCulturePolStrAsPercentage(Culture.Self)|1%]"
 										size = { 65 100% }
@@ -384,39 +369,78 @@ types culture_panel
 										margin_right = 5
 									}
 
-									widget = { size = { 5 5 } }
+									widget = { size = { 12 5 } }
 
 									button = {
 										using = clean_button
-										size = { 35 35 }
+										size = { 150 35 }
 										parentanchor = vcenter
 										datacontext = "[GetScriptedGui('add_accepted_culture_scriptedgui')]"
 										visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope('curr_culture', Culture.MakeScope).End)]"
 										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope('curr_culture', Culture.MakeScope).End)]"
 										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('curr_culture', Culture.MakeScope).End )]"
-										tooltip = "[Culture.MakeScope.ScriptValue('culture_acceptance_cost_script_value')]"
+										tooltip = "[ScriptedGui.BuildTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'curr_culture', Culture.MakeScope ).End )]"
 
 										icon = {
 											texture = "gfx/interface/icons/generic_icons/accepted_icon.dds"
 											size = { 30 30 }
 											parentanchor = vcenter
 										}
+
+										textbox = {
+											position = { 30 0 }
+											size = { 120 100% }
+											text = "Make Accepted"
+											align = left|nobaseline
+											parentanchor = vcenter
+											multiline = yes
+											margin = { 5 0 }
+										}
 									}
 
 									button = {
 										using = clean_button
-										size = { 35 35 }
+										size = { 150 35 }
 										parentanchor = vcenter
 										datacontext = "[GetScriptedGui('remove_accepted_culture_scriptedgui')]"
 										visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope('curr_culture', Culture.MakeScope).End)]"
 										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope('curr_culture', Culture.MakeScope).End)]"
 										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('curr_culture', Culture.MakeScope).End )]"
-										tooltip = "[GetPlayer.MakeScope.Var('second_culture').GetValue]"
 
 										icon = {
 											texture = "gfx/interface/icons/generic_icons/discriminated_icon.dds"
 											size = { 30 30 }
 											parentanchor = vcenter
+										}
+
+										textbox = {
+											position = { 30 0 }
+											size = { 120 100% }
+											text = "End Acceptance"
+											align = left|nobaseline
+											parentanchor = vcenter
+											multiline = yes
+											margin = { 5 0 }
+										}
+									}
+
+									default_progressbar_horizontal = {
+										tooltip = "[GetPlayer.MakeScope.ScriptValue('culture_change_progress')]%"
+										size = { 150 50% }
+										datacontext = "[GetScriptedGui('change_culture_acceptance_bar')]"
+										visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope('curr_culture', Culture.MakeScope).End)]"
+										parentanchor = vcenter
+
+										blockoverride "values" {
+											value = "[GetPlayer.MakeScope.ScriptValue('culture_change_progress')]"
+											min = 0
+											max = 100
+										}
+
+										button_icon_cancel = {
+											size = { 25 25 }
+											parentanchor = right|vcenter
+											onclick = "[ScriptedGui.Execute( GuiScope.SetRoot(GetPlayer.MakeScope).End )]"
 										}
 									}
 								}

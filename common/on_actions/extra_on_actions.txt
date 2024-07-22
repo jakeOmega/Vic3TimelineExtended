@@ -11,6 +11,7 @@ on_monthly_pulse_country = {
 		remove_invalid_buildings
 		cheaty_on_action
 		civil_rights_on_action
+		change_culture_acceptance_on_action
 	}
 }
 
@@ -138,6 +139,35 @@ civil_rights_on_action = {
 			ig:ig_intelligentsia = {
 				
 				add_ideology = ideology_multicultural
+			}
+		}
+	}
+}
+
+change_culture_acceptance_on_action = {
+	effect = {
+		if = {
+			limit = { has_variable = culture_changing }
+			if = {
+				limit = { NOT = { has_variable = culture_change_progress } }
+				set_variable = {
+					name = culture_change_progress
+					value = 0
+				}
+			}
+			change_variable = {
+				name = culture_change_progress
+				add = 10
+			}
+			if = {
+				limit = { var:culture_change_progress >= 100 }
+				change_acceptance = {
+					CULTURE = var:culture_changing
+				}
+				remove_variable = culture_change_progress
+				remove_variable = culture_changing
+				recalculate_culture_acceptance_cost = yes
+        		recalculate_pop_ig_support = yes
 			}
 		}
 	}

@@ -314,26 +314,28 @@ power_bloc_mandate_progress_diplomatic_identity = {
 }
 
 culture_acceptance_cost_script_value = {
-	if = {
-		limit = {
-			shares_heritage_and_other_trait_with_any_primary_culture = c:FRA
+	scope:curr_culture = {
+		if = {
+			limit = {
+				shares_heritage_and_other_trait_with_any_primary_culture = ROOT
+			}
+			value = 0.25
 		}
-		value = 0.25
-	}
-	else_if = {
-		limit = {
-			shares_heritage_trait_with_any_primary_culture = c:FRA
+		else_if = {
+			limit = {
+				shares_heritage_trait_with_any_primary_culture = ROOT
+			}
+			value = 0.5
 		}
-		value = 0.5
-	}
-	else_if = {
-		limit = {
-			shares_non_heritage_trait_with_any_primary_culture = c:FRA
+		else_if = {
+			limit = {
+				shares_non_heritage_trait_with_any_primary_culture = ROOT
+			}
+			value = 0.75
 		}
-		value = 0.75
-	}
-	else = {
-		value = 1
+		else = {
+			value = 100
+		}
 	}
 }
 
@@ -342,5 +344,17 @@ total_cultural_acceptance_cost_script_value = {
 	every_in_list = {
 		variable = accepted_cultures
 		add = culture_acceptance_cost_script_value
+	}
+}
+
+culture_change_progress = {
+	if = {
+		limit = {
+			NOT = { has_variable = culture_change_progress }
+		}
+		value = 0
+	}
+	else = {
+		value = var:culture_change_progress
 	}
 }
