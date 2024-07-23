@@ -313,28 +313,133 @@ power_bloc_mandate_progress_diplomatic_identity = {
 	}
 }
 
+culture_acceptance_cost_script_value_player = {
+	player = {
+		PREV = {
+			value = culture_acceptance_cost_script_value
+		}
+	}
+}
+
 culture_acceptance_cost_script_value = {
-	scope:curr_culture = {
+	if = {
+		limit = { PREV = { has_law = law_type:law_ethnostate }}
 		if = {
 			limit = {
-				shares_heritage_and_other_trait_with_any_primary_culture = ROOT
+				shares_heritage_and_other_trait_with_any_primary_culture = PREV
 			}
-			value = 0.25
+			value = 15
 		}
 		else_if = {
 			limit = {
-				shares_heritage_trait_with_any_primary_culture = ROOT
+				shares_heritage_trait_with_any_primary_culture = PREV
 			}
-			value = 0.5
+			value = 30
 		}
 		else_if = {
 			limit = {
-				shares_non_heritage_trait_with_any_primary_culture = ROOT
+				shares_non_heritage_trait_with_any_primary_culture = PREV
 			}
-			value = 0.75
+			value = 50
 		}
 		else = {
-			value = 100
+			value = 80
+		}
+	}
+	else_if = {
+		limit = { PREV = { has_law = law_type:law_national_supremacy }}
+		if = {
+			limit = {
+				shares_heritage_and_other_trait_with_any_primary_culture = PREV
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				shares_heritage_trait_with_any_primary_culture = PREV
+			}
+			value = 30
+		}
+		else_if = {
+			limit = {
+				shares_non_heritage_trait_with_any_primary_culture = PREV
+			}
+			value = 50
+		}
+		else = {
+			value = 80
+		}
+	}
+	else_if = {
+		limit = { PREV = { has_law = law_type:law_racial_segregation }}
+		if = {
+			limit = {
+				shares_heritage_and_other_trait_with_any_primary_culture = PREV
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				shares_heritage_trait_with_any_primary_culture = PREV
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				shares_non_heritage_trait_with_any_primary_culture = PREV
+			}
+			value = 50
+		}
+		else = {
+			value = 80
+		}
+	}
+	else_if = {
+		limit = { PREV = { has_law = law_type:law_cultural_exclusion }}
+		if = {
+			limit = {
+				shares_heritage_and_other_trait_with_any_primary_culture = PREV
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				shares_heritage_trait_with_any_primary_culture = PREV
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				shares_non_heritage_trait_with_any_primary_culture = PREV
+			}
+			value = 0
+		}
+		else = {
+			value = 80
+		}
+	}
+	else_if = {
+		limit = { PREV = { has_law = law_type:law_multicultural }}
+		if = {
+			limit = {
+				shares_heritage_and_other_trait_with_any_primary_culture = PREV
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				shares_heritage_trait_with_any_primary_culture = PREV
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				shares_non_heritage_trait_with_any_primary_culture = PREV
+			}
+			value = 0
+		}
+		else = {
+			value = 0
 		}
 	}
 }
@@ -347,14 +452,19 @@ total_cultural_acceptance_cost_script_value = {
 	}
 }
 
+culture_change_days = 10
+
 culture_change_progress = {
 	if = {
 		limit = {
-			NOT = { has_variable = culture_change_progress }
+			NOT = { has_variable = culture_change_progress_start }
 		}
 		value = 0
 	}
 	else = {
-		value = var:culture_change_progress
+		value = game_date
+		subtract = var:culture_change_progress_start
+		divide = culture_change_days
+		multiply = 100
 	}
 }

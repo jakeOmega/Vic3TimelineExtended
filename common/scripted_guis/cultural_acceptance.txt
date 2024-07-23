@@ -26,15 +26,21 @@ add_accepted_culture_scriptedgui = {
     } 
     
     effect = {	
-		#custom_tooltip = ""
         set_variable = {
             name = culture_changing
             value = scope:curr_culture
         }
+        set_variable = {
+            name = culture_change_progress_start
+            value = game_date
+        }
+        hidden_effect = {
+            trigger_event = { id = culture_acceptance_change.1 days = culture_change_days }
+        }
     }
 
     confirm_title = "accept_culture_title"
-    confirm_text = "This will cost [GetPlayer.MakeScope.ScriptValue('culture_acceptance_cost_script_value')] bureaucracy investment. Are you sure you want to accept this culture?"
+    confirm_text = "accept_culture_text"
 }
 
 remove_accepted_culture_scriptedgui = {
@@ -68,10 +74,16 @@ remove_accepted_culture_scriptedgui = {
     } 
     
     effect = {	
-        #custom_tooltip = ""
         set_variable = {
             name = culture_changing
             value = scope:curr_culture
+        }
+        set_variable = {
+            name = culture_change_progress_start
+            value = game_date
+        }
+        hidden_effect = {
+            trigger_event = { id = culture_acceptance_change.1 days = culture_change_days }
         }
     }
 
@@ -100,8 +112,8 @@ change_culture_acceptance_bar = {
     }
 
     effect = {	
-        #custom_tooltip = ""
         remove_variable = culture_changing
+        remove_variable = culture_change_progress_start
     }
 
     confirm_title = "cancel_culture_title"

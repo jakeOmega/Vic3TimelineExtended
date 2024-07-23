@@ -448,7 +448,10 @@ recalculate_culture_acceptance_cost = {
 	remove_modifier = accepted_cultures_cost
 	add_modifier = {
 		name = accepted_cultures_cost
-		multiplier = total_cultural_acceptance_cost_script_value
+		multiplier = {
+			value = total_cultural_acceptance_cost_script_value
+			divide = 100
+		}
 	}
 }
 
