@@ -82,6 +82,7 @@ building_urban_center = {
 		pmg_public_transport
 		#pmg_entertainment
 		pmg_urban_clergy
+		pmg_augmentation
 	}
 	
 	buildable = no

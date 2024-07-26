@@ -4066,6 +4066,62 @@ pm_smart_led_streetlights = {
 	required_input_goods = electricity
 }	
 
+pm_no_private_human_augmentation = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+}
+
+pm_regulated_augmentation_market = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+	
+	unlocking_laws = {
+		law_regulated_augmentation_market
+		law_unrestricted_augmentation
+		law_mandatory_augmentation
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost: 600.0
+			goods_input_digital_assets_add = 5                   # Price:  100, Total cost: 500.0
+			goods_output_services_add = 50                       # Price:   30, Total cost: 1500.0
+			# Total input cost: 1500.0
+			# Total output cost: 1500.0
+			# Profit: 0.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_unrestricted_augmentation = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+	
+	unlocking_laws = {
+		law_unrestricted_augmentation
+		law_mandatory_augmentation
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost: 800.0
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost: 600.0
+			goods_input_digital_assets_add = 5                   # Price:  100, Total cost: 500.0
+			goods_output_services_add = 50                       # Price:   30, Total cost: 1500.0
+			goods_output_fine_art_add = 2                        # Price:  200, Total cost: 400.0
+			# Total input cost: 1900.0
+			# Total output cost: 1900.0
+			# Profit: 0.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
 pm_skyscraper_services_nexus = {
 	texture = "gfx/interface/icons/production_method_icons/skyscraper_trade_nexus.dds"
 	
@@ -12757,9 +12813,7 @@ pm_construction_principle_2 = {
 pm_construction_no_effect = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 	replacement_if_valid = pm_construction_principle_2
-}
-
-
+} 
 
 
 

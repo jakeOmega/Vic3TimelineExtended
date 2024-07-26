@@ -589,7 +589,7 @@ cryptography = {
 		country_weekly_innovation_max_add = 25
 		unit_army_defense_mult = 0.05
 		unit_army_offense_mult = 0.05
-		country_institution_ministry_of_intelligence_and_security_max_investment_add = 2
+		country_institution_ministry_of_intelligence_and_security_max_investment_add = 1
 		country_tech_spread_add = 20
 	}
 	

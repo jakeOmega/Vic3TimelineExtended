@@ -197,6 +197,8 @@ decolonization = {
 		country_influence_mult = 0.2
 		state_expected_sol_from_literacy = 1
 		country_weekly_innovation_max_add = 50
+		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
+		country_institution_ministry_of_international_aid_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -478,6 +480,8 @@ anti_war_movement = {
 		country_radicals_from_conquest_mult = 0.25
 		country_infamy_generation_mult = 0.1
 		country_infamy_decay_mult = 0.2
+		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
+		country_institution_ministry_of_international_aid_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	

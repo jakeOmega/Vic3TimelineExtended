@@ -307,7 +307,18 @@ law_ethnostate = {
 	}
 	
 	cultural_acceptance_rule = {
-		is_primary_culture_of = scope:country
+		OR = {
+			is_primary_culture_of = scope:country
+			custom_tooltip = {
+				text = "CULTURE_MANUALLY_ACCEPTED"
+				scope:country = {
+					is_target_in_variable_list = {
+						name = accepted_cultures
+						target = ROOT
+					}
+				}
+			}
+		}
 	}
 
 	unlocking_technologies = {
@@ -358,18 +369,24 @@ law_national_supremacy = {
 				shares_heritage_trait_with_any_primary_culture = scope:country
 				shares_non_heritage_trait_with_any_primary_culture = scope:country
 				NOT = {
-					scope:country = {
-						is_target_in_variable_list = {
-							name = unaccepted_cultures
-							target = ROOT
+					custom_tooltip = {
+						text = "CULTURE_MANUALLY_DISCRIMINATED"
+						scope:country = {
+							is_target_in_variable_list = {
+								name = unaccepted_cultures
+								target = ROOT
+							}
 						}
 					}
 				}
 			}
-			scope:country = {
-				is_target_in_variable_list = {
-					name = accepted_cultures
-					target = ROOT
+			custom_tooltip = {
+				text = "CULTURE_MANUALLY_ACCEPTED"
+				scope:country = {
+					is_target_in_variable_list = {
+						name = accepted_cultures
+						target = ROOT
+					}
 				}
 			}
 		}
@@ -421,18 +438,24 @@ law_racial_segregation = {
 			AND = {
 				shares_heritage_trait_with_any_primary_culture = scope:country
 				NOT = {
-					scope:country = {
-						is_target_in_variable_list = {
-							name = unaccepted_cultures
-							target = ROOT
+					custom_tooltip = {
+						text = "CULTURE_MANUALLY_DISCRIMINATED"
+						scope:country = {
+							is_target_in_variable_list = {
+								name = unaccepted_cultures
+								target = ROOT
+							}
 						}
 					}
 				}
 			}
-			scope:country = {
-				is_target_in_variable_list = {
-					name = accepted_cultures
-					target = ROOT
+			custom_tooltip = {
+				text = "CULTURE_MANUALLY_ACCEPTED"
+				scope:country = {
+					is_target_in_variable_list = {
+						name = accepted_cultures
+						target = ROOT
+					}
 				}
 			}
 		}
@@ -506,18 +529,24 @@ law_cultural_exclusion = {
 			AND = {
 				shares_trait_with_any_primary_culture = scope:country
 				NOT = {
-					scope:country = {
-						is_target_in_variable_list = {
-							name = unaccepted_cultures
-							target = ROOT
+					custom_tooltip = {
+						text = "CULTURE_MANUALLY_DISCRIMINATED"
+						scope:country = {
+							is_target_in_variable_list = {
+								name = unaccepted_cultures
+								target = ROOT
+							}
 						}
 					}
 				}
 			}
-			scope:country = {
-				is_target_in_variable_list = {
-					name = accepted_cultures
-					target = ROOT
+			custom_tooltip = {
+				text = "CULTURE_MANUALLY_ACCEPTED"
+				scope:country = {
+					is_target_in_variable_list = {
+						name = accepted_cultures
+						target = ROOT
+					}
 				}
 			}
 		}
@@ -604,7 +633,17 @@ law_multicultural = {
 	}
 
 	cultural_acceptance_rule = {
-		always = yes
+		NOT = {
+			custom_tooltip = {
+				text = "CULTURE_MANUALLY_DISCRIMINATED"
+				scope:country = {
+					is_target_in_variable_list = {
+						name = unaccepted_cultures
+						target = ROOT
+					}
+				}
+			}
+		}
 	}
 	
 	possible_political_movements = {

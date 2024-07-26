@@ -4,10 +4,6 @@ humanitarian_aid = {
 	}
 	requires_approval = no
 	should_notify_third_parties = no
-
-	unlocking_technologies = {
-		intergovernmental_organizations
-	}
 	
 	selectable = {
 		power_bloc ?= {
