@@ -12815,12 +12815,61 @@ pm_construction_no_effect = {
 	replacement_if_valid = pm_construction_principle_2
 } 
 
+pm_principle_artistic_expression_2 = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+	is_hidden_when_unavailable = yes
+	
+	unlocking_principles = {
+		principle_artistic_expression_2
+		principle_artistic_expression_3
+		principle_artistic_expression_4
+		principle_artistic_expression_5
+	}
+	
+	state_modifiers = {
+		unscaled = {
+			state_education_access_add = 0.05
+		}
+	}
 
+	building_modifiers = {
+		workforce_scaled = {
+			
+		}
+	}
+}
 
+pm_artistic_expression_no_effect = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+	replacement_if_valid = pm_principle_artistic_expression_2
+} 
 
+pm_principle_engineering_and_logistics = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+	is_hidden_when_unavailable = yes
+	
+	unlocking_principles = {
+		principle_engineering_and_logistics_1
+		principle_engineering_and_logistics_2
+		principle_engineering_and_logistics_3
+		principle_engineering_and_logistics_4
+		principle_engineering_and_logistics_5
+	}
 
+	building_modifiers = {
+		workforce_scaled = {
+			goods_output_construction_add = 0.05
+		}
+	}
 
+	state_modifiers = {
+		level_scaled = {
+			state_infrastructure_add = 1
+		}
+	}
+}
 
-
-
-
+pm_engineering_and_logistics_no_effect = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+	replacement_if_valid = pm_principle_engineering_and_logistics
+} 

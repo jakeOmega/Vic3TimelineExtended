@@ -272,7 +272,6 @@ principle_group_ideological_truth = {
 
 principle_group_cultural_unity = {
 	primary_for_identity = identity_cultural
-	unlocking_identity = identity_cultural
 
 	levels = {
 		principle_cultural_unity_1
@@ -292,6 +291,39 @@ principle_group_cultural_plurality = {
 		principle_cultural_plurality_3
 		principle_cultural_plurality_4
 		principle_cultural_plurality_5
+	}
+}
+
+principle_group_artistic_expression = {
+	primary_for_identity = identity_cultural
+	unlocking_identity = identity_cultural
+
+	levels = {
+		principle_artistic_expression_1
+		principle_artistic_expression_2
+		principle_artistic_expression_3
+		principle_artistic_expression_4
+		principle_artistic_expression_5
+	}
+}
+
+principle_group_military_training = {
+	levels = {
+		principle_military_training_1
+		principle_military_training_2
+		principle_military_training_3
+		principle_military_training_4
+		principle_military_training_5
+	}
+}
+
+principle_group_engineering_and_logistics = {
+	levels = {
+		principle_engineering_and_logistics_1
+		principle_engineering_and_logistics_2
+		principle_engineering_and_logistics_3
+		principle_engineering_and_logistics_4
+		principle_engineering_and_logistics_5
 	}
 }
 

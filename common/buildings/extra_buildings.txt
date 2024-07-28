@@ -158,7 +158,7 @@ building_synthetics_plants_silk = {
 
 building_synthetics_plants_oil = {
 	building_group = bg_heavy_industry
-	texture = "gfx/interface/icons/building_icons/synthetics_plants.dds"
+	texture = "gfx/interface/icons/goods_icons/oil.dds"
 	city_type = city
 	levels_per_mesh = 5
 	
@@ -188,7 +188,7 @@ building_synthetics_plants_oil = {
 
 building_synthetics_plants_rubber = {
 	building_group = bg_heavy_industry
-	texture = "gfx/interface/icons/building_icons/synthetics_plants.dds"
+	texture = "gfx/interface/icons/goods_icons/rubber.dds"
 	city_type = city
 	levels_per_mesh = 5
 	
@@ -218,7 +218,7 @@ building_synthetics_plants_rubber = {
 
 building_synthetics_plants_opium = {
 	building_group = bg_heavy_industry
-	texture = "gfx/interface/icons/building_icons/synthetics_plants.dds"
+	texture = "gfx/interface/icons/goods_icons/opium.dds"
 	city_type = city
 	levels_per_mesh = 5
 	
@@ -248,7 +248,7 @@ building_synthetics_plants_opium = {
 
 building_synthetics_plants_coal = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/coal.dds"
 	
 	unlocking_technologies = {
 		genetic_engineering
@@ -276,7 +276,7 @@ building_synthetics_plants_coal = {
 
 building_synthetics_plants_wood = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/wood.dds"
 	
 	unlocking_technologies = {
 		biotechnology
@@ -304,7 +304,7 @@ building_synthetics_plants_wood = {
 
 building_synthetics_plants_sugar = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/sugar.dds"
 	
 	unlocking_technologies = {
 		green_revolution
@@ -332,7 +332,7 @@ building_synthetics_plants_sugar = {
 
 building_synthetics_plants_meat = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/meat.dds"
 	
 	unlocking_technologies = {
 		lab-grown_food
@@ -360,7 +360,7 @@ building_synthetics_plants_meat = {
 
 building_synthetics_plants_fruit = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/fruit.dds"
 	
 	unlocking_technologies = {
 		lab-grown_food
@@ -388,7 +388,7 @@ building_synthetics_plants_fruit = {
 
 building_synthetics_plants_drinks = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/liquor.dds"
 	
 	unlocking_technologies = {
 		genetic_engineering
@@ -416,7 +416,7 @@ building_synthetics_plants_drinks = {
 
 building_synthetics_plants_biomass = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/grain.dds"
 	
 	unlocking_technologies = {
 		genetic_engineering
@@ -533,7 +533,7 @@ building_motor_industry = {
 
 building_car_industry = {
 	building_group = bg_heavy_industry
-	texture = "gfx/interface/icons/building_icons/motor_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/automobiles.dds"
 	city_type = city
 	levels_per_mesh = 5
 	
@@ -584,7 +584,7 @@ building_electrics_industry = {
 
 building_electrics_industry_radio = {
 	building_group = bg_heavy_industry
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/radios.dds"
 	city_type = city
 	levels_per_mesh = 5
 	
@@ -614,7 +614,7 @@ building_electrics_industry_radio = {
 
 building_electrics_industry_appliances = {
 	building_group = bg_heavy_industry
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/consumer_appliances.dds"
 	city_type = city
 	levels_per_mesh = 5
 	
@@ -673,7 +673,7 @@ building_power_plant = {
 
 building_war_machine_industry = {
 	building_group = bg_heavy_industry
-	texture = "gfx/interface/icons/building_icons/vehicles_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/tanks.dds"
 	city_type = city
 	levels_per_mesh = 5
 	
@@ -701,7 +701,7 @@ building_war_machine_industry = {
 
 building_aeroplanes_industry = {
 	building_group = bg_heavy_industry
-	texture = "gfx/interface/icons/building_icons/vehicles_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/aeroplanes.dds"
 	city_type = city
 	levels_per_mesh = 5
 	
@@ -730,7 +730,7 @@ building_aeroplanes_industry = {
 
 building_airport = {
 	building_group = bg_private_infrastructure	
-	texture = "gfx/interface/icons/building_icons/building_railway.dds"
+	texture = "gfx/interface/icons/goods_icons/aeroplanes.dds"
 	
 	enable_air_connection = yes # does this do anything??
 	has_max_level = yes
@@ -748,26 +748,9 @@ building_airport = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_space_program = {
-	building_group = bg_government	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
-	
-	unlocking_technologies = {
-		space_exploration
-	}
-
-	production_method_groups = {
-		pmg_base_building_space_program
-	}
-
-	required_construction = construction_cost_super_high
-	ownership_type = self
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
-}
-
 building_highway = {
 	building_group = bg_private_infrastructure	
-	texture = "gfx/interface/icons/building_icons/building_railway.dds"
+	texture = "gfx/interface/icons/goods_icons/automobiles.dds"
 
 	has_max_level = yes
 	
@@ -786,7 +769,7 @@ building_highway = {
 
 building_software_industry = {
 	building_group = bg_light_industry
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/digital_assets.dds"
 	
 	unlocking_technologies = {
 		computer_networks
@@ -804,7 +787,7 @@ building_software_industry = {
 
 building_network_infrastructure = {
 	building_group = bg_private_infrastructure	
-	texture = "gfx/interface/icons/building_icons/building_railway.dds"
+	texture = "gfx/interface/icons/goods_icons/digital_access.dds"
 	
 	unlocking_technologies = {
 		computer_networks
@@ -902,7 +885,7 @@ building_renewable_energy_plant = {
 
 building_electronic_components_and_semiconductor_industry = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/electronic_components.dds"
 	
 	unlocking_technologies = {
 		transistors
@@ -929,7 +912,7 @@ building_electronic_components_and_semiconductor_industry = {
 
 building_robotics_industry = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/robotics.dds"
 	
 	unlocking_technologies = {
 		robotics
@@ -956,7 +939,7 @@ building_robotics_industry = {
 
 building_advanced_material_fabricator = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/advanced_materials.dds"
 	
 	unlocking_technologies = {
 		modern_material_science
@@ -983,7 +966,7 @@ building_advanced_material_fabricator = {
 
 building_launch_facility = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/launch_capacity.dds"
 	
 	unlocking_technologies = {
 		space_exploration
@@ -1002,7 +985,7 @@ building_launch_facility = {
 
 building_space_elevator_construction_site = {
 	building_group = bg_government	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/launch_capacity.dds"
 	
 	unlocking_technologies = {
 		space_elevator
@@ -1119,7 +1102,7 @@ building_space_elevator_construction_site = {
 
 building_space_elevator = {
 	building_group = bg_private_infrastructure	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/launch_capacity.dds"
 
 	production_method_groups = {
 		pmg_base_building_space_elevator
@@ -1135,7 +1118,7 @@ building_space_elevator = {
 
 building_space_mine = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/building_icons/electrics_industry.dds"
+	texture = "gfx/interface/icons/goods_icons/iron.dds"
 	
 	unlocking_technologies = {
 		asteroid_mining
@@ -1231,6 +1214,57 @@ building_national_park = {
 	}	
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_arts_academy = {
+	building_group = bg_arts
+
+	city_type = city
+	
+	levels_per_mesh = 5
+
+	unlocking_technologies = {
+		romanticism
+	}
+
+	production_method_groups = {
+		pmg_base_building_arts_academy
+		pmg_ownership_building_arts_academy
+		pmg_principle_freedom_of_movement_3
+		pmg_principle_artistic_expression
+	}
+	
+	texture = "gfx/interface/icons/building_icons/building_arts_academy.dds"
+
+	required_construction = construction_cost_medium
+	
+	ownership_type = self
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_barracks = {
+	building_group = bg_army
+	recruits_combat_units = yes
+	texture = "gfx/interface/icons/building_icons/building_barracks.dds"
+	city_type = city
+	
+	has_max_level = yes
+	
+	levels_per_mesh = 25
+
+	unlocking_technologies = {
+		standing_army
+	}
+
+	production_method_groups = {
+		pmg_training
+		pmg_principle_engineering_and_logistics
+	}
+
+	required_construction = construction_cost_very_low
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_military.dds"
 }
 
 #building_naval_base = {

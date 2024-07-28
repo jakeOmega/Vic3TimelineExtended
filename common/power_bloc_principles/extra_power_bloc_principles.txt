@@ -410,7 +410,7 @@ principle_aggressive_coordination_4 = {
 	
 	member_modifier = {
 		country_initiator_war_goal_maneuver_cost_mult = -0.4
-		country_war_exhaustion_casualties_mult = -0.2
+		country_war_exhaustion_casualties_mult = -0.15
 		country_join_power_bloc_member_in_plays_bool = yes
 		country_infamy_generation_mult = 0.15
 		state_pop_support_law_ministry_of_war_add = 0.5
@@ -448,7 +448,7 @@ principle_aggressive_coordination_5 = {
 	member_modifier = {
 		# Modifiers from previous level(s)
 		country_initiator_war_goal_maneuver_cost_mult = -0.5
-		country_war_exhaustion_casualties_mult = -0.25
+		country_war_exhaustion_casualties_mult = -0.15
 		country_join_power_bloc_member_in_plays_bool = yes
 		country_infamy_generation_mult = 0.15
 		state_pop_support_law_ministry_of_war_add = 0.5
@@ -2283,7 +2283,7 @@ principle_global_security_3 = {
 
 	member_modifier = {
 		state_pop_support_law_ministry_of_war_add = 0.5
-		country_war_exhaustion_casualties_mult = -0.25
+		country_war_exhaustion_casualties_mult = -0.2
 	}
 
 	institution = institution_ministry_of_war
@@ -2313,7 +2313,7 @@ principle_global_security_4 = {
 
 	member_modifier = {
 		state_pop_support_law_ministry_of_war_add = 0.5
-		country_war_exhaustion_casualties_mult = -0.25
+		country_war_exhaustion_casualties_mult = -0.2
 	}
 
 	institution = institution_ministry_of_war
@@ -2344,7 +2344,7 @@ principle_global_security_5 = {
 
 	member_modifier = {
 		state_pop_support_law_ministry_of_war_add = 0.5
-		country_war_exhaustion_casualties_mult = -0.25
+		country_war_exhaustion_casualties_mult = -0.2
 	}
 
 	institution = institution_ministry_of_war
@@ -2640,6 +2640,384 @@ principle_welfare_5 = {
 		state_poor_expected_sol = -0.5
 		state_construction_mult = 0.02
 		country_authority_add = 100
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_artistic_expression_1 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		goods_output_fine_art_mult = 0.05
+	}
+	
+	ai_weight = {
+		value = 100
+		
+		if = {
+			limit = { has_strategy = ai_strategy_progressive_agenda }
+			multiply = 2.0
+		}
+
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_culture
+			}
+			multiply = 2.0
+		}			
+	}
+}
+
+principle_artistic_expression_2 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		goods_output_fine_art_mult = 0.05
+		building_group_bg_arts_academics_standard_of_living_add = 1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_artistic_expression_3 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		goods_output_fine_art_mult = 0.05
+		building_group_bg_arts_academics_standard_of_living_add = 1
+		country_war_exhaustion_casualties_mult = -0.1
+		unit_morale_loss_mult = -0.1
+	}
+
+
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_artistic_expression_4 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = mass_media
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		goods_output_fine_art_mult = 0.05
+		building_group_bg_arts_academics_standard_of_living_add = 1
+		country_war_exhaustion_casualties_mult = -0.1
+		unit_morale_loss_mult = -0.2
+		country_society_tech_research_speed_mult = 0.05
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_artistic_expression_5 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = social_media
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		goods_output_fine_art_mult = 0.05
+		building_group_bg_arts_academics_standard_of_living_add = 1
+		country_war_exhaustion_casualties_mult = -0.1
+		unit_morale_loss_mult = -0.3
+		country_society_tech_research_speed_mult = 0.1
+		state_migration_pull_add = 5
+		state_migration_pull_mult = 0.2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_military_training_1 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		country_military_tech_research_speed_mult = 0.05
+		unit_army_experience_gain_mult = 0.05
+	}
+	
+	ai_weight = {
+		value = 100
+		
+		if = {
+			limit = {
+				OR = {
+					has_strategy = ai_strategy_restore_natural_borders
+					has_strategy = ai_strategy_nationalist_agenda
+					has_strategy = ai_strategy_territorial_expansion
+					has_strategy = ai_strategy_armed_isolationism
+				}
+			}
+			multiply = 2.0
+		}
+
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_war
+			}
+			multiply = 2.0
+		}	
+		if = {
+			limit = {
+				has_law = law_type:law_professional_army
+			}
+			multiply = 3
+		}
+		if = {
+			limit = {
+				has_law = law_type:law_mass_constription
+			}
+			multiply = 2
+		}		
+	}
+}
+
+principle_military_training_2 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_military_tech_research_speed_mult = 0.05
+		unit_army_experience_gain_mult = 0.1
+
+		country_military_tech_spread_mult = 0.1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_military_training_3 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_military_tech_research_speed_mult = 0.05
+		unit_army_experience_gain_mult = 0.2
+		country_military_tech_spread_mult = 0.1
+
+		unit_navy_experience_gain_mult = 0.1
+		military_formation_mobilization_speed_mult = 0.2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_military_training_4 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = combined_arms
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_military_tech_research_speed_mult = 0.1
+		unit_army_experience_gain_mult = 0.35
+		country_military_tech_spread_mult = 0.1
+		unit_navy_experience_gain_mult = 0.2
+		military_formation_mobilization_speed_mult = 0.2
+
+		state_building_conscription_center_max_level_add = 100
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_military_training_5 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = rapid_deployment_forces
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_military_tech_research_speed_mult = 0.1
+		unit_army_experience_gain_mult = 0.5
+		country_military_tech_spread_mult = 0.2
+		unit_navy_experience_gain_mult = 0.4
+		military_formation_mobilization_speed_mult = 0.2
+		state_building_conscription_center_max_level_add = 100
+		state_building_barracks_max_level_add = 100
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_engineering_and_logistics_1 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		# unlocks PM for barracks that adds a small construction output
+	}
+	
+	ai_weight = {
+		value = 100
+		
+		if = {
+			limit = {
+				OR = {
+					has_strategy = ai_strategy_restore_natural_borders
+					has_strategy = ai_strategy_nationalist_agenda
+					has_strategy = ai_strategy_territorial_expansion
+					has_strategy = ai_strategy_armed_isolationism
+				}
+			}
+			multiply = 2.0
+		}
+
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_war
+			}
+			multiply = 2.0
+		}	
+		if = {
+			limit = {
+				has_law = law_type:law_professional_army
+			}
+			multiply = 3
+		}
+		if = {
+			limit = {
+				has_law = law_type:law_mass_constription
+			}
+			multiply = 2
+		}		
+	}
+}
+
+principle_engineering_and_logistics_2 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	member_modifier = {
+		character_battle_condition_broken_supply_line_mult = -0.2
+		character_battle_condition_charted_terrain_mult = 0.2
+		character_battle_condition_dug_in_mult = 0.5
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_engineering_and_logistics_3 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		character_battle_condition_broken_supply_line_mult = -0.2
+		character_battle_condition_charted_terrain_mult = 0.2
+		character_battle_condition_dug_in_mult = 0.5
+
+		unit_convoy_requirements_mult = -0.25
+		unit_convoy_defense_mult = 0.5
+		unit_convoy_raiding_interception_mult = 0.5
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_engineering_and_logistics_4 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = combined_arms
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		character_battle_condition_broken_supply_line_mult = -0.2
+		character_battle_condition_charted_terrain_mult = 0.2
+		character_battle_condition_dug_in_mult = 0.5
+		unit_convoy_requirements_mult = -0.25
+
+		state_building_airport_max_level_add = 5
+		unit_convoy_defense_mult = 1
+		unit_convoy_raiding_interception_mult = 1
+		unit_morale_recovery_mult = 0.25
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_engineering_and_logistics_5 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = rapid_deployment_forces
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		character_battle_condition_broken_supply_line_mult = -0.2
+		character_battle_condition_charted_terrain_mult = 0.2
+		character_battle_condition_dug_in_mult = 0.5
+		unit_convoy_requirements_mult = -0.25
+		state_building_airport_max_level_add = 10
+		unit_convoy_defense_mult = 1
+		unit_convoy_raiding_interception_mult = 1
+		unit_morale_recovery_mult = 0.25
+
+		character_morale_cap_add = 0.2
 	}
 
 	ai_weight = {

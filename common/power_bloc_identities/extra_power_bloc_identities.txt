@@ -17,7 +17,7 @@
 	}
 	
 	possible = {
-		has_technology_researched = pan-nationalism
+		has_technology_researched = romanticism
 	}
 
 	member_modifier = {

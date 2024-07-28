@@ -1449,6 +1449,20 @@ pmg_construction_principle = {
         pm_construction_no_effect
     }
 }
+pmg_principle_artistic_expression = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_principle_artistic_expression_2
+        pm_artistic_expression_no_effect
+    }
+} 
+pmg_principle_engineering_and_logistics = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_principle_engineering_and_logistics
+        pm_engineering_and_logistics_no_effect
+    }
+} 
 pmg_ownership_building_manor_house = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_ownership.dds"
 	ai_selection = most_productive
