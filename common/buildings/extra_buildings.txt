@@ -769,7 +769,7 @@ building_highway = {
 
 building_software_industry = {
 	building_group = bg_light_industry
-	texture = "gfx/interface/icons/goods_icons/digital_assets.dds"
+	texture = "gfx/interface/icons/goods_icons/digital_access.dds"
 	
 	unlocking_technologies = {
 		computer_networks
@@ -912,7 +912,7 @@ building_electronic_components_and_semiconductor_industry = {
 
 building_robotics_industry = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/goods_icons/robotics.dds"
+	texture = "gfx/interface/icons/goods_icons/robot.dds"
 	
 	unlocking_technologies = {
 		robotics
@@ -939,7 +939,7 @@ building_robotics_industry = {
 
 building_advanced_material_fabricator = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/goods_icons/advanced_materials.dds"
+	texture = "gfx/interface/icons/goods_icons/buckyball.dds"
 	
 	unlocking_technologies = {
 		modern_material_science
@@ -966,7 +966,7 @@ building_advanced_material_fabricator = {
 
 building_launch_facility = {
 	building_group = bg_heavy_industry	
-	texture = "gfx/interface/icons/goods_icons/launch_capacity.dds"
+	texture = "gfx/interface/icons/goods_icons/rocket.dds"
 	
 	unlocking_technologies = {
 		space_exploration
@@ -985,7 +985,7 @@ building_launch_facility = {
 
 building_space_elevator_construction_site = {
 	building_group = bg_government	
-	texture = "gfx/interface/icons/goods_icons/launch_capacity.dds"
+	texture = "gfx/interface/icons/goods_icons/rocket.dds"
 	
 	unlocking_technologies = {
 		space_elevator
@@ -1102,7 +1102,7 @@ building_space_elevator_construction_site = {
 
 building_space_elevator = {
 	building_group = bg_private_infrastructure	
-	texture = "gfx/interface/icons/goods_icons/launch_capacity.dds"
+	texture = "gfx/interface/icons/goods_icons/rocket.dds"
 
 	production_method_groups = {
 		pmg_base_building_space_elevator
