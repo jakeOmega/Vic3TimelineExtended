@@ -97,294 +97,378 @@ goods_output_luxury_furniture_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_radios_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_furniture_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_services_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_consumer_appliances_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_digital_access_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_fine_art_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_clothes_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_luxury_clothes_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_glass_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_steel_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_groceries_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_porcelain_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_fertilizer_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_explosives_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_ammunition_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_radios_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_telephones_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_grain_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_fish_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_meat_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_wood_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_coal_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_iron_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_lead_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_gold_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_sulfur_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_rubber_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_coffee_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_dye_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_opium_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_tea_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_tobacco_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_paper_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_output_transportation_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 goods_input_coal_mult = {
 	color = bad
 	percent = yes
 	
+	game_data = {
 	ai_value = -250
+}
 }
 
 goods_output_launch_capacity_mult = {
 	color = good
 	percent = yes
 	
+	game_data = {
 	ai_value = 250
+}
 }
 
 building_employment_clerks_mult = {
 	color = bad
 	percent = yes
 	
+	game_data = {
 	ai_value = -2500
+}
 }
 
 building_employment_engineers_mult = {
 	color = bad
 	percent = yes
 	
+	game_data = {
 	ai_value = -2500
+}
 }
 
 building_employment_farmers_mult = {
 	color = bad
 	percent = yes
 	
+	game_data = {
 	ai_value = -2500
+}
 }
 
 building_employment_machinists_mult = {
 	color = bad
 	percent = yes
 	
+	game_data = {
 	ai_value = -2500
+}
 }
 
 building_employment_shopkeepers_mult = {
 	color = bad
 	percent = yes
 	
+	game_data = {
 	ai_value = -2500
+}
 }
 
 state_building_hydro_plant_max_level_add = {
@@ -456,7 +540,9 @@ building_weekly_space_elevator_progress = {
 	color = good
 	percent = yes
 
+	game_data = {
 	ai_value = 50000000
+}
 }
 
 building_total_space_elevator_progress = {
@@ -492,98 +578,116 @@ country_monthly_loyalists_add = {
 country_institution_ministry_of_war_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_migration_controls_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_commerce_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_foreign_affairs_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_national_bank_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_culture_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_labor_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_the_environment_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_intelligence_and_security_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_refugee_affairs_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_propaganda_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_science_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_thought_control_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_consumer_protection_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_urban_planning_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_population_control_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_religion_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 country_institution_ministry_of_international_aid_max_investment_add = {
 	color = good
 	percent = no
+	decimals=0
 }
 
 power_bloc_leader_can_force_cultural_acceptance_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
-		ai_value = 0
+		ai_value = 100
 	}
 }
 
@@ -591,7 +695,7 @@ power_bloc_leader_can_force_cultural_adoption_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
-		ai_value = 0
+		ai_value = 100
 	}
 }
 
@@ -599,7 +703,7 @@ power_bloc_leader_can_peacefully_annex_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
-		ai_value = 0
+		ai_value = 100
 	}
 }
 
@@ -607,7 +711,7 @@ power_bloc_can_enact_greenest_grass_campaign_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
-		ai_value = 0
+		ai_value = 100
 	}
 }
 
@@ -615,7 +719,7 @@ power_bloc_can_use_extend_influence_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
-		ai_value = 0
+		ai_value = 100
 	}
 }
 
@@ -623,7 +727,7 @@ power_bloc_homelands_can_decay_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
-		ai_value = 0
+		ai_value = 100
 	}
 }
 
@@ -631,7 +735,7 @@ power_bloc_can_give_humanitarian_aid_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
-		ai_value = 0
+		ai_value = 100
 	}
 }
 
@@ -639,7 +743,7 @@ power_bloc_can_use_crisis_resolution_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
-		ai_value = 0
+		ai_value = 100
 	}
 }
 
@@ -647,7 +751,7 @@ state_infrastructure_from_aeroplanes_consumption_add = {
 	decimals=2
 	color=good
 	game_data={
-		ai_value=0
+		ai_value=100
 	}
 }
 
@@ -655,7 +759,7 @@ state_infrastructure_from_transportation_consumption_add = {
 	decimals=2
 	color=good
 	game_data={
-		ai_value=0
+		ai_value=1000
 	}
 }
 
@@ -846,7 +950,7 @@ state_pop_support_law_ministry_of_urban_planning_add = {
 
 building_group_bg_military_standard_of_living_add = {
 	color = good
-	percent = no
+	percent = yes
 }
 
 building_group_bg_bureaucracy_throughput_add = {
