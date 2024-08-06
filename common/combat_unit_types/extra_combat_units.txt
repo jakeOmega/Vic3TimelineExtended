@@ -7,40 +7,27 @@
 
 ### Infantry
 
-combat_unit_type_combined_arms = {
+combat_unit_type_armored_infantry = {
     group = combat_unit_group_infantry
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-
     upkeep_modifier = {
-        goods_input_small_arms_add = 3
-        goods_input_ammunition_add = 3
-        goods_input_tanks_add = 3
-        goods_input_aeroplanes_add = 1
-        goods_input_oil_add = 1
-        goods_input_radios_add = 1
-    }
+		goods_input_small_arms_add = 4                        # Price:   60, Total cost: 240.0
+		goods_input_ammunition_add = 4                        # Price:   50, Total cost: 200.0
+		goods_input_tanks_add = 4                             # Price:   80, Total cost: 320.0
+		goods_input_oil_add = 3                               # Price:   40, Total cost: 120.0
+		goods_input_radios_add = 2                            # Price:   80, Total cost: 160.0
+		# Total cost: 1040.0
+	}
     
     battle_modifier = {
-        unit_offense_add = 80
-        unit_defense_add = 80
-        unit_morale_loss_add = 3
-        unit_defense_mult = 0.1
+        unit_offense_add = 60
+        unit_defense_add = 100
+        unit_morale_loss_add = 2
         unit_devastation_mult = 0.2
-        unit_provinces_lost_mult = -0.2
+        unit_provinces_lost_mult = -0.25
     }
 
-	unlocking_technologies = { combined_arms }
+	unlocking_technologies = { combined_arms }  # era 6
 
     combat_unit_image = {
 		# fallback
@@ -57,38 +44,24 @@ combat_unit_type_combined_arms = {
 combat_unit_type_robotic_soldiers = {
     group = combat_unit_group_infantry
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-
     upkeep_modifier = {
-        goods_input_ammunition_add = 8
-        goods_input_tanks_add = 5
-        goods_input_aeroplanes_add = 1
-        goods_input_oil_add = 1
-        goods_input_radios_add = 5
-        goods_input_robotics_add = 10
-        goods_input_small_arms_add = 15
-    }
+		goods_input_small_arms_add = 15                       # Price:   60, Total cost: 900.0
+		goods_input_ammunition_add = 10                       # Price:   50, Total cost: 500.0
+		goods_input_tanks_add = 12                            # Price:   80, Total cost: 960.0
+		goods_input_radios_add = 12                           # Price:   80, Total cost: 960.0
+		goods_input_robotics_add = 30                         # Price:   80, Total cost: 2400.0
+		# Total cost: 5720.0
+	}
     
     battle_modifier = {
-        unit_offense_add = 160
-        unit_defense_add = 160
+        unit_offense_add = 120
+        unit_defense_add = 350
         unit_morale_loss_add = 1
-        unit_defense_mult = 0.2
-        unit_devastation_mult = 0.2
-        unit_provinces_lost_mult = -0.4
+        unit_devastation_mult = 1
+        unit_provinces_lost_mult = -0.25
     }
 
-	unlocking_technologies = { network_centric_warfare }
+	unlocking_technologies = { network_centric_warfare }  # era 9
 
     combat_unit_image = {
 		# fallback
@@ -104,37 +77,24 @@ combat_unit_type_robotic_soldiers = {
 combat_unit_type_swarm_bots = {
     group = combat_unit_group_infantry
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-
     upkeep_modifier = {
-        goods_input_ammunition_add = 8
-        goods_input_tanks_add = 10
-        goods_input_aeroplanes_add = 3
-        goods_input_radios_add = 10
-        goods_input_robotics_add = 30
-        goods_input_small_arms_add = 25
-    }
+		goods_input_small_arms_add = 30                       # Price:   60, Total cost: 1800.0
+		goods_input_ammunition_add = 30                       # Price:   50, Total cost: 1500.0
+		goods_input_tanks_add = 18                            # Price:   80, Total cost: 1440.0
+		goods_input_radios_add = 30                           # Price:   80, Total cost: 2400.0
+		goods_input_robotics_add = 60                         # Price:   80, Total cost: 4800.0
+		# Total cost: 11940.0
+	}
     
     battle_modifier = {
-        unit_offense_add = 400
-        unit_defense_add = 400
+        unit_offense_add = 240
+        unit_defense_add = 700
         unit_morale_loss_add = 1
-        unit_defense_mult = 0.2
-        unit_devastation_mult = 0.25
-        unit_provinces_lost_mult = -0.6
+        unit_devastation_mult = 2
+        unit_provinces_lost_mult = -0.25
     }
 
-	unlocking_technologies = { swarm_technology }
+	unlocking_technologies = { swarm_technology } # era 10
 
     combat_unit_image = {
 		# fallback
@@ -149,38 +109,25 @@ combat_unit_type_swarm_bots = {
 combat_unit_type_grey_goo = {
     group = combat_unit_group_infantry
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-
     upkeep_modifier = {
-        goods_input_ammunition_add = 8
-        goods_input_tanks_add = 10
-        goods_input_aeroplanes_add = 3
-        goods_input_radios_add = 10
-        goods_input_robotics_add = 30
-        goods_input_small_arms_add = 100
-        goods_input_advanced_materials_add = 1
-    }
+		goods_input_small_arms_add = 30                       # Price:   60, Total cost: 1800.0
+		goods_input_ammunition_add = 30                       # Price:   50, Total cost: 1500.0
+		goods_input_tanks_add = 20                            # Price:   80, Total cost: 1600.0
+		goods_input_radios_add = 30                           # Price:   80, Total cost: 2400.0
+		goods_input_robotics_add = 60                         # Price:   80, Total cost: 4800.0
+		goods_input_advanced_materials_add = 3                # Price: 4000, Total cost: 12000.0
+		# Total cost: 24100.0
+	}
     
     battle_modifier = {
-        unit_offense_add = 1000
-        unit_defense_add = 1000
+        unit_offense_add = 480
+        unit_defense_add = 1400
         unit_morale_loss_add = 1
-        unit_defense_mult = 0.1
-        unit_devastation_mult = 0.1
-        unit_provinces_lost_mult = -0.8
+        unit_devastation_mult = 4
+        unit_provinces_lost_mult = -0.25
     }
 
-	unlocking_technologies = { molecular_assemblers }
+	unlocking_technologies = { molecular_assemblers }  # era 11
 
     combat_unit_image = {
 		# fallback
@@ -206,24 +153,25 @@ combat_unit_type_moterized_artillery = {
     }
 
     upkeep_modifier = {
-        goods_input_tanks_add = 2
-        goods_input_artillery_add = 4
-        goods_input_radios_add = 1
-        goods_input_oil_add = 3
-        goods_input_automobiles_add = 1
-        goods_input_ammunition_add = 4
-    }
+		goods_input_tanks_add = 4                             # Price:   80, Total cost: 320.0
+		goods_input_artillery_add = 10                        # Price:   70, Total cost: 700.0
+		goods_input_radios_add = 2                            # Price:   80, Total cost: 160.0
+		goods_input_oil_add = 4                               # Price:   40, Total cost: 160.0
+		goods_input_automobiles_add = 2                       # Price:  100, Total cost: 200.0
+		goods_input_ammunition_add = 8                        # Price:   50, Total cost: 400.0
+		# Total cost: 1940.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 70
-        unit_defense_add = 60
+        unit_offense_add = 120
+        unit_defense_add = 80
         unit_morale_loss_add = 5
         unit_kill_rate_add = 0.3
-        unit_morale_damage_mult = 0.15
-        unit_devastation_mult = 0.2
+        unit_morale_damage_mult = 0.5
+        unit_devastation_mult = 0.4
     }
 
-	unlocking_technologies = { moterized_artillery }
+	unlocking_technologies = { moterized_artillery }  # era 6
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/mobile_art.dds"
@@ -253,25 +201,26 @@ combat_unit_type_guided_artillery_projectiles = {
     }
 
     upkeep_modifier = {
-        goods_input_tanks_add = 3
-        goods_input_artillery_add = 4
-        goods_input_radios_add = 1
-        goods_input_oil_add = 3
-        goods_input_automobiles_add = 1
-        goods_input_ammunition_add = 8
-        goods_input_electronic_components_add = 1
-    }
+		goods_input_tanks_add = 7                             # Price:   80, Total cost: 560.0
+		goods_input_artillery_add = 16                        # Price:   70, Total cost: 1120.0
+		goods_input_radios_add = 4                            # Price:   80, Total cost: 320.0
+		goods_input_oil_add = 4                               # Price:   40, Total cost: 160.0
+		goods_input_automobiles_add = 4                       # Price:  100, Total cost: 400.0
+		goods_input_ammunition_add = 16                       # Price:   50, Total cost: 800.0
+		goods_input_electronic_components_add = 8             # Price:   80, Total cost: 640.0
+		# Total cost: 4000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 120
-        unit_defense_add = 100
-        unit_morale_loss_add = 3
-        unit_kill_rate_add = 0.3
-        unit_morale_damage_mult = 0.25
-        unit_devastation_mult = 0.2
+        unit_offense_add = 180
+        unit_defense_add = 120
+        unit_morale_loss_add = 5
+        unit_kill_rate_add = 0.4
+        unit_morale_damage_mult = 0.6
+        unit_devastation_mult = 0.8
     }
 
-	unlocking_technologies = { guided_missiles }
+	unlocking_technologies = { guided_missiles }  # era 7
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/precision_art.dds"
@@ -300,25 +249,26 @@ combat_unit_type_networked_guided_artillery_projectiles = {
     }
 
     upkeep_modifier = {
-        goods_input_tanks_add = 3
-        goods_input_artillery_add = 6
-        goods_input_radios_add = 1
-        goods_input_oil_add = 3
-        goods_input_automobiles_add = 1
-        goods_input_ammunition_add = 8
-        goods_input_electronic_components_add = 3
-    }
+		goods_input_tanks_add = 10                            # Price:   80, Total cost: 800.0
+		goods_input_artillery_add = 40                        # Price:   70, Total cost: 2800.0
+		goods_input_radios_add = 10                           # Price:   80, Total cost: 800.0
+		goods_input_oil_add = 5                               # Price:   40, Total cost: 200.0
+		goods_input_automobiles_add = 6                       # Price:  100, Total cost: 600.0
+		goods_input_ammunition_add = 32                       # Price:   50, Total cost: 1600.0
+		goods_input_electronic_components_add = 40            # Price:   80, Total cost: 3200.0
+		# Total cost: 10000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 220
-		unit_defense_add = 200
-        unit_morale_loss_add = 3
+        unit_offense_add = 400
+        unit_defense_add = 260
+        unit_morale_loss_add = 5
         unit_kill_rate_add = 0.4
-        unit_morale_damage_mult = 0.5
-        unit_devastation_mult = 0.1
+        unit_morale_damage_mult = 0.6
+        unit_devastation_mult = 1.2
     }
 
-	unlocking_technologies = { network_centric_warfare }
+	unlocking_technologies = { network_centric_warfare }  # era 9
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/precision_art2.dds"
@@ -346,26 +296,24 @@ combat_unit_type_orbital_bombardment = {
     }
 
     upkeep_modifier = {
-        goods_input_tanks_add = 3
-        goods_input_artillery_add = 8
-        goods_input_radios_add = 1
-        goods_input_oil_add = 3
-        goods_input_automobiles_add = 1
-        goods_input_launch_capacity_add = 3
-        goods_input_electronic_components_add = 6
-        goods_input_ammunition_add = 16
-    }
+		goods_input_artillery_add = 60                        # Price:   70, Total cost: 4200.0
+		goods_input_radios_add = 10                           # Price:   80, Total cost: 800.0
+		goods_input_ammunition_add = 44                       # Price:   50, Total cost: 2200.0
+		goods_input_electronic_components_add = 60            # Price:   80, Total cost: 4800.0
+		goods_input_launch_capacity_add = 40                  # Price:  200, Total cost: 8000.0
+		# Total cost: 20000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 560
-		unit_defense_add = 480
-        unit_morale_loss_add = 1
+        unit_offense_add = 800
+        unit_defense_add = 520
+        unit_morale_loss_add = 5
         unit_kill_rate_add = 0.5
-        unit_morale_damage_mult = 1
-        unit_devastation_mult = 0.2
+        unit_morale_damage_mult = 0.8
+        unit_devastation_mult = 3
     }
 
-	unlocking_technologies = { space_militarization }
+	unlocking_technologies = { space_militarization }  # era 10
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/orbital1.dds"
@@ -392,26 +340,25 @@ combat_unit_type_orbital_precision_antimatter_strikes = {
     }
 
     upkeep_modifier = {
-        goods_input_tanks_add = 3
-        goods_input_artillery_add = 10
-        goods_input_radios_add = 1
-        goods_input_oil_add = 3
-        goods_input_automobiles_add = 1
-        goods_input_launch_capacity_add = 15
-        goods_input_electronic_components_add = 8
-        goods_input_ammunition_add = 16
-    }
+		goods_input_artillery_add = 60                        # Price:   70, Total cost: 4200.0
+		goods_input_radios_add = 14                           # Price:   80, Total cost: 1120.0
+		goods_input_ammunition_add = 52                       # Price:   50, Total cost: 2600.0
+		goods_input_electronic_components_add = 66            # Price:   80, Total cost: 5280.0
+		goods_input_launch_capacity_add = 54                  # Price:  200, Total cost: 10800.0
+		goods_input_advanced_materials_add = 4                # Price: 4000, Total cost: 16000.0
+		# Total cost: 40000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 880
-		unit_defense_add = 800
-        unit_morale_loss_add = 1
-        unit_kill_rate_add = 0.75
-        unit_morale_damage_mult = 2
-        unit_devastation_mult = 0.1
+        unit_offense_add = 1600
+        unit_defense_add = 1040
+        unit_morale_loss_add = 5
+        unit_kill_rate_add = 0.5
+        unit_morale_damage_mult = 0.8
+        unit_devastation_mult = 6
     }
 
-	unlocking_technologies = { antimatter_production }
+	unlocking_technologies = { antimatter_production }  # era 11
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/orbital2.dds"
@@ -437,12 +384,13 @@ combat_unit_type_light_tanks = {
     }
     
     upkeep_modifier = {
-        goods_input_tanks_add = 2
-        goods_input_artillery_add = 2
-        goods_input_oil_add = 2
-        goods_input_ammunition_add = 2
-        goods_input_radios_add = 2
-    }
+		goods_input_tanks_add = 2                             # Price:   80, Total cost: 160.0
+		goods_input_artillery_add = 2                         # Price:   70, Total cost: 140.0
+		goods_input_oil_add = 2                               # Price:   40, Total cost: 80.0
+		goods_input_ammunition_add = 2                        # Price:   50, Total cost: 100.0
+		goods_input_radios_add = 2                            # Price:   80, Total cost: 160.0
+		# Total cost: 640.0
+	}
 
     battle_modifier = {
         unit_offense_add = 45
@@ -456,7 +404,7 @@ combat_unit_type_light_tanks = {
         military_formation_mobilization_speed_mult = 0.2
     }
 
-	unlocking_technologies = { mobile_armor }
+	unlocking_technologies = { mobile_armor }  # era 5
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/cavalry_light_tank.dds"
@@ -485,23 +433,24 @@ combat_unit_type_light_scout_tanks = {
     }
     
     upkeep_modifier = {
-        goods_input_tanks_add = 4
-        goods_input_artillery_add = 2
-        goods_input_oil_add = 2
-        goods_input_ammunition_add = 4
-        goods_input_radios_add = 3
-        goods_input_electronic_components_add = 1
-    }
+		goods_input_tanks_add = 22                            # Price:   80, Total cost: 1760.0
+		goods_input_artillery_add = 6                         # Price:   70, Total cost: 420.0
+		goods_input_oil_add = 3                               # Price:   40, Total cost: 120.0
+		goods_input_ammunition_add = 10                       # Price:   50, Total cost: 500.0
+		goods_input_radios_add = 20                           # Price:   80, Total cost: 1600.0
+		goods_input_electronic_components_add = 20            # Price:   80, Total cost: 1600.0
+		# Total cost: 6000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 70
-        unit_defense_add = 70
-        unit_morale_loss_add = 3
-        unit_devastation_mult = 0.1
+        unit_offense_add = 150
+        unit_defense_add = 150
+        unit_morale_loss_add = 4
+        unit_devastation_mult = 0.2
         unit_occupation_mult = 0.5
     }
 
-	unlocking_technologies = { inertial_navigation_systems }
+	unlocking_technologies = { inertial_navigation_systems }  # era 7
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/scout_tank.dds"
@@ -529,24 +478,26 @@ combat_unit_type_stealth_reconnaissance_drone_carrier = {
     }
     
     upkeep_modifier = {
-        goods_input_tanks_add = 6
-        goods_input_artillery_add = 2
-        goods_input_oil_add = 2
-        goods_input_ammunition_add = 4
-        goods_input_radios_add = 4
-        goods_input_electronic_components_add = 3
-        goods_input_robotics_add = 2
-    }
+		goods_input_tanks_add = 50                            # Price:   80, Total cost: 4000.0
+		goods_input_artillery_add = 20                        # Price:   70, Total cost: 1400.0
+		goods_input_oil_add = 6                               # Price:   40, Total cost: 240.0
+		goods_input_ammunition_add = 16                       # Price:   50, Total cost: 800.0
+		goods_input_radios_add = 35                           # Price:   80, Total cost: 2800.0
+		goods_input_electronic_components_add = 40            # Price:   80, Total cost: 3200.0
+		goods_input_robotics_add = 22                         # Price:   80, Total cost: 1760.0
+		goods_input_aeroplanes_add = 10                       # Price:   80, Total cost: 800.0
+		# Total cost: 15000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 150
-        unit_defense_add = 150
-        unit_morale_loss_add = 2
-        unit_devastation_mult = 0.1
-        unit_occupation_mult = 0.75
+        unit_offense_add = 320
+        unit_defense_add = 320
+        unit_morale_loss_add = 4
+        unit_devastation_mult = 1
+        unit_occupation_mult = 0.6
     }
 
-	unlocking_technologies = { rapid_deployment_forces }
+	unlocking_technologies = { rapid_deployment_forces }  # era 9
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/stealth_drone.dds"
@@ -573,24 +524,26 @@ combat_unit_type_holographic_ambush_combat_vehicle = {
     }
     
     upkeep_modifier = {
-        goods_input_tanks_add = 6
-        goods_input_artillery_add = 2
-        goods_input_oil_add = 2
-        goods_input_ammunition_add = 4
-        goods_input_radios_add = 4
-        goods_input_electronic_components_add = 3
-        goods_input_robotics_add = 2
-    }
+		goods_input_tanks_add = 95                            # Price:   80, Total cost: 7600.0
+		goods_input_artillery_add = 40                        # Price:   70, Total cost: 2800.0
+		goods_input_ammunition_add = 40                       # Price:   50, Total cost: 2000.0
+		goods_input_radios_add = 50                           # Price:   80, Total cost: 4000.0
+		goods_input_electronic_components_add = 70            # Price:   80, Total cost: 5600.0
+		goods_input_robotics_add = 40                         # Price:   80, Total cost: 3200.0
+		goods_input_aeroplanes_add = 10                       # Price:   80, Total cost: 800.0
+		goods_input_advanced_materials_add = 1                # Price: 4000, Total cost: 4000.0
+		# Total cost: 30000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 300
-        unit_defense_add = 300
-        unit_morale_loss_add = 1
-        unit_devastation_mult = 0.1
-        unit_occupation_mult = 1.5
+        unit_offense_add = 640
+        unit_defense_add = 640
+        unit_morale_loss_add = 4
+        unit_devastation_mult = 2
+        unit_occupation_mult = 1
     }
 
-	unlocking_technologies = { augmented_reality_warfare }
+	unlocking_technologies = { augmented_reality_warfare }  # era 10
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/hologram_tank.dds"
@@ -614,12 +567,13 @@ combat_unit_type_heavy_tank = {
     }
     
     upkeep_modifier = {
-        goods_input_tanks_add = 3
-        goods_input_artillery_add = 4
-        goods_input_radios_add = 1
-        goods_input_oil_add = 3
-        goods_input_ammunition_add = 4
-    }
+		goods_input_tanks_add = 3                             # Price:   80, Total cost: 240.0
+		goods_input_artillery_add = 4                         # Price:   70, Total cost: 280.0
+		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
+		goods_input_oil_add = 3                               # Price:   40, Total cost: 120.0
+		goods_input_ammunition_add = 4                        # Price:   50, Total cost: 200.0
+		# Total cost: 920.0
+	}
 
     battle_modifier = {
         unit_offense_add = 70
@@ -635,7 +589,7 @@ combat_unit_type_heavy_tank = {
         military_formation_movement_speed_mult = -0.2
     }
 
-	unlocking_technologies = { mobile_armor }
+	unlocking_technologies = { mobile_armor }  # era 5
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/artillery_heavy_tank.dds"
@@ -665,24 +619,25 @@ combat_unit_type_main_battle_tank = {
     }
     
     upkeep_modifier = {
-        goods_input_tanks_add = 6
-        goods_input_artillery_add = 6
-        goods_input_radios_add = 3
-        goods_input_oil_add = 4
-        goods_input_ammunition_add = 8
-        goods_input_electronic_components_add = 2
-    }
+		goods_input_tanks_add = 50                            # Price:   80, Total cost: 4000.0
+		goods_input_artillery_add = 20                        # Price:   70, Total cost: 1400.0
+		goods_input_radios_add = 6                            # Price:   80, Total cost: 480.0
+		goods_input_oil_add = 12                              # Price:   40, Total cost: 480.0
+		goods_input_ammunition_add = 20                       # Price:   50, Total cost: 1000.0
+		goods_input_electronic_components_add = 8             # Price:   80, Total cost: 640.0
+		# Total cost: 8000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 140
-        unit_defense_add = 70
-        unit_morale_loss_add = 3
+        unit_offense_add = 200
+        unit_defense_add = 200
+        unit_morale_loss_add = 4
         unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.3
-        unit_devastation_mult = 0.2
+        unit_morale_damage_mult = 0.15
+        unit_devastation_mult = 0.4
     }
 
-	unlocking_technologies = { guided_missiles }
+	unlocking_technologies = { guided_missiles }  # era 7
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/main_battle_tanks.dds"
@@ -711,24 +666,25 @@ combat_unit_type_reactive_armor_tank = {
     }
     
     upkeep_modifier = {
-        goods_input_tanks_add = 10
-        goods_input_artillery_add = 8
-        goods_input_radios_add = 5
-        goods_input_oil_add = 4
-        goods_input_ammunition_add = 16
-        goods_input_electronic_components_add = 8
-    }
+		goods_input_tanks_add = 80                            # Price:   80, Total cost: 6400.0
+		goods_input_artillery_add = 26                        # Price:   70, Total cost: 1820.0
+		goods_input_radios_add = 20                           # Price:   80, Total cost: 1600.0
+		goods_input_oil_add = 12                              # Price:   40, Total cost: 480.0
+		goods_input_ammunition_add = 26                       # Price:   50, Total cost: 1300.0
+		goods_input_electronic_components_add = 30            # Price:   80, Total cost: 2400.0
+		# Total cost: 14000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 280
-        unit_defense_add = 140
-        unit_morale_loss_add = 2
+        unit_offense_add = 320
+        unit_defense_add = 320
+        unit_morale_loss_add = 4
         unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.6
-        unit_devastation_mult = 0.2
+        unit_morale_damage_mult = 0.15
+        unit_devastation_mult = 0.8
     }
 
-	unlocking_technologies = { precision_guided_munitions }
+	unlocking_technologies = { precision_guided_munitions }  # era 8
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/modern_MBT.dds"
@@ -756,25 +712,26 @@ combat_unit_type_railgun_tank = {
     }
     
     upkeep_modifier = {
-        goods_input_tanks_add = 20
-        goods_input_artillery_add = 12
-        goods_input_radios_add = 8
-        goods_input_oil_add = 4
-        goods_input_ammunition_add = 20
-        goods_input_electronic_components_add = 12
-        goods_input_robotics_add = 4
-    }
+		goods_input_tanks_add = 214                           # Price:   80, Total cost: 17120.0
+		goods_input_artillery_add = 64                        # Price:   70, Total cost: 4480.0
+		goods_input_radios_add = 40                           # Price:   80, Total cost: 3200.0
+		goods_input_oil_add = 20                              # Price:   40, Total cost: 800.0
+		goods_input_ammunition_add = 80                       # Price:   50, Total cost: 4000.0
+		goods_input_electronic_components_add = 90            # Price:   80, Total cost: 7200.0
+		goods_input_robotics_add = 40                         # Price:   80, Total cost: 3200.0
+		# Total cost: 40000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 700
-        unit_defense_add = 700
-        unit_morale_loss_add = 1
-        unit_kill_rate_add = 0.5
-        unit_morale_damage_mult = 1.2
-        unit_devastation_mult = 0.2
+        unit_offense_add = 1000
+        unit_defense_add = 1000
+        unit_morale_loss_add = 4
+        unit_kill_rate_add = 0.25
+        unit_morale_damage_mult = 0.15
+        unit_devastation_mult = 2
     }
 
-	unlocking_technologies = { hypersonic_weapons }
+	unlocking_technologies = { hypersonic_weapons }  # era 10
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/railgun_tank.dds"
@@ -801,26 +758,27 @@ combat_unit_type_DEW_tank = { #directed energy weapon tank
     }
     
     upkeep_modifier = {
-        goods_input_tanks_add = 40
-        goods_input_artillery_add = 16
-        goods_input_radios_add = 12
-        goods_input_oil_add = 4
-        goods_input_ammunition_add = 32
-        goods_input_electronic_components_add = 24
-        goods_input_robotics_add = 8
-        goods_input_advanced_materials_add = 0.1
-    }
+		goods_input_tanks_add = 300                           # Price:   80, Total cost: 24000.0
+		goods_input_artillery_add = 100                       # Price:   70, Total cost: 7000.0
+		goods_input_radios_add = 80                           # Price:   80, Total cost: 6400.0
+		goods_input_oil_add = 20                              # Price:   40, Total cost: 800.0
+		goods_input_ammunition_add = 116                      # Price:   50, Total cost: 5800.0
+		goods_input_electronic_components_add = 140           # Price:   80, Total cost: 11200.0
+		goods_input_robotics_add = 60                         # Price:   80, Total cost: 4800.0
+		goods_input_advanced_materials_add = 5                # Price: 4000, Total cost: 20000.0
+		# Total cost: 80000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 1100
-        unit_defense_add = 200
-        unit_morale_loss_add = 1
-        unit_kill_rate_add = 1
-        unit_morale_damage_mult = 1.2
-        unit_devastation_mult = 0.2
+        unit_offense_add = 2000
+        unit_defense_add = 2000
+        unit_morale_loss_add = 4
+        unit_kill_rate_add = 0.25
+        unit_morale_damage_mult = 0.15
+        unit_devastation_mult = 4
     }
 
-	unlocking_technologies = { directed_energy_weapons }
+	unlocking_technologies = { compact_fusion_reactors }  # era 11
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/DEW_tank.dds"
@@ -844,71 +802,26 @@ combat_unit_type_bomber_aircraft = {
     }
     
     upkeep_modifier = {
-        goods_input_ammunition_add = 1
-        goods_input_aeroplanes_add = 2
-        goods_input_oil_add = 1
-        goods_input_radios_add = 1
-    }
+		goods_input_ammunition_add = 40                       # Price:   50, Total cost: 2000.0
+		goods_input_aeroplanes_add = 30                       # Price:   80, Total cost: 2400.0
+		goods_input_oil_add = 20                              # Price:   40, Total cost: 800.0
+		goods_input_radios_add = 10                           # Price:   80, Total cost: 800.0
+		# Total cost: 6000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 75
-        unit_defense_add = 25
-        unit_morale_loss_add = 8
+        unit_offense_add = 300
+        unit_defense_add = 200
+        unit_morale_loss_add = 12
         unit_kill_rate_add = 0.25
         unit_morale_damage_mult = 0.5
-        unit_devastation_mult = 0.25
-    }
-
-	unlocking_technologies = { bombing_aircraft }
-
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/bomber.dds"
-    }
-
-    upgrades = {
-        combat_unit_type_advanced_bomber_aircraft
-        combat_unit_type_jet_powered_fighters
-        combat_unit_type_stealth_aircraft
-        combat_unit_type_orbital_tactical_vehicles
-        combat_unit_type_orbital_weapons_platforms
-    }
-}
-
-combat_unit_type_advanced_bomber_aircraft = {
-    group = combat_unit_group_aircraft
-
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-    
-    upkeep_modifier = {
-        goods_input_ammunition_add = 3
-        goods_input_aeroplanes_add = 3
-        goods_input_oil_add = 2
-        goods_input_radios_add = 5
-    }
-
-    battle_modifier = {
-        unit_offense_add = 100
-        unit_defense_add = 50
-        unit_morale_loss_add = 6
-        unit_kill_rate_add = 0.5
-        unit_morale_damage_mult = 1
         unit_devastation_mult = 0.5
     }
 
-	unlocking_technologies = { advanced_military_aircraft }
+	unlocking_technologies = { bombing_aircraft }  # era 6
 
     combat_unit_image = {
-        texture = "gfx/unit_illustrations/advanced_bomber.dds"
+        texture = "gfx/unit_illustrations/bomber.dds"
     }
 
     upgrades = {
@@ -935,23 +848,24 @@ combat_unit_type_jet_powered_fighters = {
     }
     
     upkeep_modifier = {
-        goods_input_ammunition_add = 5
-        goods_input_aeroplanes_add = 10
-        goods_input_oil_add = 2
-        goods_input_radios_add = 5
-        goods_input_electronic_components_add = 4
-    }
+		goods_input_ammunition_add = 40                       # Price:   50, Total cost: 2000.0
+		goods_input_aeroplanes_add = 60                       # Price:   80, Total cost: 4800.0
+		goods_input_oil_add = 20                              # Price:   40, Total cost: 800.0
+		goods_input_radios_add = 20                           # Price:   80, Total cost: 1600.0
+		goods_input_electronic_components_add = 10            # Price:   80, Total cost: 800.0
+		# Total cost: 10000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 200
-        unit_defense_add = 100
-        unit_morale_loss_add = 6
-        unit_kill_rate_add = 0.75
-        unit_morale_damage_mult = 2
-        unit_devastation_mult = 0.75
+        unit_offense_add = 450
+        unit_defense_add = 300
+        unit_morale_loss_add = 12
+        unit_kill_rate_add = 0.25
+        unit_morale_damage_mult = 0.5
+        unit_devastation_mult = 1
     }
 
-	unlocking_technologies = { jet_engine_technology }
+	unlocking_technologies = { jet_engine_technology }  # era 7
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/jet_bomber.dds"
@@ -980,23 +894,24 @@ combat_unit_type_stealth_aircraft = {
     }
     
     upkeep_modifier = {
-        goods_input_ammunition_add = 10
-        goods_input_aeroplanes_add = 20
-        goods_input_oil_add = 2
-        goods_input_radios_add = 5
-        goods_input_electronic_components_add = 4
-    }
+		goods_input_ammunition_add = 40                       # Price:   50, Total cost: 2000.0
+		goods_input_aeroplanes_add = 125                      # Price:   80, Total cost: 10000.0
+		goods_input_oil_add = 20                              # Price:   40, Total cost: 800.0
+		goods_input_radios_add = 50                           # Price:   80, Total cost: 4000.0
+		goods_input_electronic_components_add = 40            # Price:   80, Total cost: 3200.0
+		# Total cost: 20000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 400
-        unit_defense_add = 200
-        unit_morale_loss_add = 5
-        unit_kill_rate_add = 1
-        unit_morale_damage_mult = 3
-        unit_devastation_mult = 1
+        unit_offense_add = 700
+        unit_defense_add = 450
+        unit_morale_loss_add = 12
+        unit_kill_rate_add = 0.25
+        unit_morale_damage_mult = 0.5
+        unit_devastation_mult = 2
     }
 
-	unlocking_technologies = { stealth_technology }
+	unlocking_technologies = { stealth_technology }  # era 8
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/stealth_bomber.dds"
@@ -1024,24 +939,25 @@ combat_unit_type_orbital_tactical_vehicles = {
     }
     
     upkeep_modifier = {
-        goods_input_ammunition_add = 20
-        goods_input_aeroplanes_add = 40
-        goods_input_oil_add = 2
-        goods_input_radios_add = 5
-        goods_input_robotics_add = 4
-        goods_input_launch_capacity_add = 5
-    }
+		goods_input_ammunition_add = 64                       # Price:   50, Total cost: 3200.0
+		goods_input_aeroplanes_add = 240                      # Price:   80, Total cost: 19200.0
+		goods_input_radios_add = 80                           # Price:   80, Total cost: 6400.0
+		goods_input_electronic_components_add = 80            # Price:   80, Total cost: 6400.0
+		goods_input_robotics_add = 60                         # Price:   80, Total cost: 4800.0
+		goods_input_launch_capacity_add = 100                 # Price:  200, Total cost: 20000.0
+		# Total cost: 60000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 700
-        unit_defense_add = 500
-        unit_morale_loss_add = 4
-        unit_kill_rate_add = 1.5
-        unit_morale_damage_mult = 3
-        unit_devastation_mult = 0.1
+        unit_offense_add = 1400
+        unit_defense_add = 900
+        unit_morale_loss_add = 12
+        unit_kill_rate_add = 0.25
+        unit_morale_damage_mult = 0.5
+        unit_devastation_mult = 4
     }
 
-	unlocking_technologies = { space_militarization }
+	unlocking_technologies = { space_militarization }  # era 10
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/OTC.dds"
@@ -1068,24 +984,26 @@ combat_unit_type_orbital_weapons_platforms = {
     }
     
     upkeep_modifier = {
-        goods_input_ammunition_add = 40
-        goods_input_aeroplanes_add = 80
-        goods_input_oil_add = 2
-        goods_input_radios_add = 5
-        goods_input_robotics_add = 4
-        goods_input_launch_capacity_add = 20
-    }
+		goods_input_ammunition_add = 64                       # Price:   50, Total cost: 3200.0
+		goods_input_aeroplanes_add = 240                      # Price:   80, Total cost: 19200.0
+		goods_input_radios_add = 80                           # Price:   80, Total cost: 6400.0
+		goods_input_electronic_components_add = 80            # Price:   80, Total cost: 6400.0
+		goods_input_robotics_add = 60                         # Price:   80, Total cost: 4800.0
+		goods_input_launch_capacity_add = 300                 # Price:  200, Total cost: 60000.0
+		goods_input_advanced_materials_add = 5                # Price: 4000, Total cost: 20000.0
+		# Total cost: 120000.0
+	}
 
     battle_modifier = {
-        unit_offense_add = 1200
-        unit_defense_add = 1000
-        unit_morale_loss_add = 3
-        unit_kill_rate_add = 2
-        unit_morale_damage_mult = 4
-        unit_devastation_mult = 0.1
+        unit_offense_add = 2800
+        unit_defense_add = 1800
+        unit_morale_loss_add = 12
+        unit_kill_rate_add = 0.25
+        unit_morale_damage_mult = 0.5
+        unit_devastation_mult = 8
     }
 
-	unlocking_technologies = { orbital_weapon_platforms }
+	unlocking_technologies = { orbital_weapon_platforms }  # era 11
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/OTC2.dds"
@@ -1100,12 +1018,13 @@ combat_unit_type_fleet_carrier = {
     group = combat_unit_group_capital_ship
 
     upkeep_modifier = {
-        goods_input_artillery_add = 4
-        goods_input_ironclads_add = 12
-        goods_input_ammunition_add = 10
-        goods_input_radios_add = 5
-        goods_input_aeroplanes_add = 20
-    }
+		goods_input_artillery_add = 4                         # Price:   70, Total cost: 280.0
+		goods_input_ironclads_add = 12                        # Price:   80, Total cost: 960.0
+		goods_input_ammunition_add = 10                       # Price:   50, Total cost: 500.0
+		goods_input_radios_add = 5                            # Price:   80, Total cost: 400.0
+		goods_input_aeroplanes_add = 20                       # Price:   80, Total cost: 1600.0
+		# Total cost: 3740.0
+	}
 
     battle_modifier = {
         unit_offense_add = 300
@@ -1118,7 +1037,7 @@ combat_unit_type_fleet_carrier = {
         military_formation_movement_speed_mult = 0.2
     }
 
-	unlocking_technologies = { bombing_aircraft }
+	unlocking_technologies = { bombing_aircraft }  # era 6
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/fleet_carrier.dds"
@@ -1133,13 +1052,14 @@ combat_unit_type_nuclear_supercarrier = {
     group = combat_unit_group_capital_ship
 
     upkeep_modifier = {
-        goods_input_artillery_add = 6
-        goods_input_ironclads_add = 15
-        goods_input_ammunition_add = 15
-        goods_input_radios_add = 8
-        goods_input_aeroplanes_add = 40
-        goods_input_electronic_components_add = 5
-    }
+		goods_input_artillery_add = 6                         # Price:   70, Total cost: 420.0
+		goods_input_ironclads_add = 15                        # Price:   80, Total cost: 1200.0
+		goods_input_ammunition_add = 15                       # Price:   50, Total cost: 750.0
+		goods_input_radios_add = 8                            # Price:   80, Total cost: 640.0
+		goods_input_aeroplanes_add = 40                       # Price:   80, Total cost: 3200.0
+		goods_input_electronic_components_add = 5             # Price:   80, Total cost: 400.0
+		# Total cost: 6610.0
+	}
 
     battle_modifier = {
         unit_offense_add = 500
@@ -1153,7 +1073,7 @@ combat_unit_type_nuclear_supercarrier = {
         military_formation_organization_gain_mult = 0.2
     }
 
-    unlocking_technologies = { nuclear_energy }
+    unlocking_technologies = { nuclear_energy }  # era 7
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/nuclear_supercarrier.dds"
@@ -1168,14 +1088,15 @@ combat_unit_type_arsenal_ship = {
     group = combat_unit_group_capital_ship
 
     upkeep_modifier = {
-        goods_input_artillery_add = 8
-        goods_input_ironclads_add = 20
-        goods_input_ammunition_add = 20
-        goods_input_radios_add = 10
-        goods_input_aeroplanes_add = 40
-        goods_input_electronic_components_add = 10
-        goods_input_robotics_add = 5
-    }
+		goods_input_artillery_add = 8                         # Price:   70, Total cost: 560.0
+		goods_input_ironclads_add = 20                        # Price:   80, Total cost: 1600.0
+		goods_input_ammunition_add = 20                       # Price:   50, Total cost: 1000.0
+		goods_input_radios_add = 10                           # Price:   80, Total cost: 800.0
+		goods_input_aeroplanes_add = 40                       # Price:   80, Total cost: 3200.0
+		goods_input_electronic_components_add = 10            # Price:   80, Total cost: 800.0
+		goods_input_robotics_add = 5                          # Price:   80, Total cost: 400.0
+		# Total cost: 8360.0
+	}
 
     battle_modifier = {
         unit_offense_add = 800
@@ -1189,7 +1110,7 @@ combat_unit_type_arsenal_ship = {
         military_formation_organization_gain_mult = 0.3
     }
 
-    unlocking_technologies = { precision_guided_munitions }
+    unlocking_technologies = { precision_guided_munitions }  # era 8
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/arsenal_ship.dds"
@@ -1204,15 +1125,16 @@ combat_unit_type_hypersonic_missile_platform = {
     group = combat_unit_group_capital_ship
 
     upkeep_modifier = {
-        goods_input_artillery_add = 10
-        goods_input_ironclads_add = 25
-        goods_input_ammunition_add = 25
-        goods_input_radios_add = 15
-        goods_input_aeroplanes_add = 40
-        goods_input_electronic_components_add = 15
-        goods_input_robotics_add = 10
-        goods_input_advanced_materials_add = 0.1
-    }
+		goods_input_artillery_add = 10                        # Price:   70, Total cost: 700.0
+		goods_input_ironclads_add = 25                        # Price:   80, Total cost: 2000.0
+		goods_input_ammunition_add = 25                       # Price:   50, Total cost: 1250.0
+		goods_input_radios_add = 15                           # Price:   80, Total cost: 1200.0
+		goods_input_aeroplanes_add = 40                       # Price:   80, Total cost: 3200.0
+		goods_input_electronic_components_add = 15            # Price:   80, Total cost: 1200.0
+		goods_input_robotics_add = 10                         # Price:   80, Total cost: 800.0
+		goods_input_advanced_materials_add = 0.1              # Price: 4000, Total cost: 400.0
+		# Total cost: 10750.0
+	}
 
     battle_modifier = {
         unit_offense_add = 1000
@@ -1226,7 +1148,7 @@ combat_unit_type_hypersonic_missile_platform = {
         military_formation_organization_gain_mult = 0.4
     }
 
-    unlocking_technologies = { hypersonic_weapons }
+    unlocking_technologies = { hypersonic_weapons }  # era 10
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/hypersonic_missile_platform.dds"
@@ -1239,11 +1161,12 @@ combat_unit_type_asw_destroyers = {
     group = combat_unit_group_light_ship
 
     upkeep_modifier = {
-        goods_input_ironclads_add = 5
-        goods_input_ammunition_add = 10
-        goods_input_artillery_add = 3
-        goods_input_radios_add = 10
-    }
+		goods_input_ironclads_add = 5                         # Price:   80, Total cost: 400.0
+		goods_input_ammunition_add = 10                       # Price:   50, Total cost: 500.0
+		goods_input_artillery_add = 3                         # Price:   70, Total cost: 210.0
+		goods_input_radios_add = 10                           # Price:   80, Total cost: 800.0
+		# Total cost: 1910.0
+	}
 
     battle_modifier = {
         unit_offense_add = 80
@@ -1257,7 +1180,7 @@ combat_unit_type_asw_destroyers = {
         military_formation_movement_speed_mult = 0.5
     }
 
-	unlocking_technologies = { sonar }
+	unlocking_technologies = { sonar }  # era 6
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/ASW_destroyer.dds"
@@ -1272,12 +1195,13 @@ combat_unit_type_guided_missile_ship = {
     group = combat_unit_group_light_ship
 
     upkeep_modifier = {
-        goods_input_ironclads_add = 6
-        goods_input_ammunition_add = 12
-        goods_input_artillery_add = 4
-        goods_input_radios_add = 12
-        goods_input_electronic_components_add = 2
-    }
+		goods_input_ironclads_add = 6                         # Price:   80, Total cost: 480.0
+		goods_input_ammunition_add = 12                       # Price:   50, Total cost: 600.0
+		goods_input_artillery_add = 4                         # Price:   70, Total cost: 280.0
+		goods_input_radios_add = 12                           # Price:   80, Total cost: 960.0
+		goods_input_electronic_components_add = 2             # Price:   80, Total cost: 160.0
+		# Total cost: 2480.0
+	}
 
     battle_modifier = {
         unit_offense_add = 120
@@ -1291,7 +1215,7 @@ combat_unit_type_guided_missile_ship = {
         military_formation_movement_speed_mult = 0.6
     }
 
-    unlocking_technologies = { guided_missiles }
+    unlocking_technologies = { guided_missiles }  # era 7
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/guided_missile_ship.dds"
@@ -1306,14 +1230,15 @@ combat_unit_type_pulsed_laser_escort = {
     group = combat_unit_group_light_ship
 
     upkeep_modifier = {
-        goods_input_ironclads_add = 8
-        goods_input_ammunition_add = 14
-        goods_input_artillery_add = 5
-        goods_input_radios_add = 14
-        goods_input_electronic_components_add = 4
-        goods_input_robotics_add = 2
-        goods_input_advanced_materials_add = 0.1
-    }
+		goods_input_ironclads_add = 8                         # Price:   80, Total cost: 640.0
+		goods_input_ammunition_add = 14                       # Price:   50, Total cost: 700.0
+		goods_input_artillery_add = 5                         # Price:   70, Total cost: 350.0
+		goods_input_radios_add = 14                           # Price:   80, Total cost: 1120.0
+		goods_input_electronic_components_add = 4             # Price:   80, Total cost: 320.0
+		goods_input_robotics_add = 2                          # Price:   80, Total cost: 160.0
+		goods_input_advanced_materials_add = 0.1              # Price: 4000, Total cost: 400.0
+		# Total cost: 3690.0
+	}
 
     battle_modifier = {
         unit_offense_add = 200
@@ -1328,7 +1253,7 @@ combat_unit_type_pulsed_laser_escort = {
         military_formation_movement_speed_mult = 0.8
     }
 
-    unlocking_technologies = { directed_energy_weapons }
+    unlocking_technologies = { directed_energy_weapons }  # era 10
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/pulsed_laser_escort.dds"
@@ -1341,12 +1266,13 @@ combat_unit_type_nuclear_submarine = {
     group = combat_unit_group_support_ship
 
     upkeep_modifier = {
-        goods_input_ironclads_add = 4
-        goods_input_artillery_add = 4
-        goods_input_ammunition_add = 5
-        goods_input_radios_add = 3
-        goods_input_electronic_components_add = 4
-    }
+		goods_input_ironclads_add = 4                         # Price:   80, Total cost: 320.0
+		goods_input_artillery_add = 4                         # Price:   70, Total cost: 280.0
+		goods_input_ammunition_add = 5                        # Price:   50, Total cost: 250.0
+		goods_input_radios_add = 3                            # Price:   80, Total cost: 240.0
+		goods_input_electronic_components_add = 4             # Price:   80, Total cost: 320.0
+		# Total cost: 1410.0
+	}
 
     battle_modifier = {
         unit_offense_add = 120
@@ -1359,7 +1285,7 @@ combat_unit_type_nuclear_submarine = {
         military_formation_movement_speed_mult = 0.5
     }
 
-	unlocking_technologies = { advanced_submarine_technology }
+	unlocking_technologies = { advanced_submarine_technology }  $ era 7
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/nuclear_submarine.dds"
@@ -1370,12 +1296,13 @@ combat_unit_type_expeditionary_sea_base = {
     group = combat_unit_group_support_ship
 
     upkeep_modifier = {
-        goods_input_ironclads_add = 6
-        goods_input_artillery_add = 6
-        goods_input_ammunition_add = 8
-        goods_input_radios_add = 4
-        goods_input_electronic_components_add = 6
-    }
+		goods_input_ironclads_add = 6                         # Price:   80, Total cost: 480.0
+		goods_input_artillery_add = 6                         # Price:   70, Total cost: 420.0
+		goods_input_ammunition_add = 8                        # Price:   50, Total cost: 400.0
+		goods_input_radios_add = 4                            # Price:   80, Total cost: 320.0
+		goods_input_electronic_components_add = 6             # Price:   80, Total cost: 480.0
+		# Total cost: 2100.0
+	}
 
     battle_modifier = {
         unit_offense_add = 100
@@ -1388,7 +1315,7 @@ combat_unit_type_expeditionary_sea_base = {
         military_formation_organization_gain_mult = 1
     }
 
-    unlocking_technologies = { rapid_deployment_forces }
+    unlocking_technologies = { rapid_deployment_forces }  # era 9
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/expeditionary_sea_base.dds"
@@ -1403,13 +1330,14 @@ combat_unit_type_swarm_coordination_vessel = {
     group = combat_unit_group_support_ship
 
     upkeep_modifier = {
-        goods_input_ironclads_add = 8
-        goods_input_artillery_add = 8
-        goods_input_ammunition_add = 10
-        goods_input_radios_add = 5
-        goods_input_electronic_components_add = 8
-        goods_input_robotics_add = 4
-    }
+		goods_input_ironclads_add = 8                         # Price:   80, Total cost: 640.0
+		goods_input_artillery_add = 8                         # Price:   70, Total cost: 560.0
+		goods_input_ammunition_add = 10                       # Price:   50, Total cost: 500.0
+		goods_input_radios_add = 5                            # Price:   80, Total cost: 400.0
+		goods_input_electronic_components_add = 8             # Price:   80, Total cost: 640.0
+		goods_input_robotics_add = 4                          # Price:   80, Total cost: 320.0
+		# Total cost: 3060.0
+	}
 
     battle_modifier = {
         unit_offense_add = 500
@@ -1425,9 +1353,115 @@ combat_unit_type_swarm_coordination_vessel = {
         military_formation_organization_gain_mult = 0.5
     }
 
-    unlocking_technologies = { swarm_technology }
+    unlocking_technologies = { swarm_technology }  # era 10
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/swarm_coordination_vessel.dds"
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

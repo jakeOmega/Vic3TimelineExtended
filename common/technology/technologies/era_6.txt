@@ -107,18 +107,22 @@ bombing_aircraft = {
 	}
 }
 
-advanced_military_aircraft = {
-	# WW2 aircraft through jet aircraft
+nuclear_weapons = {
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
+	texture = "gfx/interface/icons/invention_icons/multilateral_alliances.dds"
 	category = military
 	
 	unlocking_technologies = {	
-		bombing_aircraft
-		radar
+		rocketry
 	}
-
 	modifier = {
+		country_diplomatic_play_maneuvers_add = 25
+		country_influence_mult = 0.2
+		country_prestige_mult = 0.2
+		country_infamy_generation_mult = -0.25
+		country_weekly_innovation_max_add = 50
+		country_tech_spread_add = 40
+		state_bureaucracy_population_base_cost_factor_mult = 0.5
 	}
 	
 	ai_weight = {

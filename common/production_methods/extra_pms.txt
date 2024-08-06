@@ -4081,15 +4081,17 @@ pm_regulated_augmentation_market = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			# Input goods
 			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
 			goods_input_digital_access_add = 5                   # Price:  120, Total cost: 600.0
 			goods_input_digital_assets_add = 5                   # Price:  100, Total cost: 500.0
+			# Output goods
 			goods_output_services_add = 50                       # Price:   30, Total cost: 1500.0
 			# Total input cost: 1500.0
 			# Total output cost: 1500.0
 			# Profit: 0.0
 			# Profit margin: 0.00%
-			# Zero profit price multiplier: 0.00
+			# Zero profit price multiplier: 1.00
 			# Employment: 0
 			# Wage breakeven: 0.00
 		}
@@ -4106,16 +4108,18 @@ pm_unrestricted_augmentation = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			# Input goods
 			goods_input_electronic_components_add = 10           # Price:   80, Total cost: 800.0
 			goods_input_digital_access_add = 5                   # Price:  120, Total cost: 600.0
 			goods_input_digital_assets_add = 5                   # Price:  100, Total cost: 500.0
+			# Output goods
 			goods_output_services_add = 50                       # Price:   30, Total cost: 1500.0
 			goods_output_fine_art_add = 2                        # Price:  200, Total cost: 400.0
 			# Total input cost: 1900.0
 			# Total output cost: 1900.0
 			# Profit: 0.0
 			# Profit margin: 0.00%
-			# Zero profit price multiplier: 0.00
+			# Zero profit price multiplier: 1.00
 			# Employment: 0
 			# Wage breakeven: 0.00
 		}
@@ -8388,8 +8392,8 @@ pm_autonomous_highway = {
 			# Profit: 3400.0
 			# Profit margin: 29.31%
 			# Zero profit price multiplier: 0.77
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 20
+			# Wage breakeven: 170.00
 		}
 		level_scaled = {
 			# employment
@@ -9106,8 +9110,8 @@ pm_programmable_food_synthesis = {
 			# Profit: 3700.0
 			# Profit margin: 18.23%
 			# Zero profit price multiplier: 0.85
-			# Employment: 4500
-			# Wage breakeven: 0.82
+			# Employment: 4010
+			# Wage breakeven: 0.92
 		}
 
 		level_scaled = {
@@ -12858,7 +12862,16 @@ pm_principle_engineering_and_logistics = {
 
 	building_modifiers = {
 		workforce_scaled = {
-			goods_output_construction_add = 0.05
+			# Input goods
+			# Output goods
+			goods_output_construction_add = 0.05                 # Price: 1000, Total cost: 50.0
+			# Total input cost: 0
+			# Total output cost: 50.0
+			# Profit: 50.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 	}
 
@@ -12873,3 +12886,132 @@ pm_engineering_and_logistics_no_effect = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 	replacement_if_valid = pm_principle_engineering_and_logistics
 } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
