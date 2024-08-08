@@ -996,6 +996,14 @@ country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool = {
 	}
 }
 
+country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
 building_highway_throughput_add = {
 	color = good
 	percent = yes

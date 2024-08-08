@@ -71,8 +71,8 @@ mobilization_option_robotic_assistance = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_robotics_add = 4                          # Price:   80, Total cost: 320.0
-		# Total cost: 320.0
+		goods_input_robotics_add = 10                         # Price:   80, Total cost: 800.0
+		# Total cost: 800.0
 	}
 	unit_modifier = {
 		unit_morale_recovery_mult = 0.25
@@ -303,27 +303,6 @@ mobilization_option_appliances = {
 
 	group = supplements
 }
-
-#mobilization_option_bonus_pay = {
-#	texture = "gfx/interface/icons/mobilization_options/liquor.dds"
-#
-#	possible = {
-#		always = no
-#	}
-#	upkeep_modifier = {
-		goods_input_gold_add = 0.5                            # Price:  100, Total cost: 50.0
-		# Total cost: 50.0
-	}
-#	unit_modifier = {
-#		unit_morale_recovery_mult = 0.1
-#	}
-#	ai_weight = {
-#		value = 1
-#	}
-#
-#	group = supplements
-#}
-
 
 mobilization_option_forced_march = {
 	texture = "gfx/interface/icons/mobilization_options/forced_march.dds"
@@ -646,8 +625,8 @@ mobilization_option_space_recon = {
 	}
 	upkeep_modifier = {
 		goods_input_aeroplanes_add = 1                        # Price:   80, Total cost: 80.0
-		goods_input_launch_capacity_add = 3                   # Price:  200, Total cost: 600.0
-		# Total cost: 680.0
+		goods_input_launch_capacity_add = 5                   # Price:  200, Total cost: 1000.0
+		# Total cost: 1080.0
 	}
 	unit_modifier = {
 		unit_occupation_mult = 1
@@ -695,8 +674,8 @@ mobilization_option_molecular_scanners = {
 		molecular_assemblers
 	}
 	upkeep_modifier = {
-		goods_input_advanced_materials_add = 0.1              # Price: 4000, Total cost: 400.0
-		# Total cost: 400.0
+		goods_input_advanced_materials_add = 1                # Price: 4000, Total cost: 4000.0
+		# Total cost: 4000.0
 	}
 	unit_modifier = {
 		unit_occupation_mult = 1
@@ -746,9 +725,9 @@ mobilization_option_radar = {
 		radar
 	}
 	upkeep_modifier = {
-		goods_input_consumer_appliances_add = 1               # Price:   80, Total cost: 80.0
-		goods_input_radios_add = 4                            # Price:   80, Total cost: 320.0
-		# Total cost: 400.0
+		goods_input_consumer_appliances_add = 2.5             # Price:   80, Total cost: 200.0
+		goods_input_radios_add = 5                            # Price:   80, Total cost: 400.0
+		# Total cost: 600.0
 	}
 	unit_modifier = {
 		unit_morale_loss_mult = -0.1
@@ -797,10 +776,10 @@ mobilization_option_night_vision_gear = {
 		infrared_night_vision
 	}
 	upkeep_modifier = {
-		goods_input_electronic_components_add = 3             # Price:   80, Total cost: 240.0
-		goods_input_consumer_appliances_add = 1               # Price:   80, Total cost: 80.0
-		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
-		# Total cost: 400.0
+		goods_input_electronic_components_add = 5             # Price:   80, Total cost: 400.0
+		goods_input_consumer_appliances_add = 2.5             # Price:   80, Total cost: 200.0
+		goods_input_radios_add = 2.5                          # Price:   80, Total cost: 200.0
+		# Total cost: 800.0
 	}
 	unit_modifier = {
 		unit_morale_loss_mult = -0.1
@@ -853,11 +832,11 @@ mobilization_option_missile_defense_system = {
 		missile_defense_systems
 	}
 	upkeep_modifier = {
-		goods_input_ammunition_add = 6                        # Price:   50, Total cost: 300.0
-		goods_input_electronic_components_add = 3             # Price:   80, Total cost: 240.0
-		goods_input_consumer_appliances_add = 1               # Price:   80, Total cost: 80.0
-		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
-		# Total cost: 700.0
+		goods_input_ammunition_add = 10                       # Price:   50, Total cost: 500.0
+		goods_input_electronic_components_add = 5             # Price:   80, Total cost: 400.0
+		goods_input_consumer_appliances_add = 2.5             # Price:   80, Total cost: 200.0
+		goods_input_radios_add = 2.5                          # Price:   80, Total cost: 200.0
+		# Total cost: 1300.0
 	}
 	unit_modifier = {
 		unit_morale_loss_mult = -0.1
@@ -910,10 +889,10 @@ mobilization_option_cyberwarfare_team = {
 	}
 	upkeep_modifier = {
 		goods_input_digital_access_add = 5                    # Price:  120, Total cost: 600.0
-		goods_input_digital_assets_add = 1                    # Price:  100, Total cost: 100.0
-		goods_input_electronic_components_add = 2             # Price:   80, Total cost: 160.0
-		goods_input_consumer_appliances_add = 1               # Price:   80, Total cost: 80.0
-		# Total cost: 940.0
+		goods_input_digital_assets_add = 2.5                  # Price:  100, Total cost: 250.0
+		goods_input_electronic_components_add = 5             # Price:   80, Total cost: 400.0
+		goods_input_consumer_appliances_add = 5               # Price:   80, Total cost: 400.0
+		# Total cost: 1650.0
 	}
 	unit_modifier = {
 		unit_morale_damage_mult = 0.2
@@ -968,8 +947,8 @@ mobilization_option_electronic_warfare = {
 	upkeep_modifier = {
 		goods_input_consumer_appliances_add = 5               # Price:   80, Total cost: 400.0
 		goods_input_electronic_components_add = 5             # Price:   80, Total cost: 400.0
-		goods_input_digital_assets_add = 1                    # Price:  100, Total cost: 100.0
-		# Total cost: 900.0
+		goods_input_digital_assets_add = 5                    # Price:  100, Total cost: 500.0
+		# Total cost: 1300.0
 	}
 	unit_modifier = {
 		unit_morale_damage_mult = 0.2
@@ -1018,11 +997,11 @@ mobilization_option_exoskeleton_suits = {
 		advanced_body_armor
 	}
 	upkeep_modifier = {
-		goods_input_robotics_add = 4                          # Price:   80, Total cost: 320.0
-		goods_input_ammunition_add = 8                        # Price:   50, Total cost: 400.0
-		goods_input_consumer_appliances_add = 1               # Price:   80, Total cost: 80.0
-		goods_input_electronic_components_add = 1             # Price:   80, Total cost: 80.0
-		# Total cost: 880.0
+		goods_input_robotics_add = 20                         # Price:   80, Total cost: 1600.0
+		goods_input_ammunition_add = 40                       # Price:   50, Total cost: 2000.0
+		goods_input_consumer_appliances_add = 5               # Price:   80, Total cost: 400.0
+		goods_input_electronic_components_add = 10            # Price:   80, Total cost: 800.0
+		# Total cost: 4800.0
 	}
 	unit_modifier = {
 		unit_offense_mult = 0.15
@@ -1219,11 +1198,11 @@ mobilization_option_medevac_helicopters = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_fabric_add = 1                            # Price:   20, Total cost: 20.0
+		goods_input_fabric_add = 2                            # Price:   20, Total cost: 40.0
 		goods_input_liquor_add = 2                            # Price:   30, Total cost: 60.0
-		goods_input_tools_add = 1                             # Price:   40, Total cost: 40.0
-		goods_input_aeroplanes_add = 1                        # Price:   80, Total cost: 80.0
-		# Total cost: 200.0
+		goods_input_tools_add = 2                             # Price:   40, Total cost: 80.0
+		goods_input_aeroplanes_add = 4                        # Price:   80, Total cost: 320.0
+		# Total cost: 500.0
 	}
 	unit_modifier = {
 		unit_recovery_rate_add = 0.80	
@@ -1234,149 +1213,6 @@ mobilization_option_medevac_helicopters = {
 
     group = medic_support
 }
-
-# mobilization_option_extra_training = {
-		# Total cost: 0
-	texture = "gfx/interface/icons/mobilization_options/field_hospitals.dds"
-
-		# Total cost: 0
-	possible = {
-		# Total cost: 0
-		always = no
-		# Total cost: 0
-		OR = {
-		# Total cost: 0
-			has_law = law_type:law_professional_army
-		# Total cost: 0
-			has_law = law_type:law_mass_conscription
-		# Total cost: 0
-			has_law = law_type:law_national_guard
-		goods_input_fabric_add = 1                            # Price:   20, Total cost: 20.0
-		goods_input_liquor_add = 2                            # Price:   30, Total cost: 60.0
-		goods_input_tools_add = 1                             # Price:   40, Total cost: 40.0
-		goods_input_aeroplanes_add = 1                        # Price:   80, Total cost: 80.0
-		# Total cost: 200.0
-		}
-# 	}
-
-# 	upkeep_modifier = {
-# 	}
-
-# 	on_activate = {
-# 		custom_tooltip = {
-# 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
-# 			country = {
-# 				every_scope_state = {
-# 					set_variable = {
-# 						name = training_effect_size
-# 						value = 0
-# 					}
-# 					owner = {
-# 						every_military_formation = {
-# 							limit = {
-# 								OR = {
-# 									has_mobilization_option = mobilization_option:mobilization_option_extra_training
-# 									this = root.military_formation
-# 								}
-# 							}
-# 							every_combat_unit = {
-# 								limit = {
-# 									building.state = PREV.PREV.PREV
-# 								}
-# 								add = 1
-# 							}
-# 						}
-# 					}
-# 					every_scope_building = {
-# 						limit = {
-# 							OR = {
-# 								is_building_type = building_barracks
-# 								is_building_type = building_conscription_center
-# 							}
-# 						}
-# 						remove_modifier = extra_training_modifier
-# 						add_modifier = {
-# 							name = extra_training_modifier
-# 							multiplier = PREV.training_effect_size
-# 						}
-# 					}
-# 				}
-# 			}
-# 		}
-# 	}
-
-# 	on_deactivate = {
-# 	}
-
-# 	unit_modifier = {
-# 		military_formation_mobilization_speed_mult = -0.75
-# 	}
-# 	ai_weight = {
-# 		value = 1
-# 	}
-
-#     group = training
-# }
-
-# mobilization_option_flight_simulators = {
-# 	texture = "gfx/interface/icons/mobilization_options/field_hospitals.dds"
-
-# 	possible = {
-# 		AND = {
-# 			always = no
-# 			scope:military_formation = {
-# 				any_combat_unit = {
-# 					OR = {
-# 						has_unit_type = unit_type:combat_unit_type_bomber_aircraft
-# 						has_unit_type = unit_type:combat_unit_type_advanced_bomber_aircraft
-# 						has_unit_type = unit_type:combat_unit_type_jet_powered_fighters
-# 						has_unit_type = unit_type:combat_unit_type_stealth_aircraft
-# 						has_unit_type = unit_type:combat_unit_type_orbital_tactical_vehicles
-# 						has_unit_type = unit_type:combat_unit_type_orbital_weapons_platforms
-# 					}
-# 				}
-# 			}
-# 			OR = {
-# 				has_law = law_type:law_professional_army
-# 				has_law = law_type:law_mass_conscription
-# 				has_law = law_type:law_national_guard
-# 			}
-# 		}
-# 	}
-
-# 	unlocking_technologies = {
-# 		advanced_military_aircraft
-# 	}
-
-# 	upkeep_modifier = {
-		goods_input_consumer_appliances_add = 1               # Price:   80, Total cost: 80.0
-		goods_input_electronic_components_add = 1             # Price:   80, Total cost: 80.0
-		# Total cost: 160.0
-	}
-
-# 	on_deactivate = {
-# 		if = {
-# 			limit = {
-# 				is_mobilized = no
-# 				scope:country = { is_at_war = yes }
-# 			}
-# 			scope:country = {
-# 				every_scope_war = {
-# 					add_war_war_support = { target = PREV value = { ROOT = { value = war_support_training_decrease}} }
-# 				}
-# 			}
-# 		}
-# 	}
-
-# 	unit_modifier = {
-# 		unit_army_experience_gain_mult = 0.2
-# 	}
-# 	ai_weight = {
-# 		value = 1
-# 	}
-
-#     group = training
-# }
 
 mobilization_option_voluntary_enhancement = {
 	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
@@ -1408,9 +1244,9 @@ mobilization_option_voluntary_enhancement = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_robotics_add = 2                          # Price:   80, Total cost: 160.0
-		goods_input_electronic_components_add = 4             # Price:   80, Total cost: 320.0
-		# Total cost: 480.0
+		goods_input_robotics_add = 10                         # Price:   80, Total cost: 800.0
+		goods_input_electronic_components_add = 20            # Price:   80, Total cost: 1600.0
+		# Total cost: 2400.0
 	}
 	unit_modifier = {
 		unit_offense_mult = 0.25
@@ -1453,9 +1289,9 @@ mobilization_option_mandatory_enhancement = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_robotics_add = 4                          # Price:   80, Total cost: 320.0
-		goods_input_electronic_components_add = 8             # Price:   80, Total cost: 640.0
-		# Total cost: 960.0
+		goods_input_robotics_add = 20                         # Price:   80, Total cost: 1600.0
+		goods_input_electronic_components_add = 40            # Price:   80, Total cost: 3200.0
+		# Total cost: 4800.0
 	}
 	unit_modifier = {
 		unit_offense_mult = 0.5
@@ -1467,6 +1303,28 @@ mobilization_option_mandatory_enhancement = {
 
     group = training
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

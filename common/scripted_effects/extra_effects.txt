@@ -515,3 +515,68 @@ change_acceptance = {
 		}
 	}
 }
+
+update_countrys_bloc_principles_unity = {
+	if = {
+		limit = { is_power_bloc_leader = yes }
+		power_bloc = {
+			if = {
+				limit = { has_principle = principle:principle_cultural_plurality_1 }
+				remove_principle = principle_cultural_plurality_1
+				add_principle = principle_cultural_unity_1
+			}
+			else_if = {
+				limit = { has_principle = principle:principle_cultural_plurality_2 }
+				remove_principle = principle_cultural_plurality_2
+				add_principle = principle_cultural_unity_2
+			}
+			else_if = {
+				limit = { has_principle = principle:principle_cultural_plurality_3 }
+				remove_principle = principle_cultural_plurality_3
+				add_principle = principle_cultural_unity_3
+			}
+			else_if = {
+				limit = { has_principle = principle:principle_cultural_plurality_4 }
+				remove_principle = principle_cultural_plurality_4
+				add_principle = principle_cultural_unity_4
+			}
+			else_if = {
+				limit = { has_principle = principle:principle_cultural_plurality_5 }
+				remove_principle = principle_cultural_plurality_5
+				add_principle = principle_cultural_unity_5
+			}
+		}
+	}
+}
+update_countrys_bloc_principles_plurality = {
+	if = {
+		limit = { is_power_bloc_leader = yes }
+		power_bloc = {
+			if = {
+				limit = { has_principle = principle:principle_cultural_unity_1 }
+				remove_principle = principle_cultural_unity_1
+				add_principle = principle_cultural_plurality_1
+			}
+			else_if = {
+				limit = { has_principle = principle:principle_cultural_unity_2 }
+				remove_principle = principle_cultural_unity_2
+				add_principle = principle_cultural_plurality_2
+			}
+			else_if = {
+				limit = { has_principle = principle:principle_cultural_unity_3 }
+				remove_principle = principle_cultural_unity_3
+				add_principle = principle_cultural_plurality_3
+			}
+			else_if = {
+				limit = { has_principle = principle:principle_cultural_unity_4 }
+				remove_principle = principle_cultural_unity_4
+				add_principle = principle_cultural_plurality_4
+			}
+			else_if = {
+				limit = { has_principle = principle:principle_cultural_unity_5 }
+				remove_principle = principle_cultural_unity_5
+				add_principle = principle_cultural_plurality_5
+			}
+		}
+	}
+}

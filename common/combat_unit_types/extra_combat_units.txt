@@ -89,7 +89,6 @@ combat_unit_type_swarm_bots = {
     battle_modifier = {
         unit_offense_add = 240
         unit_defense_add = 700
-        unit_morale_loss_add = 1
         unit_devastation_mult = 2
         unit_provinces_lost_mult = -0.25
     }
@@ -122,7 +121,6 @@ combat_unit_type_grey_goo = {
     battle_modifier = {
         unit_offense_add = 480
         unit_defense_add = 1400
-        unit_morale_loss_add = 1
         unit_devastation_mult = 4
         unit_provinces_lost_mult = -0.25
     }
@@ -1359,6 +1357,28 @@ combat_unit_type_swarm_coordination_vessel = {
         texture = "gfx/unit_illustrations/swarm_coordination_vessel.dds"
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

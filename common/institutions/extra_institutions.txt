@@ -191,8 +191,8 @@ institution_migration_controls = {
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 
 	modifier = {
-		state_migration_quota_mult = -0.2
-		country_mass_migration_attraction_mult = -0.2
-		state_radicals_from_sol_change_accepted_culture_mult = -0.1
+		state_migration_quota_mult = -0.083
+		country_mass_migration_attraction_mult = -0.167
+		country_leverage_resistance_mult = 0.083
 	}
 }
