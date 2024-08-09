@@ -481,6 +481,7 @@ nuclear_weapon_program_monthly_progress = {
 		limit = { var:nuclear_weapons_program_first_nuke_done > 0 }
 		multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
 	}
+	multiply = 100
 }
 nuclear_weapon_program_funding_step = 50
 nuclear_weapon_program_goal_value = 100
@@ -488,4 +489,19 @@ nuclear_weapon_program_goal_value = 100
 nuclear_weapons_program_current_cost = {
 	value = var:nuclear_weapons_program_funding
 	multiply = nuclear_weapon_program_funding_step
+}
+
+nuclear_strike_success_chance = {
+	value = modifier:country_nuclear_weapon_attack_success_add
+	scope:target_country = {
+		subtract = modifier:country_nuclear_weapon_defense_chance_add
+	}
+	multiply = 100
+	max = 100
+	min = 5
+}
+
+nuclear_strike_fail_chance = {
+	value = 100
+	subtract = nuclear_strike_success_chance
 }

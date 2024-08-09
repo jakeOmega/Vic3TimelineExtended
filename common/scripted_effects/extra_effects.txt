@@ -580,3 +580,32 @@ update_countrys_bloc_principles_plurality = {
 		}
 	}
 }
+
+nuclear_industrial_strike = {
+	change_infamy = 25
+	change_variable = {
+		name = nuclear_weapon_stockpile
+		subtract = 1
+	}
+	scope:second_state = {
+		state_region = {
+			add_devastation = 50
+		}
+		kill_population_percent_in_state = {
+			percent = 0.1
+		}
+		add_modifier = {
+			name = nuclear_strike_aftermath
+			months = short_modifier_time
+			is_decaying = yes
+		}
+	}
+	scope:target_country = {
+		every_scope_war = {
+			add_war_war_support = {
+				target = PREV
+				value = -25
+			}
+		}
+	}
+}

@@ -216,28 +216,6 @@ stealth_technology = {
 	}
 }
 
-tactical_nuclear_weapons = {
-	# Powerful, extremely high collateral damage PM for barracks - also increases infamy?
-	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
-	category = military
-	
-	unlocking_technologies = {	
-		ICBMs
-	}
-	
-	modifier = {
-		country_diplomatic_play_maneuvers_add = 25
-		country_prestige_mult = 0.1
-		country_infamy_generation_mult = -0.1
-		country_weekly_innovation_max_add = 50
-	}
-	
-	ai_weight = {
-		value = 1
-	}
-}
-
 environmental_movement = {
 	# TODO
 	era = era_8

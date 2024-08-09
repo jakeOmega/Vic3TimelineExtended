@@ -176,6 +176,10 @@ hypersonic_weapons = {
 		precision_guided_munitions
 		supersonic_aircraft
 	}
+
+	modifier = {
+		country_nuclear_weapon_attack_success_add = 0.5
+	}
 	
 	ai_weight = {
 		value = 1
@@ -213,6 +217,7 @@ directed_energy_weapons = {
 	modifier = {
 		unit_navy_defense_mult = 1
 		unit_navy_offense_mult = 1
+		country_nuclear_weapon_defense_chance_add = 0.5
 	}
 	
 	ai_weight = {

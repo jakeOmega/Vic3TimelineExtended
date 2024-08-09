@@ -45,3 +45,11 @@ nuclear_strike_aftermath = {
 	state_standard_of_living_add = -3
 	state_mortality_mult = 0.25
 }
+
+tactical_nuke_aftermath = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_infrastructure_mult = -0.1
+	state_standard_of_living_add = -1
+	state_mortality_mult = 0.05
+	building_training_rate_mult = -1
+}

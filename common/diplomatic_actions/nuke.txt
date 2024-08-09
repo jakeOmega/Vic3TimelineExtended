@@ -21,33 +21,80 @@ nuke_diplo_action = {
     }
     
 	accept_effect = {
-        change_infamy = 25
-        change_variable = {
-            name = nuclear_weapon_stockpile
-            subtract = 1
-        }
-        scope:second_state = {
-            state_region = {
-                add_devastation = 50
-            }
-            kill_population_percent_in_state = {
-                percent = 0.05
-            }
-            add_modifier = {
-                name = nuclear_strike_aftermath
-                months = short_modifier_time
-                is_decaying = yes
-            }
-        }
-        scope:target_country = {
-            every_scope_war = {
-                add_war_war_support = {
-                    target = PREV
-                    value = -25
+        save_scope_as = attacking_country
+        random_list = {
+            0 = {
+                modifier = nuclear_strike_success_chance
+                nuclear_industrial_strike = yes
+                scope:target_country = {
+                    trigger_event = nuclear_weapon_events.1
                 }
+                trigger_event = nuclear_weapon_events.2
+            }
+            0 = {
+                modifier = nuclear_strike_fail_chance
+                change_infamy = 5
+                scope:target_country = {
+                    trigger_event = nuclear_weapon_events.3
+                }
+                trigger_event = nuclear_weapon_events.4
             }
         }
     }
 
 	is_hostile = yes
+
+    ai = {
+		evaluation_chance = {
+            value = enemy_occupation
+            multiply = 10
+            if = {
+                limit = {
+                    any_scope_war = {
+                        has_war_exhaustion = {
+                            target = ROOT
+                            value > 100
+                        }
+                    }
+                }
+                multiply = 5
+            }
+            if = {
+                limit = {
+                    infamy < 25
+                }
+                multiply = 2
+            }
+            if = {
+                limit = {
+                    infamy > 75
+                }
+                multiply = 0.25
+            }
+        }
+
+		will_select_as_second_state = {
+            value = gdp
+            if = {
+                limit = {has_modifier=nuclear_strike_aftermath}
+                multiply = 0.1
+            }
+            if = {
+                limit = { is_incorporated = no }
+                multiply = 0.1
+            }
+        }
+		
+		will_propose_with_states = {} # Checked before will_propose = {} to further cut down on state combinations the AI will do a full evaluation for
+	
+		will_propose = {} # Trigger for if AI will consider proposing this action (their acceptance if asked still has to be positive if action requires acceptance), default evaluates to true
+		will_break = {} # Trigger for if AI will consider breaking off an existing pact of this action (their acceptance as if asked still has to be significantly negative if action requires acceptance), default evaluates to true
+		
+		will_propose_even_if_not_accepted = {} # Trigger for if AI will propose an action even if they think it's going to be declined, checked after will_propose
+		
+		accept_score = {} # If this value evaluates to above zero, AI will accept this action if proposed
+		accept_break_score = {} # If this value evaluates to above zero, AI will accept breaking this pact if proposed
+
+		propose_score = {}
+	}
 }

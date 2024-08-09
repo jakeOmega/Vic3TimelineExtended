@@ -142,6 +142,7 @@ nuclear_weapons = {
 		country_weekly_innovation_max_add = 50
 		country_tech_spread_add = 40
 		state_bureaucracy_population_base_cost_factor_mult = 0.5
+		country_nuclear_weapon_attack_success_add = 0.5
 	}
 	
 	ai_weight = {

@@ -1,5 +1,5 @@
 je_nuclear_program = {
-	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
 
 	group = je_group_foreign_affairs
 
@@ -67,19 +67,29 @@ je_nuclear_program = {
 				name = nuclear_weapon_program_progress
 				add = nuclear_weapon_program_monthly_progress
 			}
-            if = {
+            while = {
                 limit = {var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value}
-                set_variable = {
+                change_variable = {
                     name = nuclear_weapon_program_progress
-                    value = 0
+                    subtract = nuclear_weapon_program_goal_value
                 }
                 change_variable = {
                     name = nuclear_weapon_stockpile
                     add = 1
                 }
-                set_variable = {
-                    name = nuclear_weapons_program_first_nuke_done
-                    value = 1
+                if = {
+                    limit = { var:nuclear_weapons_program_first_nuke_done = 0 }
+                    set_variable = {
+                        name = nuclear_weapons_program_first_nuke_done
+                        value = 1
+                    }
+                    save_scope_as = first_nuke_country
+                    every_country = {
+                        limit = {
+                            NOT = { THIS = scope:first_nuke_country }
+                        }
+                        trigger_event = { id = nuclear_weapon_events.9 days = 14 }
+                    }
                 }
             }
 		}

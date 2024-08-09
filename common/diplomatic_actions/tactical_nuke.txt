@@ -1,0 +1,77 @@
+tactical_nuke_diplo_action = {
+    groups= {
+		general
+	}
+	requires_approval = no
+
+	state_selection = second_required
+    second_state_list = second_country
+	
+	show_confirmation_box = yes
+
+	possible = {
+        has_technology_researched = tactical_nuclear_weapons
+        has_variable = nuclear_weapon_stockpile
+        var:nuclear_weapon_stockpile > 0
+    }
+
+	second_state_trigger = {
+        owner = {
+            has_war_with = scope:country
+            has_building = building_barracks
+        }
+    }
+    
+	accept_effect = {
+        random_list = {
+            0 = {
+                modifier = nuclear_strike_success_chance
+                change_infamy = 10
+                scope:second_state = {
+                    state_region = {
+                        add_devastation = 25
+                    }
+                    kill_population_percent_in_state = {
+                        percent = 0.5
+                        pop_type = soldiers
+                    }
+                    kill_population_percent_in_state = {
+                        percent = 0.5
+                        pop_type = officers
+                    }
+                    kill_population_percent_in_state = {
+                        percent = 0.005
+                    }
+                    add_modifier = {
+                        name = tactical_nuke_aftermath
+                        months = short_modifier_time
+                        is_decaying = yes
+                    }
+                }
+
+                scope:target_country = {
+                    every_scope_war = {
+                        add_war_war_support = {
+                            target = PREV
+                            value = -15
+                        }
+                    }
+                }
+
+                scope:target_country = {
+                    trigger_event = nuclear_weapon_events.5
+                }
+                trigger_event = nuclear_weapon_events.6
+            }
+            0 = {
+                modifier = nuclear_strike_fail_chance
+                scope:target_country = {
+                    trigger_event = nuclear_weapon_events.7
+                }
+                trigger_event = nuclear_weapon_events.8
+            }
+        }
+    }
+
+	is_hostile = yes
+}

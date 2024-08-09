@@ -1039,3 +1039,13 @@ state_academics_investment_pool_contribution_add = {
 	color = good
 	percent = yes
 }
+
+country_nuclear_weapon_attack_success_add = {
+	color = good
+	percent = yes
+}
+
+country_nuclear_weapon_defense_chance_add = {
+	color = good
+	percent = yes
+}

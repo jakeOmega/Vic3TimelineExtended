@@ -176,6 +176,11 @@ orbital_weapon_platforms = {
 		space_militarization
 		asteroid_mining
 	}
+
+	modifier = {
+		country_nuclear_weapon_attack_success_add = 0.5
+		country_nuclear_weapon_defense_chance_add = 0.5
+	}
 	
 	ai_weight = {
 		value = 1

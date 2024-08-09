@@ -319,11 +319,33 @@ ICBMs = {
 	modifier = {
 		country_diplomatic_play_maneuvers_add = 50
 		country_infamy_generation_mult = -0.15
+		country_nuclear_weapon_attack_success_add = 0.5
 	}
 	
 	unlocking_technologies = {	
 		guided_missiles 
 		nuclear_weapons
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+tactical_nuclear_weapons = {
+	era = era_7
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		ICBMs
+	}
+	
+	modifier = {
+		country_diplomatic_play_maneuvers_add = 25
+		country_prestige_mult = 0.1
+		country_infamy_generation_mult = -0.1
+		country_weekly_innovation_max_add = 50
 	}
 	
 	ai_weight = {

@@ -192,6 +192,7 @@ missile_defense_systems = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		unit_navy_defense_mult = 0.3
+		country_nuclear_weapon_defense_chance_add = 0.5
 	}
 	
 	ai_weight = {
