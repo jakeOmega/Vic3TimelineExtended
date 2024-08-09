@@ -26,7 +26,7 @@ robotics = {
 }
 
 digital_assets = {
-	texture = "gfx/interface/icons/goods_icons/digital_access.dds"
+	texture = "gfx/interface/icons/goods_icons/software.dds"
 	cost = 100 
 	category = luxury
 	

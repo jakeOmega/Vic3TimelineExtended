@@ -730,7 +730,7 @@ building_aeroplanes_industry = {
 
 building_airport = {
 	building_group = bg_private_infrastructure	
-	texture = "gfx/interface/icons/goods_icons/aeroplanes.dds"
+	texture = "gfx/interface/icons/building_icons/airport.dds"
 	
 	enable_air_connection = yes # does this do anything??
 	has_max_level = yes
@@ -750,7 +750,7 @@ building_airport = {
 
 building_highway = {
 	building_group = bg_private_infrastructure	
-	texture = "gfx/interface/icons/goods_icons/automobiles.dds"
+	texture = "gfx/interface/icons/building_icons/highway.dds"
 
 	has_max_level = yes
 	
@@ -769,7 +769,7 @@ building_highway = {
 
 building_software_industry = {
 	building_group = bg_light_industry
-	texture = "gfx/interface/icons/goods_icons/digital_access.dds"
+	texture = "gfx/interface/icons/goods_icons/software.dds"
 	
 	unlocking_technologies = {
 		computer_networks
@@ -831,7 +831,7 @@ building_hydro_plant = {
 
 building_nuclear_plant = {
 	building_group = bg_power
-	texture = "gfx/interface/icons/building_icons/power_plant.dds"
+	texture = "gfx/interface/icons/building_icons/nuclear_plant.dds"
 	
 	production_method_groups = {
 		pmg_base_building_nuclear_power
@@ -849,7 +849,7 @@ building_nuclear_plant = {
 
 building_fusion_plant = {
 	building_group = bg_power
-	texture = "gfx/interface/icons/building_icons/power_plant.dds"
+	texture = "gfx/interface/icons/building_icons/fusion_plant.dds"
 	
 	production_method_groups = {
 		pmg_base_building_fusion_power
@@ -867,7 +867,7 @@ building_fusion_plant = {
 
 building_renewable_energy_plant = {
 	building_group = bg_power
-	texture = "gfx/interface/icons/building_icons/power_plant.dds"
+	texture = "gfx/interface/icons/building_icons/renewable_plant.dds"
 	
 	production_method_groups = {
 		pmg_base_building_renewable_power
@@ -985,7 +985,7 @@ building_launch_facility = {
 
 building_space_elevator_construction_site = {
 	building_group = bg_government	
-	texture = "gfx/interface/icons/goods_icons/rocket.dds"
+	texture = "gfx/interface/icons/building_icons/space_elevator_construction_site.dds"
 	
 	unlocking_technologies = {
 		space_elevator
@@ -1102,7 +1102,7 @@ building_space_elevator_construction_site = {
 
 building_space_elevator = {
 	building_group = bg_private_infrastructure	
-	texture = "gfx/interface/icons/goods_icons/rocket.dds"
+	texture = "gfx/interface/icons/building_icons/space_elevator.dds"
 
 	production_method_groups = {
 		pmg_base_building_space_elevator
@@ -1193,7 +1193,7 @@ building_space_program = {
 
 building_national_park = {
 	building_group = bg_parks	
-	texture = "gfx/interface/icons/building_icons/logging_camp.dds"
+	texture = "gfx/interface/icons/building_icons/national_park.dds"
 
 	has_max_level = yes
 

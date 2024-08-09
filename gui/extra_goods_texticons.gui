@@ -9,6 +9,16 @@ texticon = {
 }
 
 texticon = {
+	icon = digital_assets
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/software.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}
+
+texticon = {
 	icon = consumer_appliances
 	iconsize = {
 		texture = "gfx/interface/icons/goods_icons/consumer_appliances.dds"
