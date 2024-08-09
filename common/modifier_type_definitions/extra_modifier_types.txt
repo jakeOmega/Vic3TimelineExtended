@@ -486,6 +486,11 @@ state_building_highway_max_level_add = {
 	percent = no
 }
 
+state_building_national_park_max_level_add = {
+	color = good
+	percent = no
+}
+
 building_trade_center_throughput_add = {
 	color = good
 	percent = yes

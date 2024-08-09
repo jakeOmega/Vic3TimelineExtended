@@ -1,0 +1,83 @@
+increase_funding_nuclear_program = {
+	name = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING"
+	desc = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
+
+	visible = { always = yes }
+	
+	#Country scope
+	ai_chance = {
+		base = 0
+		modifier = {
+			trigger = { bureaucracy > nuclear_weapon_program_funding_step }
+			add = 5
+		}
+        modifier = {
+            trigger = { var:nuclear_weapons_program_first_nuke_done = 0 }
+            add = 20
+        }
+	}
+
+	possible = {
+		bureaucracy > nuclear_weapon_program_funding_step
+	}
+
+	effect = {
+        custom_tooltip = {
+            text = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
+            change_variable = {
+                name = nuclear_weapons_program_funding
+                add = 1
+            }
+            if = {
+                limit = { has_modifier = nuclear_weapon_program_funding }
+                remove_modifier = nuclear_weapon_program_funding
+            }
+            add_modifier = {
+                name = nuclear_weapon_program_funding
+                multiplier = nuclear_weapons_program_current_cost
+            }
+        }
+	}
+}
+
+decrease_funding_nuclear_program = {
+	name = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING"
+	desc = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
+
+	visible = { always = yes }
+	
+	#Country scope
+	ai_chance = {
+		base = 0
+		modifier = {
+			trigger = { bureaucracy < 0 }
+			add = 50
+		}
+        modifier = {
+            trigger = { NOT = { var:nuclear_weapons_program_first_nuke_done = 0 }}
+            add = 50
+        }
+	}
+
+	possible = {
+		var:nuclear_weapons_program_funding > 0
+	}
+
+	effect = {
+        custom_tooltip = {
+            text = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
+            change_variable = {
+                name = nuclear_weapons_program_funding
+                subtract = 1
+            }
+            if = {
+                limit = { has_modifier = nuclear_weapon_program_funding }
+                remove_modifier = nuclear_weapon_program_funding
+            }
+            add_modifier = {
+                name = nuclear_weapon_program_funding
+                multiplier = nuclear_weapons_program_current_cost
+            }
+        }
+	}
+}

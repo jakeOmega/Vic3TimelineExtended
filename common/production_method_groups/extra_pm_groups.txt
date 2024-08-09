@@ -958,8 +958,11 @@ pmg_synthetic_oil = {
 pmg_synthetic_rubber = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
-        pm_synthetic_rubber_1
-        pm_synthetic_rubber_2
+        pm_polyisoprene_rubber
+        pm_styrene_butadiene_rubber
+        pm_ziegler_natta_catalyzation
+        pm_neodymium_catalyzation
+        pm_bioengineered_rubber
     }
 }
 pmg_synthetic_opium = {

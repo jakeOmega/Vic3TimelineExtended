@@ -23,7 +23,6 @@ modern_material_science = {
 	category = production
 
 	modifier = {
-		building_synthetics_plants_rubber_throughput_add = 0.5
 	}
 	
 	unlocking_technologies = {	
@@ -160,7 +159,6 @@ synthetic_biology = {
 	}
 
 	modifier = {
-		building_synthetics_plants_rubber_throughput_add = 0.5
 		state_mortality_mult = -0.05
 	}
 	
@@ -360,7 +358,8 @@ fusion_power = {
 		country_weekly_innovation_max_add = 100
 		military_formation_movement_speed_mult = 1
 		state_bureaucracy_population_base_cost_factor_mult = 2
-		state_building_airport_max_level_add = 5
+		state_building_airport_max_level_add = 1
+		state_building_highway_max_level_add = 1
 	}
 	
 	ai_weight = {
@@ -518,7 +517,8 @@ biohacking_and_human_augmentation = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		state_building_airport_max_level_add = 5
+		state_building_airport_max_level_add = 1
+		state_building_highway_max_level_add = 1
 	}
 	
 	ai_weight = {

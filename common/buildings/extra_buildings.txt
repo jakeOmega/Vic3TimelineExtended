@@ -1194,10 +1194,8 @@ building_space_program = {
 building_national_park = {
 	building_group = bg_parks	
 	texture = "gfx/interface/icons/building_icons/logging_camp.dds"
-	
-	unlocking_technologies = {
-		environmental_movement
-	}
+
+	has_max_level = yes
 
 	production_method_groups = {
 		pmg_base_building_national_park

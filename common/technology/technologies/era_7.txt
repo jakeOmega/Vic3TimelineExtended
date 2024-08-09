@@ -67,7 +67,7 @@ jet_engine_technology = {
 	}
 
 	modifier = {
-		state_building_airport_max_level_add = 5
+		state_building_airport_max_level_add = 1
 	}
 	
 	ai_weight = {
@@ -378,7 +378,6 @@ television_broadcasting = {
 	
 	modifier = {
 		building_arts_academy_throughput_add = 0.05
-		goods_output_consumer_appliances_mult = 0.05
 		country_weekly_innovation_max_add = 50
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		country_tech_spread_add = 40
@@ -503,7 +502,7 @@ modern_urban_planning = {
 		country_max_companies_add = 1
 		country_max_weekly_construction_progress_add = 10
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
-		country_gold_reserve_limit_mult = 0.5
+		state_building_highway_max_level_add = 1
 	}
 	
 	ai_weight = {

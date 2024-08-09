@@ -130,7 +130,7 @@ wealth_11 = {
 		popneed_services = 30
 		popneed_intoxicants = 68
 		popneed_free_movement = 8
-		popneed_housing = 1
+		popneed_housing = 16
 	}
 }
 
@@ -146,7 +146,7 @@ wealth_12 = {
 		popneed_services = 39
 		popneed_intoxicants = 73
 		popneed_free_movement = 13
-		popneed_housing = 3
+		popneed_housing = 29
 	}
 }
 
@@ -162,7 +162,7 @@ wealth_13 = {
 		popneed_services = 46
 		popneed_intoxicants = 73
 		popneed_free_movement = 14
-		popneed_housing = 5
+		popneed_housing = 41
 	}
 }
 
@@ -178,7 +178,7 @@ wealth_14 = {
 		popneed_services = 58
 		popneed_intoxicants = 74
 		popneed_free_movement = 16
-		popneed_housing = 9
+		popneed_housing = 53
 	}
 }
 
@@ -194,7 +194,7 @@ wealth_15 = {
 		popneed_luxury_drinks = 21
 		popneed_free_movement = 21
 		popneed_luxury_items = 11
-		popneed_housing = 13
+		popneed_housing = 65
 	}
 }
 
@@ -210,7 +210,7 @@ wealth_16 = {
 		popneed_luxury_drinks = 30
 		popneed_free_movement = 24
 		popneed_luxury_items = 24
-		popneed_housing = 19
+		popneed_housing = 77
 	}
 }
 
@@ -226,7 +226,7 @@ wealth_17 = {
 		popneed_luxury_drinks = 46
 		popneed_free_movement = 26
 		popneed_luxury_items = 39
-		popneed_housing = 25
+		popneed_housing = 88
 	}
 }
 
@@ -242,7 +242,7 @@ wealth_18 = {
 		popneed_luxury_drinks = 65
 		popneed_free_movement = 29
 		popneed_luxury_items = 58
-		popneed_housing = 33
+		popneed_housing = 99
 	}
 }
 
@@ -258,7 +258,7 @@ wealth_19 = {
 		popneed_luxury_drinks = 86
 		popneed_free_movement = 39
 		popneed_luxury_items = 79
-		popneed_housing = 41
+		popneed_housing = 110
 	}
 }
 
@@ -277,7 +277,7 @@ wealth_20 = {
 		popneed_luxury_food = 8
 		popneed_luxury_items = 98
 		popneed_leisure = 16
-		popneed_housing = 51
+		popneed_housing = 121
 	}
 }
 
@@ -297,7 +297,7 @@ wealth_21 = {
 		popneed_luxury_items = 126
 		popneed_leisure = 18
 		popneed_convenience = 1
-		popneed_housing = 61
+		popneed_housing = 129
 	}
 }
 
@@ -317,7 +317,7 @@ wealth_22 = {
 		popneed_luxury_items = 157
 		popneed_leisure = 20
 		popneed_convenience = 2
-		popneed_housing = 73
+		popneed_housing = 137
 	}
 }
 
@@ -337,7 +337,7 @@ wealth_23 = {
 		popneed_luxury_items = 191
 		popneed_leisure = 32
 		popneed_convenience = 7
-		popneed_housing = 85
+		popneed_housing = 146
 	}
 }
 
@@ -357,7 +357,7 @@ wealth_24 = {
 		popneed_luxury_items = 220
 		popneed_leisure = 35
 		popneed_convenience = 15
-		popneed_housing = 99
+		popneed_housing = 158
 	}
 }
 
@@ -377,7 +377,7 @@ wealth_25 = {
 		popneed_luxury_items = 254
 		popneed_leisure = 38
 		popneed_convenience = 30
-		popneed_housing = 113
+		popneed_housing = 170
 	}
 }
 
@@ -398,7 +398,7 @@ wealth_26 = {
 		popneed_leisure = 56
 		popneed_convenience = 52
 		popneed_art = 1
-		popneed_housing = 129
+		popneed_housing = 185
 	}
 }
 
@@ -419,7 +419,7 @@ wealth_27 = {
 		popneed_leisure = 61
 		popneed_convenience = 84
 		popneed_art = 1
-		popneed_housing = 145
+		popneed_housing = 202
 	}
 }
 
@@ -440,7 +440,7 @@ wealth_28 = {
 		popneed_leisure = 83
 		popneed_convenience = 126
 		popneed_art = 2
-		popneed_housing = 163
+		popneed_housing = 222
 	}
 }
 
@@ -461,7 +461,7 @@ wealth_29 = {
 		popneed_leisure = 90
 		popneed_convenience = 181
 		popneed_art = 6
-		popneed_housing = 181
+		popneed_housing = 244
 	}
 }
 
@@ -481,7 +481,7 @@ wealth_30 = {
 		popneed_leisure = 104
 		popneed_convenience = 251
 		popneed_art = 13
-		popneed_housing = 201
+		popneed_housing = 271
 	}
 }
 
@@ -501,7 +501,7 @@ wealth_31 = {
 		popneed_leisure = 113
 		popneed_convenience = 337
 		popneed_art = 26
-		popneed_housing = 221
+		popneed_housing = 301
 	}
 }
 
@@ -521,7 +521,7 @@ wealth_32 = {
 		popneed_leisure = 124
 		popneed_convenience = 442
 		popneed_art = 49
-		popneed_housing = 243
+		popneed_housing = 335
 	}
 }
 
@@ -541,7 +541,7 @@ wealth_33 = {
 		popneed_leisure = 137
 		popneed_convenience = 568
 		popneed_art = 82
-		popneed_housing = 265
+		popneed_housing = 374
 	}
 }
 
@@ -561,7 +561,7 @@ wealth_34 = {
 		popneed_leisure = 152
 		popneed_convenience = 716
 		popneed_art = 132
-		popneed_housing = 289
+		popneed_housing = 419
 	}
 }
 
@@ -581,7 +581,7 @@ wealth_35 = {
 		popneed_leisure = 199
 		popneed_convenience = 890
 		popneed_art = 201
-		popneed_housing = 313
+		popneed_housing = 471
 	}
 }
 
@@ -601,7 +601,7 @@ wealth_36 = {
 		popneed_leisure = 220
 		popneed_convenience = 1090
 		popneed_art = 293
-		popneed_housing = 339
+		popneed_housing = 531
 	}
 }
 
@@ -621,7 +621,7 @@ wealth_37 = {
 		popneed_leisure = 244
 		popneed_convenience = 1320
 		popneed_art = 415
-		popneed_housing = 365
+		popneed_housing = 599
 	}
 }
 
@@ -641,7 +641,7 @@ wealth_38 = {
 		popneed_leisure = 272
 		popneed_convenience = 1581
 		popneed_art = 572
-		popneed_housing = 393
+		popneed_housing = 676
 	}
 }
 
@@ -661,7 +661,7 @@ wealth_39 = {
 		popneed_leisure = 299
 		popneed_convenience = 1877
 		popneed_art = 769
-		popneed_housing = 421
+		popneed_housing = 766
 	}
 }
 
@@ -680,7 +680,7 @@ wealth_40 = {
 		popneed_leisure = 394
 		popneed_convenience = 2209
 		popneed_art = 1013
-		popneed_housing = 451
+		popneed_housing = 869
 	}
 }
 
@@ -699,7 +699,7 @@ wealth_41 = {
 		popneed_leisure = 440
 		popneed_convenience = 2581
 		popneed_art = 1311
-		popneed_housing = 481
+		popneed_housing = 986
 	}
 }
 
@@ -718,7 +718,7 @@ wealth_42 = {
 		popneed_leisure = 482
 		popneed_convenience = 2994
 		popneed_art = 1671
-		popneed_housing = 513
+		popneed_housing = 1120
 	}
 }
 
@@ -737,7 +737,7 @@ wealth_43 = {
 		popneed_leisure = 543
 		popneed_convenience = 3452
 		popneed_art = 2100
-		popneed_housing = 545
+		popneed_housing = 1275
 	}
 }
 
@@ -756,7 +756,7 @@ wealth_44 = {
 		popneed_leisure = 680
 		popneed_convenience = 3957
 		popneed_art = 2607
-		popneed_housing = 579
+		popneed_housing = 1451
 	}
 }
 
@@ -774,7 +774,7 @@ wealth_45 = {
 		popneed_leisure = 784
 		popneed_convenience = 4511
 		popneed_art = 3201
-		popneed_housing = 613
+		popneed_housing = 1653
 	}
 }
 
@@ -792,7 +792,7 @@ wealth_46 = {
 		popneed_leisure = 963
 		popneed_convenience = 5118
 		popneed_art = 3890
-		popneed_housing = 649
+		popneed_housing = 1884
 	}
 }
 
@@ -810,7 +810,7 @@ wealth_47 = {
 		popneed_leisure = 1179
 		popneed_convenience = 5781
 		popneed_art = 4686
-		popneed_housing = 685
+		popneed_housing = 2149
 	}
 }
 
@@ -828,7 +828,7 @@ wealth_48 = {
 		popneed_leisure = 1299
 		popneed_convenience = 6502
 		popneed_art = 5597
-		popneed_housing = 723
+		popneed_housing = 2452
 	}
 }
 
@@ -846,7 +846,7 @@ wealth_49 = {
 		popneed_leisure = 1446
 		popneed_convenience = 7284
 		popneed_art = 6636
-		popneed_housing = 761
+		popneed_housing = 2799
 	}
 }
 
@@ -864,7 +864,7 @@ wealth_50 = {
 		popneed_leisure = 1593
 		popneed_convenience = 8131
 		popneed_art = 7813
-		popneed_housing = 801
+		popneed_housing = 3197
 	}
 }
 
@@ -882,7 +882,7 @@ wealth_51 = {
 		popneed_leisure = 1949
 		popneed_convenience = 9045
 		popneed_art = 9140
-		popneed_housing = 841
+		popneed_housing = 3652
 	}
 }
 
@@ -900,7 +900,7 @@ wealth_52 = {
 		popneed_leisure = 2319
 		popneed_convenience = 10029
 		popneed_art = 10629
-		popneed_housing = 883
+		popneed_housing = 4173
 	}
 }
 
@@ -918,7 +918,7 @@ wealth_53 = {
 		popneed_leisure = 2739
 		popneed_convenience = 11087
 		popneed_art = 12294
-		popneed_housing = 925
+		popneed_housing = 4769
 	}
 }
 
@@ -936,7 +936,7 @@ wealth_54 = {
 		popneed_leisure = 3412
 		popneed_convenience = 12223
 		popneed_art = 14146
-		popneed_housing = 969
+		popneed_housing = 5452
 	}
 }
 
@@ -954,7 +954,7 @@ wealth_55 = {
 		popneed_leisure = 4258
 		popneed_convenience = 13438
 		popneed_art = 16201
-		popneed_housing = 1013
+		popneed_housing = 6233
 	}
 }
 
@@ -972,7 +972,7 @@ wealth_56 = {
 		popneed_leisure = 5139
 		popneed_convenience = 14737
 		popneed_art = 18471
-		popneed_housing = 1059
+		popneed_housing = 7128
 	}
 }
 
@@ -990,7 +990,7 @@ wealth_57 = {
 		popneed_leisure = 6193
 		popneed_convenience = 16122
 		popneed_art = 20972
-		popneed_housing = 1105
+		popneed_housing = 8151
 	}
 }
 
@@ -1008,7 +1008,7 @@ wealth_58 = {
 		popneed_leisure = 7328
 		popneed_convenience = 17598
 		popneed_art = 23719
-		popneed_housing = 1153
+		popneed_housing = 9323
 	}
 }
 
@@ -1026,7 +1026,7 @@ wealth_59 = {
 		popneed_leisure = 8416
 		popneed_convenience = 19168
 		popneed_art = 26727
-		popneed_housing = 1201
+		popneed_housing = 10664
 	}
 }
 
@@ -1044,7 +1044,7 @@ wealth_60 = {
 		popneed_leisure = 9648
 		popneed_convenience = 20835
 		popneed_art = 30013
-		popneed_housing = 1251
+		popneed_housing = 12200
 	}
 }
 
@@ -1062,7 +1062,7 @@ wealth_61 = {
 		popneed_leisure = 10718
 		popneed_convenience = 22603
 		popneed_art = 33593
-		popneed_housing = 1301
+		popneed_housing = 13957
 	}
 }
 
@@ -1080,7 +1080,7 @@ wealth_62 = {
 		popneed_leisure = 11795
 		popneed_convenience = 24475
 		popneed_art = 37484
-		popneed_housing = 1353
+		popneed_housing = 15968
 	}
 }
 
@@ -1098,7 +1098,7 @@ wealth_63 = {
 		popneed_leisure = 13103
 		popneed_convenience = 26455
 		popneed_art = 41703
-		popneed_housing = 1405
+		popneed_housing = 18270
 	}
 }
 
@@ -1116,7 +1116,7 @@ wealth_64 = {
 		popneed_leisure = 14419
 		popneed_convenience = 28547
 		popneed_art = 46269
-		popneed_housing = 1459
+		popneed_housing = 20905
 	}
 }
 
@@ -1134,7 +1134,7 @@ wealth_65 = {
 		popneed_leisure = 15866
 		popneed_convenience = 30755
 		popneed_art = 51201
-		popneed_housing = 1513
+		popneed_housing = 23921
 	}
 }
 
@@ -1152,7 +1152,7 @@ wealth_66 = {
 		popneed_leisure = 17459
 		popneed_convenience = 33082
 		popneed_art = 56516
-		popneed_housing = 1569
+		popneed_housing = 27373
 	}
 }
 
@@ -1170,7 +1170,7 @@ wealth_67 = {
 		popneed_leisure = 19210
 		popneed_convenience = 35532
 		popneed_art = 62234
-		popneed_housing = 1625
+		popneed_housing = 31323
 	}
 }
 
@@ -1188,7 +1188,7 @@ wealth_68 = {
 		popneed_leisure = 21136
 		popneed_convenience = 38108
 		popneed_art = 68377
-		popneed_housing = 1683
+		popneed_housing = 35845
 	}
 }
 
@@ -1206,7 +1206,7 @@ wealth_69 = {
 		popneed_leisure = 23255
 		popneed_convenience = 40816
 		popneed_art = 74962
-		popneed_housing = 1741
+		popneed_housing = 41021
 	}
 }
 
@@ -1224,7 +1224,7 @@ wealth_70 = {
 		popneed_leisure = 25586
 		popneed_convenience = 43659
 		popneed_art = 82013
-		popneed_housing = 1801
+		popneed_housing = 46945
 	}
 }
 
@@ -1242,7 +1242,7 @@ wealth_71 = {
 		popneed_leisure = 28150
 		popneed_convenience = 46641
 		popneed_art = 89550
-		popneed_housing = 1861
+		popneed_housing = 53725
 	}
 }
 
@@ -1260,7 +1260,7 @@ wealth_72 = {
 		popneed_leisure = 30971
 		popneed_convenience = 49765
 		popneed_art = 97594
-		popneed_housing = 1923
+		popneed_housing = 61485
 	}
 }
 
@@ -1278,7 +1278,7 @@ wealth_73 = {
 		popneed_leisure = 34074
 		popneed_convenience = 53036
 		popneed_art = 106169
-		popneed_housing = 1985
+		popneed_housing = 70366
 	}
 }
 
@@ -1296,7 +1296,7 @@ wealth_74 = {
 		popneed_leisure = 37486
 		popneed_convenience = 56459
 		popneed_art = 115297
-		popneed_housing = 2049
+		popneed_housing = 80532
 	}
 }
 
@@ -1314,7 +1314,7 @@ wealth_75 = {
 		popneed_leisure = 41240
 		popneed_convenience = 60037
 		popneed_art = 125001
-		popneed_housing = 2113
+		popneed_housing = 92167
 	}
 }
 
@@ -1332,7 +1332,7 @@ wealth_76 = {
 		popneed_leisure = 45370
 		popneed_convenience = 63774
 		popneed_art = 135305
-		popneed_housing = 2179
+		popneed_housing = 105484
 	}
 }
 
@@ -1350,7 +1350,7 @@ wealth_77 = {
 		popneed_leisure = 49912
 		popneed_convenience = 67674
 		popneed_art = 146233
-		popneed_housing = 2245
+		popneed_housing = 120725
 	}
 }
 
@@ -1368,7 +1368,7 @@ wealth_78 = {
 		popneed_leisure = 54909
 		popneed_convenience = 71743
 		popneed_art = 157810
-		popneed_housing = 2313
+		popneed_housing = 138169
 	}
 }
 
@@ -1386,7 +1386,7 @@ wealth_79 = {
 		popneed_leisure = 60406
 		popneed_convenience = 75984
 		popneed_art = 170062
-		popneed_housing = 2381
+		popneed_housing = 158135
 	}
 }
 
@@ -1404,7 +1404,7 @@ wealth_80 = {
 		popneed_leisure = 66452
 		popneed_convenience = 80401
 		popneed_art = 183013
-		popneed_housing = 2451
+		popneed_housing = 180987
 	}
 }
 
@@ -1422,7 +1422,7 @@ wealth_81 = {
 		popneed_leisure = 73102
 		popneed_convenience = 84999
 		popneed_art = 196690
-		popneed_housing = 2521
+		popneed_housing = 207142
 	}
 }
 
@@ -1440,7 +1440,7 @@ wealth_82 = {
 		popneed_leisure = 80418
 		popneed_convenience = 89783
 		popneed_art = 211121
-		popneed_housing = 2593
+		popneed_housing = 237077
 	}
 }
 
@@ -1458,7 +1458,7 @@ wealth_83 = {
 		popneed_leisure = 88465
 		popneed_convenience = 94756
 		popneed_art = 226330
-		popneed_housing = 2665
+		popneed_housing = 271339
 	}
 }
 
@@ -1476,7 +1476,7 @@ wealth_84 = {
 		popneed_leisure = 97317
 		popneed_convenience = 99923
 		popneed_art = 242348
-		popneed_housing = 2739
+		popneed_housing = 310553
 	}
 }
 
@@ -1494,7 +1494,7 @@ wealth_85 = {
 		popneed_leisure = 107055
 		popneed_convenience = 105289
 		popneed_art = 259201
-		popneed_housing = 2813
+		popneed_housing = 355435
 	}
 }
 
@@ -1512,7 +1512,7 @@ wealth_86 = {
 		popneed_leisure = 117765
 		popneed_convenience = 110858
 		popneed_art = 276917
-		popneed_housing = 2889
+		popneed_housing = 406804
 	}
 }
 
@@ -1530,7 +1530,7 @@ wealth_87 = {
 		popneed_leisure = 129547
 		popneed_convenience = 116635
 		popneed_art = 295527
-		popneed_housing = 2965
+		popneed_housing = 465598
 	}
 }
 
@@ -1548,7 +1548,7 @@ wealth_88 = {
 		popneed_leisure = 142508
 		popneed_convenience = 122624
 		popneed_art = 315060
-		popneed_housing = 3043
+		popneed_housing = 532891
 	}
 }
 
@@ -1566,7 +1566,7 @@ wealth_89 = {
 		popneed_leisure = 156764
 		popneed_convenience = 128830
 		popneed_art = 335545
-		popneed_housing = 3121
+		popneed_housing = 609909
 	}
 }
 
@@ -1584,7 +1584,7 @@ wealth_90 = {
 		popneed_leisure = 172446
 		popneed_convenience = 135258
 		popneed_art = 357013
-		popneed_housing = 3201
+		popneed_housing = 698059
 	}
 }
 
@@ -1602,7 +1602,7 @@ wealth_91 = {
 		popneed_leisure = 189696
 		popneed_convenience = 141912
 		popneed_art = 379495
-		popneed_housing = 3281
+		popneed_housing = 798950
 	}
 }
 
@@ -1620,7 +1620,7 @@ wealth_92 = {
 		popneed_leisure = 208671
 		popneed_convenience = 148796
 		popneed_art = 403023
-		popneed_housing = 3363
+		popneed_housing = 914424
 	}
 }
 
@@ -1638,7 +1638,7 @@ wealth_93 = {
 		popneed_leisure = 229544
 		popneed_convenience = 155917
 		popneed_art = 427628
-		popneed_housing = 3445
+		popneed_housing = 1046588
 	}
 }
 
@@ -1656,7 +1656,7 @@ wealth_94 = {
 		popneed_leisure = 252503
 		popneed_convenience = 163278
 		popneed_art = 453343
-		popneed_housing = 3529
+		popneed_housing = 1197855
 	}
 }
 
@@ -1674,7 +1674,7 @@ wealth_95 = {
 		popneed_leisure = 277759
 		popneed_convenience = 170884
 		popneed_art = 480201
-		popneed_housing = 3613
+		popneed_housing = 1370985
 	}
 }
 
@@ -1692,7 +1692,7 @@ wealth_96 = {
 		popneed_leisure = 305541
 		popneed_convenience = 178739
 		popneed_art = 508234
-		popneed_housing = 3699
+		popneed_housing = 1569140
 	}
 }
 
@@ -1710,7 +1710,7 @@ wealth_97 = {
 		popneed_leisure = 336100
 		popneed_convenience = 186850
 		popneed_art = 537478
-		popneed_housing = 3785
+		popneed_housing = 1795934
 	}
 }
 
@@ -1728,7 +1728,7 @@ wealth_98 = {
 		popneed_leisure = 369716
 		popneed_convenience = 195220
 		popneed_art = 567965
-		popneed_housing = 3873
+		popneed_housing = 2055510
 	}
 }
 
@@ -1746,1824 +1746,1824 @@ wealth_99 = {
 		popneed_leisure = 406693
 		popneed_convenience = 203855
 		popneed_art = 599732
-		popneed_housing = 3961
+		popneed_housing = 2352603
 	}
 }
 
 wealth_100 = {
     political_strength = 1525
     goods = {
-		popneed_luxury_food = 177010
-    	popneed_heating = 26
-		popneed_luxury_drinks = 177010
-		popneed_housing = 4051
-		popneed_free_movement = 177010
-		popneed_convenience = 213003
-		popneed_intoxicants = 216
-		popneed_luxury_items = 442526
-		popneed_art = 634263
 		popneed_communication = 177010
-		popneed_services = 265515
+    	popneed_art = 634263
+		popneed_heating = 25
+		popneed_luxury_items = 442526
 		popneed_leisure = 442526
+		popneed_luxury_drinks = 177010
+		popneed_luxury_food = 177010
+		popneed_housing = 2651387
+		popneed_services = 265515
+		popneed_convenience = 213003
+		popneed_free_movement = 177010
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_101 = {
     political_strength = 1550
     goods = {
-		popneed_luxury_food = 193598
-    	popneed_heating = 26
-		popneed_luxury_drinks = 193598
-		popneed_housing = 4143
-		popneed_free_movement = 193598
-		popneed_convenience = 222323
-		popneed_intoxicants = 216
-		popneed_luxury_items = 483995
-		popneed_art = 669554
 		popneed_communication = 193598
-		popneed_services = 290396
+    	popneed_art = 669554
+		popneed_heating = 25
+		popneed_luxury_items = 483995
 		popneed_leisure = 483995
+		popneed_luxury_drinks = 193598
+		popneed_luxury_food = 193598
+		popneed_housing = 3009967
+		popneed_services = 290396
+		popneed_convenience = 222323
+		popneed_free_movement = 193598
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_102 = {
     political_strength = 1575
     goods = {
-		popneed_luxury_food = 211553
-    	popneed_heating = 26
-		popneed_luxury_drinks = 211553
-		popneed_housing = 4235
-		popneed_free_movement = 211553
-		popneed_convenience = 231953
-		popneed_intoxicants = 216
-		popneed_luxury_items = 528882
-		popneed_art = 706430
 		popneed_communication = 211553
-		popneed_services = 317328
+    	popneed_art = 706430
+		popneed_heating = 25
+		popneed_luxury_items = 528882
 		popneed_leisure = 528882
+		popneed_luxury_drinks = 211553
+		popneed_luxury_food = 211553
+		popneed_housing = 3412776
+		popneed_services = 317328
+		popneed_convenience = 231953
+		popneed_free_movement = 211553
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_103 = {
     political_strength = 1600
     goods = {
-		popneed_luxury_food = 230973
-    	popneed_heating = 26
-		popneed_luxury_drinks = 230973
-		popneed_housing = 4328
-		popneed_free_movement = 230973
-		popneed_convenience = 241900
-		popneed_intoxicants = 215
-		popneed_luxury_items = 577433
-		popneed_art = 744949
 		popneed_communication = 230973
-		popneed_services = 346459
+    	popneed_art = 744949
+		popneed_heating = 26
+		popneed_luxury_items = 577433
 		popneed_leisure = 577433
+		popneed_luxury_drinks = 230973
+		popneed_luxury_food = 230973
+		popneed_housing = 3864752
+		popneed_services = 346459
+		popneed_convenience = 241900
+		popneed_free_movement = 230973
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_104 = {
     political_strength = 1625
     goods = {
-		popneed_luxury_food = 251963
-    	popneed_heating = 26
-		popneed_luxury_drinks = 251963
-		popneed_housing = 4423
-		popneed_free_movement = 251963
-		popneed_convenience = 252171
-		popneed_intoxicants = 215
-		popneed_luxury_items = 629906
-		popneed_art = 785164
 		popneed_communication = 251963
-		popneed_services = 377942
+    	popneed_art = 785164
+		popneed_heating = 26
+		popneed_luxury_items = 629906
 		popneed_leisure = 629906
+		popneed_luxury_drinks = 251963
+		popneed_luxury_food = 251963
+		popneed_housing = 4371329
+		popneed_services = 377942
+		popneed_convenience = 252171
+		popneed_free_movement = 251963
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_105 = {
     political_strength = 1650
     goods = {
-		popneed_luxury_food = 274631
-    	popneed_heating = 26
-		popneed_luxury_drinks = 274631
-		popneed_housing = 4519
-		popneed_free_movement = 274631
-		popneed_convenience = 262774
-		popneed_intoxicants = 215
-		popneed_luxury_items = 686576
-		popneed_art = 827134
 		popneed_communication = 274631
-		popneed_services = 411944
+    	popneed_art = 827134
+		popneed_heating = 26
+		popneed_luxury_items = 686576
 		popneed_leisure = 686576
+		popneed_luxury_drinks = 274631
+		popneed_luxury_food = 274631
+		popneed_housing = 4938483
+		popneed_services = 411944
+		popneed_convenience = 262774
+		popneed_free_movement = 274631
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_106 = {
     political_strength = 1675
     goods = {
-		popneed_luxury_food = 299094
-    	popneed_heating = 26
-		popneed_luxury_drinks = 299094
-		popneed_housing = 4615
-		popneed_free_movement = 299094
-		popneed_convenience = 273715
-		popneed_intoxicants = 215
-		popneed_luxury_items = 747733
-		popneed_art = 870918
 		popneed_communication = 299094
-		popneed_services = 448638
+    	popneed_art = 870918
+		popneed_heating = 26
+		popneed_luxury_items = 747733
 		popneed_leisure = 747733
+		popneed_luxury_drinks = 299094
+		popneed_luxury_food = 299094
+		popneed_housing = 5572774
+		popneed_services = 448638
+		popneed_convenience = 273715
+		popneed_free_movement = 299094
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_107 = {
     political_strength = 1700
     goods = {
-		popneed_luxury_food = 325475
-    	popneed_heating = 26
-		popneed_luxury_drinks = 325475
-		popneed_housing = 4713
-		popneed_free_movement = 325475
-		popneed_convenience = 285003
-		popneed_intoxicants = 215
-		popneed_luxury_items = 813686
-		popneed_art = 916575
 		popneed_communication = 325475
-		popneed_services = 488209
+    	popneed_art = 916575
+		popneed_heating = 26
+		popneed_luxury_items = 813686
 		popneed_leisure = 813686
+		popneed_luxury_drinks = 325475
+		popneed_luxury_food = 325475
+		popneed_housing = 6281401
+		popneed_services = 488209
+		popneed_convenience = 285003
+		popneed_free_movement = 325475
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_108 = {
     political_strength = 1725
     goods = {
-		popneed_luxury_food = 353905
-    	popneed_heating = 26
-		popneed_luxury_drinks = 353905
-		popneed_housing = 4812
-		popneed_free_movement = 353905
-		popneed_convenience = 296645
-		popneed_intoxicants = 215
-		popneed_luxury_items = 884760
-		popneed_art = 964168
 		popneed_communication = 353905
-		popneed_services = 530853
+    	popneed_art = 964168
+		popneed_heating = 26
+		popneed_luxury_items = 884760
 		popneed_leisure = 884760
+		popneed_luxury_drinks = 353905
+		popneed_luxury_food = 353905
+		popneed_housing = 7072257
+		popneed_services = 530853
+		popneed_convenience = 296645
+		popneed_free_movement = 353905
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_109 = {
     political_strength = 1750
     goods = {
-		popneed_luxury_food = 384522
-    	popneed_heating = 26
-		popneed_luxury_drinks = 384522
-		popneed_housing = 4913
-		popneed_free_movement = 384522
-		popneed_convenience = 308648
-		popneed_intoxicants = 215
-		popneed_luxury_items = 961300
-		popneed_art = 1013758
 		popneed_communication = 384522
-		popneed_services = 576776
+    	popneed_art = 1013758
+		popneed_heating = 26
+		popneed_luxury_items = 961300
 		popneed_leisure = 961300
+		popneed_luxury_drinks = 384522
+		popneed_luxury_food = 384522
+		popneed_housing = 7953987
+		popneed_services = 576776
+		popneed_convenience = 308648
+		popneed_free_movement = 384522
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_110 = {
     political_strength = 1775
     goods = {
-		popneed_luxury_food = 417470
-    	popneed_heating = 26
-		popneed_luxury_drinks = 417470
-		popneed_housing = 5014
-		popneed_free_movement = 417470
-		popneed_convenience = 321021
-		popneed_intoxicants = 215
-		popneed_luxury_items = 1043670
-		popneed_art = 1065412
 		popneed_communication = 417470
-		popneed_services = 626198
+    	popneed_art = 1065412
+		popneed_heating = 26
+		popneed_luxury_items = 1043670
 		popneed_leisure = 1043670
+		popneed_luxury_drinks = 417470
+		popneed_luxury_food = 417470
+		popneed_housing = 8936052
+		popneed_services = 626198
+		popneed_convenience = 321021
+		popneed_free_movement = 417470
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_111 = {
     political_strength = 1800
     goods = {
-		popneed_luxury_food = 452905
-    	popneed_heating = 26
-		popneed_luxury_drinks = 452905
-		popneed_housing = 5116
-		popneed_free_movement = 452905
-		popneed_convenience = 333772
-		popneed_intoxicants = 215
-		popneed_luxury_items = 1132255
-		popneed_art = 1119193
 		popneed_communication = 452905
-		popneed_services = 679348
+    	popneed_art = 1119193
+		popneed_heating = 26
+		popneed_luxury_items = 1132255
 		popneed_leisure = 1132255
+		popneed_luxury_drinks = 452905
+		popneed_luxury_food = 452905
+		popneed_housing = 10028799
+		popneed_services = 679348
+		popneed_convenience = 333772
+		popneed_free_movement = 452905
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_112 = {
     political_strength = 1825
     goods = {
-		popneed_luxury_food = 490988
-    	popneed_heating = 26
-		popneed_luxury_drinks = 490988
-		popneed_housing = 5220
-		popneed_free_movement = 490988
-		popneed_convenience = 346907
-		popneed_intoxicants = 215
-		popneed_luxury_items = 1227463
-		popneed_art = 1175170
 		popneed_communication = 490988
-		popneed_services = 736472
+    	popneed_art = 1175170
+		popneed_heating = 26
+		popneed_luxury_items = 1227463
 		popneed_leisure = 1227463
+		popneed_luxury_drinks = 490988
+		popneed_luxury_food = 490988
+		popneed_housing = 11243534
+		popneed_services = 736472
+		popneed_convenience = 346907
+		popneed_free_movement = 490988
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_113 = {
     political_strength = 1850
     goods = {
-		popneed_luxury_food = 531892
-    	popneed_heating = 26
-		popneed_luxury_drinks = 531892
-		popneed_housing = 5325
-		popneed_free_movement = 531892
-		popneed_convenience = 360436
-		popneed_intoxicants = 215
-		popneed_luxury_items = 1329721
-		popneed_art = 1233412
 		popneed_communication = 531892
-		popneed_services = 797826
+    	popneed_art = 1233412
+		popneed_heating = 26
+		popneed_luxury_items = 1329721
 		popneed_leisure = 1329721
+		popneed_luxury_drinks = 531892
+		popneed_luxury_food = 531892
+		popneed_housing = 12592598
+		popneed_services = 797826
+		popneed_convenience = 360436
+		popneed_free_movement = 531892
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_114 = {
     political_strength = 1875
     goods = {
-		popneed_luxury_food = 575797
-    	popneed_heating = 26
-		popneed_luxury_drinks = 575797
-		popneed_housing = 5431
-		popneed_free_movement = 575797
-		popneed_convenience = 374366
-		popneed_intoxicants = 215
-		popneed_luxury_items = 1439483
-		popneed_art = 1293989
 		popneed_communication = 575797
-		popneed_services = 863682
+    	popneed_art = 1293989
+		popneed_heating = 26
+		popneed_luxury_items = 1439483
 		popneed_leisure = 1439483
+		popneed_luxury_drinks = 575797
+		popneed_luxury_food = 575797
+		popneed_housing = 14089458
+		popneed_services = 863682
+		popneed_convenience = 374366
+		popneed_free_movement = 575797
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_115 = {
     political_strength = 1900
     goods = {
-		popneed_luxury_food = 622895
-    	popneed_heating = 26
-		popneed_luxury_drinks = 622895
-		popneed_housing = 5538
-		popneed_free_movement = 622895
-		popneed_convenience = 388705
-		popneed_intoxicants = 215
-		popneed_luxury_items = 1557226
-		popneed_art = 1356972
 		popneed_communication = 622895
-		popneed_services = 934327
+    	popneed_art = 1356972
+		popneed_heating = 26
+		popneed_luxury_items = 1557226
 		popneed_leisure = 1557226
+		popneed_luxury_drinks = 622895
+		popneed_luxury_food = 622895
+		popneed_housing = 15748789
+		popneed_services = 934327
+		popneed_convenience = 388705
+		popneed_free_movement = 622895
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_116 = {
     political_strength = 1925
     goods = {
-		popneed_luxury_food = 673387
-    	popneed_heating = 26
-		popneed_luxury_drinks = 673387
-		popneed_housing = 5646
-		popneed_free_movement = 673387
-		popneed_convenience = 403463
-		popneed_intoxicants = 215
-		popneed_luxury_items = 1683454
-		popneed_art = 1422435
 		popneed_communication = 673387
-		popneed_services = 1010062
+    	popneed_art = 1422435
+		popneed_heating = 26
+		popneed_luxury_items = 1683454
 		popneed_leisure = 1683454
+		popneed_luxury_drinks = 673387
+		popneed_luxury_food = 673387
+		popneed_housing = 17586581
+		popneed_services = 1010062
+		popneed_convenience = 403463
+		popneed_free_movement = 673387
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_117 = {
     political_strength = 1950
     goods = {
-		popneed_luxury_food = 727485
-    	popneed_heating = 26
-		popneed_luxury_drinks = 727485
-		popneed_housing = 5756
-		popneed_free_movement = 727485
-		popneed_convenience = 418647
-		popneed_intoxicants = 215
-		popneed_luxury_items = 1818696
-		popneed_art = 1490454
 		popneed_communication = 727485
-		popneed_services = 1091207
+    	popneed_art = 1490454
+		popneed_heating = 26
+		popneed_luxury_items = 1818696
 		popneed_leisure = 1818696
+		popneed_luxury_drinks = 727485
+		popneed_luxury_food = 727485
+		popneed_housing = 19620236
+		popneed_services = 1091207
+		popneed_convenience = 418647
+		popneed_free_movement = 727485
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_118 = {
     political_strength = 1975
     goods = {
-		popneed_luxury_food = 785412
-    	popneed_heating = 26
-		popneed_luxury_drinks = 785412
-		popneed_housing = 5866
-		popneed_free_movement = 785412
-		popneed_convenience = 434266
-		popneed_intoxicants = 215
-		popneed_luxury_items = 1963512
-		popneed_art = 1561105
 		popneed_communication = 785412
-		popneed_services = 1178095
+    	popneed_art = 1561105
+		popneed_heating = 26
+		popneed_luxury_items = 1963512
 		popneed_leisure = 1963512
+		popneed_luxury_drinks = 785412
+		popneed_luxury_food = 785412
+		popneed_housing = 21868680
+		popneed_services = 1178095
+		popneed_convenience = 434266
+		popneed_free_movement = 785412
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_119 = {
     political_strength = 2000
     goods = {
-		popneed_luxury_food = 847404
-    	popneed_heating = 26
-		popneed_luxury_drinks = 847404
-		popneed_housing = 5978
-		popneed_free_movement = 847404
-		popneed_convenience = 450328
-		popneed_intoxicants = 215
-		popneed_luxury_items = 2118488
-		popneed_art = 1634466
 		popneed_communication = 847404
-		popneed_services = 1271079
+    	popneed_art = 1634466
+		popneed_heating = 26
+		popneed_luxury_items = 2118488
 		popneed_leisure = 2118488
+		popneed_luxury_drinks = 847404
+		popneed_luxury_food = 847404
+		popneed_housing = 24352484
+		popneed_services = 1271079
+		popneed_convenience = 450328
+		popneed_free_movement = 847404
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_120 = {
     political_strength = 2025
     goods = {
-		popneed_luxury_food = 913707
-    	popneed_heating = 26
-		popneed_luxury_drinks = 913707
-		popneed_housing = 6091
-		popneed_free_movement = 913707
-		popneed_convenience = 466842
-		popneed_intoxicants = 215
-		popneed_luxury_items = 2284244
-		popneed_art = 1710616
 		popneed_communication = 913707
-		popneed_services = 1370531
+    	popneed_art = 1710616
+		popneed_heating = 26
+		popneed_luxury_items = 2284244
 		popneed_leisure = 2284244
+		popneed_luxury_drinks = 913707
+		popneed_luxury_food = 913707
+		popneed_housing = 27093993
+		popneed_services = 1370531
+		popneed_convenience = 466842
+		popneed_free_movement = 913707
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_121 = {
     political_strength = 2050
     goods = {
-		popneed_luxury_food = 984583
-    	popneed_heating = 26
-		popneed_luxury_drinks = 984583
-		popneed_housing = 6205
-		popneed_free_movement = 984583
-		popneed_convenience = 483818
-		popneed_intoxicants = 215
-		popneed_luxury_items = 2461430
-		popneed_art = 1789638
 		popneed_communication = 984583
-		popneed_services = 1476841
+    	popneed_art = 1789638
+		popneed_heating = 26
+		popneed_luxury_items = 2461430
 		popneed_leisure = 2461430
+		popneed_luxury_drinks = 984583
+		popneed_luxury_food = 984583
+		popneed_housing = 30117455
+		popneed_services = 1476841
+		popneed_convenience = 483818
+		popneed_free_movement = 984583
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_122 = {
     political_strength = 2075
     goods = {
-		popneed_luxury_food = 1060304
-    	popneed_heating = 26
-		popneed_luxury_drinks = 1060304
-		popneed_housing = 6320
-		popneed_free_movement = 1060304
-		popneed_convenience = 501263
-		popneed_intoxicants = 215
-		popneed_luxury_items = 2650729
-		popneed_art = 1871615
 		popneed_communication = 1060304
-		popneed_services = 1590419
+    	popneed_art = 1871615
+		popneed_heating = 26
+		popneed_luxury_items = 2650729
 		popneed_leisure = 2650729
+		popneed_luxury_drinks = 1060304
+		popneed_luxury_food = 1060304
+		popneed_housing = 33449172
+		popneed_services = 1590419
+		popneed_convenience = 501263
+		popneed_free_movement = 1060304
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_123 = {
     political_strength = 2100
     goods = {
-		popneed_luxury_food = 1141158
-    	popneed_heating = 26
-		popneed_luxury_drinks = 1141158
-		popneed_housing = 6437
-		popneed_free_movement = 1141158
-		popneed_convenience = 519187
-		popneed_intoxicants = 215
-		popneed_luxury_items = 2852861
-		popneed_art = 1956631
 		popneed_communication = 1141158
-		popneed_services = 1711696
+    	popneed_art = 1956631
+		popneed_heating = 26
+		popneed_luxury_items = 2852861
 		popneed_leisure = 2852861
+		popneed_luxury_drinks = 1141158
+		popneed_luxury_food = 1141158
+		popneed_housing = 37117652
+		popneed_services = 1711696
+		popneed_convenience = 519187
+		popneed_free_movement = 1141158
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_124 = {
     political_strength = 2125
     goods = {
-		popneed_luxury_food = 1227447
-    	popneed_heating = 26
-		popneed_luxury_drinks = 1227447
-		popneed_housing = 6554
-		popneed_free_movement = 1227447
-		popneed_convenience = 537600
-		popneed_intoxicants = 215
-		popneed_luxury_items = 3068580
-		popneed_art = 2044773
 		popneed_communication = 1227447
-		popneed_services = 1841124
+    	popneed_art = 2044773
+		popneed_heating = 26
+		popneed_luxury_items = 3068580
 		popneed_leisure = 3068580
+		popneed_luxury_drinks = 1227447
+		popneed_luxury_food = 1227447
+		popneed_housing = 41153773
+		popneed_services = 1841124
+		popneed_convenience = 537600
+		popneed_free_movement = 1227447
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_125 = {
     political_strength = 2150
     goods = {
-		popneed_luxury_food = 1319488
-    	popneed_heating = 26
-		popneed_luxury_drinks = 1319488
-		popneed_housing = 6673
-		popneed_free_movement = 1319488
-		popneed_convenience = 556509
-		popneed_intoxicants = 215
-		popneed_luxury_items = 3298679
-		popneed_art = 2136130
 		popneed_communication = 1319488
-		popneed_services = 1979181
+    	popneed_art = 2136130
+		popneed_heating = 26
+		popneed_luxury_items = 3298679
 		popneed_leisure = 3298679
+		popneed_luxury_drinks = 1319488
+		popneed_luxury_food = 1319488
+		popneed_housing = 45590961
+		popneed_services = 1979181
+		popneed_convenience = 556509
+		popneed_free_movement = 1319488
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_126 = {
     political_strength = 2175
     goods = {
-		popneed_luxury_food = 1417614
-    	popneed_heating = 26
-		popneed_luxury_drinks = 1417614
-		popneed_housing = 6793
-		popneed_free_movement = 1417614
-		popneed_convenience = 575925
-		popneed_intoxicants = 215
-		popneed_luxury_items = 3543989
-		popneed_art = 2230792
 		popneed_communication = 1417614
-		popneed_services = 2126364
+    	popneed_art = 2230792
+		popneed_heating = 26
+		popneed_luxury_items = 3543989
 		popneed_leisure = 3543989
+		popneed_luxury_drinks = 1417614
+		popneed_luxury_food = 1417614
+		popneed_housing = 50465374
+		popneed_services = 2126364
+		popneed_convenience = 575925
+		popneed_free_movement = 1417614
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_127 = {
     political_strength = 2200
     goods = {
-		popneed_luxury_food = 1522174
-    	popneed_heating = 26
-		popneed_luxury_drinks = 1522174
-		popneed_housing = 6914
-		popneed_free_movement = 1522174
-		popneed_convenience = 595856
-		popneed_intoxicants = 215
-		popneed_luxury_items = 3805383
-		popneed_art = 2328849
 		popneed_communication = 1522174
-		popneed_services = 2283198
+    	popneed_art = 2328849
+		popneed_heating = 26
+		popneed_luxury_items = 3805383
 		popneed_leisure = 3805383
+		popneed_luxury_drinks = 1522174
+		popneed_luxury_food = 1522174
+		popneed_housing = 55816103
+		popneed_services = 2283198
+		popneed_convenience = 595856
+		popneed_free_movement = 1522174
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_128 = {
     political_strength = 2225
     goods = {
-		popneed_luxury_food = 1633534
-    	popneed_heating = 26
-		popneed_luxury_drinks = 1633534
-		popneed_housing = 7037
-		popneed_free_movement = 1633534
-		popneed_convenience = 616313
-		popneed_intoxicants = 215
-		popneed_luxury_items = 4083777
-		popneed_art = 2430397
 		popneed_communication = 1633534
-		popneed_services = 2450231
+    	popneed_art = 2430397
+		popneed_heating = 26
+		popneed_luxury_items = 4083777
 		popneed_leisure = 4083777
+		popneed_luxury_drinks = 1633534
+		popneed_luxury_food = 1633534
+		popneed_housing = 61685381
+		popneed_services = 2450231
+		popneed_convenience = 616313
+		popneed_free_movement = 1633534
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_129 = {
     political_strength = 2250
     goods = {
-		popneed_luxury_food = 1752078
-    	popneed_heating = 26
-		popneed_luxury_drinks = 1752078
-		popneed_housing = 7160
-		popneed_free_movement = 1752078
-		popneed_convenience = 637305
-		popneed_intoxicants = 215
-		popneed_luxury_items = 4380130
-		popneed_art = 2535531
 		popneed_communication = 1752078
-		popneed_services = 2628040
+    	popneed_art = 2535531
+		popneed_heating = 26
+		popneed_luxury_items = 4380130
 		popneed_leisure = 4380130
+		popneed_luxury_drinks = 1752078
+		popneed_luxury_food = 1752078
+		popneed_housing = 68118813
+		popneed_services = 2628040
+		popneed_convenience = 637305
+		popneed_free_movement = 1752078
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_130 = {
     political_strength = 2275
     goods = {
-		popneed_luxury_food = 1878208
-    	popneed_heating = 26
-		popneed_luxury_drinks = 1878208
-		popneed_housing = 7285
-		popneed_free_movement = 1878208
-		popneed_convenience = 658842
-		popneed_intoxicants = 215
-		popneed_luxury_items = 4695449
-		popneed_art = 2644348
 		popneed_communication = 1878208
-		popneed_services = 2817227
+    	popneed_art = 2644348
+		popneed_heating = 26
+		popneed_luxury_items = 4695449
 		popneed_leisure = 4695449
+		popneed_luxury_drinks = 1878208
+		popneed_luxury_food = 1878208
+		popneed_housing = 75165611
+		popneed_services = 2817227
+		popneed_convenience = 658842
+		popneed_free_movement = 1878208
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_131 = {
     political_strength = 2300
     goods = {
-		popneed_luxury_food = 2012346
-    	popneed_heating = 26
-		popneed_luxury_drinks = 2012346
-		popneed_housing = 7411
-		popneed_free_movement = 2012346
-		popneed_convenience = 680932
-		popneed_intoxicants = 215
-		popneed_luxury_items = 5030786
-		popneed_art = 2756946
 		popneed_communication = 2012346
-		popneed_services = 3018425
+    	popneed_art = 2756946
+		popneed_heating = 26
+		popneed_luxury_items = 5030786
 		popneed_leisure = 5030786
+		popneed_luxury_drinks = 2012346
+		popneed_luxury_food = 2012346
+		popneed_housing = 82878847
+		popneed_services = 3018425
+		popneed_convenience = 680932
+		popneed_free_movement = 2012346
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_132 = {
     political_strength = 2325
     goods = {
-		popneed_luxury_food = 2154933
-    	popneed_heating = 26
-		popneed_luxury_drinks = 2154933
-		popneed_housing = 7538
-		popneed_free_movement = 2154933
-		popneed_convenience = 703587
-		popneed_intoxicants = 215
-		popneed_luxury_items = 5387245
-		popneed_art = 2873428
 		popneed_communication = 2154933
-		popneed_services = 3232296
+    	popneed_art = 2873428
+		popneed_heating = 26
+		popneed_luxury_items = 5387245
 		popneed_leisure = 5387245
+		popneed_luxury_drinks = 2154933
+		popneed_luxury_food = 2154933
+		popneed_housing = 91315729
+		popneed_services = 3232296
+		popneed_convenience = 703587
+		popneed_free_movement = 2154933
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_133 = {
     political_strength = 2350
     goods = {
-		popneed_luxury_food = 2306431
-    	popneed_heating = 26
-		popneed_luxury_drinks = 2306431
-		popneed_housing = 7666
-		popneed_free_movement = 2306431
-		popneed_convenience = 726816
-		popneed_intoxicants = 215
-		popneed_luxury_items = 5765982
-		popneed_art = 2993896
 		popneed_communication = 2306431
-		popneed_services = 3459533
+    	popneed_art = 2993896
+		popneed_heating = 26
+		popneed_luxury_items = 5765982
 		popneed_leisure = 5765982
+		popneed_luxury_drinks = 2306431
+		popneed_luxury_food = 2306431
+		popneed_housing = 100537880
+		popneed_services = 3459533
+		popneed_convenience = 726816
+		popneed_free_movement = 2306431
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_134 = {
     political_strength = 2375
     goods = {
-		popneed_luxury_food = 2467324
-    	popneed_heating = 26
-		popneed_luxury_drinks = 2467324
-		popneed_housing = 7796
-		popneed_free_movement = 2467324
-		popneed_convenience = 750630
-		popneed_intoxicants = 215
-		popneed_luxury_items = 6168205
-		popneed_art = 3118456
 		popneed_communication = 2467324
-		popneed_services = 3700861
+    	popneed_art = 3118456
+		popneed_heating = 26
+		popneed_luxury_items = 6168205
 		popneed_leisure = 6168205
+		popneed_luxury_drinks = 2467324
+		popneed_luxury_food = 2467324
+		popneed_housing = 110611649
+		popneed_services = 3700861
+		popneed_convenience = 750630
+		popneed_free_movement = 2467324
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_135 = {
     political_strength = 2400
     goods = {
-		popneed_luxury_food = 2638117
-    	popneed_heating = 26
-		popneed_luxury_drinks = 2638117
-		popneed_housing = 7926
-		popneed_free_movement = 2638117
-		popneed_convenience = 775038
-		popneed_intoxicants = 215
-		popneed_luxury_items = 6595178
-		popneed_art = 3247213
 		popneed_communication = 2638117
-		popneed_services = 3957040
+    	popneed_art = 3247213
+		popneed_heating = 26
+		popneed_luxury_items = 6595178
 		popneed_leisure = 6595178
+		popneed_luxury_drinks = 2638117
+		popneed_luxury_food = 2638117
+		popneed_housing = 121608427
+		popneed_services = 3957040
+		popneed_convenience = 775038
+		popneed_free_movement = 2638117
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_136 = {
     political_strength = 2425
     goods = {
-		popneed_luxury_food = 2819340
-    	popneed_heating = 26
-		popneed_luxury_drinks = 2819340
-		popneed_housing = 8058
-		popneed_free_movement = 2819340
-		popneed_convenience = 800050
-		popneed_intoxicants = 215
-		popneed_luxury_items = 7048225
-		popneed_art = 3380277
 		popneed_communication = 2819340
-		popneed_services = 4228862
+    	popneed_art = 3380277
+		popneed_heating = 26
+		popneed_luxury_items = 7048225
 		popneed_leisure = 7048225
+		popneed_luxury_drinks = 2819340
+		popneed_luxury_food = 2819340
+		popneed_housing = 133604992
+		popneed_services = 4228862
+		popneed_convenience = 800050
+		popneed_free_movement = 2819340
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_137 = {
     political_strength = 2450
     goods = {
-		popneed_luxury_food = 3011546
-    	popneed_heating = 26
-		popneed_luxury_drinks = 3011546
-		popneed_housing = 8192
-		popneed_free_movement = 3011546
-		popneed_convenience = 825678
-		popneed_intoxicants = 215
-		popneed_luxury_items = 7528728
-		popneed_art = 3517758
 		popneed_communication = 3011546
-		popneed_services = 4517157
+    	popneed_art = 3517758
+		popneed_heating = 26
+		popneed_luxury_items = 7528728
 		popneed_leisure = 7528728
+		popneed_luxury_drinks = 3011546
+		popneed_luxury_food = 3011546
+		popneed_housing = 146683872
+		popneed_services = 4517157
+		popneed_convenience = 825678
+		popneed_free_movement = 3011546
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_138 = {
     political_strength = 2475
     goods = {
-		popneed_luxury_food = 3215313
-    	popneed_heating = 26
-		popneed_luxury_drinks = 3215313
-		popneed_housing = 8326
-		popneed_free_movement = 3215313
-		popneed_convenience = 851931
-		popneed_intoxicants = 215
-		popneed_luxury_items = 8038132
-		popneed_art = 3659770
 		popneed_communication = 3215313
-		popneed_services = 4822792
+    	popneed_art = 3659770
+		popneed_heating = 26
+		popneed_luxury_items = 8038132
 		popneed_leisure = 8038132
+		popneed_luxury_drinks = 3215313
+		popneed_luxury_food = 3215313
+		popneed_housing = 160933725
+		popneed_services = 4822792
+		popneed_convenience = 851931
+		popneed_free_movement = 3215313
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_139 = {
     political_strength = 2500
     goods = {
-		popneed_luxury_food = 3431244
-    	popneed_heating = 26
-		popneed_luxury_drinks = 3431244
-		popneed_housing = 8461
-		popneed_free_movement = 3431244
-		popneed_convenience = 878820
-		popneed_intoxicants = 215
-		popneed_luxury_items = 8577948
-		popneed_art = 3806427
 		popneed_communication = 3431244
-		popneed_services = 5146674
+    	popneed_art = 3806427
+		popneed_heating = 26
+		popneed_luxury_items = 8577948
 		popneed_leisure = 8577948
+		popneed_luxury_drinks = 3431244
+		popneed_luxury_food = 3431244
+		popneed_housing = 176449747
+		popneed_services = 5146674
+		popneed_convenience = 878820
+		popneed_free_movement = 3431244
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_140 = {
     political_strength = 2525
     goods = {
-		popneed_luxury_food = 3659972
-    	popneed_heating = 26
-		popneed_luxury_drinks = 3659972
-		popneed_housing = 8598
-		popneed_free_movement = 3659972
-		popneed_convenience = 906356
-		popneed_intoxicants = 215
-		popneed_luxury_items = 9149751
-		popneed_art = 3957846
 		popneed_communication = 3659972
-		popneed_services = 5489748
+    	popneed_art = 3957846
+		popneed_heating = 26
+		popneed_luxury_items = 9149751
 		popneed_leisure = 9149751
+		popneed_luxury_drinks = 3659972
+		popneed_luxury_food = 3659972
+		popneed_housing = 193334100
+		popneed_services = 5489748
+		popneed_convenience = 906356
+		popneed_free_movement = 3659972
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_141 = {
     political_strength = 2550
     goods = {
-		popneed_luxury_food = 3902153
-    	popneed_heating = 26
-		popneed_luxury_drinks = 3902153
-		popneed_housing = 8736
-		popneed_free_movement = 3902153
-		popneed_convenience = 934550
-		popneed_intoxicants = 215
-		popneed_luxury_items = 9755189
-		popneed_art = 4114146
 		popneed_communication = 3902153
-		popneed_services = 5853002
+    	popneed_art = 4114146
+		popneed_heating = 26
+		popneed_luxury_items = 9755189
 		popneed_leisure = 9755189
+		popneed_luxury_drinks = 3902153
+		popneed_luxury_food = 3902153
+		popneed_housing = 211696368
+		popneed_services = 5853002
+		popneed_convenience = 934550
+		popneed_free_movement = 3902153
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_142 = {
     political_strength = 2575
     goods = {
-		popneed_luxury_food = 4158476
-    	popneed_heating = 26
-		popneed_luxury_drinks = 4158476
-		popneed_housing = 8875
-		popneed_free_movement = 4158476
-		popneed_convenience = 963412
-		popneed_intoxicants = 215
-		popneed_luxury_items = 10395981
-		popneed_art = 4275448
 		popneed_communication = 4158476
-		popneed_services = 6237467
+    	popneed_art = 4275448
+		popneed_heating = 26
+		popneed_luxury_items = 10395981
 		popneed_leisure = 10395981
+		popneed_luxury_drinks = 4158476
+		popneed_luxury_food = 4158476
+		popneed_housing = 231654036
+		popneed_services = 6237467
+		popneed_convenience = 963412
+		popneed_free_movement = 4158476
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_143 = {
     political_strength = 2600
     goods = {
-		popneed_luxury_food = 4429659
-    	popneed_heating = 26
-		popneed_luxury_drinks = 4429659
-		popneed_housing = 9016
-		popneed_free_movement = 4429659
-		popneed_convenience = 992953
-		popneed_intoxicants = 215
-		popneed_luxury_items = 11073919
-		popneed_art = 4441875
 		popneed_communication = 4429659
-		popneed_services = 6644220
+    	popneed_art = 4441875
+		popneed_heating = 26
+		popneed_luxury_items = 11073919
 		popneed_leisure = 11073919
+		popneed_luxury_drinks = 4429659
+		popneed_luxury_food = 4429659
+		popneed_housing = 253332997
+		popneed_services = 6644220
+		popneed_convenience = 992953
+		popneed_free_movement = 4429659
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_144 = {
     political_strength = 2625
     goods = {
-		popneed_luxury_food = 4716449
-    	popneed_heating = 26
-		popneed_luxury_drinks = 4716449
-		popneed_housing = 9157
-		popneed_free_movement = 4716449
-		popneed_convenience = 1023185
-		popneed_intoxicants = 215
-		popneed_luxury_items = 11790874
-		popneed_art = 4613552
 		popneed_communication = 4716449
-		popneed_services = 7074382
+    	popneed_art = 4613552
+		popneed_heating = 26
+		popneed_luxury_items = 11790874
 		popneed_leisure = 11790874
+		popneed_luxury_drinks = 4716449
+		popneed_luxury_food = 4716449
+		popneed_housing = 276868089
+		popneed_services = 7074382
+		popneed_convenience = 1023185
+		popneed_free_movement = 4716449
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_145 = {
     political_strength = 2650
     goods = {
-		popneed_luxury_food = 5019627
-    	popneed_heating = 26
-		popneed_luxury_drinks = 5019627
-		popneed_housing = 9300
-		popneed_free_movement = 5019627
-		popneed_convenience = 1054118
-		popneed_intoxicants = 215
-		popneed_luxury_items = 12548798
-		popneed_art = 4790608
 		popneed_communication = 5019627
-		popneed_services = 7529125
+    	popneed_art = 4790608
+		popneed_heating = 26
+		popneed_luxury_items = 12548798
 		popneed_leisure = 12548798
+		popneed_luxury_drinks = 5019627
+		popneed_luxury_food = 5019627
+		popneed_housing = 302403662
+		popneed_services = 7529125
+		popneed_convenience = 1054118
+		popneed_free_movement = 5019627
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_146 = {
     political_strength = 2675
     goods = {
-		popneed_luxury_food = 5340006
-    	popneed_heating = 26
-		popneed_luxury_drinks = 5340006
-		popneed_housing = 9444
-		popneed_free_movement = 5340006
-		popneed_convenience = 1085765
-		popneed_intoxicants = 215
-		popneed_luxury_items = 13349724
-		popneed_art = 4973171
 		popneed_communication = 5340006
-		popneed_services = 8009668
+    	popneed_art = 4973171
+		popneed_heating = 26
+		popneed_luxury_items = 13349724
 		popneed_leisure = 13349724
+		popneed_luxury_drinks = 5340006
+		popneed_luxury_food = 5340006
+		popneed_housing = 330094174
+		popneed_services = 8009668
+		popneed_convenience = 1085765
+		popneed_free_movement = 5340006
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_147 = {
     political_strength = 2700
     goods = {
-		popneed_luxury_food = 5678436
-    	popneed_heating = 26
-		popneed_luxury_drinks = 5678436
-		popneed_housing = 9589
-		popneed_free_movement = 5678436
-		popneed_convenience = 1118135
-		popneed_intoxicants = 215
-		popneed_luxury_items = 14195773
-		popneed_art = 5161373
 		popneed_communication = 5678436
-		popneed_services = 8517284
+    	popneed_art = 5161373
+		popneed_heating = 26
+		popneed_luxury_items = 14195773
 		popneed_leisure = 14195773
+		popneed_luxury_drinks = 5678436
+		popneed_luxury_food = 5678436
+		popneed_housing = 360104823
+		popneed_services = 8517284
+		popneed_convenience = 1118135
+		popneed_free_movement = 5678436
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_148 = {
     political_strength = 2725
     goods = {
-		popneed_luxury_food = 6035798
-    	popneed_heating = 26
-		popneed_luxury_drinks = 6035798
-		popneed_housing = 9736
-		popneed_free_movement = 6035798
-		popneed_convenience = 1151242
-		popneed_intoxicants = 215
-		popneed_luxury_items = 15089154
-		popneed_art = 5355349
 		popneed_communication = 6035798
-		popneed_services = 9053298
+    	popneed_art = 5355349
+		popneed_heating = 26
+		popneed_luxury_items = 15089154
 		popneed_leisure = 15089154
+		popneed_luxury_drinks = 6035798
+		popneed_luxury_food = 6035798
+		popneed_housing = 392612213
+		popneed_services = 9053298
+		popneed_convenience = 1151242
+		popneed_free_movement = 6035798
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_149 = {
     political_strength = 2750
     goods = {
-		popneed_luxury_food = 6413014
-    	popneed_heating = 26
-		popneed_luxury_drinks = 6413014
-		popneed_housing = 9884
-		popneed_free_movement = 6413014
-		popneed_convenience = 1185095
-		popneed_intoxicants = 215
-		popneed_luxury_items = 16032167
-		popneed_art = 5555235
 		popneed_communication = 6413014
-		popneed_services = 9619091
+    	popneed_art = 5555235
+		popneed_heating = 26
+		popneed_luxury_items = 16032167
 		popneed_leisure = 16032167
+		popneed_luxury_drinks = 6413014
+		popneed_luxury_food = 6413014
+		popneed_housing = 427805052
+		popneed_services = 9619091
+		popneed_convenience = 1185095
+		popneed_free_movement = 6413014
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_150 = {
     political_strength = 2775
     goods = {
-		popneed_luxury_food = 6811043
-    	popneed_heating = 26
-		popneed_luxury_drinks = 6811043
-		popneed_housing = 10032
-		popneed_free_movement = 6811043
-		popneed_convenience = 1219708
-		popneed_intoxicants = 215
-		popneed_luxury_items = 17027209
-		popneed_art = 5761169
 		popneed_communication = 6811043
-		popneed_services = 10216099
+    	popneed_art = 5761169
+		popneed_heating = 26
+		popneed_luxury_items = 17027209
 		popneed_leisure = 17027209
+		popneed_luxury_drinks = 6811043
+		popneed_luxury_food = 6811043
+		popneed_housing = 465884898
+		popneed_services = 10216099
+		popneed_convenience = 1219708
+		popneed_free_movement = 6811043
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_151 = {
     political_strength = 2800
     goods = {
-		popneed_luxury_food = 7230881
-    	popneed_heating = 26
-		popneed_luxury_drinks = 7230881
-		popneed_housing = 10183
-		popneed_free_movement = 7230881
-		popneed_convenience = 1255092
-		popneed_intoxicants = 215
-		popneed_luxury_items = 18076774
-		popneed_art = 5973292
 		popneed_communication = 7230881
-		popneed_services = 10845821
+    	popneed_art = 5973292
+		popneed_heating = 26
+		popneed_luxury_items = 18076774
 		popneed_leisure = 18076774
+		popneed_luxury_drinks = 7230881
+		popneed_luxury_food = 7230881
+		popneed_housing = 507066933
+		popneed_services = 10845821
+		popneed_convenience = 1255092
+		popneed_free_movement = 7230881
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_152 = {
     political_strength = 2825
     goods = {
-		popneed_luxury_food = 7673569
-    	popneed_heating = 26
-		popneed_luxury_drinks = 7673569
-		popneed_housing = 10334
-		popneed_free_movement = 7673569
-		popneed_convenience = 1291258
-		popneed_intoxicants = 215
-		popneed_luxury_items = 19183459
-		popneed_art = 6191747
 		popneed_communication = 7673569
-		popneed_services = 11509814
+    	popneed_art = 6191747
+		popneed_heating = 26
+		popneed_luxury_items = 19183459
 		popneed_leisure = 19183459
+		popneed_luxury_drinks = 7673569
+		popneed_luxury_food = 7673569
+		popneed_housing = 551580786
+		popneed_services = 11509814
+		popneed_convenience = 1291258
+		popneed_free_movement = 7673569
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_153 = {
     political_strength = 2850
     goods = {
-		popneed_luxury_food = 8140186
-    	popneed_heating = 26
-		popneed_luxury_drinks = 8140186
-		popneed_housing = 10487
-		popneed_free_movement = 8140186
-		popneed_convenience = 1328219
-		popneed_intoxicants = 215
-		popneed_luxury_items = 20349967
-		popneed_art = 6416680
 		popneed_communication = 8140186
-		popneed_services = 12209698
+    	popneed_art = 6416680
+		popneed_heating = 26
+		popneed_luxury_items = 20349967
 		popneed_leisure = 20349967
+		popneed_luxury_drinks = 8140186
+		popneed_luxury_food = 8140186
+		popneed_housing = 599671398
+		popneed_services = 12209698
+		popneed_convenience = 1328219
+		popneed_free_movement = 8140186
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_154 = {
     political_strength = 2875
     goods = {
-		popneed_luxury_food = 8631858
-    	popneed_heating = 26
-		popneed_luxury_drinks = 8631858
-		popneed_housing = 10641
-		popneed_free_movement = 8631858
-		popneed_convenience = 1365987
-		popneed_intoxicants = 215
-		popneed_luxury_items = 21579107
-		popneed_art = 6648239
 		popneed_communication = 8631858
-		popneed_services = 12947161
+    	popneed_art = 6648239
+		popneed_heating = 26
+		popneed_luxury_items = 21579107
 		popneed_leisure = 21579107
+		popneed_luxury_drinks = 8631858
+		popneed_luxury_food = 8631858
+		popneed_housing = 651599931
+		popneed_services = 12947161
+		popneed_convenience = 1365987
+		popneed_free_movement = 8631858
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_155 = {
     political_strength = 2900
     goods = {
-		popneed_luxury_food = 9149752
-    	popneed_heating = 26
-		popneed_luxury_drinks = 9149752
-		popneed_housing = 10796
-		popneed_free_movement = 9149752
-		popneed_convenience = 1404574
-		popneed_intoxicants = 215
-		popneed_luxury_items = 22873803
-		popneed_art = 6886573
 		popneed_communication = 9149752
-		popneed_services = 13723956
+    	popneed_art = 6886573
+		popneed_heating = 26
+		popneed_luxury_items = 22873803
 		popneed_leisure = 22873803
+		popneed_luxury_drinks = 9149752
+		popneed_luxury_food = 9149752
+		popneed_housing = 707644727
+		popneed_services = 13723956
+		popneed_convenience = 1404574
+		popneed_free_movement = 9149752
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_156 = {
     political_strength = 2925
     goods = {
-		popneed_luxury_food = 9695086
-    	popneed_heating = 26
-		popneed_luxury_drinks = 9695086
-		popneed_housing = 10952
-		popneed_free_movement = 9695086
-		popneed_convenience = 1443992
-		popneed_intoxicants = 215
-		popneed_luxury_items = 24237094
-		popneed_art = 7131837
 		popneed_communication = 9695086
-		popneed_services = 14541907
+    	popneed_art = 7131837
+		popneed_heating = 26
+		popneed_luxury_items = 24237094
 		popneed_leisure = 24237094
+		popneed_luxury_drinks = 9695086
+		popneed_luxury_food = 9695086
+		popneed_housing = 768102314
+		popneed_services = 14541907
+		popneed_convenience = 1443992
+		popneed_free_movement = 9695086
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_157 = {
     political_strength = 2950
     goods = {
-		popneed_luxury_food = 10269123
-    	popneed_heating = 26
-		popneed_luxury_drinks = 10269123
-		popneed_housing = 11110
-		popneed_free_movement = 10269123
-		popneed_convenience = 1484254
-		popneed_intoxicants = 215
-		popneed_luxury_items = 25672140
-		popneed_art = 7384183
 		popneed_communication = 10269123
-		popneed_services = 15402909
+    	popneed_art = 7384183
+		popneed_heating = 26
+		popneed_luxury_items = 25672140
 		popneed_leisure = 25672140
+		popneed_luxury_drinks = 10269123
+		popneed_luxury_food = 10269123
+		popneed_housing = 833288465
+		popneed_services = 15402909
+		popneed_convenience = 1484254
+		popneed_free_movement = 10269123
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_158 = {
     political_strength = 2975
     goods = {
-		popneed_luxury_food = 10873176
-    	popneed_heating = 26
-		popneed_luxury_drinks = 10873176
-		popneed_housing = 11269
-		popneed_free_movement = 10873176
-		popneed_convenience = 1525372
-		popneed_intoxicants = 215
-		popneed_luxury_items = 27182224
-		popneed_art = 7643771
 		popneed_communication = 10873176
-		popneed_services = 16308932
+    	popneed_art = 7643771
+		popneed_heating = 26
+		popneed_luxury_items = 27182224
 		popneed_leisure = 27182224
+		popneed_luxury_drinks = 10873176
+		popneed_luxury_food = 10873176
+		popneed_housing = 903539313
+		popneed_services = 16308932
+		popneed_convenience = 1525372
+		popneed_free_movement = 10873176
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_159 = {
     political_strength = 3000
     goods = {
-		popneed_luxury_food = 11508610
-    	popneed_heating = 26
-		popneed_luxury_drinks = 11508610
-		popneed_housing = 11429
-		popneed_free_movement = 11508610
-		popneed_convenience = 1567359
-		popneed_intoxicants = 215
-		popneed_luxury_items = 28770756
-		popneed_art = 7910760
 		popneed_communication = 11508610
-		popneed_services = 17262023
+    	popneed_art = 7910760
+		popneed_heating = 26
+		popneed_luxury_items = 28770756
 		popneed_leisure = 28770756
+		popneed_luxury_drinks = 11508610
+		popneed_luxury_food = 11508610
+		popneed_housing = 979212521
+		popneed_services = 17262023
+		popneed_convenience = 1567359
+		popneed_free_movement = 11508610
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_160 = {
     political_strength = 3025
     goods = {
-		popneed_luxury_food = 12176842
-    	popneed_heating = 26
-		popneed_luxury_drinks = 12176842
-		popneed_housing = 11590
-		popneed_free_movement = 12176842
-		popneed_convenience = 1610227
-		popneed_intoxicants = 215
-		popneed_luxury_items = 30441281
-		popneed_art = 8185313
 		popneed_communication = 12176842
-		popneed_services = 18264307
+    	popneed_art = 8185313
+		popneed_heating = 26
+		popneed_luxury_items = 30441281
 		popneed_leisure = 30441281
+		popneed_luxury_drinks = 12176842
+		popneed_luxury_food = 12176842
+		popneed_housing = 1060688512
+		popneed_services = 18264307
+		popneed_convenience = 1610227
+		popneed_free_movement = 12176842
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_161 = {
     political_strength = 3050
     goods = {
-		popneed_luxury_food = 12879344
-    	popneed_heating = 26
-		popneed_luxury_drinks = 12879344
-		popneed_housing = 11753
-		popneed_free_movement = 12879344
-		popneed_convenience = 1653990
-		popneed_intoxicants = 215
-		popneed_luxury_items = 32197478
-		popneed_art = 8467594
 		popneed_communication = 12879344
-		popneed_services = 19317992
+    	popneed_art = 8467594
+		popneed_heating = 26
+		popneed_luxury_items = 32197478
 		popneed_leisure = 32197478
+		popneed_luxury_drinks = 12879344
+		popneed_luxury_food = 12879344
+		popneed_housing = 1148371759
+		popneed_services = 19317992
+		popneed_convenience = 1653990
+		popneed_free_movement = 12879344
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_162 = {
     political_strength = 3075
     goods = {
-		popneed_luxury_food = 13617645
-    	popneed_heating = 26
-		popneed_luxury_drinks = 13617645
-		popneed_housing = 11917
-		popneed_free_movement = 13617645
-		popneed_convenience = 1698660
-		popneed_intoxicants = 215
-		popneed_luxury_items = 34043166
-		popneed_art = 8757771
 		popneed_communication = 13617645
-		popneed_services = 20425371
+    	popneed_art = 8757771
+		popneed_heating = 26
+		popneed_luxury_items = 34043166
 		popneed_leisure = 34043166
+		popneed_luxury_drinks = 13617645
+		popneed_luxury_food = 13617645
+		popneed_housing = 1242692141
+		popneed_services = 20425371
+		popneed_convenience = 1698660
+		popneed_free_movement = 13617645
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_163 = {
     political_strength = 3100
     goods = {
-		popneed_luxury_food = 14393329
-    	popneed_heating = 26
-		popneed_luxury_drinks = 14393329
-		popneed_housing = 12082
-		popneed_free_movement = 14393329
-		popneed_convenience = 1744251
-		popneed_intoxicants = 215
-		popneed_luxury_items = 35982312
-		popneed_art = 9056014
 		popneed_communication = 14393329
-		popneed_services = 21588821
+    	popneed_art = 9056014
+		popneed_heating = 26
+		popneed_luxury_items = 35982312
 		popneed_leisure = 35982312
+		popneed_luxury_drinks = 14393329
+		popneed_luxury_food = 14393329
+		popneed_housing = 1344106366
+		popneed_services = 21588821
+		popneed_convenience = 1744251
+		popneed_free_movement = 14393329
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_164 = {
     political_strength = 3125
     goods = {
-		popneed_luxury_food = 15208045
-    	popneed_heating = 26
-		popneed_luxury_drinks = 15208045
-		popneed_housing = 12248
-		popneed_free_movement = 15208045
-		popneed_convenience = 1790775
-		popneed_intoxicants = 215
-		popneed_luxury_items = 38019030
-		popneed_art = 9362496
 		popneed_communication = 15208045
-		popneed_services = 22810813
+    	popneed_art = 9362496
+		popneed_heating = 26
+		popneed_luxury_items = 38019030
 		popneed_leisure = 38019030
+		popneed_luxury_drinks = 15208045
+		popneed_luxury_food = 15208045
+		popneed_housing = 1453099466
+		popneed_services = 22810813
+		popneed_convenience = 1790775
+		popneed_free_movement = 15208045
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_165 = {
     political_strength = 3150
     goods = {
-		popneed_luxury_food = 16063499
-    	popneed_heating = 26
-		popneed_luxury_drinks = 16063499
-		popneed_housing = 12416
-		popneed_free_movement = 16063499
-		popneed_convenience = 1838246
-		popneed_intoxicants = 215
-		popneed_luxury_items = 40157590
-		popneed_art = 9677392
 		popneed_communication = 16063499
-		popneed_services = 24093908
+    	popneed_art = 9677392
+		popneed_heating = 26
+		popneed_luxury_items = 40157590
 		popneed_leisure = 40157590
+		popneed_luxury_drinks = 16063499
+		popneed_luxury_food = 16063499
+		popneed_housing = 1570186362
+		popneed_services = 24093908
+		popneed_convenience = 1838246
+		popneed_free_movement = 16063499
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_166 = {
     political_strength = 3175
     goods = {
-		popneed_luxury_food = 16961462
-    	popneed_heating = 26
-		popneed_luxury_drinks = 16961462
-		popneed_housing = 12585
-		popneed_free_movement = 16961462
-		popneed_convenience = 1886677
-		popneed_intoxicants = 215
-		popneed_luxury_items = 42402420
-		popneed_art = 10000880
 		popneed_communication = 16961462
-		popneed_services = 25440762
+    	popneed_art = 10000880
+		popneed_heating = 26
+		popneed_luxury_items = 42402420
 		popneed_leisure = 42402420
+		popneed_luxury_drinks = 16961462
+		popneed_luxury_food = 16961462
+		popneed_housing = 1695913506
+		popneed_services = 25440762
+		popneed_convenience = 1886677
+		popneed_free_movement = 16961462
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_167 = {
     political_strength = 3200
     goods = {
-		popneed_luxury_food = 17903773
-    	popneed_heating = 26
-		popneed_luxury_drinks = 17903773
-		popneed_housing = 12755
-		popneed_free_movement = 17903773
-		popneed_convenience = 1936081
-		popneed_intoxicants = 215
-		popneed_luxury_items = 44758112
-		popneed_art = 10333140
 		popneed_communication = 17903773
-		popneed_services = 26854132
+    	popneed_art = 10333140
+		popneed_heating = 26
+		popneed_luxury_items = 44758112
 		popneed_leisure = 44758112
+		popneed_luxury_drinks = 17903773
+		popneed_luxury_food = 17903773
+		popneed_housing = 1830860604
+		popneed_services = 26854132
+		popneed_convenience = 1936081
+		popneed_free_movement = 17903773
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_168 = {
     political_strength = 3225
     goods = {
-		popneed_luxury_food = 18892335
-    	popneed_heating = 26
-		popneed_luxury_drinks = 18892335
-		popneed_housing = 12926
-		popneed_free_movement = 18892335
-		popneed_convenience = 1986473
-		popneed_intoxicants = 215
-		popneed_luxury_items = 47229429
-		popneed_art = 10674356
 		popneed_communication = 18892335
-		popneed_services = 28336873
+    	popneed_art = 10674356
+		popneed_heating = 26
+		popneed_luxury_items = 47229429
 		popneed_leisure = 47229429
+		popneed_luxury_drinks = 18892335
+		popneed_luxury_food = 18892335
+		popneed_housing = 1975642419
+		popneed_services = 28336873
+		popneed_convenience = 1986473
+		popneed_free_movement = 18892335
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_169 = {
     political_strength = 3250
     goods = {
-		popneed_luxury_food = 19929124
-    	popneed_heating = 26
-		popneed_luxury_drinks = 19929124
-		popneed_housing = 13099
-		popneed_free_movement = 19929124
-		popneed_convenience = 2037865
-		popneed_intoxicants = 215
-		popneed_luxury_items = 49821306
-		popneed_art = 11024714
 		popneed_communication = 19929124
-		popneed_services = 29891947
+    	popneed_art = 11024714
+		popneed_heating = 26
+		popneed_luxury_items = 49821306
 		popneed_leisure = 49821306
+		popneed_luxury_drinks = 19929124
+		popneed_luxury_food = 19929124
+		popneed_housing = 2130910666
+		popneed_services = 29891947
+		popneed_convenience = 2037865
+		popneed_free_movement = 19929124
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_170 = {
     political_strength = 3275
     goods = {
-		popneed_luxury_food = 21016184
-    	popneed_heating = 26
-		popneed_luxury_drinks = 21016184
-		popneed_housing = 13273
-		popneed_free_movement = 21016184
-		popneed_convenience = 2090272
-		popneed_intoxicants = 215
-		popneed_luxury_items = 52538858
-		popneed_art = 11384402
 		popneed_communication = 21016184
-		popneed_services = 31522423
+    	popneed_art = 11384402
+		popneed_heating = 26
+		popneed_luxury_items = 52538858
 		popneed_leisure = 52538858
+		popneed_luxury_drinks = 21016184
+		popneed_luxury_food = 21016184
+		popneed_housing = 2297355989
+		popneed_services = 31522423
+		popneed_convenience = 2090272
+		popneed_free_movement = 21016184
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_171 = {
     political_strength = 3300
     goods = {
-		popneed_luxury_food = 22155638
-    	popneed_heating = 26
-		popneed_luxury_drinks = 22155638
-		popneed_housing = 13448
-		popneed_free_movement = 22155638
-		popneed_convenience = 2143708
-		popneed_intoxicants = 215
-		popneed_luxury_items = 55387386
-		popneed_art = 11753611
 		popneed_communication = 22155638
-		popneed_services = 33231482
+    	popneed_art = 11753611
+		popneed_heating = 26
+		popneed_luxury_items = 55387386
 		popneed_leisure = 55387386
+		popneed_luxury_drinks = 22155638
+		popneed_luxury_food = 22155638
+		popneed_housing = 2475710037
+		popneed_services = 33231482
+		popneed_convenience = 2143708
+		popneed_free_movement = 22155638
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_172 = {
     political_strength = 3325
     goods = {
-		popneed_luxury_food = 23349680
-    	popneed_heating = 26
-		popneed_luxury_drinks = 23349680
-		popneed_housing = 13625
-		popneed_free_movement = 23349680
-		popneed_convenience = 2198185
-		popneed_intoxicants = 215
-		popneed_luxury_items = 58372381
-		popneed_art = 12132537
 		popneed_communication = 23349680
-		popneed_services = 35022418
+    	popneed_art = 12132537
+		popneed_heating = 26
+		popneed_luxury_items = 58372381
 		popneed_leisure = 58372381
+		popneed_luxury_drinks = 23349680
+		popneed_luxury_food = 23349680
+		popneed_housing = 2666747636
+		popneed_services = 35022418
+		popneed_convenience = 2198185
+		popneed_free_movement = 23349680
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_173 = {
     political_strength = 3350
     goods = {
-		popneed_luxury_food = 24600586
-    	popneed_heating = 26
-		popneed_luxury_drinks = 24600586
-		popneed_housing = 13802
-		popneed_free_movement = 24600586
-		popneed_convenience = 2253720
-		popneed_intoxicants = 215
-		popneed_luxury_items = 61499529
-		popneed_art = 12521375
 		popneed_communication = 24600586
-		popneed_services = 36898642
+    	popneed_art = 12521375
+		popneed_heating = 26
+		popneed_luxury_items = 61499529
 		popneed_leisure = 61499529
+		popneed_luxury_drinks = 24600586
+		popneed_luxury_food = 24600586
+		popneed_housing = 2871289060
+		popneed_services = 36898642
+		popneed_convenience = 2253720
+		popneed_free_movement = 24600586
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_174 = {
     political_strength = 3375
     goods = {
-		popneed_luxury_food = 25910712
-    	popneed_heating = 26
-		popneed_luxury_drinks = 25910712
-		popneed_housing = 13981
-		popneed_free_movement = 25910712
-		popneed_convenience = 2310325
-		popneed_intoxicants = 215
-		popneed_luxury_items = 64774719
-		popneed_art = 12920325
 		popneed_communication = 25910712
-		popneed_services = 38863688
+    	popneed_art = 12920325
+		popneed_heating = 26
+		popneed_luxury_items = 64774719
 		popneed_leisure = 64774719
+		popneed_luxury_drinks = 25910712
+		popneed_luxury_food = 25910712
+		popneed_housing = 3090202411
+		popneed_services = 38863688
+		popneed_convenience = 2310325
+		popneed_free_movement = 25910712
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_175 = {
     political_strength = 3400
     goods = {
-		popneed_luxury_food = 27282496
-    	popneed_heating = 26
-		popneed_luxury_drinks = 27282496
-		popneed_housing = 14162
-		popneed_free_movement = 27282496
-		popneed_convenience = 2368015
-		popneed_intoxicants = 215
-		popneed_luxury_items = 68204048
-		popneed_art = 13329591
 		popneed_communication = 27282496
-		popneed_services = 40921213
+    	popneed_art = 13329591
+		popneed_heating = 26
+		popneed_luxury_items = 68204048
 		popneed_leisure = 68204048
+		popneed_luxury_drinks = 27282496
+		popneed_luxury_food = 27282496
+		popneed_housing = 3324406107
+		popneed_services = 40921213
+		popneed_convenience = 2368015
+		popneed_free_movement = 27282496
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_176 = {
     political_strength = 3425
     goods = {
-		popneed_luxury_food = 28718463
-    	popneed_heating = 26
-		popneed_luxury_drinks = 28718463
-		popneed_housing = 14343
-		popneed_free_movement = 28718463
-		popneed_convenience = 2426805
-		popneed_intoxicants = 215
-		popneed_luxury_items = 71793827
-		popneed_art = 13749377
 		popneed_communication = 28718463
-		popneed_services = 43075004
+    	popneed_art = 13749377
+		popneed_heating = 26
+		popneed_luxury_items = 71793827
 		popneed_leisure = 71793827
+		popneed_luxury_drinks = 28718463
+		popneed_luxury_food = 28718463
+		popneed_housing = 3574871483
+		popneed_services = 43075004
+		popneed_convenience = 2426805
+		popneed_free_movement = 28718463
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_177 = {
     political_strength = 3450
     goods = {
-		popneed_luxury_food = 30221226
-    	popneed_heating = 26
-		popneed_luxury_drinks = 30221226
-		popneed_housing = 14526
-		popneed_free_movement = 30221226
-		popneed_convenience = 2486708
-		popneed_intoxicants = 215
-		popneed_luxury_items = 75550587
-		popneed_art = 14179892
 		popneed_communication = 30221226
-		popneed_services = 45328980
+    	popneed_art = 14179892
+		popneed_heating = 26
+		popneed_luxury_items = 75550587
 		popneed_leisure = 75550587
+		popneed_luxury_drinks = 30221226
+		popneed_luxury_food = 30221226
+		popneed_housing = 3842625510
+		popneed_services = 45328980
+		popneed_convenience = 2486708
+		popneed_free_movement = 30221226
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_178 = {
     political_strength = 3475
     goods = {
-		popneed_luxury_food = 31793487
-    	popneed_heating = 26
-		popneed_luxury_drinks = 31793487
-		popneed_housing = 14710
-		popneed_free_movement = 31793487
-		popneed_convenience = 2547741
-		popneed_intoxicants = 215
-		popneed_luxury_items = 79481085
-		popneed_art = 14621348
 		popneed_communication = 31793487
-		popneed_services = 47687194
+    	popneed_art = 14621348
+		popneed_heating = 26
+		popneed_luxury_items = 79481085
 		popneed_leisure = 79481085
+		popneed_luxury_drinks = 31793487
+		popneed_luxury_food = 31793487
+		popneed_housing = 4128753641
+		popneed_services = 47687194
+		popneed_convenience = 2547741
+		popneed_free_movement = 31793487
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_179 = {
     political_strength = 3500
     goods = {
-		popneed_luxury_food = 33438043
-    	popneed_heating = 26
-		popneed_luxury_drinks = 33438043
-		popneed_housing = 14896
-		popneed_free_movement = 33438043
-		popneed_convenience = 2609916
-		popneed_intoxicants = 215
-		popneed_luxury_items = 83592312
-		popneed_art = 15073958
 		popneed_communication = 33438043
-		popneed_services = 50153841
+    	popneed_art = 15073958
+		popneed_heating = 26
+		popneed_luxury_items = 83592312
 		popneed_leisure = 83592312
+		popneed_luxury_drinks = 33438043
+		popneed_luxury_food = 33438043
+		popneed_housing = 4434402781
+		popneed_services = 50153841
+		popneed_convenience = 2609916
+		popneed_free_movement = 33438043
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_180 = {
     political_strength = 3525
     goods = {
-		popneed_luxury_food = 35157786
-    	popneed_heating = 26
-		popneed_luxury_drinks = 35157786
-		popneed_housing = 15083
-		popneed_free_movement = 35157786
-		popneed_convenience = 2673250
-		popneed_intoxicants = 215
-		popneed_luxury_items = 87891498
-		popneed_art = 15537939
 		popneed_communication = 35157786
-		popneed_services = 52733258
+    	popneed_art = 15537939
+		popneed_heating = 26
+		popneed_luxury_items = 87891498
 		popneed_leisure = 87891498
+		popneed_luxury_drinks = 35157786
+		popneed_luxury_food = 35157786
+		popneed_housing = 4760784390
+		popneed_services = 52733258
+		popneed_convenience = 2673250
+		popneed_free_movement = 35157786
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_181 = {
     political_strength = 3550
     goods = {
-		popneed_luxury_food = 36955707
-    	popneed_heating = 26
-		popneed_luxury_drinks = 36955707
-		popneed_housing = 15271
-		popneed_free_movement = 36955707
-		popneed_convenience = 2737758
-		popneed_intoxicants = 215
-		popneed_luxury_items = 92386119
-		popneed_art = 16013512
 		popneed_communication = 36955707
-		popneed_services = 55429932
+    	popneed_art = 16013512
+		popneed_heating = 26
+		popneed_luxury_items = 92386119
 		popneed_leisure = 92386119
+		popneed_luxury_drinks = 36955707
+		popneed_luxury_food = 36955707
+		popneed_housing = 5109177728
+		popneed_services = 55429932
+		popneed_convenience = 2737758
+		popneed_free_movement = 36955707
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_182 = {
     political_strength = 3575
     goods = {
-		popneed_luxury_food = 38834898
-    	popneed_heating = 26
-		popneed_luxury_drinks = 38834898
-		popneed_housing = 15460
-		popneed_free_movement = 38834898
-		popneed_convenience = 2803453
-		popneed_intoxicants = 215
-		popneed_luxury_items = 97083907
-		popneed_art = 16500900
 		popneed_communication = 38834898
-		popneed_services = 58248501
+    	popneed_art = 16500900
+		popneed_heating = 26
+		popneed_luxury_items = 97083907
 		popneed_leisure = 97083907
+		popneed_luxury_drinks = 38834898
+		popneed_luxury_food = 38834898
+		popneed_housing = 5480933237
+		popneed_services = 58248501
+		popneed_convenience = 2803453
+		popneed_free_movement = 38834898
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_183 = {
     political_strength = 3600
     goods = {
-		popneed_luxury_food = 40798556
-    	popneed_heating = 26
-		popneed_luxury_drinks = 40798556
-		popneed_housing = 15651
-		popneed_free_movement = 40798556
-		popneed_convenience = 2870352
-		popneed_intoxicants = 215
-		popneed_luxury_items = 101992852
-		popneed_art = 17000329
 		popneed_communication = 40798556
-		popneed_services = 61193758
+    	popneed_art = 17000329
+		popneed_heating = 26
+		popneed_luxury_items = 101992852
 		popneed_leisure = 101992852
+		popneed_luxury_drinks = 40798556
+		popneed_luxury_food = 40798556
+		popneed_housing = 5877476081
+		popneed_services = 61193758
+		popneed_convenience = 2870352
+		popneed_free_movement = 40798556
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_184 = {
     political_strength = 3625
     goods = {
-		popneed_luxury_food = 42849985
-    	popneed_heating = 26
-		popneed_luxury_drinks = 42849985
-		popneed_housing = 15842
-		popneed_free_movement = 42849985
-		popneed_convenience = 2938470
-		popneed_intoxicants = 215
-		popneed_luxury_items = 107121214
-		popneed_art = 17512028
 		popneed_communication = 42849985
-		popneed_services = 64270659
+    	popneed_art = 17512028
+		popneed_heating = 26
+		popneed_luxury_items = 107121214
 		popneed_leisure = 107121214
+		popneed_luxury_drinks = 42849985
+		popneed_luxury_food = 42849985
+		popneed_housing = 6300309829
+		popneed_services = 64270659
+		popneed_convenience = 2938470
+		popneed_free_movement = 42849985
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_185 = {
     political_strength = 3650
     goods = {
-		popneed_luxury_food = 44992598
-    	popneed_heating = 26
-		popneed_luxury_drinks = 44992598
-		popneed_housing = 16036
-		popneed_free_movement = 44992598
-		popneed_convenience = 3007821
-		popneed_intoxicants = 215
-		popneed_luxury_items = 112477525
-		popneed_art = 18036229
 		popneed_communication = 44992598
-		popneed_services = 67484325
+    	popneed_art = 18036229
+		popneed_heating = 26
+		popneed_luxury_items = 112477525
 		popneed_leisure = 112477525
+		popneed_luxury_drinks = 44992598
+		popneed_luxury_food = 44992598
+		popneed_housing = 6751020310
+		popneed_services = 67484325
+		popneed_convenience = 3007821
+		popneed_free_movement = 44992598
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_186 = {
     political_strength = 3675
     goods = {
-		popneed_luxury_food = 47229923
-    	popneed_heating = 26
-		popneed_luxury_drinks = 47229923
-		popneed_housing = 16230
-		popneed_free_movement = 47229923
-		popneed_convenience = 3078423
-		popneed_intoxicants = 215
-		popneed_luxury_items = 118070604
-		popneed_art = 18573169
 		popneed_communication = 47229923
-		popneed_services = 70840044
+    	popneed_art = 18573169
+		popneed_heating = 26
+		popneed_luxury_items = 118070604
 		popneed_leisure = 118070604
+		popneed_luxury_drinks = 47229923
+		popneed_luxury_food = 47229923
+		popneed_housing = 7231279626
+		popneed_services = 70840044
+		popneed_convenience = 3078423
+		popneed_free_movement = 47229923
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_187 = {
     political_strength = 3700
     goods = {
-		popneed_luxury_food = 49565603
-    	popneed_heating = 26
-		popneed_luxury_drinks = 49565603
-		popneed_housing = 16426
-		popneed_free_movement = 49565603
-		popneed_convenience = 3150289
-		popneed_intoxicants = 215
-		popneed_luxury_items = 123909558
-		popneed_art = 19123085
 		popneed_communication = 49565603
-		popneed_services = 74343283
+    	popneed_art = 19123085
+		popneed_heating = 26
+		popneed_luxury_items = 123909558
 		popneed_leisure = 123909558
+		popneed_luxury_drinks = 49565603
+		popneed_luxury_food = 49565603
+		popneed_housing = 7742850341
+		popneed_services = 74343283
+		popneed_convenience = 3150289
+		popneed_free_movement = 49565603
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_188 = {
     political_strength = 3725
     goods = {
-		popneed_luxury_food = 52003401
-    	popneed_heating = 26
-		popneed_luxury_drinks = 52003401
-		popneed_housing = 16623
-		popneed_free_movement = 52003401
-		popneed_convenience = 3223437
-		popneed_intoxicants = 215
-		popneed_luxury_items = 130003795
-		popneed_art = 19686219
 		popneed_communication = 52003401
-		popneed_services = 77999684
+    	popneed_art = 19686219
+		popneed_heating = 26
+		popneed_luxury_items = 130003795
 		popneed_leisure = 130003795
+		popneed_luxury_drinks = 52003401
+		popneed_luxury_food = 52003401
+		popneed_housing = 8287589852
+		popneed_services = 77999684
+		popneed_convenience = 3223437
+		popneed_free_movement = 52003401
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_189 = {
     political_strength = 3750
     goods = {
-		popneed_luxury_food = 54547203
-    	popneed_heating = 26
-		popneed_luxury_drinks = 54547203
-		popneed_housing = 16821
-		popneed_free_movement = 54547203
-		popneed_convenience = 3297882
-		popneed_intoxicants = 215
-		popneed_luxury_items = 136363028
-		popneed_art = 20262817
 		popneed_communication = 54547203
-		popneed_services = 81815075
+    	popneed_art = 20262817
+		popneed_heating = 26
+		popneed_luxury_items = 136363028
 		popneed_leisure = 136363028
+		popneed_luxury_drinks = 54547203
+		popneed_luxury_food = 54547203
+		popneed_housing = 8867454938
+		popneed_services = 81815075
+		popneed_convenience = 3297882
+		popneed_free_movement = 54547203
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_190 = {
     political_strength = 3775
     goods = {
-		popneed_luxury_food = 57201020
-    	popneed_heating = 26
-		popneed_luxury_drinks = 57201020
-		popneed_housing = 17021
-		popneed_free_movement = 57201020
-		popneed_convenience = 3373639
-		popneed_intoxicants = 215
-		popneed_luxury_items = 142997284
-		popneed_art = 20853125
 		popneed_communication = 57201020
-		popneed_services = 85795473
+    	popneed_art = 20853125
+		popneed_heating = 26
+		popneed_luxury_items = 142997284
 		popneed_leisure = 142997284
+		popneed_luxury_drinks = 57201020
+		popneed_luxury_food = 57201020
+		popneed_housing = 9484506511
+		popneed_services = 85795473
+		popneed_convenience = 3373639
+		popneed_free_movement = 57201020
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_191 = {
     political_strength = 3800
     goods = {
-		popneed_luxury_food = 59968993
-    	popneed_heating = 26
-		popneed_luxury_drinks = 59968993
-		popneed_housing = 17222
-		popneed_free_movement = 59968993
-		popneed_convenience = 3450725
-		popneed_intoxicants = 215
-		popneed_luxury_items = 149916918
-		popneed_art = 21457396
 		popneed_communication = 59968993
-		popneed_services = 89947089
+    	popneed_art = 21457396
+		popneed_heating = 26
+		popneed_luxury_items = 149916918
 		popneed_leisure = 149916918
+		popneed_luxury_drinks = 59968993
+		popneed_luxury_food = 59968993
+		popneed_housing = 10140914558
+		popneed_services = 89947089
+		popneed_convenience = 3450725
+		popneed_free_movement = 59968993
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_192 = {
     political_strength = 3825
     goods = {
-		popneed_luxury_food = 62855396
-    	popneed_heating = 26
-		popneed_luxury_drinks = 62855396
-		popneed_housing = 17424
-		popneed_free_movement = 62855396
-		popneed_convenience = 3529156
-		popneed_intoxicants = 215
-		popneed_luxury_items = 157132612
-		popneed_art = 22075884
 		popneed_communication = 62855396
-		popneed_services = 94276334
+    	popneed_art = 22075884
+		popneed_heating = 26
+		popneed_luxury_items = 157132612
 		popneed_leisure = 157132612
+		popneed_luxury_drinks = 62855396
+		popneed_luxury_food = 62855396
+		popneed_housing = 10838963297
+		popneed_services = 94276334
+		popneed_convenience = 3529156
+		popneed_free_movement = 62855396
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_193 = {
     political_strength = 3850
     goods = {
-		popneed_luxury_food = 65864640
-    	popneed_heating = 26
-		popneed_luxury_drinks = 65864640
-		popneed_housing = 17628
-		popneed_free_movement = 65864640
-		popneed_convenience = 3608949
-		popneed_intoxicants = 215
-		popneed_luxury_items = 164655392
-		popneed_art = 22708847
 		popneed_communication = 65864640
-		popneed_services = 98789823
+    	popneed_art = 22708847
+		popneed_heating = 26
+		popneed_luxury_items = 164655392
 		popneed_leisure = 164655392
+		popneed_luxury_drinks = 65864640
+		popneed_luxury_food = 65864640
+		popneed_housing = 11581056545
+		popneed_services = 98789823
+		popneed_convenience = 3608949
+		popneed_free_movement = 65864640
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_194 = {
     political_strength = 3875
     goods = {
-		popneed_luxury_food = 69001276
-    	popneed_heating = 26
-		popneed_luxury_drinks = 69001276
-		popneed_housing = 17833
-		popneed_free_movement = 69001276
-		popneed_convenience = 3690119
-		popneed_intoxicants = 215
-		popneed_luxury_items = 172496635
-		popneed_art = 23356546
 		popneed_communication = 69001276
-		popneed_services = 103494379
+    	popneed_art = 23356546
+		popneed_heating = 26
+		popneed_luxury_items = 172496635
 		popneed_leisure = 172496635
+		popneed_luxury_drinks = 69001276
+		popneed_luxury_food = 69001276
+		popneed_housing = 12369723302
+		popneed_services = 103494379
+		popneed_convenience = 3690119
+		popneed_free_movement = 69001276
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_195 = {
     political_strength = 3900
     goods = {
-		popneed_luxury_food = 72269997
-    	popneed_heating = 26
-		popneed_luxury_drinks = 72269997
-		popneed_housing = 18039
-		popneed_free_movement = 72269997
-		popneed_convenience = 3772683
-		popneed_intoxicants = 215
-		popneed_luxury_items = 180668074
-		popneed_art = 24019245
 		popneed_communication = 72269997
-		popneed_services = 108397045
+    	popneed_art = 24019245
+		popneed_heating = 26
+		popneed_luxury_items = 180668074
 		popneed_leisure = 180668074
+		popneed_luxury_drinks = 72269997
+		popneed_luxury_food = 72269997
+		popneed_housing = 13207623580
+		popneed_services = 108397045
+		popneed_convenience = 3772683
+		popneed_free_movement = 72269997
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_196 = {
     political_strength = 3925
     goods = {
-		popneed_luxury_food = 75675645
-    	popneed_heating = 26
-		popneed_luxury_drinks = 75675645
-		popneed_housing = 18247
-		popneed_free_movement = 75675645
-		popneed_convenience = 3856658
-		popneed_intoxicants = 215
-		popneed_luxury_items = 189181814
-		popneed_art = 24697212
 		popneed_communication = 75675645
-		popneed_services = 113505081
+    	popneed_art = 24697212
+		popneed_heating = 26
+		popneed_luxury_items = 189181814
 		popneed_leisure = 189181814
+		popneed_luxury_drinks = 75675645
+		popneed_luxury_food = 75675645
+		popneed_housing = 14097554453
+		popneed_services = 113505081
+		popneed_convenience = 3856658
+		popneed_free_movement = 75675645
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_197 = {
     political_strength = 3950
     goods = {
-		popneed_luxury_food = 79223214
-    	popneed_heating = 26
-		popneed_luxury_drinks = 79223214
-		popneed_housing = 18455
-		popneed_free_movement = 79223214
-		popneed_convenience = 3942060
-		popneed_intoxicants = 215
-		popneed_luxury_items = 198050337
-		popneed_art = 25390718
 		popneed_communication = 79223214
-		popneed_services = 118825977
+    	popneed_art = 25390718
+		popneed_heating = 26
+		popneed_luxury_items = 198050337
 		popneed_leisure = 198050337
+		popneed_luxury_drinks = 79223214
+		popneed_luxury_food = 79223214
+		popneed_housing = 15042456367
+		popneed_services = 118825977
+		popneed_convenience = 3942060
+		popneed_free_movement = 79223214
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_198 = {
     political_strength = 3975
     goods = {
-		popneed_luxury_food = 82917851
-    	popneed_heating = 26
-		popneed_luxury_drinks = 82917851
-		popneed_housing = 18666
-		popneed_free_movement = 82917851
-		popneed_convenience = 4028907
-		popneed_intoxicants = 215
-		popneed_luxury_items = 207286512
-		popneed_art = 26100039
 		popneed_communication = 82917851
-		popneed_services = 124367454
+    	popneed_art = 26100039
+		popneed_heating = 26
+		popneed_luxury_items = 207286512
 		popneed_leisure = 207286512
+		popneed_luxury_drinks = 82917851
+		popneed_luxury_food = 82917851
+		popneed_housing = 16045419696
+		popneed_services = 124367454
+		popneed_convenience = 4028907
+		popneed_free_movement = 82917851
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_199 = {
     political_strength = 4000
     goods = {
-		popneed_luxury_food = 86764865
-    	popneed_heating = 26
-		popneed_luxury_drinks = 86764865
-		popneed_housing = 18877
-		popneed_free_movement = 86764865
-		popneed_convenience = 4117215
-		popneed_intoxicants = 215
-		popneed_luxury_items = 216903608
-		popneed_art = 26825451
 		popneed_communication = 86764865
-		popneed_services = 130137473
+    	popneed_art = 26825451
+		popneed_heating = 26
+		popneed_luxury_items = 216903608
 		popneed_leisure = 216903608
+		popneed_luxury_drinks = 86764865
+		popneed_luxury_food = 86764865
+		popneed_housing = 17109691575
+		popneed_services = 130137473
+		popneed_convenience = 4117215
+		popneed_free_movement = 86764865
+		popneed_intoxicants = 215
 	}
 }
 
 wealth_200 = {
     political_strength = 4025
     goods = {
-		popneed_luxury_food = 90769727
-    	popneed_heating = 26
-		popneed_luxury_drinks = 90769727
-		popneed_housing = 19090
-		popneed_free_movement = 90769727
-		popneed_convenience = 4207002
-		popneed_intoxicants = 215
-		popneed_luxury_items = 226915302
-		popneed_art = 27567237
 		popneed_communication = 90769727
-		popneed_services = 136144239
+    	popneed_art = 27567237
+		popneed_heating = 26
+		popneed_luxury_items = 226915302
 		popneed_leisure = 226915302
+		popneed_luxury_drinks = 90769727
+		popneed_luxury_food = 90769727
+		popneed_housing = 18238682989
+		popneed_services = 136144239
+		popneed_convenience = 4207002
+		popneed_free_movement = 90769727
+		popneed_intoxicants = 215
 	}
 }

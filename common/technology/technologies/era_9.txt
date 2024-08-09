@@ -66,8 +66,6 @@ digital_telecommunications = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_tech_spread_add = 80
-		goods_output_telephones_mult = 0.2
-		goods_output_radios_mult = 0.2
 	}
 	
 	ai_weight = {
@@ -100,7 +98,7 @@ supply_chain_management = {
 	}
 	
 	modifier = {
-		goods_output_transportation_mult = 0.2
+		state_building_highway_max_level_add = 1
 	}
 	
 	ai_weight = {
@@ -156,7 +154,7 @@ unmanned_aerial_vehicles = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		unit_navy_offense_mult = 0.1
-		state_building_airport_max_level_add = 5
+		state_building_airport_max_level_add = 1
 	}
 	
 	ai_weight = {
@@ -380,8 +378,7 @@ alternative_media = {
 	}
 	
 	modifier = {
-		political_movement_radicalism_mult = 0.25
-		building_arts_academy_throughput_add = 0.2
+		political_movement_radicalism_mult = 0.1
 		country_loan_interest_rate_add = -0.02
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 	}
@@ -403,7 +400,6 @@ animal_rights_movement = {
 	
 	modifier = {
 		country_institution_ministry_of_the_environment_max_investment_add = 1
-		building_synthetics_plants_rubber_throughput_add = 0.1
 	}
 	
 	ai_weight = {

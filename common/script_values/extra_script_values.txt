@@ -468,3 +468,24 @@ culture_change_progress = {
 		multiply = 100
 	}
 }
+
+institution_ministry_of_the_environment_pollution_generation = {
+	value = modifier:state_pollution_generation_mult
+	multiply = pollution_generation
+}
+
+nuclear_weapon_program_additional_nuke_progress_multiplier = 10
+nuclear_weapon_program_monthly_progress = {
+	value = var:nuclear_weapons_program_funding
+	if = {
+		limit = { var:nuclear_weapons_program_first_nuke_done > 0 }
+		multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
+	}
+}
+nuclear_weapon_program_funding_step = 50
+nuclear_weapon_program_goal_value = 100
+
+nuclear_weapons_program_current_cost = {
+	value = var:nuclear_weapons_program_funding
+	multiply = nuclear_weapon_program_funding_step
+}

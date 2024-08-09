@@ -1,0 +1,100 @@
+je_nuclear_program = {
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	group = je_group_foreign_affairs
+
+    is_shown_when_inactive = {
+		has_technology_researched = nuclear_weapons
+	}
+
+    scripted_button = increase_funding_nuclear_program
+    scripted_button = decrease_funding_nuclear_program
+
+    possible = {
+        OR = {
+            country_rank = rank_value:great_power
+            AND = {
+                any_scope_ally = {
+                    has_variable = nuclear_weapon_stockpile
+                    var:nuclear_weapon_stockpile > 10
+                }
+                country_rank = rank_value:major_power
+                country_innovation > 400
+            }
+        }
+    }
+
+    immediate = {
+        set_variable = {
+            name = nuclear_weapon_stockpile
+            value = 0
+        }
+        set_variable = {
+            name = nuclear_weapon_program_progress
+            value = 0
+        }
+        set_variable = {
+            name = nuclear_weapons_program_first_nuke_done
+            value = 0
+        }
+        set_variable = {
+            name = nuclear_weapons_program_funding
+            value = 0
+        }
+    }
+
+    complete = {
+		scope:journal_entry = { is_goal_complete = yes }
+	}
+
+	on_complete = {
+        if = {
+            limit = { var:nuclear_weapons_program_first_nuke_done > 0 }
+            custom_tooltip = {
+                text = "ADDITIONAL_NUKE_CREATED"
+            }
+        }
+        else = {
+            custom_tooltip = {
+                text = "FIRST_NUKE_CREATED"
+            }
+        }
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			change_variable = {
+				name = nuclear_weapon_program_progress
+				add = nuclear_weapon_program_monthly_progress
+			}
+            if = {
+                limit = {var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value}
+                set_variable = {
+                    name = nuclear_weapon_program_progress
+                    value = 0
+                }
+                change_variable = {
+                    name = nuclear_weapon_stockpile
+                    add = 1
+                }
+                set_variable = {
+                    name = nuclear_weapons_program_first_nuke_done
+                    value = 1
+                }
+            }
+		}
+	}
+
+	current_value = {
+        value = root.var:nuclear_weapon_program_progress
+	}
+
+	goal_add_value = {
+		value = nuclear_weapon_program_goal_value
+	}
+
+	progressbar = yes
+
+	weight = 10
+	should_be_pinned_by_default = yes
+}
