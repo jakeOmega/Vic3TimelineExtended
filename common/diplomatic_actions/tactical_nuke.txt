@@ -23,6 +23,7 @@ tactical_nuke_diplo_action = {
     }
     
 	accept_effect = {
+        save_scope_as = attacking_country
         random_list = {
             0 = {
                 modifier = nuclear_strike_success_chance
