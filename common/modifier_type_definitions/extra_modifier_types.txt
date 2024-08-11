@@ -752,6 +752,14 @@ power_bloc_can_use_crisis_resolution_bool = {
 	}
 }
 
+power_bloc_can_enact_decree_cultural_emigration_initiative_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+}
+
 state_infrastructure_from_aeroplanes_consumption_add = {
 	decimals=2
 	color=good
@@ -1027,6 +1035,14 @@ country_add_multicultural_ideology_to_intelligentsia_bool = {
 	}
 }
 
+state_mass_migration_encouragement_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
 state_poor_expected_sol={
 	decimals=1
 	color=neutral
@@ -1046,6 +1062,11 @@ country_nuclear_weapon_attack_success_add = {
 }
 
 country_nuclear_weapon_defense_chance_add = {
+	color = good
+	percent = yes
+}
+
+building_group_bg_arts_academics_standard_of_living_add = {
 	color = good
 	percent = yes
 }

@@ -12465,7 +12465,7 @@ pm_principle_freedom_of_movement_3 = {
 		principle_freedom_of_movement_5
 	}
 	
-	country_modifiers = {
+	state_modifiers = {
 		unscaled = {
 			state_migration_pull_mult = 0.2
 		}

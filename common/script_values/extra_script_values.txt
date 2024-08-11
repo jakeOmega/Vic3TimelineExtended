@@ -161,8 +161,8 @@ starting_investment_pool = {
 	}
 }
 
-homeland_culture_disappear_threshold = 0.33
-homeland_culture_form_threshold = 0.66
+homeland_culture_disappear_threshold = 0.25
+homeland_culture_form_threshold = 0.50
 
 primary_culture_state_count_threshold = 0.5
 
@@ -504,4 +504,18 @@ nuclear_strike_success_chance = {
 nuclear_strike_fail_chance = {
 	value = 100
 	subtract = nuclear_strike_success_chance
+}
+
+state_country_population_share = {
+	value = state_population
+	owner = {
+		divide = {
+			value = total_population
+			min = 1
+		}
+	}
+}
+
+migration_attraction_script_value = {
+	value = migration_pull
 }

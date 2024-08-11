@@ -3,6 +3,7 @@ on_monthly_pulse_state = {
 		space_elevator_on_action
 		remove_or_create_homelands_on_action
 		pollution_test
+		mass_migration_trigger_on_action
 	}
 }
 
@@ -91,7 +92,7 @@ remove_or_create_homelands_on_action = {
 			limit = {
 				owner = {
 					power_bloc ?= {
-						has_identity = identity:identity_cultural
+						modifier:power_bloc_homelands_can_decay_bool = yes
 					}
 				}
 			}
@@ -156,6 +157,20 @@ pollution_test = {
 			add_modifier = {
 				name = pollution_generation_mult_effect
 				multiplier = institution_ministry_of_the_environment_pollution_generation
+			}
+		}
+	}
+}
+
+mass_migration_trigger_on_action = {
+	effect = {
+		if = {
+			limit = {
+				modifier:state_mass_migration_encouragement_bool = yes
+			}
+			random = {
+				chance = 10
+				trigger_mass_migration = yes
 			}
 		}
 	}

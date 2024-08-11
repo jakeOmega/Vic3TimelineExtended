@@ -1318,6 +1318,10 @@ principle_cultural_unity_1 = {
 	member_modifier = {
 		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
 	}
+
+	power_bloc_modifier = {
+		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+	}
 	
 	ai_weight = {
 		value = 200 # High base weight if the leader has colonies
@@ -1351,6 +1355,7 @@ principle_cultural_unity_2 = {
 	}
 
 	power_bloc_modifier = {
+		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
 		power_bloc_homelands_can_decay_bool = yes
 	}
 	
@@ -1378,6 +1383,7 @@ principle_cultural_unity_3 = {
 	}
 
 	power_bloc_modifier = {
+		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
 		power_bloc_homelands_can_decay_bool = yes
 	}
 
@@ -1408,6 +1414,7 @@ principle_cultural_unity_4 = {
 	}
 
 	power_bloc_modifier = {
+		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
 		power_bloc_homelands_can_decay_bool = yes
 	}
 
@@ -1443,6 +1450,7 @@ principle_cultural_unity_5 = {
 	}
 
 	power_bloc_modifier = {
+		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
 		power_bloc_homelands_can_decay_bool = yes
 		power_bloc_leader_can_force_cultural_adoption_bool = yes
 	}
@@ -2657,6 +2665,7 @@ principle_artistic_expression_1 = {
 
 	member_modifier = {
 		goods_output_fine_art_mult = 0.05
+		country_academics_pol_str_mult = 0.2
 	}
 	
 	ai_weight = {
@@ -2683,6 +2692,7 @@ principle_artistic_expression_2 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		goods_output_fine_art_mult = 0.05
+		country_academics_pol_str_mult = 0.4
 		building_group_bg_arts_academics_standard_of_living_add = 1
 	}
 
@@ -2698,6 +2708,7 @@ principle_artistic_expression_3 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		goods_output_fine_art_mult = 0.05
+		country_academics_pol_str_mult = 0.6
 		building_group_bg_arts_academics_standard_of_living_add = 1
 		country_war_exhaustion_casualties_mult = -0.1
 		unit_morale_loss_mult = -0.1
@@ -2721,7 +2732,8 @@ principle_artistic_expression_4 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		goods_output_fine_art_mult = 0.05
-		building_group_bg_arts_academics_standard_of_living_add = 1
+		country_academics_pol_str_mult = 0.8
+		building_group_bg_arts_academics_standard_of_living_add = 2
 		country_war_exhaustion_casualties_mult = -0.1
 		unit_morale_loss_mult = -0.2
 		country_society_tech_research_speed_mult = 0.05
@@ -2743,7 +2755,8 @@ principle_artistic_expression_5 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		goods_output_fine_art_mult = 0.05
-		building_group_bg_arts_academics_standard_of_living_add = 1
+		country_academics_pol_str_mult = 1
+		building_group_bg_arts_academics_standard_of_living_add = 2
 		country_war_exhaustion_casualties_mult = -0.1
 		unit_morale_loss_mult = -0.3
 		country_society_tech_research_speed_mult = 0.1
@@ -2798,7 +2811,7 @@ principle_military_training_1 = {
 		}
 		if = {
 			limit = {
-				has_law = law_type:law_mass_constription
+				has_law = law_type:law_mass_conscription
 			}
 			multiply = 2
 		}		
@@ -2930,7 +2943,7 @@ principle_engineering_and_logistics_1 = {
 		}
 		if = {
 			limit = {
-				has_law = law_type:law_mass_constription
+				has_law = law_type:law_mass_conscription
 			}
 			multiply = 2
 		}		

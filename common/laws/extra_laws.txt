@@ -1539,7 +1539,7 @@ law_protected_class = {
 	}
 
 	modifier = {
-		state_bureaucracy_population_base_cost_factor_mult = 0.5
+		country_bureaucracy_investment_cost_factor_mult = 0.1
 		state_working_adult_ratio_add = 0.2
 		state_birth_rate_mult = -0.1
 		state_dependent_political_participation_add = 0.5

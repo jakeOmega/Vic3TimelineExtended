@@ -609,3 +609,29 @@ nuclear_industrial_strike = {
 		}
 	}
 }
+
+trigger_mass_migration = {
+	random_scope_culture = {
+		limit = {
+			culture_is_discriminated_in = ROOT.owner
+			# NOT = { ROOT.owner = { is_mass_migration_origin_of_culture = PREV } }
+			any_state = {
+				NOT = { PREV = { culture_is_discriminated_in = PREV.owner } }
+				NOT = { owner = { is_country_type = decentralized } }
+			}
+		}
+		ordered_state = {
+			limit = {
+				NOT = { PREV = { culture_is_discriminated_in = PREV.owner } }
+				NOT = { owner = { is_country_type = decentralized } }
+				state_is_eligible_as_mass_migration_target = yes
+			}
+			order_by = migration_attraction_script_value
+			position = 0
+			create_mass_migration = {
+				origin = ROOT.owner
+				culture = PREV
+			}
+		}
+	}
+}

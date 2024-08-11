@@ -23,7 +23,6 @@ nuclear_weapon_events.1 = {
  	}
 	
  	immediate = {
- 		
  	}
 
  	option = {

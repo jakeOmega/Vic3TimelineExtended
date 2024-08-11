@@ -1283,7 +1283,7 @@ combat_unit_type_nuclear_submarine = {
         military_formation_movement_speed_mult = 0.5
     }
 
-	unlocking_technologies = { advanced_submarine_technology }  $ era 7
+	unlocking_technologies = { advanced_submarine_technology }  # era 7
 
     combat_unit_image = {
         texture = "gfx/unit_illustrations/nuclear_submarine.dds"
