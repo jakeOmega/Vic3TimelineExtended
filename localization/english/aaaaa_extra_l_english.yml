@@ -1741,6 +1741,9 @@
  ideology_environmentalists_desc:0 "Environmentalists believe that the environment should be protected and that human activity is causing harm to the planet."
  ideology_multicultural:0 "Multiculturalist"
  ideology_multicultural_desc:0 "Multiculturalists believe that diversity is a strength and that different cultures should be celebrated."
+ ideology_anti_colonialist:0 "Anti-Colonialist"
+ ideology_anti_colonialist_desc:0 "Anti-Colonialists believe that colonialism is wrong and that colonized peoples should be free to govern themselves."
+
  STANDARD_OF_LIVING_LEVEL_101:0 "Extremely Opulent"
  STANDARD_OF_LIVING_LEVEL_102:0 "Extremely Opulent"
  STANDARD_OF_LIVING_LEVEL_103:0 "Extremely Opulent"
@@ -2065,6 +2068,9 @@
  country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool_desc: "Allowed to #b Impose#! the same [concept_law] as their own in the [GetLawGroup('lawgroup_citizenship').GetName] group on other [Concept('concept_power_bloc_member','$concept_power_bloc_members_short$')]"
  country_add_multicultural_ideology_to_intelligentsia_bool: "Add Multicultural Ideology to Intelligentsia"
  country_add_multicultural_ideology_to_intelligentsia_bool_desc: "Add the Multicultural Ideology to the Intelligentsia interest group."
+ country_add_anticolonial_ideology_to_igs_bool: "Add Anticolonial Ideology to [GetInterestGroupVariant('ig_trade_unions',GetPlayer).GetNameWithCountryVariant] and [GetInterestGroupVariant('ig_intelligentsia',GetPlayer).GetNameWithCountryVariant]."
+ country_add_anticolonial_ideology_to_igs_bool_desc: "Add the Anticolonial Ideology to the Trade Unions and Intelligentsia interest groups."
+
  state_mass_migration_encouragement_bool: "Mass Migration Encouragement"
  state_mass_migration_encouragement_bool_desc: "Encourages mass migration of non-accepted cultures present in this state to other countries. Each month, there is a 10% chance of generating a mass migration event."
  accept_culture_title: "Accept Culture"

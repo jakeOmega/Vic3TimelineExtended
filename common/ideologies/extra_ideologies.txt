@@ -231,3 +231,16 @@ ideology_multicultural = {
 		law_multicultural = strongly_approve	
 	}
 }
+
+ideology_anti_colonialist = {
+	icon = "gfx/interface/icons/ideology_icons/abolitionist.dds"
+	
+	priority = 200
+	
+	lawgroup_colonization = {		
+		law_no_colonial_affairs = strongly_approve
+		law_colonial_resettlement = strongly_disapprove
+		law_colonial_exploitation = strongly_disapprove
+		law_frontier_colonization = disapprove
+	}
+}

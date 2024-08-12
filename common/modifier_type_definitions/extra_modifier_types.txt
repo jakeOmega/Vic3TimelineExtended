@@ -1035,6 +1035,14 @@ country_add_multicultural_ideology_to_intelligentsia_bool = {
 	}
 }
 
+country_add_anticolonial_ideology_to_igs_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
 state_mass_migration_encouragement_bool = {
 	color = neutral
 	boolean = yes

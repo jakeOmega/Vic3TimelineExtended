@@ -20,6 +20,7 @@ on_monthly_pulse_country = {
 on_acquired_technology = {
 	on_actions = {
 		civil_rights_on_action
+		anticolonialism_on_action
 	}
 }
 
@@ -141,6 +142,20 @@ civil_rights_on_action = {
 			ig:ig_intelligentsia = {
 				
 				add_ideology = ideology_multicultural
+			}
+		}
+	}
+}
+
+anticolonialism_on_action = {
+	effect = {
+		if = {
+			limit = { has_technology_researched = decolonization }
+			ig:ig_trade_unions = {
+				add_ideology = ideology_anti_colonialist
+			}
+			ig:ig_intelligentsia = {
+				add_ideology = ideology_anti_colonialist
 			}
 		}
 	}

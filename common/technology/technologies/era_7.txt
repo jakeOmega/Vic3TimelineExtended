@@ -210,14 +210,15 @@ decolonization = {
 	category = society
 	
 	modifier = {
-		country_infamy_generation_mult = 0.1
-		country_infamy_decay_mult = 0.2
-		country_diplomatic_play_maneuvers_add = 25
+		country_diplomatic_play_maneuvers_add = 10
 		country_influence_mult = 0.2
 		state_expected_sol_from_literacy = 1
 		country_weekly_innovation_max_add = 50
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
+		state_colony_growth_creation_mult = 0.1
+		country_liberty_desire_of_subjects_add = 0.05
+		country_add_anticolonial_ideology_to_igs_bool = yes
 	}
 	
 	unlocking_technologies = {	
@@ -317,7 +318,7 @@ ICBMs = {
 	category = military
 	
 	modifier = {
-		country_diplomatic_play_maneuvers_add = 50
+		country_diplomatic_play_maneuvers_add = 10
 		country_infamy_generation_mult = -0.15
 		country_nuclear_weapon_attack_success_add = 0.5
 	}
@@ -342,7 +343,7 @@ tactical_nuclear_weapons = {
 	}
 	
 	modifier = {
-		country_diplomatic_play_maneuvers_add = 25
+		country_diplomatic_play_maneuvers_add = 10
 		country_prestige_mult = 0.1
 		country_infamy_generation_mult = -0.1
 		country_weekly_innovation_max_add = 50
