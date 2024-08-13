@@ -176,7 +176,29 @@ types culture_panel
 				}
 
 				textbox = {
-					text = "Total Cultural Acceptance Cost: [GetPlayer.MakeScope.ScriptValue('total_cultural_acceptance_cost_script_value')]%"
+					text = "Total Cultural Acceptance Cost: @aut! [GetPlayer.MakeScope.ScriptValue('total_cultural_acceptance_cost_script_value')]"
+					size = { @panel_width 30 }
+					align = hcenter|vcenter
+					using = fontsize_large
+					tooltip = "CULTURAL_ACCEPTANCE_COST_TOOLTIP"
+				}
+			}
+
+			divider_decorative = {
+				size = { 460 10 }
+			}
+
+			container = {
+				minimumsize = { @panel_width 40 }
+				maximumsize = { @panel_width 40 }
+				parentanchor = top
+			
+				background = {
+					using = entry_bg
+				}
+
+				textbox = {
+					text = "Total Cultural Discrimination Cost: @aut! [GetPlayer.MakeScope.ScriptValue('total_cultural_discrimination_cost_script_value')]"
 					size = { @panel_width 30 }
 					align = hcenter|vcenter
 					using = fontsize_large

@@ -31,7 +31,7 @@ legacy_construction_modifier = {
 
 accepted_cultures_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_bureaucracy_investment_cost_factor_mult = 1
+	country_authority_add = -1
 }
 
 nuclear_weapon_program_funding = {

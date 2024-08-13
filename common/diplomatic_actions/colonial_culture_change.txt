@@ -16,7 +16,6 @@ colonial_culture_change = {
             OR = {
                 has_government_type = gov_chartered_company
                 has_government_type = gov_colonial_administration
-                has_government_type = gov_crown_colony
             }
         }
 	}

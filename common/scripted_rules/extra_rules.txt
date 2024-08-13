@@ -12,60 +12,12 @@ unlock_power_bloc_principle_slot_3 = {
 	hidden_trigger = {
 		has_dlc_feature = power_bloc_features
 	}
-    OR = {
-        used_principle_slots >= 3
-        available_principle_slots >= 3
-    }
 }
 
 unlock_power_bloc_principle_slot_4 = {
 	hidden_trigger = {
 		has_dlc_feature = power_bloc_features
 	}
-    OR = {
-        used_principle_slots >= 4
-        available_principle_slots >= 4
-    }
-}
-
-unlock_power_bloc_principle_slot_5 = {
-    hidden_trigger = {
-        has_dlc_feature = power_bloc_features
-    }
-    OR = {
-        used_principle_slots >= 5
-        available_principle_slots >= 5
-    }
-}
-
-unlock_power_bloc_principle_slot_6 = {
-    hidden_trigger = {
-        has_dlc_feature = power_bloc_features
-    }
-    OR = {
-        used_principle_slots >= 6
-        available_principle_slots >= 6
-    }
-}
-
-unlock_power_bloc_principle_slot_7 = {
-    hidden_trigger = {
-        has_dlc_feature = power_bloc_features
-    }
-    OR = {
-        used_principle_slots >= 7
-        available_principle_slots >= 7
-    }
-}
-
-unlock_power_bloc_principle_slot_8 = {
-    hidden_trigger = {
-        has_dlc_feature = power_bloc_features
-    }
-    OR = {
-        used_principle_slots >= 8
-        available_principle_slots >= 8
-    }
 }
 
 unlock_power_bloc_formation_principle_slot_1 = {

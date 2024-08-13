@@ -146,6 +146,61 @@ decree_greenest_grass_campaign = {
 	}
 }
 
+decree_natalism_initiative = {
+	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	modifier = {
+		state_accepted_birth_rate_mult = 0.2
+		state_welfare_payments_add = 0.1
+		state_working_adult_ratio_add = -0.05
+	}
+	unlocking_technologies = { 
+		mass_media
+	}
+	cost = 100
+
+	ai_weight = {
+		value = 0
+		if = {
+			limit = {
+				state_country_population_share > 0.01
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				state_country_population_share > 0.05
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				state_country_population_share > 0.1
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				state_country_population_share > 0.2
+			}
+			add = 25
+		}
+		if = {
+			limit = { 
+				state_unemployment_rate >= 0.1 
+			}
+			multiply = 0
+		}
+		if = {
+			limit = {
+				any_scope_building = {
+					has_failed_hires = yes
+				}
+			}
+			multiply = 4
+		}	
+	}
+}
+
 decree_cultural_emigration_initiative = {
 	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
 	modifier = {

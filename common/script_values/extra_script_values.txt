@@ -316,7 +316,29 @@ power_bloc_mandate_progress_diplomatic_identity = {
 culture_acceptance_cost_script_value_player = {
 	player = {
 		PREV = {
-			value = culture_acceptance_cost_script_value
+			if = {
+				limit = { culture_acceptance_cost_script_value > 0 }
+				value = culture_acceptance_cost_script_value
+			}
+			else = {
+				value = culture_discrimination_cost_script_value
+				multiply = -1
+			}
+		}
+	}
+}
+
+culture_discrimination_cost_script_value_player = {
+	player = {
+		PREV = {
+			if = {
+				limit = { culture_acceptance_cost_script_value > 0 }
+				value = culture_acceptance_cost_script_value
+				multiply = -1
+			}
+			else = {
+				value = culture_discrimination_cost_script_value
+			}
 		}
 	}
 }
@@ -328,22 +350,22 @@ culture_acceptance_cost_script_value = {
 			limit = {
 				shares_heritage_and_other_trait_with_any_primary_culture = PREV
 			}
-			value = 15
+			value = 100
 		}
 		else_if = {
 			limit = {
 				shares_heritage_trait_with_any_primary_culture = PREV
 			}
-			value = 30
+			value = 200
 		}
 		else_if = {
 			limit = {
 				shares_non_heritage_trait_with_any_primary_culture = PREV
 			}
-			value = 50
+			value = 300
 		}
 		else = {
-			value = 80
+			value = 400
 		}
 	}
 	else_if = {
@@ -358,16 +380,16 @@ culture_acceptance_cost_script_value = {
 			limit = {
 				shares_heritage_trait_with_any_primary_culture = PREV
 			}
-			value = 30
+			value = 100
 		}
 		else_if = {
 			limit = {
 				shares_non_heritage_trait_with_any_primary_culture = PREV
 			}
-			value = 50
+			value = 200
 		}
 		else = {
-			value = 80
+			value = 300
 		}
 	}
 	else_if = {
@@ -388,10 +410,10 @@ culture_acceptance_cost_script_value = {
 			limit = {
 				shares_non_heritage_trait_with_any_primary_culture = PREV
 			}
-			value = 50
+			value = 100
 		}
 		else = {
-			value = 80
+			value = 200
 		}
 	}
 	else_if = {
@@ -415,7 +437,7 @@ culture_acceptance_cost_script_value = {
 			value = 0
 		}
 		else = {
-			value = 80
+			value = 100
 		}
 	}
 	else_if = {
@@ -452,7 +474,17 @@ total_cultural_acceptance_cost_script_value = {
 	}
 }
 
-culture_change_days = 10
+culture_discrimination_cost_script_value = 100
+
+total_cultural_discrimination_cost_script_value = {
+	value = 0
+	every_in_list = {
+		variable = unaccepted_cultures
+		add = culture_discrimination_cost_script_value
+	}
+}
+
+culture_change_days = 100
 
 culture_change_progress = {
 	if = {
@@ -483,7 +515,7 @@ nuclear_weapon_program_monthly_progress = {
 	}
 	multiply = 100
 }
-nuclear_weapon_program_funding_step = 50
+nuclear_weapon_program_funding_step = 5000
 nuclear_weapon_program_goal_value = 100
 
 nuclear_weapons_program_current_cost = {
@@ -518,4 +550,62 @@ state_country_population_share = {
 
 migration_attraction_script_value = {
 	value = migration_pull
+	if = {
+		limit = {
+			owner = {
+				has_subject_relation_with = ROOT.owner
+			}
+			add = 10
+		}
+	}
+	if = {
+		limit = {
+			owner = { country_has_primary_culture = PREV.PREV }
+		}
+		multiply = 2
+	}
+}
+
+market_greenhouse_gas_emissions_script_value = {
+	value = 0
+	mg:oil = {
+		add = {
+			value = market_goods_production
+			multiply = 1
+		}
+	}
+	mg:coal = {
+		add = {
+			value = market_goods_production
+			multiply = 1.5
+		}
+	}
+	divide = 10000
+}
+
+market_greenhouse_gas_emissions_script_value_display = {
+	market = {
+		value = market_greenhouse_gas_emissions_script_value
+	}
+	round = yes
+}
+
+greenhouse_gas_emissions_display = {
+	value = global_var:greenhouse_gas_emissions
+	round = yes
+}
+
+global_greenhouse_gas_emissions_script_value_display = {
+	value = 0
+	every_market = {
+		add = market_greenhouse_gas_emissions_script_value
+	}
+	round = yes
+}
+
+temperature_anomaly_display = {
+	value = global_var:greenhouse_gas_emissions
+	divide = 10000
+	round = yes
+	multiply = 10
 }

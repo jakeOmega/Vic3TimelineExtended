@@ -108,3 +108,31 @@ je_nuclear_program = {
 	weight = 10
 	should_be_pinned_by_default = yes
 }
+
+
+je_global_warming = {
+    icon = "gfx/interface/icons/event_icons/global_warming.dds"
+
+    group = je_group_environment
+
+    is_shown_when_inactive = {
+        has_global_variable = greenhouse_gas_emissions
+    }
+
+    possible = {
+        always = yes
+    }
+
+    immediate = {
+    }
+
+    complete = {
+        always = no
+    }
+
+    on_monthly_pulse = {
+    }
+
+    weight = 10
+    should_be_pinned_by_default = yes
+}

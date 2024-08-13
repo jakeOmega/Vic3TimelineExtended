@@ -23,6 +23,7 @@ add_accepted_culture_scriptedgui = {
 
 	is_valid = {
         NOT = { has_variable = culture_changing }
+        authority > 0
     } 
     
     effect = {	

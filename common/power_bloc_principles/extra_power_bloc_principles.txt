@@ -1407,8 +1407,8 @@ principle_cultural_unity_4 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
-
 		state_accepted_birth_rate_mult = 0.1
+
 		state_pop_support_law_ministry_of_culture_add = 0.5
 		country_institution_cost_institution_ministry_of_culture_mult = -0.25
 	}
@@ -1444,7 +1444,6 @@ principle_cultural_unity_5 = {
 		# Modifiers from previous level(s)	
 		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
 		state_accepted_birth_rate_mult = 0.1
-
 		state_pop_support_law_ministry_of_culture_add = 1.0
 		country_institution_cost_institution_ministry_of_culture_mult = -0.25
 	}

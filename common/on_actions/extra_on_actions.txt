@@ -17,6 +17,12 @@ on_monthly_pulse_country = {
 	}
 }
 
+on_yearly_pulse_state = {
+	on_actions = {
+		global_warming_update_on_action
+	}
+}
+
 on_acquired_technology = {
 	on_actions = {
 		civil_rights_on_action
@@ -186,6 +192,31 @@ mass_migration_trigger_on_action = {
 			random = {
 				chance = 10
 				trigger_mass_migration = yes
+			}
+		}
+	}
+}
+
+global_warming_update_on_action = {
+	effect = {
+		if = {
+			limit = {
+				NOT = { has_global_variable = greenhouse_gas_emissions }
+			}
+			set_global_variable = {
+				name = greenhouse_gas_emissions
+				value = 0
+			}
+		}
+		if = {
+			limit = {
+				owner.market_capital = THIS
+			}
+			market = {
+				change_global_variable = {
+					name = greenhouse_gas_emissions
+					add = market_greenhouse_gas_emissions_script_value
+				}
 			}
 		}
 	}
