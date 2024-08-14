@@ -264,9 +264,10 @@ globalization = {
 		building_group_bg_trade_employee_mult = -0.25
 		country_max_companies_add = 1
 		country_tech_spread_add = 80
-		country_gold_reserve_limit_mult = 1.0
 		country_allow_trade_routes_without_interest_bool = yes
 		country_leverage_threshold_change_add = -50
+		country_institution_ministry_of_commerce_max_investment_add = 1
+		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
 	 }
 	
 	ai_weight = {

@@ -83,6 +83,7 @@ containerization = {
 		state_market_access_price_impact = 0.01
 		country_loan_interest_rate_add = -0.02
 		country_tech_spread_add = 60
+		country_institution_ministry_of_commerce_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -335,6 +336,7 @@ cellular_networks = {
 	modifier = {
 		state_building_highway_max_level_add = 1
 		country_tech_spread_add = 60
+		country_institution_national_bank_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -357,6 +359,7 @@ barcodes_and_scanners = {
 		goods_output_services_mult = 0.1
 		country_company_throughput_bonus_add = 0.1
 		country_gold_reserve_limit_mult = 0.25
+		country_institution_national_bank_max_investment_add = 1
 	}
 	
 	ai_weight = {

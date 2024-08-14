@@ -312,6 +312,7 @@ bioenhanced_soldiers = {
 		unit_recovery_rate_add = 0.5
 		unit_army_offense_mult = 0.1
 		unit_army_defense_mult = 0.1
+		country_institution_ministry_of_war_max_investment_add = 1
 	}
 	
 	ai_weight = {

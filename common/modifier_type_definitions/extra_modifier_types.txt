@@ -956,6 +956,11 @@ country_institution_cost_institution_social_security_mult = {
 	percent = yes
 }
 
+country_institution_cost_institution_home_affairs_mult = {
+	color = bad
+	percent = yes
+}
+
 state_pop_support_law_ministry_of_urban_planning_add = {
 	color = good
 	percent = no

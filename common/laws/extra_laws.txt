@@ -121,9 +121,10 @@ law_moderate_data_privacy = {
 	progressiveness = 50		
 	
 	modifier = {
-		country_legitimacy_base_add = 5
+		country_society_tech_spread_mult = 0.25
+		country_leverage_resistance_mult = -0.1
 		political_movement_support_mult = 0.05
-		political_movement_radicalism_mult = -0.05
+		country_suppression_cost_mult = 0.25 
 		building_software_industry_throughput_add = -0.05
 	}
 }
@@ -136,14 +137,20 @@ law_strong_privacy_rights = {
 	unlocking_technologies = {
 		cybersecurity
 	}
+
+	unlocking_laws = {
+		law_guaranteed_liberties
+	}
 	
 	progressiveness = 100		
 	
 	modifier = {
-		country_legitimacy_base_add = 10
-		political_movement_support_mult = 0.1
-		political_movement_radicalism_mult = -0.15
+		country_society_tech_spread_mult = 0.5
+		country_leverage_resistance_mult = -0.2
+		political_movement_support_mult = 0.05
+		country_suppression_cost_mult = 0.5 
 		building_software_industry_throughput_add = -0.1
+		country_institution_cost_institution_home_affairs_mult = -0.5
 	}
 }
 
@@ -162,8 +169,10 @@ law_intrusive_surveillance = {
 	modifier = {
 		political_movement_support_mult = -0.1
 		political_movement_radicalism_mult = -0.2
-		state_radicals_from_sol_change_mult = 0.1
+		country_society_tech_spread_mult = -0.5
+		country_leverage_resistance_mult = 0.1
 		country_authority_add = 100
+		country_institution_ministry_of_intelligence_and_security_max_investment_add = 1
 	}
 }
 
@@ -175,7 +184,6 @@ law_unrestricted_ai_development = {
 	progressiveness = 0		
 
 	modifier = {
-		building_software_industry_throughput_add = 0.1
 	}
 }
 
@@ -191,9 +199,8 @@ law_moderate_ai_governance = {
 	progressiveness = 25	
 
 	modifier = {
-		country_legitimacy_base_add = 5
-		country_authority_mult = -0.05
-	}	
+
+	}
 }
 
 law_strict_ai_ethics_and_control = {
@@ -207,11 +214,7 @@ law_strict_ai_ethics_and_control = {
 	
 	progressiveness = 50	
 
-	modifier = {
-		country_legitimacy_base_add = 10
-		country_authority_mult = -0.1
-		building_software_industry_throughput_add = -0.05
-	}
+	
 }
 
 law_traditional_rules_of_war = {
@@ -238,7 +241,6 @@ law_war_crimes_forbidden = {
 		unit_kill_rate_add = -0.05
 		unit_offense_mult = -0.025
 		unit_defense_mult = -0.025
-		country_war_exhaustion_casualties_mult = 0.25
 		country_infamy_decay_mult = 0.1
 		country_leverage_generation_mult = 0.1
 	}
@@ -260,7 +262,6 @@ law_humanitarian_regulations = {
 		unit_kill_rate_add = -0.1
 		unit_offense_mult = -0.05
 		unit_defense_mult = -0.05
-		country_war_exhaustion_casualties_mult = 0.5
 		country_infamy_decay_mult = 0.2
 		country_leverage_generation_mult = 0.2
 	}
@@ -283,7 +284,6 @@ law_limited_war = {
 		unit_kill_rate_add = -0.15
 		unit_offense_mult = -0.1
 		unit_defense_mult = -0.1
-		country_war_exhaustion_casualties_mult = 1
 		country_infamy_decay_mult = 0.3
 		country_leverage_generation_mult = 0.3
 	}	
@@ -864,11 +864,11 @@ law_ministry_of_war = {
 	institution = institution_ministry_of_war
 
 	unlocking_technologies = {
-		combined_arms
+		wargaming
 	}
 		
 	modifier = {
-		country_institution_ministry_of_war_max_investment_add = 5
+		country_institution_ministry_of_war_max_investment_add = 2
 	}
 
 	ai_enact_weight_modifier = {
@@ -910,11 +910,11 @@ law_ministry_of_commerce = {
 	institution = institution_ministry_of_commerce
 
 	unlocking_technologies = {
-		commercial_aviation
+		international_exchange_standards
 	}
 		
 	modifier = {
-		country_institution_ministry_of_commerce_max_investment_add = 5
+		country_institution_ministry_of_commerce_max_investment_add = 1
 	}	
 
 	ai_enact_weight_modifier = {
@@ -955,11 +955,11 @@ law_national_bank = {
 	institution = institution_national_bank
 
 	unlocking_technologies = {
-		consumer_credit
+		central_banking
 	}
 		
 	modifier = {
-		country_institution_national_bank_max_investment_add = 5
+		country_institution_national_bank_max_investment_add = 1
 	}	
 
 	ai_enact_weight_modifier = {
@@ -998,11 +998,11 @@ law_ministry_of_culture = {
 	institution = institution_ministry_of_culture
 
 	unlocking_technologies = {
-		marketing_research
+		mass_propaganda
 	}
 		
 	modifier = {
-		country_institution_ministry_of_culture_max_investment_add = 5
+		country_institution_ministry_of_culture_max_investment_add = 1
 	}
 
 	ai_enact_weight_modifier = {
@@ -1074,7 +1074,7 @@ law_pro_capital_ministry_of_labor = {
 	}
 
 	unlocking_technologies = {
-		public_works_programs
+		marketing_research
 	}
 		
 	modifier = {
@@ -1150,7 +1150,7 @@ law_ministry_of_intelligence_and_security = {
 	institution = institution_ministry_of_intelligence_and_security
 		
 	modifier = {
-		country_institution_ministry_of_intelligence_and_security_max_investment_add = 3
+		country_institution_ministry_of_intelligence_and_security_max_investment_add = 2
 	}
 }
 
@@ -1181,7 +1181,7 @@ law_ministry_of_refugee_affairs = {
 	institution = institution_ministry_of_refugee_affairs
 		
 	modifier = {
-		country_institution_ministry_of_refugee_affairs_max_investment_add = 5
+		country_institution_ministry_of_refugee_affairs_max_investment_add = 2
 	}
 }
 

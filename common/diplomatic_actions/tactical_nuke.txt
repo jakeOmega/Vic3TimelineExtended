@@ -13,6 +13,17 @@ tactical_nuke_diplo_action = {
         has_technology_researched = tactical_nuclear_weapons
         has_variable = nuclear_weapon_stockpile
         var:nuclear_weapon_stockpile > 0
+        OR = {
+            NOT = {
+                has_law = law_type:law_limited_war
+            }
+            any_scope_state = {
+                OR = {
+                    has_modifier = nuclear_strike_aftermath
+                    has_modifier = tactical_nuke_aftermath
+                }
+            }
+        }
     }
 
 	second_state_trigger = {

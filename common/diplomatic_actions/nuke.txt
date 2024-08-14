@@ -12,6 +12,20 @@ nuke_diplo_action = {
 	possible = {
         has_variable = nuclear_weapon_stockpile
         var:nuclear_weapon_stockpile > 0
+        OR = {
+            NOT = {
+                OR = {
+                    has_law = law_type:law_humanitarian_regulations
+                    has_law = law_type:law_limited_war
+                }
+            }
+            any_scope_state = {
+                OR = {
+                    has_modifier = nuclear_strike_aftermath
+                    has_modifier = tactical_nuke_aftermath
+                }
+            }
+        }
     }
 
 	second_state_trigger = {

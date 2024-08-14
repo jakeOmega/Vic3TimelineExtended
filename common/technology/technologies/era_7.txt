@@ -277,7 +277,7 @@ photocopiers = {
 	modifier = {
 		country_weekly_innovation_max_add = 50
 		goods_output_services_mult = 0.05
-		country_gold_reserve_limit_mult = 0.25
+		country_institution_ministry_of_commerce_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -386,6 +386,7 @@ inertial_navigation_systems = {
 	modifier = {
 		unit_navy_defense_mult = 0.2
 		unit_navy_offense_mult = 0.2
+		country_institution_ministry_of_war_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -404,6 +405,7 @@ television_broadcasting = {
 		country_weekly_innovation_max_add = 50
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		country_tech_spread_add = 40
+		country_institution_ministry_of_culture_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -500,6 +502,7 @@ anti_war_movement = {
 		country_infamy_decay_mult = 0.2
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
+		country_institution_ministry_of_refugee_affairs_max_investment_add = 2
 	}
 	
 	unlocking_technologies = {	
