@@ -395,7 +395,7 @@ combat_unit_type_light_tanks = {
         unit_defense_add = 45
         unit_morale_loss_add = 4
         unit_devastation_mult = 0.1
-        unit_occupation_mult = 0.3
+        unit_occupation_mult = 0.6
     }
 
     formation_modifier = {
@@ -445,7 +445,7 @@ combat_unit_type_light_scout_tanks = {
         unit_defense_add = 150
         unit_morale_loss_add = 4
         unit_devastation_mult = 0.2
-        unit_occupation_mult = 0.5
+        unit_occupation_mult = 1
     }
 
 	unlocking_technologies = { inertial_navigation_systems }  # era 7
@@ -492,7 +492,7 @@ combat_unit_type_stealth_reconnaissance_drone_carrier = {
         unit_defense_add = 320
         unit_morale_loss_add = 4
         unit_devastation_mult = 1
-        unit_occupation_mult = 0.6
+        unit_occupation_mult = 1.2
     }
 
 	unlocking_technologies = { rapid_deployment_forces }  # era 9
@@ -538,7 +538,7 @@ combat_unit_type_holographic_ambush_combat_vehicle = {
         unit_defense_add = 640
         unit_morale_loss_add = 4
         unit_devastation_mult = 2
-        unit_occupation_mult = 1
+        unit_occupation_mult = 2
     }
 
 	unlocking_technologies = { augmented_reality_warfare }  # era 10
@@ -1357,144 +1357,4 @@ combat_unit_type_swarm_coordination_vessel = {
         texture = "gfx/unit_illustrations/swarm_coordination_vessel.dds"
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

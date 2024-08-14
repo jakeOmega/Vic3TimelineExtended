@@ -2777,8 +2777,7 @@ principle_military_training_1 = {
 	}
 
 	member_modifier = {
-		country_military_tech_research_speed_mult = 0.05
-		unit_army_experience_gain_mult = 0.05
+		unit_army_experience_gain_mult = 0.25
 	}
 	
 	ai_weight = {
@@ -2823,9 +2822,10 @@ principle_military_training_2 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		country_military_tech_research_speed_mult = 0.05
-		unit_army_experience_gain_mult = 0.1
+		unit_army_experience_gain_mult = 0.25
 
+		unit_army_experience_gain_add = 0.25
+		country_military_tech_research_speed_mult = 0.05
 		country_military_tech_spread_mult = 0.1
 	}
 
@@ -2840,12 +2840,12 @@ principle_military_training_3 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
+		unit_army_experience_gain_mult = 0.5
 		country_military_tech_research_speed_mult = 0.05
-		unit_army_experience_gain_mult = 0.2
 		country_military_tech_spread_mult = 0.1
 
-		unit_navy_experience_gain_mult = 0.1
-		military_formation_mobilization_speed_mult = 0.2
+		unit_army_experience_gain_add = 0.5
+		military_formation_mobilization_speed_mult = 0.25
 	}
 
 	ai_weight = {
@@ -2863,13 +2863,14 @@ principle_military_training_4 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		country_military_tech_research_speed_mult = 0.1
-		unit_army_experience_gain_mult = 0.35
+		unit_army_experience_gain_mult = 0.5
+		country_military_tech_research_speed_mult = 0.05
 		country_military_tech_spread_mult = 0.1
-		unit_navy_experience_gain_mult = 0.2
-		military_formation_mobilization_speed_mult = 0.2
+		unit_army_experience_gain_add = 0.5
+		military_formation_mobilization_speed_mult = 0.25
 
-		state_building_conscription_center_max_level_add = 100
+		state_building_conscription_center_max_level_add = 50
+		state_building_barracks_max_level_add = 50
 	}
 
 	ai_weight = {
@@ -2887,11 +2888,11 @@ principle_military_training_5 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		country_military_tech_research_speed_mult = 0.1
-		unit_army_experience_gain_mult = 0.5
-		country_military_tech_spread_mult = 0.2
-		unit_navy_experience_gain_mult = 0.4
-		military_formation_mobilization_speed_mult = 0.2
+		country_military_tech_research_speed_mult = 0.05
+		unit_army_experience_gain_mult = 1
+		country_military_tech_spread_mult = 0.1
+		unit_army_experience_gain_add = 1
+		military_formation_mobilization_speed_mult = 0.25
 		state_building_conscription_center_max_level_add = 100
 		state_building_barracks_max_level_add = 100
 	}

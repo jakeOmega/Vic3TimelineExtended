@@ -2,7 +2,7 @@
 	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 	modifier = {
-		unit_army_experience_gain_mult = 0.2
+		unit_army_experience_gain_add = 0.2
 		character_battle_condition_blunder_mult = -0.1
 		character_battle_condition_broken_supply_line_mult = -0.1
 		interest_group_ig_armed_forces_pol_str_mult = 0.05
