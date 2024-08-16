@@ -613,4 +613,78 @@ temperature_anomaly_display = {
 	divide = 10
 }
 
-development_aid_tech_spread = 5
+global_tech_spread_script_value = {
+	value = 0
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = nuclear_weapons
+			}
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = decolonization
+			}
+		}
+		add = 40
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = containerization
+			}
+		}
+		add = 60
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = globalization
+			}
+		}
+		add = 80
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = world_wide_web
+			}
+		}
+		add = 80
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = fusion_power
+			}
+		}
+		add = 100
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = biohacking_and_human_augmentation
+			}
+		}
+		add = 100
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = post-scarcity_economy
+			}
+		}
+		add = 200
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = artificial_intelligence
+			}
+		}
+		add = 200
+	}
+}

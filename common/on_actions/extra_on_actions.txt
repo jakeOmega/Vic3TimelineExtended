@@ -231,3 +231,15 @@ global_warming_update_on_action = {
 		}
 	}
 }
+
+tech_spread_on_action = {
+	effect = {
+		if = {
+			limit = { global_tech_spread_script_value > 0 }
+			add_modifier = {
+				name = global_technological_development
+				multiplier = global_tech_spread_script_value
+			}
+		}
+	}
+}

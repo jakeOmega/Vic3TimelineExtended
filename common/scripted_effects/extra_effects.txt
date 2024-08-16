@@ -637,6 +637,13 @@ trigger_mass_migration = {
 				origin = ROOT.owner
 				culture = PREV
 			}
+			owner = {
+				add_modifier = {
+					name = foreign_emigration
+					months = 6
+					is_decaying = yes
+				}
+			}
 		}
 	}
 }
