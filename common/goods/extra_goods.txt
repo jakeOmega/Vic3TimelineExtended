@@ -77,6 +77,8 @@ construction = {
 	
 	prestige_factor = 5
 	traded_quantity = 1
+
+	consumption_tax_cost = 400
 }
 
 

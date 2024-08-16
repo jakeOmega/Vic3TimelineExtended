@@ -361,6 +361,7 @@ recon_satellites = {
 	category = military
 	
 	modifier = {
+		country_tech_spread_add = 40
 	}
 	
 	unlocking_technologies = {	

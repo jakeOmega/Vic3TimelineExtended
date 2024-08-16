@@ -53,3 +53,23 @@ tactical_nuke_aftermath = {
 	state_mortality_mult = 0.05
 	building_training_rate_mult = -1
 }
+
+battle_army_experience = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	unit_army_experience_gain_add = 25.0
+}
+
+battle_navy_experience = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	unit_navy_experience_gain_add = 25.0
+}
+
+battle_unit_experience = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	unit_experience_gain_add = 25.0
+}
+
+legislative_efficiency = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.25
+}

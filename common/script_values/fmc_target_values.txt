@@ -1,9 +1,5 @@
 ﻿private_construction_spending_target = {
 	value = investment_pool
-	subtract = {
-		value = investment_pool_gross_income
-		multiply = 13
-	}
 	divide = 52 #investment pool should reach equillibrium in a year
 	min = 0
 	# multiply = investment_price_incentive

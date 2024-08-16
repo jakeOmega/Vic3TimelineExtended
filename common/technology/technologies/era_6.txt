@@ -160,7 +160,6 @@ nuclear_weapons = {
 		country_prestige_mult = 0.2
 		country_infamy_generation_mult = -0.25
 		country_weekly_innovation_max_add = 50
-		country_tech_spread_add = 40
 		state_bureaucracy_population_base_cost_factor_mult = 0.5
 		country_nuclear_weapon_attack_success_add = 1
 	}

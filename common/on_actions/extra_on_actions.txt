@@ -23,6 +23,12 @@ on_yearly_pulse_state = {
 	}
 }
 
+on_yearly_pulse_country = {
+	on_actions = {
+		tech_spread_on_action
+	}
+}
+
 on_acquired_technology = {
 	on_actions = {
 		civil_rights_on_action
@@ -178,6 +184,10 @@ pollution_test = {
 			add_modifier = {
 				name = pollution_generation_mult_effect
 				multiplier = institution_ministry_of_the_environment_pollution_generation
+			}
+			set_variable = {
+				name = prior_pollution_reduction
+				value = institution_ministry_of_the_environment_pollution_generation
 			}
 		}
 	}

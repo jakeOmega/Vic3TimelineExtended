@@ -134,6 +134,7 @@ institution_ministry_of_consumer_protection = {
 	modifier = {
 		goods_output_consumer_appliances_mult = -0.02
 		goods_output_groceries_mult = -0.02 
+		goods_output_construction_mult = -0.02
 		state_mortality_mult = -0.01
 		country_production_tech_research_speed_mult = 0.05
 		state_standard_of_living_add = 0.6

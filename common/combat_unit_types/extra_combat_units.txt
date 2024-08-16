@@ -1344,6 +1344,7 @@ combat_unit_type_swarm_coordination_vessel = {
         unit_convoy_defense_mult = 2
         unit_convoy_raiding_interception_mult = 3
         unit_morale_damage_mult = 0.2
+        unit_convoy_raiding_mult = 4
     }
 
     formation_modifier = {

@@ -138,6 +138,15 @@ goods_output_consumer_appliances_mult = {
 }
 }
 
+goods_output_construction_mult = {
+	color = good
+	percent = yes
+	
+	game_data = {
+	ai_value = 250
+}
+}
+
 goods_output_digital_access_mult = {
 	color = good
 	percent = yes

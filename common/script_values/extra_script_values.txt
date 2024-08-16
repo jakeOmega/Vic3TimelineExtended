@@ -502,8 +502,12 @@ culture_change_progress = {
 }
 
 institution_ministry_of_the_environment_pollution_generation = {
-	value = modifier:state_pollution_generation_mult
-	multiply = pollution_generation
+	value = pollution_generation
+	if = {
+		limit = { has_variable = prior_pollution_reduction }
+		subtract = var:prior_pollution_reduction
+	}
+	multiply = modifier:state_pollution_generation_mult
 }
 
 nuclear_weapon_program_additional_nuke_progress_multiplier = 10
@@ -513,7 +517,6 @@ nuclear_weapon_program_monthly_progress = {
 		limit = { var:nuclear_weapons_program_first_nuke_done > 0 }
 		multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
 	}
-	multiply = 100
 }
 nuclear_weapon_program_funding_step = 5000
 nuclear_weapon_program_goal_value = 100
@@ -605,7 +608,9 @@ global_greenhouse_gas_emissions_script_value_display = {
 
 temperature_anomaly_display = {
 	value = global_var:greenhouse_gas_emissions
-	divide = 10000
+	divide = 100
 	round = yes
-	multiply = 10
+	divide = 10
 }
+
+development_aid_tech_spread = 5

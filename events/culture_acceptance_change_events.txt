@@ -7,7 +7,7 @@ culture_acceptance_change.1 = {
     immediate = {
         if = {
             limit = {
-                culture_change_progress >= 100
+                culture_change_progress >= 99
                 has_variable = culture_changing
             }
             change_acceptance = {

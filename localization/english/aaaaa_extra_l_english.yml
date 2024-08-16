@@ -680,6 +680,8 @@
  goods_output_glass_mult_desc:0 "Glass Output Multiplier"
  goods_output_steel_mult_desc:0 "Steel Output Multiplier"
  goods_output_groceries_mult_desc:0 "Groceries Output Multiplier"
+ goods_output_construction_mult:0 "Construction Services Output Multiplier"
+ goods_output_construction_mult_desc:0 "Construction Services Output Multiplier"
  goods_output_porcelain_mult_desc:0 "Porcelain Output Multiplier"
  goods_output_fertilizer_mult_desc:0 "Fertilizer Output Multiplier"
  goods_output_explosives_mult_desc:0 "Explosives Output Multiplier"
