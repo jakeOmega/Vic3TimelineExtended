@@ -526,7 +526,6 @@ modern_urban_planning = {
 	}
 
 	modifier = {
-		country_max_companies_add = 1
 		country_max_weekly_construction_progress_add = 10
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		state_building_highway_max_level_add = 1

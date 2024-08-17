@@ -361,7 +361,6 @@ digital_education = {
 		state_education_access_add = 0.2
 		state_pop_qualifications_mult = 0.2
 		country_weekly_innovation_max_add = 100
-		state_birth_rate_mult = -0.01
 		state_bureaucracy_population_base_cost_factor_mult = 1
 	}
 	
@@ -421,7 +420,6 @@ LGBTQ_rights_movement = {
 	
 	modifier = {
 		state_dependent_wage_mult = 0.1
-		state_birth_rate_mult = -0.01
 	}
 	
 	ai_weight = {

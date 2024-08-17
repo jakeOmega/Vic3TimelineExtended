@@ -2868,7 +2868,7 @@ principle_military_training_4 = {
 		unit_army_experience_gain_mult = 0.5
 		country_military_tech_research_speed_mult = 0.05
 		country_military_tech_spread_mult = 0.1
-		unit_army_experience_gain_add = 0.5
+		unit_army_experience_gain_add = 1
 		military_formation_mobilization_speed_mult = 0.25
 
 		state_building_conscription_center_max_level_add = 50

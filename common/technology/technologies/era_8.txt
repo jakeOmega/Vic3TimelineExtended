@@ -226,7 +226,6 @@ environmental_movement = {
 	modifier = {
 		country_institution_ministry_of_the_environment_max_investment_add = 2
 		state_building_national_park_max_level_add = 1
-		state_birth_rate_mult = -0.01
 	}
 	
 	unlocking_technologies = {	

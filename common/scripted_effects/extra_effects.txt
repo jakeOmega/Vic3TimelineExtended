@@ -519,6 +519,12 @@ change_acceptance = {
 	}
 }
 
+reset_acceptance = {
+	clear_variable = accepted_cultures
+	clear_variable = unaccepted_cultures
+	recalculate_culture_acceptance_cost = yes
+}
+
 update_countrys_bloc_principles_unity = {
 	if = {
 		limit = { is_power_bloc_leader = yes }
@@ -617,11 +623,12 @@ trigger_mass_migration = {
 	random_scope_culture = {
 		limit = {
 			culture_is_discriminated_in = ROOT.owner
-			# NOT = { ROOT.owner = { is_mass_migration_origin_of_culture = PREV } }
+			NOT = { ROOT.owner = { is_mass_migration_origin_of_culture = PREV } }
 			any_state = {
 				NOT = { PREV = { culture_is_discriminated_in = PREV.owner } }
 				NOT = { owner = { is_country_type = decentralized } }
 				NOT = { owner = { has_law = law_type:law_closed_borders } }
+				state_is_eligible_as_mass_migration_target = yes
 			}
 		}
 		ordered_state = {
@@ -640,10 +647,15 @@ trigger_mass_migration = {
 			owner = {
 				add_modifier = {
 					name = foreign_emigration
-					months = 6
+					months = 12
 					is_decaying = yes
 				}
 			}
 		}
+	}
+	add_modifier = {
+		name = foreign_emigration_source
+		months = 12
+		is_decaying = yes
 	}
 }

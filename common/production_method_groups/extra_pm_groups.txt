@@ -304,6 +304,18 @@ pmg_firearms_manufacturing = {
         pm_semiautomatic_rifles
     }
 }
+pmg_foundries = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+
+	production_methods = {
+		pm_cannons
+		pm_smoothbores
+		pm_breech_loaders
+		pm_recoiled_barrels
+        pm_rocket_artillery
+	}
+}
 pmg_automation_building_arms_industry = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
     production_methods = {
@@ -819,15 +831,6 @@ pmg_university_academia = {
         pm_secular_academia
         pm_military_research
         pm_automated_labs
-    }
-}
-pmg_base_building_skyscraper = {
-    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
-    ai_selection = most_productive
-    production_methods = {
-        pm_skyscraper_services_nexus
-        pm_skyscraper_bureaucratic_nexus
-        pm_skyscraper_trade_nexus
     }
 }
 pmg_base_building_logging_camp = {

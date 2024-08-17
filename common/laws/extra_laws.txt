@@ -657,7 +657,7 @@ law_comprehensive_rights = {
 	modifier = {
 		state_standard_of_living_add = 3
 		country_bureaucracy_investment_cost_factor_mult = 0.1
-		state_birth_rate_mult = -0.1
+		state_birth_rate_mult = -0.05
 	}
 }
 
@@ -675,7 +675,7 @@ law_full_equality_and_protection = {
 	modifier = {
 		state_standard_of_living_add = 4
 		country_bureaucracy_investment_cost_factor_mult = 0.2
-		state_birth_rate_mult = -0.15
+		state_birth_rate_mult = -0.05
 	}
 }
 

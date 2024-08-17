@@ -484,6 +484,11 @@ total_cultural_discrimination_cost_script_value = {
 	}
 }
 
+total_cultural_cost_script_value = {
+	value = total_cultural_acceptance_cost_script_value
+	add = total_cultural_discrimination_cost_script_value
+}
+
 culture_change_days = 100
 
 culture_change_progress = {
@@ -558,12 +563,12 @@ migration_attraction_script_value = {
 			owner = {
 				has_subject_relation_with = ROOT.owner
 			}
-			add = 10
 		}
+		add = 10
 	}
 	if = {
 		limit = {
-			owner = { country_has_primary_culture = PREV.PREV }
+			owner = { country_has_primary_culture = PREV }
 		}
 		multiply = 2
 	}

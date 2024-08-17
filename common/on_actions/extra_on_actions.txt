@@ -236,6 +236,7 @@ tech_spread_on_action = {
 	effect = {
 		if = {
 			limit = { global_tech_spread_script_value > 0 }
+			remove_modifier = global_technological_development
 			add_modifier = {
 				name = global_technological_development
 				multiplier = global_tech_spread_script_value

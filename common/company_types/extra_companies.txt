@@ -391,7 +391,6 @@ company_basic_biotechnology = {
         building_synthetics_plants_wood
         building_synthetics_plants_sugar
         building_synthetics_plants_meat
-        building_synthetics_plants_fish
 		building_synthetics_plants_fruit
 		building_synthetics_plants_drinks	
         building_synthetics_plants_biomass
@@ -405,7 +404,6 @@ company_basic_biotechnology = {
 					is_building_type = building_synthetics_plants_wood
                     is_building_type = building_synthetics_plants_sugar
                     is_building_type = building_synthetics_plants_meat
-                    is_building_type = building_synthetics_plants_fish
                     is_building_type = building_synthetics_plants_fruit
                     is_building_type = building_synthetics_plants_drinks
 				}

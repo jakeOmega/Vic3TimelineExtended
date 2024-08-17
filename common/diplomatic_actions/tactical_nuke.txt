@@ -72,6 +72,10 @@ tactical_nuke_diplo_action = {
 
                 scope:target_country = {
                     trigger_event = nuclear_weapon_events.5
+                    change_relations = {
+                        tcountry = ROOT
+                        value = -50  
+                    }
                 }
                 trigger_event = nuclear_weapon_events.6
             }
@@ -79,6 +83,10 @@ tactical_nuke_diplo_action = {
                 modifier = nuclear_strike_fail_chance
                 scope:target_country = {
                     trigger_event = nuclear_weapon_events.7
+                    change_relations = {
+                        tcountry = ROOT
+                        value = -5
+                    }
                 }
                 trigger_event = nuclear_weapon_events.8
             }

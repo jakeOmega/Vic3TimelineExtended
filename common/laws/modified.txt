@@ -303,6 +303,7 @@ law_ethnostate = {
 	on_enact = {
 		recalculate_pop_ig_support = yes
 		update_countrys_bloc_principles_unity = yes
+		reset_acceptance = yes
 	}
 	
 	cultural_acceptance_rule = {
@@ -386,6 +387,7 @@ law_national_supremacy = {
 	on_enact = {
 		recalculate_pop_ig_support = yes
 		update_countrys_bloc_principles_unity = yes
+		reset_acceptance = yes
 	}
 	
 	cultural_acceptance_rule = {
@@ -482,6 +484,7 @@ law_racial_segregation = {
 			limit = { has_law = law_type:law_ministry_of_population_control }
 			activate_law = law_type:law_no_ministry_of_population_control
 		}
+		reset_acceptance = yes
 	}
 
 	cultural_acceptance_rule = {
@@ -599,6 +602,7 @@ law_cultural_exclusion = {
 			limit = { has_law = law_type:law_ministry_of_population_control }
 			activate_law = law_type:law_no_ministry_of_population_control
 		}
+		reset_acceptance = yes
 	}
 
 	cultural_acceptance_rule = {
@@ -729,6 +733,7 @@ law_multicultural = {
 			limit = { has_law = law_type:law_ministry_of_population_control }
 			activate_law = law_type:law_no_ministry_of_population_control
 		}
+		reset_acceptance = yes
 	}
 
 	modifier = {

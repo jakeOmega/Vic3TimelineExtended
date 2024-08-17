@@ -42,6 +42,10 @@ nuke_diplo_action = {
                 nuclear_industrial_strike = yes
                 scope:target_country = {
                     trigger_event = nuclear_weapon_events.1
+                    change_relations = {
+                        tcountry = ROOT
+                        value = -100  
+                    }
                 }
                 trigger_event = nuclear_weapon_events.2
             }
@@ -50,6 +54,10 @@ nuke_diplo_action = {
                 change_infamy = 5
                 scope:target_country = {
                     trigger_event = nuclear_weapon_events.3
+                    change_relations = {
+                        tcountry = ROOT
+                        value = -10  
+                    }
                 }
                 trigger_event = nuclear_weapon_events.4
             }

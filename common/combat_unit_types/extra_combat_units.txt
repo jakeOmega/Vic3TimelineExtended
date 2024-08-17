@@ -7,6 +7,73 @@
 
 ### Infantry
 
+combat_unit_type_mechanized_infantry = {
+    group = combat_unit_group_infantry
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+
+    upkeep_modifier = {
+        goods_input_small_arms_add = 3
+        goods_input_ammunition_add = 3
+        goods_input_oil_add = 1
+        goods_input_radios_add = 1
+        goods_input_tanks_add = 1
+    }
+    
+    battle_modifier = {
+        unit_offense_add = 50
+        unit_defense_add = 60
+        unit_morale_loss_add = 4
+        unit_devastation_mult = 0.1
+    }
+
+	unlocking_technologies = { mobile_armor }
+
+    combat_unit_image = {
+        trigger = { 
+            has_culture_graphics = east_asian
+        }
+        texture = "gfx/unit_illustrations/infantry_east_asian_mechanized.dds"
+    }
+
+    combat_unit_image = {
+        trigger = { 
+            has_culture_graphics = south_asian
+        }
+        texture = "gfx/unit_illustrations/infantry_south_asian_mechanized.dds"
+    }
+
+    combat_unit_image = {
+        trigger = { 
+            has_culture_graphics = african
+        }
+        texture = "gfx/unit_illustrations/infantry_african_mechanized.dds"
+    }
+
+    combat_unit_image = {
+        trigger = { 
+            has_culture_graphics = arabic
+        }
+        texture = "gfx/unit_illustrations/infantry_arabic_mechanized.dds"
+    }
+
+    combat_unit_image = {
+		# fallback
+        texture = "gfx/unit_illustrations/infantry_eu_mechanized.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_armored_infantry
+        combat_unit_type_robotic_soldiers
+        combat_unit_type_swarm_bots
+        combat_unit_type_grey_goo
+    }
+}
+
 combat_unit_type_armored_infantry = {
     group = combat_unit_group_infantry
 
@@ -134,6 +201,78 @@ combat_unit_type_grey_goo = {
 }
 
 ### Artillery
+
+combat_unit_type_siege_artillery = {
+    group = combat_unit_group_artillery
+
+    can_build_conscript = {
+        NOT = {
+            has_law = law_type:law_peasant_levies
+        }
+    }
+    
+    upkeep_modifier = {
+        goods_input_artillery_add = 4
+        goods_input_ammunition_add = 4
+		goods_input_radios_add = 1
+    }
+
+    battle_modifier = {
+        unit_offense_add = 55
+        unit_defense_add = 30
+        unit_morale_loss_add = 6
+        unit_kill_rate_add = 0.25
+        unit_devastation_mult = 0.2
+    }
+
+    formation_modifier = {
+        military_formation_mobilization_speed_mult = -0.2
+        military_formation_movement_speed_mult = -0.2
+    }
+
+	unlocking_technologies = { defense_in_depth }
+
+    combat_unit_image = {
+        trigger = { 
+            has_culture_graphics = east_asian
+        }
+        texture = "gfx/unit_illustrations/artillery_east_asian_siege.dds"
+    }
+
+    combat_unit_image = {
+        trigger = { 
+            has_culture_graphics = south_asian
+        }
+        texture = "gfx/unit_illustrations/artillery_south_asian_siege.dds"
+    }
+
+    combat_unit_image = {
+        trigger = { 
+            has_culture_graphics = african
+        }
+        texture = "gfx/unit_illustrations/artillery_african_siege.dds"
+    }
+
+    combat_unit_image = {
+        trigger = { 
+            has_culture_graphics = arabic
+        }
+        texture = "gfx/unit_illustrations/artillery_arabic_siege.dds"
+    }
+
+    combat_unit_image = {
+        # fallback
+        texture = "gfx/unit_illustrations/artillery_eu_siege.dds"
+    }
+
+    upgrades = {
+        combat_unit_type_moterized_artillery
+        combat_unit_type_guided_artillery_projectiles
+        combat_unit_type_networked_guided_artillery_projectiles
+        combat_unit_type_orbital_bombardment
+        combat_unit_type_orbital_precision_antimatter_strikes
+    }
+}
 
 combat_unit_type_moterized_artillery = {
     group = combat_unit_group_artillery
