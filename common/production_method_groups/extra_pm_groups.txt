@@ -740,6 +740,7 @@ pmg_public_transport = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
     production_methods = {
         pm_no_public_transport
+        pm_rickshaws
         pm_public_trams
         pm_public_motor_carriages
         pm_remote_work
@@ -1052,9 +1053,9 @@ pmg_base_building_highway = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
         pm_civil_highway
-        #pm_industrial_highway
+        pm_industrial_highway
         pm_electric_civil_highway
-        #pm_electric_industrial_highway
+        pm_electric_industrial_highway
         pm_autonomous_highway
     }
 }
@@ -1563,5 +1564,16 @@ pmg_construction_automation = {
         pm_tower_cranes
         pm_computer_aided_design
         pm_3d_printed_buildings
+    }
+}
+
+pmg_water_personal_transport = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_no_water_personal_transport
+        pm_sailing_ships
+        pm_steam_paddleboats
+        pm_diesel_electric_ferries
+        pm_modern_cruise_ships
     }
 }

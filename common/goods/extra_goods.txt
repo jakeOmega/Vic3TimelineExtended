@@ -83,6 +83,17 @@ construction = {
 
 
 transportation = {
+	texture = "gfx/interface/icons/goods_icons/industrial_transport.dds"
+	cost = 30
+	category = staple
+	local = yes
+
+	prestige_factor = 4
+	
+	consumption_tax_cost = 200
+}
+
+personal_transportation = {
 	texture = "gfx/interface/icons/goods_icons/transportation.dds"
 	cost = 30
 	category = staple

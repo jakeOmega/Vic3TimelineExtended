@@ -18,6 +18,11 @@ goods_output_digital_assets_add = {
 	percent = no
 }
 
+goods_output_personal_transportation_add = {
+	color = good
+	percent = no
+}
+
 goods_output_advanced_materials_add = {
 	color = good
 	percent = no
@@ -39,6 +44,11 @@ goods_input_digital_access_add = {
 }
 
 goods_input_digital_assets_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_personal_transportation_add = {
 	color = bad
 	percent = no
 }
@@ -777,7 +787,7 @@ state_infrastructure_from_aeroplanes_consumption_add = {
 	}
 }
 
-state_infrastructure_from_transportation_consumption_add = {
+state_infrastructure_from_personal_transportation_consumption_add = {
 	decimals=2
 	color=good
 	game_data={

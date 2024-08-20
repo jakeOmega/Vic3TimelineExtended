@@ -676,7 +676,7 @@ principle_transport_4 = {
 		state_infrastructure_from_population_max_mult = 0.33 
 		market_land_trade_capacity_add = 100
 		building_railway_throughput_add = 0.2
-		state_infrastructure_from_transportation_consumption_add = 0.1
+		state_infrastructure_from_personal_transportation_consumption_add = 0.1
 	}
 	
 	ai_weight = {
@@ -701,7 +701,7 @@ principle_transport_5 = {
 		building_railway_throughput_add = 0.2
 		building_airport_throughput_add = 0.2
 		building_highway_throughput_add = 0.2
-		state_infrastructure_from_transportation_consumption_add = 0.1
+		state_infrastructure_from_personal_transportation_consumption_add = 0.1
 		country_production_tech_spread_mult = 0.25
 	}
 	

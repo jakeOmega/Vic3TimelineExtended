@@ -3583,6 +3583,119 @@ pm_automated_labs = {
 	required_input_goods = digital_access	
 }
 
+pm_no_public_transport = {
+	texture = "gfx/interface/icons/production_method_icons/no_public_transport.dds"
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			# Total input cost: 0
+			# Total output cost: 150.0
+			# Profit: 150.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_rickshaws = {
+	texture = "gfx/interface/icons/production_method_icons/passenger_carriages.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_personal_transportation_add = 4         # Price:   30, Total cost: 120.0
+			# Total input cost: 0
+			# Total output cost: 120.0
+			# Profit: 120.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 1000
+			# Wage breakeven: 0.12
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 1000
+		}
+	}
+}
+
+pm_public_trams = {
+	texture = "gfx/interface/icons/production_method_icons/public_trams.dds"
+
+	unlocking_technologies = {
+		railways
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 1                          # Price:   60, Total cost: 60.0
+			# Output goods
+			goods_output_personal_transportation_add = 8         # Price:   30, Total cost: 240.0
+			# Total input cost: 60.0
+			# Total output cost: 240.0
+			# Profit: 180.0
+			# Profit margin: 300.00%
+			# Zero profit price multiplier: 0.25
+			# Employment: -200
+			# Wage breakeven: -0.90
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 100
+			building_employment_machinists_add = 200
+			building_employment_laborers_add = -500
+		}
+	}
+}
+
+pm_public_motor_carriages = {
+	texture = "gfx/interface/icons/production_method_icons/public_motor_carriages.dds"
+
+	unlocking_technologies = {
+		combustion_engine
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_automobiles_add = 1                      # Price:  100, Total cost: 100.0
+			# Output goods
+			goods_output_personal_transportation_add = 10        # Price:   30, Total cost: 300.0
+			# Total input cost: 100.0
+			# Total output cost: 300.0
+			# Profit: 200.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: -400
+			# Wage breakeven: -0.50
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 200
+			building_employment_machinists_add = 400
+			building_employment_laborers_add = -1000
+		}
+	}
+}
+
 pm_remote_work = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	
@@ -3766,7 +3879,8 @@ pm_shopping_malls = {
 			goods_input_radios_add = 2                           # Price:   80, Total cost: 160.0
 			goods_input_telephones_add = 2                       # Price:   70, Total cost: 140.0
 			goods_input_electronic_components_add = 1            # Price:   80, Total cost: 80.0
-			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
+			goods_input_transportation_add = 5                   # Price:   30, Total cost: 150.0
+			goods_input_personal_transportation_add = 5          # Price:   30, Total cost: 150.0
 			# Output goods
 			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
 			goods_output_services_add = 50                       # Price:   30, Total cost: 1500.0
@@ -3818,18 +3932,19 @@ pm_e-commerce = {
 			goods_input_radios_add = 2                           # Price:   80, Total cost: 160.0
 			goods_input_telephones_add = 2                       # Price:   70, Total cost: 140.0
 			goods_input_electronic_components_add = 1            # Price:   80, Total cost: 80.0
-			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
+			goods_input_transportation_add = 8                   # Price:   30, Total cost: 240.0
+			goods_input_personal_transportation_add = 8          # Price:   30, Total cost: 240.0
 			goods_input_digital_access_add = 2                   # Price:  120, Total cost: 240.0
 			# Output goods
 			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
-			goods_output_services_add = 65                       # Price:   30, Total cost: 1950.0
-			# Total input cost: 1100.0
-			# Total output cost: 2450.0
-			# Profit: 1350.0
-			# Profit margin: 122.73%
-			# Zero profit price multiplier: 0.45
+			goods_output_services_add = 75                       # Price:   30, Total cost: 2250.0
+			# Total input cost: 1280.0
+			# Total output cost: 2750.0
+			# Profit: 1470.0
+			# Profit margin: 114.84%
+			# Zero profit price multiplier: 0.47
 			# Employment: 2000
-			# Wage breakeven: 0.68
+			# Wage breakeven: 0.73
 		}
 
 		level_scaled = {
@@ -3873,16 +3988,17 @@ pm_drone_delivery_systems = {
 			goods_input_radios_add = 2                           # Price:   80, Total cost: 160.0
 			goods_input_telephones_add = 4                       # Price:   70, Total cost: 280.0
 			goods_input_robotics_add = 10                        # Price:   80, Total cost: 800.0
-			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
+			goods_input_transportation_add = 12                  # Price:   30, Total cost: 360.0
+			goods_input_personal_transportation_add = 8          # Price:   30, Total cost: 240.0
 			goods_input_digital_access_add = 4                   # Price:  120, Total cost: 480.0
 			# Output goods
 			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
-			goods_output_services_add = 140                      # Price:   30, Total cost: 4200.0
-			# Total input cost: 2200.0
-			# Total output cost: 4700.0
+			goods_output_services_add = 150                      # Price:   30, Total cost: 4500.0
+			# Total input cost: 2500.0
+			# Total output cost: 5000.0
 			# Profit: 2500.0
-			# Profit margin: 113.64%
-			# Zero profit price multiplier: 0.47
+			# Profit margin: 100.00%
+			# Zero profit price multiplier: 0.50
 			# Employment: 1250
 			# Wage breakeven: 2.00
 		}
@@ -3928,7 +4044,8 @@ pm_robotic_service_providers = {
 			goods_input_radios_add = 3                           # Price:   80, Total cost: 240.0
 			goods_input_telephones_add = 4                       # Price:   70, Total cost: 280.0
 			goods_input_robotics_add = 40                        # Price:   80, Total cost: 3200.0
-			goods_input_transportation_add = 30                  # Price:   30, Total cost: 900.0
+			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
+			goods_input_personal_transportation_add = 10         # Price:   30, Total cost: 300.0
 			goods_input_digital_access_add = 8                   # Price:  120, Total cost: 960.0
 			# Output goods
 			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
@@ -7554,15 +7671,16 @@ pm_designed_fig_orchards = {
 pm_hydraulic_equipment = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 
+	unlocking_technologies = {
+		green_revolution
+	}
+
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = 20
 		}
 	}
 
-	unlocking_technologies = {
-		compression_ignition
-	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -7589,8 +7707,15 @@ pm_automated_mechanical_harvesters = {
 	texture = "gfx/interface/icons/production_method_icons/base2.dds"
 
 	unlocking_technologies = {
-		compression_ignition
+		microprocessor
 	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 20
+		}
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -7618,8 +7743,15 @@ pm_automated_harvesters_and_planters = {
 	texture = "gfx/interface/icons/production_method_icons/base3.dds"
 
 	unlocking_technologies = {
-		compression_ignition
+		autonomous_vehicles
 	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 20
+		}
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -8378,14 +8510,15 @@ pm_airport = {
 			goods_input_aeroplanes_add = 25                      # Price:   80, Total cost: 2000.0
 			goods_input_oil_add = 10                             # Price:   40, Total cost: 400.0
 			# Output goods
-			goods_output_transportation_add = 80                 # Price:   30, Total cost: 2400.0
+			goods_output_transportation_add = 25                 # Price:   30, Total cost: 750.0
+			goods_output_personal_transportation_add = 65        # Price:   30, Total cost: 1950.0
 			# Total input cost: 2400.0
-			# Total output cost: 2400.0
-			# Profit: 0.0
-			# Profit margin: 0.00%
-			# Zero profit price multiplier: 1.00
+			# Total output cost: 2700.0
+			# Profit: 300.0
+			# Profit margin: 12.50%
+			# Zero profit price multiplier: 0.89
 			# Employment: 1500
-			# Wage breakeven: 0.00
+			# Wage breakeven: 0.20
 		}
 
 		level_scaled = {
@@ -8424,14 +8557,15 @@ pm_spaceport = {
 			goods_input_aeroplanes_add = 25                      # Price:   80, Total cost: 2000.0
 			goods_input_launch_capacity_add = 15                 # Price:  200, Total cost: 3000.0
 			# Output goods
-			goods_output_transportation_add = 180                # Price:   30, Total cost: 5400.0
+			goods_output_transportation_add = 50                 # Price:   30, Total cost: 1500.0
+			goods_output_personal_transportation_add = 150       # Price:   30, Total cost: 4500.0
 			# Total input cost: 5000.0
-			# Total output cost: 5400.0
-			# Profit: 400.0
-			# Profit margin: 8.00%
-			# Zero profit price multiplier: 0.93
+			# Total output cost: 6000.0
+			# Profit: 1000.0
+			# Profit margin: 20.00%
+			# Zero profit price multiplier: 0.83
 			# Employment: 1500
-			# Wage breakeven: 0.27
+			# Wage breakeven: 0.67
 		}
 
 		level_scaled = {
@@ -8466,14 +8600,15 @@ pm_civil_highway = {
 			goods_input_automobiles_add = 25                     # Price:  100, Total cost: 2500.0
 			goods_input_oil_add = 50                             # Price:   40, Total cost: 2000.0
 			# Output goods
-			goods_output_transportation_add = 150                # Price:   30, Total cost: 4500.0
+			goods_output_transportation_add = 75                 # Price:   30, Total cost: 2250.0
+			goods_output_personal_transportation_add = 100       # Price:   30, Total cost: 3000.0
 			# Total input cost: 4500.0
-			# Total output cost: 4500.0
-			# Profit: 0.0
-			# Profit margin: 0.00%
-			# Zero profit price multiplier: 1.00
+			# Total output cost: 5250.0
+			# Profit: 750.0
+			# Profit margin: 16.67%
+			# Zero profit price multiplier: 0.86
 			# Employment: 1500
-			# Wage breakeven: 0.00
+			# Wage breakeven: 0.50
 		}
 
 		level_scaled = {
@@ -8496,8 +8631,9 @@ pm_industrial_highway = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = 40
-			state_infrastructure_from_automobiles_consumption_add = 0.1
-			state_infrastructure_add = 20
+			state_infrastructure_from_automobiles_consumption_add = 0.25
+			state_infrastructure_add = 25
+			state_construction_mult = 0.05
 		}
 	}
 
@@ -8508,13 +8644,14 @@ pm_industrial_highway = {
 			goods_input_oil_add = 50                             # Price:   40, Total cost: 2000.0
 			# Output goods
 			goods_output_transportation_add = 100                # Price:   30, Total cost: 3000.0
+			goods_output_personal_transportation_add = 75        # Price:   30, Total cost: 2250.0
 			# Total input cost: 4500.0
-			# Total output cost: 3000.0
-			# Profit: -1500.0
-			# Profit margin: -33.33%
-			# Zero profit price multiplier: 1.50
+			# Total output cost: 5250.0
+			# Profit: 750.0
+			# Profit margin: 16.67%
+			# Zero profit price multiplier: 0.86
 			# Employment: 1500
-			# Wage breakeven: -1.00
+			# Wage breakeven: 0.50
 		}
 
 		level_scaled = {
@@ -8526,13 +8663,13 @@ pm_industrial_highway = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_convoys_capacity_add = 100
+			country_convoys_capacity_add = 50
 		}
 	}
 }
 
 pm_electric_civil_highway = {
-	texture = "gfx/interface/icons/production_method_icons/automobiles.dds"
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	
 	unlocking_technologies = { 
 		clean_energy_technologies
@@ -8544,14 +8681,15 @@ pm_electric_civil_highway = {
 			goods_input_automobiles_add = 25                     # Price:  100, Total cost: 2500.0
 			goods_input_electricity_add = 50                     # Price:   30, Total cost: 1500.0
 			# Output goods
-			goods_output_transportation_add = 150                # Price:   30, Total cost: 4500.0
+			goods_output_transportation_add = 75                 # Price:   30, Total cost: 2250.0
+			goods_output_personal_transportation_add = 100       # Price:   30, Total cost: 3000.0
 			# Total input cost: 4000.0
-			# Total output cost: 4500.0
-			# Profit: 500.0
-			# Profit margin: 12.50%
-			# Zero profit price multiplier: 0.89
+			# Total output cost: 5250.0
+			# Profit: 1250.0
+			# Profit margin: 31.25%
+			# Zero profit price multiplier: 0.76
 			# Employment: 1500
-			# Wage breakeven: 0.33
+			# Wage breakeven: 0.83
 		}
 
 		level_scaled = {
@@ -8579,7 +8717,7 @@ pm_electric_civil_highway = {
 }
 
 pm_electric_industrial_highway = {
-	texture = "gfx/interface/icons/invention_icons/paved_roads.dds"
+	texture = "gfx/interface/icons/invention_icons/base2.dds"
 	
 	unlocking_technologies = { 
 		clean_energy_technologies
@@ -8592,13 +8730,14 @@ pm_electric_industrial_highway = {
 			goods_input_electricity_add = 50                     # Price:   30, Total cost: 1500.0
 			# Output goods
 			goods_output_transportation_add = 100                # Price:   30, Total cost: 3000.0
+			goods_output_personal_transportation_add = 75        # Price:   30, Total cost: 2250.0
 			# Total input cost: 4000.0
-			# Total output cost: 3000.0
-			# Profit: -1000.0
-			# Profit margin: -25.00%
-			# Zero profit price multiplier: 1.33
+			# Total output cost: 5250.0
+			# Profit: 1250.0
+			# Profit margin: 31.25%
+			# Zero profit price multiplier: 0.76
 			# Employment: 1500
-			# Wage breakeven: -0.67
+			# Wage breakeven: 0.83
 		}
 
 		level_scaled = {
@@ -8610,23 +8749,23 @@ pm_electric_industrial_highway = {
 	
 	state_modifiers = {
 		workforce_scaled = {
-			state_infrastructure_add = 20
-			state_infrastructure_from_automobiles_consumption_add = 0.1
+			state_infrastructure_add = 25
+			state_infrastructure_from_automobiles_consumption_add = 0.25
+			state_construction_mult = 0.05
 		}
 	}
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_convoys_capacity_add = 100
+			country_convoys_capacity_add = 50
 		}
 	}
 
 	required_input_goods = electricity
-
 }
 
 pm_autonomous_highway = {
-	texture = "gfx/interface/icons/production_method_icons/automobiles.dds"
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
 	
 	unlocking_technologies = {
 		autonomous_vehicles
@@ -8641,14 +8780,15 @@ pm_autonomous_highway = {
 			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
 			goods_input_radios_add = 5                           # Price:   80, Total cost: 400.0
 			# Output goods
-			goods_output_transportation_add = 260                # Price:   30, Total cost: 7800.0
+			goods_output_transportation_add = 160                # Price:   30, Total cost: 4800.0
+			goods_output_personal_transportation_add = 160       # Price:   30, Total cost: 4800.0
 			# Total input cost: 7800.0
-			# Total output cost: 7800.0
-			# Profit: 0.0
-			# Profit margin: 0.00%
-			# Zero profit price multiplier: 1.00
+			# Total output cost: 9600.0
+			# Profit: 1800.0
+			# Profit margin: 23.08%
+			# Zero profit price multiplier: 0.81
 			# Employment: 20
-			# Wage breakeven: 0.00
+			# Wage breakeven: 90.00
 		}
 		level_scaled = {
 			# employment
@@ -10680,6 +10820,56 @@ pm_autonomous_trains = {
 	}
 }
 
+pm_wooden_passenger_carriages = {
+	texture = "gfx/interface/icons/production_method_icons/passenger_trains.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 8                             # Price:   20, Total cost: 160.0
+			# Output goods
+			goods_output_personal_transportation_add = 10        # Price:   30, Total cost: 300.0
+			# Total input cost: 160.0
+			# Total output cost: 300.0
+			# Profit: 140.0
+			# Profit margin: 87.50%
+			# Zero profit price multiplier: 0.53
+			# Employment: 250
+			# Wage breakeven: 0.56
+		}
+		level_scaled = {
+			building_employment_clerks_add = 250
+		}
+	}			
+}
+
+pm_steel_passenger_carriages = {
+	texture = "gfx/interface/icons/production_method_icons/passenger_carriages.dds"
+
+	unlocking_technologies = {
+		steel_railway_cars
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 5                            # Price:   50, Total cost: 250.0
+			# Output goods
+			goods_output_personal_transportation_add = 15        # Price:   30, Total cost: 450.0
+			# Total input cost: 250.0
+			# Total output cost: 450.0
+			# Profit: 200.0
+			# Profit margin: 80.00%
+			# Zero profit price multiplier: 0.56
+			# Employment: 500
+			# Wage breakeven: 0.40
+		}
+		level_scaled = {
+			building_employment_clerks_add = 500
+		}
+	}			
+}
+
 pm_double-decker_passenger_carriages = {
 	texture = "gfx/interface/icons/production_method_icons/passenger_carriages.dds"
 
@@ -10693,7 +10883,7 @@ pm_double-decker_passenger_carriages = {
 			goods_input_steel_add = 10                           # Price:   50, Total cost: 500.0
 			goods_input_glass_add = 5                            # Price:   40, Total cost: 200.0
 			# Output goods
-			goods_output_transportation_add = 30                 # Price:   30, Total cost: 900.0
+			goods_output_personal_transportation_add = 30        # Price:   30, Total cost: 900.0
 			# Total input cost: 700.0
 			# Total output cost: 900.0
 			# Profit: 200.0
@@ -10723,7 +10913,7 @@ pm_bullet_trains = {
 			goods_input_glass_add = 5                            # Price:   40, Total cost: 200.0
 			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
 			# Output goods
-			goods_output_transportation_add = 50                 # Price:   30, Total cost: 1500.0
+			goods_output_personal_transportation_add = 50        # Price:   30, Total cost: 1500.0
 			# Total input cost: 1100.0
 			# Total output cost: 1500.0
 			# Profit: 400.0
@@ -10759,7 +10949,7 @@ pm_maglev_trains = {
 			goods_input_glass_add = 5                            # Price:   40, Total cost: 200.0
 			goods_input_electronic_components_add = 20           # Price:   80, Total cost: 1600.0
 			# Output goods
-			goods_output_transportation_add = 100                # Price:   30, Total cost: 3000.0
+			goods_output_personal_transportation_add = 100       # Price:   30, Total cost: 3000.0
 			# Total input cost: 2300.0
 			# Total output cost: 3000.0
 			# Profit: 700.0
@@ -10775,7 +10965,126 @@ pm_maglev_trains = {
 			state_infrastructure_add = 10
 		}
 	}				
+}	
+
+pm_basic_port = {
+	texture = "gfx/interface/icons/production_method_icons/basic_port.dds"
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_clippers_add = 5                         # Price:   60, Total cost: 300.0
+			# Output goods
+			goods_output_transportation_add = 10                 # Price:   30, Total cost: 300.0
+			# Total input cost: 300.0
+			# Total output cost: 300.0
+			# Profit: 0.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 1.00
+			# Employment: 5000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_laborers_add = 3000
+			building_employment_clerks_add = 1500
+			building_employment_bureaucrats_add = 500
+		}
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_convoys_capacity_add = 150
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 5
+		}
+	}
+}		
+
+pm_industrial_port = {
+	texture = "gfx/interface/icons/production_method_icons/industrial_port.dds"
+
+	unlocking_technologies = {
+		gantry_cranes
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steamers_add = 5                         # Price:   70, Total cost: 350.0
+			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
+			# Output goods
+			goods_output_transportation_add = 20                 # Price:   30, Total cost: 600.0
+			# Total input cost: 500.0
+			# Total output cost: 600.0
+			# Profit: 100.0
+			# Profit margin: 20.00%
+			# Zero profit price multiplier: 0.83
+			# Employment: 4000
+			# Wage breakeven: 0.03
+		}
+		level_scaled = {
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 500
+			building_employment_clerks_add = 1000
+			building_employment_bureaucrats_add = 500
+		}
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_convoys_capacity_add = 175
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 7.5
+		}
+	}	
 }
+
+pm_modern_port = {
+	texture = "gfx/interface/icons/production_method_icons/modern_port.dds"
+	unlocking_technologies = {
+		concrete_dockyards
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steamers_add = 5                         # Price:   70, Total cost: 350.0
+			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			# Output goods
+			goods_output_transportation_add = 30                 # Price:   30, Total cost: 900.0
+			# Total input cost: 550.0
+			# Total output cost: 900.0
+			# Profit: 350.0
+			# Profit margin: 63.64%
+			# Zero profit price multiplier: 0.61
+			# Employment: 2000
+			# Wage breakeven: 0.17
+		}
+		level_scaled = {
+			building_employment_laborers_add = 750
+			building_employment_machinists_add = 250
+			building_employment_clerks_add = 500
+			building_employment_bureaucrats_add = 500
+		}
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_convoys_capacity_add = 200
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+}	
 
 pm_container_ports = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
@@ -10796,13 +11105,14 @@ pm_container_ports = {
 			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
 			goods_input_telephones_add = 5                       # Price:   70, Total cost: 350.0
 			# Output goods
+			goods_output_transportation_add = 45                 # Price:   30, Total cost: 1350.0
 			# Total input cost: 900.0
-			# Total output cost: 0
-			# Profit: -900.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
+			# Total output cost: 1350.0
+			# Profit: 450.0
+			# Profit margin: 50.00%
+			# Zero profit price multiplier: 0.67
 			# Employment: 1000
-			# Wage breakeven: -0.90
+			# Wage breakeven: 0.45
 		}
 		level_scaled = {
 			building_employment_laborers_add = 250
@@ -10840,13 +11150,14 @@ pm_global_ports = {
 			goods_input_telephones_add = 5                       # Price:   70, Total cost: 350.0
 			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
 			# Output goods
+			goods_output_transportation_add = 80                 # Price:   30, Total cost: 2400.0
 			# Total input cost: 1850.0
-			# Total output cost: 0
-			# Profit: -1850.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
+			# Total output cost: 2400.0
+			# Profit: 550.0
+			# Profit margin: 29.73%
+			# Zero profit price multiplier: 0.77
 			# Employment: 750
-			# Wage breakeven: -2.47
+			# Wage breakeven: 0.73
 		}
 		level_scaled = {
 			building_employment_engineers_add = 250
@@ -10858,6 +11169,106 @@ pm_global_ports = {
 	country_modifiers = {
 		workforce_scaled = {
 			country_convoys_capacity_add = 800
+		}
+	}
+}
+
+pm_no_water_personal_transport = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+}
+
+pm_sailing_ships = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_clippers_add = 5                         # Price:   60, Total cost: 300.0
+			# Output goods
+			goods_output_personal_transportation_add = 15        # Price:   30, Total cost: 450.0
+			# Total input cost: 300.0
+			# Total output cost: 450.0
+			# Profit: 150.0
+			# Profit margin: 50.00%
+			# Zero profit price multiplier: 0.67
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_steam_paddleboats = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+	
+	unlocking_technologies = {
+		gantry_cranes
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steamers_add = 5                         # Price:   70, Total cost: 350.0
+			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
+			# Output goods
+			goods_output_personal_transportation_add = 30        # Price:   30, Total cost: 900.0
+			# Total input cost: 500.0
+			# Total output cost: 900.0
+			# Profit: 400.0
+			# Profit margin: 80.00%
+			# Zero profit price multiplier: 0.56
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_diesel_electric_ferries = {
+	texture = "gfx/interface/icons/production_method_icons/base4.dds"
+	
+	unlocking_technologies = {
+		compression_ignition
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steamers_add = 10                        # Price:   70, Total cost: 700.0
+			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
+			# Output goods
+			goods_output_personal_transportation_add = 45        # Price:   30, Total cost: 1350.0
+			# Total input cost: 850.0
+			# Total output cost: 1350.0
+			# Profit: 500.0
+			# Profit margin: 58.82%
+			# Zero profit price multiplier: 0.63
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_modern_cruise_ships = {
+	texture = "gfx/interface/icons/production_method_icons/base5.dds"
+	
+	unlocking_technologies = {
+		containerization
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steamers_add = 10                        # Price:   70, Total cost: 700.0
+			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_consumer_appliances_add = 5              # Price:   80, Total cost: 400.0
+			# Output goods
+			goods_output_personal_transportation_add = 70        # Price:   30, Total cost: 2100.0
+			# Total input cost: 1300.0
+			# Total output cost: 2100.0
+			# Profit: 800.0
+			# Profit margin: 61.54%
+			# Zero profit price multiplier: 0.62
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 	}
 }
@@ -11949,15 +12360,16 @@ pm_wooden_buildings_mod = {
 			# Input goods
 			goods_input_fabric_add = 10                          # Price:   20, Total cost: 200.0
 			goods_input_wood_add = 30                            # Price:   20, Total cost: 600.0
+			goods_input_transportation_add = 5                   # Price:   30, Total cost: 150.0
 			# Output goods
-			goods_output_construction_add = 0.8                  # Price: 1000, Total cost: 800.0
-			# Total input cost: 800.0
-			# Total output cost: 800.0
-			# Profit: 0.0
-			# Profit margin: 0.00%
-			# Zero profit price multiplier: 1.00
+			goods_output_construction_add = 1                    # Price: 1000, Total cost: 1000.0
+			# Total input cost: 950.0
+			# Total output cost: 1000.0
+			# Profit: 50.0
+			# Profit margin: 5.26%
+			# Zero profit price multiplier: 0.95
 			# Employment: 5000
-			# Wage breakeven: 0.00
+			# Wage breakeven: 0.01
 		}
 
 		level_scaled = {
@@ -11991,16 +12403,16 @@ pm_iron_frame_buildings_mod = {
 			goods_input_fabric_add = 8                           # Price:   20, Total cost: 160.0
 			goods_input_iron_add = 20                            # Price:   40, Total cost: 800.0
 			goods_input_tools_add = 4                            # Price:   40, Total cost: 160.0
-			goods_input_transportation_add = 8                   # Price:   30, Total cost: 240.0
+			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
 			# Output goods
 			goods_output_construction_add = 2                    # Price: 1000, Total cost: 2000.0
-			# Total input cost: 1680.0
+			# Total input cost: 1740.0
 			# Total output cost: 2000.0
-			# Profit: 320.0
-			# Profit margin: 19.05%
-			# Zero profit price multiplier: 0.84
+			# Profit: 260.0
+			# Profit margin: 14.94%
+			# Zero profit price multiplier: 0.87
 			# Employment: 5000
-			# Wage breakeven: 0.06
+			# Wage breakeven: 0.05
 		}
 
 		level_scaled = {
@@ -12080,16 +12492,16 @@ pm_arc_welded_buildings_mod = {
 			goods_input_explosives_add = 8                       # Price:   50, Total cost: 400.0
 			goods_input_tools_add = 16                           # Price:   40, Total cost: 640.0
 			goods_input_electricity_add = 16                     # Price:   30, Total cost: 480.0
-			goods_input_transportation_add = 32                  # Price:   30, Total cost: 960.0
+			goods_input_transportation_add = 30                  # Price:   30, Total cost: 900.0
 			# Output goods
 			goods_output_construction_add = 5                    # Price: 1000, Total cost: 5000.0
-			# Total input cost: 4120.0
+			# Total input cost: 4060.0
 			# Total output cost: 5000.0
-			# Profit: 880.0
-			# Profit margin: 21.36%
-			# Zero profit price multiplier: 0.82
+			# Profit: 940.0
+			# Profit margin: 23.15%
+			# Zero profit price multiplier: 0.81
 			# Employment: 5000
-			# Wage breakeven: 0.18
+			# Wage breakeven: 0.19
 		} 
 
 		level_scaled = {
@@ -13026,17 +13438,17 @@ pm_national_park = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 1                   # Price:   30, Total cost: 30.0
+			goods_input_personal_transportation_add = 5          # Price:   30, Total cost: 150.0
 			# Output goods
 			goods_output_fine_art_add = 1                        # Price:  200, Total cost: 200.0
 			goods_output_services_add = 5                        # Price:   30, Total cost: 150.0
-			# Total input cost: 30.0
+			# Total input cost: 150.0
 			# Total output cost: 350.0
-			# Profit: 320.0
-			# Profit margin: 1066.67%
-			# Zero profit price multiplier: 0.09
+			# Profit: 200.0
+			# Profit margin: 133.33%
+			# Zero profit price multiplier: 0.43
 			# Employment: 1000
-			# Wage breakeven: 0.32
+			# Wage breakeven: 0.20
 		}
 
 		level_scaled = {
@@ -13049,6 +13461,7 @@ pm_national_park = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = -500
+			state_migration_pull_mult = 0.05
 			state_standard_of_living_add = 1
 		}
 	}
@@ -13060,18 +13473,18 @@ pm_national_forest = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 1                   # Price:   30, Total cost: 30.0
+			goods_input_personal_transportation_add = 5          # Price:   30, Total cost: 150.0
 			# Output goods
 			goods_output_wood_add = 10                           # Price:   20, Total cost: 200.0
 			goods_output_hardwood_add = 2                        # Price:   40, Total cost: 80.0
 			goods_output_services_add = 2                        # Price:   30, Total cost: 60.0
-			# Total input cost: 30.0
+			# Total input cost: 150.0
 			# Total output cost: 340.0
-			# Profit: 310.0
-			# Profit margin: 1033.33%
-			# Zero profit price multiplier: 0.09
+			# Profit: 190.0
+			# Profit margin: 126.67%
+			# Zero profit price multiplier: 0.44
 			# Employment: 1000
-			# Wage breakeven: 0.31
+			# Wage breakeven: 0.19
 		}
 
 		level_scaled = {
@@ -13085,7 +13498,7 @@ pm_national_forest = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = -200
-			state_infrastructure_add = 10
+			building_logging_camp_throughput_add = 0.05
 			state_standard_of_living_add = 1
 		}
 	}
@@ -13097,17 +13510,17 @@ pm_national_wildlife_refuge = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 1                   # Price:   30, Total cost: 30.0
+			goods_input_personal_transportation_add = 5          # Price:   30, Total cost: 150.0
 			# Output goods
 			goods_output_fine_art_add = 1                        # Price:  200, Total cost: 200.0
 			goods_output_meat_add = 5                            # Price:   30, Total cost: 150.0
-			# Total input cost: 30.0
+			# Total input cost: 150.0
 			# Total output cost: 350.0
-			# Profit: 320.0
-			# Profit margin: 1066.67%
-			# Zero profit price multiplier: 0.09
+			# Profit: 200.0
+			# Profit margin: 133.33%
+			# Zero profit price multiplier: 0.43
 			# Employment: 1000
-			# Wage breakeven: 0.32
+			# Wage breakeven: 0.20
 		}
 
 		level_scaled = {
@@ -13120,12 +13533,13 @@ pm_national_wildlife_refuge = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = -500
+			state_standard_of_living_add = 1
 		}
 	}
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_add = 5
+			country_weekly_innovation_add = 3
 		}
 	}
 }
@@ -13417,10 +13831,10 @@ pm_principle_engineering_and_logistics = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_construction_add = 0.1                 # Price: 1000, Total cost: 250.0
+			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
 			# Total input cost: 0
-			# Total output cost: 250.0
-			# Profit: 250.0
+			# Total output cost: 100.0
+			# Profit: 100.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
@@ -13439,6 +13853,33 @@ pm_engineering_and_logistics_no_effect = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 	replacement_if_valid = pm_principle_engineering_and_logistics
 } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
