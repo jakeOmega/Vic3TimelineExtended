@@ -83,6 +83,7 @@ je_nuclear_program = {
                         name = nuclear_weapons_program_first_nuke_done
                         value = 1
                     }
+                    trigger_event = { id = nuclear_weapon_events.10 }
                     save_scope_as = first_nuke_country
                     every_country = {
                         limit = {

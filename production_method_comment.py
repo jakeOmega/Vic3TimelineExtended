@@ -260,11 +260,11 @@ print("Production methods file updated successfully.")
 # Military costs
 vanilla_military_unit_file_path = r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\combat_unit_types\00_combat_unit_types.txt"
 military_unit_file_path = r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\combat_unit_types\extra_combat_units.txt"
-mobilization_file_path = r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\mobilization_options\extra_mobilization_options.txt"
+mobilization_file_path = r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\mobilization_options\extra_mobilization_options.txt"
 
 # process_and_update_military_costs(military_unit_file_path, goods_dict)
 
-# process_and_update_military_costs(mobilization_file_path, goods_dict)
+process_and_update_military_costs(mobilization_file_path, goods_dict)
 
 # process_and_update_military_costs(
 #    vanilla_military_unit_file_path,

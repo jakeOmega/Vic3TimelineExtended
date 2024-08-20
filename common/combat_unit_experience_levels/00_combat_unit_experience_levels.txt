@@ -73,23 +73,36 @@ veterancy6 = {
 	icon = "gfx/interface/icons/military_icons/unit_veterancy/veterancy6.dds"
 	needed_experience = 1000
 	unit_modifier = {
-        unit_offense_mult = 0.65
-        unit_defense_mult = 0.65
+        unit_offense_mult = 0.75
+        unit_defense_mult = 0.75
 		unit_morale_damage_mult = 0.5
 		unit_morale_loss_mult = -0.25
-		unit_experience_gain_add = -1.25
+		unit_experience_gain_add = -1.5
 	}
 }
 
 veterancy7 = {
 	level = 8
 	icon = "gfx/interface/icons/military_icons/unit_veterancy/veterancy7.dds"
-	needed_experience = 1200
+	needed_experience = 2000
 	unit_modifier = {
-        unit_offense_mult = 0.8
-        unit_defense_mult = 0.8
+        unit_offense_mult = 1.0
+        unit_defense_mult = 1.0
 		unit_morale_damage_mult = 1.0
 		unit_morale_loss_mult = -0.5
-		unit_experience_gain_add = -1.5
+		unit_experience_gain_add = -2
+	}
+}
+
+veterancy8 = {
+	level = 9
+	icon = "gfx/interface/icons/military_icons/unit_veterancy/veterancy8.dds"
+	needed_experience = 3000
+	unit_modifier = {
+		unit_offense_mult = 1.5
+		unit_defense_mult = 1.5
+		unit_morale_damage_mult = 3
+		unit_morale_loss_mult = -0.75
+		unit_experience_gain_add = -2.0
 	}
 }

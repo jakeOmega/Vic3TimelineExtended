@@ -579,13 +579,13 @@ market_greenhouse_gas_emissions_script_value = {
 	mg:oil = {
 		add = {
 			value = market_goods_production
-			multiply = 1
+			multiply = 2
 		}
 	}
 	mg:coal = {
 		add = {
 			value = market_goods_production
-			multiply = 1.5
+			multiply = 2
 		}
 	}
 	divide = 10000
@@ -615,7 +615,7 @@ temperature_anomaly_display = {
 	value = global_var:greenhouse_gas_emissions
 	divide = 100
 	round = yes
-	divide = 10
+	divide = 100
 }
 
 global_tech_spread_script_value = {
@@ -692,4 +692,11 @@ global_tech_spread_script_value = {
 		}
 		add = 200
 	}
+}
+
+state_arable_land_add_script_value = {
+	value = arable_land
+	multiply = modifier:state_arable_land_mult
+	subtract = var:arable_land_added
+	floor = yes
 }

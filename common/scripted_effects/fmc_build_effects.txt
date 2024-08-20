@@ -9,7 +9,7 @@ replace_building = {
 			}
 			change_variable = {
 				name = building_level
-				multiply = 2
+				multiply = 5
 			}
 			add_specified_building_level = {
 				ADD_LEVEL = var:building_level

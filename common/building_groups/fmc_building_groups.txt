@@ -18,4 +18,5 @@
 
 bg_construction = {
 	parent_group = bg_heavy_industry
+	infrastructure_usage_per_level = 0.1
 }

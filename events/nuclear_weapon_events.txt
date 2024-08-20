@@ -286,3 +286,35 @@ nuclear_weapon_events.9 = {
  		default_option = yes
  	}
 }
+
+nuclear_weapon_events.10 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+ 		video = "unspecific_fire"
+ 	}
+
+ 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+ 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+ 	title = nuclear_weapon_events.10.t
+ 	desc = nuclear_weapon_events.10.d
+ 	flavor = nuclear_weapon_events.10.f
+
+	duration = 3
+
+ 	trigger = {
+ 		# triggered by nuclear program
+ 	}
+	
+ 	immediate = {
+ 		
+ 	}
+
+ 	option = {
+ 		name = nuclear_weapon_events.10.a
+ 		default_option = yes
+ 	}
+}

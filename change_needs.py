@@ -21,9 +21,9 @@ def services_need(i):
     if i < 9:
         return 0
     elif i < 20:
-        return 12 * (i - 9)
+        return 12 * (i - 9) + 24
     else:
-        return services_need(19) + int(50 * (math.exp(0.15 * (i - 19)) - 1))
+        return services_need(19) + int(50 * (math.exp(0.2 * (i - 19)) - 1))
 
 
 def art_need(i):
@@ -34,13 +34,13 @@ def art_need(i):
 
 
 def housing_need(i):
-    return int(services_need(i)**0.9 * services_need(20) ** 0.1 + 1)
+    return max(1, int(services_need(i) ** 0.8 * services_need(20) ** 0.2))
 
 
 # Define the needs and their corresponding functions
 needs = {
     "popneed_convenience": convenience_need,
-    # "popneed_services": services_need,
+    "popneed_services": services_need,
     "popneed_art": art_need,
     "popneed_housing": housing_need,
 }
@@ -96,8 +96,11 @@ def extrapolate_power_law(x, a, b):
     return a * (x**b)
 
 
-input_file_name = r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\buy_packages\00_buy_packages.txt"
-pop_needs_out_path = r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\buy_packages\00_buy_packages.txt"
+# input_file_name = r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\buy_packages\00_buy_packages.txt"
+# pop_needs_out_path = r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\buy_packages\00_buy_packages.txt"
+input_file_name = r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\buy_packages\00_buy_packages.txt"
+pop_needs_out_path = r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\buy_packages\00_buy_packages.txt"
+
 
 with open(input_file_name, "r", encoding="utf-8-sig") as file_obj:
     file_text = file_obj.read()
@@ -276,15 +279,26 @@ def calculate_and_write_costs(
 
 # Example file paths (replace with your actual file paths)
 buy_packages_file_paths = [pop_needs_out_path]
+
+# pop_needs_file_paths = [
+#    r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\pop_needs\00_pop_needs.txt",
+#    r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\pop_needs\extra_pop_needs.txt",
+# ]
+# goods_file_paths = [
+#    r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\goods\00_goods.txt",
+#    r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\goods\extra_goods.txt",
+# ]
+# output_file_path = r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\script_values\wealth_to_pounds.txt"
+
 pop_needs_file_paths = [
-    r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\pop_needs\00_pop_needs.txt",
-    r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\pop_needs\extra_pop_needs.txt",
+    r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\pop_needs\00_pop_needs.txt",
+    r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\pop_needs\extra_pop_needs.txt",
 ]
 goods_file_paths = [
-    r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\goods\00_goods.txt",
-    r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\goods\extra_goods.txt",
+    r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\goods\00_goods.txt",
+    r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\goods\extra_goods.txt",
 ]
-output_file_path = r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\script_values\wealth_to_pounds.txt"
+output_file_path = r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\script_values\wealth_to_pounds.txt"
 
 # Call the function to calculate and write costs
 calculate_and_write_costs(

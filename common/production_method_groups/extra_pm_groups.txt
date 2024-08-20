@@ -903,19 +903,6 @@ pmg_passenger_trains = {
         pm_maglev_trains
     }
 }
-pmg_base_building_construction_sector_mod = {
-	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
-	ai_selection = most_productive
-
-	production_methods = {
-		pm_wooden_buildings_mod
-		pm_iron_frame_buildings_mod
-		pm_steel_frame_buildings_mod
-		pm_arc_welded_buildings_mod
-		pm_3d_printed_buildings
-	}
-
-}
 
 pmg_base_building_construction_sector = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
@@ -1497,5 +1484,84 @@ pmg_augmentation = {
         pm_no_private_human_augmentation
         pm_regulated_augmentation
         pm_unregulated_augmentation
+    }
+}
+
+pmg_harvesting_process_building_rye_farm = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_tools_disabled
+		pm_tools
+		pm_steam_threshers
+		pm_tractors
+		pm_compression_ignition_tractors
+        pm_hydraulic_equipment
+        pm_automated_mechanical_harvesters
+        pm_automated_harvesters_and_planters
+	}
+}
+
+pmg_harvesting_process_building_wheat_farm = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_tools_disabled
+		pm_tools
+		pm_steam_threshers
+		pm_tractors
+		pm_compression_ignition_tractors
+        pm_hydraulic_equipment
+        pm_automated_mechanical_harvesters
+        pm_automated_harvesters_and_planters
+	}
+}
+
+pmg_harvesting_process_building_maize_farm = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_tools_disabled
+		pm_tools
+		pm_steam_threshers
+		pm_tractors
+		pm_compression_ignition_tractors
+        pm_hydraulic_equipment
+        pm_automated_mechanical_harvesters
+        pm_automated_harvesters_and_planters
+	}
+}
+
+pmg_harvesting_process_building_millet_farm = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_tools_disabled
+		pm_tools
+		pm_steam_threshers
+		pm_tractors
+		pm_compression_ignition_tractors
+        pm_hydraulic_equipment
+        pm_automated_mechanical_harvesters
+        pm_automated_harvesters_and_planters
+	}
+}
+
+pmg_base_building_construction_sector_mod = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_wooden_buildings_mod
+		pm_iron_frame_buildings_mod
+		pm_steel_frame_buildings_mod
+		pm_arc_welded_buildings_mod
+        pm_reinforced_concrete_buildings
+        pm_nanomaterial_buildings
+	}
+}
+
+pmg_construction_automation = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+    production_methods = {
+        pm_no_construction_automation
+        pm_prefabricated_building_components
+        pm_tower_cranes
+        pm_computer_aided_design
+        pm_3d_printed_buildings
     }
 }

@@ -111,9 +111,9 @@ mobilization_option_logistical_support = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_engines_add = 1                           # Price:   60, Total cost: 60.0
-		goods_input_tools_add = 1                             # Price:   40, Total cost: 40.0
-		# Total cost: 100.0
+		goods_input_engines_add = 5                           # Price:   60, Total cost: 300.0
+		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
+		# Total cost: 500.0
 	}
 	unit_modifier = {
 		military_formation_attrition_risk_mult = -0.4
@@ -151,12 +151,12 @@ mobilization_option_extensive_logistical_support = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_engines_add = 1                           # Price:   60, Total cost: 60.0
-		goods_input_tools_add = 1                             # Price:   40, Total cost: 40.0
-		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
-		goods_input_telephones_add = 1                        # Price:   70, Total cost: 70.0
+		goods_input_engines_add = 5                           # Price:   60, Total cost: 300.0
+		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
+		goods_input_radios_add = 5                            # Price:   80, Total cost: 400.0
+		goods_input_telephones_add = 5                        # Price:   70, Total cost: 350.0
 		goods_input_automobiles_add = 1                       # Price:  100, Total cost: 100.0
-		# Total cost: 350.0
+		# Total cost: 1350.0
 	}
 	unit_modifier = {
 		military_formation_attrition_risk_mult = -0.3
@@ -194,14 +194,14 @@ mobilization_option_modern_logistical_support = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_radios_add = 2                            # Price:   80, Total cost: 160.0
-		goods_input_telephones_add = 2                        # Price:   70, Total cost: 140.0
+		goods_input_radios_add = 10                           # Price:   80, Total cost: 800.0
+		goods_input_telephones_add = 10                       # Price:   70, Total cost: 700.0
 		goods_input_automobiles_add = 2                       # Price:  100, Total cost: 200.0
 		goods_input_launch_capacity_add = 1                   # Price:  200, Total cost: 200.0
 		goods_input_aeroplanes_add = 1                        # Price:   80, Total cost: 80.0
 		goods_input_electronic_components_add = 2             # Price:   80, Total cost: 160.0
 		goods_input_consumer_appliances_add = 2               # Price:   80, Total cost: 160.0
-		# Total cost: 1100.0
+		# Total cost: 2300.0
 	}
 	unit_modifier = {
 		military_formation_attrition_risk_mult = -0.15
@@ -239,12 +239,15 @@ mobilization_option_advanced_logistical_support = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_launch_capacity_add = 5                   # Price:  200, Total cost: 1000.0
+		goods_input_launch_capacity_add = 10                  # Price:  200, Total cost: 2000.0
 		goods_input_aeroplanes_add = 5                        # Price:   80, Total cost: 400.0
 		goods_input_electronic_components_add = 5             # Price:   80, Total cost: 400.0
 		goods_input_consumer_appliances_add = 1               # Price:   80, Total cost: 80.0
-		goods_input_advanced_materials_add = 0.1              # Price: 4000, Total cost: 400.0
-		# Total cost: 2280.0
+		goods_input_automobiles_add = 5                       # Price:  100, Total cost: 500.0
+		goods_input_digital_assets_add = 20                   # Price:  100, Total cost: 2000.0
+		goods_input_robotics_add = 5                          # Price:   80, Total cost: 400.0
+		goods_input_radios_add = 5                            # Price:   80, Total cost: 400.0
+		# Total cost: 6180.0
 	}
 	unit_modifier = {
 		military_formation_attrition_risk_mult = -0.1
@@ -1303,3 +1306,52 @@ mobilization_option_mandatory_enhancement = {
 
     group = training
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

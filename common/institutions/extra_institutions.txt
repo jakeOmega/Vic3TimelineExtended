@@ -104,7 +104,7 @@ institution_ministry_of_propaganda = {
 	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 	modifier = {
-		country_law_enactment_success_add = 0.1
+		country_authority_add = 100
 		political_movement_radicalism_mult = 0.05
 	}
 }
@@ -159,6 +159,7 @@ institution_ministry_of_population_control = {
 		state_birth_rate_mult = -0.1
 		state_accepted_birth_rate_mult = 0.15
 		state_radicals_from_discrimination_mult = 0.25
+		country_radicals_from_conquest_mult = 0.1
 		country_infamy_decay_mult = -0.05
 	}
 }

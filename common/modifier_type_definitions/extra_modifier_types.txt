@@ -1065,6 +1065,11 @@ state_mass_migration_encouragement_bool = {
 	}
 }
 
+state_arable_land_mult = {
+	color = good
+	percent = yes
+}
+
 state_poor_expected_sol={
 	decimals=1
 	color=neutral

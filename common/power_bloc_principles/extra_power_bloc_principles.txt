@@ -789,7 +789,7 @@ principle_colonial_offices_4 = {
 	institution_modifier = {
 		state_colony_growth_creation_mult = 0.05
 		country_infamy_generation_against_unrecognized_mult = -0.05
-		country_infamy_generation_mult = -0.05
+		country_infamy_generation_mult = -0.02
 		country_influence_mult = 0.1
 		country_liberty_desire_of_subjects_add = -0.02
 	}		
@@ -825,7 +825,7 @@ principle_colonial_offices_5 = {
 		# Modifiers from previous level(s)
 		state_colony_growth_creation_mult = 0.1
 		country_infamy_generation_against_unrecognized_mult = -0.05
-		country_infamy_generation_mult = -0.05
+		country_infamy_generation_mult = -0.02
 		country_influence_mult = 0.2
 		country_leverage_generation_mult = 0.1
 		country_liberty_desire_of_subjects_add = -0.04
@@ -2098,13 +2098,7 @@ principle_urban_planning_1 = {
 	}
 	
 	ai_weight = {
-		value = 100
-		
-		if = {
-			limit = { has_strategy = ai_strategy_progressive_agenda }
-			multiply = 2.0
-		}
-
+		value = 50
 		if = {
 			limit = {
 				has_law = law_type:law_ministry_of_urban_planning
@@ -2126,6 +2120,7 @@ principle_urban_planning_2 = {
 		#Modifiers from previous level(s)	
 		state_pop_support_law_ministry_of_urban_planning_add = 0.5
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
+
 		state_shopkeepers_investment_pool_contribution_add = 0.1
 	}
 
@@ -2133,6 +2128,10 @@ principle_urban_planning_2 = {
 	institution_modifier = {
 		# Modifiers from previous level(s)	
 		building_group_bg_service_standard_of_living_add = 0.5
+		building_group_bg_service_throughput_add = 0.1
+		building_group_bg_manufacturing_throughput_add = 0.02
+		building_group_bg_agriculture_throughput_add = -0.05
+		building_group_bg_mining_throughput_add = -0.02
 	}
 
 	ai_weight = {
@@ -2153,12 +2152,19 @@ principle_urban_planning_3 = {
 		state_pop_support_law_ministry_of_urban_planning_add = 1.0
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
 		state_shopkeepers_investment_pool_contribution_add = 0.1
+
+		state_shopkeepers_investment_pool_contribution_add = 0.25
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
 		#Modifiers from previous level(s)	
 		building_group_bg_service_standard_of_living_add = 0.5
+		building_group_bg_service_throughput_add = 0.1
+		building_group_bg_manufacturing_throughput_add = 0.02
+		building_group_bg_agriculture_throughput_add = -0.05
+		building_group_bg_mining_throughput_add = -0.02
+
 		interest_group_ig_rural_folk_pol_str_mult = -0.1
 		interest_group_ig_landowners_pol_str_mult = -0.05
 	}
@@ -2181,13 +2187,19 @@ principle_urban_planning_4 = {
 		state_pop_support_law_ministry_of_urban_planning_add = 1.0
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
 		state_shopkeepers_investment_pool_contribution_add = 0.1
-		goods_output_services_mult = 0.05
+		state_shopkeepers_investment_pool_contribution_add = 0.25
+
+		goods_output_services_mult = 0.1
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
 		#Modifiers from previous level(s)	
 		building_group_bg_service_standard_of_living_add = 0.5
+		building_group_bg_service_throughput_add = 0.2
+		building_group_bg_manufacturing_throughput_add = 0.02
+		building_group_bg_agriculture_throughput_add = -0.05
+		building_group_bg_mining_throughput_add = -0.02
 		interest_group_ig_rural_folk_pol_str_mult = -0.1
 		interest_group_ig_landowners_pol_str_mult = -0.05
 	}
@@ -2211,13 +2223,17 @@ principle_urban_planning_5 = {
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
 		state_shopkeepers_investment_pool_contribution_add = 0.1
 		state_shopkeepers_investment_pool_efficiency_mult = 0.1
-		goods_output_services_mult = 0.1
+		goods_output_services_mult = 0.2
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
 		# Modifiers from previous level(s)	
 		building_group_bg_service_standard_of_living_add = 0.5
+		building_group_bg_service_throughput_add = 0.2
+		building_group_bg_manufacturing_throughput_add = 0.02
+		building_group_bg_agriculture_throughput_add = -0.05
+		building_group_bg_mining_throughput_add = -0.02
 		interest_group_ig_rural_folk_pol_str_mult = -0.1
 		interest_group_ig_landowners_pol_str_mult = -0.05
 	}
@@ -2315,7 +2331,8 @@ principle_global_security_4 = {
 
 	leader_modifier = {
 		country_diplomatic_play_maneuvers_add = 40
-		country_infamy_generation_mult = -0.2
+		country_infamy_generation_mult = -0.1
+		country_infamy_decay_mult = 0.1
 		country_prestige_from_army_power_projection_mult = 0.2
 		country_institution_cost_institution_ministry_of_war_mult = -0.25
 	}
@@ -2346,7 +2363,8 @@ principle_global_security_5 = {
 
 	leader_modifier = {
 		country_diplomatic_play_maneuvers_add = 40
-		country_infamy_generation_mult = -0.2
+		country_infamy_generation_mult = -0.1
+		country_infamy_decay_mult = 0.1
 		country_prestige_from_army_power_projection_mult = 0.2
 		country_institution_cost_institution_ministry_of_war_mult = -0.25
 	}

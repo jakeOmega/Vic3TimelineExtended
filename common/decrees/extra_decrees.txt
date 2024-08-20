@@ -206,7 +206,7 @@ decree_cultural_emigration_initiative = {
 	modifier = {
 		state_mass_migration_encouragement_bool = yes
 		state_migration_pull_mult = -0.2
-		state_radicals_from_discrimination_mult = 0.5
+		state_radicals_from_discrimination_mult = 1
 	}
 	
 	cost = 100

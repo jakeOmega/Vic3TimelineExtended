@@ -509,9 +509,8 @@ law_state_secrets = {
 	progressiveness = 50	
 
 	modifier = {
-		country_authority_add = 100
-		state_decree_cost_mult = -0.25
-		country_bureaucracy_investment_cost_factor_mult = 0.2
+		country_authority_add = 200
+		country_bureaucracy_investment_cost_factor_mult = 0.1
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = 1
 	}
 }

@@ -449,7 +449,7 @@ recalculate_culture_acceptance_cost = {
 	add_modifier = {
 		name = accepted_cultures_cost
 		multiplier = {
-			value = total_cultural_acceptance_cost_script_value
+			value = total_cultural_cost_script_value
 		}
 	}
 }
@@ -520,8 +520,8 @@ change_acceptance = {
 }
 
 reset_acceptance = {
-	clear_variable = accepted_cultures
-	clear_variable = unaccepted_cultures
+	remove_variable = accepted_cultures
+	remove_variable = unaccepted_cultures
 	recalculate_culture_acceptance_cost = yes
 }
 
@@ -657,5 +657,15 @@ trigger_mass_migration = {
 		name = foreign_emigration_source
 		months = 12
 		is_decaying = yes
+	}
+}
+
+add_arable_land_effect = {
+	state_region = {
+		add_arable_land = PREV.$AMOUNT$
+	}
+	change_variable = {
+		name = arable_land_added
+		add = $AMOUNT$
 	}
 }

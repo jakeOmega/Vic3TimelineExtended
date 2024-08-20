@@ -36,6 +36,7 @@ building_construction_sector_mod = {
 	}
 	production_method_groups = {
 		pmg_base_building_construction_sector_mod
+		pmg_construction_automation
 		pmg_construction_principle
 	}
 
