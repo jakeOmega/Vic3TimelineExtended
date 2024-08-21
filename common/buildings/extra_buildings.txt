@@ -1264,7 +1264,7 @@ building_barracks = {
 }
 
 building_port = {
-	building_group = bg_public_infrastructure
+	building_group = bg_private_infrastructure
 	city_type = port
 	texture = "gfx/interface/icons/building_icons/building_port.dds"
 

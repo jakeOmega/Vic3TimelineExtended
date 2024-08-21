@@ -1294,4 +1294,3 @@ combat_unit_type_carrier = {
         texture = "gfx/unit_illustrations/support_ships_carrier.dds"
     }
 }
-

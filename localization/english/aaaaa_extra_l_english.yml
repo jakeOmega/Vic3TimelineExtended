@@ -2083,6 +2083,7 @@
  building_group_bg_power_infrastructure_usage_mult: "[concept_infrastructure_usage] of $building_power$ buildings"
  building_group_bg_power_infrastructure_usage_mult_desc: "A bonus or penalty to the [concept_infrastructure_usage] of $building_power$ buildings"
  building_power:0 "Power"
+ pm_partial_bulk_transport:0 "Partial Bulk Transport"
  pm_rail_transport_mine_infrastructure_4:0 "Extensive Rail Transport"
  country_leverage_threshold_change_add:0 "Power Bloc Leverage Threshold Change"
  country_leverage_threshold_change_add_desc:0 "Change in the leverage threshold for a Power Bloc leader to invite a country to join the Power Bloc."

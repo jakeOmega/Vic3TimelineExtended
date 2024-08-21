@@ -3590,9 +3590,11 @@ pm_no_public_transport = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
+			goods_output_personal_transportation_add = 1         # Price:   30, Total cost: 30.0
+			goods_output_transportation_add = 0.5                # Price:   30, Total cost: 15.0
 			# Total input cost: 0
-			# Total output cost: 150.0
-			# Profit: 150.0
+			# Total output cost: 45.0
+			# Profit: 45.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
@@ -8717,7 +8719,7 @@ pm_electric_civil_highway = {
 }
 
 pm_electric_industrial_highway = {
-	texture = "gfx/interface/icons/invention_icons/base2.dds"
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
 	
 	unlocking_technologies = { 
 		clean_energy_technologies
@@ -10975,14 +10977,14 @@ pm_basic_port = {
 			# Input goods
 			goods_input_clippers_add = 5                         # Price:   60, Total cost: 300.0
 			# Output goods
-			goods_output_transportation_add = 10                 # Price:   30, Total cost: 300.0
+			goods_output_transportation_add = 20                 # Price:   30, Total cost: 600.0
 			# Total input cost: 300.0
-			# Total output cost: 300.0
-			# Profit: 0.0
-			# Profit margin: 0.00%
-			# Zero profit price multiplier: 1.00
+			# Total output cost: 600.0
+			# Profit: 300.0
+			# Profit margin: 100.00%
+			# Zero profit price multiplier: 0.50
 			# Employment: 5000
-			# Wage breakeven: 0.00
+			# Wage breakeven: 0.06
 		}
 		level_scaled = {
 			building_employment_laborers_add = 3000
@@ -11016,14 +11018,14 @@ pm_industrial_port = {
 			goods_input_steamers_add = 5                         # Price:   70, Total cost: 350.0
 			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
 			# Output goods
-			goods_output_transportation_add = 20                 # Price:   30, Total cost: 600.0
+			goods_output_transportation_add = 40                 # Price:   30, Total cost: 1200.0
 			# Total input cost: 500.0
-			# Total output cost: 600.0
-			# Profit: 100.0
-			# Profit margin: 20.00%
-			# Zero profit price multiplier: 0.83
+			# Total output cost: 1200.0
+			# Profit: 700.0
+			# Profit margin: 140.00%
+			# Zero profit price multiplier: 0.42
 			# Employment: 4000
-			# Wage breakeven: 0.03
+			# Wage breakeven: 0.17
 		}
 		level_scaled = {
 			building_employment_laborers_add = 2000
@@ -11057,14 +11059,14 @@ pm_modern_port = {
 			goods_input_steamers_add = 5                         # Price:   70, Total cost: 350.0
 			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
 			# Output goods
-			goods_output_transportation_add = 30                 # Price:   30, Total cost: 900.0
+			goods_output_transportation_add = 60                 # Price:   30, Total cost: 1800.0
 			# Total input cost: 550.0
-			# Total output cost: 900.0
-			# Profit: 350.0
-			# Profit margin: 63.64%
-			# Zero profit price multiplier: 0.61
+			# Total output cost: 1800.0
+			# Profit: 1250.0
+			# Profit margin: 227.27%
+			# Zero profit price multiplier: 0.31
 			# Employment: 2000
-			# Wage breakeven: 0.17
+			# Wage breakeven: 0.62
 		}
 		level_scaled = {
 			building_employment_laborers_add = 750
@@ -11105,14 +11107,14 @@ pm_container_ports = {
 			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
 			goods_input_telephones_add = 5                       # Price:   70, Total cost: 350.0
 			# Output goods
-			goods_output_transportation_add = 45                 # Price:   30, Total cost: 1350.0
+			goods_output_transportation_add = 90                 # Price:   30, Total cost: 2700.0
 			# Total input cost: 900.0
-			# Total output cost: 1350.0
-			# Profit: 450.0
-			# Profit margin: 50.00%
-			# Zero profit price multiplier: 0.67
+			# Total output cost: 2700.0
+			# Profit: 1800.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
 			# Employment: 1000
-			# Wage breakeven: 0.45
+			# Wage breakeven: 1.80
 		}
 		level_scaled = {
 			building_employment_laborers_add = 250
@@ -11150,14 +11152,14 @@ pm_global_ports = {
 			goods_input_telephones_add = 5                       # Price:   70, Total cost: 350.0
 			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
 			# Output goods
-			goods_output_transportation_add = 80                 # Price:   30, Total cost: 2400.0
+			goods_output_transportation_add = 160                # Price:   30, Total cost: 4800.0
 			# Total input cost: 1850.0
-			# Total output cost: 2400.0
-			# Profit: 550.0
-			# Profit margin: 29.73%
-			# Zero profit price multiplier: 0.77
+			# Total output cost: 4800.0
+			# Profit: 2950.0
+			# Profit margin: 159.46%
+			# Zero profit price multiplier: 0.39
 			# Employment: 750
-			# Wage breakeven: 0.73
+			# Wage breakeven: 3.93
 		}
 		level_scaled = {
 			building_employment_engineers_add = 250
@@ -13650,6 +13652,103 @@ pm_power_bloc_statue_diplomatic = {
 	}
 }
 
+pm_road_carts = {
+	texture = "gfx/interface/icons/production_method_icons/no_rail_transport.dds"
+		
+	building_modifiers = {
+		level_scaled = {
+			building_employment_laborers_add = 2000
+		}
+		unscaled = {
+			building_economy_of_scale_level_cap_add = -20
+		}
+	}
+}
+
+pm_partial_bulk_transport = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+		
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_transportation_add = 5                   # Price:   30, Total cost: 150.0
+			# Output goods
+			# Total input cost: 150.0
+			# Total output cost: 0
+			# Profit: -150.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_steam_rail_transport = {
+	texture = "gfx/interface/icons/production_method_icons/rail_transport.dds"
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+		
+	unlocking_technologies = {
+		railways
+	}
+		
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
+			# Output goods
+			# Total input cost: 300.0
+			# Total output cost: 0
+			# Profit: -300.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -1000
+			# Wage breakeven: 0.30
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = -1000	
+		}
+	}
+}
+
+pm_rail_transport_mine = {
+	texture = "gfx/interface/icons/production_method_icons/rail_transport.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+		
+	unlocking_technologies = {
+		railways
+	}
+		
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
+			# Output goods
+			# Total input cost: 300.0
+			# Total output cost: 0
+			# Profit: -300.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -1000
+			# Wage breakeven: 0.30
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = -1000
+		}
+	}
+}
+
 pm_rail_transport_mine_infrastructure_4 = {
 	texture = "gfx/interface/icons/production_method_icons/log_carts.dds"
 	is_hidden_when_unavailable = yes
@@ -13739,15 +13838,15 @@ pm_rail_transport_mine_infrastructure_4 = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 15                  # Price:   30, Total cost: 450.0
+			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
 			# Output goods
-			# Total input cost: 450.0
+			# Total input cost: 600.0
 			# Total output cost: 0
-			# Profit: -450.0
+			# Profit: -600.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -1500
-			# Wage breakeven: 0.30
+			# Wage breakeven: 0.40
 		}
 
 		level_scaled = {
@@ -13852,281 +13951,4 @@ pm_principle_engineering_and_logistics = {
 pm_engineering_and_logistics_no_effect = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 	replacement_if_valid = pm_principle_engineering_and_logistics
-} 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

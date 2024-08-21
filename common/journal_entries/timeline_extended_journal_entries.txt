@@ -121,7 +121,7 @@ je_global_warming = {
     }
 
     possible = {
-        always = yes
+        temperature_anomaly_display > 0.1
     }
 
     immediate = {

@@ -17,12 +17,13 @@ combat_unit_type_mechanized_infantry = {
     }
 
     upkeep_modifier = {
-        goods_input_small_arms_add = 3
-        goods_input_ammunition_add = 3
-        goods_input_oil_add = 1
-        goods_input_radios_add = 1
-        goods_input_tanks_add = 1
-    }
+		goods_input_small_arms_add = 3                        # Price:   60, Total cost: 180.0
+		goods_input_ammunition_add = 3                        # Price:   50, Total cost: 150.0
+		goods_input_oil_add = 1                               # Price:   40, Total cost: 40.0
+		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
+		goods_input_tanks_add = 1                             # Price:   80, Total cost: 80.0
+		# Total cost: 530.0
+	}
     
     battle_modifier = {
         unit_offense_add = 50
@@ -212,10 +213,11 @@ combat_unit_type_siege_artillery = {
     }
     
     upkeep_modifier = {
-        goods_input_artillery_add = 4
-        goods_input_ammunition_add = 4
-		goods_input_radios_add = 1
-    }
+		goods_input_artillery_add = 4                         # Price:   70, Total cost: 280.0
+		goods_input_ammunition_add = 4                        # Price:   50, Total cost: 200.0
+		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
+		# Total cost: 560.0
+	}
 
     battle_modifier = {
         unit_offense_add = 55
@@ -1497,4 +1499,3 @@ combat_unit_type_swarm_coordination_vessel = {
         texture = "gfx/unit_illustrations/swarm_coordination_vessel.dds"
     }
 }
-

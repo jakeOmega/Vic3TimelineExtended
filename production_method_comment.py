@@ -1,6 +1,7 @@
 import re
 import os
 
+from path_constants import mod_path, base_game_path
 
 def parse_goods(file_paths):
     """
@@ -156,6 +157,8 @@ def process_and_update_production_methods_grouped(
                 )
         updated_pms_data = updated_pms_data.replace(pm_content, updated_pm_content, 1)
 
+    updated_pms_data = updated_pms_data.strip()
+
     if write_path is None:
         if type(pms_file_path) == str:
             # Write the updated content back to the production methods file
@@ -212,6 +215,7 @@ def process_and_update_military_costs(
                 cost_content, updated_cost_content, 1
             )
 
+    updated_mil_cost_data = updated_mil_cost_data.strip()
     if write_path is None:
         if type(military_file_path) == str:
             # Write the updated content back to the production methods file
@@ -229,19 +233,19 @@ def process_and_update_military_costs(
 
 # Example usage
 goods_file_paths = [
-    r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\goods\extra_goods.txt",
-    r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\goods\00_goods.txt",
+    mod_path + r"\common\goods\extra_goods.txt",
+    base_game_path + r"\game\common\goods\00_goods.txt",
 ]
-pms_file_path = r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\production_methods\extra_pms.txt"
+pms_file_path = mod_path + r"\common\production_methods\extra_pms.txt"
 vanilla_pms_file_loc = (
-    r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\production_methods"
+    base_game_path + r"\game\common\production_methods"
 )
 vanilla_pm_file_paths = [
     os.path.join(vanilla_pms_file_loc, file)
     for file in os.listdir(vanilla_pms_file_loc)
     if file.endswith(".txt")
 ]
-output_file_path = r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\commented_vanilla_pms.txt"
+output_file_path = mod_path + r"\commented_vanilla_pms.txt"
 goods_dict = parse_goods(goods_file_paths)
 
 process_and_update_production_methods_grouped(
@@ -258,17 +262,17 @@ process_and_update_production_methods_grouped(
 print("Production methods file updated successfully.")
 
 # Military costs
-vanilla_military_unit_file_path = r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\combat_unit_types\00_combat_unit_types.txt"
-military_unit_file_path = r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\combat_unit_types\extra_combat_units.txt"
-mobilization_file_path = r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\mobilization_options\extra_mobilization_options.txt"
+vanilla_military_unit_file_path = base_game_path + r"\game\common\combat_unit_types\00_combat_unit_types.txt"
+military_unit_file_path = mod_path + r"\common\combat_unit_types\extra_combat_units.txt"
+mobilization_file_path = mod_path + r"\common\mobilization_options\extra_mobilization_options.txt"
 
-# process_and_update_military_costs(military_unit_file_path, goods_dict)
+process_and_update_military_costs(military_unit_file_path, goods_dict)
 
 process_and_update_military_costs(mobilization_file_path, goods_dict)
 
-# process_and_update_military_costs(
-#    vanilla_military_unit_file_path,
-#    goods_dict,
-#    write_path=r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\commented_vanilla_military_units.txt",
-# )
-# print("Military costs file updated successfully.")
+process_and_update_military_costs(
+   vanilla_military_unit_file_path,
+   goods_dict,
+   write_path=mod_path + r"\commented_vanilla_military_units.txt",
+)
+print("Military costs file updated successfully.")

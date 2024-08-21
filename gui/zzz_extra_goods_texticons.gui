@@ -79,10 +79,11 @@ texticon = {
 }
 
 texticon = {
-  icon = combat_unit_group_tanks   # same as database key
-  iconsize = {
-    offset = { 0 20 }
-    texture = "gfx/interface/icons/generic_icons/battalions.dds"
-    fontsize = 91
-  }
+	icon = transportation
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/industrial_transport.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
 }

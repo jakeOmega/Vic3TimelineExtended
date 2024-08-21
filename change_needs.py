@@ -8,7 +8,7 @@ Created on Sun Nov 27 01:28:43 2022
 import re, math
 from pyparsing import nestedExpr, Word, alphanums, OneOrMore, ParseResults
 import numpy as np
-
+from path_constants import mod_path, base_game_path
 
 def convenience_need(i):
     if i < 20:
@@ -96,10 +96,8 @@ def extrapolate_power_law(x, a, b):
     return a * (x**b)
 
 
-# input_file_name = r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\buy_packages\00_buy_packages.txt"
-# pop_needs_out_path = r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\buy_packages\00_buy_packages.txt"
-input_file_name = r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\buy_packages\00_buy_packages.txt"
-pop_needs_out_path = r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\buy_packages\00_buy_packages.txt"
+input_file_name = base_game_path + r"\game\common\buy_packages\00_buy_packages.txt"
+pop_needs_out_path = mod_path + r"\common\buy_packages\00_buy_packages.txt"
 
 
 with open(input_file_name, "r", encoding="utf-8-sig") as file_obj:
@@ -280,25 +278,15 @@ def calculate_and_write_costs(
 # Example file paths (replace with your actual file paths)
 buy_packages_file_paths = [pop_needs_out_path]
 
-# pop_needs_file_paths = [
-#    r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\pop_needs\00_pop_needs.txt",
-#    r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\pop_needs\extra_pop_needs.txt",
-# ]
-# goods_file_paths = [
-#    r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\goods\00_goods.txt",
-#    r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\goods\extra_goods.txt",
-# ]
-# output_file_path = r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\script_values\wealth_to_pounds.txt"
-
 pop_needs_file_paths = [
-    r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\pop_needs\00_pop_needs.txt",
-    r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\pop_needs\extra_pop_needs.txt",
+   base_game_path + r"\game\common\pop_needs\00_pop_needs.txt",
+   mod_path + r"\common\pop_needs\extra_pop_needs.txt",
 ]
 goods_file_paths = [
-    r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\goods\00_goods.txt",
-    r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\goods\extra_goods.txt",
+   base_game_path + r"\game\common\goods\00_goods.txt",
+   mod_path + r"\common\goods\extra_goods.txt",
 ]
-output_file_path = r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\script_values\wealth_to_pounds.txt"
+output_file_path = mod_path + r"\common\script_values\wealth_to_pounds.txt"
 
 # Call the function to calculate and write costs
 calculate_and_write_costs(
