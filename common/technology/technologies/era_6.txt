@@ -687,7 +687,6 @@ art_deco_architecture = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 15
-		country_company_throughput_bonus_add = 0.1
 		country_tech_spread_add = 20
 		country_institution_ministry_of_culture_max_investment_add = 1
 	}

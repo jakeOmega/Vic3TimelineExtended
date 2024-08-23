@@ -255,7 +255,6 @@ space_colonization = {
 	}
 
 	modifier = {
-		country_company_throughput_bonus_add = 0.25
 	}
 	
 	ai_weight = {

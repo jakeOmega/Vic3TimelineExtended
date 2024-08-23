@@ -1,0 +1,11 @@
+﻿l_english:
+ building_migrant_camp:0 "Migrant Camp"
+ pmg_base_building_migrant_camp:0 "Base"
+ decree_migration:0 "Forced Migration"
+ decree_migration_destination:0 "Migration Destination"
+ pm_deportee_camp:0 "Deportation Camp"
+ building_deportee_mortality_mult:0 "Deportatee Mortality Multiplier"
+ decree_migration_invalid_tooltip:0 "In a power bloc allowing forced migration."
+ deportee:0 "Deportees"
+ deportee_no_icon:0 "Deportees"
+ deportee_desc:0 "Deportees are people who have been forcibly removed from their homes and are being held in a camp pending deportation."

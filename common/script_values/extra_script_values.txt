@@ -568,7 +568,7 @@ migration_attraction_script_value = {
 	}
 	if = {
 		limit = {
-			owner = { country_has_primary_culture = PREV }
+			owner = { country_has_primary_culture = scope:migration_culture }
 		}
 		multiply = 2
 	}

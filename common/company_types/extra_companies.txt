@@ -20,7 +20,7 @@ company_construction_power_bloc = {
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_construction_sector_mod
-				level >= 10
+				level >= 5
 			}
 		}
 	}

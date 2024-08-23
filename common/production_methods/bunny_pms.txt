@@ -1,0 +1,24 @@
+pm_deportee_camp = {
+	texture = "gfx/interface/icons/production_method_icons/passenger_trains.dds"
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_deportee_add = 10000
+			building_employment_bureaucrats_add = 2000
+			building_employment_soldiers_add = 2000
+		}
+		
+		throughput_scaled = {
+			goods_input_transportation_add = 50
+			goods_input_personal_transportation_add = 50
+		}
+		unscaled = {
+			building_deportee_mortality_mult = 0.5
+		}
+	}
+	state_modifiers = {
+		unscaled = {
+			state_radicals_from_discrimination_mult = 5
+		}
+	}
+}

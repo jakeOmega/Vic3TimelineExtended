@@ -86,7 +86,7 @@ principle_internal_trade_5 = {
 	}
 
 	member_modifier = {
-		country_company_throughput_bonus_add = 0.1
+		country_company_throughput_bonus_add = 0.2
 		country_convoy_contribution_to_market_owner_add = 0.5
 		tariff_import_outside_power_bloc_mult = 0.2
 		tariff_export_outside_power_bloc_mult = 0.2
@@ -2148,17 +2148,16 @@ principle_urban_planning_3 = {
 	}
 
 	member_modifier = {
-		#Modifiers from previous level(s)	
+		# Modifiers from previous level(s)	
 		state_pop_support_law_ministry_of_urban_planning_add = 1.0
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
-		state_shopkeepers_investment_pool_contribution_add = 0.1
 
 		state_shopkeepers_investment_pool_contribution_add = 0.25
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
-		#Modifiers from previous level(s)	
+		# Modifiers from previous level(s)	
 		building_group_bg_service_standard_of_living_add = 0.5
 		building_group_bg_service_throughput_add = 0.1
 		building_group_bg_manufacturing_throughput_add = 0.02
@@ -2183,10 +2182,9 @@ principle_urban_planning_4 = {
 	}
 
 	member_modifier = {
-		#Modifiers from previous level(s)	
+		# Modifiers from previous level(s)	
 		state_pop_support_law_ministry_of_urban_planning_add = 1.0
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
-		state_shopkeepers_investment_pool_contribution_add = 0.1
 		state_shopkeepers_investment_pool_contribution_add = 0.25
 
 		goods_output_services_mult = 0.1
@@ -2194,7 +2192,7 @@ principle_urban_planning_4 = {
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
-		#Modifiers from previous level(s)	
+		# Modifiers from previous level(s)	
 		building_group_bg_service_standard_of_living_add = 0.5
 		building_group_bg_service_throughput_add = 0.2
 		building_group_bg_manufacturing_throughput_add = 0.02
@@ -2221,7 +2219,7 @@ principle_urban_planning_5 = {
 		# Modifiers from previous level(s)	
 		state_pop_support_law_ministry_of_urban_planning_add = 1.0
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
-		state_shopkeepers_investment_pool_contribution_add = 0.1
+		state_shopkeepers_investment_pool_contribution_add = 0.3
 		state_shopkeepers_investment_pool_efficiency_mult = 0.1
 		goods_output_services_mult = 0.2
 	}

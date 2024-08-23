@@ -719,6 +719,7 @@ pmg_amenities = {
         pm_market_squares
         pm_covered_markets
         pm_arcades
+        pm_department_stores
         pm_shopping_malls
         pm_e-commerce
         pm_drone_delivery_systems

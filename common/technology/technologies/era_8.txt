@@ -355,8 +355,6 @@ barcodes_and_scanners = {
 	}
 	
 	modifier = {
-		goods_output_services_mult = 0.1
-		country_company_throughput_bonus_add = 0.1
 		country_gold_reserve_limit_mult = 0.25
 		country_institution_national_bank_max_investment_add = 1
 	}

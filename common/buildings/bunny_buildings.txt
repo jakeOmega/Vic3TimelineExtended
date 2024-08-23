@@ -1,0 +1,20 @@
+building_migrant_camp = {
+	building_group = bg_migrant_camps
+	city_type = city
+	levels_per_mesh = 5
+
+	lens = infrastructure
+
+	texture = "gfx/interface/icons/building_icons/building_conscription_center.dds"
+
+	production_method_groups = {
+		pmg_base_building_migrant_camp
+		pmg_slavery_migrant_camp
+	}
+
+	buildable = no
+	expandable = no
+	downsizeable = no
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}

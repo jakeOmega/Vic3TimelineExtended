@@ -631,6 +631,7 @@ trigger_mass_migration = {
 				state_is_eligible_as_mass_migration_target = yes
 			}
 		}
+		save_scope_as = migration_culture
 		ordered_state = {
 			limit = {
 				NOT = { PREV = { culture_is_discriminated_in = PREV.owner } }

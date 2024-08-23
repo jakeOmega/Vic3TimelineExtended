@@ -1,0 +1,7 @@
+pmg_base_building_migrant_camp = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_ownership.dds"
+	production_methods = {
+		pm_deportee_camp
+		pm_deportee_camp_2
+	}
+}

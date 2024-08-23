@@ -1107,3 +1107,24 @@ building_group_bg_arts_academics_standard_of_living_add = {
 	color = good
 	percent = yes
 }
+
+building_employment_deportee_add = {
+	color = neutral
+	percent = no
+}
+
+building_deportee_mortality_mult = {
+	color = bad
+	percent = yes
+}
+
+building_employment_slavedeportee_add = {
+	color = neutral
+	percent = no
+}
+
+building_slaves_mortality_mult = {
+	color = bad
+	percent = yes
+}
+

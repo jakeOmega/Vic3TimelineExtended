@@ -1,0 +1,11 @@
+bg_migrant_camps = {
+	parent_group = bg_government
+	
+	default_building = building_migrant_camp
+
+	can_use_slaves = yes
+
+	
+	subsidized = yes
+	urbanization = 0
+}

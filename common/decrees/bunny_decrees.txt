@@ -1,0 +1,58 @@
+﻿# texture = filename								The icon that will show up in the Lens and on the map when this Focus is deployed
+# modifier											The effects this Decree has on its state
+# cost												The cost in AUT to set this Decree on a state (scales with Power Rank)
+# unlocking_technologies							A list of technologies, at least one of which must be known to the country to use this Focus
+# unlocking_laws									A list of laws, at least one which must be active in the country to use this Focus. If the country switches away from all unlocking laws the Focus will be removed
+# valid												A trigger in state context that determines if the Decree is permitted or not; should invalidate the Decree on a weekly basis if found invalid 
+# ai_weight											Scripted value which determines the chance of getting the Decree by AI
+
+decree_migration = {
+	texture = "gfx/interface/icons/decree/decree_violent_suppression.dds"
+	modifier = {
+	}
+	unlocking_technologies = { 
+	}
+	unlocking_laws = { 
+	}
+	cost = 100
+	
+	valid = {
+		AND = {
+			any_scope_culture = {
+				culture_is_discriminated_in = ROOT.owner
+			}
+			custom_tooltip ={
+				text = "decree_migration_invalid_tooltip"
+				owner = {
+					power_bloc ?= {
+						modifier:power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+					}
+				}
+			}
+		} 
+	}
+
+	ai_weight = -100000
+}
+
+decree_migration_destination = {
+	texture = "gfx/interface/icons/decree/decree_violent_suppression.dds"
+	modifier = {
+
+	}
+	unlocking_technologies = { 
+	}
+	unlocking_laws = { 
+	}
+	cost = 0
+	
+	valid = {
+		owner = {
+			any_scope_state = {
+				has_decree = decree_migration
+			}
+		}
+	}
+
+	ai_weight = -100000
+}

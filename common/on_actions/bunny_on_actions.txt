@@ -1,0 +1,122 @@
+on_monthly_pulse_state = {
+	on_actions = {
+		migration_on_action
+	}
+}
+
+migration_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_decree = decree_migration
+			}
+			if = {
+				limit = { NOT = { has_variable = migration_months } }
+				set_variable = {
+					name = migration_months
+					value = -1
+				}
+			}
+			change_variable = {
+				name = migration_months
+				add = 1
+			}
+			if = {
+				limit = { NOT = { has_building = building_migrant_camp } }
+				create_building = {
+					building = building_migrant_camp
+					level = 1
+				}
+				owner = {
+					every_interest_group = {
+						limit = {
+							AND = {
+								law_stance = {
+									law = law_type:ethnostate
+									value < neutral
+								}
+								law_stance = {
+									law = law_type:national_supremacy
+									value < neutral
+								}
+							}
+						}
+						save_scope_as = migration_interest_group
+					}
+					add_radicals = {  
+						value = 0.05 
+						interest_group = scope:migration_interest_group
+					} 
+				}
+			}
+			if = {
+				limit = { 
+					var:migration_months > 2 
+					b:building_migrant_camp = { building_has_goods_shortage = no }
+				}
+				save_scope_as = migration_source
+				every_scope_pop = {
+					limit = {
+						is_pop_type = deportee
+						pop_employment_building = building_migrant_camp
+					}
+					save_scope_as = migration_pop
+					culture = {
+						save_scope_as = migration_culture
+					}
+					if = {
+						limit = {
+							ROOT.owner = {
+								any_scope_state = {
+									has_decree = decree_migration_destination
+								}
+							}
+						}
+						ROOT.owner = {
+							random_scope_state = {
+								limit = {
+									has_decree = decree_migration_destination
+								}
+								save_scope_as = migration_destination
+							}
+						}
+					}
+					else = {
+						ordered_state = {
+							limit = {
+								NOT = { scope:migration_pop = { culture = { culture_is_discriminated_in = PREV.PREV.owner } } }
+								NOT = { owner = { is_country_type = decentralized } }
+								NOT = { owner = { has_law = law_type:law_closed_borders } }
+								state_is_eligible_as_mass_migration_target = yes
+							}
+							order_by = migration_attraction_script_value
+							position = 0
+							save_scope_as = migration_destination
+						}
+					}
+					move_pop = scope:migration_destination
+				}
+				every_scope_pop = {
+					limit = {
+						OR = {
+							is_pop_type = laborers
+						}
+						pop_employment_building = building_migrant_camp
+					}
+					change_poptype = pop_type:peasants
+				}
+				set_variable = {
+					name = migration_months
+					value = 0
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_decree = decree_migration }
+				has_building = building_migrant_camp
+			}
+			remove_building = building_migrant_camp
+		}
+	}
+}

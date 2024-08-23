@@ -216,9 +216,12 @@ decree_cultural_emigration_initiative = {
 			any_scope_culture = {
 				culture_is_discriminated_in = ROOT.owner
 			}
-			owner = {
-				power_bloc ?= {
-					modifier:power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+			custom_tooltip ={
+				text = "decree_migration_invalid_tooltip"
+				owner = {
+					power_bloc ?= {
+						modifier:power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+					}
 				}
 			}
 		} 

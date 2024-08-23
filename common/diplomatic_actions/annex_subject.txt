@@ -17,6 +17,9 @@ annex_subject_peaceful = {
         scope:target_country = {
             is_direct_subject_of = root
         }
+        is_diplomatic_play_committed_participant = no
+		scope:target_country = { is_diplomatic_play_committed_participant = no }
+		is_revolutionary = no
     }
 	
 	possible = {
