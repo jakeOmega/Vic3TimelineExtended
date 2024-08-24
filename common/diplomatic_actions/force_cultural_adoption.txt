@@ -17,6 +17,9 @@ force_cultural_adoption = {
 		power_bloc ?= {
 			scope:target_country.power_bloc ?= this
 		}
+		scope:target_country = {
+            is_direct_subject_of = root
+        }
 	}
 	
 	possible = {

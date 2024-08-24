@@ -987,7 +987,7 @@ state_pop_support_law_ministry_of_urban_planning_add = {
 
 building_group_bg_military_standard_of_living_add = {
 	color = good
-	percent = yes
+	percent = no
 }
 
 building_group_bg_bureaucracy_throughput_add = {
@@ -1128,3 +1128,12 @@ building_slaves_mortality_mult = {
 	percent = yes
 }
 
+state_clerks_investment_pool_contribution_add = {
+	color = good
+	percent = yes
+}
+
+state_clerks_investment_pool_efficiency_mult = {
+	color = good
+	percent = yes
+}

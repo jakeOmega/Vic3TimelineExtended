@@ -1,0 +1,9 @@
+industrial_nuke_succeeds_attacker = {
+	type = diplomatic_action
+	group = "nuke_group"
+
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	
+	notification_type = feed
+	color = good
+}

@@ -27,27 +27,6 @@ migration_on_action = {
 					building = building_migrant_camp
 					level = 1
 				}
-				owner = {
-					every_interest_group = {
-						limit = {
-							AND = {
-								law_stance = {
-									law = law_type:ethnostate
-									value < neutral
-								}
-								law_stance = {
-									law = law_type:national_supremacy
-									value < neutral
-								}
-							}
-						}
-						save_scope_as = migration_interest_group
-					}
-					add_radicals = {  
-						value = 0.05 
-						interest_group = scope:migration_interest_group
-					} 
-				}
 			}
 			if = {
 				limit = { 

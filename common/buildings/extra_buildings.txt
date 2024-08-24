@@ -805,7 +805,7 @@ building_network_infrastructure = {
 
 building_hydro_plant = {
 	building_group = bg_power
-	texture = "gfx/interface/icons/building_icons/power_plant.dds"
+	texture = "gfx/interface/icons/building_icons/hydro_plant.dds"
 	
 	production_method_groups = {
 		pmg_base_building_hydro_power

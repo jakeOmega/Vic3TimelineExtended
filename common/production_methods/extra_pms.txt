@@ -13010,6 +13010,30 @@ pm_hobbyist_ownership = {
 	}
 }
 
+pm_manor_house_principle_rural_1 = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+
+	unlocking_principles = {
+		principle_rural_1
+		principle_rural_2
+		principle_rural_3
+		principle_rural_4
+		principle_rural_5
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_aristocrats_add = 50
+			building_employment_farmers_add = 50
+			building_employment_laborers_add = 100
+		}
+		unscaled = {
+			building_aristocrats_shares_add = 10
+			building_farmers_shares_add = 2
+		}
+	}
+}
+
 pm_manor_house_ai_ownership = {
 	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
 

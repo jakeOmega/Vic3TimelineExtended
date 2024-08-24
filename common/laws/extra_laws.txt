@@ -620,7 +620,7 @@ law_legal_limbo = {
 	progressiveness = 0		
 
 	modifier = {
-		state_standard_of_living_add = 1
+		state_standard_of_living_add = 0.5
 	}
 }
 
@@ -636,7 +636,7 @@ law_basic_protections = {
 	progressiveness = 0		
 	
 	modifier = {
-		state_standard_of_living_add = 2
+		state_standard_of_living_add = 1
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 		state_birth_rate_mult = -0.05
 	}
@@ -654,7 +654,7 @@ law_comprehensive_rights = {
 	progressiveness = 0		
 	
 	modifier = {
-		state_standard_of_living_add = 3
+		state_standard_of_living_add = 2
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 		state_birth_rate_mult = -0.05
 	}
@@ -672,7 +672,7 @@ law_full_equality_and_protection = {
 	progressiveness = 0	
 
 	modifier = {
-		state_standard_of_living_add = 4
+		state_standard_of_living_add = 3
 		country_bureaucracy_investment_cost_factor_mult = 0.2
 		state_birth_rate_mult = -0.05
 	}

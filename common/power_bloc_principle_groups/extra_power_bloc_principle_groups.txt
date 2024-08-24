@@ -377,3 +377,24 @@ principle_group_welfare = {
 		principle_welfare_5
 	}
 }
+
+principle_group_navy = {
+	primary_for_identity = identity_military_treaty_organization
+	levels = {
+		principle_navy_1
+		principle_navy_2
+		principle_navy_3
+		principle_navy_4
+		principle_navy_5
+	}
+}
+
+principle_group_rural = {
+	levels = {
+		principle_rural_1
+		principle_rural_2
+		principle_rural_3
+		principle_rural_4
+		principle_rural_5
+	}
+}

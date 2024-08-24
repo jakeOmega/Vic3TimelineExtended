@@ -2085,6 +2085,17 @@ principle_urban_planning_1 = {
 
 	possible = {
 		has_technology_researched = modern_urban_planning
+		NOT = {
+			power_bloc = {
+				OR = {
+					has_principle = principle_rural_1
+					has_principle = principle_rural_2
+					has_principle = principle_rural_3
+					has_principle = principle_rural_4
+					has_principle = principle_rural_5
+				}
+			}
+		}
 	}
 
 	member_modifier = {
@@ -2114,6 +2125,17 @@ principle_urban_planning_2 = {
 
 	possible = {
 		has_technology_researched = modern_urban_planning
+		NOT = {
+			power_bloc = {
+				OR = {
+					has_principle = principle_rural_1
+					has_principle = principle_rural_2
+					has_principle = principle_rural_3
+					has_principle = principle_rural_4
+					has_principle = principle_rural_5
+				}
+			}
+		}
 	}
 
 	member_modifier = {
@@ -2122,6 +2144,7 @@ principle_urban_planning_2 = {
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
 
 		state_shopkeepers_investment_pool_contribution_add = 0.1
+		state_clerks_investment_pool_contribution_add = 0.1
 	}
 
 	institution = institution_ministry_of_urban_planning
@@ -2145,6 +2168,17 @@ principle_urban_planning_3 = {
 
 	possible = {
 		has_technology_researched = modern_urban_planning
+		NOT = {
+			power_bloc = {
+				OR = {
+					has_principle = principle_rural_1
+					has_principle = principle_rural_2
+					has_principle = principle_rural_3
+					has_principle = principle_rural_4
+					has_principle = principle_rural_5
+				}
+			}
+		}
 	}
 
 	member_modifier = {
@@ -2153,6 +2187,7 @@ principle_urban_planning_3 = {
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
 
 		state_shopkeepers_investment_pool_contribution_add = 0.25
+		state_clerks_investment_pool_contribution_add = 0.25
 	}
 
 	institution = institution_ministry_of_urban_planning
@@ -2179,6 +2214,17 @@ principle_urban_planning_4 = {
 
 	possible = {
 		has_technology_researched = home_video_systems
+		NOT = {
+			power_bloc = {
+				OR = {
+					has_principle = principle_rural_1
+					has_principle = principle_rural_2
+					has_principle = principle_rural_3
+					has_principle = principle_rural_4
+					has_principle = principle_rural_5
+				}
+			}
+		}
 	}
 
 	member_modifier = {
@@ -2186,6 +2232,7 @@ principle_urban_planning_4 = {
 		state_pop_support_law_ministry_of_urban_planning_add = 1.0
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
 		state_shopkeepers_investment_pool_contribution_add = 0.25
+		state_clerks_investment_pool_contribution_add = 0.25
 
 		goods_output_services_mult = 0.1
 	}
@@ -2213,6 +2260,17 @@ principle_urban_planning_5 = {
 
 	possible = {
 		has_technology_researched = digital_education
+		NOT = {
+			power_bloc = {
+				OR = {
+					has_principle = principle_rural_1
+					has_principle = principle_rural_2
+					has_principle = principle_rural_3
+					has_principle = principle_rural_4
+					has_principle = principle_rural_5
+				}
+			}
+		}
 	}
 
 	member_modifier = {
@@ -2220,7 +2278,9 @@ principle_urban_planning_5 = {
 		state_pop_support_law_ministry_of_urban_planning_add = 1.0
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
 		state_shopkeepers_investment_pool_contribution_add = 0.3
+		state_clerks_investment_pool_contribution_add = 0.3
 		state_shopkeepers_investment_pool_efficiency_mult = 0.1
+		state_clerks_investment_pool_efficiency_mult = 0.1
 		goods_output_services_mult = 0.2
 	}
 
@@ -2238,6 +2298,196 @@ principle_urban_planning_5 = {
 
 	ai_weight = {
 		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_rural_1 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	possible = {
+		NOT = {
+			power_bloc = {
+				OR = {
+					has_principle = principle_urban_planning_1
+					has_principle = principle_urban_planning_2
+					has_principle = principle_urban_planning_3
+					has_principle = principle_urban_planning_4
+					has_principle = principle_urban_planning_5
+				}
+			}
+		}
+	}
+
+	member_modifier = {
+		# new PM for manor houses
+		building_group_bg_agriculture_infrastructure_usage_mult = -0.5
+	}
+	
+	ai_weight = {
+		value = 10
+		if = {
+			limit = {
+				has_law = law_type:law_traditionalism
+			}
+			multiply = 2.0
+		}
+		if = {
+			limit = {
+				has_law = law_type:law_industry_banned
+			}
+			multiply = 5.0
+		}
+		if = {
+			limit = {
+				has_law = law_type:law_agrarianism
+			}
+			multiply = 5.0
+		}
+		if = {
+			limit = {
+				has_law = law_type:law_homesteading
+			}
+			multiply = 5.0
+		}
+	}
+}
+
+principle_rural_2 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	possible = {
+		NOT = {
+			power_bloc = {
+				OR = {
+					has_principle = principle_urban_planning_1
+					has_principle = principle_urban_planning_2
+					has_principle = principle_urban_planning_3
+					has_principle = principle_urban_planning_4
+					has_principle = principle_urban_planning_5
+				}
+			}
+		}
+	}
+	
+	member_modifier = {
+		building_group_bg_agriculture_infrastructure_usage_mult = -0.5
+		country_farmers_pol_str_mult = 0.5
+		state_farmers_investment_pool_contribution_add = 0.05
+	}
+	
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_rural_3 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		NOT = {
+			power_bloc = {
+				OR = {
+					has_principle = principle_urban_planning_1
+					has_principle = principle_urban_planning_2
+					has_principle = principle_urban_planning_3
+					has_principle = principle_urban_planning_4
+					has_principle = principle_urban_planning_5
+				}
+			}
+		}
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		building_group_bg_agriculture_infrastructure_usage_mult = -0.5
+		country_farmers_pol_str_mult = 0.5
+		state_farmers_investment_pool_contribution_add = 0.1
+
+		building_subsistence_output_mult = 0.1
+		building_group_bg_agriculture_throughput_add = 0.1
+		building_group_bg_ranching_throughput_add = 0.1
+	}
+	
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_rural_4 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	possible = {
+		has_technology_researched = advanced_agricultural_statistics
+		NOT = {
+			power_bloc = {
+				OR = {
+					has_principle = principle_urban_planning_1
+					has_principle = principle_urban_planning_2
+					has_principle = principle_urban_planning_3
+					has_principle = principle_urban_planning_4
+					has_principle = principle_urban_planning_5
+				}
+			}
+		}
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		building_group_bg_agriculture_infrastructure_usage_mult = -0.5
+		country_farmers_pol_str_mult = 0.5
+		state_farmers_investment_pool_contribution_add = 0.1
+		building_subsistence_output_mult = 0.2
+		building_group_bg_agriculture_throughput_add = 0.2
+		building_group_bg_ranching_throughput_add = 0.2
+
+		state_farmers_investment_pool_efficiency_mult = 0.5
+	}
+	
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_rural_5 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	possible = {
+		has_technology_researched = green_revolution
+		NOT = {
+			power_bloc = {
+				OR = {
+					has_principle = principle_urban_planning_1
+					has_principle = principle_urban_planning_2
+					has_principle = principle_urban_planning_3
+					has_principle = principle_urban_planning_4
+					has_principle = principle_urban_planning_5
+				}
+			}
+		}
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		building_group_bg_agriculture_infrastructure_usage_mult = -0.75
+		country_farmers_pol_str_mult = 0.5
+		state_farmers_investment_pool_contribution_add = 0.1
+		building_subsistence_output_mult = 0.3
+		building_group_bg_agriculture_throughput_add = 0.3
+		building_group_bg_ranching_throughput_add = 0.3
+		state_farmers_investment_pool_efficiency_mult = 1.0
+	}
+
+	ai_weight = {
+		value = 1000
 	}
 }
 
@@ -3051,6 +3301,171 @@ principle_engineering_and_logistics_5 = {
 		unit_morale_recovery_mult = 0.25
 
 		character_morale_cap_add = 0.2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_navy_1 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		unit_navy_experience_gain_mult = 0.25
+	}
+	
+	ai_weight = {
+		value = 100
+
+		if = {
+			limit = {
+				NOT = {
+					any_scope_state = {
+						is_coastal = yes
+					}
+				}
+			}
+			multiply = 0
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					has_strategy = ai_strategy_nationalist_agenda
+					has_strategy = ai_strategy_colonial_expansion
+					has_strategy = ai_strategy_armed_isolationism
+				}
+			}
+			multiply = 2.0
+		}
+
+		if = {
+			limit = {
+				has_strategy = ai_strategy_economic_imperialism
+			}
+			multiply = 2.0
+		}
+
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_war
+			}
+			multiply = 2.0
+		}	
+		if = {
+			limit = {
+				has_law = law_type:law_professional_army
+			}
+			multiply = 3
+		}
+		if = {
+			limit = {
+				has_law = law_type:law_mass_conscription
+			}
+			multiply = 2
+		}		
+	}
+}
+
+principle_navy_2 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		unit_navy_experience_gain_mult = 0.25
+		unit_navy_experience_gain_add = 0.25
+		country_prestige_from_navy_power_projection_mult = 0.5
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_navy_3 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		unit_navy_experience_gain_mult = 0.5
+		unit_navy_experience_gain_add = 0.5
+		country_prestige_from_navy_power_projection_mult = 0.5
+	}
+
+	institution = institution_ministry_of_war
+	institution_modifier = {
+		unit_navy_experience_gain_mult = 0.2
+		unit_navy_experience_gain_add = 0.2
+		country_prestige_from_navy_power_projection_mult = 0.2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_navy_4 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = sonar
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		unit_navy_experience_gain_mult = 0.5
+		unit_navy_experience_gain_add = 0.5
+		country_prestige_from_navy_power_projection_mult = 0.5
+
+		state_building_port_max_level_add = 10
+		building_port_throughput_add = 0.25
+	}
+
+	institution = institution_ministry_of_war
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		unit_navy_experience_gain_mult = 0.3
+		unit_navy_experience_gain_add = 0.3
+		country_prestige_from_navy_power_projection_mult = 0.3
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_navy_5 = {
+	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = missile_defense_systems
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		unit_navy_experience_gain_mult = 0.5
+		unit_navy_experience_gain_add = 0.5
+		country_prestige_from_navy_power_projection_mult = 0.5
+		state_building_port_max_level_add = 20
+		building_port_throughput_add = 0.5
+	}
+
+	institution = institution_ministry_of_war
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		unit_navy_experience_gain_mult = 0.5
+		unit_navy_experience_gain_add = 0.5
+		country_prestige_from_navy_power_projection_mult = 0.5
 	}
 
 	ai_weight = {
