@@ -105,3 +105,19 @@ coastal_state = {
 	state_infrastructure_add = 2
 	building_port_throughput_add = 0.5
 }
+
+forced_law_through_event = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_authority_add = -200
+	country_opposition_ig_approval_add = -2
+	interest_group_in_government_approval_add = -1
+}
+
+nuclear_power = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_prestige_from_army_power_projection_mult = 0.5
+	country_prestige_add = 500
+	country_diplomatic_play_maneuvers_add = 20
+	country_leverage_generation_mult = 0.25
+	country_leverage_resistance_mult = 0.25
+}

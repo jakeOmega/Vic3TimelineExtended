@@ -9,11 +9,11 @@ increase_funding_nuclear_program = {
 		base = 0
 		modifier = {
 			trigger = { bureaucracy > nuclear_weapon_program_funding_step }
-			add = 5
+			add = 50
 		}
         modifier = {
             trigger = { var:nuclear_weapons_program_first_nuke_done = 0 }
-            add = 20
+            add = 25
         }
 	}
 
@@ -55,7 +55,7 @@ decrease_funding_nuclear_program = {
 		}
         modifier = {
             trigger = { NOT = { var:nuclear_weapons_program_first_nuke_done = 0 }}
-            add = 50
+            add = 25
         }
 	}
 

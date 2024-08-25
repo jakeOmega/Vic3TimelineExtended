@@ -54,7 +54,7 @@ law_post-scarcity = {
 	
 	icon = "gfx/interface/icons/law_icons/old_age_pension.dds"
 	
-	progressiveness = 200
+	progressiveness = 300
 	
 	unlocking_technologies = {
 		post-scarcity_economy
@@ -176,45 +176,76 @@ law_intrusive_surveillance = {
 	}
 }
 
-law_unrestricted_ai_development = {
-	group = lawgroup_artificial_intelligence_governance
+law_primogeniture = {
+	group = lawgroup_inheritance
 	
 	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
 	
 	progressiveness = 0		
 
 	modifier = {
+		state_birth_rate_mult = 0.05
+		state_radicals_from_sol_change_mult = 0.1
+		interest_group_ig_landowners_pol_str_mult = 0.1
+		state_pop_qualifications_mult = -0.1
+		state_tax_capacity_mult = -0.1
+		country_bureaucracy_investment_cost_factor_mult = -0.05
 	}
 }
 
-law_moderate_ai_governance = {
-	group = lawgroup_artificial_intelligence_governance
+law_partible = {
+	group = lawgroup_inheritance
+	
+	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	
+	progressiveness = 25	
+
+	modifier = {
+	}
+}
+
+law_equal_inheritance = {
+	group = lawgroup_inheritance
 	
 	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
 	
 	unlocking_technologies = {
-		machine_learning
+		egalitarianism
+	}
+	
+	progressiveness = 50
+
+	modifier = {
+		state_birth_rate_mult = -0.2
+		state_radicals_from_sol_change_mult = -0.1
+		interest_group_ig_landowners_pol_str_mult = -0.1
+		interest_group_ig_rural_folk_pol_str_mult = 0.1
+		state_education_access_add = 0.05
+		state_migration_quota_mult = 0.1
+		state_tax_capacity_mult = 0.1
+		country_bureaucracy_investment_cost_factor_mult = 0.05
+	}
+}
+
+law_non_inheritable_usage_rights = {
+	group = lawgroup_inheritance
+	
+	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+
+	unlocking_laws = {
+		law_command_economy
+		law_cooperative_ownership
 	}
 	
 	progressiveness = 25	
 
 	modifier = {
-
+		state_birth_rate_mult = -0.1
+		country_authority_add = 200
+		country_government_dividends_efficiency_add = 0.05
+		country_bureaucrats_pol_str_mult = 0.1
+		country_bureaucracy_investment_cost_factor_mult = 0.05
 	}
-}
-
-law_strict_ai_ethics_and_control = {
-	group = lawgroup_artificial_intelligence_governance
-	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
-	
-	unlocking_technologies = {
-		generative_ai
-	}
-	
-	progressiveness = 50	
-
-	
 }
 
 law_traditional_rules_of_war = {
@@ -332,7 +363,7 @@ law_creative_commons = {
 		analytical_philosophy
 	}
 	
-	progressiveness = 50		
+	progressiveness = 75		
 	
 	modifier = {
 		building_arts_academy_throughput_add = 0.1
@@ -458,6 +489,10 @@ law_fiat_currency = {
 		country_minting_mult = 0.1
 		state_infrastructure_from_population_max_mult = 0.2
 	}
+
+	ai_enact_weight_modifier = {
+		value = 200
+	}
 }
 
 law_digital_currency = {
@@ -486,6 +521,10 @@ law_digital_currency = {
 	institution_modifier = {
 		country_minting_mult = 0.2
 		state_infrastructure_from_population_max_mult = 0.4
+	}
+
+	ai_enact_weight_modifier = {
+		value = 300
 	}
 }
 
@@ -617,7 +656,7 @@ law_legal_limbo = {
 		romanticism
 	}
 	
-	progressiveness = 0		
+	progressiveness = 25
 
 	modifier = {
 		state_standard_of_living_add = 0.5
@@ -633,7 +672,7 @@ law_basic_protections = {
 		human_rights
 	}
 	
-	progressiveness = 0		
+	progressiveness = 50	
 	
 	modifier = {
 		state_standard_of_living_add = 1
@@ -651,7 +690,7 @@ law_comprehensive_rights = {
 		sexual_revolution
 	}
 	
-	progressiveness = 0		
+	progressiveness = 100
 	
 	modifier = {
 		state_standard_of_living_add = 2
@@ -669,7 +708,7 @@ law_full_equality_and_protection = {
 		LGBTQ_rights_movement
 	}
 	
-	progressiveness = 0	
+	progressiveness = 150
 
 	modifier = {
 		state_standard_of_living_add = 3
@@ -703,7 +742,7 @@ law_unrestricted_augmentation = {
 		brain_computer_interfaces
 	}
 	
-	progressiveness = 50	
+	progressiveness = 75	
 
 	modifier = {
 		state_poor_standard_of_living_add = -1
@@ -755,7 +794,7 @@ law_medical_augmentation_only = {
 		country_tech_research_speed_mult = 0.1
 	}
 	
-	progressiveness = 50
+	progressiveness = 100
 }
 
 law_regulated_augmentation_market = {
@@ -831,7 +870,7 @@ law_ministry_of_foreign_affairs = {
 	
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 	
-	progressiveness = 0	
+	progressiveness = 100
 	
 	institution = institution_ministry_of_foreign_affairs
 
@@ -842,6 +881,10 @@ law_ministry_of_foreign_affairs = {
 	modifier = {
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 3
 	}	
+
+	ai_enact_weight_modifier = {
+		value = 100
+	}
 }
 
 law_no_ministry_of_war = {
@@ -858,7 +901,7 @@ law_ministry_of_war = {
 	
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 	
-	progressiveness = 0	
+	progressiveness = 100
 	
 	institution = institution_ministry_of_war
 
@@ -871,7 +914,7 @@ law_ministry_of_war = {
 	}
 
 	ai_enact_weight_modifier = {
-		value = 0
+		value = 10
 		
 		if = {
 			limit = {
@@ -879,9 +922,13 @@ law_ministry_of_war = {
 					OR = {
 						has_principle = principle:principle_aggressive_coordination_4
 						has_principle = principle:principle_aggressive_coordination_5
+						has_principle = principle:principle_global_security_2
 						has_principle = principle:principle_global_security_3
 						has_principle = principle:principle_global_security_4
 						has_principle = principle:principle_global_security_5
+						has_principle = principle:principle_navy_3
+						has_principle = principle:principle_navy_4
+						has_principle = principle:principle_navy_5
 					}
 				}
 			}
@@ -904,7 +951,7 @@ law_ministry_of_commerce = {
 	
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 	
-	progressiveness = 0	
+	progressiveness = 100
 	
 	institution = institution_ministry_of_commerce
 
@@ -949,7 +996,7 @@ law_national_bank = {
 	
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 	
-	progressiveness = 0	
+	progressiveness = 100
 	
 	institution = institution_national_bank
 
@@ -992,7 +1039,7 @@ law_ministry_of_culture = {
 	
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 	
-	progressiveness = 0	
+	progressiveness = 200
 	
 	institution = institution_ministry_of_culture
 
@@ -1028,7 +1075,7 @@ law_no_ministry_of_labor = {
 	
 	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
 	
-	progressiveness = 0	
+	progressiveness = 100
 
 }
 
@@ -1037,7 +1084,7 @@ law_pro_labor_ministry_of_labor = {
 	
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 	
-	progressiveness = 0	
+	progressiveness = 200
 	
 	institution = institution_ministry_of_labor
 	institution_modifier = {
@@ -1095,7 +1142,7 @@ law_ministry_of_the_environment = {
 	
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 	
-	progressiveness = 0	
+	progressiveness = 500
 	
 	unlocking_technologies = {
 		pollution_control
@@ -1140,7 +1187,7 @@ law_ministry_of_intelligence_and_security = {
 	
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 	
-	progressiveness = 0	
+	progressiveness = 50
 	
 	unlocking_technologies = {
 		mass_surveillance
@@ -1167,7 +1214,7 @@ law_ministry_of_refugee_affairs = {
 	
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 	
-	progressiveness = 0	
+	progressiveness = 200
 	
 	unlocking_technologies = {
 		civil_rights_movement
@@ -1189,7 +1236,7 @@ law_no_ministry_of_propaganda = {
 	
 	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
 	
-	progressiveness = 0	
+	progressiveness = 100
 
 }
 
@@ -1247,7 +1294,7 @@ law_ministry_of_science = {
 
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 
-	progressiveness = 0
+	progressiveness = 100
 
 	unlocking_technologies = {
 		nuclear_weapons
@@ -1294,7 +1341,7 @@ law_no_ministry_of_thought_control = {
 
 	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
 
-	progressiveness = 0
+	progressiveness = 100
 
 }
 
@@ -1336,7 +1383,7 @@ law_ministry_of_consumer_protection = {
 
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 
-	progressiveness = 0
+	progressiveness = 100
 
 	unlocking_technologies = {
 		consumer_credit
@@ -1383,7 +1430,7 @@ law_ministry_of_urban_planning = {
 
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 
-	progressiveness = 0
+	progressiveness = 100
 
 	unlocking_technologies = {
 		modern_urban_planning
@@ -1420,7 +1467,7 @@ law_no_ministry_of_population_control = {
 
 	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
 
-	progressiveness = 0
+	progressiveness = 100
 
 }
 
@@ -1453,7 +1500,7 @@ law_no_ministry_of_religion = {
 
 	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
 
-	progressiveness = 0
+	progressiveness = 50
 
 }
 
@@ -1510,7 +1557,7 @@ law_ministry_of_international_aid = {
 
 	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
 
-	progressiveness = 0
+	progressiveness = 200
 
 	unlocking_technologies = {
 		intergovernmental_organizations
@@ -1527,7 +1574,7 @@ law_protected_class = {
 	group = lawgroup_rights_of_women
 	icon = "gfx/interface/icons/law_icons/womens_suffrage.dds"
 	
-	progressiveness = 140
+	progressiveness = 200
 	
 	unlocking_technologies = {
 		sexual_revolution

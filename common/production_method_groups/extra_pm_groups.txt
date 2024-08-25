@@ -1496,15 +1496,6 @@ pmg_additional_ownership_building_manor_house = {
 	}
 }
 
-pmg_augmentation = {
-    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
-    production_methods = {
-        pm_no_private_human_augmentation
-        pm_regulated_augmentation
-        pm_unregulated_augmentation
-    }
-}
-
 pmg_harvesting_process_building_rye_farm = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
 	production_methods = {

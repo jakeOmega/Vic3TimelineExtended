@@ -1,5 +1,11 @@
 ﻿ideology_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/paternalistic.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_approve
+		law_partible = neutral
+		law_equal_inheritance = disapprove
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_ministry_of_population_control = {
 		law_no_ministry_of_population_control = disapprove
 		law_ministry_of_population_control = strongly_approve
@@ -19,11 +25,6 @@
 		law_medical_augmentation_only = approve
 		law_regulated_augmentation_market = strongly_approve
 		law_mandatory_augmentation = disapprove
-	}
-	lawgroup_artificial_intelligence_governance = {
-		law_unrestricted_ai_development = neutral
-		law_moderate_ai_governance = approve
-		law_strict_ai_ethics_and_control = strongly_approve
 	}
 	lawgroup_privacy_rights = {
 		law_minimal_privacy_protection = neutral
@@ -112,11 +113,6 @@ ideology_laissez_faire = {
 		law_no_ministry_of_commerce = disapprove
 		law_ministry_of_commerce = strongly_approve
 	}
-	lawgroup_artificial_intelligence_governance = {
-		law_unrestricted_ai_development = neutral
-		law_moderate_ai_governance = disapprove
-		law_strict_ai_ethics_and_control = strongly_disapprove
-	}
 	lawgroup_economic_system = {	
 		law_laissez_faire = strongly_approve
 		law_interventionism = approve
@@ -153,6 +149,12 @@ ideology_laissez_faire = {
 
 ideology_individualist = {
 	icon = "gfx/interface/icons/ideology_icons/individualist.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = neutral
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_ministry_of_consumer_protection = {
 		law_no_ministry_of_consumer_protection = approve
 		law_ministry_of_consumer_protection = strongly_disapprove
@@ -289,6 +291,12 @@ ideology_pious = {
 
 ideology_agrarian = {
 	icon = "gfx/interface/icons/ideology_icons/agrarian.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = approve
+		law_non_inheritable_usage_rights = disapprove
+	}
 	lawgroup_ministry_of_science = {
 		law_no_ministry_of_science = approve
 		law_ministry_of_science = neutral
@@ -455,11 +463,6 @@ ideology_moralist = {
 		law_regulated_augmentation_market = disapprove
 		law_mandatory_augmentation = strongly_disapprove
 	}
-	lawgroup_artificial_intelligence_governance = {
-		law_unrestricted_ai_development = neutral
-		law_moderate_ai_governance = approve
-		law_strict_ai_ethics_and_control = strongly_approve
-	}
 	lawgroup_governance_principles = {
 		law_monarchy = strongly_approve
 		law_theocracy = approve	
@@ -484,6 +487,12 @@ ideology_moralist = {
 
 ideology_meritocratic = {
 	icon = "gfx/interface/icons/ideology_icons/meritocratic.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = neutral
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_ministry_of_urban_planning = {
 		law_no_ministry_of_urban_planning = neutral
 		law_ministry_of_urban_planning = approve
@@ -663,6 +672,12 @@ ideology_jingoist = {
 
 ideology_liberal = {
 	icon = "gfx/interface/icons/ideology_icons/liberal.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = neutral
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_ministry_of_population_control = {
 		law_no_ministry_of_population_control = approve
 		law_ministry_of_population_control = neutral
@@ -813,6 +828,12 @@ ideology_republican = {
 
 ideology_proletarian = {
 	icon = "gfx/interface/icons/ideology_icons/proletarian.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_disapprove
+		law_partible = neutral
+		law_equal_inheritance = approve
+		law_non_inheritable_usage_rights = strongly_approve
+	}
 	lawgroup_ministry_of_urban_planning = {
 		law_no_ministry_of_urban_planning = disapprove
 		law_ministry_of_urban_planning = strongly_approve
@@ -940,11 +961,6 @@ ideology_populist = {
 		law_medical_augmentation_only = strongly_approve
 		law_regulated_augmentation_market = approve
 		law_mandatory_augmentation = strongly_disapprove
-	}
-	lawgroup_artificial_intelligence_governance = {
-		law_unrestricted_ai_development = neutral
-		law_moderate_ai_governance = approve
-		law_strict_ai_ethics_and_control = strongly_approve
 	}
 	lawgroup_right_to_information = {
 		law_informal_government_secrecy = neutral
@@ -1507,8 +1523,48 @@ ideology_papal_paternalistic = {
 	}
 }
 
+ideology_papal_moralist = {
+	icon = "gfx/interface/icons/ideology_icons/papal_moralist.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_approve
+		law_partible = neutral
+		law_equal_inheritance = disapprove
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
+	lawgroup_ministry_of_religion = {
+		law_no_ministry_of_religion = disapprove
+		law_ministry_of_religion = strongly_approve
+	}
+	lawgroup_governance_principles = {
+		law_monarchy = approve
+		law_theocracy = strongly_approve
+		law_presidential_republic = neutral
+		law_parliamentary_republic = neutral
+		law_council_republic = strongly_disapprove
+	}
+	lawgroup_church_and_state = {
+		law_state_religion = strongly_approve
+		law_freedom_of_conscience = neutral
+		law_total_separation = strongly_disapprove
+		law_state_atheism = strongly_disapprove
+	}
+	lawgroup_citizenship = {
+		law_ethnostate = neutral
+		law_national_supremacy = approve
+		law_racial_segregation = neutral
+		law_cultural_exclusion = disapprove
+		law_multicultural = strongly_disapprove	
+	}
+}
+
 ideology_confucian = {
 	icon = "gfx/interface/icons/ideology_icons/confucian.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_approve
+		law_partible = neutral
+		law_equal_inheritance = disapprove
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = disapprove
 		law_ministry_of_religion = strongly_approve
@@ -1536,6 +1592,12 @@ ideology_confucian = {
 
 ideology_bakufu = {
 	icon = "gfx/interface/icons/ideology_icons/bakufu.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_approve
+		law_partible = neutral
+		law_equal_inheritance = disapprove
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_governance_principles = {
 		law_monarchy = strongly_approve
 		law_presidential_republic = neutral
@@ -1565,6 +1627,12 @@ ideology_bakufu = {
 
 ideology_shinto_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/shinto_moralist.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_approve
+		law_partible = neutral
+		law_equal_inheritance = disapprove
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = disapprove
 		law_ministry_of_religion = strongly_approve
@@ -1656,6 +1724,12 @@ ideology_austrian_hegemony = {
 
 ideology_russian_patriarch = {
 	icon = "gfx/interface/icons/ideology_icons/russian_patriarch.dds" 
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_approve
+		law_partible = neutral
+		law_equal_inheritance = disapprove
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_distribution_of_power = {
 		law_autocracy = strongly_approve
 		law_oligarchy = approve
@@ -1691,6 +1765,12 @@ ideology_russian_patriarch = {
 
 ideology_orthodox_patriarch = {
 	icon = "gfx/interface/icons/ideology_icons/orthodox_patriarch.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_approve
+		law_partible = neutral
+		law_equal_inheritance = disapprove
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_distribution_of_power = {
 		law_single_party_state = disapprove
 		law_autocracy = strongly_approve
@@ -1719,6 +1799,12 @@ ideology_orthodox_patriarch = {
 
 ideology_buddhist_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/buddhist_moralist.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = approve
+		law_non_inheritable_usage_rights = disapprove
+	}
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = disapprove
 		law_ministry_of_religion = strongly_approve
@@ -1747,6 +1833,12 @@ ideology_buddhist_moralist = {
 
 ideology_hindu_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/hindu_moralist.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = neutral
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = disapprove
 		law_ministry_of_religion = strongly_approve
@@ -1780,6 +1872,12 @@ ideology_hindu_moralist = {
 
 ideology_sikh_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/sikh_moralist.dds" 
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = approve
+		law_non_inheritable_usage_rights = disapprove
+	}
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = disapprove
 		law_ministry_of_religion = strongly_approve
@@ -1814,6 +1912,12 @@ ideology_sikh_moralist = {
 
 ideology_oriental_orthodox_patriarch = {
 	icon = "gfx/interface/icons/ideology_icons/coptic_patriarch.dds"
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_approve
+		law_partible = neutral
+		law_equal_inheritance = disapprove
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_distribution_of_power = {
 		law_single_party_state = disapprove
 		law_autocracy = strongly_approve
@@ -2160,6 +2264,12 @@ ideology_bonapartist = {
 	# J'AIME L'OIGNON FRIT À L'HUILE,
 	# J'AIME L'OIGNON, J'AIME L'OIGNON
 	character_ideology = yes
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = approve
+		law_non_inheritable_usage_rights = disapprove
+	}
 	lawgroup_governance_principles = {
 		law_monarchy = strongly_approve
 		law_presidential_republic = neutral
@@ -2285,6 +2395,12 @@ ideology_bonapartist = {
 ideology_traditionalist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_traditionalist.dds"
 	character_ideology = yes
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_approve
+		law_partible = neutral
+		law_equal_inheritance = disapprove
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = neutral
 		law_ministry_of_religion = approve
@@ -2907,6 +3023,12 @@ ideology_radical = {
 ideology_reformer = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_reformer.dds"
 	character_ideology = yes
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = approve
+		law_non_inheritable_usage_rights = disapprove
+	}
 	lawgroup_ministry_of_urban_planning = {
 		law_no_ministry_of_urban_planning = neutral
 		law_ministry_of_urban_planning = approve
@@ -2948,11 +3070,6 @@ ideology_reformer = {
 		law_medical_augmentation_only = strongly_approve
 		law_regulated_augmentation_market = approve
 		law_mandatory_augmentation = strongly_disapprove
-	}
-	lawgroup_artificial_intelligence_governance = {
-		law_unrestricted_ai_development = neutral
-		law_moderate_ai_governance = approve
-		law_strict_ai_ethics_and_control = neutral
 	}
 	lawgroup_privacy_rights = {
 		law_minimal_privacy_protection = neutral
@@ -3096,13 +3213,13 @@ ideology_feminist = {
 	possible = {
 		owner = { 
 			has_technology_researched = feminism
-			NOT = { OR = {has_law = law_type:law_womens_suffrage has_law = law_type:law_protected_class} }
+			NOT = { AND = { has_law = law_type:law_protected_class has_law = law_type:law_full_equality_and_protection } }
 		}
 		# Agitators should have an ideology at odds with current laws
 		NAND = {
 			has_role = agitator
 			owner = {
-				OR = {has_law = law_type:law_womens_suffrage has_law = law_type:law_protected_class}
+				AND = { has_law = law_type:law_protected_class has_law = law_type:law_full_equality_and_protection }
 			}
 		}
 		scope:interest_group = {
@@ -3132,7 +3249,7 @@ ideology_feminist = {
 				limit = {
 					owner = {
 						OR = {
-							OR = {has_law = law_type:law_womens_suffrage has_law = law_type:law_protected_class}
+							AND = { has_law = law_type:law_protected_class has_law = law_type:law_full_equality_and_protection }
 							AND = {
 								has_law = law_type:law_women_in_the_workplace
 								OR = {
@@ -3592,6 +3709,12 @@ ideology_royalist = {
 ideology_social_democrat = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_social_democrat.dds"
 	character_ideology = yes
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = approve
+		law_non_inheritable_usage_rights = disapprove
+	}
 	lawgroup_ministry_of_thought_control = {
 		law_no_ministry_of_thought_control = approve
 		law_ministry_of_thought_control = strongly_disapprove
@@ -3812,6 +3935,12 @@ ideology_social_democrat = {
 ideology_communist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_communist.dds"
 	character_ideology = yes
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_disapprove
+		law_partible = disapprove
+		law_equal_inheritance = neutral
+		law_non_inheritable_usage_rights = strongly_approve
+	}
 	lawgroup_ministry_of_intelligence_and_security = {
 		law_no_ministry_of_intelligence_and_security = neutral
 		law_ministry_of_intelligence_and_security = approve
@@ -4486,6 +4615,12 @@ ideology_fascist = {
 ideology_anarchist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_anarchist.dds"
 	character_ideology = yes
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_disapprove
+		law_partible = disapprove
+		law_equal_inheritance = neutral
+		law_non_inheritable_usage_rights = strongly_approve
+	}
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = approve
 		law_ministry_of_religion = neutral
@@ -4535,11 +4670,6 @@ ideology_anarchist = {
 		law_medical_augmentation_only = disapprove
 		law_regulated_augmentation_market = neutral
 		law_mandatory_augmentation = disapprove
-	}
-	lawgroup_artificial_intelligence_governance = {
-		law_unrestricted_ai_development = neutral
-		law_moderate_ai_governance = neutral
-		law_strict_ai_ethics_and_control = disapprove
 	}
 	lawgroup_privacy_rights = {
 		law_minimal_privacy_protection = neutral
@@ -5048,11 +5178,6 @@ ideology_market_liberal = {
 		law_regulated_augmentation_market = strongly_approve
 		law_mandatory_augmentation = disapprove
 	}
-	lawgroup_artificial_intelligence_governance = {
-		law_unrestricted_ai_development = neutral
-		law_moderate_ai_governance = disapprove
-		law_strict_ai_ethics_and_control = strongly_disapprove
-	}
 	lawgroup_privacy_rights = {
 		law_minimal_privacy_protection = neutral
 		law_moderate_data_privacy = approve
@@ -5526,7 +5651,7 @@ ideology_humanitarian = {
 				has_law = law_type:law_multicultural
 				has_law = law_type:law_guaranteed_liberties
 				has_law = law_type:law_protected_speech
-				OR = {has_law = law_type:law_womens_suffrage has_law = law_type:law_protected_class}
+				AND = { has_law = law_type:law_protected_class has_law = law_type:law_full_equality_and_protection }
 				has_law = law_type:law_compulsory_primary_school
 			}
 		}
@@ -5585,7 +5710,7 @@ ideology_humanitarian = {
 		if = {
 			limit = {
 				owner = {
-					OR = {has_law = law_type:law_womens_suffrage has_law = law_type:law_protected_class}
+					AND = { has_law = law_type:law_protected_class has_law = law_type:law_full_equality_and_protection }
 				}
 			}
 			add = -25
@@ -5977,7 +6102,7 @@ ideology_humanitarian_royalist = {
 				has_law = law_type:law_monarchy
 				has_law = law_type:law_multicultural
 				has_law = law_type:law_guaranteed_liberties
-				OR = {has_law = law_type:law_womens_suffrage has_law = law_type:law_protected_class}
+				AND = { has_law = law_type:law_protected_class has_law = law_type:law_full_equality_and_protection }
 				has_law = law_type:law_compulsory_primary_school
 			}
 		}
@@ -6040,7 +6165,7 @@ ideology_humanitarian_royalist = {
 		if = {
 			limit = {
 				owner = {
-					OR = {has_law = law_type:law_womens_suffrage has_law = law_type:law_protected_class}
+					AND = { has_law = law_type:law_protected_class has_law = law_type:law_full_equality_and_protection }
 				}
 			}
 			add = -25

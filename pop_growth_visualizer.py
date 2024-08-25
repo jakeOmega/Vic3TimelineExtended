@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # Pop Growth Constants
 min_birthrate = 0.00080 * 12
-max_birthrate = 0.00500 * 12
+max_birthrate = 0.00450 * 12
 min_mortality = 0.00100 * 12
 max_mortality = 0.00600 * 12
 
@@ -118,8 +118,8 @@ def calculate_mean_birthrate(peak_sol, peak_width):
 # Standard of Living (SoL) range
 sol_range = np.linspace(1, 40, 400)
 width = 5
-birth_mult = 1.2
-mortality_mult = 0.8
+birth_mult = 1
+mortality_mult = 1
 
 # Calculate birthrate, mortality, and overall growth rate
 birthrates = np.array([birth_mult * calculate_birthrate(sol) for sol in sol_range])

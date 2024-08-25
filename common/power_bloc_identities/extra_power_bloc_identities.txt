@@ -194,7 +194,7 @@ identity_diplomatic = {
 	}
 
 	possible = {
-		has_technology_researched = intergovernmental_organizations
+		always = yes
 	}
 
 	mandate_progress = power_bloc_mandate_progress_diplomatic_identity

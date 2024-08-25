@@ -6,42 +6,42 @@
 lawgroup_privacy_rights = {
 	law_group_category = power_structure
 	
-	progressive_movement_chance = 2
-	regressive_movement_chance = 0.5
+	progressive_movement_chance = 0.5
+	regressive_movement_chance = 0.25
 }
 
-lawgroup_artificial_intelligence_governance = {
+lawgroup_inheritance = {
 	law_group_category = power_structure
 	
-	progressive_movement_chance = 2
-	regressive_movement_chance = 0.5
+	progressive_movement_chance = 0.5
+	regressive_movement_chance = 0.25
 }
 
 lawgroup_rules_of_war = {
 	law_group_category = power_structure
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 1
 	regressive_movement_chance = 0.5
 }
 
 lawgroup_intellectual_property = {
 	law_group_category = economy
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.5
 	regressive_movement_chance = 0.5
 }
 
 lawgroup_monetary_policy = {
 	law_group_category = economy
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.25
 	regressive_movement_chance = 0.5
 }
 
 lawgroup_right_to_information = {
 	law_group_category = economy
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.5
 	regressive_movement_chance = 0.5
 }
 
@@ -49,55 +49,55 @@ lawgroup_criminal_justice = {
 	law_group_category = human_rights
 	
 	progressive_movement_chance = 2
-	regressive_movement_chance = 0.5
+	regressive_movement_chance = 2
 }
 
 lawgroup_LGBTQ_rights = {
 	law_group_category = human_rights
 	
 	progressive_movement_chance = 2
-	regressive_movement_chance = 0.5
+	regressive_movement_chance = 1
 }
 
 lawgroup_human_augmentation = {
 	law_group_category = human_rights
 	
 	progressive_movement_chance = 2
-	regressive_movement_chance = 0.5
+	regressive_movement_chance = 2
 }
 
 lawgroup_ministry_of_foreign_affairs = {
 	law_group_category = power_structure
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.5
 	regressive_movement_chance = 0.5
 }
 
 lawgroup_ministry_of_war = {
 	law_group_category = power_structure
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.5
 	regressive_movement_chance = 0.5
 }
 
 lawgroup_ministry_of_intelligence_and_security = {
 	law_group_category = power_structure
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.5
 	regressive_movement_chance = 0.5
 }
 
 lawgroup_ministry_of_commerce = {
 	law_group_category = economy
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.5
 	regressive_movement_chance = 0.5
 }
 
 lawgroup_national_bank = {
 	law_group_category = economy
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 1
 	regressive_movement_chance = 0.5
 }
 
@@ -111,7 +111,7 @@ lawgroup_ministry_of_the_environment = {
 lawgroup_ministry_of_culture = {
 	law_group_category = human_rights
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.5
 	regressive_movement_chance = 0.5
 }
 
@@ -125,28 +125,28 @@ lawgroup_ministry_of_labor = {
 lawgroup_ministry_of_refugee_affairs = {
 	law_group_category = human_rights
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.25
 	regressive_movement_chance = 0.5
 }
 
 lawgroup_ministry_of_propaganda = {
 	law_group_category = power_structure
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.25
 	regressive_movement_chance = 0.5
 }
 
 lawgroup_ministry_of_science = {
 	law_group_category = power_structure
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.5
 	regressive_movement_chance = 0.5
 }
 
 lawgroup_ministry_of_thought_control = {
 	law_group_category = power_structure
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.25
 	regressive_movement_chance = 0.5
 }
 
@@ -160,7 +160,7 @@ lawgroup_ministry_of_consumer_protection = {
 lawgroup_ministry_of_urban_planning = {
 	law_group_category = economy
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.5
 	regressive_movement_chance = 0.5
 }
 
@@ -174,13 +174,13 @@ lawgroup_ministry_of_population_control = {
 lawgroup_ministry_of_religion = {
 	law_group_category = human_rights
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.5
 	regressive_movement_chance = 0.5
 }
 
 lawgroup_ministry_of_international_aid = {
 	law_group_category = human_rights
 	
-	progressive_movement_chance = 2
+	progressive_movement_chance = 0.25
 	regressive_movement_chance = 0.5
 }

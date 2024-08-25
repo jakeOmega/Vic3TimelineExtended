@@ -1,0 +1,212 @@
+﻿
+## generic diplomatic power bloc names
+united_nations = {
+	trigger = {
+		scope:selected_identity = identity:identity_diplomatic
+	}
+}
+
+global_accord = {
+	trigger = {
+		scope:selected_identity = identity:identity_diplomatic
+	}
+}
+
+international_charter = {
+	trigger = {
+		scope:selected_identity = identity:identity_diplomatic
+	}
+}
+
+## generic cultural power bloc names
+heritage_union = {
+	trigger = {
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+cultural_concord = {
+	trigger = {
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+# big cultural power bloc names
+germanic_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = german_speaking
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+french_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = francophone
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+anglo_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = anglophone
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+hispanic_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = hispanophone
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+slavic_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = slavic
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+arabic_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = arab_speaking
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+chinese_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = han_chinese
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+indian_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = south_asian_heritage
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+japanese_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = yamato
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+bantu_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = bantu
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+italian_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = italophone
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+hellenic_union = {
+	trigger = {
+		any_primary_culture = {
+			has_discrimination_trait = greek_culture
+		}
+		scope:selected_identity = identity:identity_cultural
+	}
+}
+
+# specific power bloc names
+atlantic_charter = {
+	trigger = {
+		OR = {
+			capital.region = sr:region_england
+			capital.region = sr:region_iberia
+			capital.region = sr:region_france
+			capital.region = sr:region_occitania
+			capital.region = sr:region_rhine
+			capital.region = sr:region_north_germany
+			capital.region = sr:region_north_sea_coast
+			capital.region = sr:region_baltic
+			capital.region = sr:region_canada
+			capital.region = sr:region_new_england
+			capital.region = sr:region_dixie
+		}
+	}
+}
+
+pacific_rim_pact = {
+	trigger = {
+		OR = {
+			capital.region = sr:region_pacific_coast
+			capital.region = sr:region_japan
+			capital.region = sr:region_oceania
+			capital.region = sr:region_indonesia
+			capital.region = sr:region_andes
+		}
+	}
+}
+
+amazon_pact = {
+	trigger = {
+	    OR = {
+	    	capital = { state_region = s:STATE_PARA }
+	    	capital = { state_region = s:STATE_AMAZONAS }
+	    	capital = { state_region = s:STATE_GUAYANA }
+	    }
+	}
+}
+
+european_union = {
+	trigger = {
+		scope:selected_identity = identity:identity_diplomatic
+		OR = {
+			capital = {
+				region = sr:region_england
+				region = sr:region_north_sea_coast
+				region = sr:region_iberia
+				region = sr:region_france
+				region = sr:region_occitania
+				region = sr:region_rhine
+				region = sr:region_italy
+				region = sr:region_balkans
+				region = sr:region_north_germany
+				region = sr:region_south_germany
+				region = sr:region_baltic
+				region = sr:region_danubia
+				region = sr:region_poland
+				region = sr:region_russia
+				region = sr:region_dnieper
+				region = sr:region_belarus
+				region = sr:region_baltic_states
+				region = sr:region_finland
+				region = sr:region_arctic_russia
+				region = sr:region_urals
+			}
+		}
+	}
+}

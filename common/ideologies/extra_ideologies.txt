@@ -1,81 +1,4 @@
-﻿ideology_feminist = {
-	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_womens_liberation.dds"
-	
-	character_ideology = yes
-	
-	lawgroup_LGBTQ_rights = {
-		law_full_equality_and_protection = strongly_approve
-		law_comprehensive_rights = approve
-		law_basic_protections = neutral
-		law_legal_limbo = disapprove
-		law_active_persecution = strongly_disapprove
-	}
-	
-	possible = {
-		owner = { 
-			has_technology_researched = LGBTQ_rights_movement
-			NOT = { has_law = law_type:law_full_equality_and_protection }
-		}
-		# Agitators should have an ideology at odds with current laws
-		NAND = {
-			has_role = agitator
-			owner = {
-				has_law = law_type:law_full_equality_and_protection
-			}
-		}
-		scope:interest_group = {
-			OR = {
-				is_interest_group_type = ig_rural_folk
-				is_interest_group_type = ig_intelligentsia
-				is_interest_group_type = ig_trade_unions
-				is_interest_group_type = ig_petty_bourgeoisie
-				is_interest_group_type = ig_industrialists
-			}
-		}
-		scope:interest_group = {
-			NOR = {
-				has_variable = communist_ig_var
-				has_variable = chose_vanguardism
-				has_variable = chose_fascism
-				has_variable = chose_conservatism
-				has_variable = chose_ethno_nationalism
-			}
-		}
-	}
-	
-	leader_weight = {
-		value = {
-			value = 100
-			# more likely with limited lgbtq rights
-			if = {
-				limit = {
-					owner = { 
-						OR = {
-							has_law = law_type:law_active_persecution
-							has_law = law_type:law_legal_limbo
-							has_law = law_type:law_basic_protections
-						}
-					}
-				}
-				multiply = {
-					value = 2
-				}
-			}
-			# less likely if humanitarian is an option
-			if = {
-				limit = {
-					OR = {
-						is_interest_group_type = ig_intelligentsia
-						is_interest_group_type = ig_trade_unions
-					}
-				}
-				add = -50
-			}
-		}
-	}
-}
-
-ideology_environmentalists = {
+﻿ideology_environmentalists = {
 	icon = "gfx/interface/icons/ig_icons/rural_folk.dds"
 	
 	character_ideology = yes
@@ -131,6 +54,24 @@ ideology_environmentalists = {
 					value = 5
 				}
 			}
+			if = {
+				limit = {
+					scope:interest_group = {
+						is_interest_group_type = ig_intelligentsia
+						is_interest_group_type = ig_trade_unions
+					}
+				}
+				multiply = 5
+			}
+			if = {
+				limit = {
+					scope:interest_group = {
+						is_interest_group_type = ig_rural_folk
+						is_interest_group_type = ig_petty_bourgeoisie
+					}
+				}
+				multiply = 2
+			}
 		}
 	}
 }
@@ -139,12 +80,6 @@ ideology_optimist_transhumanist = {
 	icon = "gfx/interface/icons/ideology_icons/meritocratic.dds"
 	
 	character_ideology = yes
-	
-	lawgroup_artificial_intelligence_governance = {
-		law_unrestricted_ai_development = strongly_approve
-		law_moderate_ai_governance = neutral
-		law_strict_ai_ethics_and_control = strongly_disapprove
-	}
 	
 	lawgroup_human_augmentation = {
 		law_unrestricted_augmentation = strongly_approve

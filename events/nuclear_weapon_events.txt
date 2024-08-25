@@ -316,5 +316,8 @@ nuclear_weapon_events.10 = {
  	option = {
  		name = nuclear_weapon_events.10.a
  		default_option = yes
+		add_modifier = {
+			name = nuclear_power
+		}
  	}
 }

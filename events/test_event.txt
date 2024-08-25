@@ -1,0 +1,18 @@
+namespace = test_event
+
+test_event.1 = {
+    type = country_event
+
+    immediate = {
+        
+    }
+
+    option = {
+        name = test_event.1.a
+        default_option = yes
+
+        every_scope_state = {
+            remove_building = building_manor_house
+        }
+    }
+}

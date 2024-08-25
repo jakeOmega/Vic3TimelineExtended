@@ -1105,7 +1105,7 @@ country_nuclear_weapon_defense_chance_add = {
 
 building_group_bg_arts_academics_standard_of_living_add = {
 	color = good
-	percent = yes
+	percent = no
 }
 
 building_employment_deportee_add = {
@@ -1135,5 +1135,23 @@ state_clerks_investment_pool_contribution_add = {
 
 state_clerks_investment_pool_efficiency_mult = {
 	color = good
+	percent = yes
+}
+
+building_farmers_shares_add={
+	decimals=0
+	color=neutral
+	game_data={
+		ai_value=0
+	}
+}
+
+building_logging_camp_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_group_bg_agriculture_infrastructure_usage_mult = {
+	color = bad
 	percent = yes
 }

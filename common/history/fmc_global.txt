@@ -25,4 +25,19 @@ GLOBAL = {
 			days = 2
 		}
 	}
+	every_country = {
+		activate_law = law_type:law_partible
+	}
+	c:FRA = {
+		activate_law = law_type:law_equal_inheritance
+	}
+	c:GBR = {
+		activate_law = law_type:law_primogeniture
+	}
+	c:JAP = {
+		activate_law = law_type:law_primogeniture
+	}
+	c:RUS = {
+		activate_law = law_type:law_primogeniture
+	}
 }

@@ -73,7 +73,7 @@ tactical_nuke_diplo_action = {
                 scope:target_country = {
                     trigger_event = nuclear_weapon_events.5
                     change_relations = {
-                        tcountry = ROOT
+                        country = ROOT
                         value = -50  
                     }
                 }
@@ -84,7 +84,7 @@ tactical_nuke_diplo_action = {
                 scope:target_country = {
                     trigger_event = nuclear_weapon_events.7
                     change_relations = {
-                        tcountry = ROOT
+                        country = ROOT
                         value = -5
                     }
                 }
@@ -94,4 +94,64 @@ tactical_nuke_diplo_action = {
     }
 
 	is_hostile = yes
+
+    ai = {
+		evaluation_chance = {
+            value = 0
+            if = {
+                limit = {
+                    any_scope_state = {
+                        has_modifier = tactical_nuke_aftermath
+                    }
+                }
+                add = 100
+            }
+        }
+
+		will_select_as_second_state = {
+            OR = {
+                has_building = building_barracks
+                has_building = building_naval_base
+                has_building = building_conscription_center
+            }
+        }
+	
+		propose_score = {
+            value = 0
+            scope:second_state = {
+                if = {
+                    limit = {
+                        has_building = building_barracks
+                    }
+                    add = b:building_barracks.level
+                }
+                if = {
+                    limit = {
+                        has_building = building_naval_base
+                    }
+                    add = b:building_naval_base.level
+                }
+                if = {
+                    limit = {
+                        has_building = building_conscription_center
+                    }
+                    add = b:building_conscription_center.level
+                }
+                if = {
+                    limit = {
+                        is_incorporated = no
+                    }
+                    multiply = 0.5
+                }
+                if = {
+                    limit = {
+                        is_capital = yes
+                    }
+                    multiply = 2
+                }
+                multiply = owner.gdp
+                divide = 1000000 # 1,000,000
+            }
+        }
+	}
 }

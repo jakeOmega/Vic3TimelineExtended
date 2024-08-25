@@ -123,7 +123,7 @@ def update_law_reqs(entries):
     for key, entry in entries.items():
         entry = entry.replace(
             "has_law = law_type:law_womens_suffrage",
-            "OR = {has_law = law_type:law_womens_suffrage has_law = law_type:law_protected_class}",
+            "AND = { has_law = law_type:law_protected_class has_law = law_type:law_full_equality_and_protection }",
         )
         entries[key] = entry
     return entries
@@ -178,25 +178,41 @@ extremist_privacy_entry = [
     ("law_strong_privacy_rights", "strongly_disapprove"),
     ("law_intrusive_surveillance", "strongly_approve"),
 ]
-pro_ai_governance = [
-    ("law_unrestricted_ai_development", "neutral"),
-    ("law_moderate_ai_governance", "approve"),
-    ("law_strict_ai_ethics_and_control", "strongly_approve"),
+traditional_inheritance = [
+    ("law_primogeniture", "strongly_approve"),
+    ("law_partible", "neutral"),
+    ("law_equal_inheritance", "disapprove"),
+    ("law_non_inheritable_usage_rights", "strongly_disapprove"),
 ]
-anti_ai_governance = [
-    ("law_unrestricted_ai_development", "neutral"),
-    ("law_moderate_ai_governance", "disapprove"),
-    ("law_strict_ai_ethics_and_control", "strongly_disapprove"),
+reform_inheritance = [
+    ("law_primogeniture", "disapprove"),
+    ("law_partible", "approve"),
+    ("law_equal_inheritance", "approve"),
+    ("law_non_inheritable_usage_rights", "disapprove"),
 ]
-moderate_ai_governance = [
-    ("law_unrestricted_ai_development", "neutral"),
-    ("law_moderate_ai_governance", "approve"),
-    ("law_strict_ai_ethics_and_control", "neutral"),
+progressive_inheritance = [
+    ("law_primogeniture", "strongly_disapprove"),
+    ("law_partible", "neutral"),
+    ("law_equal_inheritance", "approve"),
+    ("law_non_inheritable_usage_rights", "strongly_approve"),
 ]
-light_ai_governance = [
-    ("law_unrestricted_ai_development", "neutral"),
-    ("law_moderate_ai_governance", "neutral"),
-    ("law_strict_ai_ethics_and_control", "disapprove"),
+radical_inheritance = [
+    ("law_primogeniture", "strongly_disapprove"),
+    ("law_partible", "disapprove"),
+    ("law_equal_inheritance", "neutral"),
+    ("law_non_inheritable_usage_rights", "strongly_approve"),
+]
+communal_inheritance = [
+    ("law_primogeniture", "strongly_disapprove"),
+    ("law_partible", "disapprove"),
+    ("law_equal_inheritance", "neutral"),
+    ("law_non_inheritable_usage_rights", "strongly_approve"),
+]
+moderate_inheritance = [
+    ("law_primogeniture", "disapprove"),
+    ("law_partible", "approve"),
+    ("law_equal_inheritance", "neutral"),
+    ("law_non_inheritable_usage_rights", "strongly_disapprove"),
 ]
 aggressive_rules_of_war = [
     ("law_traditional_rules_of_war", "approve"),
@@ -397,7 +413,6 @@ lgbtq_love = [
 modifications = {
     "ideology_paternalistic": {
         "lawgroup_privacy_rights": anti_privacy_entry,
-        "lawgroup_artificial_intelligence_governance": pro_ai_governance,
         "lawgroup_human_augmentation": highly_regulated_augmentation,
         "lawgroup_ministry_of_thought_control": ministry_constructor(
             "ministry_of_thought_control", "++"
@@ -408,6 +423,7 @@ modifications = {
         "lawgroup_ministry_of_population_control": ministry_constructor(
             "ministry_of_population_control", "++"
         ),
+        "lawgroup_inheritance": traditional_inheritance,
     },
     "ideology_particularist": {
         "lawgroup_privacy_rights": pro_privacy_entry,
@@ -481,6 +497,7 @@ modifications = {
         "lawgroup_ministry_of_population_control": ministry_constructor(
             "ministry_of_population_control", "-"
         ),
+        "lawgroup_inheritance": moderate_inheritance,
     },
     "ideology_liberal_modern": {
         "lawgroup_privacy_rights": pro_privacy_entry,
@@ -519,7 +536,6 @@ modifications = {
     },
     "ideology_market_liberal": {
         "lawgroup_privacy_rights": reform_privacy_entry,
-        "lawgroup_artificial_intelligence_governance": anti_ai_governance,
         "lawgroup_human_augmentation": lightly_regulated_augmentation,
         "lawgroup_intellectual_property": moderate_ip_laws,
         "lawgroup_LGBTQ_rights": lgbtq_indifference,
@@ -571,10 +587,10 @@ modifications = {
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "+"
         ),
+        "lawgroup_inheritance": traditional_inheritance,
     },
     "ideology_reformer": {
         "lawgroup_privacy_rights": reform_privacy_entry,
-        "lawgroup_artificial_intelligence_governance": moderate_ai_governance,
         "lawgroup_human_augmentation": medical_augmentation,
         "lawgroup_intellectual_property": moderate_ip_laws,
         "lawgroup_LGBTQ_rights": lgbtq_like,
@@ -587,11 +603,11 @@ modifications = {
         "lawgroup_ministry_of_urban_planning": ministry_constructor(
             "ministry_of_urban_planning", "+"
         ),
+        "lawgroup_inheritance": reform_inheritance,
     },
     "ideology_populist": {
         "lawgroup_privacy_rights": reform_privacy_entry,
         "lawgroup_right_to_information": anti_secrecy,
-        "lawgroup_artificial_intelligence_governance": pro_ai_governance,
         "lawgroup_human_augmentation": populist_augmentation,
         "lawgroup_ministry_of_culture": ministry_constructor(
             "ministry_of_culture", "+"
@@ -668,6 +684,7 @@ modifications = {
         "lawgroup_ministry_of_thought_control": ministry_constructor(
             "ministry_of_thought_control", "--"
         ),
+        "lawgroup_inheritance": reform_inheritance,
     },
     "ideology_vanguardist": {
         "lawgroup_privacy_rights": extremist_privacy_entry,
@@ -717,7 +734,6 @@ modifications = {
     },
     "ideology_anarchist": {
         "lawgroup_privacy_rights": pro_privacy_entry,
-        "lawgroup_artificial_intelligence_governance": light_ai_governance,
         "lawgroup_human_augmentation": unregulated_augmentation,
         "lawgroup_intellectual_property": communal_ip_laws,
         "lawgroup_LGBTQ_rights": lgbtq_love,
@@ -735,9 +751,9 @@ modifications = {
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "-"
         ),
+        "lawgroup_inheritance": communal_inheritance,
     },
     "ideology_laissez_faire": {
-        "lawgroup_artificial_intelligence_governance": anti_ai_governance,
         "lawgroup_ministry_of_commerce": ministry_constructor(
             "ministry_of_commerce", "++"
         ),
@@ -762,7 +778,6 @@ modifications = {
         ),
     },
     "ideology_moralist": {
-        "lawgroup_artificial_intelligence_governance": pro_ai_governance,
         "lawgroup_human_augmentation": anti_augmentation,
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "++"
@@ -825,6 +840,7 @@ modifications = {
         "lawgroup_ministry_of_urban_planning": ministry_constructor(
             "ministry_of_urban_planning", "+"
         ),
+        "lawgroup_inheritance": moderate_inheritance,
     },
     "ideology_jingoist": {
         "lawgroup_human_augmentation": militarist_augmentation,
@@ -864,6 +880,7 @@ modifications = {
         "lawgroup_ministry_of_consumer_protection": ministry_constructor(
             "ministry_of_consumer_protection", "--"
         ),
+        "lawgroup_inheritance": moderate_inheritance,
     },
     "ideology_proletarian": {
         "lawgroup_intellectual_property": communal_ip_laws,
@@ -881,6 +898,7 @@ modifications = {
         "lawgroup_ministry_of_urban_planning": ministry_constructor(
             "ministry_of_urban_planning", "++"
         ),
+        "lawgroup_inheritance": progressive_inheritance,
     },
     "ideology_communist": {
         "lawgroup_intellectual_property": communal_ip_laws,
@@ -896,6 +914,7 @@ modifications = {
         "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
             "ministry_of_intelligence_and_security", "+"
         ),
+        "lawgroup_inheritance": communal_inheritance,
     },
     "ideology_pacifist": {
         "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "--"),
@@ -1037,32 +1056,45 @@ modifications = {
     "ideology_scholar_paternalistic": {},
     "ideology_junker_paternalistic": {},
     "ideology_papal_paternalistic": {},
+    "ideology_papal_moralist": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_inheritance": traditional_inheritance,
+    },
     "ideology_confucian": {
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "++"
         ),
+        "lawgroup_inheritance": traditional_inheritance,
     },
-    "ideology_bakufu": {},
+    "ideology_bakufu": {
+        "lawgroup_inheritance": traditional_inheritance,
+    },
     "ideology_shinto_moralist": {
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "++"
         ),
+        "lawgroup_inheritance": traditional_inheritance,
     },
     "ideology_caudillismo": {},
     "ideology_buddhist_moralist": {
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "++"
         ),
+        "lawgroup_inheritance": reform_inheritance,
     },
     "ideology_hindu_moralist": {
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "++"
         ),
+        "lawgroup_inheritance": moderate_inheritance,
     },
     "ideology_sikh_moralist": {
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "++"
         ),
+        "lawgroup_inheritance": reform_inheritance,
     },
     "ideology_heavenly_kingdom_theocratic": {
         "lawgroup_ministry_of_religion": ministry_constructor(
@@ -1071,7 +1103,9 @@ modifications = {
     },
     "ideology_orleanist": {},
     "ideology_legitimist": {},
-    "ideology_bonapartist": {},
+    "ideology_bonapartist": {
+        "lawgroup_inheritance": reform_inheritance,
+    },
     "ideology_atheist": {
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "-"
@@ -1083,12 +1117,15 @@ modifications = {
     "ideology_positivist": {},
     "ideology_russian_patriarch": {
         "lawgroup_rights_of_women": [("law_protected_class", "strongly_disapprove")],
+        "lawgroup_inheritance": traditional_inheritance,
     },
     "ideology_orthodox_patriarch": {
         "lawgroup_rights_of_women": [("law_protected_class", "strongly_disapprove")],
+        "lawgroup_inheritance": traditional_inheritance,
     },
     "ideology_oriental_orthodox_patriarch": {
         "lawgroup_rights_of_women": [("law_protected_class", "strongly_disapprove")],
+        "lawgroup_inheritance": traditional_inheritance,
     },
     "ideology_authoritarian": {
         "lawgroup_ministry_of_thought_control": ministry_constructor(
@@ -1156,6 +1193,7 @@ modifications = {
         "lawgroup_ministry_of_science": ministry_constructor(
             "ministry_of_science", "-"
         ),
+        "lawgroup_inheritance": reform_inheritance,
     },
     "ideology_stratocratic": {
         "lawgroup_welfare": [
@@ -1177,6 +1215,6 @@ modifications = {
 modified_entries = modify_entries(entries, modifications)
 modified_entries = update_law_reqs(modified_entries)
 write_to_file(
-    r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\ideologies\modified.txt",
+    r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\ideologies\modified.txt",
     modified_entries,
 )

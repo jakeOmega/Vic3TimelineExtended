@@ -1,0 +1,90 @@
+namespace = minor_events_timelineextended
+
+minor_events_timelineextended.1 = {
+    type = country_event
+    hidden = yes
+
+    immediate = {
+        every_scope_state = {
+			limit = {
+				NOT = {
+					state_region = {
+						any_scope_state = {
+							NOT = { owner = ROOT.owner }
+						}
+					}
+				}
+			}
+            if = {
+                limit = {
+                    NOT = { has_variable = arable_land_added }
+                }
+                set_variable = {
+                    name = arable_land_added
+                    value = 0
+                }
+            }
+            add_arable_land_effect = {
+                AMOUNT = state_arable_land_add_script_value
+            }
+		}
+    }
+}
+
+minor_events_timelineextended.2 = {
+    type = country_event
+
+    trigger = {
+        is_ai = no
+    }
+
+    immediate = {
+    }
+
+    cooldown = {
+		days = 365
+	}
+
+    duration = 3
+
+    option = {
+        name = minor_events_timelineextended.2.a
+        default_option = yes
+    }
+
+    option = {
+        name = minor_events_timelineextended.2.b
+        add_enactment_phase = 1
+
+        add_modifier = {
+            name = forced_law_through_event
+            days = 365
+            multiplier = 1
+            is_decaying = yes
+        }
+    }
+
+    option = {
+        name = minor_events_timelineextended.2.c
+        add_enactment_phase = 2
+
+        add_modifier = {
+            name = forced_law_through_event
+            days = 365
+            multiplier = 2
+            is_decaying = yes
+        }
+    }
+
+    option = {
+        name = minor_events_timelineextended.2.d
+        add_enactment_phase = 3
+
+        add_modifier = {
+            name = forced_law_through_event
+            days = 365
+            multiplier = 3
+            is_decaying = yes
+        }
+    }
+}
