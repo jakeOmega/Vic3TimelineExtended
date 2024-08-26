@@ -26,6 +26,7 @@ nuclear_energy = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 50
+		country_institution_ministry_of_science_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -108,6 +109,7 @@ civil_rights_movement = {
 	modifier = {
 		state_expected_sol_from_literacy = 1
 		country_add_multicultural_ideology_to_intelligentsia_bool = yes
+		country_institution_ministry_of_labor_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -123,6 +125,7 @@ laser_technology = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 50
+		country_institution_ministry_of_science_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -148,6 +151,7 @@ space_exploration = {
 		country_prestige_mult = 0.2
 		country_weekly_innovation_max_add = 50
 		country_tech_spread_add = 40
+		country_institution_ministry_of_science_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -220,6 +224,7 @@ decolonization = {
 		country_weekly_innovation_max_add = 50
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
+		country_institution_ministry_of_labor_max_investment_add = 1
 		state_colony_growth_creation_mult = 0.1
 		country_liberty_desire_of_subjects_add = 0.05
 		country_add_anticolonial_ideology_to_igs_bool = yes
@@ -261,6 +266,7 @@ mainframe_computers = {
 	modifier = {
 		country_weekly_innovation_max_add = 50
 		country_tech_spread_add = 40
+		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -282,6 +288,7 @@ photocopiers = {
 		country_weekly_innovation_max_add = 50
 		goods_output_services_mult = 0.05
 		country_institution_ministry_of_commerce_max_investment_add = 1
+		country_institution_ministry_of_propaganda_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -409,6 +416,7 @@ television_broadcasting = {
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		country_tech_spread_add = 40
 		country_institution_ministry_of_culture_max_investment_add = 1
+		country_institution_ministry_of_propaganda_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -503,7 +511,7 @@ anti_war_movement = {
 		country_radicals_from_conquest_mult = 0.25
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
-		country_institution_ministry_of_refugee_affairs_max_investment_add = 2
+		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	

@@ -103,6 +103,7 @@ supply_chain_management = {
 	
 	modifier = {
 		state_building_highway_max_level_add = 1
+		country_institution_ministry_of_urban_planning_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -285,12 +286,13 @@ social_media = {
 	category = society
 	
 	unlocking_technologies = {	
-		home_video_systems
+		pop_culture
 	}
 	
 	modifier = {
 		political_movement_radicalism_mult = 0.25
 		country_institution_ministry_of_international_aid_max_investment_add = 1
+		country_institution_ministry_of_religion_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -320,7 +322,7 @@ knowledge_economy = {
 	
 	unlocking_technologies = {	
 		decolonization
-		home_video_systems
+		pop_culture
 	}
 	
 	modifier = {
@@ -341,6 +343,7 @@ digital_entertainment = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
+		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -373,7 +376,7 @@ digital_education = {
 	}
 }
 
-alternative_media = {
+social_justice_movements = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -383,9 +386,9 @@ alternative_media = {
 	}
 	
 	modifier = {
-		political_movement_radicalism_mult = 0.1
 		country_loan_interest_rate_add = -0.02
 		country_institution_ministry_of_international_aid_max_investment_add = 1
+		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
 	}
 	
 	ai_weight = {

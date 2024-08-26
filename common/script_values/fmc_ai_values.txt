@@ -16,8 +16,24 @@
 			subtract = scaled_debt
 			add = 1
 		}
+		min = {
+			value = 10
+			if = {
+				limit = {
+					bureaucracy < 0
+				}
+				add = {
+					value = income
+					divide = {
+						value = construction_price
+						min = 500
+						max = 1500
+					}
+					divide = 5
+				}
+			}
+		}
 		round_to = 1
-		min = 10
 		max = {
 			value = construction_queue_num_queued_government_levels
 			multiply = modifier:country_max_weekly_construction_progress_add

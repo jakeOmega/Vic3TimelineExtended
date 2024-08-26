@@ -1230,6 +1230,10 @@ building_national_park = {
 	}	
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+
+	ai_value = {
+		value = 5000
+	}
 }
 
 building_arts_academy = {

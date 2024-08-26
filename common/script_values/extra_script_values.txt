@@ -631,10 +631,42 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				has_technology_researched = television
+			}
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			any_country = {
 				has_technology_researched = nuclear_weapons
 			}
 		}
 		add = 20
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = mass_media
+			}
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = green_revolution
+			}
+		}
+		add = 40
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = ICBMs
+			}
+		}
+		add = 40
 	}
 	if = {
 		limit = {
@@ -647,10 +679,42 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				has_technology_researched = computer_networks
+			}
+		}
+		add = 60
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = satellite_communications
+			}
+		}
+		add = 60
+	}
+	if = {
+		limit = {
+			any_country = {
 				has_technology_researched = containerization
 			}
 		}
 		add = 60
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = world_wide_web
+			}
+		}
+		add = 80
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = network_centric_warfare
+			}
+		}
+		add = 80
 	}
 	if = {
 		limit = {
@@ -663,10 +727,10 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
-				has_technology_researched = world_wide_web
+				has_technology_researched = generative_ai
 			}
 		}
-		add = 80
+		add = 100
 	}
 	if = {
 		limit = {
@@ -687,7 +751,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
-				has_technology_researched = post-scarcity_economy
+				has_technology_researched = artificial_intelligence
 			}
 		}
 		add = 200
@@ -695,7 +759,15 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
-				has_technology_researched = artificial_intelligence
+				has_technology_researched = space_based_solar_power
+			}
+		}
+		add = 200
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = post-scarcity_economy
 			}
 		}
 		add = 200

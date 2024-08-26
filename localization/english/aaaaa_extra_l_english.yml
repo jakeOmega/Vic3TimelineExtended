@@ -409,8 +409,8 @@
  cellular_networks:0 "Cellular Networks"
  cellular_networks_desc:0 "The emergence of cellular networks has revolutionized communications, enabling mobile phone usage and changing the dynamics of personal and business communications."
 
- home_video_systems:0 "Home Video Systems"
- home_video_systems_desc:0 "Home video systems have brought cinema into the living room, fundamentally changing the way people access and consume visual entertainment."
+ pop_culture:0 "Pop Culture"
+ pop_culture_desc:0 "Pop culture, encompassing music, movies, fashion, and other forms of entertainment, has become a dominant force in shaping societal norms and trends."
 
  inertial_navigation_systems:0 "Inertial Navigation Systems"
  inertial_navigation_systems_desc:0 "Inertial navigation systems, using gyroscopes and accelerometers, have greatly improved the guidance systems of vehicles, particularly in aviation and maritime applications."
@@ -478,8 +478,8 @@
  digital_entertainment_desc:0 "The development and popularization of digital entertainment, including video games, streaming services, and virtual reality, reshape the media landscape and create new forms of leisure and artistic expression."
  digital_education:0 "Digital Education"
  digital_education_desc:0 "The integration of digital technologies in education, such as online learning platforms and multimedia resources, transforms teaching and learning methods, improving access to educational opportunities and fostering global collaboration."
- alternative_media:0 "Alternative Media"
- alternative_media_desc:0 "The rise of alternative media, including blogs, podcasts, and independent news sources, challenges traditional media outlets and expands the diversity of perspectives and information available to the public."
+ social_justice_movements:0 "Social Justice Movements"
+ social_justice_movements_desc:0 "Social justice movements advocate for equality, fairness, and human rights, addressing issues such as racial discrimination and economic inequality, and promoting social change through activism, advocacy, and policy reform."
  animal_rights_movement:0 "Animal Rights Movement"
  animal_rights_movement_desc:0 "The Animal Rights Movement advocates for the ethical treatment of animals and the recognition of their rights, leading to changes in legislation, consumer habits, and the development of alternative products and technologies."
  LGBTQ_rights_movement:0 "LGBTQ+ Rights Movement"

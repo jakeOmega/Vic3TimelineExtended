@@ -123,6 +123,7 @@ autonomous_vehicles = {
 	modifier = {
 		state_market_access_price_impact = 0.01
 		building_group_bg_trade_employee_mult = -0.1
+		country_institution_ministry_of_urban_planning_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -195,6 +196,7 @@ cyber_warfare = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_tech_spread_add = 100
+		country_institution_ministry_of_thought_control_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -387,6 +389,7 @@ decline_of_organized_religion = {
 
 	modifier = {
 		country_loan_interest_rate_add = -0.02
+		country_institution_ministry_of_religion_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -526,6 +529,7 @@ biohacking_and_human_augmentation = {
 		country_weekly_innovation_max_add = 100
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
+		country_institution_ministry_of_thought_control_max_investment_add = 2
 	}
 	
 	ai_weight = {

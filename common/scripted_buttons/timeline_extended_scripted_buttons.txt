@@ -15,6 +15,10 @@ increase_funding_nuclear_program = {
             trigger = { var:nuclear_weapons_program_first_nuke_done = 0 }
             add = 25
         }
+        modifier = {
+            trigger = { var:nuclear_weapon_stockpile > 10 }
+            add = -50
+        }
 	}
 
 	possible = {
@@ -56,6 +60,10 @@ decrease_funding_nuclear_program = {
         modifier = {
             trigger = { NOT = { var:nuclear_weapons_program_first_nuke_done = 0 }}
             add = 25
+        }
+        modifier = {
+            trigger = { var:nuclear_weapon_stockpile > 10 }
+            add = 50
         }
 	}
 

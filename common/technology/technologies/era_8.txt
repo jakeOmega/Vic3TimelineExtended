@@ -144,6 +144,7 @@ personal_computers = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 50
+		country_institution_ministry_of_labor_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -337,6 +338,7 @@ cellular_networks = {
 		state_building_highway_max_level_add = 1
 		country_tech_spread_add = 60
 		country_institution_national_bank_max_investment_add = 1
+		country_institution_ministry_of_urban_planning_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -358,6 +360,7 @@ barcodes_and_scanners = {
 	modifier = {
 		country_gold_reserve_limit_mult = 0.25
 		country_institution_national_bank_max_investment_add = 1
+		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -421,6 +424,7 @@ video_games = {
 		goods_output_consumer_appliances_mult = 0.05
 		goods_output_digital_access_mult = 0.05
 		country_weekly_innovation_max_add = 50
+		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -428,7 +432,7 @@ video_games = {
 	}
 }
 
-home_video_systems = {
+pop_culture = {
 	# TODO
 	era = era_8
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
@@ -440,7 +444,9 @@ home_video_systems = {
 	}
 	
 	modifier = {
-		goods_output_consumer_appliances_mult = 0.1
+		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
+		country_institution_ministry_of_propaganda_max_investment_add = 1
+		country_institution_ministry_of_religion_max_investment_add = 1
 		country_weekly_innovation_max_add = 50
 	}
 	
