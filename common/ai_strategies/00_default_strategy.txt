@@ -766,7 +766,20 @@ ai_strategy_default = {
 	institution_scores = {
 		institution_colonial_affairs = {	
 			value = 10		
-		}				
+			if = {
+				limit = {
+					NOT = {
+						any_scope_state = {
+							is_under_colonization = yes
+						}
+					}
+					power_bloc ?= {
+						has_principle_group = principle_group:principle_group_colonial_offices
+					}
+				}
+				subtract = 20
+			}
+		}	
 		institution_social_security = {	
 			value = 10		
 		}
@@ -785,6 +798,60 @@ ai_strategy_default = {
 		institution_home_affairs = {	
 			value = 10		
 		}				
+		institution_ministry_of_war = {	
+			value = 50		
+		}
+		institution_ministry_of_commerce = {	
+			value = 10		
+		}
+		institution_ministry_of_foreign_affairs = {	
+			value = 50		
+		}
+		institution_national_bank = {	
+			value = 50		
+		}
+		institution_ministry_of_culture = {	
+			value = 5		
+		}
+		institution_ministry_of_labor = {	
+			value = 5		
+		}
+		institution_ministry_of_the_environment = {	
+			value = 20	
+		}
+		institution_ministry_of_intelligence_and_security = {	
+			value = 20		
+		}
+		institution_ministry_of_refugee_affairs = {	
+			value = 5		
+		}
+		institution_ministry_of_propaganda = {	
+			value = 5		
+		}
+		institution_ministry_of_science = {	
+			value = 50		
+		}
+		institution_ministry_of_thought_control = {	
+			value = 50	
+		}
+		institution_ministry_of_consumer_protection = {	
+			value = 20	
+		}
+		institution_ministry_of_urban_planning = {	
+			value = 20	
+		}
+		institution_ministry_of_population_control = {	
+			value = 5	
+		}
+		institution_ministry_of_religion = {	
+			value = 5	
+		}
+		institution_ministry_of_international_aid = {	
+			value = 5	
+		}
+		institution_migration_controls = {	
+			value = 1	
+		}
 	}	
 	
 	# How much value does the AI place on an obligation from another country?
@@ -3088,84 +3155,7 @@ ai_strategy_default = {
 	# How much construction output should the AI aim for
 	# Using this value in other strategies will function additively
 	wanted_construction_output = {
-		value = 10 # Accounts for the 10 free construction from base modifiers
-
-		add = {
-			value = investment_pool_income
-			divide = 500 # 1 construction output per this much into the investment pool				
-		}
-		
-		add = {
-			value = income
-					
-			divide = 2500 # 1 construction output per this much income
-
-			min = 0
-		}		
-		
-		# Add a baseline if trying to industrialize
-		if = {
-			limit = {
-				OR = {
-					has_strategy = ai_strategy_resource_expansion
-					has_strategy = ai_strategy_industrial_expansion
-				}
-			}
-
-			if = {
-				limit = { country_rank >= rank_value:great_power }
-				add = 50
-			}		
-			else_if = {
-				limit = { 
-					OR = {
-						country_rank >= rank_value:major_power
-						country_rank >= rank_value:unrecognized_major_power
-					}
-				}
-				add = 25
-			}	
-			else = {
-				add = 10
-			}				
-		}	
-
-		if = {
-			limit = {
-				OR = {
-					has_journal_entry = je_meiji_restoration
-					has_journal_entry = je_meiji_main
-				}
-			}			
-			multiply = 2.0
-		}
-
-		if = {
-			limit = { has_law = law_type:law_traditionalism }
-			multiply = 0.75
-		}		
-
-		if = {
-			limit = { has_strategy = ai_strategy_placate_population }
-			multiply = 0.5
-		}
-		else_if = {
-			limit = {
-				NOR = {
-					has_strategy = ai_strategy_resource_expansion
-					has_strategy = ai_strategy_industrial_expansion				
-				}
-			}
-			multiply = 0.75
-		}
-		
-		if = {
-			limit = { has_strategy = ai_strategy_maintain_mandate_of_heaven }
-			multiply = 0.1		
-		}		
-
-		min = 1
-		max = 1000
+		value = 0
 	}
 	
 	# How many levels of barracks should the AI have
@@ -3265,6 +3255,36 @@ ai_strategy_default = {
 			multiply = 0.8
 		}	
 
+		if = {
+			limit = { has_technology_researched = bombing_aircraft }
+			multiply = 0.8
+		}
+
+		if = {
+			limit = { has_technology_researched = advanced_military_aircraft }
+			multiply = 0.8
+		}
+
+		if = {
+			limit = { has_technology_researched = precision_guided_munitions }
+			multiply = 0.8
+		}
+
+		if = {
+			limit = { has_technology_researched = rapid_deployment_forces }
+			multiply = 0.8
+		}
+
+		if = {
+			limit = { has_technology_researched = space_militarization }
+			multiply = 0.8
+		}
+
+		if = {
+			limit = { has_technology_researched = orbital_weapon_platforms }
+			multiply = 0.8
+		}
+
 		# Factor in strategies
 		if = {
 			limit = { 
@@ -3290,6 +3310,8 @@ ai_strategy_default = {
 			}
 			min = 125
 		}		
+
+		multiply = 0.5
 
 		max = 1000
 		min = 1
@@ -3344,6 +3366,31 @@ ai_strategy_default = {
 			multiply = 0.75
 		}
 
+		if = {
+			limit = { has_technology_researched = sonar }
+			multiply = 0.75
+		}
+
+		if = {
+			limit = { has_technology_researched = nuclear_energy }
+			multiply = 0.75
+		}
+
+		if = {
+			limit = { has_technology_researched = precision_guided_munitions }
+			multiply = 0.75
+		}
+
+		if = {
+			limit = { has_technology_researched = rapid_deployment_forces }
+			multiply = 0.75
+		}	
+
+		if = {
+			limit = { has_technology_researched = hypersonic_weapons }
+			multiply = 0.75
+		}
+
 		# Factor in strategies
 		if = {
 			limit = { 
@@ -3374,6 +3421,8 @@ ai_strategy_default = {
 			limit = { has_strategy = ai_strategy_maintain_mandate_of_heaven }
 			multiply = 0.25
 		}		
+
+		multiply = 0.5
 
 		max = 500
 		min = 0		
@@ -3711,7 +3760,49 @@ ai_strategy_default = {
 				has_building = building_furniture_manufacturies
 				total_population >= 1000000
 			}
-		}		
+		}	
+		construction = { 
+			stance = wants_high_supply 
+			trigger = {
+				always = yes
+			}
+		}	
+		electronic_components = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = transistors
+			}
+		}
+		robotics = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = robotics
+			}
+		}
+		digital_access = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = computer_networks
+			}
+		}
+		digital_assets = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = computer_networks
+			}
+		}
+		launch_capacity = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = space_militarization
+			}
+		}
+		advanced_materials = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = modern_material_science
+			}
+		}
 	}
 	
 	# How many of its interests should the AI dedicate to regions with unrecognized and decentralized powers
@@ -5300,7 +5391,15 @@ ai_strategy_default = {
 					}				
 				}
 				multiply = 0
-			}		
+			}	
+			if = {
+				limit = {
+					scope:target_country = {
+						has_modifier = nuclear_power
+					}				
+				}
+				multiply = 0.25
+			}	
 		}		
 		dominate = {
 			value = 0
@@ -5594,7 +5693,15 @@ ai_strategy_default = {
 					}				
 				}
 				multiply = 0
-			}			
+			}	
+			if = {
+				limit = {
+					scope:target_country = {
+						has_modifier = nuclear_power
+					}				
+				}
+				multiply = 0.25
+			}		
 		}			
 	}
 	

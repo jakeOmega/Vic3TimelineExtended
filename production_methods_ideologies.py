@@ -214,6 +214,12 @@ moderate_inheritance = [
     ("law_equal_inheritance", "neutral"),
     ("law_non_inheritable_usage_rights", "strongly_disapprove"),
 ]
+bonapartist_inheritance = [
+    ("law_primogeniture", "disapprove"),
+    ("law_partible", "neutral"),
+    ("law_equal_inheritance", "strongly_approve"),
+    ("law_non_inheritable_usage_rights", "disapprove"),
+]
 aggressive_rules_of_war = [
     ("law_traditional_rules_of_war", "approve"),
     ("law_war_crimes_forbidden", "neutral"),
@@ -1101,17 +1107,23 @@ modifications = {
             "ministry_of_religion", "++"
         ),
     },
-    "ideology_orleanist": {},
-    "ideology_legitimist": {},
-    "ideology_bonapartist": {
+    "ideology_orleanist": {
         "lawgroup_inheritance": reform_inheritance,
+    },
+    "ideology_legitimist": {
+        "lawgroup_inheritance": traditional_inheritance,
+    },
+    "ideology_bonapartist": {
+        "lawgroup_inheritance": bonapartist_inheritance,
     },
     "ideology_atheist": {
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "-"
         ),
     },
-    "ideology_republican_leader": {},
+    "ideology_republican_leader": {
+        "lawgroup_inheritance": reform_inheritance,
+    },
     "ideology_royalist": {},
     "ideology_jacksonian_democrat": {},
     "ideology_positivist": {},

@@ -141,6 +141,7 @@ genetic_engineering = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 100
+		state_arable_land_mult = 0.25
 	}
 	
 	ai_weight = {

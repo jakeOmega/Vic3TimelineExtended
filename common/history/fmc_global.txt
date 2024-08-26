@@ -40,4 +40,15 @@ GLOBAL = {
 	c:RUS = {
 		activate_law = law_type:law_primogeniture
 	}
+	every_country = {
+		limit = {
+			OR = {
+				country_has_state_religion = rel:sunni
+				country_has_state_religion = rel:shiite
+			}
+		}
+		ig:ig_devout = {
+			add_ideology = ideology_islamic_inheritance
+		}
+	}
 }

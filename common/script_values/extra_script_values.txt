@@ -14,8 +14,16 @@ peaceful_annex_gdp_requirement_multiplier = 10
 ministry_of_science_monthly_effect = -1
 ministry_of_thought_control_monthly_effect = 0.001
 
-construction_cost_super_high = 2000
-construction_cost_mega_high = 5000
+construction_cost_canal = 2500
+construction_cost_monument = 1250
+construction_cost_very_high = 400
+construction_cost_high = 300
+construction_cost_medium = 200
+construction_cost_low = 100
+construction_cost_very_low = 50
+
+construction_cost_super_high = 1000
+construction_cost_mega_high = 2500
 
 war_support_training_decrease = {
 	value = 0

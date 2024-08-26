@@ -179,3 +179,16 @@ ideology_anti_colonialist = {
 		law_frontier_colonization = disapprove
 	}
 }
+
+ideology_islamic_inheritance = {
+	icon = "gfx/interface/icons/ideology_icons/moralist.dds"
+	
+	priority = 200
+	
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = approve
+		law_non_inheritable_usage_rights = disapprove
+	}
+}

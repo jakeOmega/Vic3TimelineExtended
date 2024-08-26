@@ -15,16 +15,6 @@
 
 country_replace_sectors = {
 	every_scope_state = {
-		limit = {
-			has_building = building_construction_sector
-			OR = {
-				is_capital = no
-				state_has_building_type_levels = {
-					target = bt:building_construction_sector
-					value > 1
-				}
-			}
-		}
 		replace_building = {
 			OLD_TYPE = building_construction_sector
 			NEW_TYPE = building_construction_sector_mod

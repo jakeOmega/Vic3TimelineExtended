@@ -13,9 +13,7 @@ crisis_resolution = {
 	}
 	
 	potential = {
-		scope:target_country = {
-            is_in_same_power_bloc = ROOT
-        }
+		always = yes
 	}
 	
 	possible = {
@@ -80,7 +78,13 @@ crisis_resolution = {
 					NOT = { has_war_with = scope:target_country }
 				}			
 			}
-		}				
+		}			
+
+		requirement_to_maintain = {
+			trigger = {				
+				NOT = { scope:target_country = { has_diplomats_expelled = root } }
+			}
+		}			
 	}
 	
 	ai = {

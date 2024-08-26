@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # Pop Growth Constants
 min_birthrate = 0.00080 * 12
-max_birthrate = 0.00450 * 12
+max_birthrate = 0.00475 * 12
 min_mortality = 0.00100 * 12
 max_mortality = 0.00600 * 12
 

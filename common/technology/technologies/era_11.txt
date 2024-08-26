@@ -237,6 +237,7 @@ biological_immortality = {
 		country_company_throughput_bonus_add = 0.25
 		state_mortality_mult = -0.2
 		character_health_add = 100
+		state_arable_land_mult = 0.25
 	}
 	
 	ai_weight = {

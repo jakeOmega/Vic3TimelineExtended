@@ -1155,6 +1155,26 @@ building_university = {
 
 	required_construction = construction_cost_medium
 
+	ai_value = {
+		value = 2000
+		if = {
+			limit = { owner.country_rank = rank_value:great_power }
+			add = 4000
+		}
+		if = {
+			limit = { owner.sol_ranking < 20 }
+			add = 4000
+		}
+		if = {
+			limit = { owner.country_innovation >= owner.modifier:country_weekly_innovation_max_add }
+			multiply = 0.1
+		}
+		if = {
+			limit = { owner.taking_loans = yes }
+			multiply = 0.5
+		}
+	}
+
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 

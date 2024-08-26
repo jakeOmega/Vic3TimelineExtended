@@ -518,6 +518,7 @@ modern_chemical_processes = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 25
+		state_arable_land_mult = 0.2
 	}
 	
 	unlocking_technologies = {	

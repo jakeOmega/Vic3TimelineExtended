@@ -1,22 +1,39 @@
 ﻿
 replace_building = {
-	every_scope_building = { 
-		limit = { is_building_type = $OLD_TYPE$ } 
-		state = {
-			set_variable = {
-				name = building_level
-				value = prev.level
-			}
-			change_variable = {
-				name = building_level
-				multiply = 5
-			}
-			add_specified_building_level = {
-				ADD_LEVEL = var:building_level
-				SPEC_TYPE = $NEW_TYPE$
-			}
-			remove_building = $OLD_TYPE$
+	if = {
+		limit = {
+			has_building = $OLD_TYPE$
 		}
+		set_variable = {
+			name = building_level
+			value = b:$OLD_TYPE$.level
+		}
+		remove_building = $OLD_TYPE$
+	}
+	else = {
+		set_variable = {
+			name = building_level
+			value = 0
+		}
+	}
+	change_variable = {
+		name = building_level
+		multiply = 5
+	}
+	if = {
+		limit = { has_building = building_urban_center }
+		change_variable = {
+			name = building_level
+			add = {
+				value = b:building_urban_center.level
+				divide = 2
+				floor = yes
+			}
+		}
+	}
+	add_specified_building_level = {
+		ADD_LEVEL = var:building_level
+		SPEC_TYPE = $NEW_TYPE$
 	}
 }
 

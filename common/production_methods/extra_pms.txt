@@ -3743,15 +3743,15 @@ pm_market_stalls = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
+			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
 			goods_output_services_add = 10                       # Price:   30, Total cost: 300.0
 			# Total input cost: 0
-			# Total output cost: 800.0
-			# Profit: 800.0
+			# Total output cost: 400.0
+			# Profit: 400.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 4800
-			# Wage breakeven: 0.17
+			# Wage breakeven: 0.08
 		}
 
 		level_scaled = {
@@ -3773,15 +3773,15 @@ pm_market_squares = {
 			goods_input_wood_add = 1                             # Price:   20, Total cost: 20.0
 			goods_input_glass_add = 1                            # Price:   40, Total cost: 40.0
 			# Output goods
-			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
+			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
 			goods_output_services_add = 15                       # Price:   30, Total cost: 450.0
 			# Total input cost: 60.0
-			# Total output cost: 950.0
-			# Profit: 890.0
-			# Profit margin: 1483.33%
-			# Zero profit price multiplier: 0.06
+			# Total output cost: 550.0
+			# Profit: 490.0
+			# Profit margin: 816.67%
+			# Zero profit price multiplier: 0.11
 			# Employment: 4800
-			# Wage breakeven: 0.19
+			# Wage breakeven: 0.10
 		}
 
 		level_scaled = {
@@ -3804,15 +3804,15 @@ pm_covered_markets = {
 			goods_input_glass_add = 2                            # Price:   40, Total cost: 80.0
 			goods_input_steel_add = 1                            # Price:   50, Total cost: 50.0
 			# Output goods
-			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
+			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
 			goods_output_services_add = 20                       # Price:   30, Total cost: 600.0
 			# Total input cost: 130.0
-			# Total output cost: 1100.0
-			# Profit: 970.0
-			# Profit margin: 746.15%
-			# Zero profit price multiplier: 0.12
+			# Total output cost: 700.0
+			# Profit: 570.0
+			# Profit margin: 438.46%
+			# Zero profit price multiplier: 0.19
 			# Employment: 4800
-			# Wage breakeven: 0.20
+			# Wage breakeven: 0.12
 		}
 
 		level_scaled = {
@@ -3836,15 +3836,15 @@ pm_arcades = {
 			goods_input_steel_add = 2                            # Price:   50, Total cost: 100.0
 			goods_input_electricity_add = 1                      # Price:   30, Total cost: 30.0
 			# Output goods
-			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
+			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
 			goods_output_services_add = 25                       # Price:   30, Total cost: 750.0
 			# Total input cost: 210.0
-			# Total output cost: 1250.0
-			# Profit: 1040.0
-			# Profit margin: 495.24%
-			# Zero profit price multiplier: 0.17
+			# Total output cost: 850.0
+			# Profit: 640.0
+			# Profit margin: 304.76%
+			# Zero profit price multiplier: 0.25
 			# Employment: 5000
-			# Wage breakeven: 0.21
+			# Wage breakeven: 0.13
 		}
 
 		level_scaled = {
@@ -3886,15 +3886,15 @@ pm_department_stores = {
 			goods_input_transportation_add = 1                   # Price:   30, Total cost: 30.0
 			goods_input_personal_transportation_add = 3          # Price:   30, Total cost: 90.0
 			# Output goods
-			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
+			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
 			goods_output_services_add = 45                       # Price:   30, Total cost: 1350.0
 			# Total input cost: 600.0
-			# Total output cost: 1850.0
-			# Profit: 1250.0
-			# Profit margin: 208.33%
-			# Zero profit price multiplier: 0.32
+			# Total output cost: 1450.0
+			# Profit: 850.0
+			# Profit margin: 141.67%
+			# Zero profit price multiplier: 0.41
 			# Employment: 4500
-			# Wage breakeven: 0.28
+			# Wage breakeven: 0.19
 		}
 
 		level_scaled = {
@@ -3939,15 +3939,15 @@ pm_shopping_malls = {
 			goods_input_transportation_add = 3                   # Price:   30, Total cost: 90.0
 			goods_input_personal_transportation_add = 7          # Price:   30, Total cost: 210.0
 			# Output goods
-			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
+			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
 			goods_output_services_add = 60                       # Price:   30, Total cost: 1800.0
 			# Total input cost: 860.0
-			# Total output cost: 2300.0
-			# Profit: 1440.0
-			# Profit margin: 167.44%
-			# Zero profit price multiplier: 0.37
+			# Total output cost: 1900.0
+			# Profit: 1040.0
+			# Profit margin: 120.93%
+			# Zero profit price multiplier: 0.45
 			# Employment: 4500
-			# Wage breakeven: 0.32
+			# Wage breakeven: 0.23
 		}
 
 		level_scaled = {
@@ -3993,15 +3993,15 @@ pm_e-commerce = {
 			goods_input_personal_transportation_add = 8          # Price:   30, Total cost: 240.0
 			goods_input_digital_access_add = 2                   # Price:  120, Total cost: 240.0
 			# Output goods
-			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
+			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
 			goods_output_services_add = 85                       # Price:   30, Total cost: 2550.0
 			# Total input cost: 1280.0
-			# Total output cost: 3050.0
-			# Profit: 1770.0
-			# Profit margin: 138.28%
-			# Zero profit price multiplier: 0.42
+			# Total output cost: 2650.0
+			# Profit: 1370.0
+			# Profit margin: 107.03%
+			# Zero profit price multiplier: 0.48
 			# Employment: 2000
-			# Wage breakeven: 0.89
+			# Wage breakeven: 0.69
 		}
 
 		level_scaled = {
@@ -4049,15 +4049,15 @@ pm_drone_delivery_systems = {
 			goods_input_personal_transportation_add = 8          # Price:   30, Total cost: 240.0
 			goods_input_digital_access_add = 4                   # Price:  120, Total cost: 480.0
 			# Output goods
-			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
+			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
 			goods_output_services_add = 150                      # Price:   30, Total cost: 4500.0
 			# Total input cost: 2500.0
-			# Total output cost: 5000.0
-			# Profit: 2500.0
-			# Profit margin: 100.00%
-			# Zero profit price multiplier: 0.50
+			# Total output cost: 4600.0
+			# Profit: 2100.0
+			# Profit margin: 84.00%
+			# Zero profit price multiplier: 0.54
 			# Employment: 1250
-			# Wage breakeven: 2.00
+			# Wage breakeven: 1.68
 		}
 
 		level_scaled = {
@@ -4105,15 +4105,15 @@ pm_robotic_service_providers = {
 			goods_input_personal_transportation_add = 10         # Price:   30, Total cost: 300.0
 			goods_input_digital_access_add = 8                   # Price:  120, Total cost: 960.0
 			# Output goods
-			goods_output_construction_add = 0.5                  # Price: 1000, Total cost: 500.0
+			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
 			goods_output_services_add = 450                      # Price:   30, Total cost: 13500.0
 			# Total input cost: 5850.0
-			# Total output cost: 14000.0
-			# Profit: 8150.0
-			# Profit margin: 139.32%
-			# Zero profit price multiplier: 0.42
+			# Total output cost: 13600.0
+			# Profit: 7750.0
+			# Profit margin: 132.48%
+			# Zero profit price multiplier: 0.43
 			# Employment: 1010
-			# Wage breakeven: 8.07
+			# Wage breakeven: 7.67
 		}
 
 		level_scaled = {
@@ -12356,17 +12356,16 @@ pm_wooden_buildings_mod = {
 		workforce_scaled = {
 			# Input goods
 			goods_input_fabric_add = 10                          # Price:   20, Total cost: 200.0
-			goods_input_wood_add = 30                            # Price:   20, Total cost: 600.0
-			goods_input_transportation_add = 5                   # Price:   30, Total cost: 150.0
+			goods_input_wood_add = 40                            # Price:   20, Total cost: 800.0
 			# Output goods
 			goods_output_construction_add = 1                    # Price: 1000, Total cost: 1000.0
-			# Total input cost: 950.0
+			# Total input cost: 1000.0
 			# Total output cost: 1000.0
-			# Profit: 50.0
-			# Profit margin: 5.26%
-			# Zero profit price multiplier: 0.95
+			# Profit: 0.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 1.00
 			# Employment: 5000
-			# Wage breakeven: 0.01
+			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
@@ -13971,4 +13970,58 @@ pm_principle_engineering_and_logistics = {
 pm_engineering_and_logistics_no_effect = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 	replacement_if_valid = pm_principle_engineering_and_logistics
+}
+
+pm_trade_center_merchant_guilds = {
+	texture = "gfx/interface/icons/production_method_icons/merchant_guilds.dds"
+	
+	unlocking_laws = {
+		law_mercantilism
+	}
+	
+	building_modifiers = { 
+		level_scaled = {
+			building_employment_shopkeepers_add = 250
+		}
+		unscaled = {
+			building_shopkeepers_shares_add = 10
+		}
+	}
+}
+
+pm_trade_center_privately_owned = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+		law_mercantilism
+	}
+	
+	building_modifiers = { 
+		level_scaled = {
+			building_employment_capitalists_add = 50
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+		}
+	}
+}
+
+pm_trade_center_bureaucrat_ownership = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+
+	unlocking_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+	
+	building_modifiers = { 
+		level_scaled = {
+			building_employment_bureaucrats_add = 100
+		}
+		unscaled = {
+			building_bureaucrats_shares_add = 10
+		}
+	}
 }

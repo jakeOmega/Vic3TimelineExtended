@@ -34,15 +34,27 @@ minor_events_timelineextended.1 = {
 minor_events_timelineextended.2 = {
     type = country_event
 
+    event_image = {
+ 		video = "unspecific_ruler_speaking_to_people"
+ 	}
+
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+ 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+ 	title = minor_events_timelineextended.2.t
+ 	desc = minor_events_timelineextended.2.d
+ 	flavor = minor_events_timelineextended.2.f
+
     trigger = {
-        is_ai = no
+        produced_authority > 250
     }
 
     immediate = {
     }
 
     cooldown = {
-		days = 365
+		years = 5
 	}
 
     duration = 3
@@ -50,6 +62,9 @@ minor_events_timelineextended.2 = {
     option = {
         name = minor_events_timelineextended.2.a
         default_option = yes
+        ai_chance = {
+			base = 1
+		}
     }
 
     option = {
@@ -58,33 +73,66 @@ minor_events_timelineextended.2 = {
 
         add_modifier = {
             name = forced_law_through_event
-            days = 365
+            years = 5
             multiplier = 1
             is_decaying = yes
         }
+        ai_chance = {
+			base = 0
+            modifier = {
+                trigger = {
+                    authority > 250
+                }
+                add = 2
+            }
+		}
     }
 
     option = {
+        trigger = {
+            produced_authority > 500
+        }
         name = minor_events_timelineextended.2.c
         add_enactment_phase = 2
 
         add_modifier = {
             name = forced_law_through_event
-            days = 365
+            years = 5
             multiplier = 2
             is_decaying = yes
+        }
+        ai_chance = {
+            base = 0
+            modifier = {
+                trigger = {
+                    authority > 500
+                }
+                add = 4
+            }
         }
     }
 
     option = {
-        name = minor_events_timelineextended.2.d
+        trigger = {
+            produced_authority > 750
+        }
+        name = minor_events_timelineextended.2.e
         add_enactment_phase = 3
 
         add_modifier = {
             name = forced_law_through_event
-            days = 365
+            years = 5
             multiplier = 3
             is_decaying = yes
+        }
+        ai_chance = {
+            base = 0
+            modifier = {
+                trigger = {
+                    authority > 750
+                }
+                add = 6
+            }
         }
     }
 }

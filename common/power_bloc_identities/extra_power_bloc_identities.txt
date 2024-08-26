@@ -167,7 +167,6 @@ identity_diplomatic = {
 		power_bloc_mandate_progress_per_insignificant_power_member_add = 1
 		power_bloc_cohesion_per_member_add = -1
 		power_bloc_can_give_humanitarian_aid_bool = yes
-		power_bloc_can_use_crisis_resolution_bool = yes
 	}
 
 	leader_modifier = {

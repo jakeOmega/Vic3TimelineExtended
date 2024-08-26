@@ -22,6 +22,8 @@ institution_ministry_of_commerce = {
 		country_convoys_capacity_mult = 0.2
 		country_trade_route_competitiveness_mult = 0.1
 		country_trade_route_cost_mult = -0.05
+		state_pop_support_law_free_trade_add = 0.2
+		country_enactment_success_chance_law_free_trade_add = 0.05
 	}
 }
 
@@ -46,6 +48,8 @@ institution_national_bank = {
 		country_loan_interest_rate_mult = -0.05
 		country_gold_reserve_limit_mult = 0.2
 		building_cash_reserves_mult = 0.2
+		state_capitalists_investment_pool_efficiency_mult = 0.05
+		country_government_dividends_efficiency_add = 0.01
 	}
 }
 
@@ -95,7 +99,8 @@ institution_ministry_of_refugee_affairs = {
 	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 	modifier = {
-		state_migration_pull_mult = 0.2
+		state_migration_pull_mult = 0.1
+		country_mass_migration_attraction_mult = 0.1
 		state_radicals_from_sol_change_accepted_culture_mult = 0.05
 		state_assimilation_mult = -0.05
 	}

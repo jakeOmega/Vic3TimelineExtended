@@ -1103,7 +1103,7 @@ country_nuclear_weapon_defense_chance_add = {
 	percent = yes
 }
 
-building_group_bg_arts_academics_standard_of_living_add = {
+building_group_bg_arts_standard_of_living_add = {
 	color = good
 	percent = no
 }
@@ -1154,4 +1154,14 @@ building_logging_camp_throughput_add = {
 building_group_bg_agriculture_infrastructure_usage_mult = {
 	color = bad
 	percent = yes
+}
+
+country_enactment_success_chance_law_compulsory_primary_school_add = {
+	color = good
+	percent = yes
+}
+
+state_pop_support_law_compulsory_primary_school_add = {
+	color = good
+	percent = no
 }

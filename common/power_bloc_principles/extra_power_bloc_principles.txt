@@ -247,6 +247,72 @@ principle_vassalization_5 = {
 
 ### RESEARCH CONGLOMERATE
 
+principle_advanced_research_1 = {
+	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		interest_group_ig_intelligentsia_pop_attraction_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 100
+		
+		if = {
+			limit = {
+				ig:ig_intelligentsia ?= { is_in_government = yes }
+			}
+			add = 100
+		}			
+
+		if = {
+			limit = { has_strategy = ai_strategy_progressive_agenda }
+			multiply = 1.5
+		}
+	}
+}
+
+principle_advanced_research_2 = {
+	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+	
+	member_modifier = {
+		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
+		country_weekly_innovation_max_add = 10
+	}
+
+	leader_modifier = {
+		country_weekly_innovation_max_add = 25
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_advanced_research_3 = {
+	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	member_modifier = {
+		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
+		country_tech_group_research_speed_mult = 0.01
+		country_weekly_innovation_max_add = 10
+	}
+
+	leader_modifier = {
+		country_weekly_innovation_max_add = 25
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}	
+}
+
 principle_advanced_research_4 = {
 	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
@@ -256,24 +322,20 @@ principle_advanced_research_4 = {
 	}
 
 	leader_modifier = {
-		country_can_impose_same_lawgroup_education_system_in_power_bloc_bool = yes
 		country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool = yes
-		country_weekly_innovation_max_add = 25
+		country_weekly_innovation_max_add = 50
 	}
 
 	member_modifier = {
-		country_institution_size_change_speed_institution_schools_mult = 0.5
-		country_institution_cost_institution_schools_mult = -0.5
-		country_disallow_law_no_schools_bool = yes
+		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
+		country_tech_group_research_speed_mult = 0.01
+		country_weekly_innovation_max_add = 25
+
 		country_enactment_success_chance_law_ministry_of_science_add = 0.1
 	}
 
 	institution = institution_ministry_of_science
 	institution_modifier = {
-		# School institution gives more tech spread
-		country_tech_spread_add = 20
-		country_tech_spread_mult = 0.05
-
 		country_ahead_of_time_research_penalty_mult = -0.05
 
 		# Increase Country max innovation
@@ -297,24 +359,19 @@ principle_advanced_research_5 = {
 	}
 
 	leader_modifier = {
-		country_can_impose_same_lawgroup_education_system_in_power_bloc_bool = yes
 		country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool = yes
-		country_weekly_innovation_max_add = 100
+		country_weekly_innovation_max_add = 200
 	}
 
 	member_modifier = {
-		country_institution_size_change_speed_institution_schools_mult = 0.5
-		country_institution_cost_institution_schools_mult = -0.5
-		country_disallow_law_no_schools_bool = yes
+		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
+		country_tech_group_research_speed_mult = 0.01
+		country_weekly_innovation_max_add = 50
 		country_enactment_success_chance_law_ministry_of_science_add = 0.2
 	}
 
 	institution = institution_ministry_of_science
 	institution_modifier = {
-		# School institution gives more tech spread
-		country_tech_spread_add = 20
-		country_tech_spread_mult = 0.05
-
 		country_ahead_of_time_research_penalty_mult = -0.05
 
 		# Increase Country max innovation
@@ -403,6 +460,10 @@ principle_aggressive_coordination_4 = {
 	icon = "gfx/interface/icons/principles_icons/aggressive_coordination.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
+	possible = {
+		has_technology_researched = combined_arms
+	}
+
 	power_bloc_modifier = {	
 		# Reduces cohesion
 		power_bloc_cohesion_add = -15
@@ -413,6 +474,7 @@ principle_aggressive_coordination_4 = {
 		country_war_exhaustion_casualties_mult = -0.15
 		country_join_power_bloc_member_in_plays_bool = yes
 		country_infamy_generation_mult = 0.15
+		country_infamy_decay_mult = 0.15
 		state_pop_support_law_ministry_of_war_add = 0.5
 		country_enactment_success_chance_law_ministry_of_war_add = 0.1
 		country_institution_cost_institution_ministry_of_war_mult = -0.5
@@ -435,6 +497,10 @@ principle_aggressive_coordination_5 = {
 	icon = "gfx/interface/icons/principles_icons/aggressive_coordination.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
+	possible = {
+		has_technology_researched = network_centric_warfare
+	}
+
 	power_bloc_modifier = {
 		# Reduces cohesion
 		power_bloc_cohesion_add = -20
@@ -451,6 +517,7 @@ principle_aggressive_coordination_5 = {
 		country_war_exhaustion_casualties_mult = -0.15
 		country_join_power_bloc_member_in_plays_bool = yes
 		country_infamy_generation_mult = 0.15
+		country_infamy_decay_mult = 0.15
 		state_pop_support_law_ministry_of_war_add = 0.5
 		country_enactment_success_chance_law_ministry_of_war_add = 0.1
 		country_institution_cost_institution_ministry_of_war_mult = -0.5
@@ -1587,7 +1654,7 @@ principle_cultural_plurality_4 = {
 
 	leader_modifier = {
 		# Modifiers from previous level(s)	
-		country_influence_mult = 0.2
+		country_influence_mult = 0.35
 		goods_output_fine_art_mult = 0.1
 	}
 
@@ -1608,6 +1675,7 @@ principle_cultural_plurality_4 = {
 	institution = institution_ministry_of_culture
 	institution_modifier = {
 		country_society_tech_research_speed_mult = 0.02
+		country_leverage_generation_mult = 0.05
 	}
 
 	ai_weight = {
@@ -1630,7 +1698,7 @@ principle_cultural_plurality_5 = {
 
 	leader_modifier = {
 		# Modifiers from previous level(s)	
-		country_influence_mult = 0.2
+		country_influence_mult = 0.5
 		goods_output_fine_art_mult = 0.1
 	}
 
@@ -1668,11 +1736,36 @@ principle_education_1 = {
 	}
 	
 	member_modifier = {
-		state_education_access_add = 0.1
+		state_education_access_add = 0.05
+		country_institution_size_change_speed_institution_schools_mult = 0.25
+		country_institution_cost_institution_schools_mult = -0.1
+		country_disallow_law_no_schools_bool = yes
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_education_system_in_power_bloc_bool = yes
+	}
+
+	institution = institution_schools
+	institution_modifier = {
+		# School institution gives more tech spread
+		country_tech_spread_mult = 0.05 
 	}
 	
 	ai_weight = {
-		value = 200
+		value = 100
+		
+		if = {
+			limit = {
+				ig:ig_intelligentsia ?= { is_in_government = yes }
+			}
+			add = 100
+		}			
+
+		if = {
+			limit = { has_strategy = ai_strategy_progressive_agenda }
+			multiply = 1.5
+		}
 	}
 }
 
@@ -1681,14 +1774,24 @@ principle_education_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 	
 	member_modifier = {
-		# Modifiers from previous level(s)	
-		state_education_access_add = 0.1
+		country_institution_size_change_speed_institution_schools_mult = 0.4
+		country_institution_cost_institution_schools_mult = -0.25
+		country_disallow_law_no_schools_bool = yes
+		country_enactment_success_chance_law_compulsory_primary_school_add = 0.1
+		state_pop_support_law_compulsory_primary_school_add = 0.5
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_education_system_in_power_bloc_bool = yes
 	}
 
 	institution = institution_schools
 	institution_modifier = {
-		country_weekly_innovation_max_add = 5
-		country_tech_spread_add = 5
+		# School institution gives more tech spread
+		country_tech_spread_mult = 0.05
+
+		# School isntitution reduces ahead of time research penalty
+		country_ahead_of_time_research_penalty_mult = -0.05
 	}
 	
 	ai_weight = {
@@ -1701,17 +1804,23 @@ principle_education_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 	
 	member_modifier = {
-		# Modifiers from previous level(s)	
-		state_education_access_add = 0.1
+		country_institution_size_change_speed_institution_schools_mult = 0.5
+		country_institution_cost_institution_schools_mult = -0.5
+		country_disallow_law_no_schools_bool = yes
+		country_enactment_success_chance_law_compulsory_primary_school_add = 0.2
+		state_pop_support_law_compulsory_primary_school_add = 1.0
+	}
 
-		interest_group_ig_intelligentsia_pol_str_mult = 0.1
+	leader_modifier = {
+		country_can_impose_same_lawgroup_education_system_in_power_bloc_bool = yes
 	}
 
 	institution = institution_schools
 	institution_modifier = {
+		# School institution gives more tech spread
+		country_tech_spread_mult = 0.05
+		country_ahead_of_time_research_penalty_mult = -0.05
 		country_weekly_innovation_max_add = 10
-		country_tech_spread_add = 5
-		state_pop_qualifications_mult = 0.05
 	}
 	
 	ai_weight = {
@@ -1729,18 +1838,25 @@ principle_education_4 = {
 	
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		state_education_access_add = 0.1
-		interest_group_ig_intelligentsia_pol_str_mult = 0.1
+		country_institution_size_change_speed_institution_schools_mult = 0.5
+		country_institution_cost_institution_schools_mult = -0.5
+		country_disallow_law_no_schools_bool = yes
+		country_enactment_success_chance_law_compulsory_primary_school_add = 0.2
+		state_pop_support_law_compulsory_primary_school_add = 1.0
 
+		state_education_access_add = 0.05
+		interest_group_ig_intelligentsia_pol_str_mult = 0.1
 		# New PM for Universities, producing art and services, unlocked via trigger
 	}
 
 	institution = institution_schools
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		country_weekly_innovation_max_add = 10
-		country_tech_spread_add = 5
-		country_tech_spread_mult = 0.1
+		# School institution gives more tech spread
+		country_tech_spread_mult = 0.05
+		country_ahead_of_time_research_penalty_mult = -0.05
+		country_weekly_innovation_max_add = 25
+
 		state_pop_qualifications_mult = 0.05
 	}
 	
@@ -1759,7 +1875,13 @@ principle_education_5 = {
 	
 	member_modifier = {
 		# Modifiers from previous level(s)	
+		country_institution_size_change_speed_institution_schools_mult = 0.5
+		country_institution_cost_institution_schools_mult = -0.5
+		country_disallow_law_no_schools_bool = yes
+		country_enactment_success_chance_law_compulsory_primary_school_add = 0.2
+		state_pop_support_law_compulsory_primary_school_add = 1.0
 		state_education_access_add = 0.1
+
 		interest_group_ig_intelligentsia_pol_str_mult = 0.1
 		# New PM for Universities, producing art and services, unlocked via trigger
 	}
@@ -1767,11 +1889,11 @@ principle_education_5 = {
 	institution = institution_schools
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		country_weekly_innovation_max_add = 10
-		country_tech_spread_add = 5
-		country_tech_spread_mult = 0.1
+		country_tech_spread_mult = 0.05
+		country_ahead_of_time_research_penalty_mult = -0.05
+		country_weekly_innovation_max_add = 50
 		state_pop_qualifications_mult = 0.05
-		country_weekly_innovation_mult = 0.02
+
 		country_bureaucracy_mult = 0.02
 	}
 	
@@ -2506,7 +2628,10 @@ principle_global_security_1 = {
 	leader_modifier = {
 		country_diplomatic_play_maneuvers_add = 20
 		country_infamy_generation_mult = -0.1
-		country_prestige_from_army_power_projection_mult = 0.1
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_use_crisis_resolution_bool = yes
 	}
 	
 	ai_weight = {
@@ -2525,8 +2650,11 @@ principle_global_security_2 = {
 	leader_modifier = {
 		country_diplomatic_play_maneuvers_add = 20
 		country_infamy_generation_mult = -0.1
-		country_prestige_from_army_power_projection_mult = 0.1
 		country_institution_cost_institution_ministry_of_war_mult = -0.25
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_use_crisis_resolution_bool = yes
 	}
 
 	institution = institution_ministry_of_war
@@ -2549,9 +2677,12 @@ principle_global_security_3 = {
 
 	leader_modifier = {
 		country_diplomatic_play_maneuvers_add = 20
-		country_infamy_generation_mult = -0.1
 		country_prestige_from_army_power_projection_mult = 0.1
 		country_institution_cost_institution_ministry_of_war_mult = -0.25
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_use_crisis_resolution_bool = yes
 	}
 
 	member_modifier = {
@@ -2585,6 +2716,10 @@ principle_global_security_4 = {
 		country_institution_cost_institution_ministry_of_war_mult = -0.25
 	}
 
+	power_bloc_modifier = {
+		power_bloc_can_use_crisis_resolution_bool = yes
+	}
+
 	member_modifier = {
 		state_pop_support_law_ministry_of_war_add = 0.5
 		country_war_exhaustion_casualties_mult = -0.2
@@ -2615,6 +2750,10 @@ principle_global_security_5 = {
 		country_infamy_decay_mult = 0.1
 		country_prestige_from_army_power_projection_mult = 0.2
 		country_institution_cost_institution_ministry_of_war_mult = -0.25
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_use_crisis_resolution_bool = yes
 	}
 
 	member_modifier = {
@@ -2960,7 +3099,7 @@ principle_artistic_expression_2 = {
 		# Modifiers from previous level(s)	
 		goods_output_fine_art_mult = 0.05
 		country_academics_pol_str_mult = 0.4
-		building_group_bg_arts_academics_standard_of_living_add = 1
+		building_group_bg_arts_standard_of_living_add = 3
 	}
 
 	ai_weight = {
@@ -2976,7 +3115,7 @@ principle_artistic_expression_3 = {
 		# Modifiers from previous level(s)	
 		goods_output_fine_art_mult = 0.05
 		country_academics_pol_str_mult = 0.6
-		building_group_bg_arts_academics_standard_of_living_add = 1
+		building_group_bg_arts_standard_of_living_add = 3
 		country_war_exhaustion_casualties_mult = -0.1
 		unit_morale_loss_mult = -0.1
 	}
@@ -3000,7 +3139,7 @@ principle_artistic_expression_4 = {
 		# Modifiers from previous level(s)	
 		goods_output_fine_art_mult = 0.05
 		country_academics_pol_str_mult = 0.8
-		building_group_bg_arts_academics_standard_of_living_add = 2
+		building_group_bg_arts_standard_of_living_add = 6
 		country_war_exhaustion_casualties_mult = -0.1
 		unit_morale_loss_mult = -0.2
 		country_society_tech_research_speed_mult = 0.05
@@ -3023,7 +3162,7 @@ principle_artistic_expression_5 = {
 		# Modifiers from previous level(s)	
 		goods_output_fine_art_mult = 0.05
 		country_academics_pol_str_mult = 1
-		building_group_bg_arts_academics_standard_of_living_add = 2
+		building_group_bg_arts_standard_of_living_add = 6
 		country_war_exhaustion_casualties_mult = -0.1
 		unit_morale_loss_mult = -0.3
 		country_society_tech_research_speed_mult = 0.1

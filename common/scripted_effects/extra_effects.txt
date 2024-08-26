@@ -95,88 +95,13 @@ thought_control_loyalists_update = {
 	if = {
 		limit = {
 			owner = {
-				has_law = law_type:law_ministry_of_thought_control
+				modifier:country_monthly_loyalists_add > 0
 			}
 		}
-
-		if = {
-			limit = {
-				owner = {
-					institution_investment_level = {
-						institution = institution_ministry_of_thought_control
-						value = 1
-					}
-				}
-			}
-			add_loyalists = {
-				value = {
-					value = ministry_of_thought_control_monthly_effect
-					multiply = 1
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				owner = {
-					institution_investment_level = {
-						institution = institution_ministry_of_thought_control
-						value = 2
-					}
-				}
-			}
-			add_loyalists = {
-				value = {
-					value = ministry_of_thought_control_monthly_effect
-					multiply = 2
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				owner = {
-					institution_investment_level = {
-						institution = institution_ministry_of_thought_control
-						value = 3
-					}
-				}
-			}
-			add_loyalists = {
-				value = {
-					value = ministry_of_thought_control_monthly_effect
-					multiply = 3
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				owner = {
-					institution_investment_level = {
-						institution = institution_ministry_of_thought_control
-						value = 4
-					}
-				}
-			}
-			add_loyalists = {
-				value = {
-					value = ministry_of_thought_control_monthly_effect
-					multiply = 4
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				owner = {
-					institution_investment_level = {
-						institution = institution_ministry_of_thought_control
-						value = 5
-					}
-				}
-			}
-			add_loyalists = {
-				value = {
-					value = ministry_of_thought_control_monthly_effect
-					multiply = 5
-				}
+		every_scope_state = {
+			limit = { is_incorporated = yes }
+			add_loyalists_in_state = {
+				value = ROOT.modifier:country_monthly_loyalists_add
 			}
 		}
 	}

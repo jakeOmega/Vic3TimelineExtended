@@ -71,7 +71,7 @@ battle_unit_experience = {
 
 legislative_efficiency = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.25
+	political_movement_radicalism_mult = -0.5
 }
 
 foreign_emigration = {
@@ -92,7 +92,7 @@ global_technological_development = {
 
 literacy_penalty = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	state_birth_rate_mult = 0.0 	# scaled by pop literacy
+	state_birth_rate_mult = -0.1 	# scaled by pop literacy
 }
 
 malnourishment = {
@@ -108,9 +108,9 @@ coastal_state = {
 
 forced_law_through_event = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_authority_add = -200
+	country_authority_add = -250
 	country_opposition_ig_approval_add = -2
-	interest_group_in_government_approval_add = -1
+	political_movement_restore_support_mult = 0.5
 }
 
 nuclear_power = {
@@ -120,4 +120,14 @@ nuclear_power = {
 	country_diplomatic_play_maneuvers_add = 20
 	country_leverage_generation_mult = 0.25
 	country_leverage_resistance_mult = 0.25
+}
+
+low_pop_state = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_birth_rate_mult = 0
+}
+
+high_pop_state = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_birth_rate_mult = 0
 }

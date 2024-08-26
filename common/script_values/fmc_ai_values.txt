@@ -16,7 +16,7 @@
 			subtract = scaled_debt
 			add = 1
 		}
-		round_to = 10
+		round_to = 1
 		min = 10
 		max = {
 			value = construction_queue_num_queued_government_levels
