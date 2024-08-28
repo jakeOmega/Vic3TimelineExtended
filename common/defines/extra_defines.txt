@@ -1,6 +1,8 @@
 ﻿NEconomy = {
     MIN_GOODS_PRICE = 0.01							# A good cannot have a lower base price than this                                                                                                      
     PRICE_RANGE = 0.999							    # min price of a good is base * (1 - PRICE_RANGE), Max price is base * (1 + PRICE_RANGE), PRICE_RANGE is locked to [0-1]                                
+	BUY_SELL_DIFF_AT_MAX_FACTOR = 4
+	GOODS_SHORTAGE_PENALTY_THRESHOLD = 0.25		# If supply / demand is lower than this, start applying output penalties, by default this should be ( 1 / BUY_SELL_DIFF_AT_MAX_FACTOR )
     QUALITY_OF_LIFE_MAX = 1000                                                                                                       
 	TRADE_ROUTE_MAX_LEVEL = 10000							# Trade routes cannot be higher level than this
 }
@@ -9,12 +11,19 @@ NPolitics = {
 	INCOHERENCE_FACTOR = 2								# The amount to multiply the approval value with to get an incoherence score for legitimacy
 }
 
+NWar = {
+	DEVASTATION_INCREASE_RATE = -0.01 # Per day, scales with level of occupation
+	DEVASTATION_DECAY_RATE = -0.03 # Per day, when there are no occupations
+	DEVASTATION_FROM_BATTLES = 3 # For each battle
+}
+
 NPops = {
 	NUM_WEALTH_LEVELS = 200
 }
 
 NPowerBlocs = {
 	MAX_PRINCIPLES = 8
+	MAX_MANDATES = 5
 }
 
 ### Pop Growth Constants

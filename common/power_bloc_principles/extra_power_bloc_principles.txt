@@ -1391,7 +1391,7 @@ principle_cultural_unity_1 = {
 	}
 	
 	ai_weight = {
-		value = 200 # High base weight if the leader has colonies
+		value = 50 # High base weight if the leader has colonies
 		
 		if = {
 			limit = { has_strategy = ai_strategy_reactionary_agenda }
@@ -1402,6 +1402,10 @@ principle_cultural_unity_1 = {
 			limit = { has_strategy = ai_strategy_colonial_expansion }
 			multiply = 2.0
 		}		
+		if = {
+			limit = { has_law = law_type:law_ethnostate }
+			multiply = 4.0
+		}
 	}
 }
 
@@ -1488,7 +1492,7 @@ principle_cultural_unity_4 = {
 	institution = institution_ministry_of_culture
 	institution_modifier = {
 		state_loyalists_from_sol_change_accepted_culture_mult = 0.05
-		state_accepted_birth_rate_mult = 0.01
+		state_accepted_birth_rate_mult = 0.02
 	}
 
 	ai_weight = {
@@ -1525,7 +1529,7 @@ principle_cultural_unity_5 = {
 	institution = institution_ministry_of_culture
 	institution_modifier = {
 		state_loyalists_from_sol_change_accepted_culture_mult = 0.05
-		state_accepted_birth_rate_mult = 0.02
+		state_accepted_birth_rate_mult = 0.04
 	}
 
 	ai_weight = {
@@ -1909,6 +1913,10 @@ principle_diplomacy_1 = {
 	visible = {
 		has_dlc_feature = power_bloc_features
 	}
+
+	leader_modifier = {
+		country_influence_add = 500
+	}
 	
 	member_modifier = {
 		country_influence_mult = 0.2
@@ -1917,13 +1925,17 @@ principle_diplomacy_1 = {
 	}
 	
 	ai_weight = {
-		value = 200
+		value = 500
 	}
 }
 
 principle_diplomacy_2 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	leader_modifier = {
+		country_influence_add = 500
+	}
 	
 	member_modifier = {
 		# Modifiers from previous level(s)	
@@ -1945,6 +1957,10 @@ principle_diplomacy_2 = {
 principle_diplomacy_3 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	leader_modifier = {
+		country_influence_add = 500
+	}
 	
 	member_modifier = {
 		# Modifiers from previous level(s)	
@@ -1974,6 +1990,10 @@ principle_diplomacy_4 = {
 	
 	possible = {
 		has_technology_researched = mass_media
+	}
+
+	leader_modifier = {
+		country_influence_add = 500
 	}
 	
 	member_modifier = {
@@ -2009,6 +2029,10 @@ principle_diplomacy_5 = {
 	
 	possible = {
 		has_technology_researched = world_wide_web
+	}
+
+	leader_modifier = {
+		country_influence_add = 500
 	}
 	
 	member_modifier = {

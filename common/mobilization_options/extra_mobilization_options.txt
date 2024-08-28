@@ -131,6 +131,7 @@ mobilization_option_extensive_logistical_support = {
 	possible = {
 		scope:military_formation = {
 			has_mobilization_option = mobilization_option:mobilization_option_logistical_support
+			NOT = { has_mobilization_option = mobilization_option:mobilization_option_balloon_recon }
 		}
 	}
 	
@@ -590,6 +591,58 @@ mobilization_option_space_transport = {
 	}
 
     group = transport
+}
+
+mobilization_option_entrenchment = {
+	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+
+	unlocking_principles = {
+		principle_engineering_and_logistics_3
+		principle_engineering_and_logistics_4
+		principle_engineering_and_logistics_5
+	}
+
+	possible = {
+		always = yes
+	}
+	
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	
+	upkeep_modifier = {
+		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
+		goods_input_ammunition_add = 5                        # Price:   50, Total cost: 250.0
+		# Total cost: 450.0
+	}
+	unit_modifier = {
+		unit_provinces_lost_mult = -0.5
+		unit_provinces_captured_mult = -0.5
+		unit_army_defense_mult = 0.25
+		military_formation_movement_speed_mult = -0.5
+
+	}
+	ai_weight = {
+		value = 1
+	}
+
+	group = transport
 }
 
 mobilization_option_space_recon = {
@@ -1305,4 +1358,217 @@ mobilization_option_mandatory_enhancement = {
 	}
 
     group = training
+}
+
+mobilization_option_jungle_combat_training = {
+	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+
+	unlocking_principles = {
+		principle_military_training_3
+		principle_military_training_4
+		principle_military_training_5
+	}
+
+	possible = {
+		always = yes
+	}
+	
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+		
+	upkeep_modifier = {
+		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
+		goods_input_ammunition_add = 5                        # Price:   50, Total cost: 250.0
+		goods_input_fabric_add = 5                            # Price:   20, Total cost: 100.0
+		# Total cost: 550.0
+	}
+	unit_modifier = {
+		unit_defense_forested_mult = 0.25
+		unit_offense_forested_mult = 0.25
+		unit_defense_hazardous_mult = 0.25
+		unit_offense_hazardous_mult = 0.25
+	}
+	ai_weight = {
+		value = 1
+	}
+
+	group = training
+}
+
+mobilization_option_mountain_combat_training = {
+	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+
+	unlocking_principles = {
+		principle_military_training_3
+		principle_military_training_4
+		principle_military_training_5
+	}
+
+	possible = {
+		always = yes
+	}
+	
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+		
+	upkeep_modifier = {
+		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
+		goods_input_ammunition_add = 5                        # Price:   50, Total cost: 250.0
+		goods_input_fabric_add = 5                            # Price:   20, Total cost: 100.0
+		# Total cost: 550.0
+	}
+	unit_modifier = {
+		unit_defense_elevated_mult = 0.25
+		unit_offense_elevated_mult = 0.25
+		unit_defense_hazardous_mult = 0.25
+		unit_offense_hazardous_mult = 0.25
+	}
+	ai_weight = {
+		value = 1
+	}
+
+	group = training
+}
+
+mobilization_option_flight_simulators = {
+	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+
+	unlocking_principles = {
+		principle_military_training_5
+	}
+	possible = {
+		market ?= {
+			mg:electronic_components = {
+				market_goods_sell_orders > 0
+			}
+			mg:consumer_appliances = {
+				market_goods_sell_orders > 0
+			}
+		}
+	}
+	
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	
+	upkeep_modifier = {
+		goods_input_electronic_components_add = 25             # Price:   80, Total cost: 2000.0
+		goods_input_consumer_appliances_add = 25               # Price:   80, Total cost: 2000.0
+		# Total cost: 4000.0
+	}
+	unit_modifier = {
+		unit_combat_unit_type_jet_powered_fighters_offense_mult = 0.1
+		unit_combat_unit_type_stealth_aircraft_offense_mult = 0.1
+		unit_combat_unit_type_orbital_tactical_vehicles_offense_mult = 0.1
+		unit_combat_unit_type_orbital_weapons_platforms_offense_mult = 0.1
+		unit_combat_unit_type_jet_powered_fighters_defense_mult = 0.1
+		unit_combat_unit_type_stealth_aircraft_defense_mult = 0.1
+		unit_combat_unit_type_orbital_tactical_vehicles_defense_mult = 0.1
+		unit_combat_unit_type_orbital_weapons_platforms_defense_mult = 0.1
+	}
+	ai_weight = {
+		value = 1
+	}
+
+    group = training
+}
+
+mobilization_option_amphibious_warfare = {
+	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+
+	unlocking_principles = {
+		principle_engineering_and_logistics_3
+		principle_engineering_and_logistics_4
+		principle_engineering_and_logistics_5
+	}
+
+	possible = {
+		always = yes
+	}
+	
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+			
+	upkeep_modifier = {
+		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
+		goods_input_ammunition_add = 5                        # Price:   50, Total cost: 250.0
+		goods_input_fabric_add = 5                            # Price:   20, Total cost: 100.0
+		# Total cost: 550.0
+	}
+	unit_modifier = {
+		unit_defense_water_mult = 0.25
+		unit_offense_water_mult = 0.25
+	}
+	ai_weight = {
+		value = 1
+	}
+
+	group = training
 }

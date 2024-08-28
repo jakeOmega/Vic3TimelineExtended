@@ -773,8 +773,10 @@ ai_strategy_default = {
 							is_under_colonization = yes
 						}
 					}
-					power_bloc ?= {
-						has_principle_group = principle_group:principle_group_colonial_offices
+					NOT = {
+						power_bloc ?= {
+							has_principle_group = principle_group:principle_group_colonial_offices
+						}
 					}
 				}
 				subtract = 20
