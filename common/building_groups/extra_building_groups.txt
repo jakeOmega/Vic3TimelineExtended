@@ -16,3 +16,8 @@ bg_parks = {
 	
 	economy_of_scale_ai_factor = 2.0
 }
+
+bg_construction = {
+	parent_group = bg_heavy_industry
+	infrastructure_usage_per_level = 0.1
+}

@@ -6,11 +6,7 @@
 		}
 		value = weekly_net_fixed_income
 		min = 0
-		divide = {
-			value = construction_price
-			min = 500
-			max = 1500
-		}
+		divide = var:fmc_price_stabiliser
 		multiply = {
 			add = scaled_gold_reserves
 			subtract = scaled_debt
@@ -25,7 +21,7 @@
 				add = {
 					value = income
 					divide = {
-						value = construction_price
+						value = fmc_construction_price
 						min = 500
 						max = 1500
 					}

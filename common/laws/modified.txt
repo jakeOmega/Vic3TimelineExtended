@@ -6,6 +6,7 @@ law_migration_controls = {
 		country_disallow_discriminated_migration_bool = yes	
 		country_leverage_resistance_mult = -0.25
 		country_institution_migration_controls_max_investment_add = 5
+		country_institution_cost_institution_migration_controls_mult = -0.8
 	}
 
 	institution = institution_migration_controls

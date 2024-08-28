@@ -7,7 +7,7 @@
     } 
     
 	ai_is_valid = {
-        always = yes
+        always = no
     }
 
 	is_valid = {
@@ -18,11 +18,11 @@
 		#custom_tooltip = ""
         initialize_gov_factories_variable = yes
         change_variable = { 
-            name = num_gov_factories 
+            name = fmc_public_construction_buy_target 
             add = 1
         }
-        country_update_private_public = yes
-        update_construction_effect = yes
+        fmc_country_update_private_public = yes
+        fmc_update_construction_effect = yes
     }
 }
 
@@ -35,7 +35,7 @@ add_construction_shift_scriptedgui = {
     } 
     
 	ai_is_valid = {
-        always = yes
+        always = no
     }
 
 	is_valid = {
@@ -46,11 +46,11 @@ add_construction_shift_scriptedgui = {
 		#custom_tooltip = ""
         initialize_gov_factories_variable = yes
         change_variable = { 
-            name = num_gov_factories 
+            name = fmc_public_construction_buy_target 
             add = 10
         }
-        country_update_private_public = yes
-        update_construction_effect = yes
+        fmc_country_update_private_public = yes
+        fmc_update_construction_effect = yes
     }
 }
 
@@ -63,7 +63,7 @@ add_construction_ctrl_scriptedgui = {
     } 
     
 	ai_is_valid = {
-        always = yes
+        always = no
     }
 
 	is_valid = {
@@ -74,11 +74,11 @@ add_construction_ctrl_scriptedgui = {
 		#custom_tooltip = ""
         initialize_gov_factories_variable = yes
         change_variable = { 
-            name = num_gov_factories 
+            name = fmc_public_construction_buy_target 
             add = 100
         }
-        country_update_private_public = yes
-        update_construction_effect = yes
+        fmc_country_update_private_public = yes
+        fmc_update_construction_effect = yes
     }
 }
 
@@ -91,7 +91,7 @@ add_construction_alt_scriptedgui = {
     } 
     
 	ai_is_valid = {
-        always = yes
+        always = no
     }
 
 	is_valid = {
@@ -102,11 +102,11 @@ add_construction_alt_scriptedgui = {
 		#custom_tooltip = ""
         initialize_gov_factories_variable = yes
         change_variable = { 
-            name = num_gov_factories 
+            name = fmc_public_construction_buy_target 
             add = 1000
         }
-        country_update_private_public = yes
-        update_construction_effect = yes
+        fmc_country_update_private_public = yes
+        fmc_update_construction_effect = yes
     }
 }
 
@@ -130,7 +130,7 @@ add_construction_rightclick_scriptedgui = {
         #custom_tooltip = ""
         initialize_gov_factories_variable = yes
         change_variable = { 
-            name = num_gov_factories 
+            name = fmc_public_construction_buy_target 
             add = 10000
         }
         country_update_private_public = yes
@@ -150,18 +150,18 @@ remove_construction_scriptedgui = {
         always = no
     }       
     is_valid = {
-        var:num_gov_factories >= 1
+        var:fmc_public_construction_buy_target >= 1
     }       
 
     effect = {          
         #custom_tooltip = "" 
         initialize_gov_factories_variable = yes
         change_variable = { 
-            name = num_gov_factories 
+            name = fmc_public_construction_buy_target 
             subtract = 1
         }
-        country_update_private_public = yes
-        update_construction_effect = yes
+        fmc_country_update_private_public = yes
+        fmc_update_construction_effect = yes
     }
 }
 
@@ -177,14 +177,14 @@ remove_construction_shift_scriptedgui = {
         always = no
     }       
     is_valid = {
-        var:num_gov_factories >= 10
+        var:fmc_public_construction_buy_target >= 10
     }       
 
     effect = {          
         #custom_tooltip = "" 
         initialize_gov_factories_variable = yes
         change_variable = { 
-            name = num_gov_factories 
+            name = fmc_public_construction_buy_target 
             subtract = 10
         }
         country_update_private_public = yes
@@ -204,18 +204,18 @@ remove_construction_ctrl_scriptedgui = {
         always = no
     }       
     is_valid = {
-        var:num_gov_factories >= 100
+        var:fmc_public_construction_buy_target >= 100
     }       
 
     effect = {          
         #custom_tooltip = "" 
         initialize_gov_factories_variable = yes
         change_variable = { 
-            name = num_gov_factories 
+            name = fmc_public_construction_buy_target 
             subtract = 100
         }
-        country_update_private_public = yes
-        update_construction_effect = yes
+        fmc_country_update_private_public = yes
+        fmc_update_construction_effect = yes
     }
 }
 
@@ -231,18 +231,18 @@ remove_construction_alt_scriptedgui = {
         always = no
     }       
     is_valid = {
-        var:num_gov_factories >= 1000
+        var:fmc_public_construction_buy_target >= 1000
     }       
 
     effect = {          
         #custom_tooltip = "" 
         initialize_gov_factories_variable = yes
         change_variable = { 
-            name = num_gov_factories 
+            name = fmc_public_construction_buy_target 
             subtract = 1000
         }
-        country_update_private_public = yes
-        update_construction_effect = yes
+        fmc_country_update_private_public = yes
+        fmc_update_construction_effect = yes
     }
 }
 
@@ -258,17 +258,17 @@ remove_construction_rightclick_scriptedgui = {
         always = no
     }       
     is_valid = {
-        var:num_gov_factories >= 1
+        var:fmc_public_construction_buy_target >= 1
     }       
 
     effect = {          
         #custom_tooltip = "" 
         initialize_gov_factories_variable = yes
         set_variable = { 
-            name = num_gov_factories 
+            name = fmc_public_construction_buy_target 
             value = 0
         }
-        country_update_private_public = yes
-        update_construction_effect = yes
+        fmc_country_update_private_public = yes
+        fmc_update_construction_effect = yes
     }
 }

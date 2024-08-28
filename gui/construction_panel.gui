@@ -158,7 +158,7 @@ types construction_panel
 				
 								textbox = {
 									#name = "tutorial_higlight_expansion_level"
-									text = "[GetPlayer.MakeScope.Var('num_gov_factories').GetValue]"
+									text = "[GetPlayer.MakeScope.Var('fmc_public_construction_buy_target').GetValue]"
 									
 									align = hcenter|nobaseline
 									using = fontsize_large
@@ -301,7 +301,7 @@ types construction_panel
 					# 	widget = {
 					# 		size = { @panel_width_plus_14 95 }
 					# 		visible = "[IsDataModelEmpty(BuildingProductionMethodsEntry.GetBuildings)]"
-					# 		datacontext = "[GetBuildingType('building_construction_sector')]"
+					# 		datacontext = "[GetBuildingType('fmc_building_construction_site')]"
 
 
 					#     	### building icon

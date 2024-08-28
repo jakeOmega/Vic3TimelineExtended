@@ -1,4 +1,4 @@
-﻿pm_wooden_buildings = {
+﻿pm_base = {
 	texture = "gfx/interface/icons/production_method_icons/wooden_buildings.dds"
 	
 	is_default = yes
@@ -18,7 +18,7 @@
 		}
 
 		level_scaled = {
-			building_employment_laborers_add = 100
+			building_employment_laborers_add = 10
 		}
 	}
 }

@@ -88,7 +88,7 @@ reveal_assassination_chance_foreign = {
 max_investment_pool_before_on_action = 1000000
 
 needed_private_levels = {
-	value = total_construction_use_target
+	value = fmc_total_construction_use_target
 	divide = modifier:country_max_weekly_construction_progress_add
 	multiply = 2
 	subtract = construction_queue_num_queued_private_levels
@@ -779,4 +779,27 @@ state_arable_land_add_script_value = {
 	multiply = modifier:state_arable_land_mult
 	subtract = var:arable_land_added
 	floor = yes
+}
+
+extra_construction_sectors = {
+	value = 0
+	if = {
+		limit = {
+			has_building = building_construction_sector
+		}
+		add = {
+			value = b:building_construction_sector.level
+			multiply = 4
+		}
+	}
+	if = {
+		limit = {
+			has_building = building_urban_center
+		}
+		add = {
+			value = b:building_urban_center.level
+			divide = 2
+			floor = yes
+		}
+	}
 }

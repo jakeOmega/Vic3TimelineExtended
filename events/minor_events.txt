@@ -48,14 +48,11 @@ minor_events_timelineextended.2 = {
 
     trigger = {
         produced_authority > 250
+        NOT = { has_modifier = forced_law_through_event }
     }
 
     immediate = {
     }
-
-    cooldown = {
-		years = 5
-	}
 
     duration = 3
 

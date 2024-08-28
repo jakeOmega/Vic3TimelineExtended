@@ -1,46 +1,70 @@
-﻿investment_pool_spending = {
+﻿FMC_CONSTRUCTION_SERVICES_PRICE = 1000
+
+fmc_investment_pool_spending = {
 	value = investment_pool_gross_income
 	subtract = investment_pool_net_income
 }
 
-construction_price = {
+fmc_construction_price = {
 	value = this.market.mg:construction.market_goods_pricier
 	add = 1
-	multiply = 1000
+	multiply = FMC_CONSTRUCTION_SERVICES_PRICE
 }
 
-private_construction_bought = {
-	value = investment_pool_spending
-	divide = construction_price
+fmc_private_construction_bought = {
+	value = fmc_investment_pool_spending
+	divide = fmc_construction_price
 }
 
-investment_price_incentive = {
-	value = capital.sg:construction.state_goods_cheaper
+fmc_investment_price_incentive = {
+	value = this.market.mg:construction.market_goods_pricier
 	add = 2.25
 	divide = 2.25
 }
 
-total_construction_use = {
-	value = capital.sg:construction.state_goods_consumption
-	divide = capital.modifier:state_market_access_price_impact
+fmc_total_construction_use = {
+	value = this.market.mg:construction.market_goods_consumption
+	# divide = capital.modifier:state_market_access_price_impact
 }
 
-total_construction_spending = {
-	value = total_construction_use
-	multiply = construction_price
+fmc_total_construction_spending = {
+	value = fmc_total_construction_use
+	multiply = fmc_construction_price
 }
 
-public_construction_spending = {
-	value = total_construction_spending
-	subtract = investment_pool_spending
+fmc_public_construction_spending = {
+	value = fmc_total_construction_spending
+	subtract = fmc_investment_pool_spending
 }
 
-private_construction_use = {
-	value = investment_pool_spending
-	divide = construction_price
+fmc_private_construction_use = {
+	value = fmc_investment_pool_spending
+	divide = fmc_construction_price
 }
 
-public_construction_use = {
-	value = public_construction_spending
-	divide = construction_price
+fmc_public_construction_use = {
+	value = fmc_public_construction_spending
+	divide = fmc_construction_price
+}
+
+fmc_num_points_left_queue_government = {
+	value = construction_queue_government_duration
+	multiply = fmc_total_construction_use
+	if = {
+		limit = { 
+			construction_queue_government_duration > 52000
+		}
+		value = 0
+	}
+}
+
+fmc_num_points_left_queue_private = {
+	value = construction_queue_private_duration
+	multiply = fmc_total_construction_use
+	if = {
+		limit = { 
+			construction_queue_private_duration > 52000
+		}
+		value = 0
+}
 }

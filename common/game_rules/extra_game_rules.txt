@@ -2,12 +2,7 @@ free_market_construction = {
     default = free_market_construction
 
     free_market_construction = {
-        apply_modifier = all:free_market_construction_modifier
+        #apply_modifier = all:free_market_construction_modifier
         flag = free_market_construction
-    }
-
-    legacy_construction = {
-        apply_modifier = all:legacy_construction_modifier
-        flag = legacy_construction
     }
 }

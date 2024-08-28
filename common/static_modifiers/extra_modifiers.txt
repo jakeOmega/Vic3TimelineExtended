@@ -20,13 +20,7 @@ extra_training_modifier = {
 
 free_market_construction_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_construction_add = -10
-	country_institution_cost_institution_migration_controls_mult = -0.8
-}
-
-legacy_construction_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_institution_cost_institution_migration_controls_mult = -0.8
+	#country_construction_add = -10
 }
 
 accepted_cultures_cost = {
@@ -71,7 +65,7 @@ battle_unit_experience = {
 
 legislative_efficiency = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_institution_size_change_speed_mult = 1
+	country_institution_size_change_speed_mult = 100
 }
 
 foreign_emigration = {

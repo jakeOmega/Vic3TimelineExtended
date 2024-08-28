@@ -1,6 +1,0 @@
-﻿ai_update_construction = {
-	set_variable = {
-		name = num_gov_factories
-		value = fmc_ai_construction_purchase_target
-	}	
-}

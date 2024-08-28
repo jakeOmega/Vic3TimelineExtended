@@ -3,7 +3,7 @@ company_construction_power_bloc = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
 	
 	building_types = {  
-        building_construction_sector_mod
+        building_construction_sector
 	}
 
 	potential = {
@@ -19,7 +19,7 @@ company_construction_power_bloc = {
 	possible = { 
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_construction_sector_mod
+				is_building_type = building_construction_sector
 				level >= 5
 			}
 		}

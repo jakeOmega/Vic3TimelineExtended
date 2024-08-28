@@ -1,31 +1,6 @@
 ﻿# This is executed last among all history
 GLOBAL = {
 	every_country = {
-		trigger_event = {
-			id = fmc_update_events.5
-		}
-	}
-	random_country = {
-		trigger_event = {
-			id = fmc_update_events.2
-			days = 1
-		}
-		trigger_event = {
-			id = fmc_update_events.2
-			days = 2
-		}
-	}
-	random_country = {
-		trigger_event = {
-			id = fmc_update_events.2
-			days = 1
-		}
-		trigger_event = {
-			id = fmc_update_events.2
-			days = 2
-		}
-	}
-	every_country = {
 		activate_law = law_type:law_partible
 	}
 	c:FRA = {
@@ -50,5 +25,8 @@ GLOBAL = {
 		ig:ig_devout = {
 			add_ideology = ideology_islamic_inheritance
 		}
+	}
+	every_state = {
+		extended_timeline_extra_construction_building = yes
 	}
 }

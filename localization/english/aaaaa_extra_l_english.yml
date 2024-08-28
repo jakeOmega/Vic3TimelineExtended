@@ -2009,7 +2009,7 @@
  pmg_principle_education_3:0 "Education"
  pm_power_bloc_statue_cultural:0 "Cultural Coalition"
  pm_power_bloc_statue_diplomatic:0 "Diplomatic Framework"
- building_construction_sector_mod_throughput_add:0 "Construction Sector Throughput"
+ fmc_building_construction_site_throughput_add:0 "Construction Sector Throughput"
  building_highway_throughput_add:0 "Highway Throughput"
  POWER_BLOC_COHESION_INTELLIGENTSIA_IG_CLOUT: "[SCOPE.GetRootScope.GetCountry.GetInterestGroupOfType('ig_intelligentsia').GetName] [concept_clout] ($identity_cultural$)"
  POWER_BLOC_COHESION_INTELLIGENTSIA_IG_NOT_IN_GOVERNMENT: "[SCOPE.GetRootScope.GetCountry.GetInterestGroupOfType('ig_intelligentsia').GetName] is #v not#! in [concept_government] ($identity_cultural$)"

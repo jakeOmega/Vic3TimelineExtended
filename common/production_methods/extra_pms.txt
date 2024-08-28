@@ -12341,7 +12341,7 @@ pm_space_colony_vacation = {
 	required_input_goods = digital_access
 }
 
-pm_wooden_buildings_mod = {
+pm_wooden_buildings = {
 	texture = "gfx/interface/icons/production_method_icons/wooden_buildings.dds"
 	
 	is_default = yes
@@ -12379,7 +12379,7 @@ pm_wooden_buildings_mod = {
 	}
 }
 
-pm_iron_frame_buildings_mod = {
+pm_iron_frame_buildings = {
 	texture = "gfx/interface/icons/production_method_icons/iron_frame_buildings.dds"
 	
 	unlocking_technologies = {
@@ -12423,7 +12423,7 @@ pm_iron_frame_buildings_mod = {
 	}
 }
 
-pm_steel_frame_buildings_mod = {
+pm_steel_frame_buildings = {
 	texture = "gfx/interface/icons/production_method_icons/steel_frame_buildings.dds"
 
 	unlocking_technologies = {
@@ -12467,7 +12467,7 @@ pm_steel_frame_buildings_mod = {
 	}
 }
 
-pm_arc_welded_buildings_mod = {
+pm_arc_welded_buildings = {
 	texture = "gfx/interface/icons/production_method_icons/arc_welded_buildings.dds"
 
 	unlocking_technologies = {

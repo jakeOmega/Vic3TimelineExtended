@@ -289,8 +289,8 @@ expand_building_private_construction = {
 		state = { start_privately_funded_building_construction = building_railway }
 	}
 	else_if = {
-		limit = { is_building_type = building_construction_sector_mod }
-		state = { start_privately_funded_building_construction = building_construction_sector_mod }
+		limit = { is_building_type = fmc_building_construction_site }
+		state = { start_privately_funded_building_construction = fmc_building_construction_site }
 	}
 }
 
@@ -345,7 +345,7 @@ expand_random_building = {
 				is_building_type = building_munition_plants
 				is_building_type = building_arts_academy
 				is_building_type = building_railway
-				is_building_type = building_construction_sector_mod
+				is_building_type = fmc_building_construction_site
 			}
 		}
 		while = {

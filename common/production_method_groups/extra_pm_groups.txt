@@ -906,12 +906,12 @@ pmg_passenger_trains = {
     }
 }
 
-pmg_base_building_construction_sector = {
+pmg_base_fmc_building_construction_site = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive
 
 	production_methods = {
-		pm_wooden_buildings
+		pm_base
 	}
 
 }
@@ -1552,13 +1552,13 @@ pmg_harvesting_process_building_millet_farm = {
 	}
 }
 
-pmg_base_building_construction_sector_mod = {
+pmg_base_building_construction_sector = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
-		pm_wooden_buildings_mod
-		pm_iron_frame_buildings_mod
-		pm_steel_frame_buildings_mod
-		pm_arc_welded_buildings_mod
+		pm_wooden_buildings
+		pm_iron_frame_buildings
+		pm_steel_frame_buildings
+		pm_arc_welded_buildings
         pm_reinforced_concrete_buildings
         pm_nanomaterial_buildings
 	}
