@@ -1214,7 +1214,7 @@ building_university = {
 			multiply = 0.1
 		}
 		if = {
-			limit = { owner.taking_loans = yes }
+			limit = { owner = { taking_loans = yes } }
 			multiply = 0.5
 		}
 	}

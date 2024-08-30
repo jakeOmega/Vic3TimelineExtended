@@ -744,6 +744,7 @@ pmg_public_transport = {
         pm_rickshaws
         pm_public_trams
         pm_public_motor_carriages
+        pm_multimodal_transit
         pm_remote_work
     }
 }

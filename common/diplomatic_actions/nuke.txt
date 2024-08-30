@@ -48,7 +48,7 @@ nuke_diplo_action = {
                     }
                 }
                 trigger_event = nuclear_weapon_events.2
-                post_notification = industrial_nuke_succeeds_attacker
+                
             }
             0 = {
                 modifier = nuclear_strike_fail_chance

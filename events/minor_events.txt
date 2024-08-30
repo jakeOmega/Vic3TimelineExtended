@@ -51,6 +51,10 @@ minor_events_timelineextended.2 = {
         NOT = { has_modifier = forced_law_through_event }
     }
 
+    cancellation_trigger = {
+        NOT = { enacting_any_law = yes }
+    }
+
     immediate = {
     }
 

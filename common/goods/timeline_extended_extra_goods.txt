@@ -68,20 +68,6 @@ advanced_materials = {
 	prestige_factor = 20
 }
 
-construction = {
-	texture = "gfx/interface/icons/state_status_icons/has_construction.dds"
-	cost = 1000
-	category = industrial
-
-	convoy_cost_multiplier = 10.0
-	
-	prestige_factor = 5
-	traded_quantity = 1
-
-	consumption_tax_cost = 400
-}
-
-
 transportation = {
 	texture = "gfx/interface/icons/goods_icons/industrial_transport.dds"
 	cost = 30
@@ -115,4 +101,17 @@ aeroplanes = {
 	traded_quantity = 3
 	convoy_cost_multiplier = 2.0
 	pop_consumption_can_add_infrastructure = yes
+}
+
+construction = {
+	texture = "gfx/interface/icons/goods_icons/construction_good.dds"
+	cost = 1000
+	category = industrial
+
+	#tradeable = no
+	
+	prestige_factor = 5
+	traded_quantity = 1
+
+	consumption_tax_cost = 400
 }

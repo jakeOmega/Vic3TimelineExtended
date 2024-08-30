@@ -133,8 +133,8 @@ add_construction_rightclick_scriptedgui = {
             name = fmc_public_construction_buy_target 
             add = 10000
         }
-        country_update_private_public = yes
-        update_construction_effect = yes
+        fmc_country_update_private_public = yes
+        fmc_update_construction_effect = yes
     }
 }
 
@@ -187,8 +187,8 @@ remove_construction_shift_scriptedgui = {
             name = fmc_public_construction_buy_target 
             subtract = 10
         }
-        country_update_private_public = yes
-        update_construction_effect = yes
+        fmc_country_update_private_public = yes
+        fmc_update_construction_effect = yes
     }
 }
 

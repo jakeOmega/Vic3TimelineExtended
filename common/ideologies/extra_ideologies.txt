@@ -89,13 +89,6 @@ ideology_optimist_transhumanist = {
 		law_mandatory_augmentation = neutral
 	}
 	
-	lawgroup_drug_laws = {
-		law_no_drug_regulation = strongly_approve
-		law_punitive_drug_policy = strongly_disapprove
-		law_harm_reduction_policy = approve
-		law_drug_legalization_and_regulation = strongly_approve
-	}
-	
 	lawgroup_intellectual_property = {
 		law_no_ip_protection = neutral
 		law_creative_commons = approve
@@ -118,6 +111,19 @@ ideology_optimist_transhumanist = {
 		law_gold_standard = neutral
 		law_fiat_currency = neutral
 		law_digital_currency = strongly_approve
+	}
+
+	lawgroup_distribution_of_power = {
+		law_anarchy = neutral
+		law_universal_suffrage = neutral
+		law_census_voting = neutral
+		law_wealth_voting = neutral
+		law_landed_voting = neutral
+		law_technocracy = approve
+		law_oligarchy = neutral
+		law_autocracy = neutral
+		law_single_party_state = neutral
+		law_algorithmic_governance = strongly_approve
 	}
 	
 	possible = {
@@ -190,5 +196,84 @@ ideology_islamic_inheritance = {
 		law_partible = approve
 		law_equal_inheritance = approve
 		law_non_inheritable_usage_rights = disapprove
+	}
+}
+
+ideology_corporate = {
+	icon = "gfx/interface/icons/ideology_icons/ideology_leader/laissez_faire.dds"
+	
+	priority = 200
+
+	character_ideology = yes
+
+	lawgroup_governance_principles = {
+		law_monarchy = disapprove
+		law_theocracy = strongly_disapprove	
+		law_presidential_republic = neutral
+		law_parliamentary_republic = neutral
+		law_council_republic = strongly_disapprove
+		law_corporate_state = strongly_approve
+	}
+	
+	lawgroup_economic_system = {	
+		law_laissez_faire = strongly_approve
+		law_interventionism = approve
+		law_agrarianism = neutral
+		law_traditionalism = disapprove	
+		law_cooperative_ownership = strongly_disapprove
+		law_command_economy = strongly_disapprove
+		law_industry_banned = strongly_disapprove
+	}
+
+	lawgroup_ministry_of_commerce = {
+		law_no_ministry_of_commerce = disapprove
+		law_ministry_of_commerce = strongly_approve
+	}
+
+	lawgroup_ministry_of_the_environment = {
+		law_no_ministry_of_the_environment = strongly_disapprove
+		law_ministry_of_the_environment = approve
+	}
+
+	possible = {
+		owner = { has_technology_researched = mutual_funds }
+	}
+
+	leader_weight = {
+		value = {
+			value = 25
+		}
+		if = {
+			limit = {
+				scope:interest_group = {
+					is_interest_group_type = ig_trade_unions 
+				}
+			}
+			add = -25
+		}
+		if = {
+			limit = {
+				owner = { has_technology_researched = international_exchange_standards }
+			}
+			multiply = {
+				value = 2
+			}
+		}
+		if = {
+			limit = {
+				owner = { has_technology_researched = containerization }
+			}
+			multiply = {
+				value = 2
+			}
+		}
+		if = {
+			limit = {
+				owner = { has_technology_researched = globalization }
+			}
+			multiply = {
+				value = 2
+			}
+		}
 	}
 }

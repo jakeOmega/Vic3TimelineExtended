@@ -15,6 +15,7 @@
 assassinate_domestic = {
 	potential = {
 		owner = scope:actor
+		always = no
 	}
 
 	possible = {

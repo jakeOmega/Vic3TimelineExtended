@@ -1,0 +1,143 @@
+﻿gov_direct_democracy = {
+	transfer_of_power = parliamentary_elective
+	new_leader_on_reform_government = yes
+
+	male_ruler = "RULER_TITLE_CHANCELLOR"
+	female_ruler = "RULER_TITLE_CHANCELLOR"
+	
+	possible = {
+		has_law = law_type:law_direct_democracy
+		country_has_voting_franchise = yes
+		NOT = { 
+			has_law = law_type:law_single_party_state
+		}
+	}
+
+	on_government_type_change = {
+		change_to_parliamentary_elective = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_parliamentary_elective = yes
+	}
+}
+
+gov_direct_democracy_single_party_state = {
+	transfer_of_power = presidential_elective
+	new_leader_on_reform_government = yes
+
+	male_ruler = "RULER_TITLE_CHANCELLOR"
+	female_ruler = "RULER_TITLE_CHANCELLOR"
+	
+	possible = {
+		has_law = law_type:law_direct_democracy
+		has_law = law_type:law_single_party_state
+	}
+
+	on_government_type_change = {
+		change_to_presidential_elective = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_presidential_elective = yes
+	}
+}
+
+gov_direct_democracy_autocracy = {
+	transfer_of_power = dictatorial
+	male_ruler = "RULER_TITLE_LORD_PROTECTOR"
+	female_ruler = "RULER_TITLE_LADY_PROTECTOR"
+	
+	possible = {
+		has_law = law_type:law_direct_democracy
+		country_has_voting_franchise = no
+	}
+
+	on_government_type_change = {
+		change_to_dictatorial = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_dictatorial = yes
+	}
+}
+
+gov_corporate_state_democracy = {
+	transfer_of_power = parliamentary_elective
+	new_leader_on_reform_government = yes
+
+	male_ruler = "RULER_TITLE_DIRECTOR"
+	female_ruler = "RULER_TITLE_DIRECTOR"
+	
+	possible = {
+		has_law = law_type:law_corporate_state
+		country_has_voting_franchise = yes
+		NOT = { 
+			has_law = law_type:law_single_party_state
+		}
+	}
+
+	on_government_type_change = {
+		change_to_parliamentary_elective = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_parliamentary_elective = yes
+	}
+}
+
+gov_corporate_state_single_party_state = {
+	transfer_of_power = presidential_elective
+	new_leader_on_reform_government = yes
+
+	male_ruler = "RULER_TITLE_DIRECTOR"
+	female_ruler = "RULER_TITLE_DIRECTOR"
+	
+	possible = {
+		has_law = law_type:law_corporate_state
+		country_has_voting_franchise = yes
+		NOT = { 
+			has_law = law_type:law_single_party_state
+		}
+	}
+
+	on_government_type_change = {
+		change_to_parliamentary_elective = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_parliamentary_elective = yes
+	}
+}
+
+gov_corporate_state_autocracy = {
+	transfer_of_power = dictatorial
+	male_ruler = "RULER_TITLE_DIRECTOR"
+	female_ruler = "RULER_TITLE_DIRECTOR"
+	
+	possible = {
+		has_law = law_type:law_corporate_state
+		country_has_voting_franchise = no
+	}
+
+	on_government_type_change = {
+		change_to_dictatorial = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_dictatorial = yes
+	}
+}
+
+gov_algorithmic_directorate = {
+	transfer_of_power = parliamentary_elective
+	new_leader_on_reform_government = yes
+
+	male_ruler = "RULER_TITLE_DIRECTOR"
+	female_ruler = "RULER_TITLE_DIRECTOR"
+	
+	possible = {
+		has_law = law_type:law_algorithmic_governance
+	}
+
+	on_government_type_change = {
+		change_to_parliamentary_elective = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_parliamentary_elective = yes
+	}
+}

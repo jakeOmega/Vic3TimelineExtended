@@ -9,7 +9,6 @@ building_migrant_camp = {
 
 	production_method_groups = {
 		pmg_base_building_migrant_camp
-		pmg_slavery_migrant_camp
 	}
 
 	buildable = no

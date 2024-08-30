@@ -1200,3 +1200,22 @@ state_pop_support_law_compulsory_primary_school_add = {
 	color = good
 	percent = no
 }
+
+state_working_adult_ratio_add={
+	decimals=1
+	color=good
+	percent=yes
+	game_data={
+		ai_value=0
+	}
+}
+
+state_pop_support_law_free_trade_add = {
+	color = good
+	percent = no
+}
+
+country_enactment_success_chance_law_free_trade_add = {
+	color = good
+	percent = yes
+}

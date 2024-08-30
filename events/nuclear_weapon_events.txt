@@ -23,6 +23,7 @@ nuclear_weapon_events.1 = {
  	}
 	
  	immediate = {
+		post_notification = industrial_nuke_succeeds_defender
  	}
 
  	option = {
@@ -54,7 +55,7 @@ nuclear_weapon_events.2 = {
  	}
 	
  	immediate = {
- 		
+ 		post_notification = industrial_nuke_succeeds_attacker
  	}
 
  	option = {
@@ -86,7 +87,7 @@ nuclear_weapon_events.3 = {
  	}
 	
  	immediate = {
- 		
+ 		post_notification = industrial_nuke_fails_defender
  	}
 
  	option = {
@@ -118,7 +119,7 @@ nuclear_weapon_events.4 = {
  	}
 	
  	immediate = {
- 		
+ 		post_notification = industrial_nuke_fails_attacker
  	}
 
  	option = {
@@ -150,7 +151,7 @@ nuclear_weapon_events.5 = {
  	}
 	
  	immediate = {
- 		
+ 		post_notification = tactical_nuke_succeeds_defender
  	}
 
  	option = {
@@ -182,7 +183,7 @@ nuclear_weapon_events.6 = {
  	}
 	
  	immediate = {
- 		
+ 		post_notification = tactical_nuke_succeeds_attacker
  	}
 
  	option = {
@@ -214,7 +215,7 @@ nuclear_weapon_events.7 = {
  	}
 	
  	immediate = {
- 		
+ 		post_notification = tactical_nuke_fails_defender
  	}
 
  	option = {
@@ -246,7 +247,7 @@ nuclear_weapon_events.8 = {
  	}
 	
  	immediate = {
- 		
+ 		post_notification = tactical_nuke_fails_attacker
  	}
 
   option = {

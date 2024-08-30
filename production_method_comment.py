@@ -3,6 +3,7 @@ import os
 
 from path_constants import mod_path, base_game_path
 
+
 def parse_goods(file_paths):
     """
     Parses multiple goods files to create a dictionary mapping each good to its cost.
@@ -233,13 +234,11 @@ def process_and_update_military_costs(
 
 # Example usage
 goods_file_paths = [
-    mod_path + r"\common\goods\extra_goods.txt",
+    mod_path + r"\common\goods\timeline_extended_extra_goods.txt",
     base_game_path + r"\game\common\goods\00_goods.txt",
 ]
 pms_file_path = mod_path + r"\common\production_methods\extra_pms.txt"
-vanilla_pms_file_loc = (
-    base_game_path + r"\game\common\production_methods"
-)
+vanilla_pms_file_loc = base_game_path + r"\game\common\production_methods"
 vanilla_pm_file_paths = [
     os.path.join(vanilla_pms_file_loc, file)
     for file in os.listdir(vanilla_pms_file_loc)
@@ -262,17 +261,21 @@ process_and_update_production_methods_grouped(
 print("Production methods file updated successfully.")
 
 # Military costs
-vanilla_military_unit_file_path = base_game_path + r"\game\common\combat_unit_types\00_combat_unit_types.txt"
+vanilla_military_unit_file_path = (
+    base_game_path + r"\game\common\combat_unit_types\00_combat_unit_types.txt"
+)
 military_unit_file_path = mod_path + r"\common\combat_unit_types\extra_combat_units.txt"
-mobilization_file_path = mod_path + r"\common\mobilization_options\extra_mobilization_options.txt"
+mobilization_file_path = (
+    mod_path + r"\common\mobilization_options\extra_mobilization_options.txt"
+)
 
 process_and_update_military_costs(military_unit_file_path, goods_dict)
 
 process_and_update_military_costs(mobilization_file_path, goods_dict)
 
 process_and_update_military_costs(
-   vanilla_military_unit_file_path,
-   goods_dict,
-   write_path=mod_path + r"\commented_vanilla_military_units.txt",
+    vanilla_military_unit_file_path,
+    goods_dict,
+    write_path=mod_path + r"\commented_vanilla_military_units.txt",
 )
 print("Military costs file updated successfully.")

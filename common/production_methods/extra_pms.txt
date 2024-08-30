@@ -3701,8 +3701,46 @@ pm_public_motor_carriages = {
 	}
 }
 
-pm_remote_work = {
+pm_multimodal_transit = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_technologies = {
+		modern_urban_planning
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_automobiles_add = 1                      # Price:  100, Total cost: 100.0
+			goods_input_engines_add = 1                          # Price:   60, Total cost: 60.0
+			# Output goods
+			goods_output_personal_transportation_add = 10        # Price:   30, Total cost: 300.0
+			goods_output_transportation_add = 5                  # Price:   30, Total cost: 150.0
+			# Total input cost: 160.0
+			# Total output cost: 450.0
+			# Profit: 290.0
+			# Profit margin: 181.25%
+			# Zero profit price multiplier: 0.36
+			# Employment: -500
+			# Wage breakeven: -0.58
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 200
+			building_employment_machinists_add = 300
+			building_employment_laborers_add = -1000
+		}
+	}
+}
+
+pm_remote_work = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
 	
 	unlocking_technologies = {
 		digital_telecommunications

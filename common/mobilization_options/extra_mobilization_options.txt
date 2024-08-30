@@ -1502,8 +1502,8 @@ mobilization_option_flight_simulators = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_electronic_components_add = 25             # Price:   80, Total cost: 2000.0
-		goods_input_consumer_appliances_add = 25               # Price:   80, Total cost: 2000.0
+		goods_input_electronic_components_add = 25            # Price:   80, Total cost: 2000.0
+		goods_input_consumer_appliances_add = 25              # Price:   80, Total cost: 2000.0
 		# Total cost: 4000.0
 	}
 	unit_modifier = {

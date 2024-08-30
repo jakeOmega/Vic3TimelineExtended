@@ -2359,7 +2359,7 @@ principle_urban_planning_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = home_video_systems
+		has_technology_researched = advanced_workflow_optimization
 		NOT = {
 			power_bloc = {
 				OR = {
