@@ -14,7 +14,7 @@ transistors = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 5
 	}
 }
 
@@ -91,7 +91,7 @@ green_revolution = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 5
 	}
 }
 
@@ -267,6 +267,8 @@ mainframe_computers = {
 		country_weekly_innovation_max_add = 50
 		country_tech_spread_add = 40
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
+		country_institution_ministry_of_commerce_max_investment_add = 1
+		country_institution_ministry_of_population_control_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -289,6 +291,7 @@ photocopiers = {
 		goods_output_services_mult = 0.05
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_institution_ministry_of_propaganda_max_investment_add = 1
+		country_institution_national_bank_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -371,6 +374,7 @@ recon_satellites = {
 	
 	modifier = {
 		country_tech_spread_add = 40
+		country_institution_police_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -417,6 +421,7 @@ television_broadcasting = {
 		country_tech_spread_add = 40
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_institution_ministry_of_propaganda_max_investment_add = 1
+		country_institution_home_affairs_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -540,6 +545,6 @@ modern_urban_planning = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 5
 	}
 }

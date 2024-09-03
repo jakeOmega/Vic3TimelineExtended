@@ -1040,12 +1040,16 @@ law_national_bank = {
 	
 	institution = institution_national_bank
 
+	disallowing_laws = {
+		law_traditionalism
+	}
+
 	unlocking_technologies = {
 		central_banking
 	}
 		
 	modifier = {
-		country_institution_national_bank_max_investment_add = 1
+		country_institution_national_bank_max_investment_add = 2
 	}	
 
 	ai_enact_weight_modifier = {

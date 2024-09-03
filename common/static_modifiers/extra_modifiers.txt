@@ -65,7 +65,7 @@ battle_unit_experience = {
 
 legislative_efficiency = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_institution_size_change_speed_mult = 100
+	country_institution_size_change_speed_mult = 1
 }
 
 foreign_emigration = {
@@ -140,4 +140,9 @@ declared_bankruptcy = {
 	state_capitalists_investment_pool_contribution_add = -0.3
 	state_bureaucracy_population_base_cost_factor_mult = -2
 	state_tax_capacity_mult = 2
+}
+
+unemployment_birth_penalty_state = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_birth_rate_mult = -0.1
 }

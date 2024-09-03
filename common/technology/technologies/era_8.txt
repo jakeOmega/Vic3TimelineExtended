@@ -60,7 +60,7 @@ modern_pharmaceuticals = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 50
-		state_mortality_mult = -0.1
+		country_institution_health_system_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -91,7 +91,7 @@ containerization = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 5
 	}
 }
 
@@ -125,6 +125,7 @@ computer_networks = {
 		country_weekly_innovation_max_add = 50
 		country_tech_spread_add = 60
 		state_bureaucracy_population_base_cost_factor_mult = 0.5
+		country_institution_police_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -172,7 +173,7 @@ robotics = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 5
 	}
 }
 
@@ -339,6 +340,7 @@ cellular_networks = {
 		country_tech_spread_add = 60
 		country_institution_national_bank_max_investment_add = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
+		country_institution_ministry_of_commerce_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -361,6 +363,7 @@ barcodes_and_scanners = {
 		country_gold_reserve_limit_mult = 0.25
 		country_institution_national_bank_max_investment_add = 1
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
+		country_institution_ministry_of_commerce_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -402,6 +405,7 @@ infrared_night_vision = {
 	modifier = {
 		unit_navy_defense_mult = 0.2
 		unit_navy_offense_mult = 0.2
+		country_institution_ministry_of_war_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -448,6 +452,7 @@ pop_culture = {
 		country_institution_ministry_of_propaganda_max_investment_add = 1
 		country_institution_ministry_of_religion_max_investment_add = 1
 		country_weekly_innovation_max_add = 50
+		political_movement_radicalism_mult = 0.1
 	}
 	
 	ai_weight = {

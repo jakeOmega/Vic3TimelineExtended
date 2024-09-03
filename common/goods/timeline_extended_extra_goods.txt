@@ -105,7 +105,7 @@ aeroplanes = {
 
 construction = {
 	texture = "gfx/interface/icons/goods_icons/construction_good.dds"
-	cost = 1000
+	cost = 500
 	category = industrial
 
 	#tradeable = no

@@ -2297,3 +2297,6 @@ gov_corporate_state_single_party_state_desc:0 "A single-party state where the ru
 gov_corporate_state_autocracy:0 "Corporate Autocracy"
 gov_corporate_state_autocracy_desc:0 "An authoritarian regime where the state is governed with the direct influence of a powerful corporate elite. The autocrat and corporate leaders work closely, with the autocrat wielding ultimate power while relying on corporations to maintain economic control and enforce social order."
 RULER_TITLE_DIRECTOR:0 "Director"
+country_enactment_success_chance_law_free_trade_add:0 "Free Trade Enactment Success Chance"
+ideology_corporate:0 "Corpocrat"
+ideology_corporate_desc:0 "This leader believes in a system where corporations play a central role in governance and decision-making, shaping policy to benefit business interests. The state and corporations are closely intertwined, with the private sector exerting significant influence over public affairs."

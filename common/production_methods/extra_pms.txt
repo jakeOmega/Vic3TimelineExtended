@@ -3781,7 +3781,7 @@ pm_market_stalls = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
+			goods_output_construction_add = 0.2                  # Price:  500, Total cost: 100.0
 			goods_output_services_add = 10                       # Price:   30, Total cost: 300.0
 			# Total input cost: 0
 			# Total output cost: 400.0
@@ -3811,7 +3811,7 @@ pm_market_squares = {
 			goods_input_wood_add = 1                             # Price:   20, Total cost: 20.0
 			goods_input_glass_add = 1                            # Price:   40, Total cost: 40.0
 			# Output goods
-			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
+			goods_output_construction_add = 0.2                  # Price:  500, Total cost: 100.0
 			goods_output_services_add = 15                       # Price:   30, Total cost: 450.0
 			# Total input cost: 60.0
 			# Total output cost: 550.0
@@ -3842,7 +3842,7 @@ pm_covered_markets = {
 			goods_input_glass_add = 2                            # Price:   40, Total cost: 80.0
 			goods_input_steel_add = 1                            # Price:   50, Total cost: 50.0
 			# Output goods
-			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
+			goods_output_construction_add = 0.2                  # Price:  500, Total cost: 100.0
 			goods_output_services_add = 20                       # Price:   30, Total cost: 600.0
 			# Total input cost: 130.0
 			# Total output cost: 700.0
@@ -3874,7 +3874,7 @@ pm_arcades = {
 			goods_input_steel_add = 2                            # Price:   50, Total cost: 100.0
 			goods_input_electricity_add = 1                      # Price:   30, Total cost: 30.0
 			# Output goods
-			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
+			goods_output_construction_add = 0.2                  # Price:  500, Total cost: 100.0
 			goods_output_services_add = 25                       # Price:   30, Total cost: 750.0
 			# Total input cost: 210.0
 			# Total output cost: 850.0
@@ -3924,7 +3924,7 @@ pm_department_stores = {
 			goods_input_transportation_add = 1                   # Price:   30, Total cost: 30.0
 			goods_input_personal_transportation_add = 3          # Price:   30, Total cost: 90.0
 			# Output goods
-			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
+			goods_output_construction_add = 0.2                  # Price:  500, Total cost: 100.0
 			goods_output_services_add = 45                       # Price:   30, Total cost: 1350.0
 			# Total input cost: 600.0
 			# Total output cost: 1450.0
@@ -3977,7 +3977,7 @@ pm_shopping_malls = {
 			goods_input_transportation_add = 3                   # Price:   30, Total cost: 90.0
 			goods_input_personal_transportation_add = 7          # Price:   30, Total cost: 210.0
 			# Output goods
-			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
+			goods_output_construction_add = 0.2                  # Price:  500, Total cost: 100.0
 			goods_output_services_add = 60                       # Price:   30, Total cost: 1800.0
 			# Total input cost: 860.0
 			# Total output cost: 1900.0
@@ -4031,7 +4031,7 @@ pm_e-commerce = {
 			goods_input_personal_transportation_add = 8          # Price:   30, Total cost: 240.0
 			goods_input_digital_access_add = 2                   # Price:  120, Total cost: 240.0
 			# Output goods
-			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
+			goods_output_construction_add = 0.2                  # Price:  500, Total cost: 100.0
 			goods_output_services_add = 85                       # Price:   30, Total cost: 2550.0
 			# Total input cost: 1280.0
 			# Total output cost: 2650.0
@@ -4087,7 +4087,7 @@ pm_drone_delivery_systems = {
 			goods_input_personal_transportation_add = 8          # Price:   30, Total cost: 240.0
 			goods_input_digital_access_add = 4                   # Price:  120, Total cost: 480.0
 			# Output goods
-			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
+			goods_output_construction_add = 0.2                  # Price:  500, Total cost: 100.0
 			goods_output_services_add = 150                      # Price:   30, Total cost: 4500.0
 			# Total input cost: 2500.0
 			# Total output cost: 4600.0
@@ -4143,7 +4143,7 @@ pm_robotic_service_providers = {
 			goods_input_personal_transportation_add = 10         # Price:   30, Total cost: 300.0
 			goods_input_digital_access_add = 8                   # Price:  120, Total cost: 960.0
 			# Output goods
-			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
+			goods_output_construction_add = 0.2                  # Price:  500, Total cost: 100.0
 			goods_output_services_add = 450                      # Price:   30, Total cost: 13500.0
 			# Total input cost: 5850.0
 			# Total output cost: 13600.0
@@ -12396,7 +12396,7 @@ pm_wooden_buildings = {
 			goods_input_fabric_add = 10                          # Price:   20, Total cost: 200.0
 			goods_input_wood_add = 40                            # Price:   20, Total cost: 800.0
 			# Output goods
-			goods_output_construction_add = 1                    # Price: 1000, Total cost: 1000.0
+			goods_output_construction_add = 2                    # Price:  500, Total cost: 1000.0
 			# Total input cost: 1000.0
 			# Total output cost: 1000.0
 			# Profit: 0.0
@@ -12439,7 +12439,7 @@ pm_iron_frame_buildings = {
 			goods_input_tools_add = 4                            # Price:   40, Total cost: 160.0
 			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
 			# Output goods
-			goods_output_construction_add = 2                    # Price: 1000, Total cost: 2000.0
+			goods_output_construction_add = 4                    # Price:  500, Total cost: 2000.0
 			# Total input cost: 1740.0
 			# Total output cost: 2000.0
 			# Profit: 260.0
@@ -12483,7 +12483,7 @@ pm_steel_frame_buildings = {
 			goods_input_tools_add = 8                            # Price:   40, Total cost: 320.0
 			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
 			# Output goods
-			goods_output_construction_add = 3.5                  # Price: 1000, Total cost: 3500.0
+			goods_output_construction_add = 7                    # Price:  500, Total cost: 3500.0
 			# Total input cost: 2760.0
 			# Total output cost: 3500.0
 			# Profit: 740.0
@@ -12528,7 +12528,7 @@ pm_arc_welded_buildings = {
 			goods_input_electricity_add = 16                     # Price:   30, Total cost: 480.0
 			goods_input_transportation_add = 30                  # Price:   30, Total cost: 900.0
 			# Output goods
-			goods_output_construction_add = 5                    # Price: 1000, Total cost: 5000.0
+			goods_output_construction_add = 10                   # Price:  500, Total cost: 5000.0
 			# Total input cost: 4060.0
 			# Total output cost: 5000.0
 			# Profit: 940.0
@@ -12577,7 +12577,7 @@ pm_reinforced_concrete_buildings = {
 			goods_input_transportation_add = 40                  # Price:   30, Total cost: 1200.0
 			goods_input_engines_add = 2                          # Price:   60, Total cost: 120.0
 			# Output goods
-			goods_output_construction_add = 6                    # Price: 1000, Total cost: 6000.0
+			goods_output_construction_add = 12                   # Price:  500, Total cost: 6000.0
 			# Total input cost: 4480.0
 			# Total output cost: 6000.0
 			# Profit: 1520.0
@@ -12627,7 +12627,7 @@ pm_nanomaterial_buildings = {
 			goods_input_engines_add = 2                          # Price:   60, Total cost: 120.0
 			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost: 4000.0
 			# Output goods
-			goods_output_construction_add = 12                   # Price: 1000, Total cost: 12000.0
+			goods_output_construction_add = 24                   # Price:  500, Total cost: 12000.0
 			# Total input cost: 8480.0
 			# Total output cost: 12000.0
 			# Profit: 3520.0
@@ -13603,69 +13603,6 @@ pm_national_wildlife_refuge = {
 	}
 }
 
-pm_serfdom_no = {
-	texture = "gfx/interface/icons/production_method_icons/no_serfdom.dds"
-	unlocking_laws = {
-		law_tenant_farmers
-		law_commercialized_agriculture
-		law_homesteading
-		law_collectivized_agriculture
-	}
-	disallowing_laws = {
-		law_serfdom
-	}
-	
-	building_modifiers = {					
-		unscaled = {
-			building_subsistence_output_add = 5
-		}
-		workforce_scaled = {
-			# Input goods
-			# Output goods
-			goods_output_construction_add = 0.01                 # Price: 1000, Total cost: 10.0
-			# Total input cost: 0
-			# Total output cost: 10.0
-			# Profit: 10.0
-			# Profit margin: 0.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
-		}
-	}
-}
-
-pm_serfdom = {
-	texture = "gfx/interface/icons/production_method_icons/serfdom.dds"
-	disallowing_laws = {
-		law_tenant_farmers
-		law_commercialized_agriculture
-		law_homesteading
-		law_collectivized_agriculture
-	}
-	unlocking_laws = {
-		law_serfdom
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			# Input goods
-			# Output goods
-			goods_output_grain_add = 0.5                         # Price:   20, Total cost: 10.0
-			# Total input cost: 0
-			# Total output cost: 10.0
-			# Profit: 10.0
-			# Profit margin: 0.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
-		}
-
-		unscaled = {
-			building_subsistence_output_add = 4
-			goods_output_construction_add = 0.01
-		}		
-	}
-}
-
 pm_power_bloc_statue_cultural = {
 	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
 
@@ -13987,7 +13924,7 @@ pm_principle_engineering_and_logistics = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_construction_add = 0.1                  # Price: 1000, Total cost: 100.0
+			goods_output_construction_add = 0.2                  # Price:  500, Total cost: 100.0
 			# Total input cost: 0
 			# Total output cost: 100.0
 			# Profit: 100.0

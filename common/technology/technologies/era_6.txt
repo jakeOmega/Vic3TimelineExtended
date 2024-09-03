@@ -80,7 +80,7 @@ computing_machines = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 25
-		state_pop_qualifications_mult = 0.1
+		country_institution_schools_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -164,7 +164,7 @@ nuclear_weapons = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 10
 	}
 }
 
@@ -423,7 +423,7 @@ modern_vaccines = {
 	}
 
 	modifier = {
-		state_mortality_mult = -0.05
+		country_institution_health_system_max_investment_add = 1
 	}
 	
 	ai_weight = {

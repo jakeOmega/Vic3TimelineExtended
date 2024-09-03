@@ -5,10 +5,14 @@
 	GOODS_SHORTAGE_PENALTY_THRESHOLD = 0.25		# If supply / demand is lower than this, start applying output penalties, by default this should be ( 1 / BUY_SELL_DIFF_AT_MAX_FACTOR )
     QUALITY_OF_LIFE_MAX = 1000                                                                                                       
 	TRADE_ROUTE_MAX_LEVEL = 10000							# Trade routes cannot be higher level than this
+
+	TRADE_ROUTE_AUTO_INCREASE_ACCEPTABLE_REVENUE_DIFFERENCE = 5 # Multiply revenue of new trade route level by this for the purpose of considering whether it's OK to auto-increase level (means that trade routes can level up even when slightly decreasing overall revenue)
+	TRADE_ROUTE_AUTO_REDUCTION_ACCEPTABLE_REVENUE_DIFFERENCE = 0 # Multiply revenue of current trade route level by this for the purpose of considering whether we should auto-decrease level (means that trade routes won't level down just for the purpose of a small revenue increase)
 }
 
 NPolitics = {
 	INCOHERENCE_FACTOR = 2								# The amount to multiply the approval value with to get an incoherence score for legitimacy
+	MAX_INSTITUTION_INVESTMENT = 8
 }
 
 NWar = {
@@ -99,3 +103,16 @@ NPops = {
 	POP_GROWTH_STABLE_SOL = @pop_growth_stable_sol				# Stable is where birthrate and mortality stop changing and hit their minimum values
 }
 ### End Pop Growth Constant defines
+
+
+NGame = {
+	END_DATE = "2136.1.1"
+}
+
+NDiplomacy = {
+	WAR_GOAL_INFAMY_FORCE_NATIONALIZATION = 0.05
+}
+
+NAI = {
+	PRODUCTION_BUILDING_AUTONOMOUS_INVESTMENT_PROFIT_PRIVATIZE_SELF_OWNED_BUILDING_MULT = 0.05 # Multiply the total score for privatizing self-owned building levels by this
+}

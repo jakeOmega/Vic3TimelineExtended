@@ -10,7 +10,7 @@ artificial_intelligence = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 5
 	}
 }
 
@@ -279,6 +279,7 @@ telepathic_communities = {
 		country_radicals_from_conquest_mult = -0.5
 		country_infamy_generation_mult = -0.1
 		building_economy_of_scale_level_cap_add = 100
+		country_institution_ministry_of_foreign_affairs_max_investment_add = 2
 	}
 	
 	ai_weight = {
@@ -325,6 +326,7 @@ post-scarcity_economy = {
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
 		state_building_national_park_max_level_add = 1
+		country_institution_social_security_max_investment_add = 1
 	}
 	
 	ai_weight = {

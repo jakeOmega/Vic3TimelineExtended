@@ -200,7 +200,7 @@ ideology_islamic_inheritance = {
 }
 
 ideology_corporate = {
-	icon = "gfx/interface/icons/ideology_icons/ideology_leader/laissez_faire.dds"
+	icon = "gfx/interface/icons/ideology_icons/laissez_faire.dds"
 	
 	priority = 200
 
@@ -250,6 +250,14 @@ ideology_corporate = {
 				}
 			}
 			add = -25
+		}
+		if = {
+			limit = {
+				scope:interest_group = {
+					is_interest_group_type = ig_industrialists 
+				}
+			}
+			add = 25
 		}
 		if = {
 			limit = {

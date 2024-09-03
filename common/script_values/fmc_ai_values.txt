@@ -22,8 +22,8 @@
 					value = income
 					divide = {
 						value = fmc_construction_price
-						min = 500
-						max = 1500
+						min = 50
+						max = 150
 					}
 					divide = 5
 				}

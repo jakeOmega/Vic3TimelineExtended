@@ -1219,3 +1219,17 @@ country_enactment_success_chance_law_free_trade_add = {
 	color = good
 	percent = yes
 }
+
+state_birth_rate_mult = {
+	decimals=1
+	color=good
+	percent=yes
+	game_data={
+		ai_value=0
+	}
+}
+
+building_employment_peasants_mult = {
+	color = bad
+	percent = yes
+}

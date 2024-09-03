@@ -104,6 +104,7 @@ supply_chain_management = {
 	modifier = {
 		state_building_highway_max_level_add = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
+		country_institution_ministry_of_population_control_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -215,10 +216,10 @@ automated_surveillance = {
 	}
 	
 	modifier = {
-		political_movement_radicalism_mult = -0.1
-		unit_army_offense_add = 20
 		unit_navy_defense_mult = 0.1
 		unit_navy_offense_mult = 0.1
+		country_institution_home_affairs_max_investment_add = 1
+		country_institution_police_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -233,6 +234,10 @@ advanced_body_armor = {
 	
 	unlocking_technologies = {	
 		semiautomatic_rifle
+	}
+
+	modifier = {
+		country_institution_ministry_of_war_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -290,7 +295,7 @@ social_media = {
 	}
 	
 	modifier = {
-		political_movement_radicalism_mult = 0.25
+		political_movement_radicalism_mult = 0.1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_institution_ministry_of_religion_max_investment_add = 1
 	}
@@ -329,6 +334,7 @@ knowledge_economy = {
 		country_weekly_innovation_max_add = 100
 		country_max_companies_add = 1
 		country_tech_spread_add = 80
+		country_institution_national_bank_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -365,10 +371,9 @@ digital_education = {
 	}
 	
 	modifier = {
-		state_education_access_add = 0.2
-		state_pop_qualifications_mult = 0.2
 		country_weekly_innovation_max_add = 100
 		state_bureaucracy_population_base_cost_factor_mult = 1
+		country_institution_schools_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -389,6 +394,7 @@ social_justice_movements = {
 		country_loan_interest_rate_add = -0.02
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
+		country_institution_social_security_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -445,6 +451,7 @@ cybersecurity = {
 	
 	modifier = {
 		building_network_infrastructure_throughput_add = 0.1
+		country_institution_home_affairs_max_investment_add = 1
 	}
 	
 	ai_weight = {

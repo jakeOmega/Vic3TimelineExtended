@@ -1,4 +1,4 @@
-﻿FMC_CONSTRUCTION_SERVICES_PRICE = 1000
+FMC_CONSTRUCTION_SERVICES_PRICE = 500
 
 fmc_investment_pool_spending = {
 	value = investment_pool_gross_income
@@ -66,5 +66,5 @@ fmc_num_points_left_queue_private = {
 			construction_queue_private_duration > 52000
 		}
 		value = 0
-}
+	}
 }

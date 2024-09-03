@@ -31,7 +31,7 @@ modern_material_science = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 5
 	}
 }
 
@@ -224,7 +224,7 @@ directed_energy_weapons = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 3
 	}
 }
 
@@ -255,6 +255,7 @@ electronic_warfare = {
 		unit_navy_defense_mult = 0.5
 		unit_navy_offense_mult = 0.5
 		country_tech_spread_add = 100
+		country_institution_ministry_of_war_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -348,7 +349,7 @@ asteroid_mining = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 5
 	}
 }
 
@@ -372,7 +373,7 @@ fusion_power = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 5
 	}
 }
 
@@ -390,6 +391,7 @@ decline_of_organized_religion = {
 	modifier = {
 		country_loan_interest_rate_add = -0.02
 		country_institution_ministry_of_religion_max_investment_add = 1
+		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -426,6 +428,7 @@ brain_computer_interfaces = {
 		country_weekly_innovation_max_add = 100
 		state_bureaucracy_population_base_cost_factor_mult = 2
 		country_tech_spread_add = 100
+		country_institution_schools_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -453,7 +456,8 @@ personalized_medicine = {
 	modifier = {
 		building_economy_of_scale_level_cap_add = 10
 		country_weekly_innovation_max_add = 100
-		state_mortality_mult = -0.1
+		country_institution_health_system_max_investment_add = 1
+		country_institution_ministry_of_population_control_max_investment_add = 1
 	}
 }
 
@@ -469,6 +473,7 @@ universal_basic_income = {
 	modifier = {
 		state_poor_expected_sol = 2
 		state_middle_expected_sol = 2
+		country_institution_social_security_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -530,6 +535,7 @@ biohacking_and_human_augmentation = {
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
 		country_institution_ministry_of_thought_control_max_investment_add = 2
+		political_movement_radicalism_mult = 0.1
 	}
 	
 	ai_weight = {
