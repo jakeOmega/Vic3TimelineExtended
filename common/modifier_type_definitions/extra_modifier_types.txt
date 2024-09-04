@@ -1233,3 +1233,8 @@ building_employment_peasants_mult = {
 	color = bad
 	percent = yes
 }
+
+state_war_support_monthly_add = {
+	color = good
+	percent = no
+}

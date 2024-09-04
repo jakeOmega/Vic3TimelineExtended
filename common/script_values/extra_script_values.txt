@@ -779,3 +779,11 @@ extra_construction_sectors = {
 		}
 	}
 }
+
+war_propaganda_support_script_value = {
+	value = ROOT.modifier:state_war_support_monthly_add
+	multiply = {
+		value = ROOT.state_population
+		divide = ROOT.owner.total_population
+	}
+}

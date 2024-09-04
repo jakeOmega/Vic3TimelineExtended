@@ -1,3 +1,18 @@
+decree_war_propaganda = {
+	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	modifier = {
+		state_war_support_monthly_add = 10
+	}
+	unlocking_technologies = { 
+		war_propaganda
+	}
+	cost = 100
+
+	ai_weight = {
+		value = 0				
+	}
+}
+
 decree_political_patronage = {
 	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
 	modifier = {

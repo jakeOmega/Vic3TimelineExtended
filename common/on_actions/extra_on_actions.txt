@@ -4,6 +4,7 @@ on_monthly_pulse_state = {
 		remove_or_create_homelands_on_action
 		pollution_on_action
 		mass_migration_trigger_on_action
+		war_propaganda_on_action
 	}
 }
 
@@ -303,6 +304,24 @@ investment_pool_setup_on_action = {
 			}
 			add_investment_pool = starting_investment_pool
 			set_variable = investment_pool_initialized
+		}
+	}
+}
+
+war_propaganda_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_decree = decree_war_propaganda
+			}
+			owner = {
+				every_scope_war = {
+					add_war_war_support = {
+						target = ROOT.owner
+						value = war_propaganda_support_script_value
+					}
+				}
+			}
 		}
 	}
 }
