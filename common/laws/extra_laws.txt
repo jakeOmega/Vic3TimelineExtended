@@ -919,7 +919,7 @@ law_ministry_of_foreign_affairs = {
 	}
 		
 	modifier = {
-		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
+		country_institution_ministry_of_foreign_affairs_max_investment_add = 2
 	}	
 
 	ai_enact_weight_modifier = {
@@ -950,7 +950,7 @@ law_ministry_of_war = {
 	}
 		
 	modifier = {
-		country_institution_ministry_of_war_max_investment_add = 2
+		country_institution_ministry_of_war_max_investment_add = 3
 	}
 
 	ai_enact_weight_modifier = {
@@ -1092,7 +1092,7 @@ law_ministry_of_culture = {
 	}
 		
 	modifier = {
-		country_institution_ministry_of_culture_max_investment_add = 1
+		country_institution_ministry_of_culture_max_investment_add = 2
 	}
 
 	ai_enact_weight_modifier = {
@@ -1144,7 +1144,7 @@ law_pro_labor_ministry_of_labor = {
 	}
 		
 	modifier = {
-		country_institution_ministry_of_labor_max_investment_add = 2
+		country_institution_ministry_of_labor_max_investment_add = 3
 	}
 }
 
@@ -1161,6 +1161,7 @@ law_pro_capital_ministry_of_labor = {
 		state_political_strength_from_wealth_mult = 0.05
 		state_radicals_from_sol_change_mult = 0.05
 		interest_group_ig_trade_unions_pol_str_mult = -0.05
+		building_minimum_wage_mult = -0.05
 	}
 
 	unlocking_technologies = {
@@ -1168,7 +1169,7 @@ law_pro_capital_ministry_of_labor = {
 	}
 		
 	modifier = {
-		country_institution_ministry_of_labor_max_investment_add = 2
+		country_institution_ministry_of_labor_max_investment_add = 3
 	}
 }
 
@@ -1347,7 +1348,7 @@ law_ministry_of_science = {
 	institution = institution_ministry_of_science
 
 	modifier = {
-		country_institution_ministry_of_science_max_investment_add = 2
+		country_institution_ministry_of_science_max_investment_add = 3
 	}
 
 	can_impose = {
@@ -1409,7 +1410,7 @@ law_ministry_of_thought_control = {
 	institution = institution_ministry_of_thought_control
 
 	modifier = {
-		country_institution_ministry_of_thought_control_max_investment_add = 2
+		country_institution_ministry_of_thought_control_max_investment_add = 3
 	}
 }
 
@@ -1483,7 +1484,7 @@ law_ministry_of_urban_planning = {
 	institution = institution_ministry_of_urban_planning
 
 	modifier = {
-		country_institution_ministry_of_urban_planning_max_investment_add = 2
+		country_institution_ministry_of_urban_planning_max_investment_add = 3
 	}
 
 	ai_enact_weight_modifier = {
@@ -1567,7 +1568,7 @@ law_ministry_of_religion = {
 	institution = institution_ministry_of_religion
 
 	modifier = {
-		country_institution_ministry_of_religion_max_investment_add = 2
+		country_institution_ministry_of_religion_max_investment_add = 3
 	}
 
 	ai_enact_weight_modifier = {
@@ -1610,7 +1611,7 @@ law_ministry_of_international_aid = {
 	institution = institution_ministry_of_international_aid
 
 	modifier = {
-		country_institution_ministry_of_international_aid_max_investment_add = 1
+		country_institution_ministry_of_international_aid_max_investment_add = 2
 	}
 }
 

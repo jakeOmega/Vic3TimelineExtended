@@ -9414,8 +9414,24 @@ pm_ai_entertainment = {
 	required_input_goods = digital_access
 }
 
-pm_influencers_and_content_creators = {
+pm_media_corperations = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_technologies = {
+		mass_marketing
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 500
+			building_employment_clerks_add = 1000
+			building_employment_engineers_add = 500
+		}
+	}
+}
+
+pm_influencers_and_content_creators = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
 
 	unlocking_technologies = {
 		social_media
@@ -9449,7 +9465,7 @@ pm_influencers_and_content_creators = {
 }
 
 pm_artificial_personalities = {
-	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
 
 	unlocking_technologies = {
 		brain_computer_interfaces

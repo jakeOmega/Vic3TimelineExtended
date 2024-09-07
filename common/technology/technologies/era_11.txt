@@ -26,6 +26,7 @@ advanced_nanofabrication = {
 
 	modifier = {
 		country_max_weekly_construction_progress_add = 25
+		country_institution_ministry_of_the_environment_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -326,7 +327,8 @@ post-scarcity_economy = {
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
 		state_building_national_park_max_level_add = 1
-		country_institution_social_security_max_investment_add = 1
+		country_institution_social_security_max_investment_add = 2
+		country_institution_ministry_of_the_environment_max_investment_add = 1
 	}
 	
 	ai_weight = {

@@ -231,8 +231,8 @@ ideology_corporate = {
 	}
 
 	lawgroup_ministry_of_the_environment = {
-		law_no_ministry_of_the_environment = strongly_disapprove
-		law_ministry_of_the_environment = approve
+		law_no_ministry_of_the_environment = approve
+		law_ministry_of_the_environment = strongly_disapprove
 	}
 
 	possible = {

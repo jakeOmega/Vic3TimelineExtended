@@ -775,6 +775,7 @@ pmg_ownership_building_arts_academy = {
         pm_traditional_patronage
         pm_bourgeoisie_patronage
         pm_independent_artists
+        pm_media_corperations
         pm_influencers_and_content_creators
         pm_artificial_personalities
     }

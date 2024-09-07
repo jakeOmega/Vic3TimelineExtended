@@ -200,6 +200,7 @@ keynesian_economics = {
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		country_loan_interest_rate_add = -0.02
 		country_institution_national_bank_max_investment_add = 1
+		country_institution_ministry_of_labor_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -349,6 +350,7 @@ television = {
 	
 	modifier = {
 		country_tech_spread_add = 20
+		country_institution_ministry_of_religion_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -371,6 +373,7 @@ marketing_research = {
 		building_group_bg_service_throughput_add = 0.2
 		state_expected_sol_from_literacy = 1
 		country_institution_ministry_of_culture_max_investment_add = 1
+		country_institution_ministry_of_religion_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -474,9 +477,8 @@ rural_electrification = {
 	category = society
 	
 	modifier = {
-		country_company_construction_efficiency_bonus_add = 0.1
+		country_institution_schools_max_investment_add = 1
 		state_infrastructure_from_population_max_add = 100
-		state_infrastructure_from_population_add = 5
 		state_expected_sol_from_literacy = 1
 		building_power_plant_throughput_add = 0.25
 	}

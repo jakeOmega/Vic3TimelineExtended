@@ -110,6 +110,7 @@ civil_rights_movement = {
 		state_expected_sol_from_literacy = 1
 		country_add_multicultural_ideology_to_intelligentsia_bool = yes
 		country_institution_ministry_of_labor_max_investment_add = 1
+		country_institution_ministry_of_religion_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -246,6 +247,7 @@ plastic_mass_production = {
 	category = production
 	
 	modifier = {
+		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -446,7 +448,7 @@ antibiotic_mass_production = {
 	}
 
 	modifier = {
-		state_mortality_mult = -0.05
+		country_institution_health_system_max_investment_add = 1
 	}
 	
 	ai_weight = {

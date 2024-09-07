@@ -143,7 +143,7 @@ institution_ministry_of_consumer_protection = {
 		goods_output_construction_mult = -0.02
 		state_mortality_mult = -0.01
 		country_production_tech_research_speed_mult = 0.05
-		state_standard_of_living_add = 0.6
+		state_standard_of_living_add = 0.5
 	}
 }
 
@@ -198,8 +198,7 @@ institution_migration_controls = {
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 
 	modifier = {
-		state_migration_quota_mult = -0.083
-		country_mass_migration_attraction_mult = -0.167
-		country_leverage_resistance_mult = 0.083
+		country_mass_migration_attraction_mult = -0.1
+		country_leverage_resistance_mult = 0.05
 	}
 }

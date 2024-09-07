@@ -5,6 +5,7 @@ biotechnology = {
 
 	modifier = {
 		state_arable_land_mult = 0.2
+		country_institution_ministry_of_science_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -49,7 +50,9 @@ world_wide_web = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_tech_spread_add = 80
-		building_network_infrastructure_throughput_add = 0.25
+		country_institution_ministry_of_labor_max_investment_add = 1
+		country_institution_ministry_of_culture_max_investment_add = 1
+		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -70,6 +73,7 @@ digital_telecommunications = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_tech_spread_add = 80
+		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -126,6 +130,8 @@ e-commerce = {
 		state_market_access_price_impact = 0.01
 		building_group_bg_trade_employee_mult = -0.1
 		state_bureaucracy_population_base_cost_factor_mult = 1
+		country_institution_ministry_of_urban_planning_max_investment_add = 1
+		country_institution_ministry_of_labor_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -298,6 +304,8 @@ social_media = {
 		political_movement_radicalism_mult = 0.1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_institution_ministry_of_religion_max_investment_add = 1
+		country_institution_ministry_of_propaganda_max_investment_add = 1
+		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -350,6 +358,7 @@ digital_entertainment = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
+		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -393,7 +402,7 @@ social_justice_movements = {
 	modifier = {
 		country_loan_interest_rate_add = -0.02
 		country_institution_ministry_of_international_aid_max_investment_add = 1
-		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
+		country_institution_ministry_of_refugee_affairs_max_investment_add = 2
 		country_institution_social_security_max_investment_add = 1
 	}
 	

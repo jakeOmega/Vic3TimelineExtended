@@ -146,3 +146,9 @@ unemployment_birth_penalty_state = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	state_birth_rate_mult = -0.1
 }
+
+economy_of_scale = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_throughput_add = 0.01
+	building_goods_input_mult = -0.001
+}

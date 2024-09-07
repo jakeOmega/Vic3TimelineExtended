@@ -6,13 +6,13 @@
     QUALITY_OF_LIFE_MAX = 1000                                                                                                       
 	TRADE_ROUTE_MAX_LEVEL = 10000							# Trade routes cannot be higher level than this
 
-	TRADE_ROUTE_AUTO_INCREASE_ACCEPTABLE_REVENUE_DIFFERENCE = 5 # Multiply revenue of new trade route level by this for the purpose of considering whether it's OK to auto-increase level (means that trade routes can level up even when slightly decreasing overall revenue)
-	TRADE_ROUTE_AUTO_REDUCTION_ACCEPTABLE_REVENUE_DIFFERENCE = 0 # Multiply revenue of current trade route level by this for the purpose of considering whether we should auto-decrease level (means that trade routes won't level down just for the purpose of a small revenue increase)
+	TRADE_ROUTE_AUTO_INCREASE_ACCEPTABLE_REVENUE_DIFFERENCE = 2 # Multiply revenue of new trade route level by this for the purpose of considering whether it's OK to auto-increase level (means that trade routes can level up even when slightly decreasing overall revenue)
+	TRADE_ROUTE_AUTO_REDUCTION_ACCEPTABLE_REVENUE_DIFFERENCE = 2.01 # Multiply revenue of current trade route level by this for the purpose of considering whether we should auto-decrease level (means that trade routes won't level down just for the purpose of a small revenue increase)
 }
 
 NPolitics = {
 	INCOHERENCE_FACTOR = 2								# The amount to multiply the approval value with to get an incoherence score for legitimacy
-	MAX_INSTITUTION_INVESTMENT = 8
+	MAX_INSTITUTION_INVESTMENT = 9
 }
 
 NWar = {

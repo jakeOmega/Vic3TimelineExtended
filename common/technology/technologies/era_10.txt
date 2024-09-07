@@ -23,6 +23,7 @@ modern_material_science = {
 	category = production
 
 	modifier = {
+		country_institution_ministry_of_science_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -123,7 +124,8 @@ autonomous_vehicles = {
 	modifier = {
 		state_market_access_price_impact = 0.01
 		building_group_bg_trade_employee_mult = -0.1
-		country_institution_ministry_of_urban_planning_max_investment_add = 1
+		country_institution_ministry_of_urban_planning_max_investment_add = 2
+		country_institution_ministry_of_commerce_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -143,6 +145,7 @@ genetic_engineering = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		state_arable_land_mult = 0.25
+		country_institution_ministry_of_the_environment_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -162,6 +165,7 @@ synthetic_biology = {
 
 	modifier = {
 		state_mortality_mult = -0.05
+		country_institution_ministry_of_the_environment_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -197,6 +201,7 @@ cyber_warfare = {
 		country_weekly_innovation_max_add = 100
 		country_tech_spread_add = 100
 		country_institution_ministry_of_thought_control_max_investment_add = 1
+		country_institution_police_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -276,6 +281,7 @@ swarm_technology = {
 	modifier = {
 		unit_navy_defense_mult = 0.5
 		unit_navy_offense_mult = 0.5
+		state_building_barracks_max_level_add = 100
 	}
 	
 	ai_weight = {
@@ -429,6 +435,7 @@ brain_computer_interfaces = {
 		state_bureaucracy_population_base_cost_factor_mult = 2
 		country_tech_spread_add = 100
 		country_institution_schools_max_investment_add = 1
+		country_institution_ministry_of_thought_control_max_investment_add = 2
 	}
 	
 	unlocking_technologies = {	
@@ -474,6 +481,8 @@ universal_basic_income = {
 		state_poor_expected_sol = 2
 		state_middle_expected_sol = 2
 		country_institution_social_security_max_investment_add = 1
+		country_institution_national_bank_max_investment_add = 1
+		country_institution_ministry_of_international_aid_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -499,6 +508,8 @@ mental_health_awareness = {
 		state_standard_of_living_add = 1
 		state_mortality_mult = -0.05
 		country_weekly_innovation_max_add = 100
+		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
+		country_institution_ministry_of_international_aid_max_investment_add = 1
 	}
 }
 
@@ -534,7 +545,7 @@ biohacking_and_human_augmentation = {
 		country_weekly_innovation_max_add = 100
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
-		country_institution_ministry_of_thought_control_max_investment_add = 2
+		country_institution_ministry_of_thought_control_max_investment_add = 3
 		political_movement_radicalism_mult = 0.1
 	}
 	
