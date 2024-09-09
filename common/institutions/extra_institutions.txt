@@ -22,6 +22,7 @@ institution_ministry_of_commerce = {
 		country_convoys_capacity_mult = 0.2
 		country_trade_route_competitiveness_mult = 0.1
 		country_trade_route_cost_mult = -0.05
+		country_foreign_investment_acceptance_add = 20
 		state_pop_support_law_free_trade_add = 0.2
 		country_enactment_success_chance_law_free_trade_add = 0.05
 	}
@@ -33,6 +34,7 @@ institution_ministry_of_foreign_affairs = {
 	modifier = {
 		country_improve_relations_speed_mult = 0.1
 		country_damage_relations_speed_mult = 0.1
+		country_influence_add = 100
 		country_influence_mult = 0.1
 		country_leverage_generation_mult = 0.05
 		country_max_declared_interests_add = 1

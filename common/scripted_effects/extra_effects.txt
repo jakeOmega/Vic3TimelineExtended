@@ -597,23 +597,20 @@ add_arable_land_effect = {
 }
 
 update_outreach_bureaucracy_cost = {
-	custom_tooltip = {
-		text = "OUTREACH_BUREAUCRACY_COST_UPDATED"
-		if = {
-			limit = {
-				has_modifier = outreach_bureaucracy_cost
-			}
-			remove_modifier = outreach_bureaucracy_cost
+	if = {
+		limit = {
+			has_modifier = outreach_bureaucracy_cost
 		}
-		if = {
-			limit = {
-				total_outreach_cost_script_value > 0
-			}
-			add_modifier = {
-				name = outreach_bureaucracy_cost
-				multiplier = {
-					value = total_outreach_cost_script_value
-				}
+		remove_modifier = outreach_bureaucracy_cost
+	}
+	if = {
+		limit = {
+			total_outreach_cost_script_value > 0
+		}
+		add_modifier = {
+			name = outreach_bureaucracy_cost
+			multiplier = {
+				value = total_outreach_cost_script_value
 			}
 		}
 	}

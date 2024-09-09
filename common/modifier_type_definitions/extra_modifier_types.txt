@@ -830,6 +830,30 @@ power_bloc_can_give_education_aid_bool = {
 	}
 }
 
+power_bloc_can_give_healthcare_aid_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+}
+
+power_bloc_can_give_security_aid_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+}
+
+power_bloc_can_give_science_aid_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+}
+
 state_infrastructure_from_aeroplanes_consumption_add = {
 	decimals=2
 	color=good
@@ -1251,6 +1275,16 @@ building_employment_peasants_mult = {
 }
 
 state_war_support_monthly_add = {
+	color = good
+	percent = no
+}
+
+country_war_support_monthly_add_religion = {
+	color = good
+	percent = yes
+}
+
+country_foreign_investment_acceptance_add = {
 	color = good
 	percent = no
 }

@@ -786,6 +786,11 @@ war_propaganda_support_script_value = {
 		value = ROOT.state_population
 		divide = ROOT.owner.total_population
 	}
+	add = {
+		value = ROOT.owner.modifier:country_war_support_monthly_add_religion
+		multiply = ROOT.ig:ig_devout.ig_clout
+
+	}
 }
 
 total_gdp_share = {
@@ -806,6 +811,28 @@ total_outreach_cost_script_value = {
 				has_diplomatic_pact = {
 					who = PREV
 					type = education_aid
+				}
+			}
+		}
+		add = total_population
+	}
+	every_country = {
+		limit = {
+			ROOT = {
+				has_diplomatic_pact = {
+					who = PREV
+					type = healthcare_aid
+				}
+			}
+		}
+		add = total_population
+	}
+	every_country = {
+		limit = {
+			ROOT = {
+				has_diplomatic_pact = {
+					who = PREV
+					type = security_aid
 				}
 			}
 		}

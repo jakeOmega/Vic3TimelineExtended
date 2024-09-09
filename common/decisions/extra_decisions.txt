@@ -1,0 +1,41 @@
+adopt_local_culture = {
+	is_shown = {
+		NOT = {
+            any_scope_state = {
+                is_homeland_of_country_cultures = ROOT
+            }
+        }
+	}
+
+	possible = {
+		is_subject = no
+        has_technology_researched = decolonization
+        capital = {
+            any_scope_culture = {
+                has_homeland = PREV
+            }
+        }
+	}
+	
+	when_taken = {
+		every_primary_culture = {
+            ROOT = {
+                remove_primary_culture = PREV
+            }
+        }
+        capital  = {
+            every_scope_culture = {
+                limit = {
+                    has_homeland = PREV
+                }
+                ROOT = {
+                    add_primary_culture = PREV
+                }
+            }
+        }
+	}
+
+	ai_chance = {
+		base = 100	
+	}
+}

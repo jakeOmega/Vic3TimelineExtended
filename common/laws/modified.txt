@@ -787,6 +787,13 @@ law_multicultural = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
+
+		if = {
+			limit = {
+				power_bloc ?= { has_principle_group = principle_group:principle_group_cultural_plurality }
+			}
+			add = 250
+		}
 	}
 
 	can_impose = {

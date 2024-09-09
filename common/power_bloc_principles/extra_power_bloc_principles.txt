@@ -326,6 +326,10 @@ principle_advanced_research_4 = {
 		country_weekly_innovation_max_add = 50
 	}
 
+	power_bloc_modifier = {
+		power_bloc_can_give_science_aid_bool = yes
+	}
+
 	member_modifier = {
 		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
 		country_tech_group_research_speed_mult = 0.01
@@ -368,6 +372,10 @@ principle_advanced_research_5 = {
 		country_tech_group_research_speed_mult = 0.01
 		country_weekly_innovation_max_add = 50
 		country_enactment_success_chance_law_ministry_of_science_add = 0.2
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_give_science_aid_bool = yes
 	}
 
 	institution = institution_ministry_of_science
@@ -680,11 +688,14 @@ principle_police_coordination_4 = {
 		country_can_impose_same_lawgroup_policing_in_power_bloc_bool = yes
 	}
 
+	power_bloc_modifier = {
+		power_bloc_can_give_security_aid_bool = yes
+	}
+
 	institution = institution_police
 	institution_modifier = {
 		country_authority_add = 100
 		political_movement_radicalism_mult = -0.05
-		interest_group_in_government_attraction_mult = 0.1
 	}
 	
 	ai_weight = {
@@ -713,12 +724,15 @@ principle_police_coordination_5 = {
 		country_can_impose_same_lawgroup_policing_in_power_bloc_bool = yes
 	}
 
+	power_bloc_modifier = {
+		power_bloc_can_give_security_aid_bool = yes
+	}
+
 	institution = institution_police
 	institution_modifier = {
 		country_authority_add = 100
 		country_authority_mult = 0.05
 		political_movement_radicalism_mult = -0.05
-		interest_group_in_government_attraction_mult = 0.1
 	}
 	
 	ai_weight = {
@@ -1164,6 +1178,10 @@ principle_divine_economics_5 = {
 principle_exploit_members_4 = {
 	icon = "gfx/interface/icons/principles_icons/exploitation_of_members.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = mass_media
+	}
 	
 	leader_modifier = {
 		country_authority_mult = 0.2
@@ -1200,6 +1218,10 @@ principle_exploit_members_4 = {
 principle_exploit_members_5 = {
 	icon = "gfx/interface/icons/principles_icons/exploitation_of_members.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = social_media
+	}
 	
 	leader_modifier = {
 		country_authority_mult = 0.2
@@ -1236,65 +1258,156 @@ principle_exploit_members_5 = {
 
 ### Sacred Civics
 
-principle_sacred_civics_4 = {
+principle_sacred_civics_1_mod = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		interest_group_ig_devout_approval_add = 5
+		interest_group_ig_devout_pop_attraction_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 200 # Religious PBs should tend towards picking the religious principles
+		
+		if = {
+			limit = {
+				ig:ig_devout ?= { is_in_government = yes }
+			}	
+			add = 100
+		}
+		
+		if = {
+			limit = { 
+				power_bloc ?= { NOT = { has_identity = identity:identity_religious } } 
+				# State Atheist Ideology bloc wants the power to enforce atheism
+				NAND = {
+					has_law = law_type:law_state_atheism
+					power_bloc ?= { has_identity = identity:identity_ideological_union }				
+				}
+			}
+			multiply = 0.25
+		}				
+	}
+}
+
+principle_sacred_civics_2_mod = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		interest_group_ig_devout_approval_add = 5
+		interest_group_ig_devout_pop_attraction_mult = 0.1
+
+		country_war_support_monthly_add_religion = 10
+		state_conscription_rate_mult = 0.25
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_sacred_civics_3_mod = {
 	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
-	
+
 	member_modifier = {
-		country_higher_diplomatic_acceptance_same_religion_bool = yes
-		country_reduced_liberty_desire_same_religion_bool = yes
-		country_law_enactment_stall_mult = -0.25
-		state_pop_support_law_ministry_of_religion_add = 0.5
-		country_enactment_success_chance_law_ministry_of_religion_add = 0.1
-		country_institution_cost_institution_ministry_of_religion_mult = -0.5
-		country_leader_has_law_enactment_success_mult = 0.05
+		# Modifiers from previous level(s)
+		interest_group_ig_devout_approval_add = 5
+		interest_group_ig_devout_pop_attraction_mult = 0.1
+		country_war_support_monthly_add_religion = 10
+		state_conscription_rate_mult = 0.25
 	}
 
 	leader_modifier = {
 		country_can_impose_same_lawgroup_church_and_state_in_power_bloc_bool = yes
+		country_influence_add = 500
 	}
 
 	ai_weight = {
 		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_sacred_civics_4_mod = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = mass_media
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		interest_group_ig_devout_approval_add = 5
+		interest_group_ig_devout_pop_attraction_mult = 0.1
+		country_war_support_monthly_add_religion = 10
+		state_conscription_rate_mult = 0.25
+
+		state_pop_support_law_ministry_of_religion_add = 0.25
+		country_enactment_success_chance_law_ministry_of_religion_add = 0.1
+		country_institution_cost_institution_ministry_of_religion_mult = -0.25
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_church_and_state_in_power_bloc_bool = yes
+		country_influence_add = 500
 	}
 
 	institution = institution_ministry_of_religion
 	institution_modifier = {
 		# Modifiers from previous level(s)		
 		country_authority_add = 50
-		country_clergymen_pol_str_mult = 0.05
-	}
-}
-
-principle_sacred_civics_5 = {
-	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
-	
-	member_modifier = {
-		# Modifiers from previous level(s)		
-		country_higher_diplomatic_acceptance_same_religion_bool = yes
-		country_reduced_liberty_desire_same_religion_bool = yes
-		country_law_enactment_stall_mult = -0.25
-		state_pop_support_law_ministry_of_religion_add = 1.0
-		country_enactment_success_chance_law_ministry_of_religion_add = 0.2
-		country_institution_cost_institution_ministry_of_religion_mult = -0.5
-		country_leader_has_law_enactment_success_mult = 0.1
-	}
-
-	leader_modifier = {
-		# Modifiers from previous level(s)		
-		country_can_impose_same_lawgroup_church_and_state_in_power_bloc_bool = yes
+		country_clergymen_pol_str_mult = 0.1
+		country_influence_add = 100
 	}
 
 	ai_weight = {
 		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_sacred_civics_5_mod = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = social_media
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		interest_group_ig_devout_approval_add = 5
+		interest_group_ig_devout_pop_attraction_mult = 0.1
+		country_war_support_monthly_add_religion = 10
+		state_conscription_rate_mult = 0.25
+		state_pop_support_law_ministry_of_religion_add = 0.5
+		country_enactment_success_chance_law_ministry_of_religion_add = 0.2
+		country_institution_cost_institution_ministry_of_religion_mult = -0.5
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_church_and_state_in_power_bloc_bool = yes
+		country_influence_add = 500
 	}
 
 	institution = institution_ministry_of_religion
 	institution_modifier = {
 		# Modifiers from previous level(s)		
 		country_authority_add = 100
-		country_clergymen_pol_str_mult = 0.1
+		country_clergymen_pol_str_mult = 0.2
+		country_influence_add = 100
+		country_war_support_monthly_add_religion = 2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
 	}
 }
 
@@ -1559,7 +1672,6 @@ principle_cultural_plurality_1 = {
 		# Members get cheaper and faster cultural institution
 		country_mass_migration_attraction_mult = 0.25
 		state_radicals_from_discrimination_mult = -0.25
-		state_political_strength_from_discrimination_mult = 0.1	
 	}
 	
 	ai_weight = {
@@ -1602,7 +1714,6 @@ principle_cultural_plurality_2 = {
 		# Modifiers from previous level(s)	
 		country_mass_migration_attraction_mult = 0.25
 		state_radicals_from_discrimination_mult = -0.5
-		state_political_strength_from_discrimination_mult = 0.2	
 		state_education_access_add = 0.05
 	}
 	
@@ -1632,7 +1743,7 @@ principle_cultural_plurality_3 = {
 		# Modifiers from previous level(s)	
 		country_mass_migration_attraction_mult = 0.25
 		state_radicals_from_discrimination_mult = -0.5
-		state_political_strength_from_discrimination_mult = 0.3	
+		country_add_multicultural_ideology_to_intelligentsia_bool = yes
 		state_education_access_add = 0.05
 		country_tech_spread_mult = 0.25
 		state_pop_support_law_no_migration_controls_add = 0.25
@@ -1666,7 +1777,7 @@ principle_cultural_plurality_4 = {
 		# Modifiers from previous level(s)	
 		country_mass_migration_attraction_mult = 0.25
 		state_radicals_from_discrimination_mult = -0.5
-		state_political_strength_from_discrimination_mult = 0.4
+		country_add_multicultural_ideology_to_intelligentsia_bool = yes
 		state_education_access_add = 0.05
 		country_tech_spread_mult = 0.25
 		state_pop_support_law_multicultural_add = 1.5
@@ -1710,7 +1821,7 @@ principle_cultural_plurality_5 = {
 		# Modifiers from previous level(s)	
 		country_mass_migration_attraction_mult = 0.25
 		state_radicals_from_discrimination_mult = -0.5
-		state_political_strength_from_discrimination_mult = 0.5
+		country_add_multicultural_ideology_to_intelligentsia_bool = yes
 		state_education_access_add = 0.05
 		country_tech_spread_mult = 0.25
 		state_pop_support_law_multicultural_add = 1.5
@@ -2824,7 +2935,7 @@ principle_healthcare_1 = {
 
 	institution = institution_health_system
 	institution_modifier = {
-		state_birth_rate_mult = 0.02
+		unit_recovery_rate_add = 0.05
 	}
 	
 	ai_weight = {
@@ -2859,7 +2970,7 @@ principle_healthcare_2 = {
 	institution = institution_health_system
 	institution_modifier = {
 		unit_recovery_rate_add = 0.05
-		state_birth_rate_mult = 0.02
+		political_movement_radicalism_mult = -0.02
 	}
 
 	ai_weight = {
@@ -2904,6 +3015,10 @@ principle_healthcare_4 = {
 		country_institution_cost_institution_health_system_mult = -0.4
 	}
 
+	power_bloc_modifier = {
+		power_bloc_can_give_healthcare_aid_bool = yes
+	}
+
 	institution = institution_health_system
 	institution_modifier = {
 		# Modifiers from previous level(s)	
@@ -2928,6 +3043,10 @@ principle_healthcare_5 = {
 
 	member_modifier = {
 		country_institution_cost_institution_health_system_mult = -0.5
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_give_healthcare_aid_bool = yes
 	}
 
 	institution = institution_health_system

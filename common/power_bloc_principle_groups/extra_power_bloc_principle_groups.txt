@@ -249,11 +249,11 @@ principle_group_sacred_civics = {
 	unlocking_identity = identity_religious
 
 	levels = {
-		principle_sacred_civics_1
-		principle_sacred_civics_2
-		principle_sacred_civics_3
-		principle_sacred_civics_4
-		principle_sacred_civics_5
+		principle_sacred_civics_1_mod
+		principle_sacred_civics_2_mod
+		principle_sacred_civics_3_mod
+		principle_sacred_civics_4_mod
+		principle_sacred_civics_5_mod
 	}
 }
 
