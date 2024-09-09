@@ -1853,6 +1853,10 @@ principle_education_4 = {
 		# New PM for Universities, producing art and services, unlocked via trigger
 	}
 
+	power_bloc_modifier = {
+		power_bloc_can_give_education_aid_bool = yes
+	}
+
 	institution = institution_schools
 	institution_modifier = {
 		# Modifiers from previous level(s)	
@@ -1888,6 +1892,10 @@ principle_education_5 = {
 
 		interest_group_ig_intelligentsia_pol_str_mult = 0.1
 		# New PM for Universities, producing art and services, unlocked via trigger
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_give_education_aid_bool = yes
 	}
 
 	institution = institution_schools
@@ -3040,6 +3048,10 @@ principle_welfare_4 = {
 		state_welfare_payments_add = 0.2
 	}
 
+	power_bloc_modifier = {
+		power_bloc_can_give_humanitarian_aid_bool = yes = yes
+	}
+
 	institution = institution_social_security
 	institution_modifier = {
 		# Modifiers from previous level(s)	
@@ -3067,6 +3079,10 @@ principle_welfare_5 = {
 		# Modifiers from previous level(s)	
 		country_institution_cost_institution_social_security_mult = -0.5
 		state_welfare_payments_add = 0.2
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_give_humanitarian_aid_bool = yes = yes
 	}
 
 	institution = institution_social_security

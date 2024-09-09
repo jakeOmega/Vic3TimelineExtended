@@ -166,12 +166,12 @@ identity_diplomatic = {
 		power_bloc_mandate_progress_per_minor_power_member_add = 1
 		power_bloc_mandate_progress_per_insignificant_power_member_add = 1
 		power_bloc_cohesion_per_member_add = -1
-		power_bloc_can_give_humanitarian_aid_bool = yes
+		power_bloc_can_use_diplomatic_alignment_bool = yes
 	}
 
 	leader_modifier = {
-		country_leverage_generation_mult = 0.2
-		country_infamy_generation_mult = 0.2
+		country_pact_leverage_generation_mult = 0.5
+		country_infamy_generation_mult = 0.25
 	}
 
 	non_leader_modifier = {

@@ -152,3 +152,8 @@ economy_of_scale = {
 	building_throughput_add = 0.01
 	building_goods_input_mult = -0.001
 }
+
+outreach_bureaucracy_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_bureaucracy_add = -1
+}

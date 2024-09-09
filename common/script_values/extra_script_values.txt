@@ -787,3 +787,30 @@ war_propaganda_support_script_value = {
 		divide = ROOT.owner.total_population
 	}
 }
+
+total_gdp_share = {
+	value = gdp
+	divide = {
+		value = 0
+		every_country = {
+			add = gdp
+		}
+	}
+}
+
+total_outreach_cost_script_value = {
+	value = 0
+	every_country = {
+		limit = {
+			ROOT = {
+				has_diplomatic_pact = {
+					who = PREV
+					type = education_aid
+				}
+			}
+		}
+		add = total_population
+	}
+	divide = 1000000
+	multiply = 10
+}

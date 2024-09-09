@@ -814,6 +814,22 @@ power_bloc_can_enact_decree_cultural_emigration_initiative_bool = {
 	}
 }
 
+power_bloc_can_use_diplomatic_alignment_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+}
+
+power_bloc_can_give_education_aid_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+}
+
 state_infrastructure_from_aeroplanes_consumption_add = {
 	decimals=2
 	color=good

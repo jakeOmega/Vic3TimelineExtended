@@ -1,0 +1,3 @@
+concept_superpowers = {}
+
+concept_world_governments = {}

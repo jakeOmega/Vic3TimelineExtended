@@ -891,7 +891,7 @@ ai_strategy_default = {
 		
 		# Bonus for obligations from Great Powers
 		if = {
-			limit = { scope:target_country.country_rank = rank_value:great_power }
+			limit = { scope:target_country.country_rank >= rank_value:great_power }
 			add = 5
 		}
 		
@@ -2503,7 +2503,7 @@ ai_strategy_default = {
 		# Very high aggression against pariah countries by Great Powers
 		if = {
 			limit = {
-				country_rank = rank_value:great_power
+				country_rank >= rank_value:great_power
 				scope:target_country = {
 					infamy >= infamy_threshold:pariah
 					NOT = {
@@ -2892,7 +2892,7 @@ ai_strategy_default = {
 			limit = {
 				exists = c:RUS
                 THIS = c:RUS
-                country_rank = rank_value:great_power
+                country_rank >= rank_value:great_power
                 OR = {
                 	exists = c:CIR
                 	exists = c:CHC
@@ -3196,7 +3196,7 @@ ai_strategy_default = {
 		
 		# Extra army size from rank
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = 25
 		}
 		if = {
@@ -3536,7 +3536,7 @@ ai_strategy_default = {
 		combat_unit_group_capital_ship = {
 			value = 0
 			if = {
-				limit = { country_rank = rank_value:great_power }
+				limit = { country_rank >= rank_value:great_power }
 				add = 30
 			}
 			if = {
@@ -3862,7 +3862,7 @@ ai_strategy_default = {
 				limit = { # Britain is participating in the Caucasian War in a certain capacity early game.
 					c:GBR ?= this
 					exists = c:CIR
-					country_rank = rank_value:great_power
+					country_rank >= rank_value:great_power
 					navy_size >= 50
 				}
 				add = 500
@@ -3895,7 +3895,7 @@ ai_strategy_default = {
 						}
 						AND = {
 							has_global_variable = gp_hawaii_interest
-							country_rank = rank_value:great_power
+							country_rank >= rank_value:great_power
 							OR = {
 								country_is_in_north_america = yes 
 								country_is_in_south_america = yes 
@@ -3911,7 +3911,7 @@ ai_strategy_default = {
 				limit = {
 					exists = c:JAP
 					c:JAP = { has_law = law_type:law_isolationism }
-					NOT = { country_rank = rank_value:great_power }
+					NOT = { country_rank >= rank_value:great_power }
 				}
 				add = -50
 			}				
@@ -3935,7 +3935,7 @@ ai_strategy_default = {
 				limit = {
 					OR = {
 						AND = {
-							country_rank = rank_value:great_power
+							country_rank >= rank_value:great_power
 							has_technology_researched = malaria_prevention
 						}
 						has_journal_entry = je_scramble_for_africa
@@ -3949,7 +3949,7 @@ ai_strategy_default = {
 				limit = {
 					OR = {
 						AND = {
-							country_rank = rank_value:great_power
+							country_rank >= rank_value:great_power
 							has_technology_researched = malaria_prevention
 						}
 						has_journal_entry = je_scramble_for_africa
@@ -3963,7 +3963,7 @@ ai_strategy_default = {
 				limit = {
 					OR = {
 						AND = {
-							country_rank = rank_value:great_power
+							country_rank >= rank_value:great_power
 							has_technology_researched = malaria_prevention
 						}
 						has_journal_entry = je_scramble_for_africa
@@ -3977,7 +3977,7 @@ ai_strategy_default = {
 				limit = {
 					OR = {
 						AND = {
-							country_rank = rank_value:great_power
+							country_rank >= rank_value:great_power
 							has_technology_researched = malaria_prevention
 						}
 						has_journal_entry = je_scramble_for_africa
@@ -3991,7 +3991,7 @@ ai_strategy_default = {
 				limit = {
 					OR = {
 						AND = {
-							country_rank = rank_value:great_power
+							country_rank >= rank_value:great_power
 							has_technology_researched = malaria_prevention
 						}
 						has_journal_entry = je_scramble_for_africa
@@ -4005,7 +4005,7 @@ ai_strategy_default = {
 				limit = {
 					OR = {
 						AND = {
-							country_rank = rank_value:great_power
+							country_rank >= rank_value:great_power
 							has_technology_researched = malaria_prevention
 						}
 						has_journal_entry = je_scramble_for_africa
@@ -4019,7 +4019,7 @@ ai_strategy_default = {
 				limit = {
 					OR = {
 						AND = {
-							country_rank = rank_value:great_power
+							country_rank >= rank_value:great_power
 							has_technology_researched = malaria_prevention
 						}
 						has_journal_entry = je_scramble_for_africa
@@ -4914,7 +4914,7 @@ ai_strategy_default = {
 			if = {
 				limit = {		
 					NOR = {
-						country_rank = rank_value:great_power
+						country_rank >= rank_value:great_power
 						has_strategic_adjacency = scope:target_country
 						AND = {
 							country_rank >= rank_value:major_power
@@ -5651,7 +5651,7 @@ ai_strategy_default = {
 			if = {
 				limit = {		
 					NOR = {
-						country_rank = rank_value:great_power
+						country_rank >= rank_value:great_power
 						has_strategic_adjacency = scope:target_country 
 						AND = {
 							country_rank >= rank_value:major_power

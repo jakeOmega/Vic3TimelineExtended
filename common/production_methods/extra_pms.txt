@@ -9418,7 +9418,7 @@ pm_media_corperations = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 
 	unlocking_technologies = {
-		mass_marketing
+		marketing_research
 	}
 
 	building_modifiers = {
