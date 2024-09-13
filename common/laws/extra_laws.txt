@@ -1873,7 +1873,7 @@ law_neocolonialism = {
 	institution = institution_colonial_affairs
 	institution_modifier = {
 		state_colony_growth_creation_mult = -0.1
-		country_leverage_generation_mult = 0.05
+		economic_dependence_leverage_gain_mult = 0.1
 	}
 
 	pop_support = {

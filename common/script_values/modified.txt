@@ -29,21 +29,10 @@ power_bloc_leverage_gain = {
 		value = 200
 		multiply = "scope:target.economic_dependence(ROOT)"
 			
-		if = {
-			limit = {
-				root.power_bloc = {
-					has_principle_group = principle_group:principle_group_foreign_investment
-				}
-			}
-			multiply = 1.5
+		multiply = {
+			value = 1
+			add = modifier:economic_dependence_leverage_gain_mult
 		}
-
-        if = {
-            limit = {
-                ROOT = { has_technology_researched = globalization }
-            }
-            multiply = 1.5
-        }
 
 		desc = POWER_BLOC_LEVERAGE_GAIN_FROM_ECONOMIC_DEPENDENCE
 	}
@@ -289,139 +278,6 @@ power_bloc_leverage_gain = {
 		multiply = {
 			value = 0.1
 			desc = POWER_BLOC_LEVERAGE_UNRECOGNIZED_LEADER_RECOGNIZED_TARGET
-		}
-	}
-}
-
-power_bloc_great_power_non_leader_members = {
-	every_power_bloc_member = {
-		if = {
-			limit = {
-				is_power_bloc_leader = no
-				country_rank >= rank_value:great_power
-			}
-			add = 1
-		}
-	}
-}
-
-power_bloc_mandate_progress_per_great_power_member = {
-	value = modifier:power_bloc_mandate_progress_per_great_power_member_add
-	multiply = {
-		value = 1
-		add = modifier:power_bloc_mandate_progress_per_great_power_member_mult
-		min = 0
-	}
-}
-
-power_bloc_mandate_progress_by_rank = {
-	value = {
-		value = 6
-		subtract = power_bloc_rank
-		min = 1
-		desc = "POWER_BLOC_MANDATE_PROGRESS_BASE"
-	}
-
-    if = {
-        limit = {
-            power_bloc_leader = {
-                country_rank = rank_value:world_government
-            }
-        }
-        add = 10
-        desc = "POWER_BLOC_MANDATE_PROGRESS_LEADER_WORLD_GOVERNMENT"
-    }
-    else_if = {
-        limit = {
-            power_bloc_leader = {
-                country_rank = rank_value:superpower
-            }
-        }
-        add = 5
-        desc = "POWER_BLOC_MANDATE_PROGRESS_LEADER_SUPERPOWER"
-    }
-
-	if = {
-		limit = {
-			power_bloc_great_power_non_leader_members > 0
-			power_bloc_mandate_progress_per_great_power_member != 0
-		}
-		add = {
-			value = power_bloc_great_power_non_leader_members
-			multiply = power_bloc_mandate_progress_per_great_power_member
-			desc = "POWER_BLOC_MANDATE_PROGRESS_FROM_GREAT_POWER_MEMBERS"
-		}
-	}
-
-	if = {
-		limit = {
-			power_bloc_major_power_non_leader_members > 0
-			power_bloc_mandate_progress_per_major_power_member != 0
-		}
-		add = {
-			value = power_bloc_major_power_non_leader_members
-			multiply = power_bloc_mandate_progress_per_major_power_member
-			desc = "POWER_BLOC_MANDATE_PROGRESS_FROM_MAJOR_POWER_MEMBERS"
-		}
-	}
-
-	if = {
-		limit = {
-			power_bloc_minor_power_non_leader_members > 0
-			power_bloc_mandate_progress_per_minor_power_member != 0
-		}
-		add = {
-			value = power_bloc_minor_power_non_leader_members
-			multiply = power_bloc_mandate_progress_per_minor_power_member
-			desc = "POWER_BLOC_MANDATE_PROGRESS_FROM_MINOR_POWER_MEMBERS"
-		}
-	}
-
-	if = {
-		limit = {
-			power_bloc_unrecognized_major_power_non_leader_members > 0
-			power_bloc_mandate_progress_per_unrecognized_major_power_member != 0
-		}
-		add = {
-			value = power_bloc_unrecognized_major_power_non_leader_members
-			multiply = power_bloc_mandate_progress_per_unrecognized_major_power_member
-			desc = "POWER_BLOC_MANDATE_PROGRESS_FROM_UNRECOGNIZED_MAJOR_POWER_MEMBERS"
-		}
-	}
-
-	if = {
-		limit = {
-			power_bloc_unrecognized_regional_power_non_leader_members > 0
-			power_bloc_mandate_progress_per_unrecognized_regional_power_member != 0
-		}
-		add = {
-			value = power_bloc_unrecognized_regional_power_non_leader_members
-			multiply = power_bloc_mandate_progress_per_unrecognized_regional_power_member
-			desc = "POWER_BLOC_MANDATE_PROGRESS_FROM_UNRECOGNIZED_REGIONAL_POWER_MEMBERS"
-		}
-	}
-
-	if = {
-		limit = {
-			power_bloc_unrecognized_power_non_leader_members > 0
-			power_bloc_mandate_progress_per_unrecognized_power_member != 0
-		}
-		add = {
-			value = power_bloc_unrecognized_power_non_leader_members
-			multiply = power_bloc_mandate_progress_per_unrecognized_power_member
-			desc = "POWER_BLOC_MANDATE_PROGRESS_FROM_UNRECOGNIZED_POWER_MEMBERS"
-		}
-	}
-
-	if = {
-		limit = {
-			power_bloc_insignificant_power_non_leader_members > 0
-			power_bloc_mandate_progress_per_insignificant_power_member != 0
-		}
-		add = {
-			value = power_bloc_insignificant_power_non_leader_members
-			multiply = power_bloc_mandate_progress_per_insignificant_power_member
-			desc = "POWER_BLOC_MANDATE_PROGRESS_FROM_INSIGNIFICANT_POWER_MEMBERS"
 		}
 	}
 }

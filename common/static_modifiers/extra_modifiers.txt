@@ -118,12 +118,14 @@ nuclear_power = {
 
 low_pop_state = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	state_birth_rate_mult = 0
+	state_birth_rate_mult = 0.25
+	state_migration_pull_mult = 0.5
 }
 
 high_pop_state = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	state_birth_rate_mult = 0
+	state_migration_pull_mult = -0.5
 }
 
 declared_bankruptcy = {
@@ -145,7 +147,6 @@ declared_bankruptcy = {
 unemployment_birth_penalty_state = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	state_birth_rate_mult = -0.1
-	state_working_adult_ratio_add = -0.1
 }
 
 economy_of_scale = {
@@ -157,4 +158,11 @@ economy_of_scale = {
 outreach_bureaucracy_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_bureaucracy_add = -1
+}
+
+failed_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_leverage_resistance_mult = -1
+	interest_group_in_government_attraction_mult = -0.5
+	building_subsistence_output_mult = 1
 }

@@ -83,6 +83,10 @@ je_nuclear_program = {
                         name = nuclear_weapons_program_first_nuke_done
                         value = 1
                     }
+                    change_variable = {
+                        name = nuclear_weapon_program_progress
+                        multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
+                    }
                     trigger_event = { id = nuclear_weapon_events.10 }
                     save_scope_as = first_nuke_country
                     every_country = {
@@ -137,4 +141,128 @@ je_global_warming = {
 
     weight = 10
     should_be_pinned_by_default = yes
+}
+
+je_state_collapse = {
+    icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+    group = je_group_internal_affairs
+
+    is_shown_when_inactive = {
+        average_sol < 5
+        NOT = { is_country_type = decentralized }
+    }
+
+    possible = {
+        average_sol < 4
+    }
+
+    immediate = {
+        set_variable = {
+            name = state_collapse_progress
+            value = 0
+        }
+    }
+
+    complete = {
+        ROOT.var:state_collapse_progress >= 52
+    }
+
+    current_value = {
+        value = root.var:state_collapse_progress
+    }
+
+    goal_add_value = {
+		value = 52
+	}
+
+    on_weekly_pulse = {
+        effect = {
+            change_variable = {
+                name = state_collapse_progress
+                add = 1
+            }
+            if = {
+                limit = { var:state_collapse_progress >= 52 }
+                set_variable = {
+                    name = state_collapse_progress
+                    value = 0
+                }
+                add_modifier = {
+                    name = failed_state_modifier
+                    months = long_modifier_time
+                    is_decaying = yes
+                }
+                every_scope_state = {
+                    if = {
+                        limit = {
+                            has_building = building_barracks
+                        }
+                        remove_building = building_barracks
+                    }
+                    if = {
+                        limit = {
+                            has_building = building_naval_base
+                        }
+                        remove_building = building_naval_base
+                    }
+                    if = {
+                        limit = {
+                            has_building = building_port
+                        }
+                        remove_building = building_port
+                    }
+                    if = {
+                        limit = {
+                            has_building = building_railway
+                        }
+                        remove_building = building_railway
+                    }
+                    if = {
+                        limit = {
+                            has_building = building_university
+                        }
+                        remove_building = building_university
+                    }
+                    if = {
+                        limit = {
+                            has_building = building_government_administration
+                        }
+                        remove_building = building_government_administration
+                    }
+                }
+                activate_law = law_type:law_no_schools
+                activate_law = law_type:law_no_health_system
+                activate_law = law_type:law_no_police
+                activate_law = law_type:law_no_social_security
+                activate_law = law_type:law_no_workers_rights
+                activate_law = law_type:law_no_colonial_affairs
+                activate_law = law_type:law_no_home_affairs
+                activate_law = law_type:law_no_migration_controls
+                activate_law = law_type:law_no_national_bank
+                activate_law = law_type:law_no_ministry_of_commerce
+                activate_law = law_type:law_no_ministry_of_consumer_protection
+                activate_law = law_type:law_no_ministry_of_culture
+                activate_law = law_type:law_no_ministry_of_foreign_affairs
+                activate_law = law_type:law_no_ministry_of_intelligence_and_security
+                activate_law = law_type:law_no_ministry_of_international_aid
+                activate_law = law_type:law_no_ministry_of_labor
+                activate_law = law_type:law_no_ministry_of_population_control
+                activate_law = law_type:law_no_ministry_of_propaganda
+                activate_law = law_type:law_no_ministry_of_refugee_affairs
+                activate_law = law_type:law_no_ministry_of_religion
+                activate_law = law_type:law_no_ministry_of_science
+                activate_law = law_type:law_no_ministry_of_the_environment
+                activate_law = law_type:law_no_ministry_of_thought_control
+                activate_law = law_type:law_no_ministry_of_urban_planning
+                activate_law = law_type:law_no_ministry_of_war
+            }
+        }
+	}
+    weight = 10
+    should_be_pinned_by_default = yes
+
+    progressbar = yes
+
+    can_deactivate = yes
 }

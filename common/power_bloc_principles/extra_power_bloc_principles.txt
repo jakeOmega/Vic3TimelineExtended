@@ -376,6 +376,7 @@ principle_advanced_research_5 = {
 
 	power_bloc_modifier = {
 		power_bloc_can_give_science_aid_bool = yes
+		power_bloc_can_give_science_aid_2_bool = yes
 	}
 
 	institution = institution_ministry_of_science
@@ -919,6 +920,79 @@ principle_colonial_offices_5 = {
 
 ### Foreign Investment
 
+principle_foreign_investment_1 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		economic_dependence_leverage_gain_mult = 0.5
+	}
+	
+	ai_weight = {
+		value = 100
+		
+		if = {
+			limit = {
+				OR = {
+					ig:ig_industrialists ?= { is_in_government = yes }
+					ig:ig_landowners ?= { is_in_government = yes }
+				}
+			}	
+			add = 100
+		}		
+		
+		if = {
+			limit = { has_strategy = ai_strategy_economic_imperialism }
+			multiply = 2.0
+		}		
+	}
+}
+
+principle_foreign_investment_2 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	member_modifier = {
+		# Members get reduced nationalization cost for assets of non-members
+		country_nationalization_cost_non_members_mult = -0.5
+
+		economic_dependence_leverage_gain_mult = 0.5
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_foreign_investment_3 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	# Members can always invest in power bloc coutries of lower rank
+	# Does not generate a tooltip, so a dummy modifier is required to show this effect
+	allows_foreign_investment_in_lower_rank = yes
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_nationalization_cost_non_members_mult = -0.5
+
+		economic_dependence_leverage_gain_mult = 0.5
+	}
+	
+	power_bloc_modifier = {
+		# This modifier has no effects and is only here to generate a tooltip
+		power_bloc_allow_foreign_investment_lower_rank_bool = yes 
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
 principle_foreign_investment_4 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
@@ -934,8 +1008,7 @@ principle_foreign_investment_4 = {
 	member_modifier = {
 		country_nationalization_cost_non_members_mult = -0.5
 
-		# This modifier is just here to generate a tooltip. It doesn't actually do anything on its own
-		country_higher_leverage_from_economic_dependence_bool = yes
+		economic_dependence_leverage_gain_mult = 0.5
 
 		state_pop_support_law_national_bank_add = 0.5
 		country_enactment_success_chance_law_national_bank_add = 0.1
@@ -949,8 +1022,7 @@ principle_foreign_investment_4 = {
 
 	institution = institution_national_bank
 	institution_modifier = {
-		country_influence_mult = 0.1
-		country_leverage_generation_mult = 0.05
+		economic_dependence_leverage_gain_mult = 0.1
 	}
 
 	ai_weight = {
@@ -974,8 +1046,7 @@ principle_foreign_investment_5 = {
 		# Modifiers from previous level(s)
 		country_nationalization_cost_non_members_mult = -0.5
 
-		# This modifier is just here to generate a tooltip. It doesn't actually do anything on its own
-		country_higher_leverage_from_economic_dependence_bool = yes
+		economic_dependence_leverage_gain_mult = 0.5
 
 		state_pop_support_law_national_bank_add = 1.0
 		country_enactment_success_chance_law_national_bank_add = 0.2
@@ -991,7 +1062,7 @@ principle_foreign_investment_5 = {
 	institution_modifier = {
 		# Modifiers from previous level(s)
 		country_influence_mult = 0.2
-		country_leverage_generation_mult = 0.1
+		economic_dependence_leverage_gain_mult = 0.1
 	}
 
 	ai_weight = {
@@ -1257,6 +1328,35 @@ principle_exploit_members_5 = {
 }
 
 ### Sacred Civics
+
+principle_sacred_civics_1 = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	visible = {
+		always = no
+	}
+	
+	ai_weight = -1000
+}
+
+principle_sacred_civics_2 = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+	
+	ai_weight = {
+		value = -1000
+	}
+}
+
+principle_sacred_civics_3 = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	ai_weight = {
+		value = -1000
+	}
+}
 
 principle_sacred_civics_1_mod = {
 	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"

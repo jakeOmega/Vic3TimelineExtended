@@ -1141,7 +1141,7 @@ healthcare_aid = {
         requirement_to_maintain = {
             trigger = {
                 OR = {
-                    scope:target_country = { has_law = law_type:law_no_healthcare }
+                    scope:target_country = { has_law = law_type:law_no_health_system }
                     scope:target_country = { 
                         institution_investment_level = {
                             institution = institution_health_system
@@ -1446,6 +1446,15 @@ science_aid = {
 		}
 
 		requirement_to_maintain = {
+			trigger = {		
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_MORE_TECHS_RESEARCHED"
+					techs_researched > scope:target_country.techs_researched
+				}	
+			}
+		}
+
+		requirement_to_maintain = {
 			trigger = {
 				country_rank > scope:target_country.country_rank
 			}
@@ -1456,6 +1465,153 @@ science_aid = {
 				institution_investment_level = {
 					institution = institution_ministry_of_science
 					value >= 2
+				}
+			}
+		}
+		
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
+			}
+		}
+
+	 	requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
+				}		
+			}
+			
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17 # this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}					
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
+					NOT = { is_country_type = decentralized }
+					scope:target_country = {
+						NOT = { is_country_type = decentralized }
+					}				
+				}
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
+					NOT = { has_war_with = scope:target_country }
+				}			
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}
+	}
+
+	ai = {
+		max_influence_spending_fraction = 0.20
+		
+		evaluation_chance = {
+			value = 0.0
+			
+			if = {
+				limit = { country_rank >= rank_value:major_power }
+				add = {
+					value = country_rank
+					multiply = 0.05
+				}				
+			}			
+		}		
+		
+		accept_score = {
+			value = 0
+		}		
+	
+		junior_accept_score = {
+			value = 0
+		}	
+	
+		propose_score = {
+			value = 10
+		}
+	
+		will_propose = { 
+			would_accept_diplomatic_action = {
+				actor = scope:target_country
+				type = science_aid
+			}
+		}
+		
+		will_break = {}	
+	}
+}
+
+science_aid_2 = {
+	groups= {
+		general
+	}
+	requires_approval = no
+	should_notify_third_parties = no
+	
+	selectable = {
+		power_bloc ?= {
+			modifier:power_bloc_can_give_science_aid_2_bool = yes
+		}
+	}
+	
+	potential = {
+		always = yes
+	}
+	
+	possible = {}
+	
+	pact = {	
+		cost = 100
+	
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		relations_progress_per_day = 6 # At 100, +1 relations
+		relations_improvement_max = 30
+
+		first_modifier = {
+			country_weekly_innovation_add = -500
+		}
+		
+		second_modifier = {
+			country_pact_leverage_generation_add = 500
+			country_tech_spread_add = 500
+		}
+
+		requirement_to_maintain = {
+			trigger = {		
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_MORE_TECHS_RESEARCHED"
+					techs_researched > scope:target_country.techs_researched
+				}	
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				country_rank > scope:target_country.country_rank
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				institution_investment_level = {
+					institution = institution_ministry_of_science
+					value >= 4
 				}
 			}
 		}

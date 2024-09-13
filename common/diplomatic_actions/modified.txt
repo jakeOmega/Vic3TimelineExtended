@@ -440,12 +440,6 @@ invite_to_power_bloc = {
 					scope:actor.power_bloc = {
                         if = {
 							limit = {
-								scope:target_country.country_rank = rank_value:superpower
-							}
-							add = -1000
-						}
-						else_if = {
-							limit = {
 								scope:target_country.country_rank = rank_value:great_power
 							}
 							add = modifier:power_bloc_invite_acceptance_great_power_add 
@@ -966,7 +960,9 @@ foreign_investment_agreement = {
 
 			add = {
 				desc = "COUNTRY_FOREIGN_INVESTMENT_ACCEPTANCE_ADD"
-				add = modifier:country_foreign_investment_acceptance_add
+				scope:actor = {
+					add = modifier:country_foreign_investment_acceptance_add
+				}
 			}
 			
 			add = {
@@ -1413,7 +1409,9 @@ foreign_investment_rights = {
 
 			add = {
 				desc = "COUNTRY_FOREIGN_INVESTMENT_ACCEPTANCE_ADD"
-				add = modifier:country_foreign_investment_acceptance_add
+				scope:actor = {
+					add = modifier:country_foreign_investment_acceptance_add
+				}
 			}
 
 			if = {
@@ -1613,7 +1611,9 @@ foreign_investment_rights = {
 
 			add = {
 				desc = "COUNTRY_FOREIGN_INVESTMENT_ACCEPTANCE_ADD"
-				add = modifier:country_foreign_investment_acceptance_add
+				scope:actor = {
+					add = modifier:country_foreign_investment_acceptance_add
+				}
 			}
 
 			add = {

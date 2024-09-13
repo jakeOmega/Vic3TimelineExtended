@@ -275,10 +275,9 @@ globalization = {
 	}
 	
 	modifier = {
-		building_economy_of_scale_level_cap_add = 50
+		economic_dependence_leverage_gain_mult = 0.5
 		state_market_access_price_impact = 0.01
 		building_group_bg_trade_employee_mult = -0.25
-		country_max_companies_add = 1
 		country_tech_spread_add = 80
 		country_allow_trade_routes_without_interest_bool = yes
 		country_leverage_threshold_change_add = -50
