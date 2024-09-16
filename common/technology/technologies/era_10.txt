@@ -199,7 +199,6 @@ cyber_warfare = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		country_tech_spread_add = 100
 		country_institution_ministry_of_thought_control_max_investment_add = 1
 		country_institution_police_max_investment_add = 1
 	}
@@ -259,7 +258,6 @@ electronic_warfare = {
 	modifier = {
 		unit_navy_defense_mult = 0.5
 		unit_navy_offense_mult = 0.5
-		country_tech_spread_add = 100
 		country_institution_ministry_of_war_max_investment_add = 1
 	}
 	
@@ -417,7 +415,6 @@ telemedicine = {
 
 	modifier = {
 		state_mortality_mult = -0.05
-		country_tech_spread_add = 100
 	}
 	
 	ai_weight = {
@@ -433,7 +430,6 @@ brain_computer_interfaces = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		state_bureaucracy_population_base_cost_factor_mult = 2
-		country_tech_spread_add = 100
 		country_institution_schools_max_investment_add = 1
 		country_institution_ministry_of_thought_control_max_investment_add = 2
 	}

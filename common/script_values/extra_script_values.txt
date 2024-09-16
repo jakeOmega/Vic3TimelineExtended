@@ -615,7 +615,39 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				has_technology_researched = modern_automotive_technology
+			}
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = bergius_process
+			}
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = cryptography
+			}
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			any_country = {
 				has_technology_researched = nuclear_weapons
+			}
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = rocketry
 			}
 		}
 		add = 20
@@ -631,7 +663,39 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				has_technology_researched = computing_machines
+			}
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = keynesian_economics
+			}
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			any_country = {
 				has_technology_researched = green_revolution
+			}
+		}
+		add = 40
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = transistors
+			}
+		}
+		add = 40
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = mainframe_computers
 			}
 		}
 		add = 40
@@ -647,7 +711,39 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				has_technology_researched = space_exploration
+			}
+		}
+		add = 40
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = nuclear_energy
+			}
+		}
+		add = 40
+	}
+	if = {
+		limit = {
+			any_country = {
 				has_technology_researched = decolonization
+			}
+		}
+		add = 40
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = modern_urban_planning
+			}
+		}
+		add = 40
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = civil_rights_movement
 			}
 		}
 		add = 40
@@ -663,7 +759,39 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				has_technology_researched = integrated_circuits
+			}
+		}
+		add = 60
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = personal_computers
+			}
+		}
+		add = 60
+	}
+	if = {
+		limit = {
+			any_country = {
 				has_technology_researched = satellite_communications
+			}
+		}
+		add = 60
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = stealth_technology
+			}
+		}
+		add = 60
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = supersonic_aircraft
 			}
 		}
 		add = 60
@@ -679,7 +807,39 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				has_technology_researched = pop_culture
+			}
+		}
+		add = 60
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = modern_pharmaceuticals
+			}
+		}
+		add = 60
+	}
+	if = {
+		limit = {
+			any_country = {
 				has_technology_researched = world_wide_web
+			}
+		}
+		add = 80
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = wireless_internet
+			}
+		}
+		add = 80
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = nanotechnology
 			}
 		}
 		add = 80
@@ -695,7 +855,39 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				has_technology_researched = automated_surveillance
+			}
+		}
+		add = 80
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = unmanned_aerial_vehicles
+			}
+		}
+		add = 80
+	}
+	if = {
+		limit = {
+			any_country = {
 				has_technology_researched = globalization
+			}
+		}
+		add = 80
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = social_justice_movements
+			}
+		}
+		add = 80
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = social_media
 			}
 		}
 		add = 80
@@ -711,7 +903,39 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				has_technology_researched = modern_material_science
+			}
+		}
+		add = 100
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = quantum_computing
+			}
+		}
+		add = 100
+	}
+	if = {
+		limit = {
+			any_country = {
 				has_technology_researched = fusion_power
+			}
+		}
+		add = 100
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = space_militarization
+			}
+		}
+		add = 100
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = hypersonic_weapons
 			}
 		}
 		add = 100
@@ -727,7 +951,39 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				has_technology_researched = mental_health_awareness
+			}
+		}
+		add = 100
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = personalized_medicine
+			}
+		}
+		add = 100
+	}
+	if = {
+		limit = {
+			any_country = {
 				has_technology_researched = artificial_intelligence
+			}
+		}
+		add = 200
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = orbital_manufacturing
+			}
+		}
+		add = 200
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = advanced_nanofabrication
 			}
 		}
 		add = 200
@@ -743,7 +999,39 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				has_technology_researched = compact_fusion_reactors
+			}
+		}
+		add = 200
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = orbital_weapon_platforms
+			}
+		}
+		add = 200
+	}
+	if = {
+		limit = {
+			any_country = {
 				has_technology_researched = post-scarcity_economy
+			}
+		}
+		add = 200
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = biological_immortality
+			}
+		}
+		add = 200
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_technology_researched = space_colonization
 			}
 		}
 		add = 200

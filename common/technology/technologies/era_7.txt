@@ -151,7 +151,6 @@ space_exploration = {
 	modifier = {
 		country_prestige_mult = 0.2
 		country_weekly_innovation_max_add = 50
-		country_tech_spread_add = 40
 		country_institution_ministry_of_science_max_investment_add = 1
 	}
 	
@@ -267,7 +266,6 @@ mainframe_computers = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 50
-		country_tech_spread_add = 40
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_institution_ministry_of_population_control_max_investment_add = 1
@@ -375,7 +373,6 @@ recon_satellites = {
 	category = military
 	
 	modifier = {
-		country_tech_spread_add = 40
 		country_institution_police_max_investment_add = 1
 	}
 	
@@ -420,7 +417,6 @@ television_broadcasting = {
 		building_arts_academy_throughput_add = 0.05
 		country_weekly_innovation_max_add = 50
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
-		country_tech_spread_add = 40
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_institution_ministry_of_propaganda_max_investment_add = 1
 		country_institution_home_affairs_max_investment_add = 1
