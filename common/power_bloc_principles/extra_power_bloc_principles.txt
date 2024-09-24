@@ -3268,7 +3268,7 @@ principle_welfare_4 = {
 	}
 
 	power_bloc_modifier = {
-		power_bloc_can_give_humanitarian_aid_bool = yes = yes
+		power_bloc_can_give_humanitarian_aid_bool = yes
 	}
 
 	institution = institution_social_security
@@ -3301,7 +3301,7 @@ principle_welfare_5 = {
 	}
 
 	power_bloc_modifier = {
-		power_bloc_can_give_humanitarian_aid_bool = yes = yes
+		power_bloc_can_give_humanitarian_aid_bool = yes
 	}
 
 	institution = institution_social_security

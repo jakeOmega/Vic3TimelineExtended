@@ -1,0 +1,7 @@
+custom_religion = {
+    texture = "gfx/interface/icons/religion_icons/animist.dds"
+	traits = {
+		custom_religion_trait
+	}
+	color = { 0.1 0.0 0.1 }
+}

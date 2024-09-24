@@ -1,0 +1,148 @@
+custom_religion_custom_loc = {
+    type = country
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_a_selected
+        }
+        localization_key = custom_religion_name_a
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_b_selected
+        }
+        localization_key = custom_religion_name_b
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_c_selected
+        }
+        localization_key = custom_religion_name_c
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_d_selected
+        }
+        localization_key = custom_religion_name_d
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_e_selected
+        }
+        localization_key = custom_religion_name_e
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_f_selected
+        }
+        localization_key = custom_religion_name_f
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_g_selected
+        }
+        localization_key = custom_religion_name_g
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_h_selected
+        }
+        localization_key = custom_religion_name_h
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_i_selected
+        }
+        localization_key = custom_religion_name_i
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_j_selected
+        }
+        localization_key = custom_religion_name_j
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_k_selected
+        }
+        localization_key = custom_religion_name_k
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_l_selected
+        }
+        localization_key = custom_religion_name_l
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_m_selected
+        }
+        localization_key = custom_religion_name_m
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_n_selected
+        }
+        localization_key = custom_religion_name_n
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_o_selected
+        }
+        localization_key = custom_religion_name_o
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_p_selected
+        }
+        localization_key = custom_religion_name_p
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_q_selected
+        }
+        localization_key = custom_religion_name_q
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_r_selected
+        }
+        localization_key = custom_religion_name_r
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_s_selected
+        }
+        localization_key = custom_religion_name_s
+    }
+
+    text = {
+        trigger = {
+            has_variable = custom_religion_name_t_selected
+        }
+        localization_key = custom_religion_name_t
+    }
+    
+    text = {
+        localization_key = custom_religion_fallback
+        fallback = yes
+    }
+}

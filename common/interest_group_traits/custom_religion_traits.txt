@@ -1,0 +1,108 @@
+﻿ig_trait_custom_religion_traditionalist_loyal = {
+	icon = "gfx/interface/icons/ig_trait_icons/be_fruitful_and_multiply.dds"
+	min_approval = loyal
+	
+	modifier = {
+		state_birth_rate_mult = 0.025
+	}
+}
+
+ig_trait_custom_religion_traditionalist_happy = {
+	icon = "gfx/interface/icons/ig_trait_icons/divine_right.dds"
+	min_approval = happy
+	
+	modifier = {
+		country_authority_mult = 0.1
+	}
+}
+
+ig_trait_custom_religion_traditionalist_unhappy = {
+	icon = "gfx/interface/icons/ig_trait_icons/pious_fiction.dds"
+	max_approval = unhappy
+	
+	modifier = {
+		state_education_access_add = -0.1
+	}
+}
+
+ig_trait_custom_religion_market_liberal_loyal = {
+	icon = "gfx/interface/icons/ig_trait_icons/wealth_of_nations.dds"
+	min_approval = loyal
+	
+	modifier = {
+		state_capitalists_investment_pool_efficiency_mult = 0.1
+	}
+}
+
+ig_trait_custom_religion_market_liberal_happy = {
+	icon = "gfx/interface/icons/ig_trait_icons/wealth_of_nations.dds"
+	min_approval = happy
+	
+	modifier = {
+		state_loyalists_from_sol_change_accepted_religion_mult = 0.1
+	}
+}
+
+ig_trait_custom_religion_market_liberal_unhappy = {
+	icon = "gfx/interface/icons/ig_trait_icons/wealth_of_nations.dds"
+	max_approval = unhappy
+	
+	modifier = {
+		state_rich_expected_sol = 3
+	}
+}
+
+ig_trait_custom_religion_social_democrat_loyal = {
+	icon = "gfx/interface/icons/ig_trait_icons/communism.dds"
+	min_approval = loyal
+	
+	modifier = {
+		state_poor_expected_sol = -1
+		country_bureaucracy_investment_cost_factor_mult = -0.1
+	}
+}
+
+ig_trait_custom_religion_social_democrat_happy = {
+	icon = "gfx/interface/icons/ig_trait_icons/communism.dds"
+	min_approval = happy
+	
+	modifier = {
+		country_bureaucracy_mult = 0.1
+	}
+}
+
+ig_trait_custom_religion_social_democrat_unhappy = {
+	icon = "gfx/interface/icons/ig_trait_icons/communism.dds"
+	max_approval = unhappy
+	
+	modifier = {
+		state_radicals_from_sol_change_mult = 0.1
+	}
+}
+
+ig_trait_custom_religion_totalitarian_loyal = {
+	icon = "gfx/interface/icons/ig_trait_icons/totalitarianism.dds"
+	min_approval = loyal
+	
+	modifier = {
+		country_institution_cost_institution_police_mult = -0.25
+	}
+}
+
+ig_trait_custom_religion_totalitarian_happy = {
+	icon = "gfx/interface/icons/ig_trait_icons/totalitarianism.dds"
+	min_approval = happy
+	
+	modifier = {
+		political_movement_radicalism_mult = -0.15
+	}
+}
+
+ig_trait_custom_religion_totalitarian_unhappy = {
+	icon = "gfx/interface/icons/ig_trait_icons/totalitarianism.dds"
+	max_approval = unhappy
+	
+	modifier = {
+		state_radicals_from_discrimination_mult = 0.1
+	}
+}

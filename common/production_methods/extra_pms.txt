@@ -4213,23 +4213,23 @@ pm_high_pressure_sodium_streetlights = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 0.5                    # Price:   30, Total cost: 15.0
+			goods_input_electricity_add = 3                      # Price:   30, Total cost: 90.0
 			goods_input_electronic_components_add = 0.5          # Price:   80, Total cost: 40.0
 			goods_input_telephones_add = 0.5                     # Price:   70, Total cost: 35.0
 			# Output goods
-			goods_output_services_add = 8                        # Price:   30, Total cost: 240.0
-			# Total input cost: 90.0
-			# Total output cost: 240.0
-			# Profit: 150.0
-			# Profit margin: 166.67%
-			# Zero profit price multiplier: 0.38
-			# Employment: 500
-			# Wage breakeven: 0.30
+			goods_output_services_add = 15                       # Price:   30, Total cost: 450.0
+			# Total input cost: 165.0
+			# Total output cost: 450.0
+			# Profit: 285.0
+			# Profit margin: 172.73%
+			# Zero profit price multiplier: 0.37
+			# Employment: 250
+			# Wage breakeven: 1.14
 		}
 
 		level_scaled = {
-			building_employment_laborers_add = 300
-			building_employment_engineers_add = 200
+			building_employment_laborers_add = 150
+			building_employment_engineers_add = 100
 		}
 	}
 
@@ -4252,23 +4252,23 @@ pm_led_streetlights = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 0.25                   # Price:   30, Total cost: 7.5
+			goods_input_electricity_add = 1                      # Price:   30, Total cost: 30.0
 			goods_input_electronic_components_add = 1            # Price:   80, Total cost: 80.0
-			goods_input_telephones_add = 0.5                     # Price:   70, Total cost: 35.0
+			goods_input_telephones_add = 1                       # Price:   70, Total cost: 70.0
 			# Output goods
-			goods_output_services_add = 12                       # Price:   30, Total cost: 360.0
-			# Total input cost: 122.5
-			# Total output cost: 360.0
-			# Profit: 237.5
-			# Profit margin: 193.88%
-			# Zero profit price multiplier: 0.34
-			# Employment: 500
-			# Wage breakeven: 0.47
+			goods_output_services_add = 20                       # Price:   30, Total cost: 600.0
+			# Total input cost: 180.0
+			# Total output cost: 600.0
+			# Profit: 420.0
+			# Profit margin: 233.33%
+			# Zero profit price multiplier: 0.30
+			# Employment: 250
+			# Wage breakeven: 1.68
 		}
 
 		level_scaled = {
-			building_employment_laborers_add = 250
-			building_employment_engineers_add = 250
+			building_employment_laborers_add = 100
+			building_employment_engineers_add = 150
 		}
 	}
 
@@ -4291,19 +4291,19 @@ pm_smart_led_streetlights = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 0.25                   # Price:   30, Total cost: 7.5
+			goods_input_electricity_add = 1                      # Price:   30, Total cost: 30.0
 			goods_input_electronic_components_add = 1            # Price:   80, Total cost: 80.0
-			goods_input_telephones_add = 0.5                     # Price:   70, Total cost: 35.0
+			goods_input_telephones_add = 1                       # Price:   70, Total cost: 70.0
 			goods_input_digital_access_add = 1                   # Price:  120, Total cost: 120.0
 			# Output goods
-			goods_output_services_add = 20                       # Price:   30, Total cost: 600.0
-			# Total input cost: 242.5
-			# Total output cost: 600.0
-			# Profit: 357.5
-			# Profit margin: 147.42%
-			# Zero profit price multiplier: 0.40
+			goods_output_services_add = 30                       # Price:   30, Total cost: 900.0
+			# Total input cost: 300.0
+			# Total output cost: 900.0
+			# Profit: 600.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
 			# Employment: 10
-			# Wage breakeven: 35.75
+			# Wage breakeven: 60.00
 		}
 
 		level_scaled = {

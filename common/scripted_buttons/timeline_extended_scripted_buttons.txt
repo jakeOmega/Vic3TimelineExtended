@@ -1,3 +1,4 @@
+# Nuclear weapons
 increase_funding_nuclear_program = {
 	name = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING"
 	desc = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
@@ -88,4 +89,3356 @@ decrease_funding_nuclear_program = {
             }
         }
 	}
+}
+
+# Custom religion
+
+select_ideology_traditionalist_economy = {
+    name = "SELECT_IDEOLOGY_TRADITIONALIST_ECONOMY"
+    desc = "SELECT_IDEOLOGY_TRADITIONALIST_ECONOMY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
+        var:current_stage = 1
+    }
+    
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_free_market_economy_selected }
+        NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
+        NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_TRADITIONALIST_ECONOMY_DESC"
+            set_variable = {
+                name = custom_religion_ideology_traditionalist_economy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_traditionalist_economy = {
+    name = "DESELECT_IDEOLOGY_TRADITIONALIST_ECONOMY"
+    desc = "DESELECT_IDEOLOGY_TRADITIONALIST_ECONOMY_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_traditionalist_economy_selected
+        var:current_stage = 1
+    }
+    
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_TRADITIONALIST_ECONOMY_DESC"
+            remove_variable = custom_religion_ideology_traditionalist_economy_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_free_market_economy = {
+    name = "SELECT_IDEOLOGY_FREE_MARKET_ECONOMY"
+    desc = "SELECT_IDEOLOGY_FREE_MARKET_ECONOMY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_free_market_economy_selected }
+        var:current_stage = 1
+    }
+    
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
+        NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
+        NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_FREE_MARKET_ECONOMY_DESC"
+            set_variable = {
+                name = custom_religion_ideology_free_market_economy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_free_market_economy = {
+    name = "DESELECT_IDEOLOGY_FREE_MARKET_ECONOMY"
+    desc = "DESELECT_IDEOLOGY_FREE_MARKET_ECONOMY_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_free_market_economy_selected
+        var:current_stage = 1
+    }
+    
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+        NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
+        NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
+        NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_FREE_MARKET_ECONOMY_DESC"
+            remove_variable = custom_religion_ideology_free_market_economy_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_socialist_economy = {
+    name = "SELECT_IDEOLOGY_SOCIALIST_ECONOMY"
+    desc = "SELECT_IDEOLOGY_SOCIALIST_ECONOMY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
+        NOT = { has_variable = custom_religion_ideology_free_market_economy_selected }
+        NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_SOCIALIST_ECONOMY_DESC"
+            set_variable = {
+                name = custom_religion_ideology_socialist_economy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_socialist_economy = {
+    name = "DESELECT_IDEOLOGY_SOCIALIST_ECONOMY"
+    desc = "DESELECT_IDEOLOGY_SOCIALIST_ECONOMY_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_socialist_economy_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_SOCIALIST_ECONOMY_DESC"
+            remove_variable = custom_religion_ideology_socialist_economy_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_social_democratic_economy = {
+    name = "SELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY"
+    desc = "SELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
+        NOT = { has_variable = custom_religion_ideology_free_market_economy_selected }
+        NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY_DESC"
+            set_variable = {
+                name = custom_religion_ideology_social_democratic_economy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_social_democratic_economy = {
+    name = "DESELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY"
+    desc = "DESELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_social_democratic_economy_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY_DESC"
+            remove_variable = custom_religion_ideology_social_democratic_economy_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_traditionalist_society = {
+    name = "SELECT_IDEOLOGY_TRADITIONALIST_SOCIETY"
+    desc = "SELECT_IDEOLOGY_TRADITIONALIST_SOCIETY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_inclusive_society_selected }
+        NOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }
+        NOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_TRADITIONALIST_SOCIETY_DESC"
+            set_variable = {
+                name = custom_religion_ideology_traditionalist_society_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_traditionalist_society = {
+    name = "DESELECT_IDEOLOGY_TRADITIONALIST_SOCIETY"
+    desc = "DESELECT_IDEOLOGY_TRADITIONALIST_SOCIETY_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_traditionalist_society_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_TRADITIONALIST_SOCIETY_DESC"
+            remove_variable = custom_religion_ideology_traditionalist_society_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_inclusive_society = {
+    name = "SELECT_IDEOLOGY_INCLUSIVE_SOCIETY"
+    desc = "SELECT_IDEOLOGY_INCLUSIVE_SOCIETY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_inclusive_society_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }
+        NOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }
+        NOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_INCLUSIVE_SOCIETY_DESC"
+            set_variable = {
+                name = custom_religion_ideology_inclusive_society_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_inclusive_society = {
+    name = "DESELECT_IDEOLOGY_INCLUSIVE_SOCIETY"
+    desc = "DESELECT_IDEOLOGY_INCLUSIVE_SOCIETY_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_inclusive_society_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_INCLUSIVE_SOCIETY_DESC"
+            remove_variable = custom_religion_ideology_inclusive_society_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_totalitarian_society = {
+    name = "SELECT_IDEOLOGY_TOTALITARIAN_SOCIETY"
+    desc = "SELECT_IDEOLOGY_TOTALITARIAN_SOCIETY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }
+        NOT = { has_variable = custom_religion_ideology_inclusive_society_selected }
+        NOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_TOTALITARIAN_SOCIETY_DESC"
+            set_variable = {
+                name = custom_religion_ideology_totalitarian_society_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_totalitarian_society = {
+    name = "DESELECT_IDEOLOGY_TOTALITARIAN_SOCIETY"
+    desc = "DESELECT_IDEOLOGY_TOTALITARIAN_SOCIETY_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_totalitarian_society_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_TOTALITARIAN_SOCIETY_DESC"
+            remove_variable = custom_religion_ideology_totalitarian_society_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_meritocratic_society = {
+    name = "SELECT_IDEOLOGY_MERITOCRATIC_SOCIETY"
+    desc = "SELECT_IDEOLOGY_MERITOCRATIC_SOCIETY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }
+        NOT = { has_variable = custom_religion_ideology_inclusive_society_selected }
+        NOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_MERITOCRATIC_SOCIETY_DESC"
+            set_variable = {
+                name = custom_religion_ideology_meritocratic_society_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_meritocratic_society = {
+    name = "DESELECT_IDEOLOGY_MERITOCRATIC_SOCIETY"
+    desc = "DESELECT_IDEOLOGY_MERITOCRATIC_SOCIETY_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_meritocratic_society_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_MERITOCRATIC_SOCIETY_DESC"
+            remove_variable = custom_religion_ideology_meritocratic_society_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_aristocratic_governance = {
+    name = "SELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE"
+    desc = "SELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }
+        NOT = { has_variable = custom_religion_ideology_republican_governance_selected }
+        NOT = { has_variable = custom_religion_ideology_corporate_governance_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE_DESC"
+            set_variable = {
+                name = custom_religion_ideology_aristocratic_governance_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_aristocratic_governance = {
+    name = "DESELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE"
+    desc = "DESELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_aristocratic_governance_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE_DESC"
+            remove_variable = custom_religion_ideology_aristocratic_governance_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_technocratic_governance = {
+    name = "SELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE"
+    desc = "SELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }
+        NOT = { has_variable = custom_religion_ideology_republican_governance_selected }
+        NOT = { has_variable = custom_religion_ideology_corporate_governance_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE_DESC"
+            set_variable = {
+                name = custom_religion_ideology_technocratic_governance_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_technocratic_governance = {
+    name = "DESELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE"
+    desc = "DESELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_technocratic_governance_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE_DESC"
+            remove_variable = custom_religion_ideology_technocratic_governance_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_republican_governance = {
+    name = "SELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE"
+    desc = "SELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_republican_governance_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }
+        NOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }
+        NOT = { has_variable = custom_religion_ideology_corporate_governance_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE_DESC"
+            set_variable = {
+                name = custom_religion_ideology_republican_governance_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_republican_governance = {
+    name = "DESELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE"
+    desc = "DESELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_republican_governance_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE_DESC"
+            remove_variable = custom_religion_ideology_republican_governance_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_corporate_governance = {
+    name = "SELECT_IDEOLOGY_CORPORATE_GOVERNANCE"
+    desc = "SELECT_IDEOLOGY_CORPORATE_GOVERNANCE_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_corporate_governance_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }
+        NOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }
+        NOT = { has_variable = custom_religion_ideology_republican_governance_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_CORPORATE_GOVERNANCE_DESC"
+            set_variable = {
+                name = custom_religion_ideology_corporate_governance_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_corporate_governance = {
+    name = "DESELECT_IDEOLOGY_CORPORATE_GOVERNANCE"
+    desc = "DESELECT_IDEOLOGY_CORPORATE_GOVERNANCE_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_corporate_governance_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_CORPORATE_GOVERNANCE_DESC"
+            remove_variable = custom_religion_ideology_corporate_governance_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_pacifist_outlook = {
+    name = "SELECT_IDEOLOGY_PACIFIST_OUTLOOK"
+    desc = "SELECT_IDEOLOGY_PACIFIST_OUTLOOK_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }
+        NOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }
+        NOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_PACIFIST_OUTLOOK_DESC"
+            set_variable = {
+                name = custom_religion_ideology_pacifist_outlook_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_pacifist_outlook = {
+    name = "DESELECT_IDEOLOGY_PACIFIST_OUTLOOK"
+    desc = "DESELECT_IDEOLOGY_PACIFIST_OUTLOOK_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_pacifist_outlook_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_PACIFIST_OUTLOOK_DESC"
+            remove_variable = custom_religion_ideology_pacifist_outlook_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_militarist_outlook = {
+    name = "SELECT_IDEOLOGY_MILITARIST_OUTLOOK"
+    desc = "SELECT_IDEOLOGY_MILITARIST_OUTLOOK_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }
+        NOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }
+        NOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_MILITARIST_OUTLOOK_DESC"
+            set_variable = {
+                name = custom_religion_ideology_militarist_outlook_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_militarist_outlook = {
+    name = "DESELECT_IDEOLOGY_MILITARIST_OUTLOOK"
+    desc = "DESELECT_IDEOLOGY_MILITARIST_OUTLOOK_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_militarist_outlook_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_MILITARIST_OUTLOOK_DESC"
+            remove_variable = custom_religion_ideology_militarist_outlook_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_isolationist_outlook = {
+    name = "SELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK"
+    desc = "SELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }
+        NOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }
+        NOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK_DESC"
+            set_variable = {
+                name = custom_religion_ideology_isolationist_outlook_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_isolationist_outlook = {
+    name = "DESELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK"
+    desc = "DESELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_isolationist_outlook_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK_DESC"
+            remove_variable = custom_religion_ideology_isolationist_outlook_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_ideology_exploitative_outlook = {
+    name = "SELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK"
+    desc = "SELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies < 3
+        NOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }
+        NOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }
+        NOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK_DESC"
+            set_variable = {
+                name = custom_religion_ideology_exploitative_outlook_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_idelogies
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_ideology_exploitative_outlook = {
+    name = "DESELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK"
+    desc = "DESELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK_DESC"
+
+    visible = {
+        has_variable = custom_religion_ideology_exploitative_outlook_selected
+        var:current_stage = 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_idelogies > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK_DESC"
+            remove_variable = custom_religion_ideology_exploitative_outlook_selected
+            change_variable = {
+                name = selected_idelogies
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_traditionalist_loyal = {
+    name = "SELECT_TRAIT_TRADITIONALIST_LOYAL"
+    desc = "SELECT_TRAIT_TRADITIONALIST_LOYAL_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_traditionalist_loyal_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_traditionalist_economy_selected
+            has_variable = custom_religion_ideology_traditionalist_society_selected
+            has_variable = custom_religion_ideology_aristocratic_governance_selected
+            has_variable = custom_religion_ideology_isolationist_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_market_liberal_loyal_selected
+            has_variable = custom_religion_trait_social_democrat_loyal_selected
+            has_variable = custom_religion_trait_totalitarian_loyal_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_TRADITIONALIST_LOYAL_DESC"
+            set_variable = {
+                name = custom_religion_trait_traditionalist_loyal_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_traditionalist_loyal = {
+    name = "DESELECT_TRAIT_TRADITIONALIST_LOYAL"
+    desc = "DESELECT_TRAIT_TRADITIONALIST_LOYAL_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_traditionalist_loyal_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_TRADITIONALIST_LOYAL_DESC"
+            remove_variable = custom_religion_trait_traditionalist_loyal_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_traditionalist_happy = {
+    name = "SELECT_TRAIT_TRADITIONALIST_HAPPY"
+    desc = "SELECT_TRAIT_TRADITIONALIST_HAPPY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_traditionalist_happy_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_traditionalist_economy_selected
+            has_variable = custom_religion_ideology_traditionalist_society_selected
+            has_variable = custom_religion_ideology_aristocratic_governance_selected
+            has_variable = custom_religion_ideology_isolationist_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_market_liberal_happy_selected
+            has_variable = custom_religion_trait_social_democrat_happy_selected
+            has_variable = custom_religion_trait_totalitarian_happy_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_TRADITIONALIST_HAPPY_DESC"
+            set_variable = {
+                name = custom_religion_trait_traditionalist_happy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_traditionalist_happy = {
+    name = "DESELECT_TRAIT_TRADITIONALIST_HAPPY"
+    desc = "DESELECT_TRAIT_TRADITIONALIST_HAPPY_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_traditionalist_happy_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_TRADITIONALIST_HAPPY_DESC"
+            remove_variable = custom_religion_trait_traditionalist_happy_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_traditionalist_unhappy = {
+    name = "SELECT_TRAIT_TRADITIONALIST_UNHAPPY"
+    desc = "SELECT_TRAIT_TRADITIONALIST_UNHAPPY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_traditionalist_unhappy_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_traditionalist_economy_selected
+            has_variable = custom_religion_ideology_traditionalist_society_selected
+            has_variable = custom_religion_ideology_aristocratic_governance_selected
+            has_variable = custom_religion_ideology_isolationist_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_market_liberal_unhappy_selected
+            has_variable = custom_religion_trait_social_democrat_unhappy_selected
+            has_variable = custom_religion_trait_totalitarian_unhappy_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_TRADITIONALIST_UNHAPPY_DESC"
+            set_variable = {
+                name = custom_religion_trait_traditionalist_unhappy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_traditionalist_unhappy = {
+    name = "DESELECT_TRAIT_TRADITIONALIST_UNHAPPY"
+    desc = "DESELECT_TRAIT_TRADITIONALIST_UNHAPPY_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_traditionalist_unhappy_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_TRADITIONALIST_UNHAPPY_DESC"
+            remove_variable = custom_religion_trait_traditionalist_unhappy_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_market_liberal_loyal = {
+    name = "SELECT_TRAIT_MARKET_LIBERAL_LOYAL"
+    desc = "SELECT_TRAIT_MARKET_LIBERAL_LOYAL_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_market_liberal_loyal_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_free_market_economy_selected
+            has_variable = custom_religion_ideology_meritocratic_society_selected
+            has_variable = custom_religion_ideology_corporate_governance_selected
+            has_variable = custom_religion_ideology_exploitative_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_social_democrat_loyal_selected
+            has_variable = custom_religion_trait_totalitarian_loyal_selected
+            has_variable = custom_religion_trait_traditionalist_loyal_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_MARKET_LIBERAL_LOYAL_DESC"
+            set_variable = {
+                name = custom_religion_trait_market_liberal_loyal_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_market_liberal_loyal = {
+    name = "DESELECT_TRAIT_MARKET_LIBERAL_LOYAL"
+    desc = "DESELECT_TRAIT_MARKET_LIBERAL_LOYAL_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_market_liberal_loyal_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_MARKET_LIBERAL_LOYAL_DESC"
+            remove_variable = custom_religion_trait_market_liberal_loyal_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_market_liberal_happy = {
+    name = "SELECT_TRAIT_MARKET_LIBERAL_HAPPY"
+    desc = "SELECT_TRAIT_MARKET_LIBERAL_HAPPY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_market_liberal_happy_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_free_market_economy_selected
+            has_variable = custom_religion_ideology_meritocratic_society_selected
+            has_variable = custom_religion_ideology_corporate_governance_selected
+            has_variable = custom_religion_ideology_exploitative_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_social_democrat_happy_selected
+            has_variable = custom_religion_trait_totalitarian_happy_selected
+            has_variable = custom_religion_trait_traditionalist_happy_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_MARKET_LIBERAL_HAPPY_DESC"
+            set_variable = {
+                name = custom_religion_trait_market_liberal_happy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_market_liberal_happy = {
+    name = "DESELECT_TRAIT_MARKET_LIBERAL_HAPPY"
+    desc = "DESELECT_TRAIT_MARKET_LIBERAL_HAPPY_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_market_liberal_happy_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_MARKET_LIBERAL_HAPPY_DESC"
+            remove_variable = custom_religion_trait_market_liberal_happy_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_market_liberal_unhappy = {
+    name = "SELECT_TRAIT_MARKET_LIBERAL_UNHAPPY"
+    desc = "SELECT_TRAIT_MARKET_LIBERAL_UNHAPPY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_market_liberal_unhappy_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_free_market_economy_selected
+            has_variable = custom_religion_ideology_meritocratic_society_selected
+            has_variable = custom_religion_ideology_corporate_governance_selected
+            has_variable = custom_religion_ideology_exploitative_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_social_democrat_unhappy_selected
+            has_variable = custom_religion_trait_totalitarian_unhappy_selected
+            has_variable = custom_religion_trait_traditionalist_unhappy_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_MARKET_LIBERAL_UNHAPPY_DESC"
+            set_variable = {
+                name = custom_religion_trait_market_liberal_unhappy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_market_liberal_unhappy = {
+    name = "DESELECT_TRAIT_MARKET_LIBERAL_UNHAPPY"
+    desc = "DESELECT_TRAIT_MARKET_LIBERAL_UNHAPPY_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_market_liberal_unhappy_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_MARKET_LIBERAL_UNHAPPY_DESC"
+            remove_variable = custom_religion_trait_market_liberal_unhappy_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_social_democrat_loyal = {
+    name = "SELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL"
+    desc = "SELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_social_democrat_loyal_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_social_democratic_economy_selected
+            has_variable = custom_religion_ideology_inclusive_society_selected
+            has_variable = custom_religion_ideology_republican_governance_selected
+            has_variable = custom_religion_ideology_pacifist_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_market_liberal_loyal_selected
+            has_variable = custom_religion_trait_totalitarian_loyal_selected
+            has_variable = custom_religion_trait_traditionalist_loyal_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL_DESC"
+            set_variable = {
+                name = custom_religion_trait_social_democrat_loyal_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_social_democrat_loyal = {
+    name = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL"
+    desc = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_social_democrat_loyal_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL_DESC"
+            remove_variable = custom_religion_trait_social_democrat_loyal_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_social_democrat_happy = {
+    name = "SELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY"
+    desc = "SELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_social_democrat_happy_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_social_democratic_economy_selected
+            has_variable = custom_religion_ideology_inclusive_society_selected
+            has_variable = custom_religion_ideology_republican_governance_selected
+            has_variable = custom_religion_ideology_pacifist_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_market_liberal_happy_selected
+            has_variable = custom_religion_trait_totalitarian_happy_selected
+            has_variable = custom_religion_trait_traditionalist_happy_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY_DESC"
+            set_variable = {
+                name = custom_religion_trait_social_democrat_happy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_social_democrat_happy = {
+    name = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY"
+    desc = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_social_democrat_happy_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY_DESC"
+            remove_variable = custom_religion_trait_social_democrat_happy_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_social_democrat_unhappy = {
+    name = "SELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY"
+    desc = "SELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_social_democrat_unhappy_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_social_democratic_economy_selected
+            has_variable = custom_religion_ideology_inclusive_society_selected
+            has_variable = custom_religion_ideology_republican_governance_selected
+            has_variable = custom_religion_ideology_pacifist_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_market_liberal_unhappy_selected
+            has_variable = custom_religion_trait_totalitarian_unhappy_selected
+            has_variable = custom_religion_trait_traditionalist_unhappy_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY_DESC"
+            set_variable = {
+                name = custom_religion_trait_social_democrat_unhappy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_social_democrat_unhappy = {
+    name = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY"
+    desc = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_social_democrat_unhappy_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY_DESC"
+            remove_variable = custom_religion_trait_social_democrat_unhappy_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_totalitarian_loyal = {
+    name = "SELECT_TRAIT_TOTALITARIAN_LOYAL"
+    desc = "SELECT_TRAIT_TOTALITARIAN_LOYAL_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_totalitarian_loyal_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_socialist_economy_selected
+            has_variable = custom_religion_ideology_totalitarian_society_selected
+            has_variable = custom_religion_ideology_technocratic_governance_selected
+            has_variable = custom_religion_ideology_militarist_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_market_liberal_loyal_selected
+            has_variable = custom_religion_trait_social_democrat_loyal_selected
+            has_variable = custom_religion_trait_traditionalist_loyal_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_TOTALITARIAN_LOYAL_DESC"
+            set_variable = {
+                name = custom_religion_trait_totalitarian_loyal_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_totalitarian_loyal = {
+    name = "DESELECT_TRAIT_TOTALITARIAN_LOYAL"
+    desc = "DESELECT_TRAIT_TOTALITARIAN_LOYAL_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_totalitarian_loyal_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_TOTALITARIAN_LOYAL_DESC"
+            remove_variable = custom_religion_trait_totalitarian_loyal_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_totalitarian_happy = {
+    name = "SELECT_TRAIT_TOTALITARIAN_HAPPY"
+    desc = "SELECT_TRAIT_TOTALITARIAN_HAPPY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_totalitarian_happy_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_socialist_economy_selected
+            has_variable = custom_religion_ideology_totalitarian_society_selected
+            has_variable = custom_religion_ideology_technocratic_governance_selected
+            has_variable = custom_religion_ideology_militarist_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_market_liberal_happy_selected
+            has_variable = custom_religion_trait_social_democrat_happy_selected
+            has_variable = custom_religion_trait_traditionalist_happy_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_TOTALITARIAN_HAPPY_DESC"
+            set_variable = {
+                name = custom_religion_trait_totalitarian_happy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_totalitarian_happy = {
+    name = "DESELECT_TRAIT_TOTALITARIAN_HAPPY"
+    desc = "DESELECT_TRAIT_TOTALITARIAN_HAPPY_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_totalitarian_happy_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_TOTALITARIAN_HAPPY_DESC"
+            remove_variable = custom_religion_trait_totalitarian_happy_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_trait_totalitarian_unhappy = {
+    name = "SELECT_TRAIT_TOTALITARIAN_UNHAPPY"
+    desc = "SELECT_TRAIT_TOTALITARIAN_UNHAPPY_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_trait_totalitarian_unhappy_selected }
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits < 3
+        OR = {
+            has_variable = custom_religion_ideology_social
+            has_variable = custom_religion_ideology_totalitarian_society_selected
+            has_variable = custom_religion_ideology_technocratic_governance_selected
+            has_variable = custom_religion_ideology_militarist_outlook_selected
+        }
+        NOT = {
+            has_variable = custom_religion_trait_market_liberal_unhappy_selected
+            has_variable = custom_religion_trait_social_democrat_unhappy_selected
+            has_variable = custom_religion_trait_traditionalist_unhappy_selected
+        }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_TRAIT_TOTALITARIAN_UNHAPPY_DESC"
+            set_variable = {
+                name = custom_religion_trait_totalitarian_unhappy_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_traits
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_trait_totalitarian_unhappy = {
+    name = "DESELECT_TRAIT_TOTALITARIAN_UNHAPPY"
+    desc = "DESELECT_TRAIT_TOTALITARIAN_UNHAPPY_DESC"
+
+    visible = {
+        has_variable = custom_religion_trait_totalitarian_unhappy_selected
+        var:current_stage = 2
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_traits > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_TRAIT_TOTALITARIAN_UNHAPPY_DESC"
+            remove_variable = custom_religion_trait_totalitarian_unhappy_selected
+            change_variable = {
+                name = selected_traits
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_a = {
+    name = "custom_religion_name_a"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_a_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_a_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_a = {
+    name = "custom_religion_name_a"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_a_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_a_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_b = {
+    name = "custom_religion_name_b"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_b_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_b_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_b = {
+    name = "custom_religion_name_b"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_b_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_b_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_c = {
+    name = "custom_religion_name_c"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_c_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_c_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_c = {
+    name = "custom_religion_name_a"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_c_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_c_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_d = {
+    name = "custom_religion_name_d"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_d_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_d_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_d = {
+    name = "custom_religion_name_d"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_d_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_d_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_e = {
+    name = "custom_religion_name_e"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_e_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_e_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_e = {
+    name = "custom_religion_name_e"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_e_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_e_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_f = {
+    name = "custom_religion_name_f"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_f_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_f_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_f = {
+    name = "custom_religion_name_f"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_f_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_f_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_g = {
+    name = "custom_religion_name_g"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_g_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_g_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_g = {
+    name = "custom_religion_name_g"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_g_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_g_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_h = {
+    name = "custom_religion_name_h"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_h_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_h_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_h = {
+    name = "custom_religion_name_h"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_h_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_h_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_i = {
+    name = "custom_religion_name_i"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_i_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_i_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_i = {
+    name = "custom_religion_name_i"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_i_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_i_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_j = {
+    name = "custom_religion_name_j"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_j_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_j_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_j = {
+    name = "custom_religion_name_j"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_j_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_j_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_k = {
+    name = "custom_religion_name_k"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_k_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_k_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_k = {
+    name = "custom_religion_name_k"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_k_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_k_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_l = {
+    name = "custom_religion_name_l"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_l_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_l_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_l = {
+    name = "custom_religion_name_l"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_l_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_l_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_m = {
+    name = "custom_religion_name_m"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_m_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_m_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_m = {
+    name = "custom_religion_name_m"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_m_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_m_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_n = {
+    name = "custom_religion_name_n"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_n_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_n_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_n = {
+    name = "custom_religion_name_n"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_n_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_n_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_o = {
+    name = "custom_religion_name_o"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_o_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_o_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_o = {
+    name = "custom_religion_name_o"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_o_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_o_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_p = {
+    name = "custom_religion_name_p"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_p_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_p_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_p = {
+    name = "custom_religion_name_p"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_p_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_p_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_q = {
+    name = "custom_religion_name_q"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_q_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_q_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_q = {
+    name = "custom_religion_name_q"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_q_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_q_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_r = {
+    name = "custom_religion_name_r"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_r_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_r_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_r = {
+    name = "custom_religion_name_r"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_r_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_r_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_s = {
+    name = "custom_religion_name_s"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_s_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_s_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_s = {
+    name = "custom_religion_name_s"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_s_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_s_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_t = {
+    name = "custom_religion_name_t"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_t_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_t_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_t = {
+    name = "custom_religion_name_t"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_t_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_t_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+custom_religion_back = {
+    name = "CUSTOM_RELIGION_BACK"
+    desc = "CUSTOM_RELIGION_BACK_DESC"
+
+    visible = {
+        var:current_stage > 1
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:current_stage > 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "CUSTOM_RELIGION_BACK_DESC"
+            change_variable = {
+                name = current_stage
+                subtract = 1
+            }
+        }
+    }
+}
+
+custom_religion_next = {
+    name = "CUSTOM_RELIGION_NEXT"
+    desc = "CUSTOM_RELIGION_NEXT_DESC"
+
+    visible = {
+        OR = {
+            AND = {
+                var:selected_idelogies = 3
+                var:current_stage = 1
+            }
+            AND = {
+                var:selected_traits = 3
+                var:current_stage = 2
+            }
+        }
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        always = yes
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "CUSTOM_RELIGION_NEXT_DESC"
+            change_variable = {
+                name = current_stage
+                add = 1
+            }
+        }
+    }
+}
+
+create_new_religion = {
+    name = "CREATE_NEW_RELIGION"
+    desc = "CREATE_NEW_RELIGION_DESC"
+
+    visible = {
+        var:selected_idelogies = 3
+        var:selected_traits = 3
+        var:selected_name = 1
+        var:current_stage = 3
+    }
+    
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        always = yes
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "CREATE_NEW_RELIGION_DESC"
+            set_state_religion = rel:custom_religion
+            every_scope_character = {
+                limit = {
+                    interest_group = ROOT.ig:ig_devout
+                }
+                exile_character = yes
+            }
+            ruler = {
+                change_character_religion = rel:custom_religion
+            }
+            ig:ig_devout = {
+                hidden_effect = { set_interest_group_name = custom_religion }
+                # remove old ideologies
+                remove_all_ideologies = yes
+                # add relevant ideologies
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }}
+                    add_ideology = ideology_custom_religion_traditionalist_economy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_free_market_economy_selected }}
+                    add_ideology = ideology_custom_religion_free_market_economy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_socialist_economy_selected }}
+                    add_ideology = ideology_custom_religion_socialist_economy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }}
+                    add_ideology = ideology_custom_religion_social_democratic_economy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }}
+                    add_ideology = ideology_custom_religion_traditionalist_society
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_inclusive_society_selected }}
+                    add_ideology = ideology_custom_religion_inclusive_society
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }}
+                    add_ideology = ideology_custom_religion_totalitarian_society
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }}
+                    add_ideology = ideology_custom_religion_meritocratic_society
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }}
+                    add_ideology = ideology_custom_religion_aristocratic_governance
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }}
+                    add_ideology = ideology_custom_religion_technocratic_governance
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_republican_governance_selected }}
+                    add_ideology = ideology_custom_religion_republican_governance
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_corporate_governance_selected }}
+                    add_ideology = ideology_custom_religion_corporate_governance
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }}
+                    add_ideology = ideology_custom_religion_pacifist_outlook
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }}
+                    add_ideology = ideology_custom_religion_militarist_outlook
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }}
+                    add_ideology = ideology_custom_religion_isolationist_outlook
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }}
+                    add_ideology = ideology_custom_religion_exploitative_outlook
+                }
+                # set ig traits
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_loyal_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_loyal
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_happy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_happy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_unhappy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_unhappy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_loyal_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_loyal
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_happy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_happy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_unhappy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_unhappy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_loyal_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_loyal
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_happy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_happy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_unhappy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_unhappy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_loyal_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_loyal
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_happy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_happy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_unhappy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_unhappy
+                }
+            }
+            random_scope_state = {
+                limit = {
+                    owner = ROOT
+                    is_capital = yes
+                }
+                convert_population = {
+                    target = rel:custom_religion
+                    value = 0.2
+                }
+            }
+            every_scope_state = {
+                limit = {
+                    owner = ROOT
+                    is_incorporated = yes
+                    NOT = { is_capital = yes }
+                }
+                convert_population = {
+                    target = rel:custom_religion
+                    value = 0.1
+                }
+            }
+        }
+    }
 }

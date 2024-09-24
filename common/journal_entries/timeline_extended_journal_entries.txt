@@ -266,3 +266,148 @@ je_state_collapse = {
 
     can_deactivate = yes
 }
+
+je_create_new_religion = {
+    icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+    group = je_group_internal_affairs
+
+    is_shown_when_inactive = {
+        NOT = { country_has_state_religion = rel:custom_religion }
+    }
+
+    scripted_button = select_ideology_traditionalist_economy
+    scripted_button = deselect_ideology_traditionalist_economy
+    scripted_button = select_ideology_free_market_economy
+    scripted_button = deselect_ideology_free_market_economy
+    scripted_button = select_ideology_socialist_economy
+    scripted_button = deselect_ideology_socialist_economy
+    scripted_button = select_ideology_social_democratic_economy
+    scripted_button = deselect_ideology_social_democratic_economy
+    scripted_button = select_ideology_traditionalist_society
+    scripted_button = deselect_ideology_traditionalist_society
+    scripted_button = select_ideology_inclusive_society
+    scripted_button = deselect_ideology_inclusive_society
+    scripted_button = select_ideology_totalitarian_society
+    scripted_button = deselect_ideology_totalitarian_society
+    scripted_button = select_ideology_meritocratic_society
+    scripted_button = deselect_ideology_meritocratic_society
+    scripted_button = select_ideology_aristocratic_governance
+    scripted_button = deselect_ideology_aristocratic_governance
+    scripted_button = select_ideology_technocratic_governance
+    scripted_button = deselect_ideology_technocratic_governance
+    scripted_button = select_ideology_republican_governance
+    scripted_button = deselect_ideology_republican_governance
+    scripted_button = select_ideology_corporate_governance
+    scripted_button = deselect_ideology_corporate_governance
+    scripted_button = select_ideology_pacifist_outlook
+    scripted_button = deselect_ideology_pacifist_outlook
+    scripted_button = select_ideology_militarist_outlook
+    scripted_button = deselect_ideology_militarist_outlook
+    scripted_button = select_ideology_isolationist_outlook
+    scripted_button = deselect_ideology_isolationist_outlook
+    scripted_button = select_ideology_exploitative_outlook
+    scripted_button = deselect_ideology_exploitative_outlook
+    scripted_button = select_trait_traditionalist_loyal
+    scripted_button = deselect_trait_traditionalist_loyal
+    scripted_button = select_trait_market_liberal_loyal
+    scripted_button = deselect_trait_market_liberal_loyal
+    scripted_button = select_trait_social_democrat_loyal
+    scripted_button = deselect_trait_social_democrat_loyal
+    scripted_button = select_trait_totalitarian_loyal
+    scripted_button = deselect_trait_totalitarian_loyal
+    scripted_button = select_trait_market_liberal_happy
+    scripted_button = deselect_trait_market_liberal_happy
+    scripted_button = select_trait_traditionalist_happy
+    scripted_button = deselect_trait_traditionalist_happy
+    scripted_button = select_trait_social_democrat_happy
+    scripted_button = deselect_trait_social_democrat_happy
+    scripted_button = select_trait_totalitarian_happy
+    scripted_button = deselect_trait_totalitarian_happy
+    scripted_button = select_trait_traditionalist_unhappy
+    scripted_button = deselect_trait_traditionalist_unhappy
+    scripted_button = select_trait_market_liberal_unhappy
+    scripted_button = deselect_trait_market_liberal_unhappy
+    scripted_button = select_trait_social_democrat_unhappy
+    scripted_button = deselect_trait_social_democrat_unhappy
+    scripted_button = select_trait_totalitarian_unhappy
+    scripted_button = deselect_trait_totalitarian_unhappy
+    scripted_button = select_name_a
+    scripted_button = deselect_name_a
+    scripted_button = select_name_b
+    scripted_button = deselect_name_b
+    scripted_button = select_name_c
+    scripted_button = deselect_name_c
+    scripted_button = select_name_d
+    scripted_button = deselect_name_d
+    scripted_button = select_name_e
+    scripted_button = deselect_name_e
+    scripted_button = select_name_f
+    scripted_button = deselect_name_f
+    scripted_button = select_name_g
+    scripted_button = deselect_name_g
+    scripted_button = select_name_h
+    scripted_button = deselect_name_h
+    scripted_button = select_name_i
+    scripted_button = deselect_name_i
+    scripted_button = select_name_j
+    scripted_button = deselect_name_j
+    scripted_button = select_name_k
+    scripted_button = deselect_name_k
+    scripted_button = select_name_l
+    scripted_button = deselect_name_l
+    scripted_button = select_name_m
+    scripted_button = deselect_name_m
+    scripted_button = select_name_n
+    scripted_button = deselect_name_n
+    scripted_button = select_name_o
+    scripted_button = deselect_name_o
+    scripted_button = select_name_p
+    scripted_button = deselect_name_p
+    scripted_button = select_name_q
+    scripted_button = deselect_name_q
+    scripted_button = select_name_r
+    scripted_button = deselect_name_r
+    scripted_button = select_name_s
+    scripted_button = deselect_name_s
+    scripted_button = select_name_t
+    scripted_button = deselect_name_t
+    scripted_button = custom_religion_back
+    scripted_button = custom_religion_next
+    scripted_button = create_new_religion
+
+    possible = {
+        is_ai = no
+        NOT = { country_has_state_religion = rel:custom_religion }
+    }
+
+    immediate = {
+        set_variable = {
+            name = selected_idelogies
+            value = 0
+        }
+        set_variable = {
+            name = selected_traits
+            value = 0
+        }
+        set_variable = {
+            name = selected_name
+            value = 0
+        }
+        set_variable = {
+            name = current_stage
+            value = 1
+        }
+    }
+
+    complete = {
+        country_has_state_religion = rel:custom_religion
+    }
+
+    on_weekly_pulse = {
+    }
+
+    weight = 10
+    should_be_pinned_by_default = yes
+    can_deactivate = yes
+}
