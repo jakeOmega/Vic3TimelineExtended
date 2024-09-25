@@ -1,4 +1,52 @@
-custom_religion = {
+custom_religion_christian = {
+	texture = "gfx/interface/icons/religion_icons/christian.dds"
+	traits = {
+		christian
+	}
+	color = { 0.1 0.0 0.1 }
+}
+
+custom_religion_muslim = {
+	texture = "gfx/interface/icons/religion_icons/muslim.dds"
+	traits = {
+		muslim
+	}
+	color = { 0.1 0.0 0.1 }
+}
+
+custom_religion_jewish = {
+	texture = "gfx/interface/icons/religion_icons/jewish.dds"
+	traits = {
+		jewish
+	}
+	color = { 0.1 0.0 0.1 }
+}
+
+custom_religion_eastern = {
+	texture = "gfx/interface/icons/religion_icons/hindu.dds"
+	traits = {
+		eastern
+	}
+	color = { 0.1 0.0 0.1 }
+}
+
+custom_religion_animist = {
+	texture = "gfx/interface/icons/religion_icons/norse.dds"
+	traits = {
+		animist
+	}
+	color = { 0.1 0.0 0.1 }
+}
+
+custom_religion_buddhist = {
+	texture = "gfx/interface/icons/religion_icons/zoroastrian.dds"
+	traits = {
+		buddhist
+	}
+	color = { 0.1 0.0 0.1 }
+}
+
+custom_religion_custom = {
     texture = "gfx/interface/icons/religion_icons/animist.dds"
 	traits = {
 		custom_religion_trait

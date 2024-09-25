@@ -1,8 +1,11 @@
-free_market_construction = {
-    default = free_market_construction
+custom_religions_allowed_rule = {
+    default = custom_religions_not_allowed
 
-    free_market_construction = {
-        #apply_modifier = all:free_market_construction_modifier
-        flag = free_market_construction
+    custom_religions_not_allowed = {
+        flag = custom_religions_not_allowed
+    }
+
+    custom_religions_allowed = {
+        flag = custom_religions_allowed
     }
 }

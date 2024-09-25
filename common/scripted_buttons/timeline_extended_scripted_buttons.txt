@@ -2139,7 +2139,7 @@ select_name_c = {
 }
 
 deselect_name_c = {
-    name = "custom_religion_name_a"
+    name = "custom_religion_name_c"
     desc = "DESELECT_NAME_DESC"
 
     visible = {
@@ -3204,6 +3204,433 @@ deselect_name_t = {
     }
 }
 
+select_christian = {
+    name = "SELECT_CHRISTIAN"
+    desc = "SELECT_CHRISTIAN_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_christian_selected }
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_CHRISTIAN_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_christian_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_christian = {
+    name = "DESELECT_CHRISTIAN"
+    desc = "DESELECT_CHRISTIAN_DESC"
+
+    visible = {
+        has_variable = custom_religion_christian_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_CHRISTIAN_DESC"
+            remove_variable = custom_religion_christian_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_muslim = {
+    name = "SELECT_MUSLIM"
+    desc = "SELECT_MUSLIM_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_muslim_selected }
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_MUSLIM_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_muslim_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_muslim = {
+    name = "DESELECT_MUSLIM"
+    desc = "DESELECT_MUSLIM_DESC"
+
+    visible = {
+        has_variable = custom_religion_muslim_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_MUSLIM_DESC"
+            remove_variable = custom_religion_muslim_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_judaism = {
+    name = "SELECT_JUDAISM"
+    desc = "SELECT_JUDAISM_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_judaism_selected }
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_JUDAISM_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_judaism_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_judaism = {
+    name = "DESELECT_JUDAISM"
+    desc = "DESELECT_JUDAISM_DESC"
+
+    visible = {
+        has_variable = custom_religion_judaism_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_JUDAISM_DESC"
+            remove_variable = custom_religion_judaism_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_eastern = {
+    name = "SELECT_EASTERN"
+    desc = "SELECT_EASTERN_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_eastern_selected }
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_EASTERN_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_eastern_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_eastern = {
+    name = "DESELECT_EASTERN"
+    desc = "DESELECT_EASTERN_DESC"
+
+    visible = {
+        has_variable = custom_religion_eastern_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_EASTERN_DESC"
+            remove_variable = custom_religion_eastern_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_animist = {
+    name = "SELECT_ANIMIST"
+    desc = "SELECT_ANIMIST_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_animist_selected }
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_ANIMIST_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_animist_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_animist = {
+    name = "DESELECT_ANIMIST"
+    desc = "DESELECT_ANIMIST_DESC"
+
+    visible = {
+        has_variable = custom_religion_animist_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_ANIMIST_DESC"
+            remove_variable = custom_religion_animist_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_buddhist = {
+    name = "SELECT_BUDDHIST"
+    desc = "SELECT_BUDDHIST_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_buddhist_selected }
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_BUDDHIST_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_buddhist_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_buddhist = {
+    name = "DESELECT_BUDDHIST"
+    desc = "DESELECT_BUDDHIST_DESC"
+
+    visible = {
+        has_variable = custom_religion_buddhist_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_BUDDHIST_DESC"
+            remove_variable = custom_religion_buddhist_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_custom = {
+    name = "SELECT_CUSTOM"
+    desc = "SELECT_CUSTOM_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_custom_selected }
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_CUSTOM_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_custom_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_custom = {
+    name = "DESELECT_CUSTOM"
+    desc = "DESELECT_CUSTOM_DESC"
+
+    visible = {
+        has_variable = custom_religion_custom_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_CUSTOM_DESC"
+            remove_variable = custom_religion_custom_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
 custom_religion_back = {
     name = "CUSTOM_RELIGION_BACK"
     desc = "CUSTOM_RELIGION_BACK_DESC"
@@ -3245,6 +3672,10 @@ custom_religion_next = {
                 var:selected_traits = 3
                 var:current_stage = 2
             }
+            AND = {
+                var:selected_name = 1
+                var:current_stage = 3
+            }
         }
     }
 
@@ -3275,7 +3706,8 @@ create_new_religion = {
         var:selected_idelogies = 3
         var:selected_traits = 3
         var:selected_name = 1
-        var:current_stage = 3
+        var:selected_religion_group = 1
+        var:current_stage = 4
     }
     
     ai_chance = {
@@ -3289,15 +3721,60 @@ create_new_religion = {
     effect = {
         custom_tooltip = {
             text = "CREATE_NEW_RELIGION_DESC"
-            set_state_religion = rel:custom_religion
             every_scope_character = {
                 limit = {
                     interest_group = ROOT.ig:ig_devout
                 }
                 exile_character = yes
             }
+            if = {
+                limit = { has_variable = custom_religion_christian_selected }
+                rel:custom_religion_christian = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_muslim_selected }
+                rel:custom_religion_muslim = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_judaism_selected }
+                rel:custom_religion_jewish = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_eastern_selected }
+                rel:custom_religion_eastern = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_animist_selected }
+                rel:custom_religion_animist = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_buddhist_selected }
+                rel:custom_religion_buddhist = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_custom_selected }
+                rel:custom_religion_custom = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            set_state_religion = scope:custom_religion_scope
             ruler = {
-                change_character_religion = rel:custom_religion
+                change_character_religion = scope:custom_religion_scope
+            }
+            heir ?= {
+                change_character_religion = scope:custom_religion_scope
             }
             ig:ig_devout = {
                 hidden_effect = { set_interest_group_name = custom_religion }
@@ -3424,7 +3901,7 @@ create_new_religion = {
                     is_capital = yes
                 }
                 convert_population = {
-                    target = rel:custom_religion
+                    target = scope:custom_religion_scope
                     value = 0.2
                 }
             }
@@ -3435,7 +3912,7 @@ create_new_religion = {
                     NOT = { is_capital = yes }
                 }
                 convert_population = {
-                    target = rel:custom_religion
+                    target = scope:custom_religion_scope
                     value = 0.1
                 }
             }

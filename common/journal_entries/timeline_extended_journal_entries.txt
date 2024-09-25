@@ -273,7 +273,16 @@ je_create_new_religion = {
     group = je_group_internal_affairs
 
     is_shown_when_inactive = {
-        NOT = { country_has_state_religion = rel:custom_religion }
+        AND = {
+            NOT = { country_has_state_religion = rel:custom_religion_christian }
+            NOT = { country_has_state_religion = rel:custom_religion_muslim }
+            NOT = { country_has_state_religion = rel:custom_religion_jewish }
+            NOT = { country_has_state_religion = rel:custom_religion_eastern }
+            NOT = { country_has_state_religion = rel:custom_religion_animist }
+            NOT = { country_has_state_religion = rel:custom_religion_buddhist }
+            NOT = { country_has_state_religion = rel:custom_religion_custom }
+        }
+        has_game_rule = custom_religions_allowed
     }
 
     scripted_button = select_ideology_traditionalist_economy
@@ -316,10 +325,10 @@ je_create_new_religion = {
     scripted_button = deselect_trait_social_democrat_loyal
     scripted_button = select_trait_totalitarian_loyal
     scripted_button = deselect_trait_totalitarian_loyal
-    scripted_button = select_trait_market_liberal_happy
-    scripted_button = deselect_trait_market_liberal_happy
     scripted_button = select_trait_traditionalist_happy
     scripted_button = deselect_trait_traditionalist_happy
+    scripted_button = select_trait_market_liberal_happy
+    scripted_button = deselect_trait_market_liberal_happy
     scripted_button = select_trait_social_democrat_happy
     scripted_button = deselect_trait_social_democrat_happy
     scripted_button = select_trait_totalitarian_happy
@@ -372,13 +381,26 @@ je_create_new_religion = {
     scripted_button = deselect_name_s
     scripted_button = select_name_t
     scripted_button = deselect_name_t
+    scripted_button = select_christian
+    scripted_button = deselect_christian
+    scripted_button = select_muslim
+    scripted_button = deselect_muslim
+    scripted_button = select_jewish
+    scripted_button = deselect_jewish
+    scripted_button = select_eastern
+    scripted_button = deselect_eastern
+    scripted_button = select_animist
+    scripted_button = deselect_animist
+    scripted_button = select_buddhist
+    scripted_button = deselect_buddhist
+    scripted_button = select_custom
+    scripted_button = deselect_custom
     scripted_button = custom_religion_back
     scripted_button = custom_religion_next
     scripted_button = create_new_religion
 
     possible = {
         is_ai = no
-        NOT = { country_has_state_religion = rel:custom_religion }
     }
 
     immediate = {
@@ -395,13 +417,25 @@ je_create_new_religion = {
             value = 0
         }
         set_variable = {
+            name = selected_religion_group
+            value = 0
+        }
+        set_variable = {
             name = current_stage
             value = 1
         }
     }
 
     complete = {
-        country_has_state_religion = rel:custom_religion
+        OR = {
+            country_has_state_religion = rel:custom_religion_christian
+            country_has_state_religion = rel:custom_religion_muslim
+            country_has_state_religion = rel:custom_religion_jewish
+            country_has_state_religion = rel:custom_religion_eastern
+            country_has_state_religion = rel:custom_religion_animist
+            country_has_state_religion = rel:custom_religion_buddhist
+            country_has_state_religion = rel:custom_religion_custom
+        }
     }
 
     on_weekly_pulse = {

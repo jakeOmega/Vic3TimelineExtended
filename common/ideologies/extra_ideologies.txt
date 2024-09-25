@@ -943,9 +943,9 @@ ideology_custom_religion_meritocratic_society = {
 	}
 	
 	lawgroup_church_and_state = {
-		law_state_religion = disapprove
+		law_state_religion = neutral
 		law_freedom_of_conscience = approve
-		law_total_separation = strongly_approve
+		law_total_separation = neutral
 		law_state_atheism = disapprove
 	}
 
@@ -1176,7 +1176,7 @@ ideology_custom_religion_republican_governance = {
 	
 	lawgroup_governance_principles = {
 		law_monarchy = strongly_disapprove
-		law_theocracy = disapprove	
+		law_theocracy = neutral	
 		law_presidential_republic = strongly_approve
 		law_parliamentary_republic = strongly_approve
 		law_council_republic = strongly_disapprove
