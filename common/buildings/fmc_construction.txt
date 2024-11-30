@@ -3,7 +3,7 @@
 
 fmc_building_construction_site = {
 	building_group = fmc_bg_construction_site
-	texture = "gfx/interface/icons/building_icons/construction_camp.dds"
+	icon = "gfx/interface/icons/building_icons/construction_camp.dds"
 	levels_per_mesh = -1
 	buildable = no
 	expandable = no
@@ -32,7 +32,7 @@ fmc_building_construction_site = {
 
 building_construction_sector = {
 	building_group = bg_construction
-	texture = "gfx/interface/icons/building_icons/construction_camp.dds"
+	icon = "gfx/interface/icons/building_icons/construction_camp.dds"
 	city_type = city
 	levels_per_mesh = 5
 	# meshes = {

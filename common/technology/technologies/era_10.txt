@@ -10,6 +10,7 @@ machine_learning = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 100
+		state_education_access_add = -0.05
 	}
 	
 	ai_weight = {
@@ -63,6 +64,7 @@ generative_ai = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
+		state_education_access_add = -0.05
 	}
 	
 	unlocking_technologies = {	
@@ -460,7 +462,6 @@ personalized_medicine = {
 		building_economy_of_scale_level_cap_add = 10
 		country_weekly_innovation_max_add = 100
 		country_institution_health_system_max_investment_add = 1
-		country_institution_ministry_of_population_control_max_investment_add = 1
 	}
 }
 
@@ -474,8 +475,8 @@ universal_basic_income = {
 	}
 	
 	modifier = {
-		state_poor_expected_sol = 2
-		state_middle_expected_sol = 2
+		state_lower_strata_expected_sol_add = 2
+		state_middle_strata_expected_sol_add = 2
 		country_institution_social_security_max_investment_add = 1
 		country_institution_national_bank_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
@@ -542,7 +543,7 @@ biohacking_and_human_augmentation = {
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
 		country_institution_ministry_of_thought_control_max_investment_add = 3
-		political_movement_radicalism_mult = 0.1
+		political_movement_radicalism_from_enactment_disapproval_mult = 0.1
 	}
 	
 	ai_weight = {

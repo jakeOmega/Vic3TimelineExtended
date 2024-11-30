@@ -76,8 +76,22 @@ nuke_diplo_action = {
         }
 	
 		will_propose = {
-            any_scope_state = {
-                has_modifier = nuclear_strike_aftermath
+            OR = {
+                AND = {
+                    any_scope_state = {
+                        has_modifier = nuclear_strike_aftermath
+                    }
+                    scope:target_country = {
+                        has_modifier = nuclear_power
+                    }
+                }
+                AND = {
+                    has_law = law_type:law_total_war
+                    has_diplomatic_pact = {
+                        type = rivalry
+                        who = scope:target_country
+                    }
+                }
             }
             NOT = { infamy > 75 }
         }
@@ -88,10 +102,12 @@ nuke_diplo_action = {
                 add = {
                     value = state_population
                     divide = owner.total_population
+                    multiply = 200
                 }
                 add = {
                     value = gdp
                     divide = owner.gdp
+                    multiply = 400
                 }
                 if = {
                     limit = {
@@ -105,8 +121,6 @@ nuke_diplo_action = {
                     }
                     multiply = 2
                 }
-                multiply = owner.gdp
-                divide = 100000 # 100,000
             }
         }
 	}
@@ -212,15 +226,7 @@ tactical_nuke_diplo_action = {
 
     ai = {
 		evaluation_chance = {
-            value = 0
-            if = {
-                limit = {
-                    any_scope_state = {
-                        has_modifier = tactical_nuke_aftermath
-                    }
-                }
-                add = 100
-            }
+            value = 100
         }
 
 		will_select_as_second_state = {
@@ -229,6 +235,28 @@ tactical_nuke_diplo_action = {
                 has_building = building_naval_base
                 has_building = building_conscription_center
             }
+        }
+
+        will_propose = {
+            OR = {
+                AND = {
+                    OR = {
+                        has_modifier = nuclear_strike_aftermath
+                        has_modifier = tactical_nuke_aftermath
+                    }
+                    scope:target_country = {
+                        has_modifier = nuclear_power
+                    }
+                }
+                AND = {
+                    has_law = law_type:law_total_war
+                    has_diplomatic_pact = {
+                        type = rivalry
+                        who = scope:target_country
+                    }
+                }
+            }
+            NOT = { infamy > 75 }
         }
 	
 		propose_score = {
@@ -264,8 +292,7 @@ tactical_nuke_diplo_action = {
                     }
                     multiply = 2
                 }
-                multiply = owner.gdp
-                divide = 1000000 # 1,000,000
+                multiply = 100
             }
         }
 	}

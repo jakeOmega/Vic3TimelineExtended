@@ -5,7 +5,7 @@ artificial_intelligence = {
 	
 	unlocking_technologies = {	
 		generative_ai
-		advanced_nanofabrication
+		programmable_matter
 		autonomous_vehicles
 	}
 	
@@ -27,6 +27,7 @@ advanced_nanofabrication = {
 	modifier = {
 		country_max_weekly_construction_progress_add = 25
 		country_institution_ministry_of_the_environment_max_investment_add = 1
+		state_education_access_add = -0.05
 	}
 	
 	ai_weight = {
@@ -79,6 +80,7 @@ orbital_manufacturing = {
 
 	modifier = {
 		state_building_airport_max_level_add = 2
+		state_education_access_add = -0.05
 	}
 	
 	ai_weight = {
@@ -320,8 +322,8 @@ post-scarcity_economy = {
 	}
 	
 	modifier = {
-		state_poor_expected_sol = 3
-		state_middle_expected_sol = 1
+		state_lower_strata_expected_sol_add = 3
+		state_middle_strata_expected_sol_add = 1
 		country_max_weekly_construction_progress_add = 50
 		country_loan_interest_rate_add = -0.01
 		state_building_airport_max_level_add = 1

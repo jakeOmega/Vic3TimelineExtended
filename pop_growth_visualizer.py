@@ -7,13 +7,13 @@ max_birthrate = 0.00475 * 12
 min_mortality = 0.00100 * 12
 max_mortality = 0.00600 * 12
 
-pop_growth_equilibrium_sol = 5
-pop_growth_transition_sol = 10
-pop_growth_max_sol = 12
+pop_growth_equilibrium_sol = 4
+pop_growth_transition_sol = 11
+pop_growth_max_sol = 18
 pop_growth_stable_sol = 35
 
 transition_birthrate_mult = 1
-max_growth_mortality_mult = 0.5
+max_growth_mortality_mult = 0.4
 
 # Derived Values
 birthrate_at_transition = max_birthrate * transition_birthrate_mult

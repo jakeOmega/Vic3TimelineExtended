@@ -306,7 +306,7 @@ types construction_panel
 
 					#     	### building icon
 					#     	icon = {
-					#     		texture = "[BuildingType.GetTexture]"
+					#     		texture = "[BuildingType.GetIcon]"
 					#     		enabled = no
 					#     		size = { 100 100 }
 					#     		position = { 7 0 }

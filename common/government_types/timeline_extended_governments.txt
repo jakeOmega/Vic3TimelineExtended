@@ -67,7 +67,7 @@ gov_corporate_state_democracy = {
 	female_ruler = "RULER_TITLE_DIRECTOR"
 	
 	possible = {
-		has_law = law_type:law_corporate_state
+		has_law = law_type:law_corporation_state
 		country_has_voting_franchise = yes
 		NOT = { 
 			has_law = law_type:law_single_party_state
@@ -90,7 +90,7 @@ gov_corporate_state_single_party_state = {
 	female_ruler = "RULER_TITLE_DIRECTOR"
 	
 	possible = {
-		has_law = law_type:law_corporate_state
+		has_law = law_type:law_corporation_state
 		country_has_voting_franchise = yes
 		NOT = { 
 			has_law = law_type:law_single_party_state
@@ -111,7 +111,7 @@ gov_corporate_state_autocracy = {
 	female_ruler = "RULER_TITLE_DIRECTOR"
 	
 	possible = {
-		has_law = law_type:law_corporate_state
+		has_law = law_type:law_corporation_state
 		country_has_voting_franchise = no
 	}
 

@@ -1,0 +1,11 @@
+﻿# root = political_movement
+
+## STATE FACTORS ##
+
+movement_support_high_pollution = {
+	name = POP_HIGH_POLLUTION
+}
+
+movement_support_low_gpd_per_capita = {
+	name = POP_LOW_GPD_PER_CAPITA
+}

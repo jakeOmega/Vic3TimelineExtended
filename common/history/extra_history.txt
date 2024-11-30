@@ -2,6 +2,10 @@
 GLOBAL = {
 	every_country = {
 		activate_law = law_type:law_partible
+		activate_law = law_type:law_minority_rights_discrimination
+		activate_law = law_type:law_minimal_privacy_protection
+		activate_law = law_type:law_traditional_rules_of_war
+		activate_law = law_type:law_informal_government_secrecy
 		set_variable = {
 			name = nuclear_weapon_stockpile
 			value = 0
@@ -9,6 +13,7 @@ GLOBAL = {
 	}
 	c:FRA = {
 		activate_law = law_type:law_equal_inheritance
+		activate_law = law_type:law_minority_rights_cultural_assimilation
 	}
 	c:GBR = {
 		activate_law = law_type:law_primogeniture
@@ -18,6 +23,13 @@ GLOBAL = {
 	}
 	c:RUS = {
 		activate_law = law_type:law_primogeniture
+		activate_law = law_type:law_minority_rights_ghettoization
+	}
+	c:USA = {
+		activate_law = law_type:law_minority_rights_violent_hostility
+	}
+	c:SIA = {
+		activate_law = law_type:law_minority_rights_indifference
 	}
 	every_country = {
 		limit = {

@@ -26,7 +26,7 @@ annex_subject_peaceful = {
         scope:target_country = {
             NOT = { has_truce_with = ROOT }
             any_primary_culture = {
-                NOT = { culture_is_discriminated_in = ROOT }
+                pop_acceptance > 40
             }
         }
         custom_tooltip = {
@@ -101,7 +101,7 @@ crisis_resolution = {
 		second_modifier = {
 			country_pact_leverage_generation_add = 200
             country_legitimacy_min_add = 40
-            political_movement_radicalism_mult = -0.5
+            political_movement_radicalism_from_enactment_disapproval_mult = -0.5
 		}
 		
 		requirement_to_maintain = {

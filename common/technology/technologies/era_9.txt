@@ -52,6 +52,7 @@ world_wide_web = {
 		country_institution_ministry_of_labor_max_investment_add = 1
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
+		state_education_access_add = -0.05
 	}
 	
 	ai_weight = {
@@ -106,7 +107,6 @@ supply_chain_management = {
 	modifier = {
 		state_building_highway_max_level_add = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
-		country_institution_ministry_of_population_control_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -130,6 +130,7 @@ e-commerce = {
 		state_bureaucracy_population_base_cost_factor_mult = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
 		country_institution_ministry_of_labor_max_investment_add = 1
+		state_education_access_add = -0.05
 	}
 	
 	ai_weight = {
@@ -297,11 +298,12 @@ social_media = {
 	}
 	
 	modifier = {
-		political_movement_radicalism_mult = 0.1
+		political_movement_radicalism_from_enactment_disapproval_mult = 0.1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_institution_ministry_of_religion_max_investment_add = 1
 		country_institution_ministry_of_propaganda_max_investment_add = 1
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
+		state_expected_sol_from_literacy = 1
 	}
 	
 	ai_weight = {
@@ -399,6 +401,7 @@ social_justice_movements = {
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 2
 		country_institution_social_security_max_investment_add = 1
+		state_expected_sol_from_literacy = 1
 	}
 	
 	ai_weight = {

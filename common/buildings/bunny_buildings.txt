@@ -5,7 +5,7 @@ building_migrant_camp = {
 
 	lens = infrastructure
 
-	texture = "gfx/interface/icons/building_icons/building_conscription_center.dds"
+	icon = "gfx/interface/icons/building_icons/building_conscription_center.dds"
 
 	production_method_groups = {
 		pmg_base_building_migrant_camp

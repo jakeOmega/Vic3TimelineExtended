@@ -1286,13 +1286,13 @@ types power_bloc_formation
 
 			blockoverride "icon" {
 				texture = "gfx/interface/backgrounds/colored_header.dds"
+				color = "[DataColorPicker.GetColor]"
 
 				modify_texture = {
 					spriteType = Corneredtiled
 					spriteborder = { 20 20 }
 					texture_density = 2
 					alpha = 1
-					color = "[DataColorPicker.GetColor]"
 				}
 			}
 

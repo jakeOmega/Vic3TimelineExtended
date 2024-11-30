@@ -39,7 +39,7 @@ ig_trait_custom_religion_market_liberal_happy = {
 	min_approval = happy
 	
 	modifier = {
-		state_loyalists_from_sol_change_accepted_religion_mult = 0.1
+		country_state_religion_wages_mult = 0.1
 	}
 }
 
@@ -48,7 +48,7 @@ ig_trait_custom_religion_market_liberal_unhappy = {
 	max_approval = unhappy
 	
 	modifier = {
-		state_rich_expected_sol = 3
+		state_upper_strata_expected_sol_add = 3
 	}
 }
 
@@ -57,7 +57,7 @@ ig_trait_custom_religion_social_democrat_loyal = {
 	min_approval = loyal
 	
 	modifier = {
-		state_poor_expected_sol = -1
+		state_lower_strata_expected_sol_add = -1
 		country_bureaucracy_investment_cost_factor_mult = -0.1
 	}
 }
@@ -76,7 +76,7 @@ ig_trait_custom_religion_social_democrat_unhappy = {
 	max_approval = unhappy
 	
 	modifier = {
-		state_radicals_from_sol_change_mult = 0.1
+		country_loyalism_increases_full_acceptance_mult = -0.1
 	}
 }
 
@@ -94,7 +94,7 @@ ig_trait_custom_religion_totalitarian_happy = {
 	min_approval = happy
 	
 	modifier = {
-		political_movement_radicalism_mult = -0.15
+		political_movement_radicalism_from_enactment_disapproval_mult = -0.15
 	}
 }
 
@@ -103,6 +103,60 @@ ig_trait_custom_religion_totalitarian_unhappy = {
 	max_approval = unhappy
 	
 	modifier = {
-		state_radicals_from_discrimination_mult = 0.1
+		country_radicals_from_legitimacy_mult = 0.1
+	}
+}
+
+ig_trait_custom_religion_imperial_cult_loyal = {
+	icon = "gfx/interface/icons/ig_trait_icons/imperial_cult.dds"
+	min_approval = loyal
+	
+	modifier = {
+		country_authority_mult = 0.10
+	}
+}
+
+ig_trait_custom_religion_imperial_cult_happy = {
+	icon = "gfx/interface/icons/ig_trait_icons/imperial_cult.dds"
+	min_approval = happy
+	
+	modifier = {
+		state_decree_cost_mult = -0.1
+	}
+}
+
+ig_trait_custom_religion_imperial_cult_unhappy = {
+	icon = "gfx/interface/icons/ig_trait_icons/imperial_cult.dds"
+	max_approval = unhappy
+	
+	modifier = {
+		state_conversion_mult = -0.25
+	}
+}
+
+ig_trait_custom_religion_theocratic_loyal = {
+	icon = "gfx/interface/icons/ig_trait_icons/theocracy.dds"
+	min_approval = loyal
+	
+	modifier = {
+		state_conversion_mult = 0.25
+	}
+}
+
+ig_trait_custom_religion_theocratic_happy = {
+	icon = "gfx/interface/icons/ig_trait_icons/theocracy.dds"
+	min_approval = happy
+	
+	modifier = {
+		country_influence_mult = 0.25
+	}
+}
+
+ig_trait_custom_religion_theocratic_unhappy = {
+	icon = "gfx/interface/icons/ig_trait_icons/theocracy.dds"
+	max_approval = unhappy
+	
+	modifier = {
+		state_assimilation_mult = -0.25
 	}
 }

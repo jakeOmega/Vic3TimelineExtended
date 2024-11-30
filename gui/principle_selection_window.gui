@@ -330,7 +330,6 @@
 									parentanchor = hcenter
 									autoresize = yes
 									align = center|nobaseline
-									multiline = yes
 									text = "PRINCIPLE_SELECTION_SUBMIT_BUTTON_LABEL"
 									using = fontsize_xxl
 								}
@@ -340,7 +339,9 @@
 									parentanchor = hcenter
 									autoresize = yes
 									align = center|nobaseline
-									multiline = yes
+									max_width = 330
+									fontsize_min = 14
+									elide = right
 									text = "PRINCIPLE_SELECTION_SUBMIT_BUTTON_COST"
 								}
 							}
@@ -364,8 +365,7 @@
 								textbox = {
 									parentanchor = hcenter
 									autoresize = yes
-									align = center|nobaseline
-									multiline = yes
+									align = hcenter|nobaseline
 									text = "PRINCIPLE_SELECTION_SUBMIT_BUTTON_LABEL"
 									using = fontsize_xxl
 								}
@@ -374,10 +374,11 @@
 									visible = "[PowerBlocPrincipleSelectionWindow.HasSelectedPrinciple]"
 									parentanchor = hcenter
 									autoresize = yes
-									align = center|nobaseline
-									multiline = yes
+									align = hcenter|nobaseline
+									max_width = 330
+									fontsize_min = 14
+									elide = right
 									text = "PRINCIPLE_SELECTION_SUBMIT_BUTTON_COST"
-								}
 							}
 						}
 					}

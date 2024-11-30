@@ -1230,7 +1230,7 @@ pm_dedicated_police_I = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_radicals_from_sol_change_mult = -0.25
+			state_radicals_from_political_movements_mult = -0.25
 			state_turmoil_effects_mult = -0.75
 		}
 		
@@ -1259,7 +1259,7 @@ pm_militarized_police_I = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_radicals_from_sol_change_mult = -0.25
+			state_radicals_from_political_movements_mult = -0.25
 			state_radicals_from_discrimination_mult = -0.25
 			interest_group_ig_armed_forces_pol_str_mult = 0.50
 			state_mortality_turmoil_mult = 0.020

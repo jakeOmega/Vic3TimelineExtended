@@ -1,0 +1,660 @@
+﻿movement_environmental = {
+    category = movement_category_ideological
+
+    ideology = ideology_environmentalists
+    character_ideologies = {
+        ideology_environmentalists
+    }
+    
+    disband_trigger = {
+        # Conditions under which the movement disbands
+        always = no
+    }
+    on_disbanded = {
+        # Actions to perform when the movement disbands
+    }
+    
+    creation_trigger = {
+        # Conditions under which the movement is created
+        # For example, when environmental degradation reaches a certain level
+        NOT = { has_law = law_type:law_ministry_of_the_environment }
+        has_technology_researched = pollution_control
+    }
+    creation_weight = {
+        value = 100
+    }    
+    on_created = {
+        add_movement_enthusiasm_modifier = yes
+    }
+    
+    character_support_trigger = {
+        OR = {
+            has_ideology = ideology:ideology_environmentalists
+            OR = {
+                is_interest_group_type = ig_intelligentsia
+            }
+        }
+    }
+    character_support_weight = {
+        value = 200
+        if = {
+            limit = {
+                has_ideology = ideology:ideology_environmentalists
+            }
+            multiply = {
+                value = 5
+            }
+        }
+    }
+    
+    pop_support_factors = {
+        # Factors influencing popular support
+        movement_support_high_pollution
+		movement_support_high_literacy
+        movement_support_academics
+    }    
+
+    pop_support_weight = {
+		add = {
+			value = 3
+			desc = "POP_BASE_SUPPORT"
+		}
+
+        add = {
+			desc = "POLLUTED_STATE"
+            value = state.state_region.pollution_amount
+			divide = 255 # max pollution
+			multiply = 20
+            if = {
+                limit = { state.state_region.pollution_amount > 200 }
+                multiply = 2
+            }
+        }
+
+        if = {
+            limit = {
+                strata = upper
+            }
+            if = {
+                limit = {
+                    is_pop_type = capitalists
+                }
+                multiply = {
+                    value = 0.1
+                    desc = "POP_CAPITALISTS"
+                }
+            }
+            else = {
+                multiply = {
+                    value = 0.2
+                    desc = "UPPER_CLASS"
+                }
+            }
+        }
+        else_if = {
+            limit = {
+                strata = middle
+            }
+            if = {
+                limit = {
+                    is_pop_type = academics
+                }
+                multiply = {
+                    value = 5
+                    desc = "POP_ACADEMICS"
+                }
+            }
+            else_if = {
+                limit = {
+                    is_pop_type = clergymen
+                }
+                multiply = {
+                    value = 0.5
+                    desc = "POP_CLERGYMEN"
+                }
+            }
+            else = {
+                multiply = {
+                    value = 2
+                    desc = "MIDDLE_CLASS"
+                }
+            }
+        }
+        else_if = {
+            limit = {
+                strata = lower
+            }
+			multiply = {
+				value = 0.5
+				desc = "LOWER_CLASS"
+			}
+        }
+
+        multiply = { # Illiterate pops participate at 1/10 the rate of fully literate pops
+			desc = "POP_LITERACY"
+			value = literacy_rate
+			multiply = 0.9
+			add = 0.10
+		}
+
+		if = {
+			limit = { owner = { has_technology_researched = environmental_movement } }
+			multiply = {
+				value = 2
+				desc = "TECHNOLOGY_RESEARCHED_environmental_movement"
+			}
+		}
+		if = {
+			limit = { owner = { has_technology_researched = animal_rights_movement } }
+			multiply = {
+				value = 1.25
+				desc = "TECHNOLOGY_RESEARCHED_animal_rights_movement"
+			}
+		}
+		if = {
+			limit = { owner = { has_technology_researched = genetic_engineering } }
+			multiply = {
+				value = 1.25
+				desc = "TECHNOLOGY_RESEARCHED_genetic_engineering"
+			}
+		}
+    }
+
+    revolution = {
+        possible = {
+            political_movement_support >= 0.05
+        }
+        
+        weight = {
+            value = 100
+        }
+    
+        state_weight = {
+            value = 1
+        }
+    }
+
+    secession = {
+        possible = {
+            political_movement_support >= 0.05
+        }    
+    
+        weight = {
+            value = 1
+        }  
+
+        state_weight = {
+            value = 1          
+        }        
+    }    
+    
+    additional_radicalism_factors = {
+        owner = {
+			if = {
+				limit = { has_institution = institution_ministry_of_the_environment }
+				
+				add = {
+					value = modifier:country_institution_ministry_of_the_environment_max_investment_add
+					subtract = "institution_investment_level(institution_ministry_of_the_environment)"
+					multiply = 0.05
+					desc = "INSTITUTION_FUNDING_LEVEL_ministry_of_the_environment"
+				}
+			}
+			else = {
+				add = {
+					value = modifier:country_institution_ministry_of_the_environment_max_investment_add
+                    multiply = 0.05
+					desc = "NO_INSTITUTION_ministry_of_the_environment"
+				}		
+			}
+		}
+    }
+}
+
+movement_civil_rights = {
+    category = movement_category_ideological
+
+    ideology = ideology_multicultural
+    character_ideologies = {
+        ideology_multicultural
+    }
+    
+    disband_trigger = {
+        # Conditions under which the movement disbands
+        has_law = law_type:law_multicultural
+        has_law = law_type:law_minority_rights_affirmative_action
+    }
+    on_disbanded = {
+        # Actions to perform when the movement disbands
+    }
+    
+    creation_trigger = {
+        # Conditions under which the movement is created
+        # For example, when the country has a certain level of political rights
+        has_technology_researched = civil_rights_movement
+    }
+    creation_weight = {
+        value = 100
+    }    
+    on_created = {
+        add_movement_enthusiasm_modifier = yes
+    }
+    
+    character_support_trigger = {
+        OR = {
+            has_ideology = ideology:ideology_multicultural
+            OR = {
+                is_interest_group_type = ig_intelligentsia
+            }
+        }
+    }
+    character_support_weight = {
+        value = 50
+        if = {
+            limit = {
+                has_ideology = ideology:ideology_multicultural
+            }
+            multiply = {
+                value = 5
+            }
+        }
+    }
+    
+    pop_support_factors = {
+        # Factors influencing popular support
+        movement_support_cultural_discrimination
+        movement_support_high_literacy
+        movement_support_academics
+        movement_support_high_urbanization
+    }    
+
+    pop_support_weight = {
+        add = {
+			value = 10
+			desc = "POP_BASE_SUPPORT"
+		}
+        add = {
+			desc = "URBAN_STATE"
+			value = 5
+			multiply = state.state_urbanization_rate
+		}
+
+        if = {
+            limit = {
+                strata = upper
+            }
+            if = {
+                limit = {
+                    is_pop_type = capitalists
+                }
+                multiply = {
+                    value = 1
+                    desc = "POP_CAPITALISTS"
+                }
+            }
+            else = {
+                multiply = {
+                    value = 0.5
+                    desc = "UPPER_CLASS"
+                }
+            }
+        }
+        else_if = {
+            limit = {
+                strata = middle
+            }
+            if = {
+                limit = {
+                    is_pop_type = academics
+                }
+                multiply = {
+                    value = 5
+                    desc = "POP_ACADEMICS"
+                }
+            }
+            else_if = {
+                limit = {
+                    is_pop_type = clergymen
+                }
+                multiply = {
+                    value = 0.5
+                    desc = "POP_CLERGYMEN"
+                }
+            }
+            else = {
+                multiply = {
+                    value = 2
+                    desc = "MIDDLE_CLASS"
+                }
+            }
+        }
+        else_if = {
+            limit = {
+                strata = lower
+            }
+            multiply = {
+                value = 0.75
+                desc = "LOWER_CLASS"
+            }
+        }
+
+		if = {
+			limit = {
+				state = {
+					state_cultural_acceptance = {  
+						target = PREV.culture
+						value < acceptance_status_5
+					}	
+				}
+			}
+			
+			add = {
+				desc = "POP_DISCRIMINATED"	
+				value = 100
+				subtract = pop_acceptance			
+				divide = 10	
+			}			
+		}
+
+        if = {
+            limit = {
+                limit = { literacy_rate > 0.9 }
+            }
+            add = 20
+            desc = "HIGH_LITERACY"			
+        }
+
+        if = {
+            limit = {
+                standard_of_living > state.average_expected_sol
+            }
+            add = 10
+            desc = "HIGH_STANDARD_OF_LIVING"
+        }
+
+        if = {
+            limit = {
+                limit = {
+                    owner = {
+                        OR = {
+                            has_law = law_type:law_minority_rights_violent_hostility
+                            has_law = law_type:law_minority_rights_ghettoization
+                        }
+                    }
+                }
+                add = 5
+                desc = "MINORITY_RIGHTS_VIOLATED"
+            }
+        }
+
+        multiply = { # Illiterate pops participate at 1/10 the rate of fully literate pops
+            desc = "POP_LITERACY"
+            value = literacy_rate
+            multiply = 0.9
+            add = 0.10
+        }
+    }
+
+    revolution = {
+        possible = {
+            political_movement_support >= 0.05
+        }
+        
+        weight = {
+            value = 100
+        }
+    
+        state_weight = {
+            value = 1
+        }
+    }
+
+    secession = {
+        possible = {
+            political_movement_support >= 0.05
+        }    
+    
+        weight = {
+            value = 1
+        }  
+
+        state_weight = {
+            value = 1          
+        }        
+    }
+}
+
+movement_anti_war = {
+    category = movement_category_ideological
+
+    ideology = ideology_pacifist
+    character_ideologies = {
+        ideology_pacifist
+        ideology_anti_colonialist
+    }
+    
+    disband_trigger = {
+        # Conditions under which the movement disbands
+        always = no
+    }
+    on_disbanded = {
+        # Actions to perform when the movement disbands
+    }
+    
+    creation_trigger = {
+        # Conditions under which the movement is created
+        # For example, when the country has a certain level of political rights
+        has_technology_researched = anti_war_movement
+    }
+    creation_weight = {
+        value = 100
+    }    
+    on_created = {
+        add_movement_enthusiasm_modifier = yes
+    }
+    
+    character_support_trigger = {
+        OR = {
+            has_ideology = ideology:ideology_pacifist
+            has_ideology = ideology:ideology_anti_colonialist
+            OR = {
+                is_interest_group_type = ig_intelligentsia
+                is_interest_group_type = ig_trade_unions
+            }
+        }
+    }
+    character_support_weight = {
+        value = 50
+        if = {
+            limit = {
+                OR  = {
+                    has_ideology = ideology:ideology_pacifist
+                    has_ideology = ideology:ideology_anti_colonialist
+                }
+            }
+            multiply = {
+                value = 5
+            }
+        }
+    }
+    
+    pop_support_factors = {
+        # Factors influencing popular support
+        movement_support_high_literacy
+        movement_support_academics
+        movement_support_high_urbanization
+    }    
+
+    pop_support_weight = {
+        add = {
+            desc = "URBAN_STATE"
+            value = 3
+            multiply = state.state_urbanization_rate
+        }
+
+        if = {
+            limit = {
+                strata = upper
+            }
+            if = {
+                limit = {
+                    is_pop_type = capitalists
+                }
+                multiply = {
+                    value = 1.25
+                    desc = "POP_CAPITALISTS"
+                }
+            }
+            else = {
+                multiply = {
+                    value = 0.5
+                    desc = "UPPER_CLASS"
+                }
+            }
+        }
+        else_if = {
+            limit = {
+                strata = middle
+            }
+            if = {
+                limit = {
+                    is_pop_type = academics
+                }
+                multiply = {
+                    value = 5
+                    desc = "POP_ACADEMICS"
+                }
+            }
+            else_if = {
+                limit = {
+                    is_pop_type = clergymen
+                }
+                multiply = {
+                    value = 1.5
+                    desc = "POP_CLERGYMEN"
+                }
+            }
+            else = {
+                multiply = {
+                    value = 1.25
+                    desc = "MIDDLE_CLASS"
+                }
+            }
+        }
+        else_if = {
+            limit = {
+                strata = lower
+            }
+            multiply = {
+                value = 0.5
+                desc = "LOWER_CLASS"
+            }
+        }
+
+        multiply = { # Illiterate pops participate at 1/10 the rate of fully literate pops
+            desc = "POP_LITERACY"
+            value = literacy_rate
+            multiply = 0.9
+            add = 0.10
+        }
+    }
+
+    revolution = {
+        possible = {
+            political_movement_support >= 0.05
+        }
+        
+        weight = {
+            value = 100
+        }
+    
+        state_weight = {
+            value = 1
+        }
+    }
+
+    secession = {
+        possible = {
+            political_movement_support >= 0.05
+        }    
+    
+        weight = {
+            value = 1
+        }  
+
+        state_weight = {
+            value = 1          
+        }        
+    }
+
+    additional_radicalism_factors = {
+        owner = {
+            if = {
+                limit = { has_institution = institution_ministry_of_foreign_affairs }
+                add = {
+                    value = modifier:country_institution_ministry_of_foreign_affairs_max_investment_add
+                    subtract = "institution_investment_level(institution_ministry_of_foreign_affairs)"
+                    multiply = 0.05
+                    desc = "INSTITUTION_FUNDING_LEVEL_ministry_of_foreign_affairs"
+                }
+            }
+            else = {
+                add = {
+                    value = modifier:country_institution_ministry_of_foreign_affairs_max_investment_add
+                    multiply = 0.05
+                    desc = "NO_INSTITUTION_ministry_of_foreign_affairs"
+                }        
+            }
+
+            if = {
+                limit = { has_institution = institution_ministry_of_international_aid }
+                add = {
+                    value = modifier:country_institution_ministry_of_international_aid_max_investment_add
+                    subtract = "institution_investment_level(institution_ministry_of_international_aid)"
+                    multiply = 0.05
+                    desc = "INSTITUTION_FUNDING_LEVEL_ministry_of_international_aid"
+                }
+            }
+            else = {
+                add = {
+                    value = modifier:country_institution_ministry_of_international_aid_max_investment_add
+                    multiply = 0.05
+                    desc = "NO_INSTITUTION_ministry_of_international_aid"
+                }        
+            }
+
+            if = {
+                limit = { has_institution = institution_ministry_of_refugee_affairs }
+                add = {
+                    value = modifier:country_institution_ministry_of_refugee_affairs_max_investment_add
+                    subtract = "institution_investment_level(institution_ministry_of_refugee_affairs)"
+                    multiply = 0.05
+                    desc = "INSTITUTION_FUNDING_LEVEL_ministry_of_refugee_affairs"
+                }
+            }
+            else = {
+                add = {
+                    value = modifier:country_institution_ministry_of_refugee_affairs_max_investment_add
+                    multiply = 0.05
+                    desc = "NO_INSTITUTION_ministry_of_refugee_affairs"
+                }        
+            }
+
+            if = {
+                limit = { num_subjects > 0 }
+                add = {
+                    value = 0.05
+                    desc = "SUBJECTS"
+                }
+            }
+
+            if = {
+                limit = { is_at_war = yes }
+                add = {
+                    value = 0.05
+                    desc = "AT_WAR"
+                }
+            }
+        }
+    }
+}

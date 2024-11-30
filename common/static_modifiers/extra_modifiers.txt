@@ -10,10 +10,7 @@ pollution_generation_mult_effect = {
 
 cheaty = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_minting_add = 1000000
-	country_tech_research_speed_mult = 100
-	country_law_enactment_success_add = 1
-	country_law_enactment_time_mult = -1
+	country_tech_research_speed_mult = 4
 }
 
 extra_training_modifier = {
@@ -107,7 +104,7 @@ forced_law_through_event = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_authority_add = -250
 	country_opposition_ig_approval_add = -2
-	political_movement_restore_support_mult = 0.5
+	political_movement_radicalism_from_enactment_disapproval_mult = 0.5
 }
 
 nuclear_power = {
@@ -137,7 +134,7 @@ declared_bankruptcy = {
 	country_loan_interest_rate_mult = 0.5
 	unit_offense_mult = -0.75
 	unit_defense_mult = -0.75
-	state_radicals_from_sol_change_mult = 1.0
+	state_radicals_from_political_movements_mult = 1.0
 	state_welfare_payments_mult = -1
 	country_force_privatization_bool = yes
 	country_government_wages_mult = -0.8
@@ -168,4 +165,11 @@ failed_state_modifier = {
 	country_leverage_resistance_mult = -1
 	interest_group_in_government_attraction_mult = -0.5
 	building_subsistence_output_mult = 1
+}
+
+state_region_pollution_health = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_mortality_mult = 0.1
+	state_standard_of_living_add = -6
+	state_working_adult_ratio_add = -0.05
 }

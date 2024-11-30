@@ -253,6 +253,13 @@ power_bloc_gdp = {
 	}
 }
 
+global_gdp = {
+	value = 0
+	every_country = {
+		add = gdp
+	}
+}
+
 power_bloc_gdp_share = {
 	value = 0
 	every_power_bloc_member = {
@@ -1129,3 +1136,27 @@ total_outreach_cost_script_value = {
 	divide = 1000000
 	multiply = 10
 }
+
+country_gdp_per_capita = {
+	value = 0
+	every_scope_state = {
+		add = gdp
+	}
+	divide = total_population
+}
+
+global_gdp_per_capita = {
+	value = global_gdp
+	divide = global_population
+}
+
+rel_gdp_per_capita = {
+	value = gdp_per_capita
+	divide = global_gdp_per_capita
+}
+
+curr_year = {
+	value = year
+}
+
+movement_base_year = 1930

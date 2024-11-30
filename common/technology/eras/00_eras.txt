@@ -37,9 +37,9 @@ era_9 = { #1988-2012
 }
 
 era_10 = { #2012-2030
-	technology_cost = 200000
+	technology_cost = 300000
 }
 
 era_11 = { #2031+
-	technology_cost = 600000
+	technology_cost = 800000
 }

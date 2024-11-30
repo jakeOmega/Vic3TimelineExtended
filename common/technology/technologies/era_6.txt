@@ -196,7 +196,6 @@ keynesian_economics = {
 	
 	modifier = {
 		state_construction_mult = 0.1
-		state_expected_sol_from_literacy = 1
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		country_loan_interest_rate_add = -0.02
 		country_institution_national_bank_max_investment_add = 1
@@ -369,7 +368,6 @@ marketing_research = {
 	modifier = {
 		country_legitimacy_ideological_incoherence_mult = -0.1
 		building_group_bg_service_throughput_add = 0.2
-		state_expected_sol_from_literacy = 1
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_institution_ministry_of_religion_max_investment_add = 1
 	}

@@ -724,12 +724,6 @@ country_institution_ministry_of_urban_planning_max_investment_add = {
 	decimals=0
 }
 
-country_institution_ministry_of_population_control_max_investment_add = {
-	color = good
-	percent = no
-	decimals=0
-}
-
 country_institution_ministry_of_religion_max_investment_add = {
 	color = good
 	percent = no
@@ -1163,7 +1157,7 @@ state_arable_land_mult = {
 	percent = yes
 }
 
-state_poor_expected_sol={
+state_lower_strata_expected_sol_add={
 	decimals=1
 	color=neutral
 	game_data={
@@ -1299,5 +1293,10 @@ country_foreign_investment_acceptance_add = {
 
 economic_dependence_leverage_gain_mult = {
 	color = good
+	percent = yes
+}
+
+state_mortality_violent_hostility_mult = {
+	color = bad
 	percent = yes
 }

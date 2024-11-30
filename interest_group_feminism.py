@@ -1,6 +1,6 @@
 import os
 import regex
-import json
+from path_constants import mod_path, base_game_path
 import copy
 
 
@@ -133,10 +133,8 @@ law_heavy = {
     },
 }
 
-input_directory = (
-    r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\interest_groups"
-)
-output_directory = r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Production Methods\common\interest_groups"
+input_directory = base_game_path + r"\game\common\interest_groups"
+output_directory = mod_path + r"\common\interest_groups"
 modifications = {
     "00_armed_forces.txt": {
         "female_commander_chance": normalize_values(balanced, 0.3),

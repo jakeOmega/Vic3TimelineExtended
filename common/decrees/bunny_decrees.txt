@@ -19,7 +19,7 @@ decree_migration = {
 	valid = {
 		AND = {
 			any_scope_culture = {
-				culture_is_discriminated_in = ROOT.owner
+				pop_acceptance < 40
 			}
 			custom_tooltip ={
 				text = "decree_migration_invalid_tooltip"

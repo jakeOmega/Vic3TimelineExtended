@@ -695,8 +695,9 @@ principle_police_coordination_4 = {
 
 	institution = institution_police
 	institution_modifier = {
-		country_authority_add = 100
-		political_movement_radicalism_mult = -0.05
+		country_authority_add = 75
+		political_movement_radicalism_add = -0.05
+		political_movement_radicalism_from_enactment_disapproval_mult = -0.05
 	}
 	
 	ai_weight = {
@@ -733,7 +734,8 @@ principle_police_coordination_5 = {
 	institution_modifier = {
 		country_authority_add = 100
 		country_authority_mult = 0.05
-		political_movement_radicalism_mult = -0.05
+		political_movement_radicalism_add = -0.05
+		political_movement_radicalism_from_enactment_disapproval_mult = -0.05
 	}
 	
 	ai_weight = {
@@ -869,7 +871,7 @@ principle_colonial_offices_4 = {
 	
 	institution = institution_colonial_affairs
 	institution_modifier = {
-		state_colony_growth_creation_mult = 0.05
+		state_colony_growth_creation_factor = 0.05
 		country_infamy_generation_against_unrecognized_mult = -0.05
 		country_infamy_generation_mult = -0.02
 		country_influence_mult = 0.1
@@ -905,7 +907,7 @@ principle_colonial_offices_5 = {
 	institution = institution_colonial_affairs
 	institution_modifier = {
 		# Modifiers from previous level(s)
-		state_colony_growth_creation_mult = 0.1
+		state_colony_growth_creation_factor = 0.1
 		country_infamy_generation_against_unrecognized_mult = -0.05
 		country_infamy_generation_mult = -0.02
 		country_influence_mult = 0.2
@@ -1082,8 +1084,8 @@ principle_creative_legislature_4 = {
 	
 	member_modifier = {
 		country_law_enactment_stall_mult = -0.33
-		political_movement_preserve_support_mult = -0.33
-		political_movement_restore_support_mult = -0.33
+		political_movement_radicalism_from_enactment_disapproval_mult = -0.25
+		political_movement_radicalism_from_enactment_approval_mult = 0.25
 		country_law_enactment_max_setbacks_add = 1
 		country_legitimacy_base_add = 10
 		country_lobby_leverage_generation_mult = 0.1
@@ -1106,8 +1108,8 @@ principle_creative_legislature_5 = {
 	member_modifier = {
 		# Modifiers from previous level(s)
 		country_law_enactment_stall_mult = -0.33
-		political_movement_preserve_support_mult = -0.33
-		political_movement_restore_support_mult = -0.33
+		political_movement_radicalism_from_enactment_disapproval_mult = -0.25
+		political_movement_radicalism_from_enactment_approval_mult = 0.25
 		country_law_enactment_max_setbacks_add = 2
 		country_legitimacy_min_add = 20
 		country_legitimacy_base_add = 20
@@ -1193,9 +1195,8 @@ principle_divine_economics_4 = {
 		# Modifiers from previous level(s)		
 		country_subject_income_transfer_heathen_mult = 0.5		
 	
-		# SoL changes less radical/more loyalist for accepted religion pops
-		state_radicals_from_sol_change_accepted_religion_mult = -0.25
-		state_loyalists_from_sol_change_accepted_religion_mult = 0.25
+		# Higher wages for state religion pops
+		country_state_religion_wages_mult = 0.25
 		
 		# New PM for Financial Districts/Manor Houses unlocked via trigger
 
@@ -1225,9 +1226,8 @@ principle_divine_economics_5 = {
 		# Modifiers from previous level(s)		
 		country_subject_income_transfer_heathen_mult = 0.5		
 	
-		# SoL changes less radical/more loyalist for accepted religion pops
-		state_radicals_from_sol_change_accepted_religion_mult = -0.25
-		state_loyalists_from_sol_change_accepted_religion_mult = 0.25
+		# Higher wages for state religion pops
+		country_state_religion_wages_mult = 0.25
 
 		state_clergymen_investment_pool_contribution_add = 0.1
 		
@@ -1704,7 +1704,7 @@ principle_cultural_unity_4 = {
 
 	institution = institution_ministry_of_culture
 	institution_modifier = {
-		state_loyalists_from_sol_change_accepted_culture_mult = 0.05
+		country_loyalism_increases_full_acceptance_mult = 0.05
 		state_accepted_birth_rate_mult = 0.02
 	}
 
@@ -1741,7 +1741,7 @@ principle_cultural_unity_5 = {
 
 	institution = institution_ministry_of_culture
 	institution_modifier = {
-		state_loyalists_from_sol_change_accepted_culture_mult = 0.05
+		country_loyalism_increases_full_acceptance_mult = 0.05
 		state_accepted_birth_rate_mult = 0.04
 	}
 
@@ -1771,7 +1771,8 @@ principle_cultural_plurality_1 = {
 	member_modifier = {
 		# Members get cheaper and faster cultural institution
 		country_mass_migration_attraction_mult = 0.25
-		state_radicals_from_discrimination_mult = -0.25
+		state_pop_support_movement_cultural_majority_mult = -0.25
+		state_pop_support_movement_cultural_minority_mult = -0.1
 	}
 	
 	ai_weight = {
@@ -1813,7 +1814,8 @@ principle_cultural_plurality_2 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		country_mass_migration_attraction_mult = 0.25
-		state_radicals_from_discrimination_mult = -0.5
+		state_pop_support_movement_cultural_majority_mult = -0.5
+		state_pop_support_movement_cultural_minority_mult = -0.2
 		state_education_access_add = 0.05
 	}
 	
@@ -1842,7 +1844,8 @@ principle_cultural_plurality_3 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		country_mass_migration_attraction_mult = 0.25
-		state_radicals_from_discrimination_mult = -0.5
+		state_pop_support_movement_cultural_majority_mult = -0.5
+		state_pop_support_movement_cultural_minority_mult = -0.2
 		country_add_multicultural_ideology_to_intelligentsia_bool = yes
 		state_education_access_add = 0.05
 		country_tech_spread_mult = 0.25
@@ -1876,7 +1879,8 @@ principle_cultural_plurality_4 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		country_mass_migration_attraction_mult = 0.25
-		state_radicals_from_discrimination_mult = -0.5
+		state_pop_support_movement_cultural_majority_mult = -0.5
+		state_pop_support_movement_cultural_minority_mult = -0.2
 		country_add_multicultural_ideology_to_intelligentsia_bool = yes
 		state_education_access_add = 0.05
 		country_tech_spread_mult = 0.25
@@ -1920,7 +1924,8 @@ principle_cultural_plurality_5 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		country_mass_migration_attraction_mult = 0.25
-		state_radicals_from_discrimination_mult = -0.5
+		state_pop_support_movement_cultural_majority_mult = -0.5
+		state_pop_support_movement_cultural_minority_mult = -0.2
 		country_add_multicultural_ideology_to_intelligentsia_bool = yes
 		state_education_access_add = 0.05
 		country_tech_spread_mult = 0.25
@@ -3070,7 +3075,7 @@ principle_healthcare_2 = {
 	institution = institution_health_system
 	institution_modifier = {
 		unit_recovery_rate_add = 0.05
-		political_movement_radicalism_mult = -0.02
+		country_loyalism_increases_full_acceptance_mult = 0.02
 	}
 
 	ai_weight = {
@@ -3095,7 +3100,7 @@ principle_healthcare_3 = {
 		# Modifiers from previous level(s)	
 		unit_recovery_rate_add = 0.05
 		state_birth_rate_mult = 0.02
-		political_movement_radicalism_mult = -0.02
+		country_loyalism_increases_full_acceptance_mult = 0.02
 	}
 
 	ai_weight = {
@@ -3124,7 +3129,7 @@ principle_healthcare_4 = {
 		# Modifiers from previous level(s)	
 		unit_recovery_rate_add = 0.05
 		state_birth_rate_mult = 0.02
-		political_movement_radicalism_mult = -0.02
+		country_loyalism_increases_full_acceptance_mult = 0.02
 		country_authority_add = 50
 	}
 
@@ -3154,9 +3159,9 @@ principle_healthcare_5 = {
 		# Modifiers from previous level(s)	
 		unit_recovery_rate_add = 0.05
 		state_birth_rate_mult = 0.02
-		political_movement_radicalism_mult = -0.02
+		country_loyalism_increases_full_acceptance_mult = 0.02
 		country_authority_add = 100
-		state_radicals_from_sol_change_mult = -0.1
+		state_expected_sol_mult = -0.02
 	}
 
 	ai_weight = {
@@ -3179,7 +3184,7 @@ principle_welfare_1 = {
 
 	institution = institution_social_security
 	institution_modifier = {
-		state_radicals_from_sol_change_mult = -0.05
+		state_radicals_from_political_movements_mult = -0.05
 	}
 	
 	ai_weight = {
@@ -3219,7 +3224,7 @@ principle_welfare_2 = {
 	institution = institution_social_security
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		state_radicals_from_sol_change_mult = -0.05
+		state_radicals_from_political_movements_mult = -0.05
 		state_education_access_add = 0.02
 		state_pop_qualifications_mult = 0.05
 	}
@@ -3242,10 +3247,10 @@ principle_welfare_3 = {
 	institution = institution_social_security
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		state_radicals_from_sol_change_mult = -0.05
+		state_radicals_from_political_movements_mult = -0.05
 		state_education_access_add = 0.02
 		state_pop_qualifications_mult = 0.05
-		state_poor_expected_sol = -0.5
+		state_lower_strata_expected_sol_add = -0.5
 	}
 
 	ai_weight = {
@@ -3274,10 +3279,10 @@ principle_welfare_4 = {
 	institution = institution_social_security
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		state_radicals_from_sol_change_mult = -0.05
+		state_radicals_from_political_movements_mult = -0.05
 		state_education_access_add = 0.02
 		state_pop_qualifications_mult = 0.05
-		state_poor_expected_sol = -0.5
+		state_lower_strata_expected_sol_add = -0.5
 		state_construction_mult = 0.02
 	}
 
@@ -3307,10 +3312,10 @@ principle_welfare_5 = {
 	institution = institution_social_security
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		state_radicals_from_sol_change_mult = -0.05
+		state_radicals_from_political_movements_mult = -0.05
 		state_education_access_add = 0.02
 		state_pop_qualifications_mult = 0.05
-		state_poor_expected_sol = -0.5
+		state_lower_strata_expected_sol_add = -0.5
 		state_construction_mult = 0.02
 		country_authority_add = 100
 	}
@@ -3698,7 +3703,7 @@ principle_engineering_and_logistics_5 = {
 		unit_convoy_raiding_interception_mult = 1
 		unit_morale_recovery_mult = 0.25
 
-		character_morale_cap_add = 0.2
+		unit_morale_loss_mult = -0.1
 	}
 
 	ai_weight = {

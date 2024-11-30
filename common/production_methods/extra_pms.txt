@@ -14,26 +14,26 @@ pm_dragline_excavators_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 40                           # Price:   40, Total cost: 1600.0
-			goods_input_engines_add = 25                         # Price:   60, Total cost: 1500.0
-			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 4                            # Price:   40, Total cost: 160.0
+			goods_input_engines_add = 2                          # Price:   60, Total cost: 120.0
+			goods_input_transportation_add = 1                   # Price:   30, Total cost: 30.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
 			# Output goods
-			goods_output_coal_add = 60                           # Price:   30, Total cost: 1800.0
-			# Total input cost: 3600.0
-			# Total output cost: 1800.0
-			# Profit: -1800.0
-			# Profit margin: -50.00%
-			# Zero profit price multiplier: 2.00
+			goods_output_coal_add = 6                            # Price:   30, Total cost: 180.0
+			# Total input cost: 350.0
+			# Total output cost: 180.0
+			# Profit: -170.0
+			# Profit margin: -48.57%
+			# Zero profit price multiplier: 1.94
 			# Employment: -2000
-			# Wage breakeven: 0.90
+			# Wage breakeven: 0.09
 		}
 
 		level_scaled = {
@@ -60,26 +60,26 @@ pm_dragline_excavators_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 40                           # Price:   40, Total cost: 1600.0
-			goods_input_engines_add = 25                         # Price:   60, Total cost: 1500.0
-			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 4                            # Price:   40, Total cost: 160.0
+			goods_input_engines_add = 2                          # Price:   60, Total cost: 120.0
+			goods_input_transportation_add = 1                   # Price:   30, Total cost: 30.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
 			# Output goods
-			goods_output_iron_add = 50                           # Price:   40, Total cost: 2000.0
-			# Total input cost: 3600.0
-			# Total output cost: 2000.0
-			# Profit: -1600.0
-			# Profit margin: -44.44%
-			# Zero profit price multiplier: 1.80
+			goods_output_iron_add = 5                            # Price:   40, Total cost: 200.0
+			# Total input cost: 350.0
+			# Total output cost: 200.0
+			# Profit: -150.0
+			# Profit margin: -42.86%
+			# Zero profit price multiplier: 1.75
 			# Employment: -2000
-			# Wage breakeven: 0.80
+			# Wage breakeven: 0.07
 		}
 
 		level_scaled = {
@@ -106,26 +106,26 @@ pm_dragline_excavators_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 40                           # Price:   40, Total cost: 1600.0
-			goods_input_engines_add = 25                         # Price:   60, Total cost: 1500.0
-			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 4                            # Price:   40, Total cost: 160.0
+			goods_input_engines_add = 2                          # Price:   60, Total cost: 120.0
+			goods_input_transportation_add = 1                   # Price:   30, Total cost: 30.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
 			# Output goods
-			goods_output_lead_add = 50                           # Price:   40, Total cost: 2000.0
-			# Total input cost: 3600.0
-			# Total output cost: 2000.0
-			# Profit: -1600.0
-			# Profit margin: -44.44%
-			# Zero profit price multiplier: 1.80
+			goods_output_lead_add = 5                            # Price:   40, Total cost: 200.0
+			# Total input cost: 350.0
+			# Total output cost: 200.0
+			# Profit: -150.0
+			# Profit margin: -42.86%
+			# Zero profit price multiplier: 1.75
 			# Employment: -2000
-			# Wage breakeven: 0.80
+			# Wage breakeven: 0.07
 		}
 
 		level_scaled = {
@@ -145,7 +145,7 @@ pm_dragline_excavators_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 5
 		}
 	}
 	
@@ -159,19 +159,19 @@ pm_dragline_excavators_sulfur_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 40                           # Price:   40, Total cost: 1600.0
-			goods_input_engines_add = 25                         # Price:   60, Total cost: 1500.0
-			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 4                            # Price:   40, Total cost: 160.0
+			goods_input_engines_add = 2                          # Price:   60, Total cost: 120.0
+			goods_input_transportation_add = 1                   # Price:   30, Total cost: 30.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
 			# Output goods
-			goods_output_sulfur_add = 40                         # Price:   50, Total cost: 2000.0
-			# Total input cost: 3600.0
-			# Total output cost: 2000.0
-			# Profit: -1600.0
-			# Profit margin: -44.44%
-			# Zero profit price multiplier: 1.80
+			goods_output_sulfur_add = 4                          # Price:   50, Total cost: 200.0
+			# Total input cost: 350.0
+			# Total output cost: 200.0
+			# Profit: -150.0
+			# Profit margin: -42.86%
+			# Zero profit price multiplier: 1.75
 			# Employment: -2000
-			# Wage breakeven: 0.80
+			# Wage breakeven: 0.07
 		}
 
 		level_scaled = {
@@ -191,7 +191,7 @@ pm_dragline_excavators_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 5
 		}
 	}
 	
@@ -205,19 +205,19 @@ pm_dragline_excavators_gold_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 40                           # Price:   40, Total cost: 1600.0
-			goods_input_engines_add = 25                         # Price:   60, Total cost: 1500.0
-			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 4                            # Price:   40, Total cost: 160.0
+			goods_input_engines_add = 2                          # Price:   60, Total cost: 120.0
+			goods_input_transportation_add = 1                   # Price:   30, Total cost: 30.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
 			# Output goods
-			goods_output_gold_add = 20                           # Price:  100, Total cost: 2000.0
-			# Total input cost: 3600.0
-			# Total output cost: 2000.0
-			# Profit: -1600.0
-			# Profit margin: -44.44%
-			# Zero profit price multiplier: 1.80
+			goods_output_gold_add = 2                            # Price:  100, Total cost: 200.0
+			# Total input cost: 350.0
+			# Total output cost: 200.0
+			# Profit: -150.0
+			# Profit margin: -42.86%
+			# Zero profit price multiplier: 1.75
 			# Employment: -2000
-			# Wage breakeven: 0.80
+			# Wage breakeven: 0.07
 		}
 
 		level_scaled = {
@@ -237,7 +237,7 @@ pm_large_scale_earth_movers_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 25
+			state_pollution_generation_add = 5
 		}
 	}
 	
@@ -250,20 +250,20 @@ pm_large_scale_earth_movers_coal_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
 			# Output goods
-			goods_output_coal_add = 120                          # Price:   30, Total cost: 3600.0
-			# Total input cost: 8400.0
-			# Total output cost: 3600.0
-			# Profit: -4800.0
-			# Profit margin: -57.14%
-			# Zero profit price multiplier: 2.33
+			goods_output_coal_add = 12                           # Price:   30, Total cost: 360.0
+			# Total input cost: 820.0
+			# Total output cost: 360.0
+			# Profit: -460.0
+			# Profit margin: -56.10%
+			# Zero profit price multiplier: 2.28
 			# Employment: -2500
-			# Wage breakeven: 1.92
+			# Wage breakeven: 0.18
 		}
 
 		level_scaled = {
@@ -291,27 +291,27 @@ pm_large_scale_earth_movers_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 25
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
 			# Output goods
-			goods_output_iron_add = 100                          # Price:   40, Total cost: 4000.0
-			# Total input cost: 8400.0
-			# Total output cost: 4000.0
-			# Profit: -4400.0
-			# Profit margin: -52.38%
-			# Zero profit price multiplier: 2.10
+			goods_output_iron_add = 10                           # Price:   40, Total cost: 400.0
+			# Total input cost: 820.0
+			# Total output cost: 400.0
+			# Profit: -420.0
+			# Profit margin: -51.22%
+			# Zero profit price multiplier: 2.05
 			# Employment: -2500
-			# Wage breakeven: 1.76
+			# Wage breakeven: 0.17
 		}
 
 		level_scaled = {
@@ -339,27 +339,27 @@ pm_large_scale_earth_movers_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 25
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
 			# Output goods
-			goods_output_lead_add = 100                          # Price:   40, Total cost: 4000.0
-			# Total input cost: 8400.0
-			# Total output cost: 4000.0
-			# Profit: -4400.0
-			# Profit margin: -52.38%
-			# Zero profit price multiplier: 2.10
+			goods_output_lead_add = 10                           # Price:   40, Total cost: 400.0
+			# Total input cost: 820.0
+			# Total output cost: 400.0
+			# Profit: -420.0
+			# Profit margin: -51.22%
+			# Zero profit price multiplier: 2.05
 			# Employment: -2500
-			# Wage breakeven: 1.76
+			# Wage breakeven: 0.17
 		}
 
 		level_scaled = {
@@ -387,27 +387,27 @@ pm_large_scale_earth_movers_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 25
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
 			# Output goods
-			goods_output_sulfur_add = 80                         # Price:   50, Total cost: 4000.0
-			# Total input cost: 8400.0
-			# Total output cost: 4000.0
-			# Profit: -4400.0
-			# Profit margin: -52.38%
-			# Zero profit price multiplier: 2.10
+			goods_output_sulfur_add = 8                          # Price:   50, Total cost: 400.0
+			# Total input cost: 820.0
+			# Total output cost: 400.0
+			# Profit: -420.0
+			# Profit margin: -51.22%
+			# Zero profit price multiplier: 2.05
 			# Employment: -2500
-			# Wage breakeven: 1.76
+			# Wage breakeven: 0.17
 		}
 
 		level_scaled = {
@@ -435,27 +435,27 @@ pm_large_scale_earth_movers_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 25
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
 			# Output goods
-			goods_output_gold_add = 40                           # Price:  100, Total cost: 4000.0
-			# Total input cost: 8400.0
-			# Total output cost: 4000.0
-			# Profit: -4400.0
-			# Profit margin: -52.38%
-			# Zero profit price multiplier: 2.10
+			goods_output_gold_add = 4                            # Price:  100, Total cost: 400.0
+			# Total input cost: 820.0
+			# Total output cost: 400.0
+			# Profit: -420.0
+			# Profit margin: -51.22%
+			# Zero profit price multiplier: 2.05
 			# Employment: -2500
-			# Wage breakeven: 1.76
+			# Wage breakeven: 0.17
 		}
 
 		level_scaled = {
@@ -483,28 +483,28 @@ pm_geophysical_survey_techniques_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 40                          # Price:   80, Total cost: 3200.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 4                           # Price:   80, Total cost: 320.0
 			# Output goods
-			goods_output_coal_add = 250                          # Price:   30, Total cost: 7500.0
-			# Total input cost: 11600.0
-			# Total output cost: 7500.0
-			# Profit: -4100.0
-			# Profit margin: -35.34%
-			# Zero profit price multiplier: 1.55
+			goods_output_coal_add = 25                           # Price:   30, Total cost: 750.0
+			# Total input cost: 1140.0
+			# Total output cost: 750.0
+			# Profit: -390.0
+			# Profit margin: -34.21%
+			# Zero profit price multiplier: 1.52
 			# Employment: -2500
-			# Wage breakeven: 1.64
+			# Wage breakeven: 0.16
 		}
 
 		level_scaled = {
@@ -532,28 +532,28 @@ pm_geophysical_survey_techniques_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 40                          # Price:   80, Total cost: 3200.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 4                           # Price:   80, Total cost: 320.0
 			# Output goods
-			goods_output_iron_add = 200                          # Price:   40, Total cost: 8000.0
-			# Total input cost: 11600.0
-			# Total output cost: 8000.0
-			# Profit: -3600.0
-			# Profit margin: -31.03%
-			# Zero profit price multiplier: 1.45
+			goods_output_iron_add = 20                           # Price:   40, Total cost: 800.0
+			# Total input cost: 1140.0
+			# Total output cost: 800.0
+			# Profit: -340.0
+			# Profit margin: -29.82%
+			# Zero profit price multiplier: 1.43
 			# Employment: -2500
-			# Wage breakeven: 1.44
+			# Wage breakeven: 0.14
 		}
 
 		level_scaled = {
@@ -581,28 +581,28 @@ pm_geophysical_survey_techniques_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 40                          # Price:   80, Total cost: 3200.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 4                           # Price:   80, Total cost: 320.0
 			# Output goods
-			goods_output_lead_add = 200                          # Price:   40, Total cost: 8000.0
-			# Total input cost: 11600.0
-			# Total output cost: 8000.0
-			# Profit: -3600.0
-			# Profit margin: -31.03%
-			# Zero profit price multiplier: 1.45
+			goods_output_lead_add = 20                           # Price:   40, Total cost: 800.0
+			# Total input cost: 1140.0
+			# Total output cost: 800.0
+			# Profit: -340.0
+			# Profit margin: -29.82%
+			# Zero profit price multiplier: 1.43
 			# Employment: -2500
-			# Wage breakeven: 1.44
+			# Wage breakeven: 0.14
 		}
 
 		level_scaled = {
@@ -630,28 +630,28 @@ pm_geophysical_survey_techniques_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 40                          # Price:   80, Total cost: 3200.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 4                           # Price:   80, Total cost: 320.0
 			# Output goods
-			goods_output_sulfur_add = 170                        # Price:   50, Total cost: 8500.0
-			# Total input cost: 11600.0
-			# Total output cost: 8500.0
-			# Profit: -3100.0
-			# Profit margin: -26.72%
-			# Zero profit price multiplier: 1.36
+			goods_output_sulfur_add = 17                         # Price:   50, Total cost: 850.0
+			# Total input cost: 1140.0
+			# Total output cost: 850.0
+			# Profit: -290.0
+			# Profit margin: -25.44%
+			# Zero profit price multiplier: 1.34
 			# Employment: -2500
-			# Wage breakeven: 1.24
+			# Wage breakeven: 0.12
 		}
 
 		level_scaled = {
@@ -679,28 +679,28 @@ pm_geophysical_survey_techniques_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 40                          # Price:   80, Total cost: 3200.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 4                           # Price:   80, Total cost: 320.0
 			# Output goods
-			goods_output_gold_add = 85                           # Price:  100, Total cost: 8500.0
-			# Total input cost: 11600.0
-			# Total output cost: 8500.0
-			# Profit: -3100.0
-			# Profit margin: -26.72%
-			# Zero profit price multiplier: 1.36
+			goods_output_gold_add = 8.5                          # Price:  100, Total cost: 850.0
+			# Total input cost: 1140.0
+			# Total output cost: 850.0
+			# Profit: -290.0
+			# Profit margin: -25.44%
+			# Zero profit price multiplier: 1.34
 			# Employment: -2500
-			# Wage breakeven: 1.24
+			# Wage breakeven: 0.12
 		}
 
 		level_scaled = {
@@ -727,29 +727,29 @@ pm_ore_sorting_and_separation_technology_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 40                          # Price:   80, Total cost: 3200.0
-			goods_input_electronic_components_add = 40           # Price:   80, Total cost: 3200.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 4                           # Price:   80, Total cost: 320.0
+			goods_input_electronic_components_add = 4            # Price:   80, Total cost: 320.0
 			# Output goods
-			goods_output_coal_add = 380                          # Price:   30, Total cost: 11400.0
-			# Total input cost: 14800.0
-			# Total output cost: 11400.0
-			# Profit: -3400.0
-			# Profit margin: -22.97%
-			# Zero profit price multiplier: 1.30
+			goods_output_coal_add = 38                           # Price:   30, Total cost: 1140.0
+			# Total input cost: 1460.0
+			# Total output cost: 1140.0
+			# Profit: -320.0
+			# Profit margin: -21.92%
+			# Zero profit price multiplier: 1.28
 			# Employment: -3000
-			# Wage breakeven: 1.13
+			# Wage breakeven: 0.11
 		}
 
 		level_scaled = {
@@ -776,29 +776,29 @@ pm_ore_sorting_and_separation_technology_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 40                          # Price:   80, Total cost: 3200.0
-			goods_input_electronic_components_add = 40           # Price:   80, Total cost: 3200.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 4                           # Price:   80, Total cost: 320.0
+			goods_input_electronic_components_add = 4            # Price:   80, Total cost: 320.0
 			# Output goods
-			goods_output_iron_add = 300                          # Price:   40, Total cost: 12000.0
-			# Total input cost: 14800.0
-			# Total output cost: 12000.0
-			# Profit: -2800.0
-			# Profit margin: -18.92%
-			# Zero profit price multiplier: 1.23
+			goods_output_iron_add = 30                           # Price:   40, Total cost: 1200.0
+			# Total input cost: 1460.0
+			# Total output cost: 1200.0
+			# Profit: -260.0
+			# Profit margin: -17.81%
+			# Zero profit price multiplier: 1.22
 			# Employment: -3000
-			# Wage breakeven: 0.93
+			# Wage breakeven: 0.09
 		}
 
 		level_scaled = {
@@ -825,29 +825,29 @@ pm_ore_sorting_and_separation_technology_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 40                          # Price:   80, Total cost: 3200.0
-			goods_input_electronic_components_add = 40           # Price:   80, Total cost: 3200.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 4                           # Price:   80, Total cost: 320.0
+			goods_input_electronic_components_add = 4            # Price:   80, Total cost: 320.0
 			# Output goods
-			goods_output_lead_add = 300                          # Price:   40, Total cost: 12000.0
-			# Total input cost: 14800.0
-			# Total output cost: 12000.0
-			# Profit: -2800.0
-			# Profit margin: -18.92%
-			# Zero profit price multiplier: 1.23
+			goods_output_lead_add = 30                           # Price:   40, Total cost: 1200.0
+			# Total input cost: 1460.0
+			# Total output cost: 1200.0
+			# Profit: -260.0
+			# Profit margin: -17.81%
+			# Zero profit price multiplier: 1.22
 			# Employment: -3000
-			# Wage breakeven: 0.93
+			# Wage breakeven: 0.09
 		}
 
 		level_scaled = {
@@ -874,29 +874,29 @@ pm_ore_sorting_and_separation_technology_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 40                          # Price:   80, Total cost: 3200.0
-			goods_input_electronic_components_add = 40           # Price:   80, Total cost: 3200.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 4                           # Price:   80, Total cost: 320.0
+			goods_input_electronic_components_add = 4            # Price:   80, Total cost: 320.0
 			# Output goods
-			goods_output_sulfur_add = 240                        # Price:   50, Total cost: 12000.0
-			# Total input cost: 14800.0
-			# Total output cost: 12000.0
-			# Profit: -2800.0
-			# Profit margin: -18.92%
-			# Zero profit price multiplier: 1.23
+			goods_output_sulfur_add = 24                         # Price:   50, Total cost: 1200.0
+			# Total input cost: 1460.0
+			# Total output cost: 1200.0
+			# Profit: -260.0
+			# Profit margin: -17.81%
+			# Zero profit price multiplier: 1.22
 			# Employment: -3000
-			# Wage breakeven: 0.93
+			# Wage breakeven: 0.09
 		}
 
 		level_scaled = {
@@ -923,29 +923,29 @@ pm_ore_sorting_and_separation_technology_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 		
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 30                         # Price:   60, Total cost: 1800.0
-			goods_input_transportation_add = 20                  # Price:   30, Total cost: 600.0
-			goods_input_oil_add = 15                             # Price:   40, Total cost: 600.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 40                          # Price:   80, Total cost: 3200.0
-			goods_input_electronic_components_add = 40           # Price:   80, Total cost: 3200.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 2                   # Price:   30, Total cost: 60.0
+			goods_input_oil_add = 1                              # Price:   40, Total cost: 40.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 4                           # Price:   80, Total cost: 320.0
+			goods_input_electronic_components_add = 4            # Price:   80, Total cost: 320.0
 			# Output goods
-			goods_output_gold_add = 120                          # Price:  100, Total cost: 12000.0
-			# Total input cost: 14800.0
-			# Total output cost: 12000.0
-			# Profit: -2800.0
-			# Profit margin: -18.92%
-			# Zero profit price multiplier: 1.23
+			goods_output_gold_add = 12                           # Price:  100, Total cost: 1200.0
+			# Total input cost: 1460.0
+			# Total output cost: 1200.0
+			# Profit: -260.0
+			# Profit margin: -17.81%
+			# Zero profit price multiplier: 1.22
 			# Employment: -3000
-			# Wage breakeven: 0.93
+			# Wage breakeven: 0.09
 		}
 
 		level_scaled = {
@@ -978,22 +978,22 @@ pm_laser_excavation_technology_coal_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 35                         # Price:   60, Total cost: 2100.0
-			goods_input_transportation_add = 30                  # Price:   30, Total cost: 900.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 50                          # Price:   80, Total cost: 4000.0
-			goods_input_electronic_components_add = 50           # Price:   80, Total cost: 4000.0
-			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost: 4000.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 3                   # Price:   30, Total cost: 90.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 5                           # Price:   80, Total cost: 400.0
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
+			goods_input_advanced_materials_add = 0.1             # Price: 4000, Total cost: 400.0
 			# Output goods
-			goods_output_coal_add = 700                          # Price:   30, Total cost: 21000.0
-			# Total input cost: 20400.0
-			# Total output cost: 21000.0
-			# Profit: 600.0
-			# Profit margin: 2.94%
-			# Zero profit price multiplier: 0.97
+			goods_output_coal_add = 70                           # Price:   30, Total cost: 2100.0
+			# Total input cost: 2010.0
+			# Total output cost: 2100.0
+			# Profit: 90.0
+			# Profit margin: 4.48%
+			# Zero profit price multiplier: 0.96
 			# Employment: -3500
-			# Wage breakeven: -0.17
+			# Wage breakeven: -0.03
 		}
 
 		level_scaled = {
@@ -1026,22 +1026,22 @@ pm_laser_excavation_technology_iron_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 35                         # Price:   60, Total cost: 2100.0
-			goods_input_transportation_add = 30                  # Price:   30, Total cost: 900.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 50                          # Price:   80, Total cost: 4000.0
-			goods_input_electronic_components_add = 50           # Price:   80, Total cost: 4000.0
-			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost: 4000.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 3                   # Price:   30, Total cost: 90.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 5                           # Price:   80, Total cost: 400.0
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
+			goods_input_advanced_materials_add = 0.1             # Price: 4000, Total cost: 400.0
 			# Output goods
-			goods_output_iron_add = 520                          # Price:   40, Total cost: 20800.0
-			# Total input cost: 20400.0
-			# Total output cost: 20800.0
-			# Profit: 400.0
-			# Profit margin: 1.96%
-			# Zero profit price multiplier: 0.98
+			goods_output_iron_add = 52                           # Price:   40, Total cost: 2080.0
+			# Total input cost: 2010.0
+			# Total output cost: 2080.0
+			# Profit: 70.0
+			# Profit margin: 3.48%
+			# Zero profit price multiplier: 0.97
 			# Employment: -3500
-			# Wage breakeven: -0.11
+			# Wage breakeven: -0.02
 		}
 
 		level_scaled = {
@@ -1074,22 +1074,22 @@ pm_laser_excavation_technology_lead_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 35                         # Price:   60, Total cost: 2100.0
-			goods_input_transportation_add = 30                  # Price:   30, Total cost: 900.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 50                          # Price:   80, Total cost: 4000.0
-			goods_input_electronic_components_add = 50           # Price:   80, Total cost: 4000.0
-			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost: 4000.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 3                   # Price:   30, Total cost: 90.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 5                           # Price:   80, Total cost: 400.0
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
+			goods_input_advanced_materials_add = 0.1             # Price: 4000, Total cost: 400.0
 			# Output goods
-			goods_output_lead_add = 520                          # Price:   40, Total cost: 20800.0
-			# Total input cost: 20400.0
-			# Total output cost: 20800.0
-			# Profit: 400.0
-			# Profit margin: 1.96%
-			# Zero profit price multiplier: 0.98
+			goods_output_lead_add = 52                           # Price:   40, Total cost: 2080.0
+			# Total input cost: 2010.0
+			# Total output cost: 2080.0
+			# Profit: 70.0
+			# Profit margin: 3.48%
+			# Zero profit price multiplier: 0.97
 			# Employment: -3500
-			# Wage breakeven: -0.11
+			# Wage breakeven: -0.02
 		}
 
 		level_scaled = {
@@ -1122,22 +1122,22 @@ pm_laser_excavation_technology_sulfur_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 35                         # Price:   60, Total cost: 2100.0
-			goods_input_transportation_add = 30                  # Price:   30, Total cost: 900.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 50                          # Price:   80, Total cost: 4000.0
-			goods_input_electronic_components_add = 50           # Price:   80, Total cost: 4000.0
-			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost: 4000.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 3                   # Price:   30, Total cost: 90.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 5                           # Price:   80, Total cost: 400.0
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
+			goods_input_advanced_materials_add = 0.1             # Price: 4000, Total cost: 400.0
 			# Output goods
-			goods_output_sulfur_add = 420                        # Price:   50, Total cost: 21000.0
-			# Total input cost: 20400.0
-			# Total output cost: 21000.0
-			# Profit: 600.0
-			# Profit margin: 2.94%
-			# Zero profit price multiplier: 0.97
+			goods_output_sulfur_add = 42                         # Price:   50, Total cost: 2100.0
+			# Total input cost: 2010.0
+			# Total output cost: 2100.0
+			# Profit: 90.0
+			# Profit margin: 4.48%
+			# Zero profit price multiplier: 0.96
 			# Employment: -3500
-			# Wage breakeven: -0.17
+			# Wage breakeven: -0.03
 		}
 
 		level_scaled = {
@@ -1170,22 +1170,22 @@ pm_laser_excavation_technology_gold_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 60                           # Price:   40, Total cost: 2400.0
-			goods_input_engines_add = 35                         # Price:   60, Total cost: 2100.0
-			goods_input_transportation_add = 30                  # Price:   30, Total cost: 900.0
-			goods_input_electricity_add = 100                    # Price:   30, Total cost: 3000.0
-			goods_input_radios_add = 50                          # Price:   80, Total cost: 4000.0
-			goods_input_electronic_components_add = 50           # Price:   80, Total cost: 4000.0
-			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost: 4000.0
+			goods_input_tools_add = 6                            # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_transportation_add = 3                   # Price:   30, Total cost: 90.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_radios_add = 5                           # Price:   80, Total cost: 400.0
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
+			goods_input_advanced_materials_add = 0.1             # Price: 4000, Total cost: 400.0
 			# Output goods
-			goods_output_gold_add = 210                          # Price:  100, Total cost: 21000.0
-			# Total input cost: 20400.0
-			# Total output cost: 21000.0
-			# Profit: 600.0
-			# Profit margin: 2.94%
-			# Zero profit price multiplier: 0.97
+			goods_output_gold_add = 21                           # Price:  100, Total cost: 2100.0
+			# Total input cost: 2010.0
+			# Total output cost: 2100.0
+			# Profit: 90.0
+			# Profit margin: 4.48%
+			# Zero profit price multiplier: 0.96
 			# Employment: -3500
-			# Wage breakeven: -0.17
+			# Wage breakeven: -0.03
 		}
 
 		level_scaled = {
@@ -1208,7 +1208,7 @@ pm_high_pressure_hydraulic_pump_building_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 30
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -1250,7 +1250,7 @@ pm_high_pressure_hydraulic_pump_building_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 30
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -1292,7 +1292,7 @@ pm_high_pressure_hydraulic_pump_building_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 30
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -1334,7 +1334,7 @@ pm_high_pressure_hydraulic_pump_building_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 30
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -1376,7 +1376,7 @@ pm_high_pressure_hydraulic_pump_building_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 30
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -1418,7 +1418,7 @@ pm_continuous_miners_building_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -1460,7 +1460,7 @@ pm_continuous_miners_building_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -1502,7 +1502,7 @@ pm_continuous_miners_building_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -1544,7 +1544,7 @@ pm_continuous_miners_building_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -1586,7 +1586,7 @@ pm_continuous_miners_building_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -1858,7 +1858,7 @@ pm_ammonium_nitrate_building_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 10
 		}
 	}
 	
@@ -1892,7 +1892,7 @@ pm_ammonium_nitrate_building_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 10
 		}
 	}
 	
@@ -1926,7 +1926,7 @@ pm_ammonium_nitrate_building_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 10
 		}
 	}
 	
@@ -1960,7 +1960,7 @@ pm_ammonium_nitrate_building_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 10
 		}
 	}
 	
@@ -1994,7 +1994,7 @@ pm_ammonium_nitrate_building_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 10
 		}
 	}
 	
@@ -2028,7 +2028,7 @@ pm_metamaterial_explosives_building_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 	
@@ -2062,7 +2062,7 @@ pm_metamaterial_explosives_building_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 	
@@ -2096,7 +2096,7 @@ pm_metamaterial_explosives_building_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 	
@@ -2130,7 +2130,7 @@ pm_metamaterial_explosives_building_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 	
@@ -2164,7 +2164,7 @@ pm_metamaterial_explosives_building_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 	
@@ -2198,7 +2198,7 @@ pm_electrified_rotary_drilling_rigs = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 30
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -2239,7 +2239,7 @@ pm_offshore_rigs = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 30
+			state_pollution_generation_add = 15
 		}
 	}
 	
@@ -2282,7 +2282,7 @@ pm_directional_drilling_rigs = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 30
+			state_pollution_generation_add = 10
 		}
 	}
 	
@@ -2326,7 +2326,7 @@ pm_intellegent_drilling_rigs = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 30
+			state_pollution_generation_add = 10
 		}
 	}
 	
@@ -2499,12 +2499,6 @@ factory_farm_building_vineyard_plantation = {
 		
 	unlocking_technologies = {
 		green_revolution
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 5
-		}
 	}
 
 	state_modifiers = {
@@ -3710,7 +3704,7 @@ pm_multimodal_transit = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 
@@ -3910,7 +3904,7 @@ pm_department_stores = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 1
 		}
 	}
 
@@ -3940,10 +3934,6 @@ pm_department_stores = {
 			building_employment_clerks_add = 3000
 			building_employment_shopkeepers_add = 500
 		}
-		
-		unscaled = {
-			building_shopkeepers_shares_add = 10
-		}
 	}
 }
 
@@ -3962,7 +3952,7 @@ pm_shopping_malls = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 2
 		}
 	}
 
@@ -3993,10 +3983,6 @@ pm_shopping_malls = {
 			building_employment_clerks_add = 3000
 			building_employment_shopkeepers_add = 500
 		}
-		
-		unscaled = {
-			building_shopkeepers_shares_add = 10
-		}
 	}
 }
 
@@ -4015,7 +4001,7 @@ pm_e-commerce = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 2
 		}
 	}
 
@@ -4049,10 +4035,6 @@ pm_e-commerce = {
 			building_employment_engineers_add = 200
 			building_employment_machinists_add = 200
 		}
-		
-		unscaled = {
-			building_shopkeepers_shares_add = 10
-		}
 	}
 	required_input_goods = digital_access
 }
@@ -4071,7 +4053,7 @@ pm_drone_delivery_systems = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 15
+			state_pollution_generation_add = 1
 		}
 	}
 
@@ -4105,10 +4087,6 @@ pm_drone_delivery_systems = {
 			building_employment_machinists_add = 50
 			building_employment_shopkeepers_add = 50
 		}
-		
-		unscaled = {
-			building_shopkeepers_shares_add = 10
-		}
 	}
 
 	required_input_goods = digital_access
@@ -4123,12 +4101,6 @@ pm_robotic_service_providers = {
 	unlocking_production_methods = {
 		pm_led_streetlights
 		pm_smart_led_streetlights
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 10
-		}
 	}
 
 	building_modifiers = {
@@ -4157,10 +4129,6 @@ pm_robotic_service_providers = {
 		level_scaled = {
 			building_employment_laborers_add = 1000
 			building_employment_shopkeepers_add = 10
-		}
-		
-		unscaled = {
-			building_shopkeepers_shares_add = 10
 		}
 	}
 
@@ -5379,21 +5347,22 @@ pm_modern_design_porcelain = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_dye_add = 50                             # Price:   40, Total cost: 2000.0
+			goods_input_dye_add = 10                             # Price:   40, Total cost: 400.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_lead_add = 10                            # Price:   40, Total cost: 400.0
 			# Output goods
-			goods_output_glass_add = -30                         # Price:   40, Total cost: -1200.0
-			goods_output_porcelain_add = 70                      # Price:   70, Total cost: 4900.0
-			# Total input cost: 2000.0
-			# Total output cost: 3700.0
-			# Profit: 1700.0
-			# Profit margin: 85.00%
-			# Zero profit price multiplier: 0.54
-			# Employment: 1000
-			# Wage breakeven: 1.70
+			goods_output_porcelain_add = 35                      # Price:   70, Total cost: 2450.0
+			# Total input cost: 1100.0
+			# Total output cost: 2450.0
+			# Profit: 1350.0
+			# Profit margin: 122.73%
+			# Zero profit price multiplier: 0.45
+			# Employment: 500
+			# Wage breakeven: 2.70
 		}
 		
 		level_scaled = {
-			building_employment_shopkeepers_add = 1000
+			building_employment_shopkeepers_add = 500
 		}					
 	}														
 }
@@ -5408,15 +5377,17 @@ pm_3d_printed_porcelain = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_dye_add = 50                             # Price:   40, Total cost: 2000.0
-			goods_input_digital_access_add = 10                  # Price:  120, Total cost: 1200.0
+			goods_input_dye_add = 10                             # Price:   40, Total cost: 400.0
+			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_lead_add = 10                            # Price:   40, Total cost: 400.0
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost: 600.0
 			# Output goods
-			goods_output_porcelain_add = 100                     # Price:   70, Total cost: 7000.0
-			# Total input cost: 3200.0
-			# Total output cost: 7000.0
-			# Profit: 3800.0
-			# Profit margin: 118.75%
-			# Zero profit price multiplier: 0.46
+			goods_output_porcelain_add = 50                      # Price:   70, Total cost: 3500.0
+			# Total input cost: 1700.0
+			# Total output cost: 3500.0
+			# Profit: 1800.0
+			# Profit margin: 105.88%
+			# Zero profit price multiplier: 0.49
 			# Employment: 0
 			# Wage breakeven: 0.00
 		}					
@@ -5447,16 +5418,17 @@ pm_massed_produced_plastics = {
 		workforce_scaled = {
 			# Input goods
 			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
-			goods_input_oil_add = 10                             # Price:   40, Total cost: 400.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
 			# Output goods
-			# Total input cost: 950.0
+			# Total input cost: 850.0
 			# Total output cost: 0
-			# Profit: -950.0
+			# Profit: -850.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -3900
-			# Wage breakeven: 0.24
+			# Wage breakeven: 0.22
 		}
 
 		level_scaled = {
@@ -5592,18 +5564,18 @@ pm_rayon = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sulfur_add = 20                          # Price:   50, Total cost: 1000.0
-			goods_input_fertilizer_add = 30                      # Price:   30, Total cost: 900.0
-			goods_input_wood_add = 80                            # Price:   20, Total cost: 1600.0
+			goods_input_sulfur_add = 10                          # Price:   50, Total cost: 500.0
+			goods_input_fertilizer_add = 15                      # Price:   30, Total cost: 450.0
+			goods_input_wood_add = 40                            # Price:   20, Total cost: 800.0
 			# Output goods
-			goods_output_silk_add = 100                          # Price:   40, Total cost: 4000.0
-			# Total input cost: 3500.0
-			# Total output cost: 4000.0
-			# Profit: 500.0
-			# Profit margin: 14.29%
-			# Zero profit price multiplier: 0.88
+			goods_output_silk_add = 60                           # Price:   40, Total cost: 2400.0
+			# Total input cost: 1750.0
+			# Total output cost: 2400.0
+			# Profit: 650.0
+			# Profit margin: 37.14%
+			# Zero profit price multiplier: 0.73
 			# Employment: 5500
-			# Wage breakeven: 0.09
+			# Wage breakeven: 0.12
 		}
 
 		level_scaled = {
@@ -6231,6 +6203,12 @@ pm_continuous_processing = {
 		}
 	}
 
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 2.5
+		}
+	}
+
 	required_input_goods = electricity
 }
 
@@ -6262,6 +6240,12 @@ pm_advanced_process_control = {
 			building_employment_machinists_add = -500
 			building_employment_engineers_add = -250
 			building_employment_shopkeepers_add = -250
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
 		}
 	}
 
@@ -6300,6 +6284,12 @@ pm_distributed_control_systems = {
 		}
 	}
 
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+
 	required_input_goods = electricity
 	required_input_goods = digital_access
 }
@@ -6333,6 +6323,12 @@ pm_ai_managed_chemical_plant = {
 			building_employment_machinists_add = -1000
 			building_employment_shopkeepers_add = -500
 			building_employment_engineers_add = -1990
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
 		}
 	}
 
@@ -7383,6 +7379,12 @@ pm_modern_farming = {
 		green_revolution
 	}
 
+	state_modifiers = {
+		unscaled = {
+			state_harvest_condition_drought_impact_mult = 0.2
+		}
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -7900,17 +7902,17 @@ pm_skidders_and_forwarders = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
-			goods_input_electronic_components_add = 10           # Price:   80, Total cost: 800.0
+			goods_input_engines_add = 3                          # Price:   60, Total cost: 180.0
+			goods_input_oil_add = 4                              # Price:   40, Total cost: 160.0
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost: 400.0
 			# Output goods
-			# Total input cost: 1400.0
+			# Total input cost: 740.0
 			# Total output cost: 0
-			# Profit: -1400.0
+			# Profit: -740.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -3250
-			# Wage breakeven: 0.43
+			# Wage breakeven: 0.23
 		}
 
 		level_scaled = {
@@ -7969,16 +7971,16 @@ pm_automobile_production_dedicated = {
 			# Input goods
 			goods_input_steel_add = 50                           # Price:   50, Total cost: 2500.0
 			goods_input_rubber_add = 30                          # Price:   40, Total cost: 1200.0
-			goods_input_oil_add = 80                             # Price:   40, Total cost: 3200.0
+			goods_input_oil_add = 60                             # Price:   40, Total cost: 2400.0
 			# Output goods
 			goods_output_automobiles_add = 70                    # Price:  100, Total cost: 7000.0
-			# Total input cost: 6900.0
+			# Total input cost: 6100.0
 			# Total output cost: 7000.0
-			# Profit: 100.0
-			# Profit margin: 1.45%
-			# Zero profit price multiplier: 0.99
+			# Profit: 900.0
+			# Profit margin: 14.75%
+			# Zero profit price multiplier: 0.87
 			# Employment: 4000
-			# Wage breakeven: 0.03
+			# Wage breakeven: 0.23
 		}
 
 		level_scaled = {
@@ -8006,18 +8008,18 @@ pm_automobile_production_dedicated_2 = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 100                          # Price:   50, Total cost: 5000.0
-			goods_input_rubber_add = 60                          # Price:   40, Total cost: 2400.0
-			goods_input_oil_add = 160                            # Price:   40, Total cost: 6400.0
+			goods_input_steel_add = 75                           # Price:   50, Total cost: 3750.0
+			goods_input_rubber_add = 45                          # Price:   40, Total cost: 1800.0
+			goods_input_oil_add = 90                             # Price:   40, Total cost: 3600.0
 			# Output goods
-			goods_output_automobiles_add = 150                   # Price:  100, Total cost: 15000.0
-			# Total input cost: 13800.0
-			# Total output cost: 15000.0
-			# Profit: 1200.0
-			# Profit margin: 8.70%
-			# Zero profit price multiplier: 0.92
+			goods_output_automobiles_add = 110                   # Price:  100, Total cost: 11000.0
+			# Total input cost: 9150.0
+			# Total output cost: 11000.0
+			# Profit: 1850.0
+			# Profit margin: 20.22%
+			# Zero profit price multiplier: 0.83
 			# Employment: 5000
-			# Wage breakeven: 0.24
+			# Wage breakeven: 0.37
 		}
 
 		level_scaled = {
@@ -9019,7 +9021,7 @@ pm_modern_oil-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 75
+			state_pollution_generation_add = 50
 		}
 	}
 	
@@ -10118,12 +10120,6 @@ pm_ai_managed_building_arms_industry = {
 		artificial_intelligence
 	}
 	
-	unlocking_production_methods = {
-		pm_bolt_action_rifles
-		pm_semiautomatic_rifles
-		pm_recoiled_barrels
-	}
-	
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -10159,11 +10155,6 @@ pm_ai_managed_building_munition_plants = {
 
 	unlocking_technologies = {
 		artificial_intelligence
-	}
-	
-	unlocking_production_methods = {
-		pm_explosive_shells
-		pm_modern_cartridges
 	}
 	
 	building_modifiers = {
@@ -10333,6 +10324,12 @@ pm_ai_managed_textile_factory = {
 
 pm_manual_assembly = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 2.5
+		}
+	}
 }
 
 pm_automated_assembly_lines = {
@@ -10356,6 +10353,12 @@ pm_automated_assembly_lines = {
 
 		level_scaled = {
 			building_employment_laborers_add = -1000
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
 		}
 	}
 
@@ -10393,6 +10396,12 @@ pm_cleanroom_fabs = {
 		}
 	}
 
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+
 	required_input_goods = electricity
 }
 
@@ -10425,6 +10434,12 @@ pm_ai_managed_fab = {
 			building_employment_machinists_add = -1000
 			building_employment_shopkeepers_add = -500
 			building_employment_engineers_add = -1990
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
 		}
 	}
 
@@ -12733,7 +12748,7 @@ pm_tower_cranes = {
 }
 
 pm_computer_aided_design = {
-	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+	texture = "gfx/interface/icons/production_method_icons/base4.dds"
 	
 	unlocking_technologies = {
 		computer_aided_design
@@ -13634,7 +13649,7 @@ pm_power_bloc_statue_cultural = {
 	
 	state_modifiers = {
 		workforce_scaled = {
-			state_radicals_from_sol_change_accepted_culture_mult = -0.1
+			country_loyalism_increases_full_acceptance_mult = 0.1
 			state_assimilation_mult = 0.25
 		}
 	}

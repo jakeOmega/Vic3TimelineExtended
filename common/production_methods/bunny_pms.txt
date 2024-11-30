@@ -18,7 +18,8 @@ pm_deportee_camp = {
 	}
 	state_modifiers = {
 		unscaled = {
-			state_radicals_from_discrimination_mult = 5
+			country_radicalism_increases_violent_hostility_mult = 5
+			country_radicalism_increases_cultural_erasure_mult = 5
 		}
 	}
 }

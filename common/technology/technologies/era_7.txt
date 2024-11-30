@@ -7,6 +7,7 @@ transistors = {
 	modifier = {
 		building_power_plant_throughput_add = 0.25
 		state_bureaucracy_population_base_cost_factor_mult = 0.5
+		state_education_access_add = -0.05
 	}
 	
 	unlocking_technologies = {	
@@ -96,7 +97,6 @@ green_revolution = {
 }
 
 civil_rights_movement = {
-	# Unlocks Multiculturalism
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -220,12 +220,11 @@ decolonization = {
 	modifier = {
 		country_diplomatic_play_maneuvers_add = 10
 		country_influence_mult = 0.2
-		state_expected_sol_from_literacy = 1
 		country_weekly_innovation_max_add = 50
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_institution_ministry_of_labor_max_investment_add = 1
-		state_colony_growth_creation_mult = 0.1
+		state_colony_growth_creation_factor = 0.1
 		country_liberty_desire_of_subjects_add = 0.05
 		country_add_anticolonial_ideology_to_igs_bool = yes
 	}
@@ -268,7 +267,6 @@ mainframe_computers = {
 		country_weekly_innovation_max_add = 50
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 		country_institution_ministry_of_commerce_max_investment_add = 1
-		country_institution_ministry_of_population_control_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -464,7 +462,6 @@ contraceptive_pill = {
 		state_pop_qualifications_mult = 0.05
 		state_education_access_add = 0.05
 		state_birth_rate_mult = -0.10
-		state_expected_sol_from_literacy = 1
 		country_weekly_innovation_max_add = 50
 	}
 	
@@ -490,7 +487,6 @@ second_wave_feminism = {
 		state_pop_qualifications_mult = 0.05
 		state_education_access_add = 0.05
 		state_birth_rate_mult = -0.025
-		state_expected_sol_from_literacy = 1
 	}
 	
 	unlocking_technologies = {	
