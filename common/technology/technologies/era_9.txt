@@ -1,3 +1,40 @@
+hydraulic_fracturing = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		computer_aided_design
+		personal_computers
+	}
+	
+	modifier = {
+		building_group_bg_mining_throughput_add = 0.1
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
+cloud_computing = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		wireless_internet
+	}
+	
+	modifier = {
+		country_weekly_innovation_max_add = 100
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
 biotechnology = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
@@ -18,7 +55,7 @@ biotechnology = {
 	}
 }
 
-nanotechnology = {
+early_nanotechnology = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -52,7 +89,6 @@ world_wide_web = {
 		country_institution_ministry_of_labor_max_investment_add = 1
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
-		state_education_access_add = -0.05
 	}
 	
 	ai_weight = {
@@ -87,6 +123,10 @@ clean_energy_technologies = {
 	
 	unlocking_technologies = {	
 		personal_computers
+	}
+
+	modifier = {
+		country_institution_ministry_of_the_environment_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -130,7 +170,6 @@ e-commerce = {
 		state_bureaucracy_population_base_cost_factor_mult = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
 		country_institution_ministry_of_labor_max_investment_add = 1
-		state_education_access_add = -0.05
 	}
 	
 	ai_weight = {
@@ -180,6 +219,7 @@ network_centric_warfare = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
+		state_building_barracks_max_level_add = 50
 	}
 	
 	unlocking_technologies = {	
@@ -258,6 +298,10 @@ rapid_deployment_forces = {
 	unlocking_technologies = {	
 		satellite_communications
 	}
+
+	modifier = {
+		state_building_barracks_max_level_add = 50
+	}
 	
 	ai_weight = {
 		value = 1
@@ -274,10 +318,10 @@ globalization = {
 	}
 	
 	modifier = {
-		economic_dependence_leverage_gain_mult = 0.5
+		country_economic_dependence_leverage_gain_mult = 0.5
 		state_market_access_price_impact = 0.01
 		building_group_bg_trade_employee_mult = -0.25
-		country_allow_trade_routes_without_interest_bool = yes
+		state_trade_advantage_mult = 0.25
 		country_leverage_threshold_change_add = -50
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
@@ -338,7 +382,6 @@ knowledge_economy = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		country_max_companies_add = 1
 		country_institution_national_bank_max_investment_add = 1
 	}
 	
@@ -353,6 +396,7 @@ digital_entertainment = {
 	category = society
 
 	modifier = {
+		country_max_companies_add = 1
 		country_weekly_innovation_max_add = 100
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
@@ -380,6 +424,7 @@ digital_education = {
 		country_weekly_innovation_max_add = 100
 		state_bureaucracy_population_base_cost_factor_mult = 1
 		country_institution_schools_max_investment_add = 1
+		state_education_access_add = -0.1
 	}
 	
 	ai_weight = {
@@ -402,6 +447,9 @@ social_justice_movements = {
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 2
 		country_institution_social_security_max_investment_add = 1
 		state_expected_sol_from_literacy = 1
+		# less racist
+		country_acceptance_shared_cultural_trait_add = 5
+		country_acceptance_culture_base_add = 5
 	}
 	
 	ai_weight = {
@@ -409,18 +457,19 @@ social_justice_movements = {
 	}
 }
 
-animal_rights_movement = {
+terrorism_and_anti_terrorism = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
 	
 	unlocking_technologies = {	
-		environmental_movement
+		pop_culture
 		anti_war_movement
 	}
 	
 	modifier = {
-		country_institution_ministry_of_the_environment_max_investment_add = 1
+		country_influence_mult = 0.1
+		state_building_barracks_max_level_add = 50
 	}
 	
 	ai_weight = {
@@ -454,6 +503,7 @@ cybersecurity = {
 	
 	unlocking_technologies = {	
 		knowledge_economy
+		terrorism_and_anti_terrorism
 	}
 	
 	modifier = {

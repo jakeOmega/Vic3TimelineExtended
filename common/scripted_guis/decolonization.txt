@@ -1,0 +1,8 @@
+decolonization_scripted_gui = {
+
+	scope = state 
+
+	is_shown = {
+        state_independence_movement_strength > 0
+    } 
+}

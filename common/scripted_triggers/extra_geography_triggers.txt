@@ -1,0 +1,28 @@
+﻿### State geography triggers
+
+state_is_in_big_russia = {
+	OR = {
+		region = sr:region_russia
+		region = sr:region_dnieper
+		region = sr:region_belarus
+		region = sr:region_caucasus
+		region = sr:region_urals
+		region = sr:region_west_siberia
+		region = sr:region_central_asia
+		region = sr:region_east_siberia
+		region = sr:region_manchuria
+	}
+}
+
+state_is_in_the_mediterranean = {
+	OR = {
+		region = sr:region_italy
+		region = sr:region_iberia
+		region = sr:region_balkans
+		region = sr:region_anatolia
+		region = sr:region_arabic
+		region = sr:region_north_africa
+		region = sr:region_occitania
+		region = sr:region_nile_basin
+	}
+}

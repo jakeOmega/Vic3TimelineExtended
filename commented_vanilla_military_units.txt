@@ -9,52 +9,49 @@
 
 combat_unit_type_irregular_infantry = {
     group = combat_unit_group_infantry
+	max_manpower = 1000
+
+    conscript_peasant_levies = yes
 
     battle_modifier = {
         unit_offense_add = 10
         unit_defense_add = 10
         unit_morale_loss_add = 15
     }
-	
+
     upkeep_modifier = {
     }
 
-    # scope = country
-    # both this and "can_build" needs to be true to build conscripts
-    can_build_conscript = {
-        always = yes
-    }
-    
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = decentralised_americas
         }
         texture = "gfx/unit_illustrations/infantry_decentralised_americas_irregular.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/infantry_east_asian_irregular.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/infantry_south_asian_irregular.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/infantry_african_irregular.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/infantry_arabic_irregular.dds"
@@ -76,6 +73,9 @@ combat_unit_type_irregular_infantry = {
 
 combat_unit_type_line_infantry = {
     group = combat_unit_group_infantry
+	max_manpower = 1000
+
+    conscript_peasant_levies = yes
 
     upkeep_modifier = {
 		goods_input_small_arms_add = 1                        # Price:   60, Total cost: 60.0
@@ -91,28 +91,28 @@ combat_unit_type_line_infantry = {
 	unlocking_technologies = { line_infantry }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/infantry_east_asian_line.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/infantry_south_asian_line.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/infantry_african_line.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/infantry_arabic_line.dds"
@@ -123,7 +123,7 @@ combat_unit_type_line_infantry = {
         texture = "gfx/unit_illustrations/infantry_eu_line.dds"
     }
 
-	upgrades = {	
+	upgrades = {
 		combat_unit_type_skirmish_infantry
         combat_unit_type_trench_infantry
         combat_unit_type_squad_infantry
@@ -133,6 +133,9 @@ combat_unit_type_line_infantry = {
 
 combat_unit_type_skirmish_infantry = {
     group = combat_unit_group_infantry
+	max_manpower = 1000
+
+    conscript_peasant_levies = yes
 
     upkeep_modifier = {
 		goods_input_small_arms_add = 2                        # Price:   60, Total cost: 120.0
@@ -149,28 +152,28 @@ combat_unit_type_skirmish_infantry = {
 	unlocking_technologies = { general_staff }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/infantry_east_asian_skirmish.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/infantry_south_asian_skirmish.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/infantry_african_skirmish.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/infantry_arabic_skirmish.dds"
@@ -190,13 +193,16 @@ combat_unit_type_skirmish_infantry = {
 
 combat_unit_type_trench_infantry = {
     group = combat_unit_group_infantry
+	max_manpower = 1000
+
+    conscript_peasant_levies = yes
 
     upkeep_modifier = {
 		goods_input_small_arms_add = 3                        # Price:   60, Total cost: 180.0
 		goods_input_ammunition_add = 2                        # Price:   50, Total cost: 100.0
 		# Total cost: 280.0
 	}
-    
+
     battle_modifier = {
         unit_offense_add = 30
         unit_defense_add = 40
@@ -206,28 +212,28 @@ combat_unit_type_trench_infantry = {
 	unlocking_technologies = { trench_works }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/infantry_east_asian_trench.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/infantry_south_asian_trench.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/infantry_african_trench.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/infantry_arabic_trench.dds"
@@ -246,6 +252,9 @@ combat_unit_type_trench_infantry = {
 
 combat_unit_type_squad_infantry = {
     group = combat_unit_group_infantry
+	max_manpower = 1000
+
+    conscript_peasant_levies = yes
 
     upkeep_modifier = {
 		goods_input_small_arms_add = 3                        # Price:   60, Total cost: 180.0
@@ -253,7 +262,7 @@ combat_unit_type_squad_infantry = {
 		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
 		# Total cost: 410.0
 	}
-    
+
     battle_modifier = {
         unit_offense_add = 40
         unit_defense_add = 50
@@ -263,28 +272,28 @@ combat_unit_type_squad_infantry = {
 	unlocking_technologies = { nco_training }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/infantry_east_asian_squad.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/infantry_south_asian_squad.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/infantry_african_squad.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/infantry_arabic_squad.dds"
@@ -302,12 +311,7 @@ combat_unit_type_squad_infantry = {
 
 combat_unit_type_mechanized_infantry = {
     group = combat_unit_group_infantry
-
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_small_arms_add = 3                        # Price:   60, Total cost: 180.0
@@ -317,7 +321,7 @@ combat_unit_type_mechanized_infantry = {
 		goods_input_tanks_add = 1                             # Price:   80, Total cost: 80.0
 		# Total cost: 530.0
 	}
-    
+
     battle_modifier = {
         unit_offense_add = 50
         unit_defense_add = 60
@@ -328,28 +332,28 @@ combat_unit_type_mechanized_infantry = {
 	unlocking_technologies = { mobile_armor }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/infantry_east_asian_mechanized.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/infantry_south_asian_mechanized.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/infantry_african_mechanized.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/infantry_arabic_mechanized.dds"
@@ -365,18 +369,13 @@ combat_unit_type_mechanized_infantry = {
 
 combat_unit_type_cannon_artillery = {
     group = combat_unit_group_artillery
-	
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }	
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_artillery_add = 1                         # Price:   70, Total cost: 70.0
 		# Total cost: 70.0
 	}
-    
+
     battle_modifier = {
         unit_offense_add = 25
         unit_defense_add = 15
@@ -393,28 +392,28 @@ combat_unit_type_cannon_artillery = {
 	unlocking_technologies = { artillery }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/artillery_east_asian_cannon.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/artillery_south_asian_cannon.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/artillery_african_cannon.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/artillery_arabic_cannon.dds"
@@ -434,18 +433,13 @@ combat_unit_type_cannon_artillery = {
 
 combat_unit_type_mobile_artillery = {
     group = combat_unit_group_artillery
-	
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }	
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_artillery_add = 2                         # Price:   70, Total cost: 140.0
 		# Total cost: 140.0
 	}
-    
+
     battle_modifier = {
         unit_offense_add = 30
         unit_defense_add = 15
@@ -460,30 +454,30 @@ combat_unit_type_mobile_artillery = {
     }
 
 	unlocking_technologies = { napoleonic_warfare }
-	
+
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/artillery_east_asian_mobile.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/artillery_south_asian_mobile.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/artillery_african_mobile.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/artillery_arabic_mobile.dds"
@@ -502,13 +496,8 @@ combat_unit_type_mobile_artillery = {
 
 combat_unit_type_shrapnel_artillery = {
     group = combat_unit_group_artillery
+	max_manpower = 1000
 
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-    
     upkeep_modifier = {
 		goods_input_artillery_add = 3                         # Price:   70, Total cost: 210.0
 		goods_input_ammunition_add = 3                        # Price:   50, Total cost: 150.0
@@ -531,28 +520,28 @@ combat_unit_type_shrapnel_artillery = {
 	unlocking_technologies = { breech_loading_artillery }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/artillery_east_asian_shrapnel.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/artillery_south_asian_shrapnel.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/artillery_african_shrapnel.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/artillery_arabic_shrapnel.dds"
@@ -570,13 +559,8 @@ combat_unit_type_shrapnel_artillery = {
 
 combat_unit_type_siege_artillery = {
     group = combat_unit_group_artillery
+	max_manpower = 1000
 
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-    
     upkeep_modifier = {
 		goods_input_artillery_add = 4                         # Price:   70, Total cost: 280.0
 		goods_input_ammunition_add = 4                        # Price:   50, Total cost: 200.0
@@ -600,28 +584,28 @@ combat_unit_type_siege_artillery = {
 	unlocking_technologies = { defense_in_depth }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/artillery_east_asian_siege.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/artillery_south_asian_siege.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/artillery_african_siege.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/artillery_arabic_siege.dds"
@@ -635,13 +619,8 @@ combat_unit_type_siege_artillery = {
 
 combat_unit_type_heavy_tank = {
     group = combat_unit_group_artillery
+	max_manpower = 1000
 
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-    
     upkeep_modifier = {
 		goods_input_tanks_add = 3                             # Price:   80, Total cost: 240.0
 		goods_input_artillery_add = 4                         # Price:   70, Total cost: 280.0
@@ -676,13 +655,8 @@ combat_unit_type_heavy_tank = {
 
 combat_unit_type_hussars = {
     group = combat_unit_group_cavalry
-	
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }	
-    
+	max_manpower = 1000
+
     upkeep_modifier = {
 		goods_input_grain_add = 1                             # Price:   20, Total cost: 20.0
 		# Total cost: 20.0
@@ -702,28 +676,28 @@ combat_unit_type_hussars = {
 	unlocking_technologies = { standing_army }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/cavalry_east_asian_hussar.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/cavalry_south_asian_hussar.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/cavalry_african_hussar.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/cavalry_arabic_hussar.dds"
@@ -743,13 +717,8 @@ combat_unit_type_hussars = {
 
 combat_unit_type_dragoons = {
     group = combat_unit_group_cavalry
+	max_manpower = 1000
 
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-    
     upkeep_modifier = {
 		goods_input_grain_add = 1                             # Price:   20, Total cost: 20.0
 		goods_input_small_arms_add = 2                        # Price:   60, Total cost: 120.0
@@ -767,28 +736,28 @@ combat_unit_type_dragoons = {
 	unlocking_technologies = { line_infantry }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/cavalry_east_asian_dragoon.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/cavalry_south_asian_dragoon.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/cavalry_african_dragoon.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/cavalry_arabic_dragoon.dds"
@@ -807,13 +776,8 @@ combat_unit_type_dragoons = {
 
 combat_unit_type_cuirassiers = {
     group = combat_unit_group_cavalry
-	
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-    
+	max_manpower = 1000
+
     upkeep_modifier = {
 		goods_input_grain_add = 1                             # Price:   20, Total cost: 20.0
 		goods_input_small_arms_add = 2                        # Price:   60, Total cost: 120.0
@@ -830,28 +794,28 @@ combat_unit_type_cuirassiers = {
 	unlocking_technologies = { line_infantry }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/cavalry_east_asian_cuirassier.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/cavalry_south_asian_cuirassier.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/cavalry_african_cuirassier.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/cavalry_arabic_cuirassier.dds"
@@ -870,13 +834,8 @@ combat_unit_type_cuirassiers = {
 
 combat_unit_type_lancers = {
     group = combat_unit_group_cavalry
-	
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-    
+	max_manpower = 1000
+
     upkeep_modifier = {
 		goods_input_grain_add = 2                             # Price:   20, Total cost: 40.0
 		goods_input_small_arms_add = 2                        # Price:   60, Total cost: 120.0
@@ -894,30 +853,30 @@ combat_unit_type_lancers = {
     }
 
 	unlocking_technologies = { napoleonic_warfare }
-    
+
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = east_asian
         }
         texture = "gfx/unit_illustrations/cavalry_east_asian_lancer.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = south_asian
         }
         texture = "gfx/unit_illustrations/cavalry_south_asian_lancer.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = african
         }
         texture = "gfx/unit_illustrations/cavalry_african_lancer.dds"
     }
 
     combat_unit_image = {
-        trigger = { 
+        trigger = {
             has_culture_graphics = arabic
         }
         texture = "gfx/unit_illustrations/cavalry_arabic_lancer.dds"
@@ -936,13 +895,8 @@ combat_unit_type_lancers = {
 
 combat_unit_type_light_tanks = {
     group = combat_unit_group_cavalry
+	max_manpower = 1000
 
-    can_build_conscript = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-    
     upkeep_modifier = {
 		goods_input_tanks_add = 2                             # Price:   80, Total cost: 160.0
 		goods_input_artillery_add = 2                         # Price:   70, Total cost: 140.0
@@ -971,12 +925,18 @@ combat_unit_type_light_tanks = {
     }
 }
 
+﻿###
+### Keep "unit tiers" per group in ascending order; the system will determine the default unit type for a country
+### by the last defined unit type that it can build
+###
+
 ### NAVY
 
 ### Light ship group
 
 combat_unit_type_frigate = {
     group = combat_unit_group_light_ship
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_manowars_add = 1                          # Price:   70, Total cost: 70.0
@@ -986,24 +946,24 @@ combat_unit_type_frigate = {
     battle_modifier = {
         unit_offense_add = 10
         unit_defense_add = 15
+		unit_blockade_add = 10
         unit_morale_loss_add = 10
     }
 
 	unlocking_technologies = { navigation }
-	
+
     combat_unit_image = {
         texture = "gfx/unit_illustrations/light_ships_frigate.dds"
     }
-	
+
 	upgrades = {
 		combat_unit_type_monitor
-        combat_unit_type_destroyer
-		combat_unit_type_torpedo_boat
 	}
 }
 
 combat_unit_type_monitor = {
     group = combat_unit_group_light_ship
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 1                         # Price:   80, Total cost: 80.0
@@ -1015,6 +975,7 @@ combat_unit_type_monitor = {
     battle_modifier = {
         unit_offense_add = 20
         unit_defense_add = 30
+        unit_blockade_add = 20
         unit_morale_loss_add = 8
 	    unit_convoy_defense_mult = 0.20
     }
@@ -1028,10 +989,16 @@ combat_unit_type_monitor = {
     combat_unit_image = {
         texture = "gfx/unit_illustrations/capital_ships_monitor.dds"
     }
+
+	upgrades = {
+		combat_unit_type_destroyer
+		combat_unit_type_torpedo_boat
+	}
 }
 
 combat_unit_type_destroyer = {
     group = combat_unit_group_light_ship
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 2                         # Price:   80, Total cost: 160.0
@@ -1043,8 +1010,9 @@ combat_unit_type_destroyer = {
     battle_modifier = {
         unit_offense_add = 30
         unit_defense_add = 40
+        unit_blockade_add = 30
         unit_morale_loss_add = 6
-        unit_convoy_defense_mult = 0.35
+		unit_convoy_defense_mult = 0.35
     }
 
     formation_modifier = {
@@ -1055,14 +1023,15 @@ combat_unit_type_destroyer = {
     combat_unit_image = {
         texture = "gfx/unit_illustrations/light_ships_destroyer.dds"
     }
-	
+
 	upgrades = {
-		combat_unit_type_torpedo_boat
+		combat_unit_type_scout_cruiser
 	}
 }
 
 combat_unit_type_torpedo_boat = {
     group = combat_unit_group_light_ship
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 2                         # Price:   80, Total cost: 160.0
@@ -1073,6 +1042,7 @@ combat_unit_type_torpedo_boat = {
     battle_modifier = {
         unit_offense_add = 40
         unit_defense_add = 30
+        unit_blockade_add = 30
         unit_morale_loss_add = 8
         unit_convoy_raiding_mult = 0.25
     }
@@ -1086,14 +1056,15 @@ combat_unit_type_torpedo_boat = {
     combat_unit_image = {
         texture = "gfx/unit_illustrations/light_ships_torpedo_boat.dds"
     }
-	
+
 	upgrades = {
-		combat_unit_type_destroyer
+		combat_unit_type_scout_cruiser
 	}
 }
 
 combat_unit_type_scout_cruiser = {
     group = combat_unit_group_light_ship
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 3                         # Price:   80, Total cost: 240.0
@@ -1106,6 +1077,7 @@ combat_unit_type_scout_cruiser = {
     battle_modifier = {
         unit_offense_add = 50
         unit_defense_add = 50
+        unit_blockade_add = 40
         unit_morale_loss_add = 6
 		unit_convoy_defense_mult = 0.5
     }
@@ -1125,6 +1097,7 @@ combat_unit_type_scout_cruiser = {
 
 combat_unit_type_man_o_war = {
     group = combat_unit_group_capital_ship
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_manowars_add = 3                          # Price:   70, Total cost: 210.0
@@ -1134,8 +1107,9 @@ combat_unit_type_man_o_war = {
     battle_modifier = {
         unit_offense_add = 25
         unit_defense_add = 25
+        unit_blockade_add = 100
         unit_morale_loss_add = 10
-        unit_convoy_raiding_mult = -0.5
+        unit_convoy_raiding_mult = -0.9
     }
 
 	unlocking_technologies = { drydocks }
@@ -1143,7 +1117,7 @@ combat_unit_type_man_o_war = {
     combat_unit_image = {
         texture = "gfx/unit_illustrations/capital_ships_manowar.dds"
     }
-	
+
 	upgrades = {
 		combat_unit_type_ironclad
 	}
@@ -1151,6 +1125,7 @@ combat_unit_type_man_o_war = {
 
 combat_unit_type_ironclad = {
     group = combat_unit_group_capital_ship
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 3                         # Price:   80, Total cost: 240.0
@@ -1162,8 +1137,9 @@ combat_unit_type_ironclad = {
     battle_modifier = {
         unit_offense_add = 50
         unit_defense_add = 50
+		unit_blockade_add = 200
         unit_morale_loss_add = 8
-		unit_convoy_raiding_mult = -0.5
+		unit_convoy_raiding_mult = -0.9
     }
 
     formation_modifier = {
@@ -1175,10 +1151,15 @@ combat_unit_type_ironclad = {
     combat_unit_image = {
         texture = "gfx/unit_illustrations/capital_ships_ironclad.dds"
     }
+
+	upgrades = {
+		combat_unit_type_dreadnought
+	}
 }
 
 combat_unit_type_dreadnought = {
     group = combat_unit_group_capital_ship
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 6                         # Price:   80, Total cost: 480.0
@@ -1191,8 +1172,9 @@ combat_unit_type_dreadnought = {
     battle_modifier = {
         unit_offense_add = 80
         unit_defense_add = 80
+        unit_blockade_add = 400
         unit_morale_loss_add = 6
-		unit_convoy_raiding_mult = -0.5
+		unit_convoy_raiding_mult = -0.9
     }
 
     formation_modifier = {
@@ -1204,10 +1186,15 @@ combat_unit_type_dreadnought = {
     combat_unit_image = {
         texture = "gfx/unit_illustrations/capital_ships_dreadnought.dds"
     }
+
+	upgrades = {
+		combat_unit_type_battleship
+	}
 }
 
 combat_unit_type_battleship = {
     group = combat_unit_group_capital_ship
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 8                         # Price:   80, Total cost: 640.0
@@ -1220,8 +1207,9 @@ combat_unit_type_battleship = {
     battle_modifier = {
         unit_offense_add = 100
         unit_defense_add = 100
+        unit_blockade_add = 500
         unit_morale_loss_add = 4
-		unit_convoy_raiding_mult = -0.5
+		unit_convoy_raiding_mult = -0.9
     }
 
     formation_modifier = {
@@ -1239,6 +1227,7 @@ combat_unit_type_battleship = {
 
 combat_unit_type_submarine = {
     group = combat_unit_group_support_ship
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 2                         # Price:   80, Total cost: 160.0
@@ -1251,6 +1240,7 @@ combat_unit_type_submarine = {
     battle_modifier = {
         unit_offense_add = 60
         unit_defense_add = 20
+        unit_blockade_add = 10
         unit_morale_loss_add = 8
         unit_convoy_raiding_mult = 1.0
     }
@@ -1268,6 +1258,7 @@ combat_unit_type_submarine = {
 
 combat_unit_type_carrier = {
     group = combat_unit_group_support_ship
+	max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 8                         # Price:   80, Total cost: 640.0
@@ -1280,6 +1271,7 @@ combat_unit_type_carrier = {
     battle_modifier = {
         unit_offense_add = 120
         unit_defense_add = 60
+        unit_blockade_add = 500
         unit_morale_loss_add = 6
 		unit_convoy_defense_mult = 0.25
     }

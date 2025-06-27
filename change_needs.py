@@ -5,10 +5,13 @@ Created on Sun Nov 27 01:28:43 2022
 @author: jakef
 """
 
-import re, math
-from pyparsing import nestedExpr, Word, alphanums, OneOrMore, ParseResults
+import math
+import re
+
 import numpy as np
-from path_constants import mod_path, base_game_path
+
+from path_constants import base_game_path, mod_path
+
 
 def convenience_need(i):
     if i < 20:
@@ -21,7 +24,7 @@ def services_need(i):
     if i < 9:
         return 0
     elif i < 20:
-        return 12 * (i - 9) + 24
+        return 12 * (i - 9)
     else:
         return services_need(19) + int(50 * (math.exp(0.2 * (i - 19)) - 1))
 
@@ -29,12 +32,12 @@ def services_need(i):
 def art_need(i):
     if i < 25:
         return 0
-    else:
+    elif i < 50:
         return int(0.02 * (i - 24) ** 4 + 1)
-
-
-def housing_need(i):
-    return max(1, int(services_need(i) ** 0.8 * services_need(20) ** 0.2))
+    else:
+        base = int(0.02 * (25) ** 4 + 1)
+        exp = math.exp(0.2 * (i - 49))
+        return int(base * exp)
 
 
 # Define the needs and their corresponding functions
@@ -42,7 +45,6 @@ needs = {
     "popneed_convenience": convenience_need,
     "popneed_services": services_need,
     "popneed_art": art_need,
-    "popneed_housing": housing_need,
 }
 
 
@@ -66,9 +68,6 @@ def extract_all_needs(matches):
 
 
 def fit_power_law(x, y):
-    def power_law(x, a, b):
-        return a * (x**b)
-
     x = np.array(x)
     y = np.array(y)
 
@@ -266,25 +265,40 @@ def calculate_and_write_costs(
     )
 
     # Writing to output file
-    with open(output_file_path, "w", encoding="utf-8-sig") as file:
-        file.write("wealth_in_pounds = {\n")
-        for wealth_level, cost in buy_package_costs.items():
-            file.write(
-                f"    if = {{ limit = {{ wealth = {wealth_level} }} value = {cost} }}\n"
+    # with open(output_file_path, "w", encoding="utf-8-sig") as file:
+    #    file.write("wealth_in_pounds = {\n")
+    #    for wealth_level, cost in buy_package_costs.items():
+    #        file.write(
+    #            f"    if = {{ limit = {{ wealth = {wealth_level} }} value = {cost} }}\n"
+    #        )
+    #    file.write("}\n")
+
+    # print proportional costs of changed needs
+    for wealth_level, cost in buy_package_costs.items():
+        if wealth_level > 50:
+            break
+        print(f"wealth_{wealth_level} = {cost}")
+        for need in pop_needs_defaults.keys():
+            if "popneed_" + need not in needs:
+                continue
+            amount = needs["popneed_" + need](wealth_level - 1)
+            need_cost = amount * goods_cost[pop_needs_defaults[need]]
+            prop_cost = 100 * need_cost / cost
+            print(
+                f"\t{need} = {prop_cost:.2f}% ({need_cost} for {amount} {pop_needs_defaults[need]})"
             )
-        file.write("}\n")
 
 
 # Example file paths (replace with your actual file paths)
 buy_packages_file_paths = [pop_needs_out_path]
 
 pop_needs_file_paths = [
-   base_game_path + r"\game\common\pop_needs\00_pop_needs.txt",
-   mod_path + r"\common\pop_needs\extra_pop_needs.txt",
+    base_game_path + r"\game\common\pop_needs\00_pop_needs.txt",
+    mod_path + r"\common\pop_needs\extra_pop_needs.txt",
 ]
 goods_file_paths = [
-   base_game_path + r"\game\common\goods\00_goods.txt",
-   mod_path + r"\common\goods\extra_goods.txt",
+    base_game_path + r"\game\common\goods\00_goods.txt",
+    mod_path + r"\common\goods\timeline_extended_extra_goods.txt",
 ]
 output_file_path = mod_path + r"\common\script_values\wealth_to_pounds.txt"
 

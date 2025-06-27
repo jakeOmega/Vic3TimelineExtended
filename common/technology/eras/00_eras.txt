@@ -21,25 +21,29 @@ era_5 = { #1911-1936
 }
 
 era_6 = { #1919-1945
-	technology_cost = 20000
+	technology_cost = 25000
 }
 
 era_7 = { #1946-1967
-	technology_cost = 35000
+	technology_cost = 65000
 }
 
 era_8 = { #1968-1987
-	technology_cost = 85000
+	technology_cost = 115000
 }
 
 era_9 = { #1988-2012
-	technology_cost = 120000
+	technology_cost = 210000
 }
 
-era_10 = { #2012-2030
-	technology_cost = 300000
+era_10 = { #nowish
+	technology_cost = 450000
 }
 
-era_11 = { #2031+
+era_11 = { #near future
 	technology_cost = 800000
+}
+
+era_12 = { #far future
+	technology_cost = 2000000
 }

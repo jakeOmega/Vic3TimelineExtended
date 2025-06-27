@@ -1,0 +1,2800 @@
+# Victoria 3 Companies: 1936 - Modern Era
+
+# --- Early-Mid 20th Century (1936-1960) ---
+
+# Volkswagen (1937)
+company_volkswagen = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_volkswagen.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_SAXONY
+	}
+	building_types = {
+		building_automotive_industry
+		building_motor_industry
+	}
+	extension_building_types = {
+		building_steel_mills
+		building_electrics_industry_appliances # For consumer appliances
+	}
+	potential = {
+		has_interest_marker_in_region = region_north_germany
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_SAXONY
+		}
+	}
+	possible = {
+		has_technology_researched = modern_automotive_technology
+		any_scope_state = {
+			state_region = s:STATE_SAXONY
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_automotive_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		building_automotive_industry_throughput_add = 0.15
+		state_infrastructure_from_population_add = 10
+	}
+	ai_will_do = {
+		has_technology_researched = modern_automotive_technology
+	}
+	ai_construction_targets = {
+		building_automotive_industry = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_SAXONY
+			}
+		}
+	}
+}
+
+# Toyota (1937)
+company_toyota = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_toyota.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_CHUBU # Central Japan, Toyota's home region
+	}
+	building_types = {
+		building_automotive_industry
+		building_robotics_industry # For their later innovations
+	}
+	extension_building_types = {
+		building_steel_mills
+		building_electronic_components_and_semiconductor_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_japan
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_CHUBU
+		}
+	}
+	possible = {
+		has_technology_researched = modern_automotive_technology
+		any_scope_state = {
+			state_region = s:STATE_CHUBU
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_automotive_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		building_automotive_industry_throughput_add = 0.05
+		country_production_tech_research_speed_mult = 0.1
+	}
+	ai_will_do = {
+		has_technology_researched = modern_automotive_technology
+	}
+	ai_construction_targets = {
+		building_automotive_industry = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_CHUBU
+			}
+		}
+	}
+}
+
+# Samsung (1938)
+company_samsung = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/korean_samsung.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_SEOUL # Capital of South Korea, Samsung's home base
+	}
+	building_types = {
+		building_electrics_industry_appliances
+		building_electronic_components_and_semiconductor_industry
+		building_shipyards
+	}
+	extension_building_types = {
+		building_software_industry
+		building_network_infrastructure
+	}
+	potential = {
+		#has_interest_marker_in_region = region_manchuria
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_SEOUL
+		}
+	}
+	possible = {
+		has_technology_researched = transistors
+		any_scope_state = {
+			state_region = s:STATE_SEOUL
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_electrics_industry_appliances
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_weekly_innovation_mult = 0.1
+		building_electrics_industry_appliances_throughput_add = 0.1
+	}
+	ai_will_do = {
+		has_technology_researched = transistors
+	}
+	ai_construction_targets = {
+		building_electrics_industry_appliances = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_SEOUL
+			}
+		}
+	}
+}
+
+# Hewlett-Packard (HP) (1939)
+company_hp = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_hp.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+        STATE_CALIFORNIA # Silicon Valley, HP's birthplace
+	}
+	building_types = {
+		building_electrics_industry_appliances # Representing early calculators and later computers
+		building_electronic_components_and_semiconductor_industry
+	}
+	extension_building_types = {
+		building_software_industry
+		building_robotics_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_pacific_coast
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+		}
+	}
+	possible = {
+		has_technology_researched = transistors
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_electrics_industry_appliances
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_society_tech_research_speed_mult = 0.1
+		building_university_throughput_add = 0.1
+	}
+	ai_will_do = {
+		has_technology_researched = transistors
+	}
+	ai_construction_targets = {
+		building_electrics_industry = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_CALIFORNIA
+			}
+		}
+	}
+}
+
+# Sony (1946)
+company_sony = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_sony.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_KANTO # Tokyo region, Sony's home base
+	}
+	building_types = {
+		building_electrics_industry_appliances # Consumer Appliances
+		building_electronic_components_and_semiconductor_industry
+		building_arts_academy # Art and Entertainment
+	}
+	extension_building_types = {
+		building_software_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_japan
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_KANTO
+		}
+	}
+	possible = {
+		has_technology_researched = transistors
+		any_scope_state = {
+			state_region = s:STATE_KANTO
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_electrics_industry_appliances
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_consumer_appliances_mult = 0.1
+		country_prestige_mult = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_entertainment
+	}
+	ai_will_do = {
+		has_technology_researched = transistors
+	}
+	ai_construction_targets = {
+		building_electrics_industry_appliances = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_KANTO
+			}
+		}
+	}
+}
+
+# IKEA (1943)
+company_ikea = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/swedish_ikea.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_GOTALAND
+	}
+	building_types = {
+		building_furniture_manufacturies
+	}
+	extension_building_types = {
+		building_logging_camp
+		building_textile_mills
+	}
+	potential = {
+		has_interest_marker_in_region = region_baltic
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_GOTALAND
+		}
+	}
+	possible = {
+		has_technology_researched = marketing_research
+		any_scope_state = {
+			state_region = s:STATE_GOTALAND
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_furniture_manufacturies
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_input_wood_mult = -0.1
+		state_lower_strata_standard_of_living_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_furniture
+	}
+	ai_will_do = {
+		has_technology_researched = marketing_research
+	}
+	ai_construction_targets = {
+		building_furniture_manufacturies = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_GOTALAND
+			}
+		}
+	}
+}
+
+
+# --- Mid-Late 20th Century (1960-1990) ---
+
+# Intel (1968)
+company_intel = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_intel.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_CALIFORNIA
+	}
+	building_types = {
+		building_electronic_components_and_semiconductor_industry
+	}
+	extension_building_types = {
+		building_software_industry
+		building_robotics_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_pacific_coast
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+		}
+	}
+	possible = {
+		has_technology_researched = microprocessor
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_electronic_components_and_semiconductor_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_production_tech_research_speed_mult = 0.15
+		goods_output_electronic_components_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_electronic_components
+	}
+	ai_will_do = {
+		has_technology_researched = microprocessor
+	}
+	ai_construction_targets = {
+		building_electronic_components_and_semiconductor_industry = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_CALIFORNIA
+			}
+		}
+	}
+}
+
+# Microsoft (1975)
+company_microsoft = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_microsoft.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_WASHINGTON # Seattle area, Microsoft's home base
+	}
+	building_types = {
+		building_software_industry
+	}
+	extension_building_types = {
+		building_electrics_industry_appliances # For hardware like Surface, Xbox
+		building_network_infrastructure # For Azure cloud
+	}
+	potential = {
+		has_interest_marker_in_region = region_pacific_coast
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_WASHINGTON
+		}
+	}
+	possible = {
+		has_technology_researched = personal_computers
+		any_scope_state = {
+			state_region = s:STATE_WASHINGTON
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_software_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_society_tech_research_speed_mult = 0.1
+		state_education_access_add = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_software
+	}
+	ai_will_do = {
+		has_technology_researched = personal_computers
+	}
+	ai_construction_targets = {
+		building_software_industry = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_WASHINGTON
+			}
+		}
+	}
+}
+
+# Apple (1976)
+company_apple = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_apple.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_CALIFORNIA # Silicon Valley, Apple's home base
+	}
+	building_types = {
+		building_electrics_industry_appliances # Consumer Appliances
+		building_software_industry # Digital Assets
+	}
+	extension_building_types = {
+		building_network_infrastructure # Digital Access
+		building_electronic_components_and_semiconductor_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_pacific_coast
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+		}
+	}
+	possible = {
+		has_technology_researched = personal_computers
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_electrics_industry_appliances
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_prestige_mult = 0.1
+		country_weekly_innovation_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_consumer_appliances
+	}
+	ai_will_do = {
+		has_technology_researched = personal_computers
+	}
+	ai_construction_targets = {
+		building_electrics_industry_appliances = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_CALIFORNIA
+			}
+		}
+	}
+}
+
+# TSMC (1987)
+company_tsmc = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/taiwanese_tsmc.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_FORMOSA
+	}
+	building_types = {
+		building_electronic_components_and_semiconductor_industry
+	}
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+	potential = {
+		has_interest_marker_in_region = region_south_china
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_FORMOSA
+		}
+	}
+	possible = {
+		has_technology_researched = integrated_circuits
+		any_scope_state = {
+			state_region = s:STATE_FORMOSA
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_electronic_components_and_semiconductor_industry
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		building_electronic_components_and_semiconductor_industry_throughput_add = 0.2
+		country_production_tech_research_speed_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_electronic_components
+	}
+	ai_will_do = {
+		has_technology_researched = integrated_circuits
+	}
+	ai_construction_targets = {
+		building_electronic_components_and_semiconductor_industry = {
+			level = 15
+			state_trigger = {
+				state_region = s:STATE_FORMOSA
+			}
+		}
+	}
+}
+
+# Huawei (1987)
+company_huawei = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_huawei.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_GUANGDONG # Southern China, Huawei's home base
+	}
+	building_types = {
+		building_network_infrastructure # Digital Access
+		building_electrics_industry_appliances # Consumer Appliances
+	}
+	extension_building_types = {
+		building_electronic_components_and_semiconductor_industry
+		building_software_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_south_china
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_GUANGDONG
+		}
+	}
+	possible = {
+		has_technology_researched = computer_networks
+		any_scope_state = {
+			state_region = s:STATE_GUANGDONG
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_network_infrastructure
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		state_infrastructure_add = 10
+		country_society_tech_research_speed_mult = 0.1
+	}
+	ai_will_do = {
+		has_technology_researched = computer_networks
+	}
+	ai_construction_targets = {
+		building_network_infrastructure = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_GUANGDONG
+			}
+		}
+	}
+}
+
+
+# --- Late 20th - Early 21st Century (1990-2010) ---
+
+# Amazon (1994)
+company_amazon = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_amazon.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_WASHINGTON # Seattle area, Amazon's home base
+	}
+	building_types = {
+		building_network_infrastructure # Digital Access (for AWS)
+		building_port # Representing logistics network
+	}
+	extension_building_types = {
+		building_software_industry
+		building_robotics_industry # For warehouse automation
+	}
+	potential = {
+		has_interest_marker_in_region = region_pacific_coast
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_WASHINGTON
+		}
+	}
+	possible = {
+		has_technology_researched = e-commerce
+		any_scope_state = {
+			state_region = s:STATE_WASHINGTON
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_network_infrastructure
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		building_urban_center_throughput_add = 0.1 # For logistics and distribution
+		building_port_throughput_add = 0.2
+	}
+	ai_will_do = {
+		has_technology_researched = e-commerce
+	}
+	ai_construction_targets = {
+		building_network_infrastructure = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_WASHINGTON
+			}
+		}
+	}
+}
+
+# Nvidia (1993)
+company_nvidia = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_nvidia.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_CALIFORNIA # Silicon Valley, Nvidia's home base
+	}
+	building_types = {
+		building_electronic_components_and_semiconductor_industry
+	}
+	extension_building_types = {
+		building_software_industry # For CUDA and AI software
+		building_robotics_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_pacific_coast
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+		}
+	}
+	possible = {
+		has_technology_researched = computer_aided_design
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_electronic_components_and_semiconductor_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_tech_research_speed_mult = 0.1 # For AI and scientific computing
+		goods_output_electronic_components_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_electronic_components
+	}
+	ai_will_do = {
+		has_technology_researched = computer_aided_design
+	}
+	ai_construction_targets = {
+		building_electronic_components_and_semiconductor_industry = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_CALIFORNIA
+			}
+		}
+	}
+}
+
+# Google (Alphabet) (1998)
+company_google = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_google.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_CALIFORNIA # Silicon Valley, Google's home base
+	}
+	building_types = {
+		building_network_infrastructure # Digital Access
+		building_software_industry # Digital Assets
+	}
+	extension_building_types = {
+		building_robotics_industry
+		building_automotive_industry # For Waymo
+	}
+	potential = {
+		has_interest_marker_in_region = region_pacific_coast
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+		}
+	}
+	possible = {
+		has_technology_researched = world_wide_web
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_network_infrastructure
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_tech_spread_mult = 0.2
+		state_education_access_add = 0.1
+	}
+	ai_will_do = {
+		has_technology_researched = world_wide_web
+	}
+	ai_construction_targets = {
+		building_network_infrastructure = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_CALIFORNIA
+			}
+		}
+	}
+}
+
+# Netflix (1997)
+company_netflix = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_netflix.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_CALIFORNIA # Silicon Valley, Netflix's home base
+	}
+	building_types = {
+		building_arts_academy # Fine Art and Entertainment
+		building_network_infrastructure # Digital Access
+	}
+	extension_building_types = {
+		building_software_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_pacific_coast
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+		}
+	}
+	possible = {
+		has_technology_researched = wireless_internet
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_arts_academy
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_prestige_mult = 0.1
+		country_influence_mult = 0.05
+	}
+	ai_will_do = {
+		has_technology_researched = wireless_internet
+	}
+	ai_construction_targets = {
+		building_arts_academy = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_CALIFORNIA
+			}
+		}
+	}
+}
+
+# SpaceX (2002)
+company_spacex = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_spacex.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_harbor_shipbuilding.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_CALIFORNIA # Southern California, SpaceX's home base
+        STATE_TEXAS # For Starbase in Boca Chica
+	}
+	building_types = {
+		building_launch_facility # Launch Capacity
+	}
+	extension_building_types = {
+		building_network_infrastructure # For Starlink
+		building_advanced_material_fabricator
+	}
+	potential = {
+		OR = {
+			has_interest_marker_in_region = region_pacific_coast
+			has_interest_marker_in_region = region_dixie
+		}
+	}
+	attainable = {
+		any_scope_state = {
+			OR = {
+				state_region = s:STATE_CALIFORNIA
+                state_region = s:STATE_TEXAS
+			}
+		}
+	}
+	possible = {
+		has_technology_researched = reusable_rocketry
+		any_scope_state = {
+			OR = {
+				state_region = s:STATE_CALIFORNIA
+                state_region = s:STATE_TEXAS
+			}
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_launch_facility
+				level >= 2
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_launch_capacity_mult = 0.2
+		country_military_tech_research_speed_mult = 0.1
+	}
+	ai_will_do = {
+		has_technology_researched = reusable_rocketry
+	}
+	ai_construction_targets = {
+		building_launch_facility = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+                    state_region = s:STATE_TEXAS
+				}
+			}
+		}
+	}
+}
+
+
+# --- Modern Era (2010-Present) ---
+
+# ByteDance (2012)
+company_bytedance = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_bytedance.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_BEIJING # Capital of China, ByteDance's home base
+	}
+	building_types = {
+		building_arts_academy # Art and Entertainment
+		building_software_industry # Digital Assets
+	}
+	extension_building_types = {
+		building_network_infrastructure
+	}
+	potential = {
+		has_interest_marker_in_region = region_north_china
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_BEIJING
+		}
+	}
+	possible = {
+		has_technology_researched = social_media
+		any_scope_state = {
+			state_region = s:STATE_BEIJING
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_software_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_prestige_mult = 0.1
+		country_influence_mult = 0.05
+	}
+	ai_will_do = {
+		has_technology_researched = social_media
+	}
+	ai_construction_targets = {
+		building_software_industry = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_BEIJING
+			}
+		}
+	}
+}
+
+# OpenAI (2015)
+company_openai = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_openai.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_CALIFORNIA # Silicon Valley, OpenAI's home base
+	}
+	building_types = {
+		building_software_industry
+	}
+	extension_building_types = {
+		building_robotics_industry
+		building_network_infrastructure
+	}
+	potential = {
+		has_interest_marker_in_region = region_pacific_coast
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+		}
+	}
+	possible = {
+		has_technology_researched = machine_learning
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_software_industry
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_tech_research_speed_mult = 0.10
+		country_weekly_innovation_mult = 0.10
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_software
+	}
+	ai_will_do = {
+		has_technology_researched = machine_learning
+	}
+	ai_construction_targets = {
+		building_software_industry = {
+			level = 15
+			state_trigger = {
+				state_region = s:STATE_CALIFORNIA
+			}
+		}
+	}
+}
+
+# CATL (2011)
+company_catl = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_catl.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_FUJIAN # Southern China, CATL's home base
+	}
+	building_types = {
+		building_advanced_material_fabricator # For batteries
+		building_chemical_plants
+	}
+	extension_building_types = {
+		building_electrics_industry
+		building_motor_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_south_china
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_FUJIAN
+		}
+	}
+	possible = {
+		has_technology_researched = clean_energy_technologies
+		any_scope_state = {
+			state_region = s:STATE_FUJIAN
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_chemical_plants
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_advanced_materials_mult = 0.15
+		building_automotive_industry_throughput_add = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_advanced_materials
+	}
+	ai_will_do = {
+		has_technology_researched = clean_energy_technologies
+	}
+	ai_construction_targets = {
+		building_chemical_plants = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_FUJIAN
+			}
+		}
+	}
+}
+
+# Boston Dynamics (1992)
+company_boston_dynamics = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_boston_dynamics.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_MASSACHUSETTS # Boston area, robotics hub
+	}
+	building_types = {
+		building_robotics_industry
+	}
+	extension_building_types = {
+		building_software_industry
+		building_arms_industry # For potential military applications
+	}
+	potential = {
+		has_interest_marker_in_region = region_new_england
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_MASSACHUSETTS
+		}
+	}
+	possible = {
+		has_technology_researched = machine_learning
+		any_scope_state = {
+			state_region = s:STATE_MASSACHUSETTS
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_robotics_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_robotics_mult = 0.2
+		unit_army_offense_mult = 0.05
+	}
+	ai_will_do = {
+		has_technology_researched = machine_learning
+	}
+	ai_construction_targets = {
+		building_robotics_industry = {
+			level = 10
+			state_trigger = {
+				state_region = s:STATE_MASSACHUSETTS
+			}
+		}
+	}
+}
+
+# ASML (1984)
+company_asml = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/dutch_asml.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+        STATE_GELRE # North Brabant, ASML's home base
+	}
+	building_types = {
+		building_tooling_workshops # Representing their photolithography machines
+		building_electronic_components_and_semiconductor_industry
+	}
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+	potential = {
+		has_interest_marker_in_region = region_rhine
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_GELRE
+		}
+	}
+	possible = {
+		has_technology_researched = early_nanotechnology
+		any_scope_state = {
+			state_region = s:STATE_GELRE
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_electronic_components_and_semiconductor_industry
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		building_electronic_components_and_semiconductor_industry_throughput_add = 0.25 # Crucial for all semiconductors
+		country_production_tech_research_speed_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_electronic_components
+		prestige_good_generic_tools
+	}
+	ai_will_do = {
+		has_technology_researched = early_nanotechnology
+	}
+	ai_construction_targets = {
+		building_electronic_components_and_semiconductor_industry = {
+			level = 15
+			state_trigger = {
+				state_region = s:STATE_GELRE
+			}
+		}
+	}
+}
+
+# Lockheed Martin (1995)
+company_lockheed_martin = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_lockheed_martin.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_MARYLAND
+	}
+	building_types = {
+		building_aeroplanes_industry
+		building_arms_industry
+		building_launch_facility
+	}
+	extension_building_types = {
+		building_software_industry
+		building_advanced_material_fabricator
+	}
+	potential = {
+		has_interest_marker_in_region = region_new_england
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_MARYLAND
+		}
+	}
+	possible = {
+		has_technology_researched = stealth_technology
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_aeroplanes_industry
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		unit_army_offense_mult = 0.1
+		unit_navy_offense_mult = 0.1
+		country_military_tech_research_speed_mult = 0.1
+	}
+    ai_will_do = {
+        has_technology_researched = stealth_technology
+    }
+    ai_construction_targets = {
+        building_aeroplanes_industry = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_MARYLAND
+            }
+        }
+    }
+}
+
+# BAE Systems (1999)
+company_bae_systems = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/gb_bae_systems.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_HOME_COUNTIES
+	}
+	building_types = {
+		building_aeroplanes_industry
+		building_arms_industry
+		building_military_shipyards
+	}
+	extension_building_types = {
+		building_electronic_components_and_semiconductor_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_england
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_HOME_COUNTIES
+		}
+	}
+	possible = {
+		has_technology_researched = supersonic_aircraft
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_aeroplanes_industry
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		unit_army_defense_mult = 0.1
+		unit_navy_defense_mult = 0.1
+	}
+    ai_will_do = {
+        has_technology_researched = supersonic_aircraft
+    }
+    ai_construction_targets = {
+        building_aeroplanes_industry = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_HOME_COUNTIES
+            }
+        }
+    }
+}
+
+# Roscosmos (2015)
+company_roscosmos = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_roscosmos.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_harbor_shipbuilding.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_MOSCOW
+	}
+	building_types = {
+		building_launch_facility
+	}
+	extension_building_types = {
+		building_aeroplanes_industry
+		building_advanced_material_fabricator
+	}
+	potential = {
+		has_interest_marker_in_region = region_russia
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_MOSCOW
+		}
+	}
+	possible = {
+		has_technology_researched = reusable_rocketry
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_launch_facility
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_launch_capacity_mult = 0.15
+		country_prestige_mult = 0.05
+	}
+    ai_will_do = {
+        has_technology_researched = reusable_rocketry
+    }
+    ai_construction_targets = {
+        building_launch_facility = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_MOSCOW
+            }
+        }
+    }
+}
+
+# Airbus (1970)
+company_airbus = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/eu_airbus.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_LANGUEDOC
+		STATE_BAVARIA
+	}
+	building_types = {
+		building_aeroplanes_industry
+	}
+	extension_building_types = {
+		building_launch_facility
+		building_software_industry
+	}
+	potential = {
+		OR = {
+			has_interest_marker_in_region = region_france
+			has_interest_marker_in_region = region_north_germany
+		}
+	}
+	attainable = {
+		any_scope_state = {
+			OR = {
+				state_region = s:STATE_LANGUEDOC
+                state_region = s:STATE_BAVARIA
+			}
+		}
+	}
+	possible = {
+		has_technology_researched = supersonic_aircraft
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_aeroplanes_industry
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		building_aeroplanes_industry_throughput_add = 0.15
+		state_infrastructure_add = 5
+	}
+    ai_will_do = {
+        has_technology_researched = supersonic_aircraft
+    }
+    ai_construction_targets = {
+        building_aeroplanes_industry = {
+            level = 10
+            state_trigger = {
+                OR = {
+                    state_region = s:STATE_LANGUEDOC
+                    state_region = s:STATE_BAVARIA
+                }
+            }
+        }
+    }
+}
+
+# Dassault Aviation (1929)
+company_dassault_aviation = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/french_dassault.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_ILE_DE_FRANCE
+	}
+	building_types = {
+		building_aeroplanes_industry
+	}
+	extension_building_types = {
+		building_arms_industry
+		building_software_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_france
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_ILE_DE_FRANCE
+		}
+	}
+	possible = {
+		has_technology_researched = jet_engine_technology
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_aeroplanes_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		unit_army_offense_mult = 0.05
+		country_prestige_mult = 0.05
+	}
+    ai_will_do = {
+        has_technology_researched = jet_engine_technology
+    }
+    ai_construction_targets = {
+        building_aeroplanes_industry = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_ILE_DE_FRANCE
+            }
+        }
+    }
+}
+
+# Hyundai (1947)
+company_hyundai = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/korean_hyundai.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_SEOUL
+	}
+	building_types = {
+		building_automotive_industry
+		building_robotics_industry
+		building_shipyards
+	}
+	extension_building_types = {
+		building_steel_mills
+	}
+	potential = {
+		has_interest_marker_in_region = region_manchuria
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_SEOUL
+		}
+	}
+	possible = {
+		has_technology_researched = modern_automotive_technology
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_automotive_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		building_automotive_industry_throughput_add = 0.1
+		building_shipyards_throughput_add = 0.1
+	}
+    ai_will_do = {
+        has_technology_researched = modern_automotive_technology
+    }
+    ai_construction_targets = {
+        building_automotive_industry = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_SEOUL
+            }
+        }
+    }
+}
+
+# SAP (1972)
+company_sap = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_sap.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_BADEN
+	}
+	building_types = {
+		building_software_industry
+	}
+	extension_building_types = {
+		building_network_infrastructure
+	}
+	potential = {
+		has_interest_marker_in_region = region_south_germany
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_BADEN
+		}
+	}
+	possible = {
+		has_technology_researched = computer_networks
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_software_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		state_tax_capacity_mult = 0.05
+		country_bureaucracy_mult = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_software
+	}
+    ai_will_do = {
+        has_technology_researched = computer_networks
+    }
+    ai_construction_targets = {
+        building_software_industry = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_BADEN
+            }
+        }
+    }
+}
+
+# Tencent (1998)
+company_tencent = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_tencent.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_GUANGDONG
+	}
+	building_types = {
+		building_software_industry
+		building_arts_academy
+		building_network_infrastructure
+	}
+	extension_building_types = {
+		building_electrics_industry_appliances
+	}
+	potential = {
+		has_interest_marker_in_region = region_south_china
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_GUANGDONG
+		}
+	}
+	possible = {
+		has_technology_researched = social_media
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_software_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_prestige_mult = 0.1
+		state_education_access_add = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_entertainment
+	}
+    ai_will_do = {
+        has_technology_researched = social_media
+    }
+    ai_construction_targets = {
+        building_software_industry = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_GUANGDONG
+            }
+        }
+    }
+}
+
+# Alibaba (1999)
+company_alibaba = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_alibaba.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_ZHEJIANG
+	}
+	building_types = {
+		building_network_infrastructure
+		building_software_industry
+	}
+	extension_building_types = {
+		building_port
+	}
+	potential = {
+		has_interest_marker_in_region = region_south_china
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_ZHEJIANG
+		}
+	}
+	possible = {
+		has_technology_researched = e-commerce
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_network_infrastructure
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		state_trade_advantage_mult = 0.1
+		goods_output_digital_access_mult = 0.1
+	}
+    ai_will_do = {
+        has_technology_researched = e-commerce
+    }
+    ai_construction_targets = {
+        building_network_infrastructure = {
+            level = 5
+            state_trigger = {
+                state_region = s:STATE_ZHEJIANG
+            }
+        }
+    }
+}
+
+# Nintendo (1889)
+company_nintendo = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_nintendo.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_KANSAI
+	}
+	building_types = {
+		building_arts_academy
+		building_electrics_industry_appliances
+		building_software_industry
+	}
+	extension_building_types = {
+		building_electronic_components_and_semiconductor_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_japan
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_KANSAI
+		}
+	}
+	possible = {
+		has_technology_researched = video_games
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_electrics_industry_appliances
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_prestige_mult = 0.15
+		goods_output_fine_art_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_entertainment
+	}
+    ai_will_do = {
+        has_technology_researched = video_games
+    }
+    ai_construction_targets = {
+        building_electrics_industry_appliances = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_KANSAI
+            }
+        }
+    }
+}
+
+# Gazprom (1989)
+company_gazprom = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_gazprom.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_oil_drills.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_INGRIA
+	}
+	building_types = {
+		building_oil_rig
+		building_power_plant
+	}
+	extension_building_types = {
+		building_chemical_plants
+	}
+	potential = {
+		has_interest_marker_in_region = region_russia
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_INGRIA
+		}
+	}
+	possible = {
+		has_technology_researched = containerization
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_oil_rig
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_oil_mult = 0.1
+	}
+    ai_will_do = {
+        has_technology_researched = containerization
+    }
+    ai_construction_targets = {
+        building_oil_rig = {
+            level = 15
+            state_trigger = {
+                state_region = s:STATE_INGRIA
+            }
+        }
+    }
+}
+
+# Saudi Aramco (1933)
+company_saudi_aramco = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/saudi_aramco.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_oil_drills.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_NEJD
+	}
+	building_types = {
+		building_oil_rig
+	}
+	extension_building_types = {
+		building_chemical_plants
+		building_port
+	}
+	potential = {
+		has_interest_marker_in_region = region_arabic
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_NEJD
+		}
+	}
+	possible = {
+		has_technology_researched = transistors
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_oil_rig
+				level >= 15
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_oil_mult = 0.25
+	}
+    ai_will_do = {
+        has_technology_researched = transistors
+    }
+    ai_construction_targets = {
+        building_oil_rig = {
+            level = 20
+            state_trigger = {
+                state_region = s:STATE_NEJD
+            }
+        }
+    }
+}
+
+# Petrobras (1953)
+company_petrobras = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/brazilian_petrobras.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_oil_drills.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_RIO_DE_JANEIRO
+	}
+	building_types = {
+		building_oil_rig
+	}
+	extension_building_types = {
+		building_chemical_plants
+	}
+	potential = {
+		has_interest_marker_in_region = region_brazil
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_RIO_DE_JANEIRO
+		}
+	}
+	possible = {
+		has_technology_researched = transistors
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_oil_rig
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_oil_mult = 0.10
+	}
+    ai_will_do = {
+        has_technology_researched = transistors
+    }
+    ai_construction_targets = {
+        building_oil_rig = {
+            level = 15
+            state_trigger = {
+                state_region = s:STATE_RIO_DE_JANEIRO
+            }
+        }
+    }
+}
+
+# Rosatom (2007)
+company_rosatom = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_rosatom.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_MOSCOW
+	}
+	building_types = {
+		building_nuclear_plant
+		building_power_plant
+	}
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+	potential = {
+		has_interest_marker_in_region = region_russia
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_MOSCOW
+		}
+	}
+	possible = {
+		has_technology_researched = nuclear_energy
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_nuclear_plant
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_electricity_mult = 0.1
+		country_military_tech_research_speed_mult = 0.05
+	}
+    ai_will_do = {
+        has_technology_researched = nuclear_energy
+    }
+    ai_construction_targets = {
+        building_nuclear_plant = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_MOSCOW
+            }
+        }
+    }
+}
+
+# Oracle (1977)
+company_oracle = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_oracle.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_TEXAS
+	}
+	building_types = {
+		building_software_industry
+		building_network_infrastructure
+	}
+	extension_building_types = {
+		building_electrics_industry_appliances
+	}
+	potential = {
+		has_interest_marker_in_region = region_dixie
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_TEXAS
+		}
+	}
+	possible = {
+		has_technology_researched = knowledge_economy
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_software_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_tech_research_speed_mult = 0.1
+        country_weekly_innovation_mult = 0.1
+        country_bureaucracy_mult = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_software
+	}
+    ai_will_do = {
+        has_technology_researched = knowledge_economy
+    }
+    ai_construction_targets = {
+        building_software_industry = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_TEXAS
+            }
+        }
+    }
+}
+
+# SoftBank (1981)
+company_softbank = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_softbank.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_KANTO
+	}
+	building_types = {
+		building_network_infrastructure
+	}
+	extension_building_types = {
+		building_software_industry
+		building_robotics_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_japan
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_KANTO
+		}
+	}
+	possible = {
+		has_technology_researched = knowledge_economy
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_network_infrastructure
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		state_capitalists_investment_pool_efficiency_mult = 0.05
+        country_tech_research_speed_mult = 0.1
+	}
+    ai_will_do = {
+        has_technology_researched = knowledge_economy
+    }
+    ai_construction_targets = {
+        building_network_infrastructure = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_KANTO
+            }
+        }
+    }
+}
+
+# Roche (1896)
+company_roche = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/swiss_roche.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_EAST_SWITZERLAND # Basel area, Roche's home base
+	}
+	building_types = {
+		building_chemical_plants
+        building_synthetics_plants_opium
+	}
+	potential = {
+		has_interest_marker_in_region = region_south_germany
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_EAST_SWITZERLAND
+		}
+	}
+	possible = {
+		has_technology_researched = modern_pharmaceuticals
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_chemical_plants
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		state_mortality_mult = -0.05
+		country_society_tech_research_speed_mult = 0.05
+        country_weekly_innovation_mult = 0.05
+        state_pollution_generation_mult = -0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_opium
+	}
+    ai_will_do = {
+        has_technology_researched = modern_pharmaceuticals
+    }
+    ai_construction_targets = {
+        building_chemical_plants = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_EAST_SWITZERLAND
+            }
+        }
+    }
+}
+
+# Pfizer (1849)
+company_pfizer = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_pfizer.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_NEW_YORK
+	}
+	building_types = {
+		building_chemical_plants
+        building_synthetics_plants_opium
+	}
+	potential = {
+		has_interest_marker_in_region = region_new_england
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_NEW_YORK
+		}
+	}
+	possible = {
+		has_technology_researched = modern_pharmaceuticals
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_chemical_plants
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		state_mortality_mult = -0.05
+		country_weekly_innovation_mult = 0.05
+        country_society_tech_research_speed_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_opium
+	}
+    ai_will_do = {
+        has_technology_researched = modern_pharmaceuticals
+    }
+    ai_construction_targets = {
+        building_chemical_plants = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_NEW_YORK
+            }
+        }
+    }
+}
+
+# Vale (1942)
+company_vale = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/brazilian_vale.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_mining.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_RIO_DE_JANEIRO
+	}
+	building_types = {
+		building_iron_mine
+		building_coal_mine
+	}
+	extension_building_types = {
+		building_railway
+		building_port
+	}
+	potential = {
+		has_interest_marker_in_region = region_brazil
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_RIO_DE_JANEIRO
+		}
+	}
+	possible = {
+		has_technology_researched = modern_tools
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_iron_mine
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_iron_mult = 0.1
+		building_group_bg_mining_throughput_add = 0.05
+	}
+    ai_will_do = {
+        has_technology_researched = modern_tools
+    }
+    ai_construction_targets = {
+        building_iron_mine = {
+            level = 15
+            state_trigger = {
+                state_region = s:STATE_RIO_DE_JANEIRO
+            }
+        }
+    }
+}
+
+# The Walt Disney Company (1923)
+company_disney = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_disney.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_CALIFORNIA
+	}
+	building_types = {
+		building_arts_academy
+	}
+	extension_building_types = {
+		building_software_industry
+		building_network_infrastructure
+	}
+	potential = {
+		has_interest_marker_in_region = region_pacific_coast
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_CALIFORNIA
+		}
+	}
+	possible = {
+		has_technology_researched = mass_media
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_arts_academy
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_prestige_mult = 0.2
+		country_infamy_generation_mult = -0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_entertainment
+	}
+    ai_will_do = {
+        has_technology_researched = mass_media
+    }
+    ai_construction_targets = {
+        building_arts_academy = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_CALIFORNIA
+            }
+        }
+    }
+}
+
+# Universal Music Group (1934)
+company_universal_music = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/eu_universal_music.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_ILE_DE_FRANCE
+		STATE_HOLLAND
+	}
+	building_types = {
+		building_arts_academy
+	}
+	extension_building_types = {
+		building_software_industry
+	}
+	potential = {
+		OR = {
+			has_interest_marker_in_region = region_france
+			has_interest_marker_in_region = region_rhine
+		}
+	}
+	attainable = {
+		any_scope_state = {
+			OR = {
+				state_region = s:STATE_ILE_DE_FRANCE
+				state_region = s:STATE_HOLLAND
+			}
+		}
+	}
+	possible = {
+		has_technology_researched = mass_media
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_arts_academy
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_prestige_mult = 0.1
+		goods_output_fine_art_mult = 0.1
+	}
+    ai_will_do = {
+        has_technology_researched = mass_media
+    }
+    ai_construction_targets = {
+        building_arts_academy = {
+            level = 10
+            state_trigger = {
+                OR = {
+                    state_region = s:STATE_ILE_DE_FRANCE
+                    state_region = s:STATE_HOLLAND
+                }
+            }
+        }
+    }
+}
+
+# Verizon (1983)
+company_verizon = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_verizon.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_NEW_YORK
+	}
+	building_types = {
+		building_network_infrastructure
+	}
+	extension_building_types = {
+		building_electrics_industry # for telephones
+	}
+	potential = {
+		has_interest_marker_in_region = region_new_england
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_NEW_YORK
+		}
+	}
+	possible = {
+		has_technology_researched = cellular_networks
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_network_infrastructure
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_digital_access_mult = 0.2
+		state_infrastructure_add = 10
+	}
+    ai_will_do = {
+        has_technology_researched = cellular_networks
+    }
+    ai_construction_targets = {
+        building_network_infrastructure = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_NEW_YORK
+            }
+        }
+    }
+}
+
+# Reliance Industries (1973)
+company_reliance = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_reliance.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_BOMBAY
+	}
+	building_types = {
+		building_oil_rig
+		building_chemical_plants
+		building_network_infrastructure
+	}
+	extension_building_types = {
+		building_textile_mills
+		building_port
+	}
+	potential = {
+		has_interest_marker_in_region = region_bombay
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_BOMBAY
+		}
+	}
+	possible = {
+		has_technology_researched = containerization
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_chemical_plants
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		state_market_access_price_impact = 0.05
+		state_infrastructure_add = 5
+	}
+    ai_will_do = {
+        has_technology_researched = containerization
+    }
+    ai_construction_targets = {
+        building_chemical_plants = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_BOMBAY
+            }
+        }
+    }
+}
+
+# FANUC (1956)
+company_fanuc = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_fanuc.dds" 
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_CHUBU
+	}
+	building_types = {
+		building_robotics_industry
+		building_tooling_workshops
+	}
+	extension_building_types = {
+		building_software_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_japan
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_CHUBU
+		}
+	}
+	possible = {
+		has_technology_researched = robotics
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_robotics_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_robotics_mult = 0.25
+		building_group_bg_manufacturing_throughput_add = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_tools
+	}
+    ai_will_do = {
+        has_technology_researched = robotics
+    }
+    ai_construction_targets = {
+        building_robotics_industry = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_CHUBU
+            }
+        }
+    }
+}
+
+# --- Italy ---
+
+# ENI (1953)
+company_eni = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/italian_eni.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_oil_drills.dds"
+	flavored_company = yes
+	preferred_headquarters = { 
+		STATE_LAZIO 
+	}
+	building_types = {
+		building_oil_rig
+		building_chemical_plants
+		building_power_plant
+	}
+	extension_building_types = {
+		building_port
+		building_railway
+	}
+	potential = {
+		has_interest_marker_in_region = region_italy
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_LAZIO
+		}
+	}
+	possible = {
+		has_technology_researched = modern_chemical_processes
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_oil_rig
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_oil_mult = 0.05
+		goods_output_electricity_mult = 0.05
+		country_government_dividends_efficiency_add = 0.05
+	}
+    ai_will_do = {
+        has_technology_researched = modern_chemical_processes
+    }
+    ai_construction_targets = {
+        building_oil_rig = {
+            level = 15
+            state_trigger = {
+                state_region = s:STATE_LAZIO
+            }
+        }
+    }
+}
+
+# Ferrari (1947)
+company_ferrari = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/italian_ferrari.dds" # Placeholder
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_EMILIA
+	}
+	building_types = {
+		building_automotive_industry
+		building_motor_industry
+	}
+	extension_building_types = {
+		building_arts_academy # Representing design and prestige
+	}
+	potential = {
+		has_interest_marker_in_region = region_italy
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_EMILIA
+		}
+	}
+	possible = {
+		has_technology_researched = modern_automotive_technology
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_automotive_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		country_prestige_mult = 0.15
+		building_automotive_industry_throughput_add = 0.1
+	}
+    ai_will_do = {
+        has_technology_researched = modern_automotive_technology
+    }
+    ai_construction_targets = {
+        building_automotive_industry = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_EMILIA
+            }
+        }
+    }
+}
+
+# --- Canada ---
+
+# BlackBerry (Research In Motion) (1984)
+company_blackberry = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/canadian_blackberry.dds" # Placeholder
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_ONTARIO
+	}
+	building_types = {
+		building_network_infrastructure
+		building_software_industry
+		building_electrics_industry_appliances
+	}
+	extension_building_types = {
+		building_electronic_components_and_semiconductor_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_canada
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_ONTARIO
+		}
+	}
+	possible = {
+		has_technology_researched = cellular_networks
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_network_infrastructure
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_digital_access_mult = 0.15
+		country_bureaucracy_mult = 0.05 # Representing secure enterprise communications
+	}
+    ai_will_do = {
+        has_technology_researched = cellular_networks
+    }
+    ai_construction_targets = {
+        building_network_infrastructure = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_ONTARIO
+            }
+        }
+    }
+}
+
+# Shopify (2006)
+company_shopify = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/canadian_shopify.dds" # Placeholder
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_urban.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_ONTARIO
+	}
+	building_types = {
+		building_software_industry
+		building_network_infrastructure
+	}
+	extension_building_types = {
+		building_port # Representing logistics network integration
+	}
+	potential = {
+		has_interest_marker_in_region = region_canada
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_ONTARIO
+		}
+	}
+	possible = {
+		has_technology_researched = e-commerce
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_software_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		state_trade_advantage_mult = 0.1
+		country_weekly_innovation_mult = 0.05
+	}
+    ai_will_do = {
+        has_technology_researched = e-commerce
+    }
+    ai_construction_targets = {
+        building_software_industry = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_ONTARIO
+            }
+        }
+    }
+}
+
+
+# --- Australia ---
+
+# BHP Group (2001, modern entity)
+company_bhp_group = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/australian_bhp.dds" # Placeholder
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_mining.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_VICTORIA
+	}
+	building_types = {
+		building_iron_mine
+		building_coal_mine
+		building_lead_mine
+	}
+	extension_building_types = {
+		building_railway
+		building_port
+		building_oil_rig
+	}
+	potential = {
+		has_interest_marker_in_region = region_oceania
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_VICTORIA
+		}
+	}
+	possible = {
+		has_technology_researched = modern_tools
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_iron_mine
+				level >= 15
+			}
+		}
+	}
+	prosperity_modifier = {
+		building_group_bg_mining_throughput_add = 0.25
+	}
+    ai_will_do = {
+        has_technology_researched = modern_tools
+    }
+    ai_construction_targets = {
+        building_iron_mine = {
+            level = 20
+            state_trigger = {
+                state_region = s:STATE_VICTORIA
+            }
+        }
+    }
+}
+
+# Cochlear (1981)
+company_cochlear = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/australian_cochlear.dds" # Placeholder
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_NEW_SOUTH_WALES
+	}
+	building_types = {
+		building_chemical_plants # Proxy for medical manufacturing
+		building_electrics_industry_appliances
+	}
+	extension_building_types = {
+		building_electronic_components_and_semiconductor_industry
+	}
+	potential = {
+		has_interest_marker_in_region = region_oceania
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_NEW_SOUTH_WALES
+		}
+	}
+	possible = {
+		has_technology_researched = modern_pharmaceuticals
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_chemical_plants
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		state_mortality_mult = -0.05
+		country_society_tech_research_speed_mult = 0.1
+	}
+    ai_will_do = {
+        has_technology_researched = modern_pharmaceuticals
+    }
+    ai_construction_targets = {
+        building_chemical_plants = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_NEW_SOUTH_WALES
+            }
+        }
+    }
+}
+
+# --- India ---
+
+# Infosys (1981)
+company_infosys = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_infosys.dds" # Placeholder
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_urban.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_MYSORE
+	}
+	building_types = {
+		building_software_industry
+	}
+	extension_building_types = {
+		building_network_infrastructure
+	}
+	potential = {
+		has_interest_marker_in_region = region_madras
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_MYSORE
+		}
+	}
+	possible = {
+		has_technology_researched = knowledge_economy
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_software_industry
+				level >= 5
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_digital_assets_mult = 0.15
+		state_education_access_add = 0.05
+	}
+    ai_will_do = {
+        has_technology_researched = knowledge_economy
+    }
+    ai_construction_targets = {
+        building_software_industry = {
+            level = 10
+            state_trigger = {
+                state_region = s:STATE_MYSORE
+            }
+        }
+    }
+}
+
+# JSW Steel (1982)
+company_jsw_steel = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_jsw_steel.dds" # Placeholder
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_BOMBAY
+	}
+	building_types = {
+		building_steel_mills
+	}
+	extension_building_types = {
+		building_iron_mine
+		building_coal_mine
+		building_railway
+	}
+	potential = {
+		has_interest_marker_in_region = region_bombay
+	}
+	attainable = {
+		any_scope_state = {
+			state_region = s:STATE_BOMBAY
+		}
+	}
+	possible = {
+		has_technology_researched = aluminum_mass_production
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_steel_mills
+				level >= 10
+			}
+		}
+	}
+	prosperity_modifier = {
+		goods_output_steel_mult = 0.15
+		building_group_bg_manufacturing_throughput_add = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_steel
+	}
+    ai_will_do = {
+        has_technology_researched = aluminum_mass_production
+    }
+    ai_construction_targets = {
+        building_steel_mills = {
+            level = 15
+            state_trigger = {
+                state_region = s:STATE_BOMBAY
+            }
+        }
+    }
+}

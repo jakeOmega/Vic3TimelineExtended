@@ -9,6 +9,7 @@
 
 combat_unit_type_mechanized_infantry = {
     group = combat_unit_group_infantry
+    max_manpower = 1000
 
     can_build_conscript = {
         NOT = {
@@ -77,6 +78,7 @@ combat_unit_type_mechanized_infantry = {
 
 combat_unit_type_armored_infantry = {
     group = combat_unit_group_infantry
+    max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_small_arms_add = 4                        # Price:   60, Total cost: 240.0
@@ -111,6 +113,7 @@ combat_unit_type_armored_infantry = {
 
 combat_unit_type_robotic_soldiers = {
     group = combat_unit_group_infantry
+    max_manpower = 100
 
     upkeep_modifier = {
 		goods_input_small_arms_add = 15                       # Price:   60, Total cost: 900.0
@@ -144,6 +147,7 @@ combat_unit_type_robotic_soldiers = {
 
 combat_unit_type_swarm_bots = {
     group = combat_unit_group_infantry
+    max_manpower = 25
 
     upkeep_modifier = {
 		goods_input_small_arms_add = 30                       # Price:   60, Total cost: 1800.0
@@ -175,6 +179,7 @@ combat_unit_type_swarm_bots = {
 
 combat_unit_type_grey_goo = {
     group = combat_unit_group_infantry
+    max_manpower = 10
 
     upkeep_modifier = {
 		goods_input_small_arms_add = 30                       # Price:   60, Total cost: 1800.0
@@ -205,6 +210,7 @@ combat_unit_type_grey_goo = {
 
 combat_unit_type_siege_artillery = {
     group = combat_unit_group_artillery
+    max_manpower = 1000
 
     can_build_conscript = {
         NOT = {
@@ -278,6 +284,7 @@ combat_unit_type_siege_artillery = {
 
 combat_unit_type_moterized_artillery = {
     group = combat_unit_group_artillery
+    max_manpower = 1000
 
     can_build = {
         NOT = {
@@ -326,6 +333,7 @@ combat_unit_type_moterized_artillery = {
 
 combat_unit_type_guided_artillery_projectiles = {
     group = combat_unit_group_artillery
+    max_manpower = 1000
 
     can_build = {
         NOT = {
@@ -374,6 +382,7 @@ combat_unit_type_guided_artillery_projectiles = {
 
 combat_unit_type_networked_guided_artillery_projectiles = {
     group = combat_unit_group_artillery
+    max_manpower = 500
 
     can_build = {
         NOT = {
@@ -421,6 +430,7 @@ combat_unit_type_networked_guided_artillery_projectiles = {
 
 combat_unit_type_orbital_bombardment = {
     group = combat_unit_group_artillery
+    max_manpower = 10
 
     can_build = {
         NOT = {
@@ -465,6 +475,7 @@ combat_unit_type_orbital_bombardment = {
 
 combat_unit_type_orbital_precision_antimatter_strikes = {
     group = combat_unit_group_artillery
+    max_manpower = 10
 
     can_build = {
         NOT = {
@@ -509,6 +520,7 @@ combat_unit_type_orbital_precision_antimatter_strikes = {
 
 combat_unit_type_light_tanks = {
     group = combat_unit_group_cavalry
+    max_manpower = 1000
 
     can_build = {
         NOT = {
@@ -558,6 +570,7 @@ combat_unit_type_light_tanks = {
 
 combat_unit_type_light_scout_tanks = {
     group = combat_unit_group_cavalry
+    max_manpower = 1000
 
     can_build = {
         NOT = {
@@ -603,6 +616,7 @@ combat_unit_type_light_scout_tanks = {
 
 combat_unit_type_stealth_reconnaissance_drone_carrier = {
     group = combat_unit_group_cavalry
+    max_manpower = 1000
 
     can_build = {
         NOT = {
@@ -649,6 +663,7 @@ combat_unit_type_stealth_reconnaissance_drone_carrier = {
 
 combat_unit_type_holographic_ambush_combat_vehicle = {
     group = combat_unit_group_cavalry
+    max_manpower = 1000
 
     can_build = {
         NOT = {
@@ -692,6 +707,7 @@ combat_unit_type_holographic_ambush_combat_vehicle = {
 ### Tanks
 combat_unit_type_heavy_tank = {
     group = combat_unit_group_tanks
+    max_manpower = 1000
 
     can_build = {
         NOT = {
@@ -744,6 +760,7 @@ combat_unit_type_heavy_tank = {
 
 combat_unit_type_main_battle_tank = {
     group = combat_unit_group_tanks
+    max_manpower = 1000
 
     can_build = {
         NOT = {
@@ -791,6 +808,7 @@ combat_unit_type_main_battle_tank = {
 
 combat_unit_type_reactive_armor_tank = {
     group = combat_unit_group_tanks
+    max_manpower = 1000
 
     can_build = {
         NOT = {
@@ -837,6 +855,7 @@ combat_unit_type_reactive_armor_tank = {
 
 combat_unit_type_railgun_tank = {
     group = combat_unit_group_tanks
+    max_manpower = 1000
 
     can_build = {
         NOT = {
@@ -883,6 +902,7 @@ combat_unit_type_railgun_tank = {
 
 combat_unit_type_DEW_tank = { #directed energy weapon tank
     group = combat_unit_group_tanks
+    max_manpower = 1000
 
     can_build = {
         NOT = {
@@ -927,6 +947,7 @@ combat_unit_type_DEW_tank = { #directed energy weapon tank
 ### Aircraft
 combat_unit_type_bomber_aircraft = {
     group = combat_unit_group_aircraft
+    max_manpower = 200
 
     can_build = {
         NOT = {
@@ -973,6 +994,7 @@ combat_unit_type_bomber_aircraft = {
 
 combat_unit_type_jet_powered_fighters = {
     group = combat_unit_group_aircraft
+    max_manpower = 200
 
     can_build = {
         NOT = {
@@ -1019,6 +1041,7 @@ combat_unit_type_jet_powered_fighters = {
 
 combat_unit_type_stealth_aircraft = {
     group = combat_unit_group_aircraft
+    max_manpower = 200
 
     can_build = {
         NOT = {
@@ -1064,6 +1087,7 @@ combat_unit_type_stealth_aircraft = {
 
 combat_unit_type_orbital_tactical_vehicles = {
     group = combat_unit_group_aircraft
+    max_manpower = 100
 
     can_build = {
         NOT = {
@@ -1109,6 +1133,7 @@ combat_unit_type_orbital_tactical_vehicles = {
 
 combat_unit_type_orbital_weapons_platforms = {
     group = combat_unit_group_aircraft
+    max_manpower = 10
 
     can_build = {
         NOT = {
@@ -1155,6 +1180,7 @@ combat_unit_type_orbital_weapons_platforms = {
 
 combat_unit_type_fleet_carrier = {
     group = combat_unit_group_capital_ship
+    max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_artillery_add = 4                         # Price:   70, Total cost: 280.0
@@ -1170,6 +1196,8 @@ combat_unit_type_fleet_carrier = {
 		unit_defense_add = 100
         unit_morale_loss_add = 4
         unit_convoy_defense_mult = 0.5
+        unit_blockade_add = 750
+		unit_convoy_raiding_mult = -0.9
     }
 
     formation_modifier = {
@@ -1189,6 +1217,7 @@ combat_unit_type_fleet_carrier = {
 
 combat_unit_type_nuclear_supercarrier = {
     group = combat_unit_group_capital_ship
+    max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_artillery_add = 6                         # Price:   70, Total cost: 420.0
@@ -1205,6 +1234,8 @@ combat_unit_type_nuclear_supercarrier = {
         unit_defense_add = 300
         unit_morale_loss_add = 4
         unit_convoy_defense_mult = 0.5
+        unit_blockade_add = 1000
+		unit_convoy_raiding_mult = -0.9
     }
 
     formation_modifier = {
@@ -1225,6 +1256,7 @@ combat_unit_type_nuclear_supercarrier = {
 
 combat_unit_type_arsenal_ship = {
     group = combat_unit_group_capital_ship
+    max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_artillery_add = 8                         # Price:   70, Total cost: 560.0
@@ -1242,6 +1274,8 @@ combat_unit_type_arsenal_ship = {
         unit_defense_add = 500
         unit_morale_loss_add = 4
         unit_convoy_defense_mult = 0.5
+        unit_blockade_add = 1500
+		unit_convoy_raiding_mult = -0.9
     }
 
     formation_modifier = {
@@ -1262,6 +1296,7 @@ combat_unit_type_arsenal_ship = {
 
 combat_unit_type_hypersonic_missile_platform = {
     group = combat_unit_group_capital_ship
+    max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_artillery_add = 10                        # Price:   70, Total cost: 700.0
@@ -1280,6 +1315,8 @@ combat_unit_type_hypersonic_missile_platform = {
         unit_defense_add = 800
         unit_morale_loss_add = 4
         unit_convoy_defense_mult = 0.5
+        unit_blockade_add = 2000
+		unit_convoy_raiding_mult = -0.9
     }
 
     formation_modifier = {
@@ -1298,6 +1335,7 @@ combat_unit_type_hypersonic_missile_platform = {
 
 combat_unit_type_asw_destroyers = {
     group = combat_unit_group_light_ship
+    max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 5                         # Price:   80, Total cost: 400.0
@@ -1313,6 +1351,7 @@ combat_unit_type_asw_destroyers = {
         unit_morale_loss_add = 4
         unit_convoy_defense_mult = 1
         unit_convoy_raiding_interception_mult = 1
+        unit_blockade_add = 60
     }
 
     formation_modifier = {
@@ -1332,6 +1371,7 @@ combat_unit_type_asw_destroyers = {
 
 combat_unit_type_guided_missile_ship = {
     group = combat_unit_group_light_ship
+    max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 6                         # Price:   80, Total cost: 480.0
@@ -1348,6 +1388,7 @@ combat_unit_type_guided_missile_ship = {
         unit_morale_loss_add = 3
         unit_convoy_defense_mult = 1
         unit_convoy_raiding_interception_mult = 1
+        unit_blockade_add = 100
     }
 
     formation_modifier = {
@@ -1367,6 +1408,7 @@ combat_unit_type_guided_missile_ship = {
 
 combat_unit_type_pulsed_laser_escort = {
     group = combat_unit_group_light_ship
+    max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 8                         # Price:   80, Total cost: 640.0
@@ -1386,6 +1428,7 @@ combat_unit_type_pulsed_laser_escort = {
         unit_convoy_defense_mult = 3
         unit_convoy_raiding_interception_mult = 3
         unit_morale_damage_mult = 0.2
+        unit_blockade_add = 150
     }
 
     formation_modifier = {
@@ -1403,6 +1446,7 @@ combat_unit_type_pulsed_laser_escort = {
 
 combat_unit_type_nuclear_submarine = {
     group = combat_unit_group_support_ship
+    max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 4                         # Price:   80, Total cost: 320.0
@@ -1433,6 +1477,7 @@ combat_unit_type_nuclear_submarine = {
 
 combat_unit_type_expeditionary_sea_base = {
     group = combat_unit_group_support_ship
+    max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 6                         # Price:   80, Total cost: 480.0
@@ -1447,6 +1492,7 @@ combat_unit_type_expeditionary_sea_base = {
         unit_offense_add = 100
         unit_defense_add = 100
         unit_morale_loss_add = 3
+        unit_blockade_add = 1000
     }
 
     formation_modifier = {
@@ -1467,6 +1513,7 @@ combat_unit_type_expeditionary_sea_base = {
 
 combat_unit_type_swarm_coordination_vessel = {
     group = combat_unit_group_support_ship
+    max_manpower = 1000
 
     upkeep_modifier = {
 		goods_input_ironclads_add = 8                         # Price:   80, Total cost: 640.0

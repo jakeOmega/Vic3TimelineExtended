@@ -1,4 +1,4 @@
 mod_path = (
-    r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended"
+    r"C:\Users\jakef\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended"
 )
-base_game_path = r"G:\SteamLibrary\steamapps\common\Victoria 3"
+base_game_path = r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3"

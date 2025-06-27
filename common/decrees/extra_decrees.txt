@@ -162,17 +162,14 @@ decree_greenest_grass_campaign = {
 decree_cultural_emigration_initiative = {
 	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
 	modifier = {
-		state_mass_migration_encouragement_bool = yes
-		state_migration_pull_mult = -0.2
-		country_radicalism_increases_violent_hostility_mult = 1
-		country_radicalism_increases_cultural_erasure_mult = 1
+		state_violence_against_minorities_bool = yes
 	}
 	
 	cost = 100
 
 	state_trigger = {
 		any_scope_pop = {
-			pop_acceptance < 40
+			pop_acceptance < 60
 		}
 	}
 	country_trigger = {
@@ -191,3 +188,158 @@ decree_cultural_emigration_initiative = {
 	}
 }
 
+decree_pollution_control = {
+	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	modifier = {
+		state_pollution_generation_mult = -0.5
+	}
+
+	unlocking_technologies = { 
+		pollution_control
+	}
+	
+	cost = 100
+
+	state_trigger = {
+		state_pollution_generation > 0
+	}
+
+	ai_weight = {
+		value = 0
+	}
+}
+
+decree_cultural_integration = {
+	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	modifier = {
+		state_yearly_cultural_acceptance_add = 5
+	}
+
+	unlocking_technologies = { 
+		
+	}
+	
+	cost = 100
+
+	state_trigger = {
+		any_scope_culture = {
+			PREV = {
+				state_cultural_acceptance = {
+					target = PREV
+					value < 100
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		value = 0
+	}
+}
+
+decree_natalism_initiative = {
+	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	modifier = {
+		state_birth_rate_mult = 0.5
+	}
+
+	unlocking_technologies = { 
+		mass_media
+	}
+	
+	cost = 250
+
+	ai_weight = {
+		value = 0
+	}
+}
+
+decree_tax_breakes = {
+	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	modifier = {
+		state_tax_collection_mult = -0.5
+		state_radicals_from_political_movements_mult = -0.5
+		state_loyalists_from_political_movements_mult = 0.25
+		state_migration_pull_mult = 0.25
+	}
+
+	unlocking_technologies = { 
+		keynesian_economics
+	}
+	
+	cost = 50
+
+	ai_weight = {
+		value = 0
+	}
+}
+
+decree_trade_reform = {
+	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	modifier = {
+		state_trade_advantage_mult = 0.25
+		state_trade_capacity_mult = 0.25
+		state_tariff_import_add = -0.25
+		state_tariff_export_add = -0.25
+	}
+
+	unlocking_technologies = { 
+		containerization
+	}
+	
+	cost = 100
+
+	ai_weight = {
+		value = 0
+		if = {
+			limit = { 
+				any_scope_building = {
+					is_building_type = building_trade_center
+				}
+			}
+			add = 10
+		}
+		if = {
+			limit = { 
+				any_scope_building = {
+					is_building_type = building_trade_center
+					level > 5
+				}
+			}
+			add = 10
+		}
+		if = {
+			limit = { 
+				any_scope_building = {
+					is_building_type = building_trade_center
+					level > 10
+				}
+			}
+			add = 10
+		}
+		if = {
+			limit = { 
+				scope:country = {  has_law = law_type:law_free_trade } 
+			}
+			multiply = 2.0
+		}		
+	}
+}
+
+decree_antiterrorism_campaign = {
+	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	modifier = {
+		state_radicals_from_political_movements_mult = -0.5
+		state_turmoil_effects_mult = -0.1
+	}
+
+	unlocking_technologies = { 
+		terrorism_and_anti_terrorism
+	}
+	
+	cost = 100
+
+	ai_weight = {
+		value = 0
+	}
+}

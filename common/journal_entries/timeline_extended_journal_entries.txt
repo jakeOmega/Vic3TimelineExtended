@@ -11,17 +11,7 @@ je_nuclear_program = {
     scripted_button = decrease_funding_nuclear_program
 
     possible = {
-        OR = {
-            country_rank = rank_value:great_power
-            AND = {
-                any_scope_ally = {
-                    has_variable = nuclear_weapon_stockpile
-                    var:nuclear_weapon_stockpile ?> 10
-                }
-                country_rank = rank_value:major_power
-                country_innovation > 400
-            }
-        }
+        country_rank = rank_value:great_power
     }
 
     immediate = {

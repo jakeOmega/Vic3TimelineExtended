@@ -32,7 +32,6 @@ integrated_circuits = {
 	}
 
 	modifier = {
-		state_education_access_add = -0.05
 	}
 	
 	ai_weight = {
@@ -129,7 +128,6 @@ computer_networks = {
 		country_weekly_innovation_max_add = 50
 		state_bureaucracy_population_base_cost_factor_mult = 0.5
 		country_institution_police_max_investment_add = 1
-		state_education_access_add = -0.05
 	}
 	
 	unlocking_technologies = {	
@@ -150,7 +148,6 @@ personal_computers = {
 	modifier = {
 		country_weekly_innovation_max_add = 50
 		country_institution_ministry_of_labor_max_investment_add = 1
-		state_education_access_add = -0.05
 	}
 	
 	unlocking_technologies = {	
@@ -320,11 +317,10 @@ computer_aided_design = {
 	
 	unlocking_technologies = {	
 		mainframe_computers
-		integrated_circuits
+		computer_networks
 	}
 	
 	modifier = {
-		state_construction_mult = 0.1
 		country_company_construction_efficiency_bonus_add = 0.1
 	}
 	
@@ -348,7 +344,6 @@ cellular_networks = {
 		country_institution_national_bank_max_investment_add = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
 		country_institution_ministry_of_commerce_max_investment_add = 1
-		state_education_access_add = -0.05
 	}
 	
 	ai_weight = {
@@ -394,6 +389,7 @@ precision_guided_munitions = {
 		unit_navy_defense_mult = 0.5
 		unit_navy_offense_mult = 0.5
 		country_weekly_innovation_max_add = 50
+		state_building_barracks_max_level_add = 50
 	}
 	
 	ai_weight = {
@@ -434,8 +430,7 @@ video_games = {
 	}
 	
 	modifier = {
-		goods_output_consumer_appliances_mult = 0.05
-		goods_output_digital_access_mult = 0.05
+		country_max_companies_add = 1
 		country_weekly_innovation_max_add = 50
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 	}

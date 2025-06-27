@@ -6,6 +6,13 @@ GLOBAL = {
 		activate_law = law_type:law_minimal_privacy_protection
 		activate_law = law_type:law_traditional_rules_of_war
 		activate_law = law_type:law_informal_government_secrecy
+		if = {
+			limit = { has_law = law_type:law_migration_controls }
+			set_institution_investment_level = {
+				institution = institution_migration_controls
+				level = 6
+			}
+		}
 		set_variable = {
 			name = nuclear_weapon_stockpile
 			value = 0

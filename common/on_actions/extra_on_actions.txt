@@ -1,10 +1,9 @@
 on_monthly_pulse_state = {
 	on_actions = {
 		space_elevator_on_action
-		remove_or_create_homelands_on_action
 		pollution_on_action
-		mass_migration_trigger_on_action
 		war_propaganda_on_action
+		state_yearly_cultural_acceptance_add_on_action
 	}
 }
 
@@ -15,26 +14,27 @@ on_monthly_pulse_country = {
 		cheaty_on_action
 		change_culture_acceptance_on_action
 		investment_pool_setup_on_action
-		update_outreach_bureaucracy_cost_on_action
 	}
 }
 
 on_yearly_pulse_state = {
 	on_actions = {
 		global_warming_update_on_action
+		remove_or_create_homelands_on_action
+		decolonization_on_action
+		violent_hostility_on_action
 	}
 }
 
 on_yearly_pulse_country = {
 	on_actions = {
 		tech_spread_on_action
+		excess_private_construction_on_action
 	}
 }
 
 on_acquired_technology = {
 	on_actions = {
-		civil_rights_on_action
-		anticolonialism_on_action
 		add_arable_land_effect_on_action
 	}
 }
@@ -125,95 +125,33 @@ remove_or_create_homelands_on_action = {
 					}
 				}
 			}
-			every_scope_culture = {
-				limit = {
-					ROOT = {
-						culture_percent_state = {
-							target = PREV
-							value < homeland_culture_disappear_threshold
+			random_list = {
+				10 = {
+					modifier = {
+						if = {
+							limit = {
+								has_decree = decree_promote_national_values
+							}
+							add = 12.5
 						}
 					}
-					NOT = { is_primary_culture_of = ROOT.owner }
-					has_homeland = ROOT
+					remove_homelands_effect = yes
 				}
-				save_scope_as = removal_culture
-				ROOT = {
-					state_region = {
-						remove_homeland = scope:removal_culture
-					}
-					post_notification = homeland_removed
-				}
+				90 = { }
 			}
-			every_scope_culture = {
-				limit = {
-					ROOT = {
-						culture_percent_state = {
-							target = PREV
-							value >= homeland_culture_form_threshold
+			random_list = {
+				10 = {
+					modifier = {
+						if = {
+							limit = {
+								has_decree = decree_promote_national_values
+							}
+							add = 12.5
 						}
 					}
-					is_primary_culture_of = ROOT.owner
-					NOT = { has_homeland = ROOT }
+					create_homelands_effect = yes
 				}
-				save_scope_as = form_culture
-				ROOT = {
-					state_region = {
-						add_homeland = scope:form_culture
-					}
-					post_notification = homeland_created
-				}
-			}
-		}
-	}
-}
-
-civil_rights_on_action = {
-	effect = {
-		if = {
-			limit = { has_technology_researched = civil_rights_movement }
-			if = {
-				limit = {
-					ig:ig_intelligentsia = {
-						NOT = { has_ideology = ideology:ideology_multicultural }
-					}
-				}
-				ig:ig_intelligentsia = {
-					add_ideology = ideology_multicultural
-					save_scope_as = interest_group_scope
-				}
-				post_notification = ideology_multicultural_added
-			}
-		}
-	}
-}
-
-anticolonialism_on_action = {
-	effect = {
-		if = {
-			limit = { has_technology_researched = decolonization }
-			if = {
-				limit = {
-					ig:ig_trade_unions = {
-						NOT = { has_ideology = ideology:ideology_anti_colonialist }
-					}
-				}
-				ig:ig_trade_unions = {
-					add_ideology = ideology_anti_colonialist
-					save_scope_as = interest_group_scope
-				}
-				post_notification = ideology_anti_colonialist_added
-			}
-			if = {
-				limit = {
-					ig:ig_intelligentsia = {
-						NOT = { has_ideology = ideology:ideology_anti_colonialist }
-					}
-				}
-				ig:ig_intelligentsia = {
-					add_ideology = ideology_anti_colonialist
-					save_scope_as = interest_group_scope
-				}
-				post_notification = ideology_anti_colonialist_added
+				90 = { }
 			}
 		}
 	}
@@ -234,20 +172,6 @@ pollution_on_action = {
 			set_variable = {
 				name = prior_pollution_reduction
 				value = institution_ministry_of_the_environment_pollution_generation
-			}
-		}
-	}
-}
-
-mass_migration_trigger_on_action = {
-	effect = {
-		if = {
-			limit = {
-				modifier:state_mass_migration_encouragement_bool = yes
-			}
-			random = {
-				chance = 2
-				trigger_mass_migration = yes
 			}
 		}
 	}
@@ -288,6 +212,13 @@ tech_spread_on_action = {
 				multiplier = global_tech_spread_script_value
 			}
 		}
+		if = {
+			limit = {
+				NOT = { is_country_type = recognized }
+				has_technology_researched = decolonization
+			}
+			set_country_type = recognized
+		}
 	}
 }
 
@@ -313,7 +244,7 @@ war_propaganda_on_action = {
 	effect = {
 		if = {
 			limit = {
-				has_decree = decree_war_propaganda
+				always = yes
 			}
 			owner = {
 				every_scope_war = {
@@ -327,8 +258,311 @@ war_propaganda_on_action = {
 	}
 }
 
-update_outreach_bureaucracy_cost_on_action = {
+excess_private_construction_on_action = {
 	effect = {
-		update_outreach_bureaucracy_cost = yes
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						construction_queue_num_queued_private_levels > target_queue_length
+						investment_pool_net_income > 0
+					}
+					has_modifier = too_much_private_construction
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_modifier = too_much_private_construction
+						too_much_private_construction_script_value > 0
+					}
+				}
+				remove_modifier = too_much_private_construction
+				if = {
+					limit = {
+						too_much_private_construction_script_value > 0
+					}
+					add_modifier = {
+					name = too_much_private_construction
+						multiplier = too_much_private_construction_script_value
+	
+					}
+				}
+			}
+			set_variable = {
+				name = too_much_private_construction_cached
+				value = too_much_private_construction_script_value
+			}
+		}
+		remove_modifier = overinvestment_modifier
+		if = {
+			limit = {
+				var:too_much_private_construction_cached > 1000
+				investment_pool > gdp
+			}
+			add_modifier = {
+				name = overinvestment_modifier
+			}
+		}
+	}
+}
+
+state_yearly_cultural_acceptance_add_on_action = {
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					modifier:state_yearly_cultural_acceptance_add > 0
+					modifier:state_min_cultural_acceptance_delta_add > 0
+				}
+				any_scope_culture = {
+					ROOT = {
+						cultural_acceptance_delta = {
+							target = PREV
+							value < 0
+						}
+					}
+				}
+			}
+			every_scope_culture = {
+				limit = {
+					ROOT = {
+						cultural_acceptance_delta = {
+							target = PREV
+							value < 0
+						}
+					}
+				}
+				ROOT = {
+					if = {
+						limit = {
+							cultural_acceptance_delta = {
+								target = PREV
+								value < negative_state_min_cultural_acceptance_delta_add
+							}
+						}
+						add_acceptance = {
+							target = PREV
+							value = {
+								value = -40
+								add = modifier:state_min_cultural_acceptance_delta_add
+								subtract = "cultural_acceptance_delta(PREV)"
+							}
+						}
+					}
+					add_acceptance = {
+						target = PREV
+						value = {
+							add = modifier:state_yearly_cultural_acceptance_add
+							divide = 12 # monthly on_action
+							max = {
+								add = "cultural_acceptance_delta(PREV)"
+								multiply = -1 # cannot add more delta than what gets you to 0
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+decolonization_on_action = {
+	effect = {		
+		if = {
+			limit = { 
+				state_independence_movement_strength = 100
+				NOR = {
+					has_modifier = refused_decolonization_modifier
+					has_modifier = bribed_to_stop_decolonization_modifier
+				}
+				owner = {
+					is_diplomatic_play_committed_participant = no
+				}
+			}
+			random_list = {
+				20 = {
+					save_scope_as = colony_state
+					owner = {
+						top_overlord = {
+							trigger_event = { id = minor_events_timelineextended.5 }
+						}
+					}
+				}
+				80 = { }
+			}
+		}
+	}
+}
+
+violent_hostility_on_action = {
+	effect = {
+		save_scope_as = curr_state
+		if = {
+			limit = {
+				modifier:state_violence_against_minorities_bool = yes
+				any_scope_culture = {
+					scope:curr_state = {
+						state_cultural_acceptance = {
+							target = PREV
+							value < 60
+						}
+						culture_percent_state = {
+							culture = PREV
+							value > 0.05
+						}
+					}
+				}
+			}
+			
+			every_scope_culture = {
+				limit = {
+					scope:curr_state = {
+						state_cultural_acceptance = {
+							target = PREV
+							value < 60
+						}
+						culture_percent_state = {
+							culture = PREV
+							value > 0.05
+						}
+					}
+				}
+				save_scope_as = curr_culture
+				random_list = {
+					5 = { # real bad
+						modifier = {
+							if = {
+								limit = {
+									scope:curr_state = {
+										state_cultural_acceptance = {
+											target = PREV
+											value < 40
+										}
+									}
+								}
+								add = 10
+							}
+							if = {
+								limit = {
+									scope:curr_state = {
+										state_cultural_acceptance = {
+											target = PREV
+											value < 20
+										}
+									}
+								}
+								add = 20
+							}
+							if = {
+								limit = {
+									scope:curr_state = { has_decree = decree_promote_national_values }
+								}
+								multiply = 1.5
+							}
+							if = {
+								limit = {
+									scope:curr_state = { has_decree = decree_violent_suppression }
+								}
+								multiply = 1.5
+							}
+							if = {
+								limit = {
+									scope:curr_state.owner = {
+										power_bloc ?= {
+											has_principle_group = principle_group_cultural_unity
+										}
+									}
+									multiply = 2.0
+								}
+							}
+						}
+						scope:curr_state = {
+							kill_population_percent_in_state = {
+								culture = PREV
+								percent = 0.1
+							}
+							add_radicals_in_state = {
+								culture = PREV
+								value = 1.0
+							}
+							state_region = { add_devastation = 0.25 }
+							every_scope_pop = {
+								limit = {
+									culture = scope:curr_culture
+								}
+								trigger_mass_migration = {
+									POP_RATIO = 0.3
+								}
+							}
+						}
+					}
+					5 = { # bad
+						modifier = {
+							if = {
+								limit = {
+									scope:curr_state = {
+										state_cultural_acceptance = {
+											target = PREV
+											value < 40
+										}
+									}
+								}
+								add = 10
+							}
+							if = {
+								limit = {
+									scope:curr_state = {
+										state_cultural_acceptance = {
+											target = PREV
+											value < 20
+										}
+									}
+								}
+								add = 10
+							}
+							if = {
+								limit = {
+									scope:curr_state = { has_decree = decree_promote_national_values }
+								}
+								multiply = 1.5
+							}
+							if = {
+								limit = {
+									scope:curr_state.owner = {
+										power_bloc ?= {
+											has_principle_group = principle_group_cultural_unity
+										}
+									}
+									multiply = 0.75
+								}
+							}
+						}
+						scope:curr_state = {
+							kill_population_percent_in_state = {
+								culture = PREV
+								percent = 0.02
+							}
+							add_radicals_in_state = {
+								culture = PREV
+								value = 0.25
+							}
+							state_region = { add_devastation = 0.1 }
+							every_scope_pop = {
+								limit = {
+									culture = scope:curr_culture
+								}
+								trigger_mass_migration = {
+									POP_RATIO = 0.1
+								}
+							}
+						}
+					}
+					100 = { # nothing
+					}
+				}
+			}
+		}
+		remove_variable = sent_message
 	}
 }

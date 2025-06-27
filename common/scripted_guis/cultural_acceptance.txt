@@ -13,7 +13,12 @@ add_accepted_culture_scriptedgui = {
         }
         exists = scope:curr_culture
         scope:curr_culture = {
-            culture_is_discriminated_in = ROOT
+            ROOT.owner = {
+				cultural_acceptance_base = {
+					target = PREV
+					value < 40
+				}
+			}
         }
     } 
     
@@ -59,7 +64,12 @@ remove_accepted_culture_scriptedgui = {
         }
         exists = scope:curr_culture
         scope:curr_culture = {
-            NOT = { culture_is_discriminated_in = ROOT }
+            ROOT.owner = {
+				cultural_acceptance_base = {
+					target = PREV
+					value >= 40
+				}
+			}
         }
     } 
     

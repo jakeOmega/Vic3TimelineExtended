@@ -7,7 +7,6 @@ transistors = {
 	modifier = {
 		building_power_plant_throughput_add = 0.25
 		state_bureaucracy_population_base_cost_factor_mult = 0.5
-		state_education_access_add = -0.05
 	}
 	
 	unlocking_technologies = {	
@@ -111,6 +110,24 @@ civil_rights_movement = {
 		country_add_multicultural_ideology_to_intelligentsia_bool = yes
 		country_institution_ministry_of_labor_max_investment_add = 1
 		country_institution_ministry_of_religion_max_investment_add = 1
+		# less racist
+		country_acceptance_shared_cultural_trait_add = 5
+		country_acceptance_culture_base_add = 5
+	}
+
+	on_researched = {
+		if = {
+			limit = {
+				ig:ig_intelligentsia = {
+					NOT = { has_ideology = ideology:ideology_multicultural_ig }
+				}
+			}
+			ig:ig_intelligentsia = {
+				add_ideology = ideology_multicultural_ig
+				save_scope_as = interest_group_scope
+			}
+			post_notification = ideology_multicultural_added
+		}
 	}
 	
 	ai_weight = {
@@ -218,8 +235,6 @@ decolonization = {
 	category = society
 	
 	modifier = {
-		country_diplomatic_play_maneuvers_add = 10
-		country_influence_mult = 0.2
 		country_weekly_innovation_max_add = 50
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
@@ -227,6 +242,41 @@ decolonization = {
 		state_colony_growth_creation_factor = 0.1
 		country_liberty_desire_of_subjects_add = 0.05
 		country_add_anticolonial_ideology_to_igs_bool = yes
+		country_unrecognized_become_recognized_bool = yes
+	}
+
+	on_researched = {
+		if = {
+			limit = {
+				ig:ig_trade_unions = {
+					NOT = { has_ideology = ideology:ideology_anti_colonialist }
+				}
+			}
+			ig:ig_trade_unions = {
+				add_ideology = ideology_anti_colonialist
+				save_scope_as = interest_group_scope
+			}
+			post_notification = ideology_anti_colonialist_added
+		}
+		if = {
+			limit = {
+				ig:ig_intelligentsia = {
+					NOT = { has_ideology = ideology:ideology_anti_colonialist }
+				}
+			}
+			ig:ig_intelligentsia = {
+				add_ideology = ideology_anti_colonialist
+				save_scope_as = interest_group_scope
+			}
+			post_notification = ideology_anti_colonialist_added
+		}
+
+		if = {
+			limit = {
+				is_country_type = unrecognized
+			}
+			set_country_type = recognized
+		}
 	}
 	
 	unlocking_technologies = {	
@@ -308,7 +358,6 @@ anti_sub_warfare = {
 	category = military
 	
 	modifier = {
-		unit_navy_defense_mult = 0.1
 		unit_convoy_defense_mult = 0.5
 		unit_navy_defense_mult = 0.2
 		unit_navy_offense_mult = 0.2
@@ -357,6 +406,7 @@ tactical_nuclear_weapons = {
 		country_diplomatic_play_maneuvers_add = 10
 		country_prestige_mult = 0.1
 		country_weekly_innovation_max_add = 50
+		state_building_barracks_max_level_add = 50
 	}
 	
 	ai_weight = {
@@ -412,7 +462,7 @@ television_broadcasting = {
 	category = society
 	
 	modifier = {
-		building_arts_academy_throughput_add = 0.05
+		country_max_companies_add = 1
 		country_weekly_innovation_max_add = 50
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		country_institution_ministry_of_culture_max_investment_add = 1
@@ -442,7 +492,8 @@ antibiotic_mass_production = {
 	}
 
 	modifier = {
-		country_institution_health_system_max_investment_add = 1
+		state_mortality_mult = -0.05
+		state_birth_rate_mult = 0.05
 	}
 	
 	ai_weight = {
@@ -457,10 +508,10 @@ contraceptive_pill = {
 	category = society
 	
 	modifier = {
-		state_dependent_wage_mult = 0.1
+		state_dependent_wage_mult = 0.35
 		state_working_adult_ratio_add = 0.05
 		state_pop_qualifications_mult = 0.05
-		state_education_access_add = 0.05
+		state_tax_capacity_mult = 0.05
 		state_birth_rate_mult = -0.10
 		country_weekly_innovation_max_add = 50
 	}
@@ -482,10 +533,10 @@ second_wave_feminism = {
 	category = society
 	
 	modifier = {
-		state_dependent_wage_mult = 0.1
+		state_dependent_wage_mult = 0.15
 		state_working_adult_ratio_add = 0.025
 		state_pop_qualifications_mult = 0.05
-		state_education_access_add = 0.05
+		state_tax_capacity_mult = 0.05
 		state_birth_rate_mult = -0.025
 	}
 	
@@ -511,6 +562,7 @@ anti_war_movement = {
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
+		state_building_barracks_max_level_add = 50
 	}
 	
 	unlocking_technologies = {	
@@ -536,6 +588,7 @@ modern_urban_planning = {
 		country_max_weekly_construction_progress_add = 10
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		state_building_highway_max_level_add = 1
+		country_institution_ministry_of_urban_planning_max_investment_add = 2
 	}
 	
 	ai_weight = {

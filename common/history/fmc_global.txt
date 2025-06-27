@@ -1,0 +1,28 @@
+﻿# This is executed last among all history
+GLOBAL = {
+	every_country = {
+		trigger_event = {
+			id = fmc_update_events.5
+		}
+	}
+	random_country = {
+		trigger_event = {
+			id = fmc_update_events.2
+			days = 1
+		}
+		trigger_event = {
+			id = fmc_update_events.2
+			days = 2
+		}
+	}
+	random_country = {
+		trigger_event = {
+			id = fmc_update_events.2
+			days = 1
+		}
+		trigger_event = {
+			id = fmc_update_events.2
+			days = 2
+		}
+	}
+}

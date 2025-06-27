@@ -65,36 +65,6 @@ building_furniture_manufacturies = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_urban_center = {
-	building_group = bg_service
-	icon = "gfx/interface/icons/building_icons/urban_center.dds"
-	city_type = city
-	residence_points_per_level = 0
-	
-	unlocking_technologies = { 
-		urbanization
-	}
-	
-	production_method_groups = {
-		pmg_amenities
-		#pmg_housing
-		pmg_street_lighting
-		pmg_public_transport
-		#pmg_entertainment
-		pmg_urban_clergy
-		#pmg_augmentation
-	}
-	
-	buildable = no
-	expandable = no
-	downsizeable = no	
-	cannot_switch_owner = yes
-	
-	terrain_manipulator = urban_city
-	ownership_type = self
-    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
-}
-
 building_synthetics_plants = {
 	building_group = bg_heavy_industry
 	icon = "gfx/interface/icons/building_icons/synthetics_plants.dds"
@@ -107,9 +77,7 @@ building_synthetics_plants = {
 	
 	production_method_groups = {
 		pmg_synthetic_dyes
-		# pmg_distribution_building_synthetics_plants_dyes
 		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
 	}
 	
 	required_construction = construction_cost_very_high
@@ -137,9 +105,7 @@ building_synthetics_plants_silk = {
 	
 	production_method_groups = {
 		pmg_synthetic_silk
-		# pmg_distribution_building_synthetics_plants_silk
 		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
 	}
 	
 	required_construction = construction_cost_very_high
@@ -168,9 +134,7 @@ building_synthetics_plants_oil = {
 	
 	production_method_groups = {
 		pmg_synthetic_oil
-		# pmg_distribution_building_synthetics_plants_oil
 		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
 	}
 	
 	required_construction = construction_cost_very_high
@@ -198,9 +162,7 @@ building_synthetics_plants_rubber = {
 	
 	production_method_groups = {
 		pmg_synthetic_rubber
-		# pmg_distribution_building_synthetics_plants_rubber
 		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
 	}
 	
 	required_construction = construction_cost_very_high
@@ -228,9 +190,7 @@ building_synthetics_plants_opium = {
 	
 	production_method_groups = {
 		pmg_synthetic_opium
-		# pmg_distribution_building_synthetics_plants_rubber
 		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
 	}
 	
 	required_construction = construction_cost_very_high
@@ -259,7 +219,6 @@ building_synthetics_plants_coal = {
 	production_method_groups = {
 		pmg_synthetic_coal
 		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
 		
 	}
 
@@ -289,7 +248,6 @@ building_synthetics_plants_wood = {
 	production_method_groups = {
 		pmg_synthetic_wood
 		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
 		
 	}
 
@@ -319,7 +277,6 @@ building_synthetics_plants_sugar = {
 	production_method_groups = {
 		pmg_synthetic_sugar
 		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
 		
 	}
 
@@ -348,9 +305,7 @@ building_synthetics_plants_meat = {
 
 	production_method_groups = {
 		pmg_synthetic_meat
-		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
-		
+		pmg_automation_building_chemical_plants		
 	}
 
 	required_construction = construction_cost_very_high
@@ -378,9 +333,7 @@ building_synthetics_plants_fruit = {
 
 	production_method_groups = {
 		pmg_synthetic_fruit
-		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
-		
+		pmg_automation_building_chemical_plants		
 	}
 
 	required_construction = construction_cost_very_high
@@ -408,9 +361,7 @@ building_synthetics_plants_drinks = {
 
 	production_method_groups = {
 		pmg_synthetic_drinks
-		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
-		
+		pmg_automation_building_chemical_plants		
 	}
 
 	required_construction = construction_cost_very_high
@@ -438,9 +389,7 @@ building_synthetics_plants_biomass = {
 
 	production_method_groups = {
 		pmg_synthetic_biomass
-		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_synthetics_plants
-		
+		pmg_automation_building_chemical_plants		
 	}
 
 	required_construction = construction_cost_very_high
@@ -470,7 +419,6 @@ building_chemical_plants = {
 	production_method_groups = {
 		pmg_fertilizer_production
 		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_chemical_plants
 	}
 
 	required_construction = construction_cost_very_high
@@ -500,7 +448,6 @@ building_explosives_factory = {
 	production_method_groups = {
 		pmg_explosives_building_chemical_plants
 		pmg_automation_building_chemical_plants
-		#pmg_ownership_capital_building_chemical_plants
 	}
 
 	required_construction = construction_cost_very_high
@@ -529,7 +476,6 @@ building_motor_industry = {
 	production_method_groups = {
 		pmg_base_building_motor_industry
 		pmg_automation_building_motor_industry
-		#pmg_ownership_capital_building_motor_industry
 	}
 	
 	required_construction = construction_cost_very_high
@@ -541,27 +487,6 @@ building_motor_industry = {
 			}
 		}
 	}
-	ownership_type = self
-    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
-}
-
-building_car_industry = {
-	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/goods_icons/automobiles.dds"
-	city_type = city
-	levels_per_mesh = -1
-	
-	unlocking_technologies = {
-		combustion_engine
-	}
-
-	production_method_groups = {
-		pmg_base_building_car_industry
-		pmg_automation_building_motor_industry
-		#pmg_ownership_capital_building_car_industry
-	}
-	
-	required_construction = construction_cost_very_high
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -578,9 +503,7 @@ building_electrics_industry = {
 
 	production_method_groups = {
 		pmg_telephones_category
-		# pmg_distribution_building_electrics_industry
 		pmg_automation_building_electronic_components
-		#pmg_ownership_capital_building_electrics_industry
 	}
 	
 	required_construction = construction_cost_very_high
@@ -608,9 +531,7 @@ building_electrics_industry_radio = {
 
 	production_method_groups = {
 		pmg_radios_category
-		# pmg_distribution_building_electrics_industry
 		pmg_automation_building_electronic_components
-		#pmg_ownership_capital_building_electrics_industry
 	}
 	
 	required_construction = construction_cost_very_high
@@ -638,9 +559,7 @@ building_electrics_industry_appliances = {
 
 	production_method_groups = {
 		pmg_consumer_appliances
-		# pmg_distribution_building_electrics_industry
 		pmg_automation_building_electronic_components
-		#pmg_ownership_capital_building_electrics_industry
 	}
 	
 	required_construction = construction_cost_super_high
@@ -669,7 +588,6 @@ building_power_plant = {
 	production_method_groups = {
 		pmg_base_building_power_plant
 		pmg_power_automation
-		#pmg_ownership_capital_building_power_plant
 	}
 	
 	required_construction = construction_cost_very_high
@@ -685,19 +603,20 @@ building_power_plant = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_war_machine_industry = {
+building_automotive_industry = {
 	building_group = bg_heavy_industry
 	icon = "gfx/interface/icons/building_icons/vehicles_industry.dds"
 	city_type = city
 	levels_per_mesh = 5
 	
 	unlocking_technologies = {
-		mobile_armor
+		combustion_engine
 	}
 
 	production_method_groups = {
+		pmg_automobile_production
 		pmg_tanks
-		pmg_automation_tanks
+		pmg_automation_building_automotive_industry
 	}
 	
 	required_construction = construction_cost_very_high
@@ -726,7 +645,6 @@ building_aeroplanes_industry = {
 	production_method_groups = {
 		pmg_aeroplanes
 		pmg_automation_planes
-		#pmg_ownership_capital_building_war_machine_industry
 	}
 	
 	required_construction = construction_cost_very_high
@@ -1136,6 +1054,7 @@ building_space_elevator_construction_site = {
 		}
 	}
 	ownership_type = no_ownership
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
 building_space_elevator = {
@@ -1171,7 +1090,7 @@ building_space_mine = {
 		
 	}
 
-	required_construction = construction_cost_mega_high
+	required_construction = construction_cost_space_mine
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -1340,8 +1259,6 @@ building_port = {
 	city_type = port
 	icon = "gfx/interface/icons/building_icons/building_port.dds"
 
-	has_max_level = yes
-	ignore_stateregion_max_level = yes
 	port = yes
 
 	unlocking_technologies = { navigation }

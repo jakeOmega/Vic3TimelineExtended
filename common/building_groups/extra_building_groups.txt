@@ -9,7 +9,7 @@ bg_parks = {
 	
 	economy_of_scale = no
 	
-	lens = government
+	lens = development
 	
 	urbanization = 20
 	infrastructure_usage_per_level = 1

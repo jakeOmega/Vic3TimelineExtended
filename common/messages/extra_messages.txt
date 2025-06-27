@@ -84,3 +84,10 @@ ideology_anti_colonialist_added = {
 	notification_type = feed
 	color = good
 }
+
+violence_against_minorities = {
+	type = state
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = neutral
+}

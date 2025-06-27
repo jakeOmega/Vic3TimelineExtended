@@ -29,7 +29,64 @@ nuclear_weapon_events.1 = {
  	option = {
  		name = nuclear_weapon_events.1.a
  		default_option = yes
+		ai_chance = {
+			base = 1
+		}
  	}
+	
+	option = {
+		name = nuclear_weapon_events.1.b
+		trigger = {
+			owner = {
+				has_modifier = nuclear_power
+				var:nuclear_weapon_stockpile > 0
+			}
+		}
+
+		ai_chance = {
+			base = 10
+		}
+		scope:attacking_country = {
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 0
+				nuclear_response_strike = yes
+			}
+		}
+	}
+
+	option = {
+		name = nuclear_weapon_events.1.c
+		trigger = {
+			owner = {
+				has_modifier = nuclear_power
+				var:nuclear_weapon_stockpile > 2
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+
+		scope:attacking_country = {
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 0
+				nuclear_response_strike = yes
+			}
+
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 1
+				nuclear_response_strike = yes
+			}
+
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 2
+				nuclear_response_strike = yes
+			}
+		}
+	}
 }
 
 nuclear_weapon_events.2 = {
@@ -320,5 +377,244 @@ nuclear_weapon_events.10 = {
 		add_modifier = {
 			name = nuclear_power
 		}
+ 	}
+}
+
+nuclear_weapon_events.11 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+ 		video = "unspecific_fire"
+ 	}
+
+ 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+ 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+ 	title = nuclear_weapon_events.11.t
+ 	desc = nuclear_weapon_events.11.d
+ 	flavor = nuclear_weapon_events.11.f
+
+    duration = 3
+
+ 	trigger = {
+ 		# triggered by nuclear strike
+ 	}
+	
+ 	immediate = {
+		post_notification = industrial_nuke_response_succeeds_defender
+ 	}
+
+ 	option = {
+ 		name = nuclear_weapon_events.11.a
+ 		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+ 	}
+	
+	option = {
+		name = nuclear_weapon_events.11.b
+		trigger = {
+			owner = {
+				has_modifier = nuclear_power
+				var:nuclear_weapon_stockpile > 0
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+		scope:target_country = {
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 0
+				nuclear_response_response_strike = yes
+			}
+		}
+	}
+
+	option = {
+		name = nuclear_weapon_events.11.c
+		trigger = {
+			owner = {
+				has_modifier = nuclear_power
+				var:nuclear_weapon_stockpile > 2
+			}
+		}
+		ai_chance = {
+			base = 30
+		}
+		scope:target_country = {
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 0
+				nuclear_response_response_strike = yes
+			}
+
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 1
+				nuclear_response_response_strike = yes
+			}
+
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 2
+				nuclear_response_response_strike = yes
+			}
+		}
+	}
+}
+
+nuclear_weapon_events.12 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+ 		video = "unspecific_fire"
+ 	}
+
+ 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+ 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+ 	title = nuclear_weapon_events.12.t
+ 	desc = nuclear_weapon_events.12.d
+ 	flavor = nuclear_weapon_events.12.f
+
+    duration = 3
+
+ 	trigger = {
+ 		# triggered by nuclear strike
+ 	}
+	
+ 	immediate = {
+ 		post_notification = industrial_nuke_response_succeeds_attacker
+ 	}
+
+ 	option = {
+ 		name = nuclear_weapon_events.12.a
+ 		default_option = yes
+ 	}
+}
+
+nuclear_weapon_events.13 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+ 		video = "unspecific_ruler_speaking_to_people"
+ 	}
+
+ 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+ 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+ 	title = nuclear_weapon_events.13.t
+ 	desc = nuclear_weapon_events.13.d
+ 	flavor = nuclear_weapon_events.13.f
+
+    duration = 3
+
+ 	trigger = {
+ 		# triggered by nuclear strike
+ 	}
+	
+ 	immediate = {
+ 		post_notification = industrial_nuke_response_fails_defender
+ 	}
+
+ 	option = {
+ 		name = nuclear_weapon_events.13.a
+ 		default_option = yes
+ 	}
+}
+
+nuclear_weapon_events.14 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+ 		video = "unspecific_ruler_speaking_to_people"
+ 	}
+
+ 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+ 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+ 	title = nuclear_weapon_events.14.t
+ 	desc = nuclear_weapon_events.14.d
+ 	flavor = nuclear_weapon_events.14.f
+
+    duration = 3
+
+ 	trigger = {
+ 		# triggered by nuclear strike
+ 	}
+	
+ 	immediate = {
+ 		post_notification = industrial_nuke_response_fails_attacker
+ 	}
+
+ 	option = {
+ 		name = nuclear_weapon_events.14.a
+ 		default_option = yes
+ 	}
+}
+
+nuclear_weapon_events.15 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+ 		video = "unspecific_fire"
+ 	}
+
+ 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+ 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+ 	title = nuclear_weapon_events.15.t
+ 	desc = nuclear_weapon_events.15.d
+ 	flavor = nuclear_weapon_events.15.f
+
+    duration = 3
+
+ 	trigger = {
+ 		# triggered by nuclear strike
+ 	}
+
+ 	option = {
+ 		name = nuclear_weapon_events.15.a
+ 		default_option = yes
+ 	}
+}
+
+nuclear_weapon_events.16 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+ 		video = "unspecific_fire"
+ 	}
+
+ 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+ 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+ 	title = nuclear_weapon_events.16.t
+ 	desc = nuclear_weapon_events.16.d
+ 	flavor = nuclear_weapon_events.16.f
+
+    duration = 3
+
+ 	trigger = {
+ 		# triggered by nuclear strike
+ 	}
+
+ 	option = {
+ 		name = nuclear_weapon_events.16.a
+ 		default_option = yes
  	}
 }

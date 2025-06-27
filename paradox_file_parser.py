@@ -136,7 +136,11 @@ class ParadoxFileParser:
         with codecs.open(file_path, "r", "utf-8-sig") as f:
             text = f.read()
         tokens = self.tokenize("{" + text + "}")
-        self.merge_data(self.parse_object(tokens)[0])
+        try:
+            self.merge_data(self.parse_object(tokens)[0])
+        except Exception as e:
+            print(f"Error parsing file: {file_path}")
+            raise e
 
     def merge_data(self, new_data):
         # Merge new data into existing self.data, with new_data taking precedence

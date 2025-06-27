@@ -7,9 +7,9 @@ increase_funding_nuclear_program = {
 	
 	#Country scope
 	ai_chance = {
-		base = 0
+		value = 0
 		modifier = {
-			trigger = { bureaucracy > nuclear_weapon_program_funding_step }
+			trigger = { country_innovation > nuclear_weapon_program_funding_step }
 			add = 50
 		}
         modifier = {
@@ -23,7 +23,7 @@ increase_funding_nuclear_program = {
 	}
 
 	possible = {
-		bureaucracy > nuclear_weapon_program_funding_step
+		country_innovation > nuclear_weapon_program_funding_step
 	}
 
 	effect = {
@@ -53,10 +53,10 @@ decrease_funding_nuclear_program = {
 	
 	#Country scope
 	ai_chance = {
-		base = 0
+		value = 0
 		modifier = {
-			trigger = { bureaucracy < 0 }
-			add = 50
+			trigger = { country_innovation < modifier:country_weekly_innovation_max_add }
+			add = 25
 		}
         modifier = {
             trigger = { NOT = { var:nuclear_weapons_program_first_nuke_done = 0 }}
@@ -103,7 +103,7 @@ select_ideology_traditionalist_economy = {
     }
     
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -140,7 +140,7 @@ deselect_ideology_traditionalist_economy = {
     }
     
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -169,7 +169,7 @@ select_ideology_free_market_economy = {
     }
     
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -206,7 +206,7 @@ deselect_ideology_free_market_economy = {
     }
     
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -238,7 +238,7 @@ select_ideology_socialist_economy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -275,7 +275,7 @@ deselect_ideology_socialist_economy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -304,7 +304,7 @@ select_ideology_social_democratic_economy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -341,7 +341,7 @@ deselect_ideology_social_democratic_economy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -370,7 +370,7 @@ select_ideology_imperial_cult_economy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -407,7 +407,7 @@ deselect_ideology_imperial_cult_economy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -436,7 +436,7 @@ select_ideology_theocratic_economy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -473,7 +473,7 @@ deselect_ideology_theocratic_economy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -502,7 +502,7 @@ select_ideology_traditionalist_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -539,7 +539,7 @@ deselect_ideology_traditionalist_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -568,7 +568,7 @@ select_ideology_inclusive_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -605,7 +605,7 @@ deselect_ideology_inclusive_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -634,7 +634,7 @@ select_ideology_totalitarian_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -671,7 +671,7 @@ deselect_ideology_totalitarian_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -700,7 +700,7 @@ select_ideology_meritocratic_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -737,7 +737,7 @@ deselect_ideology_meritocratic_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -766,7 +766,7 @@ select_ideology_imperial_cult_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -804,7 +804,7 @@ deselect_ideology_imperial_cult_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -833,7 +833,7 @@ select_ideology_theocratic_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -870,7 +870,7 @@ deselect_ideology_theocratic_society = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -899,7 +899,7 @@ select_ideology_aristocratic_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -936,7 +936,7 @@ deselect_ideology_aristocratic_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -965,7 +965,7 @@ select_ideology_technocratic_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1002,7 +1002,7 @@ deselect_ideology_technocratic_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1031,7 +1031,7 @@ select_ideology_republican_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1068,7 +1068,7 @@ deselect_ideology_republican_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1097,7 +1097,7 @@ select_ideology_corporate_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1134,7 +1134,7 @@ deselect_ideology_corporate_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1163,7 +1163,7 @@ select_ideology_imperial_cult_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1200,7 +1200,7 @@ deselect_ideology_imperial_cult_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1229,7 +1229,7 @@ select_ideology_theocratic_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1266,7 +1266,7 @@ deselect_ideology_theocratic_governance = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1295,7 +1295,7 @@ select_ideology_pacifist_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1332,7 +1332,7 @@ deselect_ideology_pacifist_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1361,7 +1361,7 @@ select_ideology_militarist_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1398,7 +1398,7 @@ deselect_ideology_militarist_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1427,7 +1427,7 @@ select_ideology_isolationist_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1464,7 +1464,7 @@ deselect_ideology_isolationist_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1493,7 +1493,7 @@ select_ideology_exploitative_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1530,7 +1530,7 @@ deselect_ideology_exploitative_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1559,7 +1559,7 @@ select_ideology_imperialist_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1596,7 +1596,7 @@ deselect_ideology_imperialist_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1625,7 +1625,7 @@ select_ideology_theocratic_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1662,7 +1662,7 @@ deselect_ideology_theocratic_outlook = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1691,7 +1691,7 @@ select_trait_traditionalist_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1736,7 +1736,7 @@ deselect_trait_traditionalist_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1765,7 +1765,7 @@ select_trait_traditionalist_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1810,7 +1810,7 @@ deselect_trait_traditionalist_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1839,7 +1839,7 @@ select_trait_traditionalist_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1884,7 +1884,7 @@ deselect_trait_traditionalist_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1913,7 +1913,7 @@ select_trait_market_liberal_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1958,7 +1958,7 @@ deselect_trait_market_liberal_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -1987,7 +1987,7 @@ select_trait_market_liberal_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2032,7 +2032,7 @@ deselect_trait_market_liberal_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2061,7 +2061,7 @@ select_trait_market_liberal_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2106,7 +2106,7 @@ deselect_trait_market_liberal_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2135,7 +2135,7 @@ select_trait_social_democrat_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2180,7 +2180,7 @@ deselect_trait_social_democrat_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2209,7 +2209,7 @@ select_trait_social_democrat_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2254,7 +2254,7 @@ deselect_trait_social_democrat_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2283,7 +2283,7 @@ select_trait_social_democrat_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2328,7 +2328,7 @@ deselect_trait_social_democrat_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2357,7 +2357,7 @@ select_trait_totalitarian_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2402,7 +2402,7 @@ deselect_trait_totalitarian_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2431,7 +2431,7 @@ select_trait_totalitarian_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2476,7 +2476,7 @@ deselect_trait_totalitarian_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2505,7 +2505,7 @@ select_trait_totalitarian_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2550,7 +2550,7 @@ deselect_trait_totalitarian_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2579,7 +2579,7 @@ select_trait_imperial_cult_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2624,7 +2624,7 @@ deselect_trait_imperial_cult_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2653,7 +2653,7 @@ select_trait_imperial_cult_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2698,7 +2698,7 @@ deselect_trait_imperial_cult_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2727,7 +2727,7 @@ select_trait_imperial_cult_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2772,7 +2772,7 @@ deselect_trait_imperial_cult_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2801,7 +2801,7 @@ select_trait_theocratic_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2846,7 +2846,7 @@ deselect_trait_theocratic_loyal = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2875,7 +2875,7 @@ select_trait_theocratic_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2920,7 +2920,7 @@ deselect_trait_theocratic_happy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2949,7 +2949,7 @@ select_trait_theocratic_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -2994,7 +2994,7 @@ deselect_trait_theocratic_unhappy = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3024,7 +3024,7 @@ select_name_a = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3056,7 +3056,7 @@ deselect_name_a = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3085,7 +3085,7 @@ select_name_b = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3117,7 +3117,7 @@ deselect_name_b = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3146,7 +3146,7 @@ select_name_c = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3178,7 +3178,7 @@ deselect_name_c = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3207,7 +3207,7 @@ select_name_d = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3239,7 +3239,7 @@ deselect_name_d = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3268,7 +3268,7 @@ select_name_e = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3300,7 +3300,7 @@ deselect_name_e = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3329,7 +3329,7 @@ select_name_f = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3361,7 +3361,7 @@ deselect_name_f = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3390,7 +3390,7 @@ select_name_g = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3422,7 +3422,7 @@ deselect_name_g = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3451,7 +3451,7 @@ select_name_h = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3483,7 +3483,7 @@ deselect_name_h = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3512,7 +3512,7 @@ select_name_i = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3544,7 +3544,7 @@ deselect_name_i = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3573,7 +3573,7 @@ select_name_j = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3605,7 +3605,7 @@ deselect_name_j = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3634,7 +3634,7 @@ select_name_k = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3666,7 +3666,7 @@ deselect_name_k = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3695,7 +3695,7 @@ select_name_l = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3727,7 +3727,7 @@ deselect_name_l = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3756,7 +3756,7 @@ select_name_m = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3788,7 +3788,7 @@ deselect_name_m = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3817,7 +3817,7 @@ select_name_n = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3849,7 +3849,7 @@ deselect_name_n = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3878,7 +3878,7 @@ select_name_o = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3910,7 +3910,7 @@ deselect_name_o = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3939,7 +3939,7 @@ select_name_p = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -3971,7 +3971,7 @@ deselect_name_p = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4000,7 +4000,7 @@ select_name_q = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4032,7 +4032,7 @@ deselect_name_q = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4061,7 +4061,7 @@ select_name_r = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4093,7 +4093,7 @@ deselect_name_r = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4122,7 +4122,7 @@ select_name_s = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4154,7 +4154,7 @@ deselect_name_s = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4183,7 +4183,7 @@ select_name_t = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4215,7 +4215,7 @@ deselect_name_t = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4244,7 +4244,7 @@ select_christian = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4276,7 +4276,7 @@ deselect_christian = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4305,7 +4305,7 @@ select_muslim = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4337,7 +4337,7 @@ deselect_muslim = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4366,7 +4366,7 @@ select_judaism = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4398,7 +4398,7 @@ deselect_judaism = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4427,7 +4427,7 @@ select_eastern = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4459,7 +4459,7 @@ deselect_eastern = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4488,7 +4488,7 @@ select_animist = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4520,7 +4520,7 @@ deselect_animist = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4549,7 +4549,7 @@ select_buddhist = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4581,7 +4581,7 @@ deselect_buddhist = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4610,7 +4610,7 @@ select_custom = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4642,7 +4642,7 @@ deselect_custom = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4670,7 +4670,7 @@ custom_religion_back = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4710,7 +4710,7 @@ custom_religion_next = {
     }
 
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {
@@ -4741,7 +4741,7 @@ create_new_religion = {
     }
     
     ai_chance = {
-        base = 0
+        value = 0
     }
 
     possible = {

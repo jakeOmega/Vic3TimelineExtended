@@ -1,0 +1,527 @@
+# TREATY ARTICLE: request_influence
+request_influence = {
+    kind = directed
+    cost = 500
+
+    flags = {
+        can_be_renegotiated
+    }
+
+	usage_limit = once_per_side
+    
+    source_modifier = {
+        # Formerly first_modifier, providing leverage to the initiator (source).
+        country_treaty_leverage_generation_add = 5000
+    }
+
+    visible = {
+        always = yes
+    }
+
+    possible = {
+        is_in_power_bloc = no
+        scope:other_country = {
+			is_power_bloc_leader = yes
+		}
+		has_diplomatic_relevance = scope:other_country
+        NOT = { has_war_with = scope:other_country }
+        NOT = { is_country_type = decentralized }
+        NOT = { has_diplomats_expelled = scope:other_country }
+        NOT = { scope:other_country = { has_diplomats_expelled = root } }
+    }
+
+    can_ratify = {
+        always = yes
+    }
+
+    ai = {
+        # AI will never offer or request this article.
+        article_ai_usage = { none }
+        evaluation_chance = { value = 0 }
+
+        # The old AI would always break this pact. This is modeled by allowing
+        # withdrawal at any time and setting the AI desire to do so high.
+        can_withdraw = { always = yes }
+
+        inherent_accept_score = {
+            value = 0
+
+			if = {
+				limit = {
+					scope:source_country = this
+				}
+				add = -1000
+			}
+			else = {
+				add = 1000
+			}
+        }
+    }
+}
+
+# TREATY ARTICLE: crisis_resolution
+crisis_resolution = {
+    kind = directed
+    cost = 400
+    relations_progress_per_day = 3 
+	relations_improvement_max = 80 
+
+	usage_limit = once_per_side
+
+    source_modifier = {
+        # The leader (source) pays an authority cost.
+        country_authority_add = -100 
+    }
+    target_modifier = {
+        # The target country receives bonuses to handle their crisis.
+        country_treaty_leverage_generation_add = 200 
+        country_legitimacy_min_add = 40 
+        political_movement_radicalism_from_enactment_disapproval_mult = -0.5 
+    }
+
+    visible = {
+        # From old 'selectable'
+        is_power_bloc_leader = yes
+		power_bloc ?= {
+            modifier:power_bloc_can_use_crisis_resolution_bool = yes 
+        }
+    }
+
+    possible = {
+        # From old 'possible'
+        authority > 100 
+		has_diplomatic_relevance = scope:other_country
+        scope:other_country.relations:root > relations_threshold:poor 
+        NOT = { has_war_with = scope:other_country } 
+    }
+
+    can_ratify = {
+		always = yes
+    }
+
+    ai = {
+        treaty_categories = { other } # A special support category.
+        article_ai_usage = { offer } # The leader offers this aid.
+
+        evaluation_chance = {
+            value = 0.0
+			if = {
+				limit = { country_rank >= rank_value:major_power }
+				add = {
+					value = country_rank
+					multiply = 0.05
+				}
+			}
+        } 
+
+        # AI will propose if the target would accept, mirroring old logic.
+        # Since it's unilateral, we assume acceptance is based on need.
+        inherent_accept_score = {
+            value = 10
+            # AI is more likely to propose to countries with turmoil or low legitimacy.
+            if = {
+                limit = { scope:other_country = { any_scope_state = { turmoil > 25 } } }
+                add = 20
+            }
+            if = {
+                limit = { scope:other_country = { legitimacy < 50 } }
+                add = 15
+            }
+        }
+    }
+}
+
+# TREATY ARTICLE: extend_influence
+extend_influence = {
+    kind = directed
+    cost = 500 
+
+    target_modifier = {
+        country_treaty_leverage_generation_add = 500 
+    }
+
+	usage_limit = once_per_side
+
+    visible = {
+        is_power_bloc_leader = yes
+		power_bloc ?= {
+			modifier:power_bloc_can_use_extend_influence_bool = yes 
+		}
+    }
+
+    possible = {
+        has_diplomatic_relevance = scope:other_country
+        NOT = { has_war_with = scope:other_country } 
+        NOT = { has_diplomats_expelled = scope:other_country } 
+    }
+
+    can_ratify = {
+        always = yes
+    }
+
+    non_fulfillment = {
+        consequences = withdraw
+        conditions = {
+            weekly = {
+                scope:article = {
+                    OR = {
+                        root = { has_war_with = scope:other_country }
+                        root = { has_diplomats_expelled = scope:other_country }
+                    }
+                }
+            }
+        }
+    }
+
+    ai = {
+        treaty_categories = { power_bloc }
+        article_ai_usage = { offer }
+        evaluation_chance = { value = 0.25 } 
+
+        inherent_accept_score = {
+            # Based on old 'propose_score' logic 
+            value = -5
+            if = {
+                limit = { root = { has_attitude = { who = scope:other_country attitude = protective } } }
+                add = 10
+            }
+            if = {
+                limit = { root = { has_attitude = { who = scope:other_country attitude = conciliatory } } }
+                add = 20
+            }
+        }
+    }
+}
+
+# ---------------------------------
+# TREATY ARTICLE: education_aid
+# ---------------------------------
+# This article allows a country to provide educational support to another,
+# boosting their education access. It is based on the original 'education_aid' diplomatic action.
+education_aid = {
+	kind = directed
+	cost = 100 
+	relations_progress_per_day = 3 
+	relations_improvement_max = 30 
+
+	# This modifier applies to the country receiving aid (the target).
+	target_modifier = {
+		country_treaty_leverage_generation_add = 200 
+		state_education_access_add = 0.1 
+	}
+
+	source_modifier = {
+		country_institution_cost_institution_schools_mult = 0.1
+	}
+
+	usage_limit = once_per_side
+
+	# This article is only visible if the potential provider has unlocked it via their power bloc.
+	visible = {
+		power_bloc ?= {
+			modifier:power_bloc_can_give_education_aid_bool = yes 
+		}
+	}
+
+	possible = {
+		country_rank > scope:other_country.country_rank 
+		literacy_rate > scope:other_country.literacy_rate 
+		scope:other_country = {
+			OR = {
+				has_law = law_type:law_no_schools 
+				institution_investment_level = {
+					institution = institution_schools
+					value <= 3 
+				}
+			}
+		}
+	}
+
+	# The initial requirements for the pact to be established.
+	can_ratify = {
+		always = yes
+	}
+
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { offer }
+		evaluation_chance = {
+			value = 10.0
+			if = {
+				limit = { country_rank >= rank_value:major_power } 
+				add = {
+					value = country_rank
+					multiply = 0.05 
+				}
+			}
+		}
+		inherent_accept_score = 10
+	}
+}
+
+# ---------------------------------
+# TREATY ARTICLE: healthcare_aid
+# ---------------------------------
+# This article allows a country to provide healthcare support, improving mortality and SoL.
+# It is based on the original 'healthcare_aid' diplomatic action.
+healthcare_aid = {
+	kind = directed
+	cost = 100 
+	relations_progress_per_day = 3 
+	relations_improvement_max = 30 
+
+	source_modifier = {
+		country_institution_cost_institution_health_system_mult = 0.1
+	}
+
+	target_modifier = {
+		country_treaty_leverage_generation_add = 200 
+		state_mortality_mult = -0.04 
+		state_pollution_reduction_health_mult = -0.1 
+		state_standard_of_living_add = 0.5 
+	}
+
+	usage_limit = once_per_side
+
+	visible = {
+		power_bloc ?= {
+			modifier:power_bloc_can_give_healthcare_aid_bool = yes 
+		}
+	}
+
+	possible = {
+		country_rank > scope:other_country.country_rank 
+		institution_investment_level = {
+			institution = institution_health_system
+			value >= 3 
+		}
+		scope:other_country = {
+			OR = {
+				has_law = law_type:law_no_health_system 
+				institution_investment_level = {
+					institution = institution_health_system
+					value <= 3 
+				}
+			}
+		}
+	}
+
+	can_ratify = {
+		always = yes
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { offer }
+		evaluation_chance = {
+			value = 10.0
+			if = {
+				limit = { country_rank >= rank_value:major_power } 
+				add = {
+					value = country_rank
+					multiply = 0.05 
+				}
+			}
+		}
+		inherent_accept_score = 10
+	}
+}
+
+
+# ---------------------------------
+# TREATY ARTICLE: security_aid
+# ---------------------------------
+# This article allows a country to provide security assistance to reduce turmoil.
+# It is based on the original 'security_aid' diplomatic action.
+security_aid = {
+	kind = directed
+	cost = 100 
+	relations_progress_per_day = 3 
+	relations_improvement_max = 30 
+
+	source_modifier = {
+		country_institution_cost_institution_police_mult = 0.1
+	}
+
+	target_modifier = {
+		country_treaty_leverage_generation_add = 200 
+		state_turmoil_effects_mult = -0.2 
+	}
+
+	usage_limit = once_per_side
+
+	visible = {
+		power_bloc ?= {
+			modifier:power_bloc_can_give_security_aid_bool = yes 
+		}
+	}
+
+	possible = {
+		country_rank > scope:other_country.country_rank 
+		institution_investment_level = {
+			institution = institution_police
+			value >= 3 
+		}
+		scope:other_country = {
+			OR = {
+				has_law = law_type:law_no_police 
+				institution_investment_level = {
+					institution = institution_police
+					value <= 3 
+				}
+			}
+		}
+	}
+
+	can_ratify = {
+		always = yes
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { offer }
+		evaluation_chance = {
+			value = 10.0
+			if = {
+				limit = { country_rank >= rank_value:major_power } 
+				add = {
+					value = country_rank
+					multiply = 0.05 
+				}
+			}
+		}
+		inherent_accept_score = 10
+	}
+}
+
+# ---------------------------------
+# TREATY ARTICLE: science_aid
+# ---------------------------------
+# This article allows a technologically advanced country to provide scientific support,
+# boosting tech spread at a cost to their own innovation.
+# It is based on the original 'science_aid' diplomatic action.
+science_aid = {
+	kind = directed
+	cost = 100 
+	relations_progress_per_day = 3 
+	relations_improvement_max = 30 
+
+	usage_limit = once_per_side
+
+	source_modifier = {
+		country_weekly_innovation_add = -100
+	}
+	target_modifier = {
+		country_treaty_leverage_generation_add = 200
+		country_tech_spread_add = 100
+	}
+
+	visible = {
+		power_bloc ?= {
+			modifier:power_bloc_can_give_science_aid_bool = yes 
+		}
+	}
+
+	possible = {
+		root.techs_researched > scope:other_country.techs_researched 
+		root.country_rank > scope:other_country.country_rank 
+		institution_investment_level = {
+			institution = institution_ministry_of_science
+			value >= 2 
+		}
+	}
+
+	can_ratify = {
+		always = yes
+	}
+
+	ai = {
+		treaty_categories = { none }
+		article_ai_usage = {
+            request
+        }
+
+		evaluation_chance = {
+			value = 10.0
+			if = {
+				limit = { country_rank >= rank_value:major_power } 
+				add = {
+					value = country_rank
+					multiply = 0.05 
+				}
+			}
+		}
+		inherent_accept_score = 10
+	}
+}
+
+# ---------------------------------
+# TREATY ARTICLE: science_aid_2
+# ---------------------------------
+# An upgraded version of Science Aid, providing greater benefits at a higher cost.
+# It requires the base 'science_aid' article to already be active.
+science_aid_2 = {
+	kind = directed
+	cost = 100 
+	relations_progress_per_day = 6 
+	relations_improvement_max = 30 
+
+	usage_limit = once_per_side
+
+	source_modifier = {
+		country_weekly_innovation_add = -400 
+	}
+	target_modifier = {
+		country_treaty_leverage_generation_add = 400 
+		country_tech_spread_add = 400 
+	}
+
+	visible = {
+		power_bloc ?= {
+			modifier:power_bloc_can_give_science_aid_2_bool = yes 
+		}
+	}
+
+	possible = {
+		# This upgraded pact requires the original to be active between the two countries.
+		# This is checked by looking for an existing treaty with the 'science_aid' article.
+        custom_tooltip = {
+            text = "Requires the base Modernization Aid pact to be active."
+            any_scope_treaty = {
+                binds = scope:other_country
+                any_scope_article = {
+                    has_type = science_aid
+                    source_country = root
+                }
+            }
+        }
+
+		root.techs_researched > scope:other_country.techs_researched 
+		root.country_rank > scope:other_country.country_rank 
+		root.institution_investment_level = {
+			institution = institution_ministry_of_science
+			value >= 4 
+		}
+	}
+
+	can_ratify = {
+		always = yes
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { offer }
+		evaluation_chance = {
+			value = 20.0
+			if = {
+				limit = { country_rank >= rank_value:major_power } 
+				add = {
+					value = country_rank
+					multiply = 0.05 
+				}
+			}
+		}
+		inherent_accept_score = 20
+	}
+}

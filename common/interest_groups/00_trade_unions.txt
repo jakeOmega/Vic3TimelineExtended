@@ -10,11 +10,12 @@ ig_trade_unions = {
 		ideology_populist
 		ideology_anti_slavery
 	}
-	
+
 	character_ideologies = {
 		ideology_moderate
 		ideology_reformer
 		ideology_radical
+		ideology_utopian
 	}
 
 	enable = {
@@ -27,7 +28,7 @@ ig_trade_unions = {
 		ig_trait_industrial_organizers
 		ig_trait_work_to_rule
 	}
-	
+
 	on_enable = {
 		ig:ig_trade_unions = {
 			if = {
@@ -45,7 +46,7 @@ ig_trade_unions = {
 				set_ig_trait = ig_trait:ig_trait_solidarity
 			}
 		}
-		
+
 		### Socialism
 		if = {
 			limit = {
@@ -76,7 +77,7 @@ ig_trade_unions = {
 		rule = {
 			trigger = {
 				c:BIC ?= this
-				any_primary_culture = { 
+				any_primary_culture = {
 					cu:british = this
 				}
 			}
@@ -229,7 +230,7 @@ ig_trade_unions = {
 				min = 0
 			}
 		}
-		
+
 		if = {
 			limit = {
 				scope:interest_group = {
@@ -322,6 +323,10 @@ ig_trade_unions = {
 		value = 0.5
 	}
 
+	executive_weight = {
+		value = 0.2
+	}
+
 	noble_chance = {
 		value = 0.1
 	}
@@ -398,6 +403,10 @@ ig_trade_unions = {
 			}
 			add = { value = 0.019 }
 		}
+	}
+
+	female_executive_chance = {
+		value = 0.0
 	}
 
 	female_politician_chance = {
@@ -488,7 +497,7 @@ ig_trade_unions = {
 
 	female_agitator_chance = {
 		value = 0.05
-		
+
 		if = {
 			limit = {
 				owner = {
@@ -499,8 +508,8 @@ ig_trade_unions = {
 			add = {
 				value = 0.05
 			}
-		}	
-		
+		}
+
 		if = {
 			limit = {
 				owner = {
@@ -523,7 +532,7 @@ ig_trade_unions = {
 			add = {
 				value = 0.05
 			}
-		}		
+		}
 	
 		
 		if = {
@@ -601,5 +610,11 @@ ig_trade_unions = {
 	commander_leader_chance = {
 		value = 0.25
 		multiply = ig_commander_leader_chance_mult
+	}
+
+	# The chance that a executive belonging to this IG takes over leadership when it changes
+	# scope:character is the most popular executive in the IG
+	executive_leader_chance = {
+		value = 0.25
 	}
 }

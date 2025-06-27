@@ -1,3 +1,43 @@
+paved_roads = {
+	era = era_5
+	texture = "gfx/interface/icons/invention_icons/paved_roads.dds"
+	category = society
+	
+	modifier = {
+		state_infrastructure_from_automobiles_consumption_add = 0.25
+		market_land_trade_capacity_add = 20
+		state_building_highway_max_level_add = 1
+	}
+	
+	unlocking_technologies = {	
+		elevator
+	}
+	
+	ai_weight = {
+		value = 2 # Important for those nice-looking roads!
+	}
+}
+
+military_aviation = {
+	# Unlocks Vehicles Industries
+	# Unlocks Tanks, Planes and Tanks PM in Barracks
+	era = era_5
+	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
+	category = military
+	
+	modifier = {
+		country_nuclear_weapon_defense_chance_add = 0.25
+	}
+	
+	unlocking_technologies = {	
+		defense_in_depth
+	}
+	
+	ai_weight = {
+		value = 1.5 # Important tech in general
+	}
+}
+
 intensive_agriculture = {
 	# Unlocks Chemical Plants
 	# Unlocks Intensive Agriculture PM on Rye Farms, Wheat Farms, Rice Farms, Maize Farms, Millet Farms

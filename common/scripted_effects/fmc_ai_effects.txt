@@ -1,0 +1,6 @@
+﻿fmc_ai_update_construction = {
+	set_variable = {
+		name = fmc_public_construction_buy_target
+		value = fmc_ai_construction_purchase_target
+	}	
+}

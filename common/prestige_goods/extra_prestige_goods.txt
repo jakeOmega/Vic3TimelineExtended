@@ -1,0 +1,30 @@
+﻿prestige_good_entertainment = {
+	base_good = fine_art
+	prestige_bonus = 0.2
+	texture = "gfx/interface/icons/goods_icons/fine_art.dds"
+}
+
+prestige_good_generic_consumer_appliances = {
+	base_good = consumer_appliances
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/consumer_appliances.dds"
+}
+
+prestige_good_generic_electronic_components = {
+	base_good = electronic_components
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/electronic_components.dds"
+}
+
+prestige_good_generic_software = {
+	base_good = digital_assets
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/software.dds"
+}
+
+prestige_good_generic_advanced_materials = {
+	base_good = advanced_materials
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/buckyball.dds"
+}
+

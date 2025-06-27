@@ -27,7 +27,8 @@ class ModState:
 
     def load_files_from_directory(self, entity_type, dir_path, base_game=True):
         for file_name in os.listdir(dir_path):
-            if file_name.startswith("_"):
+            if file_name.startswith("_") or (file_name[-3:] == ".md"):
+                print("skipping file:", file_name)
                 continue
             file_path = os.path.join(dir_path, file_name)
             if os.path.isfile(file_path):

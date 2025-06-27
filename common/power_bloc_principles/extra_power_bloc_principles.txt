@@ -54,22 +54,18 @@ principle_internal_trade_4 = {
 	}
 
 	member_modifier = {
-		country_company_throughput_bonus_add = 0.1
+		country_company_throughput_bonus_add = 0.05
 		country_convoy_contribution_to_market_owner_add = 0.4
-		tariff_import_outside_power_bloc_mult = 0.2
-		tariff_export_outside_power_bloc_mult = 0.2
+		state_infrastructure_mult = 0.1
 		country_port_connection_cost_mult = -0.25
-		state_pop_support_law_ministry_of_commerce_add = 0.5
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 	}
 
 	institution = institution_ministry_of_commerce
 	institution_modifier = {
-		country_trade_route_quantity_mult = 0.2
-		state_infrastructure_mult = 0.05
-		building_group_bg_heavy_industry_infrastructure_usage_mult = -0.02
-		building_group_bg_power_infrastructure_usage_mult = -0.02
+		country_company_throughput_bonus_add = 0.01
+		country_port_connection_cost_mult = -0.05
 	}
 	
 	ai_weight = {
@@ -86,22 +82,18 @@ principle_internal_trade_5 = {
 	}
 
 	member_modifier = {
-		country_company_throughput_bonus_add = 0.2
+		country_company_throughput_bonus_add = 0.1
 		country_convoy_contribution_to_market_owner_add = 0.5
-		tariff_import_outside_power_bloc_mult = 0.2
-		tariff_export_outside_power_bloc_mult = 0.2
+		state_infrastructure_mult = 0.1
 		country_port_connection_cost_mult = -0.25
-		state_pop_support_law_ministry_of_commerce_add = 0.5
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 	}
 
 	institution = institution_ministry_of_commerce
 	institution_modifier = {
-		country_trade_route_quantity_mult = 0.4
-		state_infrastructure_mult = 0.1
-		building_group_bg_heavy_industry_infrastructure_usage_mult = -0.04
-		building_group_bg_power_infrastructure_usage_mult = -0.04
+		country_company_throughput_bonus_add = 0.02
+		country_port_connection_cost_mult = -0.05
 	}
 	
 	ai_weight = {
@@ -124,11 +116,8 @@ principle_market_unification_4 = {
 	}
 
 	member_modifier = {
-		country_company_throughput_bonus_add = 0.1
-		tariff_import_outside_power_bloc_mult = 0.2
-		tariff_export_outside_power_bloc_mult = 0.2
 		state_infrastructure_mult = 0.2
-		country_convoy_contribution_to_market_owner_add = 0.6
+		country_convoy_contribution_to_market_owner_add = 0.3
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 	}
 
@@ -162,11 +151,8 @@ principle_market_unification_5 = {
 	}
 
 	member_modifier = {
-		country_company_throughput_bonus_add = 0.2
-		tariff_import_outside_power_bloc_mult = 0.2
-		tariff_export_outside_power_bloc_mult = 0.2
 		state_infrastructure_mult = 0.3
-		country_convoy_contribution_to_market_owner_add = 0.8
+		country_convoy_contribution_to_market_owner_add = 0.4
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 	}
 
@@ -204,7 +190,7 @@ principle_vassalization_4 = {
 	}
 
 	member_modifier = {
-		country_authority_per_subject_add = 25
+		country_authority_per_subject_add = 10
 		country_subject_income_transfer_mult = 0.25
 
 		country_allow_enacting_decrees_in_subject_bool = yes
@@ -233,7 +219,7 @@ principle_vassalization_5 = {
 	}
 
 	member_modifier = {
-		country_authority_per_subject_add = 50
+		country_authority_per_subject_add = 20
 		country_subject_income_transfer_mult = 0.25
 
 		country_allow_enacting_decrees_in_subject_bool = yes
@@ -282,11 +268,11 @@ principle_advanced_research_2 = {
 	
 	member_modifier = {
 		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
-		country_weekly_innovation_max_add = 10
+		country_weekly_innovation_max_add = 5
 	}
 
 	leader_modifier = {
-		country_weekly_innovation_max_add = 25
+		country_weekly_innovation_max_add = 15
 	}
 
 	ai_weight = {
@@ -301,7 +287,7 @@ principle_advanced_research_3 = {
 	member_modifier = {
 		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
 		country_tech_group_research_speed_mult = 0.01
-		country_weekly_innovation_max_add = 10
+		country_weekly_innovation_max_add = 5
 	}
 
 	leader_modifier = {
@@ -323,7 +309,7 @@ principle_advanced_research_4 = {
 
 	leader_modifier = {
 		country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool = yes
-		country_weekly_innovation_max_add = 50
+		country_weekly_innovation_max_add = 25
 	}
 
 	power_bloc_modifier = {
@@ -333,7 +319,7 @@ principle_advanced_research_4 = {
 	member_modifier = {
 		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
 		country_tech_group_research_speed_mult = 0.01
-		country_weekly_innovation_max_add = 25
+		country_weekly_innovation_max_add = 10
 
 		country_enactment_success_chance_law_ministry_of_science_add = 0.1
 	}
@@ -343,7 +329,7 @@ principle_advanced_research_4 = {
 		country_ahead_of_time_research_penalty_mult = -0.05
 
 		# Increase Country max innovation
-		country_weekly_innovation_max_add = 15
+		country_weekly_innovation_max_add = 10
 
 		country_tech_group_research_speed_mult = 0.01
 		country_academics_pol_str_mult = 0.1
@@ -364,13 +350,13 @@ principle_advanced_research_5 = {
 
 	leader_modifier = {
 		country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool = yes
-		country_weekly_innovation_max_add = 200
+		country_weekly_innovation_max_add = 100
 	}
 
 	member_modifier = {
 		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
 		country_tech_group_research_speed_mult = 0.01
-		country_weekly_innovation_max_add = 50
+		country_weekly_innovation_max_add = 25
 		country_enactment_success_chance_law_ministry_of_science_add = 0.2
 	}
 
@@ -384,7 +370,7 @@ principle_advanced_research_5 = {
 		country_ahead_of_time_research_penalty_mult = -0.05
 
 		# Increase Country max innovation
-		country_weekly_innovation_max_add = 45
+		country_weekly_innovation_max_add = 25
 
 		country_tech_group_research_speed_mult = 0.01
 		country_academics_pol_str_mult = 0.3
@@ -475,16 +461,14 @@ principle_aggressive_coordination_4 = {
 
 	power_bloc_modifier = {	
 		# Reduces cohesion
-		power_bloc_cohesion_add = -15
+		power_bloc_cohesion_add = -10
 	}
 	
 	member_modifier = {
-		country_initiator_war_goal_maneuver_cost_mult = -0.4
+		country_initiator_war_goal_maneuver_cost_mult = -0.3
 		country_war_exhaustion_casualties_mult = -0.15
 		country_join_power_bloc_member_in_plays_bool = yes
 		country_infamy_generation_mult = 0.15
-		country_infamy_decay_mult = 0.15
-		state_pop_support_law_ministry_of_war_add = 0.5
 		country_enactment_success_chance_law_ministry_of_war_add = 0.1
 		country_institution_cost_institution_ministry_of_war_mult = -0.5
 	}
@@ -512,22 +496,19 @@ principle_aggressive_coordination_5 = {
 
 	power_bloc_modifier = {
 		# Reduces cohesion
-		power_bloc_cohesion_add = -20
+		power_bloc_cohesion_add = -10
 	}
 
 	leader_modifier = {
 		country_influence_mult = -0.1
-		power_bloc_leverage_generation_mult = 0.1
 	}
 	
 	member_modifier = {
 		# Modifiers from previous level(s)
-		country_initiator_war_goal_maneuver_cost_mult = -0.5
+		country_initiator_war_goal_maneuver_cost_mult = -0.3
 		country_war_exhaustion_casualties_mult = -0.15
 		country_join_power_bloc_member_in_plays_bool = yes
 		country_infamy_generation_mult = 0.15
-		country_infamy_decay_mult = 0.15
-		state_pop_support_law_ministry_of_war_add = 0.5
 		country_enactment_success_chance_law_ministry_of_war_add = 0.1
 		country_institution_cost_institution_ministry_of_war_mult = -0.5
 	}
@@ -538,6 +519,8 @@ principle_aggressive_coordination_5 = {
 		country_military_wages_mult = 0.1
 		unit_experience_gain_mult = 0.1
 		building_training_rate_mult = 0.1
+		unit_offense_mult = 0.01
+		unit_defense_mult = 0.01
 	}
 	
 	ai_weight = {
@@ -555,22 +538,17 @@ principle_external_trade_4 = {
 		has_technology_researched = television
 	}
 	
-	power_bloc_modifier = {
-		power_bloc_trade_route_cost_mult = -0.75
-	}
-	
 	member_modifier = {
-		country_allow_trade_routes_without_interest_bool = yes
-		country_max_companies_add = 1
-		state_pop_support_law_ministry_of_commerce_add = 0.5
+		state_trade_capacity_mult = 0.25
+		state_trade_advantage_mult = 0.25
+		country_no_advantage_loss_from_lack_of_interest_bool = yes
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 	}
 
 	institution = institution_ministry_of_commerce
 	institution_modifier = {
-		country_trade_route_competitiveness_mult = 0.1
-		country_convoys_capacity_mult = 0.2
+		state_trade_advantage_mult = 0.05
 	}
 
 	ai_weight = {
@@ -586,22 +564,18 @@ principle_external_trade_5 = {
 		has_technology_researched = cellular_networks
 	}
 	
-	power_bloc_modifier = {
-		power_bloc_trade_route_cost_mult = -0.75
-	}
-	
 	member_modifier = {
-		country_allow_trade_routes_without_interest_bool = yes
-		country_max_companies_add = 2
-		state_pop_support_law_ministry_of_commerce_add = 0.5
+		state_trade_capacity_mult = 0.25
+		state_trade_advantage_mult = 0.25
+		country_no_advantage_loss_from_lack_of_interest_bool = yes
+		country_max_companies_add = 1
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 	}
 
 	institution = institution_ministry_of_commerce
 	institution_modifier = {
-		country_trade_route_competitiveness_mult = 0.2
-		country_convoys_capacity_mult = 0.4
+		state_trade_advantage_mult = 0.1
 	}
 
 	ai_weight = {
@@ -624,14 +598,14 @@ principle_food_standardization_4 = {
 		building_group_bg_agriculture_throughput_add = 0.1
 		building_food_industry_throughput_add = 0.2
 		state_standard_of_living_add = 1
-		state_pop_support_law_ministry_of_consumer_protection_add = 0.5
-		country_enactment_success_chance_law_ministry_of_consumer_protection_add = 0.1
-		country_institution_cost_institution_ministry_of_consumer_protection_mult = -0.25
+		state_food_security_add = 0.1
+		country_institution_cost_institution_health_system_mult = -0.1
+		country_institution_cost_institution_ministry_of_consumer_protection_mult = -0.5
 	}
 
 	institution = institution_ministry_of_consumer_protection
 	institution_modifier = {
-		country_production_tech_research_speed_mult = 0.02
+		goods_output_groceries_mult = 0.02 
 	}
 	
 	ai_weight = {
@@ -651,15 +625,16 @@ principle_food_standardization_5 = {
 		# Modifiers from previous level(s)
 		building_group_bg_agriculture_throughput_add = 0.2
 		building_food_industry_throughput_add = 0.3
-		state_standard_of_living_add = 1
-		state_pop_support_law_ministry_of_consumer_protection_add = 1
-		country_enactment_success_chance_law_ministry_of_consumer_protection_add = 0.2
+		state_standard_of_living_add = 3
+		state_food_security_add = 0.2
+		country_institution_cost_institution_health_system_mult = -0.1
 		country_institution_cost_institution_ministry_of_consumer_protection_mult = -0.5
+		unit_recovery_rate_add = 0.1
 	}
 
 	institution = institution_ministry_of_consumer_protection
 	institution_modifier = {
-		country_production_tech_research_speed_mult = 0.04
+		goods_output_groceries_mult = 0.02 
 	}
 	
 	ai_weight = {
@@ -755,10 +730,10 @@ principle_transport_4 = {
 	}
 
 	member_modifier = {
-		country_convoys_capacity_mult = 0.3
+		building_port_throughput_add = 0.3
 		state_infrastructure_from_population_mult = 0.33
 		state_infrastructure_from_population_max_mult = 0.33 
-		market_land_trade_capacity_add = 100
+		building_economy_of_scale_level_cap_add = 20
 		building_railway_throughput_add = 0.2
 		state_infrastructure_from_personal_transportation_consumption_add = 0.1
 	}
@@ -778,10 +753,10 @@ principle_transport_5 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)
-		country_convoys_capacity_mult = 0.4
+		building_port_throughput_add = 0.4
 		state_infrastructure_from_population_mult = 0.33
 		state_infrastructure_from_population_max_mult = 0.33 
-		market_land_trade_capacity_add = 150
+		building_economy_of_scale_level_cap_add = 30
 		building_railway_throughput_add = 0.2
 		building_airport_throughput_add = 0.2
 		building_highway_throughput_add = 0.2
@@ -805,7 +780,7 @@ principle_military_industry_4 = {
 	}
 	
 	member_modifier = {
-		building_war_machine_industry_throughput_add = 0.15
+		building_automotive_industry_throughput_add = 0.15
 		building_arms_industry_throughput_add = 0.15
 		building_artillery_foundries_throughput_add = 0.15
 		building_military_shipyards_throughput_add = 0.15
@@ -829,7 +804,7 @@ principle_military_industry_5 = {
 	
 	member_modifier = {
 		# Modifiers from previous level(s)
-		building_war_machine_industry_throughput_add = 0.25
+		building_automotive_industry_throughput_add = 0.25
 		building_arms_industry_throughput_add = 0.25
 		building_artillery_foundries_throughput_add = 0.25
 		building_military_shipyards_throughput_add = 0.25
@@ -931,7 +906,7 @@ principle_foreign_investment_1 = {
 	}
 
 	member_modifier = {
-		economic_dependence_leverage_gain_mult = 0.5
+		country_economic_dependence_leverage_gain_mult = 0.5
 	}
 	
 	ai_weight = {
@@ -962,7 +937,7 @@ principle_foreign_investment_2 = {
 		# Members get reduced nationalization cost for assets of non-members
 		country_nationalization_cost_non_members_mult = -0.5
 
-		economic_dependence_leverage_gain_mult = 0.5
+		country_economic_dependence_leverage_gain_mult = 0.5
 	}
 	
 	ai_weight = {
@@ -982,7 +957,7 @@ principle_foreign_investment_3 = {
 		# Modifiers from previous level(s)	
 		country_nationalization_cost_non_members_mult = -0.5
 
-		economic_dependence_leverage_gain_mult = 0.5
+		country_economic_dependence_leverage_gain_mult = 0.5
 	}
 	
 	power_bloc_modifier = {
@@ -1010,9 +985,8 @@ principle_foreign_investment_4 = {
 	member_modifier = {
 		country_nationalization_cost_non_members_mult = -0.5
 
-		economic_dependence_leverage_gain_mult = 0.5
+		country_economic_dependence_leverage_gain_mult = 0.5
 
-		state_pop_support_law_national_bank_add = 0.5
 		country_enactment_success_chance_law_national_bank_add = 0.1
 		country_institution_cost_institution_national_bank_mult = -0.5
 	}
@@ -1024,7 +998,7 @@ principle_foreign_investment_4 = {
 
 	institution = institution_national_bank
 	institution_modifier = {
-		economic_dependence_leverage_gain_mult = 0.1
+		country_economic_dependence_leverage_gain_mult = 0.1
 	}
 
 	ai_weight = {
@@ -1048,9 +1022,8 @@ principle_foreign_investment_5 = {
 		# Modifiers from previous level(s)
 		country_nationalization_cost_non_members_mult = -0.5
 
-		economic_dependence_leverage_gain_mult = 0.5
+		country_economic_dependence_leverage_gain_mult = 0.5
 
-		state_pop_support_law_national_bank_add = 1.0
 		country_enactment_success_chance_law_national_bank_add = 0.2
 		country_institution_cost_institution_national_bank_mult = -0.5
 	}
@@ -1063,8 +1036,8 @@ principle_foreign_investment_5 = {
 	institution = institution_national_bank
 	institution_modifier = {
 		# Modifiers from previous level(s)
-		country_influence_mult = 0.2
-		economic_dependence_leverage_gain_mult = 0.1
+		country_influence_add = 100
+		country_economic_dependence_leverage_gain_mult = 0.1
 	}
 
 	ai_weight = {
@@ -1188,7 +1161,7 @@ principle_divine_economics_4 = {
 	
 	power_bloc_modifier = {
 		# Modifiers from previous level(s)		
-		power_bloc_religion_trade_route_competitiveness_mult = 0.5
+		state_trade_advantage_same_religion_add = 50
 	}
 	
 	member_modifier = {
@@ -1219,7 +1192,7 @@ principle_divine_economics_5 = {
 	
 	power_bloc_modifier = {
 		# Modifiers from previous level(s)		
-		power_bloc_religion_trade_route_competitiveness_mult = 0.5
+		state_trade_advantage_same_religion_add = 50
 	}
 	
 	member_modifier = {
@@ -1450,7 +1423,6 @@ principle_sacred_civics_4_mod = {
 		country_war_support_monthly_add_religion = 10
 		state_conscription_rate_mult = 0.25
 
-		state_pop_support_law_ministry_of_religion_add = 0.25
 		country_enactment_success_chance_law_ministry_of_religion_add = 0.1
 		country_institution_cost_institution_ministry_of_religion_mult = -0.25
 	}
@@ -1487,7 +1459,6 @@ principle_sacred_civics_5_mod = {
 		interest_group_ig_devout_pop_attraction_mult = 0.1
 		country_war_support_monthly_add_religion = 10
 		state_conscription_rate_mult = 0.25
-		state_pop_support_law_ministry_of_religion_add = 0.5
 		country_enactment_success_chance_law_ministry_of_religion_add = 0.2
 		country_institution_cost_institution_ministry_of_religion_mult = -0.5
 	}
@@ -1529,7 +1500,6 @@ principle_ideological_truth_4 = {
 		country_party_whip_impact_mult = 0.2
 		country_legitimacy_min_add = 25		
 		country_enactment_success_chance_law_ministry_of_propaganda_add = 0.1
-		state_pop_support_law_ministry_of_propaganda_add = 0.5
 		country_institution_cost_institution_ministry_of_propaganda_mult = -0.5
 		country_leader_has_law_enactment_success_mult = 0.1
 	}
@@ -1537,7 +1507,6 @@ principle_ideological_truth_4 = {
 	institution = institution_ministry_of_propaganda
 	institution_modifier = {
 		interest_group_in_government_approval_add = 1
-		interest_group_in_government_attraction_mult = 0.01
 	}
 
 	ai_weight = {
@@ -1561,7 +1530,6 @@ principle_ideological_truth_5 = {
 		country_party_whip_impact_mult = 0.2
 		country_legitimacy_min_add = 25		
 		country_enactment_success_chance_law_ministry_of_propaganda_add = 0.2
-		state_pop_support_law_ministry_of_propaganda_add = 1.0
 		country_institution_cost_institution_ministry_of_propaganda_mult = -0.5
 		country_leader_has_law_enactment_success_mult = 0.2
 	}
@@ -1570,7 +1538,6 @@ principle_ideological_truth_5 = {
 	institution_modifier = {
 		# Modifiers from previous level(s)	
 		interest_group_in_government_approval_add = 2
-		interest_group_in_government_attraction_mult = 0.02
 	}
 
 	ai_weight = {
@@ -1592,11 +1559,13 @@ principle_cultural_unity_1 = {
 		OR = {
 			has_law = law_type:law_ethnostate
 			has_law = law_type:law_national_supremacy
+			has_law = law_type:law_racial_segregation
 		}
 	}
 
-	member_modifier = {
+	leader_modifier = {
 		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 
 	power_bloc_modifier = {
@@ -1616,6 +1585,10 @@ principle_cultural_unity_1 = {
 			multiply = 2.0
 		}		
 		if = {
+			limit = { has_law = law_type:law_racial_segregation }
+			multiply = 0.5
+		}
+		if = {
 			limit = { has_law = law_type:law_ethnostate }
 			multiply = 4.0
 		}
@@ -1630,12 +1603,14 @@ principle_cultural_unity_2 = {
 		OR = {
 			has_law = law_type:law_ethnostate
 			has_law = law_type:law_national_supremacy
+			has_law = law_type:law_racial_segregation
 		}
 	}
 
-	member_modifier = {
-		# Modifiers from previous level(s)	
+	leader_modifier = {
+		# Modifiers from previous level(s)
 		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 
 	power_bloc_modifier = {
@@ -1656,14 +1631,21 @@ principle_cultural_unity_3 = {
 		OR = {
 			has_law = law_type:law_ethnostate
 			has_law = law_type:law_national_supremacy
+			has_law = law_type:law_racial_segregation
 		}
 	}
 	
 	member_modifier = {
-		# Modifiers from previous level(s)	
-		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
+		country_standard_of_living_full_acceptance_add = 1
+		country_wage_violent_hostility_mult = -0.2
+		country_wage_cultural_erasure_mult = -0.2
+		country_wage_open_prejudice_mult = -0.2
+	}
 
-		state_accepted_birth_rate_mult = 0.1
+	leader_modifier = {
+		# Modifiers from previous level(s)
+		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 
 	power_bloc_modifier = {
@@ -1685,16 +1667,23 @@ principle_cultural_unity_4 = {
 		OR = {
 			has_law = law_type:law_ethnostate
 			has_law = law_type:law_national_supremacy
+			has_law = law_type:law_racial_segregation
 		}
 	}
 	
 	member_modifier = {
-		# Modifiers from previous level(s)	
-		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
-		state_accepted_birth_rate_mult = 0.1
+		country_standard_of_living_full_acceptance_add = 1
+		country_wage_violent_hostility_mult = -0.2
+		country_wage_cultural_erasure_mult = -0.2
+		country_wage_open_prejudice_mult = -0.2
 
-		state_pop_support_law_ministry_of_culture_add = 0.5
 		country_institution_cost_institution_ministry_of_culture_mult = -0.25
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s)
+		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 
 	power_bloc_modifier = {
@@ -1705,7 +1694,7 @@ principle_cultural_unity_4 = {
 	institution = institution_ministry_of_culture
 	institution_modifier = {
 		country_loyalism_increases_full_acceptance_mult = 0.05
-		state_accepted_birth_rate_mult = 0.02
+		country_standard_of_living_full_acceptance_add = 1
 	}
 
 	ai_weight = {
@@ -1722,15 +1711,23 @@ principle_cultural_unity_5 = {
 		OR = {
 			has_law = law_type:law_ethnostate
 			has_law = law_type:law_national_supremacy
+			has_law = law_type:law_racial_segregation
 		}
 	}
 	
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
-		state_accepted_birth_rate_mult = 0.1
-		state_pop_support_law_ministry_of_culture_add = 1.0
+		country_standard_of_living_full_acceptance_add = 1
+		country_wage_violent_hostility_mult = -0.2
+		country_wage_cultural_erasure_mult = -0.2
+		country_wage_open_prejudice_mult = -0.2
 		country_institution_cost_institution_ministry_of_culture_mult = -0.25
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s)
+		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 
 	power_bloc_modifier = {
@@ -1742,7 +1739,7 @@ principle_cultural_unity_5 = {
 	institution = institution_ministry_of_culture
 	institution_modifier = {
 		country_loyalism_increases_full_acceptance_mult = 0.05
-		state_accepted_birth_rate_mult = 0.04
+		country_standard_of_living_full_acceptance_add = 1
 	}
 
 	ai_weight = {
@@ -1762,7 +1759,6 @@ principle_cultural_plurality_1 = {
 
 	possible = {
 		OR = {
-			has_law = law_type:law_racial_segregation
 			has_law = law_type:law_cultural_exclusion
 			has_law = law_type:law_multicultural
 		}
@@ -1773,6 +1769,10 @@ principle_cultural_plurality_1 = {
 		country_mass_migration_attraction_mult = 0.25
 		state_pop_support_movement_cultural_majority_mult = -0.25
 		state_pop_support_movement_cultural_minority_mult = -0.1
+	}
+
+	power_bloc_modifier = {
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 	
 	ai_weight = {
@@ -1805,7 +1805,6 @@ principle_cultural_plurality_2 = {
 
 	possible = {
 		OR = {
-			has_law = law_type:law_racial_segregation
 			has_law = law_type:law_cultural_exclusion
 			has_law = law_type:law_multicultural
 		}
@@ -1817,6 +1816,10 @@ principle_cultural_plurality_2 = {
 		state_pop_support_movement_cultural_majority_mult = -0.5
 		state_pop_support_movement_cultural_minority_mult = -0.2
 		state_education_access_add = 0.05
+	}
+
+	power_bloc_modifier = {
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 	
 	ai_weight = {
@@ -1830,15 +1833,9 @@ principle_cultural_plurality_3 = {
 
 	possible = {
 		OR = {
-			has_law = law_type:law_racial_segregation
 			has_law = law_type:law_cultural_exclusion
 			has_law = law_type:law_multicultural
 		}
-	}
-
-	leader_modifier = {
-		country_influence_mult = 0.2
-		goods_output_fine_art_mult = 0.1
 	}
 	
 	member_modifier = {
@@ -1846,10 +1843,14 @@ principle_cultural_plurality_3 = {
 		country_mass_migration_attraction_mult = 0.25
 		state_pop_support_movement_cultural_majority_mult = -0.5
 		state_pop_support_movement_cultural_minority_mult = -0.2
-		country_add_multicultural_ideology_to_intelligentsia_bool = yes
 		state_education_access_add = 0.05
 		country_tech_spread_mult = 0.25
-		state_pop_support_law_no_migration_controls_add = 0.25
+		state_min_cultural_acceptance_delta_add = 5
+		state_yearly_cultural_acceptance_add = 0.25
+	}
+
+	power_bloc_modifier = {
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 	
 	ai_weight = {
@@ -1864,37 +1865,31 @@ principle_cultural_plurality_4 = {
 	possible = {
 		has_technology_researched = civil_rights_movement
 		OR = {
-			has_law = law_type:law_racial_segregation
 			has_law = law_type:law_cultural_exclusion
 			has_law = law_type:law_multicultural
 		}
-	}
-
-	leader_modifier = {
-		# Modifiers from previous level(s)	
-		country_influence_mult = 0.35
-		goods_output_fine_art_mult = 0.1
 	}
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		country_mass_migration_attraction_mult = 0.25
 		state_pop_support_movement_cultural_majority_mult = -0.5
-		state_pop_support_movement_cultural_minority_mult = -0.2
-		country_add_multicultural_ideology_to_intelligentsia_bool = yes
+		state_pop_support_movement_cultural_minority_mult = -0.3
 		state_education_access_add = 0.05
 		country_tech_spread_mult = 0.25
-		state_pop_support_law_multicultural_add = 1.5
-		state_pop_support_law_ministry_of_culture_add = 1.0
-		state_pop_support_law_no_migration_controls_add = 0.25
-		state_pop_support_law_ministry_of_refugee_affairs_add = 0.25
-		state_pop_support_law_full_equality_and_protection_add = 0.1
+		state_min_cultural_acceptance_delta_add = 10
+		state_yearly_cultural_acceptance_add = 0.5
+	}
+
+	power_bloc_modifier = {
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 
 	institution = institution_ministry_of_culture
 	institution_modifier = {
-		country_society_tech_research_speed_mult = 0.02
-		country_leverage_generation_mult = 0.05
+		# less racist
+		country_acceptance_shared_cultural_trait_add = 1
+		country_acceptance_culture_base_add = 1
 	}
 
 	ai_weight = {
@@ -1909,37 +1904,31 @@ principle_cultural_plurality_5 = {
 	possible = {
 		has_technology_researched = globalization
 		OR = {
-			has_law = law_type:law_racial_segregation
 			has_law = law_type:law_cultural_exclusion
 			has_law = law_type:law_multicultural
 		}
 	}
 
-	leader_modifier = {
-		# Modifiers from previous level(s)	
-		country_influence_mult = 0.5
-		goods_output_fine_art_mult = 0.1
-	}
-
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		country_mass_migration_attraction_mult = 0.25
-		state_pop_support_movement_cultural_majority_mult = -0.5
-		state_pop_support_movement_cultural_minority_mult = -0.2
-		country_add_multicultural_ideology_to_intelligentsia_bool = yes
+		state_pop_support_movement_cultural_majority_mult = -0.75
+		state_pop_support_movement_cultural_minority_mult = -0.4
 		state_education_access_add = 0.05
 		country_tech_spread_mult = 0.25
-		state_pop_support_law_multicultural_add = 1.5
-		state_pop_support_law_ministry_of_culture_add = 1.0
-		state_pop_support_law_no_migration_controls_add = 0.25
-		state_pop_support_law_ministry_of_refugee_affairs_add = 0.25
-		state_pop_support_law_full_equality_and_protection_add = 0.1
+		state_min_cultural_acceptance_delta_add = 10
+		state_yearly_cultural_acceptance_add = 0.5
+	}
+	power_bloc_modifier = {
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 
 	institution = institution_ministry_of_culture
 	institution_modifier = {
-		country_society_tech_research_speed_mult = 0.04
-		country_leverage_generation_mult = 0.1
+		# less racist
+		country_acceptance_shared_cultural_trait_add = 1
+		country_acceptance_culture_base_add = 1
+		state_yearly_cultural_acceptance_add = 0.1
 	}
 
 	ai_weight = {
@@ -1998,7 +1987,6 @@ principle_education_2 = {
 		country_institution_cost_institution_schools_mult = -0.25
 		country_disallow_law_no_schools_bool = yes
 		country_enactment_success_chance_law_compulsory_primary_school_add = 0.1
-		state_pop_support_law_compulsory_primary_school_add = 0.5
 	}
 
 	leader_modifier = {
@@ -2028,7 +2016,6 @@ principle_education_3 = {
 		country_institution_cost_institution_schools_mult = -0.5
 		country_disallow_law_no_schools_bool = yes
 		country_enactment_success_chance_law_compulsory_primary_school_add = 0.2
-		state_pop_support_law_compulsory_primary_school_add = 1.0
 	}
 
 	leader_modifier = {
@@ -2040,7 +2027,7 @@ principle_education_3 = {
 		# School institution gives more tech spread
 		country_tech_spread_mult = 0.05
 		country_ahead_of_time_research_penalty_mult = -0.05
-		country_weekly_innovation_max_add = 10
+		country_weekly_innovation_max_add = 5
 	}
 	
 	ai_weight = {
@@ -2062,7 +2049,6 @@ principle_education_4 = {
 		country_institution_cost_institution_schools_mult = -0.5
 		country_disallow_law_no_schools_bool = yes
 		country_enactment_success_chance_law_compulsory_primary_school_add = 0.2
-		state_pop_support_law_compulsory_primary_school_add = 1.0
 
 		state_education_access_add = 0.05
 		interest_group_ig_intelligentsia_pol_str_mult = 0.1
@@ -2079,7 +2065,7 @@ principle_education_4 = {
 		# School institution gives more tech spread
 		country_tech_spread_mult = 0.05
 		country_ahead_of_time_research_penalty_mult = -0.05
-		country_weekly_innovation_max_add = 25
+		country_weekly_innovation_max_add = 10
 
 		state_pop_qualifications_mult = 0.05
 	}
@@ -2103,7 +2089,6 @@ principle_education_5 = {
 		country_institution_cost_institution_schools_mult = -0.5
 		country_disallow_law_no_schools_bool = yes
 		country_enactment_success_chance_law_compulsory_primary_school_add = 0.2
-		state_pop_support_law_compulsory_primary_school_add = 1.0
 		state_education_access_add = 0.1
 
 		interest_group_ig_intelligentsia_pol_str_mult = 0.1
@@ -2300,9 +2285,7 @@ principle_environmental_sustainability_1 = {
 
 	member_modifier = {
 		goods_input_oil_mult = -0.05
-		goods_output_oil_mult = -0.05
 		goods_input_coal_mult = -0.05
-		goods_output_coal_mult = -0.05
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.25
 	}
 	
@@ -2334,12 +2317,8 @@ principle_environmental_sustainability_2 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		goods_input_oil_mult = -0.1
-		goods_output_oil_mult = -0.1
 		goods_input_coal_mult = -0.1
-		goods_output_coal_mult = -0.1
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
-
-		state_pop_support_law_ministry_of_the_environment_add = 0.5
 	}
 
 	institution = institution_ministry_of_the_environment
@@ -2363,17 +2342,15 @@ principle_environmental_sustainability_3 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		goods_input_oil_mult = -0.15
-		goods_output_oil_mult = -0.15
 		goods_input_coal_mult = -0.15
-		goods_output_coal_mult = -0.15
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
-		state_pop_support_law_ministry_of_the_environment_add = 0.5
+		state_pollution_reduction_health_mult = 0.2
 	}
 
 	institution = institution_ministry_of_the_environment
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		state_standard_of_living_add = 0.2
+		state_standard_of_living_add = 0.4
 	}
 
 	ai_weight = {
@@ -2394,18 +2371,15 @@ principle_environmental_sustainability_4 = {
 		building_renewable_energy_plant_throughput_add = 0.5
 		building_power_plant_throughput_add = -0.5
 		goods_input_oil_mult = -0.2
-		goods_output_oil_mult = -0.2
 		goods_input_coal_mult = -0.2
-		goods_output_coal_mult = -0.2
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
-		state_pop_support_law_ministry_of_the_environment_add = 1
 	}
 
 	institution = institution_ministry_of_the_environment
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		state_standard_of_living_add = 0.2
-
+		state_standard_of_living_add = 0.4
+		building_renewable_energy_plant_throughput_add = 0.1
 	}
 
 	ai_weight = {
@@ -2426,18 +2400,17 @@ principle_environmental_sustainability_5 = {
 		building_renewable_energy_plant_throughput_add = 0.5
 		building_power_plant_throughput_add = -0.5
 		goods_input_oil_mult = -0.25
-		goods_output_oil_mult = -0.25
 		goods_input_coal_mult = -0.25
-		goods_output_coal_mult = -0.25
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
-		state_pop_support_law_ministry_of_the_environment_add = 1.5
 	}
 
 	institution = institution_ministry_of_the_environment
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		state_standard_of_living_add = 0.2
-		country_legitimacy_base_add = 5
+		state_standard_of_living_add = 0.4
+		building_renewable_energy_plant_throughput_add = 0.1
+		goods_input_oil_mult = -0.05
+		goods_input_coal_mult = -0.05
 	}
 
 	ai_weight = {
@@ -2454,7 +2427,7 @@ principle_urban_planning_1 = {
 	}
 
 	possible = {
-		has_technology_researched = modern_urban_planning
+		has_technology_researched = urbanization
 		NOT = {
 			power_bloc = {
 				OR = {
@@ -2469,13 +2442,12 @@ principle_urban_planning_1 = {
 	}
 
 	member_modifier = {
-		state_pop_support_law_ministry_of_urban_planning_add = 0.5
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
-		building_group_bg_service_standard_of_living_add = 0.5
+		building_group_bg_service_standard_of_living_add = 1
 	}
 	
 	ai_weight = {
@@ -2494,7 +2466,7 @@ principle_urban_planning_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
-		has_technology_researched = modern_urban_planning
+		has_technology_researched = urbanization
 		NOT = {
 			power_bloc = {
 				OR = {
@@ -2510,18 +2482,15 @@ principle_urban_planning_2 = {
 
 	member_modifier = {
 		#Modifiers from previous level(s)	
-		state_pop_support_law_ministry_of_urban_planning_add = 0.5
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
-
-		state_shopkeepers_investment_pool_contribution_add = 0.1
-		state_clerks_investment_pool_contribution_add = 0.1
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		building_group_bg_service_standard_of_living_add = 0.5
-		building_group_bg_service_throughput_add = 0.1
+		building_group_bg_service_standard_of_living_add = 1
+
+		building_urban_center_throughput_add = 0.05
 		building_group_bg_manufacturing_throughput_add = 0.02
 		building_group_bg_agriculture_throughput_add = -0.05
 		building_group_bg_mining_throughput_add = -0.02
@@ -2553,24 +2522,19 @@ principle_urban_planning_3 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		state_pop_support_law_ministry_of_urban_planning_add = 1.0
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
 
-		state_shopkeepers_investment_pool_contribution_add = 0.25
-		state_clerks_investment_pool_contribution_add = 0.25
+		state_trade_capacity_add = 20
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		building_group_bg_service_standard_of_living_add = 0.5
-		building_group_bg_service_throughput_add = 0.1
+		building_group_bg_service_standard_of_living_add = 1
+		building_urban_center_throughput_add = 0.05
 		building_group_bg_manufacturing_throughput_add = 0.02
 		building_group_bg_agriculture_throughput_add = -0.05
 		building_group_bg_mining_throughput_add = -0.02
-
-		interest_group_ig_rural_folk_pol_str_mult = -0.1
-		interest_group_ig_landowners_pol_str_mult = -0.05
 	}
 
 	ai_weight = {
@@ -2599,24 +2563,18 @@ principle_urban_planning_4 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		state_pop_support_law_ministry_of_urban_planning_add = 1.0
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
-		state_shopkeepers_investment_pool_contribution_add = 0.25
-		state_clerks_investment_pool_contribution_add = 0.25
-
-		goods_output_services_mult = 0.1
+		state_trade_capacity_add = 20
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		building_group_bg_service_standard_of_living_add = 0.5
-		building_group_bg_service_throughput_add = 0.2
+		building_group_bg_service_standard_of_living_add = 1
+		building_urban_center_throughput_add = 0.1
 		building_group_bg_manufacturing_throughput_add = 0.02
 		building_group_bg_agriculture_throughput_add = -0.05
 		building_group_bg_mining_throughput_add = -0.02
-		interest_group_ig_rural_folk_pol_str_mult = -0.1
-		interest_group_ig_landowners_pol_str_mult = -0.05
 	}
 
 	ai_weight = {
@@ -2645,25 +2603,19 @@ principle_urban_planning_5 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		state_pop_support_law_ministry_of_urban_planning_add = 1.0
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
-		state_shopkeepers_investment_pool_contribution_add = 0.3
-		state_clerks_investment_pool_contribution_add = 0.3
-		state_shopkeepers_investment_pool_efficiency_mult = 0.1
-		state_clerks_investment_pool_efficiency_mult = 0.1
-		goods_output_services_mult = 0.2
+		state_trade_capacity_add = 20
+		state_import_advantage_mult = 0.25
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		building_group_bg_service_standard_of_living_add = 0.5
-		building_group_bg_service_throughput_add = 0.2
+		building_group_bg_service_standard_of_living_add = 1
+		building_urban_center_throughput_add = 0.2
 		building_group_bg_manufacturing_throughput_add = 0.02
 		building_group_bg_agriculture_throughput_add = -0.05
 		building_group_bg_mining_throughput_add = -0.02
-		interest_group_ig_rural_folk_pol_str_mult = -0.1
-		interest_group_ig_landowners_pol_str_mult = -0.05
 	}
 
 	ai_weight = {
@@ -2934,7 +2886,6 @@ principle_global_security_3 = {
 	}
 
 	member_modifier = {
-		state_pop_support_law_ministry_of_war_add = 0.5
 		country_war_exhaustion_casualties_mult = -0.2
 	}
 
@@ -2969,7 +2920,6 @@ principle_global_security_4 = {
 	}
 
 	member_modifier = {
-		state_pop_support_law_ministry_of_war_add = 0.5
 		country_war_exhaustion_casualties_mult = -0.2
 	}
 
@@ -3005,7 +2955,6 @@ principle_global_security_5 = {
 	}
 
 	member_modifier = {
-		state_pop_support_law_ministry_of_war_add = 0.5
 		country_war_exhaustion_casualties_mult = -0.2
 	}
 
@@ -3377,14 +3326,12 @@ principle_artistic_expression_3 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		goods_output_fine_art_mult = 0.05
+		goods_output_fine_art_mult = 0.1
 		country_academics_pol_str_mult = 0.6
 		building_group_bg_arts_standard_of_living_add = 3
-		country_war_exhaustion_casualties_mult = -0.1
 		unit_morale_loss_mult = -0.1
+		state_assimilation_mult = 0.25
 	}
-
-
 
 	ai_weight = {
 		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
@@ -3401,12 +3348,18 @@ principle_artistic_expression_4 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		goods_output_fine_art_mult = 0.05
+		goods_output_fine_art_mult = 0.1
 		country_academics_pol_str_mult = 0.8
 		building_group_bg_arts_standard_of_living_add = 6
-		country_war_exhaustion_casualties_mult = -0.1
 		unit_morale_loss_mult = -0.2
+		state_assimilation_mult = 0.5
 		country_society_tech_research_speed_mult = 0.05
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		country_society_tech_research_speed_mult = 0.02
+		country_leverage_generation_mult = 0.05
 	}
 
 	ai_weight = {
@@ -3424,14 +3377,18 @@ principle_artistic_expression_5 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		goods_output_fine_art_mult = 0.05
+		goods_output_fine_art_mult = 0.1
 		country_academics_pol_str_mult = 1
 		building_group_bg_arts_standard_of_living_add = 6
-		country_war_exhaustion_casualties_mult = -0.1
 		unit_morale_loss_mult = -0.3
+		state_assimilation_mult = 0.75
 		country_society_tech_research_speed_mult = 0.1
-		state_migration_pull_add = 5
-		state_migration_pull_mult = 0.2
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		country_society_tech_research_speed_mult = 0.05
+		country_leverage_generation_mult = 0.1
 	}
 
 	ai_weight = {
@@ -3798,8 +3755,9 @@ principle_navy_2 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		unit_navy_experience_gain_mult = 0.25
-		unit_navy_experience_gain_add = 0.25
-		country_prestige_from_navy_power_projection_mult = 0.5
+
+		unit_convoy_defense_mult = 0.25
+		unit_convoy_raiding_mult = 0.25
 	}
 
 	ai_weight = {
@@ -3813,16 +3771,17 @@ principle_navy_3 = {
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
-		unit_navy_experience_gain_mult = 0.5
-		unit_navy_experience_gain_add = 0.5
-		country_prestige_from_navy_power_projection_mult = 0.5
+		unit_navy_experience_gain_mult = 0.25
+		unit_convoy_defense_mult = 0.25
+		unit_convoy_raiding_mult = 0.25
+		country_prestige_from_navy_power_projection_mult = 0.1
 	}
 
 	institution = institution_ministry_of_war
 	institution_modifier = {
-		unit_navy_experience_gain_mult = 0.2
-		unit_navy_experience_gain_add = 0.2
-		country_prestige_from_navy_power_projection_mult = 0.2
+		unit_navy_experience_gain_mult = 0.1
+		unit_convoy_defense_mult = 0.1
+		unit_convoy_raiding_mult = 0.1
 	}
 
 	ai_weight = {
@@ -3841,19 +3800,17 @@ principle_navy_4 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		unit_navy_experience_gain_mult = 0.5
-		unit_navy_experience_gain_add = 0.5
-		country_prestige_from_navy_power_projection_mult = 0.5
-
-		state_building_port_max_level_add = 10
+		unit_convoy_defense_mult = 0.25
+		unit_convoy_raiding_mult = 0.25
+		country_prestige_from_navy_power_projection_mult = 0.1
 		building_port_throughput_add = 0.25
 	}
 
 	institution = institution_ministry_of_war
 	institution_modifier = {
-		# Modifiers from previous level(s)	
-		unit_navy_experience_gain_mult = 0.3
-		unit_navy_experience_gain_add = 0.3
-		country_prestige_from_navy_power_projection_mult = 0.3
+		unit_navy_experience_gain_mult = 0.1
+		unit_convoy_defense_mult = 0.1
+		unit_convoy_raiding_mult = 0.1
 	}
 
 	ai_weight = {
@@ -3872,18 +3829,70 @@ principle_navy_5 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		unit_navy_experience_gain_mult = 0.5
-		unit_navy_experience_gain_add = 0.5
-		country_prestige_from_navy_power_projection_mult = 0.5
-		state_building_port_max_level_add = 20
-		building_port_throughput_add = 0.5
+		unit_convoy_defense_mult = 0.25
+		unit_convoy_raiding_mult = 0.25
+		country_prestige_from_navy_power_projection_mult = 0.1
+		building_port_throughput_add = 0.25
 	}
 
 	institution = institution_ministry_of_war
 	institution_modifier = {
-		# Modifiers from previous level(s)	
-		unit_navy_experience_gain_mult = 0.5
-		unit_navy_experience_gain_add = 0.5
-		country_prestige_from_navy_power_projection_mult = 0.5
+		unit_navy_experience_gain_mult = 0.1
+		unit_convoy_defense_mult = 0.2
+		unit_convoy_raiding_mult = 0.2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Companies
+
+principle_companies_4 = {
+	icon = "gfx/interface/icons/principles_icons/companies.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = modern_urban_planning
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_company_throughput_bonus_add = 0.1
+		country_free_charters_add = 1
+		country_max_companies_add = 2
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		country_free_charters_add = 1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_companies_5 = {
+	icon = "gfx/interface/icons/principles_icons/companies.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = globalization
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_company_throughput_bonus_add = 0.2
+		country_free_charters_add = 1
+		country_max_companies_add = 3
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		country_free_charters_add = 1
+		country_company_throughput_bonus_add = 0.05
 	}
 
 	ai_weight = {

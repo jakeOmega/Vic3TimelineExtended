@@ -5,6 +5,7 @@
 	
 	obsession_chance = 1.0
 	prestige_factor = 10
+	traded_quantity = 3
 }
 
 electronic_components = {
@@ -14,6 +15,7 @@ electronic_components = {
 	
 	obsession_chance = 0
 	prestige_factor = 10
+	traded_quantity = 4
 }
 
 robotics = {
@@ -23,6 +25,7 @@ robotics = {
 	
 	obsession_chance = 0
 	prestige_factor = 10
+	traded_quantity = 2
 }
 
 digital_assets = {
@@ -34,6 +37,7 @@ digital_assets = {
 	
 	obsession_chance = 0
 	prestige_factor = 10
+	traded_quantity = 10
 }
 
 digital_access = {
@@ -57,6 +61,7 @@ launch_capacity = {
 	
 	obsession_chance = 0.0
 	prestige_factor = 20
+	traded_quantity = 1
 }
 
 advanced_materials = {
@@ -66,6 +71,7 @@ advanced_materials = {
 		
 	obsession_chance = 0.0
 	prestige_factor = 20
+	traded_quantity = 0.1
 }
 
 transportation = {
@@ -101,6 +107,7 @@ aeroplanes = {
 	traded_quantity = 3
 	convoy_cost_multiplier = 2.0
 	pop_consumption_can_add_infrastructure = yes
+	traded_quantity = 3
 }
 
 construction = {
@@ -114,4 +121,15 @@ construction = {
 	traded_quantity = 1
 
 	consumption_tax_cost = 400
+	traded_quantity = 0.1
+}
+
+fertilizer = {
+	texture = "gfx/interface/icons/company_icons/basic_chemicals.dds"
+	cost = 30
+	category = industrial
+
+	prestige_factor = 3
+
+	traded_quantity = 7 # 210
 }

@@ -1,0 +1,135 @@
+﻿# fmc_private_construction_spending_target = {
+# 	value = investment_pool
+# 	divide = 52 #investment pool should reach equillibrium in a year
+# 	# multiply = fmc_investment_price_incentive
+# }
+
+
+fmc_private_construction_spending_target = {
+	value = investment_pool_gross_income
+	multiply = {
+		add = investment_pool
+		subtract = fmc_investment_pool_size_target
+		divide = fmc_investment_pool_size_target
+		multiply = 0.25
+		add = 1
+	}
+}
+
+
+fmc_public_construction_use_target = {
+	if = {
+		limit = {
+			has_variable = fmc_public_construction_buy_target
+		}
+		if = {
+			limit = {
+				is_construction_paused = no
+			}
+			value = var:fmc_public_construction_buy_target
+		}
+		else = {
+			value = 0
+		}
+		
+	}
+	else = {
+		value = 1
+	}
+}
+
+# fmc_private_construction_use_target = {
+# 	value = fmc_private_construction_spending_target
+# 	divide = 100 #fmc_construction_price
+# }
+
+fmc_investment_pool_size_target = {
+	if = {
+		limit = {
+			investment_pool_gross_income > 0
+		}
+		value = investment_pool_gross_income
+	}
+	else = {
+		value = 100000
+	}
+	multiply = 10  
+}
+
+fmc_private_construction_use_target = {
+	value = fmc_private_construction_spending_target
+	divide = var:fmc_price_stabiliser
+
+	if = {
+		limit = {
+			# and = {
+				construction_queue_num_queued_private_levels = 0
+				# construction_queue_num_queued_government_levels > 0
+			# }
+		 }
+		 value = 0
+	}
+	if = {
+		limit = {
+			and = {
+				construction_queue_num_queued_government_levels = 0
+			}
+		 }
+		 multiply = 2
+	}
+}
+
+
+fmc_total_construction_use_target = {
+	value = fmc_private_construction_use_target
+	add = fmc_public_construction_use_target
+}
+
+fmc_private_public_construction_ratio_target = {
+	if = {
+		limit = {
+			fmc_total_construction_use_target > 0
+		}
+			value = fmc_private_construction_use_target
+			divide = fmc_total_construction_use_target
+	}
+	else = {
+		value = 1
+	}
+	multiply = 100
+}
+
+fmc_price_stabiliser_next_value = {
+	if = {
+		limit = {
+		#	OR = {
+				NOT = {
+					has_variable = fmc_price_stabiliser
+				}
+		#		var:fmc_price_stabiliser < 32
+		#	}
+		}
+		value = FMC_CONSTRUCTION_SERVICES_PRICE
+	}
+	else = {
+		if = {
+			limit = {
+				var:fmc_price_stabiliser < fmc_construction_price
+			}
+			value = var:fmc_price_stabiliser
+			add = {
+				value = fmc_construction_price
+				subtract = var:fmc_price_stabiliser
+				divide = 10
+			}
+		}
+		else = {
+			value = var:fmc_price_stabiliser
+			subtract = {
+				value = var:fmc_price_stabiliser
+				subtract = fmc_construction_price
+				divide = 10
+			}
+		}
+	}
+}

@@ -1,0 +1,144 @@
+﻿fmc_country_update_sectors = {
+	every_state = {
+		if = {
+			limit = {
+				any_scope_building = {
+					is_under_construction = yes
+				}
+			}
+			set_specified_building_level = {
+				SPEC_LEVEL = 1
+				SPEC_TYPE = fmc_building_construction_site
+			}
+		}
+		fmc_state_on_construction_end = yes
+	}
+	if = {
+		limit = {
+			fmc_num_of_construction_sites = 0
+		}
+		capital = {
+			create_building = {
+				building = fmc_building_construction_site
+				level = 1
+			}
+		}
+	}
+}
+
+
+fmc_country_update_construction_data = {
+	fmc_country_update_private_public = yes
+	fmc_update_construction_effect = yes
+}
+
+
+fmc_country_update_private_public = {
+	remove_modifier = fmc_private_public_share_modifier
+	add_modifier = {
+		name = fmc_private_public_share_modifier
+		multiplier = fmc_private_public_construction_ratio_target
+	}
+}
+
+
+fmc_update_construction_effect = {
+	set_local_variable = {
+		name = fmc_construction_per_site_var
+		value = fmc_construction_per_site
+	}
+	change_local_variable = {
+		name = fmc_construction_per_site_var
+		subtract = 1
+	}
+	
+	every_scope_building = {
+		limit = {
+			type = bt:fmc_building_construction_site
+		}
+		remove_modifier = fmc_add_construction_modifier
+		# save_scope_as = fmc_current_building
+		if = {
+			limit = {
+				occupancy != 0
+			}
+
+			state = {
+				if = {
+					limit = { 
+						NOT = {
+							has_modifier = fmc_add_construction_employment
+						}
+					}
+					add_modifier = {
+						name = fmc_add_construction_employment
+						multiplier = -0.9
+					}
+				}
+			}
+
+		}
+		else = {
+			state = {
+				if = {
+					limit = { 
+						has_modifier = fmc_add_construction_employment
+					}
+					remove_modifier = fmc_add_construction_employment
+				}
+			}
+		}
+		if = {
+			limit = {
+				occupancy > 1
+			}
+			fmc_reset_building = yes
+
+		}
+		add_modifier = {
+			name = fmc_add_construction_modifier
+			multiplier = local_var:fmc_construction_per_site_var
+		}
+	}
+}
+
+
+fmc_reset_building = {
+	state = {
+		remove_building = fmc_building_construction_site
+		create_building = {
+			building = fmc_building_construction_site
+			level = 1
+		}
+	}
+}
+
+fmc_update_price_stabiliser = {
+	# if = {
+	# 	limit = {
+	# 		NOT = {
+	# 			has_variable = fmc_price_stabiliser
+	# 		}
+	# 	}
+		set_variable = {
+			name = fmc_price_stabiliser
+			value = fmc_price_stabiliser_next_value
+		}
+	# }
+	# else = {
+	
+	# 	if = {
+	# 		limit = { var:fmc_price_stabiliser < fmc_construction_price }
+	# 		change_variable = {
+	# 			name = fmc_price_stabiliser
+	# 			add = 10
+	# 		}
+	# 	}
+	# 	else = {
+	# 		change_variable = {
+	# 			name = fmc_price_stabiliser
+	# 			subtract = 10
+	# 		}
+	# 	}
+	# }
+}

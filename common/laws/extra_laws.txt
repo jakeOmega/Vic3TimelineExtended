@@ -11,6 +11,7 @@ law_universal_basic_income = {
 	
 	modifier = {
 		country_institution_social_security_max_investment_add = 2
+		state_expected_sol_from_literacy = 10
 	}
 
 	institution = institution_social_security
@@ -24,28 +25,28 @@ law_universal_basic_income = {
 	# Below needed since this Law changes Politial Participation
 	on_activate = {
 		recalculate_pop_ig_support = yes
-		set_institution_investment_level = {
-			institution = institution_social_security
-			level = 1
+		if = {
+			limit = {
+				institution_investment_level = {
+					institution = institution_social_security
+					value <= 5
+				}
+			}
+			set_institution_investment_level = {
+				institution = institution_social_security
+				level = 1
+			}
+		}
+		else = {
+			set_institution_investment_level = {
+				institution = institution_social_security
+				level = 2
+			}
 		}
 	}
 	
 	on_deactivate = {
 		recalculate_pop_ig_support = yes
-	}
-	
-	pop_support = {
-		value = 0
-		
-		add = {
-			desc = "POP_POVERTY"			
-			# SoL 29 gives 0.1 pop support, 28 -> 0.2, 27 -> 0.3, ... 20 -> 1.0
-			value = 30
-			subtract = standard_of_living
-			multiply = 0.1
-			min = 0
-			max = 1
-		}
 	}
 }
 
@@ -63,6 +64,8 @@ law_post-scarcity = {
 	modifier = {
 		country_institution_social_security_max_investment_add = 2
 		state_academics_investment_pool_contribution_add = 0.01
+		state_shopkeepers_investment_pool_contribution_add = -0.19
+		state_expected_sol_from_literacy = 30
 	}
 
 	institution = institution_social_security
@@ -76,28 +79,28 @@ law_post-scarcity = {
 	# Below needed since this Law changes Politial Participation
 	on_activate = {
 		recalculate_pop_ig_support = yes
-		set_institution_investment_level = {
-			institution = institution_social_security
-			level = 1
+		if = {
+			limit = {
+				institution_investment_level = {
+					institution = institution_social_security
+					value <= 5
+				}
+			}
+			set_institution_investment_level = {
+				institution = institution_social_security
+				level = 1
+			}
+		}
+		else = {
+			set_institution_investment_level = {
+				institution = institution_social_security
+				level = 2
+			}
 		}
 	}
 	
 	on_deactivate = {
 		recalculate_pop_ig_support = yes
-	}
-	
-	pop_support = {
-		value = 0
-		
-		add = {
-			desc = "POP_POVERTY"			
-			# SoL 29 gives 0.1 pop support, 28 -> 0.2, 27 -> 0.3, ... 20 -> 1.0
-			value = 40
-			subtract = standard_of_living
-			multiply = 0.1
-			min = 0
-			max = 1
-		}
 	}
 }
 
@@ -490,8 +493,7 @@ law_gold_standard = {
 	progressiveness = 25	
 
 	modifier = {
-		country_trade_route_competitiveness_mult = 0.1
-		country_free_trade_routes_add = 1
+		state_trade_advantage_mult = 0.1
 		state_tax_capacity_mult = 0.1
 	}
 
@@ -516,8 +518,7 @@ law_fiat_currency = {
 	progressiveness = 50		
 	
 	modifier = {
-		country_trade_route_competitiveness_mult = 0.2
-		country_free_trade_routes_add = 2
+		state_trade_advantage_mult = 0.2
 		building_gold_mine_throughput_add = -0.25
 	}
 
@@ -550,8 +551,7 @@ law_digital_currency = {
 	progressiveness = 75		
 	
 	modifier = {
-		country_trade_route_competitiveness_mult = 0.4
-		country_free_trade_routes_add = 4
+		state_trade_advantage_mult = 0.3
 		building_gold_mine_throughput_add = -0.5
 	}
 
@@ -913,6 +913,13 @@ law_minority_rights_violent_hostility = {
 		law_racial_segregation
 	}
 
+	modifier = {
+		# Non-state religious discrimination
+		country_acceptance_shared_religious_trait_add = -1
+		country_acceptance_religion_base_add = -5
+		state_violence_against_minorities_bool = yes
+	}
+
 	acceptance_modifier = {
 		country_radicalism_increases_violent_hostility_mult = 1
 		country_radicalism_increases_cultural_erasure_mult = 0.5
@@ -942,7 +949,6 @@ law_minority_rights_violent_hostility = {
 		country_wage_violent_hostility_mult = -0.75
 		country_wage_cultural_erasure_mult = -0.5
 		country_wage_open_prejudice_mult = -0.4
-		country_wage_full_acceptance_mult = 0.25
 
 		country_qualification_growth_violent_hostility_mult = -0.75
 		country_qualification_growth_cultural_erasure_mult = -0.5
@@ -966,6 +972,19 @@ law_minority_rights_violent_hostility = {
 		country_standard_of_living_open_prejudice_add = -1
 		country_standard_of_living_second_rate_citizen_add = -0.5
 	}
+
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
 }
 
 law_minority_rights_ghettoization = {
@@ -983,7 +1002,12 @@ law_minority_rights_ghettoization = {
 		law_ethnostate
 		law_national_supremacy
 		law_racial_segregation
-		law_cultural_exclusion
+	}
+
+	modifier = {
+		# Non-state religious discrimination
+		country_acceptance_shared_religious_trait_add = -1
+		country_acceptance_religion_base_add = -5
 	}
 	
 	acceptance_modifier = {
@@ -1016,7 +1040,6 @@ law_minority_rights_ghettoization = {
 		country_wage_violent_hostility_mult = -0.5
 		country_wage_cultural_erasure_mult = -0.3
 		country_wage_open_prejudice_mult = -0.2
-		country_wage_full_acceptance_mult = 0.25
 
 		country_qualification_growth_violent_hostility_mult = -0.5
 		country_qualification_growth_cultural_erasure_mult = -0.3
@@ -1047,6 +1070,19 @@ law_minority_rights_ghettoization = {
 		country_standard_of_living_open_prejudice_add = -1
 		country_standard_of_living_second_rate_citizen_add = -0.5
 	}
+
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
 }
 
 law_minority_rights_cultural_assimilation = {
@@ -1065,7 +1101,13 @@ law_minority_rights_cultural_assimilation = {
 		law_racial_segregation
 		law_cultural_exclusion
 		law_multicultural
-	}		
+	}	
+
+	modifier = {
+		# Non-state religious discrimination
+		country_acceptance_shared_religious_trait_add = -1
+		country_acceptance_religion_base_add = -5
+	}	
 	
 	acceptance_modifier = {
 		# Increased radicalism due to forced assimilation policies
@@ -1099,7 +1141,6 @@ law_minority_rights_cultural_assimilation = {
 		# Minimal wage penalties
 		country_wage_violent_hostility_mult = -0.1
 		country_wage_cultural_erasure_mult = -0.05
-		country_wage_full_acceptance_mult = 0.1
 
 		# Qualifications are reduced moderately
 		country_qualification_growth_violent_hostility_mult = -0.5
@@ -1131,6 +1172,19 @@ law_minority_rights_cultural_assimilation = {
 		country_standard_of_living_open_prejudice_add = -1
 		country_standard_of_living_second_rate_citizen_add = -0.5
 	}
+
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
 }
 
 law_minority_rights_discrimination = {
@@ -1146,6 +1200,12 @@ law_minority_rights_discrimination = {
 		law_racial_segregation
 		law_cultural_exclusion
 	}	
+
+	modifier = {
+		# Non-state religious discrimination
+		country_acceptance_shared_religious_trait_add = -1
+		country_acceptance_religion_base_add = -5
+	}
 	
 	acceptance_modifier = {
 		# Moderate radicalism increases
@@ -1165,6 +1225,7 @@ law_minority_rights_discrimination = {
 		country_allow_voting_full_acceptance_bool = yes
 
 		# Assimilation allowed but less effective
+		country_allow_assimilation_cultural_erasure_bool = yes
 		country_allow_assimilation_open_prejudice_bool = yes
 		country_allow_assimilation_second_rate_citizen_bool = yes
 		country_allow_assimilation_full_acceptance_bool = yes
@@ -1176,7 +1237,6 @@ law_minority_rights_discrimination = {
 		country_wage_violent_hostility_mult = -0.25
 		country_wage_cultural_erasure_mult = -0.15
 		country_wage_open_prejudice_mult = -0.1
-		country_wage_full_acceptance_mult = 0.1
 
 		country_qualification_growth_violent_hostility_mult = -0.25
 		country_qualification_growth_cultural_erasure_mult = -0.15
@@ -1207,6 +1267,19 @@ law_minority_rights_discrimination = {
 		country_standard_of_living_open_prejudice_add = -1
 		country_standard_of_living_second_rate_citizen_add = -0.5
 	}
+
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
 }
 
 law_minority_rights_indifference = {
@@ -1215,6 +1288,14 @@ law_minority_rights_indifference = {
 	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
 	
 	progressiveness = 75		
+
+	modifier = {
+		state_min_cultural_acceptance_delta_add = 5
+
+		# Non-state religious discrimination
+		country_acceptance_shared_religious_trait_add = -1
+		country_acceptance_religion_base_add = -5
+	}
 	
 	acceptance_modifier = {
 		# Minimal radicalism increases
@@ -1269,6 +1350,19 @@ law_minority_rights_indifference = {
 		country_standard_of_living_cultural_erasure_add = -1
 		country_standard_of_living_open_prejudice_add = -0.5
 	}
+
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
 }
 
 law_minority_rights_protection = {
@@ -1291,6 +1385,7 @@ law_minority_rights_protection = {
 
 	modifier = {
 		country_bureaucracy_investment_cost_factor_mult = 0.1
+		state_min_cultural_acceptance_delta_add = 10
 	}
 	
 	acceptance_modifier = {
@@ -1307,6 +1402,7 @@ law_minority_rights_protection = {
 		country_allow_voting_full_acceptance_bool = yes
 
 		# Assimilation remains neutral
+		country_allow_assimilation_violent_hostility_bool = yes
 		country_allow_assimilation_cultural_erasure_bool = yes
 		country_allow_assimilation_open_prejudice_bool = yes
 		country_allow_assimilation_second_rate_citizen_bool = yes
@@ -1334,6 +1430,19 @@ law_minority_rights_protection = {
 		country_standard_of_living_violent_hostility_add = -1
 		country_standard_of_living_cultural_erasure_add = -0.5
 	}
+
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
 }
 
 law_minority_rights_affirmative_action = {
@@ -1354,6 +1463,8 @@ law_minority_rights_affirmative_action = {
 
 	modifier = {
 		country_bureaucracy_investment_cost_factor_mult = 0.2
+		state_min_cultural_acceptance_delta_add = 20
+		country_assimilation_delta_threshold_add = -100
 	}
 	
 	acceptance_modifier = {
@@ -1396,6 +1507,19 @@ law_minority_rights_affirmative_action = {
 		country_disallow_government_work_full_acceptance_bool = no
 
 		country_standard_of_living_violent_hostility_add = -0.5
+	}
+
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
 	}
 }
 
@@ -1982,13 +2106,13 @@ law_ministry_of_urban_planning = {
 	progressiveness = 25
 
 	unlocking_technologies = {
-		modern_urban_planning
+		urbanization
 	}
 
 	institution = institution_ministry_of_urban_planning
 
 	modifier = {
-		country_institution_ministry_of_urban_planning_max_investment_add = 3
+		country_institution_ministry_of_urban_planning_max_investment_add = 1
 	}
 
 	ai_enact_weight_modifier = {
@@ -2106,34 +2230,6 @@ law_protected_class = {
 		state_birth_rate_mult = -0.1
 		state_dependent_political_participation_add = 0.5
 	}
-	
-	possible_political_movements = {
-		law_women_own_property
-	}
-
-	pop_support = {
-		value = 0.05
-		add = {
-			desc = "ALL_POPS"
-			if = {
-				limit = {
-					owner = {
-						has_technology_researched = feminism
-					}
-				}
-				value = 0.1
-			}
-			if = {
-				limit = {
-					owner = {
-						has_technology_researched = feminism
-						has_technology_researched = political_agitation
-					}
-				}
-				value = 0.1
-			}
-		}
-	}
 }
 
 law_corporation_state = {
@@ -2174,25 +2270,6 @@ law_corporation_state = {
 		interest_group_ig_industrialists_pol_str_mult = 0.25
 		state_political_strength_from_wealth_mult = 1.0
 		country_max_companies_add = 1
-	}
-
-	possible_political_movements = {
-		law_presidential_republic
-		law_parliamentary_republic
-		law_council_republic
-	}
-
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_UPPER_STRATA"
-			if = {
-				limit = {
-					strata = rich
-				}
-				value = 0.33
-			}
-		}
 	}
 
 	ai_will_do = {
@@ -2280,16 +2357,6 @@ law_direct_democracy = {
 		country_agitator_slots_add = 1
 	}
 
-	possible_political_movements = {
-		law_presidential_republic
-		law_parliamentary_republic
-		law_council_republic
-	}
-
-	pop_support = {
-		value = 5
-	}
-
 	ai_will_do = {
 		exists = ruler
 		ruler = {
@@ -2344,20 +2411,7 @@ law_neocolonialism = {
 	institution = institution_colonial_affairs
 	institution_modifier = {
 		state_colony_growth_creation_factor = -0.1
-		economic_dependence_leverage_gain_mult = 0.1
-	}
-
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_UPPER_STRATA"
-			if = {
-				limit = {
-					strata = rich
-				}
-				value = 0.33
-			}
-		}
+		country_economic_dependence_leverage_gain_mult = 0.1
 	}
 
 	ai_will_do = {
@@ -2435,19 +2489,6 @@ law_algorithmic_governance = {
 		law_universal_suffrage
 		law_autocracy
 		law_oligarchy
-	}
-
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_RADICAL"
-			if = {
-				limit = {
-					pop_radical_fraction > 0.25
-				}
-				value = 0.33
-			}
-		}
 	}
 
 	ai_will_do = {

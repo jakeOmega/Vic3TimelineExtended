@@ -63,7 +63,7 @@ migration_on_action = {
 					else = {
 						ordered_state = {
 							limit = {
-								NOT = { scope:migration_pop = { culture = { culture_is_discriminated_in = PREV.PREV.owner } } }
+								NOT = { scope:migration_pop = { culture = { PREV.PREV = {state_cultural_acceptance = {target = PREV value > 40}} } } }
 								NOT = { owner = { is_country_type = decentralized } }
 								NOT = { owner = { has_law = law_type:law_closed_borders } }
 								state_is_eligible_as_mass_migration_target = yes

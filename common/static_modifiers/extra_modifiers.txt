@@ -10,7 +10,11 @@ pollution_generation_mult_effect = {
 
 cheaty = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_tech_research_speed_mult = 4
+	country_law_enactment_success_add = 100
+	country_opposition_ig_approval_add = 100
+	interest_group_in_government_approval_add = 100
+	country_tech_spread_mult = 5
+	country_minting_add = 1000000
 }
 
 extra_training_modifier = {
@@ -30,7 +34,7 @@ accepted_cultures_cost = {
 
 nuclear_weapon_program_funding = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_bureaucracy_add = -1
+	country_weekly_innovation_add = -1
 }
 
 nuclear_strike_aftermath = {
@@ -38,6 +42,7 @@ nuclear_strike_aftermath = {
 	state_infrastructure_mult = -0.5
 	state_standard_of_living_add = -3
 	state_mortality_mult = 0.25
+	building_throughput_add = -0.5
 }
 
 tactical_nuke_aftermath = {
@@ -66,6 +71,15 @@ battle_unit_experience = {
 legislative_efficiency = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_institution_size_change_speed_mult = 1
+	country_law_enactment_time_mult = -0.25
+	country_law_enactment_success_add = 0.05
+}
+
+political_dysfunction = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_opposition_ig_approval_add = -10
+	state_radicals_from_political_movements_mult = 0.20
+	country_bureaucracy_mult = -0.5
 }
 
 foreign_emigration = {
@@ -107,6 +121,21 @@ forced_law_through_event = {
 	political_movement_radicalism_from_enactment_disapproval_mult = 0.5
 }
 
+forced_law_through_event_enactment_small = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.15
+}
+
+forced_law_through_event_enactment_medium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.3
+}
+
+forced_law_through_event_enactment_large = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.45
+}
+
 nuclear_power = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_prestige_from_army_power_projection_mult = 0.5
@@ -118,13 +147,13 @@ nuclear_power = {
 
 low_pop_state = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	state_birth_rate_mult = 0.25
+	state_birth_rate_mult = 0.5
 	state_migration_pull_mult = 0.5
 }
 
 high_pop_state = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	state_birth_rate_mult = 0
+	state_birth_rate_mult = -0.05
 	state_migration_pull_mult = -0.5
 }
 
@@ -172,4 +201,44 @@ state_region_pollution_health = {
 	state_mortality_mult = 0.1
 	state_standard_of_living_add = -6
 	state_working_adult_ratio_add = -0.05
+}
+
+too_much_private_construction = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_max_weekly_construction_progress_add = 1
+	state_construction_mult = -0.0001
+}
+
+refused_decolonization_modifier = { # multiplied by state_independence_movement_strength, which is between 0 and 100
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_bureaucracy_population_base_cost_factor_mult = 0.1
+	country_authority_add = -1
+	country_radicalism_increases_violent_hostility_mult = 0.1
+	country_radicalism_increases_cultural_erasure_mult = 0.1
+	country_radicalism_increases_open_prejudice_mult = 0.05
+	country_radicalism_increases_second_rate_citizen_mult = 0.01
+}
+
+bribed_to_stop_decolonization_modifier = { # multiplied by state_independence_movement_strength, which is between 0 and 100
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_welfare_payments_add = 0.02
+}
+
+overinvestment_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_academics_investment_pool_contribution_add = -1
+	state_aristocrats_investment_pool_contribution_add = -1
+	state_capitalists_investment_pool_contribution_add = -1
+	state_clergymen_investment_pool_contribution_add = -1
+	state_clerks_investment_pool_contribution_add = -1
+	state_farmers_investment_pool_contribution_add = -1
+	state_shopkeepers_investment_pool_contribution_add = -1
+	state_bureaucrats_investment_pool_contribution_add = -1
+	state_engineers_investment_pool_contribution_add = -1
+	state_laborers_investment_pool_contribution_add = -1
+	state_machinists_investment_pool_contribution_add = -1
+	state_officers_investment_pool_contribution_add = -1
+	state_peasants_investment_pool_contribution_add = -1
+	state_slaves_investment_pool_contribution_add = -1
+	state_soldiers_investment_pool_contribution_add = -1
 }

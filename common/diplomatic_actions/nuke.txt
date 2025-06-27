@@ -9,13 +9,17 @@ nuke_diplo_action = {
 	
 	show_confirmation_box = yes
 
+    potential = {
+        has_modifier = nuclear_power
+    }
+
 	possible = {
         var:nuclear_weapon_stockpile > 0
         OR = {
             NOT = {
                 OR = {
                     has_law = law_type:law_humanitarian_regulations
-                    has_law = law_type:law_limited_war
+                    # has_law = law_type:law_limited_war
                 }
             }
             any_scope_state = {
@@ -35,32 +39,9 @@ nuke_diplo_action = {
     
 	accept_effect = {
         save_scope_as = attacking_country
-        random_list = {
-            0 = {
-                modifier = nuclear_strike_success_chance
-                nuclear_industrial_strike = yes
-                scope:target_country = {
-                    trigger_event = nuclear_weapon_events.1
-                    change_relations = {
-                        country = ROOT
-                        value = -100  
-                    }
-                }
-                trigger_event = nuclear_weapon_events.2
-                
-            }
-            0 = {
-                modifier = nuclear_strike_fail_chance
-                change_infamy = 5
-                scope:target_country = {
-                    trigger_event = nuclear_weapon_events.3
-                    change_relations = {
-                        country = ROOT
-                        value = -10  
-                    }
-                }
-                trigger_event = nuclear_weapon_events.4
-            }
+        scope:second_state = {
+            save_scope_as = target_state
+            nuclear_first_stike = yes
         }
     }
 
@@ -68,7 +49,7 @@ nuke_diplo_action = {
 
     ai = {
 		evaluation_chance = {
-            value = 100
+            value = 1
         }
 
 		will_select_as_second_state = {
@@ -76,51 +57,17 @@ nuke_diplo_action = {
         }
 	
 		will_propose = {
-            OR = {
-                AND = {
-                    any_scope_state = {
-                        has_modifier = nuclear_strike_aftermath
-                    }
-                    scope:target_country = {
-                        has_modifier = nuclear_power
-                    }
-                }
-                AND = {
-                    has_law = law_type:law_total_war
-                    has_diplomatic_pact = {
-                        type = rivalry
-                        who = scope:target_country
-                    }
-                }
+            has_law = law_type:law_total_war
+            has_diplomatic_pact = {
+                type = rivalry
+                who = scope:target_country
             }
             NOT = { infamy > 75 }
         }
 
 		propose_score = {
-            value = 0
             scope:second_state = {
-                add = {
-                    value = state_population
-                    divide = owner.total_population
-                    multiply = 200
-                }
-                add = {
-                    value = gdp
-                    divide = owner.gdp
-                    multiply = 400
-                }
-                if = {
-                    limit = {
-                        is_incorporated = no
-                    }
-                    multiply = 0.5
-                }
-                if = {
-                    limit = {
-                        is_capital = yes
-                    }
-                    multiply = 2
-                }
+                value = nuclear_industrial_strike_target_score
             }
         }
 	}
@@ -137,6 +84,10 @@ tactical_nuke_diplo_action = {
     second_state_list = second_country
 	
 	show_confirmation_box = yes
+
+    potential = {
+        has_modifier = nuclear_power
+    }
 
 	possible = {
         has_technology_researched = tactical_nuclear_weapons
@@ -164,49 +115,20 @@ tactical_nuke_diplo_action = {
     
 	accept_effect = {
         save_scope_as = attacking_country
+        change_variable = {
+            name = nuclear_weapon_stockpile
+            subtract = 1
+        }
+        scope:second_state = {
+            save_scope_as = target_state
+        }
         random_list = {
             0 = {
                 modifier = nuclear_strike_success_chance
                 change_infamy = 10
                 scope:second_state = {
-                    state_region = {
-                        add_devastation = 25
-                    }
-                    kill_population_percent_in_state = {
-                        percent = 0.5
-                        pop_type = soldiers
-                    }
-                    kill_population_percent_in_state = {
-                        percent = 0.5
-                        pop_type = officers
-                    }
-                    kill_population_percent_in_state = {
-                        percent = 0.005
-                    }
-                    add_modifier = {
-                        name = tactical_nuke_aftermath
-                        months = short_modifier_time
-                        is_decaying = yes
-                    }
+                    nuclear_tactical_strike = yes
                 }
-
-                scope:target_country = {
-                    every_scope_war = {
-                        add_war_war_support = {
-                            target = PREV
-                            value = -15
-                        }
-                    }
-                }
-
-                scope:target_country = {
-                    trigger_event = nuclear_weapon_events.5
-                    change_relations = {
-                        country = ROOT
-                        value = -50  
-                    }
-                }
-                trigger_event = nuclear_weapon_events.6
             }
             0 = {
                 modifier = nuclear_strike_fail_chance
@@ -226,7 +148,7 @@ tactical_nuke_diplo_action = {
 
     ai = {
 		evaluation_chance = {
-            value = 100
+            value = 1
         }
 
 		will_select_as_second_state = {
@@ -238,23 +160,10 @@ tactical_nuke_diplo_action = {
         }
 
         will_propose = {
-            OR = {
-                AND = {
-                    OR = {
-                        has_modifier = nuclear_strike_aftermath
-                        has_modifier = tactical_nuke_aftermath
-                    }
-                    scope:target_country = {
-                        has_modifier = nuclear_power
-                    }
-                }
-                AND = {
-                    has_law = law_type:law_total_war
-                    has_diplomatic_pact = {
-                        type = rivalry
-                        who = scope:target_country
-                    }
-                }
+            has_law = law_type:law_total_war
+            has_diplomatic_pact = {
+                type = rivalry
+                who = scope:target_country
             }
             NOT = { infamy > 75 }
         }
@@ -266,33 +175,33 @@ tactical_nuke_diplo_action = {
                     limit = {
                         has_building = building_barracks
                     }
-                    add = b:building_barracks.level
+                    add = {
+                        value = b:building_barracks.level
+                        divide = 100
+                    }
                 }
                 if = {
                     limit = {
                         has_building = building_naval_base
                     }
-                    add = b:building_naval_base.level
+                    add = {
+                        value = b:building_naval_base.level
+                        divide = 100
+                    }
                 }
                 if = {
                     limit = {
                         has_building = building_conscription_center
                     }
-                    add = b:building_conscription_center.level
+                    add = {
+                        value = b:building_conscription_center.level
+                        divide = 100
+                    }
                 }
                 if = {
-                    limit = {
-                        is_incorporated = no
-                    }
-                    multiply = 0.5
+                    limit = { owner = { has_modifier = nuclear_power }}
+                    divide = 100 # hesitant to nuke if they can retaliate
                 }
-                if = {
-                    limit = {
-                        is_capital = yes
-                    }
-                    multiply = 2
-                }
-                multiply = 100
             }
         }
 	}

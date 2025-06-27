@@ -1,43 +1,3 @@
-paved_roads = {
-	era = era_5
-	texture = "gfx/interface/icons/invention_icons/paved_roads.dds"
-	category = society
-	
-	modifier = {
-		state_infrastructure_from_automobiles_consumption_add = 0.25
-		market_land_trade_capacity_add = 20
-		state_building_highway_max_level_add = 1
-	}
-	
-	unlocking_technologies = {	
-		elevator
-	}
-	
-	ai_weight = {
-		value = 2 # Important for those nice-looking roads!
-	}
-}
-
-military_aviation = {
-	# Unlocks Vehicles Industries
-	# Unlocks Tanks, Planes and Tanks PM in Barracks
-	era = era_5
-	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
-	category = military
-	
-	modifier = {
-		country_nuclear_weapon_defense_chance_add = 0.25
-	}
-	
-	unlocking_technologies = {	
-		defense_in_depth
-	}
-	
-	ai_weight = {
-		value = 1.5 # Important tech in general
-	}
-}
-
 bergius_process = {
 	# Unlocks Synthetic Oil Plants building
 	era = era_6
@@ -81,6 +41,7 @@ computing_machines = {
 	modifier = {
 		country_weekly_innovation_max_add = 25
 		country_institution_schools_max_investment_add = 1
+		state_education_access_add = -0.1
 	}
 	
 	unlocking_technologies = {	
@@ -223,6 +184,7 @@ combined_arms = {
 
 	modifier = {
 		country_institution_ministry_of_war_max_investment_add = 1
+		state_building_barracks_max_level_add = 50
 	}
 	
 	ai_weight = {
@@ -230,7 +192,7 @@ combined_arms = {
 	}
 }
 
-advanced_materials = {
+modern_materials = {
 	# Fiberglass mass production, fibre-reinforced plastic, Nylon, Teflon, Polyester, etc.
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/plastics.dds"
@@ -255,7 +217,7 @@ modern_tools = {
 	category = production
 	
 	unlocking_technologies = {	
-		advanced_materials
+		modern_materials
 	}
 	
 	ai_weight = {
@@ -273,7 +235,7 @@ modern_skyscrapers = {
 	}
 	
 	unlocking_technologies = {	
-		advanced_materials
+		modern_materials
 	}
 	
 	ai_weight = {
@@ -367,7 +329,7 @@ marketing_research = {
 	
 	modifier = {
 		country_legitimacy_ideological_incoherence_mult = -0.1
-		building_group_bg_service_throughput_add = 0.2
+		country_max_companies_add = 1
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_institution_ministry_of_religion_max_investment_add = 1
 	}
@@ -422,7 +384,8 @@ modern_vaccines = {
 	}
 
 	modifier = {
-		country_institution_health_system_max_investment_add = 1
+		state_mortality_mult = -0.05
+		state_birth_rate_mult = 0.05
 	}
 	
 	ai_weight = {
@@ -440,8 +403,9 @@ mass_media = {
 	}
 
 	modifier = {
-		country_company_construction_efficiency_bonus_add = 0.05
+		country_company_throughput_bonus_add = 0.05
 		country_institution_ministry_of_culture_max_investment_add = 1
+		country_free_charters_add = 1
 	}
 	
 	ai_weight = {
@@ -456,6 +420,7 @@ animation = {
 	
 	modifier = {
 		building_arts_academy_throughput_add = 0.25
+		state_max_trade_advantage_from_capacity_add = 0.05
 	}
 	
 	unlocking_technologies = {	
@@ -473,7 +438,6 @@ rural_electrification = {
 	category = society
 	
 	modifier = {
-		country_institution_schools_max_investment_add = 1
 		state_infrastructure_from_population_max_add = 100
 		state_expected_sol_from_literacy = 1
 		building_power_plant_throughput_add = 0.25
@@ -585,7 +549,7 @@ naval_convoy_defense = {
 	category = military
 	
 	modifier = {
-		unit_convoy_defense_mult = 0.75
+		country_convoy_damage_taken_mult = -0.75
 	}
 	
 	unlocking_technologies = {	
@@ -666,7 +630,9 @@ public_works_programs = {
 	modifier = {
 		state_building_hydro_plant_max_level_add = 5
 		country_weekly_innovation_max_add = 10
-		country_gold_reserve_limit_mult = 0.25
+		country_institution_schools_max_investment_add = 1
+		state_education_access_add = -0.1
+		state_building_barracks_max_level_add = 50
 	}
 	
 	unlocking_technologies = {	
@@ -722,9 +688,7 @@ intergovernmental_organizations = {
 	category = society
 	
 	modifier = {
-		country_legitimacy_ideological_incoherence_mult = -0.1
 		country_institution_size_change_speed_mult = 0.25
-		country_gold_reserve_limit_mult = 0.25
 		country_leverage_threshold_change_add = -100
 	}
 	

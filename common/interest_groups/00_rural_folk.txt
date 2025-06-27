@@ -9,7 +9,7 @@ ig_rural_folk = {
 		ideology_particularist
 		ideology_isolationist
 	}
-	
+
 	character_ideologies = {
 		ideology_moderate
 		ideology_pacifist
@@ -58,7 +58,7 @@ ig_rural_folk = {
 			}
 			else_if = {
 				limit = {
-					owner = { 
+					owner = {
 						OR = {
 							c:BIC ?= this
 							any_primary_culture = {
@@ -90,7 +90,7 @@ ig_rural_folk = {
 				set_ig_trait = ig_trait:ig_trait_farmers_markets
 			}
 		}
-	
+
 		# Jeffersonian Ideology
 		if = {
 			limit = {
@@ -168,7 +168,7 @@ ig_rural_folk = {
 		rule = {
 			trigger = {
 				c:BIC ?= this
-				any_primary_culture = { 
+				any_primary_culture = {
 					cu:british = this
 				}
 			}
@@ -253,7 +253,7 @@ ig_rural_folk = {
 				value = 75
 			}
 		}
-		
+
 		if = {
 			limit = {
 				c:BIC ?= owner
@@ -266,7 +266,7 @@ ig_rural_folk = {
 				value = 0.1
 			}
 		}
-	
+
 		multiply = {
 			desc = "LEADER_POPULARITY"
 			scope:interest_group = {
@@ -292,7 +292,7 @@ ig_rural_folk = {
 				min = 0
 			}
 		}
-		
+
 		if = {
 			limit = {
 				scope:interest_group = {
@@ -385,6 +385,10 @@ ig_rural_folk = {
 		value = 1.0
 	}
 
+	executive_weight = {
+		value = 0.1
+	}
+
 	noble_chance = {
 		value = 0.2
 	}
@@ -471,6 +475,10 @@ ig_rural_folk = {
 			}
 			add = { value = 0.021 }
 		}
+	}
+
+	female_executive_chance = {
+		value = 0.0
 	}
 
 	female_politician_chance = {
@@ -571,7 +579,7 @@ ig_rural_folk = {
 
 	female_agitator_chance = {
 		value = 0.025
-		
+
 		if = {
 			limit = {
 				owner = {
@@ -582,8 +590,8 @@ ig_rural_folk = {
 			add = {
 				value = 0.025
 			}
-		}	
-		
+		}
+
 		if = {
 			limit = {
 				owner = {
@@ -606,7 +614,7 @@ ig_rural_folk = {
 			add = {
 				value = 0.025
 			}
-		}		
+		}
 	
 		
 		if = {
@@ -694,5 +702,11 @@ ig_rural_folk = {
 	commander_leader_chance = {
 		value = 0.5
 		multiply = ig_commander_leader_chance_mult
+	}
+
+	# The chance that a executive belonging to this IG takes over leadership when it changes
+	# scope:character is the most popular executive in the IG
+	executive_leader_chance = {
+		value = 0.2
 	}
 }

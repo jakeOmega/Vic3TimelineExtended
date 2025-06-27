@@ -430,7 +430,12 @@ change_acceptance = {
 	if = {
 		limit = {
 			$CULTURE$ = {
-				culture_is_discriminated_in = ROOT
+				ROOT = {
+					cultural_acceptance_base = {
+						target = PREV
+						value < 40
+					}
+				}
 			}
 		}
 		accept_culture = {
@@ -516,26 +521,22 @@ update_countrys_bloc_principles_plurality = {
 }
 
 nuclear_industrial_strike = {
-	change_infamy = 25
-	change_variable = {
-		name = nuclear_weapon_stockpile
-		subtract = 1
+	state_region = {
+		add_devastation = 100
 	}
-	scope:second_state = {
-		state_region = {
-			add_devastation = 50
-		}
-		kill_population_percent_in_state = {
-			percent = 0.1
-		}
-		add_modifier = {
-			name = nuclear_strike_aftermath
-			months = short_modifier_time
-			is_decaying = yes
-		}
+	kill_population_percent_in_state = {
+		percent = 0.1
 	}
-	scope:target_country = {
+	add_modifier = {
+		name = nuclear_strike_aftermath
+		months = short_modifier_time
+		is_decaying = yes
+	}
+	owner = {
 		every_scope_war = {
+			limit = {
+				has_war_support = { target = PREV value > -65 } # cannot drop below -90
+			}
 			add_war_war_support = {
 				target = PREV
 				value = -25
@@ -544,45 +545,215 @@ nuclear_industrial_strike = {
 	}
 }
 
-trigger_mass_migration = {
-	random_scope_culture = {
-		limit = {
-			culture_is_discriminated_in = ROOT.owner
-			NOT = { ROOT.owner = { is_mass_migration_origin_of_culture = PREV } }
-			any_state = {
-				NOT = { PREV = { culture_is_discriminated_in = PREV.owner } }
-				NOT = { owner = { is_country_type = decentralized } }
-				NOT = { owner = { has_law = law_type:law_closed_borders } }
-				state_is_eligible_as_mass_migration_target = yes
+nuclear_first_stike = { # Scope is target state
+	save_scope_as = target_state
+	scope:attacking_country = {
+		custom_tooltip = {
+			text = nuke_success_chance_desc
+		}
+		custom_tooltip = {
+			text = use_one_nuke_desc
+			change_variable = {
+				name = nuclear_weapon_stockpile
+				subtract = 1
 			}
 		}
-		save_scope_as = migration_culture
-		ordered_state = {
-			limit = {
-				NOT = { PREV = { culture_is_discriminated_in = PREV.owner } }
-				NOT = { owner = { is_country_type = decentralized } }
-				NOT = { owner = { has_law = law_type:law_closed_borders } }
-				state_is_eligible_as_mass_migration_target = yes
+		random_list = {
+			0 = {
+				modifier = nuclear_strike_success_chance
+				custom_tooltip = {
+					text = industrial_nuke_succeeds_desc
+
+					change_infamy = 25
+					scope:target_state = {
+						nuclear_industrial_strike = yes
+						trigger_event = nuclear_weapon_events.1
+					}
+					scope:target_country = {
+						change_relations = {
+							country = ROOT
+							value = -50  
+						}
+					}
+					trigger_event = nuclear_weapon_events.2
+					every_country = {
+						limit = {
+							NOT = { THIS = ROOT }
+							NOT = { THIS = scope:target_country }
+						}
+						trigger_event = nuclear_weapon_events.15
+					}
+				}
 			}
-			order_by = migration_attraction_script_value
-			position = 0
-			create_mass_migration = {
-				origin = ROOT.owner
-				culture = PREV
-			}
-			owner = {
-				add_modifier = {
-					name = foreign_emigration
-					months = 12
-					is_decaying = yes
+			0 = {
+				modifier = nuclear_strike_fail_chance
+
+				custom_tooltip = {
+					text = industrial_nuke_fails_desc
+					change_infamy = 5
+					scope:target_state = {
+						trigger_event = nuclear_weapon_events.3
+					}
+					scope:target_country = {
+						change_relations = {
+							country = ROOT
+							value = -10  
+						}
+					}
+					trigger_event = nuclear_weapon_events.4
 				}
 			}
 		}
 	}
+}
+
+nuclear_response_strike = {  # Scope is target state, target/attacking_country reversed as this is a response to first strike
+	save_scope_as = target_state
+	scope:target_country = {
+		custom_tooltip = {
+			text = use_one_nuke_desc
+			change_variable = {
+				name = nuclear_weapon_stockpile
+				subtract = 1
+			}
+		}
+		random_list = {
+			0 = {
+				modifier = nuclear_strike_success_chance
+
+				custom_tooltip = {
+					text = industrial_nuke_succeeds_desc
+					scope:target_state = {
+						nuclear_industrial_strike = yes
+						trigger_event = nuclear_weapon_events.11
+					}
+					trigger_event = nuclear_weapon_events.12
+					every_country = {
+						limit = {
+							NOT = { THIS = PREV }
+							NOT = { THIS = scope:attacking_country }
+						}
+						trigger_event = nuclear_weapon_events.16
+					}
+				}
+			}
+			0 = {
+				modifier = nuclear_strike_fail_chance
+				custom_tooltip = {
+					text = industrial_nuke_fails_desc
+					scope:target_state = {
+						trigger_event = nuclear_weapon_events.13
+					}
+					trigger_event = nuclear_weapon_events.14
+				}
+			}
+		}
+	}
+}
+
+nuclear_response_response_strike = {  # Scope is target state
+	save_scope_as = target_state
+	scope:attacking_country = {
+		custom_tooltip = {
+			text = use_one_nuke_desc
+			change_variable = {
+				name = nuclear_weapon_stockpile
+				subtract = 1
+			}
+		}
+		random_list = {
+			0 = {
+				modifier = nuclear_strike_success_chance
+
+				custom_tooltip = {
+					text = industrial_nuke_succeeds_desc
+					scope:target_state = {
+						nuclear_industrial_strike = yes
+						trigger_event = nuclear_weapon_events.1
+					}
+					trigger_event = nuclear_weapon_events.2
+					every_country = {
+						limit = {
+							NOT = { THIS = ROOT }
+							NOT = { THIS = scope:target_country }
+						}
+						trigger_event = nuclear_weapon_events.15
+					}
+				}
+			}
+			0 = {
+				modifier = nuclear_strike_fail_chance
+				custom_tooltip = {
+					text = industrial_nuke_fails_desc
+					scope:target_state = {
+						trigger_event = nuclear_weapon_events.3
+					}
+					trigger_event = nuclear_weapon_events.4
+					every_country = {
+						limit = {
+							NOT = { THIS = ROOT.owner }
+							NOT = { THIS = scope:target_country }
+						}
+						trigger_event = nuclear_weapon_events.15
+					}
+				}
+			}
+		}
+	}
+}
+
+nuclear_tactical_strike = {
+	state_region = {
+		add_devastation = 25
+	}
+	kill_population_percent_in_state = {
+		percent = 0.5
+		pop_type = soldiers
+	}
+	kill_population_percent_in_state = {
+		percent = 0.5
+		pop_type = officers
+	}
+	kill_population_percent_in_state = {
+		percent = 0.005
+	}
 	add_modifier = {
-		name = foreign_emigration_source
-		months = 12
+		name = tactical_nuke_aftermath
+		months = short_modifier_time
 		is_decaying = yes
+	}
+
+	trigger_event = nuclear_weapon_events.5
+	scope:attacking_country = {
+		trigger_event = nuclear_weapon_events.6
+	}
+}
+
+trigger_mass_migration = {
+	ordered_state = {
+		limit = {
+			NOT = { owner = { has_law = law_type:law_closed_borders } }
+			state_cultural_acceptance = {
+				target = scope:curr_culture
+				value > owner.modifier:country_migration_restrictiveness_add
+			}
+		}
+		order_by = migration_attraction_script_value
+
+		save_scope_as = migration_target
+	}
+	move_partial_pop = {
+		state = scope:migration_target
+		population_ratio = $POP_RATIO$
+	}
+	scope:curr_state = {
+		if = {
+			limit = {
+				NOT = { has_variable = sent_message }
+			}
+			post_notification = violence_against_minorities
+			set_variable = sent_message
+		}
 	}
 }
 
@@ -593,26 +764,6 @@ add_arable_land_effect = {
 	change_variable = {
 		name = arable_land_added
 		add = $AMOUNT$
-	}
-}
-
-update_outreach_bureaucracy_cost = {
-	if = {
-		limit = {
-			has_modifier = outreach_bureaucracy_cost
-		}
-		remove_modifier = outreach_bureaucracy_cost
-	}
-	if = {
-		limit = {
-			total_outreach_cost_script_value > 0
-		}
-		add_modifier = {
-			name = outreach_bureaucracy_cost
-			multiplier = {
-				value = total_outreach_cost_script_value
-			}
-		}
 	}
 }
 
@@ -671,4 +822,320 @@ remove_all_ideologies = {
 	remove_ideology = ideology_orleanist
 	remove_ideology = ideology_legitimist
 	remove_ideology = ideology_bonapartist
+}
+
+remove_homelands_effect = {
+	every_scope_culture = {
+		limit = {
+			ROOT = {
+				culture_percent_state = {
+					target = PREV
+					value < homeland_culture_disappear_threshold
+				}
+			}
+			NOT = { is_primary_culture_of = ROOT.owner }
+			has_homeland = ROOT
+		}
+		save_scope_as = removal_culture
+		ROOT = {
+			state_region = {
+				remove_homeland = scope:removal_culture
+			}
+			post_notification = homeland_removed
+		}
+	}
+}
+
+create_homelands_effect = {
+	every_scope_culture = {
+		limit = {
+			ROOT = {
+				culture_percent_state = {
+					target = PREV
+					value >= homeland_culture_form_threshold
+				}
+			}
+			is_primary_culture_of = ROOT.owner
+			NOT = { has_homeland = ROOT }
+		}
+		save_scope_as = form_culture
+		ROOT = {
+			state_region = {
+				add_homeland = scope:form_culture
+			}
+			post_notification = homeland_created
+		}
+	}
+}
+
+set_decolonization_variable = {
+	set_variable = decolonization_marker
+	every_neighbouring_state = {
+		limit = {
+			NOT = { has_variable = decolonization_marker }
+			any_scope_culture = {
+				has_homeland = PREV
+				has_homeland = scope:new_country_capital
+			}
+			owner = scope:new_country_capital.owner
+			NOT = {
+				is_homeland_of_country_cultures = owner
+			}
+			state_independence_movement_strength > state_independence_movement_strength_threshold
+		}
+		set_decolonization_variable = yes
+	}
+}
+
+form_decolonized_country = { # scope is capital state of new country, must be a homeland of something
+	save_scope_as = new_country_capital
+	random_scope_culture = {
+		limit = {
+			has_homeland = scope:new_country_capital
+		}
+		save_scope_as = new_country_culture
+	}
+	
+	random_list = {
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 0 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 30 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 60 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 90 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 120 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 150 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 180 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 210 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 240 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 270 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 300 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 330 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+	}
 }

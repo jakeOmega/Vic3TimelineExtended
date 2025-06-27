@@ -1,0 +1,150 @@
+﻿
+namespace = fmc_update_events
+
+#create a daily pulse event
+fmc_update_events.1 = {
+    type = country_event
+    hidden = yes
+
+    trigger = {
+        OR = {
+            NOT = {
+                has_global_variable = fmc_date_of_last_daily_pulse
+            }
+            fmc_days_since_last_event_execution >= 1
+        }
+    }
+
+    immediate = {
+
+        if = {
+            limit = {
+                NOT = {
+                    has_global_variable = fmc_num_main_event_executions
+                }
+            }
+            set_global_variable = {
+                name = fmc_num_main_event_executions
+                value = 0
+            }
+        }
+        change_global_variable = {
+            name = fmc_num_main_event_executions
+            add = 1
+        }
+
+        set_global_variable = {
+            name = fmc_date_of_last_daily_pulse
+            value = game_date
+        }
+        random_country = {
+            trigger_event = {
+                id = fmc_update_events.2
+                days = 1
+            }
+            trigger_event = {
+                id = fmc_update_events.2
+                days = 2
+            }
+        }
+        random_country = {
+            trigger_event = {
+                id = fmc_update_events.2
+                days = 1
+            }
+            trigger_event = {
+                id = fmc_update_events.2
+                days = 2
+            }
+        }
+        if = {
+            limit = {
+                fmc_num_main_event_executions_modulo_7 = 0
+            }
+            every_country = {
+                trigger_event = {
+                    id = fmc_update_events.3
+                }
+            }
+        }
+    }
+}
+
+#helper event to trigger the main event
+fmc_update_events.2 = {
+    type = country_event
+    hidden = yes
+
+    immediate = {
+        trigger_event = {
+            id = fmc_update_events.1
+        }
+    }
+}
+
+#event fired on daily pulse
+fmc_update_events.3 = {
+    type = country_event
+    hidden = yes
+
+    immediate = {
+        fmc_on_weekly_pulse = yes
+    }
+}
+
+#event fired on border changes
+fmc_update_events.4 = {
+    type = country_event
+    hidden = yes
+
+    immediate = {
+        #every_country = {
+            fmc_on_border_changes = yes
+        #}
+    }
+}
+
+#event fired on construction setup
+fmc_update_events.5 = {
+    type = country_event
+    hidden = yes
+
+    immediate = {
+        # every_country = {
+            country_construction_setup = yes
+        # }
+    }
+}
+
+#On construction started
+fmc_update_events.6 = {
+    type = building_event
+    hidden = yes
+
+    immediate = {
+        state = {
+            fmc_state_on_construction_start = yes
+        }
+    }
+}
+
+#On construction finished
+fmc_update_events.7 = {
+    type = building_event
+    hidden = yes
+    immediate = {
+        state = {
+            fmc_state_on_construction_end = yes
+        }
+    }
+}
+
+#for testing
+# fmc_update_events.8 = {
+#     type = country_event
+#     hidden = no
+
+#     option = {
+
+#     }
+# }

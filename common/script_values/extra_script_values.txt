@@ -1,6 +1,9 @@
 ﻿gdp_per_capita = {
 	value = gdp
-	divide = state_population
+	divide = {
+		value = state_population
+		min = 1
+	}
 }
 
 peaceful_annex_gdp_requirement = {
@@ -16,6 +19,7 @@ ministry_of_thought_control_monthly_effect = 0.001
 
 construction_cost_super_high = 1500
 construction_cost_mega_high = 2500
+construction_cost_space_mine = 5000
 
 war_support_training_decrease = {
 	value = 0
@@ -178,7 +182,9 @@ accepted_culture_state_count = {
 		every_scope_state = {
 			limit = {
 				any_scope_culture = {
-					NOT = { culture_is_discriminated_in = PREV.owner.power_bloc.power_bloc_leader }
+					NOT = { 
+						PREV.owner.power_bloc.power_bloc_leader = {cultural_acceptance_base = {target = PREV value < 40}}
+					}
 					PREV = {
 						culture_percent_state = {
 							target = PREV
@@ -253,7 +259,7 @@ power_bloc_gdp = {
 	}
 }
 
-global_gdp = {
+global_gdp_script_value = {
 	value = 0
 	every_country = {
 		add = gdp
@@ -265,7 +271,7 @@ power_bloc_gdp_share = {
 	every_power_bloc_member = {
 		add = gdp
 	}
-	divide = global_gdp
+	divide = global_gdp_script_value
 	multiply = 100
 }
 
@@ -514,12 +520,22 @@ nuclear_weapon_program_monthly_progress = {
 		multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
 	}
 }
-nuclear_weapon_program_funding_step = 5000
+nuclear_weapon_program_funding_step = 100
 nuclear_weapon_program_goal_value = 100
 
 nuclear_weapons_program_current_cost = {
 	value = var:nuclear_weapons_program_funding
 	multiply = nuclear_weapon_program_funding_step
+}
+
+country_nuclear_weapon_attack_success_add_display = {
+	value = modifier:country_nuclear_weapon_attack_success_add
+	multiply = 100
+}
+
+country_nuclear_weapon_defense_chance_add_display = {
+	value = modifier:country_nuclear_weapon_defense_chance_add
+	multiply = 100
 }
 
 nuclear_strike_success_chance = {
@@ -551,17 +567,54 @@ migration_attraction_script_value = {
 	value = migration_pull
 	if = {
 		limit = {
-			owner = {
-				has_subject_relation_with = ROOT.owner
+			state_cultural_acceptance = {
+				target = scope:curr_culture
+				value < 20
 			}
 		}
-		add = 10
+		multiply = 0
+	}
+	else_if = {
+		limit = {
+			state_cultural_acceptance = {
+				target = scope:curr_culture
+				value < 40
+			}
+		}
+		multiply = 0.2
+	}
+	else_if = {
+		limit = {
+			state_cultural_acceptance = {
+				target = scope:curr_culture
+				value < 60
+			}
+		}
+		multiply = 0.4
+	}
+	else_if = {
+		limit = {
+			state_cultural_acceptance = {
+				target = scope:curr_culture
+				value < 80
+			}
+		}
+		multiply = 0.6
+	}
+	else = {
+		multiply = 1
 	}
 	if = {
 		limit = {
-			owner = { country_has_primary_culture = scope:migration_culture }
+			owner = { country_has_primary_culture = scope:curr_culture }
 		}
 		multiply = 2
+	}
+	if = {
+		limit = {
+			state_unemployment_rate > 0.1
+		}
+		multiply = 0
 	}
 }
 
@@ -614,6 +667,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = television
 			}
 		}
@@ -622,6 +676,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = modern_automotive_technology
 			}
 		}
@@ -630,6 +685,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = bergius_process
 			}
 		}
@@ -638,6 +694,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = cryptography
 			}
 		}
@@ -646,6 +703,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = nuclear_weapons
 			}
 		}
@@ -654,6 +712,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = rocketry
 			}
 		}
@@ -662,6 +721,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = mass_media
 			}
 		}
@@ -670,6 +730,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = computing_machines
 			}
 		}
@@ -678,6 +739,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = keynesian_economics
 			}
 		}
@@ -686,6 +748,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = green_revolution
 			}
 		}
@@ -694,6 +757,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = transistors
 			}
 		}
@@ -702,6 +766,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = mainframe_computers
 			}
 		}
@@ -710,6 +775,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = ICBMs
 			}
 		}
@@ -718,6 +784,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = space_exploration
 			}
 		}
@@ -726,6 +793,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = nuclear_energy
 			}
 		}
@@ -734,6 +802,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = decolonization
 			}
 		}
@@ -742,6 +811,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = modern_urban_planning
 			}
 		}
@@ -750,6 +820,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = civil_rights_movement
 			}
 		}
@@ -758,6 +829,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = computer_networks
 			}
 		}
@@ -766,6 +838,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = integrated_circuits
 			}
 		}
@@ -774,6 +847,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = personal_computers
 			}
 		}
@@ -782,6 +856,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = satellite_communications
 			}
 		}
@@ -790,6 +865,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = stealth_technology
 			}
 		}
@@ -798,6 +874,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = supersonic_aircraft
 			}
 		}
@@ -806,6 +883,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = containerization
 			}
 		}
@@ -814,6 +892,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = pop_culture
 			}
 		}
@@ -822,6 +901,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = modern_pharmaceuticals
 			}
 		}
@@ -830,6 +910,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = world_wide_web
 			}
 		}
@@ -838,6 +919,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = wireless_internet
 			}
 		}
@@ -846,7 +928,8 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
-				has_technology_researched = nanotechnology
+				country_rank >= rank_value:great_power
+				has_technology_researched = early_nanotechnology
 			}
 		}
 		add = 80
@@ -854,6 +937,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = network_centric_warfare
 			}
 		}
@@ -862,6 +946,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = automated_surveillance
 			}
 		}
@@ -870,6 +955,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = unmanned_aerial_vehicles
 			}
 		}
@@ -878,6 +964,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = globalization
 			}
 		}
@@ -886,6 +973,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = social_justice_movements
 			}
 		}
@@ -894,6 +982,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = social_media
 			}
 		}
@@ -902,6 +991,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = generative_ai
 			}
 		}
@@ -910,6 +1000,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = modern_material_science
 			}
 		}
@@ -918,6 +1009,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = quantum_computing
 			}
 		}
@@ -926,6 +1018,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = fusion_power
 			}
 		}
@@ -934,6 +1027,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = space_militarization
 			}
 		}
@@ -942,6 +1036,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = hypersonic_weapons
 			}
 		}
@@ -950,6 +1045,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = biohacking_and_human_augmentation
 			}
 		}
@@ -958,6 +1054,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = mental_health_awareness
 			}
 		}
@@ -966,6 +1063,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = personalized_medicine
 			}
 		}
@@ -974,6 +1072,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = artificial_intelligence
 			}
 		}
@@ -982,6 +1081,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = orbital_manufacturing
 			}
 		}
@@ -990,6 +1090,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = advanced_nanofabrication
 			}
 		}
@@ -998,6 +1099,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = space_based_solar_power
 			}
 		}
@@ -1006,6 +1108,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = compact_fusion_reactors
 			}
 		}
@@ -1014,6 +1117,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = orbital_weapon_platforms
 			}
 		}
@@ -1022,6 +1126,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = post-scarcity_economy
 			}
 		}
@@ -1030,6 +1135,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = biological_immortality
 			}
 		}
@@ -1038,6 +1144,7 @@ global_tech_spread_script_value = {
 	if = {
 		limit = {
 			any_country = {
+				country_rank >= rank_value:great_power
 				has_technology_researched = space_colonization
 			}
 		}
@@ -1076,15 +1183,23 @@ extra_construction_sectors = {
 }
 
 war_propaganda_support_script_value = {
-	value = ROOT.modifier:state_war_support_monthly_add
-	multiply = {
-		value = ROOT.state_population
-		divide = ROOT.owner.total_population
+	value = 0
+	if = {
+		limit = {
+			ROOT.modifier:country_war_support_monthly_add > 0
+		}
+		add = ROOT.modifier:state_war_support_monthly_add
+		multiply = {
+			value = ROOT.state_population
+			divide = {
+				value = ROOT.owner.total_population
+				min = 1
+			}
+		}
 	}
 	add = {
 		value = ROOT.owner.modifier:country_war_support_monthly_add_religion
 		multiply = ROOT.ig:ig_devout.ig_clout
-
 	}
 }
 
@@ -1098,43 +1213,9 @@ total_gdp_share = {
 	}
 }
 
-total_outreach_cost_script_value = {
-	value = 0
-	every_country = {
-		limit = {
-			ROOT = {
-				has_diplomatic_pact = {
-					who = PREV
-					type = education_aid
-				}
-			}
-		}
-		add = total_population
-	}
-	every_country = {
-		limit = {
-			ROOT = {
-				has_diplomatic_pact = {
-					who = PREV
-					type = healthcare_aid
-				}
-			}
-		}
-		add = total_population
-	}
-	every_country = {
-		limit = {
-			ROOT = {
-				has_diplomatic_pact = {
-					who = PREV
-					type = security_aid
-				}
-			}
-		}
-		add = total_population
-	}
+test_cost = {
+	value = scope:other_country.total_population
 	divide = 1000000
-	multiply = 10
 }
 
 country_gdp_per_capita = {
@@ -1142,17 +1223,26 @@ country_gdp_per_capita = {
 	every_scope_state = {
 		add = gdp
 	}
-	divide = total_population
+	divide = {
+		value = total_population
+		min = 1
+	}
 }
 
 global_gdp_per_capita = {
-	value = global_gdp
-	divide = global_population
+	value = global_gdp_script_value
+	divide = {
+		value = global_population
+		min = 1
+	}
 }
 
 rel_gdp_per_capita = {
 	value = gdp_per_capita
-	divide = global_gdp_per_capita
+	divide = {
+		value = global_gdp_per_capita
+		min = 0.01
+	}
 }
 
 curr_year = {
@@ -1160,3 +1250,527 @@ curr_year = {
 }
 
 movement_base_year = 1930
+
+target_queue_length = 500
+
+base_construction_per_week = {
+	value = modifier:country_max_weekly_construction_progress_add
+	subtract = var:too_much_private_construction_cached
+}
+
+curr_cost_per_construction_point = {
+	value = investment_pool_gross_income
+	subtract = investment_pool_net_income
+	divide = {
+		value = modifier:country_construction_add
+		multiply = modifier:country_private_construction_allocation_mult
+		divide = modifier:country_max_weekly_construction_progress_add
+		max = construction_queue_num_queued_private_levels
+	}
+	divide = modifier:country_max_weekly_construction_progress_add
+}
+
+target_construction_per_week = {
+	value = investment_pool_gross_income
+	divide = curr_cost_per_construction_point
+	divide = target_queue_length
+}
+
+too_much_private_construction_script_value = {
+	value = target_construction_per_week
+	subtract = base_construction_per_week
+	min = {
+		value = var:too_much_private_construction_cached
+		divide = 1.2
+		min = 0
+	}
+	max = {
+		value = var:too_much_private_construction_cached
+		multiply = 1.2
+		min = 10
+		max = 9000
+	}
+}
+
+negative_state_min_cultural_acceptance_delta_add = {
+	value = -40
+	add = modifier:state_min_cultural_acceptance_delta_add
+}
+
+total_state_yearly_cultural_acceptance_add = {
+	value = 1
+	add = modifier:state_yearly_cultural_acceptance_add
+}
+
+country_max_state_population = {
+	value = 0
+	ordered_scope_state = {
+		order_by = state_population
+		position = 0
+		add = state_population
+	}
+}
+
+country_max_state_gdp = {
+	value = 0
+	ordered_scope_state = {
+		order_by = gdp
+		position = 0
+		add = gdp
+	}
+}
+
+nuclear_industrial_strike_target_score = {
+	value = 1
+	
+	multiply = {
+		value = gdp
+		owner = {
+			divide = country_max_state_gdp
+		}
+	}
+	multiply = {
+		value = state_population
+		owner = {
+			divide = country_max_state_population
+		}
+	}
+	if = {
+		limit = {
+			is_incorporated = no
+		}
+		multiply = 0.5
+	}
+	if = {
+		limit = {
+			is_capital = yes
+		}
+		multiply = 2
+	}
+	if = {
+		limit = {
+			has_modifier = nuclear_strike_aftermath
+		}
+		multiply = 0.1
+	}
+	if = {
+		limit = { owner = { has_modifier = nuclear_power }}
+		divide = 100 # hesitant to nuke if they can retaliate
+	}
+}
+
+low_pop_state_threshold = {
+	value = 5000
+	multiply = arable_land
+}
+
+states_demanding_independence = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_variable = decolonization_marker
+		}
+		add = 1
+	}
+}
+
+state_independence_movement_strength_threshold = 50
+
+state_independence_movement_strength = {
+	value = 0
+	
+	if = {
+		limit = {
+			NOT = { is_homeland_of_country_cultures = owner }
+		}
+		add = 5
+	}
+
+	if = {
+		limit = {
+			OR = {
+				state_population < 10000
+			}
+		}
+		multiply = 0
+	}
+	else_if = {
+		limit = {
+			OR = {
+				state_population < 50000
+			}
+		}
+		multiply = 0.5
+	}
+
+	if = {
+		limit = {
+			is_incorporated = yes
+		}
+		multiply = 0.8
+	}
+
+	if = {
+		limit = {
+			has_decree = decree_promote_national_values
+		}
+		multiply = 0.8
+	}
+
+	if = {
+		limit = {
+			state_population < low_pop_state_threshold
+		}
+		multiply = 0.5
+	}
+
+	if = {
+		limit = { is_under_colonization = yes }
+		multiply = 0
+	}
+
+	if = {
+		limit = {
+			is_treaty_port = yes
+		}
+		multiply = 0.5
+	}
+
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					state_is_in_europe = yes
+					owner.top_overlord.capital = { state_is_in_europe = yes }
+				}
+				AND = {
+					state_is_in_americas = yes
+					owner.top_overlord.capital = { state_is_in_americas = yes }
+				}
+				AND = {
+					state_is_in_middle_east = yes
+					owner.top_overlord.capital = { state_is_in_middle_east = yes }
+				}
+				AND = {
+					state_is_in_central_asia = yes
+					owner.top_overlord.capital = { state_is_in_central_asia = yes }
+				}
+				AND = {
+					state_is_in_east_asia = yes
+					owner.top_overlord.capital = { state_is_in_east_asia = yes }
+				}
+				AND = {
+					state_is_in_india = yes
+					owner.top_overlord.capital = { state_is_in_india = yes }
+				}
+				AND = {
+					state_is_in_africa = yes
+					owner.top_overlord.capital = { state_is_in_africa = yes }
+				}
+				AND = {
+					state_is_in_southeast_asia = yes
+					owner.top_overlord.capital = { state_is_in_southeast_asia = yes }
+				}
+				AND = {
+					state_is_in_big_russia = yes
+					owner.top_overlord.capital = { state_is_in_big_russia = yes }
+				}
+				AND = {
+					state_is_in_the_mediterranean = yes
+					owner.top_overlord.capital = { state_is_in_the_mediterranean = yes }
+				}
+			}
+		}
+		multiply = 0.25
+	}
+
+	if = {
+		limit = {
+			owner = { has_technology_researched = decolonization }
+		}
+		multiply = {
+			value = 4
+			if = {
+				limit = {
+					OR = {
+						owner = {
+							has_government_type = gov_chartered_company
+							has_government_type = gov_colonial_administration
+						}
+					}
+				}
+				add = 1
+			}
+		}
+	}
+
+	if = {
+		limit = {
+			NOT = {
+				owner = {
+					any_primary_culture = {
+						culture_has_community_in_state = PREV.PREV
+					}
+				}
+			}
+		}
+		multiply = 2
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				owner = {
+					any_primary_culture = {
+						PREV.PREV = {
+							culture_percent_state = {
+								target = PREV
+								value > 0.05
+							}
+						}
+					}
+				}
+			}
+		}
+		multiply = 1.5
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				owner = {
+					any_primary_culture = {
+						PREV.PREV = {
+							culture_percent_state = {
+								target = PREV
+								value > 0.10
+							}
+						}
+					}
+				}
+			}
+		}
+		multiply = 1.25
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				owner = {
+					any_primary_culture = {
+						PREV.PREV = {
+							culture_percent_state = {
+								target = PREV
+								value > 0.25
+							}
+						}
+					}
+				}
+			}
+		}
+		multiply = 1
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				owner = {
+					any_primary_culture = {
+						PREV.PREV = {
+							culture_percent_state = {
+								target = PREV
+								value > 0.33
+							}
+						}
+					}
+				}
+			}
+		}
+		multiply = 0.5
+	}
+	else = {
+		multiply = 0.25
+	}
+
+	
+	if = {
+		limit = {
+			any_scope_pop = {
+				pop_acceptance < 20
+				culture = {
+					has_homeland = ROOT
+					ROOT = {
+						culture_percent_state = {
+							target = PREV
+							value > 0.25
+						}
+					}
+				}
+			}
+		}
+		multiply = 5
+	}
+	else_if = {
+		limit = {
+			any_scope_pop = {
+				pop_acceptance < 40
+				culture = {
+					has_homeland = ROOT
+					ROOT = {
+						culture_percent_state = {
+							target = PREV
+							value > 0.25
+						}
+					}
+				}
+			}
+		}
+		multiply = 3
+	}
+	else_if = {
+		limit = {
+			any_scope_pop = {
+				pop_acceptance < 60
+				culture = {
+					has_homeland = ROOT
+					ROOT = {
+						culture_percent_state = {
+							target = PREV
+							value > 0.25
+						}
+					}
+				}
+			}
+		}
+		multiply = 2
+	}
+	else_if = {
+		limit = {
+			any_scope_pop = {
+				pop_acceptance < 80
+				culture = {
+					has_homeland = ROOT
+					ROOT = {
+						culture_percent_state = {
+							target = PREV
+							value > 0.25
+						}
+					}
+				}
+			}
+		}
+		multiply = 1
+	}
+	else = {
+		multiply = 0.5
+	}
+
+	if = {
+		limit = {
+			market_access = 0
+		}
+		multiply = 2
+	}
+	else_if = {
+		limit = {
+			market_access < 0.5
+		}
+		multiply = 1.5
+	}
+
+	if = {
+		limit = {
+			owner = { in_default = yes }
+		}
+		multiply = 1.5
+	}
+	else_if = {
+		limit = {
+			owner = { has_modifier = declared_bankruptcy }
+		}
+		multiply = 1.25
+	}
+
+	multiply = {
+		value = turmoil
+		multiply = 4
+		add = 1
+	}
+
+	if = {
+		limit = {
+			owner.top_overlord.global_country_ranking = 1
+		}
+		multiply = 0.35
+	}
+	else_if = {
+		limit = {
+			owner.top_overlord.global_country_ranking = 2
+		}
+		multiply = 0.5
+	}
+	else = {
+		multiply = {
+			value = 0.6
+			add = {
+				value = owner.top_overlord.global_country_ranking
+				multiply = 0.05
+				max = 0.25
+			}
+		}
+	}
+
+	if = {
+		limit = {
+			owner = { is_in_power_bloc = yes }
+			owner.powerbloc ?= {
+				has_principle = principle:principle_cultural_plurality_2
+				has_principle = principle:principle_cultural_plurality_3
+				has_principle = principle:principle_cultural_plurality_4
+				has_principle = principle:principle_cultural_plurality_5
+			}
+		}
+		multiply = 0.9
+	}
+
+	subtract = 50
+	min = 0
+	max = 0 #disabled for now
+}
+
+pop_culture_conversion_propotion_script_value = {
+	value = 0.002 # base rate
+	multiply = {
+		value = 1
+		add = state.modifier:state_assimilation_mult
+	}
+	multiply = 12 # 12 months in a year
+	multiply = {
+		value = 1
+		subtract = pop_radical_fraction
+	}
+	max = 1
+}
+
+basic_house_level_script_value = {
+	value = state_population
+	divide = 500000
+	add = 0.5
+	floor = yes
+	max = 10
+	min = 1
+	multiply = 0
+}
+
+luxury_house_level_script_value = {
+	value = state_population
+	divide = 2000000
+	add = 0.5
+	floor = yes
+	max = 5
+	if = {
+		limit = {
+			any_scope_pop = {
+				strata = upper
+			}
+		}
+		min = 1
+	}
+	multiply = 0
+}

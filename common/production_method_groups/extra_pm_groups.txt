@@ -157,7 +157,11 @@ pmg_fertilizer_production = {
         pm_artificial_fertilizers
         pm_improved_fertilizer
         pm_nitrogen_fixation
-        pm_complex_npk_fertilizers
+        pm_catalytic_cracking
+        pm_polymerization_processes
+        pm_automated_chemical_reactors
+        pm_flow_chemistry_production
+        pm_ai_optimized_synthesis
     }
 }
 pmg_explosives_building_chemical_plants = {
@@ -267,6 +271,7 @@ pmg_aeroplanes = {
 pmg_tanks = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
     production_methods = {
+        pm_no_tank_production
         pm_tank_production
         pm_advanced_composite_armor
         pm_active_protection_systems
@@ -783,7 +788,7 @@ pmg_ownership_building_arts_academy = {
 pmg_base_building_power_plant = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
-        pm_hydroelectric_plant
+        pm_early_power_plant
         pm_coal-fired_plant
         pm_oil-fired_plant
         pm_modern_coal-fired_plant
@@ -880,7 +885,8 @@ pmg_base_building_oil_rig = {
         pm_electrified_rotary_drilling_rigs
         pm_offshore_rigs
         pm_directional_drilling_rigs
-        pm_intellegent_drilling_rigs
+        pm_fracking
+        pm_intelligent_drilling_rigs
     }
 }
 pmg_base_building_railway = {
@@ -891,6 +897,8 @@ pmg_base_building_railway = {
         pm_steam_trains
 		pm_electric_trains
 		pm_diesel_trains
+        pm_centralized_traffic_control
+        pm_containerized_cargo
         pm_automated_loading_and_unloading
         pm_autonomous_trains
     }
@@ -1019,19 +1027,20 @@ pmg_consumer_appliances = {
         pm_fusion_battery_appliances
     }
 }
-pmg_base_building_car_industry = {
-    texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
-    production_methods = {
-        pm_automobile_production_dedicated
-        pm_automobile_production_dedicated_2
+pmg_automobile_production = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
+	production_methods = {
+		pm_automobile_production
+		pm_mass_automobile_production
         pm_electric_cars
         pm_fusion_battery_vehicles
-    }
+	}
 }
-pmg_automation_tanks = {
+pmg_automation_building_automotive_industry = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
     production_methods = {
         pm_basic_production
+        pm_assembly_lines_building_automotive_industry
         pm_robotic_assembly_lines
         pm_intelligent_manufacturing_systems
         pm_self_optimizing_production
@@ -1196,6 +1205,7 @@ pmg_base_building_lauch_facility = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
         pm_chemical_rockets
+        pm_reusable_rockets
         pm_ablative_rockets
         pm_fusion_ssto_craft
     }
@@ -1265,6 +1275,9 @@ pmg_ownership_building_company_headquarter = {
 
 	production_methods = {
 		pm_company_headquarter_privately_owned
+        pm_company_headquarter_principle_divine_economics_2
+        pm_company_headquarter_government_run
+        pm_company_headquarter_worker_cooperative
         pm_financial_district_publicly_traded
         pm_electronic_brokarage
         pm_digital_trading
@@ -1576,6 +1589,7 @@ pmg_base_building_construction_sector = {
 		pm_steel_frame_buildings
 		pm_arc_welded_buildings
         pm_reinforced_concrete_buildings
+        pm_advanced_construction
         pm_nanomaterial_buildings
 	}
 }
@@ -1600,4 +1614,20 @@ pmg_water_personal_transport = {
         pm_diesel_electric_ferries
         pm_modern_cruise_ships
     }
+}
+
+pmg_trade_quantity_trade_center = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	ai_selection = most_productive
+
+	production_methods = {
+		pm_trade_center_trade_quantity_limited
+		pm_trade_center_trade_quantity_normal
+		pm_trade_center_trade_quantity_high
+		pm_trade_center_trade_quantity_very_high
+        pm_trade_center_trade_quantity_advanced_1
+        pm_trade_center_trade_quantity_advanced_2
+        pm_trade_center_trade_quantity_advanced_3
+        pm_trade_center_trade_quantity_advanced_4
+	}
 }

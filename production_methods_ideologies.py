@@ -7,6 +7,7 @@ Created on Thu Jul  6 23:22:15 2023
 
 import re
 from os import walk
+from path_constants import mod_path, base_game_path
 
 
 def ministry_constructor(ministry_name, attitude):
@@ -137,13 +138,13 @@ def write_to_file(file_path, entries):
 
 entries = {}
 filenames = next(
-    walk(r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\ideologies"),
+    walk(base_game_path + r"\game\common\ideologies"),
     (None, None, []),
 )[2]
 for file in filenames:
     print("Parsing: ", file)
     new_entries = parse_file(
-        r"G:\SteamLibrary\steamapps\common\Victoria 3\game\common\ideologies\\" + file
+        base_game_path + r"\game\common\ideologies\\" + file
     )
     print("Found ", len(new_entries.keys()), " new entries")
     entries.update(new_entries)
@@ -1135,6 +1136,14 @@ modifications = {
             ("law_corporation_state", "strongly_disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
+        "lawgroup_welfare": [
+            ("law_no_social_security", "strongly_disapprove"),
+            ("law_poor_laws", "strongly_disapprove"),
+            ("law_wage_subsidies", "disapprove"),
+            ("law_old_age_pension", "neutral"),
+            ("law_universal_basic_income", "approve"),
+            ("law_post-scarcity", "strongly_approve"),
+        ],
     },
     "ideology_scholar_paternalistic": {
         "lawgroup_governance_principles": [
@@ -1479,6 +1488,6 @@ modifications = {
 modified_entries = modify_entries(entries, modifications)
 modified_entries = update_law_reqs(modified_entries)
 write_to_file(
-    r"F:\Libraries\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\common\ideologies\modified.txt",
+    mod_path + r"\common\ideologies\modified.txt",
     modified_entries,
 )

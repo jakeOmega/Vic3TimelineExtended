@@ -48,7 +48,6 @@ minor_events_timelineextended.2 = {
 
     trigger = {
         produced_authority > 250
-        NOT = { has_modifier = forced_law_through_event }
     }
 
     cancellation_trigger = {
@@ -70,13 +69,15 @@ minor_events_timelineextended.2 = {
 
     option = {
         name = minor_events_timelineextended.2.b
-        add_enactment_phase = 1
 
         add_modifier = {
             name = forced_law_through_event
             years = 5
             multiplier = 1
             is_decaying = yes
+        }
+        add_enactment_modifier = {
+            name = forced_law_through_event_enactment_small
         }
         ai_chance = {
 			base = 0
@@ -94,13 +95,16 @@ minor_events_timelineextended.2 = {
             produced_authority > 500
         }
         name = minor_events_timelineextended.2.c
-        add_enactment_phase = 2
+        add_enactment_phase = 1
 
         add_modifier = {
             name = forced_law_through_event
             years = 5
             multiplier = 2
             is_decaying = yes
+        }
+        add_enactment_modifier = {
+            name = forced_law_through_event_enactment_medium
         }
         ai_chance = {
             base = 0
@@ -118,13 +122,16 @@ minor_events_timelineextended.2 = {
             produced_authority > 750
         }
         name = minor_events_timelineextended.2.e
-        add_enactment_phase = 3
+        add_enactment_phase = 2
 
         add_modifier = {
             name = forced_law_through_event
             years = 5
             multiplier = 3
             is_decaying = yes
+        }
+        add_enactment_modifier = {
+            name = forced_law_through_event_enactment_large
         }
         ai_chance = {
             base = 0
@@ -134,6 +141,132 @@ minor_events_timelineextended.2 = {
                 }
                 add = 6
             }
+        }
+    }
+}
+
+minor_events_timelineextended.3 = {
+    type = country_event
+    hidden = yes
+
+    immediate = {
+        capital = {
+            every_scope_culture = {
+                limit = {
+                    has_homeland = PREV
+                    NOT = {
+                        is_primary_culture_of = PREV.owner
+                    }
+                }
+                PREV.owner = {
+                    add_primary_culture = PREV
+                }
+            }
+        }
+
+        every_scope_state = {
+            add_loyalists = {
+                value 0.5
+            }
+        }
+    }
+}
+
+minor_events_timelineextended.4 = {
+    type = state_event
+    hidden = yes
+
+    immediate = {
+        save_scope_as = new_country_capital
+        set_decolonization_variable = yes
+        form_decolonized_country = yes
+    }
+}
+
+minor_events_timelineextended.5 = {
+    type = country_event
+
+    event_image = {
+        video = "unspecific_ruler_speaking_to_people"
+    }
+
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+    icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+    title = minor_events_timelineextended.5.t
+    desc = minor_events_timelineextended.5.d
+    flavor = minor_events_timelineextended.5.f
+
+    immediate = {
+        every_state = {
+            remove_variable = decolonization_marker
+        }
+    }
+
+    duration = 3
+
+    option = {
+        name = minor_events_timelineextended.5.a
+        default_option = yes
+
+        scope:colony_state = {
+            trigger_event = {
+                id = minor_events_timelineextended.4
+            }
+        }
+
+        ai_chance = {
+            base = 1
+        }
+    }
+
+    option = {
+        name = minor_events_timelineextended.5.b
+
+        scope:colony_state = {
+            owner = {
+                every_scope_state = {
+                    limit = {
+                        has_variable = decolonization_marker
+                    }
+                    add_modifier = {
+                        name = refused_decolonization_modifier
+                        years = 5
+                        multiplier = state_independence_movement_strength
+                        is_decaying = yes
+                    }
+                    remove_variable = decolonization_marker
+                }
+            }
+        }
+
+        ai_chance = {
+            base = 0
+        }
+    }
+
+    option = {
+        name = minor_events_timelineextended.5.c
+
+        scope:colony_state = {
+            owner = {
+                every_scope_state = {
+                    limit = {
+                        has_variable = decolonization_marker
+                    }
+                    add_modifier = {
+                        name = bribed_to_stop_decolonization_modifier
+                        years = 5
+                        multiplier = state_independence_movement_strength
+                    }
+                    remove_variable = decolonization_marker
+                }
+            }
+        }
+
+        ai_chance = {
+            base = 0
         }
     }
 }

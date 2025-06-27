@@ -216,7 +216,15 @@ movement_modernizer = {
 		}
 
         if = {
-            limit = { year > movement_base_year }
+            limit = {
+				year > movement_base_year
+				owner = {
+					OR = {
+						has_law = law_type:law_traditionalism
+						has_law = law_type:law_serfdom
+					}
+				}
+			}
             add = {
                 desc = "ITS_CURR_YEAR_AND_WE_STILL_HAVE_PROBLEMS"
                 value = {
@@ -374,7 +382,15 @@ movement_modernizer = {
 
     additional_radicalism_factors = {
         if = {
-            limit = { year > movement_base_year }
+            limit = {
+				year > movement_base_year
+				owner = {
+					OR = {
+						has_law = law_type:law_traditionalism
+						has_law = law_type:law_serfdom
+					}
+				}
+			}
             add = {
                 desc = "ITS_CURR_YEAR_AND_WE_STILL_HAVE_PROBLEMS"
                 value = {

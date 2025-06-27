@@ -272,11 +272,12 @@ law_ethnostate = {
 		country_authority_add = 200
 
 		#From this block, we only apply the highest value a Pop qualifies for
+		# More racist laws have heritage always 50 more than same without heritage
 		country_acceptance_primary_culture_add = 100
 		country_acceptance_shared_heritage_and_cultural_trait_add = 40
-		country_acceptance_shared_heritage_trait_add = 20
-		country_acceptance_shared_cultural_trait_add = 0
-		country_acceptance_culture_base_add = 0
+		country_acceptance_shared_heritage_trait_add = 30
+		country_acceptance_shared_cultural_trait_add = -10 # low even with other sources of acceptance
+		country_acceptance_culture_base_add = -20
 
 		country_bureaucracy_investment_cost_factor_mult = -0.25
 	}
@@ -312,11 +313,12 @@ law_national_supremacy = {
 		country_authority_add = 150
 
 		#From this block, we only apply the highest value a Pop qualifies for
+		# Less racist laws have heritage always 20 more than same without heritage
 		country_acceptance_primary_culture_add = 100
 		country_acceptance_shared_heritage_and_cultural_trait_add = 60
 		country_acceptance_shared_heritage_trait_add = 40
-		country_acceptance_shared_cultural_trait_add = 20
-		country_acceptance_culture_base_add = 0
+		country_acceptance_shared_cultural_trait_add = 40
+		country_acceptance_culture_base_add = 20
 
 		country_bureaucracy_investment_cost_factor_mult = -0.15
 	}
@@ -352,11 +354,12 @@ law_racial_segregation = {
 		country_authority_add = 100
 
 		#From this block, we only apply the highest value a Pop qualifies for
+		# More racist laws have heritage always 50 more than same without heritage
 		country_acceptance_primary_culture_add = 100
-		country_acceptance_shared_heritage_and_cultural_trait_add = 70
-		country_acceptance_shared_heritage_trait_add = 60
-		country_acceptance_shared_cultural_trait_add = 30
-		country_acceptance_culture_base_add = 10
+		country_acceptance_shared_heritage_and_cultural_trait_add = 85
+		country_acceptance_shared_heritage_trait_add = 65
+		country_acceptance_shared_cultural_trait_add = 35
+		country_acceptance_culture_base_add = 15
 	}
 
 	ai_enact_weight_modifier = { #Petitions
@@ -395,11 +398,12 @@ law_cultural_exclusion = {
 		country_authority_add = 50
 
 		#From this block, we only apply the highest value a Pop qualifies for
+		# Less racist laws have heritage always 20 more than same without heritage
 		country_acceptance_primary_culture_add = 100
 		country_acceptance_shared_heritage_and_cultural_trait_add = 80
-		country_acceptance_shared_heritage_trait_add = 40
+		country_acceptance_shared_heritage_trait_add = 45
 		country_acceptance_shared_cultural_trait_add = 60
-		country_acceptance_culture_base_add = 20
+		country_acceptance_culture_base_add = 25
 
 		state_assimilation_mult = 0.25
 	}
@@ -432,9 +436,11 @@ law_multicultural = {
 	on_enact = {
 		if = {
 			limit = {
-				has_law = law_type:law_minority_rights_violent_hostility
-				has_law = law_type:law_minority_rights_ghettoization
-				has_law = law_type:law_minority_rights_discrimination
+				OR = {
+					has_law = law_type:law_minority_rights_violent_hostility
+					has_law = law_type:law_minority_rights_ghettoization
+					has_law = law_type:law_minority_rights_discrimination
+				}
 			}
 			activate_law = law_type:law_minority_rights_indifference
 		}
@@ -443,11 +449,12 @@ law_multicultural = {
 
 	modifier = {
 		#From this block, we only apply the highest value a Pop qualifies for
+		# Less racist laws have heritage always 20 more than same without heritage
 		country_acceptance_primary_culture_add = 100
-		country_acceptance_shared_heritage_and_cultural_trait_add = 90
-		country_acceptance_shared_heritage_trait_add = 85
-		country_acceptance_shared_cultural_trait_add = 85
-		country_acceptance_culture_base_add = 70
+		country_acceptance_shared_heritage_and_cultural_trait_add = 95
+		country_acceptance_shared_heritage_trait_add = 80
+		country_acceptance_shared_cultural_trait_add = 75
+		country_acceptance_culture_base_add = 60
 
 		country_bureaucracy_investment_cost_factor_mult = 0.25
 	}
@@ -495,7 +502,7 @@ law_state_religion = {
 		country_acceptance_shared_religious_trait_add = 0
 		country_acceptance_religion_base_add = -25	
 
-		country_allow_conversion_violent_hostility_bool = no
+		country_allow_conversion_violent_hostility_bool = yes
 		country_allow_conversion_cultural_erasure_bool = yes
 		country_allow_conversion_open_prejudice_bool = yes
 		country_allow_conversion_second_rate_citizen_bool = yes
@@ -612,7 +619,9 @@ law_freedom_of_conscience = {
 		country_acceptance_shared_religious_trait_add = 15
 		country_acceptance_religion_base_add = 0
 
-		country_allow_conversion_violent_hostility_bool = no
+		state_conversion_mult = -0.25
+
+		country_allow_conversion_violent_hostility_bool = yes
 		country_allow_conversion_cultural_erasure_bool = yes
 		country_allow_conversion_open_prejudice_bool = yes
 		country_allow_conversion_second_rate_citizen_bool = yes
@@ -688,6 +697,12 @@ law_total_separation = {
 			}
 			remove_modifier = antireligious_policies
 		}
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_religion
+			}
+			activate_law = law_type:law_no_ministry_of_religion
+		}
 	}
 
 	modifier = {
@@ -695,7 +710,9 @@ law_total_separation = {
 		country_acceptance_shared_religious_trait_add = 15
 		country_acceptance_religion_base_add = 15
 
-		country_allow_conversion_violent_hostility_bool = no
+		state_conversion_mult = -0.9
+
+		country_allow_conversion_violent_hostility_bool = yes
 		country_allow_conversion_cultural_erasure_bool = yes
 		country_allow_conversion_open_prejudice_bool = yes
 		country_allow_conversion_second_rate_citizen_bool = yes
@@ -763,7 +780,7 @@ law_state_atheism = {
 		country_acceptance_shared_religious_trait_add = 0
 		country_acceptance_religion_base_add = -10
 
-		country_allow_conversion_violent_hostility_bool = no
+		country_allow_conversion_violent_hostility_bool = yes
 		country_allow_conversion_cultural_erasure_bool = yes
 		country_allow_conversion_open_prejudice_bool = yes
 		country_allow_conversion_second_rate_citizen_bool = yes
@@ -788,6 +805,12 @@ law_state_atheism = {
 					value = 0.25
 				}
 			}
+		}
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_religion
+			}
+			activate_law = law_type:law_no_ministry_of_religion
 		}
 		recalculate_pop_ig_support = yes
 	}

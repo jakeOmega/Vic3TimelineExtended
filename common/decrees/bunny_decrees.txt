@@ -16,20 +16,26 @@ decree_migration = {
 	}
 	cost = 100
 	
-	valid = {
-		AND = {
-			any_scope_culture = {
-				pop_acceptance < 40
-			}
-			custom_tooltip ={
-				text = "decree_migration_invalid_tooltip"
-				owner = {
-					power_bloc ?= {
-						modifier:power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
-					}
+	state_trigger = {
+		any_scope_culture = {
+			PREV = {
+				state_cultural_acceptance = {
+					target = PREV
+					value < 40
 				}
 			}
-		} 
+		}
+	}
+
+	country_trigger = {
+		custom_tooltip ={
+			text = "decree_migration_invalid_tooltip"
+			owner = {
+				power_bloc ?= {
+					modifier:power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+				}
+			}
+		}
 	}
 
 	ai_weight = -100000
@@ -46,11 +52,9 @@ decree_migration_destination = {
 	}
 	cost = 0
 	
-	valid = {
-		owner = {
-			any_scope_state = {
-				has_decree = decree_migration
-			}
+	country_trigger = {
+		any_scope_state = {
+			has_decree = decree_migration
 		}
 	}
 

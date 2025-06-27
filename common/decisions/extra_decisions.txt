@@ -36,6 +36,6 @@ adopt_local_culture = {
 	}
 
 	ai_chance = {
-		base = 100	
+		value = 100	
 	}
 }

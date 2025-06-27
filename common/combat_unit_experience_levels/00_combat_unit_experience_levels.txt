@@ -10,6 +10,9 @@ veterancy0 = {
 	unit_modifier = {
         unit_offense_mult = 0.05
         unit_defense_mult = 0.05
+		unit_convoy_defense_mult = 0.05
+		unit_convoy_raiding_mult = 0.05
+		unit_blockade_mult = 0.05
 	}
 }
 
@@ -20,6 +23,9 @@ veterancy1 = {
 	unit_modifier = {
         unit_offense_mult = 0.1
         unit_defense_mult = 0.1
+		unit_convoy_defense_mult = 0.1
+		unit_convoy_raiding_mult = 0.1
+		unit_blockade_mult = 0.1
 	}
 }
 
@@ -30,6 +36,10 @@ veterancy2 = {
 	unit_modifier = {
         unit_offense_mult = 0.15
         unit_defense_mult = 0.15
+		unit_convoy_defense_mult = 0.15
+		unit_convoy_raiding_mult = 0.15
+		unit_blockade_mult = 0.15
+		unit_morale_damage_mult = 0.25
 	}
 }
 
@@ -40,6 +50,9 @@ veterancy3 = {
 	unit_modifier = {
         unit_offense_mult = 0.25
         unit_defense_mult = 0.25
+        unit_convoy_defense_mult = 0.25
+		unit_convoy_raiding_mult = 0.25
+		unit_blockade_mult = 0.25
 		unit_experience_gain_add = -1
 	}
 }
@@ -51,6 +64,9 @@ veterancy4 = {
 	unit_modifier = {
         unit_offense_mult = 0.35
         unit_defense_mult = 0.35
+        unit_convoy_defense_mult = 0.35
+		unit_convoy_raiding_mult = 0.35
+		unit_blockade_mult = 0.35
 		unit_morale_damage_mult = 0.1
 		unit_experience_gain_add = -1
 	}
@@ -63,6 +79,10 @@ veterancy5 = {
 	unit_modifier = {
         unit_offense_mult = 0.5
         unit_defense_mult = 0.5
+        unit_convoy_defense_mult = 0.5
+		unit_convoy_raiding_mult = 0.5
+		unit_blockade_mult = 0.5
+        
 		unit_morale_damage_mult = 0.25
 		unit_experience_gain_add = -1
 	}
@@ -75,6 +95,9 @@ veterancy6 = {
 	unit_modifier = {
         unit_offense_mult = 0.75
         unit_defense_mult = 0.75
+        unit_convoy_defense_mult = 0.75
+		unit_convoy_raiding_mult = 0.75
+		unit_blockade_mult = 0.75
 		unit_morale_damage_mult = 0.5
 		unit_morale_loss_mult = -0.25
 		unit_experience_gain_add = -1.5
@@ -88,6 +111,9 @@ veterancy7 = {
 	unit_modifier = {
         unit_offense_mult = 1.0
         unit_defense_mult = 1.0
+        unit_convoy_defense_mult = 1.0
+		unit_convoy_raiding_mult = 1.0
+		unit_blockade_mult = 1.0
 		unit_morale_damage_mult = 1.0
 		unit_morale_loss_mult = -0.5
 		unit_experience_gain_add = -2
@@ -101,6 +127,9 @@ veterancy8 = {
 	unit_modifier = {
 		unit_offense_mult = 1.5
 		unit_defense_mult = 1.5
+		unit_convoy_defense_mult = 1.5
+		unit_convoy_raiding_mult = 1.5
+		unit_blockade_mult = 1.5
 		unit_morale_damage_mult = 3
 		unit_morale_loss_mult = -0.75
 		unit_experience_gain_add = -2.0

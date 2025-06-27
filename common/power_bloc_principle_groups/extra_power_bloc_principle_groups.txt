@@ -398,3 +398,14 @@ principle_group_rural = {
 		principle_rural_5
 	}
 }
+
+principle_group_companies = {
+
+	levels = {
+		principle_companies_1
+		principle_companies_2
+		principle_companies_3
+		principle_companies_4
+		principle_companies_5
+	}
+}

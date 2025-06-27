@@ -1,0 +1,57 @@
+﻿initialize_gov_factories_variable = {
+    if = {
+	    limit = {
+	        not = {
+	            has_variable = fmc_public_construction_buy_target
+	        }
+	    }
+	    set_variable = {
+	        name = fmc_public_construction_buy_target
+	        value = 0
+	    }
+	}
+}
+
+
+# country_replace_sectors = {
+# 	every_scope_state = {
+# 		limit = {
+# 			has_building = fmc_building_construction_site
+# 			OR = {
+# 				is_capital = no
+# 				state_has_building_type_levels = {
+# 					target = bt:fmc_building_construction_site
+# 					value > 1
+# 				}
+# 			}
+# 		}
+# 		fmc_replace_building = {
+# 			OLD_TYPE = fmc_building_construction_site
+# 			NEW_TYPE = building_construction_sector
+# 		}
+# 	}
+# }
+
+country_construction_setup = {
+	initialize_gov_factories_variable = yes
+	# country_replace_sectors = yes
+	if = {
+		limit = {
+			fmc_num_of_construction_sites = 0
+		}
+		capital = {
+			create_building = {
+				building = fmc_building_construction_site
+				level = 1
+			}
+		}
+	}
+	# capital = {
+	# 	create_building = {
+	# 		building = fmc_building_construction_site
+	# 		level = 1
+	# 	}
+	# }
+	#fmc_country_update_private_public = yes
+}
+

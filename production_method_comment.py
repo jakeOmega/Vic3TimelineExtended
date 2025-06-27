@@ -1,7 +1,7 @@
-import re
 import os
+import re
 
-from path_constants import mod_path, base_game_path
+from path_constants import base_game_path, mod_path
 
 
 def parse_goods(file_paths):
@@ -261,9 +261,10 @@ process_and_update_production_methods_grouped(
 print("Production methods file updated successfully.")
 
 # Military costs
-vanilla_military_unit_file_path = (
-    base_game_path + r"\game\common\combat_unit_types\00_combat_unit_types.txt"
-)
+vanilla_military_unit_file_path = [
+    base_game_path + r"\game\common\combat_unit_types\00_land_combat_unit_types.txt",
+    base_game_path + r"\game\common\combat_unit_types\01_navy_combat_unit_types.txt",
+]
 military_unit_file_path = mod_path + r"\common\combat_unit_types\extra_combat_units.txt"
 mobilization_file_path = (
     mod_path + r"\common\mobilization_options\extra_mobilization_options.txt"

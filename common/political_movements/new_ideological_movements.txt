@@ -145,13 +145,6 @@
 			}
 		}
 		if = {
-			limit = { owner = { has_technology_researched = animal_rights_movement } }
-			multiply = {
-				value = 1.25
-				desc = "TECHNOLOGY_RESEARCHED_animal_rights_movement"
-			}
-		}
-		if = {
 			limit = { owner = { has_technology_researched = genetic_engineering } }
 			multiply = {
 				value = 1.25
@@ -231,7 +224,16 @@ movement_civil_rights = {
     creation_trigger = {
         # Conditions under which the movement is created
         # For example, when the country has a certain level of political rights
-        has_technology_researched = civil_rights_movement
+        OR = {
+            has_technology_researched = civil_rights_movement
+            power_bloc ?= {
+                OR = {
+                    has_principle = principle:principle_cultural_unity_3
+                    has_principle = principle:principle_cultural_unity_4
+                    has_principle = principle:principle_cultural_unity_5
+                }
+            }
+        }
     }
     creation_weight = {
         value = 100
@@ -269,15 +271,67 @@ movement_civil_rights = {
     }    
 
     pop_support_weight = {
-        add = {
-			value = 10
-			desc = "POP_BASE_SUPPORT"
-		}
+        if = {
+            limit = {
+                owner = { has_technology_researched = civil_rights_movement }
+            }
+            add = {
+                value = 2
+                desc = "TECHNOLOGY_RESEARCHED_civil_rights_movement"
+            }
+        }
+
+        if = {
+            limit = {
+                owner = { has_technology_researched = social_justice_movements }
+            }
+            add = {
+                value = 5
+                desc = "TECHNOLOGY_RESEARCHED_social_justice_movements"
+            }
+        }
+        
         add = {
 			desc = "URBAN_STATE"
 			value = 5
 			multiply = state.state_urbanization_rate
 		}
+
+        owner = {
+            if = {
+                limit = {
+                    power_bloc ?= {
+                        has_principle = principle:principle_cultural_unity_3
+                    }
+                }
+                add = {
+                    value = 5
+                    desc = "CULTURAL_UNITY_3"
+                }
+            }
+            if = {
+                limit = {
+                    power_bloc ?= {
+                        has_principle = principle:principle_cultural_unity_4
+                    }
+                }
+                add = {
+                    value = 10
+                    desc = "CULTURAL_UNITY_4"
+                }
+            }
+            if = {
+                limit = {
+                    power_bloc ?= {
+                        has_principle = principle:principle_cultural_unity_5
+                    }
+                }
+                add = {
+                    value = 15
+                    desc = "CULTURAL_UNITY_5"
+                }
+            }
+        }
 
         if = {
             limit = {
@@ -358,7 +412,7 @@ movement_civil_rights = {
 
         if = {
             limit = {
-                limit = { literacy_rate > 0.9 }
+                literacy_rate > 0.9
             }
             add = 20
             desc = "HIGH_LITERACY"			
@@ -374,15 +428,15 @@ movement_civil_rights = {
 
         if = {
             limit = {
-                limit = {
-                    owner = {
-                        OR = {
-                            has_law = law_type:law_minority_rights_violent_hostility
-                            has_law = law_type:law_minority_rights_ghettoization
-                        }
+                owner = {
+                    OR = {
+                        has_law = law_type:law_minority_rights_violent_hostility
+                        has_law = law_type:law_minority_rights_ghettoization
                     }
                 }
-                add = 5
+            }
+            add = {
+                value = 5
                 desc = "MINORITY_RIGHTS_VIOLATED"
             }
         }
@@ -486,10 +540,66 @@ movement_anti_war = {
     }    
 
     pop_support_weight = {
+        if = {
+            limit = {
+                owner = { has_technology_researched = social_justice_movements }
+            }
+            add = {
+                value = 5
+                desc = "TECHNOLOGY_RESEARCHED_social_justice_movements"
+            }
+        }
         add = {
             desc = "URBAN_STATE"
             value = 3
             multiply = state.state_urbanization_rate
+        }
+
+        owner = {
+            if = {
+                limit = {
+                    any_scope_war = {
+                        num_country_casualties = {
+                            target = ROOT.owner
+                            value > 10000
+                        }
+                    }
+                }
+                add = {
+                    value = 10
+                    desc = "HIGH_CASUALTIES_10000"
+                }
+            }
+
+            if = {
+                limit = {
+                    any_scope_war = {
+                        num_country_casualties = {
+                            target = ROOT.owner
+                            value > 100000
+                        }
+                    }
+                }
+                add = {
+                    value = 10
+                    desc = "HIGH_CASUALTIES_100000"
+                }
+            }
+
+            if = {
+                limit = {
+                    any_scope_war = {
+                        num_country_casualties = {
+                            target = ROOT.owner
+                            value > 1000000
+                        }
+                    }
+                }
+                add = {
+                    value = 10
+                    desc = "HIGH_CASUALTIES_1000000"
+                }
+            }
         }
 
         if = {
@@ -551,6 +661,14 @@ movement_anti_war = {
             }
         }
 
+        if = {
+            limit = {
+                owner = { is_at_war = yes }
+            }
+            add = 20
+            desc = "AT_WAR"
+        }
+
         multiply = { # Illiterate pops participate at 1/10 the rate of fully literate pops
             desc = "POP_LITERACY"
             value = literacy_rate
@@ -561,7 +679,7 @@ movement_anti_war = {
 
     revolution = {
         possible = {
-            political_movement_support >= 0.05
+            always = no
         }
         
         weight = {
@@ -575,7 +693,7 @@ movement_anti_war = {
 
     secession = {
         possible = {
-            political_movement_support >= 0.05
+            always = no
         }    
     
         weight = {
@@ -651,7 +769,7 @@ movement_anti_war = {
             if = {
                 limit = { is_at_war = yes }
                 add = {
-                    value = 0.05
+                    value = 0.25
                     desc = "AT_WAR"
                 }
             }

@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Pop Growth Constants
 min_birthrate = 0.00080 * 12
@@ -118,8 +118,8 @@ def calculate_mean_birthrate(peak_sol, peak_width):
 # Standard of Living (SoL) range
 sol_range = np.linspace(1, 40, 400)
 width = 5
-birth_mult = 1
-mortality_mult = 1
+birth_mult = 1.1
+mortality_mult = 0.9
 
 # Calculate birthrate, mortality, and overall growth rate
 birthrates = np.array([birth_mult * calculate_birthrate(sol) for sol in sol_range])
