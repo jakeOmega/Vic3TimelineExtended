@@ -1,4 +1,10 @@
 modern_material_science = {
+	# Advanced Material Fabricator building, Laser Excavation PM for mines,
+	# Integrated Optical Chip Networks PM for Wired Telecommunications Industries
+	# Advanced Metamaterials Shipbuilding PM for civilian shipyards
+	# Metamaterial Explosives PM for mines and Explosives Factories,
+	# Graphene Electric Motors PM for Motor Industries, Advanced Renewables PM for
+	# Renewable Power Plant, AI-Optimized Synthesis PM for Chemical Industries
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -19,6 +25,7 @@ modern_material_science = {
 }
 
 quantum_computing = {
+	# Intellegent Drilling Rigs PM for Oil Rigs, Extreme Bandwidth PM for Network Infrastructure
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -39,6 +46,8 @@ quantum_computing = {
 }
 
 smart_grids = {
+	# AI Managed Power Plants PM for all power plants, Autonomous Logistics PM for Trade Centers,
+	# Predictive Maintenance PM for all Network Infrastructure
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -57,6 +66,9 @@ smart_grids = {
 }
 
 autonomous_vehicles = {
+	# Drone Delivery PM for Urban Centers, Autonomous Trains PM for Railways,
+	# Automated Harvesters and Planters PM for Agriculture, Autonomous Highway
+	# PM for Highways
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -78,6 +90,8 @@ autonomous_vehicles = {
 }
 
 genetic_engineering = {
+	# Synthetic Coal, Drinks, Biomass Industries buildings, Bioengineered Rubber
+	# PM for Synthetic Rubber Factories, State Eugenics Program law
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -98,6 +112,11 @@ genetic_engineering = {
 }
 
 synthetic_biology = {
+	# Self-Growing Paper PM for Paper Industries, Bioplastics PM for Glassworks,
+	# Oil-Producing Bacteria PM for Synthetic Oil Industries, Synthetic Bactieria
+	# Advanced Material Fabrication PM for Advanced Material Fabrecators
+	# Designed Crops PM for Agriculture, Self-Healing Packaging PM for Food Industries
+	# Open-Source Genetics law
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -118,18 +137,18 @@ synthetic_biology = {
 }
 
 directed_energy_weapons = {
+	# Ablative Rockets PM for Launch Facilities, Solar Exploration PM for Space Program,
+	# Pulsed Laser Escort unit
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
 	
 	unlocking_technologies = {	
-		stealth_technology
+		directed_energy_defenses
 	}
 
 	modifier = {
-		unit_navy_defense_mult = 1
-		unit_navy_offense_mult = 1
-		country_nuclear_weapon_defense_chance_add = 0.5
+		state_building_naval_base_max_level_add = 40
 	}
 	
 	ai_weight = {
@@ -138,6 +157,7 @@ directed_energy_weapons = {
 }
 
 space_militarization = {
+	# Orbital Bombardment and Orbital Tactical Vehicles units
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -152,6 +172,8 @@ space_militarization = {
 }
 
 swarm_technology = {
+	# Swarm-Coordinated Tanks PM for Automotive Industries, Swarm Bots and
+	# Swarm Coordination Vessel units
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -162,8 +184,7 @@ swarm_technology = {
 	}
 
 	modifier = {
-		unit_navy_defense_mult = 0.5
-		unit_navy_offense_mult = 0.5
+		state_building_naval_base_max_level_add = 40
 		state_building_barracks_max_level_add = 100
 	}
 	
@@ -173,13 +194,14 @@ swarm_technology = {
 }
 
 quantum_communications = {
+	# Quantium Communications PM for Wireless Telecommunications Industries
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
 	
 	unlocking_technologies = {	
 		network_centric_warfare
-		cryptography
+		military_grade_cybersecurity
 	}
 	
 	modifier = {
@@ -192,6 +214,7 @@ quantum_communications = {
 }
 
 bioenhanced_soldiers = {
+	# Mandatory Augmentation law
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -215,6 +238,7 @@ bioenhanced_soldiers = {
 }
 
 augmented_reality_warfare = {
+	# Holographic Ambush Vehicle unit
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -229,6 +253,7 @@ augmented_reality_warfare = {
 }
 
 asteroid_mining = {
+	# Extraplanetary Base (space mine) building
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -244,6 +269,7 @@ asteroid_mining = {
 }
 
 fusion_power = {
+	# Fusion Power Plant building
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -253,8 +279,7 @@ fusion_power = {
 	}
 
 	modifier = {
-		unit_navy_defense_mult = 1
-		unit_navy_offense_mult = 1
+		state_building_naval_base_max_level_add = 40
 		country_weekly_innovation_max_add = 100
 		military_formation_movement_speed_mult = 1
 		state_bureaucracy_population_base_cost_factor_mult = 2
@@ -268,6 +293,9 @@ fusion_power = {
 }
 
 brain_computer_interfaces = {
+	# AI Assisted Research PM for Universities, Neuromorphic Computing PM for Electronics Industries,
+	# Neurostimulation PM for Arts Academy, Fully Automated Content Creation PM for Software Industries,
+	# Unrestricted Augmentation and Human Purity laws
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -310,6 +338,7 @@ personalized_medicine = {
 }
 
 lab-grown_food = {
+	# Synthetic Mean and Synthetic Fruit Plant buildings
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -328,6 +357,8 @@ lab-grown_food = {
 }
 
 biohacking_and_human_augmentation = {
+	# Bioelectronic Implants PM for Consumer Appliance Industries, Regulated Augmentation
+	# Market law
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society

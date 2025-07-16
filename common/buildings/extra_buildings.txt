@@ -590,7 +590,7 @@ building_power_plant = {
 		pmg_power_automation
 	}
 	
-	required_construction = construction_cost_very_high
+	required_construction = construction_cost_medium
 
 	possible = {
 		this = {
@@ -673,6 +673,10 @@ building_airport = {
 		commercial_aviation
 	}
 
+	should_auto_expand = {
+		occupancy >= 0.8
+	}
+
 	production_method_groups = {
 		pmg_base_building_airport
 	}
@@ -692,6 +696,10 @@ building_highway = {
 	
 	unlocking_technologies = {
 		paved_roads
+	}
+
+	should_auto_expand = {
+		occupancy >= 0.8
 	}
 
 	production_method_groups = {
@@ -731,6 +739,15 @@ building_network_infrastructure = {
 	
 	unlocking_technologies = {
 		computer_networks
+	}
+
+	should_auto_expand = {
+		occupancy >= 0.8
+		state = {
+			sg:digital_access = {
+				state_goods_pricier > 0.5
+			}
+		}
 	}
 
 	production_method_groups = {
@@ -900,7 +917,7 @@ building_advanced_material_fabricator = {
 	production_method_groups = {
 		pmg_base_building_advanced_material_fabricator
 		pmg_automation_building_advanced_material_fabricator
-		
+		pmg_location_building_advanced_material_fabricator
 	}
 
 	required_construction = construction_cost_mega_high
@@ -917,7 +934,7 @@ building_advanced_material_fabricator = {
 }
 
 building_launch_facility = {
-	building_group = bg_heavy_industry	
+	building_group = bg_space	
 	icon = "gfx/interface/icons/goods_icons/rocket.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1076,7 +1093,7 @@ building_space_elevator = {
 }
 
 building_space_mine = {
-	building_group = bg_heavy_industry	
+	building_group = bg_space	
 	icon = "gfx/interface/icons/goods_icons/iron.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1181,6 +1198,10 @@ building_national_park = {
 	levels_per_mesh = -1
 
 	has_max_level = yes
+
+	should_auto_expand = {
+		occupancy >= 0.8
+	}
 
 	production_method_groups = {
 		pmg_base_building_national_park

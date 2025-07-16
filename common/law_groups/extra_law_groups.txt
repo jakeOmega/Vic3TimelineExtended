@@ -73,6 +73,49 @@ lawgroup_human_augmentation = {
 	regressive_movement_chance = 2
 }
 
+lawgroup_state_power = {
+	law_group_category = power_structure
+
+	progressive_movement_chance = 0.5
+	regressive_movement_chance = 0.5
+}
+
+lawgroup_electoral_finance = {
+	law_group_category = power_structure
+	
+	progressive_movement_chance = 0.5
+	regressive_movement_chance = 0.5
+}
+
+lawgroup_financial_regulation = {
+	law_group_category = economy
+	
+	progressive_movement_chance = 0.5
+	regressive_movement_chance = 0.5
+}
+
+lawgroup_genetic_rights = {
+	law_group_category = economy
+	
+	progressive_movement_chance = 0.5
+	regressive_movement_chance = 0.5
+}
+
+lawgroup_internet_governance = {
+	law_group_category = human_rights
+	
+	progressive_movement_chance = 0.5
+	regressive_movement_chance = 0.5
+}
+
+lawgroup_family_reproductive_policy = {
+	law_group_category = human_rights
+	
+	progressive_movement_chance = 0.5
+	regressive_movement_chance = 0.5
+}
+
+
 lawgroup_ministry_of_foreign_affairs = {
 	law_group_category = power_structure
 	

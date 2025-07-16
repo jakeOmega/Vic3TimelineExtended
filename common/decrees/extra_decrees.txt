@@ -201,7 +201,7 @@ decree_pollution_control = {
 	cost = 100
 
 	state_trigger = {
-		state_pollution_generation > 0
+		pollution_generation > 0
 	}
 
 	ai_weight = {

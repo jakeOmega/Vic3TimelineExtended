@@ -1,4 +1,5 @@
 hydraulic_fracturing = {
+	# Fracking PM for Oil Rigs, Flow Chemistry Production PM for Chemical Plants
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -18,6 +19,7 @@ hydraulic_fracturing = {
 }
 
 cloud_computing = {
+	# Cloud Computing PM for Software Industries
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -36,6 +38,7 @@ cloud_computing = {
 }
 
 biotechnology = {
+	# Synthetic Wood Plant, GMO plantation PMs for plantations, Corporate Genetic Licensing law
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -56,6 +59,7 @@ biotechnology = {
 }
 
 early_nanotechnology = {
+	# Multicore Processors PM for Electronics Industries
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -75,6 +79,9 @@ early_nanotechnology = {
 }
 
 world_wide_web = {
+	# Internet Communications PM for Government Administration, Web 1.0 PM for Software Industries,
+	# Distributed Control Systems PM for chemical/synthetics industries, 
+	# Unregulated Internet, State-Controlled Internet, and Net Neutrality laws
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -97,6 +104,8 @@ world_wide_web = {
 }
 
 digital_telecommunications = {
+	# Remote Work PM for Urban Centers, Automated Trading PM for Financial Districts/Companies, 
+	# Maglev Trains PM for Railways
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -117,6 +126,9 @@ digital_telecommunications = {
 }
 
 clean_energy_technologies = {
+	# Renewable Energy Plant building, LED Streetlights PM for Urban Centers,
+	# Electric Car PM for Automotive Industries, Electric Car PMs for Highways,
+	# Hydrogen Fuel Cells PM for Motor Industries
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -135,6 +147,8 @@ clean_energy_technologies = {
 }
 
 supply_chain_management = {
+	# Robotic Food Processing PM for Food Industries, Intelligent Manufacturing Systems PM
+	# for Automotive Industries
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -155,6 +169,7 @@ supply_chain_management = {
 }
 
 e-commerce = {
+	# E-Commerce PM for Urban Centers, Customized Clothing PM for Textile Mills
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -178,6 +193,7 @@ e-commerce = {
 }
 
 wireless_internet = {
+	# Medium Bandwidth PM for Network Infrastructure
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -193,6 +209,7 @@ wireless_internet = {
 }
 
 unmanned_aerial_vehicles = {
+	# UAVs PM for aeroplane industries
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -203,7 +220,7 @@ unmanned_aerial_vehicles = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		unit_navy_offense_mult = 0.1
+		state_building_naval_base_max_level_add = 20
 		state_building_airport_max_level_add = 1
 	}
 	
@@ -212,7 +229,27 @@ unmanned_aerial_vehicles = {
 	}
 }
 
+military_grade_cybersecurity = {
+	era = era_9
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = military
+	
+	unlocking_technologies = {	
+		cryptography
+	}
+
+	modifier = {
+		country_military_tech_spread_mult = 0.25
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
 network_centric_warfare = {
+	# Active Protection Systems PM for Automotive Industries, Networked Guided Artillery unit,
+	# Robotic Assistance mobilization option
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -220,9 +257,11 @@ network_centric_warfare = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		state_building_barracks_max_level_add = 50
+		state_building_naval_base_max_level_add = 20
 	}
 	
 	unlocking_technologies = {	
+		military_grade_cybersecurity
 		satellite_communications
 	}
 	
@@ -232,6 +271,7 @@ network_centric_warfare = {
 }
 
 missile_defense_systems = {
+	# Missile Defense System mobilization option
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -242,7 +282,6 @@ missile_defense_systems = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		unit_navy_defense_mult = 0.3
 		country_nuclear_weapon_defense_chance_add = 0.5
 	}
 	
@@ -252,17 +291,16 @@ missile_defense_systems = {
 }
 
 automated_surveillance = {
+	# Intrusive Surveillance System, Ministry of Thought Control laws
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
 	
 	unlocking_technologies = {	
-		network_centric_warfare
+		military_grade_cybersecurity
 	}
 	
 	modifier = {
-		unit_navy_defense_mult = 0.1
-		unit_navy_offense_mult = 0.1
 		country_institution_home_affairs_max_investment_add = 1
 		country_institution_police_max_investment_add = 1
 	}
@@ -273,6 +311,7 @@ automated_surveillance = {
 }
 
 advanced_body_armor = {
+	# Exoskeleton Suits mobilization option
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -291,6 +330,8 @@ advanced_body_armor = {
 }
 
 rapid_deployment_forces = {
+	# Stealth Reconnaissance Drone Carrier, Expeditionary Sea Bases units,
+	# Advanced Logisitical Support mobilization option
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -301,6 +342,7 @@ rapid_deployment_forces = {
 
 	modifier = {
 		state_building_barracks_max_level_add = 50
+		state_building_naval_base_max_level_add = 20
 	}
 	
 	ai_weight = {
@@ -309,6 +351,8 @@ rapid_deployment_forces = {
 }
 
 globalization = {
+	# Global Ports PM for Ports, Just-in-Time Logisitics PM for Trade Centers,
+	# Securitization and Derivatives law
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -333,6 +377,7 @@ globalization = {
 }
 
 social_media = {
+	# Decentalized Digital Media PM for Arts Academy, Intrusive Surveillance System law (alternative requirement)
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -356,6 +401,7 @@ social_media = {
 }
 
 virtual_reality = {
+	# VR Headsets PM for Consumer Appliance Industries
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -371,6 +417,9 @@ virtual_reality = {
 }
 
 knowledge_economy = {
+	# Version Control and Distribution Platforms PM for Software Industries,
+	# Mars Mission PM for Space Program, Moderate Data Privacy, Open Source Innovation,
+	# and Open Government laws
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -391,6 +440,7 @@ knowledge_economy = {
 }
 
 digital_entertainment = {
+	# Smartphones PM for Consumer Appliance Industries, Digital Streaming PM for Arts Academy
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -458,6 +508,7 @@ social_justice_movements = {
 }
 
 terrorism_and_anti_terrorism = {
+	# Anti-Terrorism Campaign decree
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -478,6 +529,7 @@ terrorism_and_anti_terrorism = {
 }
 
 LGBTQ_rights_movement = {
+	# Full Equality and Protection (LGBTQ+ rights) law
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -497,6 +549,7 @@ LGBTQ_rights_movement = {
 }
 
 cybersecurity = {
+	# Strong Privacy Rights and Digital Currency laws
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -517,6 +570,7 @@ cybersecurity = {
 }
 
 advanced_workflow_optimization = {
+	# Advanced Workflow Optimization PM for Software Industries
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society

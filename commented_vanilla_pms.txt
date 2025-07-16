@@ -2764,14 +2764,14 @@ pm_tank_production = {
 			goods_input_steel_add = 5                            # Price:   50, Total cost: 250.0
 			# Output goods
 			goods_output_automobiles_add = -20                   # Price:  100, Total cost: -2000.0
-			goods_output_tanks_add = 20                          # Price:   80, Total cost: 1600.0
+			goods_output_tanks_add = 20                          # Price:  120, Total cost: 2400.0
 			# Total input cost: 250.0
-			# Total output cost: -400.0
-			# Profit: -650.0
-			# Profit margin: -260.00%
-			# Zero profit price multiplier: -0.62
+			# Total output cost: 400.0
+			# Profit: 150.0
+			# Profit margin: 60.00%
+			# Zero profit price multiplier: 0.62
 			# Employment: 250
-			# Wage breakeven: -2.60
+			# Wage breakeven: 0.60
 		}
 
 		level_scaled = {
@@ -6762,12 +6762,12 @@ pm_traditional_art = {
 			# Input goods
 			goods_input_paper_add = 10                           # Price:   30, Total cost: 300.0
 			# Output goods
-			goods_output_fine_art_add = 4                        # Price:  200, Total cost: 800.0
+			goods_output_fine_art_add = 5                        # Price:  200, Total cost: 1000.0
 			# Total input cost: 300.0
-			# Total output cost: 800.0
-			# Profit: 500.0
-			# Profit margin: 166.67%
-			# Zero profit price multiplier: 0.38
+			# Total output cost: 1000.0
+			# Profit: 700.0
+			# Profit margin: 233.33%
+			# Zero profit price multiplier: 0.30
 			# Employment: 0
 			# Wage breakeven: 0.00
 		}
@@ -6787,12 +6787,12 @@ pm_realist_art = {
 			# Input goods
 			goods_input_paper_add = 15                           # Price:   30, Total cost: 450.0
 			# Output goods
-			goods_output_fine_art_add = 5                        # Price:  200, Total cost: 1000.0
+			goods_output_fine_art_add = 6                        # Price:  200, Total cost: 1200.0
 			# Total input cost: 450.0
-			# Total output cost: 1000.0
-			# Profit: 550.0
-			# Profit margin: 122.22%
-			# Zero profit price multiplier: 0.45
+			# Total output cost: 1200.0
+			# Profit: 750.0
+			# Profit margin: 166.67%
+			# Zero profit price multiplier: 0.38
 			# Employment: 0
 			# Wage breakeven: 0.00
 		}
@@ -6813,12 +6813,12 @@ pm_photographic_art = {
 			goods_input_paper_add = 15                           # Price:   30, Total cost: 450.0
 			goods_input_tools_add = 8                            # Price:   40, Total cost: 320.0
 			# Output goods
-			goods_output_fine_art_add = 7                        # Price:  200, Total cost: 1400.0
+			goods_output_fine_art_add = 8                        # Price:  200, Total cost: 1600.0
 			# Total input cost: 770.0
-			# Total output cost: 1400.0
-			# Profit: 630.0
-			# Profit margin: 81.82%
-			# Zero profit price multiplier: 0.55
+			# Total output cost: 1600.0
+			# Profit: 830.0
+			# Profit margin: 107.79%
+			# Zero profit price multiplier: 0.48
 			# Employment: 0
 			# Wage breakeven: 0.00
 		}
@@ -6838,14 +6838,14 @@ pm_film_art = {
 			# Input goods
 			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
 			goods_input_paper_add = 15                           # Price:   30, Total cost: 450.0
-			goods_input_electricity_add = 2                      # Price:   30, Total cost: 60.0
+			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
 			# Output goods
-			goods_output_fine_art_add = 8                        # Price:  200, Total cost: 1600.0
-			# Total input cost: 910.0
-			# Total output cost: 1600.0
-			# Profit: 690.0
-			# Profit margin: 75.82%
-			# Zero profit price multiplier: 0.57
+			goods_output_fine_art_add = 10                       # Price:  200, Total cost: 2000.0
+			# Total input cost: 1000.0
+			# Total output cost: 2000.0
+			# Profit: 1000.0
+			# Profit margin: 100.00%
+			# Zero profit price multiplier: 0.50
 			# Employment: 0
 			# Wage breakeven: 0.00
 		}
@@ -8892,7 +8892,7 @@ pm_basic_port = {
 	}
 	state_modifiers = {
 		workforce_scaled = {
-			state_infrastructure_add = 5
+			state_infrastructure_add = 3
 		}
 	}
 }
@@ -8934,7 +8934,7 @@ pm_industrial_port = {
 	}
 	state_modifiers = {
 		workforce_scaled = {
-			state_infrastructure_add = 7.5
+			state_infrastructure_add = 4
 		}
 	}
 }
@@ -8976,7 +8976,7 @@ pm_modern_port = {
 	}
 	state_modifiers = {
 		workforce_scaled = {
-			state_infrastructure_add = 10
+			state_infrastructure_add = 5
 		}
 	}
 }
@@ -9364,8 +9364,7 @@ pm_trade_center_principle_external_trade_2 = {
 
 pm_trade_center_trade_quantity_limited = {
 	texture = "gfx/interface/icons/production_method_icons/trade_quantity_1.dds"
-	replacement_if_valid = pm_trade_center_principle_external_trade_2
-	is_hidden_when_unavailable = yes
+	low_pop_method = yes # AI will activate this method for states with low population
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -9390,6 +9389,7 @@ pm_trade_center_trade_quantity_limited = {
 
 pm_trade_center_trade_quantity_normal = {
 	texture = "gfx/interface/icons/production_method_icons/trade_quantity_2.dds"
+	is_default = yes
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -9466,8 +9466,8 @@ pm_financial_district_privately_owned = {
 	building_modifiers = {
 		level_scaled = {
 			building_employment_capitalists_add = 50
-			building_employment_shopkeepers_add = 100
-			building_employment_clerks_add = 100
+			building_employment_shopkeepers_add = 25
+			building_employment_clerks_add = 25
 		}
 		unscaled = {
 			building_capitalists_shares_add = 10
@@ -9484,8 +9484,8 @@ pm_financial_district_publicly_traded = {
 	building_modifiers = {
 		level_scaled = {
 			building_employment_capitalists_add = 50
-			building_employment_bureaucrats_add = 50
-			building_employment_clerks_add = 150
+			building_employment_bureaucrats_add = 25
+			building_employment_clerks_add = 25
 		}
 		unscaled = {
 			building_capitalists_shares_add = 10
@@ -9505,8 +9505,8 @@ pm_financial_district_principle_divine_economics_2 = {
 	building_modifiers = {
 		level_scaled = {
 			building_employment_capitalists_add = 50
-			building_employment_clergymen_add = 50
-			building_employment_clerks_add = 150
+			building_employment_clergymen_add = 25
+			building_employment_clerks_add = 25
 		}
 		unscaled = {
 			building_capitalists_shares_add = 10
@@ -9522,7 +9522,6 @@ pm_manor_house_privately_owned = {
 	building_modifiers = {
 		level_scaled = {
 			building_employment_aristocrats_add = 50
-			building_employment_laborers_add = 100
 		}
 		unscaled = {
 			building_aristocrats_shares_add = 10
@@ -9543,7 +9542,6 @@ pm_manor_house_principle_divine_economics_2 = {
 		level_scaled = {
 			building_employment_aristocrats_add = 50
 			building_employment_clergymen_add = 50
-			building_employment_laborers_add = 100
 		}
 
 		unscaled = {
@@ -9597,13 +9595,11 @@ pm_company_headquarter_privately_owned = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_capitalists_add = 50
-			building_employment_shopkeepers_add = 100
-			building_employment_clerks_add = 100
+			building_employment_capitalists_add = 25
+			building_employment_clerks_add = 25
 		}
 		unscaled = {
 			building_capitalists_shares_add = 10
-			building_shopkeepers_shares_add = 1
 		}
 	}
 }
@@ -9624,9 +9620,8 @@ pm_company_headquarter_principle_divine_economics_2 = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_capitalists_add = 50
-			building_employment_clergymen_add = 50
-			building_employment_clerks_add = 150
+			building_employment_capitalists_add = 25
+			building_employment_clergymen_add = 25
 		}
 		unscaled = {
 			building_capitalists_shares_add = 10
@@ -9644,8 +9639,8 @@ pm_company_headquarter_government_run = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_bureaucrats_add = 200
-			building_employment_clerks_add = 300
+			building_employment_bureaucrats_add = 50
+			building_employment_clerks_add = 50
 		}
 		unscaled = {
 			building_bureaucrats_shares_add = 10
@@ -9663,8 +9658,8 @@ pm_company_headquarter_worker_cooperative = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_shopkeepers_add = 500
-			building_employment_clerks_add = 500
+			building_employment_shopkeepers_add = 50
+			building_employment_clerks_add = 50
 		}
 		unscaled = {
 			building_shopkeepers_shares_add = 10

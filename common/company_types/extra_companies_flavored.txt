@@ -41,6 +41,9 @@ company_volkswagen = {
 		building_automotive_industry_throughput_add = 0.15
 		state_infrastructure_from_population_add = 10
 	}
+	possible_prestige_goods = {
+		prestige_good_luxury_automobiles
+	}
 	ai_will_do = {
 		has_technology_researched = modern_automotive_technology
 	}
@@ -92,6 +95,10 @@ company_toyota = {
 	prosperity_modifier = {
 		building_automotive_industry_throughput_add = 0.05
 		country_production_tech_research_speed_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_luxury_automobiles
+		prestige_good_precision_robotics 
 	}
 	ai_will_do = {
 		has_technology_researched = modern_automotive_technology
@@ -146,6 +153,10 @@ company_samsung = {
 		country_weekly_innovation_mult = 0.1
 		building_electrics_industry_appliances_throughput_add = 0.1
 	}
+	possible_prestige_goods = {
+		prestige_good_generic_consumer_appliances
+		prestige_good_advanced_telecom
+	}
 	ai_will_do = {
 		has_technology_researched = transistors
 	}
@@ -196,7 +207,10 @@ company_hp = {
 	}
 	prosperity_modifier = {
 		country_society_tech_research_speed_mult = 0.1
-		building_university_throughput_add = 0.1
+		goods_output_consumer_appliances_mult = 0.15
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_consumer_appliances
 	}
 	ai_will_do = {
 		has_technology_researched = transistors
@@ -252,6 +266,7 @@ company_sony = {
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
+		prestige_good_generic_consumer_appliances
 	}
 	ai_will_do = {
 		has_technology_researched = transistors
@@ -358,7 +373,7 @@ company_intel = {
 		}
 	}
 	prosperity_modifier = {
-		country_production_tech_research_speed_mult = 0.15
+		country_production_tech_research_speed_mult = 0.1
 		goods_output_electronic_components_mult = 0.1
 	}
 	possible_prestige_goods = {
@@ -412,8 +427,8 @@ company_microsoft = {
 		}
 	}
 	prosperity_modifier = {
-		country_society_tech_research_speed_mult = 0.1
 		state_education_access_add = 0.05
+		goods_output_digital_assets_mult = 0.15
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
@@ -472,6 +487,7 @@ company_apple = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_consumer_appliances
+		prestige_good_advanced_telecom 
 	}
 	ai_will_do = {
 		has_technology_researched = personal_computers
@@ -496,9 +512,11 @@ company_tsmc = {
 	}
 	building_types = {
 		building_electronic_components_and_semiconductor_industry
+		building_advanced_material_fabricator
 	}
 	extension_building_types = {
-		building_advanced_material_fabricator
+		building_software_industry # For software development
+		building_robotics_industry # For manufacturing automation
 	}
 	potential = {
 		has_interest_marker_in_region = region_south_china
@@ -525,6 +543,7 @@ company_tsmc = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_electronic_components
+		prestige_good_generic_advanced_materials 
 	}
 	ai_will_do = {
 		has_technology_researched = integrated_circuits
@@ -577,6 +596,10 @@ company_huawei = {
 	prosperity_modifier = {
 		state_infrastructure_add = 10
 		country_society_tech_research_speed_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_premium_networks 
+		prestige_good_advanced_telecom 
 	}
 	ai_will_do = {
 		has_technology_researched = computer_networks
@@ -633,6 +656,10 @@ company_amazon = {
 		building_urban_center_throughput_add = 0.1 # For logistics and distribution
 		building_port_throughput_add = 0.2
 	}
+	possible_prestige_goods = {
+		prestige_good_integrated_logistics 
+		prestige_good_premium_networks
+	}
 	ai_will_do = {
 		has_technology_researched = e-commerce
 	}
@@ -681,8 +708,8 @@ company_nvidia = {
 		}
 	}
 	prosperity_modifier = {
-		country_tech_research_speed_mult = 0.1 # For AI and scientific computing
-		goods_output_electronic_components_mult = 0.1
+		country_tech_research_speed_mult = 0.05 # For AI and scientific computing
+		goods_output_electronic_components_mult = 0.25
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_electronic_components
@@ -736,8 +763,12 @@ company_google = {
 		}
 	}
 	prosperity_modifier = {
-		country_tech_spread_mult = 0.2
-		state_education_access_add = 0.1
+		goods_output_digital_assets_mult = 0.05
+		goods_output_digital_access_mult = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_software
+		prestige_good_premium_networks 
 	}
 	ai_will_do = {
 		has_technology_researched = world_wide_web
@@ -790,6 +821,9 @@ company_netflix = {
 		country_prestige_mult = 0.1
 		country_influence_mult = 0.05
 	}
+	possible_prestige_goods = {
+		prestige_good_entertainment
+	}
 	ai_will_do = {
 		has_technology_researched = wireless_internet
 	}
@@ -814,10 +848,12 @@ company_spacex = {
 	}
 	building_types = {
 		building_launch_facility # Launch Capacity
+		building_space_mine
 	}
 	extension_building_types = {
 		building_network_infrastructure # For Starlink
 		building_advanced_material_fabricator
+		building_space_elevator
 	}
 	potential = {
 		OR = {
@@ -850,6 +886,9 @@ company_spacex = {
 	prosperity_modifier = {
 		goods_output_launch_capacity_mult = 0.2
 		country_military_tech_research_speed_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_heavy_lift_launch 
 	}
 	ai_will_do = {
 		has_technology_researched = reusable_rocketry
@@ -907,6 +946,9 @@ company_bytedance = {
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
 		country_influence_mult = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_entertainment
 	}
 	ai_will_do = {
 		has_technology_researched = social_media
@@ -1068,6 +1110,9 @@ company_boston_dynamics = {
 		goods_output_robotics_mult = 0.2
 		unit_army_offense_mult = 0.05
 	}
+	possible_prestige_goods = {
+		prestige_good_precision_robotics 
+	}
 	ai_will_do = {
 		has_technology_researched = machine_learning
 	}
@@ -1147,11 +1192,14 @@ company_lockheed_martin = {
 	building_types = {
 		building_aeroplanes_industry
 		building_arms_industry
+		building_artillery_foundries
 		building_launch_facility
 	}
 	extension_building_types = {
 		building_software_industry
 		building_advanced_material_fabricator
+		building_space_elevator
+        building_space_mine
 	}
 	potential = {
 		has_interest_marker_in_region = region_new_england
@@ -1175,6 +1223,10 @@ company_lockheed_martin = {
 		unit_army_offense_mult = 0.1
 		unit_navy_offense_mult = 0.1
 		country_military_tech_research_speed_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_advanced_aircraft 
+		prestige_good_heavy_lift_launch 
 	}
     ai_will_do = {
         has_technology_researched = stealth_technology
@@ -1200,10 +1252,13 @@ company_bae_systems = {
 	building_types = {
 		building_aeroplanes_industry
 		building_arms_industry
+		building_artillery_foundries
 		building_military_shipyards
 	}
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
+		building_space_elevator
+        building_space_mine
 	}
 	potential = {
 		has_interest_marker_in_region = region_england
@@ -1226,6 +1281,9 @@ company_bae_systems = {
 	prosperity_modifier = {
 		unit_army_defense_mult = 0.1
 		unit_navy_defense_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_advanced_aircraft
 	}
     ai_will_do = {
         has_technology_researched = supersonic_aircraft
@@ -1250,10 +1308,12 @@ company_roscosmos = {
 	}
 	building_types = {
 		building_launch_facility
+		building_aeroplanes_industry
 	}
 	extension_building_types = {
-		building_aeroplanes_industry
 		building_advanced_material_fabricator
+		building_space_elevator
+        building_space_mine
 	}
 	potential = {
 		has_interest_marker_in_region = region_russia
@@ -1276,6 +1336,9 @@ company_roscosmos = {
 	prosperity_modifier = {
 		goods_output_launch_capacity_mult = 0.15
 		country_prestige_mult = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_heavy_lift_launch
 	}
     ai_will_do = {
         has_technology_researched = reusable_rocketry
@@ -1305,6 +1368,8 @@ company_airbus = {
 	extension_building_types = {
 		building_launch_facility
 		building_software_industry
+		building_space_elevator
+        building_space_mine
 	}
 	potential = {
 		OR = {
@@ -1333,6 +1398,11 @@ company_airbus = {
 	prosperity_modifier = {
 		building_aeroplanes_industry_throughput_add = 0.15
 		state_infrastructure_add = 5
+		state_incorporation_speed_mult = 0.25
+	}
+	possible_prestige_goods = {
+		prestige_good_advanced_aircraft
+		prestige_good_performance_engines 
 	}
     ai_will_do = {
         has_technology_researched = supersonic_aircraft
@@ -1360,10 +1430,13 @@ company_dassault_aviation = {
 	}
 	building_types = {
 		building_aeroplanes_industry
+		building_arms_industry
+		building_artillery_foundries
 	}
 	extension_building_types = {
-		building_arms_industry
 		building_software_industry
+		building_space_elevator
+        building_space_mine
 	}
 	potential = {
 		has_interest_marker_in_region = region_france
@@ -1384,8 +1457,13 @@ company_dassault_aviation = {
 		}
 	}
 	prosperity_modifier = {
-		unit_army_offense_mult = 0.05
+		unit_army_offense_mult = 0.1
+		country_military_tech_research_speed_mult = 0.05
 		country_prestige_mult = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_advanced_aircraft 
+		prestige_good_performance_engines 
 	}
     ai_will_do = {
         has_technology_researched = jet_engine_technology
@@ -1410,6 +1488,7 @@ company_hyundai = {
 	}
 	building_types = {
 		building_automotive_industry
+		building_motor_industry
 		building_robotics_industry
 		building_shipyards
 	}
@@ -1438,6 +1517,10 @@ company_hyundai = {
 		building_automotive_industry_throughput_add = 0.1
 		building_shipyards_throughput_add = 0.1
 	}
+	possible_prestige_goods = {
+		prestige_good_luxury_automobiles
+		prestige_good_performance_engines
+	}
     ai_will_do = {
         has_technology_researched = modern_automotive_technology
     }
@@ -1461,9 +1544,11 @@ company_sap = {
 	}
 	building_types = {
 		building_software_industry
+		building_railway
 	}
 	extension_building_types = {
 		building_network_infrastructure
+		building_port
 	}
 	potential = {
 		has_interest_marker_in_region = region_south_germany
@@ -1484,11 +1569,12 @@ company_sap = {
 		}
 	}
 	prosperity_modifier = {
-		state_tax_capacity_mult = 0.05
-		country_bureaucracy_mult = 0.05
+		country_bureaucracy_mult = 0.1
+		country_bureaucracy_investment_cost_factor_mult = -0.1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
+		prestige_good_integrated_logistics 
 	}
     ai_will_do = {
         has_technology_researched = computer_networks
@@ -1543,6 +1629,7 @@ company_tencent = {
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
+		prestige_good_generic_software 
 	}
     ai_will_do = {
         has_technology_researched = social_media
@@ -1593,6 +1680,9 @@ company_alibaba = {
 	prosperity_modifier = {
 		state_trade_advantage_mult = 0.1
 		goods_output_digital_access_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_software
 	}
     ai_will_do = {
         has_technology_researched = e-commerce
@@ -1647,6 +1737,7 @@ company_nintendo = {
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
+		prestige_good_generic_consumer_appliances 
 	}
     ai_will_do = {
         has_technology_researched = video_games
@@ -1697,6 +1788,9 @@ company_gazprom = {
 	prosperity_modifier = {
 		goods_output_oil_mult = 0.1
 	}
+	possible_prestige_goods = {
+		prestige_good_refined_petrochemicals
+	}
     ai_will_do = {
         has_technology_researched = containerization
     }
@@ -1746,6 +1840,9 @@ company_saudi_aramco = {
 	prosperity_modifier = {
 		goods_output_oil_mult = 0.25
 	}
+	possible_prestige_goods = {
+		prestige_good_refined_petrochemicals 
+	}
     ai_will_do = {
         has_technology_researched = transistors
     }
@@ -1794,6 +1891,9 @@ company_petrobras = {
 	prosperity_modifier = {
 		goods_output_oil_mult = 0.10
 	}
+	possible_prestige_goods = {
+		prestige_good_refined_petrochemicals
+	}
     ai_will_do = {
         has_technology_researched = transistors
     }
@@ -1818,9 +1918,10 @@ company_rosatom = {
 	building_types = {
 		building_nuclear_plant
 		building_power_plant
+		building_advanced_material_fabricator
 	}
 	extension_building_types = {
-		building_advanced_material_fabricator
+		building_chemical_plants
 	}
 	potential = {
 		has_interest_marker_in_region = region_russia
@@ -1843,6 +1944,9 @@ company_rosatom = {
 	prosperity_modifier = {
 		goods_output_electricity_mult = 0.1
 		country_military_tech_research_speed_mult = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_advanced_materials 
 	}
     ai_will_do = {
         has_technology_researched = nuclear_energy
@@ -1891,8 +1995,8 @@ company_oracle = {
 		}
 	}
 	prosperity_modifier = {
-		country_tech_research_speed_mult = 0.1
-        country_weekly_innovation_mult = 0.1
+		country_tech_research_speed_mult = 0.05
+        country_weekly_innovation_mult = 0.05
         country_bureaucracy_mult = 0.05
 	}
 	possible_prestige_goods = {
@@ -1946,7 +2050,10 @@ company_softbank = {
 	}
 	prosperity_modifier = {
 		state_capitalists_investment_pool_efficiency_mult = 0.05
-        country_tech_research_speed_mult = 0.1
+        country_tech_research_speed_mult = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_premium_networks 
 	}
     ai_will_do = {
         has_technology_researched = knowledge_economy
@@ -2075,6 +2182,7 @@ company_vale = {
 	building_types = {
 		building_iron_mine
 		building_coal_mine
+		building_steel_mills
 	}
 	extension_building_types = {
 		building_railway
@@ -2101,6 +2209,9 @@ company_vale = {
 	prosperity_modifier = {
 		goods_output_iron_mult = 0.1
 		building_group_bg_mining_throughput_add = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_steel
 	}
     ai_will_do = {
         has_technology_researched = modern_tools
@@ -2168,8 +2279,8 @@ company_disney = {
     }
 }
 
-# Universal Music Group (1934)
-company_universal_music = {
+# Universal (1934)
+company_universal = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/eu_universal_music.dds" 
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
 	flavored_company = yes
@@ -2210,6 +2321,9 @@ company_universal_music = {
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
 		goods_output_fine_art_mult = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_entertainment
 	}
     ai_will_do = {
         has_technology_researched = mass_media
@@ -2263,6 +2377,10 @@ company_verizon = {
 		goods_output_digital_access_mult = 0.2
 		state_infrastructure_add = 10
 	}
+	possible_prestige_goods = {
+		prestige_good_premium_networks
+		prestige_good_advanced_telecom 
+	}
     ai_will_do = {
         has_technology_researched = cellular_networks
     }
@@ -2314,6 +2432,10 @@ company_reliance = {
 	prosperity_modifier = {
 		state_market_access_price_impact = 0.05
 		state_infrastructure_add = 5
+	}
+	possible_prestige_goods = {
+		prestige_good_refined_petrochemicals
+		prestige_good_generic_fertilizer
 	}
     ai_will_do = {
         has_technology_researched = containerization
@@ -2367,6 +2489,7 @@ company_fanuc = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_tools
+		prestige_good_precision_robotics 
 	}
     ai_will_do = {
         has_technology_researched = robotics
@@ -2419,9 +2542,12 @@ company_eni = {
 		}
 	}
 	prosperity_modifier = {
-		goods_output_oil_mult = 0.05
-		goods_output_electricity_mult = 0.05
+		building_oil_rig_throughput_add = 0.15
+		building_power_plant_throughput_add = 0.15
 		country_government_dividends_efficiency_add = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_refined_petrochemicals 
 	}
     ai_will_do = {
         has_technology_researched = modern_chemical_processes
@@ -2472,6 +2598,10 @@ company_ferrari = {
 	prosperity_modifier = {
 		country_prestige_mult = 0.15
 		building_automotive_industry_throughput_add = 0.1
+	}
+	possible_prestige_goods = {
+		prestige_good_luxury_automobiles 
+		prestige_good_performance_engines 
 	}
     ai_will_do = {
         has_technology_researched = modern_automotive_technology
@@ -2526,6 +2656,10 @@ company_blackberry = {
 		goods_output_digital_access_mult = 0.15
 		country_bureaucracy_mult = 0.05 # Representing secure enterprise communications
 	}
+	possible_prestige_goods = {
+		prestige_good_advanced_telecom 
+		prestige_good_premium_networks
+    }
     ai_will_do = {
         has_technology_researched = cellular_networks
     }
@@ -2576,6 +2710,10 @@ company_shopify = {
 		state_trade_advantage_mult = 0.1
 		country_weekly_innovation_mult = 0.05
 	}
+	possible_prestige_goods = {
+		prestige_good_generic_software
+		prestige_good_integrated_logistics
+    }
     ai_will_do = {
         has_technology_researched = e-commerce
     }
@@ -2631,6 +2769,9 @@ company_bhp_group = {
 	prosperity_modifier = {
 		building_group_bg_mining_throughput_add = 0.25
 	}
+	possible_prestige_goods = {
+		prestige_good_generic_steel
+	}
     ai_will_do = {
         has_technology_researched = modern_tools
     }
@@ -2681,6 +2822,9 @@ company_cochlear = {
 		state_mortality_mult = -0.05
 		country_society_tech_research_speed_mult = 0.1
 	}
+	possible_prestige_goods = {
+		prestige_good_generic_consumer_appliances 
+	}
     ai_will_do = {
         has_technology_researched = modern_pharmaceuticals
     }
@@ -2729,8 +2873,11 @@ company_infosys = {
 		}
 	}
 	prosperity_modifier = {
-		goods_output_digital_assets_mult = 0.15
+		country_company_throughput_bonus_add = 0.05
 		state_education_access_add = 0.05
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_software
 	}
     ai_will_do = {
         has_technology_researched = knowledge_economy

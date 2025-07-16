@@ -28,3 +28,62 @@ prestige_good_generic_advanced_materials = {
 	texture = "gfx/interface/icons/goods_icons/buckyball.dds"
 }
 
+prestige_good_luxury_automobiles = {
+	base_good = automobiles
+	prestige_bonus = 0.2
+	texture = "gfx/interface/icons/goods_icons/transportation.dds"
+}
+
+prestige_good_advanced_aircraft = {
+	base_good = aeroplanes
+	prestige_bonus = 0.15
+	texture = "gfx/interface/icons/goods_icons/aeroplanes.dds"
+}
+
+prestige_good_advanced_weaponry = {
+	base_good = tanks # Represents advanced ground systems
+	prestige_bonus = 0.15
+	texture = "gfx/interface/icons/goods_icons/tanks.dds"
+}
+
+prestige_good_precision_robotics = {
+	base_good = robotics
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/robot.dds"
+}
+
+prestige_good_premium_networks = {
+	base_good = digital_access
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/digital_access.dds"
+}
+
+prestige_good_heavy_lift_launch = {
+	base_good = launch_capacity
+	prestige_bonus = 0.2
+	texture = "gfx/interface/icons/goods_icons/rocket.dds"
+}
+
+prestige_good_refined_petrochemicals = {
+	base_good = oil
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/oil.dds" # Assuming a standard oil icon exists
+}
+
+prestige_good_integrated_logistics = {
+	base_good = merchant_marine
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/industrial_transport.dds"
+}
+
+prestige_good_advanced_telecom = {
+    base_good = telephones
+    prestige_bonus = 0.15
+    texture = "gfx/interface/icons/goods_icons/telephones.dds"
+}
+
+prestige_good_performance_engines = {
+	base_good = engines
+	prestige_bonus = 0.15
+	texture = "gfx/interface/icons/goods_icons/engines.dds"
+}

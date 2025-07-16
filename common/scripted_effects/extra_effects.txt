@@ -529,7 +529,7 @@ nuclear_industrial_strike = {
 	}
 	add_modifier = {
 		name = nuclear_strike_aftermath
-		months = short_modifier_time
+		days = short_modifier_time
 		is_decaying = yes
 	}
 	owner = {
@@ -719,7 +719,7 @@ nuclear_tactical_strike = {
 	}
 	add_modifier = {
 		name = tactical_nuke_aftermath
-		months = short_modifier_time
+		days = short_modifier_time
 		is_decaying = yes
 	}
 
@@ -1137,5 +1137,27 @@ form_decolonized_country = { # scope is capital state of new country, must be a 
 				}
 			}
 		}
+	}
+}
+
+fix_incompatible_laws = {
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_landed_voting
+				has_law = law_type:law_wealth_voting
+				has_law = law_type:law_census_voting
+				has_law = law_type:law_universal_suffrage
+			}
+			has_law = law_type:law_no_campaign_finance_laws
+		}
+		activate_law = law_type:law_unregulated_donations
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_no_internet_policy
+			has_technology_researched = world_wide_web
+		}
+		activate_law = law_type:law_unregulated_internet
 	}
 }

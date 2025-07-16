@@ -21,6 +21,22 @@
 		law_no_ministry_of_commerce = neutral
 		law_ministry_of_commerce = disapprove
 	}
+
+	lawgroup_family_policy = {
+		law_traditional_family_structure = neutral
+		law_pro_natalist_subsidies = disapprove
+		law_state_sponsored_family_planning = approve
+		law_population_control_measures = neutral
+		law_communal_child_rearing = neutral
+	}
+
+	lawgroup_genetic_rights = {
+		law_traditional_heredity = neutral
+		law_ban_on_genetic_modification = approve
+		law_corporate_genetic_licensing = disapprove
+		law_open_source_genetics = neutral
+		law_state_eugenics_program = strongly_disapprove
+	}
 	
 	country_trigger = {
 		has_technology_researched = pollution_control
@@ -144,6 +160,12 @@ ideology_multicultural = {
 		law_minority_rights_affirmative_action = strongly_approve
 	}
 
+	lawgroup_state_power = {
+		law_unitary_state = neutral
+		law_federal_system = approve
+		law_devolution = strongly_approve
+	}
+
 	country_trigger = {
 		any_political_movement = {
 			is_political_movement_type = movement_civil_rights
@@ -226,6 +248,12 @@ ideology_multicultural_ig = {
 		law_minority_rights_protection = approve
 		law_minority_rights_affirmative_action = strongly_approve
 	}
+
+	lawgroup_state_power = {
+		law_unitary_state = neutral
+		law_federal_system = approve
+		law_devolution = strongly_approve
+	}
 }
 
 ideology_anti_colonialist = {
@@ -290,6 +318,21 @@ ideology_optimist_transhumanist = {
 		law_autocracy = neutral
 		law_single_party_state = neutral
 		law_algorithmic_governance = strongly_approve
+	}
+
+	lawgroup_internet_governance = {
+		law_no_internet_policy = neutral
+		law_unregulated_internet = approve
+		law_state_controlled_internet = disapprove
+		law_net_neutrality = approve
+	}
+
+	lawgroup_genetic_rights = {
+		law_traditional_heredity = neutral
+		law_ban_on_genetic_modification = disapprove
+		law_corporate_genetic_licensing = approve
+		law_open_source_genetics = strongly_approve
+		law_state_eugenics_program = strongly_disapprove
 	}
 	
 	possible = {
@@ -375,6 +418,34 @@ ideology_corporate = {
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = approve
 		law_ministry_of_the_environment = strongly_disapprove
+	}
+
+	lawgroup_financial_regulation = {
+		law_unregulated_banking = neutral
+		law_investment_banking_separation = disapprove
+		law_securitization_and_derivatives = approve
+	}
+
+	lawgroup_electoral_finance = {
+		law_no_campaign_finance_laws = neutral
+		law_unregulated_donations = approve
+		law_donation_limits = disapprove
+		law_publicly_funded_elections = strongly_disapprove
+	}
+
+	lawgroup_internet_governance = {
+		law_no_internet_policy = neutral
+		law_unregulated_internet = strongly_approve
+		law_state_controlled_internet = disapprove
+		law_net_neutrality = strongly_disapprove
+	}
+
+	lawgroup_genetic_rights = {
+		law_traditional_heredity = neutral
+		law_ban_on_genetic_modification = disapprove
+		law_corporate_genetic_licensing = strongly_approve
+		law_open_source_genetics = disapprove
+		law_state_eugenics_program = strongly_disapprove
 	}
 
 	possible = {
@@ -2012,7 +2083,7 @@ ideology_custom_religion_pacifist_outlook = {
 		law_ministry_of_refugee_affairs = approve
 	}
 
-	law_ministry_of_international_aid = {
+	lawgroup_ministry_of_international_aid = {
 		law_no_ministry_of_international_aid = neutral
 		law_ministry_of_international_aid = approve
 	}
@@ -2059,7 +2130,7 @@ ideology_custom_religion_militarist_outlook = {
 		law_ministry_of_refugee_affairs = disapprove
 	}
 
-	law_ministry_of_international_aid = {
+	lawgroup_ministry_of_international_aid = {
 		law_no_ministry_of_international_aid = neutral
 		law_ministry_of_international_aid = disapprove
 	}
@@ -2106,7 +2177,7 @@ ideology_custom_religion_isolationist_outlook = {
 		law_ministry_of_refugee_affairs = disapprove
 	}
 
-	law_ministry_of_international_aid = {
+	lawgroup_ministry_of_international_aid = {
 		law_no_ministry_of_international_aid = neutral
 		law_ministry_of_international_aid = disapprove
 	}
@@ -2153,7 +2224,7 @@ ideology_custom_religion_exploitative_outlook = {
 		law_ministry_of_refugee_affairs = disapprove
 	}
 
-	law_ministry_of_international_aid = {
+	lawgroup_ministry_of_international_aid = {
 		law_no_ministry_of_international_aid = neutral
 		law_ministry_of_international_aid = disapprove
 	}
@@ -2200,7 +2271,7 @@ ideology_custom_religion_imperialist_outlook = {
 		law_ministry_of_refugee_affairs = disapprove
 	}
 
-	law_ministry_of_international_aid = {
+	lawgroup_ministry_of_international_aid = {
 		law_no_ministry_of_international_aid = neutral
 		law_ministry_of_international_aid = approve
 	}
@@ -2247,7 +2318,7 @@ ideology_custom_religion_theocratic_outlook = {
 		law_ministry_of_refugee_affairs = disapprove
 	}
 
-	law_ministry_of_international_aid = {
+	lawgroup_ministry_of_international_aid = {
 		law_no_ministry_of_international_aid = neutral
 		law_ministry_of_international_aid = approve
 	}

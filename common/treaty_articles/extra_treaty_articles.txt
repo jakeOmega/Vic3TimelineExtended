@@ -1,5 +1,6 @@
 # TREATY ARTICLE: request_influence
 request_influence = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
     kind = directed
     cost = 500
 
@@ -39,10 +40,6 @@ request_influence = {
         article_ai_usage = { none }
         evaluation_chance = { value = 0 }
 
-        # The old AI would always break this pact. This is modeled by allowing
-        # withdrawal at any time and setting the AI desire to do so high.
-        can_withdraw = { always = yes }
-
         inherent_accept_score = {
             value = 0
 
@@ -53,14 +50,27 @@ request_influence = {
 				add = -1000
 			}
 			else = {
-				add = 1000
+				add = 30
 			}
+            if = {
+                limit = { has_attitude = { who = scope:source_country attitude = protective } }
+                add = 20
+            }
+            if = {
+                limit = { has_attitude = { who = scope:source_country attitude = friendly } }
+                add = 10
+            }
+            if = {
+                limit = { scope:source_country.relations:target_country >= relations_threshold:cordial }
+                add = 10
+            }
         }
     }
 }
 
 # TREATY ARTICLE: crisis_resolution
 crisis_resolution = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
     kind = directed
     cost = 400
     relations_progress_per_day = 3 
@@ -77,6 +87,7 @@ crisis_resolution = {
         country_treaty_leverage_generation_add = 200 
         country_legitimacy_min_add = 40 
         political_movement_radicalism_from_enactment_disapproval_mult = -0.5 
+		country_liberty_desire_add = -0.1
     }
 
     visible = {
@@ -127,12 +138,17 @@ crisis_resolution = {
                 limit = { scope:other_country = { legitimacy < 50 } }
                 add = 15
             }
+            if = {
+                limit = { scope:other_country = { has_revolution = yes } }
+                add = 30
+            }
         }
     }
 }
 
 # TREATY ARTICLE: extend_influence
 extend_influence = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
     kind = directed
     cost = 500 
 
@@ -183,11 +199,15 @@ extend_influence = {
             value = -5
             if = {
                 limit = { root = { has_attitude = { who = scope:other_country attitude = protective } } }
-                add = 10
+                add = 20
             }
             if = {
                 limit = { root = { has_attitude = { who = scope:other_country attitude = conciliatory } } }
                 add = 20
+            }
+            if = {
+                limit = { root = { has_attitude = { who = scope:other_country attitude = friendly } } }
+                add = 10
             }
         }
     }
@@ -199,6 +219,7 @@ extend_influence = {
 # This article allows a country to provide educational support to another,
 # boosting their education access. It is based on the original 'education_aid' diplomatic action.
 education_aid = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
 	cost = 100 
 	relations_progress_per_day = 3 
@@ -256,7 +277,17 @@ education_aid = {
 				}
 			}
 		}
-		inherent_accept_score = 10
+		inherent_accept_score = {
+            value = 10
+            if = {
+                limit = { scope:target_country = { literacy_rate < 0.2 } }
+                add = 20
+            }
+            if = {
+                limit = { scope:target_country = { institution_investment_level = { institution = institution_schools value < 2 } } }
+                add = 15
+            }
+        }
 	}
 }
 
@@ -266,6 +297,7 @@ education_aid = {
 # This article allows a country to provide healthcare support, improving mortality and SoL.
 # It is based on the original 'healthcare_aid' diplomatic action.
 healthcare_aid = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
 	cost = 100 
 	relations_progress_per_day = 3 
@@ -277,9 +309,8 @@ healthcare_aid = {
 
 	target_modifier = {
 		country_treaty_leverage_generation_add = 200 
-		state_mortality_mult = -0.04 
-		state_pollution_reduction_health_mult = -0.1 
-		state_standard_of_living_add = 0.5 
+		state_mortality_mult = -0.05
+		state_standard_of_living_add = 1
 	}
 
 	usage_limit = once_per_side
@@ -324,7 +355,17 @@ healthcare_aid = {
 				}
 			}
 		}
-		inherent_accept_score = 10
+		inherent_accept_score = {
+            value = 10
+            if = {
+                limit = { scope:target_country = { average_sol_for_primary_cultures < 10 } }
+                add = 20
+            }
+            if = {
+                limit = { scope:target_country = { institution_investment_level = { institution = institution_health_system value < 2 } } }
+                add = 15
+            }
+        }
 	}
 }
 
@@ -335,6 +376,7 @@ healthcare_aid = {
 # This article allows a country to provide security assistance to reduce turmoil.
 # It is based on the original 'security_aid' diplomatic action.
 security_aid = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
 	cost = 100 
 	relations_progress_per_day = 3 
@@ -347,6 +389,7 @@ security_aid = {
 	target_modifier = {
 		country_treaty_leverage_generation_add = 200 
 		state_turmoil_effects_mult = -0.2 
+		country_liberty_desire_add = -0.1
 	}
 
 	usage_limit = once_per_side
@@ -391,7 +434,17 @@ security_aid = {
 				}
 			}
 		}
-		inherent_accept_score = 10
+		inherent_accept_score = {
+            value = 10
+            if = {
+                limit = { scope:target_country = { any_scope_state = { turmoil > 25 } } }
+                add = 20
+            }
+            if = {
+                limit = { scope:target_country = { has_revolution = yes } }
+                add = 30
+            }
+        }
 	}
 }
 
@@ -402,6 +455,7 @@ security_aid = {
 # boosting tech spread at a cost to their own innovation.
 # It is based on the original 'science_aid' diplomatic action.
 science_aid = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
 	cost = 100 
 	relations_progress_per_day = 3 
@@ -452,7 +506,17 @@ science_aid = {
 				}
 			}
 		}
-		inherent_accept_score = 10
+		inherent_accept_score = {
+            value = 10
+            if = {
+                limit = { scope:target_country = { country_innovation < 100 } }
+                add = 20
+            }
+            if = {
+                limit = { scope:target_country = { modifier:country_tech_spread_add < 100 } }
+                add = 15
+            }
+        }
 	}
 }
 
@@ -462,6 +526,7 @@ science_aid = {
 # An upgraded version of Science Aid, providing greater benefits at a higher cost.
 # It requires the base 'science_aid' article to already be active.
 science_aid_2 = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
 	cost = 100 
 	relations_progress_per_day = 6 
@@ -497,9 +562,9 @@ science_aid_2 = {
             }
         }
 
-		root.techs_researched > scope:other_country.techs_researched 
-		root.country_rank > scope:other_country.country_rank 
-		root.institution_investment_level = {
+		techs_researched > scope:other_country.techs_researched 
+		country_rank > scope:other_country.country_rank 
+		institution_investment_level = {
 			institution = institution_ministry_of_science
 			value >= 4 
 		}
@@ -522,6 +587,458 @@ science_aid_2 = {
 				}
 			}
 		}
-		inherent_accept_score = 20
+		inherent_accept_score = {
+            value = 20
+            if = {
+                limit = { scope:target_country = { country_innovation < 400 } }
+                add = 30
+            }
+            if = {
+                limit = { scope:target_country = { modifier:country_tech_spread_add < 400 } }
+                add = 25
+            }
+        }
 	}
+}
+
+# ---------------------------------
+# TREATY ARTICLE: suppress_subject_liberty
+# ---------------------------------
+# This article allows an overlord to suppress the liberty desire of their subject.
+suppress_subject_liberty = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
+	kind = directed
+	cost = 100
+
+	source_modifier = {
+		country_liberty_desire_add = -0.25
+	}
+
+	usage_limit = once_per_side
+
+	visible = {
+		NOT = { is_country_type = decentralized }
+		is_revolutionary = no
+	}
+
+	possible = {
+		is_subject_of = scope:other_country
+	}
+
+	can_ratify = {
+		always = yes
+	}
+
+	ai = {
+		treaty_categories = { power_bloc }
+		article_ai_usage = { offer request }
+		evaluation_chance = {
+			value = 10.0
+			if = {
+				limit = { has_attitude = { who = scope:other_country attitude = domineering } }
+				add = 20
+			}
+		}
+		inherent_accept_score = {
+			value = 0
+			if = {
+				limit = { scope:target_country = this } # Evaluator is the Overlord (source)
+				add = 50 # Overlords like this
+				if = {
+					limit = { scope:target_country = { has_attitude = { who = root attitude = rebellious } } }
+					add = 25
+				}
+			}
+			else = {
+				add = -50 # Subjects do not like this
+				if = {
+					limit = { scope:source_country.relations:target_country >= relations_threshold:cordial }
+					add = 10
+				}
+				if = {
+					limit = { scope:source_country.relations:target_country >= relations_threshold:friendly }
+					add = 10
+				}
+				if = {
+					limit = { has_attitude = { who = scope:source_country attitude = loyal } }
+					add = 15
+				}
+			}
+		}
+	}
+}
+
+# ---------------------------------
+# TREATY ARTICLE: nuclear_disarmament
+# ---------------------------------
+# This article forces a country to dismantle its nuclear program.
+nuclear_disarmament = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
+	kind = directed
+	cost = 200
+
+	flags = { can_be_enforced }
+
+	usage_limit = once_per_side
+
+	visible = {
+		has_technology_researched = nuclear_weapons
+	}
+
+	possible = {
+		scope:other_country = { has_technology_researched = nuclear_weapons }
+	}
+
+	can_ratify = {
+		always = yes
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { request }
+		evaluation_chance = {
+			value = 5.0
+			if = {
+				limit = { has_attitude = { who = scope:other_country attitude = hostile } }
+				add = 10
+			}
+			if = {
+				limit = { any_rival_country = { THIS = scope:other_country } }
+				add = 20
+			}
+		}
+		inherent_accept_score = {
+			value = 0
+			if = {
+				limit = { scope:target_country = this } # Evaluator is the one demanding disarmament (source)
+				add = 75 # Countries want their rivals disarmed
+				if = {
+					limit = { has_attitude = { who = scope:target_country attitude = hostile } }
+					add = 25
+				}
+			}
+			else = { # Evaluator is the one being asked to disarm (target)
+				add = -100
+				if = {
+					limit = { country_rank >= rank_value:great_power }
+					add = -50
+				}
+				if = {
+					limit = { scope:source_country.relations:target_country < relations_threshold:cordial }
+					add = -50
+				}
+				if = {
+					limit = { any_rival_country = { THIS = scope:source_country } }
+					add = -100
+				}
+			}
+		}
+	}
+}
+
+# ---------------------------------
+# TREATY ARTICLE: nuclear_program_aid
+# ---------------------------------
+# This article allows a country to provide nuclear program aid to another,
+# allowing them to develop nuclear weapons.
+nuclear_program_aid = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
+	kind = directed
+	cost = 500
+
+	target_modifier = {
+		receiving_nuclear_program_aid = yes
+	}
+
+	usage_limit = once_per_side
+
+	visible = {
+		has_modifier = nuclear_power
+	}
+
+	possible = {
+		has_modifier = nuclear_power
+		scope:other_country = {
+			NOT = { has_modifier = nuclear_power }
+			NOT = {
+				any_scope_treaty = {
+					any_scope_article = {
+						has_type = nuclear_disarmament
+						target_country = root
+					}
+				}
+			}
+		}
+	}
+
+	can_ratify = {
+		always = yes
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { offer }
+		evaluation_chance = {
+			value = 5.0
+			if = {
+				limit = { has_attitude = { who = scope:other_country attitude = friendly } }
+				add = 10
+			}
+			if = {
+				limit = { is_in_same_power_bloc = scope:other_country }
+				add = 20
+			}
+		}
+		inherent_accept_score = {
+			value = 0
+			if = {
+				limit = { scope:target_country = this } # Evaluator is the one offering aid (source)
+				add = -100
+				if = {
+					limit = { is_in_same_power_bloc = scope:target_country }
+					add = 25
+				}
+				if = {
+					limit = { has_attitude = { who = scope:target_country attitude = friendly } }
+					add = 25
+				}
+				if = {
+					limit = { scope:source_country.relations:target_country >= relations_threshold:cordial }
+					add = 25
+				}
+				if = {
+					limit = {
+						"num_shared_rivals(scope:target_country)" > 0
+					}
+					add = 25
+				}
+				if = {
+					limit = {
+						"num_alliances_and_defensive_pacts_with_rivals(scope:source_country)" > 0
+					}
+					add = {
+						desc = "DIPLOMATIC_ACCEPTANCE_ALLIED_TO_RIVALS"
+						value = "num_alliances_and_defensive_pacts_with_rivals(scope:source_country)"
+						multiply = -15
+					}
+				}
+
+				if = {
+					limit = {
+						"num_alliances_and_defensive_pacts_with_allies(scope:source_country)" > 0
+					}
+					add = {
+						desc = "DIPLOMATIC_ACCEPTANCE_ALLIED_TO_ALLIES"
+						value = "num_alliances_and_defensive_pacts_with_allies(scope:source_country)"
+						multiply = 10
+					}
+				}
+			}
+			else = { # Evaluator is the one being asked to accept aid (target)
+				add = 50
+				if = {
+					limit = { country_rank >= rank_value:major_power }
+					add = 50
+				}
+				if = {
+					limit = { scope:source_country.relations:target_country > relations_threshold:cordial }
+					add = 25
+				}
+			}
+		}
+	}
+}
+
+# TREATY ARTICLE: intelligence_sharing_pact
+intelligence_sharing_pact = {
+    kind = mutual
+    cost = 200  # Upfront Influence cost
+
+    # Improves relations over time, showing growing trust.
+    relations_progress_per_day = 1.0
+    relations_improvement_max = 60
+
+    icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
+
+    flags = {
+        can_be_renegotiated
+    }
+
+	unlocked_by_technologies = {
+        intergovernmental_organizations
+    }
+
+    # Mutual modifier applies to both signatories.
+    mutual_modifier = {
+        # The core benefit: a 20% boost to the institution's effectiveness.
+        country_institution_impact_institution_ministry_of_intelligence_and_security_mult = 0.20
+
+        # The trade-off: a 10% increase in Bureaucracy cost.
+        country_institution_cost_institution_ministry_of_intelligence_and_security_mult = 0.10
+
+        # The second trade-off: a continuous drain on Authority.
+        country_authority_add = -50
+
+        # Represents the mutual dependence and entanglement of the pact.
+        country_treaty_leverage_generation_add = 300
+
+        # A passive benefit representing shared counter-intelligence.
+        country_leverage_resistance_mult = 0.1
+    }
+
+    # Executed once when the treaty is signed.
+    on_entry_into_force = {
+        # The world takes notice of this deep alliance, generating a small amount of Infamy.
+        scope:article_options.first_country = {
+			change_infamy = 1
+		}
+        scope:article_options.second_country = {
+			change_infamy = 1
+		}
+    }
+
+    # Only visible and possible between significant powers who have something to share.
+    visible = {
+        has_law = law_type:law_ministry_of_intelligence_and_security
+    }
+
+    possible = {
+        # Both countries must have a spy agency to share intelligence.
+        has_law = law_type:law_ministry_of_intelligence_and_security
+        scope:other_country = { has_law = law_type:law_ministry_of_intelligence_and_security }
+
+        # Must be at least a Major Power to enter such a high-level agreement.
+        country_rank >= rank_value:major_power
+        scope:other_country = { country_rank >= rank_value:major_power }
+
+        # Standard diplomatic checks
+        has_diplomatic_relevance = scope:other_country
+        NOT = { has_war_with = scope:other_country }
+        NOT = { has_diplomats_expelled = scope:other_country }
+        NOT = { scope:other_country = { has_diplomats_expelled = root } }
+    }
+
+    can_ratify = {
+        always = yes
+    }
+
+    ai = {
+        treaty_categories = { military }
+        article_ai_usage = { offer request }
+        evaluation_chance = { value = 15.0 }
+
+        inherent_accept_score = {
+            value = 0
+            # AI is more willing if they have good relations or a common threat.
+            if = {
+                limit = { has_attitude = { who = scope:other_country attitude = friendly } }
+                add = 25
+            }
+            if = {
+                limit = { any_rival_country = { any_rival_country = {THIS = scope:other_country } } } # We have a rival in common
+                add = 40
+            }
+            # AI is less willing if they have conflicting interests or are rivals.
+            if = {
+                limit = { any_rival_country = { THIS = scope:other_country } }
+                add = -100
+            }
+            if = {
+                limit = { has_attitude = { who = scope:other_country attitude = hostile } }
+                add = -50
+            }
+        }
+    }
+}
+
+# TREATY ARTICLE: joint_military_exercises
+joint_military_exercises = {
+    kind = mutual
+    cost = 75 # Relatively low influence cost, making it an accessible agreement
+
+    # The act of training together builds trust and improves relations.
+    relations_progress_per_day = 0.5
+    relations_improvement_max = 30
+
+    icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
+
+    flags = {
+        can_be_renegotiated
+    }
+
+    # Unlocks once modern combined arms doctrines are understood.
+    unlocked_by_technologies = {
+        combined_arms
+    }
+
+    # Mutual modifier applies to both signatories.
+    mutual_modifier = {
+        # The core benefit: Armies gain experience faster.
+        unit_army_experience_gain_mult = 0.25
+        unit_navy_experience_gain_mult = 0.25
+
+        # The trade-off: A small increase in military goods cost, representing the ammunition, fuel,
+        # and equipment consumed during large-scale training exercises.
+        country_military_goods_cost_mult = 0.05
+
+        # Represents the diplomatic entanglement of the pact.
+        country_treaty_leverage_generation_add = 150
+    }
+
+    # No special visibility requirements beyond having the tech.
+    visible = {
+        NOT = { is_country_type = decentralized }
+		has_technology_researched = combined_arms
+    }
+
+    possible = {
+        # Standard diplomatic checks
+        has_diplomatic_relevance = scope:other_country
+        NOT = { has_war_with = scope:other_country }
+        NOT = { has_diplomats_expelled = scope:other_country }
+        NOT = { scope:other_country = { has_diplomats_expelled = root } }
+    }
+
+    can_ratify = {
+        always = yes
+    }
+
+    ai = {
+        treaty_categories = { military }
+        article_ai_usage = { offer request }
+        evaluation_chance = { value = 20.0 } # AI should propose this fairly often to allies.
+
+        inherent_accept_score = {
+            value = 10
+            # AI is more willing if they have good relations or a common threat.
+            if = {
+                limit = { has_attitude = { who = scope:other_country attitude = friendly } }
+                add = 30
+            }
+            if = {
+                limit = { any_rival_country = { any_rival_country = {THIS = scope:other_country } } } # Common rival
+                add = 30
+            }
+            # AI is less willing if they are rivals.
+            if = {
+                limit = { any_rival_country = { THIS = scope:other_country } }
+                add = -75
+            }
+            # AI is more likely to accept if they have a Jingoist or militaristic leader/government.
+            if = {
+                limit = {
+                    OR = {
+						any_interest_group = {
+							OR = {
+								has_ideology = ideology_jingoist
+								has_ideology = ideology_fascist
+							}
+							is_in_government = yes
+						}
+                    }
+                }
+                add = 20
+            }
+        }
+    }
 }

@@ -770,8 +770,11 @@ pmg_base_building_arts_academy = {
         pm_realist_art
         pm_photographic_art
         pm_film_art
-        pm_modern_entertainment
-        pm_ai_entertainment
+        pm_sound_film
+        pm_broadcast_television
+        pm_video_games
+        pm_digital_streaming
+        pm_neurostimulation
     }
 }
 pmg_ownership_building_arts_academy = {
@@ -780,7 +783,8 @@ pmg_ownership_building_arts_academy = {
         pm_traditional_patronage
         pm_bourgeoisie_patronage
         pm_independent_artists
-        pm_media_corperations
+        pm_state_directed_media
+        pm_media_corporations
         pm_influencers_and_content_creators
         pm_artificial_personalities
     }
@@ -1032,6 +1036,7 @@ pmg_automobile_production = {
 	production_methods = {
 		pm_automobile_production
 		pm_mass_automobile_production
+        pm_modern_automobile_production
         pm_electric_cars
         pm_fusion_battery_vehicles
 	}
@@ -1050,6 +1055,7 @@ pmg_automation_planes = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
         pm_basic_production
+        pm_assembly_line_aeroplanes
         pm_uavs
         pm_self_optimizing_production_planes
     }
@@ -1198,6 +1204,12 @@ pmg_automation_building_advanced_material_fabricator = {
         pm_lab_am_fabrication
         pm_synthetic_bacteria_am_fabrication
         pm_automated_am_fabrication
+    }
+}
+pmg_location_building_advanced_material_fabricator = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_basic_production
         pm_orbital_fabrication
     }
 }

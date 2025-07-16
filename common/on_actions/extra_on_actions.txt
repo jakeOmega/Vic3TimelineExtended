@@ -36,12 +36,19 @@ on_yearly_pulse_country = {
 on_acquired_technology = {
 	on_actions = {
 		add_arable_land_effect_on_action
+		fix_incompatible_laws
 	}
 }
 
 on_law_enactment_started = {
 	events = {
 		minor_events_timelineextended.2
+	}
+}
+
+on_law_activated = {
+	on_actions = {
+		fix_incompatible_laws_from_law_scope
 	}
 }
 
@@ -564,5 +571,19 @@ violent_hostility_on_action = {
 			}
 		}
 		remove_variable = sent_message
+	}
+}
+
+fix_incompatible_laws_from_law_scope = {
+	effect = {
+		owner = {
+			fix_incompatible_laws = yes
+		}
+	}
+}
+
+fix_incompatible_laws = {
+	effect = {
+		fix_incompatible_laws = yes
 	}
 }

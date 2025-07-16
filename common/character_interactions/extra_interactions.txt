@@ -51,7 +51,7 @@ assassinate_domestic = {
 		value = 0		
 	}
 
-	cooldown = { months = short_modifier_time }
+	cooldown = { days = short_modifier_time }
 
 	show_confirmation_box = yes
 }
@@ -88,7 +88,7 @@ assassinate_foreign = { # doesn't work D:
 		value = 0		
 	}
 
-	cooldown = { months = short_modifier_time }
+	cooldown = { days = short_modifier_time }
 
 	show_confirmation_box = yes
 }

@@ -1526,6 +1526,447 @@ culture_templates = {
 		1 = [ethnicity]
 	}
 }""",
+    "japanese": """japanese_[name]= {
+    color= hsv{ 0 0 90 }
+    religion = mahayana
+    traits = { yamato [heritage] }
+    male_common_first_names = {
+        Aritomo Gentaro Gonnohyoe Goro Hayao Heihachiro Hikonojo Hiroshi Hyoe Iwao Jinzaburo Jiro Kageaki Kagenori Kantaro Kazushige Keisuke Kenkichi Kiyotaka Koichiro Kotohito Kozo Kuranosuke Maresuke Masatake Masujiro Michisura Mineo Mitsue Mitsuomi Nariaki Nobuyoshi Rokuro Sadao Samata Shichiro Shigeru Shigeto Shinsaku Shoin Soroku Sotokichi Sukenori Sukeyuki Sumiyoshi Tadakuni Takamori Takayoshi Takeaki Tamemoto Taro Taruhito Tetsutaro Tomasaburo Tomonosuke Toshimichi Toshiyoshi Tsugumichi Yahachi Yasukata Yasuyoshi Yoshida Yoshifuru Yoshika Yoshimichi Yoshinobu Yoshinori Yusaku
+    }
+    female_common_first_names = {
+        Asako Chikako Ginko Gyokuran Kaho Kei Kin Kumehachi Masako Miki Natsu Nobu Oi Rengetsu Sayoko Teru Toyoko Tsuneko
+    }
+    noble_last_names = {
+        Hayashi Ito Jutoku Kujo Matsudaira Mitsune Nabeshima Togo Tokugawa
+    }
+    common_last_names = {
+        Akiyama Araki Arichi Arisugawa Dewa Enomoto Hasegawa Honjo Ichinohe Inoue Itagaki Kabayama Kamimura Kamio Kanin Kataoka Kato Katsu Katsura Kawakami Kawamura Kido Kodama Kuroda Kuroki Makino Masaki Minami Muto Nakamuta Nire Nogi Nozu Okada Oku Okubo Omura Osumi Oyama Saigo Sakura Sato Shibayama Shimamura Shirakawa Suzuki Tachibana Takashima Takasugi Tamon Terauchi Tsuboi Ueda Uehara Ugaki Uryu Yamagata Yamakawa Yamamoto Yamashita Yamaya Yashiro Yui
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "indo_aryan": """indo_aryan_[name]= {
+    color= hsv{ 0.12 0.70 0.60 }
+    religion = hindu
+    traits = { indo_aryan_language [heritage] }
+    male_common_first_names = {
+        Aakash Amratlal Ashoka Balwantry Chandrakirti Chandraka Dhalip Ganda Govind Harishankar Ishvari Jassa Kapur Lokendra Madhukar Nau Nihal Pheran Purnananda Raghuraj Ranjit Shivshankar Udit Veer
+    }
+    female_common_first_names = {
+        Alka Amrita Anuradha Asha Bhawana Datar Ganga Hema Indira Jind Mehtab Nidhi Priyanka Rani Sada Sampat Savita Uma
+    }
+    noble_last_names = {
+        Arkvanshi Bahadur Bajpai Bhangi Chauhan Deva Jaitely Kunwar Nehru Phulkian Prasad Shah Singh
+    }
+    common_last_names = {
+        Ahluwalia Ambani Bharti Bhave Biswas Das Devi Dhillon Gandhi Gupta Janak Joshi Kaur Kunwar Mishra Nayar Phukan Ram Sastri Sharma Shukla Singh Tiwana Verma Yadav
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "dravidian": """dravidian_[name]= {
+    color= hsv{ 0.94 0.57 0.70 }
+    religion = hindu
+    traits = { dravidian [heritage] }
+    male_common_first_names = {
+        Alluri Basaveshwara Chidambaram Durgabai Harihara Kandukuri Kempe Krishnadeva Narasimha Pingali Potti Raja Rajagopalachari Ramaswami Seshayya Shanmukham Subramania Tanguturi Uyyalawada
+    }
+    female_common_first_names = {
+        Anjali Aparna Chindodi Fathima Lakshmi Manjula Nageswari Rajini Rani Saraswati Sudhamani
+    }
+    noble_last_names = {
+        Bahadur Hegde Iyer Menon Nayak Narayan Rajagopalachari Rao Raya Salarjung Sethupathi Tondaiman
+    }
+    common_last_names = {
+        Ballala Bibi Deshmukh Gowda Hanumathu Kattabomman Kesavadas Krishnamachari Mudaliar Naidu Nayudu Perumal Pillai Sitaramaraju Sriramulu Veeresalingam Wodeyar
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "bantu": """bantu_[name]= {
+    color= hsv{ 0.15 0.65 0.45 }
+    religion = animist
+    traits = { bantu [heritage] }
+    male_common_first_names = {
+        Agyeman Amadi Atakora Bakari Chane Chionesu Dume Gamba Githinji Ilunga Jideofor Juma Kabili Kasongo Kofi Kwame Mburumba Mensa Mzilikazi Ngengi Onsei Orji Owusu Sekayi Shaka Tichawonna Wamwara Zuka
+    }
+    female_common_first_names = {
+        Abisagi Akousua Ambwene Chima Danai Fulu Kakenya Mmanthatisi Nandi Nwanyieze Serwaa_Nyarko Thandi Wambui Yaa_Akyaa
+    }
+    noble_last_names = {
+        Asante Banda Buthelezei Denkyira Ilunga kaJama Kambazembi Keita Maharero Moshoeshoe Nnofo Nri Rozwi
+    }
+    common_last_names = {
+        Achebe Akengbedo Bonsu Cilemo Dacche Deng Fofie Gqunu Hanga Kalombo Kony Kuai Kwenda Lobengula Maina Mtemi Ngwale Njovu Nyamazana Onyeso Phiri Prempeh Soshangane Tene wa_Ngengi
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "turkic": """turkic_[name]= {
+    color= hsv{ 0.99 0.48 0.80 }
+    religion = sunni
+    traits = { turkic [heritage] }
+    male_common_first_names = {
+        Abdulhamid Abdullah Ahmet Ali Alimqul Arif Aslan Bahaeddin Bekir Cemal Enver Fahri Fevzi Fuat Halil Hasan Haydar Heydar Ibrahim Ismet Izzet Kazim Kemal Mahmud Mehmed Murad Musa Mustafa Namik Numan Nurettin Omar Osman Rauf Reshad Selim Suleyman Talat Yaqub Yusuf Ziya
+    }
+    female_common_first_names = {
+        Aisha Alaviyya Ayse Aziza Emina Fatma Gulimina Gulnazar Hamida Maryam Nasiba Sakina Samal
+    }
+    noble_last_names = {
+        Ankuap Arpazli Ashurbeyov Balyan Bayero Beg Benderli Cengic Dantata Karaosmanoglu Khan Koprulu Osmanoglu Saraki Shah
+    }
+    common_last_names = {
+        Abdulbaqi Akbas al-Kanemi Aytakov Bahadur Bakikhanov Bayramov Burhan Eczacibashi Hasagasi Ildyrym Koc Kosalay Masanchi Mehmandarov Mulos Oezal Rasulzade Sabanci Taymur Zardabi
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "malay": """malay_[name]= {
+    color= hsv{ 0.92 0.49 0.60 }
+    religion = sunni
+    traits = { malay_culture [heritage] }
+    male_common_first_names = {
+        Abul Abdurrahman Ahmad Amir Anom Arifin Bambang Daud Emilio Hasyim Jose Juan Kiras Manuel Muhammad Panembahan Slamet Soekarno Ton_That Tran Truong
+    }
+    female_common_first_names = {
+        Atiqah Brijida Carmen Catalina Fatin Leona Lien Mai Maria Megawati Sari Siti Sunarti Tatiek
+    }
+    noble_last_names = {
+        Aguainaldo al_Qadri Bonifacio Bukitan Djajadiningrat Hamengkubuwono Le Manisia Marga_Sinambela Ngo_Dinh Pakualaman Sastrowardoyo
+    }
+    common_last_names = {
+        Akbaruddin Angkat Arellano Bangun Bintang Buu_Lan Capah Cirebon Cuong del_Pilar Diwa Gajah Han Juhah Kaloko Khairuddin Meka Mien_Lam Pasi Rizal Salihin Sinamo
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "north_american": """north_american_[name]= {
+    color= hsv{ 0.63 0.30 0.52 }
+    religion = animist
+    traits = { north_american_group [heritage] }
+    male_common_first_names = {
+        Apuckshunubbee Barboncito Billy Catecahassa Cheeseekau Cochise Gabriel Geronimo Guyasuta Hehaka Henry_Chee Husishusis_Kute Inkpaduta John Joseph Kaintwakon Lalawethika Louis Manuelito Ollokot Peter Quanah Skenandoa Tamaha Tenskatawa Toohoolhoolzote Wanata
+    }
+    female_common_first_names = {
+        Alliquippa Azayamankawin Chipeta Dehhewanis Gahonnoneh Kaniehtiio Marie-Anne Methoataske Naduah Nonhelema Owanah Polly Rosalie Sacagawea
+    }
+    noble_last_names = {
+        Abeel Ahenakew Blacksnake Boudinot Bowlegs Brant Cornplanter Dodge Hastiin_Dagha Kahkewistahaw Lathlin Lepine McIntosh Riel Ridge Ross Sayer Vann
+    }
+    common_last_names = {
+        Ahtahkakoop Anderson Bissette Bruce Buck Buffalo Bull Calf Child Crane Decoteau Dumont Folsom Harjo Hicks Huste Iyotake Jemison Lacerte Lesperance Logan Martin McQueen Montour Parker Pitchlynn Powell Rain Sapa Tecumseh Vandal Witko
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "mesoamerican": """mesoamerican_[name]= {
+    color= hsv{ 0.47 0.29 0.38 }
+    religion = catholic
+    traits = { native_mesoamerican_culture_group [heritage] }
+    male_common_first_names = {
+        Agustin Akbal Andres Antonio Benito Carlos Cristobal Cuautehmoc Diego Emiliano Felipe Gaspar Hernando Jacinto Jesus JosE_ Juan Luis Manuel Martin Miguel Porfirio Santiago Yumil
+    }
+    female_common_first_names = {
+        Ana Antonia Amaranta Celsa Cleofas Cristina Delfina Eufrosina Eva Felipa Jovita Laureana Lina Maria Matilde Ramona Rosalina Sofia
+    }
+    noble_last_names = {
+        Altamirano Ay Calderon Ceel Chan Charis Chi Cortes Henestrosa Juarez Pat Pec Poot Tamayo
+    }
+    common_last_names = {
+        Ak_ab_al Almonte Atlanteco Badiano Cal Canek Canul Carrillo Ceh Chinas Coc Coyotl Cristobal Cuautlaxahue Fernandez Garcia Gonzalez Gutierrez Huanitzin Ixtlilxochitl Jimenez Lopez Matus Menchu Morales Ortiz Pineda Pop Puk Ruiz Tecu Valeriano Xochitl Zapata
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "south_american": """south_american_[name]= {
+    color= hsv{ 0.10 0.22 0.69 }
+    religion = catholic
+    traits = { south_american_group [heritage] }
+    male_common_first_names = {
+        Agustin Alejandro Antonio Anibal Aucan Bartolome Carlos David Diego Evo Felipe Francisco Gregorio Hugo Jacinto JosE_ Juan Luis Manuel Martin Maximo Pablo Pedro Ramon Roque Santiago Simon Tupac Victor
+    }
+    female_common_first_names = {
+        Adela Angelica Bartolina Carola Celsa Claudia Eliza Emilia Janequeo Juana Maria Mercedes Micael Modesta Sara Silvia Veronica
+    }
+    noble_last_names = {
+        Anzoategui Apaza Calfucura Colipi Collahuazo Conoepan Cusicanqui Katari Melin Namuncura Poma Quispe Santa_Cruz Sisa Tiaraju Tumpa Vargas
+    }
+    common_last_names = {
+        Alvarez Arguedas Ayme Barrientos Calfucur Calisaya Camba Cardenas Chambi Choquehuanca Condori Diaz Fernandez Gonzalez Guaman Gutierrez Hernandez Huallpa Humala Lopez Mamani Morales Ortiz Paredes Patino Puma Riquelme Rodriguez Sosa Toledo Torres Velazquez
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "west_slavic": """west_slavic_[name]= {
+    color= hsv{ 0.66 0.32 0.99 }
+    religion = catholic
+    traits = { west_slavic [heritage] }
+    male_common_first_names = {
+        Adam Aleksander Alois Andrej Antonin Bedrich Boleslaw Bronislaw Edvard Emil Eustachy Frantisek Gustav Henryk Ignacy Jakub Jan Jaroslav Jiri Jozef Karol Kazimierz Ladislav Leopold Ludwik Maciej Marian Michal Mikulas Pavel Peter Roman Stanislaw Stefan Tadeusz Vaclav Vojtech Zygmunt
+    }
+    female_common_first_names = {
+        Anna Barbara Blanka Elena Emilia Ewelina Helena Irena Ivana Jaroslava Karolina Katerina Klara Ludmila Maria Olga Stefania Tereza Ursula Zofia Zuzana
+    }
+    noble_last_names = {
+        Bernolak Bor-Komorowski Clary_Aldringen Colloredo-Mansfeld CzetwertyN_ski Daxner Glowacki GoL_uchowski Harrach Jesensky Kollar Lichnovsky L_ubieN_ski OgiN_ski Pilsudski Potocki Radziwill Sapieha Thun-Hohenstein z_Lobkovic
+    }
+    common_last_names = {
+        Balaban Basch Benes Blaho Brzoska Celovsky Chlapowski Dabrowski Dvorak Fibich Gajda Hlinka Hodza Jirecek Kafka Kollar Kucera Langiewicz Masaryk Moravec Nemecek Neruda Nowak Novotny Ostrowski Popper Radecky Safarik Smetana Sowinski Stefanik Svoboda Tiso Traugutt Weber
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "south_slavic": """south_slavic_[name]= {
+    color= hsv{ 0.97 0.26 0.58 }
+    religion = orthodox
+    traits = { jugoslav [heritage] }
+    male_common_first_names = {
+        Alaksandar Andrija Antun Blagoje Bozidar Branko Danilo Dragutin Dusan Franjo Ivan Janko Josip Juraj Karlo Kresimir Ljudevit Milan Milos Mirko Miroslav Nikola Pavle Petar Radomir Slavko Stjepan Tomislav Vladimir Vojislav Zivojin
+    }
+    female_common_first_names = {
+        Aleksandra Ana Anka Darinka Draga Dragojla Ivana Jelena Katarina Marija Milena Natalia Ruza Tereza
+    }
+    noble_last_names = {
+        Anastasijevic Avakumovic Draskovic Garasanin Gradi Izetbegovic Jelacic Karadordevic Kukuljevic Mazuranic Nenadovic Obrenovic Pejacevic Pozderac Sarkotic Zrinski
+    }
+    common_last_names = {
+        Alapic Bakaric Belimarkovic Bilic Blazevic Boroevic Brankovic Cuvaj Dapcevic Frankopan Gaj Getaldic Gundulic Hadzilic Horvatovic Imamovic Jankovic Jovanovic Kulenovic Lesjanin Maric Mihailovic Misic Nazor Nedic Novak Panic Pesic Petrovic Popovic Putnik Pucic Selimovic Sokolovic Stepanovic Tomasic Vukotic Zivkovic
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "celtic": """celtic_[name]= {
+    color= hsv{ 0.35 0.58 0.54 }
+    religion = catholic
+    traits = { celtic_people [heritage] }
+    male_common_first_names = {
+        Alexander Arthur Brian Cathal Christopher Con Daniel Denis Desmond Edward Eamon Fionan Frank George Harry Jack James John Joseph Kevin Liam Michael Murrough Patrick Peter Richard Robert Sean Thomas William
+    }
+    female_common_first_names = {
+        Adela Anne Bithia Bridget Catherine Charlotte Clotilde Edith Ellen Emily Gertrude Honora Ida Isobel Jane Josephine Laura Letitia Louisa Margaret Mary Nora Olivia Rose Sarah Sophie
+    }
+    noble_last_names = {
+        Beresford Browne Castlereagh Conyngham FitzGerald FitzMaurice Glenavy Hamilton Hill Lambart Loftus Mornington O_Brien Plunket Talbot Taylor Vane-Tempest
+    }
+    common_last_names = {
+        Aiken Ashe Boyle Brady Breen Brennan Brown Brugha Burke Byrne Campbell Carroll Clarke Collins Connolly Connor Cosgrave Craig Daly Doherty Donnelly Doyle Duffy Dunne Farrell Fitzpatrick Flynn Gallagher Griffith Hayes Healy Hughes Johnston Kelly Kennedy Larkin Lynch Maguire Mallin Martin McCarthy Moore Moran Mulcahy Murphy Murray Nolan O_Connor O_Higgins O_Leary Pearse Power Quinn Reilly Ryan Smith Sullivan Walsh White Wilson
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "hungarian": """hungarian_[name]= {
+    color= hsv{ 0.25 0.22 0.99 }
+    religion = catholic
+    traits = { hungarian_culture_group [heritage] }
+    male_common_first_names = {
+        Alajos Albert Andras Aurel Benedek Bertalan Bela Daniel_3 David_2 Erno Ferencz Gyula Gyorgy Gabor Ignac Imre Istvan Janos Jozsef Kalman Karoly Lajos Laszlo Mihaly Mor Sandor Peter_2 Vilmos Zsigmond
+    }
+    female_common_first_names = {
+        Amalia_2 Anna Bertha Brigitta Emilia Emma Flora Fruzina Judit Katalin Kornelia Maria Nina Rozalia Terez Vilma Zsuzsanna
+    }
+    noble_last_names = {
+        Andrassy Deak Erenyi_Ullmann Frakashazi_Fischer Laczkovics Lahner Leiningen-Westerburg Lichtenstein Osterreicher von_Benedek Zrinyi
+    }
+    common_last_names = {
+        Apponyi Aulich Baross Batthyany Beothy Bothmer Damjanich Dessewffy Egressy Farkas Goldziher Gungl Hauszmann Heller Horthy Jaszai Joseffy Katona Kaufman Kiss Knezich Lazar Liszt Mikszath Molnar Nagy-Sandor Ottinger Perczel Poeltenberg Remenyi Rohr Schweidel Szemere Szechenyi Tersztyansky Torok Varga Vecsey
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "scandinavian": """scandinavian_[name]= {
+    color= hsv{ 0.64 0.57 0.62 }
+    religion = protestant
+    traits = { scandinavian_culture_group [heritage] }
+    male_common_first_names = {
+        Aage Anders Andreas Anton Arne Axel Bjorn Carl Christian Christofer Daniel Edvard Einar Erik Folke Frederik Georg Gustav Hans Henrik Ivar Jacob Johan Julius Karl Knud Lars Ludvig Magnus Michael Niels Olaf Olav Ole Oscar Otto Peter Poul Sigurd Sten Sven Thomas Thorvald Vilhelm
+    }
+    female_common_first_names = {
+        Amalie Anna Anne Augusta Birgitta Brita Caroline Catharina Charlotta Christina Dagmar Dorothea Elisabeth Erika Eva Frederikke Hanna Helena Inga Ingrid Irene Johanna Karin Kerstin Kristina Louise Lovisa Margaretha Maria Martha Matilda Sofia Ulrika
+    }
+    noble_last_names = {
+        af_Ugglas Anker Barnekow Beck-Friis Bjelke Brahe CederstrO_m De_Geer Gyllenstierna Hamilton Hermelin Kaas Koskull Lagerbjelke Leijonhufvud Lovenskiold Morner Nordenfalk Palmstierna Piper Raab Reventlow Rosenkrantz Sprengtporten Trolle von_Essen von_Fersen von_Holstein Wachtmeister Wedel-Jarlsberg
+    }
+    common_last_names = {
+        Andersen Andersson Berg Berggren Bergstrom BillstrO_m Bjork Blomqvist Carlsen Carlsson Dahlberg Danielsson Ekman Eriksson Falsen Fredriksson Gustafsson Hansen Hansson Henriksson Holm Holmberg Johansson Jonsson Juul Karlsson Krogh Larsen Larsson Lindberg Lindgren Lindstrom Lundberg Lundgren Michaelsen Nielsen Nilsson Olsen Olsson Pedersen Persson Petersson Pettersson Samuelsson Sandberg Svensson
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "korean": """korean_[name]= {
+    color= hsv{ 0.17 0.41 0.34 }
+    religion = confucian
+    traits = { korean_language [heritage] }
+    male_common_first_names = {
+        Bak Bong-haek Byeon Choi-ung Chwa-chin Don-in Gu Han Hong-jip Heong-gyo Jeong Jo Jung-yang Kown Mung-geun Ok Sang-ok Sim Won-yong Yi Yun
+    }
+    female_common_first_names = {
+        Bingheogak Hwahyeop Hyoyu Ja-yeong Jeongildang Seonhui Sinjeong Sunghee Yeongsuhap Yunjidang
+    }
+    noble_last_names = {
+        Bak Chang Choe Gang Gim Gwon Han Hong Jo Kim Ko Min Moon Na Namgung Park Shin Seong Seok Song Won Yi
+    }
+    common_last_names = {
+        Bo Chung Guk Gyu Haung Hu Hwan Hyong Im Jip Mok Seo Seon Shinjong Si Sun Taek Yong
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "jewish": """jewish_[name]= {
+    color= hsv{ 0.13 0.80 0.99 }
+    religion = jewish
+    traits = { jewish_group [heritage] }
+    male_common_first_names = {
+        Abraham Albert Baruch Benjamin Binyamin Daniel David Eli Gavriel Gerson Gustav Heinrich Hermann Ignatz Isaak Itzhak Jakob Jeremias Josef Julius Leonhard Michael Moshe Salomon Saul Shmuel Sigmund Simon Theodor Yosef
+    }
+    female_common_first_names = {
+        Angela Alice Amalie Berta Emma Elsa Inez Irene Johanna Klara Karoline Minna Margarete Noemie Regine Ruth Sonia Zoe
+    }
+    noble_last_names = {
+        Abrabanel Auerbach Austerlitz von_Bleichroeder Camondo Curiel Ephrussi Guenzburg von_Hofmannsthal von_Neumann Oppenheim Sassoon Zuckerkandl
+    }
+    common_last_names = {
+        Abramovitch Ashkenazi Barak Bernstein Birnbaum Bloch Cantor Cardoso Cohen Disraeli Frank Friedlander Gaon Ginsberg Goldstein Halevi Horowitz Israel Jacobsohn Kagan Kaplan Klein Levin Levy Luria Maimon Montefiore Morgenstern Nathan Oren Peretz Rosenthal Sachs Schapiro Schwartz Weinstein Weiss
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "romanian": """romanian_[name]= {
+    color= hsv{ 0.12 0.41 0.54 }
+    religion = orthodox
+    traits = { romanian_culture_group [heritage] }
+    male_common_first_names = {
+        Adrian Alexandru Andrei Anton Carol Constantin Cornel Daniel Dumitru Eugen Ferdinand Gheorghe Grigore Ioan Iosif Iulian Laurentiu Lucian Mihai Mircea Nicolae Octavian Ovidiu Petru Radu Sergiu Stefan Teodor Toma Traian Vasile Victor Vlad
+    }
+    female_common_first_names = {
+        Adela Ana Constanta Daria Ecaterina Elena Elisa Elisabeta Eugenia Iulia Lucretia Maria
+    }
+    noble_last_names = {
+        Asachi Cantemir Caradja Callimachi Ghica Hasdeu Hurmuzachi Kogalniceanu Moruzi Racovita Sturdza Vacarescu
+    }
+    common_last_names = {
+        Angelescu Antonescu Argetoianu Averescu Bragadiru Cernat Coanda Culcer Cuza Dragalina Florescu Grigorescu Ionescu Lahovary Lupescu Manu Marinescu Murgescu Panaitescu Poenaru Popescu Prezan Samsonovici Steflea Tatarascu Vaitoianu
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "burmese": """burmese_[name]= {
+    color= hsv{ 0.13 0.42 0.38 }
+    religion = theravada
+    traits = { burmese_language [heritage] }
+    male_common_first_names = {
+        Alaungphaya Bodawphaya Duwa Ga Hsinbyushin Hta Maung Mindon Minkyaw Naungdawkyi Pagan Sama Saw Singu Sinwa Thibaw U Zan
+    }
+    female_common_first_names = {
+        Bawk_Ja Chandra Hsinbyumashin Nan_Moe_Moe Naw_Paw Supayalat Thaung Thin
+    }
+    noble_last_names = {
+        Aung Kantarawadi Konbaung Lisu Min Mungchi Sao Shatam U_bee
+    }
+    common_last_names = {
+        Bagyidaw Bandula Bye Che Dabayin Kye Kyi Lahpai Lahtaw Law_Paw Maran Myo Ne_Myo Papw Thura
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "tai": """tai_[name]= {
+    color= hsv{ 0.61 0.29 0.58 }
+    religion = theravada
+    traits = { tai [heritage] }
+    male_common_first_names = {
+        Anurutha Chao Chulalongkorn Hkam Hkun Hseng Hso Lun Mongkut Nangklao Nanthasen Ong Phraya Sakkarin Setthathirath Shwe Sisavang Sun Than Tuam Unkham Vajiravudh
+    }
+    female_common_first_names = {
+        Adorndibyanibha Bandhavanna Charm Hearn Kham-Oun Pheng Prabha Samathi Sirikit Valaya Yaovabha
+    }
+    noble_last_names = {
+        Chakri Luang_Phrabang Ong Praya_Siri Sao
+    }
+    common_last_names = {
+        Anuvong Bunnag Cheng Hmu Hung Inswang Kaw Kridakorn Kuman Letya Long Min Mong Nan Nitithada Phonphayuhasena Praband Rabibadhana Som Thephatsadin Vong
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "khmer": """khmer_[name]= {
+    color= hsv{ 0.04 0.54 0.86 }
+    religion = theravada
+    traits = { khmer_language [heritage] }
+    male_common_first_names = {
+        Ang Laik-Gi Manthaturath Norodom Ong Pok Sakkarin Satha Sisowath Sukha Taksin Thommo Tun Unkeo
+    }
+    female_common_first_names = {
+        Aut Bandhavanna Bunlei Di Mey Nokiang Ros Tuu Thiha Vanthy Vara
+    }
+    noble_last_names = {
+        Ang Chakri Luang_Phrabang Ong Varman
+    }
+    common_last_names = {
+        Anuvong Bun Chan Em Eng Intharavong Kuman Long Maung Mey Non Reachea Saw Sieng Sinn Snguon Soe Som Supho Tong Vong
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
+    "polynesian": """polynesian_[name]= {
+    color= hsv{ 0.73 0.49 0.65 }
+    religion = animist
+    traits = { polynesian_group [heritage] }
+    male_common_first_names = {
+        Finau [cite: 82] Iosefo [cite: 82] Kaoua [cite: 84] Kahanamoku [cite: 82] Lunalilo [cite: 82] Mahuta [cite: 85] Pokaia [cite: 85] Samuel [cite: 84] Seru [cite: 84] Taufa_ahau [cite: 82] Te_Rata [cite: 85] William [cite: 82]
+    }
+    female_common_first_names = {
+        Alanieta [cite: 84] Auli_i [cite: 82] Hariata [cite: 85] Kahupeka [cite: 85] Kaliko [cite: 82] Kamamalu [cite: 82] Mary [cite: 82] Pane [cite: 82] Pomare [cite: 82] Salote [cite: 84] Sarojini [cite: 84] Te_Puea [cite: 85]
+    }
+    noble_last_names = {
+        Dovi [cite: 84] Heke [cite: 85] Hongi [cite: 85] Kalakaua [cite: 82] Kamehameha [cite: 82] Kawananakoa [cite: 82] Pomare [cite: 82] Sukuna [cite: 84] Te_Wherowhero [cite: 85] Uluviti [cite: 84]
+    }
+    common_last_names = {
+        Cakobau [cite: 84] Feletoa [cite: 82] Ielemia [cite: 82] Kahanamoku [cite: 83] Loganimoce [cite: 84] Ma_ufanga [cite: 82] Nakuina [cite: 83] Pukui [cite: 83] Raouparah [cite: 85] Tautu [cite: 84] Tupou [cite: 84] Wherowhero [cite: 85]
+    }
+    graphics = [graphics]
+    ethnicities = {
+        1 = [ethnicity]
+    }
+}""",
 }
 
 heritage_templates = {
@@ -1594,6 +2035,27 @@ name_trait_mapping = {
     "sino": "sinosphere",
     "iranian": "iranian_turanian_culture_group",
     "dutch": "beneluxian_culture_group",
+    "japanese": "yamato",
+    "indo_aryan": "indo_aryan_language",
+    "dravidian": "dravidian",
+    "bantu": "bantu",
+    "turkic": "turkic",
+    "malay": "malay_culture",
+    "north_american": "north_american_group",
+    "mesoamerican": "native_mesoamerican_culture_group",
+    "south_american": "south_american_group",
+    "west_slavic": "west_slavic",
+    "south_slavic": "jugoslav",
+    "celtic": "celtic_people",
+    "hungarian": "hungarian_culture_group",
+    "scandinavian": "scandinavian_culture_group",
+    "korean": "korean_language",
+    "jewish": "jewish_group",
+    "romanian": "romanian_culture_group",
+    "burmese": "burmese_language",
+    "tai": "tai",
+    "khmer": "khmer_language",
+    "polynesian": "polynesian_group",
 }
 
 heritage_base = {
@@ -1609,6 +2071,71 @@ heritage_base = {
     "sino": "east_asian_heritage",
     "iranian": "iranian_turanian_culture_group",
     "dutch": "european_heritage",
+    "japanese": "east_asian_heritage",
+    "indo_aryan": "south_asian_heritage",
+    "dravidian": "south_asian_heritage",
+    "bantu": "african_heritage",
+    "turkic": "central_asian_heritage",
+    "malay": "southeast_asian_heritage",
+    "north_american": "indigenous_american_heritage",
+    "mesoamerican": "indigenous_american_heritage",
+    "south_american": "indigenous_american_heritage",
+    "west_slavic": "european_heritage",
+    "south_slavic": "european_heritage",
+    "celtic": "european_heritage",
+    "hungarian": "european_heritage",
+    "scandinavian": "european_heritage",
+    "korean": "east_asian_heritage",
+    "jewish": "european_heritage",
+    "romanian": "european_heritage",
+    "burmese": "southeast_asian_heritage",
+    "tai": "southeast_asian_heritage",
+    "khmer": "southeast_asian_heritage",
+    "polynesian": "indigenous_oceanic_heritage",
+}
+
+# Provides specific, polished display names for culture templates.
+display_name_map = {
+    # Colonial/Linguistic Prefixes
+    "anglo": "Anglo",
+    "franco": "Franco",
+    "german": "German",
+    "hispano": "Hispano",
+    "lusano": "Luso",
+    "italo": "Italo",
+    "dutch": "Dutch",
+    "sino": "Sino",
+    "japanese": "Japanese",
+    # Indigenous American Groups
+    # These are hard because the South American and (especially) North American cultures are very diverse.
+    "north_american": "Akiin",
+    "mesoamerican": "Mesoan",
+    "south_american": "Ayllun",
+    # Other Cultural Groups
+    "slavic": "East Slavic",
+    "hellenic": "Greek",
+    "celtic": "Gaelic",
+    "south_slavic": "South Slavic",
+    "west_slavic": "West Slavic",
+    "indo_aryan": "Indo-Aryan",
+    "polynesian": "Polynesian",
+}
+
+# Configures the final name format using {culture} and {heritage} placeholders.
+# This is more flexible than the old prefix/suffix system.
+name_format_map = {
+    # Prefix-style cultures
+    "anglo": '"{culture}-{heritage}"',
+    "franco": '"{culture}-{heritage}"',
+    "german": '"{culture}-{heritage}"',
+    "hispano": '"{culture}-{heritage}"',
+    "lusano": '"{culture}-{heritage}"',
+    "italo": '"{culture}-{heritage}"',
+    "dutch": '"{culture}-{heritage}"',
+    "sino": '"{culture}-{heritage}"',
+    "japanese": '"{culture}-{heritage}"',
+    # Suffix-style cultures (default for most)
+    "default": '"{heritage}-{culture}"',
 }
 
 output = ""
@@ -1779,8 +2306,25 @@ localization_output = "l_english:\n"
 for culture_template in culture_templates.keys():
     for heritage in heritage_templates.keys():
         if heritage_base[culture_template] != heritage_templates[heritage]["heritage"]:
+            # 1. Get the format string for the culture, or use the default
+            format_string = name_format_map.get(
+                culture_template, name_format_map["default"]
+            )
+
+            # 2. Get the polished display name for the new culture
+            culture_formatted_name = display_name_map.get(
+                culture_template, " ".join(culture_template.split("_")).title()
+            )
+
+            # 3. Get the formatted name for the old heritage
             heritage_formatted_name = " ".join(heritage.split("_")).title()
-            localization_output += f' {culture_template}_{heritage}:0 "{culture_template.capitalize()}-{heritage_formatted_name}"\n'
+
+            # 4. Apply the format string to generate the final name
+            final_name = format_string.format(
+                culture=culture_formatted_name, heritage=heritage_formatted_name
+            )
+
+            localization_output += f" {culture_template}_{heritage}:0 {final_name}\n"
 
 with open(
     mod_path + r"\localization\english\assimilation_cultures_l_english.yml",

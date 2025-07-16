@@ -325,6 +325,21 @@ ig_trade_unions = {
 
 	executive_weight = {
 		value = 0.2
+		
+		# The company owning BIC should not get non-industrialist executives
+		if = {
+			limit = {
+				exists = scope:company
+				exists = c:BIC
+				c:BIC = {
+					exists = owning_company
+					owning_company = scope:company
+				}
+			}
+			multiply = {
+				value = 0
+			}
+		}
 	}
 
 	noble_chance = {

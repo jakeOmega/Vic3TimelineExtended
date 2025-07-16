@@ -11,7 +11,22 @@ je_nuclear_program = {
     scripted_button = decrease_funding_nuclear_program
 
     possible = {
-        country_rank = rank_value:great_power
+        OR = {
+            country_rank = rank_value:great_power
+            AND = {
+                country_rank = rank_value:major_power
+                has_technology_researched = ICBMs
+            }
+            modifier:receiving_nuclear_program_aid = yes 
+        }
+        NOT = {
+            any_scope_treaty = {
+                any_scope_article = {
+                    has_type = nuclear_disarmament
+                    source_country = root
+                }
+            }
+        }
     }
 
     immediate = {
@@ -53,6 +68,24 @@ je_nuclear_program = {
 
 	on_monthly_pulse = {
 		effect = {
+            if = {
+                limit = {
+                    any_scope_treaty = {
+                        any_scope_article = {
+                            has_type = nuclear_disarmament
+                            source_country = root
+                        }
+                    }
+                }
+                set_variable = {
+                    name = nuclear_weapon_stockpile
+                    value = 0
+                }
+                set_variable = {
+                    name = nuclear_weapon_program_progress
+                    value = 0
+                }
+            }
 			change_variable = {
 				name = nuclear_weapon_program_progress
 				add = nuclear_weapon_program_monthly_progress
@@ -180,7 +213,7 @@ je_state_collapse = {
                 }
                 add_modifier = {
                     name = failed_state_modifier
-                    months = long_modifier_time
+                    days = long_modifier_time
                     is_decaying = yes
                 }
                 every_scope_state = {

@@ -195,7 +195,7 @@ company_basic_electrics = {
 		building_network_infrastructure
 	}
 	possible_prestige_goods = {
-		prestige_good_entertainment
+		prestige_good_generic_consumer_appliances
 	}
     ai_will_do = {
 		any_scope_state = {
@@ -203,6 +203,7 @@ company_basic_electrics = {
                 OR = {
 				    is_building_type = building_electrics_industry
                     is_building_type = building_electrics_industry_radio
+					is_building_type = building_electrics_industry_appliances
                 }
 				level >= 3
 			}
@@ -284,7 +285,6 @@ company_basic_electronics = {
     
     building_types = {
         building_electronic_components_and_semiconductor_industry
-        building_robotics_industry
     }
 
     possible = { 
@@ -308,6 +308,7 @@ company_basic_electronics = {
     extension_building_types = {
 		building_tooling_workshops
         building_software_industry
+		building_robotics_industry
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_electronic_components
@@ -343,8 +344,6 @@ company_basic_aerospace = {
     
     building_types = {
         building_launch_facility
-        building_space_elevator
-        building_space_mine
         building_aeroplanes_industry
     }
 
@@ -366,8 +365,8 @@ company_basic_aerospace = {
     }
     flavored_company = no
     extension_building_types = {
-		building_automotive_industry
-        building_software_industry
+		building_space_elevator
+        building_space_mine
         building_electrics_industry_radio
 		building_airport
 	}
@@ -421,9 +420,7 @@ company_basic_software = {
 
     flavored_company = no
     extension_building_types = {
-		building_robotics_industry
         building_network_infrastructure
-        building_electronic_components_and_semiconductor_industry
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
@@ -529,11 +526,14 @@ company_basic_biotechnology = {
 				level >= 10
 			}
 		}
+		modifier:country_can_use_biotech_companies_bool = yes
 	}
 	
 	prosperity_modifier = {
 		state_birth_rate_mult = 0.05
         building_training_rate_mult = 0.5
+		country_tech_research_speed_mult = 0.05
+		state_pollution_generation_mult = -0.2
 	}	
 
     flavored_company = no
@@ -541,6 +541,7 @@ company_basic_biotechnology = {
 		building_synthetics_plants_rubber
         building_synthetics_plants_oil
         building_chemical_plants
+		building_food_industry
 	}
     ai_will_do = {
 		any_scope_state = {

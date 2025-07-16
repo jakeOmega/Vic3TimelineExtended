@@ -1,4 +1,5 @@
 artificial_intelligence = {
+	# Ultimate automation PMs for basically eveything
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -15,6 +16,8 @@ artificial_intelligence = {
 }
 
 advanced_nanofabrication = {
+	# Advanced AM Fabrication and Automated AM Fabrication PMs for Advanced Material Fabricator
+	# Nanorobots PM for Robotics Industries, Nanomaterial Buildings PM for Construction Sectors
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -35,6 +38,8 @@ advanced_nanofabrication = {
 }
 
 molecular_assemblers = {
+	# Nanobot Assemblers PM for Tooling Workshops, Self-Replicating Assemblers for Advanced Material Fabricators,
+	# Gray Goo unit, Molecular Scanners mobilization option
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -53,6 +58,8 @@ molecular_assemblers = {
 }
 
 quantum_materials = {
+	# Superconducting Networks PM for Wired Telecommunications Industries,
+	# Semi-Infinite Bandwidth PM for Network Infrastructure
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -67,6 +74,8 @@ quantum_materials = {
 }
 
 orbital_manufacturing = {
+	# Microgravity Alloying PM for Steel Mills, Orbital Fabrication PM for Advanced Material Fabricator,
+	# Orbital Nanolithography PM for Electronics Industries
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -86,6 +95,10 @@ orbital_manufacturing = {
 }
 
 programmable_matter = {
+	# Programmable Matter PM for Furniture and Textile Factories, Programmable Plastics 
+	# PM for Glassworks, Bespoke Alloys PM for Steel Mills, Advanced Sel-Replicating Assemblers
+	# PM for Advanced Material Fabricator, Programmable Food Synthesis PM for Food Industries,
+	# Autonomous Networks PM for Network Infrastructure
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -106,6 +119,8 @@ programmable_matter = {
 
 
 compact_fusion_reactors = {
+	# Spaceport PM for airport, Fusion SSTO Craft PM for Launch Facilities,
+	# Interstellar Mission PM for Space Program, DEW Tank unit
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -116,8 +131,7 @@ compact_fusion_reactors = {
 
 	modifier = {
 		country_max_weekly_construction_progress_add = 50
-		unit_navy_defense_mult = 2
-		unit_navy_offense_mult = 2
+		state_building_naval_base_max_level_add = 60
 		military_formation_movement_speed_mult = 1
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
@@ -130,6 +144,8 @@ compact_fusion_reactors = {
 }
 
 fusion_batteries = {
+	# Fusion Battery Motors PM for Motor Industries, Fusion Battery Vehicles PM for Automotive Industries,
+	# Fusion Battery Appliances PM for Consumer Appliance Industries
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -141,8 +157,7 @@ fusion_batteries = {
 	modifier = {
 		state_market_access_price_impact = 0.01
 		building_group_bg_trade_employee_mult = -0.04
-		unit_navy_defense_mult = 1
-		unit_navy_offense_mult = 1
+		state_building_naval_base_max_level_add = 60
 		military_formation_movement_speed_mult = 1
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
@@ -154,6 +169,7 @@ fusion_batteries = {
 }
 
 space_elevator = {
+	# Space Elevator Construction Site building
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -169,6 +185,7 @@ space_elevator = {
 }
 
 orbital_weapon_platforms = {
+	# Orbital Weapons Platforms unit
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -190,6 +207,7 @@ orbital_weapon_platforms = {
 }
 
 space_based_solar_power = {
+	# Space Power PM for Renewable Energy Plants
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -204,6 +222,7 @@ space_based_solar_power = {
 }
 
 antimatter_production = {
+	# Orbital Precision Antimatter Strikes unit
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -215,7 +234,7 @@ antimatter_production = {
 	
 	modifier = {
 		building_launch_facility_throughput_add = 0.25
-		unit_navy_offense_mult = 2
+		state_building_naval_base_max_level_add = 60
 		military_formation_movement_speed_mult = 1
 	}
 	
@@ -248,6 +267,7 @@ biological_immortality = {
 }
 
 space_colonization = {
+	# Mining, Farming, Resort Colony PMs for Extraplanetary Base
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -266,6 +286,8 @@ space_colonization = {
 }
 
 telepathic_communities = {
+	# Neural Lace Telepathy PM for Wireless Telecommunications Industries,
+	# AI-Mediated Mind Sharing PM for Software Industries
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -312,6 +334,8 @@ mind_backups = {
 }
 
 post-scarcity_economy = {
+	# Smart LED Streetlights PM for Urban Centers,
+	# Post-Scarcity Economy law
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -338,6 +362,7 @@ post-scarcity_economy = {
 }
 
 neural_lace = {
+	# Neural Lace Communications PM for Wired Telecommunications Industries
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society

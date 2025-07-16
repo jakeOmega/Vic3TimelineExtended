@@ -36,6 +36,8 @@ NPops = {
 
 	CULTURAL_COMMUNITY_ACCEPTANCE_DELTA_ON_SPAWN = -0.4							# The percentage of the maximum cultural acceptance that should be added as a delta to the cultural community when it first appears
 	CULTURAL_COMMUNITY_ACCEPTANCE_DELTA_DECAY_PER_MONTH = 0.0833	# The percentage of the maximum cultural acceptance that should be removed as a delta to the cultural community each month
+	JOB_SATISFACTION_PER_SOL_ABOVE_EXPECTED_SOL = 1				# Job satisfaction gained per level of SoL above your expected SoL
+	JOB_SATISFACTION_FROM_CAN_AFFORD_EXPENSES = 0
 }
 
 NPowerBlocs = {
@@ -124,4 +126,9 @@ NGame = {
 
 NDiplomacy = {
 	WAR_GOAL_INFAMY_FORCE_NATIONALIZATION = 0.5
+}
+
+NCountry = {
+	CONSTRUCTION_QUEUE_INCREMENT_SHIFT = 10
+	CONSTRUCTION_QUEUE_INCREMENT_CONTROL = 100
 }

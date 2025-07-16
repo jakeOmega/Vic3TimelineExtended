@@ -318,8 +318,8 @@ combat_unit_type_mechanized_infantry = {
 		goods_input_ammunition_add = 3                        # Price:   50, Total cost: 150.0
 		goods_input_oil_add = 1                               # Price:   40, Total cost: 40.0
 		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
-		goods_input_tanks_add = 1                             # Price:   80, Total cost: 80.0
-		# Total cost: 530.0
+		goods_input_tanks_add = 1                             # Price:  120, Total cost: 120.0
+		# Total cost: 570.0
 	}
 
     battle_modifier = {
@@ -622,12 +622,12 @@ combat_unit_type_heavy_tank = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_tanks_add = 3                             # Price:   80, Total cost: 240.0
+		goods_input_tanks_add = 3                             # Price:  120, Total cost: 360.0
 		goods_input_artillery_add = 4                         # Price:   70, Total cost: 280.0
 		goods_input_ammunition_add = 4                        # Price:   50, Total cost: 200.0
 		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
 		goods_input_oil_add = 3                               # Price:   40, Total cost: 120.0
-		# Total cost: 920.0
+		# Total cost: 1040.0
 	}
 
     battle_modifier = {
@@ -898,12 +898,12 @@ combat_unit_type_light_tanks = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_tanks_add = 2                             # Price:   80, Total cost: 160.0
+		goods_input_tanks_add = 2                             # Price:  120, Total cost: 240.0
 		goods_input_artillery_add = 2                         # Price:   70, Total cost: 140.0
 		goods_input_oil_add = 2                               # Price:   40, Total cost: 80.0
 		goods_input_ammunition_add = 2                        # Price:   50, Total cost: 100.0
 		goods_input_radios_add = 2                            # Price:   80, Total cost: 160.0
-		# Total cost: 640.0
+		# Total cost: 720.0
 	}
 
     battle_modifier = {

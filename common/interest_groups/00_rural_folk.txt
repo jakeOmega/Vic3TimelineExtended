@@ -387,6 +387,21 @@ ig_rural_folk = {
 
 	executive_weight = {
 		value = 0.1
+		
+		# The company owning BIC should not get non-industrialist executives
+		if = {
+			limit = {
+				exists = scope:company
+				exists = c:BIC
+				c:BIC = {
+					exists = owning_company
+					owning_company = scope:company
+				}
+			}
+			multiply = {
+				value = 0
+			}
+		}
 	}
 
 	noble_chance = {

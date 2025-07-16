@@ -35,7 +35,6 @@ institution_ministry_of_foreign_affairs = {
 		country_leverage_generation_mult = 0.05
 		country_max_declared_interests_add = 1
 		country_infamy_decay_mult = 0.05
-		country_infamy_generation_mult = -0.02
 	}
 }
 
@@ -72,11 +71,10 @@ institution_ministry_of_the_environment = {
 	icon = "gfx/interface/icons/institution_icons/workplace_safety.dds"
 	background_texture = "gfx/interface/illustrations/institutions/workplace_safety.dds"
 	modifier = {
-		building_group_bg_mining_throughput_add = -0.02
-		building_logging_camp_throughput_add = -0.02
+		building_group_bg_mining_throughput_add = -0.01
+		building_logging_camp_throughput_add = -0.01
 		building_group_bg_oil_extraction_throughput_add = -0.02
-		building_group_bg_construction_throughput_add = -0.02
-		building_group_bg_manufacturing_throughput_add = -0.01
+		country_company_construction_efficiency_bonus_add = -0.02
 		state_pollution_generation_mult = -0.2
 		state_building_national_park_max_level_add = 1
 	}
@@ -138,7 +136,7 @@ institution_ministry_of_consumer_protection = {
 	modifier = {
 		goods_output_consumer_appliances_mult = -0.02
 		goods_output_groceries_mult = -0.02 
-		goods_output_construction_mult = -0.02
+		country_company_construction_efficiency_bonus_add = -0.02
 		state_mortality_mult = -0.01
 		country_production_tech_research_speed_mult = 0.05
 		state_standard_of_living_add = 0.5

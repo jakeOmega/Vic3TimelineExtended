@@ -55,7 +55,7 @@ mobilization_option_robotic_assistance = {
 	}
 	
 	unlocking_technologies = {
-		swarm_technology
+		network_centric_warfare
 	}
 	
 	on_deactivate_while_mobilized = {
@@ -896,7 +896,58 @@ mobilization_option_missile_defense_system = {
 	}
 	unit_modifier = {
 		unit_morale_loss_mult = -0.1
-		unit_army_defense_mult = 0.1
+		unit_army_defense_mult = 0.2
+		unit_army_offense_mult = 0.05
+	}
+	ai_weight = {
+		value = 1
+	}
+
+    group = special_weapons
+}
+
+mobilization_option_directed_energy_defenses = {
+	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+
+	possible = {
+		market ?= {
+			mg:electronic_components = {
+				market_goods_sell_orders > 0
+			}
+		}
+	}
+	
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	
+	unlocking_technologies = {
+		directed_energy_defenses
+	}
+	upkeep_modifier = {
+		goods_input_electronic_components_add = 10             # Price:   80, Total cost: 400.0
+		goods_input_consumer_appliances_add = 5             # Price:   80, Total cost: 200.0
+		goods_input_radios_add = 5                          # Price:   80, Total cost: 200.0
+		# Total cost: 800.0
+	}
+	unit_modifier = {
+		unit_army_defense_mult = 0.2
 		unit_army_offense_mult = 0.05
 	}
 	ai_weight = {

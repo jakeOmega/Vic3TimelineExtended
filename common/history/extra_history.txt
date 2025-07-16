@@ -13,6 +13,24 @@ GLOBAL = {
 				level = 6
 			}
 		}
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_landed_voting
+					has_law = law_type:law_wealth_voting
+					has_law = law_type:law_census_voting
+					has_law = law_type:law_universal_suffrage
+				}
+			}
+			activate_law = law_type:law_unregulated_donations
+		}
+		if = {
+			limit = { is_country_type = unrecognized }
+			activate_law = law_type:law_feudal_contracts
+		}
+		else = {
+			activate_law = law_type:law_unitary_state
+		}
 		set_variable = {
 			name = nuclear_weapon_stockpile
 			value = 0
@@ -31,12 +49,80 @@ GLOBAL = {
 	c:RUS = {
 		activate_law = law_type:law_primogeniture
 		activate_law = law_type:law_minority_rights_ghettoization
+		activate_law = law_type:law_feudal_contracts
 	}
 	c:USA = {
 		activate_law = law_type:law_minority_rights_violent_hostility
+		activate_law = law_type:law_federal_system
 	}
-	c:SIA = {
+	c:SIA = { # Siam
 		activate_law = law_type:law_minority_rights_indifference
+	}
+	c:SWI = { # Switzerland
+		activate_law = law_type:law_federal_system
+	}
+	c:MEX = { # Mexico
+		activate_law = law_type:law_federal_system
+	}
+	c:UCA = { # United States of Central America
+		activate_law = law_type:law_federal_system
+	}
+	c:BRZ = { # Brazil
+		activate_law = law_type:law_federal_system
+	}
+	c:AUS = { # Austria
+		activate_law = law_type:law_feudal_contracts
+	}
+	c:TUR = { # Turkey/Ottoman Empire
+		activate_law = law_type:law_feudal_contracts
+	}
+	c:BIC = { # East India Company
+		activate_law = law_type:law_devolution
+	}
+	c:CHI = { # Qing China
+		activate_law = law_type:law_unitary_state
+	}
+	c:KOR = { # Korea
+		activate_law = law_type:law_unitary_state
+	}
+	c:EGY = { # Egypt
+		activate_law = law_type:law_unitary_state
+	}
+	c:SPA = { # Spain
+		activate_law = law_type:law_feudal_contracts
+	}
+	c:SIC = { # Two Sicilies
+		activate_law = law_type:law_feudal_contracts
+	}
+	c:CLM = { # Colombia
+		activate_law = law_type:law_devolution
+	}
+	c:VNZ = { # Venezuela
+		activate_law = law_type:law_devolution
+	}
+	c:ECU = { # Ecuador
+		activate_law = law_type:law_devolution
+	}
+	c:ARG = { # Argentina
+		activate_law = law_type:law_devolution
+	}
+	c:PEU = { # Peru
+		activate_law = law_type:law_devolution
+	}
+	c:BOL = { # Bolivia
+		activate_law = law_type:law_devolution
+	}
+	c:URU = { # Uruguay
+		activate_law = law_type:law_devolution
+	}
+	c:SER = { # Serbia
+		activate_law = law_type:law_feudal_contracts
+	}
+	c:WAL = { # Wallachia
+		activate_law = law_type:law_feudal_contracts
+	}
+	c:MOL = { # Moldova
+		activate_law = law_type:law_feudal_contracts
 	}
 	every_country = {
 		limit = {

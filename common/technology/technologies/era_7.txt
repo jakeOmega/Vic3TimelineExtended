@@ -1,5 +1,7 @@
 transistors = {
-	# Unlocks Transistors Factory building
+	# Unlocks Transistors Factory building, Continuous Miners PM for mines, Teletype PM for Government Administration
+	# Electronic Brokarage PM for Financial Districts/Companies, Offshore Rigs PM for Oil Rigs,
+	# Textile Finishing Machinery PM for Textile Mills
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -19,7 +21,7 @@ transistors = {
 }
 
 nuclear_energy = {
-	# Unlocks nuclear power plants
+	# Unlocks nuclear power plants, Nuclear Supercarrier unit
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -39,7 +41,7 @@ nuclear_energy = {
 }
 
 advanced_military_aircraft = {
-	# WW2 aircraft through jet aircraft
+	# Advanced Aeroplane Production PM for Aeroplane Industries, Medevac Helicopters mobilization option
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
 	category = military
@@ -58,7 +60,7 @@ advanced_military_aircraft = {
 }
 
 jet_engine_technology = {
-	# Unlocks better aircraft in barracks, better aircraft carrier in naval bases
+	# Unlocks Jet-Powered Aircraft unit
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -77,7 +79,8 @@ jet_engine_technology = {
 }
 
 green_revolution = {
-	# Unlocks Modern Farming PM in farms
+	# Unlocks Modern Farming and Hydraulic Equipment PMs in farms, Mechanized Farm for plantations, 
+	# Ziegler-Natta Catalyzation SBR PM for Synthetic Rubber
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -96,6 +99,7 @@ green_revolution = {
 }
 
 civil_rights_movement = {
+	# Unlocks Affirmative Action, Ministry of Refugee Affairs laws
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -136,7 +140,7 @@ civil_rights_movement = {
 }
 
 laser_technology = {
-	# Better telecoms PM? Laser cutting PM?
+	# Geophysical Survey Techniques PM for mines, Electrochemical Machining PM for Tooling Workshops
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -156,7 +160,7 @@ laser_technology = {
 }
 
 space_exploration = {
-	# Prestige?
+	# Launch Facility and Space Program buildings
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -177,7 +181,7 @@ space_exploration = {
 }
 
 pollution_control = {
-	# TODO
+	# Ministry of the Environment law, Pollution Controll decree
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -193,7 +197,7 @@ pollution_control = {
 }
 
 advanced_submarine_technology = {
-	# Unlocks Transistors Factory building
+	# Nuclear Submarine unit
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -209,7 +213,7 @@ advanced_submarine_technology = {
 }
 
 guided_missiles = {
-	# Better artillery
+	# Guided Artillery, Main Battle Tanks, Guided Missile Ships units
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -219,8 +223,7 @@ guided_missiles = {
 	}
 
 	modifier = {
-		unit_navy_defense_mult = 0.3
-		unit_navy_offense_mult = 0.3
+		state_building_naval_base_max_level_add = 20
 	}
 	
 	ai_weight = {
@@ -229,7 +232,8 @@ guided_missiles = {
 }
 
 decolonization = {
-	# TODO
+	# National Labs PM for University, Decentralized Religious Structures PM for Urban Centers,
+	# Freedom of Information and Neocolonialism laws
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/decolonization.dds"
 	category = society
@@ -289,7 +293,7 @@ decolonization = {
 }
 
 plastic_mass_production = {
-	# TODO
+	# Mass-Produced Plastics PM for Glassworks, Polymerization Processes for Chemical Plants
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -308,7 +312,6 @@ plastic_mass_production = {
 }
 
 mainframe_computers = {
-	# TODO
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -329,7 +332,6 @@ mainframe_computers = {
 }
 
 photocopiers = {
-	# TODO
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -352,15 +354,13 @@ photocopiers = {
 }
 
 anti_sub_warfare = {
-	# TODO
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
 	
 	modifier = {
 		unit_convoy_defense_mult = 0.5
-		unit_navy_defense_mult = 0.2
-		unit_navy_offense_mult = 0.2
+		state_building_naval_base_max_level_add = 20
 	}
 	
 	unlocking_technologies = {	
@@ -373,7 +373,7 @@ anti_sub_warfare = {
 }
 
 ICBMs = {
-	# TODO
+	# Limited War law
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -394,6 +394,7 @@ ICBMs = {
 }
 
 tactical_nuclear_weapons = {
+	# Tactical Nuke "diplo action" for nuclear powers
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -415,7 +416,7 @@ tactical_nuclear_weapons = {
 }
 
 recon_satellites = {
-	# TODO
+	# Modern Logisitcal Support and Space Recon mobilization options
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -434,7 +435,7 @@ recon_satellites = {
 }
 
 inertial_navigation_systems = {
-	# TODO
+	# Modern Scout Tank unit
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -445,8 +446,7 @@ inertial_navigation_systems = {
 	}
 
 	modifier = {
-		unit_navy_defense_mult = 0.2
-		unit_navy_offense_mult = 0.2
+		state_building_naval_base_max_level_add = 20
 		country_institution_ministry_of_war_max_investment_add = 1
 	}
 	
@@ -456,7 +456,7 @@ inertial_navigation_systems = {
 }
 
 television_broadcasting = {
-	# TODO
+	# High Pressure Sodium Streetlights PM for Urban Centers, Broadcast Television PM for Arts Academy
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -481,7 +481,6 @@ television_broadcasting = {
 }
 
 antibiotic_mass_production = {
-	# TODO
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -502,7 +501,6 @@ antibiotic_mass_production = {
 }
 
 contraceptive_pill = {
-	# TODO
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -527,7 +525,7 @@ contraceptive_pill = {
 }
 
 second_wave_feminism = {
-	# TODO
+	# State-Sponsored Family Planning law
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -551,7 +549,6 @@ second_wave_feminism = {
 }
 
 anti_war_movement = {
-	# TODO
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -575,7 +572,8 @@ anti_war_movement = {
 }
 
 modern_urban_planning = {
-	# Maybe economies of scale?
+	# Multimodal Transit and Department Stores PMs for Urban Centers, Bullet Trains PM for Railways,
+	# Reinforced Concrete Buildings PM for Construction Sectors, Modern plants PMs for Power Plants
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society

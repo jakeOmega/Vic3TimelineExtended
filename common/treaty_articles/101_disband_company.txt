@@ -1,0 +1,150 @@
+# =================================================================
+# TREATY ARTICLE: disband_company
+# A punitive article that forces a country to dissolve one of its major companies.
+# =================================================================
+disband_company = {
+	icon = "gfx/interface/icons/law_icons/command_economy.dds" # Placeholder Icon
+	kind = directed
+	cost = 150 # A significant influence cost to demand this.
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		is_monopoly_for_company
+		recipient_pays_maintenance
+	}
+
+	# This article requires you to specify which company you are targeting.
+	required_inputs = {
+		company
+		building_type
+	}
+		
+	visible = {
+		# Only visible if the target country has any companies to disband.
+		scope:other_country = {
+			any_company = {
+				is_active = yes
+			}
+		}
+	}
+
+	possible = {
+		# Standard diplomatic checks
+		has_diplomatic_relevance = scope:other_country
+		NOT = { has_war_with = scope:other_country }
+	}
+
+	can_ratify = {
+		# Prevents adding the same demand twice in one treaty.
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			scope:treaty ?= {
+				NOT = {
+					any_scope_article_option = {
+						count > 1
+						has_type = disband_company
+						input_company = root.input_company
+					}
+				}
+			}
+		}
+	}
+
+	# This is the core effect that fires when the treaty is ratified.
+	on_entry_into_force = {
+		scope:target_country = {
+			remove_company = scope:article.input_company
+		}
+	}
+
+	on_withdrawal = {}
+	on_break = {}
+
+	company_valid_trigger = {
+		always = yes
+    }
+
+	building_type_valid_trigger = {
+		always = yes
+	}
+
+	# This section governs AI behavior regarding the treaty article.
+	ai = {
+		treaty_categories = { economy }
+		# The AI will only ever demand this from others, never offer to do it to themselves.
+		article_ai_usage = { request }
+
+		# AI will only consider demanding this if they are significantly more powerful.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = { country_rank > scope:other_country.country_rank }
+				add = 10
+			}
+		}
+
+		# The AI's decision-making on whether to ACCEPT the demand.
+		inherent_accept_score = {
+			value = 0 # Start from a neutral position
+
+			# The AI receiving the demand (the target) will evaluate it.
+			if = {
+				limit = { scope:target_country = this }
+				
+				# Base reluctance is extremely high. This is a core part of their economy.
+				add = -200
+
+				# Add a massive penalty based on the company's contribution to the national economy.
+				# A custom script value would calculate: (Company's building GDP / National GDP) * a large negative number.
+				# For now, we can proxy this by checking the level of buildings associated with the company.
+				add = {
+					value = 0
+					scope:article.input_company = {
+						every_scope_building = {
+							# For every level of a building belonging to this company, add a penalty.
+							add = level
+						}
+					}
+					multiply = -10 # A very high penalty per building level.
+					desc = "AI_REJECTS_DISBANDING_SIGNIFICANT_COMPANY"
+				}
+
+				# Very powerful nations will refuse out of pride.
+				if = {
+					limit = { country_rank >= rank_value:great_power }
+					add = -100
+				}
+				
+				# Less likely to accept if they are rivals or have poor relations.
+				if = {
+					limit = { any_rival_country = { THIS = scope:source_country } }
+					add = -100
+				}
+				if = {
+					limit = { has_attitude = { who = scope:source_country attitude = hostile } }
+					add = -50
+				}
+			}
+		}
+	}
+
+	# This defines the wargoal if this article is pushed in a diplomatic play.
+	wargoal = {
+		execution_priority = 70 # High priority, as it's a major concession.
+		contestion_type = control_target_country_capital
+		
+		# Infamy is calculated based on the economic power of the target country.
+		infamy = {
+			value = 10
+			scope:target_country = {
+				multiply = {
+					value = gdp
+					divide = 10000000 # Scale based on GDP
+					add = 1
+					max = 2.5
+				}
+			}
+		}
+	}
+}

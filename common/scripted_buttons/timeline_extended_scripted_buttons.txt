@@ -8,22 +8,31 @@ increase_funding_nuclear_program = {
 	#Country scope
 	ai_chance = {
 		value = 0
-		modifier = {
-			trigger = { country_innovation > nuclear_weapon_program_funding_step }
-			add = 50
-		}
-        modifier = {
-            trigger = { var:nuclear_weapons_program_first_nuke_done = 0 }
+        if = { 
+            limit = { country_innovation > nuclear_weapon_program_funding_step }
+            add = 50
+        }
+        if = { 
+            limit = { var:nuclear_weapons_program_first_nuke_done = 0 }
             add = 25
         }
-        modifier = {
-            trigger = { var:nuclear_weapon_stockpile > 10 }
+
+        if = { 
+            limit = { var:nuclear_weapon_stockpile > 10 }
             add = -50
         }
-	}
+    }
 
 	possible = {
 		country_innovation > nuclear_weapon_program_funding_step
+        NOT = {
+            any_scope_treaty = {
+                any_scope_article = {
+                    has_type = nuclear_disarmament
+                    source_country = root
+                }
+            }
+        }
 	}
 
 	effect = {
@@ -54,19 +63,21 @@ decrease_funding_nuclear_program = {
 	#Country scope
 	ai_chance = {
 		value = 0
-		modifier = {
-			trigger = { country_innovation < modifier:country_weekly_innovation_max_add }
-			add = 25
-		}
-        modifier = {
-            trigger = { NOT = { var:nuclear_weapons_program_first_nuke_done = 0 }}
+        if = { 
+            limit = { country_innovation < modifier:country_weekly_innovation_max_add }
             add = 25
         }
-        modifier = {
-            trigger = { var:nuclear_weapon_stockpile > 10 }
+
+        if = { 
+            limit = { NOT = { var:nuclear_weapons_program_first_nuke_done = 0 }}
+            add = 25
+        }
+
+        if = { 
+            limit = { var:nuclear_weapon_stockpile > 10 }
             add = 50
         }
-	}
+    }
 
 	possible = {
 		var:nuclear_weapons_program_funding > 0

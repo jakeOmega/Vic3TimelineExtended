@@ -1,5 +1,6 @@
 bergius_process = {
 	# Unlocks Synthetic Oil Plants building
+	# Unlocks Catalytic Cracking for Chemical Plants
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/aniline.dds"
 	category = production
@@ -54,7 +55,7 @@ computing_machines = {
 }
 
 personal_appliances = {
-	# refrigerators, electric stoves, washing machines, dishwashers, A/C, etc. - workforce ratio!!!
+	# Unlocks Consumer Appliance Industries building
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/electrical_generation.dds"
 	category = production
@@ -74,7 +75,7 @@ personal_appliances = {
 }
 
 rocketry = {
-	# WW2 era rocketry
+	# Rocket Artillery PM for Artillery Foundary
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/artillery.dds"
 	category = military
@@ -93,7 +94,7 @@ rocketry = {
 }
 
 bombing_aircraft = {
-	# CAS, strategic bombers
+	# Propeller Aircraft, Fleet Carrier units, Total War law
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
 	category = military
@@ -108,6 +109,7 @@ bombing_aircraft = {
 }
 
 nuclear_weapons = {
+	# Nuclear program journal entry, military research PM for University, Humanitarian Regulations and Ministry of Science laws
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/multilateral_alliances.dds"
 	category = military
@@ -130,7 +132,7 @@ nuclear_weapons = {
 }
 
 commercial_aviation = {
-	# started earlier, but became significant towards the end of game period
+	# Unlocks Airport building, Air Transport mobilization option
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
 	category = society
@@ -150,13 +152,13 @@ commercial_aviation = {
 }
 
 keynesian_economics = {
-	# The General Theory of Employment, Interest and Money came out in 1936
+	# Fiat Money, Publically Funded Election, and Banking Separation laws, Tax Breaks decree
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/macroeconomics.dds"
 	category = society
 	
 	modifier = {
-		state_construction_mult = 0.1
+		state_trade_capacity_mult = 0.1
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		country_loan_interest_rate_add = -0.02
 		country_institution_national_bank_max_investment_add = 1
@@ -168,12 +170,12 @@ keynesian_economics = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 3
 	}
 }
 
 combined_arms = {
-	# Doctrinal aspect
+	# Armored Infrantry unit
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/military_drill.dds"
 	category = military
@@ -193,7 +195,9 @@ combined_arms = {
 }
 
 modern_materials = {
-	# Fiberglass mass production, fibre-reinforced plastic, Nylon, Teflon, Polyester, etc.
+	# Dragline Excavators and High-Pressure Hydraulic Pump PMs for mines, Deep Well PM for oil rigs, 
+	# Polyester and Nylon PM for synthetic clothes, Flexible Packaging for Food Industries, 
+	# Advanced Dyes for Synthetic Dyes Industries
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/plastics.dds"
 	category = production
@@ -211,7 +215,8 @@ modern_materials = {
 }
 
 modern_tools = {
-	# Material-handling equipment like forklifts and such
+	# Large Scale Earth Movers for Mines, Electrified Rotary Drilling Rigs for Oil Rigs,
+	# Ultradeep Wells for Oil Rigs, Material Handling Equipment for Tooling Workshops
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/mechanical_tools.dds"
 	category = production
@@ -226,6 +231,7 @@ modern_tools = {
 }
 
 modern_skyscrapers = {
+	# Twisted Pair Copper Cables for Wired Telecommunications Industries
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/steel_frame_buildings.dds"
 	category = production
@@ -244,7 +250,6 @@ modern_skyscrapers = {
 }
 
 advanced_agricultural_statistics = {
-	# In USA, USDA's Crop Reporting Board created in 1905, but including in 6 anyway
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/intensive_agriculture.dds"
 	category = society
@@ -265,7 +270,7 @@ advanced_agricultural_statistics = {
 }
 
 modern_automotive_technology = {
-	# coil spring suspension, electric ignition starters, cigarette lighters, etc. 
+	# Gas Turbine Engines for Motor Industries, Modern Automobiles for Automotive Industries
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/combustion_engine.dds"
 	category = production
@@ -284,7 +289,7 @@ modern_automotive_technology = {
 }
 
 radar = {
-	# Invented in the 30s, sorta
+	# Radar Equipment mobilization option
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/radio.dds"
 	category = military
@@ -303,7 +308,7 @@ radar = {
 }
 
 television = {
-	# Experimental television broadcasts were started in 1929, limited regular broadcasts began in 1934, and an expanded service in November 1936
+	# VHF and UHF Transmission for Wireless Telecommunications Industries, Television PM for Consumer Appliance Industries
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -322,7 +327,7 @@ television = {
 }
 
 marketing_research = {
-	# Starch test and such
+	# Mass Marketing PM for Textile and Furniture buildings, Media Corporations PM for Art Academy, Pro-Capital Ministry of Labor and Corporatocracy laws
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/mass_propaganda.dds"
 	category = society
@@ -343,8 +348,8 @@ marketing_research = {
 	}
 }
 
-moterized_artillery = {
-	# Starch test and such
+motorized_artillery = {
+	# Motorized Arillery unit
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/artillery.dds"
 	category = military
@@ -359,7 +364,7 @@ moterized_artillery = {
 }
 
 semiautomatic_rifle = {
-	# M1 Garand in 1937
+	# Modern Cartridges for Munition Plants, Semi-Automatic Rifle PM for Arms Industries
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/bolt_action_rifles.dds"
 	category = military
@@ -374,7 +379,6 @@ semiautomatic_rifle = {
 }
 
 modern_vaccines = {
-	# diphtheria, pertussis, tuberculosis, tetanus, etc.
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/pharmaceuticals.dds"
 	category = society
@@ -394,6 +398,8 @@ modern_vaccines = {
 }
 
 mass_media = {
+	# Sound Film PM for Art Academy, Donation Limits, Ministry of Propaganda, Ministry of Religion, Direct Democracy laws
+	# Political Patronage, Natalism Initiative decrees
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
@@ -453,7 +459,6 @@ rural_electrification = {
 }
 
 fluorescent_lamps = {
-	#Dunno about this name, meant to represent move from arc lamps to more modern flourecent or incandecent electrical lighting
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/electrical_capacitors.dds"
 	category = production
@@ -473,7 +478,9 @@ fluorescent_lamps = {
 }
 
 modern_chemical_processes = {
-	#ostwald and haber processes
+	# Ammonium Nitrate PM for Mines, Styrene-Butadiene PM for Synthetic Rubber Industries,
+	# Food Additives PM for Food Industries, Ammonium Nitrate Explosives PM for Explosives Factory
+	# Advanced Process Control automation PM for all chemical/synthetic-type industries
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/chemical_bleaching.dds"
 	category = production
@@ -494,7 +501,7 @@ modern_chemical_processes = {
 }
 
 aluminum_mass_production = {
-	#abc
+	# Aluminum Substitution PM for Steel Mills
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/steelworking.dds"
 	category = production
@@ -509,7 +516,7 @@ aluminum_mass_production = {
 }
 
 stainless_steel_mass_production = {
-	#abc
+	# Chromium Substitution PM for Steel Mills
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/steelworking.dds"
 	category = production
@@ -528,7 +535,9 @@ stainless_steel_mass_production = {
 }
 
 modern_management_techniques = {
-	#abc
+	# Continuous Bleaching PM for Paper Mills, Mass-Produced Packaged Food PM for Food Industries,
+	# Centralized Traffic Control PM for Railways, Module Shipbuilding PM for civilian and military shipyards
+	# Prefabricated Building Components PM for Construction Sectors
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/central_planning.dds"
 	category = society
@@ -543,7 +552,6 @@ modern_management_techniques = {
 }
 
 naval_convoy_defense = {
-	#abc
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/sea_lane_strategies.dds"
 	category = military
@@ -562,13 +570,12 @@ naval_convoy_defense = {
 }
 
 sonar = {
-	#abc
+	# ASW Destroyers unit
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/radio.dds"
 	category = military
 	
 	modifier = {
-		unit_navy_defense_mult = 0.2
 		unit_convoy_raiding_interception_mult = 0.5
 		unit_convoy_defense_mult = 0.5
 	}
@@ -588,8 +595,7 @@ naval_fire_control_systems = {
 	category = military
 	
 	modifier = {
-		unit_navy_offense_mult = 0.2
-		unit_navy_defense_mult = 0.1
+		state_building_naval_base_max_level_add = 20
 	}
 	
 	unlocking_technologies = {	
@@ -602,6 +608,7 @@ naval_fire_control_systems = {
 }
 
 cryptography = {
+	# State Secrets law
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/mass_surveillance.dds"
 	category = military
@@ -623,6 +630,8 @@ cryptography = {
 }
 
 public_works_programs = {
+	# Hydro Plant building, Double-Decker Passenger Carriages PM for Railways,
+	# Pro-Labor Ministry of Labor law
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/urban_planning.dds"
 	category = society
@@ -645,6 +654,7 @@ public_works_programs = {
 }
 
 art_deco_architecture = {
+	# Modern Design Porcelain PM for Glassworks
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/urban_planning.dds"
 	category = society
@@ -664,6 +674,7 @@ art_deco_architecture = {
 }
 
 consumer_credit = {
+	# Ministry of Consumer Protection law
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/modern_financial_instruments.dds"
 	category = society
@@ -683,6 +694,7 @@ consumer_credit = {
 }
 
 intergovernmental_organizations = {
+	# Managed Global Trade PM for Trade Center, Ministry of International Aid law, Bureaucratic Reform decree
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/multilateral_alliances.dds"
 	category = society
@@ -690,6 +702,7 @@ intergovernmental_organizations = {
 	modifier = {
 		country_institution_size_change_speed_mult = 0.25
 		country_leverage_threshold_change_add = -100
+		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -700,48 +713,3 @@ intergovernmental_organizations = {
 		value = 1
 	}
 }
-
-#public libraries and such goods_output_tools_mult
-
-#tank concentration doctrine (tank roll)
-
-#Air-to-ground radio
-
-#Fast food (e.g. white castle)
-
-#Large-scale infrastructure projects (e.g. Hoover Dam)
-
-#Public health initiatives (e.g. fluoridation of water) - a bit out of period, but I like the idea
-
-#Intergovernmental Organizations (The League of Nations, League of Red Cross Societies, etc.) 
-
-#Synthetic detergents
-
-#The five-day workweek
-
-#Strowger switch (automatic telephone switching)
-
-#Intercontinental broadcasts (e.g. "first transatlantic telephone call")
-
-#Ostwald process & Haber process - is this what the highest level already represent?
-
-#Interwar sound recording (Vitaphone and such)
-
-#WPA, public works, Hoover dam
-
-#Consumer credit
-
-#family planning and birth control/contraception
-
-#Fuel injection/petrol direct injection
-
-#FM radio
-
-#logistics as prod method for armies
-
-#"teraforming" -> more farmable land
-
-#Department of Natural Resources
-
-#tree farms
-

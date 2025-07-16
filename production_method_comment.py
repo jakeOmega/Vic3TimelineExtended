@@ -161,7 +161,7 @@ def process_and_update_production_methods_grouped(
     updated_pms_data = updated_pms_data.strip()
 
     if write_path is None:
-        if type(pms_file_path) == str:
+        if isinstance(pms_file_path, str):
             # Write the updated content back to the production methods file
             with open(pms_file_path, "w") as file:
                 file.write(updated_pms_data)
@@ -184,7 +184,7 @@ def process_and_update_military_costs(
     Processes the production methods file and updates the 'workforce_scaled' section with input and output goods
     grouped separately, followed by a summary. Removes any existing unrelated comments.
     """
-    if type(military_file_path) == str:
+    if isinstance(military_file_path, str):
         military_file_list = [military_file_path]
     else:
         military_file_list = military_file_path
@@ -232,10 +232,9 @@ def process_and_update_military_costs(
             file.write(updated_mil_cost_data)
 
 
-# Example usage
 goods_file_paths = [
-    mod_path + r"\common\goods\timeline_extended_extra_goods.txt",
     base_game_path + r"\game\common\goods\00_goods.txt",
+    mod_path + r"\common\goods\timeline_extended_extra_goods.txt",
 ]
 pms_file_path = mod_path + r"\common\production_methods\extra_pms.txt"
 vanilla_pms_file_loc = base_game_path + r"\game\common\production_methods"

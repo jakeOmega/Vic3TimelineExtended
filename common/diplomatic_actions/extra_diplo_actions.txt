@@ -647,6 +647,7 @@ fund_resistance = {
     second_state_list = second_country
 	
 	selectable = {
+		always = no
 		has_technology_researched = terrorism_and_anti_terrorism
 	}
 

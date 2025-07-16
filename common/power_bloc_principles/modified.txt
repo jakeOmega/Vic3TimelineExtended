@@ -29,20 +29,3 @@ principle_food_standardization_3 = {
 		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
 	}
 }
-
-principle_transport_3 = {
-	icon = "gfx/interface/icons/principles_icons/transport.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
-
-	member_modifier = {
-		country_convoys_capacity_mult = 0.2
-		state_infrastructure_from_population_mult = 0.33
-		state_infrastructure_from_population_max_mult = 0.33 
-		market_land_trade_capacity_add = 50
-		building_railway_throughput_add = 0.2
-	}
-	
-	ai_weight = {
-		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
-	}
-}

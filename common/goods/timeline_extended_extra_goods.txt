@@ -133,3 +133,13 @@ fertilizer = {
 
 	traded_quantity = 7 # 210
 }
+
+tanks = {
+	texture = "gfx/interface/icons/goods_icons/tanks.dds"
+	cost = 120
+	category = military
+
+	prestige_factor = 10
+	traded_quantity = 3 # 240
+	convoy_cost_multiplier = 2.0
+}

@@ -499,6 +499,29 @@ goods_output_robotics_mult = {
 }
 }
 
+goods_output_digital_assets_mult = {
+	color = good
+	percent = yes
+	
+	game_data = {
+	ai_value = 250
+}
+}
+
+goods_trade_advantage_digital_assets_mult = {
+	color = good
+	percent = yes
+	
+	game_data = {
+	ai_value = 250
+}
+}
+
+building_oil_rig_throughput_add = {
+	color = good
+	percent = yes
+}
+
 building_employment_clerks_mult = {
 	color = bad
 	percent = yes
@@ -888,6 +911,14 @@ power_bloc_can_give_education_aid_bool = {
 	}
 }
 
+receiving_nuclear_program_aid = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+}
+
 power_bloc_can_give_healthcare_aid_bool = {
 	color = neutral
 	boolean = yes
@@ -1120,6 +1151,41 @@ country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = {
 	}
 }
 
+country_can_use_biotech_companies_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_harvest_condition_financial_panic_duration_mult = {
+	color = bad
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_harvest_condition_financial_panic_impact_mult = {
+	color = bad
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_harvest_condition_speculative_frenzy_duration_mult = {
+	color = good
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+}
+
 building_highway_throughput_add = {
 	color = good
 	percent = yes
@@ -1309,6 +1375,54 @@ state_min_cultural_acceptance_delta_add = {
 state_violence_against_minorities_bool = {
 	color = neutral
 	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_institution_impact_institution_schools_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_police_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_intelligence_and_security_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_foreign_affairs_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_war_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_national_bank_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_cost_institution_ministry_of_intelligence_and_security_mult = {
+	color = bad
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_institution_cost_institution_police_mult = {
+	color = bad
+	percent = yes
+	decimals = 1
 	game_data = {
 		ai_value = 0
 	}
