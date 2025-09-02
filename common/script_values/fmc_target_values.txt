@@ -8,10 +8,9 @@
 fmc_private_construction_spending_target = {
 	value = investment_pool_gross_income
 	multiply = {
-		add = investment_pool
+		value = investment_pool
 		subtract = fmc_investment_pool_size_target
 		divide = fmc_investment_pool_size_target
-		multiply = 0.25
 		add = 1
 	}
 }
@@ -56,26 +55,23 @@ fmc_investment_pool_size_target = {
 	multiply = 10  
 }
 
+investment_pool_times_thousand = {
+	value = investment_pool
+	multiply = 1000
+}
+
 fmc_private_construction_use_target = {
 	value = fmc_private_construction_spending_target
 	divide = var:fmc_price_stabiliser
-
 	if = {
 		limit = {
-			# and = {
-				construction_queue_num_queued_private_levels = 0
-				# construction_queue_num_queued_government_levels > 0
-			# }
-		 }
-		 value = 0
+			investment_pool_gross_income > 1000000
+		}
+		min = 1000
 	}
-	if = {
-		limit = {
-			and = {
-				construction_queue_num_queued_government_levels = 0
-			}
-		 }
-		 multiply = 2
+	max = {
+		value = 1000
+		multiply = modifier:country_max_weekly_construction_progress_add
 	}
 }
 

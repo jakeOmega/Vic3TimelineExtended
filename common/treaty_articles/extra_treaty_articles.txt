@@ -32,7 +32,28 @@ request_influence = {
     }
 
     can_ratify = {
-        always = yes
+        custom_tooltip = {
+            text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = request_influence
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+        }
     }
 
     ai = {
@@ -107,7 +128,28 @@ crisis_resolution = {
     }
 
     can_ratify = {
-		always = yes
+		custom_tooltip = {
+            text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = crisis_resolution
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+        }
     }
 
     ai = {
@@ -172,7 +214,28 @@ extend_influence = {
     }
 
     can_ratify = {
-        always = yes
+        custom_tooltip = {
+            text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = crisis_resolution
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+        }
     }
 
     non_fulfillment = {
@@ -260,7 +323,28 @@ education_aid = {
 
 	# The initial requirements for the pact to be established.
 	can_ratify = {
-		always = yes
+		custom_tooltip = {
+            text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = education_aid
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+        }
 	}
 
 
@@ -339,7 +423,28 @@ healthcare_aid = {
 	}
 
 	can_ratify = {
-		always = yes
+		custom_tooltip = {
+            text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = education_aid
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+        }
 	}
 
 	ai = {
@@ -418,7 +523,28 @@ security_aid = {
 	}
 
 	can_ratify = {
-		always = yes
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = security_aid
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
 	}
 
 	ai = {
@@ -487,7 +613,28 @@ science_aid = {
 	}
 
 	can_ratify = {
-		always = yes
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = science_aid
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
 	}
 
 	ai = {
@@ -571,7 +718,28 @@ science_aid_2 = {
 	}
 
 	can_ratify = {
-		always = yes
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = science_aid_2
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
 	}
 
 	ai = {
@@ -690,7 +858,28 @@ nuclear_disarmament = {
 	}
 
 	can_ratify = {
-		always = yes
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = nuclear_disarmament
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
 	}
 
 	ai = {
@@ -772,7 +961,28 @@ nuclear_program_aid = {
 	}
 
 	can_ratify = {
-		always = yes
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = nuclear_program_aid
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
 	}
 
 	ai = {

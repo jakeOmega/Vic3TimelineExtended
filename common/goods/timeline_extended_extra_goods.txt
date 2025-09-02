@@ -75,17 +75,6 @@ advanced_materials = {
 }
 
 transportation = {
-	texture = "gfx/interface/icons/goods_icons/industrial_transport.dds"
-	cost = 30
-	category = staple
-	local = yes
-
-	prestige_factor = 4
-	
-	consumption_tax_cost = 200
-}
-
-personal_transportation = {
 	texture = "gfx/interface/icons/goods_icons/transportation.dds"
 	cost = 30
 	category = staple
@@ -140,6 +129,25 @@ tanks = {
 	category = military
 
 	prestige_factor = 10
-	traded_quantity = 3 # 240
+	traded_quantity = 3
 	convoy_cost_multiplier = 2.0
+}
+
+tourism = {
+	texture = "gfx/interface/icons/goods_icons/tourism.dds"
+	cost = 100
+	category = luxury
+
+	prestige_factor = 10
+	traded_quantity = 10
+	obsession_chance = 0.5
+}
+
+tech_metals = {
+	texture = "gfx/interface/icons/goods_icons/tech_metals.dds"
+	cost = 80
+	category = industrial
+
+	prestige_factor = 20
+	traded_quantity = 5
 }

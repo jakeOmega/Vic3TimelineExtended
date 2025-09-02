@@ -1,0 +1,3002 @@
+on_acquired_technology = {
+	on_actions = {
+		extra_headlines_tech
+	}
+}
+
+extra_headlines_tech = {
+	effect = {
+		set_global_variable = {
+			name = headlines_tech_acquired
+			value = scope:technology
+		}
+
+        #ICBMs
+        if = {
+            limit = { 
+                has_technology_researched = ICBMs
+                NOT = {
+                    has_global_variable = headlines_ICBMs_researched
+                }
+            }
+            set_global_variable = headlines_ICBMs_researched
+            save_scope_as = headlines_ICBMs_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_ICBMs
+            }
+        }
+
+        #LGBTQ_rights_movement
+        if = {
+            limit = { 
+                has_technology_researched = LGBTQ_rights_movement
+                NOT = {
+                    has_global_variable = headlines_LGBTQ_rights_movement_researched
+                }
+            }
+            set_global_variable = headlines_LGBTQ_rights_movement_researched
+            save_scope_as = headlines_LGBTQ_rights_movement_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_LGBTQ_rights_movement
+            }
+        }
+
+        #additive_manufacturing
+        if = {
+            limit = { 
+                has_technology_researched = additive_manufacturing
+                NOT = {
+                    has_global_variable = headlines_additive_manufacturing_researched
+                }
+            }
+            set_global_variable = headlines_additive_manufacturing_researched
+            save_scope_as = headlines_additive_manufacturing_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_additive_manufacturing
+            }
+        }
+
+        #advanced_agricultural_statistics
+        if = {
+            limit = { 
+                has_technology_researched = advanced_agricultural_statistics
+                NOT = {
+                    has_global_variable = headlines_advanced_agricultural_statistics_researched
+                }
+            }
+            set_global_variable = headlines_advanced_agricultural_statistics_researched
+            save_scope_as = headlines_advanced_agricultural_statistics_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_advanced_agricultural_statistics
+            }
+        }
+
+        #advanced_assembly_lines
+        if = {
+            limit = { 
+                has_technology_researched = advanced_assembly_lines
+                NOT = {
+                    has_global_variable = headlines_advanced_assembly_lines_researched
+                }
+            }
+            set_global_variable = headlines_advanced_assembly_lines_researched
+            save_scope_as = headlines_advanced_assembly_lines_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_advanced_assembly_lines
+            }
+        }
+
+        #advanced_body_armor
+        if = {
+            limit = { 
+                has_technology_researched = advanced_body_armor
+                NOT = {
+                    has_global_variable = headlines_advanced_body_armor_researched
+                }
+            }
+            set_global_variable = headlines_advanced_body_armor_researched
+            save_scope_as = headlines_advanced_body_armor_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_advanced_body_armor
+            }
+        }
+
+        #advanced_materials_armor
+        if = {
+            limit = { 
+                has_technology_researched = advanced_materials_armor
+                NOT = {
+                    has_global_variable = headlines_advanced_materials_armor_researched
+                }
+            }
+            set_global_variable = headlines_advanced_materials_armor_researched
+            save_scope_as = headlines_advanced_materials_armor_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_advanced_materials_armor
+            }
+        }
+
+        #advanced_military_aircraft
+        if = {
+            limit = { 
+                has_technology_researched = advanced_military_aircraft
+                NOT = {
+                    has_global_variable = headlines_advanced_military_aircraft_researched
+                }
+            }
+            set_global_variable = headlines_advanced_military_aircraft_researched
+            save_scope_as = headlines_advanced_military_aircraft_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_advanced_military_aircraft
+            }
+        }
+
+        #advanced_nanofabrication
+        if = {
+            limit = { 
+                has_technology_researched = advanced_nanofabrication
+                NOT = {
+                    has_global_variable = headlines_advanced_nanofabrication_researched
+                }
+            }
+            set_global_variable = headlines_advanced_nanofabrication_researched
+            save_scope_as = headlines_advanced_nanofabrication_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_advanced_nanofabrication
+            }
+        }
+
+        #advanced_structural_engineering
+        if = {
+            limit = { 
+                has_technology_researched = advanced_structural_engineering
+                NOT = {
+                    has_global_variable = headlines_advanced_structural_engineering_researched
+                }
+            }
+            set_global_variable = headlines_advanced_structural_engineering_researched
+            save_scope_as = headlines_advanced_structural_engineering_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_advanced_structural_engineering
+            }
+        }
+
+        #advanced_submarine_technology
+        if = {
+            limit = { 
+                has_technology_researched = advanced_submarine_technology
+                NOT = {
+                    has_global_variable = headlines_advanced_submarine_technology_researched
+                }
+            }
+            set_global_variable = headlines_advanced_submarine_technology_researched
+            save_scope_as = headlines_advanced_submarine_technology_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_advanced_submarine_technology
+            }
+        }
+
+        #advanced_workflow_optimization
+        if = {
+            limit = { 
+                has_technology_researched = advanced_workflow_optimization
+                NOT = {
+                    has_global_variable = headlines_advanced_workflow_optimization_researched
+                }
+            }
+            set_global_variable = headlines_advanced_workflow_optimization_researched
+            save_scope_as = headlines_advanced_workflow_optimization_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_advanced_workflow_optimization
+            }
+        }
+
+        #aluminum_mass_production
+        if = {
+            limit = { 
+                has_technology_researched = aluminum_mass_production
+                NOT = {
+                    has_global_variable = headlines_aluminum_mass_production_researched
+                }
+            }
+            set_global_variable = headlines_aluminum_mass_production_researched
+            save_scope_as = headlines_aluminum_mass_production_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_aluminum_mass_production
+            }
+        }
+
+        #animation
+        if = {
+            limit = { 
+                has_technology_researched = animation
+                NOT = {
+                    has_global_variable = headlines_animation_researched
+                }
+            }
+            set_global_variable = headlines_animation_researched
+            save_scope_as = headlines_animation_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_animation
+            }
+        }
+
+        #anti_sub_warfare
+        if = {
+            limit = { 
+                has_technology_researched = anti_sub_warfare
+                NOT = {
+                    has_global_variable = headlines_anti_sub_warfare_researched
+                }
+            }
+            set_global_variable = headlines_anti_sub_warfare_researched
+            save_scope_as = headlines_anti_sub_warfare_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_anti_sub_warfare
+            }
+        }
+
+        #anti_war_movement
+        if = {
+            limit = { 
+                has_technology_researched = anti_war_movement
+                NOT = {
+                    has_global_variable = headlines_anti_war_movement_researched
+                }
+            }
+            set_global_variable = headlines_anti_war_movement_researched
+            save_scope_as = headlines_anti_war_movement_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_anti_war_movement
+            }
+        }
+
+        #antibiotic_mass_production
+        if = {
+            limit = { 
+                has_technology_researched = antibiotic_mass_production
+                NOT = {
+                    has_global_variable = headlines_antibiotic_mass_production_researched
+                }
+            }
+            set_global_variable = headlines_antibiotic_mass_production_researched
+            save_scope_as = headlines_antibiotic_mass_production_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_antibiotic_mass_production
+            }
+        }
+
+        #antimatter_production
+        if = {
+            limit = { 
+                has_technology_researched = antimatter_production
+                NOT = {
+                    has_global_variable = headlines_antimatter_production_researched
+                }
+            }
+            set_global_variable = headlines_antimatter_production_researched
+            save_scope_as = headlines_antimatter_production_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_antimatter_production
+            }
+        }
+
+        #art_deco_architecture
+        if = {
+            limit = { 
+                has_technology_researched = art_deco_architecture
+                NOT = {
+                    has_global_variable = headlines_art_deco_architecture_researched
+                }
+            }
+            set_global_variable = headlines_art_deco_architecture_researched
+            save_scope_as = headlines_art_deco_architecture_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_art_deco_architecture
+            }
+        }
+
+        #artificial_intelligence
+        if = {
+            limit = { 
+                has_technology_researched = artificial_intelligence
+                NOT = {
+                    has_global_variable = headlines_artificial_intelligence_researched
+                }
+            }
+            set_global_variable = headlines_artificial_intelligence_researched
+            save_scope_as = headlines_artificial_intelligence_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_artificial_intelligence
+            }
+        }
+
+        #asteroid_mining
+        if = {
+            limit = { 
+                has_technology_researched = asteroid_mining
+                NOT = {
+                    has_global_variable = headlines_asteroid_mining_researched
+                }
+            }
+            set_global_variable = headlines_asteroid_mining_researched
+            save_scope_as = headlines_asteroid_mining_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_asteroid_mining
+            }
+        }
+
+        #augmented_reality_warfare
+        if = {
+            limit = { 
+                has_technology_researched = augmented_reality_warfare
+                NOT = {
+                    has_global_variable = headlines_augmented_reality_warfare_researched
+                }
+            }
+            set_global_variable = headlines_augmented_reality_warfare_researched
+            save_scope_as = headlines_augmented_reality_warfare_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_augmented_reality_warfare
+            }
+        }
+
+        #automated_surveillance
+        if = {
+            limit = { 
+                has_technology_researched = automated_surveillance
+                NOT = {
+                    has_global_variable = headlines_automated_surveillance_researched
+                }
+            }
+            set_global_variable = headlines_automated_surveillance_researched
+            save_scope_as = headlines_automated_surveillance_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_automated_surveillance
+            }
+        }
+
+        #autonomous_vehicles
+        if = {
+            limit = { 
+                has_technology_researched = autonomous_vehicles
+                NOT = {
+                    has_global_variable = headlines_autonomous_vehicles_researched
+                }
+            }
+            set_global_variable = headlines_autonomous_vehicles_researched
+            save_scope_as = headlines_autonomous_vehicles_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_autonomous_vehicles
+            }
+        }
+
+        #barcodes_and_scanners
+        if = {
+            limit = { 
+                has_technology_researched = barcodes_and_scanners
+                NOT = {
+                    has_global_variable = headlines_barcodes_and_scanners_researched
+                }
+            }
+            set_global_variable = headlines_barcodes_and_scanners_researched
+            save_scope_as = headlines_barcodes_and_scanners_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_barcodes_and_scanners
+            }
+        }
+
+        #bergius_process
+        if = {
+            limit = { 
+                has_technology_researched = bergius_process
+                NOT = {
+                    has_global_variable = headlines_bergius_process_researched
+                }
+            }
+            set_global_variable = headlines_bergius_process_researched
+            save_scope_as = headlines_bergius_process_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_bergius_process
+            }
+        }
+
+        #bioenhanced_soldiers
+        if = {
+            limit = { 
+                has_technology_researched = bioenhanced_soldiers
+                NOT = {
+                    has_global_variable = headlines_bioenhanced_soldiers_researched
+                }
+            }
+            set_global_variable = headlines_bioenhanced_soldiers_researched
+            save_scope_as = headlines_bioenhanced_soldiers_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_bioenhanced_soldiers
+            }
+        }
+
+        #biohacking_and_human_augmentation
+        if = {
+            limit = { 
+                has_technology_researched = biohacking_and_human_augmentation
+                NOT = {
+                    has_global_variable = headlines_biohacking_and_human_augmentation_researched
+                }
+            }
+            set_global_variable = headlines_biohacking_and_human_augmentation_researched
+            save_scope_as = headlines_biohacking_and_human_augmentation_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_biohacking_and_human_augmentation
+            }
+        }
+
+        #biological_immortality
+        if = {
+            limit = { 
+                has_technology_researched = biological_immortality
+                NOT = {
+                    has_global_variable = headlines_biological_immortality_researched
+                }
+            }
+            set_global_variable = headlines_biological_immortality_researched
+            save_scope_as = headlines_biological_immortality_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_biological_immortality
+            }
+        }
+
+        #biotechnology
+        if = {
+            limit = { 
+                has_technology_researched = biotechnology
+                NOT = {
+                    has_global_variable = headlines_biotechnology_researched
+                }
+            }
+            set_global_variable = headlines_biotechnology_researched
+            save_scope_as = headlines_biotechnology_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_biotechnology
+            }
+        }
+
+        #bombing_aircraft
+        if = {
+            limit = { 
+                has_technology_researched = bombing_aircraft
+                NOT = {
+                    has_global_variable = headlines_bombing_aircraft_researched
+                }
+            }
+            set_global_variable = headlines_bombing_aircraft_researched
+            save_scope_as = headlines_bombing_aircraft_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_bombing_aircraft
+            }
+        }
+
+        #brain_computer_interfaces
+        if = {
+            limit = { 
+                has_technology_researched = brain_computer_interfaces
+                NOT = {
+                    has_global_variable = headlines_brain_computer_interfaces_researched
+                }
+            }
+            set_global_variable = headlines_brain_computer_interfaces_researched
+            save_scope_as = headlines_brain_computer_interfaces_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_brain_computer_interfaces
+            }
+        }
+
+        #cellular_networks
+        if = {
+            limit = { 
+                has_technology_researched = cellular_networks
+                NOT = {
+                    has_global_variable = headlines_cellular_networks_researched
+                }
+            }
+            set_global_variable = headlines_cellular_networks_researched
+            save_scope_as = headlines_cellular_networks_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_cellular_networks
+            }
+        }
+
+        #civil_rights_movement
+        if = {
+            limit = { 
+                has_technology_researched = civil_rights_movement
+                NOT = {
+                    has_global_variable = headlines_civil_rights_movement_researched
+                }
+            }
+            set_global_variable = headlines_civil_rights_movement_researched
+            save_scope_as = headlines_civil_rights_movement_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_civil_rights_movement
+            }
+        }
+
+        #clean_energy_technologies
+        if = {
+            limit = { 
+                has_technology_researched = clean_energy_technologies
+                NOT = {
+                    has_global_variable = headlines_clean_energy_technologies_researched
+                }
+            }
+            set_global_variable = headlines_clean_energy_technologies_researched
+            save_scope_as = headlines_clean_energy_technologies_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_clean_energy_technologies
+            }
+        }
+
+        #cloud_computing
+        if = {
+            limit = { 
+                has_technology_researched = cloud_computing
+                NOT = {
+                    has_global_variable = headlines_cloud_computing_researched
+                }
+            }
+            set_global_variable = headlines_cloud_computing_researched
+            save_scope_as = headlines_cloud_computing_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_cloud_computing
+            }
+        }
+
+        #combined_arms
+        if = {
+            limit = { 
+                has_technology_researched = combined_arms
+                NOT = {
+                    has_global_variable = headlines_combined_arms_researched
+                }
+            }
+            set_global_variable = headlines_combined_arms_researched
+            save_scope_as = headlines_combined_arms_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_combined_arms
+            }
+        }
+
+        #commercial_aviation
+        if = {
+            limit = { 
+                has_technology_researched = commercial_aviation
+                NOT = {
+                    has_global_variable = headlines_commercial_aviation_researched
+                }
+            }
+            set_global_variable = headlines_commercial_aviation_researched
+            save_scope_as = headlines_commercial_aviation_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_commercial_aviation
+            }
+        }
+
+        #compact_fusion_reactors
+        if = {
+            limit = { 
+                has_technology_researched = compact_fusion_reactors
+                NOT = {
+                    has_global_variable = headlines_compact_fusion_reactors_researched
+                }
+            }
+            set_global_variable = headlines_compact_fusion_reactors_researched
+            save_scope_as = headlines_compact_fusion_reactors_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_compact_fusion_reactors
+            }
+        }
+
+        #computer_aided_design
+        if = {
+            limit = { 
+                has_technology_researched = computer_aided_design
+                NOT = {
+                    has_global_variable = headlines_computer_aided_design_researched
+                }
+            }
+            set_global_variable = headlines_computer_aided_design_researched
+            save_scope_as = headlines_computer_aided_design_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_computer_aided_design
+            }
+        }
+
+        #computer_networks
+        if = {
+            limit = { 
+                has_technology_researched = computer_networks
+                NOT = {
+                    has_global_variable = headlines_computer_networks_researched
+                }
+            }
+            set_global_variable = headlines_computer_networks_researched
+            save_scope_as = headlines_computer_networks_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_computer_networks
+            }
+        }
+
+        #computing_machines
+        if = {
+            limit = { 
+                has_technology_researched = computing_machines
+                NOT = {
+                    has_global_variable = headlines_computing_machines_researched
+                }
+            }
+            set_global_variable = headlines_computing_machines_researched
+            save_scope_as = headlines_computing_machines_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_computing_machines
+            }
+        }
+
+        #consumer_credit
+        if = {
+            limit = { 
+                has_technology_researched = consumer_credit
+                NOT = {
+                    has_global_variable = headlines_consumer_credit_researched
+                }
+            }
+            set_global_variable = headlines_consumer_credit_researched
+            save_scope_as = headlines_consumer_credit_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_consumer_credit
+            }
+        }
+
+        #containerization
+        if = {
+            limit = { 
+                has_technology_researched = containerization
+                NOT = {
+                    has_global_variable = headlines_containerization_researched
+                }
+            }
+            set_global_variable = headlines_containerization_researched
+            save_scope_as = headlines_containerization_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_containerization
+            }
+        }
+
+        #contraceptive_pill
+        if = {
+            limit = { 
+                has_technology_researched = contraceptive_pill
+                NOT = {
+                    has_global_variable = headlines_contraceptive_pill_researched
+                }
+            }
+            set_global_variable = headlines_contraceptive_pill_researched
+            save_scope_as = headlines_contraceptive_pill_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_contraceptive_pill
+            }
+        }
+
+        #cryptography
+        if = {
+            limit = { 
+                has_technology_researched = cryptography
+                NOT = {
+                    has_global_variable = headlines_cryptography_researched
+                }
+            }
+            set_global_variable = headlines_cryptography_researched
+            save_scope_as = headlines_cryptography_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_cryptography
+            }
+        }
+
+        #cyber_warfare
+        if = {
+            limit = { 
+                has_technology_researched = cyber_warfare
+                NOT = {
+                    has_global_variable = headlines_cyber_warfare_researched
+                }
+            }
+            set_global_variable = headlines_cyber_warfare_researched
+            save_scope_as = headlines_cyber_warfare_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_cyber_warfare
+            }
+        }
+
+        #cybersecurity
+        if = {
+            limit = { 
+                has_technology_researched = cybersecurity
+                NOT = {
+                    has_global_variable = headlines_cybersecurity_researched
+                }
+            }
+            set_global_variable = headlines_cybersecurity_researched
+            save_scope_as = headlines_cybersecurity_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_cybersecurity
+            }
+        }
+
+        #decline_of_organized_religion
+        if = {
+            limit = { 
+                has_technology_researched = decline_of_organized_religion
+                NOT = {
+                    has_global_variable = headlines_decline_of_organized_religion_researched
+                }
+            }
+            set_global_variable = headlines_decline_of_organized_religion_researched
+            save_scope_as = headlines_decline_of_organized_religion_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_decline_of_organized_religion
+            }
+        }
+
+        #decolonization
+        if = {
+            limit = { 
+                has_technology_researched = decolonization
+                NOT = {
+                    has_global_variable = headlines_decolonization_researched
+                }
+            }
+            set_global_variable = headlines_decolonization_researched
+            save_scope_as = headlines_decolonization_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_decolonization
+            }
+        }
+
+        #digital_education
+        if = {
+            limit = { 
+                has_technology_researched = digital_education
+                NOT = {
+                    has_global_variable = headlines_digital_education_researched
+                }
+            }
+            set_global_variable = headlines_digital_education_researched
+            save_scope_as = headlines_digital_education_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_digital_education
+            }
+        }
+
+        #digital_entertainment
+        if = {
+            limit = { 
+                has_technology_researched = digital_entertainment
+                NOT = {
+                    has_global_variable = headlines_digital_entertainment_researched
+                }
+            }
+            set_global_variable = headlines_digital_entertainment_researched
+            save_scope_as = headlines_digital_entertainment_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_digital_entertainment
+            }
+        }
+
+        #digital_telecommunications
+        if = {
+            limit = { 
+                has_technology_researched = digital_telecommunications
+                NOT = {
+                    has_global_variable = headlines_digital_telecommunications_researched
+                }
+            }
+            set_global_variable = headlines_digital_telecommunications_researched
+            save_scope_as = headlines_digital_telecommunications_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_digital_telecommunications
+            }
+        }
+
+        #directed_energy_defenses
+        if = {
+            limit = { 
+                has_technology_researched = directed_energy_defenses
+                NOT = {
+                    has_global_variable = headlines_directed_energy_defenses_researched
+                }
+            }
+            set_global_variable = headlines_directed_energy_defenses_researched
+            save_scope_as = headlines_directed_energy_defenses_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_directed_energy_defenses
+            }
+        }
+
+        #directed_energy_weapons
+        if = {
+            limit = { 
+                has_technology_researched = directed_energy_weapons
+                NOT = {
+                    has_global_variable = headlines_directed_energy_weapons_researched
+                }
+            }
+            set_global_variable = headlines_directed_energy_weapons_researched
+            save_scope_as = headlines_directed_energy_weapons_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_directed_energy_weapons
+            }
+        }
+
+        #e-commerce
+        if = {
+            limit = { 
+                has_technology_researched = e-commerce
+                NOT = {
+                    has_global_variable = headlines_e-commerce_researched
+                }
+            }
+            set_global_variable = headlines_e-commerce_researched
+            save_scope_as = headlines_e-commerce_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_e-commerce
+            }
+        }
+
+        #early_nanotechnology
+        if = {
+            limit = { 
+                has_technology_researched = early_nanotechnology
+                NOT = {
+                    has_global_variable = headlines_early_nanotechnology_researched
+                }
+            }
+            set_global_variable = headlines_early_nanotechnology_researched
+            save_scope_as = headlines_early_nanotechnology_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_early_nanotechnology
+            }
+        }
+
+        #electronic_warfare
+        if = {
+            limit = { 
+                has_technology_researched = electronic_warfare
+                NOT = {
+                    has_global_variable = headlines_electronic_warfare_researched
+                }
+            }
+            set_global_variable = headlines_electronic_warfare_researched
+            save_scope_as = headlines_electronic_warfare_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_electronic_warfare
+            }
+        }
+
+        #environmental_movement
+        if = {
+            limit = { 
+                has_technology_researched = environmental_movement
+                NOT = {
+                    has_global_variable = headlines_environmental_movement_researched
+                }
+            }
+            set_global_variable = headlines_environmental_movement_researched
+            save_scope_as = headlines_environmental_movement_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_environmental_movement
+            }
+        }
+
+        #fiber_optics
+        if = {
+            limit = { 
+                has_technology_researched = fiber_optics
+                NOT = {
+                    has_global_variable = headlines_fiber_optics_researched
+                }
+            }
+            set_global_variable = headlines_fiber_optics_researched
+            save_scope_as = headlines_fiber_optics_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_fiber_optics
+            }
+        }
+
+        #fluorescent_lamps
+        if = {
+            limit = { 
+                has_technology_researched = fluorescent_lamps
+                NOT = {
+                    has_global_variable = headlines_fluorescent_lamps_researched
+                }
+            }
+            set_global_variable = headlines_fluorescent_lamps_researched
+            save_scope_as = headlines_fluorescent_lamps_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_fluorescent_lamps
+            }
+        }
+
+        #fusion_batteries
+        if = {
+            limit = { 
+                has_technology_researched = fusion_batteries
+                NOT = {
+                    has_global_variable = headlines_fusion_batteries_researched
+                }
+            }
+            set_global_variable = headlines_fusion_batteries_researched
+            save_scope_as = headlines_fusion_batteries_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_fusion_batteries
+            }
+        }
+
+        #fusion_power
+        if = {
+            limit = { 
+                has_technology_researched = fusion_power
+                NOT = {
+                    has_global_variable = headlines_fusion_power_researched
+                }
+            }
+            set_global_variable = headlines_fusion_power_researched
+            save_scope_as = headlines_fusion_power_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_fusion_power
+            }
+        }
+
+        #gene_splicing
+        if = {
+            limit = { 
+                has_technology_researched = gene_splicing
+                NOT = {
+                    has_global_variable = headlines_gene_splicing_researched
+                }
+            }
+            set_global_variable = headlines_gene_splicing_researched
+            save_scope_as = headlines_gene_splicing_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_gene_splicing
+            }
+        }
+
+        #generative_ai
+        if = {
+            limit = { 
+                has_technology_researched = generative_ai
+                NOT = {
+                    has_global_variable = headlines_generative_ai_researched
+                }
+            }
+            set_global_variable = headlines_generative_ai_researched
+            save_scope_as = headlines_generative_ai_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_generative_ai
+            }
+        }
+
+        #genetic_engineering
+        if = {
+            limit = { 
+                has_technology_researched = genetic_engineering
+                NOT = {
+                    has_global_variable = headlines_genetic_engineering_researched
+                }
+            }
+            set_global_variable = headlines_genetic_engineering_researched
+            save_scope_as = headlines_genetic_engineering_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_genetic_engineering
+            }
+        }
+
+        #globalization
+        if = {
+            limit = { 
+                has_technology_researched = globalization
+                NOT = {
+                    has_global_variable = headlines_globalization_researched
+                }
+            }
+            set_global_variable = headlines_globalization_researched
+            save_scope_as = headlines_globalization_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_globalization
+            }
+        }
+
+        #green_revolution
+        if = {
+            limit = { 
+                has_technology_researched = green_revolution
+                NOT = {
+                    has_global_variable = headlines_green_revolution_researched
+                }
+            }
+            set_global_variable = headlines_green_revolution_researched
+            save_scope_as = headlines_green_revolution_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_green_revolution
+            }
+        }
+
+        #guided_missiles
+        if = {
+            limit = { 
+                has_technology_researched = guided_missiles
+                NOT = {
+                    has_global_variable = headlines_guided_missiles_researched
+                }
+            }
+            set_global_variable = headlines_guided_missiles_researched
+            save_scope_as = headlines_guided_missiles_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_guided_missiles
+            }
+        }
+
+        #hydraulic_fracturing
+        if = {
+            limit = { 
+                has_technology_researched = hydraulic_fracturing
+                NOT = {
+                    has_global_variable = headlines_hydraulic_fracturing_researched
+                }
+            }
+            set_global_variable = headlines_hydraulic_fracturing_researched
+            save_scope_as = headlines_hydraulic_fracturing_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_hydraulic_fracturing
+            }
+        }
+
+        #hypersonic_weapons
+        if = {
+            limit = { 
+                has_technology_researched = hypersonic_weapons
+                NOT = {
+                    has_global_variable = headlines_hypersonic_weapons_researched
+                }
+            }
+            set_global_variable = headlines_hypersonic_weapons_researched
+            save_scope_as = headlines_hypersonic_weapons_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_hypersonic_weapons
+            }
+        }
+
+        #inertial_navigation_systems
+        if = {
+            limit = { 
+                has_technology_researched = inertial_navigation_systems
+                NOT = {
+                    has_global_variable = headlines_inertial_navigation_systems_researched
+                }
+            }
+            set_global_variable = headlines_inertial_navigation_systems_researched
+            save_scope_as = headlines_inertial_navigation_systems_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_inertial_navigation_systems
+            }
+        }
+
+        #infrared_night_vision
+        if = {
+            limit = { 
+                has_technology_researched = infrared_night_vision
+                NOT = {
+                    has_global_variable = headlines_infrared_night_vision_researched
+                }
+            }
+            set_global_variable = headlines_infrared_night_vision_researched
+            save_scope_as = headlines_infrared_night_vision_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_infrared_night_vision
+            }
+        }
+
+        #integrated_circuits
+        if = {
+            limit = { 
+                has_technology_researched = integrated_circuits
+                NOT = {
+                    has_global_variable = headlines_integrated_circuits_researched
+                }
+            }
+            set_global_variable = headlines_integrated_circuits_researched
+            save_scope_as = headlines_integrated_circuits_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_integrated_circuits
+            }
+        }
+
+        #intergovernmental_organizations
+        if = {
+            limit = { 
+                has_technology_researched = intergovernmental_organizations
+                NOT = {
+                    has_global_variable = headlines_intergovernmental_organizations_researched
+                }
+            }
+            set_global_variable = headlines_intergovernmental_organizations_researched
+            save_scope_as = headlines_intergovernmental_organizations_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_intergovernmental_organizations
+            }
+        }
+
+        #isoprene
+        if = {
+            limit = { 
+                has_technology_researched = isoprene
+                NOT = {
+                    has_global_variable = headlines_isoprene_researched
+                }
+            }
+            set_global_variable = headlines_isoprene_researched
+            save_scope_as = headlines_isoprene_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_isoprene
+            }
+        }
+
+        #jadc2
+        if = {
+            limit = { 
+                has_technology_researched = jadc2
+                NOT = {
+                    has_global_variable = headlines_jadc2_researched
+                }
+            }
+            set_global_variable = headlines_jadc2_researched
+            save_scope_as = headlines_jadc2_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_jadc2
+            }
+        }
+
+        #jet_engine_technology
+        if = {
+            limit = { 
+                has_technology_researched = jet_engine_technology
+                NOT = {
+                    has_global_variable = headlines_jet_engine_technology_researched
+                }
+            }
+            set_global_variable = headlines_jet_engine_technology_researched
+            save_scope_as = headlines_jet_engine_technology_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_jet_engine_technology
+            }
+        }
+
+        #keynesian_economics
+        if = {
+            limit = { 
+                has_technology_researched = keynesian_economics
+                NOT = {
+                    has_global_variable = headlines_keynesian_economics_researched
+                }
+            }
+            set_global_variable = headlines_keynesian_economics_researched
+            save_scope_as = headlines_keynesian_economics_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_keynesian_economics
+            }
+        }
+
+        #knowledge_economy
+        if = {
+            limit = { 
+                has_technology_researched = knowledge_economy
+                NOT = {
+                    has_global_variable = headlines_knowledge_economy_researched
+                }
+            }
+            set_global_variable = headlines_knowledge_economy_researched
+            save_scope_as = headlines_knowledge_economy_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_knowledge_economy
+            }
+        }
+
+        #lab-grown_food
+        if = {
+            limit = { 
+                has_technology_researched = lab-grown_food
+                NOT = {
+                    has_global_variable = headlines_lab-grown_food_researched
+                }
+            }
+            set_global_variable = headlines_lab-grown_food_researched
+            save_scope_as = headlines_lab-grown_food_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_lab-grown_food
+            }
+        }
+
+        #laser_technology
+        if = {
+            limit = { 
+                has_technology_researched = laser_technology
+                NOT = {
+                    has_global_variable = headlines_laser_technology_researched
+                }
+            }
+            set_global_variable = headlines_laser_technology_researched
+            save_scope_as = headlines_laser_technology_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_laser_technology
+            }
+        }
+
+        #machine_learning
+        if = {
+            limit = { 
+                has_technology_researched = machine_learning
+                NOT = {
+                    has_global_variable = headlines_machine_learning_researched
+                }
+            }
+            set_global_variable = headlines_machine_learning_researched
+            save_scope_as = headlines_machine_learning_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_machine_learning
+            }
+        }
+
+        #mainframe_computers
+        if = {
+            limit = { 
+                has_technology_researched = mainframe_computers
+                NOT = {
+                    has_global_variable = headlines_mainframe_computers_researched
+                }
+            }
+            set_global_variable = headlines_mainframe_computers_researched
+            save_scope_as = headlines_mainframe_computers_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_mainframe_computers
+            }
+        }
+
+        #marketing_research
+        if = {
+            limit = { 
+                has_technology_researched = marketing_research
+                NOT = {
+                    has_global_variable = headlines_marketing_research_researched
+                }
+            }
+            set_global_variable = headlines_marketing_research_researched
+            save_scope_as = headlines_marketing_research_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_marketing_research
+            }
+        }
+
+        #mass_media
+        if = {
+            limit = { 
+                has_technology_researched = mass_media
+                NOT = {
+                    has_global_variable = headlines_mass_media_researched
+                }
+            }
+            set_global_variable = headlines_mass_media_researched
+            save_scope_as = headlines_mass_media_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_mass_media
+            }
+        }
+
+        #mental_health_awareness
+        if = {
+            limit = { 
+                has_technology_researched = mental_health_awareness
+                NOT = {
+                    has_global_variable = headlines_mental_health_awareness_researched
+                }
+            }
+            set_global_variable = headlines_mental_health_awareness_researched
+            save_scope_as = headlines_mental_health_awareness_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_mental_health_awareness
+            }
+        }
+
+        #microprocessor
+        if = {
+            limit = { 
+                has_technology_researched = microprocessor
+                NOT = {
+                    has_global_variable = headlines_microprocessor_researched
+                }
+            }
+            set_global_variable = headlines_microprocessor_researched
+            save_scope_as = headlines_microprocessor_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_microprocessor
+            }
+        }
+
+        #military_grade_cybersecurity
+        if = {
+            limit = { 
+                has_technology_researched = military_grade_cybersecurity
+                NOT = {
+                    has_global_variable = headlines_military_grade_cybersecurity_researched
+                }
+            }
+            set_global_variable = headlines_military_grade_cybersecurity_researched
+            save_scope_as = headlines_military_grade_cybersecurity_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_military_grade_cybersecurity
+            }
+        }
+
+        #mind_backups
+        if = {
+            limit = { 
+                has_technology_researched = mind_backups
+                NOT = {
+                    has_global_variable = headlines_mind_backups_researched
+                }
+            }
+            set_global_variable = headlines_mind_backups_researched
+            save_scope_as = headlines_mind_backups_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_mind_backups
+            }
+        }
+
+        #missile_defense_systems
+        if = {
+            limit = { 
+                has_technology_researched = missile_defense_systems
+                NOT = {
+                    has_global_variable = headlines_missile_defense_systems_researched
+                }
+            }
+            set_global_variable = headlines_missile_defense_systems_researched
+            save_scope_as = headlines_missile_defense_systems_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_missile_defense_systems
+            }
+        }
+
+        #modern_automotive_technology
+        if = {
+            limit = { 
+                has_technology_researched = modern_automotive_technology
+                NOT = {
+                    has_global_variable = headlines_modern_automotive_technology_researched
+                }
+            }
+            set_global_variable = headlines_modern_automotive_technology_researched
+            save_scope_as = headlines_modern_automotive_technology_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_modern_automotive_technology
+            }
+        }
+
+        #modern_chemical_processes
+        if = {
+            limit = { 
+                has_technology_researched = modern_chemical_processes
+                NOT = {
+                    has_global_variable = headlines_modern_chemical_processes_researched
+                }
+            }
+            set_global_variable = headlines_modern_chemical_processes_researched
+            save_scope_as = headlines_modern_chemical_processes_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_modern_chemical_processes
+            }
+        }
+
+        #modern_management_techniques
+        if = {
+            limit = { 
+                has_technology_researched = modern_management_techniques
+                NOT = {
+                    has_global_variable = headlines_modern_management_techniques_researched
+                }
+            }
+            set_global_variable = headlines_modern_management_techniques_researched
+            save_scope_as = headlines_modern_management_techniques_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_modern_management_techniques
+            }
+        }
+
+        #modern_material_science
+        if = {
+            limit = { 
+                has_technology_researched = modern_material_science
+                NOT = {
+                    has_global_variable = headlines_modern_material_science_researched
+                }
+            }
+            set_global_variable = headlines_modern_material_science_researched
+            save_scope_as = headlines_modern_material_science_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_modern_material_science
+            }
+        }
+
+        #modern_materials
+        if = {
+            limit = { 
+                has_technology_researched = modern_materials
+                NOT = {
+                    has_global_variable = headlines_modern_materials_researched
+                }
+            }
+            set_global_variable = headlines_modern_materials_researched
+            save_scope_as = headlines_modern_materials_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_modern_materials
+            }
+        }
+
+        #modern_pharmaceuticals
+        if = {
+            limit = { 
+                has_technology_researched = modern_pharmaceuticals
+                NOT = {
+                    has_global_variable = headlines_modern_pharmaceuticals_researched
+                }
+            }
+            set_global_variable = headlines_modern_pharmaceuticals_researched
+            save_scope_as = headlines_modern_pharmaceuticals_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_modern_pharmaceuticals
+            }
+        }
+
+        #modern_skyscrapers
+        if = {
+            limit = { 
+                has_technology_researched = modern_skyscrapers
+                NOT = {
+                    has_global_variable = headlines_modern_skyscrapers_researched
+                }
+            }
+            set_global_variable = headlines_modern_skyscrapers_researched
+            save_scope_as = headlines_modern_skyscrapers_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_modern_skyscrapers
+            }
+        }
+
+        #modern_tools
+        if = {
+            limit = { 
+                has_technology_researched = modern_tools
+                NOT = {
+                    has_global_variable = headlines_modern_tools_researched
+                }
+            }
+            set_global_variable = headlines_modern_tools_researched
+            save_scope_as = headlines_modern_tools_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_modern_tools
+            }
+        }
+
+        #modern_urban_planning
+        if = {
+            limit = { 
+                has_technology_researched = modern_urban_planning
+                NOT = {
+                    has_global_variable = headlines_modern_urban_planning_researched
+                }
+            }
+            set_global_variable = headlines_modern_urban_planning_researched
+            save_scope_as = headlines_modern_urban_planning_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_modern_urban_planning
+            }
+        }
+
+        #modern_vaccines
+        if = {
+            limit = { 
+                has_technology_researched = modern_vaccines
+                NOT = {
+                    has_global_variable = headlines_modern_vaccines_researched
+                }
+            }
+            set_global_variable = headlines_modern_vaccines_researched
+            save_scope_as = headlines_modern_vaccines_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_modern_vaccines
+            }
+        }
+
+        #molecular_assemblers
+        if = {
+            limit = { 
+                has_technology_researched = molecular_assemblers
+                NOT = {
+                    has_global_variable = headlines_molecular_assemblers_researched
+                }
+            }
+            set_global_variable = headlines_molecular_assemblers_researched
+            save_scope_as = headlines_molecular_assemblers_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_molecular_assemblers
+            }
+        }
+
+        #motorized_artillery
+        if = {
+            limit = { 
+                has_technology_researched = motorized_artillery
+                NOT = {
+                    has_global_variable = headlines_motorized_artillery_researched
+                }
+            }
+            set_global_variable = headlines_motorized_artillery_researched
+            save_scope_as = headlines_motorized_artillery_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_motorized_artillery
+            }
+        }
+
+        #naval_convoy_defense
+        if = {
+            limit = { 
+                has_technology_researched = naval_convoy_defense
+                NOT = {
+                    has_global_variable = headlines_naval_convoy_defense_researched
+                }
+            }
+            set_global_variable = headlines_naval_convoy_defense_researched
+            save_scope_as = headlines_naval_convoy_defense_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_naval_convoy_defense
+            }
+        }
+
+        #naval_fire_control_systems
+        if = {
+            limit = { 
+                has_technology_researched = naval_fire_control_systems
+                NOT = {
+                    has_global_variable = headlines_naval_fire_control_systems_researched
+                }
+            }
+            set_global_variable = headlines_naval_fire_control_systems_researched
+            save_scope_as = headlines_naval_fire_control_systems_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_naval_fire_control_systems
+            }
+        }
+
+        #network_centric_warfare
+        if = {
+            limit = { 
+                has_technology_researched = network_centric_warfare
+                NOT = {
+                    has_global_variable = headlines_network_centric_warfare_researched
+                }
+            }
+            set_global_variable = headlines_network_centric_warfare_researched
+            save_scope_as = headlines_network_centric_warfare_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_network_centric_warfare
+            }
+        }
+
+        #neural_lace
+        if = {
+            limit = { 
+                has_technology_researched = neural_lace
+                NOT = {
+                    has_global_variable = headlines_neural_lace_researched
+                }
+            }
+            set_global_variable = headlines_neural_lace_researched
+            save_scope_as = headlines_neural_lace_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_neural_lace
+            }
+        }
+
+        #nuclear_energy
+        if = {
+            limit = { 
+                has_technology_researched = nuclear_energy
+                NOT = {
+                    has_global_variable = headlines_nuclear_energy_researched
+                }
+            }
+            set_global_variable = headlines_nuclear_energy_researched
+            save_scope_as = headlines_nuclear_energy_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_nuclear_energy
+            }
+        }
+
+        #nuclear_weapons
+        if = {
+            limit = { 
+                has_technology_researched = nuclear_weapons
+                NOT = {
+                    has_global_variable = headlines_nuclear_weapons_researched
+                }
+            }
+            set_global_variable = headlines_nuclear_weapons_researched
+            save_scope_as = headlines_nuclear_weapons_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_nuclear_weapons
+            }
+        }
+
+        #orbital_manufacturing
+        if = {
+            limit = { 
+                has_technology_researched = orbital_manufacturing
+                NOT = {
+                    has_global_variable = headlines_orbital_manufacturing_researched
+                }
+            }
+            set_global_variable = headlines_orbital_manufacturing_researched
+            save_scope_as = headlines_orbital_manufacturing_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_orbital_manufacturing
+            }
+        }
+
+        #orbital_weapon_platforms
+        if = {
+            limit = { 
+                has_technology_researched = orbital_weapon_platforms
+                NOT = {
+                    has_global_variable = headlines_orbital_weapon_platforms_researched
+                }
+            }
+            set_global_variable = headlines_orbital_weapon_platforms_researched
+            save_scope_as = headlines_orbital_weapon_platforms_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_orbital_weapon_platforms
+            }
+        }
+
+        #personal_appliances
+        if = {
+            limit = { 
+                has_technology_researched = personal_appliances
+                NOT = {
+                    has_global_variable = headlines_personal_appliances_researched
+                }
+            }
+            set_global_variable = headlines_personal_appliances_researched
+            save_scope_as = headlines_personal_appliances_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_personal_appliances
+            }
+        }
+
+        #personal_computers
+        if = {
+            limit = { 
+                has_technology_researched = personal_computers
+                NOT = {
+                    has_global_variable = headlines_personal_computers_researched
+                }
+            }
+            set_global_variable = headlines_personal_computers_researched
+            save_scope_as = headlines_personal_computers_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_personal_computers
+            }
+        }
+
+        #personalized_medicine
+        if = {
+            limit = { 
+                has_technology_researched = personalized_medicine
+                NOT = {
+                    has_global_variable = headlines_personalized_medicine_researched
+                }
+            }
+            set_global_variable = headlines_personalized_medicine_researched
+            save_scope_as = headlines_personalized_medicine_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_personalized_medicine
+            }
+        }
+
+        #photocopiers
+        if = {
+            limit = { 
+                has_technology_researched = photocopiers
+                NOT = {
+                    has_global_variable = headlines_photocopiers_researched
+                }
+            }
+            set_global_variable = headlines_photocopiers_researched
+            save_scope_as = headlines_photocopiers_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_photocopiers
+            }
+        }
+
+        #plastic_mass_production
+        if = {
+            limit = { 
+                has_technology_researched = plastic_mass_production
+                NOT = {
+                    has_global_variable = headlines_plastic_mass_production_researched
+                }
+            }
+            set_global_variable = headlines_plastic_mass_production_researched
+            save_scope_as = headlines_plastic_mass_production_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_plastic_mass_production
+            }
+        }
+
+        #pollution_control
+        if = {
+            limit = { 
+                has_technology_researched = pollution_control
+                NOT = {
+                    has_global_variable = headlines_pollution_control_researched
+                }
+            }
+            set_global_variable = headlines_pollution_control_researched
+            save_scope_as = headlines_pollution_control_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_pollution_control
+            }
+        }
+
+        #pop_culture
+        if = {
+            limit = { 
+                has_technology_researched = pop_culture
+                NOT = {
+                    has_global_variable = headlines_pop_culture_researched
+                }
+            }
+            set_global_variable = headlines_pop_culture_researched
+            save_scope_as = headlines_pop_culture_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_pop_culture
+            }
+        }
+
+        #post-scarcity_economy
+        if = {
+            limit = { 
+                has_technology_researched = post-scarcity_economy
+                NOT = {
+                    has_global_variable = headlines_post-scarcity_economy_researched
+                }
+            }
+            set_global_variable = headlines_post-scarcity_economy_researched
+            save_scope_as = headlines_post-scarcity_economy_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_post-scarcity_economy
+            }
+        }
+
+        #precision_guided_munitions
+        if = {
+            limit = { 
+                has_technology_researched = precision_guided_munitions
+                NOT = {
+                    has_global_variable = headlines_precision_guided_munitions_researched
+                }
+            }
+            set_global_variable = headlines_precision_guided_munitions_researched
+            save_scope_as = headlines_precision_guided_munitions_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_precision_guided_munitions
+            }
+        }
+
+        #predictive_logistics
+        if = {
+            limit = { 
+                has_technology_researched = predictive_logistics
+                NOT = {
+                    has_global_variable = headlines_predictive_logistics_researched
+                }
+            }
+            set_global_variable = headlines_predictive_logistics_researched
+            save_scope_as = headlines_predictive_logistics_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_predictive_logistics
+            }
+        }
+
+        #programmable_matter
+        if = {
+            limit = { 
+                has_technology_researched = programmable_matter
+                NOT = {
+                    has_global_variable = headlines_programmable_matter_researched
+                }
+            }
+            set_global_variable = headlines_programmable_matter_researched
+            save_scope_as = headlines_programmable_matter_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_programmable_matter
+            }
+        }
+
+        #public_works_programs
+        if = {
+            limit = { 
+                has_technology_researched = public_works_programs
+                NOT = {
+                    has_global_variable = headlines_public_works_programs_researched
+                }
+            }
+            set_global_variable = headlines_public_works_programs_researched
+            save_scope_as = headlines_public_works_programs_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_public_works_programs
+            }
+        }
+
+        #quantum_communications
+        if = {
+            limit = { 
+                has_technology_researched = quantum_communications
+                NOT = {
+                    has_global_variable = headlines_quantum_communications_researched
+                }
+            }
+            set_global_variable = headlines_quantum_communications_researched
+            save_scope_as = headlines_quantum_communications_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_quantum_communications
+            }
+        }
+
+        #quantum_computing
+        if = {
+            limit = { 
+                has_technology_researched = quantum_computing
+                NOT = {
+                    has_global_variable = headlines_quantum_computing_researched
+                }
+            }
+            set_global_variable = headlines_quantum_computing_researched
+            save_scope_as = headlines_quantum_computing_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_quantum_computing
+            }
+        }
+
+        #quantum_materials
+        if = {
+            limit = { 
+                has_technology_researched = quantum_materials
+                NOT = {
+                    has_global_variable = headlines_quantum_materials_researched
+                }
+            }
+            set_global_variable = headlines_quantum_materials_researched
+            save_scope_as = headlines_quantum_materials_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_quantum_materials
+            }
+        }
+
+        #radar
+        if = {
+            limit = { 
+                has_technology_researched = radar
+                NOT = {
+                    has_global_variable = headlines_radar_researched
+                }
+            }
+            set_global_variable = headlines_radar_researched
+            save_scope_as = headlines_radar_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_radar
+            }
+        }
+
+        #rapid_deployment_forces
+        if = {
+            limit = { 
+                has_technology_researched = rapid_deployment_forces
+                NOT = {
+                    has_global_variable = headlines_rapid_deployment_forces_researched
+                }
+            }
+            set_global_variable = headlines_rapid_deployment_forces_researched
+            save_scope_as = headlines_rapid_deployment_forces_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_rapid_deployment_forces
+            }
+        }
+
+        #recon_satellites
+        if = {
+            limit = { 
+                has_technology_researched = recon_satellites
+                NOT = {
+                    has_global_variable = headlines_recon_satellites_researched
+                }
+            }
+            set_global_variable = headlines_recon_satellites_researched
+            save_scope_as = headlines_recon_satellites_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_recon_satellites
+            }
+        }
+
+        #reusable_rocketry
+        if = {
+            limit = { 
+                has_technology_researched = reusable_rocketry
+                NOT = {
+                    has_global_variable = headlines_reusable_rocketry_researched
+                }
+            }
+            set_global_variable = headlines_reusable_rocketry_researched
+            save_scope_as = headlines_reusable_rocketry_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_reusable_rocketry
+            }
+        }
+
+        #robotics
+        if = {
+            limit = { 
+                has_technology_researched = robotics
+                NOT = {
+                    has_global_variable = headlines_robotics_researched
+                }
+            }
+            set_global_variable = headlines_robotics_researched
+            save_scope_as = headlines_robotics_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_robotics
+            }
+        }
+
+        #rocketry
+        if = {
+            limit = { 
+                has_technology_researched = rocketry
+                NOT = {
+                    has_global_variable = headlines_rocketry_researched
+                }
+            }
+            set_global_variable = headlines_rocketry_researched
+            save_scope_as = headlines_rocketry_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_rocketry
+            }
+        }
+
+        #rural_electrification
+        if = {
+            limit = { 
+                has_technology_researched = rural_electrification
+                NOT = {
+                    has_global_variable = headlines_rural_electrification_researched
+                }
+            }
+            set_global_variable = headlines_rural_electrification_researched
+            save_scope_as = headlines_rural_electrification_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_rural_electrification
+            }
+        }
+
+        #satellite_communications
+        if = {
+            limit = { 
+                has_technology_researched = satellite_communications
+                NOT = {
+                    has_global_variable = headlines_satellite_communications_researched
+                }
+            }
+            set_global_variable = headlines_satellite_communications_researched
+            save_scope_as = headlines_satellite_communications_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_satellite_communications
+            }
+        }
+
+        #second_wave_feminism
+        if = {
+            limit = { 
+                has_technology_researched = second_wave_feminism
+                NOT = {
+                    has_global_variable = headlines_second_wave_feminism_researched
+                }
+            }
+            set_global_variable = headlines_second_wave_feminism_researched
+            save_scope_as = headlines_second_wave_feminism_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_second_wave_feminism
+            }
+        }
+
+        #semiautomatic_rifle
+        if = {
+            limit = { 
+                has_technology_researched = semiautomatic_rifle
+                NOT = {
+                    has_global_variable = headlines_semiautomatic_rifle_researched
+                }
+            }
+            set_global_variable = headlines_semiautomatic_rifle_researched
+            save_scope_as = headlines_semiautomatic_rifle_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_semiautomatic_rifle
+            }
+        }
+
+        #sexual_revolution
+        if = {
+            limit = { 
+                has_technology_researched = sexual_revolution
+                NOT = {
+                    has_global_variable = headlines_sexual_revolution_researched
+                }
+            }
+            set_global_variable = headlines_sexual_revolution_researched
+            save_scope_as = headlines_sexual_revolution_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_sexual_revolution
+            }
+        }
+
+        #smart_grids
+        if = {
+            limit = { 
+                has_technology_researched = smart_grids
+                NOT = {
+                    has_global_variable = headlines_smart_grids_researched
+                }
+            }
+            set_global_variable = headlines_smart_grids_researched
+            save_scope_as = headlines_smart_grids_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_smart_grids
+            }
+        }
+
+        #social_justice_movements
+        if = {
+            limit = { 
+                has_technology_researched = social_justice_movements
+                NOT = {
+                    has_global_variable = headlines_social_justice_movements_researched
+                }
+            }
+            set_global_variable = headlines_social_justice_movements_researched
+            save_scope_as = headlines_social_justice_movements_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_social_justice_movements
+            }
+        }
+
+        #social_media
+        if = {
+            limit = { 
+                has_technology_researched = social_media
+                NOT = {
+                    has_global_variable = headlines_social_media_researched
+                }
+            }
+            set_global_variable = headlines_social_media_researched
+            save_scope_as = headlines_social_media_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_social_media
+            }
+        }
+
+        #sonar
+        if = {
+            limit = { 
+                has_technology_researched = sonar
+                NOT = {
+                    has_global_variable = headlines_sonar_researched
+                }
+            }
+            set_global_variable = headlines_sonar_researched
+            save_scope_as = headlines_sonar_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_sonar
+            }
+        }
+
+        #space_based_solar_power
+        if = {
+            limit = { 
+                has_technology_researched = space_based_solar_power
+                NOT = {
+                    has_global_variable = headlines_space_based_solar_power_researched
+                }
+            }
+            set_global_variable = headlines_space_based_solar_power_researched
+            save_scope_as = headlines_space_based_solar_power_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_space_based_solar_power
+            }
+        }
+
+        #space_colonization
+        if = {
+            limit = { 
+                has_technology_researched = space_colonization
+                NOT = {
+                    has_global_variable = headlines_space_colonization_researched
+                }
+            }
+            set_global_variable = headlines_space_colonization_researched
+            save_scope_as = headlines_space_colonization_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_space_colonization
+            }
+        }
+
+        #space_elevator
+        if = {
+            limit = { 
+                has_technology_researched = space_elevator
+                NOT = {
+                    has_global_variable = headlines_space_elevator_researched
+                }
+            }
+            set_global_variable = headlines_space_elevator_researched
+            save_scope_as = headlines_space_elevator_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_space_elevator
+            }
+        }
+
+        #space_exploration
+        if = {
+            limit = { 
+                has_technology_researched = space_exploration
+                NOT = {
+                    has_global_variable = headlines_space_exploration_researched
+                }
+            }
+            set_global_variable = headlines_space_exploration_researched
+            save_scope_as = headlines_space_exploration_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_space_exploration
+            }
+        }
+
+        #space_militarization
+        if = {
+            limit = { 
+                has_technology_researched = space_militarization
+                NOT = {
+                    has_global_variable = headlines_space_militarization_researched
+                }
+            }
+            set_global_variable = headlines_space_militarization_researched
+            save_scope_as = headlines_space_militarization_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_space_militarization
+            }
+        }
+
+        #stainless_steel_mass_production
+        if = {
+            limit = { 
+                has_technology_researched = stainless_steel_mass_production
+                NOT = {
+                    has_global_variable = headlines_stainless_steel_mass_production_researched
+                }
+            }
+            set_global_variable = headlines_stainless_steel_mass_production_researched
+            save_scope_as = headlines_stainless_steel_mass_production_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_stainless_steel_mass_production
+            }
+        }
+
+        #stealth_technology
+        if = {
+            limit = { 
+                has_technology_researched = stealth_technology
+                NOT = {
+                    has_global_variable = headlines_stealth_technology_researched
+                }
+            }
+            set_global_variable = headlines_stealth_technology_researched
+            save_scope_as = headlines_stealth_technology_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_stealth_technology
+            }
+        }
+
+        #supersonic_aircraft
+        if = {
+            limit = { 
+                has_technology_researched = supersonic_aircraft
+                NOT = {
+                    has_global_variable = headlines_supersonic_aircraft_researched
+                }
+            }
+            set_global_variable = headlines_supersonic_aircraft_researched
+            save_scope_as = headlines_supersonic_aircraft_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_supersonic_aircraft
+            }
+        }
+
+        #supply_chain_management
+        if = {
+            limit = { 
+                has_technology_researched = supply_chain_management
+                NOT = {
+                    has_global_variable = headlines_supply_chain_management_researched
+                }
+            }
+            set_global_variable = headlines_supply_chain_management_researched
+            save_scope_as = headlines_supply_chain_management_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_supply_chain_management
+            }
+        }
+
+        #swarm_technology
+        if = {
+            limit = { 
+                has_technology_researched = swarm_technology
+                NOT = {
+                    has_global_variable = headlines_swarm_technology_researched
+                }
+            }
+            set_global_variable = headlines_swarm_technology_researched
+            save_scope_as = headlines_swarm_technology_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_swarm_technology
+            }
+        }
+
+        #synthetic_biology
+        if = {
+            limit = { 
+                has_technology_researched = synthetic_biology
+                NOT = {
+                    has_global_variable = headlines_synthetic_biology_researched
+                }
+            }
+            set_global_variable = headlines_synthetic_biology_researched
+            save_scope_as = headlines_synthetic_biology_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_synthetic_biology
+            }
+        }
+
+        #tactical_nuclear_weapons
+        if = {
+            limit = { 
+                has_technology_researched = tactical_nuclear_weapons
+                NOT = {
+                    has_global_variable = headlines_tactical_nuclear_weapons_researched
+                }
+            }
+            set_global_variable = headlines_tactical_nuclear_weapons_researched
+            save_scope_as = headlines_tactical_nuclear_weapons_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_tactical_nuclear_weapons
+            }
+        }
+
+        #telemedicine
+        if = {
+            limit = { 
+                has_technology_researched = telemedicine
+                NOT = {
+                    has_global_variable = headlines_telemedicine_researched
+                }
+            }
+            set_global_variable = headlines_telemedicine_researched
+            save_scope_as = headlines_telemedicine_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_telemedicine
+            }
+        }
+
+        #telepathic_communities
+        if = {
+            limit = { 
+                has_technology_researched = telepathic_communities
+                NOT = {
+                    has_global_variable = headlines_telepathic_communities_researched
+                }
+            }
+            set_global_variable = headlines_telepathic_communities_researched
+            save_scope_as = headlines_telepathic_communities_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_telepathic_communities
+            }
+        }
+
+        #television
+        if = {
+            limit = { 
+                has_technology_researched = television
+                NOT = {
+                    has_global_variable = headlines_television_researched
+                }
+            }
+            set_global_variable = headlines_television_researched
+            save_scope_as = headlines_television_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_television
+            }
+        }
+
+        #television_broadcasting
+        if = {
+            limit = { 
+                has_technology_researched = television_broadcasting
+                NOT = {
+                    has_global_variable = headlines_television_broadcasting_researched
+                }
+            }
+            set_global_variable = headlines_television_broadcasting_researched
+            save_scope_as = headlines_television_broadcasting_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_television_broadcasting
+            }
+        }
+
+        #terrorism_and_anti_terrorism
+        if = {
+            limit = { 
+                has_technology_researched = terrorism_and_anti_terrorism
+                NOT = {
+                    has_global_variable = headlines_terrorism_and_anti_terrorism_researched
+                }
+            }
+            set_global_variable = headlines_terrorism_and_anti_terrorism_researched
+            save_scope_as = headlines_terrorism_and_anti_terrorism_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_terrorism_and_anti_terrorism
+            }
+        }
+
+        #transistors
+        if = {
+            limit = { 
+                has_technology_researched = transistors
+                NOT = {
+                    has_global_variable = headlines_transistors_researched
+                }
+            }
+            set_global_variable = headlines_transistors_researched
+            save_scope_as = headlines_transistors_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_transistors
+            }
+        }
+
+        #universal_basic_income
+        if = {
+            limit = { 
+                has_technology_researched = universal_basic_income
+                NOT = {
+                    has_global_variable = headlines_universal_basic_income_researched
+                }
+            }
+            set_global_variable = headlines_universal_basic_income_researched
+            save_scope_as = headlines_universal_basic_income_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_universal_basic_income
+            }
+        }
+
+        #unmanned_aerial_vehicles
+        if = {
+            limit = { 
+                has_technology_researched = unmanned_aerial_vehicles
+                NOT = {
+                    has_global_variable = headlines_unmanned_aerial_vehicles_researched
+                }
+            }
+            set_global_variable = headlines_unmanned_aerial_vehicles_researched
+            save_scope_as = headlines_unmanned_aerial_vehicles_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_unmanned_aerial_vehicles
+            }
+        }
+
+        #video_games
+        if = {
+            limit = { 
+                has_technology_researched = video_games
+                NOT = {
+                    has_global_variable = headlines_video_games_researched
+                }
+            }
+            set_global_variable = headlines_video_games_researched
+            save_scope_as = headlines_video_games_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_video_games
+            }
+        }
+
+        #virtual_reality
+        if = {
+            limit = { 
+                has_technology_researched = virtual_reality
+                NOT = {
+                    has_global_variable = headlines_virtual_reality_researched
+                }
+            }
+            set_global_variable = headlines_virtual_reality_researched
+            save_scope_as = headlines_virtual_reality_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_virtual_reality
+            }
+        }
+
+        #wireless_internet
+        if = {
+            limit = { 
+                has_technology_researched = wireless_internet
+                NOT = {
+                    has_global_variable = headlines_wireless_internet_researched
+                }
+            }
+            set_global_variable = headlines_wireless_internet_researched
+            save_scope_as = headlines_wireless_internet_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_wireless_internet
+            }
+        }
+
+        #world_wide_web
+        if = {
+            limit = { 
+                has_technology_researched = world_wide_web
+                NOT = {
+                    has_global_variable = headlines_world_wide_web_researched
+                }
+            }
+            set_global_variable = headlines_world_wide_web_researched
+            save_scope_as = headlines_world_wide_web_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_world_wide_web
+            }
+        }
+
+        #abyssal_plain_mining
+        if = {
+            limit = { 
+                has_technology_researched = abyssal_plain_mining
+                NOT = {
+                    has_global_variable = headlines_abyssal_plain_mining_researched
+                }
+            }
+            set_global_variable = headlines_abyssal_plain_mining_researched
+            save_scope_as = headlines_abyssal_plain_mining_researcher
+            every_country = {
+                limit = {
+                    is_ai = no
+                }
+                post_notification = headlines_tech_abyssal_plain_mining
+            }
+    }
+}
+

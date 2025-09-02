@@ -69,7 +69,7 @@ texticon = {
 }
 
 texticon = {
-	icon = personal_transportation
+	icon = transportation
 	iconsize = {
 		texture = "gfx/interface/icons/goods_icons/transportation.dds"
 		size = { 25 25 }
@@ -79,9 +79,19 @@ texticon = {
 }
 
 texticon = {
-	icon = transportation
+	icon = tourism
 	iconsize = {
-		texture = "gfx/interface/icons/goods_icons/industrial_transport.dds"
+		texture = "gfx/interface/icons/goods_icons/tourism.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}
+
+texticon = {
+	icon = tech_metals
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/tech_metals.dds"
 		size = { 25 25 }
 		offset = { 0 7 }
 		fontsize = 18

@@ -4,6 +4,10 @@
 	BUY_SELL_DIFF_AT_MAX_FACTOR = 4
 	GOODS_SHORTAGE_PENALTY_THRESHOLD = 0.25		# If supply / demand is lower than this, start applying output penalties, by default this should be ( 1 / BUY_SELL_DIFF_AT_MAX_FACTOR )
     QUALITY_OF_LIFE_MAX = 1000              
+	RETOOLING_WEEKS = 260
+	MIN_CONSTRUCTION_EFFICIENCY = 0.25
+	COMPANY_PROSPERITY_EMPLOYED_LEVELS_MAX = 75					# Max target prosperity from fully employed building levels
+	COMPANY_ON_ESTABLISH_COOLDOWN_MONTHS = 12
 }
 
 NPolitics = {
@@ -15,9 +19,9 @@ NPolitics = {
 
 	MOVEMENT_MIN_RADICALISM_FOR_LAW_ENACTMENT_IMPACT = 0.1
 
-	MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE = -0.1   # Multiplied by a movement's stance on each active law (positive stance = negative radicalism)
-	MOVEMENT_RADICALISM_FROM_RADICAL_SUPPORTERS = 0.9   # Scales against fraction of radicals among movement supporters
-	MOVEMENT_RADICALISM_FROM_LOYALIST_SUPPORTERS = -0.5 # Scales against fraction of loyalists among movement supporters
+	MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE = -0.1    # Multiplied by a movement's stance on each active law (positive stance = negative radicalism)
+	MOVEMENT_RADICALISM_FROM_RADICAL_SUPPORTERS = 0.5    # Scales against fraction of radicals among movement supporters
+	MOVEMENT_RADICALISM_FROM_LOYALIST_SUPPORTERS = -0.25 # Scales against fraction of loyalists among movement supporters
 
 	RADICALISM_AGITATING_THRESHOLD = 0.1
 }
@@ -38,6 +42,7 @@ NPops = {
 	CULTURAL_COMMUNITY_ACCEPTANCE_DELTA_DECAY_PER_MONTH = 0.0833	# The percentage of the maximum cultural acceptance that should be removed as a delta to the cultural community each month
 	JOB_SATISFACTION_PER_SOL_ABOVE_EXPECTED_SOL = 1				# Job satisfaction gained per level of SoL above your expected SoL
 	JOB_SATISFACTION_FROM_CAN_AFFORD_EXPENSES = 0
+	WORKING_ADULT_RATIO_SKEW_MAXIMUM = 1000000
 }
 
 NPowerBlocs = {

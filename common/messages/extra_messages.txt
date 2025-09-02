@@ -91,3 +91,1661 @@ violence_against_minorities = {
 	notification_type = feed
 	color = neutral
 }
+
+headlines_tech_ICBMs = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_LGBTQ_rights_movement = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_additive_manufacturing = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_advanced_agricultural_statistics = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_advanced_assembly_lines = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_advanced_body_armor = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_advanced_materials_armor = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_advanced_military_aircraft = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_advanced_nanofabrication = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_advanced_structural_engineering = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_advanced_submarine_technology = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_advanced_workflow_optimization = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_aluminum_mass_production = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_animation = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_anti_sub_warfare = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_anti_war_movement = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_antibiotic_mass_production = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_antimatter_production = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_art_deco_architecture = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_artificial_intelligence = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_asteroid_mining = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_augmented_reality_warfare = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_automated_surveillance = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_autonomous_vehicles = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_barcodes_and_scanners = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_bergius_process = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_bioenhanced_soldiers = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_biohacking_and_human_augmentation = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_biological_immortality = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_biotechnology = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_bombing_aircraft = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_brain_computer_interfaces = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_cellular_networks = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_civil_rights_movement = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_clean_energy_technologies = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_cloud_computing = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_combined_arms = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_commercial_aviation = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_compact_fusion_reactors = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_computer_aided_design = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_computer_networks = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_computing_machines = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_consumer_credit = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_containerization = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_contraceptive_pill = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_cryptography = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_cyber_warfare = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_cybersecurity = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_decline_of_organized_religion = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_decolonization = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_digital_education = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_digital_entertainment = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_digital_telecommunications = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_directed_energy_defenses = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_directed_energy_weapons = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_e-commerce = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_early_nanotechnology = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_electronic_warfare = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_environmental_movement = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_fiber_optics = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_fluorescent_lamps = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_fusion_batteries = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_fusion_power = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_gene_splicing = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_generative_ai = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_genetic_engineering = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_globalization = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_green_revolution = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_guided_missiles = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_hydraulic_fracturing = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_hypersonic_weapons = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_inertial_navigation_systems = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_infrared_night_vision = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_integrated_circuits = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_intergovernmental_organizations = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_isoprene = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_jadc2 = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_jet_engine_technology = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_keynesian_economics = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_knowledge_economy = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_lab-grown_food = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_laser_technology = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_machine_learning = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_mainframe_computers = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_marketing_research = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_mass_media = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_mental_health_awareness = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_microprocessor = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_military_grade_cybersecurity = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_mind_backups = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_missile_defense_systems = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_modern_automotive_technology = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_modern_chemical_processes = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_modern_management_techniques = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_modern_material_science = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_modern_materials = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_modern_pharmaceuticals = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_modern_skyscrapers = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_modern_tools = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_modern_urban_planning = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_modern_vaccines = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_molecular_assemblers = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_motorized_artillery = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_naval_convoy_defense = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_naval_fire_control_systems = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_network_centric_warfare = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_neural_lace = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_nuclear_energy = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_nuclear_weapons = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_orbital_manufacturing = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_orbital_weapon_platforms = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_personal_appliances = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_personal_computers = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_personalized_medicine = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_photocopiers = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_plastic_mass_production = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_pollution_control = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_pop_culture = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_post-scarcity_economy = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_precision_guided_munitions = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_predictive_logistics = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_programmable_matter = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_public_works_programs = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_quantum_communications = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_quantum_computing = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_quantum_materials = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_radar = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_rapid_deployment_forces = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_recon_satellites = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_reusable_rocketry = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_robotics = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_rocketry = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_rural_electrification = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_satellite_communications = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_second_wave_feminism = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_semiautomatic_rifle = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_sexual_revolution = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_smart_grids = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_social_justice_movements = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_social_media = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_sonar = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_space_based_solar_power = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_space_colonization = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_space_elevator = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_space_exploration = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_space_militarization = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_stainless_steel_mass_production = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_stealth_technology = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_supersonic_aircraft = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_supply_chain_management = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_swarm_technology = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_synthetic_biology = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_tactical_nuclear_weapons = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_telemedicine = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_telepathic_communities = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_television = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_television_broadcasting = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_terrorism_and_anti_terrorism = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_transistors = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_universal_basic_income = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_unmanned_aerial_vehicles = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_video_games = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_virtual_reality = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_wireless_internet = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+
+headlines_tech_world_wide_web = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}
+
+headlines_tech_abyssal_plain_mining = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/news_tech.dds"
+    group = "headlines_tech_group"
+    notification_type = feed
+    days = 28
+    color = neutral
+}

@@ -39,9 +39,11 @@ GLOBAL = {
 	c:FRA = {
 		activate_law = law_type:law_equal_inheritance
 		activate_law = law_type:law_minority_rights_cultural_assimilation
+		activate_law = law_type:law_universal_banking_light_prudence
 	}
 	c:GBR = {
 		activate_law = law_type:law_primogeniture
+		activate_law = law_type:law_universal_banking_light_prudence
 	}
 	c:JAP = {
 		activate_law = law_type:law_primogeniture
@@ -54,6 +56,7 @@ GLOBAL = {
 	c:USA = {
 		activate_law = law_type:law_minority_rights_violent_hostility
 		activate_law = law_type:law_federal_system
+		activate_law = law_type:law_free_mutual_banking
 	}
 	c:SIA = { # Siam
 		activate_law = law_type:law_minority_rights_indifference
@@ -123,6 +126,12 @@ GLOBAL = {
 	}
 	c:MOL = { # Moldova
 		activate_law = law_type:law_feudal_contracts
+	}
+	c:SWE = { # Sweden
+		activate_law = law_type:law_universal_banking_light_prudence
+	}
+	c:NET = { # Netherlands
+		activate_law = law_type:law_universal_banking_light_prudence
 	}
 	every_country = {
 		limit = {

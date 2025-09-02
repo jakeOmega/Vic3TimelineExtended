@@ -1,8 +1,9 @@
+from collections import defaultdict
+
 from mod_state import ModState
-import os
 from path_constants import base_game_path, mod_path
 
-base_game_path = {
+base_game_paths = {
     "Building Groups": base_game_path + r"\game\common\building_groups",
     "Buildings": base_game_path + r"\game\common\buildings",
     "Technologies": base_game_path + r"\game\common\technology\technologies",
@@ -16,7 +17,7 @@ base_game_path = {
     "Combat Unit Types": base_game_path + r"\game\common\combat_unit_types",
     "Company Types": base_game_path + r"\game\common\company_types",
     # "Customizable Localization": base_game_path + r"\game\common\customizable_localization",
-    "Decisions": base_game_path + r"\game\common\decisions",
+    # "Decisions": base_game_path + r"\game\common\decisions",
     # "Defines": base_game_path + r"\game\common\defines",
     "Diplomatic Actions": base_game_path + r"\game\common\diplomatic_actions",
     "Diplomatic Plays": base_game_path + r"\game\common\diplomatic_plays",
@@ -25,7 +26,8 @@ base_game_path = {
     "Interest Groups": base_game_path + r"\game\common\interest_groups",
     "Law Groups": base_game_path + r"\game\common\law_groups",
     "Laws": base_game_path + r"\game\common\laws",
-    "Mobilization Option Groups": base_game_path + r"\game\common\mobilization_option_groups",
+    "Mobilization Option Groups": base_game_path
+    + r"\game\common\mobilization_option_groups",
     "Mobilization Options": base_game_path + r"\game\common\mobilization_options",
     # "Modifier Types": base_game_path + r"\game\common\modifier_types",
     "Modifiers": base_game_path + r"\game\common\static_modifiers",
@@ -36,7 +38,7 @@ base_game_path = {
     "Subject Types": base_game_path + r"\game\common\subject_types",
 }
 
-mod_path = {
+mod_paths = {
     "Building Groups": mod_path + r"\common\building_groups",
     "Buildings": mod_path + r"\common\buildings",
     "Technologies": mod_path + r"\common\technology\technologies",
@@ -50,7 +52,7 @@ mod_path = {
     "Combat Unit Types": mod_path + r"\common\combat_unit_types",
     "Company Types": mod_path + r"\common\company_types",
     # "Customizable Localization": mod_path + r"\common\customizable_localization",
-    "Decisions": mod_path + r"\common\decisions",
+    # "Decisions": mod_path + r"\common\decisions",
     # "Defines": mod_path + r"\common\defines",
     "Diplomatic Actions": mod_path + r"\common\diplomatic_actions",
     "Diplomatic Plays": mod_path + r"\common\diplomatic_plays",
@@ -70,7 +72,14 @@ mod_path = {
     "Subject Types": mod_path + r"\common\subject_types",
 }
 
-mod_state = ModState(base_game_path, mod_path)
+mod_state = ModState(base_game_paths, mod_paths)
+mod_state.add_localization(base_game_path + r"\game\localization\english")
+mod_state.add_localization(mod_path + r"\localization\english")
+mod_state.add_localization(mod_path + r"\localization\english\replace")
+doc_path = r"C:\Users\jakef\Documents\Old Victoria 3"
+
+laws_path = doc_path + r"\laws.txt"
+laws_output = ""
 laws = mod_state.get_data("Laws")
 laws_dict = {}
 for law_id, (_, law_data) in laws.items():
@@ -80,9 +89,12 @@ for law_id, (_, law_data) in laws.items():
     laws_dict[law_group].append(law_id)
 
 for law_group in laws_dict.keys():
-    print(law_group)
+    laws_output += f"{mod_state.localize(law_group)}:\n"
     for law_id in laws_dict[law_group]:
-        print("\t", law_id)
+        laws_output += f"\t{mod_state.localize(law_id)}\n"
+
+with open(laws_path, "w", encoding="utf-8") as f:
+    f.write(laws_output)
 
 """
 mod_state.save_changes_to_json(r"F:\Libraries\Documents\testing")
@@ -111,7 +123,6 @@ for ideology_id, (_, ideology_data) in ideologies.items():
 # )
 
 
-
 bonuses = {}
 counts = {}
 cat_counts = {}
@@ -130,66 +141,59 @@ eras = [
     "era_12",
 ]
 
-for era in eras:
-    for category in ["production", "military", "society"]:
-        bonuses[(category, era)] = 0
-        cat_counts[(category, era)] = 0
-    counts[era] = 0
-
+tech_path = doc_path + r"\technologies.txt"
+tech_output = ""
 tech = mod_state.get_data("Technologies")
+tech_dict = defaultdict(list)
 for tech_id, (_, tech_data) in tech.items():
-    _, category = tech_data["category"]
-    _, era = tech_data["era"]
-    if era not in eras:
-        continue
-    counts[era] += 1
-    cat_counts[(category, era)] += 1
-    if "modifier" not in tech_data.keys():
-        continue
-    _, modifier = tech_data["modifier"]
-    if len(modifier) == 0:
-        continue
-    if "country_weekly_innovation_max_add" not in modifier.keys():
-        continue
-    _, bonus = modifier["country_weekly_innovation_max_add"]
-    bonuses[(category, era)] += int(bonus)
+    era = tech_data.get("era", ["", "era_0"])[1]
+    era_int = int(era.split("_")[-1])
+    tech_dict[era_int].append(tech_id)
 
-years_per_era = [40, 40, 40, 40, 30, 30, 20, 20, 20, 20, 20, 20]
-weeks_per_era = [52 * year for year in years_per_era]
-research_speeds = {}
-for era in eras:
-    research_speeds[era] = 0
-for era in eras:
-    for category in ["production", "military", "society"]:
-        research_speeds[era] += bonuses[(category, era)]
+for era in range(1, 13):
+    tech_output += f"{era}: {len(tech_dict[era])} technologies\n"
+    for tech_id in tech_dict[era]:
+        tech_output += f"\t{mod_state.localize(tech_id)}"
+        description = mod_state.get_description(tech_id)
+        if description is not None:
+            tech_output += f" - {description}"
+        tech_output += "\n"
 
-cumulative_research_speed = 200
-research_speed_mult = 2.5
-for era_num in range(1, len(eras)):
-    era = eras[era_num]
-    end_speed, start_speed = (
-        research_speeds[era] + cumulative_research_speed,
-        cumulative_research_speed,
-    )
-    cumulative_research_speed = end_speed
-    avg_research_speed = (end_speed + start_speed) * research_speed_mult/ 2
-    cost_per_tech = avg_research_speed * weeks_per_era[era_num] / counts[era]
-    print(
-        f"{era:6}",
-        "cost per tech: ",
-        f"{cost_per_tech:9.2f}",
-        " research speed: ",
-        f"{avg_research_speed:7.2f}",
-        " tech count: ",
-        f"{counts[era]:3}",
-        " production: ",
-        f'{cat_counts[("production", era)]:3}',
-        " military: ",
-        f'{cat_counts[("military", era)]:3}',
-        " society: ",
-        f'{cat_counts[("society", era)]:3}',
-    )
+with open(tech_path, "w", encoding="utf-8") as f:
+    f.write(tech_output)
 
+building_path = doc_path + r"\buildings.txt"
+building_output = ""
+buildings_data = mod_state.get_data("Buildings")
+pmg_groups = mod_state.get_data("PM Groups")
+production_methods = mod_state.get_data("PMs")
+for building_id, data in buildings_data.items():
+    pm_groups = data[1].get("production_method_groups", ["", []])[1]
+    building_output += f"{mod_state.localize(building_id)}:\n"
+    for pmg in pm_groups:
+        if pmg not in pmg_groups.keys():
+            building_output += f"Building {mod_state.localize(building_id)} references missing PM Group {mod_state.localize(pmg)}\n"
+            continue
+        building_output += f"\t{mod_state.localize(pmg)}:\n"
+        pms = pmg_groups[pmg][1].get("production_methods", ["", []])[1]
+        for pm in pms:
+            if pm not in production_methods.keys():
+                building_output += f"Building {mod_state.localize(building_id)} references missing PM {mod_state.localize(pm)}\n"
+                continue
+            building_output += f"\t\t{mod_state.localize(pm)}\n"
+    building_output += "\n"
+
+with open(building_path, "w", encoding="utf-8") as f:
+    f.write(building_output)
+
+goods_path = doc_path + r"\goods.txt"
+goods_output = ""
+goods = mod_state.get_data("Goods")
+for good_id, _ in goods.items():
+    goods_output += f"{mod_state.localize(good_id)}\n"
+
+with open(goods_path, "w", encoding="utf-8") as f:
+    f.write(goods_output)
 
 # Updating and writing back to a file
 # buildings_data['new_building'] = {...}

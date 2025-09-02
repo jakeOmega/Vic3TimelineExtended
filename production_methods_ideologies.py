@@ -450,6 +450,106 @@ minority_love = [
     ("law_minority_rights_protection", "approve"),
     ("law_minority_rights_affirmative_action", "strongly_approve"),
 ]
+# --- Financial regulation opinion sets for new banking laws ---
+
+finreg_laissez_faire = [
+    ("law_unregulated_banking", "strongly_approve"),
+    ("law_free_mutual_banking", "approve"),
+    ("law_universal_banking_light_prudence", "approve"),
+    ("law_prudential_narrow_banking", "disapprove"),
+    ("law_directed_credit_development_banks", "strongly_disapprove"),
+    ("law_central_bank_independence", "approve"),
+]
+
+finreg_market_liberal = [
+    ("law_unregulated_banking", "neutral"),
+    ("law_free_mutual_banking", "approve"),
+    ("law_universal_banking_light_prudence", "approve"),
+    ("law_prudential_narrow_banking", "disapprove"),
+    ("law_directed_credit_development_banks", "disapprove"),
+    ("law_central_bank_independence", "strongly_approve"),
+]
+
+finreg_liberal = [
+    ("law_unregulated_banking", "disapprove"),
+    ("law_free_mutual_banking", "neutral"),
+    ("law_universal_banking_light_prudence", "neutral"),
+    ("law_prudential_narrow_banking", "approve"),
+    ("law_directed_credit_development_banks", "disapprove"),
+    ("law_central_bank_independence", "strongly_approve"),
+]
+
+finreg_social_dem = [
+    ("law_unregulated_banking", "strongly_disapprove"),
+    ("law_free_mutual_banking", "neutral"),
+    ("law_universal_banking_light_prudence", "disapprove"),
+    ("law_prudential_narrow_banking", "strongly_approve"),
+    ("law_directed_credit_development_banks", "approve"),
+    ("law_central_bank_independence", "strongly_approve"),
+]
+
+finreg_socialist = [
+    ("law_unregulated_banking", "strongly_disapprove"),
+    ("law_free_mutual_banking", "approve"),
+    ("law_universal_banking_light_prudence", "disapprove"),
+    ("law_prudential_narrow_banking", "approve"),
+    ("law_directed_credit_development_banks", "strongly_approve"),
+    ("law_central_bank_independence", "neutral"),
+]
+
+finreg_communist = [
+    ("law_unregulated_banking", "strongly_disapprove"),
+    ("law_free_mutual_banking", "disapprove"),
+    ("law_universal_banking_light_prudence", "strongly_disapprove"),
+    ("law_prudential_narrow_banking", "approve"),
+    ("law_directed_credit_development_banks", "strongly_approve"),
+    ("law_central_bank_independence", "strongly_disapprove"),
+]
+
+finreg_anarchist = [
+    ("law_unregulated_banking", "approve"),
+    ("law_free_mutual_banking", "strongly_approve"),
+    ("law_universal_banking_light_prudence", "disapprove"),
+    ("law_prudential_narrow_banking", "strongly_disapprove"),
+    ("law_directed_credit_development_banks", "strongly_disapprove"),
+    ("law_central_bank_independence", "strongly_disapprove"),
+]
+
+finreg_paternalistic = [
+    ("law_unregulated_banking", "neutral"),
+    ("law_free_mutual_banking", "disapprove"),
+    ("law_universal_banking_light_prudence", "approve"),
+    ("law_prudential_narrow_banking", "strongly_approve"),
+    ("law_directed_credit_development_banks", "neutral"),
+    ("law_central_bank_independence", "approve"),
+]
+
+finreg_fascist = [
+    ("law_unregulated_banking", "neutral"),
+    ("law_free_mutual_banking", "strongly_disapprove"),
+    ("law_universal_banking_light_prudence", "approve"),
+    ("law_prudential_narrow_banking", "disapprove"),
+    ("law_directed_credit_development_banks", "strongly_approve"),
+    ("law_central_bank_independence", "neutral"),
+]
+
+finreg_populist = [
+    ("law_unregulated_banking", "disapprove"),
+    ("law_free_mutual_banking", "approve"),
+    ("law_universal_banking_light_prudence", "neutral"),
+    ("law_prudential_narrow_banking", "approve"),
+    ("law_directed_credit_development_banks", "strongly_approve"),
+    ("law_central_bank_independence", "neutral"),
+]
+
+finreg_meritocratic = [
+    ("law_unregulated_banking", "neutral"),
+    ("law_free_mutual_banking", "neutral"),
+    ("law_universal_banking_light_prudence", "approve"),
+    ("law_prudential_narrow_banking", "approve"),
+    ("law_directed_credit_development_banks", "disapprove"),
+    ("law_central_bank_independence", "strongly_approve"),
+]
 
 
 modifications = {
@@ -482,11 +582,7 @@ modifications = {
             ("law_donation_limits", "disapprove"),
             ("law_publicly_funded_elections", "strongly_disapprove"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "neutral"),
-            ("law_investment_banking_separation", "approve"),
-            ("law_securitization_and_derivatives", "disapprove"),
-        ],
+        "lawgroup_financial_regulation": finreg_paternalistic,
         "lawgroup_genetic_rights": [
             ("law_traditional_heredity", "strongly_approve"),
             ("law_ban_on_genetic_modification", "approve"),
@@ -521,6 +617,7 @@ modifications = {
             ("law_federal_system", "approve"),
             ("law_devolution", "strongly_approve"),
         ],
+        "lawgroup_financial_regulation": finreg_populist,
     },
     "ideology_patriotic": {
         "lawgroup_privacy_rights": anti_privacy_entry,
@@ -594,11 +691,7 @@ modifications = {
             ("law_donation_limits", "approve"),
             ("law_publicly_funded_elections", "approve"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "disapprove"),
-            ("law_investment_banking_separation", "approve"),
-            ("law_securitization_and_derivatives", "disapprove"),
-        ],
+        "lawgroup_financial_regulation": finreg_liberal,
         "lawgroup_internet_governance": [
             ("law_no_internet_policy", "neutral"),
             ("law_unregulated_internet", "strongly_approve"),
@@ -650,11 +743,7 @@ modifications = {
             ("law_donation_limits", "approve"),
             ("law_publicly_funded_elections", "approve"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "disapprove"),
-            ("law_investment_banking_separation", "approve"),
-            ("law_securitization_and_derivatives", "disapprove"),
-        ],
+        "lawgroup_financial_regulation": finreg_liberal,
         "lawgroup_internet_governance": [
             ("law_no_internet_policy", "neutral"),
             ("law_unregulated_internet", "strongly_approve"),
@@ -709,6 +798,7 @@ modifications = {
             "ministry_of_religion", "-"
         ),
         "lawgroup_minority_rights": minority_like,
+        "lawgroup_financial_regulation": finreg_market_liberal,
     },
     "ideology_traditionalist": {
         "lawgroup_privacy_rights": trad_privacy_entry,
@@ -831,11 +921,7 @@ modifications = {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "strongly_disapprove"),
-            ("law_investment_banking_separation", "strongly_approve"),
-            ("law_securitization_and_derivatives", "disapprove"),
-        ],
+        "lawgroup_financial_regulation": finreg_social_dem,
         "lawgroup_family_reproductive_policy": [
             ("law_traditional_family_structure", "disapprove"),
             ("law_pro_natalist_subsidies", "disapprove"),
@@ -923,11 +1009,7 @@ modifications = {
             ("law_donation_limits", "neutral"),
             ("law_publicly_funded_elections", "disapprove"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "neutral"),
-            ("law_investment_banking_separation", "disapprove"),
-            ("law_securitization_and_derivatives", "approve"),
-        ],
+        "lawgroup_financial_regulation": finreg_fascist,
         "lawgroup_internet_governance": [
             ("law_no_internet_policy", "neutral"),
             ("law_unregulated_internet", "disapprove"),
@@ -979,11 +1061,7 @@ modifications = {
             ("law_donation_limits", "neutral"),
             ("law_publicly_funded_elections", "approve"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "approve"),
-            ("law_investment_banking_separation", "disapprove"),
-            ("law_securitization_and_derivatives", "neutral"),
-        ],
+        "lawgroup_financial_regulation": finreg_anarchist,
         "lawgroup_internet_governance": [
             ("law_no_internet_policy", "neutral"),
             ("law_unregulated_internet", "strongly_approve"),
@@ -1033,11 +1111,7 @@ modifications = {
             ("law_donation_limits", "disapprove"),
             ("law_publicly_funded_elections", "strongly_disapprove"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "strongly_approve"),
-            ("law_investment_banking_separation", "strongly_disapprove"),
-            ("law_securitization_and_derivatives", "approve"),
-        ],
+        "lawgroup_financial_regulation": finreg_laissez_faire,
         "lawgroup_internet_governance": [
             ("law_no_internet_policy", "neutral"),
             ("law_unregulated_internet", "approve"),
@@ -1134,6 +1208,7 @@ modifications = {
             "ministry_of_urban_planning", "+"
         ),
         "lawgroup_inheritance": moderate_inheritance,
+        "lawgroup_financial_regulation": finreg_meritocratic,
     },
     "ideology_jingoist": {
         "lawgroup_human_augmentation": militarist_augmentation,
@@ -1227,6 +1302,7 @@ modifications = {
             ("law_open_source_genetics", "approve"),
             ("law_state_eugenics_program", "disapprove"),
         ],
+        "lawgroup_financial_regulation": finreg_socialist,
     },
     "ideology_communist": {
         "lawgroup_intellectual_property": communal_ip_laws,
@@ -1254,6 +1330,7 @@ modifications = {
             ("law_population_control_measures", "disapprove"),
             ("law_communal_child_rearing", "strongly_approve"),
         ],
+        "lawgroup_financial_regulation": finreg_communist,
     },
     "ideology_pacifist": {
         "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "--"),
@@ -1422,11 +1499,6 @@ modifications = {
             ("law_donation_limits", "approve"),
             ("law_publicly_funded_elections", "disapprove"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "disapprove"),
-            ("law_investment_banking_separation", "approve"),
-            ("law_securitization_and_derivatives", "strongly_disapprove"),
-        ],
         "lawgroup_genetic_rights": [
             ("law_traditional_heredity", "neutral"),
             ("law_ban_on_genetic_modification", "approve"),
@@ -1488,11 +1560,7 @@ modifications = {
             ("law_donation_limits", "disapprove"),
             ("law_publicly_funded_elections", "strongly_disapprove"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "neutral"),
-            ("law_investment_banking_separation", "approve"),
-            ("law_securitization_and_derivatives", "disapprove"),
-        ],
+        "lawgroup_financial_regulation": finreg_paternalistic,
         "lawgroup_genetic_rights": [
             ("law_traditional_heredity", "strongly_approve"),
             ("law_ban_on_genetic_modification", "approve"),
@@ -1555,11 +1623,7 @@ modifications = {
             ("law_donation_limits", "disapprove"),
             ("law_publicly_funded_elections", "strongly_disapprove"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "neutral"),
-            ("law_investment_banking_separation", "approve"),
-            ("law_securitization_and_derivatives", "disapprove"),
-        ],
+        "lawgroup_financial_regulation": finreg_paternalistic,
         "lawgroup_genetic_rights": [
             ("law_traditional_heredity", "strongly_approve"),
             ("law_ban_on_genetic_modification", "approve"),
@@ -1595,11 +1659,7 @@ modifications = {
             ("law_donation_limits", "disapprove"),
             ("law_publicly_funded_elections", "strongly_disapprove"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "neutral"),
-            ("law_investment_banking_separation", "approve"),
-            ("law_securitization_and_derivatives", "disapprove"),
-        ],
+        "lawgroup_financial_regulation": finreg_paternalistic,
         "lawgroup_genetic_rights": [
             ("law_traditional_heredity", "strongly_approve"),
             ("law_ban_on_genetic_modification", "approve"),
@@ -1635,11 +1695,7 @@ modifications = {
             ("law_donation_limits", "disapprove"),
             ("law_publicly_funded_elections", "strongly_disapprove"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "neutral"),
-            ("law_investment_banking_separation", "approve"),
-            ("law_securitization_and_derivatives", "disapprove"),
-        ],
+        "lawgroup_financial_regulation": finreg_paternalistic,
         "lawgroup_genetic_rights": [
             ("law_traditional_heredity", "strongly_approve"),
             ("law_ban_on_genetic_modification", "approve"),
@@ -2154,11 +2210,7 @@ modifications = {
             ("law_donation_limits", "neutral"),
             ("law_publicly_funded_elections", "disapprove"),
         ],
-        "lawgroup_financial_regulation": [
-            ("law_unregulated_banking", "neutral"),
-            ("law_investment_banking_separation", "disapprove"),
-            ("law_securitization_and_derivatives", "approve"),
-        ],
+        "lawgroup_financial_regulation": finreg_fascist,
         "lawgroup_internet_governance": [
             ("law_no_internet_policy", "neutral"),
             ("law_unregulated_internet", "disapprove"),
@@ -2198,6 +2250,7 @@ modifications = {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
         ],
+        "lawgroup_financial_regulation": finreg_liberal,
     },
     "ideology_radical_movement": {
         "lawgroup_distribution_of_power": [

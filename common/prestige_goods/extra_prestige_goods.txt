@@ -31,7 +31,7 @@ prestige_good_generic_advanced_materials = {
 prestige_good_luxury_automobiles = {
 	base_good = automobiles
 	prestige_bonus = 0.2
-	texture = "gfx/interface/icons/goods_icons/transportation.dds"
+	texture = "gfx/interface/icons/goods_icons/automobiles.dds"
 }
 
 prestige_good_advanced_aircraft = {
@@ -50,12 +50,6 @@ prestige_good_precision_robotics = {
 	base_good = robotics
 	prestige_bonus = 0.1
 	texture = "gfx/interface/icons/goods_icons/robot.dds"
-}
-
-prestige_good_premium_networks = {
-	base_good = digital_access
-	prestige_bonus = 0.1
-	texture = "gfx/interface/icons/goods_icons/digital_access.dds"
 }
 
 prestige_good_heavy_lift_launch = {
@@ -85,5 +79,17 @@ prestige_good_advanced_telecom = {
 prestige_good_performance_engines = {
 	base_good = engines
 	prestige_bonus = 0.15
-	texture = "gfx/interface/icons/goods_icons/engines.dds"
+	texture = "gfx/interface/icons/goods_icons/locomotives.dds"
+}
+
+prestige_good_resort_travel = {
+	base_good = tourism
+	prestige_bonus = 0.2
+	texture = "gfx/interface/icons/goods_icons/tourism.dds"
+}
+
+prestige_good_generic_lead = {
+	base_good = lead
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/lead.dds"
 }

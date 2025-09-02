@@ -1,0 +1,42 @@
+# ----- Phase checks (driven by your JE's finance_cycle_value) -----
+banking_cycle_is_panic = { var:finance_cycle_value < 15 }
+banking_cycle_is_downturn = { var:finance_cycle_value >= 15 var:finance_cycle_value < 35 }
+banking_cycle_is_stable = { var:finance_cycle_value >= 35 var:finance_cycle_value < 65 }
+banking_cycle_is_expansion = { var:finance_cycle_value >= 65 var:finance_cycle_value < 85 }
+banking_cycle_is_frenzy = { var:finance_cycle_value >= 85 }
+
+# ----- Heat & risk signals -----
+banking_cycle_bubble_risk_high = {
+    OR = {
+        var:finance_cycle_value >= 90
+        AND = { var:finance_cycle_value >= 75 var:finance_cycle_momentum >= 3 }
+    }
+}
+banking_cycle_bubble_risk_rising = { var:finance_cycle_momentum >= 3 }
+banking_cycle_risk_falling = { var:finance_cycle_momentum <= -3 }
+
+# ----- Recession signal -----
+banking_cycle_is_recession = {
+    OR = {
+        trigger:banking_cycle_is_panic = yes
+        trigger:banking_cycle_is_downturn = yes
+    }
+}
+
+# ----- Points remaining (reads the summed modifier) -----
+banking_points_none = { "modifier:country_banking_intervention_max_add" <= 0 }
+banking_points_low  = { "modifier:country_banking_intervention_max_add" <= 2 }
+banking_points_med  = { "modifier:country_banking_intervention_max_add" >= 3 "modifier:country_banking_intervention_max_add" <= 5 }
+banking_points_high = { "modifier:country_banking_intervention_max_add" >= 6 }
+
+# ----- Active/conflicting tools (quick checks) -----
+banking_tool_rate_hike_active = { has_modifier = banking_policy_rate_hike }
+banking_tool_omo_active       = { has_modifier = banking_open_market_ops }
+banking_tool_buffer_active    = { has_modifier = banking_countercyclical_capital_buffer }
+banking_tool_deposit_active   = { has_modifier = banking_expand_deposit_guarantee }
+banking_tool_directed_active  = { has_modifier = banking_directed_credit_infrastructure }
+banking_tool_eliq_active      = { has_modifier = banking_emergency_liquidity_program }
+
+# Fiscal stress nudge
+banking_fiscal_stress_low  = { country_treasury < 0 }
+banking_fiscal_stress_high = { has_healthy_economy = no }

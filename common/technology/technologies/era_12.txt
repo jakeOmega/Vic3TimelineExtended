@@ -97,8 +97,7 @@ orbital_manufacturing = {
 programmable_matter = {
 	# Programmable Matter PM for Furniture and Textile Factories, Programmable Plastics 
 	# PM for Glassworks, Bespoke Alloys PM for Steel Mills, Advanced Sel-Replicating Assemblers
-	# PM for Advanced Material Fabricator, Programmable Food Synthesis PM for Food Industries,
-	# Autonomous Networks PM for Network Infrastructure
+	# PM for Advanced Material Fabricator, Programmable Food Synthesis PM for Food Industries
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -121,12 +120,14 @@ programmable_matter = {
 compact_fusion_reactors = {
 	# Spaceport PM for airport, Fusion SSTO Craft PM for Launch Facilities,
 	# Interstellar Mission PM for Space Program, DEW Tank unit
+	# Better Fusion Reactors PM for Fusion Plants
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
 	
 	unlocking_technologies = {	
 		fusion_power
+		directed_energy_weapons
 	}
 
 	modifier = {

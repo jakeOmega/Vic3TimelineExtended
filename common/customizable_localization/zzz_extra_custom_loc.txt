@@ -1,0 +1,39 @@
+﻿# Dynamic name for the cultural building, triggered by the active Production Method
+building_arts_academy_dynamic_name = {
+    type = country
+    # Futuristic PMs
+    text = {
+        trigger = { has_technology_researched = brain_computer_interfaces }
+        localization_key = "building_name_arts_academy_neuro"
+    }
+    text = {
+        trigger = { has_technology_researched = digital_entertainment }
+        localization_key = "building_name_arts_academy_digital"
+    }
+    text = {
+        trigger = { has_technology_researched = video_games }
+        localization_key = "building_name_arts_academy_interactive"
+    }
+    
+    # 20th Century PMs
+    text = {
+        trigger = { has_technology_researched = broadcast_television }
+        localization_key = "building_name_arts_academy_broadcast"
+    }
+    
+    # Early Media PMs (covers Photography, Moving Pictures, Sound Film)
+    text = {
+        trigger = {
+            OR = {
+                has_technology_researched = mass_media
+            }
+        }
+        localization_key = "building_name_arts_academy_studio"
+    }
+    
+    # Default/Fallback Name (for Traditional Art, etc.)
+    text = {
+        trigger = { always = yes }
+        localization_key = "building_name_arts_academy_default"
+    }
+}

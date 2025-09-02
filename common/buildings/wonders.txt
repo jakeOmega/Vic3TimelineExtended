@@ -1,0 +1,185 @@
+#==================================================
+# UN and Power Bloc Headquarters
+#==================================================
+
+building_un_headquarters = {
+    building_group = bg_bureaucracy
+    icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+    expandable = no
+    downsizeable = no
+    unique = yes
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_un_headquarters
+    }
+    required_construction = construction_cost_mega_high
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_variable = can_build_un_hq
+        }
+    }
+}
+
+building_power_bloc_hq = {
+    building_group = bg_bureaucracy
+    icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+    expandable = no
+    downsizeable = no
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_power_bloc_hq
+    }
+
+    unlocking_technologies = {
+        intergovernmental_organizations
+    }
+
+    required_construction = construction_cost_mega_high
+    
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            is_power_bloc_leader = yes
+            has_technology_researched = intergovernmental_organizations
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_power_bloc_hq
+            }
+            NOT = {
+                owner = {
+                    any_scope_building = {
+                        is_building_type = building_power_bloc_hq
+                    }
+                }
+            }
+        }
+    }
+}
+
+#==================================================
+# Modern Wonders
+#==================================================
+
+building_wonder_golden_gate_bridge = {
+    building_group = bg_monuments
+    icon = "gfx/interface/icons/building_icons/building_railway.dds"
+    expandable = no
+    downsizeable = no
+    unique = yes
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_wonder_golden_gate_bridge
+    }
+
+    unlocking_technologies = {
+        marketing_research
+    }
+    required_construction = construction_cost_mega_high
+    
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        state_region = s:STATE_CALIFORNIA
+    }
+}
+
+building_wonder_empire_state_building = {
+    building_group = bg_monuments
+    icon = "gfx/interface/icons/building_icons/urban_center.dds"
+    expandable = no
+    downsizeable = no
+    unique = yes
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_wonder_empire_state_building
+    }
+
+    unlocking_technologies = {
+        modern_skyscrapers
+    }
+
+    required_construction = construction_cost_mega_high
+    
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        state_region = s:STATE_NEW_YORK
+    }
+}
+
+building_wonder_sydney_opera_house = {
+    building_group = bg_monuments
+    icon = "gfx/interface/icons/building_icons/building_arts_academy.dds"
+    expandable = no
+    downsizeable = no
+    unique = yes
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_wonder_sydney_opera_house
+    }
+
+    unlocking_technologies = {
+        art_deco_architecture
+    }
+
+    required_construction = construction_cost_mega_high
+    
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        state_region = s:STATE_NEW_SOUTH_WALES
+    }
+}
+
+building_wonder_cn_tower = {
+    building_group = bg_monuments
+    icon = "gfx/interface/icons/building_icons/urban_center.dds"
+    expandable = no
+    downsizeable = no
+    unique = yes
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_wonder_cn_tower
+    }
+
+    unlocking_technologies = {
+        modern_skyscrapers
+    }
+
+    required_construction = construction_cost_mega_high
+    
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        state_region = s:STATE_ONTARIO
+    }
+}
+
+building_wonder_burj_khalifa = {
+    building_group = bg_monuments
+    icon = "gfx/interface/icons/building_icons/urban_center.dds"
+    expandable = no
+    downsizeable = no
+    unique = yes
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_wonder_burj_khalifa
+    }
+
+    unlocking_technologies = {
+        computer_aided_design
+    }
+
+    required_construction = construction_cost_mega_high
+    
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        state_region = s:STATE_ABU_DHABI
+    }
+}

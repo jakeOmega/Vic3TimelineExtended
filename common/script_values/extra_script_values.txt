@@ -14,12 +14,12 @@ peaceful_annex_gdp_requirement = {
 
 peaceful_annex_gdp_requirement_multiplier = 10
 
-ministry_of_science_monthly_effect = -1
 ministry_of_thought_control_monthly_effect = 0.001
 
-construction_cost_super_high = 1500
-construction_cost_mega_high = 2500
-construction_cost_space_mine = 5000
+construction_cost_super_high = 2000
+construction_cost_mega_high = 5000
+construction_cost_extreme = 10000
+construction_cost_space_mine = 20000
 
 war_support_training_decrease = {
 	value = 0
@@ -147,6 +147,12 @@ available_principle_slots = {
 starting_investment_pool = {
 	value = fmc_private_construction_spending_target
 	multiply = 2
+}
+
+investment_pool_banking_cycle_add = {
+	value = investment_pool
+	multiply = modifier:country_monthly_investment_pool_mult
+	add = modifier:country_monthly_investment_pool_add
 }
 
 homeland_culture_disappear_threshold = 0.25
@@ -1180,6 +1186,12 @@ extra_construction_sectors = {
 			floor = yes
 		}
 	}
+	if = {
+		limit = {
+			is_capital = yes
+		}
+		min = 1
+	}
 }
 
 war_propaganda_support_script_value = {
@@ -1773,4 +1785,62 @@ luxury_house_level_script_value = {
 		min = 1
 	}
 	multiply = 0
+}
+
+city_size = {
+	value = 0
+	if = {
+		limit = {
+			has_building = building_urban_center
+		}
+		add = b:building_urban_center.level
+		multiply = b:building_urban_center.occupancy
+	}
+}
+
+# Base points provided by the currently active law (used for JE setup / display).
+banking_law_base_points_value = {
+	value = 0
+	if = { limit = { has_law = law_type:law_unregulated_banking }                              add = 1 }    # default
+	if = { limit = { has_law = law_type:law_free_mutual_banking }                              add = 3 }
+	if = { limit = { has_law = law_type:law_universal_banking_light_prudence }                 add = 4 }
+	if = { limit = { has_law = law_type:law_prudential_narrow_banking }                        add = 7 }
+	if = { limit = { has_law = law_type:law_directed_credit_development_banks }                add = 7 }
+	if = {
+		limit = { has_law = law_type:law_central_bank_independence }
+		add = 7
+		institution:institution_national_bank = {
+			add = investment
+		}
+	}
+}
+
+banking_current_free_points_val = {
+	value = modifier:country_banking_intervention_max_add
+}
+
+banking_current_points_spend_val = {
+	value = banking_law_base_points_value
+	subtract = banking_current_free_points_val
+}
+
+banking_monthly_momentum = {
+	value = modifier:country_finance_momentum_monthly_add
+}
+
+banking_monthly_bubble = {
+	value = modifier:country_bubble_pressure_monthly_add
+}
+
+banking_monthly_cycle = {
+	value = modifier:country_finance_value_monthly_add
+}
+
+# fiscal policy effect based on spending relative to GDP
+financial_cycle_government_fiscal_policy_effect_size = {
+	value = expenses
+	subtract = income
+	multiply = 52
+	divide = gdp
+	multiply = 5 # deficit spending 20% of GDP adds 1 points to the financial cycle monthly
 }

@@ -1,0 +1,2923 @@
+base_tourism_appeal_value = {
+	if = {
+		limit = { state_region = s:STATE_MINSK }
+		value = 45 # Pleasant, but flat terrain. Some historical architecture in Minsk, but less of a major draw.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALASKA }
+		value = 80 # World-class natural scenery, glaciers, and mountains. Harsh climate limits its score slightly.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WASHINGTON }
+		value = 80 # Dramatic coastline, Cascade mountains (Mt. Rainier), temperate rainforests. High natural beauty.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OREGON }
+		value = 85 # Spectacular coastline, mountains, Crater Lake. Very high natural appeal.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_IDAHO }
+		value = 70 # Rugged natural beauty, including parts of Yellowstone and the Rocky Mountains. Lacks a coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_COLORADO }
+		value = 85 # Core of the Rocky Mountains, exceptional mountain scenery. Pre-colonial cliff dwellings add historical value.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WYOMING }
+		value = 90 # Home to most of Yellowstone and Grand Teton National Parks, premier natural wonders.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MONTANA }
+		value = 80 # Glacier National Park and parts of Yellowstone. Stunning mountain landscapes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTH_DAKOTA }
+		value = 25 # Mostly plains, limited major natural or historical attractions. Harsh winters.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTH_DAKOTA }
+		value = 45 # The Black Hills and Badlands provide unique and significant natural beauty.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NEBRASKA }
+		value = 20 # Predominantly plains, lacking major pre-1836 tourist draws.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KANSAS }
+		value = 20 # Flat terrain, limited in major, large-scale tourist attractions from this period.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OKLAHOMA }
+		value = 25 # Some scenic areas like the Wichita Mountains, but mostly rolling plains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LOUISIANA }
+		value = 65 # Unique bayou ecosystem and the significant cultural history of New Orleans.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ARKANSAS }
+		value = 40 # Ozark mountains and Hot Springs provide natural appeal.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MISSOURI }
+		value = 40 # Ozark mountains, major rivers, but not a top-tier destination based on these factors alone.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_IOWA }
+		value = 25 # Rolling hills and farmland, but lacks major attractions for this context.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MINNESOTA }
+		value = 50 # "Land of 10,000 Lakes" offers significant water-based natural beauty. Cold winters.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WISCONSIN }
+		value = 50 # Great Lakes coastline and extensive forests/lakes. Pleasant summers.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NEW_YORK }
+		value = 85 # Niagara Falls, Hudson Valley, Adirondack mountains, and the world-class port of New York City.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_INDIANA }
+		value = 30 # Lacks major mountains or coastlines, though has pleasant rolling terrain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MICHIGAN }
+		value = 60 # Extensive Great Lakes coastline with dunes and forests. A strong natural draw.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OHIO }
+		value = 30 # Pleasant river valleys but lacks the scale of other states' natural features.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KENTUCKY }
+		value = 50 # Mammoth Cave is a world-class natural wonder. Appalachian mountains add appeal.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TENNESSEE }
+		value = 60 # Great Smoky Mountains National Park offers top-tier mountain scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MISSISSIPPI }
+		value = 35 # Gulf coast and Mississippi River are notable, but the terrain is largely low-lying.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALABAMA }
+		value = 40 # Pleasant Gulf coast beaches and Appalachian foothills.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FLORIDA }
+		value = 85 # Extensive coastline with premier beaches, unique Everglades ecosystem. Excellent climate for tourism.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GEORGIA }
+		value = 55 # Atlantic coast with barrier islands, Appalachian mountains, and the Okefenokee Swamp.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VIRGINIA }
+		value = 75 # Significant colonial history, Blue Ridge Mountains, and Atlantic coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DISTRICT_OF_COLUMBIA }
+		value = 70 # Location of the capital, historically significant even from its founding. Assessed on its geographical and planned potential.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_VIRGINIA }
+		value = 60 # Entirely within the Appalachian Mountains, very scenic.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MARYLAND }
+		value = 60 # Chesapeake Bay offers extensive coastline and unique estuaries. Historical importance.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DELAWARE }
+		value = 40 # Pleasant Atlantic beaches are its main draw.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PENNSYLVANIA }
+		value = 65 # Rich colonial history (Philadelphia), Appalachian mountains, and Great Lakes access.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NEW_JERSEY }
+		value = 50 # Extensive coastline is a major asset.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ILLINOIS }
+		value = 33 # Great Lakes coastline is a plus, but the state is predominantly flat plains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MASSACHUSETTS }
+		value = 80 # Cradle of American history, scenic coastline (Cape Cod), and Berkshire mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NEW_HAMPSHIRE }
+		value = 65 # White Mountains offer rugged scenery. Limited but pretty coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CONNECTICUT }
+		value = 55 # Scenic coastline and colonial history.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RHODE_ISLAND }
+		value = 60 # Extensive coastline for its size with historically significant and beautiful ports like Newport.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VERMONT }
+		value = 60 # The Green Mountains provide beautiful, rolling mountain scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MAINE }
+		value = 75 # Rocky, dramatic coastline and vast northern forests. High natural beauty.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTH_CAROLINA }
+		value = 70 # Outer Banks coastline and the Great Smoky/Blue Ridge Mountains provide two strong, distinct attractions.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TEXAS }
+		value = 60 # Immense and diverse, with a long Gulf coast, but much is arid or flat plains. Big Bend area is a highlight.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YUKON_TERRITORY }
+		value = 65 # Remote and mountainous wilderness. Harsh climate but beautiful.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTHWEST_TERRITORIES }
+		value = 50 # Vast, remote arctic and sub-arctic wilderness with many lakes. Very harsh climate.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NUNAVUT }
+		value = 40 # Arctic archipelago, unique landscape, but extremely harsh and inaccessible.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BRITISH_COLUMBIA }
+		value = 90 # World-class mountains, fjords, and coastline. One of the most scenic places on Earth.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALBERTA }
+		value = 85 # Home to Banff and Jasper National Parks, the heart of the Canadian Rockies.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SASKATCHEWAN }
+		value = 20 # Mostly prairie, lacking major natural attractions on a large scale.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MANITOBA }
+		value = 35 # Primarily prairie and boreal forest, with a remote Hudson Bay coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ONTARIO }
+		value = 70 # Vast Great Lakes coastline, Niagara Falls, and immense northern wilderness.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_QUEBEC }
+		value = 75 # St. Lawrence River, Laurentian Mountains, and rich history of Quebec City and Montreal.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NEWFOUNDLAND }
+		value = 65 # Dramatic, rugged coastline and Gros Morne National Park. Unique landscape.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUATEMALA }
+		value = 90 # Heart of the Mayan civilization (Tikal), stunning highlands, volcanoes, and jungle.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HONDURAS }
+		value = 75 # Mayan ruins (Cop�n), beautiful Caribbean coast and islands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NICARAGUA }
+		value = 70 # Volcanoes, large lakes, and both Caribbean and Pacific coasts.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_COSTA_RICA }
+		value = 85 # Exceptional biodiversity, rainforests, volcanoes, and long coastlines. A premier eco-tourism hub.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PANAMA }
+		value = 70 # Isthmus with two long coastlines, tropical forests, and strategic importance.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CUBA }
+		value = 80 # Beautiful beaches, tropical climate, unique terrain, and significant colonial history.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_URUGUAY }
+		value = 55 # Pleasant coastline with beaches, rolling plains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ECUADOR }
+		value = 85 # Andes mountains, Amazon basin, Pacific coast, and the unparalleled Galapagos Islands (though hubs are mainland).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SANTO_DOMINGO }
+		value = 80 # First European settlement in the Americas, beautiful beaches, and varied terrain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HAITI }
+		value = 75 # Mountainous terrain and rich history, though often overlooked. Beautiful coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GOTLAND }
+		value = 65 # Unique island with historical medieval city (Visby) and distinctive coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GOTALAND }
+		value = 75 # West coast archipelago (G�teborg) and large lakes. Scenic and pleasant.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SCANIA }
+		value = 60 # Rolling hills and pleasant coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORRLAND }
+		value = 70 # Vast northern wilderness, mountains, and the "High Coast." Primarily for nature tourism.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SVEALAND }
+		value = 80 # Stockholm archipelago is a world-class feature. Rich in history and beautiful lakes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SICILY }
+		value = 95 # Crossroads of history (Greek, Roman, Norman), Mt. Etna, stunning coastline. Top-tier destination.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PELOPONNESE }
+		value = 95 # Core of ancient Greece (Olympia, Mycenae), beautiful coastline and mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_IONIAN_ISLANDS }
+		value = 90 # Lush, beautiful islands with Venetian architecture and stunning beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALBANIA }
+		value = 75 # Rugged mountains and a beautiful Adriatic coastline with ancient sites.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BOSNIA }
+		value = 60 # Mountainous and scenic with historic cities like Sarajevo and Mostar.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NAVARRA }
+		value = 70 # Pyrenees mountains and historical significance (Pamplona).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTHERN_TRANSYLVANIA }
+		value = 75 # Heart of Transylvania with medieval towns (Brasov, Sibiu) and castles, surrounded by the Carpathians.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HAWAIIAN_ISLANDS }
+		value = 100 # Iconic tropical paradise: volcanoes, world-class beaches, unique Polynesian culture, and perfect climate.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTHERN_TRANSYLVANIA }
+		value = 70 # Historic towns (Cluj-Napoca) and scenic Carpathian landscape.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MOLDAVIA }
+		value = 60 # Painted monasteries of Bukovina (though some are just outside) and rolling hills.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WALLACHIA }
+		value = 65 # Southern Carpathian mountains and historic capital of Bucharest.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GALICIA }
+		value = 70 # Scenic coastline ("Costa da Morte"), pilgrim destination of Santiago de Compostela.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ASTURIAS }
+		value = 75 # "Green Spain," rugged coastline and the Picos de Europa mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CASTILE }
+		value = 70 # High plateau with major historical cities (Le�n, Burgos, Salamanca).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ARAGON }
+		value = 75 # Pyrenees mountains, historical city of Zaragoza.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CATALONIA }
+		value = 90 # Pyrenees, Costa Brava, and the immense historical/cultural weight of Barcelona.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BALEARES }
+		value = 85 # Famous Mediterranean islands (Majorca, Ibiza) with great beaches and climate.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NEW_SOUTH_WALES }
+		value = 65 # Iconic Sydney Harbour, Blue Mountains, and extensive coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VICTORIA }
+		value = 75 # Great Ocean Road, scenic coastline, and Victorian Alps.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TASMANIA }
+		value = 80 # Unique, rugged wilderness and stunning, remote coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_QUEENSLAND }
+		value = 95 # Great Barrier Reef and tropical rainforests. World-class natural wonders.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTH_AUSTRALIA }
+		value = 60 # Unique coastline (Great Australian Bight), Flinders Ranges, and wine regions.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WESTERN_AUSTRALIA }
+		value = 70 # Vast state with unique coastline, forests in the south, and dramatic gorges in the north.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTHERN_TERRITORY }
+		value = 80 # Uluru and Kakadu National Park are iconic, unique global landmarks.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTH_ISLAND }
+		value = 85 # Volcanic activity (Rotorua), beaches, and the beautiful Bay of Islands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTH_ISLAND }
+		value = 95 # Fiordland, Southern Alps, glaciers. One of the most dramatic and beautiful landscapes on Earth.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_MICRONESIA }
+		value = 80 # Classic tropical islands and atolls, like Truk Lagoon.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_MICRONESIA }
+		value = 80 # More tropical islands and atolls, excellent for marine tourism.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_JAVA }
+		value = 75 # Volcanic landscapes, rich culture, and proximity to major historical cities.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_JAVA }
+		value = 80 # Mount Bromo and other dramatic volcanoes, ancient temple complexes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CENTRAL_JAVA }
+		value = 85 # Borobudur and Prambanan temple complexes are world-class historical sites.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CEYLON }
+		value = 85 # Ancient cities (Anuradhapura, Kandy), beautiful beaches, and lush highlands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_URGA }
+		value = 50 # Location of the future capital, Gobi desert landscapes. Historically significant as a nomadic center.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ULIASTAI }
+		value = 45 # Altai mountains and vast steppe. Remote but scenic.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OMAN }
+		value = 70 # Dramatic coastlines, fjords of Musandam, deserts, and historic forts.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ABU_DHABI }
+		value = 50 # Arid coastline and desert. Less varied than Oman.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YEMEN }
+		value = 80 # Unique architecture of Sana'a and Shibam, island of Socotra (though far offshore). Rich history.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HEDJAZ }
+		value = 90 # Home to Mecca and Medina, the most important sites in Islam. Immense historical and cultural significance.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TUNISIA }
+		value = 85 # Ancient Carthage, Roman ruins (El Djem), pleasant Mediterranean coast, and Sahara desert landscapes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUINEA }
+		value = 50 # Fouta Djallon highlands offer impressive scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GHANA }
+		value = 50 # Coastline with historical slave forts.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TOGO }
+		value = 45 # Pleasant scenery and coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DAHOMEY }
+		value = 45 # Historical significance (Kingdom of Dahomey) and coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DEIR_EZ_ZOR }
+		value = 40 # Ancient sites along the Euphrates like Dura-Europos and Mari. Arid landscape.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GABON }
+		value = 60 # Dense rainforest and coastline. Primarily for nature.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BOTSWANA }
+		value = 70 # Okavango Delta and Kalahari Desert provide unique ecosystems and wildlife viewing.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ZAMBIA }
+		value = 80 # Victoria Falls is a primary attraction. Rich in wildlife.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CAMBODIA }
+		value = 90 # Angkor Wat and surrounding temples are a top-tier world historical site. Tonle Sap lake is a unique feature.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SAVOY }
+		value = 90 # Heart of the Western Alps, Mont Blanc. Premier mountain scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LIBERIA }
+		value = 45 # Rainforest and coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EMILIA }
+		value = 75 # Major historical cities like Parma and Modena. Rich in culture and cuisine.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TUSCANY }
+		value = 100 # Cradle of the Renaissance (Florence, Siena, Pisa), iconic rolling hills, and coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ROMAGNA }
+		value = 80 # Historic cities (Bologna, Ravenna with its mosaics), and Adriatic coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LAZIO }
+		value = 100 # Rome. The Colosseum, Forum, Vatican (technically post-1836 state but the site is ancient). The epicenter of an empire. Unmatched in history.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NEVADA }
+		value = 50 # Dramatic desert scenery, but a harsh climate. Includes Lake Tahoe.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ARIZONA }
+		value = 90 # Grand Canyon, Monument Valley, Sedona. Unparalleled desert and canyon landscapes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NEW_MEXICO }
+		value = 75 # Unique Pueblo architecture, starkly beautiful landscapes, and rich indigenous and colonial history.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CALIFORNIA }
+		value = 95 # Yosemite, Sequoia, Death Valley, extensive and beautiful coastline. Unmatched natural diversity.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BAJA_CALIFORNIA }
+		value = 70 # Long, arid peninsula with beautiful coastlines and marine life.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SONORA }
+		value = 50 # Sonoran desert and long Gulf of California coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHIHUAHUA }
+		value = 55 # Copper Canyon offers a world-class natural feature. Mostly arid.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RIO_GRANDE }
+		value = 50 # Gulf coast, but largely flat.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUERRERO }
+		value = 75 # Famous port of Acapulco and mountainous interior.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DURANGO }
+		value = 50 # Sierra Madre Occidental offers rugged scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YUCATAN }
+		value = 95 # Chichen Itza, Tulum, and countless other Mayan ruins, plus cenotes and a world-class Caribbean coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MEXICO }
+		value = 95 # Mexico City (Tenochtitlan), Teotihuacan, and other major pre-Columbian sites. Cultural and historical heart of the nation.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_JALISCO }
+		value = 70 # Cultural heartland with Guadalajara and Pacific coast (Puerto Vallarta).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ZACATECAS }
+		value = 65 # Historically significant silver mining city with well-preserved architecture.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUAYANA }
+		value = 70 # Tepuis (table-top mountains), Angel Falls (though remote), and vast jungle.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ZULIA }
+		value = 65 # Andes foothills, but the main feature is the large, oil-rich Maracaibo lake.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MIRANDA }
+		value = 70 # Capital of Caracas, coastal mountain range and coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BOLIVAR }
+		value = 75 # Orinoco delta, and southern portion contains part of the Guiana Highlands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ANTIOQUIA }
+		value = 65 # Mountainous, coffee-growing region with a pleasant climate.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUAVIARE }
+		value = 55 # Vast, flat plains (Llanos) and Amazon rainforest. Remote.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CUNDINAMARCA }
+		value = 70 # High Andean plateau with the historical capital of Bogot�.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CAUCA }
+		value = 70 # Access to Pacific, Andes, and contains pre-Columbian sites (San Agust�n).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PASTAZA }
+		value = 60 # Upper Amazon basin, centered on Iquitos. For nature and river travel.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CAJAMARCA }
+		value = 70 # Northern Andes with significant pre-Inca and Inca history.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LIMA }
+		value = 85 # Major pre-Columbian sites and the historical center of Spanish power in South America.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ICA }
+		value = 90 # Nazca Lines, Paracas culture, and proximity to Cuzco.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AREQUIPA }
+		value = 80 # Colca Canyon, historic 'White City' of Arequipa, near Lake Titicaca.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AMAZONAS }
+		value = 80 # The heart of the Amazon rainforest, centered on Manaus. Unparalleled biodiversity.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MATO_GROSSO }
+		value = 70 # Pantanal wetlands are a world-class wildlife viewing area.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RIO_GRANDE_DO_SUL }
+		value = 60 # Gaucho country, rolling hills, and a long coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PARANA }
+		value = 80 # Igua�u Falls is a world-class natural wonder.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SAO_PAULO }
+		value = 55 # Pleasant coastline and hills, but its main value is post-1836.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MINAS_GERAIS }
+		value = 80 # Colonial history with gold rush towns like Ouro Preto, a UNESCO site. Mountainous terrain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RIO_DE_JANEIRO }
+		value = 95 # Iconic natural setting of Guanabara Bay with Sugarloaf Mountain and Corcovado. World-class beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TAHITI }
+		value = 95 # Archetype of a South Pacific paradise. Volcanic islands, lagoons, and atolls.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TONGA }
+		value = 80 # Island kingdom with coral reefs and beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BAHIA }
+		value = 85 # Long tropical coastline, unique culture of Salvador (first capital of Brazil).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RIO_GRANDE_DO_NORTE }
+		value = 70 # Notable for its extensive beaches and coastal dunes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PERNAMBUCO }
+		value = 75 # Historic colonial port of Recife/Olinda and beautiful beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MARANHAO }
+		value = 75 # Len��is Maranhenses National Park offers a unique landscape of dunes and lagoons.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PARA }
+		value = 70 # Mouth of the Amazon River, tropical forests.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALTO_PARAGUAY }
+		value = 50 # Mostly arid Gran Chaco. Remote.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BAJO_PARAGUAY }
+		value = 65 # Jesuit missions and Iguazu Falls nearby (in Paran�).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BUENOS_AIRES }
+		value = 60 # Vast, fertile pampas and a long Atlantic coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PATAGONIA }
+		value = 90 # Southern Andes, glaciers (Perito Moreno), and vast, wild landscapes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RIO_NEGRO }
+		value = 85 # Andes mountain range, including Aconcagua (highest peak in Americas), and wine country.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LA_PAMPA }
+		value = 70 # Sierras de C�rdoba offer a scenic mountain refuge from the plains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SANTA_FE }
+		value = 45 # Paran� River delta is a major feature, but mostly flat pampas.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CORRIENTES }
+		value = 60 # Iber� Wetlands provide a major wildlife area.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TUCUMAN }
+		value = 60 # Scenic mountains and valleys. "Garden of the Republic."
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHACO }
+		value = 40 # Largely flat, hot, and humid plain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_JUJUY }
+		value = 75 # Dramatic, colorful mountains (Quebrada de Humahuaca) and high-altitude desert.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SANTA_CRUZ }
+		value = 70 # vast region of eastern plains and tropical forest
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LA_PAZ }
+		value = 85 # Highest capital city, Lake Titicaca, and dramatic Andean peaks.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_POTOSI }
+		value = 80 # Salar de Uyuni (salt flat) is a world-class feature. Rich mining history.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SANTIAGO }
+		value = 85 # Central valley with Andes rising dramatically to the east. Major historical and cultural center.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LOS_RIOS }
+		value = 80 # Chilean Lake District offers stunning lakes and volcanoes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ARAUCANIA }
+		value = 85 # Southern Patagonia, Torres del Paine. Wild, dramatic, and beautiful.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTH_ATLANTIC_ISLANDS }
+		value = 65 # Falklands/Malvinas. Remote, rugged, and rich in wildlife.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ICELAND }
+		value = 95 # "Land of Fire and Ice." Volcanoes, glaciers, geysers, hot springs, and the Northern Lights. Unique geology.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GREENLAND }
+		value = 80 # Massive ice cap, glaciers, icebergs, and stark arctic beauty.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_SAHARA }
+		value = 50 # Classic Sahara dune seas (ergs). For desert tourism.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MARRAKECH }
+		value = 85 # Historic city of Marrakech, Atlas Mountains, and Atlantic coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FEZ }
+		value = 80 # Ancient imperial city of Fez, a hub of Moroccan culture and history.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AL_RIF }
+		value = 75 # Mediterranean coast and Rif mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_INNER_MOROCCO }
+		value = 65 # Pre-Saharan "gateway to the desert" landscape.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ORAN }
+		value = 70 # Mediterranean coast and historical port city.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_SAHARA }
+		value = 30 # Extremely arid and flat, though with a long, remote coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SAHARA }
+		value = 55 # Ahaggar Mountains provide a dramatic volcanic centerpiece to the Sahara.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALGIERS }
+		value = 75 # Historic casbah and beautiful Mediterranean coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CONSTANTINE }
+		value = 70 # City in a dramatic canyon setting, Roman ruins.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TRIPOLI }
+		value = 75 # Roman ruins of Leptis Magna and Sabratha are top-tier. Desert landscapes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LIBYAN_DESERT }
+		value = 40 # Extremely arid, but contains remote oases.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LIBYA }
+		value = 80 # Greek ruins of Cyrene are world-class. Green Mountain (Jebel Akhdar) and coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UPPER_EGYPT }
+		value = 100 # Luxor, Karnak, Valley of the Kings. The heartland of Ancient Egypt.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EGYPTIAN_DESERT }
+		value = 85 # Abu Simbel and desert oases.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LOWER_EGYPT }
+		value = 100 # Giza pyramids and Sphinx, Cairo's history, Nile Delta.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MATRUH }
+		value = 50 # Mediterranean coast and Siwa Oasis.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MIDDLE_EGYPT }
+		value = 75 # Important but less-visited Pharaonic sites like Abydos and Dendera.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SINAI }
+		value = 80 # Mount Sinai (religious significance), Red Sea coast (marine life), and rugged desert.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DONGOLA }
+		value = 70 # Heart of the ancient Kingdom of Kush, with numerous pyramids and temples (Mero�).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KORDOFAN }
+		value = 30 # Arid savanna and desert.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DARFUR }
+		value = 40 # Volcanic Marra Mountains offer scenic relief from the arid surroundings.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BLUE_NILE }
+		value = 50 # Confluence of the Blue and White Niles.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NEW_BRUNSWICK }
+		value = 65 # Bay of Fundy (highest tides in the world) and scenic coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTH_ANGOLA }
+		value = 50 # Coastline and historical capital of Luanda.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTH_ANGOLA }
+		value = 55 # Namib desert coastline and scenic highlands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_ANGOLA }
+		value = 40 # Largely plateau, less scenic variation.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_INDIAN_OCEAN_TERRITORY }
+		value = 85 # Volcanic islands of Mauritius and R�union. Classic tropical paradise.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LOURENCO_MARQUES }
+		value = 65 # Coastline with good beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MOCAMBIQUE }
+		value = 70 # Long coastline with archipelagos (Quirimbas, Bazaruto).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ZAMBEZIA }
+		value = 70 # Lower Zambezi river and access to Lake Malawi/Nyasa.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EASTERN_CAPE }
+		value = 65 # "Wild Coast" is ruggedly beautiful.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CAPE_COLONY }
+		value = 85 # Cape Town's iconic setting (Table Mountain), wine country, and Garden Route coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTHERN_CAPE }
+		value = 55 # Arid but beautiful, includes Augrabies Falls and spring wildflowers.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HOME_COUNTIES }
+		value = 70 # Historic heartland of England (Windsor, Canterbury, Oxford) surrounding London. White Cliffs of Dover.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LANCASHIRE }
+		value = 70 # English Lake District is a premier scenic area.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WALES }
+		value = 75 # Mountainous (Snowdonia), dramatic coastline, and numerous castles.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YORKSHIRE }
+		value = 70 # Yorkshire Dales and North York Moors offer beautiful landscapes. Historic city of York.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HIGHLANDS }
+		value = 90 # Scottish Highlands, lochs (Loch Ness), and islands (Skye). World-class scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MIDLANDS }
+		value = 50 # Pleasant rolling countryside but lacks major mountains or coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_ANGLIA }
+		value = 50 # Unique wetlands (The Broads) and gentle coastline. Historically significant university (Cambridge).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_COUNTRY }
+		value = 75 # Beautiful coastline (Cornwall, Jurassic Coast), rolling hills, and ancient sites (Stonehenge).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LOWLANDS }
+		value = 80 # Dominated by the major historical and cultural cities of Edinburgh and Glasgow.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ULSTER }
+		value = 65 # Giant's Causeway is a unique geological wonder. Scenic coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MUNSTER }
+		value = 75 # Dramatic Atlantic coastline (Cliffs of Moher, Ring of Kerry).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LEINSTER }
+		value = 70 # Ancient sites (Newgrange) and the major historical capital of Dublin.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LANGUEDOC }
+		value = 85 # Roman history (Pont du Gard, N�mes), medieval cities (Carcassonne), and Mediterranean coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RHONE }
+		value = 90 # French Alps, major historical city of Lyon, and scenic river valley.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FRENCH_LOW_COUNTRIES }
+		value = 65 # Historically significant region with cities like Lille, but geographically flat.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PICARDY }
+		value = 55 # Major Gothic cathedrals (Amiens), but largely flat terrain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PROVENCE }
+		value = 95 # French Riviera, lavender fields, Roman ruins, and Papal Palace in Avignon. Top-tier destination.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALSACE_LORRAINE }
+		value = 75 # Vosges mountains and unique Franco-Germanic culture and architecture (Strasbourg).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORMANDY }
+		value = 80 # Mont-Saint-Michel, D-Day beaches (post-1836 importance but the coast is scenic), distinctive countryside, and chalk cliffs.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_POITOU }
+		value = 70 # Atlantic coast (La Rochelle) and rolling countryside.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUYENNE }
+		value = 75 # Wine region (Bordeaux) and prehistoric caves (Lascaux).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AUVERGNE_LIMOUSIN }
+		value = 70 # Massif Central provides a unique landscape of extinct volcanoes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BRITTANY }
+		value = 80 # Distinct Celtic culture, rugged coastline, and ancient megaliths.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BURGUNDY }
+		value = 75 # Famous wine region with rich history and architecture (Dijon).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHAMPAGNE }
+		value = 70 # Famous for its wine, rolling hills, and historic city of Reims.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FRANCHE_COMTE }
+		value = 70 # Jura mountains offer scenic beauty.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LORRAINE }
+		value = 65 # Historically important cities (Nancy) and rolling hills.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AQUITAINE }
+		value = 75 # Atlantic coast, wine country, and foothills of the Pyrenees.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ORLEANS }
+		value = 75 # Loire Valley with its famous ch�teaux.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ILE_DE_FRANCE }
+		value = 100 # Paris. Versailles. The historical and cultural heart of France for centuries.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ELBE }
+		value = 65 # Major port cities of Hamburg and Bremen, but geographically flat.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BEIRA }
+		value = 75 # Mountainous interior (Serra da Estrela) and historic university city of Coimbra.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ESTREMADURA }
+		value = 85 # Lisbon and its surroundings, including Sintra. Historically rich with a pleasant coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALENTEJO }
+		value = 70 # Rolling plains with cork trees, megalithic sites, and the Algarve coast in the south.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CAPE_VERDE }
+		value = 75 # Volcanic islands with a unique Creole culture.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MADEIRA }
+		value = 85 # Subtropical volcanic island with dramatic cliffs and lush vegetation.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CANARY_ISLANDS }
+		value = 85 # Volcanic islands with diverse landscapes, from pine forests to deserts, and a great climate.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AZORES }
+		value = 85 # Dramatic volcanic islands with crater lakes and lush green landscapes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GRANADA }
+		value = 90 # The Alhambra in Granada, Sierra Nevada mountains, and Mediterranean coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ANDALUSIA }
+		value = 90 # Moorish heritage (Seville, C�rdoba), white villages, and Atlantic coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BADAJOZ }
+		value = 50 # Roman ruins (M�rida) but largely arid plains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VALENCIA }
+		value = 80 # Long Mediterranean coastline and the historic city of Valencia.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TOLEDO }
+		value = 85 # Madrid (capital) and the historically crucial city of Toledo.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WALLONIA }
+		value = 65 # Ardennes forest offers scenic beauty.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FLANDERS }
+		value = 75 # Rich with medieval cities like Bruges, Ghent, and Antwerp.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HOLLAND }
+		value = 80 # Historic cities of Amsterdam, Rotterdam, and The Hague, with unique canal landscapes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FRIESLAND }
+		value = 60 # Unique landscape of islands, coast, and canals.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GELRE }
+		value = 60 # Riverlands and the Veluwe forest area.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_JUTLAND }
+		value = 55 # Rolling hills and long coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ZEALAND }
+		value = 80 # Contains the capital Copenhagen and numerous historic castles.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WESTERN_NORWAY }
+		value = 95 # The heart of Fjord Norway. Unparalleled fjord scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTHERN_NORWAY }
+		value = 85 # Lofoten islands, North Cape, and Northern Lights. Remote and spectacular.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EASTERN_NORWAY }
+		value = 70 # Includes the capital Oslo, with access to fjords and forests.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_SWITZERLAND }
+		value = 85 # Access to the Alps, Lake Lucerne, and the city of Z�rich.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_SWITZERLAND }
+		value = 90 # Contains the Matterhorn, Jungfrau region, and Lake Geneva. Premier alpine destination.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PUERTO_RICO }
+		value = 75 # Tropical island with beaches and a mountainous interior.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CRETE }
+		value = 95 # Minoan civilization (Knossos), dramatic gorges (Samaria), and a stunning coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_INDIES }
+		value = 85 # Archetypal Caribbean islands with beaches, volcanoes, and rainforest.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BERMUDA }
+		value = 80 # Sub-tropical island with famous pink sand beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BAHAMAS }
+		value = 80 # Sprawling archipelago with countless islands and world-class beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_JAMAICA }
+		value = 80 # Mountainous interior (Blue Mountains), beaches, and vibrant culture.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BALUCHISTAN }
+		value = 50 # Arid, rugged coastline and dramatic interior mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ORISSA }
+		value = 60 # Ancient temples (Konark Sun Temple) and coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SINDH }
+		value = 65 # Indus Valley Civilization sites (Mohenjo-Daro) are of immense historical importance.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RAJPUTANA }
+		value = 80 # "Land of Kings." Forts and palaces of Jaipur, Jodhpur, Udaipur. Desert landscapes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CIRCARS }
+		value = 60 # Long coastline with some notable sites.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PUNJAB }
+		value = 75 # Historical heartland, location of Lahore and Amritsar (Golden Temple).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CENTRAL_PROVINCES }
+		value = 50 # Rolling hills and forests, but less of a primary tourist draw.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MYSORE }
+		value = 75 # Hill stations, palaces of Mysore, and ruins of Hampi (nearby).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TRAVANCORE }
+		value = 85 # Kerala backwaters, lush coastline, and Western Ghats. "God's Own Country."
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MADRAS }
+		value = 80 # "Temple State of India," with countless grand Dravidian temples. Coromandel Coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KASHMIR }
+		value = 95 # Vale of Kashmir, stunning Himalayan peaks, and unique culture. A famed paradise.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HYDERABAD }
+		value = 70 # Historic city of Hyderabad and Golconda Fort. Deccan Plateau.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUJARAT }
+		value = 70 # Unique salt marsh (Rann of Kutch) and ancient sites from the Indus Valley Civilization.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MALWA }
+		value = 65 # Historic forts and palaces (Gwalior).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BOMBAY }
+		value = 75 # Major port city, nearby Western Ghats with ancient caves (Ajanta & Ellora, though a bit far).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BIHAR }
+		value = 70 # Bodh Gaya, where the Buddha attained enlightenment, is a world-class pilgrimage site.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_BENGAL }
+		value = 60 # Largest river delta in the world, mangrove forests of the Sundarbans.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_BENGAL }
+		value = 70 # Cultural capital of Calcutta, access to the Sundarbans and Himalayan foothills (Darjeeling).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ASSAM }
+		value = 65 # Tea plantations and wildlife (Kaziranga National Park).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DELHI }
+		value = 85 # Seat of many empires, with major historical sites from the Sultanate and Mughal periods.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AWADH }
+		value = 80 # Varanasi (spiritual heart of Hinduism) on the Ganges, and Mughal history in Lucknow.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TENASSERIM }
+		value = 70 # Long, tropical southern coastline of Myanmar/Siam.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KACHIN }
+		value = 60 # Mountainous northern region of Burma.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SHAN_STATES }
+		value = 70 # Scenic plateau with Inle Lake.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PEGU }
+		value = 70 # Major temples including the Shwedagon Pagoda in Rangoon.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTH_SUMATRA }
+		value = 75 # Lake Toba (massive crater lake) is a major feature.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTH_SUMATRA }
+		value = 65 # Mostly lowlands and swamp, but with access to volcanic highlands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CELEBES }
+		value = 75 # Unique culture of Tana Toraja and excellent diving spots.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ACEH }
+		value = 70 # Northern tip of Sumatra with beautiful beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WESTERN_NEW_GUINEA }
+		value = 80 # Raja Ampat has some of the highest marine biodiversity on Earth. Remote and wild.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MOLUCCAS }
+		value = 75 # The historic "Spice Islands," with volcanic scenery and rich marine life.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_BORNEO }
+		value = 65 # Rainforests and river systems.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_BORNEO }
+		value = 70 # Rainforests, orangutan sanctuaries, and diving at offshore islands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SUNDA_ISLANDS }
+		value = 90 # Bali, Lombok, Komodo. A string of world-famous tourist islands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MALAYA }
+		value = 75 # Tropical rainforest, highlands (Cameron), and beautiful islands (Penang, Langkawi).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTH_BORNEO }
+		value = 70 # Mount Kinabalu and Sipadan island for diving.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MINDANAO }
+		value = 70 # Southern island of the Philippines with volcanoes and beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LUZON }
+		value = 75 # Contains Manila, rice terraces of Banaue, and numerous volcanoes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VISAYAS }
+		value = 85 # Central Philippine islands like Cebu and Bohol, famous for beaches and unique geology (Chocolate Hills).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ATTICA }
+		value = 100 # Athens, the Acropolis, the Parthenon. Ground zero for Western civilization.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SKOPIA }
+		value = 60 # Lake Ohrid (shared with Albania) is a highlight.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MACEDONIA }
+		value = 85 # Mount Olympus, the historic city of Thessaloniki, and beautiful coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_THESSALIA }
+		value = 80 # Meteora monasteries are a stunning and unique world wonder.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WESTERN_THRACE }
+		value = 65 # Coastline and historical sites.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTHERN_THRACE }
+		value = 65 # Historic city of Plovdiv and the Balkan Mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BULGARIA }
+		value = 70 # Black Sea coast, Balkan mountains, and historic cities like Veliko Tarnovo.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DOBRUDJA }
+		value = 60 # Black Sea coast and Danube Delta.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTH_MADAGASCAR }
+		value = 75 # Unique spiny forests and dramatic sandstone canyons (Isalo).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTH_MADAGASCAR }
+		value = 80 # Distinctive limestone karst pinnacles (tsingy) and unique wildlife.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OROMIA }
+		value = 70 # Rift Valley lakes and Bale Mountains National Park.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AMHARA }
+		value = 75 # Simien Mountains are a spectacular range.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GONDER }
+		value = 80 # Historic castles of Gondar and the rock-hewn churches of Lalibela (nearby).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KAZEMBE }
+		value = 65 # Contains southern end of Lake Tanganyika and various waterfalls.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ERITREA }
+		value = 65 # Red Sea coast and Dahlak Archipelago.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOMALILAND }
+		value = 50 # Long coastline but arid interior.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NAMAQUALAND }
+		value = 60 # Namib-Naukluft Park (Sossusvlei dunes) and Fish River Canyon.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HEREROLAND }
+		value = 65 # Etosha Pan is a massive salt pan and major wildlife area. Skeleton Coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ZAMBEZI }
+		value = 85 # Victoria Falls, Mana Pools, and Hwange National Park. Premier wildlife region.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KENYA }
+		value = 85 # Maasai Mara (Great Migration), Mount Kenya, Great Rift Valley, and Indian Ocean coast. Top-tier safari destination.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RIFT_VALLEY }
+		value = 80 # Great Rift Valley lakes (Nakuru, Naivasha) and national parks.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHAD }
+		value = 45 # Lake Chad and Zakouma National Park. Remote.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WADDAI }
+		value = 35 # Sahel and savanna region.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LINDI }
+		value = 70 # Selous Game Reserve and Ruaha National Park. Major wildlife areas.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ZANZIBAR }
+		value = 85 # Historic Stone Town and classic tropical spice island beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TANGANYIKA }
+		value = 90 # Serengeti (Great Migration), Ngorongoro Crater, Mount Kilimanjaro, and Lake Victoria. Arguably the world's premier safari region.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MAURITANIA }
+		value = 50 # Ancient caravan towns (Chinguetti) and the Banc d'Arguin coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_INNER_MAURITANIA }
+		value = 40 # Deep Sahara and rock formations.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EASTERN_MALI }
+		value = 65 # Famed city of Timbuktu and unique Dogon country architecture.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WESTERN_MALI }
+		value = 60 # Historic city of Djenn� (Great Mosque).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TIMBUKTU }
+		value = 70 # The name itself is a draw; historic city and gateway to the Sahara.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HAUSALAND }
+		value = 50 # Historic Hausa cities like Sokoto.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BENIN }
+		value = 50 # Historic kingdom of Benin.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YORUBA_STATES }
+		value = 50 # Cultural heartland of the Yoruba people.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NIGER_DELTA }
+		value = 45 # Major river delta, but difficult terrain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OUTER_HAUSALAND }
+		value = 40 # Sahelian region.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NIGER }
+		value = 45 # T�n�r� desert and A�r Mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BORNU }
+		value = 40 # Sahel region around Lake Chad.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NIGERIA }
+		value = 45 # Jos Plateau provides some scenic relief.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_HAUSALAND }
+		value = 50 # Historic walled city of Kano.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KATANGA }
+		value = 60 # Southern part of the Congo Basin, rich in minerals and with some parks.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CONGO_ORIENTALE }
+		value = 65 # Congo River, Virunga mountains with gorillas (shared border).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KASAI }
+		value = 55 # River basin, predominantly rainforest.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BAS_CONGO }
+		value = 60 # Mouth of the Congo River.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EQUATEUR }
+		value = 60 # Heart of the Congo rainforest on the equator.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UGANDA }
+		value = 80 # "Pearl of Africa." Murchison Falls, Bwindi Impenetrable Forest (gorillas), source of the Nile.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EQUATORIA }
+		value = 60 # Sudd wetland is a massive feature.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VOLTA }
+		value = 45 # Savanna region.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTH_CAMEROON }
+		value = 55 # Savanna and mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTH_CAMEROON }
+		value = 65 # Mount Cameroon and coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UBANGI_SHARI }
+		value = 50 # Rainforest and savanna.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CONGO }
+		value = 60 # Congo River and rainforest.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_IVORY_COAST }
+		value = 50 # Coastline and savanna.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WINDWARD_COAST }
+		value = 55 # Coastline with tropical forest.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SENEGAL }
+		value = 60 # Historic slave trade islands (Gor�e), Sahelian wildlife.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GAMBIA }
+		value = 55 # Gambia River is a primary feature.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SIERRA_LEONE }
+		value = 50 # Beaches and hills.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ZULULAND }
+		value = 70 # Drakensberg mountains, historic Zulu heartland, and coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VRYSTAAT }
+		value = 50 # Scenic parts of the Drakensberg (Golden Gate Highlands).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TRANSVAAL }
+		value = 65 # Blyde River Canyon is a major feature. Kruger Park on its border.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EASTERN_NEW_GUINEA }
+		value = 75 # Extremely rugged highlands (Kokoda Trail), diverse cultures, and coastlines.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FIJI }
+		value = 85 # Archetypal South Pacific destination with beautiful beaches and reefs.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VANUATU }
+		value = 85 # Active volcanoes, unique culture, and great diving.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KANAK }
+		value = 80 # New Caledonia. Large lagoon, nickel-rich red earth, and French-Melanesian culture.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BOUGAINVILLE }
+		value = 70 # Volcanic island.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOLOMON_ISLANDS }
+		value = 75 # Wreck diving (WW2 history is post-1836, but the sites are there) and diverse islands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NAURU }
+		value = 40 # Small, isolated phosphate island. Unique but limited.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HAIL }
+		value = 45 # North Arabian desert.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NEJD }
+		value = 50 # "Empty Quarter" desert and historic Diriyah (founding place of Saudi state).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TRANSJORDAN }
+		value = 90 # Petra and Wadi Rum are world-class historical and natural wonders. Dead Sea.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PALESTINE }
+		value = 95 # Jerusalem and other sites of immense religious importance to three world religions.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LEBANON }
+		value = 85 # Ancient Phoenician cities (Byblos, Tyre), Roman ruins (Baalbek), and scenic mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SYRIA }
+		value = 90 # Damascus, Aleppo, Palmyra, and Crac des Chevaliers represent a staggering depth of history.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALEPPO }
+		value = 90 # One of the oldest continuously inhabited cities, with a world-famous citadel and souk.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BAGHDAD }
+		value = 85 # Historical capital of the Abbasid Caliphate, ancient Babylon nearby.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BASRA }
+		value = 60 # Marsh Arabs and confluence of the Tigris and Euphrates.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MOSUL }
+		value = 75 # Ancient Nineveh and other Assyrian capitals.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LARISTAN }
+		value = 60 # Arid coast and islands in the Persian Gulf.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KERMAN }
+		value = 60 # Desert city with historic bazaar, near the unique Kalut sand formations.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SISTAN }
+		value = 55 # Arid region with unique wetlands on the Afghan border.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KHORASAN }
+		value = 75 # Major pilgrimage city of Mashhad and vast historical region.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KHUZESTAN }
+		value = 70 # Ancient Elamite capital of Susa and ziggurat of Chogha Zanbil.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FARS }
+		value = 90 # Persepolis and Pasargadae, the heart of the ancient Persian Empire.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ISFAHAN }
+		value = 95 # Isfahan's stunning Islamic architecture is a world treasure.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MAZANDARAN }
+		value = 65 # Caspian Sea coast and Alborz mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_IRAKAJEMI }
+		value = 80 # Contains the capital Tehran and holy city of Qom at the foot of the mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SEMNAN }
+		value = 50 # Largely desert and semi-desert.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TABRIZ }
+		value = 70 # Historic city and bazaar in a mountainous region.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_URMIA }
+		value = 65 # Lake Urmia and mountainous terrain on the Turkish border.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LURISTAN }
+		value = 55 # Mountainous region, home to ancient Lur tribes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PERSIAN_KURDISTAN }
+		value = 60 # Mountainous heartland of the Kurds in Iran.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ARMENIA }
+		value = 75 # Mount Ararat (national symbol), ancient monasteries, and Lake Sevan.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AZERBAIJAN }
+		value = 75 # Fire Temple, petroglyphs of Gobustan, and the historic core of Baku.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GREATER_CAUCASUS }
+		value = 80 # High Caucasus mountains and historic capital of Tbilisi.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MONTENEGRO }
+		value = 80 # Bay of Kotor is a fjord-like bay on the Adriatic. Rugged mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTHERN_SERBIA }
+		value = 65 # Capital of Belgrade at the confluence of the Danube and Sava.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTHERN_SERBIA }
+		value = 60 # Historically significant heartland of medieval Serbia.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EASTERN_THRACE }
+		value = 95 # Constantinople/Istanbul. Crossroads of empires, immense historical significance.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HUDAVENDIGAR }
+		value = 75 # First Ottoman capital (Bursa) and access to the Sea of Marmara.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AYDIN }
+		value = 90 # Ancient Greek sites like Ephesus and Pergamon, beautiful Aegean coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KONYA }
+		value = 85 # Cappadocia's unique "fairy chimney" landscape and cave dwellings.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KASTAMONU }
+		value = 65 # Black Sea coast and Pontic Mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CYPRUS }
+		value = 80 # Mediterranean island with ancient ruins and beautiful beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TRABZON }
+		value = 70 # Black Sea coast with lush mountains and the Sumela Monastery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_AEGEAN_ISLANDS }
+		value = 85 # Cycladic islands like Mykonos and Santorini. Archetypal Greek islands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_AEGEAN_ISLANDS }
+		value = 85 # Islands like Rhodes (medieval city) and Samos.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ANKARA }
+		value = 70 # Anatolian plateau, Hittite capital of Hattusa.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KANDAHAR }
+		value = 60 # Historic city on the crossroads between Persia and India.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_QUETTA }
+		value = 55 # Strategic mountain passes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTHERN_BALUCHISTAN }
+		value = 45 # Arid and remote.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HERAT }
+		value = 70 # Ancient city with major Islamic architecture, including the Minaret of Jam (nearby).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BALKH }
+		value = 65 # Ancient Bactria, historic city of Mazar-i-Sharif.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DIYARBAKIR }
+		value = 70 # Historic walled city on the Tigris, Mount Nemrut statues nearby.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ERZURUM }
+		value = 65 # High, mountainous region with historic sites like Ani (on the border).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KARS }
+		value = 65 # Historically contested region with sites like Ani.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KABUL }
+		value = 70 # Historic capital, gateway to the Khyber Pass.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CENTRAL_HIGHLANDS }
+		value = 75 # Bamiyan Buddhas (destroyed, but the niches and landscape remain) and Band-e-Amir lakes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BANGKOK }
+		value = 80 # Historic Grand Palace and temples of Bangkok, floating markets.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MEKONG }
+		value = 80 # Mekong Delta, historic city of Saigon, and beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TONKIN }
+		value = 80 # Halong Bay is a world-class natural wonder. Historic Hanoi.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ANNAM }
+		value = 75 # Imperial city of Hue, coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LAOS }
+		value = 75 # Luang Prabang is a beautiful, well-preserved historic town. Mekong river scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHIANG_MAI }
+		value = 75 # Cultural heart of Northern Thailand with numerous temples and surrounding mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NAKHON_RATCHASIMA }
+		value = 65 # Gateway to the northeast, with some Khmer ruins.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SEOUL }
+		value = 85 # Historic capital of Korea for centuries, with palaces and city walls.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BUSAN }
+		value = 75 # Southern port with beaches and nearby historic city of Gyeongju (capital of Silla).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SARIWON }
+		value = 60 # Mountainous northern region.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PYONGYANG }
+		value = 70 # Historic capital of various Korean kingdoms.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YANGHO }
+		value = 70 # Agricultural heartland with historic cities.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HOKKAIDO }
+		value = 75 # Wild, volcanic landscapes and national parks. Known for its winter scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TOHOKU }
+		value = 70 # Rural region with beautiful coastline, mountains, and hot springs.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KANTO }
+		value = 90 # Contains Edo/Tokyo and nearby attractions like Nikko and Mount Fuji.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHUBU }
+		value = 85 # "Japanese Alps," historic villages (Shirakawa-go), and the Sea of Japan coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KANSAI }
+		value = 100 # Imperial capital of Kyoto, first capital of Nara, vibrant Osaka. The cultural and historical heart of Japan.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KYUSHU }
+		value = 85 # Volcanic landscapes (Mt. Aso), hot springs, and historic port of Nagasaki.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RYUKYU_ISLANDS }
+		value = 85 # Subtropical islands (Okinawa) with a unique culture, castles, and beautiful beaches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHUGOKU }
+		value = 80 # Itsukushima Shrine (floating torii gate) and historic cities.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SHIKOKU }
+		value = 70 # Rural island with pilgrimage route and scenic coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LHASA }
+		value = 90 # Potala Palace and Jokhang Temple make Lhasa a unique and world-famous spiritual center. High Himalayas.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NGARI }
+		value = 80 # Mount Kailash, a holy mountain for several religions. Extremely remote and high-altitude.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HIMALAYAS }
+		value = 95 # Contains Mount Everest and Kathmandu Valley's temple cities. The highest mountain range on Earth.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EASTERN_HIMALAYAS }
+		value = 80 # Bhutan's unique dzong architecture (e.g., Tiger's Nest Monastery) and Himalayan scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DZUNGARIA }
+		value = 55 # Gateway to Central Asia with mountains and grasslands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TIANSHAN }
+		value = 75 # Silk Road oasis cities like Kashgar, surrounded by vast desert and high mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SICHUAN }
+		value = 85 # Giant Buddha of Leshan, holy Mount Emei, and Jiuzhaigou's colorful lakes. Panda country.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YUNNAN }
+		value = 90 # Extremely diverse, from tropical forests to Tibetan plateaus. Rice terraces, Lijiang old town.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUIZHOU }
+		value = 75 # Karst landscapes, Huangguoshu Waterfall.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SHAOZHOU }
+		value = 65 # Karst landscapes of the Li River/Guilin are a major highlight (though some are in Guangxi).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HINGGAN }
+		value = 50 # Inner Mongolian grasslands.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALXA }
+		value = 50 # Inner Mongolian desert.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUANGXI }
+		value = 80 # Guilin's iconic karst landscape is a world-famous sight.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTHERN_MANCHURIA }
+		value = 50 # Border region with Korea, Changbai mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTHERN_MANCHURIA }
+		value = 45 # Plains and forests.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SHANDONG }
+		value = 75 # Mount Tai (holy mountain) and the birthplace of Confucius (Qufu).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BEIJING }
+		value = 95 # Imperial capital for centuries. Forbidden City, Temple of Heaven, and access to the Great Wall.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SHANXI }
+		value = 75 # Yungang Grottoes and the ancient city of Pingyao.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_XIAN }
+		value = 95 # Home to the Terracotta Army and the ancient capital of several dynasties.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NINGXIA }
+		value = 55 # Desert landscape with Western Xia tombs.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GANSU }
+		value = 70 # Key section of the Silk Road with Mogao Caves at Dunhuang.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_QINGHAI }
+		value = 65 # High plateau with massive Qinghai Lake.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHONGQING }
+		value = 75 # Yangtze River Three Gorges and the Dazu Rock Carvings.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUANGDONG }
+		value = 70 # Major trading delta, but less focused on pre-modern tourism.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FUJIAN }
+		value = 70 # Unique Tulou roundhouses and coastal scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ZHEJIANG }
+		value = 75 # Famous West Lake in Hangzhou.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SUZHOU }
+		value = 85 # "Venice of the East." Classical gardens of Suzhou and water towns.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_JIANGSU }
+		value = 70 # Grand Canal and historic cities.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NANJING }
+		value = 75 # A major historical capital of China.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HENAN }
+		value = 75 # Shaolin Temple and Longmen Grottoes. A cradle of Chinese civilization.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ZHILI }
+		value = 60 # Largely flat plain surrounding Beijing.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_JIANGXI }
+		value = 70 # Scenic mountains (Mount Lu) and center of porcelain production (Jingdezhen).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTHERN_ANHUI }
+		value = 80 # Huangshan (Yellow Mountain) is an iconic and stunning landscape.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTHERN_ANHUI }
+		value = 40 # Largely plains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WESTERN_HUBEI }
+		value = 75 # Wudang Mountains (Taoist center) and the Three Gorges.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EASTERN_HUBEI }
+		value = 60 # Major lakes and the city of Wuhan.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HUNAN }
+		value = 75 # Zhangjiajie's "Avatar" mountains are a unique geological formation.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FORMOSA }
+		value = 80 # Taroko Gorge and mountainous interior.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OSTROBOTHNIA }
+		value = 60 # Flat coastline and rural landscapes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_KARELIA }
+		value = 65 # Finnish Lakeland district, vast numbers of lakes and forests.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHUKOTKA }
+		value = 30 # Extremely remote Siberian peninsula.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NENETSIA }
+		value = 25 # Arctic tundra.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_KARELIA }
+		value = 60 # Russian side of the Lakeland, with historical sites like Kizhi Pogost.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ARKHANGELSK }
+		value = 50 # Solovetsky Islands have major historical/religious importance. Otherwise remote taiga.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TARTARIA }
+		value = 45 # Volga river is the main feature, otherwise steppe.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OUTER_MANCHURIA }
+		value = 50 # Sikhote-Alin mountains and Pacific coastline. Remote.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UZBEKIA }
+		value = 90 # Samarkand, Bukhara, Khiva. The heart of the Silk Road with stunning architecture.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KHIVA }
+		value = 85 # The walled city of Khiva is a perfectly preserved treasure.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TAJIKISTAN }
+		value = 75 # Pamir Mountains ("The Roof of the World"). Exceptional mountain scenery.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KIRGHIZIA }
+		value = 75 # Tian Shan mountains and Lake Issyk-Kul.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_URALSK }
+		value = 30 # Arid steppe, shores of the Caspian.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TURKMENIA }
+		value = 65 # Karakum Desert, ancient ruins of Merv.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SEMIRECHE }
+		value = 60 # "Seven Rivers." Steppe and mountains bordering China.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AKMOLINSK }
+		value = 30 # Kazakh Steppe.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KAMCHATKA }
+		value = 85 # "Land of Volcanoes." One of the most volcanically active and dramatic landscapes on Earth.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OKHOTSK }
+		value = 45 # Remote, cold sea coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YAKUTSK }
+		value = 40 # Extremely cold, vast Siberian region. Lena Pillars are a notable natural feature.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TRANS_BAIKAL }
+		value = 70 # Lake Baikal, the world's oldest and deepest lake, is a premier natural wonder.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_IRKUTSK }
+		value = 70 # Main access point to Lake Baikal.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TOMSK }
+		value = 35 # West Siberian Plain. Taiga and swamp.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TOBOLSK }
+		value = 35 # West Siberian Plain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UPPER_YENISEYSK }
+		value = 40 # Yenisey River and taiga.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OB }
+		value = 30 # West Siberian Plain, mouth of the Ob river.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_URAL }
+		value = 60 # Ural Mountains, the dividing line of Eurasia.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SAMARA }
+		value = 45 # Volga river and steppe.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KAZAN }
+		value = 65 # Historic Kazan Kremlin at the confluence of the Volga and Kazanka rivers.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PERM }
+		value = 50 # Foothills of the Urals.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GALICH }
+		value = 50 # Vast northern forests and lake systems.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TVER }
+		value = 50 # Valdai Hills, source of the Volga. Pleasant lakeland.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MOSCOW }
+		value = 85 # Kremlin and Red Square are iconic. The political and spiritual heart of Russia for centuries.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DAGESTAN }
+		value = 70 # Caspian Sea coast and very rugged Caucasus mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KUBAN }
+		value = 65 # Black Sea coast and Caucasus foothills.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ASTRAKHAN }
+		value = 50 # Volga Delta and Caspian Sea.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ROSTOV }
+		value = 50 # Don River and steppe.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CRIMEA }
+		value = 85 # Beautiful Black Sea coastline, mountains, and rich history.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KHARKOV }
+		value = 40 # Mostly plains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KURSK }
+		value = 35 # Rolling hills of the Central Russian Upland.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NOVGOROD }
+		value = 70 # One of the oldest and most important historic cities in Russia.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_INGRIA }
+		value = 90 # St. Petersburg. The imperial capital, designed to rival the great cities of Europe. Palaces and canals.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHERSON }
+		value = 65 # Major Black Sea port of Odessa with its famous Potemkin steps.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BESSARABIA }
+		value = 45 # Rolling hills between the Dniester and Prut rivers.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SMOLENSK }
+		value = 45 # Historically important city, but geographically unremarkable.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CAMPANIA }
+		value = 95 # Naples, Pompeii, Herculaneum, Amalfi Coast, and Vesuvius. An incredible concentration of attractions.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CALABRIA }
+		value = 75 # "Toe" of Italy. Rugged, scenic coastline and mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ABRUZZO }
+		value = 70 # Apennine mountains (Gran Sasso) and Adriatic coast. Wild and mountainous.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_APULIA }
+		value = 80 # "Heel" of Italy. Unique Trulli houses, extensive coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_GALICIA }
+		value = 80 # Historic city of Krak�w, a major cultural center. Access to Tatra mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_GALICIA }
+		value = 70 # Historic city of Lviv, with well-preserved architecture.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_SLOVAKIA }
+		value = 65 # Tatra mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_SLOVAKIA }
+		value = 70 # Historic capital of Bratislava on the Danube, with nearby castles.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DALMATIA }
+		value = 90 # Stunning coastline with countless islands. Historic cities of Split (Diocletian's Palace) and Dubrovnik.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CROATIA }
+		value = 75 # Plitvice Lakes National Park is a unique wonder. Capital of Zagreb and Adriatic coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SLAVONIA }
+		value = 40 # Flat river plains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BEKES }
+		value = 45 # Part of the Great Hungarian Plain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TRANSDANUBIA }
+		value = 70 # Lake Balaton, rolling hills, and historic cities.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ISTRIA }
+		value = 85 # Peninsula with beautiful coastline, Roman ruins (Pula), and Venetian towns.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VENETIA }
+		value = 95 # Venice. An entire city built on water. Unique in the world. Also contains Verona.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LOMBARDY }
+		value = 85 # Italian lakes (Como, Garda, Maggiore), Alps, and the cultural/historical hub of Milan.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BOHEMIA }
+		value = 90 # Prague, the "City of a Hundred Spires," is one of the most beautiful and historic in Europe.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MORAVIA }
+		value = 70 # Historic cities and rolling countryside.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CENTRAL_HUNGARY }
+		value = 85 # Budapest on the Danube, a major imperial capital.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_STYRIA }
+		value = 75 # Eastern Alps, historic city of Graz.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TYROL }
+		value = 85 # Heart of the Austrian Alps (Innsbruck). Premier mountain destination.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AUSTRIA }
+		value = 90 # Vienna, the grand capital of the Habsburg Empire. Danube valley.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTH_TYROL }
+		value = 85 # The Dolomites offer some of the most dramatic mountain scenery in the Alps.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SLOVENIA }
+		value = 80 # Julian Alps, Lake Bled, and a small but beautiful Adriatic coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DELVIDEK }
+		value = 45 # Flat plains of Vojvodina.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_POSEN }
+		value = 50 # Historic city, but largely flat.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WESTPHALIA }
+		value = 55 # Rolling hills, but heavily industrialized post-1836.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ANHALT }
+		value = 50 # Part of the North German Plain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_POMERANIA }
+		value = 65 # Baltic Sea coast with islands like Rugen.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WEST_PRUSSIA }
+		value = 65 # Historic city of Danzig/Gdansk on the Baltic.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EAST_PRUSSIA }
+		value = 70 # Masurian Lake District and Baltic coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RHINELAND }
+		value = 80 # The Rhine Gorge with its castles and vineyards is a classic tourist destination.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTH_RHINE }
+		value = 70 # Historic cities like Cologne (cathedral) and Aachen (Charlemagne's capital).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SILESIA }
+		value = 55 # Plains with some mountains on the border.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BRANDENBURG }
+		value = 65 # Contains Berlin, a major historical capital. Surrounded by lakes and forests.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SCHLESWIG_HOLSTEIN }
+		value = 60 # Coastlines on both the North and Baltic Seas.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_WURTTEMBERG }
+		value = 70 # Black Forest and access to Lake Constance.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BADEN }
+		value = 75 # Black Forest, Rhine Valley, and historic Heidelberg.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HANNOVER }
+		value = 50 # Largely flat North German Plain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BAVARIA }
+		value = 90 # Bavarian Alps, Neuschwanstein castle (post-1836 but represents the romantic landscape), and major city of Munich.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FRANCONIA }
+		value = 75 # Medieval cities of Nuremberg and W�rzburg.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SAXONY }
+		value = 75 # "Florence on the Elbe" (Dresden) and "Saxon Switzerland" rock formations.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HESSE }
+		value = 65 # Major city of Frankfurt and rolling hills.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BRUNSWICK }
+		value = 50 # Harz mountains are a notable feature.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GREATER_POLAND }
+		value = 70 # Contains the capital of Warsaw.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LESSER_POLAND }
+		value = 70 # Historic city of Lublin.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PIEDMONT }
+		value = 85 # Italian Alps, Turin, and access to the Italian Lakes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SARDINIA }
+		value = 80 # Unique Nuragic civilization ruins, beautiful and rugged coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SAKHALIN }
+		value = 50 # Remote and rugged island north of Japan.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TARAPACA }
+		value = 55 # Atacama Desert, driest place on Earth.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ANTOFAGASTA }
+		value = 60 # Atacama Desert with dramatic coastal cliffs.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BREST }
+		value = 45 # Plains and ancient forests.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MAZOVIA }
+		value = 50 # Plains of central Poland.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VOLHYNIA }
+		value = 40 # Pripet Marshes and plains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KIEV }
+		value = 80 # Historic mother city of Rus', with major churches and monasteries.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MECKLENBURG }
+		value = 60 # Baltic coast and a large lakeland district.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MALTA }
+		value = 75 # Historic fortress island with megalithic temples.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UMBRIA }
+		value = 80 # "Green Heart of Italy." Hilltop towns like Perugia and Assisi.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BANAT }
+		value = 45 # Flat plain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CORSICA }
+		value = 80 # "Mountain in the Sea." Extremely rugged interior and beautiful coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PASHTUNISTAN }
+		value = 55 # Khyber Pass and rugged frontier territory.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UTAH }
+		value = 80 # Zion, Bryce, Arches. A concentration of unique and stunning national parks.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SOUTH_CAROLINA }
+		value = 65 # Historic Charleston and pleasant coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHIAPAS }
+		value = 85 # Mayan ruins (Palenque), Sumidero Canyon, and mountainous jungle.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SAN_SALVADOR }
+		value = 70 # Volcanoes and Mayan sites.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ADANA }
+		value = 70 # Cilician plain and Mediterranean coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CONNAUGHT }
+		value = 70 # Wild Atlantic coast and rugged landscapes.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TUVA }
+		value = 55 # Siberian mountains and steppe.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GOIAS }
+		value = 50 # Cerrado plateau with some national parks.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ACRE }
+		value = 55 # Amazon rainforest.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PIAUI }
+		value = 50 # Semi-arid interior with Serra da Capivara National Park (prehistoric paintings).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CEARA }
+		value = 65 # Long coastline with dramatic dunes and cliffs.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PARAIBA }
+		value = 60 # Easternmost point of the Americas with a pleasant coastline.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SANTA_CATARINA }
+		value = 70 # Coastline with excellent beaches and a cooler, European-like interior.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VERACRUZ }
+		value = 75 # Major colonial port, access to high mountains (Pico de Orizaba), and Totonac ruins.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SINALOA }
+		value = 60 # Pacific coast and access to the Copper Canyon region.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BAJIO }
+		value = 75 # Colonial "silver cities" like Guanajuato and San Luis Potos�.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OAXACA }
+		value = 85 # Zapotec ruins (Monte Alb�n), unique culture, and Pacific coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SHENGJING }
+		value = 55 # Imperial palaces of the early Qing dynasty in Mukden/Shenyang.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_JETISY }
+		value = 65 # "Seven Rivers" region, part of the Silk Road. Tian Shan mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RUHR }
+		value = 50 # Based on its pre-industrial landscape of rolling hills and river valleys.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MAINE_ANJOU }
+		value = 75 # Part of the Loire Valley with its historic towns and ch�teaux.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VILNIUS }
+		value = 70 # Historic capital of the Polish-Lithuanian Commonwealth.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_COURLAND }
+		value = 65 # Pleasant Baltic coastline and historic towns.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TARTU }
+		value = 65 # University city and southern Estonian lake district.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TALINN }
+		value = 75 # Exceptionally well-preserved medieval walled city on the Baltic.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RIGA }
+		value = 75 # Largest city in the Baltics with a major historic center.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KAUNAS }
+		value = 60 # Second city of Lithuania, located at the confluence of two rivers.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FERGANA }
+		value = 75 # Fertile valley that was a key part of the Silk Road.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MERZ }
+		value = 70 # Ancient oasis city of Merv, a major Silk Road site.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SYRDARYA }
+		value = 60 # Along the Syr Darya river, with the historic city of Turkistan.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AKTOBE }
+		value = 30 # Arid steppe.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KALMYKIA }
+		value = 40 # Steppe region on the Caspian sea, home to the Kalmyk people (Buddhists in Europe).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTH_CAUCASUS }
+		value = 75 # High Caucasus mountains, including Mount Elbrus, Europe's highest peak.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TAURIDA }
+		value = 70 # Steppe region north of Crimea.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TAMBOV }
+		value = 35 # Flat agricultural heartland.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RYAZAN }
+		value = 45 # Historic city with a kremlin.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VITEBSK }
+		value = 45 # Hilly lake district.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PSKOV }
+		value = 65 # Ancient city with a fortress and kremlin.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YAROSLAVL }
+		value = 70 # Golden Ring city with beautiful churches.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NIZHNY_NOVGOROD }
+		value = 70 # Major historic city on the Volga with a kremlin.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_VYATKA }
+		value = 40 # Forested, rural region.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UFA }
+		value = 50 # At the edge of the Ural mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SURGUT }
+		value = 30 # West Siberian Plain, oil country.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KRASNOYARSK }
+		value = 60 # Stolby Nature Reserve has unique rock pillars.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALTAI }
+		value = 80 # Altai Mountains are a stunning range, the "Golden Mountains."
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BURYATIA }
+		value = 70 # Eastern shore of Lake Baikal and Buddhist culture.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KOLYMA }
+		value = 35 # Extremely remote and cold region of Siberia.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AMUR }
+		value = 50 # Amur River basin.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHELYABINSK }
+		value = 55 # Southern Ural mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KUOPIO }
+		value = 65 # Heart of the Finnish Lakeland.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OULU }
+		value = 60 # Coast of the Bothnian Bay and northern rivers.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UUSIMAA }
+		value = 75 # Southern coast with Helsinki and its archipelago.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KOLA }
+		value = 60 # Murmansk Fjord, tundra, and mountains.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MOGILEV }
+		value = 40 # Plains of eastern Belarus.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ORYOL }
+		value = 40 # Central Russian Upland.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ELIZAVETPOL }
+		value = 65 # Caucasus foothills.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_STAVROPOL }
+		value = 60 # Caucasus foothills, spa towns.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHUVASHIA }
+		value = 45 # On the Volga River.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHERNIHIV }
+		value = 50 # Historic city in northern Ukraine.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ARAKAN }
+		value = 65 # Coastal region of Burma with ancient kingdom of Mrauk U.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AGRA }
+		value = 85 # Taj Mahal. Need I say more? Also Agra Fort and Fatehpur Sikri.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BUNDELKHAND }
+		value = 65 # Temples of Khajuraho are a major draw.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HILL_PUNJAB }
+		value = 70 # Foothills of the Himalayas, includes Shimla.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KURNOOL }
+		value = 60 # Inland region of Andhra, with some notable ruins.
+	}
+	else = {
+		# Default value for any state not explicitly listed
+		value = 20 # Generic value for unlisted states, can be adjusted as needed.
+	}
+	divide = 100 # Normalize to a 0-100 scale
+}
+
+
+# --- INDIVIDUAL TOURISM OUTPUT MODIFIERS ---
+
+# From the state's static, unchangeable appeal score (0-100)
+# Assumes the score is stored in a state variable, e.g., via script from your dictionary
+tourism_bonus_from_base_appeal = {
+	value = base_tourism_appeal_value
+}
+
+city_size_rank = {
+	if = {
+		limit = {
+			has_variable = state_city_size_rank
+		}
+		value = var:state_city_size_rank
+	}
+	else = {
+		value = 0 # Default value if city size is not defined
+	}
+}
+
+# Tiered bonus from Cities
+tourism_bonus_from_urban_centers = {
+	value = 0
+	if = {
+		limit = {
+			city_size_rank < 21
+			city_size_rank > 0
+		}
+		add = {
+			value = 21
+			subtract = city_size_rank
+			multiply = 0.05
+		}
+	}
+}
+
+# Large bonus from Airports (building has a max level, so no DR needed)
+tourism_bonus_from_airports = {
+	value = 0
+	if = {
+		limit = { has_building = building_airport }
+		add = {
+			value = b:building_airport.level
+			multiply = 15	# +15% per level
+		}
+	}
+	divide = 100	# Normalize to a 0-100 scale
+}
+
+# Penalties from repressive laws
+tourism_penalty_from_laws = {
+	value = 0
+	if = { limit = { owner = { has_law = law_type:law_secret_police } } subtract = 30 }
+	if = { limit = { owner = { has_law = law_type:law_outlawed_dissent } } subtract = 30 }
+	if = { limit = { owner = { has_law = law_type:law_ethnostate } } subtract = 20 }
+	if = { limit = { owner = { has_law = law_type:law_racial_segregation } } subtract = 5 }
+	if = { limit = { owner = { has_law = law_type:law_intrusive_surveillance } } subtract = 25 }
+	if = { limit = { owner = { has_law = law_type:law_state_controlled_internet } } subtract = 5 }
+	divide = 100	# Normalize to a 0-100 scale
+}
+
+# Bonuses from progressive laws
+tourism_bonus_from_laws = {
+	value = 0
+	if = { limit = { owner = { has_law = law_type:law_guaranteed_liberties } } add = 10 }
+	if = { limit = { owner = { has_law = law_type:law_multicultural } } add = 15 }
+	if = { limit = { owner = { has_law = law_type:law_moderate_data_privacy } } add = 5 }
+	if = { limit = { owner = { has_law = law_type:law_strong_privacy_rights } } add = 10 }
+	divide = 100	# Normalize to a 0-100 scale
+}
+
+tourism_net_bonus_from_laws = {
+	value = tourism_bonus_from_laws
+	add = tourism_penalty_from_laws
+}
+
+# Penalty from instability
+tourism_penalty_from_turmoil = {
+	value = turmoil
+	multiply = -1
+}
+
+# Penalty from environmental damage
+tourism_penalty_from_pollution = {
+	value = state_region.pollution_amount
+	divide = 255
+	multiply = -2
+}
+
+
+# --- INDIVIDUAL TOURISM THROUGHPUT MODIFIERS ---
+
+
+# Tiered bonus from Ports
+tourism_throughput_from_ports = {
+	value = 0
+	if = {
+		limit = { has_building = building_port }
+		add = {
+			value = b:building_port.level
+			max = 100
+			multiply = 0.002
+		}
+		if = {
+			limit = { b:building_port.level > 100 }
+			add = {
+				value = b:building_port.level
+				subtract = 100
+				max = 400
+				multiply = 0.0004
+			}
+		}
+	}
+}
+
+# Tiered bonus from land transport infrastructure
+tourism_throughput_from_land_transport = {
+	value = 0
+	# Railways
+	if = {
+		limit = { has_building = building_railway }
+		add = {
+			value = b:building_railway.level
+			max = 100
+			multiply = 0.001
+		}
+		if = {
+			limit = { b:building_railway.level > 100 }
+			add = {
+				value = b:building_railway.level
+				subtract = 100
+				max = 400
+				multiply = 0.0002
+			}
+		}
+	}
+	# Highways
+	if = {
+		limit = { has_building = building_highway }
+		add = { 
+			value = b:building_highway.level
+			max = 100
+			multiply = 0.001
+		}
+		if = {
+			limit = { b:building_highway.level > 100 }
+			add = {
+				value = b:building_highway.level
+				subtract = 100
+				max = 400
+				multiply = 0.0002
+			}
+		}
+	}
+}
+
+# Tiered bonus from cultural investment
+tourism_throughput_from_art = {
+	value = 0
+	if = {
+		limit = { has_building = building_arts_academy }
+		add = { 
+			value = b:building_arts_academy.level
+			max = 20
+			multiply = 0.01
+		}
+		if = {
+			limit = { b:building_arts_academy.level > 20 }
+			add = {
+				value = b:building_arts_academy.level
+				subtract = 20
+				max = 80
+				multiply = 0.0025
+			}
+		}
+		if = {
+			limit = { b:building_arts_academy.level > 100 }
+			add = {
+				value = b:building_arts_academy.level
+				subtract = 100
+				max = 400
+				multiply = 0.0005
+			}
+		}
+		if = {
+			limit = { b:building_arts_academy.level > 500 }
+			add = {
+				value = b:building_arts_academy.level
+				subtract = 500
+				max = 1000
+				multiply = 0.0001
+			}
+		}
+	}
+}
+
+# Bonus from National Parks, scaled by the state's intrinsic appeal
+tourism_throughput_from_parks = {
+	value = 0
+	if = {
+		limit = { has_building = building_national_park }
+		add = {
+			value = 0.25
+			multiply = {
+				value = 1
+				add = {
+					value = base_tourism_appeal_value
+					divide = 200
+				}
+			}
+		}
+	}
+}
+
+# Flat bonus from unique monuments
+tourism_throughput_from_monuments = {
+	value = 0
+	if = {
+		limit = { has_building = building_skyscraper }
+		add = 0.10
+	}
+	every_scope_building = {
+		limit = {
+			is_building_group = bg_monuments
+		}
+		add = 0.25
+	}
+}
+
+# Bonus from a promotional state decree
+tourism_throughput_from_decree = {
+	value = 0
+	if = {
+		limit = { has_decree = decree_promote_tourism } # Assuming this decree is created
+		add = 0.5
+	}
+}
+
+# --- TOTAL CALCULATIONS ---
+
+total_tourism_output_bonus_percent = {
+	value = tourism_bonus_from_base_appeal
+	add = tourism_bonus_from_urban_centers
+	add = tourism_bonus_from_airports
+	add = tourism_penalty_from_laws
+	add = tourism_bonus_from_laws
+	add = tourism_penalty_from_turmoil
+	add = tourism_penalty_from_pollution
+}
+
+total_tourism_throughput_bonus_percent = {
+	value = tourism_throughput_from_ports
+	add = tourism_throughput_from_land_transport
+	add = tourism_throughput_from_art
+	add = tourism_throughput_from_parks
+	add = tourism_throughput_from_monuments
+	add = tourism_throughput_from_decree
+}

@@ -103,7 +103,6 @@ decree_greenest_grass_campaign = {
 	}
 
 	state_trigger = {
-		NOT = { has_decree = decree_greener_grass_campaign }
 		is_isolated_from_market = no
 	}
 	country_trigger  = {
@@ -201,7 +200,7 @@ decree_pollution_control = {
 	cost = 100
 
 	state_trigger = {
-		pollution_generation > 0
+		state_region.pollution_amount > 0
 	}
 
 	ai_weight = {
@@ -337,6 +336,53 @@ decree_antiterrorism_campaign = {
 		terrorism_and_anti_terrorism
 	}
 	
+	cost = 100
+
+	ai_weight = {
+		value = 0
+	}
+}
+
+decree_promote_tourism = {
+	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	modifier = {
+	}
+	
+	cost = 100
+
+	ai_weight = {
+		value = 0		
+	}
+}
+
+decree_encourage_emigration = {
+	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	modifier = {
+		state_migration_pull_mult = -0.5
+	}
+
+	unlocking_technologies = { 
+		social_media
+	}
+
+	cost = 100
+
+	ai_weight = {
+		value = 0
+	}
+}
+
+decree_subsidize_immigration = {
+	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	modifier = {
+		state_migration_pull_mult = 0.5
+		state_welfare_payments_add = 1
+	}
+
+	unlocking_technologies = { 
+		public_works_programs
+	}
+
 	cost = 100
 
 	ai_weight = {

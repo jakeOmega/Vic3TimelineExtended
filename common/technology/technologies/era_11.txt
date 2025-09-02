@@ -24,6 +24,22 @@ modern_material_science = {
 	}
 }
 
+abyssal_plain_mining = {
+	# Oceanic Mines building
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+	
+	unlocking_technologies = {	
+		additive_manufacturing
+		advanced_structural_engineering
+	}
+	
+	ai_weight = {
+		value = 1
+	}
+}
+
 quantum_computing = {
 	# Intellegent Drilling Rigs PM for Oil Rigs, Extreme Bandwidth PM for Network Infrastructure
 	era = era_11
@@ -47,7 +63,7 @@ quantum_computing = {
 
 smart_grids = {
 	# AI Managed Power Plants PM for all power plants, Autonomous Logistics PM for Trade Centers,
-	# Predictive Maintenance PM for all Network Infrastructure
+	# Autonomous Networks PM for Network Infrastructure
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
@@ -128,7 +144,6 @@ synthetic_biology = {
 
 	modifier = {
 		country_institution_health_system_max_investment_add = 1
-		country_institution_ministry_of_the_environment_max_investment_add = 1
 	}
 	
 	ai_weight = {
@@ -138,7 +153,7 @@ synthetic_biology = {
 
 directed_energy_weapons = {
 	# Ablative Rockets PM for Launch Facilities, Solar Exploration PM for Space Program,
-	# Pulsed Laser Escort unit
+	# Pulsed Laser Escort unit, Inertial Fusion Reactors PM for Fusion Plants
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -275,7 +290,7 @@ fusion_power = {
 	category = military
 	
 	unlocking_technologies = {	
-		directed_energy_weapons
+		directed_energy_defenses
 	}
 
 	modifier = {

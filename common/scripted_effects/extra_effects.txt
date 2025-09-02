@@ -1160,4 +1160,18 @@ fix_incompatible_laws = {
 		}
 		activate_law = law_type:law_unregulated_internet
 	}
+	if = {
+		limit = {
+			NOT = { has_technology_researched = post-scarcity_economy }
+			has_law = law_type:law_post-scarcity
+		}
+		activate_law = law_type:law_universal_basic_income
+	}
+	if = {
+		limit = {
+			NOT = { has_technology_researched = universal_basic_income }
+			has_law = law_type:law_universal_basic_income
+		}
+		activate_law = law_type:law_wage_subsidies
+	}
 }

@@ -190,7 +190,7 @@ principle_vassalization_4 = {
 	}
 
 	member_modifier = {
-		country_authority_per_subject_add = 10
+		country_authority_per_subject_add = 20
 		country_subject_income_transfer_mult = 0.25
 
 		country_allow_enacting_decrees_in_subject_bool = yes
@@ -219,7 +219,7 @@ principle_vassalization_5 = {
 	}
 
 	member_modifier = {
-		country_authority_per_subject_add = 20
+		country_authority_per_subject_add = 30
 		country_subject_income_transfer_mult = 0.25
 
 		country_allow_enacting_decrees_in_subject_bool = yes
@@ -735,7 +735,7 @@ principle_transport_4 = {
 		state_infrastructure_from_population_max_mult = 0.33 
 		building_economy_of_scale_level_cap_add = 20
 		building_railway_throughput_add = 0.2
-		state_infrastructure_from_personal_transportation_consumption_add = 0.1
+		state_infrastructure_from_transportation_consumption_add = 0.1
 	}
 	
 	ai_weight = {
@@ -760,7 +760,7 @@ principle_transport_5 = {
 		building_railway_throughput_add = 0.2
 		building_airport_throughput_add = 0.2
 		building_highway_throughput_add = 0.2
-		state_infrastructure_from_personal_transportation_consumption_add = 0.1
+		state_infrastructure_from_transportation_consumption_add = 0.1
 		country_production_tech_spread_mult = 0.25
 	}
 	
@@ -1555,14 +1555,6 @@ principle_cultural_unity_1 = {
 		has_dlc_feature = power_bloc_features
 	}
 
-	possible = {
-		OR = {
-			has_law = law_type:law_ethnostate
-			has_law = law_type:law_national_supremacy
-			has_law = law_type:law_racial_segregation
-		}
-	}
-
 	leader_modifier = {
 		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
 		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
@@ -1599,14 +1591,6 @@ principle_cultural_unity_2 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
-	possible = {
-		OR = {
-			has_law = law_type:law_ethnostate
-			has_law = law_type:law_national_supremacy
-			has_law = law_type:law_racial_segregation
-		}
-	}
-
 	leader_modifier = {
 		# Modifiers from previous level(s)
 		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
@@ -1626,14 +1610,6 @@ principle_cultural_unity_2 = {
 principle_cultural_unity_3 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
-
-	possible = {
-		OR = {
-			has_law = law_type:law_ethnostate
-			has_law = law_type:law_national_supremacy
-			has_law = law_type:law_racial_segregation
-		}
-	}
 	
 	member_modifier = {
 		country_standard_of_living_full_acceptance_add = 1
@@ -1664,11 +1640,6 @@ principle_cultural_unity_4 = {
 
 	possible = {
 		has_technology_researched = marketing_research
-		OR = {
-			has_law = law_type:law_ethnostate
-			has_law = law_type:law_national_supremacy
-			has_law = law_type:law_racial_segregation
-		}
 	}
 	
 	member_modifier = {
@@ -1708,11 +1679,6 @@ principle_cultural_unity_5 = {
 
 	possible = {
 		has_technology_researched = globalization
-		OR = {
-			has_law = law_type:law_ethnostate
-			has_law = law_type:law_national_supremacy
-			has_law = law_type:law_racial_segregation
-		}
 	}
 	
 	member_modifier = {
@@ -1757,13 +1723,6 @@ principle_cultural_plurality_1 = {
 		has_dlc_feature = power_bloc_features
 	}
 
-	possible = {
-		OR = {
-			has_law = law_type:law_cultural_exclusion
-			has_law = law_type:law_multicultural
-		}
-	}
-
 	member_modifier = {
 		# Members get cheaper and faster cultural institution
 		country_mass_migration_attraction_mult = 0.25
@@ -1802,13 +1761,6 @@ principle_cultural_plurality_1 = {
 principle_cultural_plurality_2 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
-
-	possible = {
-		OR = {
-			has_law = law_type:law_cultural_exclusion
-			has_law = law_type:law_multicultural
-		}
-	}
 
 	member_modifier = {
 		# Modifiers from previous level(s)	
@@ -1864,10 +1816,6 @@ principle_cultural_plurality_4 = {
 
 	possible = {
 		has_technology_researched = civil_rights_movement
-		OR = {
-			has_law = law_type:law_cultural_exclusion
-			has_law = law_type:law_multicultural
-		}
 	}
 
 	member_modifier = {
@@ -1903,10 +1851,6 @@ principle_cultural_plurality_5 = {
 
 	possible = {
 		has_technology_researched = globalization
-		OR = {
-			has_law = law_type:law_cultural_exclusion
-			has_law = law_type:law_multicultural
-		}
 	}
 
 	member_modifier = {

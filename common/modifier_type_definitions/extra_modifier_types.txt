@@ -8,6 +8,11 @@ goods_output_electronic_components_add = {
 	percent = no
 }
 
+goods_output_tech_metals_add = {
+	color = good
+	percent = no
+}
+
 goods_output_digital_access_add = {
 	color = good
 	percent = no
@@ -18,7 +23,7 @@ goods_output_digital_assets_add = {
 	percent = no
 }
 
-goods_output_personal_transportation_add = {
+goods_output_transportation_add = {
 	color = good
 	percent = no
 }
@@ -28,7 +33,17 @@ goods_output_advanced_materials_add = {
 	percent = no
 }
 
+goods_output_tourism_add = {
+	color = good
+	percent = no
+}
+
 goods_input_electronic_components_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_tech_metals_add = {
 	color = bad
 	percent = no
 }
@@ -48,7 +63,7 @@ goods_input_digital_assets_add = {
 	percent = no
 }
 
-goods_input_personal_transportation_add = {
+goods_input_transportation_add = {
 	color = bad
 	percent = no
 }
@@ -427,16 +442,16 @@ goods_output_transportation_mult = {
 	}
 }
 
-goods_output_personal_transportation_mult = {
+goods_output_advanced_materials_mult = {
 	color = good
 	percent = yes
 	
 	game_data = {
-		ai_value = 250
-	}
+	ai_value = 250
+}
 }
 
-goods_output_advanced_materials_mult = {
+goods_output_tourism_mult = {
 	color = good
 	percent = yes
 	
@@ -455,6 +470,15 @@ goods_input_coal_mult = {
 }
 
 goods_input_electricity_mult = {
+	color = bad
+	percent = yes
+	
+	game_data = {
+	ai_value = -250
+}
+}
+
+goods_input_construction_mult = {
 	color = bad
 	percent = yes
 	
@@ -482,6 +506,15 @@ goods_output_launch_capacity_mult = {
 }
 
 goods_output_electronic_components_mult = {
+	color = good
+	percent = yes
+	
+	game_data = {
+	ai_value = 250
+}
+}
+
+goods_output_tech_metals_mult = {
 	color = good
 	percent = yes
 	
@@ -607,44 +640,76 @@ building_airport_throughput_add = {
 	percent = yes
 }
 
+building_logging_camp_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_robotics_industry_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_advanced_material_fabricator_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
 building_electronic_components_and_semiconductor_industry_throughput_add = {
 	color = good
 	percent = yes
+	decimals = 0
 }
 
 building_electrics_industry_appliances_throughput_add = {
 	color = good
 	percent = yes
+	decimals = 0
 }
 
 building_synthetics_plants_rubber_throughput_add = {
 	color = good
 	percent = yes
+	decimals = 0
 }
 
 building_synthetics_plants_oil_throughput_add = {
 	color = good
 	percent = yes
+	decimals = 0
 }
 
 building_network_infrastructure_throughput_add = {
 	color = good
 	percent = yes
+	decimals = 0
 }
 
 building_group_bg_arts_throughput_add = {
 	color = good
 	percent = yes
+	decimals = 0
 }
 
 building_launch_facility_throughput_add = {
 	color = good
 	percent = yes
+	decimals = 0
 }
 
 building_software_industry_throughput_add = {
 	color = good
 	percent = yes
+	decimals = 0
+}
+
+building_tourism_industry_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
 }
 
 building_weekly_space_elevator_progress = {
@@ -719,6 +784,43 @@ state_pollution_generation_mult = {
 country_monthly_loyalists_add = {
 	color = good
 	percent = yes
+}
+
+country_banking_intervention_max_add = {
+	color = good
+	percent = no
+	decimals = 0
+	game_data = { ai_value = 100 }
+}
+
+country_finance_momentum_monthly_add = {
+	color = neutral
+	percent = no
+	decimals = 2
+}
+
+country_bubble_pressure_monthly_add  = {
+	color = neutral
+	percent = no
+	decimals = 2
+}
+
+country_finance_value_monthly_add    = {
+	color = neutral
+	percent = no
+	decimals = 2
+}
+
+country_monthly_investment_pool_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+country_monthly_investment_pool_mult = {
+	color = good
+	percent = yes
+	decimals = 2
 }
 
 country_institution_ministry_of_war_max_investment_add = {
@@ -959,7 +1061,7 @@ state_infrastructure_from_aeroplanes_consumption_add = {
 	}
 }
 
-state_infrastructure_from_personal_transportation_consumption_add = {
+state_infrastructure_from_transportation_consumption_add = {
 	decimals=2
 	color=good
 	game_data={
@@ -1299,11 +1401,6 @@ building_farmers_shares_add={
 	}
 }
 
-building_logging_camp_throughput_add = {
-	color = good
-	percent = yes
-}
-
 building_group_bg_agriculture_infrastructure_usage_mult = {
 	color = bad
 	percent = yes
@@ -1426,4 +1523,269 @@ country_institution_cost_institution_police_mult = {
 	game_data = {
 		ai_value = 0
 	}
+}
+
+building_employment_capitalists_mult = {
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_building_volkswagen_autostadt_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_toyota_kaikan_plant_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_samsung_digital_city_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_hp_labs_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_sony_pictures_studios_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_ikea_almhult_campus_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_intel_ronler_acres_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_microsoft_redmond_campus_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_apple_park_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_tsmc_fab_18_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_huawei_ox_horn_campus_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_amazon_fulfillment_center_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_nvidia_endeavor_campus_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_googleplex_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_netflix_animation_studios_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_spacex_starbase_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_bytedance_data_fortress_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_openai_research_lab_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_catl_gigafactory_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_boston_dynamics_ai_institute_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_asml_veldhoven_campus_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_lockheed_skunk_works_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_bae_samlesbury_aerodrome_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_roscosmos_vostochny_cosmodrome_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_airbus_lagardere_plant_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_dassault_merignac_plant_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_hyundai_ulsan_factory_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_sap_headquarters_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_tencent_seafront_towers_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_alibaba_cainiao_park_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_nintendo_development_center_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_gazprom_lakhta_center_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_saudi_aramco_abqaiq_plant_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_petrobras_cenpes_center_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_rosatom_mayak_association_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_oracle_cloud_data_center_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_softbank_vision_fund_hq_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_roche_tower_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_pfizer_rd_campus_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_vale_carajas_mine_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_disney_world_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_universal_studios_hollywood_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_verizon_building_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_reliance_jamnagar_refinery_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_fanuc_forest_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_eni_palazzo_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_ferrari_maranello_factory_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_blackberry_rim_campus_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_shopify_fulfillment_hub_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_bhp_mount_whaleback_mine_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_cochlear_global_hq_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_infosys_mysore_campus_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_jsw_vijayanagar_works_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_generic_industrial_zone_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_generic_media_hq_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_generic_resource_depository_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_generic_hq_skyscraper_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_generic_power_hub_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_generic_robotics_institute_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_generic_proving_grounds_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_generic_data_fortress_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_generic_materials_lab_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_generic_rd_complex_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_generic_logistics_hub_max_level_add = {
+	color = good
+	percent = no
 }

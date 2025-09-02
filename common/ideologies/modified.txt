@@ -16,8 +16,11 @@
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = neutral
-		law_investment_banking_separation = approve
-		law_securitization_and_derivatives = disapprove
+		law_free_mutual_banking = disapprove
+		law_universal_banking_light_prudence = approve
+		law_prudential_narrow_banking = strongly_approve
+		law_directed_credit_development_banks = neutral
+		law_central_bank_independence = approve
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
@@ -127,8 +130,11 @@ ideology_laissez_faire = {
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = strongly_approve
-		law_investment_banking_separation = strongly_disapprove
-		law_securitization_and_derivatives = approve
+		law_free_mutual_banking = approve
+		law_universal_banking_light_prudence = approve
+		law_prudential_narrow_banking = disapprove
+		law_directed_credit_development_banks = strongly_disapprove
+		law_central_bank_independence = approve
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
@@ -437,6 +443,14 @@ ideology_agrarian = {
 
 ideology_particularist = {
 	icon = "gfx/interface/icons/ideology_icons/particularist.dds"
+	lawgroup_financial_regulation = {
+		law_unregulated_banking = disapprove
+		law_free_mutual_banking = approve
+		law_universal_banking_light_prudence = neutral
+		law_prudential_narrow_banking = approve
+		law_directed_credit_development_banks = strongly_approve
+		law_central_bank_independence = neutral
+	}
 	lawgroup_state_power = {
 		law_feudal_contracts = approve
 		law_unitary_state = strongly_disapprove
@@ -602,6 +616,14 @@ ideology_moralist = {
 
 ideology_meritocratic = {
 	icon = "gfx/interface/icons/ideology_icons/meritocratic.dds"
+	lawgroup_financial_regulation = {
+		law_unregulated_banking = neutral
+		law_free_mutual_banking = neutral
+		law_universal_banking_light_prudence = approve
+		law_prudential_narrow_banking = approve
+		law_directed_credit_development_banks = disapprove
+		law_central_bank_independence = strongly_approve
+	}
 	lawgroup_inheritance = {
 		law_primogeniture = disapprove
 		law_partible = approve
@@ -821,8 +843,11 @@ ideology_liberal = {
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = disapprove
-		law_investment_banking_separation = approve
-		law_securitization_and_derivatives = disapprove
+		law_free_mutual_banking = neutral
+		law_universal_banking_light_prudence = neutral
+		law_prudential_narrow_banking = approve
+		law_directed_credit_development_banks = disapprove
+		law_central_bank_independence = strongly_approve
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
@@ -1007,6 +1032,14 @@ ideology_republican = {
 
 ideology_proletarian = {
 	icon = "gfx/interface/icons/ideology_icons/proletarian.dds"
+	lawgroup_financial_regulation = {
+		law_unregulated_banking = strongly_disapprove
+		law_free_mutual_banking = approve
+		law_universal_banking_light_prudence = disapprove
+		law_prudential_narrow_banking = approve
+		law_directed_credit_development_banks = strongly_approve
+		law_central_bank_independence = neutral
+	}
 	lawgroup_genetic_rights = {
 		law_traditional_heredity = neutral
 		law_ban_on_genetic_modification = neutral
@@ -1273,11 +1306,6 @@ ideology_reactionary = {
 		law_open_source_genetics = neutral
 		law_state_eugenics_program = disapprove
 	}
-	lawgroup_financial_regulation = {
-		law_unregulated_banking = disapprove
-		law_investment_banking_separation = approve
-		law_securitization_and_derivatives = strongly_disapprove
-	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
 		law_unregulated_donations = disapprove
@@ -1542,8 +1570,11 @@ ideology_liberal_modern = {
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = disapprove
-		law_investment_banking_separation = approve
-		law_securitization_and_derivatives = disapprove
+		law_free_mutual_banking = neutral
+		law_universal_banking_light_prudence = neutral
+		law_prudential_narrow_banking = approve
+		law_directed_credit_development_banks = disapprove
+		law_central_bank_independence = strongly_approve
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
@@ -1727,8 +1758,11 @@ ideology_republican_paternalistic = {
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = neutral
-		law_investment_banking_separation = approve
-		law_securitization_and_derivatives = disapprove
+		law_free_mutual_banking = disapprove
+		law_universal_banking_light_prudence = approve
+		law_prudential_narrow_banking = strongly_approve
+		law_directed_credit_development_banks = neutral
+		law_central_bank_independence = approve
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
@@ -1795,8 +1829,11 @@ ideology_scholar_paternalistic = {
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = neutral
-		law_investment_banking_separation = approve
-		law_securitization_and_derivatives = disapprove
+		law_free_mutual_banking = disapprove
+		law_universal_banking_light_prudence = approve
+		law_prudential_narrow_banking = strongly_approve
+		law_directed_credit_development_banks = neutral
+		law_central_bank_independence = approve
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
@@ -1863,8 +1900,11 @@ ideology_junker_paternalistic = {
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = neutral
-		law_investment_banking_separation = approve
-		law_securitization_and_derivatives = disapprove
+		law_free_mutual_banking = disapprove
+		law_universal_banking_light_prudence = approve
+		law_prudential_narrow_banking = strongly_approve
+		law_directed_credit_development_banks = neutral
+		law_central_bank_independence = approve
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
@@ -1931,8 +1971,11 @@ ideology_papal_paternalistic = {
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = neutral
-		law_investment_banking_separation = approve
-		law_securitization_and_derivatives = disapprove
+		law_free_mutual_banking = disapprove
+		law_universal_banking_light_prudence = approve
+		law_prudential_narrow_banking = strongly_approve
+		law_directed_credit_development_banks = neutral
+		law_central_bank_independence = approve
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
@@ -3927,8 +3970,11 @@ ideology_social_democrat = {
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = strongly_disapprove
-		law_investment_banking_separation = strongly_approve
-		law_securitization_and_derivatives = disapprove
+		law_free_mutual_banking = neutral
+		law_universal_banking_light_prudence = disapprove
+		law_prudential_narrow_banking = strongly_approve
+		law_directed_credit_development_banks = approve
+		law_central_bank_independence = strongly_approve
 	}
 	lawgroup_inheritance = {
 		law_primogeniture = disapprove
@@ -4176,6 +4222,14 @@ ideology_social_democrat = {
 ideology_communist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_communist.dds"
 	character_ideology = yes
+	lawgroup_financial_regulation = {
+		law_unregulated_banking = strongly_disapprove
+		law_free_mutual_banking = disapprove
+		law_universal_banking_light_prudence = strongly_disapprove
+		law_prudential_narrow_banking = approve
+		law_directed_credit_development_banks = strongly_approve
+		law_central_bank_independence = strongly_disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_disapprove
 		law_pro_natalist_subsidies = neutral
@@ -4663,8 +4717,11 @@ ideology_fascist = {
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = neutral
-		law_investment_banking_separation = disapprove
-		law_securitization_and_derivatives = approve
+		law_free_mutual_banking = strongly_disapprove
+		law_universal_banking_light_prudence = approve
+		law_prudential_narrow_banking = disapprove
+		law_directed_credit_development_banks = strongly_approve
+		law_central_bank_independence = neutral
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
@@ -5003,8 +5060,11 @@ ideology_anarchist = {
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = approve
-		law_investment_banking_separation = disapprove
-		law_securitization_and_derivatives = neutral
+		law_free_mutual_banking = strongly_approve
+		law_universal_banking_light_prudence = disapprove
+		law_prudential_narrow_banking = strongly_disapprove
+		law_directed_credit_development_banks = strongly_disapprove
+		law_central_bank_independence = strongly_disapprove
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
@@ -5566,6 +5626,14 @@ ideology_theocrat = {
 ideology_market_liberal = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_market_liberal.dds"
 	character_ideology = yes
+	lawgroup_financial_regulation = {
+		law_unregulated_banking = neutral
+		law_free_mutual_banking = approve
+		law_universal_banking_light_prudence = approve
+		law_prudential_narrow_banking = disapprove
+		law_directed_credit_development_banks = disapprove
+		law_central_bank_independence = strongly_approve
+	}
 	lawgroup_minority_rights = {
 		law_minority_rights_violent_hostility = strongly_disapprove
 		law_minority_rights_ghettoization = disapprove
@@ -5730,7 +5798,7 @@ ideology_market_liberal = {
 					OR = {
 						has_law = law_type:law_agrarianism
 						has_law = law_type:law_traditionalism
-						has_law = law_type:law_isolationism
+						has_law_or_variant = law_type:law_isolationism
 						has_law = law_type:law_mercantilism
 					}
 				}
@@ -7467,7 +7535,7 @@ ideology_despotic_utopian = {
 						has_law = law_type:law_single_party_state
 					}
 					has_law = law_type:law_multicultural
-					has_law = law_type:law_isolationism
+					has_law_or_variant = law_type:law_isolationism
 				}
 			}
 			add = -50
@@ -7629,7 +7697,7 @@ ideology_orleanist = {
 					OR = {
 						has_law = law_type:law_agrarianism
 						has_law = law_type:law_traditionalism
-						has_law = law_type:law_isolationism
+						has_law_or_variant = law_type:law_isolationism
 						has_law = law_type:law_mercantilism
 					}
 				}
@@ -8443,8 +8511,11 @@ ideology_fascist_movement = {
 	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = neutral
-		law_investment_banking_separation = disapprove
-		law_securitization_and_derivatives = approve
+		law_free_mutual_banking = strongly_disapprove
+		law_universal_banking_light_prudence = approve
+		law_prudential_narrow_banking = disapprove
+		law_directed_credit_development_banks = strongly_approve
+		law_central_bank_independence = neutral
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
@@ -8555,6 +8626,14 @@ ideology_corporatist_movement = {
 
 ideology_liberal_movement = {
 	icon = "gfx/interface/icons/ideology_icons/liberal.dds"
+	lawgroup_financial_regulation = {
+		law_unregulated_banking = disapprove
+		law_free_mutual_banking = neutral
+		law_universal_banking_light_prudence = neutral
+		law_prudential_narrow_banking = approve
+		law_directed_credit_development_banks = disapprove
+		law_central_bank_independence = strongly_approve
+	}
 	lawgroup_internal_security = {
 		law_guaranteed_liberties = strongly_approve
 		law_no_home_affairs = neutral

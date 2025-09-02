@@ -27,3 +27,164 @@ bg_space = {
 	parent_group = bg_heavy_industry
 	economy_of_scale = no
 }
+
+bg_company_buildings = {
+	parent_group = bg_heavy_industry
+	economy_of_scale = no
+	infrastructure_usage_per_level = 5
+}
+
+
+bg_manganese_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_manganese_mine
+
+	can_use_slaves = yes
+}
+
+bg_chromium_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_chromium_mine
+
+	can_use_slaves = yes
+}
+
+bg_specialty_alloy_metals_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_specialty_alloy_metal_mine
+
+	can_use_slaves = yes
+}
+
+bg_copper_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_copper_mine
+
+	can_use_slaves = yes
+}
+
+bg_bauxite_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_bauxite_mine
+
+	can_use_slaves = yes
+}
+
+bg_precious_minor_base_metals_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_precious_minor_base_metal_mine
+
+	can_use_slaves = yes
+}
+
+bg_nickel_cobalt_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_nickel_cobalt_mine
+
+	can_use_slaves = yes
+}
+
+bg_lithium_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_lithium_mine
+
+	can_use_slaves = yes
+}
+
+bg_rare_earth_metals_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_rare_earth_metals_mine
+
+	can_use_slaves = yes
+}
+
+bg_platinum_group_metals_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_platinum_group_metals_mine
+
+	can_use_slaves = yes
+}
+
+bg_graphite_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_graphite_mine
+
+	can_use_slaves = yes
+}
+
+bg_phosphate_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_phosphate_mine
+
+	can_use_slaves = yes
+}
+
+bg_potash_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_potash_mine
+
+	can_use_slaves = yes
+}
+
+bg_industrial_minerals_salts_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+    depletable_resource = no
+
+	default_building = building_industrial_mineral_salt_mine
+
+	can_use_slaves = yes
+}

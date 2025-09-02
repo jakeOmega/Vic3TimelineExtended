@@ -13,6 +13,7 @@ pmg_canning = {
     production_methods = {
         pm_disabled_canning
         pm_cannery
+        pm_cannery_fish
         pm_vacuum_canning
         pm_vacuum_canning_principle_3
         pm_flexible_packaging
@@ -110,6 +111,8 @@ pmg_base_building_glassworks = {
         pm_leaded_glass
         pm_crystal_glass
         pm_houseware_plastics
+        pm_injection_molding
+        pm_blow_molding
         pm_bioplastics
     }
 }
@@ -138,6 +141,8 @@ pmg_base_building_paper_mills = {
         pm_pulp_pressing
         pm_sulfite_pulping
         pm_bleached_paper
+        pm_kraft_pulping
+        pm_calendered_and_coated_paper
         pm_self_growing_paper
     }
 }
@@ -179,7 +184,9 @@ pmg_synthetic_dyes = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
         pm_dye_production
-        pm_advanced_dyes
+        pm_petroleum_dyes
+        pm_biotech_dyes
+        pm_quantum_dot_pigments
     }
 }
 pmg_synthetic_silk = {
@@ -188,6 +195,11 @@ pmg_synthetic_silk = {
         pm_rayon
         pm_polyester
         pm_nylon
+        pm_microfiber_blends
+        pm_elastomeric_blends
+        pm_performance_textiles
+        pm_advanced_material_fibers
+        pm_programmable_fibers
     }
 }
 pmg_steelmaking_process = {
@@ -307,6 +319,8 @@ pmg_firearms_manufacturing = {
         pm_repeaters
         pm_bolt_action_rifles
         pm_semiautomatic_rifles
+        pm_networked_small_arms
+        pm_programmable_matter_small_arms
     }
 }
 pmg_foundries = {
@@ -319,6 +333,9 @@ pmg_foundries = {
 		pm_breech_loaders
 		pm_recoiled_barrels
         pm_rocket_artillery
+        pm_precision_guided_shells
+        pm_electromagnetic_projectors
+        pm_programmable_matter_artillery
 	}
 }
 pmg_automation_building_arms_industry = {
@@ -337,6 +354,10 @@ pmg_base_building_munition_plants = {
         pm_percussion_caps
         pm_explosive_shells
         pm_modern_cartridges
+        pm_smart_fuzes
+        pm_networked_munitions
+        pm_swarm_release_munitions
+        pm_programmable_munitions
     }
 }
 pmg_automation_building_munition_plants = {
@@ -631,6 +652,31 @@ pmg_steam_automation_building_gold_mine = {
         pm_laser_excavation_technology_gold_mine
     }
 }
+pmg_mining_equipment_building_tech_metals_mine = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_high_pressure_hydraulic_pump_building_tech_metals_mine
+        pm_continuous_miners_building_tech_metals_mine
+        pm_smart_miners_building_tech_metals_mine
+    }
+}
+pmg_explosives_building_tech_metals_mine = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_ammonium_nitrate_building_tech_metals_mine
+        pm_metamaterial_explosives_building_tech_metals_mine
+    }
+}
+pmg_steam_automation_building_tech_metals_mine = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+    production_methods = {
+        pm_dragline_excavators_tech_metals_mine
+        pm_large_scale_earth_movers_tech_metals_mine
+        pm_geophysical_survey_techniques_tech_metals_mine
+        pm_ore_sorting_and_separation_technology_tech_metals_mine
+        pm_laser_excavation_technology_tech_metals_mine
+    }
+}
 pmg_base_building_coffee_plantation = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
@@ -797,6 +843,14 @@ pmg_base_building_power_plant = {
         pm_oil-fired_plant
         pm_modern_coal-fired_plant
         pm_modern_oil-fired_plant
+    }
+}
+pmg_emissions_control = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_no_emissions_control
+        pm_basic_emissions_control
+        pm_advanced_emissions_control
     }
 }
 pmg_base_building_port = {
@@ -992,7 +1046,10 @@ pmg_synthetic_wood = {
 pmg_synthetic_sugar = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
     production_methods = {
-        pm_synthetic_sugar
+        pm_high_fructose_syrup
+        pm_cellulosic_hydrolysis
+        pm_electroenzymatic_synthesis
+        pm_programmable_sweetness
     }
 }
 pmg_synthetic_meat = {
@@ -1140,7 +1197,9 @@ pmg_base_building_nuclear_power = {
 pmg_base_building_fusion_power = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
-        pm_base_building_fusion_power
+        pm_base_building_tokamak_fusion_power
+        pm_base_building_inertial_fusion_power
+        pm_base_building_compact_modular_fusion_power
     }
 }
 pmg_base_building_renewable_power = {
@@ -1213,7 +1272,7 @@ pmg_location_building_advanced_material_fabricator = {
         pm_orbital_fabrication
     }
 }
-pmg_base_building_lauch_facility = {
+pmg_base_building_launch_facility = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
         pm_chemical_rockets
@@ -1222,7 +1281,7 @@ pmg_base_building_lauch_facility = {
         pm_fusion_ssto_craft
     }
 }
-pmg_automation_building_lauch_facility = {
+pmg_automation_building_launch_facility = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
         pm_manual_launch_operations
@@ -1238,6 +1297,14 @@ pmg_base_building_space_mine = {
         pm_space_colony_mining
         pm_space_colony_grain
         pm_space_colony_vacation
+    }
+}
+pmg_base_building_ocean_mine = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_ocean_mine
+        pm_advanced_ocean_mine
+        pm_automated_ocean_mine
     }
 }
 pmg_base_building_space_elevator_construction_site = {
@@ -1392,6 +1459,16 @@ pmg_train_automation_building_gold_mine = {
 		pm_rail_transport_mine
         pm_rail_transport_mine_infrastructure_4
 	}
+}
+
+pmg_train_automation_building_tech_metals_mine = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+    production_methods = {
+        pm_road_carts
+        pm_partial_bulk_transport
+        pm_rail_transport_mine
+        pm_rail_transport_mine_infrastructure_4
+    }
 }
 
 pmg_train_automation_building_coffee_plantation = {
@@ -1641,5 +1718,28 @@ pmg_trade_quantity_trade_center = {
         pm_trade_center_trade_quantity_advanced_2
         pm_trade_center_trade_quantity_advanced_3
         pm_trade_center_trade_quantity_advanced_4
+	}
+}
+
+pmg_tourism = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+
+    production_methods = {
+        pm_tourism
+        pm_mass_tourism
+        pm_jet_age_tourism
+        pm_modern_tourism
+        pm_space_tourism
+    }
+}
+
+pmg_maintenance = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    is_hidden_when_unavailable = yes
+    
+	production_methods = {
+		pm_maintenance
 	}
 }

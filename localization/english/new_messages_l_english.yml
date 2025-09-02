@@ -1,0 +1,829 @@
+﻿l_english:
+# ICBMs - 1950s Tone
+ notification_headlines_tech_ICBMs_tooltip:0 "#header $notification_headlines_tech_ICBMs_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_ICBMs_desc$"
+ notification_headlines_tech_ICBMs_name:0 "#b ROCKETS NOW CAPABLE OF STRIKING ACROSS CONTINENTS #!"
+ notification_headlines_tech_ICBMs_desc:1 "A successful test of an $HEADLINES_TECH_NAME$ has been reported out of [SCOPE.sCountry('headlines_ICBMs_researcher').GetName]. #lore The development of rockets powerful enough to carry a payload between continents has staggering geopolitical implications. International analysts warn this technology could fundamentally alter the nature of warfare and global power dynamics... #!"
+
+# LGBTQ+ Rights Movement - Modern Tone
+ notification_headlines_tech_LGBTQ_rights_movement_tooltip:0 "#header $notification_headlines_tech_LGBTQ_rights_movement_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_LGBTQ_rights_movement_desc$"
+ notification_headlines_tech_LGBTQ_rights_movement_name:0 "#b CALLS FOR EQUALITY AND ACCEPTANCE GROW #!"
+ notification_headlines_tech_LGBTQ_rights_movement_desc:1 "A significant social movement advocating for $HEADLINES_TECH_NAME$ is gaining mainstream attention in [SCOPE.sCountry('headlines_LGBTQ_rights_movement_researcher').GetName]. #lore Activists are pushing for legal protections and societal acceptance for individuals with diverse sexual orientations and gender identities, challenging long-held social norms... #!"
+
+# Additive Manufacturing - Near-Future Tone
+ notification_headlines_tech_additive_manufacturing_tooltip:0 "#header $notification_headlines_tech_additive_manufacturing_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_additive_manufacturing_desc$"
+ notification_headlines_tech_additive_manufacturing_name:0 "#b MANUFACTURING REVOLUTION: 'PRINTING' SOLID OBJECTS #!"
+ notification_headlines_tech_additive_manufacturing_desc:1 "Engineers in [SCOPE.sCountry('headlines_additive_manufacturing_researcher').GetName] have demonstrated a viable process for $HEADLINES_TECH_NAME$. #lore Popularly known as '3D printing,' the technology builds items layer by layer from a digital model. Experts predict this will disrupt everything from prototyping to producing complex, on-demand parts... #!"
+
+# Advanced Agricultural Statistics - Mid-20th Century Tone
+ notification_headlines_tech_advanced_agricultural_statistics_tooltip:0 "#header $notification_headlines_tech_advanced_agricultural_statistics_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_advanced_agricultural_statistics_desc$"
+ notification_headlines_tech_advanced_agricultural_statistics_name:0 "#b FARMING BY THE NUMBERS PROMISES RECORD HARVESTS #!"
+ notification_headlines_tech_advanced_agricultural_statistics_desc:1 "Agronomists in [SCOPE.sCountry('headlines_advanced_agricultural_statistics_researcher').GetName] are applying $HEADLINES_TECH_NAME$ to boost efficiency. #lore By analyzing crop data and livestock patterns with modern statistical methods, farms can optimize yields and resource use. The approach promises to make farming a more exact science... #!"
+
+# Advanced Assembly Lines - Late 20th Century Tone
+ notification_headlines_tech_advanced_assembly_lines_tooltip:0 "#header $notification_headlines_tech_advanced_assembly_lines_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_advanced_assembly_lines_desc$"
+ notification_headlines_tech_advanced_assembly_lines_name:0 "#b FACTORIES ADOPT 'JUST-IN-TIME' PRODUCTION #!"
+ notification_headlines_tech_advanced_assembly_lines_desc:1 "Manufacturers in [SCOPE.sCountry('headlines_advanced_assembly_lines_researcher').GetName] are implementing $HEADLINES_TECH_NAME$. #lore Incorporating modular components and producing items only as needed allows for greater flexibility and reduced waste. Economists believe this will lower costs for a wide variety of consumer goods... #!"
+
+# Advanced Body Armor - Modern Tone
+ notification_headlines_tech_advanced_body_armor_tooltip:0 "#header $notification_headlines_tech_advanced_body_armor_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_advanced_body_armor_desc$"
+ notification_headlines_tech_advanced_body_armor_name:0 "#b NEW COMPOSITE ARMOR INCREASES SOLDIER SURVIVABILITY #!"
+ notification_headlines_tech_advanced_body_armor_desc:1 "Military researchers in [SCOPE.sCountry('headlines_advanced_body_armor_researcher').GetName] have unveiled $HEADLINES_TECH_NAME$. #lore The use of lightweight composites and advanced ceramics offers superior protection without significantly increasing weight, a crucial factor for infantry mobility and effectiveness in combat situations... #!"
+
+# Advanced Materials Armor - Modern Tone
+ notification_headlines_tech_advanced_materials_armor_tooltip:0 "#header $notification_headlines_tech_advanced_materials_armor_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_advanced_materials_armor_desc$"
+ notification_headlines_tech_advanced_materials_armor_name:0 "#b NEXT-GEN ARMOR MAKES VEHICLES MORE RESILIENT #!"
+ notification_headlines_tech_advanced_materials_armor_desc:1 "The armed forces of [SCOPE.sCountry('headlines_advanced_materials_armor_researcher').GetName] have begun to field vehicles with $HEADLINES_TECH_NAME$. #lore By incorporating materials like Composite and Reactive Armor, military vehicles demonstrate a marked increase in their ability to withstand enemy fire, potentially changing the calculus of armored warfare... #!"
+
+# Advanced Military Aircraft - Late 20th Century Tone
+ notification_headlines_tech_advanced_military_aircraft_tooltip:0 "#header $notification_headlines_tech_advanced_military_aircraft_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_advanced_military_aircraft_desc$"
+ notification_headlines_tech_advanced_military_aircraft_name:0 "#b NEW GENERATION OF JETS DOMINATES THE SKIES #!"
+ notification_headlines_tech_advanced_military_aircraft_desc:1 "A new line of $HEADLINES_TECH_NAME$ has been unveiled in [SCOPE.sCountry('headlines_advanced_military_aircraft_researcher').GetName]. #lore These latest designs boast superior speed, range, and armament capacity, setting a new standard for air combat and strategic power projection that other nations will be forced to match... #!"
+
+# Advanced Nanofabrication - Near-Future Tone
+ notification_headlines_tech_advanced_nanofabrication_tooltip:0 "#header $notification_headlines_tech_advanced_nanofabrication_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_advanced_nanofabrication_desc$"
+ notification_headlines_tech_advanced_nanofabrication_name:0 "#b BUILDING AT THE ATOMIC LEVEL NOW POSSIBLE #!"
+ notification_headlines_tech_advanced_nanofabrication_desc:1 "A breakthrough in $HEADLINES_TECH_NAME$ is being reported from labs in [SCOPE.sCountry('headlines_advanced_nanofabrication_researcher').GetName]. #lore This unprecedented control over matter at the nanoscale is expected to have revolutionary applications in fields as diverse as medicine and electronics... #!"
+
+# Advanced Structural Engineering - Late 20th Century Tone
+ notification_headlines_tech_advanced_structural_engineering_tooltip:0 "#header $notification_headlines_tech_advanced_structural_engineering_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_advanced_structural_engineering_desc$"
+ notification_headlines_tech_advanced_structural_engineering_name:0 "#b STRONGER, LIGHTER, BETTER: THE FUTURE OF CONSTRUCTION #!"
+ notification_headlines_tech_advanced_structural_engineering_desc:1 "The construction industry of [SCOPE.sCountry('headlines_advanced_structural_engineering_researcher').GetName] is pioneering $HEADLINES_TECH_NAME$. #lore By combining high-strength composites and new welding techniques, structures can be built to be lighter and more durable, opening up new possibilities in architecture and industry... #!"
+
+# Advanced Submarine Technology - Cold War Tone
+ notification_headlines_tech_advanced_submarine_technology_tooltip:0 "#header $notification_headlines_tech_advanced_submarine_technology_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_advanced_submarine_technology_desc$"
+ notification_headlines_tech_advanced_submarine_technology_name:0 "#b SILENT HUNTERS PROWL THE DEEP #!"
+ notification_headlines_tech_advanced_submarine_technology_desc:1 "[SCOPE.sCountry('headlines_advanced_submarine_technology_researcher').GetAdjective] engineers have perfected $HEADLINES_TECH_NAME$. #lore Thanks to innovations like nuclear power and sound-dampening hulls, a new class of submarine is capable of greater speed and stealth. Naval analysts note these vessels will be exceptionally difficult to track... #!"
+
+# Advanced Workflow Optimization - Modern Tone
+ notification_headlines_tech_advanced_workflow_optimization_tooltip:0 "#header $notification_headlines_tech_advanced_workflow_optimization_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_advanced_workflow_optimization_desc$"
+ notification_headlines_tech_advanced_workflow_optimization_name:0 "#b DATA-DRIVEN EFFICIENCY SWEEPS INDUSTRIES #!"
+ notification_headlines_tech_advanced_workflow_optimization_desc:1 "Businesses in [SCOPE.sCountry('headlines_advanced_workflow_optimization_researcher').GetName] are seeing productivity gains through $HEADLINES_TECH_NAME$. #lore Using the latest technology and data analysis to streamline processes, companies are cutting waste and increasing output, setting a new standard for operational management... #!"
+
+# Aluminum Mass Production - Early 20th Century Tone
+ notification_headlines_tech_aluminum_mass_production_tooltip:0 "#header $notification_headlines_tech_aluminum_mass_production_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_aluminum_mass_production_desc$"
+ notification_headlines_tech_aluminum_mass_production_name:0 "#b FORMER 'JEWELRY METAL' NOW PLENTIFUL #!"
+ notification_headlines_tech_aluminum_mass_production_desc:1 "Chemists in [SCOPE.sCountry('headlines_aluminum_mass_production_researcher').GetName] have unlocked an industrial method for $HEADLINES_TECH_NAME$. #lore Once more valuable than gold, this incredibly strong and lightweight metal is now available for widespread use in everything from aviation to cookware... #!"
+
+# Animation - Early 20th Century Tone
+ notification_headlines_tech_animation_tooltip:0 "#header $notification_headlines_tech_animation_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_animation_desc$"
+ notification_headlines_tech_animation_name:0 "#b DRAWINGS THAT MOVE DELIGHT AUDIENCES #!"
+ notification_headlines_tech_animation_desc:1 "A new form of entertainment, $HEADLINES_TECH_NAME$, is being pioneered by artists in [SCOPE.sCountry('headlines_animation_researcher').GetName]. #lore By rapidly displaying a sequence of drawings, a magical illusion of movement is created, opening up a novel medium for storytelling and artistic expression... #!"
+
+# Anti-Submarine Warfare - WWII Tone
+ notification_headlines_tech_anti_sub_warfare_tooltip:0 "#header $notification_headlines_tech_anti_sub_warfare_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_anti_sub_warfare_desc$"
+ notification_headlines_tech_anti_sub_warfare_name:0 "#b NEW TACTICS TO COUNTER UNDERSEA MENACE #!"
+ notification_headlines_tech_anti_sub_warfare_desc:1 "The navy of [SCOPE.sCountry('headlines_anti_sub_warfare_researcher').GetName] has developed new $HEADLINES_TECH_NAME$ tactics. #lore Better sonar and homing torpedoes have improved the ability to hunt enemy submarines, a critical development for securing vital shipping lanes against commerce raiders... #!"
+
+# Anti-War Movement - 1960s Tone
+ notification_headlines_tech_anti_war_movement_tooltip:0 "#header $notification_headlines_tech_anti_war_movement_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_anti_war_movement_desc$"
+ notification_headlines_tech_anti_war_movement_name:0 "#b THOUSANDS MARCH, DEMANDING 'PEACE NOW!' #!"
+ notification_headlines_tech_anti_war_movement_desc:1 "A growing $HEADLINES_TECH_NAME$ has taken root in [SCOPE.sCountry('headlines_anti_war_movement_researcher').GetName], challenging government policy. #lore Composed of students, activists, and ordinary citizens, these movements are shaping public opinion and putting pressure on politicians to reconsider their military ventures... #!"
+
+# Antibiotic Mass Production - Mid-20th Century Tone
+ notification_headlines_tech_antibiotic_mass_production_tooltip:0 "#header $notification_headlines_tech_antibiotic_mass_production_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_antibiotic_mass_production_desc$"
+ notification_headlines_tech_antibiotic_mass_production_name:0 "#b 'WONDER DRUGS' NOW WIDELY AVAILABLE #!"
+ notification_headlines_tech_antibiotic_mass_production_desc:1 "[SCOPE.sCountry('headlines_antibiotic_mass_production_researcher').GetName] has achieved $HEADLINES_TECH_NAME$. #lore The ability to produce these miracle drugs in large quantities means that once-fatal bacterial infections can now be treated. This development is expected to have a dramatic positive effect on public health and life expectancy... #!"
+
+# Antimatter Production - Far-Future Tone
+ notification_headlines_tech_antimatter_production_tooltip:0 "#header $notification_headlines_tech_antimatter_production_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_antimatter_production_desc$"
+ notification_headlines_tech_antimatter_production_name:0 "#b EXOTIC MATTER UNLOCKS UNPRECEDENTED ENERGY #!"
+ notification_headlines_tech_antimatter_production_desc:1 "Physicists in [SCOPE.sCountry('headlines_antimatter_production_researcher').GetName] report a breakthrough in $HEADLINES_TECH_NAME$. #lore With an incredible energy density, this substance promises to revolutionize spacecraft propulsion and power generation, though its volatility remains a significant concern... #!"
+
+# Art Deco Architecture - 1920s/30s Tone
+ notification_headlines_tech_art_deco_architecture_tooltip:0 "#header $notification_headlines_tech_art_deco_architecture_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_art_deco_architecture_desc$"
+ notification_headlines_tech_art_deco_architecture_name:0 "#b SLEEK LINES AND BOLD SHAPES DEFINE MODERN CITIES #!"
+ notification_headlines_tech_art_deco_architecture_desc:1 "A glamorous new style, $HEADLINES_TECH_NAME$, is sweeping the nation of [SCOPE.sCountry('headlines_art_deco_architecture_researcher').GetName]. #lore Defined by rich ornamentation and strong geometric forms, it has become the signature look for a new generation of prestigious buildings and a symbol of modern sophistication... #!"
+
+# Artificial General Intelligence - Near-Future Tone
+ notification_headlines_tech_artificial_intelligence_tooltip:0 "#header $notification_headlines_tech_artificial_intelligence_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_artificial_intelligence_desc$"
+ notification_headlines_tech_artificial_intelligence_name:0 "#b A 'THINKING MACHINE' IS BORN #!"
+ notification_headlines_tech_artificial_intelligence_desc:1 "Researchers in [SCOPE.sCountry('headlines_artificial_intelligence_researcher').GetName] claim to have created the first $HEADLINES_TECH_NAME$. #lore Unlike narrow AI, this machine appears capable of human-like reasoning across a range of tasks. The development raises profound questions for the future of industry, labor, and humanity itself... #!"
+
+# Asteroid Mining - Near-Future Tone
+ notification_headlines_tech_asteroid_mining_tooltip:0 "#header $notification_headlines_tech_asteroid_mining_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_asteroid_mining_desc$"
+ notification_headlines_tech_asteroid_mining_name:0 "#b A GOLD RUSH IN THE HEAVENS #!"
+ notification_headlines_tech_asteroid_mining_desc:1 "Corporations in [SCOPE.sCountry('headlines_asteroid_mining_researcher').GetName] have announced the first viable plans for $HEADLINES_TECH_NAME$. #lore The prospect of extracting valuable metals and minerals from near-earth asteroids could fuel further space exploration and create immense wealth, kicking off a new extra-terrestrial resource race... #!"
+
+# Augmented Reality Warfare - Near-Future Tone
+ notification_headlines_tech_augmented_reality_warfare_tooltip:0 "#header $notification_headlines_tech_augmented_reality_warfare_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_augmented_reality_warfare_desc$"
+ notification_headlines_tech_augmented_reality_warfare_name:0 "#b DIGITAL OVERLAYS ENHANCE THE MODERN BATTLEFIELD #!"
+ notification_headlines_tech_augmented_reality_warfare_desc:1 "The military of [SCOPE.sCountry('headlines_augmented_reality_warfare_researcher').GetName] is testing systems for $HEADLINES_TECH_NAME$. #lore By feeding soldiers real-time data directly into their field of vision, this technology improves situational awareness and target acquisition. Analysts are studying the potential advantages this could offer in combat... #!"
+
+# Automated Surveillance - Modern Tone
+ notification_headlines_tech_automated_surveillance_tooltip:0 "#header $notification_headlines_tech_automated_surveillance_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_automated_surveillance_desc$"
+ notification_headlines_tech_automated_surveillance_name:0 "#b THE UNBLINKING EYE: SURVEILLANCE GOES AUTOMATIC #!"
+ notification_headlines_tech_automated_surveillance_desc:1 "Military forces in [SCOPE.sCountry('headlines_automated_surveillance_researcher').GetName] have deployed systems for $HEADLINES_TECH_NAME$. #lore A network of ground sensors and aerial drones allows for constant monitoring of territory without requiring a human presence, raising questions about privacy and the future of intelligence gathering... #!"
+
+# Autonomous Vehicles - Near-Future Tone
+ notification_headlines_tech_autonomous_vehicles_tooltip:0 "#header $notification_headlines_tech_autonomous_vehicles_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_autonomous_vehicles_desc$"
+ notification_headlines_tech_autonomous_vehicles_name:0 "#b CARS THAT DRIVE THEMSELVES HIT THE ROAD #!"
+ notification_headlines_tech_autonomous_vehicles_desc:1 "Inventors in [SCOPE.sCountry('headlines_autonomous_vehicles_researcher').GetName] have demonstrated the first commercially viable $HEADLINES_TECH_NAME$. #lore Vehicles capable of navigating traffic without a human driver could revolutionize transportation and logistics, though public acceptance and regulatory hurdles remain... #!"
+
+# Barcodes and Scanners - Late 20th Century Tone
+ notification_headlines_tech_barcodes_and_scanners_tooltip:0 "#header $notification_headlines_tech_barcodes_and_scanners_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_barcodes_and_scanners_desc$"
+ notification_headlines_tech_barcodes_and_scanners_name:0 "#b BLACK AND WHITE LINES TRANSFORM RETAIL #!"
+ notification_headlines_tech_barcodes_and_scanners_desc:1 "Retailers in [SCOPE.sCountry('headlines_barcodes_and_scanners_researcher').GetName] are widely adopting $HEADLINES_TECH_NAME$. #lore This system of encoding product information into lines for quick scanning has drastically improved inventory management and checkout speed, streamlining the entire logistics chain... #!"
+
+# Bergius Process - WWII Era Tone
+ notification_headlines_tech_bergius_process_tooltip:0 "#header $notification_headlines_tech_bergius_process_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_bergius_process_desc$"
+ notification_headlines_tech_bergius_process_name:0 "#b SYNTHETIC FUEL FROM COAL ANNOUNCED #!"
+ notification_headlines_tech_bergius_process_desc:1 "Chemists in [SCOPE.sCountry('headlines_bergius_process_researcher').GetName] have perfected the $HEADLINES_TECH_NAME$, allowing for the creation of synthetic fuel. #lore By hydrogenating coal under high pressure, liquid fuels can be produced, a crucial strategic development for any nation with limited access to natural oil reserves... #!"
+
+# Bioenhanced Soldiers - Near-Future Tone
+ notification_headlines_tech_bioenhanced_soldiers_tooltip:0 "#header $notification_headlines_tech_bioenhanced_soldiers_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_bioenhanced_soldiers_desc$"
+ notification_headlines_tech_bioenhanced_soldiers_name:0 "#b HUMAN AUGMENTATION ENTERS MILITARY REALM #!"
+ notification_headlines_tech_bioenhanced_soldiers_desc:1 "A military program in [SCOPE.sCountry('headlines_bioenhanced_soldiers_researcher').GetName] is reportedly creating $HEADLINES_TECH_NAME$. #lore The use of biotechnology to enhance the strength and intelligence of soldiers opens a Pandora's box of ethical debates and raises the specter of a new kind of arms race... #!"
+
+# Human Augmentation - Near-Future Tone
+ notification_headlines_tech_biohacking_and_human_augmentation_tooltip:0 "#header $notification_headlines_tech_biohacking_and_human_augmentation_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_biohacking_and_human_augmentation_desc$"
+ notification_headlines_tech_biohacking_and_human_augmentation_name:0 "#b BEYOND HUMAN: THE AUGMENTATION DEBATE #!"
+ notification_headlines_tech_biohacking_and_human_augmentation_desc:1 "The science of $HEADLINES_TECH_NAME$ is advancing rapidly in [SCOPE.sCountry('headlines_biohacking_and_human_augmentation_researcher').GetName]. #lore From gene editing to neuroprosthetics, the ability to push beyond natural human limits raises profound ethical questions about what it means to be human... #!"
+
+# Biological Immortality - Far-Future Tone
+ notification_headlines_tech_biological_immortality_tooltip:0 "#header $notification_headlines_tech_biological_immortality_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_biological_immortality_desc$"
+ notification_headlines_tech_biological_immortality_name:0 "#b SCIENTISTS CLAIM TO HAVE HALTED AGING #!"
+ notification_headlines_tech_biological_immortality_desc:1 "Scientists in [SCOPE.sCountry('headlines_biological_immortality_researcher').GetName] claim a breakthrough in achieving $HEADLINES_TECH_NAME$. #lore While still theoretical, the prospect of arresting the aging process through genetic engineering could reshape society in unimaginable ways, posing deep social and economic questions... #!"
+
+# Biotechnology - Modern Tone
+ notification_headlines_tech_biotechnology_tooltip:0 "#header $notification_headlines_tech_biotechnology_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_biotechnology_desc$"
+ notification_headlines_tech_biotechnology_name:0 "#b PRECISION GENE-EDITING TOOLS DEVELOPED #!"
+ notification_headlines_tech_biotechnology_desc:1 "[SCOPE.sCountry('headlines_biotechnology_researcher').GetAdjective] scientists are making huge leaps in $HEADLINES_TECH_NAME$. #lore Technologies like CRISPR allow for the precise editing of genes, heralding a new era of breakthroughs in medicine and agriculture, along with intense ethical debate... #!"
+
+# Bombing Aircraft - WWII Tone
+ notification_headlines_tech_bombing_aircraft_tooltip:0 "#header $notification_headlines_tech_bombing_aircraft_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_bombing_aircraft_desc$"
+ notification_headlines_tech_bombing_aircraft_name:0 "#b CITIES NOW VULNERABLE TO AERIAL ATTACK #!"
+ notification_headlines_tech_bombing_aircraft_desc:1 "The development of strategic $HEADLINES_TECH_NAME$ in [SCOPE.sCountry('headlines_bombing_aircraft_researcher').GetName] marks a dark turn in warfare. #lore These long-range aircraft are capable of striking deep into enemy territory, targeting industrial centers and civilian populations alike. Strategists are grappling with the implications of this new dimension of total war... #!"
+
+# Brain-Computer Interfaces - Near-Future Tone
+ notification_headlines_tech_brain_computer_interfaces_tooltip:0 "#header $notification_headlines_tech_brain_computer_interfaces_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_brain_computer_interfaces_desc$"
+ notification_headlines_tech_brain_computer_interfaces_name:0 "#b DIRECT LINK BETWEEN BRAIN AND MACHINE ACHIEVED #!"
+ notification_headlines_tech_brain_computer_interfaces_desc:1 "Researchers in [SCOPE.sCountry('headlines_brain_computer_interfaces_researcher').GetName] have demonstrated working $HEADLINES_TECH_NAME$. #lore The ability to connect the human brain directly to computers opens up astonishing possibilities for medicine, communication, and human enhancement... #!"
+
+# Cellular Networks - Late 20th Century Tone
+ notification_headlines_tech_cellular_networks_tooltip:0 "#header $notification_headlines_tech_cellular_networks_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_cellular_networks_desc$"
+ notification_headlines_tech_cellular_networks_name:0 "#b PHONE CALLS UNTETHERED FROM WIRES #!"
+ notification_headlines_tech_cellular_networks_desc:1 "The launch of commercial $HEADLINES_TECH_NAME$ in [SCOPE.sCountry('headlines_cellular_networks_researcher').GetName] is changing how people communicate. #lore The ability to make phone calls from almost anywhere is transforming both business and social life, freeing communication from the confines of a building... #!"
+
+# Civil Rights Movement - 1960s Tone
+ notification_headlines_tech_civil_rights_movement_tooltip:0 "#header $notification_headlines_tech_civil_rights_movement_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_civil_rights_movement_desc$"
+ notification_headlines_tech_civil_rights_movement_name:0 "#b MARCHES FOR CIVIL RIGHTS CHALLENGE STATUS QUO #!"
+ notification_headlines_tech_civil_rights_movement_desc:1 "A powerful $HEADLINES_TECH_NAME$ has emerged in [SCOPE.sCountry('headlines_civil_rights_movement_researcher').GetName], demanding an end to systemic discrimination. #lore Through organized protests and acts of civil disobedience, the movement is forcing a national conversation on equality and justice, with consequences that are being watched around the world... #!"
+
+# Clean Energy Technologies - Modern Tone
+ notification_headlines_tech_clean_energy_technologies_tooltip:0 "#header $notification_headlines_tech_clean_energy_technologies_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_clean_energy_technologies_desc$"
+ notification_headlines_tech_clean_energy_technologies_name:0 "#b POWER FROM THE SUN AND WIND GROWS #!"
+ notification_headlines_tech_clean_energy_technologies_desc:1 "[SCOPE.sCountry('headlines_clean_energy_technologies_researcher').GetName] is investing heavily in $HEADLINES_TECH_NAME$. #lore With advancements in solar panels and wind turbines, generating electricity without burning fossil fuels is becoming more viable, a key step in addressing environmental concerns... #!"
+
+# Cloud Computing - Modern Tone
+ notification_headlines_tech_cloud_computing_tooltip:0 "#header $notification_headlines_tech_cloud_computing_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_cloud_computing_desc$"
+ notification_headlines_tech_cloud_computing_name:0 "#b DATA 'IN THE CLOUD' TRANSFORMS TECH #!"
+ notification_headlines_tech_cloud_computing_desc:1 "The rise of $HEADLINES_TECH_NAME$ is transforming the tech industry in [SCOPE.sCountry('headlines_cloud_computing_researcher').GetName]. #lore The delivery of computing services over the internet allows for massive, flexible data storage and processing, providing a powerful new tool for businesses and individuals... #!"
+
+# Combined Arms - WWII Tone
+ notification_headlines_tech_combined_arms_tooltip:0 "#header $notification_headlines_tech_combined_arms_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_combined_arms_desc$"
+ notification_headlines_tech_combined_arms_name:0 "#b NEW DOCTRINE SYNCHRONIZES MILITARY FORCES #!"
+ notification_headlines_tech_combined_arms_desc:1 "Military theorists in [SCOPE.sCountry('headlines_combined_arms_researcher').GetName] have perfected the doctrine of $HEADLINES_TECH_NAME$. #lore By tightly coordinating infantry, armor, and air power, armed forces can achieve a battlefield effectiveness far greater than the sum of their parts, setting a new standard for military operations... #!"
+
+# Commercial Aviation - Mid-20th Century Tone
+ notification_headlines_tech_commercial_aviation_tooltip:0 "#header $notification_headlines_tech_commercial_aviation_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_commercial_aviation_desc$"
+ notification_headlines_tech_commercial_aviation_name:0 "#b AIR TRAVEL SHRINKS THE GLOBE #!"
+ notification_headlines_tech_commercial_aviation_desc:1 "The widespread use of airplanes for passenger travel, known as $HEADLINES_TECH_NAME$, is making the world a smaller place. #lore Thanks to innovators in [SCOPE.sCountry('headlines_commercial_aviation_researcher').GetName], crossing oceans in hours instead of weeks is now a reality for those who can afford it... #!"
+
+# Compact Fusion Reactors - Near-Future Tone
+ notification_headlines_tech_compact_fusion_reactors_tooltip:0 "#header $notification_headlines_tech_compact_fusion_reactors_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_compact_fusion_reactors_desc$"
+ notification_headlines_tech_compact_fusion_reactors_name:0 "#b FUSION POWER IN A SMALLER PACKAGE #!"
+ notification_headlines_tech_compact_fusion_reactors_desc:1 "Physicists in [SCOPE.sCountry('headlines_compact_fusion_reactors_researcher').GetName] have blueprinted new $HEADLINES_TECH_NAME$. #lore These smaller, more efficient designs could be a game-changer for providing clean, cheap energy, though making them a practical reality remains a significant challenge... #!"
+
+# Computer-Aided Design - Late 20th Century Tone
+ notification_headlines_tech_computer_aided_design_tooltip:0 "#header $notification_headlines_tech_computer_aided_design_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_computer_aided_design_desc$"
+ notification_headlines_tech_computer_aided_design_name:0 "#b DIGITAL BLUEPRINTS REVOLUTIONIZE ENGINEERING #!"
+ notification_headlines_tech_computer_aided_design_desc:1 "[SCOPE.sCountry('headlines_computer_aided_design_researcher').GetAdjective] engineers are adopting $HEADLINES_TECH_NAME$. #lore The use of computers to create complex and accurate designs is transforming manufacturing and engineering, allowing for faster development and more intricate products... #!"
+
+# Computer Networks - Late 20th Century Tone
+ notification_headlines_tech_computer_networks_tooltip:0 "#header $notification_headlines_tech_computer_networks_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_computer_networks_desc$"
+ notification_headlines_tech_computer_networks_name:0 "#b COMPUTERS BEGIN TO 'TALK' TO ONE ANOTHER #!"
+ notification_headlines_tech_computer_networks_desc:1 "Technicians in [SCOPE.sCountry('headlines_computer_networks_researcher').GetName] are building the first $HEADLINES_TECH_NAME$. #lore The ability to connect computers to share data and resources is a foundational development, laying the groundwork for what could become a global web of information... #!"
+
+# Computing Machines - Mid-20th Century Tone
+ notification_headlines_tech_computing_machines_tooltip:0 "#header $notification_headlines_tech_computing_machines_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_computing_machines_desc$"
+ notification_headlines_tech_computing_machines_name:0 "#b 'ELECTRONIC BRAINS' TACKLE COMPLEX CALCULATIONS #!"
+ notification_headlines_tech_computing_machines_desc:1 "Early $HEADLINES_TECH_NAME$ developed in [SCOPE.sCountry('headlines_computing_machines_researcher').GetName] are changing information processing. #lore These massive devices can automate complex calculations at speeds no human could match, leading to major advancements in science and engineering... #!"
+
+# Consumer Credit - Post-WWII Tone
+ notification_headlines_tech_consumer_credit_tooltip:0 "#header $notification_headlines_tech_consumer_credit_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_consumer_credit_desc$"
+ notification_headlines_tech_consumer_credit_name:0 "#b 'BUY NOW, PAY LATER' FUELS ECONOMIC GROWTH #!"
+ notification_headlines_tech_consumer_credit_desc:1 "The rise of $HEADLINES_TECH_NAME$ in [SCOPE.sCountry('headlines_consumer_credit_researcher').GetName] has transformed the retail economy. #lore A system that allows people to purchase goods on credit is fueling unprecedented consumer spending, though some economists warn of the potential risks of rising debt... #!"
+
+# Containerization - Mid-20th Century Tone
+ notification_headlines_tech_containerization_tooltip:0 "#header $notification_headlines_tech_containerization_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_containerization_desc$"
+ notification_headlines_tech_containerization_name:0 "#b THE SIMPLE BOX THAT CHANGED GLOBAL TRADE #!"
+ notification_headlines_tech_containerization_desc:1 "The process of $HEADLINES_TECH_NAME$, pioneered in [SCOPE.sCountry('headlines_containerization_researcher').GetName], has revolutionized global trade. #lore By placing goods in standardized containers, ships and ports can operate with incredible efficiency, dramatically lowering the cost of moving goods around the world... #!"
+
+# Contraceptive Pill - 1960s Tone
+ notification_headlines_tech_contraceptive_pill_tooltip:0 "#header $notification_headlines_tech_contraceptive_pill_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_contraceptive_pill_desc$"
+ notification_headlines_tech_contraceptive_pill_name:0 "#b 'THE PILL' SPARKS SOCIAL REVOLUTION #!"
+ notification_headlines_tech_contraceptive_pill_desc:1 "The development of the $HEADLINES_TECH_NAME$ in [SCOPE.sCountry('headlines_contraceptive_pill_researcher').GetName] is having a massive social impact. #lore By giving women reliable control over their fertility, this small pill is playing a central role in family planning and the ongoing women's liberation movement... #!"
+
+# Cryptography - WWII Tone
+ notification_headlines_tech_cryptography_tooltip:0 "#header $notification_headlines_tech_cryptography_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_cryptography_desc$"
+ notification_headlines_tech_cryptography_name:0 "#b THE SECRET WAR OF CODES AND CIPHERS #!"
+ notification_headlines_tech_cryptography_desc:1 "Masters of $HEADLINES_TECH_NAME$ in [SCOPE.sCountry('headlines_cryptography_researcher').GetName] are working in secret to gain an edge in the war. #lore The art of writing and solving codes is a crucial tool for securing communications while breaking into the enemy's, providing a vital intelligence advantage... #!"
+
+# Cyber Warfare - Modern Tone
+ notification_headlines_tech_cyber_warfare_tooltip:0 "#header $notification_headlines_tech_cyber_warfare_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_cyber_warfare_desc$"
+ notification_headlines_tech_cyber_warfare_name:0 "#b CONFLICT MOVES TO THE DIGITAL REALM #!"
+ notification_headlines_tech_cyber_warfare_desc:1 "As the world becomes more digital, so does conflict. [SCOPE.sCountry('headlines_cyber_warfare_researcher').GetName] is developing tools for $HEADLINES_TECH_NAME$, a new and invisible battlefield where nations attack and defend in cyberspace... #!"
+
+# Cybersecurity - Modern Tone
+ notification_headlines_tech_cybersecurity_tooltip:0 "#header $notification_headlines_tech_cybersecurity_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_cybersecurity_desc$"
+ notification_headlines_tech_cybersecurity_name:0 "#b DIGITAL FORTRESSES GUARD AGAINST NEW THREATS #!"
+ notification_headlines_tech_cybersecurity_desc:1 "With increasing reliance on digital technologies, experts in [SCOPE.sCountry('headlines_cybersecurity_researcher').GetName] are developing new methods of $HEADLINES_TECH_NAME$. #lore This field is dedicated to keeping critical information and systems safe from a new generation of digital threats... #!"
+
+# Decline of Organized Religion - Late 20th Century Tone
+ notification_headlines_tech_decline_of_organized_religion_tooltip:0 "#header $notification_headlines_tech_decline_of_organized_religion_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_decline_of_organized_religion_desc$"
+ notification_headlines_tech_decline_of_organized_religion_name:0 "#b RISE OF SECULARISM NOTED IN NEW SURVEYS #!"
+ notification_headlines_tech_decline_of_organized_religion_desc:1 "Sociologists in [SCOPE.sCountry('headlines_decline_of_organized_religion_researcher').GetName] have noted a steady $HEADLINES_TECH_NAME$. #lore A marked trend towards secularism is changing social norms and values, as fewer people affiliate with traditional religious institutions... #!"
+
+# Decolonization - Post-WWII Tone
+ notification_headlines_tech_decolonization_tooltip:0 "#header $notification_headlines_tech_decolonization_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_decolonization_desc$"
+ notification_headlines_tech_decolonization_name:0 "#b THE AGE OF EMPIRE ENDS, NEW NATIONS EMERGE #!"
+ notification_headlines_tech_decolonization_desc:1 "The process of $HEADLINES_TECH_NAME$ is reshaping the world map. #lore The dismantling of old colonial empires, championed by thinkers in [SCOPE.sCountry('headlines_decolonization_researcher').GetName], has led to the birth of new independent states in a messy but necessary process of global change... #!"
+
+# Digital Education - Modern Tone
+ notification_headlines_tech_digital_education_tooltip:0 "#header $notification_headlines_tech_digital_education_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_digital_education_desc$"
+ notification_headlines_tech_digital_education_name:0 "#b THE CLASSROOM OF THE FUTURE IS ONLINE #!"
+ notification_headlines_tech_digital_education_desc:1 "Educators in [SCOPE.sCountry('headlines_digital_education_researcher').GetName] are embracing $HEADLINES_TECH_NAME$. #lore With online learning and multimedia resources, education is becoming more accessible and collaborative for students with a reliable internet connection... #!"
+
+# Digital Entertainment - Modern Tone
+ notification_headlines_tech_digital_entertainment_tooltip:0 "#header $notification_headlines_tech_digital_entertainment_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_digital_entertainment_desc$"
+ notification_headlines_tech_digital_entertainment_name:0 "#b ON-DEMAND ENTERTAINMENT RESHAPES LEISURE #!"
+ notification_headlines_tech_digital_entertainment_desc:1 "From video games to streaming services, $HEADLINES_TECH_NAME$ is reshaping how people spend their free time. #lore In [SCOPE.sCountry('headlines_digital_entertainment_researcher').GetName] and beyond, there are more ways than ever to be entertained or distracted from home... #!"
+
+# Digital Telecommunications - Late 20th Century Tone
+ notification_headlines_tech_digital_telecommunications_tooltip:0 "#header $notification_headlines_tech_digital_telecommunications_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_digital_telecommunications_desc$"
+ notification_headlines_tech_digital_telecommunications_name:0 "#b CLEARER CALLS, FASTER DATA WITH DIGITAL #!"
+ notification_headlines_tech_digital_telecommunications_desc:1 "The switch from analog to $HEADLINES_TECH_NAME$ is making communication systems more efficient and versatile. #lore Companies in [SCOPE.sCountry('headlines_digital_telecommunications_researcher').GetName] are leading the charge, allowing for clearer calls and faster data transmission... #!"
+
+# Directed Energy Defenses - Near-Future Tone
+ notification_headlines_tech_directed_energy_defenses_tooltip:0 "#header $notification_headlines_tech_directed_energy_defenses_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_directed_energy_defenses_desc$"
+ notification_headlines_tech_directed_energy_defenses_name:0 "#b LASERS TO FORM DEFENSIVE SHIELD #!"
+ notification_headlines_tech_directed_energy_defenses_desc:1 "The military of [SCOPE.sCountry('headlines_directed_energy_defenses_researcher').GetName] is developing $HEADLINES_TECH_NAME$. #lore By using high-energy lasers to shoot down incoming missiles and drones, this futuristic technology promises a new layer of defense against aerial threats... #!"
+
+# Directed Energy Weapons - Near-Future Tone
+ notification_headlines_tech_directed_energy_weapons_tooltip:0 "#header $notification_headlines_tech_directed_energy_weapons_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_directed_energy_weapons_desc$"
+ notification_headlines_tech_directed_energy_weapons_name:0 "#b 'RAY GUNS' NO LONGER SCIENCE FICTION #!"
+ notification_headlines_tech_directed_energy_weapons_desc:1 "[SCOPE.sCountry('headlines_directed_energy_weapons_researcher').GetName] has tested prototype $HEADLINES_TECH_NAME$. #lore High-energy lasers and microwaves can now be used as weapons, offering a new level of precision for targeting and neutralizing threats at the speed of light... #!"
+
+# E-Commerce - Late 20th/21st Century Tone
+ notification_headlines_tech_e-commerce_tooltip:0 "#header $notification_headlines_tech_e-commerce_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_e-commerce_desc$"
+ notification_headlines_tech_e-commerce_name:0 "#b SHOPPING FROM HOME WITH 'E-COMMERCE' #!"
+ notification_headlines_tech_e-commerce_desc:1 "Thanks to the internet, buying and selling goods from anywhere is now a reality. #lore This system of $HEADLINES_TECH_NAME$, pioneered by companies in [SCOPE.sCountry('headlines_e-commerce_researcher').GetName], is a convenient new way to shop and a great way for businesses to reach new customers... #!"
+
+# Early Nanotechnology - Late 20th/Early 21st Century Tone
+ notification_headlines_tech_early_nanotechnology_tooltip:0 "#header $notification_headlines_tech_early_nanotechnology_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_early_nanotechnology_desc$"
+ notification_headlines_tech_early_nanotechnology_name:0 "#b SCIENCE OF THE SMALL PROMISES BIG FUTURE #!"
+ notification_headlines_tech_early_nanotechnology_desc:1 "Scientists in [SCOPE.sCountry('headlines_early_nanotechnology_researcher').GetName] are making breakthroughs in $HEADLINES_TECH_NAME$. #lore The ability to manipulate materials at the atomic level could lead to incredible breakthroughs in medicine, materials, and computing... #!"
+
+# Electronic Warfare - Cold War Tone
+ notification_headlines_tech_electronic_warfare_tooltip:0 "#header $notification_headlines_tech_electronic_warfare_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_electronic_warfare_desc$"
+ notification_headlines_tech_electronic_warfare_name:0 "#b THE INVISIBLE WAR OF THE AIRWAVES #!"
+ notification_headlines_tech_electronic_warfare_desc:1 "The military of [SCOPE.sCountry('headlines_electronic_warfare_researcher').GetName] has developed capabilities for $HEADLINES_TECH_NAME$. #lore By disrupting enemy communications and radar with invisible radio waves, a significant advantage can be gained in battle. It is a new and subtle way to fight... #!"
+
+# Environmental Movement - 1970s Tone
+ notification_headlines_tech_environmental_movement_tooltip:0 "#header $notification_headlines_tech_environmental_movement_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_environmental_movement_desc$"
+ notification_headlines_tech_environmental_movement_name:0 "#b A GREEN WAVE: ACTIVISTS DEMAND PLANET'S PROTECTION #!"
+ notification_headlines_tech_environmental_movement_desc:1 "An $HEADLINES_TECH_NAME$ dedicated to protecting the planet is gaining support in [SCOPE.sCountry('headlines_environmental_movement_researcher').GetName]. #lore It raises awareness about ecological issues like pollution and pushes for more sustainable ways of living for future generations... #!"
+
+# Fiber Optics - Late 20th Century Tone
+ notification_headlines_tech_fiber_optics_tooltip:0 "#header $notification_headlines_tech_fiber_optics_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_fiber_optics_desc$"
+ notification_headlines_tech_fiber_optics_name:0 "#b MESSAGES SENT AT THE SPEED OF LIGHT #!"
+ notification_headlines_tech_fiber_optics_desc:1 "A breakthrough in $HEADLINES_TECH_NAME$ by researchers in [SCOPE.sCountry('headlines_fiber_optics_researcher').GetName] promises to revolutionize communications. #lore By sending data as pulses of light through thin glass strands, faster and more efficient communication networks can be built, forming the backbone of a modern digital world... #!"
+
+# Fluorescent Lamps - Early 20th Century Tone
+ notification_headlines_tech_fluorescent_lamps_tooltip:0 "#header $notification_headlines_tech_fluorescent_lamps_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_fluorescent_lamps_desc$"
+ notification_headlines_tech_fluorescent_lamps_name:0 "#b EFFICIENT NEW LAMPS BRIGHTEN CITIES #!"
+ notification_headlines_tech_fluorescent_lamps_desc:1 "Inventors in [SCOPE.sCountry('headlines_fluorescent_lamps_researcher').GetName] have perfected $HEADLINES_TECH_NAME$. #lore These new lamps are much more efficient than the old arc lamps, making electrical lighting more widespread and affordable for cities and homes... #!"
+
+# Fusion Batteries - Far-Future Tone
+ notification_headlines_tech_fusion_batteries_tooltip:0 "#header $notification_headlines_tech_fusion_batteries_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_fusion_batteries_desc$"
+ notification_headlines_tech_fusion_batteries_name:0 "#b THE BATTERY THAT NEVER DIES? #!"
+ notification_headlines_tech_fusion_batteries_desc:1 "Imagine a battery that never needs to be recharged. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetName] is developing $HEADLINES_TECH_NAME$, which use compact fusion reactors to power devices and vehicles for years, revolutionizing energy as we know it... #!"
+
+# Fusion Power - Near-Future Tone
+ notification_headlines_tech_fusion_power_tooltip:0 "#header $notification_headlines_tech_fusion_power_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_fusion_power_desc$"
+ notification_headlines_tech_fusion_power_name:0 "#b HARNESSING THE POWER OF A STAR #!"
+ notification_headlines_tech_fusion_power_desc:1 "Scientists in [SCOPE.sCountry('headlines_fusion_power_researcher').GetName] are on the verge of achieving sustained $HEADLINES_TECH_NAME$. #lore If the power of nuclear fusion can be harnessed, it could provide a nearly limitless source of clean energy. It remains the holy grail of energy production... #!"
+
+# Gene Splicing - Late 20th Century Tone
+ notification_headlines_tech_gene_splicing_tooltip:0 "#header $notification_headlines_tech_gene_splicing_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_gene_splicing_desc$"
+ notification_headlines_tech_gene_splicing_name:0 "#b SCIENTISTS LEARN TO CUT AND PASTE THE CODE OF LIFE #!"
+ notification_headlines_tech_gene_splicing_desc:1 "Biologists in [SCOPE.sCountry('headlines_gene_splicing_researcher').GetName] have pioneered the technique of $HEADLINES_TECH_NAME$. #lore By cutting and pasting DNA, the very building blocks of life can be manipulated. This has opened up new possibilities for medicine and agriculture, as well as a host of ethical dilemmas... #!"
+
+# Generative AI - Modern Tone
+ notification_headlines_tech_generative_ai_tooltip:0 "#header $notification_headlines_tech_generative_ai_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_generative_ai_desc$"
+ notification_headlines_tech_generative_ai_name:0 "#b AI LEARNS TO CREATE ART, MUSIC, AND MORE #!"
+ notification_headlines_tech_generative_ai_desc:1 "A new form of AI can create original content, from images to music to text. #lore This $HEADLINES_TECH_NAME$, developed in labs in [SCOPE.sCountry('headlines_generative_ai_researcher').GetName], is a powerful new tool for creativity, and it's getting better all the time... #!"
+
+# Genetic Engineering - Modern Tone
+ notification_headlines_tech_genetic_engineering_tooltip:0 "#header $notification_headlines_tech_genetic_engineering_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_genetic_engineering_desc$"
+ notification_headlines_tech_genetic_engineering_name:0 "#b REWRITING THE BOOK OF LIFE #!"
+ notification_headlines_tech_genetic_engineering_desc:1 "The field of $HEADLINES_TECH_NAME$ is leading to major breakthroughs in [SCOPE.sCountry('headlines_genetic_engineering_researcher').GetName]. #lore By manipulating the genes of organisms, new medical treatments can be developed and crops improved. It is a powerful technology, but one that must be wielded with care... #!"
+
+# Globalization - Late 20th/21st Century Tone
+ notification_headlines_tech_globalization_tooltip:0 "#header $notification_headlines_tech_globalization_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_globalization_desc$"
+ notification_headlines_tech_globalization_name:0 "#b A TRULY INTERCONNECTED WORLD #!"
+ notification_headlines_tech_globalization_desc:1 "The world is becoming more interconnected through a process of $HEADLINES_TECH_NAME$. #lore This acceleration of trade, communication, and cultural exchange, championed by leaders in [SCOPE.sCountry('headlines_globalization_researcher').GetName], is bringing the world closer together, for better or for worse... #!"
+
+# Green Revolution - Mid-20th Century Tone
+ notification_headlines_tech_green_revolution_tooltip:0 "#header $notification_headlines_tech_green_revolution_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_green_revolution_desc$"
+ notification_headlines_tech_green_revolution_name:0 "#b NEW FARMING TECHNIQUES TO FEED THE WORLD #!"
+ notification_headlines_tech_green_revolution_desc:1 "A series of technological innovations in agriculture, spearheaded by agronomists in [SCOPE.sCountry('headlines_green_revolution_researcher').GetName], have led to a huge increase in food production. #lore This $HEADLINES_TECH_NAME$ has helped to feed a growing world, but not without its own set of problems... #!"
+
+# Guided Missiles - Cold War Tone
+ notification_headlines_tech_guided_missiles_tooltip:0 "#header $notification_headlines_tech_guided_missiles_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_guided_missiles_desc$"
+ notification_headlines_tech_guided_missiles_name:0 "#b 'SMART' MISSILES CAN NOW FIND THEIR OWN TARGETS #!"
+ notification_headlines_tech_guided_missiles_desc:1 "Missiles can now find their own way to a target, thanks to research in [SCOPE.sCountry('headlines_guided_missiles_researcher').GetName]. #lore These $HEADLINES_TECH_NAME$ make weapons much more accurate and effective, which is bad news for any potential adversary... #!"
+
+# Hydraulic Fracturing - Modern Tone
+ notification_headlines_tech_hydraulic_fracturing_tooltip:0 "#header $notification_headlines_tech_hydraulic_fracturing_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_hydraulic_fracturing_desc$"
+ notification_headlines_tech_hydraulic_fracturing_name:0 "#b 'FRACKING' UNLOCKS VAST ENERGY RESERVES #!"
+ notification_headlines_tech_hydraulic_fracturing_desc:1 "A controversial but effective way to extract natural gas and oil from underground, $HEADLINES_TECH_NAME$ is booming in [SCOPE.sCountry('headlines_hydraulic_fracturing_researcher').GetName]. #lore It's a boon for the energy industry and national independence, but not so much for the environment... #!"
+
+# Hypersonic Weapons - Modern/Near-Future Tone
+ notification_headlines_tech_hypersonic_weapons_tooltip:0 "#header $notification_headlines_tech_hypersonic_weapons_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_hypersonic_weapons_desc$"
+ notification_headlines_tech_hypersonic_weapons_name:0 "#b NEW WEAPONS CAN TRAVEL FASTER THAN SOUND #!"
+ notification_headlines_tech_hypersonic_weapons_desc:1 "[SCOPE.sCountry('headlines_hypersonic_weapons_researcher').GetName] has tested new $HEADLINES_TECH_NAME$. #lore These weapons can travel at more than five times the speed of sound. They're incredibly fast and precise, and a real headache for existing defense systems... #!"
+
+# Inertial Navigation Systems - Cold War Tone
+ notification_headlines_tech_inertial_navigation_systems_tooltip:0 "#header $notification_headlines_tech_inertial_navigation_systems_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_inertial_navigation_systems_desc$"
+ notification_headlines_tech_inertial_navigation_name:0 "#b NAVIGATE ANYWHERE WITHOUT EXTERNAL SIGNALS #!"
+ notification_headlines_tech_inertial_navigation_systems_desc:1 "Using gyroscopes and accelerometers, $HEADLINES_TECH_NAME$ developed in [SCOPE.sCountry('headlines_inertial_navigation_systems_researcher').GetName] can guide vehicles with incredible accuracy. #lore They're especially useful for ballistic missiles, submarines, and strategic bombers, helping them to stay on course without external signals... #!"
+
+# Infrared Night Vision - Cold War/Modern Tone
+ notification_headlines_tech_infrared_night_vision_tooltip:0 "#header $notification_headlines_tech_infrared_night_vision_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_infrared_night_vision_desc$"
+ notification_headlines_tech_infrared_night_vision_name:0 "#b TECHNOLOGY TURNS NIGHT INTO DAY #!"
+ notification_headlines_tech_infrared_night_vision_desc:1 "This technology, perfected in [SCOPE.sCountry('headlines_infrared_night_vision_researcher').GetName], allows users to see in the dark. #lore $HEADLINES_TECH_NAME$ has changed the way military and security operations are conducted, giving soldiers the ability to operate effectively at night... #!"
+
+# Integrated Circuits - Late 20th Century Tone
+ notification_headlines_tech_integrated_circuits_tooltip:0 "#header $notification_headlines_tech_integrated_circuits_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_integrated_circuits_desc$"
+ notification_headlines_tech_integrated_circuits_name:0 "#b AN ENTIRE CIRCUIT ON A TINY CHIP #!"
+ notification_headlines_tech_integrated_circuits_desc:1 "By putting many electronic components onto a single chip, engineers in [SCOPE.sCountry('headlines_integrated_circuits_researcher').GetName] have made electronic devices smaller, faster, and more powerful. #lore These $HEADLINES_TECH_NAME$ are the secret behind the modern electronics revolution... #!"
+
+# Intergovernmental Organizations - Post-WWII Tone
+ notification_headlines_tech_intergovernmental_organizations_tooltip:0 "#header $notification_headlines_tech_intergovernmental_organizations_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_intergovernmental_organizations_desc$"
+ notification_headlines_tech_intergovernmental_organizations_name:0 "#b NATIONS UNITE FOR GLOBAL COOPERATION #!"
+ notification_headlines_tech_intergovernmental_organizations_desc:1 "Following initiatives from [SCOPE.sCountry('headlines_intergovernmental_organizations_researcher').GetName], nations are forming $HEADLINES_TECH_NAME$. #lore These formal institutions allow countries to collaborate on specific issues. They're supposed to promote cooperation and make things more efficient, though that's not always the case... #!"
+
+# Isoprene - Mid-20th Century Tone
+ notification_headlines_tech_isoprene_tooltip:0 "#header $notification_headlines_tech_isoprene_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_isoprene_desc$"
+ notification_headlines_tech_isoprene_name:0 "#b SYNTHETIC RUBBER PRODUCTION SOARS #!"
+ notification_headlines_tech_isoprene_desc:1 "Chemists in [SCOPE.sCountry('headlines_isoprene_researcher').GetName] are mass-producing $HEADLINES_TECH_NAME$. #lore It's a key ingredient in the production of synthetic rubber. This versatile material is used in everything from tires to footwear, fueling industrial growth... #!"
+
+# JADC2 - Modern Military Tone
+ notification_headlines_tech_jadc2_tooltip:0 "#header $notification_headlines_tech_jadc2_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_jadc2_desc$"
+ notification_headlines_tech_jadc2_name:0 "#b ALL FORCES CONNECTED IN NEW BATTLE NETWORK #!"
+ notification_headlines_tech_jadc2_desc:1 "The military of [SCOPE.sCountry('headlines_jadc2_researcher').GetName] is implementing $HEADLINES_TECH_NAME$. #lore This military concept aims to connect all forces across every domain—air, land, sea, space, and cyber. It's designed to improve situational awareness and decision-making, creating a more effective fighting force... #!"
+
+# Jet Engine Technology - Post-WWII Tone
+ notification_headlines_tech_jet_engine_technology_tooltip:0 "#header $notification_headlines_tech_jet_engine_technology_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_jet_engine_technology_desc$"
+ notification_headlines_tech_jet_engine_technology_name:0 "#b THE JET AGE HAS ARRIVED #!"
+ notification_headlines_tech_jet_engine_technology_desc:1 "The jet engine, perfected by engineers in [SCOPE.sCountry('headlines_jet_engine_technology_researcher').GetName], has revolutionized aviation. #lore $HEADLINES_TECH_NAME$ has allowed aircraft to fly faster, farther, and higher than ever before, changing the face of both military and commercial air travel... #!"
+
+# Keynesian Economics - Post-Depression Tone
+ notification_headlines_tech_keynesian_economics_tooltip:0 "#header $notification_headlines_tech_keynesian_economics_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_keynesian_economics_desc$"
+ notification_headlines_tech_keynesian_economics_name:0 "#b GOVERNMENT SPENDING TO TACKLE ECONOMIC CRISIS #!"
+ notification_headlines_tech_keynesian_economics_desc:1 "A new economic theory, championed by thinkers in [SCOPE.sCountry('headlines_keynesian_economics_researcher').GetName], advocates for government intervention to manage the economy. #lore Known as $HEADLINES_TECH_NAME$, it's all about using public spending to stimulate growth and reduce unemployment, a popular idea in times of crisis... #!"
+
+# Knowledge Economy - Late 20th/21st Century Tone
+ notification_headlines_tech_knowledge_economy_tooltip:0 "#header $notification_headlines_tech_knowledge_economy_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_knowledge_economy_desc$"
+ notification_headlines_tech_knowledge_economy_name:0 "#b IDEAS, NOT IRON, NOW DRIVE THE ECONOMY #!"
+ notification_headlines_tech_knowledge_economy_desc:1 "In this new $HEADLINES_TECH_NAME$ emerging in [SCOPE.sCountry('headlines_knowledge_economy_researcher').GetName], knowledge is the most valuable commodity. #lore The creation and use of information are now the main drivers of growth, which means everyone needs to be a bit smarter... #!"
+
+# Lab-Grown Food - Near-Future Tone
+ notification_headlines_tech_lab-grown_food_tooltip:0 "#header $notification_headlines_tech_lab-grown_food_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_lab-grown_food_desc$"
+ notification_headlines_tech_lab-grown_food_name:0 "#b STEAKS FROM A PETRI DISH NOW A REALITY #!"
+ notification_headlines_tech_lab-grown_food_desc:1 "Scientists in [SCOPE.sCountry('headlines_lab-grown_food_researcher').GetName] can now grow food in a lab, from cultured meat to other synthetic products. #lore This $HEADLINES_TECH_NAME$ could be a more sustainable and ethical way to feed the world, if people are willing to eat it... #!"
+
+# Laser Technology - Late 20th Century Tone
+ notification_headlines_tech_laser_technology_tooltip:0 "#header $notification_headlines_tech_laser_technology_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_laser_technology_desc$"
+ notification_headlines_tech_laser_technology_name:0 "#b THE POWERFUL BEAM OF LIGHT WITH ENDLESS USES #!"
+ notification_headlines_tech_laser_technology_desc:1 "The laser, a product of research in [SCOPE.sCountry('headlines_laser_technology_researcher').GetName], has found its way into all sorts of applications. #lore From telecommunications and medicine to manufacturing, $HEADLINES_TECH_NAME$ is a precise and powerful tool with a seemingly endless number of uses... #!"
+
+# Machine Learning - Modern Tone
+ notification_headlines_tech_machine_learning_tooltip:0 "#header $notification_headlines_tech_machine_learning_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_machine_learning_desc$"
+ notification_headlines_tech_machine_learning_name:0 "#b COMPUTERS ARE NOW ABLE TO LEARN ON THEIR OWN #!"
+ notification_headlines_tech_machine_learning_desc:1 "Computers can now be built that learn from data, thanks to $HEADLINES_TECH_NAME$ research from [SCOPE.sCountry('headlines_machine_learning_researcher').GetName]. #lore This has led to a host of new technologies and applications, from medical diagnosis to self-driving cars, and it's only going to get more powerful... #!"
+
+# Mainframe Computers - Mid-to-Late 20th Century Tone
+ notification_headlines_tech_mainframe_computers_tooltip:0 "#header $notification_headlines_tech_mainframe_computers_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_mainframe_computers_desc$"
+ notification_headlines_tech_mainframe_computers_name:0 "#b 'BIG IRON' COMPUTERS POWER MODERN INDUSTRY #!"
+ notification_headlines_tech_mainframe_computers_desc:1 "These large, powerful $HEADLINES_TECH_NAME$ are the workhorses of big business and government in [SCOPE.sCountry('headlines_mainframe_computers_researcher').GetName]. #lore They're reliable and can handle massive amounts of data, making them essential for large-scale operations from banking to space exploration... #!"
+
+# Marketing Research - Mid-20th Century Tone
+ notification_headlines_tech_marketing_research_tooltip:0 "#header $notification_headlines_tech_marketing_research_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_marketing_research_desc$"
+ notification_headlines_tech_marketing_research_name:0 "#b SCIENCE OF SELLING: WHAT DO CONSUMERS WANT? #!"
+ notification_headlines_tech_marketing_research_desc:1 "By studying what consumers want, businesses in [SCOPE.sCountry('headlines_marketing_research_researcher').GetName] can create more effective advertising and better products. #lore This new field of $HEADLINES_TECH_NAME$ is all about understanding people's desires, and then selling them back to them... #!"
+
+# Mass Media - 20th Century Tone
+ notification_headlines_tech_mass_media_tooltip:0 "#header $notification_headlines_tech_mass_media_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_mass_media_desc$"
+ notification_headlines_tech_mass_media_name:0 "#b RADIO, TV, AND NEWSPAPERS SHAPE PUBLIC OPINION #!"
+ notification_headlines_tech_mass_media_desc:1 "Through various platforms, information, entertainment, and news can now be spread to a massive audience. #lore This gives the $HEADLINES_TECH_NAME$ in [SCOPE.sCountry('headlines_mass_media_researcher').GetName] a powerful influence over public opinion and culture... #!"
+
+# Mental Health Awareness - Modern Tone
+ notification_headlines_tech_mental_health_awareness_tooltip:0 "#header $notification_headlines_tech_mental_health_awareness_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_mental_health_awareness_desc$"
+ notification_headlines_tech_mental_health_awareness_name:0 "#b STIGMA AROUND MENTAL HEALTH BEGINS TO FADE #!"
+ notification_headlines_tech_mental_health_awareness_desc:1 "The importance of mental well-being is finally being understood, thanks to a growing movement for $HEADLINES_TECH_NAME$ in [SCOPE.sCountry('headlines_mental_health_awareness_researcher').GetName]. #lore This increased awareness is leading to better care, less stigma, and new ways to support those who are struggling... #!"
+
+# Microprocessor - Late 20th Century Tone
+ notification_headlines_tech_microprocessor_tooltip:0 "#header $notification_headlines_tech_microprocessor_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_microprocessor_desc$"
+ notification_headlines_tech_microprocessor_name:0 "#b A COMPUTER ON A SINGLE CHIP #!"
+ notification_headlines_tech_microprocessor_desc:1 "This tiny chip, the $HEADLINES_TECH_NAME$, is the brain of modern computers and electronic devices. #lore Its invention in [SCOPE.sCountry('headlines_microprocessor_researcher').GetName] has led to an explosion of technological innovation, changing the world in countless ways... #!"
+
+# Military-Grade Cybersecurity - Modern Tone
+ notification_headlines_tech_military_grade_cybersecurity_tooltip:0 "#header $notification_headlines_tech_military_grade_cybersecurity_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_military_grade_cybersecurity_desc$"
+ notification_headlines_tech_military_grade_cybersecurity_name:0 "#b DIGITAL WARFARE DEMANDS DIGITAL DEFENSES #!"
+ notification_headlines_tech_military_grade_cybersecurity_desc:1 "The military of [SCOPE.sCountry('headlines_military_grade_cybersecurity_researcher').GetName] is developing advanced techniques to protect its most sensitive information and systems from cyber threats. #lore In the digital age, this $HEADLINES_TECH_NAME$ is more important than ever... #!"
+
+# Mind Backups - Far-Future Tone
+ notification_headlines_tech_mind_backups_tooltip:0 "#header $notification_headlines_tech_mind_backups_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_mind_backups_desc$"
+ notification_headlines_tech_mind_backups_name:0 "#b DIGITAL IMMORTALITY MAY SOON BE POSSIBLE #!"
+ notification_headlines_tech_mind_backups_desc:1 "[SCOPE.sCountry('headlines_mind_backups_researcher').GetAdjective] scientists are developing the ability to store memories and consciousness in digital form. #lore These $HEADLINES_TECH_NAME$ are a path to a kind of immortality, allowing a person to live on long after their physical body has failed... #!"
+
+# Missile Defense Systems - Late Cold War/Modern Tone
+ notification_headlines_tech_missile_defense_systems_tooltip:0 "#header $notification_headlines_tech_missile_defense_systems_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_missile_defense_name$"
+ notification_headlines_tech_missile_defense_name:0 "#b DEFENSE SHIELD AGAINST MISSILES DEVELOPED #!"
+ notification_headlines_tech_missile_defense_systems_desc:1 "With anti-ballistic missiles and laser interceptors, [SCOPE.sCountry('headlines_missile_defense_systems_researcher').GetName] can now defend against incoming missile attacks. #lore These $HEADLINES_TECH_NAME$ should improve security and strategic stability, in theory... #!"
+
+# Advanced Automotive Production Techniques - 1920s-30s Tone
+ notification_headlines_tech_modern_automotive_technology_tooltip:0 "#header $notification_headlines_tech_modern_automotive_technology_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_modern_automotive_technology_desc$"
+ notification_headlines_tech_modern_automotive_technology_name:0 "#b MODERN AUTOMOBILES OFFER COMFORT AND RELIABILITY #!"
+ notification_headlines_tech_modern_automotive_technology_desc:1 "Automakers in [SCOPE.sCountry('headlines_modern_automotive_technology_researcher').GetName] are using $HEADLINES_TECH_NAME$. #lore By combining precision machining with modern features like coil spring suspension and electric starters, cars are becoming more comfortable and reliable than ever before... #!"
+
+# Modern Chemical Processes - Early 20th Century Tone
+ notification_headlines_tech_modern_chemical_processes_tooltip:0 "#header $notification_headlines_tech_modern_chemical_processes_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_modern_chemical_processes_desc$"
+ notification_headlines_tech_modern_chemical_processes_name:0 "#b CHEMICAL INDUSTRY REVOLUTIONIZED #!"
+ notification_headlines_tech_modern_chemical_processes_desc:1 "New processes like the Ostwald and Haber methods have revolutionized the chemical industry in [SCOPE.sCountry('headlines_modern_chemical_processes_researcher').GetName]. #lore Thanks to these $HEADLINES_TECH_NAME$, important chemicals like fertilizers and synthetic materials can now be produced on a massive scale... #!"
+
+# Modern Management Techniques - 20th Century Tone
+ notification_headlines_tech_modern_management_techniques_tooltip:0 "#header $notification_headlines_tech_modern_management_techniques_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_modern_management_techniques_desc$"
+ notification_headlines_tech_modern_management_techniques_name:0 "#b 'SCIENTIFIC MANAGEMENT' BOOSTS PRODUCTIVITY #!"
+ notification_headlines_tech_modern_management_techniques_desc:1 "New ways of organizing and managing businesses are leading to greater efficiency and productivity. #lore Theorists in [SCOPE.sCountry('headlines_modern_management_techniques_researcher').GetName] have pioneered these $HEADLINES_TECH_NAME$, which are being adopted across the nation... #!"
+
+# Modern Material Science - Modern/Near-Future Tone
+ notification_headlines_tech_modern_material_science_tooltip:0 "#header $notification_headlines_tech_modern_material_science_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_modern_material_science_desc$"
+ notification_headlines_tech_modern_material_science_name:0 "#b 'WONDER MATERIALS' TO CHANGE THE FUTURE #!"
+ notification_headlines_tech_modern_material_science_desc:1 "From graphene to metamaterials, scientists in [SCOPE.sCountry('headlines_modern_material_science_researcher').GetName] are creating new substances with unique properties. #lore This advanced $HEADLINES_TECH_NAME$ is set to revolutionize everything from electronics to aerospace... #!"
+
+# Modern Materials - Mid-20th Century Tone
+ notification_headlines_tech_modern_materials_tooltip:0 "#header $notification_headlines_tech_modern_materials_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_modern_materials_desc$"
+ notification_headlines_tech_modern_materials_name:0 "#b FIBERGLASS AND NYLON: MATERIALS OF TOMORROW, TODAY #!"
+ notification_headlines_tech_modern_materials_desc:1 "[SCOPE.sCountry('headlines_modern_materials_researcher').GetAdjective] chemists have invented new $HEADLINES_TECH_NAME$. #lore Materials like fiberglass, nylon, and Teflon are stronger, lighter, and more versatile than what came before. They've changed the way things are built and manufactured... #!"
+
+# Modern Pharmaceuticals - Mid-20th Century Tone
+ notification_headlines_tech_modern_pharmaceuticals_tooltip:0 "#header $notification_headlines_tech_modern_pharmaceuticals_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_modern_pharmaceuticals_desc$"
+ notification_headlines_tech_modern_pharmaceuticals_name:0 "#b THE DAWN OF THE MIRACLE DRUG ERA #!"
+ notification_headlines_tech_modern_pharmaceuticals_desc:1 "With new drugs and vaccines developed in [SCOPE.sCountry('headlines_modern_pharmaceuticals_researcher').GetName], huge strides in public health have been made. #lore Thanks to these $HEADLINES_TECH_NAME$, people are living longer, healthier lives... #!"
+
+# Modern Skyscrapers - Late 20th/21st Century Tone
+ notification_headlines_tech_modern_skyscrapers_tooltip:0 "#header $notification_headlines_tech_modern_skyscrapers_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_modern_skyscrapers_desc$"
+ notification_headlines_tech_modern_skyscrapers_name:0 "#b A RACE TO THE CLOUDS: SKYLINES REDEFINED #!"
+ notification_headlines_tech_modern_skyscrapers_desc:1 "Thanks to new architectural designs and materials pioneered in [SCOPE.sCountry('headlines_modern_skyscrapers_researcher').GetName], taller and more impressive buildings can now be built. #lore These $HEADLINES_TECH_NAME$ have become symbols of the modern, urban world... #!"
+
+# Modern Tools - Mid-20th Century Tone
+ notification_headlines_tech_modern_tools_tooltip:0 "#header $notification_headlines_tech_modern_tools_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_modern_tools_desc$"
+ notification_headlines_tech_modern_tools_name:0 "#b FORKLIFTS MODERNIZE THE WORKPLACE #!"
+ notification_headlines_tech_modern_tools_desc:1 "Tools like forklifts, now common in [SCOPE.sCountry('headlines_modern_tools_researcher').GetName], have made workplaces more efficient and safer. #lore These $HEADLINES_TECH_NAME$ have improved productivity and reduced the number of accidents, which is good for everyone... #!"
+
+# Modern Urban Planning - 20th Century Tone
+ notification_headlines_tech_modern_urban_planning_tooltip:0 "#header $notification_headlines_tech_modern_urban_planning_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_modern_urban_planning_desc$"
+ notification_headlines_tech_modern_urban_planning_name:0 "#b A NEW VISION FOR THE CITIES OF THE FUTURE #!"
+ notification_headlines_tech_modern_urban_planning_desc:1 "By planning cities more systematically, proponents in [SCOPE.sCountry('headlines_modern_urban_planning_researcher').GetName] say more efficient, sustainable, and pleasant places to live can be created. #lore This $HEADLINES_TECH_NAME$ is a way to bring some order to the chaos of urban growth... #!"
+
+# Modern Vaccines - Mid-20th Century Tone
+ notification_headlines_tech_modern_vaccines_tooltip:0 "#header $notification_headlines_tech_modern_vaccines_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_modern_vaccines_desc$"
+ notification_headlines_tech_modern_vaccines_name:0 "#b DEADLY DISEASES DEFEATED BY VACCINATION #!"
+ notification_headlines_tech_modern_vaccines_desc:1 "Vaccines for diseases like diphtheria, tetanus, and tuberculosis have saved countless lives in [SCOPE.sCountry('headlines_modern_vaccines_researcher').GetName] and abroad. #lore These $HEADLINES_TECH_NAME$ are a cornerstone of public health, protecting populations from some of the world's most deadly diseases... #!"
+
+# Molecular Assemblers - Far-Future Tone
+ notification_headlines_tech_molecular_assemblers_tooltip:0 "#header $notification_headlines_tech_molecular_assemblers_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_molecular_assemblers_desc$"
+ notification_headlines_tech_molecular_assemblers_name:0 "#b BUILDING ANYTHING, ONE ATOM AT A TIME #!"
+ notification_headlines_tech_molecular_assemblers_desc:1 "Imagine machines that can build things atom by atom. #lore Scientists in [SCOPE.sCountry('headlines_molecular_assemblers_researcher').GetName] are designing these $HEADLINES_TECH_NAME$, which could create highly customized goods with incredible precision, changing the very nature of manufacturing... #!"
+
+# Motorized Artillery - WWII Tone
+ notification_headlines_tech_motorized_artillery_tooltip:0 "#header $notification_headlines_tech_motorized_artillery_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_motorized_artillery_desc$"
+ notification_headlines_tech_motorized_artillery_name:0 "#b ARTILLERY NOW KEEPS PACE WITH ADVANCING ARMIES #!"
+ notification_headlines_tech_motorized_artillery_desc:1 "By putting their artillery on wheels, the army of [SCOPE.sCountry('headlines_motorized_artillery_researcher').GetName] has made it much more mobile and effective. #lore Now these big guns can keep up with the rest of their ground forces... #!"
+
+# Naval Convoy Defense - WWI/WWII Tone
+ notification_headlines_tech_naval_convoy_defense_tooltip:0 "#header $notification_headlines_tech_naval_convoy_defense_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_naval_convoy_defense_desc$"
+ notification_headlines_tech_naval_convoy_defense_name:0 "#b NEW TACTICS TO GUARD THE SEA LANES #!"
+ notification_headlines_tech_naval_convoy_defense_desc:1 "New strategies and technologies developed in [SCOPE.sCountry('headlines_naval_convoy_defense_researcher').GetName] are making naval convoys safer. #lore It's all about protecting the ships that carry vital goods and personnel across the seas from enemy predation... #!"
+
+# Naval Fire Control Systems - WWII/Cold War Tone
+ notification_headlines_tech_naval_fire_control_systems_tooltip:0 "#header $notification_headlines_tech_naval_fire_control_systems_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_naval_fire_control_systems_desc$"
+ notification_headlines_tech_naval_fire_control_systems_name:0 "#b COMPUTER-AIMED NAVAL GUNS OFFER DEADLY ACCURACY #!"
+ notification_headlines_tech_naval_fire_control_systems_desc:1 "The navy of [SCOPE.sCountry('headlines_naval_fire_control_systems_researcher').GetName] has deployed advanced systems for targeting and coordinating naval gunfire. #lore These $HEADLINES_TECH_NAME$ make a ship's weapons more accurate and deadly, which is always a plus in a naval battle... #!"
+
+# Network Centric Warfare - Modern Military Tone
+ notification_headlines_tech_network_centric_warfare_tooltip:0 "#header $notification_headlines_tech_network_centric_warfare_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_network_centric_warfare_desc$"
+ notification_headlines_tech_network_centric_warfare_name:0 "#b FIGHTING AT THE SPEED OF INFORMATION #!"
+ notification_headlines_tech_network_centric_warfare_desc:1 "By connecting all forces through advanced communication systems, the military of [SCOPE.sCountry('headlines_network_centric_warfare_researcher').GetName] can improve its situational awareness and decision-making. #lore It's a new way of fighting, $HEADLINES_TECH_NAME$, that leverages the power of information... #!"
+
+# Neural Lace - Far-Future Tone
+ notification_headlines_tech_neural_lace_tooltip:0 "#header $notification_headlines_tech_neural_lace_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_neural_lace_desc$"
+ notification_headlines_tech_neural_lace_name:0 "#b A SEAMLESS CONNECTION BETWEEN MIND AND MACHINE #!"
+ notification_headlines_tech_neural_lace_desc:1 "Researchers in [SCOPE.sCountry('headlines_neural_lace_researcher').GetName] are developing the $HEADLINES_TECH_NAME$, a brain-computer interface that allows for a seamless connection between the mind and digital devices. #lore It could enhance cognitive abilities and give users direct control over technology... #!"
+
+# Nuclear Energy - 1950s Tone
+ notification_headlines_tech_nuclear_energy_tooltip:0 "#header $notification_headlines_tech_nuclear_energy_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_nuclear_energy_desc$"
+ notification_headlines_tech_nuclear_energy_name:0 "#b ATOMS FOR PEACE: CLEAN ENERGY FOR THE FUTURE #!"
+ notification_headlines_tech_nuclear_energy_desc:1 "By harnessing the power of nuclear reactions, [SCOPE.sCountry('headlines_nuclear_energy_researcher').GetName] has found a new and powerful source of energy. #lore $HEADLINES_TECH_NAME$ has the potential to fuel industries and reduce reliance on fossil fuels, but it comes with its own set of risks... #!"
+
+# Nuclear Weapons - 1940s-50s Tone
+ notification_headlines_tech_nuclear_weapons_tooltip:0 "#header $notification_headlines_tech_nuclear_weapons_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_nuclear_weapons_desc$"
+ notification_headlines_tech_nuclear_weapons_name:0 "#b A WEAPON THAT CAN DESTROY WORLDS #!"
+ notification_headlines_tech_nuclear_weapons_desc:1 "The atomic bomb, developed in secret by [SCOPE.sCountry('headlines_nuclear_weapons_researcher').GetAdjective] scientists, has changed the world forever. #lore These incredibly powerful $HEADLINES_TECH_NAME$ have fundamentally altered the nature of warfare and ushered in a new era of global politics... #!"
+
+# Orbital Manufacturing - Near-Future Tone
+ notification_headlines_tech_orbital_manufacturing_tooltip:0 "#header $notification_headlines_tech_orbital_manufacturing_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_orbital_manufacturing_desc$"
+ notification_headlines_tech_orbital_manufacturing_name:0 "#b FACTORIES NOW ORBITING THE EARTH #!"
+ notification_headlines_tech_orbital_manufacturing_desc:1 "The unique environment of space allows for the creation of materials and products that are impossible to make on Earth. #lore Companies from [SCOPE.sCountry('headlines_orbital_manufacturing_researcher').GetName] believe $HEADLINES_TECH_NAME$ could be the key to the future in space... #!"
+
+# Orbital Weapon Platforms - Cold War/Sci-Fi Tone
+ notification_headlines_tech_orbital_weapon_platforms_tooltip:0 "#header $notification_headlines_tech_orbital_weapon_platforms_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_orbital_weapon_platforms_desc$"
+ notification_headlines_tech_orbital_weapon_platforms_name:0 "#b THE ULTIMATE STRATEGIC HIGH GROUND #!"
+ notification_headlines_tech_orbital_weapon_platforms_desc:1 "By placing weapons in space, [SCOPE.sCountry('headlines_orbital_weapon_platforms_researcher').GetName] can have a global strike capability and a constant eye on its enemies. #lore These $HEADLINES_TECH_NAME$ represent the ultimate high ground in modern warfare... #!"
+
+# Personal Appliances - Post-WWII Boom Tone
+ notification_headlines_tech_personal_appliances_tooltip:0 "#header $notification_headlines_tech_personal_appliances_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_personal_appliances_desc$"
+ notification_headlines_tech_personal_appliances_name:0 "#b MODERN CONVENIENCES EASE HOUSEHOLD BURDENS #!"
+ notification_headlines_tech_personal_appliances_desc:1 "Refrigerators, washing machines, and air conditioners from [SCOPE.sCountry('headlines_personal_appliances_researcher').GetName] have made lives much more comfortable and efficient. #lore These new $HEADLINES_TECH_NAME$ have automated many daily chores, giving people more time for other things... #!"
+
+# Personal Computers - 1980s Tone
+ notification_headlines_tech_personal_computers_tooltip:0 "#header $notification_headlines_tech_personal_computers_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_personal_computers_desc$"
+ notification_headlines_tech_personal_computers_name:0 "#b A COMPUTER IN EVERY HOME! #!"
+ notification_headlines_tech_personal_computers_desc:1 "The personal computer has brought the power of digital technology to the masses. #lore Companies in [SCOPE.sCountry('headlines_personal_computers_researcher').GetName] are leading the charge, changing the way people work, learn, and communicate, and opening up a world of new possibilities... #!"
+
+# Personalized Medicine - Modern/Near-Future Tone
+ notification_headlines_tech_personalized_medicine_tooltip:0 "#header $notification_headlines_tech_personalized_medicine_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_personalized_medicine_desc$"
+ notification_headlines_tech_personalized_medicine_name:0 "#b MEDICAL TREATMENTS TAILORED TO YOUR DNA #!"
+ notification_headlines_tech_personalized_medicine_desc:1 "By tailoring medical treatments to individual patients, doctors in [SCOPE.sCountry('headlines_personalized_medicine_researcher').GetName] can make them more effective. #lore It's a new approach to healthcare, $HEADLINES_TECH_NAME$, that takes into account unique genetic and lifestyle factors... #!"
+
+# Photocopiers - Mid-to-Late 20th Century Tone
+ notification_headlines_tech_photocopiers_tooltip:0 "#header $notification_headlines_tech_photocopiers_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_photocopiers_desc$"
+ notification_headlines_tech_photocopiers_name:0 "#b INSTANT COPIES REVOLUTIONIZE THE OFFICE #!"
+ notification_headlines_tech_photocopiers_desc:1 "The ability to quickly and easily make copies of documents has streamlined office work in [SCOPE.sCountry('headlines_photocopiers_researcher').GetName]. #lore The $HEADLINES_TECH_NAME$ is a simple but essential tool that has dramatically improved productivity in the modern workplace... #!"
+
+# Plastic Mass Production - Mid-20th Century Tone
+ notification_headlines_tech_plastic_mass_production_tooltip:0 "#header $notification_headlines_tech_plastic_mass_production_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_plastic_mass_production_desc$"
+ notification_headlines_tech_plastic_mass_production_name:0 "#b PLASTIC: THE MATERIAL OF A THOUSAND USES #!"
+ notification_headlines_tech_plastic_mass_production_desc:1 "The $HEADLINES_TECH_NAME$ in [SCOPE.sCountry('headlines_plastic_mass_production_researcher').GetName] has given the world a wide range of new, lightweight, and durable products. #lore It has also, however, given us a massive environmental problem to deal with... #!"
+
+# Pollution Control - 1970s Tone
+ notification_headlines_tech_pollution_control_tooltip:0 "#header $notification_headlines_tech_pollution_control_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_pollution_control_desc$"
+ notification_headlines_tech_pollution_control_name:0 "#b NATIONS BEGIN TO CLEAN UP THEIR ACT #!"
+ notification_headlines_tech_pollution_control_desc:1 "We're finally starting to clean up our act. #lore By managing pollution from industries and cars, new $HEADLINES_TECH_NAME$ initiatives in [SCOPE.sCountry('headlines_pollution_control_researcher').GetName] aim to improve air and water quality and protect public health... #!"
+
+# Pop Culture - Mid-20th Century Onward
+ notification_headlines_tech_pop_culture_tooltip:0 "#header $notification_headlines_tech_pop_culture_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_pop_culture_desc$"
+ notification_headlines_tech_pop_culture_name:0 "#b FROM MOVIES TO MUSIC, POP CULTURE GRIPS THE YOUTH #!"
+ notification_headlines_tech_pop_culture_desc:1 "From music and movies to fashion and fads, the $HEADLINES_TECH_NAME$ spreading from [SCOPE.sCountry('headlines_pop_culture_researcher').GetName] has a powerful influence on society. #lore It shapes trends, values, and even how people see the world... #!"
+
+# Post-Scarcity Economy - Far-Future Tone
+ notification_headlines_tech_post-scarcity_economy_tooltip:0 "#header $notification_headlines_tech_post-scarcity_economy_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_post-scarcity_economy_desc$"
+ notification_headlines_tech_post-scarcity_economy_name:0 "#b COULD THIS BE THE END OF WANT? #!"
+ notification_headlines_tech_post-scarcity_economy_desc:1 "What if there was enough for everyone? #lore A $HEADLINES_TECH_NAME$, made possible by advanced technology from [SCOPE.sCountry('headlines_post-scarcity_economy_researcher').GetName], could eliminate material want and redefine the very meaning of work... #!"
+
+# Precision Guided Munitions - Late Cold War/Modern Tone
+ notification_headlines_tech_precision_guided_munitions_tooltip:0 "#header $notification_headlines_tech_precision_guided_munitions_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_precision_guided_munitions_desc$"
+ notification_headlines_tech_precision_guided_munitions_name:0 "#b 'SMART BOMBS' CAN HIT A PINPOINT TARGET #!"
+ notification_headlines_tech_precision_guided_munitions_desc:1 "Smart bombs and cruise missiles developed by [SCOPE.sCountry('headlines_precision_guided_munitions_researcher').GetAdjective] engineers can now hit their targets with incredible accuracy. #lore These $HEADLINES_TECH_NAME$ make military strikes more effective and reduce collateral damage, at least in theory... #!"
+
+# Predictive Logistics - Modern Tone
+ notification_headlines_tech_predictive_logistics_tooltip:0 "#header $notification_headlines_tech_predictive_logistics_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_predictive_logistics_desc$"
+ notification_headlines_tech_predictive_logistics_name:0 "#b GETTING SUPPLIES THERE BEFORE THEY'RE NEEDED #!"
+ notification_headlines_tech_predictive_logistics_desc:1 "By using data to forecast supply chain needs, companies in [SCOPE.sCountry('headlines_predictive_logistics_researcher').GetName] can make their logistics more efficient and less costly. #lore This system of $HEADlines_TECH_NAME$ is a smarter way to get things where they need to go... #!"
+
+# Programmable Matter - Far-Future Tone
+ notification_headlines_tech_programmable_matter_tooltip:0 "#header $notification_headlines_tech_programmable_matter_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_programmable_matter_desc$"
+ notification_headlines_tech_programmable_matter_name:0 "#b SHAPE-SHIFTING MATERIALS NOW A REALITY #!"
+ notification_headlines_tech_programmable_matter_desc:1 "Imagine materials that can change their shape, color, or texture on command. #lore Scientists in [SCOPE.sCountry('headlines_programmable_matter_researcher').GetName] claim $HEADLINES_TECH_NAME$ could be the next great leap in materials science, with endless possibilities... #!"
+
+# Public Works Programs - 1930s Tone
+ notification_headlines_tech_public_works_programs_tooltip:0 "#header $notification_headlines_tech_public_works_programs_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_public_works_programs_desc$"
+ notification_headlines_tech_public_works_programs_name:0 "#b NATIONS BUILD THEIR WAY OUT OF DEPRESSION #!"
+ notification_headlines_tech_public_works_programs_desc:1 "The government of [SCOPE.sCountry('headlines_public_works_programs_researcher').GetName] has initiated massive government-funded projects to build infrastructure and improve public utilities. #lore These $HEADLINES_TECH_NAME$ are a way to stimulate the economy and create jobs, especially in tough times... #!"
+
+# Quantum Communications - Near-Future Tone
+ notification_headlines_tech_quantum_communications_tooltip:0 "#header $notification_headlines_tech_quantum_communications_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_quantum_communications_desc$"
+ notification_headlines_tech_quantum_communications_name:0 "#b THE UNBREAKABLE CODE IS HERE #!"
+ notification_headlines_tech_quantum_communications_desc:1 "Quantum technology developed in [SCOPE.sCountry('headlines_quantum_communications_researcher').GetName] can provide unbreakably secure channels for communication. #lore It's the ultimate in secure messaging, protecting sensitive information from prying eyes... #!"
+
+# Quantum Computing - Near-Future Tone
+ notification_headlines_tech_quantum_computing_tooltip:0 "#header $notification_headlines_tech_quantum_computing_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_quantum_computing_desc$"
+ notification_headlines_tech_quantum_computing_name:0 "#b QUANTUM COMPUTERS TO SOLVE THE UNSOLVABLE #!"
+ notification_headlines_tech_quantum_computing_desc:1 "By harnessing the strange principles of quantum mechanics, physicists in [SCOPE.sCountry('headlines_quantum_computing_researcher').GetName] can build computers far more powerful than anything today. #lore These devices could solve some of the world's most complex problems... #!"
+
+# Quantum Materials - Near-Future Tone
+ notification_headlines_tech_quantum_materials_tooltip:0 "#header $notification_headlines_tech_quantum_materials_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_quantum_materials_desc$"
+ notification_headlines_tech_quantum_materials_name:0 "#b ENGINEERING MATTER AT THE QUANTUM LEVEL #!"
+ notification_headlines_tech_quantum_materials_desc:1 "Engineered substances with unique quantum properties are being created in [SCOPE.sCountry('headlines_quantum_materials_researcher').GetName]. #lore These $HEADLINES_TECH_NAME$ could lead to breakthroughs in energy, computing, and telecommunications, changing the world as we know it... #!"
+
+# Radar - WWII Tone
+ notification_headlines_tech_radar_tooltip:0 "#header $notification_headlines_tech_radar_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_radar_desc$"
+ notification_headlines_tech_radar_name:0 "#b UNSEEN EYE SPOTS ENEMY AIRCRAFT #!"
+ notification_headlines_tech_radar_desc:1 "This secret technology, pioneered in [SCOPE.sCountry('headlines_radar_researcher').GetName], allows for the detection of objects at a great distance, even in darkness or fog. #lore $HEADLINES_TECH_NAME$ has been a crucial tool in military aviation, providing early warning of enemy attacks... #!"
+
+# Rapid Deployment Forces - Cold War/Modern Tone
+ notification_headlines_tech_rapid_deployment_forces_tooltip:0 "#header $notification_headlines_tech_rapid_deployment_forces_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_rapid_deployment_forces_desc$"
+ notification_headlines_tech_rapid_deployment_forces_name:0 "#b ELITE TROOPS READY TO DEPLOY ANYWHERE, ANYTIME #!"
+ notification_headlines_tech_rapid_deployment_forces_desc:1 "[SCOPE.sCountry('headlines_rapid_deployment_forces_researcher').GetName] has organized highly trained and specialized units that can be sent anywhere in the world at a moment's notice. #lore These $HEADLINES_TECH_NAME$ give a nation a flexible and effective way to respond to crises... #!"
+
+# Reconnaissance Satellites - Cold War Tone
+ notification_headlines_tech_recon_satellites_tooltip:0 "#header $notification_headlines_tech_recon_satellites_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_recon_satellites_desc$"
+ notification_headlines_tech_recon_satellites_name:0 "#b THE SPY IN THE SKY WATCHES FROM ABOVE #!"
+ notification_headlines_tech_recon_satellites_desc:1 "With satellites, [SCOPE.sCountry('headlines_recon_satellites_researcher').GetName] can now spy on any part of the world from space. #lore This has revolutionized intelligence gathering, giving nations an unprecedented view of their adversaries' military installations and movements... #!"
+
+# Reusable Rocketry - Modern Tone
+ notification_headlines_tech_reusable_rocketry_tooltip:0 "#header $notification_headlines_tech_reusable_rocketry_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_reusable_rocketry_desc$"
+ notification_headlines_tech_reusable_rocketry_name:0 "#b ROCKETS THAT CAN LAND THEMSELVES #!"
+ notification_headlines_tech_reusable_rocketry_desc:1 "By making their rockets reusable, visionaries in [SCOPE.sCountry('headlines_reusable_rocketry_researcher').GetName] can dramatically reduce the cost of space travel. #lore This breakthrough in $HEADLINES_TECH_NAME$ could open up a new era of exploration and commercial activity in space... #!"
+
+# Industrial Robotics - Late 20th Century Tone
+ notification_headlines_tech_robotics_tooltip:0 "#header $notification_headlines_tech_robotics_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_robotics_desc$"
+ notification_headlines_tech_robotics_name:0 "#b ROBOTS NOW ON THE ASSEMBLY LINE #!"
+ notification_headlines_tech_robotics_desc:1 "Industrial robots have transformed factories in [SCOPE.sCountry('headlines_robotics_researcher').GetName]. #lore These $HEADLINES_TECH_NAME$ can perform complex tasks with incredible precision and efficiency, making production lines safer and more productive... #!"
+
+# Rocketry - WWII/Cold War Tone
+ notification_headlines_tech_rocketry_tooltip:0 "#header $notification_headlines_tech_rocketry_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_rocketry_desc$"
+ notification_headlines_tech_rocketry_name:0 "#b REACHING FOR THE HEAVENS AND BEYOND #!"
+ notification_headlines_tech_rocketry_desc:1 "The development of modern $HEADLINES_TECH_NAME$ in [SCOPE.sCountry('headlines_rocketry_researcher').GetName] has provided powerful new weapons and the ability to explore space. #lore It has been a key technology of this century, with a profound impact on warfare and science... #!"
+
+# Rural Electrification - Early 20th Century Tone
+ notification_headlines_tech_rural_electrification_tooltip:0 "#header $notification_headlines_tech_rural_electrification_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_rural_electrification_desc$"
+ notification_headlines_tech_rural_electrification_name:0 "#b LIGHTS COME TO THE COUNTRYSIDE #!"
+ notification_headlines_tech_rural_electrification_desc:1 "Bringing electricity to the countryside has improved the quality of life and created new economic opportunities for rural populations. #lore The $HEADLINES_TECH_NAME$ program in [SCOPE.sCountry('headlines_rural_electrification_researcher').GetName] is a key step in modernizing a nation... #!"
+
+# Satellite Communications - Cold War/Modern Tone
+ notification_headlines_tech_satellite_communications_tooltip:0 "#header $notification_headlines_tech_satellite_communications_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_satellite_communications_desc$"
+ notification_headlines_tech_satellite_communications_name:0 "#b A GLOBAL PHONE BOOTH NOW IN ORBIT #!"
+ notification_headlines_tech_satellite_communications_desc:1 "Satellites launched by [SCOPE.sCountry('headlines_satellite_communications_researcher').GetName] have provided a global communication network. #lore Now information can be transmitted instantly across the world, making the planet a much more connected place... #!"
+
+# Second Wave Feminism - 1960s-70s Tone
+ notification_headlines_tech_second_wave_feminism_tooltip:0 "#header $notification_headlines_tech_second_wave_feminism_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_second_wave_feminism_desc$"
+ notification_headlines_tech_second_wave_feminism_name:0 "#b WOMEN'S LIBERATION MOVEMENT DEMANDS EQUALITY #!"
+ notification_headlines_tech_second_wave_feminism_desc:1 "This wave of feminism, gaining traction in [SCOPE.sCountry('headlines_second_wave_feminism_researcher').GetName], has fought for equality and personal rights for women. #lore Known as $HEADLINES_TECH_NAME$, it has had a significant impact on society, changing gender roles and legal norms... #!"
+
+# Semi-Automatic Rifle - WWII Tone
+ notification_headlines_tech_semiautomatic_rifle_tooltip:0 "#header $notification_headlines_tech_semiautomatic_rifle_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_semiautomatic_rifle_desc$"
+ notification_headlines_tech_semiautomatic_rifle_name:0 "#b MORE FIREPOWER FOR THE AVERAGE SOLDIER #!"
+ notification_headlines_tech_semiautomatic_rifle_desc:1 "Semi-automatic rifles like the M1 Garand, issued to the troops of [SCOPE.sCountry('headlines_semiautomatic_rifle_researcher').GetName], give infantry a much higher rate of fire. #lore The $HEADLINES_TECH_NAME$ improves their firepower and makes them more effective in a firefight... #!"
+
+# Sexual Revolution - 1960s Tone
+ notification_headlines_tech_sexual_revolution_tooltip:0 "#header $notification_headlines_tech_sexual_revolution_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_sexual_revolution_desc$"
+ notification_headlines_tech_sexual_revolution_name:0 "#b TRADITIONAL VALUES CHALLENGED BY THE YOUTH #!"
+ notification_headlines_tech_sexual_revolution_desc:1 "A social movement in [SCOPE.sCountry('headlines_sexual_revolution_researcher').GetName] has challenged traditional ideas about sexuality and relationships. #lore This $HEADLINES_TECH_NAME$ has led to greater acceptance of premarital sex, contraception, and different family structures... #!"
+
+# Smart Grids - Modern Tone
+ notification_headlines_tech_smart_grids_tooltip:0 "#header $notification_headlines_tech_smart_grids_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_smart_grids_desc$"
+ notification_headlines_tech_smart_grids_name:0 "#b A SMARTER GRID FOR A SMARTER WORLD #!"
+ notification_headlines_tech_smart_grids_desc:1 "By incorporating advanced technology into electrical grids, engineers in [SCOPE.sCountry('headlines_smart_grids_researcher').GetName] can make them more efficient, reliable, and sustainable. #lore These $HEADLINES_TECH_NAME$ are a smarter way to manage power... #!"
+
+# Social Justice Movements - Modern Tone
+ notification_headlines_tech_social_justice_movements_tooltip:0 "#header $notification_headlines_tech_social_justice_movements_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_social_justice_movements_desc$"
+ notification_headlines_tech_social_justice_movements_name:0 "#b A CALL FOR A FAIRER SOCIETY FOR ALL #!"
+ notification_headlines_tech_social_justice_movements_desc:1 "Movements that fight for equality, fairness, and human rights are growing in [SCOPE.sCountry('headlines_social_justice_movements_researcher').GetName]. #lore These $HEADLINES_TECH_NAME$ tackle issues like racial discrimination and economic inequality, pushing for social change through activism and advocacy... #!"
+
+# Social Media - 21st Century Tone
+ notification_headlines_tech_social_media_tooltip:0 "#header $notification_headlines_tech_social_media_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_social_media_desc$"
+ notification_headlines_tech_social_media_name:0 "#b CONNECTING THE WORLD, ONE POST AT A TIME #!"
+ notification_headlines_tech_social_media_desc:1 "Social media platforms, emerging from [SCOPE.sCountry('headlines_social_media_researcher').GetName], have changed the way people communicate and share information. #lore They've given everyone a voice, for better or for worse, and have had a huge impact on culture and politics... #!"
+
+# Sonar - WWI/WWII Tone
+ notification_headlines_tech_sonar_tooltip:0 "#header $notification_headlines_tech_sonar_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_sonar_desc$"
+ notification_headlines_tech_sonar_name:0 "#b HEARING UNDERWATER: SUBMARINES HAVE NOWHERE TO HIDE #!"
+ notification_headlines_tech_sonar_desc:1 "By using sound to detect objects underwater, $HEADLINES_TECH_NAME$ has become an essential tool for naval defense in [SCOPE.sCountry('headlines_sonar_researcher').GetName]. #lore It helps navies to find submarines and other underwater threats, protecting their fleets and convoys... #!"
+
+# Space-Based Solar Power - Near-Future Tone
+ notification_headlines_tech_space_based_solar_power_tooltip:0 "#header $notification_headlines_tech_space_based_solar_power_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_space_based_solar_power_desc$"
+ notification_headlines_tech_space_based_solar_power_name:0 "#b BEAMING ENERGY DOWN FROM ORBIT #!"
+ notification_headlines_tech_space_based_solar_power_desc:1 "By putting massive solar collectors in orbit, visionaries in [SCOPE.sCountry('headlines_space_based_solar_power_researcher').GetName] believe a reliable and abundant source of clean energy could be established. #lore It's an ambitious idea, but one that could solve the world's energy problems for good... #!"
+
+# Space Colonization - Far-Future Tone
+ notification_headlines_tech_space_colonization_tooltip:0 "#header $notification_headlines_tech_space_colonization_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_space_colonization_desc$"
+ notification_headlines_tech_space_colonization_name:0 "#b HUMANITY'S NEXT FRONTIER: THE STARS #!"
+ notification_headlines_tech_space_colonization_desc:1 "As Earth becomes more crowded, pioneers from [SCOPE.sCountry('headlines_space_colonization_researcher').GetName] say humanity may need to look to the stars for new places to live. #lore $HEADLINES_TECH_NAME$ could be the next great chapter in human history... #!"
+
+# Space Elevator - Far-Future Tone
+ notification_headlines_tech_space_elevator_tooltip:0 "#header $notification_headlines_tech_space_elevator_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_space_elevator_desc$"
+ notification_headlines_tech_space_elevator_name:0 "#b AN ELEVATOR TO THE STARS #!"
+ notification_headlines_tech_space_elevator_desc:1 "Engineers in [SCOPE.sCountry('headlines_space_elevator_researcher').GetName] have proposed a hypothetical structure that would allow for travel between Earth and space with ease. #lore A $HEADLINES_TECH_NAME$ would make space travel much cheaper and could accelerate the exploration of the cosmos... #!"
+
+# Space Exploration - Cold War/Space Race Tone
+ notification_headlines_tech_space_exploration_tooltip:0 "#header $notification_headlines_tech_space_exploration_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_space_exploration_desc$"
+ notification_headlines_tech_space_exploration_name:0 "#b ONE SMALL STEP FOR A MAN... #!"
+ notification_headlines_tech_space_exploration_desc:1 "Advancements in rocketry and satellite technology in [SCOPE.sCountry('headlines_space_exploration_researcher').GetName] have allowed for the exploration of space. #lore This has opened a new era of scientific discovery and stands as a testament to human ingenuity in the great race for the heavens... #!"
+
+# Space Militarization - Modern/Near-Future Tone
+ notification_headlines_tech_space_militarization_tooltip:0 "#header $notification_headlines_tech_space_militarization_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_space_militarization_desc$"
+ notification_headlines_tech_space_militarization_name:0 "#b THE NEXT BATTLEFIELD IS SPACE #!"
+ notification_headlines_tech_space_militarization_desc:1 "As space becomes more important strategically, [SCOPE.sCountry('headlines_space_militarization_researcher').GetName] is seeing a push to develop and deploy military capabilities there. #lore This raises concerns about the weaponization of space and the need for new rules of engagement... #!"
+
+# Stainless Steel Mass Production - Early 20th Century Tone
+ notification_headlines_tech_stainless_steel_mass_production_tooltip:0 "#header $notification_headlines_tech_stainless_steel_mass_production_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_stainless_steel_mass_production_desc$"
+ notification_headlines_tech_stainless_steel_mass_production_name:0 "#b THE END OF RUST? STAINLESS STEEL FOR EVERYONE #!"
+ notification_headlines_tech_stainless_steel_mass_production_desc:1 "Metallurgists in [SCOPE.sCountry('headlines_stainless_steel_mass_production_researcher').GetName] can now produce stainless steel in large quantities. #lore This corrosion-resistant and durable material is useful in a wide range of applications, from cutlery to construction... #!"
+
+# Stealth Technology - Late Cold War/Modern Tone
+ notification_headlines_tech_stealth_technology_tooltip:0 "#header $notification_headlines_tech_stealth_technology_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_stealth_technology_desc$"
+ notification_headlines_tech_stealth_technology_name:0 "#b THE INVISIBLE AIRCRAFT IS NOW A REALITY #!"
+ notification_headlines_tech_stealth_technology_desc:1 "By using special materials and designs, [SCOPE.sCountry('headlines_stealth_technology_researcher').GetName] can make its military assets nearly invisible to radar and other detection systems. #lore This $HEADLINES_TECH_NAME$ is a powerful advantage in modern warfare... #!"
+
+# Supersonic Aircraft - Cold War Tone
+ notification_headlines_tech_supersonic_aircraft_tooltip:0 "#header $notification_headlines_tech_supersonic_aircraft_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_supersonic_aircraft_desc$"
+ notification_headlines_tech_supersonic_aircraft_name:0 "#b BREAKING THE SOUND BARRIER #!"
+ notification_headlines_tech_supersonic_aircraft_desc:1 "[SCOPE.sCountry('headlines_supersonic_aircraft_researcher').GetAdjective] pilots are now flying aircraft that can travel faster than the speed of sound. #lore These $HEADLINES_TECH_NAME$ have made air travel faster and have enhanced military aviation capabilities... #!"
+
+# Supply Chain Management - Modern Tone
+ notification_headlines_tech_supply_chain_management_tooltip:0 "#header $notification_headlines_tech_supply_chain_management_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_supply_chain_management_desc$"
+ notification_headlines_tech_supply_chain_management_name:0 "#b THE SCIENCE OF GETTING THINGS WHERE THEY NEED TO GO #!"
+ notification_headlines_tech_supply_chain_management_desc:1 "By using technology and data to optimize their supply chains, companies in [SCOPE.sCountry('headlines_supply_chain_management_researcher').GetName] can make them more efficient and less costly. #lore It's all about getting the right things to the right place at the right time... #!"
+
+# Swarm Technology - Near-Future Tone
+ notification_headlines_tech_swarm_technology_tooltip:0 "#header $notification_headlines_tech_swarm_technology_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_swarm_technology_desc$"
+ notification_headlines_tech_swarm_technology_name:0 "#b A SWARM OF DRONES, ACTING AS ONE #!"
+ notification_headlines_tech_swarm_technology_desc:1 "By coordinating large groups of autonomous systems, the military of [SCOPE.sCountry('headlines_swarm_technology_researcher').GetName] can create powerful new tools for reconnaissance, defense, and attack. #lore With this $HEADLINES_TECH_NAME$, the whole is truly greater than the sum of its parts... #!"
+
+# Synthetic Biology - Modern/Near-Future Tone
+ notification_headlines_tech_synthetic_biology_tooltip:0 "#header $notification_headlines_tech_synthetic_biology_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_synthetic_biology_desc$"
+ notification_headlines_tech_synthetic_biology_name:0 "#b DESIGNING LIFE FROM SCRATCH #!"
+ notification_headlines_tech_synthetic_biology_desc:1 "By designing and building new biological parts and systems, scientists in [SCOPE.sCountry('headlines_synthetic_biology_researcher').GetName] can create solutions to some of the world's most pressing problems. #lore This field of $HEADLINES_TECH_NAME$ has enormous potential, and some significant risks... #!"
+
+# Tactical Nuclear Weapons - Cold War Tone
+ notification_headlines_tech_tactical_nuclear_weapons_tooltip:0 "#header $notification_headlines_tech_tactical_nuclear_weapons_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_tactical_nuclear_weapons_desc$"
+ notification_headlines_tech_tactical_nuclear_weapons_name:0 "#b BATTLEFIELD NUKES A DANGEROUS ESCALATION #!"
+ notification_headlines_tech_tactical_nuclear_weapons_desc:1 "Military planners in [SCOPE.sCountry('headlines_tactical_nuclear_weapons_researcher').GetName] have developed smaller, more versatile nuclear weapons that can be used on the battlefield. #lore These $HEADLINES_TECH_NAME$ expand strategic options, but also make the use of nuclear weapons a more thinkable proposition... #!"
+
+# Telemedicine - Modern Tone
+ notification_headlines_tech_telemedicine_tooltip:0 "#header $notification_headlines_tech_telemedicine_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_telemedicine_desc$"
+ notification_headlines_tech_telemedicine_name:0 "#b THE DOCTOR WILL SEE YOU NOW... ON A SCREEN #!"
+ notification_headlines_tech_telemedicine_desc:1 "By delivering healthcare services remotely, [SCOPE.sCountry('headlines_telemedicine_researcher').GetName] can improve access to care for people in underserved areas. #lore This practice of $HEADLINES_TECH_NAME$ is a more efficient way to use medical resources, and it's becoming more common all the time... #!"
+
+# Telepathic Communities - Far-Future Tone
+ notification_headlines_tech_telepathic_communities_tooltip:0 "#header $notification_headlines_tech_telepathic_communities_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_telepathic_communities_desc$"
+ notification_headlines_tech_telepathic_communities_name:0 "#b A COMMUNITY OF MINDS #!"
+ notification_headlines_tech_telepathic_communities_desc:1 "What if people could communicate directly from mind to mind? #lore Theorists in [SCOPE.sCountry('headlines_telepathic_communities_researcher').GetName] imagine $HEADLINES_TECH_NAME$, connected by brain-computer interfaces, could foster a new level of empathy and understanding... #!"
+
+# Television & Television Broadcasting - Mid-20th Century Tone
+ notification_headlines_tech_television_tooltip:0 "#header $notification_headlines_tech_television_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_television_desc$"
+ notification_headlines_tech_television_name:0 "#b PICTURES IN YOUR LIVING ROOM #!"
+ notification_headlines_tech_television_desc:1 "The invention of the $HEADLINES_TECH_NAME$ in [SCOPE.sCountry('headlines_television_researcher').GetName] has revolutionized entertainment and communication. #lore It has become a powerful medium for spreading information and shaping public opinion, one flickering screen at a time... #!"
+
+ notification_headlines_tech_television_broadcasting_tooltip:0 "#header $notification_headlines_tech_television_broadcasting_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_television_broadcasting_desc$"
+ notification_headlines_tech_television_broadcasting_name:0 "#b BROADCASTING TO THE NATION #!"
+ notification_headlines_tech_television_broadcasting_desc:1 "The rise of $HEADLINES_TECH_NAME$ networks in [SCOPE.sCountry('headlines_television_broadcasting_researcher').GetName] has changed the way people get their news and entertainment. #lore It has become a powerful force in shaping public opinion, for better or for worse... #!"
+
+# Terrorism and Antiterrorism - Late 20th/21st Century Tone
+ notification_headlines_tech_terrorism_and_anti_terrorism_tooltip:0 "#header $notification_headlines_tech_terrorism_and_anti_terrorism_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_terrorism_and_anti_terrorism_desc$"
+ notification_headlines_tech_terrorism_and_anti_terrorism_name:0 "#b A NEW KIND OF WARFARE #!"
+ notification_headlines_tech_terrorism_and_anti_terrorism_desc:1 "The rise of terrorism has forced [SCOPE.sCountry('headlines_terrorism_and_anti_terrorism_researcher').GetName] to develop new strategies to protect itself. #lore This has redefined national security priorities and led to a new era of global cooperation and conflict... #!"
+
+# Transistor Technology - Mid-20th Century Tone
+ notification_headlines_tech_transistors_tooltip:0 "#header $notification_headlines_tech_transistors_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_transistors_desc$"
+ notification_headlines_tech_transistors_name:0 "#b THE TINY SWITCH THAT WILL CHANGE THE WORLD #!"
+ notification_headlines_tech_transistors_desc:1 "The transistor, invented by scientists in [SCOPE.sCountry('headlines_transistors_researcher').GetName], is the tiny switch that makes all modern electronics possible. #lore Its invention has led to a revolution in computing and communication, changing the world in countless ways... #!"
+
+# Universal Basic Income - Modern/Near-Future Tone
+ notification_headlines_tech_universal_basic_income_tooltip:0 "#header $notification_headlines_tech_universal_basic_income_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_universal_basic_income_desc$"
+ notification_headlines_tech_universal_basic_income_name:0 "#b A PAYCHECK FOR EVERYONE? #!"
+ notification_headlines_tech_universal_basic_income_desc:1 "The idea of giving everyone a basic income is gaining traction in [SCOPE.sCountry('headlines_universal_basic_income_researcher').GetName] as a way to address economic inequality and automation. #lore This concept of a $HEADLINES_TECH_NAME$ is a bold idea, but one that could reshape society for the better... #!"
+
+# Unmanned Aerial Vehicles - Modern Tone
+ notification_headlines_tech_unmanned_aerial_vehicles_tooltip:0 "#header $notification_headlines_tech_unmanned_aerial_vehicles_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_unmanned_aerial_vehicles_desc$"
+ notification_headlines_tech_unmanned_aerial_vehicles_name:0 "#b EYES IN THE SKY: THE AGE OF THE DRONE BEGINS #!"
+ notification_headlines_tech_unmanned_aerial_vehicles_desc:1 "Drones developed in [SCOPE.sCountry('headlines_unmanned_aerial_vehicles_researcher').GetName] have changed the face of warfare. #lore These $HEADLINES_TECH_NAME$ allow for surveillance and precision strikes without risking the lives of pilots, providing a powerful new tool in military arsenals... #!"
+
+# Video Games - Late 20th/21st Century Tone
+ notification_headlines_tech_video_games_tooltip:0 "#header $notification_headlines_tech_video_games_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_video_games_desc$"
+ notification_headlines_tech_video_games_name:0 "#b A NEW PASTIME: THE RISE OF VIDEO GAMES #!"
+ notification_headlines_tech_video_games_desc:1 "$HEADLINES_TECH_NAME$ have become a massive new form of entertainment and art. #lore Spreading from [SCOPE.sCountry('headlines_video_games_researcher').GetName], they've had a huge influence on popular culture, and they're only getting more immersive and complex... #!"
+
+# Virtual Reality - Modern/Near-Future Tone
+ notification_headlines_tech_virtual_reality_tooltip:0 "#header $notification_headlines_tech_virtual_reality_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_virtual_reality_desc$"
+ notification_headlines_tech_virtual_reality_name:0 "#b STEPPING INTO ANOTHER WORLD #!"
+ notification_headlines_tech_virtual_reality_desc:1 "$HEADLINES_TECH_NAME$ technologies pioneered in [SCOPE.sCountry('headlines_virtual_reality_researcher').GetName] can create incredibly immersive experiences for entertainment, education, and training. #lore It's a new way to interact with the digital world, and it's full of potential... #!"
+
+# Wireless Internet (Wi-Fi) - 21st Century Tone
+ notification_headlines_tech_wireless_internet_tooltip:0 "#header $notification_headlines_tech_wireless_internet_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_wireless_internet_desc$"
+ notification_headlines_tech_wireless_internet_name:0 "#b INTERNET WITHOUT THE WIRES #!"
+ notification_headlines_tech_wireless_internet_desc:1 "Wi-Fi has made it possible to connect to the internet without cables. #lore Developed in [SCOPE.sCountry('headlines_wireless_internet_researcher').GetName], it has made life more convenient and has revolutionized the way people work, communicate, and entertain themselves... #!"
+
+# World Wide Web - 1990s Tone
+ notification_headlines_tech_world_wide_web_tooltip:0 "#header $notification_headlines_tech_world_wide_web_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_world_wide_web_desc$"
+ notification_headlines_tech_world_wide_web_name:0 "#b 'WORLD WIDE WEB' CONNECTS THE GLOBE #!"
+ notification_headlines_tech_world_wide_web_desc:1 "The $HEADLINES_TECH_NAME$, developed by researchers including those in [SCOPE.sCountry('headlines_world_wide_web_researcher').GetName], has transformed the way people access and share information. #lore It has created a global platform for collaboration and innovation, connecting the world in a vast network of knowledge... #!"
+
+# Abyssal Plain Mining - Near-Future Tone
+ notification_headlines_tech_abyssal_plain_mining_tooltip:0 "#header $notification_headlines_tech_abyssal_plain_mining_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_abyssal_plain_mining_desc$"
+ notification_headlines_tech_abyssal_plain_mining_name:0 "#b MINING THE OCEAN FLOOR FOR RARE RESOURCES #!"
+ notification_headlines_tech_abyssal_plain_mining_desc:1 "With the depletion of terrestrial mineral resources, companies in [SCOPE.sCountry('headlines_abyssal_plain_mining_researcher').GetName] are turning to the ocean floor for mining. #lore This $HEADLINES_TECH_NAME$ could provide access to valuable minerals, but it also raises environmental concerns... #!"

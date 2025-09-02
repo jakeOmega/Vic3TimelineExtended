@@ -29,8 +29,8 @@
 	}
 	
 	upkeep_modifier = {
-		goods_input_radios_add = 0.5                          # Price:   80, Total cost: 40.0
-		goods_input_telephones_add = 1                        # Price:   70, Total cost: 70.0
+		goods_input_radios_add = 0.5                          # Price:   80, Total cost:    40.0 (36.36%)
+		goods_input_telephones_add = 1                        # Price:   70, Total cost:    70.0 (63.64%)
 		# Total cost: 110.0
 	}
 	unit_modifier = {
@@ -71,7 +71,7 @@ mobilization_option_robotic_assistance = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_robotics_add = 10                         # Price:   80, Total cost: 800.0
+		goods_input_robotics_add = 10                         # Price:   80, Total cost:   800.0 (100.00%)
 		# Total cost: 800.0
 	}
 	unit_modifier = {
@@ -111,8 +111,8 @@ mobilization_option_logistical_support = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_engines_add = 5                           # Price:   60, Total cost: 300.0
-		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
+		goods_input_engines_add = 5                           # Price:   60, Total cost:   300.0 (60.00%)
+		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (40.00%)
 		# Total cost: 500.0
 	}
 	unit_modifier = {
@@ -152,11 +152,11 @@ mobilization_option_extensive_logistical_support = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_engines_add = 5                           # Price:   60, Total cost: 300.0
-		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
-		goods_input_radios_add = 5                            # Price:   80, Total cost: 400.0
-		goods_input_telephones_add = 5                        # Price:   70, Total cost: 350.0
-		goods_input_automobiles_add = 1                       # Price:  100, Total cost: 100.0
+		goods_input_engines_add = 5                           # Price:   60, Total cost:   300.0 (22.22%)
+		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (14.81%)
+		goods_input_radios_add = 5                            # Price:   80, Total cost:   400.0 (29.63%)
+		goods_input_telephones_add = 5                        # Price:   70, Total cost:   350.0 (25.93%)
+		goods_input_automobiles_add = 1                       # Price:  100, Total cost:   100.0 (7.41%)
 		# Total cost: 1350.0
 	}
 	unit_modifier = {
@@ -195,13 +195,13 @@ mobilization_option_modern_logistical_support = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_radios_add = 10                           # Price:   80, Total cost: 800.0
-		goods_input_telephones_add = 10                       # Price:   70, Total cost: 700.0
-		goods_input_automobiles_add = 2                       # Price:  100, Total cost: 200.0
-		goods_input_launch_capacity_add = 1                   # Price:  200, Total cost: 200.0
-		goods_input_aeroplanes_add = 1                        # Price:   80, Total cost: 80.0
-		goods_input_electronic_components_add = 2             # Price:   80, Total cost: 160.0
-		goods_input_consumer_appliances_add = 2               # Price:   80, Total cost: 160.0
+		goods_input_radios_add = 10                           # Price:   80, Total cost:   800.0 (34.78%)
+		goods_input_telephones_add = 10                       # Price:   70, Total cost:   700.0 (30.43%)
+		goods_input_automobiles_add = 2                       # Price:  100, Total cost:   200.0 (8.70%)
+		goods_input_launch_capacity_add = 1                   # Price:  200, Total cost:   200.0 (8.70%)
+		goods_input_aeroplanes_add = 1                        # Price:   80, Total cost:    80.0 (3.48%)
+		goods_input_electronic_components_add = 2             # Price:   80, Total cost:   160.0 (6.96%)
+		goods_input_consumer_appliances_add = 2               # Price:   80, Total cost:   160.0 (6.96%)
 		# Total cost: 2300.0
 	}
 	unit_modifier = {
@@ -240,14 +240,14 @@ mobilization_option_advanced_logistical_support = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_launch_capacity_add = 10                  # Price:  200, Total cost: 2000.0
-		goods_input_aeroplanes_add = 5                        # Price:   80, Total cost: 400.0
-		goods_input_electronic_components_add = 5             # Price:   80, Total cost: 400.0
-		goods_input_consumer_appliances_add = 1               # Price:   80, Total cost: 80.0
-		goods_input_automobiles_add = 5                       # Price:  100, Total cost: 500.0
-		goods_input_digital_assets_add = 20                   # Price:  100, Total cost: 2000.0
-		goods_input_robotics_add = 5                          # Price:   80, Total cost: 400.0
-		goods_input_radios_add = 5                            # Price:   80, Total cost: 400.0
+		goods_input_launch_capacity_add = 10                  # Price:  200, Total cost:  2000.0 (32.36%)
+		goods_input_aeroplanes_add = 5                        # Price:   80, Total cost:   400.0 (6.47%)
+		goods_input_electronic_components_add = 5             # Price:   80, Total cost:   400.0 (6.47%)
+		goods_input_consumer_appliances_add = 1               # Price:   80, Total cost:    80.0 (1.29%)
+		goods_input_automobiles_add = 5                       # Price:  100, Total cost:   500.0 (8.09%)
+		goods_input_digital_assets_add = 20                   # Price:  100, Total cost:  2000.0 (32.36%)
+		goods_input_robotics_add = 5                          # Price:   80, Total cost:   400.0 (6.47%)
+		goods_input_radios_add = 5                            # Price:   80, Total cost:   400.0 (6.47%)
 		# Total cost: 6180.0
 	}
 	unit_modifier = {
@@ -271,7 +271,7 @@ mobilization_option_coffee = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_coffee_add = 0.5                          # Price:   50, Total cost: 25.0
+		goods_input_coffee_add = 0.5                          # Price:   50, Total cost:    25.0 (100.00%)
 		# Total cost: 25.0
 	}
 	unit_modifier = {
@@ -295,7 +295,7 @@ mobilization_option_appliances = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_consumer_appliances_add = 0.5             # Price:   80, Total cost: 40.0
+		goods_input_consumer_appliances_add = 0.5             # Price:   80, Total cost:    40.0 (100.00%)
 		# Total cost: 40.0
 	}
 	unit_modifier = {
@@ -335,7 +335,7 @@ mobilization_option_forced_march = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_gold_add = 0.5                            # Price:  100, Total cost: 50.0
+		goods_input_gold_add = 0.5                            # Price:  100, Total cost:    50.0 (100.00%)
 		# Total cost: 50.0
 	}
 	unit_modifier = {
@@ -408,7 +408,7 @@ mobilization_option_truck_transport = {
 		combustion_engine
 	}
 	upkeep_modifier = {
-		goods_input_automobiles_add = 0.5                     # Price:  100, Total cost: 50.0
+		goods_input_automobiles_add = 0.5                     # Price:  100, Total cost:    50.0 (100.00%)
 		# Total cost: 50.0
 	}
 	unit_modifier = {
@@ -465,7 +465,7 @@ mobilization_option_rail_transport = {
 		railways
 	}
 	upkeep_modifier = {
-		goods_input_engines_add = 0.5                         # Price:   60, Total cost: 30.0
+		goods_input_engines_add = 0.5                         # Price:   60, Total cost:    30.0 (100.00%)
 		# Total cost: 30.0
 	}
 	unit_modifier = {
@@ -521,7 +521,7 @@ mobilization_option_air_transport = {
 		commercial_aviation
 	}
 	upkeep_modifier = {
-		goods_input_aeroplanes_add = 5                        # Price:   80, Total cost: 400.0
+		goods_input_aeroplanes_add = 5                        # Price:   80, Total cost:   400.0 (100.00%)
 		# Total cost: 400.0
 	}
 	unit_modifier = {
@@ -578,8 +578,8 @@ mobilization_option_space_transport = {
 		rapid_deployment_forces
 	}
 	upkeep_modifier = {
-		goods_input_launch_capacity_add = 10                  # Price:  200, Total cost: 2000.0
-		goods_input_aeroplanes_add = 5                        # Price:   80, Total cost: 400.0
+		goods_input_launch_capacity_add = 10                  # Price:  200, Total cost:  2000.0 (83.33%)
+		goods_input_aeroplanes_add = 5                        # Price:   80, Total cost:   400.0 (16.67%)
 		# Total cost: 2400.0
 	}
 	unit_modifier = {
@@ -627,8 +627,8 @@ mobilization_option_entrenchment = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
-		goods_input_ammunition_add = 5                        # Price:   50, Total cost: 250.0
+		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (44.44%)
+		goods_input_ammunition_add = 5                        # Price:   50, Total cost:   250.0 (55.56%)
 		# Total cost: 450.0
 	}
 	unit_modifier = {
@@ -680,8 +680,8 @@ mobilization_option_space_recon = {
 		recon_satellites
 	}
 	upkeep_modifier = {
-		goods_input_aeroplanes_add = 1                        # Price:   80, Total cost: 80.0
-		goods_input_launch_capacity_add = 5                   # Price:  200, Total cost: 1000.0
+		goods_input_aeroplanes_add = 1                        # Price:   80, Total cost:    80.0 (7.41%)
+		goods_input_launch_capacity_add = 5                   # Price:  200, Total cost:  1000.0 (92.59%)
 		# Total cost: 1080.0
 	}
 	unit_modifier = {
@@ -730,7 +730,7 @@ mobilization_option_molecular_scanners = {
 		molecular_assemblers
 	}
 	upkeep_modifier = {
-		goods_input_advanced_materials_add = 1                # Price: 4000, Total cost: 4000.0
+		goods_input_advanced_materials_add = 1                # Price: 4000, Total cost:  4000.0 (100.00%)
 		# Total cost: 4000.0
 	}
 	unit_modifier = {
@@ -781,8 +781,8 @@ mobilization_option_radar = {
 		radar
 	}
 	upkeep_modifier = {
-		goods_input_consumer_appliances_add = 2.5             # Price:   80, Total cost: 200.0
-		goods_input_radios_add = 5                            # Price:   80, Total cost: 400.0
+		goods_input_consumer_appliances_add = 2.5             # Price:   80, Total cost:   200.0 (33.33%)
+		goods_input_radios_add = 5                            # Price:   80, Total cost:   400.0 (66.67%)
 		# Total cost: 600.0
 	}
 	unit_modifier = {
@@ -832,9 +832,9 @@ mobilization_option_night_vision_gear = {
 		infrared_night_vision
 	}
 	upkeep_modifier = {
-		goods_input_electronic_components_add = 5             # Price:   80, Total cost: 400.0
-		goods_input_consumer_appliances_add = 2.5             # Price:   80, Total cost: 200.0
-		goods_input_radios_add = 2.5                          # Price:   80, Total cost: 200.0
+		goods_input_electronic_components_add = 5             # Price:   80, Total cost:   400.0 (50.00%)
+		goods_input_consumer_appliances_add = 2.5             # Price:   80, Total cost:   200.0 (25.00%)
+		goods_input_radios_add = 2.5                          # Price:   80, Total cost:   200.0 (25.00%)
 		# Total cost: 800.0
 	}
 	unit_modifier = {
@@ -888,10 +888,10 @@ mobilization_option_missile_defense_system = {
 		missile_defense_systems
 	}
 	upkeep_modifier = {
-		goods_input_ammunition_add = 10                       # Price:   50, Total cost: 500.0
-		goods_input_electronic_components_add = 5             # Price:   80, Total cost: 400.0
-		goods_input_consumer_appliances_add = 2.5             # Price:   80, Total cost: 200.0
-		goods_input_radios_add = 2.5                          # Price:   80, Total cost: 200.0
+		goods_input_ammunition_add = 10                       # Price:   50, Total cost:   500.0 (38.46%)
+		goods_input_electronic_components_add = 5             # Price:   80, Total cost:   400.0 (30.77%)
+		goods_input_consumer_appliances_add = 2.5             # Price:   80, Total cost:   200.0 (15.38%)
+		goods_input_radios_add = 2.5                          # Price:   80, Total cost:   200.0 (15.38%)
 		# Total cost: 1300.0
 	}
 	unit_modifier = {
@@ -941,10 +941,10 @@ mobilization_option_directed_energy_defenses = {
 		directed_energy_defenses
 	}
 	upkeep_modifier = {
-		goods_input_electronic_components_add = 10             # Price:   80, Total cost: 400.0
-		goods_input_consumer_appliances_add = 5             # Price:   80, Total cost: 200.0
-		goods_input_radios_add = 5                          # Price:   80, Total cost: 200.0
-		# Total cost: 800.0
+		goods_input_electronic_components_add = 10            # Price:   80, Total cost:   800.0 (50.00%)
+		goods_input_consumer_appliances_add = 5               # Price:   80, Total cost:   400.0 (25.00%)
+		goods_input_radios_add = 5                            # Price:   80, Total cost:   400.0 (25.00%)
+		# Total cost: 1600.0
 	}
 	unit_modifier = {
 		unit_army_defense_mult = 0.2
@@ -995,10 +995,10 @@ mobilization_option_cyberwarfare_team = {
 		cyber_warfare
 	}
 	upkeep_modifier = {
-		goods_input_digital_access_add = 5                    # Price:  120, Total cost: 600.0
-		goods_input_digital_assets_add = 2.5                  # Price:  100, Total cost: 250.0
-		goods_input_electronic_components_add = 5             # Price:   80, Total cost: 400.0
-		goods_input_consumer_appliances_add = 5               # Price:   80, Total cost: 400.0
+		goods_input_digital_access_add = 5                    # Price:  120, Total cost:   600.0 (36.36%)
+		goods_input_digital_assets_add = 2.5                  # Price:  100, Total cost:   250.0 (15.15%)
+		goods_input_electronic_components_add = 5             # Price:   80, Total cost:   400.0 (24.24%)
+		goods_input_consumer_appliances_add = 5               # Price:   80, Total cost:   400.0 (24.24%)
 		# Total cost: 1650.0
 	}
 	unit_modifier = {
@@ -1052,9 +1052,9 @@ mobilization_option_electronic_warfare = {
 		electronic_warfare
 	}
 	upkeep_modifier = {
-		goods_input_consumer_appliances_add = 5               # Price:   80, Total cost: 400.0
-		goods_input_electronic_components_add = 5             # Price:   80, Total cost: 400.0
-		goods_input_digital_assets_add = 5                    # Price:  100, Total cost: 500.0
+		goods_input_consumer_appliances_add = 5               # Price:   80, Total cost:   400.0 (30.77%)
+		goods_input_electronic_components_add = 5             # Price:   80, Total cost:   400.0 (30.77%)
+		goods_input_digital_assets_add = 5                    # Price:  100, Total cost:   500.0 (38.46%)
 		# Total cost: 1300.0
 	}
 	unit_modifier = {
@@ -1104,10 +1104,10 @@ mobilization_option_exoskeleton_suits = {
 		advanced_body_armor
 	}
 	upkeep_modifier = {
-		goods_input_robotics_add = 20                         # Price:   80, Total cost: 1600.0
-		goods_input_ammunition_add = 40                       # Price:   50, Total cost: 2000.0
-		goods_input_consumer_appliances_add = 5               # Price:   80, Total cost: 400.0
-		goods_input_electronic_components_add = 10            # Price:   80, Total cost: 800.0
+		goods_input_robotics_add = 20                         # Price:   80, Total cost:  1600.0 (33.33%)
+		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (41.67%)
+		goods_input_consumer_appliances_add = 5               # Price:   80, Total cost:   400.0 (8.33%)
+		goods_input_electronic_components_add = 10            # Price:   80, Total cost:   800.0 (16.67%)
 		# Total cost: 4800.0
 	}
 	unit_modifier = {
@@ -1171,8 +1171,8 @@ mobilization_option_first_aid = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_fabric_add = 1                            # Price:   20, Total cost: 20.0
-		goods_input_liquor_add = 2                            # Price:   30, Total cost: 60.0
+		goods_input_fabric_add = 1                            # Price:   20, Total cost:    20.0 (25.00%)
+		goods_input_liquor_add = 2                            # Price:   30, Total cost:    60.0 (75.00%)
 		# Total cost: 80.0
 	}
 	unit_modifier = {
@@ -1236,9 +1236,9 @@ mobilization_option_field_hospitals = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_fabric_add = 1                            # Price:   20, Total cost: 20.0
-		goods_input_liquor_add = 2                            # Price:   30, Total cost: 60.0
-		goods_input_tools_add = 1                             # Price:   40, Total cost: 40.0
+		goods_input_fabric_add = 1                            # Price:   20, Total cost:    20.0 (16.67%)
+		goods_input_liquor_add = 2                            # Price:   30, Total cost:    60.0 (50.00%)
+		goods_input_tools_add = 1                             # Price:   40, Total cost:    40.0 (33.33%)
 		# Total cost: 120.0
 	}
 	unit_modifier = {
@@ -1305,10 +1305,10 @@ mobilization_option_medevac_helicopters = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_fabric_add = 2                            # Price:   20, Total cost: 40.0
-		goods_input_liquor_add = 2                            # Price:   30, Total cost: 60.0
-		goods_input_tools_add = 2                             # Price:   40, Total cost: 80.0
-		goods_input_aeroplanes_add = 4                        # Price:   80, Total cost: 320.0
+		goods_input_fabric_add = 2                            # Price:   20, Total cost:    40.0 (8.00%)
+		goods_input_liquor_add = 2                            # Price:   30, Total cost:    60.0 (12.00%)
+		goods_input_tools_add = 2                             # Price:   40, Total cost:    80.0 (16.00%)
+		goods_input_aeroplanes_add = 4                        # Price:   80, Total cost:   320.0 (64.00%)
 		# Total cost: 500.0
 	}
 	unit_modifier = {
@@ -1351,8 +1351,8 @@ mobilization_option_voluntary_enhancement = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_robotics_add = 10                         # Price:   80, Total cost: 800.0
-		goods_input_electronic_components_add = 20            # Price:   80, Total cost: 1600.0
+		goods_input_robotics_add = 10                         # Price:   80, Total cost:   800.0 (33.33%)
+		goods_input_electronic_components_add = 20            # Price:   80, Total cost:  1600.0 (66.67%)
 		# Total cost: 2400.0
 	}
 	unit_modifier = {
@@ -1396,8 +1396,8 @@ mobilization_option_mandatory_enhancement = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_robotics_add = 20                         # Price:   80, Total cost: 1600.0
-		goods_input_electronic_components_add = 40            # Price:   80, Total cost: 3200.0
+		goods_input_robotics_add = 20                         # Price:   80, Total cost:  1600.0 (33.33%)
+		goods_input_electronic_components_add = 40            # Price:   80, Total cost:  3200.0 (66.67%)
 		# Total cost: 4800.0
 	}
 	unit_modifier = {
@@ -1445,9 +1445,9 @@ mobilization_option_jungle_combat_training = {
 	}
 		
 	upkeep_modifier = {
-		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
-		goods_input_ammunition_add = 5                        # Price:   50, Total cost: 250.0
-		goods_input_fabric_add = 5                            # Price:   20, Total cost: 100.0
+		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (36.36%)
+		goods_input_ammunition_add = 5                        # Price:   50, Total cost:   250.0 (45.45%)
+		goods_input_fabric_add = 5                            # Price:   20, Total cost:   100.0 (18.18%)
 		# Total cost: 550.0
 	}
 	unit_modifier = {
@@ -1497,9 +1497,9 @@ mobilization_option_mountain_combat_training = {
 	}
 		
 	upkeep_modifier = {
-		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
-		goods_input_ammunition_add = 5                        # Price:   50, Total cost: 250.0
-		goods_input_fabric_add = 5                            # Price:   20, Total cost: 100.0
+		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (36.36%)
+		goods_input_ammunition_add = 5                        # Price:   50, Total cost:   250.0 (45.45%)
+		goods_input_fabric_add = 5                            # Price:   20, Total cost:   100.0 (18.18%)
 		# Total cost: 550.0
 	}
 	unit_modifier = {
@@ -1553,8 +1553,8 @@ mobilization_option_flight_simulators = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_electronic_components_add = 25            # Price:   80, Total cost: 2000.0
-		goods_input_consumer_appliances_add = 25              # Price:   80, Total cost: 2000.0
+		goods_input_electronic_components_add = 25            # Price:   80, Total cost:  2000.0 (50.00%)
+		goods_input_consumer_appliances_add = 25              # Price:   80, Total cost:  2000.0 (50.00%)
 		# Total cost: 4000.0
 	}
 	unit_modifier = {
@@ -1608,9 +1608,9 @@ mobilization_option_amphibious_warfare = {
 	}
 			
 	upkeep_modifier = {
-		goods_input_tools_add = 5                             # Price:   40, Total cost: 200.0
-		goods_input_ammunition_add = 5                        # Price:   50, Total cost: 250.0
-		goods_input_fabric_add = 5                            # Price:   20, Total cost: 100.0
+		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (36.36%)
+		goods_input_ammunition_add = 5                        # Price:   50, Total cost:   250.0 (45.45%)
+		goods_input_fabric_add = 5                            # Price:   20, Total cost:   100.0 (18.18%)
 		# Total cost: 550.0
 	}
 	unit_modifier = {

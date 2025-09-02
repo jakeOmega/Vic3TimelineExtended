@@ -102,6 +102,535 @@ decrease_funding_nuclear_program = {
 	}
 }
 
+cb_policy_rate_hike = {
+    name = "CB_POLICY_RATE_HIKE"
+    desc = "CB_POLICY_RATE_HIKE_DESC"
+    visible = {
+        always = yes
+    }
+    ai_chance = {
+        value = 0
+        # Core: use when hot / bubble risk high
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 45 }
+        if = { limit = { banking_cycle_bubble_risk_high = yes } add = 25 }
+        if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 15 }
+
+        # Law flavor: prefer if proper CB
+        if = { limit = { has_law = law_central_bank_independence } add = 15 }
+
+        # Resources
+        if = { limit = { banking_points_high = yes } add = 10 }
+        if = { limit = { banking_points_low = yes } add = -15 }
+
+        # Avoid when weak
+        if = { limit = { banking_cycle_is_recession = yes } add = -80 }
+        if = { limit = { banking_tool_omo_active = yes } add = -10 }  # don't fight OMO
+        if = { limit = { banking_tool_eliq_active = yes } add = -40 } # don't hike during emergency
+    }
+
+
+    possible = {
+        modifier:country_banking_intervention_max_add >= 2
+        NOT = { has_modifier = banking_policy_rate_hike }
+    }
+
+    effect = {
+        # Spend 2 points (via the modifier) and cool the cycle
+        add_modifier = { name = banking_policy_rate_hike days = 365 }
+        add_radicals = {
+            value = small_radicals
+        }
+    }
+}
+
+cb_open_market_ops = {
+    name = "CB_OPEN_MARKET_OPS"
+    desc = "CB_OPEN_MARKET_OPS_DESC"
+    visible = { always = yes }
+    
+    ai_chance = {
+        value = 0
+        # Core: use in panic/downturn, or when momentum is sharply negative
+        if = { limit = { banking_cycle_is_panic = yes } add = 60 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+        if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
+
+        # Law flavor
+        if = { limit = { has_law = law_central_bank_independence } add = 15 }
+
+        # Resources
+        if = { limit = { banking_points_med = yes } add = 10 }
+        if = { limit = { banking_points_low = yes } add = 5 }
+
+        # Avoid when hot or contradictory
+        if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
+        if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
+        if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+
+        # (Optional) Fiscal stress: conservative on big asset buys if highly stressed
+        if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
+    }
+
+
+    possible = {
+        has_technology_researched = keynesian_economics
+        modifier:country_banking_intervention_max_add >= 4
+        NOT = { has_modifier = banking_open_market_ops }
+    }
+    effect = {
+        add_modifier = { name = banking_open_market_ops days = 365 }
+    }
+}
+
+cb_countercyclical_buffer = {
+    name = "CB_COUNTERCYCLICAL_BUFFER"
+    desc = "CB_COUNTERCYCLICAL_BUFFER_DESC"
+    visible = { always = yes }
+    
+    ai_chance = {
+        value = 0
+        # Core: expansion/frenzy, especially with building heat
+        if = { limit = { banking_cycle_is_expansion = yes } add = 25 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 35 }
+        if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 15 }
+
+        # Law flavor: prudential regimes lean this way
+        if = { limit = { has_law = law_prudential_narrow_banking } add = 15 }
+        if = { limit = { has_law = law_universal_banking_light_prudence } add = 10 }
+        if = { limit = { has_law = law_free_mutual_banking } add = 5 }
+
+        # Resources
+        if = { limit = { banking_points_low = yes } add = 10 }  # cheap, so attractive when points are scarce
+
+        # Avoid in recession/panic
+        if = { limit = { banking_cycle_is_recession = yes } add = -60 }
+    }
+
+    possible = {
+        has_technology_researched = international_exchange_standards
+        modifier:country_banking_intervention_max_add >= 2
+        NOT = { has_modifier = banking_countercyclical_capital_buffer }
+    }
+    effect = {
+        add_modifier = { name = banking_countercyclical_capital_buffer days = 185 }
+    }
+}
+
+cb_expand_deposit_guarantee = {
+    name = "CB_EXPAND_DEPOSIT_GUARANTEE"
+    desc = "CB_EXPAND_DEPOSIT_GUARANTEE_DESC"
+    visible = { always = yes }
+    
+    ai_chance = {
+        value = 0
+        # Core: strong in panic, useful in downturn
+        if = { limit = { banking_cycle_is_panic = yes } add = 70 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 25 }
+
+        # Synergy: if emergency liquidity not active, prefer deposit guarantee
+        if = { limit = { NOT = { banking_tool_eliq_active = yes } } add = 10 }
+
+        # Law flavor
+        if = { limit = { has_law = law_prudential_narrow_banking } add = 15 }
+        if = { limit = { has_law = law_central_bank_independence } add = 10 }
+
+        # Avoid if already expanded or if in hot market
+        if = { limit = { banking_tool_deposit_active = yes } add = -100 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = -30 }
+
+        # Resources
+        if = { limit = { banking_points_low = yes } add = -10 }
+    }
+
+    possible = {
+        has_technology_researched = consumer_credit
+        modifier:country_banking_intervention_max_add >= 4
+        NOT = { has_modifier = banking_expand_deposit_guarantee }
+    }
+    effect = {
+        add_modifier = { name = banking_expand_deposit_guarantee days = 365 }
+        add_loyalists = {
+            value = small_radicals
+        }
+    }
+}
+
+cb_directed_credit_infrastructure = {
+    name = "CB_DIRECTED_CREDIT_INFRA"
+    desc = "CB_DIRECTED_CREDIT_INFRA_DESC"
+    visible = { always = yes }
+    
+    ai_chance = {
+        value = 0
+        # Core: best in downturn; OK in stable if momentum is falling
+        if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
+        if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = yes } add = 15 }
+
+        # Law flavor
+        if = { limit = { has_law = law_directed_credit_development_banks } add = 25 }
+
+        # Avoid in frenzy (overheats) and deep panic (prefer E-LIQ first)
+        if = { limit = { banking_cycle_is_frenzy = yes } add = -35 }
+        if = { limit = { banking_cycle_is_panic = yes } add = -30 }
+        if = { limit = { banking_tool_eliq_active = yes } add = 10 } # after the firebreak, push demand
+
+        # Resources
+        if = { limit = { banking_points_med = yes } add = 10 }
+    }
+
+    possible = {
+        modifier:country_banking_intervention_max_add >= 3
+        NOT = { has_modifier = banking_directed_credit_infrastructure }
+    }
+    effect = {
+        add_modifier = { name = banking_directed_credit_infrastructure days = 730 }
+    }
+}
+
+cb_emergency_liquidity_program = {
+    name = "CB_EMERGENCY_LIQUIDITY"
+    desc = "CB_EMERGENCY_LIQUIDITY_DESC"
+    visible = { always = yes }
+    
+    ai_chance = {
+        value = 0
+        # Core: panic now; also when sliding fast toward panic
+        if = { limit = { banking_cycle_is_panic = yes } add = 85 }
+        if = { limit = { banking_cycle_is_downturn = yes var:finance_cycle_momentum <= -4 } add = 35 }
+
+        # Law flavor
+        if = { limit = { has_law = law_central_bank_independence } add = 10 }
+        if = { limit = { has_law = law_directed_credit_development_banks } add = 10 }
+
+        # Avoid otherwise
+        if = { limit = { banking_cycle_is_expansion = yes } add = -60 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = -70 }
+
+        # Resources (if you barely have enough, still try)
+        if = { limit = { banking_points_low = yes } add = 10 }
+
+        # Don’t stack duplicates
+        if = { limit = { banking_tool_eliq_active = yes } add = -100 }
+    }
+
+    possible = {
+        has_technology_researched = investment_banks
+        modifier:country_banking_intervention_max_add >= 6
+        NOT = { has_modifier = banking_emergency_liquidity_program }
+    }
+    effect = {
+        add_modifier = { name = banking_emergency_liquidity_program days = 365 }
+        # Big shock absorber
+        change_variable = { name = finance_cycle_value add = 20 }        # jump out of panic quickly
+        change_variable = { name = finance_cycle_momentum add = 1 }
+        change_variable = { name = bubble_pressure add = 10 }
+    }
+}
+
+cb_moral_suasion = {
+    name = "CB_MORAL_SUASION"
+    desc = "CB_MORAL_SUASION_DESC"
+    visible = { always = yes }
+    
+    ai_chance = {
+        value = 0
+        # Use in light heat or light weakness when other tools are gated/expensive
+        if = { limit = { banking_cycle_is_expansion = yes } add = 15 }
+        if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 30 }
+
+        # Prefer when points are scarce
+        if = { limit = { banking_points_low = yes } add = 20 }
+
+        # Deprioritize in extremes (panic/frenzy demand stronger tools)
+        if = { limit = { banking_cycle_is_panic = yes } add = -30 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = -25 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = -20 }
+    }
+
+    possible = {
+        modifier:country_banking_intervention_max_add >= 1
+        NOT = { has_modifier = banking_moral_suasion }
+    }
+    effect = {
+        add_modifier = { name = banking_moral_suasion days = 365 }
+
+    }
+}
+
+cb_raise_margin_requirements = {
+    name = "CB_RAISE_MARGIN_REQ"
+    desc = "CB_RAISE_MARGIN_REQ_DESC"
+    visible = { always = yes }
+    
+    ai_chance = {
+        value = 0
+        # Core: expansion/frenzy, especially with building heat
+        if = { limit = { banking_cycle_is_expansion = yes } add = 5 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 15 }
+        if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 35 }
+
+        # Law flavor: prudential regimes lean this way
+        if = { limit = { has_law = law_prudential_narrow_banking } add = 15 }
+        if = { limit = { has_law = law_universal_banking_light_prudence } add = 10 }
+        if = { limit = { has_law = law_free_mutual_banking } add = 5 }
+
+        # Resources
+        if = { limit = { banking_points_low = yes } add = 10 }  # cheap, so attractive when points are scarce
+
+        # Avoid in recession/panic
+        if = { limit = { banking_cycle_is_recession = yes } add = -60 }
+    }
+
+    possible = {
+        modifier:country_banking_intervention_max_add >= 2
+        NOT = { has_modifier = banking_raise_margin_requirements }
+    }
+    effect = {
+        add_modifier = { name = banking_raise_margin_requirements days = 185 }
+    }
+}
+
+cb_fx_devaluation = {
+    name = "CB_FX_DEVALUATION"
+    desc = "CB_FX_DEVALUATION_DESC"
+    visible = { always = yes }
+
+    ai_chance = {
+        value = 0
+        # Core: use in panic/downturn, or when momentum is sharply negative
+        if = { limit = { banking_cycle_is_panic = yes } add = 60 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+        if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
+
+        # Law flavor
+        if = { limit = { has_law = law_central_bank_independence } add = 15 }
+
+        # Resources
+        if = { limit = { banking_points_med = yes } add = 10 }
+        if = { limit = { banking_points_low = yes } add = 5 }
+
+        # Avoid when hot or contradictory
+        if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
+        if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
+        if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+
+        # (Optional) Fiscal stress: conservative on big asset buys if highly stressed
+        if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
+    }
+
+    possible = {
+        modifier:country_banking_intervention_max_add >= 3
+        NOT = { has_modifier = banking_fx_devaluation }
+        has_technology_researched = keynesian_economics
+    }
+    effect = {
+        add_modifier = { name = banking_fx_devaluation days = 365 }
+    }
+}
+
+cb_fx_support = {
+    name = "CB_FX_SUPPORT"
+    desc = "CB_FX_SUPPORT_DESC"
+    visible = { always = yes }
+
+    ai_chance = {
+        value = 0
+        # Core: use in panic/downturn, or when momentum is sharply negative
+        if = { limit = { banking_cycle_is_panic = yes } add = 60 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+        if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
+
+        # Law flavor
+        if = { limit = { has_law = law_central_bank_independence } add = 15 }
+
+        # Resources
+        if = { limit = { banking_points_med = yes } add = 10 }
+        if = { limit = { banking_points_low = yes } add = 5 }
+
+        # Avoid when hot or contradictory
+        if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
+        if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
+        if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+
+        # (Optional) Fiscal stress: conservative on big asset buys if highly stressed
+        if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
+    }
+
+    possible = {
+        modifier:country_banking_intervention_max_add >= 3
+        NOT = { has_modifier = banking_fx_support }
+        has_technology_researched = international_exchange_standards
+    }
+    effect = {
+        add_modifier = { name = banking_fx_support days = 365 }
+    }
+}
+
+cb_capital_controls_outflow = {
+    name = "CB_CAPITAL_CONTROLS_OUT"
+    desc = "CB_CAPITAL_CONTROLS_OUT_DESC"
+    visible = { always = yes }
+
+    ai_chance = {
+        value = 0
+        # Core: use in panic/downturn, or when momentum is sharply negative
+        if = { limit = { banking_cycle_is_panic = yes } add = 60 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+        if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
+
+        # Law flavor
+        if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
+        if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 10 }
+
+        # Resources
+        if = { limit = { banking_points_med = yes } add = 10 }
+        if = { limit = { banking_points_low = yes } add = 5 }
+
+        # Avoid when hot or contradictory
+        if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
+        if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
+        if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+
+        # (Optional) Fiscal stress: conservative on big asset buys if highly stressed
+        if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
+    }
+
+    possible = {
+        modifier:country_banking_intervention_max_add >= 2
+        NOT = { has_modifier = banking_capital_controls_out }
+        OR = {
+            has_law = law_type:law_prudential_narrow_banking
+            has_law = law_type:law_directed_credit_development_banks
+        }
+    }
+    effect = {
+        add_modifier = { name = banking_capital_controls_out days = 365 }
+    }
+}
+
+cb_fx_swap_lines = {
+    name = "CB_FX_SWAP_LINES"
+    desc = "CB_FX_SWAP_LINES_DESC"
+    visible = { always = yes }
+
+    ai_chance = {
+        value = 0
+        # Core: use in panic/downturn, or when momentum is sharply negative
+        if = { limit = { banking_cycle_is_panic = yes } add = 60 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+        if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
+
+        # Law flavor
+        if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
+        if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 10 }
+
+        # Resources
+        if = { limit = { banking_points_med = yes } add = 10 }
+        if = { limit = { banking_points_low = yes } add = 5 }
+
+        # Avoid when hot or contradictory
+        if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
+        if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
+        if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+
+        # (Optional) Fiscal stress: conservative on big asset buys if highly stressed
+        if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
+    }
+
+    possible = {
+        modifier:country_banking_intervention_max_add >= 4
+        NOT = { has_modifier = banking_fx_swap_lines }
+        has_technology_researched = international_exchange_standards
+        OR = {
+            has_law = law_type:law_central_bank_independence
+            has_law = law_type:law_directed_credit_development_banks
+        }
+    }
+    effect = {
+        add_modifier = { name = banking_fx_swap_lines days = 365 }
+        change_variable = { name = finance_cycle_value add = 5 }
+  }
+}
+
+
+cb_export_credit_facility = {
+    name = "CB_EXPORT_CREDIT"
+    desc = "CB_EXPORT_CREDIT_DESC"
+    visible = { always = yes }
+
+    ai_chance = {
+        value = 0
+        # Core: use in panic/downturn, or when momentum is sharply negative
+        if = { limit = { banking_cycle_is_panic = yes } add = 60 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+        if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
+
+        # Law flavor
+        if = { limit = { has_law = law_directed_credit_development_banks } add = 15 }
+
+        # Resources
+        if = { limit = { banking_points_med = yes } add = 10 }
+        if = { limit = { banking_points_low = yes } add = 5 }
+
+        # Avoid when hot or contradictory
+        if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
+        if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
+        if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+
+        # (Optional) Fiscal stress: conservative on big asset buys if highly stressed
+        if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
+    }
+
+    possible = {
+        modifier:country_banking_intervention_max_add >= 2
+        NOT = { has_modifier = banking_export_credit_facility }
+        has_technology_researched = corporate_management
+    }
+    effect = {
+        add_modifier = { name = banking_export_credit_facility days = 730 } # 24m commitment
+    }
+}
+
+cb_asset_relief_program = {
+    name = "CB_ASSET_RELIEF"
+    desc = "CB_ASSET_RELIEF_DESC"
+    visible = { always = yes }
+
+    ai_chance = {
+        value = 0
+        # Use in real stress; also in stagnation
+        if = { limit = { banking_cycle_is_panic = yes } add = 70 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
+        if = { limit = { var:finance_cycle_value >= 25 var:finance_cycle_value < 40 } add = 25 } # stagnation shelf
+        # Prefer when fiscal/financial stress is high (replace with your own signals if you have them)
+        if = { limit = { banking_fiscal_stress_low = yes } add = 10 }
+        if = { limit = { banking_fiscal_stress_high = yes } add = 10 }
+        # Avoid when hot
+        if = { limit = { banking_cycle_is_boom = yes } add = -30 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = -50 }
+        # Points awareness
+        if = { limit = { banking_points_high = yes } add = 10 }
+    }
+
+    possible = {
+        modifier:country_banking_intervention_max_add >= 5
+        NOT = { has_modifier = banking_asset_relief_program }
+        OR = {
+            has_technology_researched = keynesian_economics
+        }
+        OR = {
+            has_law = law_type:law_central_bank_independence
+            has_law = law_type:law_directed_credit_development_banks
+            has_law = law_type:law_prudential_narrow_banking
+        }
+    }
+
+    effect = {
+        add_modifier = { name = banking_asset_relief_program days = 1080 } # 36 months
+    }
+}
+
+
 # Custom religion
 
 select_ideology_traditionalist_economy = {

@@ -10,9 +10,9 @@ pm_dummy = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_grain_add = 40                           # Price:   20, Total cost: 800.0
+			goods_input_grain_add = 40                           # Price:   20, Total cost:   800.0 (100.00%)
 			# Output goods
-			goods_output_groceries_add = 45                      # Price:   30, Total cost: 1350.0
+			goods_output_groceries_add = 45                      # Price:   30, Total cost:  1350.0 (100.00%)
 			# Total input cost: 800.0
 			# Total output cost: 1350.0
 			# Profit: 550.0
@@ -40,10 +40,10 @@ pm_sweeteners = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_grain_add = 40                           # Price:   20, Total cost: 800.0
-			goods_input_sugar_add = 15                           # Price:   30, Total cost: 450.0
+			goods_input_grain_add = 40                           # Price:   20, Total cost:   800.0 (64.00%)
+			goods_input_sugar_add = 15                           # Price:   30, Total cost:   450.0 (36.00%)
 			# Output goods
-			goods_output_groceries_add = 65                      # Price:   30, Total cost: 1950.0
+			goods_output_groceries_add = 65                      # Price:   30, Total cost:  1950.0 (100.00%)
 			# Total input cost: 1250.0
 			# Total output cost: 1950.0
 			# Profit: 700.0
@@ -72,10 +72,10 @@ pm_baking_powder = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_grain_add = 80                           # Price:   20, Total cost: 1600.0
-			goods_input_sugar_add = 30                           # Price:   30, Total cost: 900.0
+			goods_input_grain_add = 80                           # Price:   20, Total cost:  1600.0 (64.00%)
+			goods_input_sugar_add = 30                           # Price:   30, Total cost:   900.0 (36.00%)
 			# Output goods
-			goods_output_groceries_add = 120                     # Price:   30, Total cost: 3600.0
+			goods_output_groceries_add = 120                     # Price:   30, Total cost:  3600.0 (100.00%)
 			# Total input cost: 2500.0
 			# Total output cost: 3600.0
 			# Profit: 1100.0
@@ -109,11 +109,11 @@ pm_cannery = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_grain_add = -20                          # Price:   20, Total cost: -400.0
-			goods_input_meat_add = 20                            # Price:   30, Total cost: 600.0
-			goods_input_iron_add = 10                            # Price:   40, Total cost: 400.0
+			goods_input_grain_add = -20                          # Price:   20, Total cost:  -400.0 (-66.67%)
+			goods_input_meat_add = 20                            # Price:   30, Total cost:   600.0 (100.00%)
+			goods_input_iron_add = 10                            # Price:   40, Total cost:   400.0 (66.67%)
 			# Output goods
-			goods_output_groceries_add = 30                      # Price:   30, Total cost: 900.0
+			goods_output_groceries_add = 30                      # Price:   30, Total cost:   900.0 (100.00%)
 			# Total input cost: 600.0
 			# Total output cost: 900.0
 			# Profit: 300.0
@@ -140,11 +140,11 @@ pm_cannery_fish = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_grain_add = -20                          # Price:   20, Total cost: -400.0
-			goods_input_fish_add = 30                            # Price:   20, Total cost: 600.0
-			goods_input_iron_add = 10                            # Price:   40, Total cost: 400.0
+			goods_input_grain_add = -20                          # Price:   20, Total cost:  -400.0 (-66.67%)
+			goods_input_fish_add = 30                            # Price:   20, Total cost:   600.0 (100.00%)
+			goods_input_iron_add = 10                            # Price:   40, Total cost:   400.0 (66.67%)
 			# Output goods
-			goods_output_groceries_add = 30                      # Price:   30, Total cost: 900.0
+			goods_output_groceries_add = 30                      # Price:   30, Total cost:   900.0 (100.00%)
 			# Total input cost: 600.0
 			# Total output cost: 900.0
 			# Profit: 300.0
@@ -172,13 +172,13 @@ pm_vacuum_canning = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_grain_add = -30                          # Price:   20, Total cost: -600.0
-			goods_input_fish_add = 30                            # Price:   20, Total cost: 600.0
-			goods_input_meat_add = 20                            # Price:   30, Total cost: 600.0
-			goods_input_iron_add = 10                            # Price:   40, Total cost: 400.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_grain_add = -30                          # Price:   20, Total cost:  -600.0 (-50.00%)
+			goods_input_fish_add = 30                            # Price:   20, Total cost:   600.0 (50.00%)
+			goods_input_meat_add = 20                            # Price:   30, Total cost:   600.0 (50.00%)
+			goods_input_iron_add = 10                            # Price:   40, Total cost:   400.0 (33.33%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (16.67%)
 			# Output goods
-			goods_output_groceries_add = 60                      # Price:   30, Total cost: 1800.0
+			goods_output_groceries_add = 60                      # Price:   30, Total cost:  1800.0 (100.00%)
 			# Total input cost: 1200.0
 			# Total output cost: 1800.0
 			# Profit: 600.0
@@ -211,13 +211,13 @@ pm_vacuum_canning_principle_3 = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_grain_add = -30                          # Price:   20, Total cost: -600.0
-			goods_input_fish_add = 30                            # Price:   20, Total cost: 600.0
-			goods_input_meat_add = 20                            # Price:   30, Total cost: 600.0
-			goods_input_iron_add = 10                            # Price:   40, Total cost: 400.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_grain_add = -30                          # Price:   20, Total cost:  -600.0 (-50.00%)
+			goods_input_fish_add = 30                            # Price:   20, Total cost:   600.0 (50.00%)
+			goods_input_meat_add = 20                            # Price:   30, Total cost:   600.0 (50.00%)
+			goods_input_iron_add = 10                            # Price:   40, Total cost:   400.0 (33.33%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (16.67%)
 			# Output goods
-			goods_output_groceries_add = 70                      # Price:   30, Total cost: 2100.0
+			goods_output_groceries_add = 70                      # Price:   30, Total cost:  2100.0 (100.00%)
 			# Total input cost: 1200.0
 			# Total output cost: 2100.0
 			# Profit: 900.0
@@ -249,10 +249,10 @@ pm_pot_stills = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sugar_add = 25                           # Price:   30, Total cost: 750.0
+			goods_input_sugar_add = 25                           # Price:   30, Total cost:   750.0 (100.00%)
 			# Output goods
-			goods_output_liquor_add = 60                         # Price:   30, Total cost: 1800.0
-			goods_output_groceries_add = -30                     # Price:   30, Total cost: -900.0
+			goods_output_liquor_add = 60                         # Price:   30, Total cost:  1800.0 (200.00%)
+			goods_output_groceries_add = -30                     # Price:   30, Total cost:  -900.0 (-100.00%)
 			# Total input cost: 750.0
 			# Total output cost: 900.0
 			# Profit: 150.0
@@ -280,11 +280,11 @@ pm_patent_stills = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sugar_add = 25                           # Price:   30, Total cost: 750.0
-			goods_input_glass_add = 10                           # Price:   40, Total cost: 400.0
+			goods_input_sugar_add = 25                           # Price:   30, Total cost:   750.0 (65.22%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (34.78%)
 			# Output goods
-			goods_output_liquor_add = 100                        # Price:   30, Total cost: 3000.0
-			goods_output_groceries_add = -40                     # Price:   30, Total cost: -1200.0
+			goods_output_liquor_add = 100                        # Price:   30, Total cost:  3000.0 (166.67%)
+			goods_output_groceries_add = -40                     # Price:   30, Total cost: -1200.0 (-66.67%)
 			# Total input cost: 1150.0
 			# Total output cost: 1800.0
 			# Profit: 650.0
@@ -321,7 +321,7 @@ pm_automated_bakery = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (100.00%)
 			# Output goods
 			# Total input cost: 400.0
 			# Total output cost: 0
@@ -345,9 +345,9 @@ pm_handsewn_clothes = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fabric_add = 40                          # Price:   20, Total cost: 800.0
+			goods_input_fabric_add = 40                          # Price:   20, Total cost:   800.0 (100.00%)
 			# Output goods
-			goods_output_clothes_add = 45                        # Price:   30, Total cost: 1350.0
+			goods_output_clothes_add = 45                        # Price:   30, Total cost:  1350.0 (100.00%)
 			# Total input cost: 800.0
 			# Total output cost: 1350.0
 			# Profit: 550.0
@@ -373,10 +373,10 @@ pm_dye_workshops = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fabric_add = 40                          # Price:   20, Total cost: 800.0
-			goods_input_dye_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_fabric_add = 40                          # Price:   20, Total cost:   800.0 (80.00%)
+			goods_input_dye_add = 5                              # Price:   40, Total cost:   200.0 (20.00%)
 			# Output goods
-			goods_output_clothes_add = 60                        # Price:   30, Total cost: 1800.0
+			goods_output_clothes_add = 60                        # Price:   30, Total cost:  1800.0 (100.00%)
 			# Total input cost: 1000.0
 			# Total output cost: 1800.0
 			# Profit: 800.0
@@ -405,11 +405,11 @@ pm_sewing_machines = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fabric_add = 60                          # Price:   20, Total cost: 1200.0
-			goods_input_dye_add = 10                             # Price:   40, Total cost: 400.0
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_fabric_add = 60                          # Price:   20, Total cost:  1200.0 (66.67%)
+			goods_input_dye_add = 10                             # Price:   40, Total cost:   400.0 (22.22%)
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (11.11%)
 			# Output goods
-			goods_output_clothes_add = 100                       # Price:   30, Total cost: 3000.0
+			goods_output_clothes_add = 100                       # Price:   30, Total cost:  3000.0 (100.00%)
 			# Total input cost: 1800.0
 			# Total output cost: 3000.0
 			# Profit: 1200.0
@@ -439,12 +439,12 @@ pm_electric_sewing_machines = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fabric_add = 60                          # Price:   20, Total cost: 1200.0
-			goods_input_dye_add = 20                             # Price:   40, Total cost: 800.0
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
-			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_fabric_add = 60                          # Price:   20, Total cost:  1200.0 (44.44%)
+			goods_input_dye_add = 20                             # Price:   40, Total cost:   800.0 (29.63%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (14.81%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (11.11%)
 			# Output goods
-			goods_output_clothes_add = 140                       # Price:   30, Total cost: 4200.0
+			goods_output_clothes_add = 140                       # Price:   30, Total cost:  4200.0 (100.00%)
 			# Total input cost: 2700.0
 			# Total output cost: 4200.0
 			# Profit: 1500.0
@@ -476,11 +476,11 @@ pm_craftsman_sewing = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_silk_add = 15                            # Price:   40, Total cost: 600.0
-			goods_input_fabric_add = -15                         # Price:   20, Total cost: -300.0
+			goods_input_silk_add = 15                            # Price:   40, Total cost:   600.0 (200.00%)
+			goods_input_fabric_add = -15                         # Price:   20, Total cost:  -300.0 (-100.00%)
 			# Output goods
-			goods_output_clothes_add = -30                       # Price:   30, Total cost: -900.0
-			goods_output_luxury_clothes_add = 30                 # Price:   60, Total cost: 1800.0
+			goods_output_clothes_add = -30                       # Price:   30, Total cost:  -900.0 (-100.00%)
+			goods_output_luxury_clothes_add = 30                 # Price:   60, Total cost:  1800.0 (200.00%)
 			# Total input cost: 300.0
 			# Total output cost: 900.0
 			# Profit: 600.0
@@ -512,12 +512,12 @@ pm_elastics = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_rubber_add = 10                          # Price:   40, Total cost: 400.0
-			goods_input_silk_add = 35                            # Price:   40, Total cost: 1400.0
-			goods_input_fabric_add = -35                         # Price:   20, Total cost: -700.0
+			goods_input_rubber_add = 10                          # Price:   40, Total cost:   400.0 (36.36%)
+			goods_input_silk_add = 35                            # Price:   40, Total cost:  1400.0 (127.27%)
+			goods_input_fabric_add = -35                         # Price:   20, Total cost:  -700.0 (-63.64%)
 			# Output goods
-			goods_output_clothes_add = -70                       # Price:   30, Total cost: -2100.0
-			goods_output_luxury_clothes_add = 70                 # Price:   60, Total cost: 4200.0
+			goods_output_clothes_add = -70                       # Price:   30, Total cost: -2100.0 (-100.00%)
+			goods_output_luxury_clothes_add = 70                 # Price:   60, Total cost:  4200.0 (200.00%)
 			# Total input cost: 1100.0
 			# Total output cost: 2100.0
 			# Profit: 1000.0
@@ -552,7 +552,7 @@ pm_mechanized_looms = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (100.00%)
 			# Output goods
 			# Total input cost: 200.0
 			# Total output cost: 0
@@ -584,8 +584,8 @@ pm_automatic_power_looms = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (40.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (60.00%)
 			# Output goods
 			# Total input cost: 500.0
 			# Total output cost: 0
@@ -611,10 +611,10 @@ pm_handcrafted_furniture = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 30                            # Price:   20, Total cost: 600.0
-			goods_input_fabric_add = 10                          # Price:   20, Total cost: 200.0
+			goods_input_wood_add = 30                            # Price:   20, Total cost:   600.0 (75.00%)
+			goods_input_fabric_add = 10                          # Price:   20, Total cost:   200.0 (25.00%)
 			# Output goods
-			goods_output_furniture_add = 45                      # Price:   30, Total cost: 1350.0
+			goods_output_furniture_add = 45                      # Price:   30, Total cost:  1350.0 (100.00%)
 			# Total input cost: 800.0
 			# Total output cost: 1350.0
 			# Profit: 550.0
@@ -642,11 +642,11 @@ pm_lathe = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 30                            # Price:   20, Total cost: 600.0
-			goods_input_fabric_add = 10                          # Price:   20, Total cost: 200.0
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_wood_add = 30                            # Price:   20, Total cost:   600.0 (60.00%)
+			goods_input_fabric_add = 10                          # Price:   20, Total cost:   200.0 (20.00%)
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (20.00%)
 			# Output goods
-			goods_output_furniture_add = 65                      # Price:   30, Total cost: 1950.0
+			goods_output_furniture_add = 65                      # Price:   30, Total cost:  1950.0 (100.00%)
 			# Total input cost: 1000.0
 			# Total output cost: 1950.0
 			# Profit: 950.0
@@ -682,11 +682,11 @@ pm_mechanized_workshops = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 50                            # Price:   20, Total cost: 1000.0
-			goods_input_fabric_add = 10                          # Price:   20, Total cost: 200.0
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
+			goods_input_wood_add = 50                            # Price:   20, Total cost:  1000.0 (62.50%)
+			goods_input_fabric_add = 10                          # Price:   20, Total cost:   200.0 (12.50%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (25.00%)
 			# Output goods
-			goods_output_furniture_add = 110                     # Price:   30, Total cost: 3300.0
+			goods_output_furniture_add = 110                     # Price:   30, Total cost:  3300.0 (100.00%)
 			# Total input cost: 1600.0
 			# Total output cost: 3300.0
 			# Profit: 1700.0
@@ -715,11 +715,11 @@ pm_luxury_furniture = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_hardwood_add = 15                        # Price:   40, Total cost: 600.0
-			goods_input_wood_add = -15                           # Price:   20, Total cost: -300.0
+			goods_input_hardwood_add = 15                        # Price:   40, Total cost:   600.0 (200.00%)
+			goods_input_wood_add = -15                           # Price:   20, Total cost:  -300.0 (-100.00%)
 			# Output goods
-			goods_output_furniture_add = -25                     # Price:   30, Total cost: -750.0
-			goods_output_luxury_furniture_add = 25               # Price:   60, Total cost: 1500.0
+			goods_output_furniture_add = -25                     # Price:   30, Total cost:  -750.0 (-100.00%)
+			goods_output_luxury_furniture_add = 25               # Price:   60, Total cost:  1500.0 (200.00%)
 			# Total input cost: 300.0
 			# Total output cost: 750.0
 			# Profit: 450.0
@@ -750,12 +750,12 @@ pm_precision_tools = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_hardwood_add = 25                        # Price:   40, Total cost: 1000.0
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
-			goods_input_wood_add = -25                           # Price:   20, Total cost: -500.0
+			goods_input_hardwood_add = 25                        # Price:   40, Total cost:  1000.0 (111.11%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (44.44%)
+			goods_input_wood_add = -25                           # Price:   20, Total cost:  -500.0 (-55.56%)
 			# Output goods
-			goods_output_furniture_add = -55                     # Price:   30, Total cost: -1650.0
-			goods_output_luxury_furniture_add = 55               # Price:   60, Total cost: 3300.0
+			goods_output_furniture_add = -55                     # Price:   30, Total cost: -1650.0 (-100.00%)
+			goods_output_luxury_furniture_add = 55               # Price:   60, Total cost:  3300.0 (200.00%)
 			# Total input cost: 900.0
 			# Total output cost: 1650.0
 			# Profit: 750.0
@@ -795,8 +795,8 @@ pm_watertube_boiler_building_furniture_manufacturies = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (57.14%)
+			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (42.86%)
 			# Output goods
 			# Total input cost: 350.0
 			# Total output cost: 0
@@ -833,8 +833,8 @@ pm_rotary_valve_engine_building_furniture_manufacturies = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_coal_add = 10                            # Price:   30, Total cost: 300.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (40.00%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (60.00%)
 			# Output goods
 			# Total input cost: 500.0
 			# Total output cost: 0
@@ -871,9 +871,9 @@ pm_assembly_lines_building_furniture_manufacturies = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (36.36%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (36.36%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (27.27%)
 			# Output goods
 			# Total input cost: 550.0
 			# Total output cost: 0
@@ -898,9 +898,9 @@ pm_forest_glass = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 30                            # Price:   20, Total cost: 600.0
+			goods_input_wood_add = 30                            # Price:   20, Total cost:   600.0 (100.00%)
 			# Output goods
-			goods_output_glass_add = 30                          # Price:   40, Total cost: 1200.0
+			goods_output_glass_add = 30                          # Price:   40, Total cost:  1200.0 (100.00%)
 			# Total input cost: 600.0
 			# Total output cost: 1200.0
 			# Profit: 600.0
@@ -933,10 +933,10 @@ pm_leaded_glass = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 20                            # Price:   20, Total cost: 400.0
-			goods_input_lead_add = 10                            # Price:   40, Total cost: 400.0
+			goods_input_wood_add = 20                            # Price:   20, Total cost:   400.0 (50.00%)
+			goods_input_lead_add = 10                            # Price:   40, Total cost:   400.0 (50.00%)
 			# Output goods
-			goods_output_glass_add = 40                          # Price:   40, Total cost: 1600.0
+			goods_output_glass_add = 40                          # Price:   40, Total cost:  1600.0 (100.00%)
 			# Total input cost: 800.0
 			# Total output cost: 1600.0
 			# Profit: 800.0
@@ -970,9 +970,9 @@ pm_crystal_glass = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_lead_add = 35                            # Price:   40, Total cost: 1400.0
+			goods_input_lead_add = 35                            # Price:   40, Total cost:  1400.0 (100.00%)
 			# Output goods
-			goods_output_glass_add = 60                          # Price:   40, Total cost: 2400.0
+			goods_output_glass_add = 60                          # Price:   40, Total cost:  2400.0 (100.00%)
 			# Total input cost: 1400.0
 			# Total output cost: 2400.0
 			# Profit: 1000.0
@@ -1007,10 +1007,10 @@ pm_houseware_plastics = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_oil_add = 20                             # Price:   40, Total cost: 800.0
-			goods_input_lead_add = 30                            # Price:   40, Total cost: 1200.0
+			goods_input_oil_add = 20                             # Price:   40, Total cost:   800.0 (40.00%)
+			goods_input_lead_add = 30                            # Price:   40, Total cost:  1200.0 (60.00%)
 			# Output goods
-			goods_output_glass_add = 100                         # Price:   40, Total cost: 4000.0
+			goods_output_glass_add = 100                         # Price:   40, Total cost:  4000.0 (100.00%)
 			# Total input cost: 2000.0
 			# Total output cost: 4000.0
 			# Profit: 2000.0
@@ -1039,10 +1039,10 @@ pm_ceramics = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_dye_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_dye_add = 5                              # Price:   40, Total cost:   200.0 (100.00%)
 			# Output goods
-			goods_output_glass_add = -10                         # Price:   40, Total cost: -400.0
-			goods_output_porcelain_add = 10                      # Price:   70, Total cost: 700.0
+			goods_output_glass_add = -10                         # Price:   40, Total cost:  -400.0 (-133.33%)
+			goods_output_porcelain_add = 10                      # Price:   70, Total cost:   700.0 (233.33%)
 			# Total input cost: 200.0
 			# Total output cost: 300.0
 			# Profit: 100.0
@@ -1073,10 +1073,10 @@ pm_bone_china = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_dye_add = 10                             # Price:   40, Total cost: 400.0
+			goods_input_dye_add = 10                             # Price:   40, Total cost:   400.0 (100.00%)
 			# Output goods
-			goods_output_glass_add = -20                         # Price:   40, Total cost: -800.0
-			goods_output_porcelain_add = 30                      # Price:   70, Total cost: 2100.0
+			goods_output_glass_add = -20                         # Price:   40, Total cost:  -800.0 (-61.54%)
+			goods_output_porcelain_add = 30                      # Price:   70, Total cost:  2100.0 (161.54%)
 			# Total input cost: 400.0
 			# Total output cost: 1300.0
 			# Profit: 900.0
@@ -1116,9 +1116,9 @@ pm_automatic_bottle_blowers = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 2                            # Price:   40, Total cost: 80.0
-			goods_input_engines_add = 2                          # Price:   60, Total cost: 120.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 2                            # Price:   40, Total cost:    80.0 (20.00%)
+			goods_input_engines_add = 2                          # Price:   60, Total cost:   120.0 (30.00%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (50.00%)
 			# Output goods
 			# Total input cost: 400.0
 			# Total output cost: 0
@@ -1141,9 +1141,9 @@ pm_crude_tools = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 30                            # Price:   20, Total cost: 600.0
+			goods_input_wood_add = 30                            # Price:   20, Total cost:   600.0 (100.00%)
 			# Output goods
-			goods_output_tools_add = 30                          # Price:   40, Total cost: 1200.0
+			goods_output_tools_add = 30                          # Price:   40, Total cost:  1200.0 (100.00%)
 			# Total input cost: 600.0
 			# Total output cost: 1200.0
 			# Profit: 600.0
@@ -1170,10 +1170,10 @@ pm_pig_iron = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 30                            # Price:   20, Total cost: 600.0
-			goods_input_iron_add = 20                            # Price:   40, Total cost: 800.0
+			goods_input_wood_add = 30                            # Price:   20, Total cost:   600.0 (42.86%)
+			goods_input_iron_add = 20                            # Price:   40, Total cost:   800.0 (57.14%)
 			# Output goods
-			goods_output_tools_add = 60                          # Price:   40, Total cost: 2400.0
+			goods_output_tools_add = 60                          # Price:   40, Total cost:  2400.0 (100.00%)
 			# Total input cost: 1400.0
 			# Total output cost: 2400.0
 			# Profit: 1000.0
@@ -1199,10 +1199,10 @@ pm_steel = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 30                            # Price:   20, Total cost: 600.0
-			goods_input_steel_add = 20                           # Price:   50, Total cost: 1000.0
+			goods_input_wood_add = 30                            # Price:   20, Total cost:   600.0 (37.50%)
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (62.50%)
 			# Output goods
-			goods_output_tools_add = 80                          # Price:   40, Total cost: 3200.0
+			goods_output_tools_add = 80                          # Price:   40, Total cost:  3200.0 (100.00%)
 			# Total input cost: 1600.0
 			# Total output cost: 3200.0
 			# Profit: 1600.0
@@ -1229,10 +1229,10 @@ pm_rubber_grips = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_rubber_add = 10                          # Price:   40, Total cost: 400.0
-			goods_input_steel_add = 30                           # Price:   50, Total cost: 1500.0
+			goods_input_rubber_add = 10                          # Price:   40, Total cost:   400.0 (21.05%)
+			goods_input_steel_add = 30                           # Price:   50, Total cost:  1500.0 (78.95%)
 			# Output goods
-			goods_output_tools_add = 110                         # Price:   40, Total cost: 4400.0
+			goods_output_tools_add = 110                         # Price:   40, Total cost:  4400.0 (100.00%)
 			# Total input cost: 1900.0
 			# Total output cost: 4400.0
 			# Profit: 2500.0
@@ -1271,7 +1271,7 @@ pm_watertube_boiler_building_tooling_workshops = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_coal_add = 10                            # Price:   30, Total cost: 300.0
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
 			# Total input cost: 300.0
 			# Total output cost: 0
@@ -1308,7 +1308,7 @@ pm_rotary_valve_engine_building_tooling_workshops = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_coal_add = 15                            # Price:   30, Total cost: 450.0
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (100.00%)
 			# Output goods
 			# Total input cost: 450.0
 			# Total output cost: 0
@@ -1345,8 +1345,8 @@ pm_assembly_lines_building_tooling_workshops = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_oil_add = 10                             # Price:   40, Total cost: 400.0
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (72.73%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (27.27%)
 			# Output goods
 			# Total input cost: 550.0
 			# Total output cost: 0
@@ -1371,9 +1371,9 @@ pm_pulp_pressing = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 30                            # Price:   20, Total cost: 600.0
+			goods_input_wood_add = 30                            # Price:   20, Total cost:   600.0 (100.00%)
 			# Output goods
-			goods_output_paper_add = 40                          # Price:   30, Total cost: 1200.0
+			goods_output_paper_add = 40                          # Price:   30, Total cost:  1200.0 (100.00%)
 			# Total input cost: 600.0
 			# Total output cost: 1200.0
 			# Profit: 600.0
@@ -1405,10 +1405,10 @@ pm_sulfite_pulping = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 30                            # Price:   20, Total cost: 600.0
-			goods_input_sulfur_add = 10                          # Price:   50, Total cost: 500.0
+			goods_input_wood_add = 30                            # Price:   20, Total cost:   600.0 (54.55%)
+			goods_input_sulfur_add = 10                          # Price:   50, Total cost:   500.0 (45.45%)
 			# Output goods
-			goods_output_paper_add = 70                          # Price:   30, Total cost: 2100.0
+			goods_output_paper_add = 70                          # Price:   30, Total cost:  2100.0 (100.00%)
 			# Total input cost: 1100.0
 			# Total output cost: 2100.0
 			# Profit: 1000.0
@@ -1441,11 +1441,11 @@ pm_bleached_paper = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 30                            # Price:   20, Total cost: 600.0
-			goods_input_sulfur_add = 10                          # Price:   50, Total cost: 500.0
-			goods_input_dye_add = 10                             # Price:   40, Total cost: 400.0
+			goods_input_wood_add = 30                            # Price:   20, Total cost:   600.0 (40.00%)
+			goods_input_sulfur_add = 10                          # Price:   50, Total cost:   500.0 (33.33%)
+			goods_input_dye_add = 10                             # Price:   40, Total cost:   400.0 (26.67%)
 			# Output goods
-			goods_output_paper_add = 100                         # Price:   30, Total cost: 3000.0
+			goods_output_paper_add = 100                         # Price:   30, Total cost:  3000.0 (100.00%)
 			# Total input cost: 1500.0
 			# Total output cost: 3000.0
 			# Profit: 1500.0
@@ -1484,8 +1484,8 @@ pm_watertube_boiler_building_paper_mills = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (57.14%)
+			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (42.86%)
 			# Output goods
 			# Total input cost: 350.0
 			# Total output cost: 0
@@ -1522,8 +1522,8 @@ pm_rotary_valve_engine_building_paper_mills = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_coal_add = 10                            # Price:   30, Total cost: 300.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (40.00%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (60.00%)
 			# Output goods
 			# Total input cost: 500.0
 			# Total output cost: 0
@@ -1551,10 +1551,10 @@ pm_artificial_fertilizers = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sulfur_add = 30                          # Price:   50, Total cost: 1500.0
-			goods_input_iron_add = 10                            # Price:   40, Total cost: 400.0
+			goods_input_sulfur_add = 30                          # Price:   50, Total cost:  1500.0 (78.95%)
+			goods_input_iron_add = 10                            # Price:   40, Total cost:   400.0 (21.05%)
 			# Output goods
-			goods_output_fertilizer_add = 90                     # Price:   30, Total cost: 2700.0
+			goods_output_fertilizer_add = 90                     # Price:   30, Total cost:  2700.0 (100.00%)
 			# Total input cost: 1900.0
 			# Total output cost: 2700.0
 			# Profit: 800.0
@@ -1589,10 +1589,10 @@ pm_improved_fertilizer = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sulfur_add = 30                          # Price:   50, Total cost: 1500.0
-			goods_input_iron_add = 30                            # Price:   40, Total cost: 1200.0
+			goods_input_sulfur_add = 30                          # Price:   50, Total cost:  1500.0 (55.56%)
+			goods_input_iron_add = 30                            # Price:   40, Total cost:  1200.0 (44.44%)
 			# Output goods
-			goods_output_fertilizer_add = 140                    # Price:   30, Total cost: 4200.0
+			goods_output_fertilizer_add = 140                    # Price:   30, Total cost:  4200.0 (100.00%)
 			# Total input cost: 2700.0
 			# Total output cost: 4200.0
 			# Profit: 1500.0
@@ -1627,11 +1627,11 @@ pm_nitrogen_fixation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sulfur_add = 40                          # Price:   50, Total cost: 2000.0
-			goods_input_oil_add = 20                             # Price:   40, Total cost: 800.0
-			goods_input_iron_add = 30                            # Price:   40, Total cost: 1200.0
+			goods_input_sulfur_add = 40                          # Price:   50, Total cost:  2000.0 (50.00%)
+			goods_input_oil_add = 20                             # Price:   40, Total cost:   800.0 (20.00%)
+			goods_input_iron_add = 30                            # Price:   40, Total cost:  1200.0 (30.00%)
 			# Output goods
-			goods_output_fertilizer_add = 200                    # Price:   30, Total cost: 6000.0
+			goods_output_fertilizer_add = 200                    # Price:   30, Total cost:  6000.0 (100.00%)
 			# Total input cost: 4000.0
 			# Total output cost: 6000.0
 			# Profit: 2000.0
@@ -1666,10 +1666,10 @@ pm_leblanc_process = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sulfur_add = 20                          # Price:   50, Total cost: 1000.0
-			goods_input_fertilizer_add = 20                      # Price:   30, Total cost: 600.0
+			goods_input_sulfur_add = 20                          # Price:   50, Total cost:  1000.0 (62.50%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (37.50%)
 			# Output goods
-			goods_output_explosives_add = 50                     # Price:   50, Total cost: 2500.0
+			goods_output_explosives_add = 50                     # Price:   50, Total cost:  2500.0 (100.00%)
 			# Total input cost: 1600.0
 			# Total output cost: 2500.0
 			# Profit: 900.0
@@ -1704,11 +1704,11 @@ pm_ammonia-soda_process = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sulfur_add = 30                          # Price:   50, Total cost: 1500.0
-			goods_input_fertilizer_add = 30                      # Price:   30, Total cost: 900.0
-			goods_input_paper_add = 10                           # Price:   30, Total cost: 300.0
+			goods_input_sulfur_add = 30                          # Price:   50, Total cost:  1500.0 (55.56%)
+			goods_input_fertilizer_add = 30                      # Price:   30, Total cost:   900.0 (33.33%)
+			goods_input_paper_add = 10                           # Price:   30, Total cost:   300.0 (11.11%)
 			# Output goods
-			goods_output_explosives_add = 80                     # Price:   50, Total cost: 4000.0
+			goods_output_explosives_add = 80                     # Price:   50, Total cost:  4000.0 (100.00%)
 			# Total input cost: 2700.0
 			# Total output cost: 4000.0
 			# Profit: 1300.0
@@ -1743,11 +1743,11 @@ pm_vacuum_evaporation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sulfur_add = 40                          # Price:   50, Total cost: 2000.0
-			goods_input_fertilizer_add = 40                      # Price:   30, Total cost: 1200.0
-			goods_input_paper_add = 20                           # Price:   30, Total cost: 600.0
+			goods_input_sulfur_add = 40                          # Price:   50, Total cost:  2000.0 (52.63%)
+			goods_input_fertilizer_add = 40                      # Price:   30, Total cost:  1200.0 (31.58%)
+			goods_input_paper_add = 20                           # Price:   30, Total cost:   600.0 (15.79%)
 			# Output goods
-			goods_output_explosives_add = 110                    # Price:   50, Total cost: 5500.0
+			goods_output_explosives_add = 110                    # Price:   50, Total cost:  5500.0 (100.00%)
 			# Total input cost: 3800.0
 			# Total output cost: 5500.0
 			# Profit: 1700.0
@@ -1782,12 +1782,12 @@ pm_brine_electrolysis = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sulfur_add = 40                          # Price:   50, Total cost: 2000.0
-			goods_input_fertilizer_add = 50                      # Price:   30, Total cost: 1500.0
-			goods_input_paper_add = 30                           # Price:   30, Total cost: 900.0
-			goods_input_electricity_add = 20                     # Price:   30, Total cost: 600.0
+			goods_input_sulfur_add = 40                          # Price:   50, Total cost:  2000.0 (40.00%)
+			goods_input_fertilizer_add = 50                      # Price:   30, Total cost:  1500.0 (30.00%)
+			goods_input_paper_add = 30                           # Price:   30, Total cost:   900.0 (18.00%)
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (12.00%)
 			# Output goods
-			goods_output_explosives_add = 150                    # Price:   50, Total cost: 7500.0
+			goods_output_explosives_add = 150                    # Price:   50, Total cost:  7500.0 (100.00%)
 			# Total input cost: 5000.0
 			# Total output cost: 7500.0
 			# Profit: 2500.0
@@ -1821,10 +1821,10 @@ pm_dye_production = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sulfur_add = 20                          # Price:   50, Total cost: 1000.0
-			goods_input_fertilizer_add = 30                      # Price:   30, Total cost: 900.0
+			goods_input_sulfur_add = 20                          # Price:   50, Total cost:  1000.0 (52.63%)
+			goods_input_fertilizer_add = 30                      # Price:   30, Total cost:   900.0 (47.37%)
 			# Output goods
-			goods_output_dye_add = 80                            # Price:   40, Total cost: 3200.0
+			goods_output_dye_add = 80                            # Price:   40, Total cost:  3200.0 (100.00%)
 			# Total input cost: 1900.0
 			# Total output cost: 3200.0
 			# Profit: 1300.0
@@ -1858,10 +1858,10 @@ pm_rayon = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 10                            # Price:   20, Total cost: 200.0
+			goods_input_wood_add = 10                            # Price:   20, Total cost:   200.0 (100.00%)
 			# Output goods
-			goods_output_dye_add = -10                           # Price:   40, Total cost: -400.0
-			goods_output_silk_add = 30                           # Price:   40, Total cost: 1200.0
+			goods_output_dye_add = -10                           # Price:   40, Total cost:  -400.0 (-50.00%)
+			goods_output_silk_add = 30                           # Price:   40, Total cost:  1200.0 (150.00%)
 			# Total input cost: 200.0
 			# Total output cost: 800.0
 			# Profit: 600.0
@@ -1891,10 +1891,10 @@ pm_blister_steel_process = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_iron_add = 40                            # Price:   40, Total cost: 1600.0
-			goods_input_coal_add = 30                            # Price:   30, Total cost: 900.0
+			goods_input_iron_add = 40                            # Price:   40, Total cost:  1600.0 (64.00%)
+			goods_input_coal_add = 30                            # Price:   30, Total cost:   900.0 (36.00%)
 			# Output goods
-			goods_output_steel_add = 65                          # Price:   50, Total cost: 3250.0
+			goods_output_steel_add = 65                          # Price:   50, Total cost:  3250.0 (100.00%)
 			# Total input cost: 2500.0
 			# Total output cost: 3250.0
 			# Profit: 750.0
@@ -1929,10 +1929,10 @@ pm_bessemer_process = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_iron_add = 60                            # Price:   40, Total cost: 2400.0
-			goods_input_coal_add = 30                            # Price:   30, Total cost: 900.0
+			goods_input_iron_add = 60                            # Price:   40, Total cost:  2400.0 (72.73%)
+			goods_input_coal_add = 30                            # Price:   30, Total cost:   900.0 (27.27%)
 			# Output goods
-			goods_output_steel_add = 90                          # Price:   50, Total cost: 4500.0
+			goods_output_steel_add = 90                          # Price:   50, Total cost:  4500.0 (100.00%)
 			# Total input cost: 3300.0
 			# Total output cost: 4500.0
 			# Profit: 1200.0
@@ -1968,10 +1968,10 @@ pm_open_hearth_process = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_iron_add = 90                            # Price:   40, Total cost: 3600.0
-			goods_input_coal_add = 30                            # Price:   30, Total cost: 900.0
+			goods_input_iron_add = 90                            # Price:   40, Total cost:  3600.0 (80.00%)
+			goods_input_coal_add = 30                            # Price:   30, Total cost:   900.0 (20.00%)
 			# Output goods
-			goods_output_steel_add = 120                         # Price:   50, Total cost: 6000.0
+			goods_output_steel_add = 120                         # Price:   50, Total cost:  6000.0 (100.00%)
 			# Total input cost: 4500.0
 			# Total output cost: 6000.0
 			# Profit: 1500.0
@@ -2007,11 +2007,11 @@ pm_electric_arc_process = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_iron_add = 100                           # Price:   40, Total cost: 4000.0
-			goods_input_coal_add = 30                            # Price:   30, Total cost: 900.0
-			goods_input_electricity_add = 30                     # Price:   30, Total cost: 900.0
+			goods_input_iron_add = 100                           # Price:   40, Total cost:  4000.0 (68.97%)
+			goods_input_coal_add = 30                            # Price:   30, Total cost:   900.0 (15.52%)
+			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (15.52%)
 			# Output goods
-			goods_output_steel_add = 150                         # Price:   50, Total cost: 7500.0
+			goods_output_steel_add = 150                         # Price:   50, Total cost:  7500.0 (100.00%)
 			# Total input cost: 5800.0
 			# Total output cost: 7500.0
 			# Profit: 1700.0
@@ -2049,8 +2049,8 @@ pm_watertube_boiler_building_steel_mills = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (57.14%)
+			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (42.86%)
 			# Output goods
 			# Total input cost: 350.0
 			# Total output cost: 0
@@ -2083,8 +2083,8 @@ pm_rotary_valve_engine_building_steel_mills = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_coal_add = 10                            # Price:   30, Total cost: 300.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (40.00%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (60.00%)
 			# Output goods
 			# Total input cost: 500.0
 			# Total output cost: 0
@@ -2113,9 +2113,9 @@ pm_steam_engines = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 30                           # Price:   50, Total cost: 1500.0
+			goods_input_steel_add = 30                           # Price:   50, Total cost:  1500.0 (100.00%)
 			# Output goods
-			goods_output_engines_add = 40                        # Price:   60, Total cost: 2400.0
+			goods_output_engines_add = 40                        # Price:   60, Total cost:  2400.0 (100.00%)
 			# Total input cost: 1500.0
 			# Total output cost: 2400.0
 			# Profit: 900.0
@@ -2150,10 +2150,10 @@ pm_electric_engines = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 40                           # Price:   50, Total cost: 2000.0
-			goods_input_electricity_add = 30                     # Price:   30, Total cost: 900.0
+			goods_input_steel_add = 40                           # Price:   50, Total cost:  2000.0 (68.97%)
+			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (31.03%)
 			# Output goods
-			goods_output_engines_add = 80                        # Price:   60, Total cost: 4800.0
+			goods_output_engines_add = 80                        # Price:   60, Total cost:  4800.0 (100.00%)
 			# Total input cost: 2900.0
 			# Total output cost: 4800.0
 			# Profit: 1900.0
@@ -2190,10 +2190,10 @@ pm_diesel_engines = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 50                           # Price:   50, Total cost: 2500.0
-			goods_input_oil_add = 50                             # Price:   40, Total cost: 2000.0
+			goods_input_steel_add = 50                           # Price:   50, Total cost:  2500.0 (55.56%)
+			goods_input_oil_add = 50                             # Price:   40, Total cost:  2000.0 (44.44%)
 			# Output goods
-			goods_output_engines_add = 120                       # Price:   60, Total cost: 7200.0
+			goods_output_engines_add = 120                       # Price:   60, Total cost:  7200.0 (100.00%)
 			# Total input cost: 4500.0
 			# Total output cost: 7200.0
 			# Profit: 2700.0
@@ -2228,8 +2228,8 @@ pm_watertube_boiler_building_motor_industry = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (57.14%)
+			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (42.86%)
 			# Output goods
 			# Total input cost: 350.0
 			# Total output cost: 0
@@ -2263,8 +2263,8 @@ pm_rotary_valve_engine_building_motor_industry = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_coal_add = 10                            # Price:   30, Total cost: 300.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (40.00%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (60.00%)
 			# Output goods
 			# Total input cost: 500.0
 			# Total output cost: 0
@@ -2297,9 +2297,9 @@ pm_assembly_lines_building_motor_industry = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (36.36%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (36.36%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (27.27%)
 			# Output goods
 			# Total input cost: 550.0
 			# Total output cost: 0
@@ -2334,9 +2334,9 @@ pm_assembly_lines_building_automotive_industry = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (36.36%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (36.36%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (27.27%)
 			# Output goods
 			# Total input cost: 550.0
 			# Total output cost: 0
@@ -2362,10 +2362,10 @@ pm_basic_shipbuilding = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 40                            # Price:   20, Total cost: 800.0
-			goods_input_fabric_add = 20                          # Price:   20, Total cost: 400.0
+			goods_input_wood_add = 40                            # Price:   20, Total cost:   800.0 (66.67%)
+			goods_input_fabric_add = 20                          # Price:   20, Total cost:   400.0 (33.33%)
 			# Output goods
-			goods_output_clippers_add = 35                       # Price:   60, Total cost: 2100.0
+			goods_output_clippers_add = 35                       # Price:   60, Total cost:  2100.0 (100.00%)
 			# Total input cost: 1200.0
 			# Total output cost: 2100.0
 			# Profit: 900.0
@@ -2394,12 +2394,12 @@ pm_complex_shipbuilding = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 20                            # Price:   20, Total cost: 400.0
-			goods_input_hardwood_add = 20                        # Price:   40, Total cost: 800.0
-			goods_input_fabric_add = 20                          # Price:   20, Total cost: 400.0
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_wood_add = 20                            # Price:   20, Total cost:   400.0 (21.05%)
+			goods_input_hardwood_add = 20                        # Price:   40, Total cost:   800.0 (42.11%)
+			goods_input_fabric_add = 20                          # Price:   20, Total cost:   400.0 (21.05%)
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (15.79%)
 			# Output goods
-			goods_output_clippers_add = 70                       # Price:   60, Total cost: 4200.0
+			goods_output_clippers_add = 70                       # Price:   60, Total cost:  4200.0 (100.00%)
 			# Total input cost: 1900.0
 			# Total output cost: 4200.0
 			# Profit: 2300.0
@@ -2435,11 +2435,11 @@ pm_metal_shipbuilding = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 30                           # Price:   50, Total cost: 1500.0
-			goods_input_coal_add = 10                            # Price:   30, Total cost: 300.0
-			goods_input_engines_add = 10                         # Price:   60, Total cost: 600.0
+			goods_input_steel_add = 30                           # Price:   50, Total cost:  1500.0 (62.50%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (12.50%)
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (25.00%)
 			# Output goods
-			goods_output_steamers_add = 65                       # Price:   70, Total cost: 4550.0
+			goods_output_steamers_add = 65                       # Price:   70, Total cost:  4550.0 (100.00%)
 			# Total input cost: 2400.0
 			# Total output cost: 4550.0
 			# Profit: 2150.0
@@ -2475,11 +2475,11 @@ pm_arc_welding_shipbuilding = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 30                           # Price:   50, Total cost: 1500.0
-			goods_input_electricity_add = 30                     # Price:   30, Total cost: 900.0
-			goods_input_engines_add = 10                         # Price:   60, Total cost: 600.0
+			goods_input_steel_add = 30                           # Price:   50, Total cost:  1500.0 (50.00%)
+			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (30.00%)
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (20.00%)
 			# Output goods
-			goods_output_steamers_add = 80                       # Price:   70, Total cost: 5600.0
+			goods_output_steamers_add = 80                       # Price:   70, Total cost:  5600.0 (100.00%)
 			# Total input cost: 3000.0
 			# Total output cost: 5600.0
 			# Profit: 2600.0
@@ -2511,11 +2511,11 @@ pm_military_shipbuilding_wooden = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_hardwood_add = 20                        # Price:   40, Total cost: 800.0
-			goods_input_fabric_add = 20                          # Price:   20, Total cost: 400.0
-			goods_input_iron_add = 10                            # Price:   40, Total cost: 400.0
+			goods_input_hardwood_add = 20                        # Price:   40, Total cost:   800.0 (50.00%)
+			goods_input_fabric_add = 20                          # Price:   20, Total cost:   400.0 (25.00%)
+			goods_input_iron_add = 10                            # Price:   40, Total cost:   400.0 (25.00%)
 			# Output goods
-			goods_output_manowars_add = 35                       # Price:   70, Total cost: 2450.0
+			goods_output_manowars_add = 35                       # Price:   70, Total cost:  2450.0 (100.00%)
 			# Total input cost: 1600.0
 			# Total output cost: 2450.0
 			# Profit: 850.0
@@ -2545,12 +2545,12 @@ pm_military_shipbuilding_wooden_2 = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_hardwood_add = 30                        # Price:   40, Total cost: 1200.0
-			goods_input_fabric_add = 10                          # Price:   20, Total cost: 200.0
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
-			goods_input_iron_add = 10                            # Price:   40, Total cost: 400.0
+			goods_input_hardwood_add = 30                        # Price:   40, Total cost:  1200.0 (57.14%)
+			goods_input_fabric_add = 10                          # Price:   20, Total cost:   200.0 (9.52%)
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (14.29%)
+			goods_input_iron_add = 10                            # Price:   40, Total cost:   400.0 (19.05%)
 			# Output goods
-			goods_output_manowars_add = 45                       # Price:   70, Total cost: 3150.0
+			goods_output_manowars_add = 45                       # Price:   70, Total cost:  3150.0 (100.00%)
 			# Total input cost: 2100.0
 			# Total output cost: 3150.0
 			# Profit: 1050.0
@@ -2579,11 +2579,11 @@ pm_military_shipbuilding_steam = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 40                           # Price:   50, Total cost: 2000.0
-			goods_input_coal_add = 20                            # Price:   30, Total cost: 600.0
-			goods_input_engines_add = 10                         # Price:   60, Total cost: 600.0
+			goods_input_steel_add = 40                           # Price:   50, Total cost:  2000.0 (62.50%)
+			goods_input_coal_add = 20                            # Price:   30, Total cost:   600.0 (18.75%)
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (18.75%)
 			# Output goods
-			goods_output_ironclads_add = 55                      # Price:   80, Total cost: 4400.0
+			goods_output_ironclads_add = 55                      # Price:   80, Total cost:  4400.0 (100.00%)
 			# Total input cost: 3200.0
 			# Total output cost: 4400.0
 			# Profit: 1200.0
@@ -2612,11 +2612,11 @@ pm_military_shipbuilding_steam_2 = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 40                           # Price:   50, Total cost: 2000.0
-			goods_input_electricity_add = 30                     # Price:   30, Total cost: 900.0
-			goods_input_engines_add = 20                         # Price:   60, Total cost: 1200.0
+			goods_input_steel_add = 40                           # Price:   50, Total cost:  2000.0 (48.78%)
+			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (21.95%)
+			goods_input_engines_add = 20                         # Price:   60, Total cost:  1200.0 (29.27%)
 			# Output goods
-			goods_output_ironclads_add = 70                      # Price:   80, Total cost: 5600.0
+			goods_output_ironclads_add = 70                      # Price:   80, Total cost:  5600.0 (100.00%)
 			# Total input cost: 4100.0
 			# Total output cost: 5600.0
 			# Profit: 1500.0
@@ -2652,11 +2652,11 @@ pm_automobile_production = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 10                         # Price:   60, Total cost: 600.0
-			goods_input_rubber_add = 5                           # Price:   40, Total cost: 200.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (60.00%)
+			goods_input_rubber_add = 5                           # Price:   40, Total cost:   200.0 (20.00%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (20.00%)
 			# Output goods
-			goods_output_automobiles_add = 30                    # Price:  100, Total cost: 3000.0
+			goods_output_automobiles_add = 30                    # Price:  100, Total cost:  3000.0 (100.00%)
 			# Total input cost: 1000.0
 			# Total output cost: 3000.0
 			# Profit: 2000.0
@@ -2690,11 +2690,11 @@ pm_mass_automobile_production = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 10                         # Price:   60, Total cost: 600.0
-			goods_input_rubber_add = 10                          # Price:   40, Total cost: 400.0
-			goods_input_oil_add = 10                             # Price:   40, Total cost: 400.0
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (42.86%)
+			goods_input_rubber_add = 10                          # Price:   40, Total cost:   400.0 (28.57%)
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (28.57%)
 			# Output goods
-			goods_output_automobiles_add = 60                    # Price:  100, Total cost: 6000.0
+			goods_output_automobiles_add = 60                    # Price:  100, Total cost:  6000.0 (100.00%)
 			# Total input cost: 1400.0
 			# Total output cost: 6000.0
 			# Profit: 4600.0
@@ -2727,11 +2727,11 @@ pm_aeroplane_production = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_hardwood_add = 4                         # Price:   40, Total cost: 160.0
-			goods_input_fabric_add = 4                           # Price:   20, Total cost: 80.0
+			goods_input_hardwood_add = 4                         # Price:   40, Total cost:   160.0 (66.67%)
+			goods_input_fabric_add = 4                           # Price:   20, Total cost:    80.0 (33.33%)
 			# Output goods
-			goods_output_automobiles_add = -10                   # Price:  100, Total cost: -1000.0
-			goods_output_aeroplanes_add = 10                     # Price:   80, Total cost: 800.0
+			goods_output_automobiles_add = -10                   # Price:  100, Total cost: -1000.0 (500.00%)
+			goods_output_aeroplanes_add = 10                     # Price:   80, Total cost:   800.0 (-400.00%)
 			# Total input cost: 240.0
 			# Total output cost: -200.0
 			# Profit: -440.0
@@ -2761,10 +2761,10 @@ pm_tank_production = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 5                            # Price:   50, Total cost: 250.0
+			goods_input_steel_add = 5                            # Price:   50, Total cost:   250.0 (100.00%)
 			# Output goods
-			goods_output_automobiles_add = -20                   # Price:  100, Total cost: -2000.0
-			goods_output_tanks_add = 20                          # Price:  120, Total cost: 2400.0
+			goods_output_automobiles_add = -20                   # Price:  100, Total cost: -2000.0 (-500.00%)
+			goods_output_tanks_add = 20                          # Price:  120, Total cost:  2400.0 (600.00%)
 			# Total input cost: 250.0
 			# Total output cost: 400.0
 			# Profit: 150.0
@@ -2785,12 +2785,12 @@ pm_telephones = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_iron_add = 20                            # Price:   40, Total cost: 800.0
-			goods_input_rubber_add = 20                          # Price:   40, Total cost: 800.0
-			goods_input_lead_add = 20                            # Price:   40, Total cost: 800.0
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
+			goods_input_iron_add = 20                            # Price:   40, Total cost:   800.0 (28.57%)
+			goods_input_rubber_add = 20                          # Price:   40, Total cost:   800.0 (28.57%)
+			goods_input_lead_add = 20                            # Price:   40, Total cost:   800.0 (28.57%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (14.29%)
 			# Output goods
-			goods_output_telephones_add = 60                     # Price:   70, Total cost: 4200.0
+			goods_output_telephones_add = 60                     # Price:   70, Total cost:  4200.0 (100.00%)
 			# Total input cost: 2800.0
 			# Total output cost: 4200.0
 			# Profit: 1400.0
@@ -2821,10 +2821,10 @@ pm_radios = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 50                     # Price:   30, Total cost: 1500.0
+			goods_input_electricity_add = 50                     # Price:   30, Total cost:  1500.0 (100.00%)
 			# Output goods
-			goods_output_telephones_add = -20                    # Price:   70, Total cost: -1400.0
-			goods_output_radios_add = 40                         # Price:   80, Total cost: 3200.0
+			goods_output_telephones_add = -20                    # Price:   70, Total cost: -1400.0 (-77.78%)
+			goods_output_radios_add = 40                         # Price:   80, Total cost:  3200.0 (177.78%)
 			# Total input cost: 1500.0
 			# Total output cost: 1800.0
 			# Profit: 300.0
@@ -2848,10 +2848,10 @@ pm_muskets = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_iron_add = 10                            # Price:   40, Total cost: 400.0
-			goods_input_hardwood_add = 10                        # Price:   40, Total cost: 400.0
+			goods_input_iron_add = 10                            # Price:   40, Total cost:   400.0 (50.00%)
+			goods_input_hardwood_add = 10                        # Price:   40, Total cost:   400.0 (50.00%)
 			# Output goods
-			goods_output_small_arms_add = 30                     # Price:   60, Total cost: 1800.0
+			goods_output_small_arms_add = 30                     # Price:   60, Total cost:  1800.0 (100.00%)
 			# Total input cost: 800.0
 			# Total output cost: 1800.0
 			# Profit: 1000.0
@@ -2880,11 +2880,11 @@ pm_rifles = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 10                           # Price:   50, Total cost: 500.0
-			goods_input_hardwood_add = 10                        # Price:   40, Total cost: 400.0
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (45.45%)
+			goods_input_hardwood_add = 10                        # Price:   40, Total cost:   400.0 (36.36%)
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (18.18%)
 			# Output goods
-			goods_output_small_arms_add = 50                     # Price:   60, Total cost: 3000.0
+			goods_output_small_arms_add = 50                     # Price:   60, Total cost:  3000.0 (100.00%)
 			# Total input cost: 1100.0
 			# Total output cost: 3000.0
 			# Profit: 1900.0
@@ -2913,11 +2913,11 @@ pm_repeaters = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 20                           # Price:   50, Total cost: 1000.0
-			goods_input_hardwood_add = 10                        # Price:   40, Total cost: 400.0
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (55.56%)
+			goods_input_hardwood_add = 10                        # Price:   40, Total cost:   400.0 (22.22%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (22.22%)
 			# Output goods
-			goods_output_small_arms_add = 70                     # Price:   60, Total cost: 4200.0
+			goods_output_small_arms_add = 70                     # Price:   60, Total cost:  4200.0 (100.00%)
 			# Total input cost: 1800.0
 			# Total output cost: 4200.0
 			# Profit: 2400.0
@@ -2947,12 +2947,12 @@ pm_bolt_action_rifles = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 20                           # Price:   50, Total cost: 1000.0
-			goods_input_hardwood_add = 10                        # Price:   40, Total cost: 400.0
-			goods_input_tools_add = 20                           # Price:   40, Total cost: 800.0
-			goods_input_oil_add = 10                             # Price:   40, Total cost: 400.0
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (38.46%)
+			goods_input_hardwood_add = 10                        # Price:   40, Total cost:   400.0 (15.38%)
+			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (30.77%)
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (15.38%)
 			# Output goods
-			goods_output_small_arms_add = 100                    # Price:   60, Total cost: 6000.0
+			goods_output_small_arms_add = 100                    # Price:   60, Total cost:  6000.0 (100.00%)
 			# Total input cost: 2600.0
 			# Total output cost: 6000.0
 			# Profit: 3400.0
@@ -2986,10 +2986,10 @@ pm_cannons = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_iron_add = 15                            # Price:   40, Total cost: 600.0
-			goods_input_hardwood_add = 10                        # Price:   40, Total cost: 400.0
+			goods_input_iron_add = 15                            # Price:   40, Total cost:   600.0 (60.00%)
+			goods_input_hardwood_add = 10                        # Price:   40, Total cost:   400.0 (40.00%)
 			# Output goods
-			goods_output_artillery_add = 25                      # Price:   70, Total cost: 1750.0
+			goods_output_artillery_add = 25                      # Price:   70, Total cost:  1750.0 (100.00%)
 			# Total input cost: 1000.0
 			# Total output cost: 1750.0
 			# Profit: 750.0
@@ -3017,10 +3017,10 @@ pm_smoothbores = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_iron_add = 25                            # Price:   40, Total cost: 1000.0
-			goods_input_hardwood_add = 15                        # Price:   40, Total cost: 600.0
+			goods_input_iron_add = 25                            # Price:   40, Total cost:  1000.0 (62.50%)
+			goods_input_hardwood_add = 15                        # Price:   40, Total cost:   600.0 (37.50%)
 			# Output goods
-			goods_output_artillery_add = 45                      # Price:   70, Total cost: 3150.0
+			goods_output_artillery_add = 45                      # Price:   70, Total cost:  3150.0 (100.00%)
 			# Total input cost: 1600.0
 			# Total output cost: 3150.0
 			# Profit: 1550.0
@@ -3049,23 +3049,23 @@ pm_breech_loaders = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 25                           # Price:   50, Total cost: 1250.0
-			goods_input_hardwood_add = 10                        # Price:   40, Total cost: 400.0
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
+			goods_input_steel_add = 25                           # Price:   50, Total cost:  1250.0 (60.98%)
+			goods_input_hardwood_add = 10                        # Price:   40, Total cost:   400.0 (19.51%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (19.51%)
 			# Output goods
-			goods_output_artillery_add = 65                      # Price:   70, Total cost: 4550.0
+			goods_output_artillery_add = 65                      # Price:   70, Total cost:  4550.0 (100.00%)
 			# Total input cost: 2050.0
 			# Total output cost: 4550.0
 			# Profit: 2500.0
 			# Profit margin: 121.95%
 			# Zero profit price multiplier: 0.45
-			# Employment: 5000
-			# Wage breakeven: 0.50
+			# Employment: 5250
+			# Wage breakeven: 0.48
 		}
 
 		level_scaled = {
 			building_employment_shopkeepers_add = 500
-			building_employment_laborers_add = 2500
+			building_employment_laborers_add = 2750
 			building_employment_machinists_add = 1500
 			building_employment_engineers_add = 500
 		}
@@ -3082,25 +3082,25 @@ pm_recoiled_barrels = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 40                           # Price:   50, Total cost: 2000.0
-			goods_input_tools_add = 20                           # Price:   40, Total cost: 800.0
-			goods_input_oil_add = 10                             # Price:   40, Total cost: 400.0
+			goods_input_steel_add = 40                           # Price:   50, Total cost:  2000.0 (62.50%)
+			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (25.00%)
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (12.50%)
 			# Output goods
-			goods_output_artillery_add = 90                      # Price:   70, Total cost: 6300.0
+			goods_output_artillery_add = 90                      # Price:   70, Total cost:  6300.0 (100.00%)
 			# Total input cost: 3200.0
 			# Total output cost: 6300.0
 			# Profit: 3100.0
 			# Profit margin: 96.88%
 			# Zero profit price multiplier: 0.51
-			# Employment: 5000
-			# Wage breakeven: 0.62
+			# Employment: 5250
+			# Wage breakeven: 0.59
 		}
 
 		level_scaled = {
 			building_employment_shopkeepers_add = 500
-			building_employment_laborers_add = 2000
+			building_employment_laborers_add = 2500
 			building_employment_machinists_add = 1500
-			building_employment_engineers_add = 1000
+			building_employment_engineers_add = 750
 		}
 	}
 }
@@ -3121,7 +3121,7 @@ pm_rotary_valve_engine_building_arms_industry = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_coal_add = 15                            # Price:   30, Total cost: 450.0
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (100.00%)
 			# Output goods
 			# Total input cost: 450.0
 			# Total output cost: 0
@@ -3154,8 +3154,8 @@ pm_assembly_lines_building_arms_industry = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_oil_add = 10                             # Price:   40, Total cost: 400.0
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (72.73%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (27.27%)
 			# Output goods
 			# Total input cost: 550.0
 			# Total output cost: 0
@@ -3186,10 +3186,10 @@ pm_percussion_caps = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 20                      # Price:   50, Total cost: 1000.0
-			goods_input_lead_add = 20                            # Price:   40, Total cost: 800.0
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (55.56%)
+			goods_input_lead_add = 20                            # Price:   40, Total cost:   800.0 (44.44%)
 			# Output goods
-			goods_output_ammunition_add = 50                     # Price:   50, Total cost: 2500.0
+			goods_output_ammunition_add = 50                     # Price:   50, Total cost:  2500.0 (100.00%)
 			# Total input cost: 1800.0
 			# Total output cost: 2500.0
 			# Profit: 700.0
@@ -3224,10 +3224,10 @@ pm_explosive_shells = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 40                      # Price:   50, Total cost: 2000.0
-			goods_input_lead_add = 30                            # Price:   40, Total cost: 1200.0
+			goods_input_explosives_add = 40                      # Price:   50, Total cost:  2000.0 (62.50%)
+			goods_input_lead_add = 30                            # Price:   40, Total cost:  1200.0 (37.50%)
 			# Output goods
-			goods_output_ammunition_add = 90                     # Price:   50, Total cost: 4500.0
+			goods_output_ammunition_add = 90                     # Price:   50, Total cost:  4500.0 (100.00%)
 			# Total input cost: 3200.0
 			# Total output cost: 4500.0
 			# Profit: 1300.0
@@ -3262,7 +3262,7 @@ pm_rotary_valve_engine_building_munition_plants = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_coal_add = 15                            # Price:   30, Total cost: 450.0
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (100.00%)
 			# Output goods
 			# Total input cost: 450.0
 			# Total output cost: 0
@@ -3295,20 +3295,20 @@ pm_assembly_lines_building_munition_plants = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_oil_add = 10                             # Price:   40, Total cost: 400.0
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (72.73%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (27.27%)
 			# Output goods
 			# Total input cost: 550.0
 			# Total output cost: 0
 			# Profit: -550.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -3000
-			# Wage breakeven: 0.18
+			# Employment: -2500
+			# Wage breakeven: 0.22
 		}
 
 		level_scaled = {
-			building_employment_laborers_add = -3000
+			building_employment_laborers_add = -2500
 		}
 	}
 
@@ -3321,7 +3321,7 @@ pm_assembly_lines_building_munition_plants = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 20                          # Price:   20, Total cost: 400.0
+			goods_output_grain_add = 20                          # Price:   20, Total cost:   400.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 400.0
 			# Profit: 400.0
@@ -3348,9 +3348,9 @@ pm_soil_enriching_farming = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fertilizer_add = 5                       # Price:   30, Total cost: 150.0
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (100.00%)
 			# Output goods
-			goods_output_grain_add = 30                          # Price:   20, Total cost: 600.0
+			goods_output_grain_add = 30                          # Price:   20, Total cost:   600.0 (100.00%)
 			# Total input cost: 150.0
 			# Total output cost: 600.0
 			# Profit: 450.0
@@ -3384,9 +3384,9 @@ pm_fertilization = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fertilizer_add = 10                      # Price:   30, Total cost: 300.0
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_grain_add = 45                          # Price:   20, Total cost: 900.0
+			goods_output_grain_add = 45                          # Price:   20, Total cost:   900.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 900.0
 			# Profit: 600.0
@@ -3419,9 +3419,9 @@ pm_chemical_fertilizer = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fertilizer_add = 15                      # Price:   30, Total cost: 450.0
+			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (100.00%)
 			# Output goods
-			goods_output_grain_add = 60                          # Price:   20, Total cost: 1200.0
+			goods_output_grain_add = 60                          # Price:   20, Total cost:  1200.0 (100.00%)
 			# Total input cost: 450.0
 			# Total output cost: 1200.0
 			# Profit: 750.0
@@ -3450,8 +3450,8 @@ pm_potatoes = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = -10                         # Price:   20, Total cost: -200.0
-			goods_output_liquor_add = 10                         # Price:   30, Total cost: 300.0
+			goods_output_grain_add = -10                         # Price:   20, Total cost:  -200.0 (-200.00%)
+			goods_output_liquor_add = 10                         # Price:   30, Total cost:   300.0 (300.00%)
 			# Total input cost: 0
 			# Total output cost: 100.0
 			# Profit: 100.0
@@ -3470,9 +3470,9 @@ pm_apple_orchards = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = -10                         # Price:   20, Total cost: -200.0
-			goods_output_fruit_add = 5                           # Price:   30, Total cost: 150.0
-			goods_output_sugar_add = 5                           # Price:   30, Total cost: 150.0
+			goods_output_grain_add = -10                         # Price:   20, Total cost:  -200.0 (-200.00%)
+			goods_output_fruit_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
+			goods_output_sugar_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
 			# Total input cost: 0
 			# Total output cost: 100.0
 			# Profit: 100.0
@@ -3494,7 +3494,7 @@ pm_tools = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 2                            # Price:   40, Total cost: 80.0
+			goods_input_tools_add = 2                            # Price:   40, Total cost:    80.0 (100.00%)
 			# Output goods
 			# Total input cost: 80.0
 			# Total output cost: 0
@@ -3526,8 +3526,8 @@ pm_steam_threshers = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 2                            # Price:   40, Total cost: 80.0
-			goods_input_coal_add = 1                             # Price:   30, Total cost: 30.0
+			goods_input_tools_add = 2                            # Price:   40, Total cost:    80.0 (72.73%)
+			goods_input_coal_add = 1                             # Price:   30, Total cost:    30.0 (27.27%)
 			# Output goods
 			# Total input cost: 110.0
 			# Total output cost: 0
@@ -3559,8 +3559,8 @@ pm_tractors = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_coal_add = 2                             # Price:   30, Total cost: 60.0
-			goods_input_engines_add = 1                          # Price:   60, Total cost: 60.0
+			goods_input_coal_add = 2                             # Price:   30, Total cost:    60.0 (50.00%)
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (50.00%)
 			# Output goods
 			# Total input cost: 120.0
 			# Total output cost: 0
@@ -3592,8 +3592,8 @@ pm_compression_ignition_tractors = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_oil_add = 2                              # Price:   40, Total cost: 80.0
-			goods_input_engines_add = 1                          # Price:   60, Total cost: 60.0
+			goods_input_oil_add = 2                              # Price:   40, Total cost:    80.0 (57.14%)
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (42.86%)
 			# Output goods
 			# Total input cost: 140.0
 			# Total output cost: 0
@@ -3617,9 +3617,9 @@ pm_citrus_orchards = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = -10                         # Price:   20, Total cost: -200.0
-			goods_output_fruit_add = 5                           # Price:   30, Total cost: 150.0
-			goods_output_sugar_add = 5                           # Price:   30, Total cost: 150.0
+			goods_output_grain_add = -10                         # Price:   20, Total cost:  -200.0 (-200.00%)
+			goods_output_fruit_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
+			goods_output_sugar_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
 			# Total input cost: 0
 			# Total output cost: 100.0
 			# Profit: 100.0
@@ -3637,7 +3637,7 @@ pm_simple_farming_building_rice_farm = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 35                          # Price:   20, Total cost: 700.0
+			goods_output_grain_add = 35                          # Price:   20, Total cost:   700.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 700.0
 			# Profit: 700.0
@@ -3664,9 +3664,9 @@ pm_soil_enriching_farming_building_rice_farm = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fertilizer_add = 10                      # Price:   30, Total cost: 300.0
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_grain_add = 50                          # Price:   20, Total cost: 1000.0
+			goods_output_grain_add = 50                          # Price:   20, Total cost:  1000.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 1000.0
 			# Profit: 700.0
@@ -3694,9 +3694,9 @@ pm_fertilization_building_rice_farm = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fertilizer_add = 20                      # Price:   30, Total cost: 600.0
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (100.00%)
 			# Output goods
-			goods_output_grain_add = 75                          # Price:   20, Total cost: 1500.0
+			goods_output_grain_add = 75                          # Price:   20, Total cost:  1500.0 (100.00%)
 			# Total input cost: 600.0
 			# Total output cost: 1500.0
 			# Profit: 900.0
@@ -3722,9 +3722,9 @@ pm_chemical_fertilizer_building_rice_farm = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fertilizer_add = 30                      # Price:   30, Total cost: 900.0
+			goods_input_fertilizer_add = 30                      # Price:   30, Total cost:   900.0 (100.00%)
 			# Output goods
-			goods_output_grain_add = 100                         # Price:   20, Total cost: 2000.0
+			goods_output_grain_add = 100                         # Price:   20, Total cost:  2000.0 (100.00%)
 			# Total input cost: 900.0
 			# Total output cost: 2000.0
 			# Profit: 1100.0
@@ -3749,9 +3749,9 @@ pm_fig_orchards_building_rice_farm = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = -30                         # Price:   20, Total cost: -600.0
-			goods_output_fruit_add = 12                          # Price:   30, Total cost: 360.0
-			goods_output_sugar_add = 18                          # Price:   30, Total cost: 540.0
+			goods_output_grain_add = -30                         # Price:   20, Total cost:  -600.0 (-200.00%)
+			goods_output_fruit_add = 12                          # Price:   30, Total cost:   360.0 (120.00%)
+			goods_output_sugar_add = 18                          # Price:   30, Total cost:   540.0 (180.00%)
 			# Total input cost: 0
 			# Total output cost: 300.0
 			# Profit: 300.0
@@ -3769,7 +3769,7 @@ pm_tools_building_rice_farm = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 4                            # Price:   40, Total cost: 160.0
+			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (100.00%)
 			# Output goods
 			# Total input cost: 160.0
 			# Total output cost: 0
@@ -3801,8 +3801,8 @@ pm_steam_threshers_building_rice_farm = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 4                            # Price:   40, Total cost: 160.0
-			goods_input_coal_add = 2                             # Price:   30, Total cost: 60.0
+			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (72.73%)
+			goods_input_coal_add = 2                             # Price:   30, Total cost:    60.0 (27.27%)
 			# Output goods
 			# Total input cost: 220.0
 			# Total output cost: 0
@@ -3826,9 +3826,9 @@ pm_fig_orchards = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = -10                         # Price:   20, Total cost: -200.0
-			goods_output_fruit_add = 5                           # Price:   30, Total cost: 150.0
-			goods_output_sugar_add = 5                           # Price:   30, Total cost: 150.0
+			goods_output_grain_add = -10                         # Price:   20, Total cost:  -200.0 (-200.00%)
+			goods_output_fruit_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
+			goods_output_sugar_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
 			# Total input cost: 0
 			# Total output cost: 100.0
 			# Profit: 100.0
@@ -3847,7 +3847,7 @@ pm_simple_ranch = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_fabric_add = 5                          # Price:   20, Total cost: 100.0
+			goods_output_fabric_add = 5                          # Price:   20, Total cost:   100.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 100.0
 			# Profit: 100.0
@@ -3869,10 +3869,10 @@ pm_sheep_farms = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_grain_add = 10                           # Price:   20, Total cost: 200.0
+			goods_input_grain_add = 10                           # Price:   20, Total cost:   200.0 (100.00%)
 			# Output goods
-			goods_output_fabric_add = 15                         # Price:   20, Total cost: 300.0
-			goods_output_fertilizer_add = 2.5                    # Price:   30, Total cost: 75.0
+			goods_output_fabric_add = 15                         # Price:   20, Total cost:   300.0 (80.00%)
+			goods_output_fertilizer_add = 2.5                    # Price:   30, Total cost:    75.0 (20.00%)
 			# Total input cost: 200.0
 			# Total output cost: 375.0
 			# Profit: 175.0
@@ -3900,10 +3900,10 @@ pm_intensive_grazing_ranch = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_grain_add = 15                           # Price:   20, Total cost: 300.0
+			goods_input_grain_add = 15                           # Price:   20, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_fabric_add = 25                         # Price:   20, Total cost: 500.0
-			goods_output_fertilizer_add = 5                      # Price:   30, Total cost: 150.0
+			goods_output_fabric_add = 25                         # Price:   20, Total cost:   500.0 (76.92%)
+			goods_output_fertilizer_add = 5                      # Price:   30, Total cost:   150.0 (23.08%)
 			# Total input cost: 300.0
 			# Total output cost: 650.0
 			# Profit: 350.0
@@ -3921,7 +3921,7 @@ pm_open_air_stockyards = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_meat_add = 10                           # Price:   30, Total cost: 300.0
+			goods_output_meat_add = 10                           # Price:   30, Total cost:   300.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 300.0
 			# Profit: 300.0
@@ -3943,9 +3943,9 @@ pm_butchering_tools = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 2                            # Price:   40, Total cost: 80.0
+			goods_input_tools_add = 2                            # Price:   40, Total cost:    80.0 (100.00%)
 			# Output goods
-			goods_output_meat_add = 15                           # Price:   30, Total cost: 450.0
+			goods_output_meat_add = 15                           # Price:   30, Total cost:   450.0 (100.00%)
 			# Total input cost: 80.0
 			# Total output cost: 450.0
 			# Profit: 370.0
@@ -3977,9 +3977,9 @@ pm_slaughterhouses = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (100.00%)
 			# Output goods
-			goods_output_meat_add = 25                           # Price:   30, Total cost: 750.0
+			goods_output_meat_add = 25                           # Price:   30, Total cost:   750.0 (100.00%)
 			# Total input cost: 200.0
 			# Total output cost: 750.0
 			# Profit: 550.0
@@ -4012,10 +4012,10 @@ pm_mechanized_slaughtering = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
-			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (57.14%)
+			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (42.86%)
 			# Output goods
-			goods_output_meat_add = 35                           # Price:   30, Total cost: 1050.0
+			goods_output_meat_add = 35                           # Price:   30, Total cost:  1050.0 (100.00%)
 			# Total input cost: 350.0
 			# Total output cost: 1050.0
 			# Profit: 700.0
@@ -4045,7 +4045,7 @@ pm_barbed_wire_fences = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_iron_add = 1                             # Price:   40, Total cost: 40.0
+			goods_input_iron_add = 1                             # Price:   40, Total cost:    40.0 (100.00%)
 			# Output goods
 			# Total input cost: 40.0
 			# Total output cost: 0
@@ -4070,8 +4070,8 @@ pm_electric_fencing = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_iron_add = 1                             # Price:   40, Total cost: 40.0
-			goods_input_electricity_add = 1                      # Price:   30, Total cost: 30.0
+			goods_input_iron_add = 1                             # Price:   40, Total cost:    40.0 (57.14%)
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (42.86%)
 			# Output goods
 			# Total input cost: 70.0
 			# Total output cost: 0
@@ -4104,7 +4104,7 @@ pm_refrigerated_storage_building_livestock_ranch = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 1                      # Price:   30, Total cost: 30.0
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (100.00%)
 			# Output goods
 			# Total input cost: 30.0
 			# Total output cost: 0
@@ -4133,8 +4133,8 @@ pm_refrigerated_rail_cars_building_livestock_ranch = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 1                      # Price:   30, Total cost: 30.0
-			goods_input_transportation_add = 1                   # Price:   30, Total cost: 30.0
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (50.00%)
+			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (50.00%)
 			# Output goods
 			# Total input cost: 60.0
 			# Total output cost: 0
@@ -4159,9 +4159,9 @@ pm_refrigerated_rail_cars_building_livestock_ranch = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (100.00%)
 			# Output goods
-			goods_output_coal_add = 25                           # Price:   30, Total cost: 750.0
+			goods_output_coal_add = 25                           # Price:   30, Total cost:   750.0 (100.00%)
 			# Total input cost: 200.0
 			# Total output cost: 750.0
 			# Profit: 550.0
@@ -4194,9 +4194,9 @@ pm_atmospheric_engine_pump_building_coal_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (100.00%)
 			# Output goods
-			goods_output_coal_add = 40                           # Price:   30, Total cost: 1200.0
+			goods_output_coal_add = 40                           # Price:   30, Total cost:  1200.0 (100.00%)
 			# Total input cost: 400.0
 			# Total output cost: 1200.0
 			# Profit: 800.0
@@ -4231,9 +4231,9 @@ pm_condensing_engine_pump_building_coal_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 15                           # Price:   40, Total cost: 600.0
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (100.00%)
 			# Output goods
-			goods_output_coal_add = 60                           # Price:   30, Total cost: 1800.0
+			goods_output_coal_add = 60                           # Price:   30, Total cost:  1800.0 (100.00%)
 			# Total input cost: 600.0
 			# Total output cost: 1800.0
 			# Profit: 1200.0
@@ -4268,10 +4268,10 @@ pm_diesel_pump_building_coal_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 15                           # Price:   40, Total cost: 600.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (75.00%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (25.00%)
 			# Output goods
-			goods_output_coal_add = 90                           # Price:   30, Total cost: 2700.0
+			goods_output_coal_add = 90                           # Price:   30, Total cost:  2700.0 (100.00%)
 			# Total input cost: 800.0
 			# Total output cost: 2700.0
 			# Profit: 1900.0
@@ -4310,9 +4310,9 @@ pm_nitroglycerin_building_coal_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 5                       # Price:   50, Total cost: 250.0
+			goods_input_explosives_add = 5                       # Price:   50, Total cost:   250.0 (100.00%)
 			# Output goods
-			goods_output_coal_add = 15                           # Price:   30, Total cost: 450.0
+			goods_output_coal_add = 15                           # Price:   30, Total cost:   450.0 (100.00%)
 			# Total input cost: 250.0
 			# Total output cost: 450.0
 			# Profit: 200.0
@@ -4350,9 +4350,9 @@ pm_dynamite_building_coal_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 10                      # Price:   50, Total cost: 500.0
+			goods_input_explosives_add = 10                      # Price:   50, Total cost:   500.0 (100.00%)
 			# Output goods
-			goods_output_coal_add = 25                           # Price:   30, Total cost: 750.0
+			goods_output_coal_add = 25                           # Price:   30, Total cost:   750.0 (100.00%)
 			# Total input cost: 500.0
 			# Total output cost: 750.0
 			# Profit: 250.0
@@ -4392,9 +4392,9 @@ pm_steam_donkey_building_coal_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 1                          # Price:   60, Total cost: 60.0
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (100.00%)
 			# Output goods
-			goods_output_coal_add = -3                           # Price:   30, Total cost: -90.0
+			goods_output_coal_add = -3                           # Price:   30, Total cost:   -90.0 (100.00%)
 			# Total input cost: 60.0
 			# Total output cost: -90.0
 			# Profit: -150.0
@@ -4420,9 +4420,9 @@ pm_picks_and_shovels_building_iron_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (100.00%)
 			# Output goods
-			goods_output_iron_add = 20                           # Price:   40, Total cost: 800.0
+			goods_output_iron_add = 20                           # Price:   40, Total cost:   800.0 (100.00%)
 			# Total input cost: 200.0
 			# Total output cost: 800.0
 			# Profit: 600.0
@@ -4455,10 +4455,10 @@ pm_atmospheric_engine_pump_building_iron_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
-			goods_input_coal_add = 10                            # Price:   30, Total cost: 300.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (57.14%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (42.86%)
 			# Output goods
-			goods_output_iron_add = 40                           # Price:   40, Total cost: 1600.0
+			goods_output_iron_add = 40                           # Price:   40, Total cost:  1600.0 (100.00%)
 			# Total input cost: 700.0
 			# Total output cost: 1600.0
 			# Profit: 900.0
@@ -4493,10 +4493,10 @@ pm_condensing_engine_pump_building_iron_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 15                           # Price:   40, Total cost: 600.0
-			goods_input_coal_add = 15                            # Price:   30, Total cost: 450.0
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (57.14%)
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (42.86%)
 			# Output goods
-			goods_output_iron_add = 60                           # Price:   40, Total cost: 2400.0
+			goods_output_iron_add = 60                           # Price:   40, Total cost:  2400.0 (100.00%)
 			# Total input cost: 1050.0
 			# Total output cost: 2400.0
 			# Profit: 1350.0
@@ -4531,10 +4531,10 @@ pm_diesel_pump_building_iron_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 15                           # Price:   40, Total cost: 600.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (75.00%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (25.00%)
 			# Output goods
-			goods_output_iron_add = 70                           # Price:   40, Total cost: 2800.0
+			goods_output_iron_add = 70                           # Price:   40, Total cost:  2800.0 (100.00%)
 			# Total input cost: 800.0
 			# Total output cost: 2800.0
 			# Profit: 2000.0
@@ -4568,9 +4568,9 @@ pm_nitroglycerin_building_iron_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 5                       # Price:   50, Total cost: 250.0
+			goods_input_explosives_add = 5                       # Price:   50, Total cost:   250.0 (100.00%)
 			# Output goods
-			goods_output_iron_add = 12                           # Price:   40, Total cost: 480.0
+			goods_output_iron_add = 12                           # Price:   40, Total cost:   480.0 (100.00%)
 			# Total input cost: 250.0
 			# Total output cost: 480.0
 			# Profit: 230.0
@@ -4607,9 +4607,9 @@ pm_dynamite_building_iron_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 10                      # Price:   50, Total cost: 500.0
+			goods_input_explosives_add = 10                      # Price:   50, Total cost:   500.0 (100.00%)
 			# Output goods
-			goods_output_iron_add = 20                           # Price:   40, Total cost: 800.0
+			goods_output_iron_add = 20                           # Price:   40, Total cost:   800.0 (100.00%)
 			# Total input cost: 500.0
 			# Total output cost: 800.0
 			# Profit: 300.0
@@ -4644,8 +4644,8 @@ pm_steam_donkey_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 1                          # Price:   60, Total cost: 60.0
-			goods_input_coal_add = 4                             # Price:   30, Total cost: 120.0
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (33.33%)
+			goods_input_coal_add = 4                             # Price:   30, Total cost:   120.0 (66.67%)
 			# Output goods
 			# Total input cost: 180.0
 			# Total output cost: 0
@@ -4677,7 +4677,7 @@ pm_rail_transport_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 5                   # Price:   30, Total cost: 150.0
+			goods_input_transportation_add = 5                   # Price:   30, Total cost:   150.0 (100.00%)
 			# Output goods
 			# Total input cost: 150.0
 			# Total output cost: 0
@@ -4700,9 +4700,9 @@ pm_picks_and_shovels_building_lead_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (100.00%)
 			# Output goods
-			goods_output_lead_add = 20                           # Price:   40, Total cost: 800.0
+			goods_output_lead_add = 20                           # Price:   40, Total cost:   800.0 (100.00%)
 			# Total input cost: 200.0
 			# Total output cost: 800.0
 			# Profit: 600.0
@@ -4734,10 +4734,10 @@ pm_atmospheric_engine_pump_building_lead_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
-			goods_input_coal_add = 10                            # Price:   30, Total cost: 300.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (57.14%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (42.86%)
 			# Output goods
-			goods_output_lead_add = 40                           # Price:   40, Total cost: 1600.0
+			goods_output_lead_add = 40                           # Price:   40, Total cost:  1600.0 (100.00%)
 			# Total input cost: 700.0
 			# Total output cost: 1600.0
 			# Profit: 900.0
@@ -4771,10 +4771,10 @@ pm_condensing_engine_pump_building_lead_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 15                           # Price:   40, Total cost: 600.0
-			goods_input_coal_add = 15                            # Price:   30, Total cost: 450.0
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (57.14%)
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (42.86%)
 			# Output goods
-			goods_output_lead_add = 60                           # Price:   40, Total cost: 2400.0
+			goods_output_lead_add = 60                           # Price:   40, Total cost:  2400.0 (100.00%)
 			# Total input cost: 1050.0
 			# Total output cost: 2400.0
 			# Profit: 1350.0
@@ -4808,10 +4808,10 @@ pm_diesel_pump_building_lead_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 15                           # Price:   40, Total cost: 600.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (75.00%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (25.00%)
 			# Output goods
-			goods_output_lead_add = 70                           # Price:   40, Total cost: 2800.0
+			goods_output_lead_add = 70                           # Price:   40, Total cost:  2800.0 (100.00%)
 			# Total input cost: 800.0
 			# Total output cost: 2800.0
 			# Profit: 2000.0
@@ -4845,9 +4845,9 @@ pm_nitroglycerin_building_lead_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 5                       # Price:   50, Total cost: 250.0
+			goods_input_explosives_add = 5                       # Price:   50, Total cost:   250.0 (100.00%)
 			# Output goods
-			goods_output_lead_add = 12                           # Price:   40, Total cost: 480.0
+			goods_output_lead_add = 12                           # Price:   40, Total cost:   480.0 (100.00%)
 			# Total input cost: 250.0
 			# Total output cost: 480.0
 			# Profit: 230.0
@@ -4884,9 +4884,9 @@ pm_dynamite_building_lead_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 10                      # Price:   50, Total cost: 500.0
+			goods_input_explosives_add = 10                      # Price:   50, Total cost:   500.0 (100.00%)
 			# Output goods
-			goods_output_lead_add = 20                           # Price:   40, Total cost: 800.0
+			goods_output_lead_add = 20                           # Price:   40, Total cost:   800.0 (100.00%)
 			# Total input cost: 500.0
 			# Total output cost: 800.0
 			# Profit: 300.0
@@ -4908,9 +4908,9 @@ pm_picks_and_shovels_building_sulfur_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (100.00%)
 			# Output goods
-			goods_output_sulfur_add = 20                         # Price:   50, Total cost: 1000.0
+			goods_output_sulfur_add = 20                         # Price:   50, Total cost:  1000.0 (100.00%)
 			# Total input cost: 200.0
 			# Total output cost: 1000.0
 			# Profit: 800.0
@@ -4942,10 +4942,10 @@ pm_atmospheric_engine_pump_building_sulfur_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
-			goods_input_coal_add = 10                            # Price:   30, Total cost: 300.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (57.14%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (42.86%)
 			# Output goods
-			goods_output_sulfur_add = 40                         # Price:   50, Total cost: 2000.0
+			goods_output_sulfur_add = 40                         # Price:   50, Total cost:  2000.0 (100.00%)
 			# Total input cost: 700.0
 			# Total output cost: 2000.0
 			# Profit: 1300.0
@@ -4979,10 +4979,10 @@ pm_condensing_engine_pump_building_sulfur_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 15                           # Price:   40, Total cost: 600.0
-			goods_input_coal_add = 15                            # Price:   30, Total cost: 450.0
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (57.14%)
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (42.86%)
 			# Output goods
-			goods_output_sulfur_add = 60                         # Price:   50, Total cost: 3000.0
+			goods_output_sulfur_add = 60                         # Price:   50, Total cost:  3000.0 (100.00%)
 			# Total input cost: 1050.0
 			# Total output cost: 3000.0
 			# Profit: 1950.0
@@ -5016,10 +5016,10 @@ pm_diesel_pump_building_sulfur_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 15                           # Price:   40, Total cost: 600.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (75.00%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (25.00%)
 			# Output goods
-			goods_output_sulfur_add = 80                         # Price:   50, Total cost: 4000.0
+			goods_output_sulfur_add = 80                         # Price:   50, Total cost:  4000.0 (100.00%)
 			# Total input cost: 800.0
 			# Total output cost: 4000.0
 			# Profit: 3200.0
@@ -5053,9 +5053,9 @@ pm_nitroglycerin_building_sulfur_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 5                       # Price:   50, Total cost: 250.0
+			goods_input_explosives_add = 5                       # Price:   50, Total cost:   250.0 (100.00%)
 			# Output goods
-			goods_output_sulfur_add = 10                         # Price:   50, Total cost: 500.0
+			goods_output_sulfur_add = 10                         # Price:   50, Total cost:   500.0 (100.00%)
 			# Total input cost: 250.0
 			# Total output cost: 500.0
 			# Profit: 250.0
@@ -5092,9 +5092,9 @@ pm_dynamite_building_sulfur_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 10                      # Price:   50, Total cost: 500.0
+			goods_input_explosives_add = 10                      # Price:   50, Total cost:   500.0 (100.00%)
 			# Output goods
-			goods_output_sulfur_add = 20                         # Price:   50, Total cost: 1000.0
+			goods_output_sulfur_add = 20                         # Price:   50, Total cost:  1000.0 (100.00%)
 			# Total input cost: 500.0
 			# Total output cost: 1000.0
 			# Profit: 500.0
@@ -5117,9 +5117,9 @@ pm_picks_and_shovels_building_gold_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (100.00%)
 			# Output goods
-			goods_output_gold_add = 8                            # Price:  100, Total cost: 800.0
+			goods_output_gold_add = 8                            # Price:  100, Total cost:   800.0 (100.00%)
 			# Total input cost: 200.0
 			# Total output cost: 800.0
 			# Profit: 600.0
@@ -5157,10 +5157,10 @@ pm_atmospheric_engine_pump_building_gold_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
-			goods_input_coal_add = 10                            # Price:   30, Total cost: 300.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (57.14%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (42.86%)
 			# Output goods
-			goods_output_gold_add = 15                           # Price:  100, Total cost: 1500.0
+			goods_output_gold_add = 15                           # Price:  100, Total cost:  1500.0 (100.00%)
 			# Total input cost: 700.0
 			# Total output cost: 1500.0
 			# Profit: 800.0
@@ -5200,10 +5200,10 @@ pm_condensing_engine_pump_building_gold_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 15                           # Price:   40, Total cost: 600.0
-			goods_input_coal_add = 15                            # Price:   30, Total cost: 450.0
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (57.14%)
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (42.86%)
 			# Output goods
-			goods_output_gold_add = 25                           # Price:  100, Total cost: 2500.0
+			goods_output_gold_add = 25                           # Price:  100, Total cost:  2500.0 (100.00%)
 			# Total input cost: 1050.0
 			# Total output cost: 2500.0
 			# Profit: 1450.0
@@ -5243,10 +5243,10 @@ pm_diesel_pump_building_gold_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 15                           # Price:   40, Total cost: 600.0
-			goods_input_oil_add = 5                              # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (75.00%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (25.00%)
 			# Output goods
-			goods_output_gold_add = 30                           # Price:  100, Total cost: 3000.0
+			goods_output_gold_add = 30                           # Price:  100, Total cost:  3000.0 (100.00%)
 			# Total input cost: 800.0
 			# Total output cost: 3000.0
 			# Profit: 2200.0
@@ -5286,9 +5286,9 @@ pm_nitroglycerin_building_gold_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 5                       # Price:   50, Total cost: 250.0
+			goods_input_explosives_add = 5                       # Price:   50, Total cost:   250.0 (100.00%)
 			# Output goods
-			goods_output_gold_add = 5                            # Price:  100, Total cost: 500.0
+			goods_output_gold_add = 5                            # Price:  100, Total cost:   500.0 (100.00%)
 			# Total input cost: 250.0
 			# Total output cost: 500.0
 			# Profit: 250.0
@@ -5331,9 +5331,9 @@ pm_dynamite_building_gold_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_explosives_add = 10                      # Price:   50, Total cost: 500.0
+			goods_input_explosives_add = 10                      # Price:   50, Total cost:   500.0 (100.00%)
 			# Output goods
-			goods_output_gold_add = 10                           # Price:  100, Total cost: 1000.0
+			goods_output_gold_add = 10                           # Price:  100, Total cost:  1000.0 (100.00%)
 			# Total input cost: 500.0
 			# Total output cost: 1000.0
 			# Profit: 500.0
@@ -5362,7 +5362,7 @@ default_building_gold_fields = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_gold_add = 10                           # Price:  100, Total cost: 1000.0
+			goods_output_gold_add = 10                           # Price:  100, Total cost:  1000.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 1000.0
 			# Profit: 1000.0
@@ -5391,7 +5391,7 @@ default_building_gold_fields = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_coffee_add = 20                         # Price:   50, Total cost: 1000.0
+			goods_output_coffee_add = 20                         # Price:   50, Total cost:  1000.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 1000.0
 			# Profit: 1000.0
@@ -5425,9 +5425,9 @@ automatic_irrigation_building_coffee_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_coffee_add = 40                         # Price:   50, Total cost: 2000.0
+			goods_output_coffee_add = 40                         # Price:   50, Total cost:  2000.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 2000.0
 			# Profit: 1700.0
@@ -5462,7 +5462,7 @@ pm_steam_rail_transport = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 5                   # Price:   30, Total cost: 150.0
+			goods_input_transportation_add = 5                   # Price:   30, Total cost:   150.0 (100.00%)
 			# Output goods
 			# Total input cost: 150.0
 			# Total output cost: 0
@@ -5486,7 +5486,7 @@ default_building_cotton_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_fabric_add = 40                         # Price:   20, Total cost: 800.0
+			goods_output_fabric_add = 40                         # Price:   20, Total cost:   800.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 800.0
 			# Profit: 800.0
@@ -5520,9 +5520,9 @@ automatic_irrigation_building_cotton_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_fabric_add = 100                        # Price:   20, Total cost: 2000.0
+			goods_output_fabric_add = 100                        # Price:   20, Total cost:  2000.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 2000.0
 			# Profit: 1700.0
@@ -5548,7 +5548,7 @@ default_building_dye_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_dye_add = 25                            # Price:   40, Total cost: 1000.0
+			goods_output_dye_add = 25                            # Price:   40, Total cost:  1000.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 1000.0
 			# Profit: 1000.0
@@ -5582,9 +5582,9 @@ automatic_irrigation_building_dye_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_dye_add = 50                            # Price:   40, Total cost: 2000.0
+			goods_output_dye_add = 50                            # Price:   40, Total cost:  2000.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 2000.0
 			# Profit: 1700.0
@@ -5610,7 +5610,7 @@ default_building_opium_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_opium_add = 20                          # Price:   50, Total cost: 1000.0
+			goods_output_opium_add = 20                          # Price:   50, Total cost:  1000.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 1000.0
 			# Profit: 1000.0
@@ -5644,9 +5644,9 @@ automatic_irrigation_building_opium_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_opium_add = 50                          # Price:   50, Total cost: 2500.0
+			goods_output_opium_add = 50                          # Price:   50, Total cost:  2500.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 2500.0
 			# Profit: 2200.0
@@ -5672,7 +5672,7 @@ default_building_tea_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_tea_add = 20                            # Price:   50, Total cost: 1000.0
+			goods_output_tea_add = 20                            # Price:   50, Total cost:  1000.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 1000.0
 			# Profit: 1000.0
@@ -5706,9 +5706,9 @@ automatic_irrigation_building_tea_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_tea_add = 40                            # Price:   50, Total cost: 2000.0
+			goods_output_tea_add = 40                            # Price:   50, Total cost:  2000.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 2000.0
 			# Profit: 1700.0
@@ -5734,7 +5734,7 @@ default_building_tobacco_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_tobacco_add = 25                        # Price:   40, Total cost: 1000.0
+			goods_output_tobacco_add = 25                        # Price:   40, Total cost:  1000.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 1000.0
 			# Profit: 1000.0
@@ -5768,9 +5768,9 @@ automatic_irrigation_building_tobacco_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_tobacco_add = 50                        # Price:   40, Total cost: 2000.0
+			goods_output_tobacco_add = 50                        # Price:   40, Total cost:  2000.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 2000.0
 			# Profit: 1700.0
@@ -5796,7 +5796,7 @@ default_building_sugar_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_sugar_add = 30                          # Price:   30, Total cost: 900.0
+			goods_output_sugar_add = 30                          # Price:   30, Total cost:   900.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 900.0
 			# Profit: 900.0
@@ -5830,9 +5830,9 @@ automatic_irrigation_building_sugar_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_sugar_add = 60                          # Price:   30, Total cost: 1800.0
+			goods_output_sugar_add = 60                          # Price:   30, Total cost:  1800.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 1800.0
 			# Profit: 1500.0
@@ -5858,7 +5858,7 @@ default_building_banana_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_fruit_add = 30                          # Price:   30, Total cost: 900.0
+			goods_output_fruit_add = 30                          # Price:   30, Total cost:   900.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 900.0
 			# Profit: 900.0
@@ -5891,9 +5891,9 @@ automatic_irrigation_building_banana_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_fruit_add = 60                          # Price:   30, Total cost: 1800.0
+			goods_output_fruit_add = 60                          # Price:   30, Total cost:  1800.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 1800.0
 			# Profit: 1500.0
@@ -5919,7 +5919,7 @@ default_building_silk_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_silk_add = 20                           # Price:   40, Total cost: 800.0
+			goods_output_silk_add = 20                           # Price:   40, Total cost:   800.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 800.0
 			# Profit: 800.0
@@ -5953,9 +5953,9 @@ automatic_irrigation_building_silk_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_silk_add = 40                           # Price:   40, Total cost: 1600.0
+			goods_output_silk_add = 40                           # Price:   40, Total cost:  1600.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 1600.0
 			# Profit: 1300.0
@@ -5981,7 +5981,7 @@ default_building_vineyard_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_wine_add = 20                           # Price:   50, Total cost: 1000.0
+			goods_output_wine_add = 20                           # Price:   50, Total cost:  1000.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 1000.0
 			# Profit: 1000.0
@@ -6015,9 +6015,9 @@ automatic_irrigation_building_vineyard_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_wine_add = 40                           # Price:   50, Total cost: 2000.0
+			goods_output_wine_add = 40                           # Price:   50, Total cost:  2000.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 2000.0
 			# Profit: 1700.0
@@ -6429,7 +6429,7 @@ pm_battlefleet_tactics = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_services_add = 15                       # Price:   30, Total cost: 450.0
+			goods_output_services_add = 15                       # Price:   30, Total cost:   450.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 450.0
 			# Profit: 450.0
@@ -6455,10 +6455,10 @@ pm_market_squares = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 1                             # Price:   20, Total cost: 20.0
-			goods_input_glass_add = 1                            # Price:   40, Total cost: 40.0
+			goods_input_wood_add = 1                             # Price:   20, Total cost:    20.0 (33.33%)
+			goods_input_glass_add = 1                            # Price:   40, Total cost:    40.0 (66.67%)
 			# Output goods
-			goods_output_services_add = 20                       # Price:   30, Total cost: 600.0
+			goods_output_services_add = 20                       # Price:   30, Total cost:   600.0 (100.00%)
 			# Total input cost: 60.0
 			# Total output cost: 600.0
 			# Profit: 540.0
@@ -6485,10 +6485,10 @@ pm_covered_markets = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_glass_add = 2                            # Price:   40, Total cost: 80.0
-			goods_input_steel_add = 1                            # Price:   50, Total cost: 50.0
+			goods_input_glass_add = 2                            # Price:   40, Total cost:    80.0 (61.54%)
+			goods_input_steel_add = 1                            # Price:   50, Total cost:    50.0 (38.46%)
 			# Output goods
-			goods_output_services_add = 25                       # Price:   30, Total cost: 750.0
+			goods_output_services_add = 25                       # Price:   30, Total cost:   750.0 (100.00%)
 			# Total input cost: 130.0
 			# Total output cost: 750.0
 			# Profit: 620.0
@@ -6515,11 +6515,11 @@ pm_arcades = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_glass_add = 2                            # Price:   40, Total cost: 80.0
-			goods_input_steel_add = 2                            # Price:   50, Total cost: 100.0
-			goods_input_electricity_add = 1                      # Price:   30, Total cost: 30.0
+			goods_input_glass_add = 2                            # Price:   40, Total cost:    80.0 (38.10%)
+			goods_input_steel_add = 2                            # Price:   50, Total cost:   100.0 (47.62%)
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (14.29%)
 			# Output goods
-			goods_output_services_add = 30                       # Price:   30, Total cost: 900.0
+			goods_output_services_add = 30                       # Price:   30, Total cost:   900.0 (100.00%)
 			# Total input cost: 210.0
 			# Total output cost: 900.0
 			# Profit: 690.0
@@ -6556,9 +6556,9 @@ pm_gas_streetlights = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_coal_add = 2                             # Price:   30, Total cost: 60.0
+			goods_input_coal_add = 2                             # Price:   30, Total cost:    60.0 (100.00%)
 			# Output goods
-			goods_output_services_add = 5                        # Price:   30, Total cost: 150.0
+			goods_output_services_add = 5                        # Price:   30, Total cost:   150.0 (100.00%)
 			# Total input cost: 60.0
 			# Total output cost: 150.0
 			# Profit: 90.0
@@ -6592,9 +6592,9 @@ pm_electric_streetlights = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 3                      # Price:   30, Total cost: 90.0
+			goods_input_electricity_add = 3                      # Price:   30, Total cost:    90.0 (100.00%)
 			# Output goods
-			goods_output_services_add = 10                       # Price:   30, Total cost: 300.0
+			goods_output_services_add = 10                       # Price:   30, Total cost:   300.0 (100.00%)
 			# Total input cost: 90.0
 			# Total output cost: 300.0
 			# Profit: 210.0
@@ -6626,7 +6626,7 @@ pm_no_public_transport = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_transportation_add = 2                  # Price:   30, Total cost: 60.0
+			goods_output_transportation_add = 2                  # Price:   30, Total cost:    60.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 60.0
 			# Profit: 60.0
@@ -6654,9 +6654,9 @@ pm_public_trams = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 0.5                        # Price:   60, Total cost: 30.0
+			goods_input_engines_add = 0.5                        # Price:   60, Total cost:    30.0 (100.00%)
 			# Output goods
-			goods_output_transportation_add = 4                  # Price:   30, Total cost: 120.0
+			goods_output_transportation_add = 4                  # Price:   30, Total cost:   120.0 (100.00%)
 			# Total input cost: 30.0
 			# Total output cost: 120.0
 			# Profit: 90.0
@@ -6690,9 +6690,9 @@ pm_public_motor_carriages = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_automobiles_add = 1                      # Price:  100, Total cost: 100.0
+			goods_input_automobiles_add = 1                      # Price:  100, Total cost:   100.0 (100.00%)
 			# Output goods
-			goods_output_transportation_add = 8                  # Price:   30, Total cost: 240.0
+			goods_output_transportation_add = 8                  # Price:   30, Total cost:   240.0 (100.00%)
 			# Total input cost: 100.0
 			# Total output cost: 240.0
 			# Profit: 140.0
@@ -6760,9 +6760,9 @@ pm_traditional_art = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 10                           # Price:   30, Total cost: 300.0
+			goods_input_paper_add = 10                           # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_fine_art_add = 5                        # Price:  200, Total cost: 1000.0
+			goods_output_fine_art_add = 5                        # Price:  200, Total cost:  1000.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 1000.0
 			# Profit: 700.0
@@ -6785,9 +6785,9 @@ pm_realist_art = {
 
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 15                           # Price:   30, Total cost: 450.0
+			goods_input_paper_add = 15                           # Price:   30, Total cost:   450.0 (100.00%)
 			# Output goods
-			goods_output_fine_art_add = 6                        # Price:  200, Total cost: 1200.0
+			goods_output_fine_art_add = 6                        # Price:  200, Total cost:  1200.0 (100.00%)
 			# Total input cost: 450.0
 			# Total output cost: 1200.0
 			# Profit: 750.0
@@ -6810,10 +6810,10 @@ pm_photographic_art = {
 
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 15                           # Price:   30, Total cost: 450.0
-			goods_input_tools_add = 8                            # Price:   40, Total cost: 320.0
+			goods_input_paper_add = 15                           # Price:   30, Total cost:   450.0 (58.44%)
+			goods_input_tools_add = 8                            # Price:   40, Total cost:   320.0 (41.56%)
 			# Output goods
-			goods_output_fine_art_add = 8                        # Price:  200, Total cost: 1600.0
+			goods_output_fine_art_add = 8                        # Price:  200, Total cost:  1600.0 (100.00%)
 			# Total input cost: 770.0
 			# Total output cost: 1600.0
 			# Profit: 830.0
@@ -6836,11 +6836,11 @@ pm_film_art = {
 
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
-			goods_input_paper_add = 15                           # Price:   30, Total cost: 450.0
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (40.00%)
+			goods_input_paper_add = 15                           # Price:   30, Total cost:   450.0 (45.00%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (15.00%)
 			# Output goods
-			goods_output_fine_art_add = 10                       # Price:  200, Total cost: 2000.0
+			goods_output_fine_art_add = 10                       # Price:  200, Total cost:  2000.0 (100.00%)
 			# Total input cost: 1000.0
 			# Total output cost: 2000.0
 			# Profit: 1000.0
@@ -6966,11 +6966,11 @@ pm_early_power_plant = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 4                          # Price:   60, Total cost: 240.0
-			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
-			goods_input_wood_add = 5                             # Price:   20, Total cost: 100.0
+			goods_input_engines_add = 4                          # Price:   60, Total cost:   240.0 (48.98%)
+			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (30.61%)
+			goods_input_wood_add = 5                             # Price:   20, Total cost:   100.0 (20.41%)
 			# Output goods
-			goods_output_electricity_add = 25                    # Price:   30, Total cost: 750.0
+			goods_output_electricity_add = 25                    # Price:   30, Total cost:   750.0 (100.00%)
 			# Total input cost: 490.0
 			# Total output cost: 750.0
 			# Profit: 260.0
@@ -7004,10 +7004,10 @@ pm_coal-fired_plant = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 6                          # Price:   60, Total cost: 360.0
-			goods_input_coal_add = 20                            # Price:   30, Total cost: 600.0
+			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (37.50%)
+			goods_input_coal_add = 20                            # Price:   30, Total cost:   600.0 (62.50%)
 			# Output goods
-			goods_output_electricity_add = 50                    # Price:   30, Total cost: 1500.0
+			goods_output_electricity_add = 50                    # Price:   30, Total cost:  1500.0 (100.00%)
 			# Total input cost: 960.0
 			# Total output cost: 1500.0
 			# Profit: 540.0
@@ -7041,10 +7041,10 @@ pm_oil-fired_plant = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 10                         # Price:   60, Total cost: 600.0
-			goods_input_oil_add = 25                             # Price:   40, Total cost: 1000.0
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (37.50%)
+			goods_input_oil_add = 25                             # Price:   40, Total cost:  1000.0 (62.50%)
 			# Output goods
-			goods_output_electricity_add = 80                    # Price:   30, Total cost: 2400.0
+			goods_output_electricity_add = 80                    # Price:   30, Total cost:  2400.0 (100.00%)
 			# Total input cost: 1600.0
 			# Total output cost: 2400.0
 			# Profit: 800.0
@@ -7106,7 +7106,7 @@ pm_horizontal_drawer_cabinets = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 10                           # Price:   30, Total cost: 300.0
+			goods_input_paper_add = 10                           # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
 			# Total input cost: 300.0
 			# Total output cost: 0
@@ -7144,7 +7144,7 @@ pm_vertical_filing_cabinets = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 20                           # Price:   30, Total cost: 600.0
+			goods_input_paper_add = 20                           # Price:   30, Total cost:   600.0 (100.00%)
 			# Output goods
 			# Total input cost: 600.0
 			# Total output cost: 0
@@ -7182,8 +7182,8 @@ pm_switch_boards = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 20                           # Price:   30, Total cost: 600.0
-			goods_input_telephones_add = 5                       # Price:   70, Total cost: 350.0
+			goods_input_paper_add = 20                           # Price:   30, Total cost:   600.0 (63.16%)
+			goods_input_telephones_add = 5                       # Price:   70, Total cost:   350.0 (36.84%)
 			# Output goods
 			# Total input cost: 950.0
 			# Total output cost: 0
@@ -7271,7 +7271,7 @@ pm_scholastic_education = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 5                            # Price:   30, Total cost: 150.0
+			goods_input_paper_add = 5                            # Price:   30, Total cost:   150.0 (100.00%)
 			# Output goods
 			# Total input cost: 150.0
 			# Total output cost: 0
@@ -7311,7 +7311,7 @@ pm_philosophy_department = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 10                           # Price:   30, Total cost: 300.0
+			goods_input_paper_add = 10                           # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
 			# Total input cost: 300.0
 			# Total output cost: 0
@@ -7351,7 +7351,7 @@ pm_analytical_philosophy_department = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 15                           # Price:   30, Total cost: 450.0
+			goods_input_paper_add = 15                           # Price:   30, Total cost:   450.0 (100.00%)
 			# Output goods
 			# Total input cost: 450.0
 			# Total output cost: 0
@@ -7418,7 +7418,7 @@ pm_skyscraper_bureaucratic_nexus = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 25                           # Price:   30, Total cost: 750.0
+			goods_input_paper_add = 25                           # Price:   30, Total cost:   750.0 (100.00%)
 			# Output goods
 			# Total input cost: 750.0
 			# Total output cost: 0
@@ -7450,7 +7450,7 @@ pm_skyscraper_trade_nexus = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 25                           # Price:   30, Total cost: 750.0
+			goods_input_paper_add = 25                           # Price:   30, Total cost:   750.0 (100.00%)
 			# Output goods
 			# Total input cost: 750.0
 			# Total output cost: 0
@@ -7971,7 +7971,7 @@ pm_default_building_victoria_terminus = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_wood_add = 30                           # Price:   20, Total cost: 600.0
+			goods_output_wood_add = 30                           # Price:   20, Total cost:   600.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 600.0
 			# Profit: 600.0
@@ -7998,9 +7998,9 @@ pm_saw_mills = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 5                            # Price:   40, Total cost: 200.0
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (100.00%)
 			# Output goods
-			goods_output_wood_add = 60                           # Price:   20, Total cost: 1200.0
+			goods_output_wood_add = 60                           # Price:   20, Total cost:  1200.0 (100.00%)
 			# Total input cost: 200.0
 			# Total output cost: 1200.0
 			# Profit: 1000.0
@@ -8028,10 +8028,10 @@ pm_electric_saw_mills = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (72.73%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (27.27%)
 			# Output goods
-			goods_output_wood_add = 100                          # Price:   20, Total cost: 2000.0
+			goods_output_wood_add = 100                          # Price:   20, Total cost:  2000.0 (100.00%)
 			# Total input cost: 550.0
 			# Total output cost: 2000.0
 			# Profit: 1450.0
@@ -8063,8 +8063,8 @@ pm_hardwood = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_wood_add = -25                          # Price:   20, Total cost: -500.0
-			goods_output_hardwood_add = 10                       # Price:   40, Total cost: 400.0
+			goods_output_wood_add = -25                          # Price:   20, Total cost:  -500.0 (500.00%)
+			goods_output_hardwood_add = 10                       # Price:   40, Total cost:   400.0 (-400.00%)
 			# Total input cost: 0
 			# Total output cost: -100.0
 			# Profit: -100.0
@@ -8088,8 +8088,8 @@ pm_increased_hardwood = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_wood_add = -40                          # Price:   20, Total cost: -800.0
-			goods_output_hardwood_add = 20                       # Price:   40, Total cost: 800.0
+			goods_output_wood_add = -40                          # Price:   20, Total cost:  -800.0 (0.00%)
+			goods_output_hardwood_add = 20                       # Price:   40, Total cost:   800.0 (0.00%)
 			# Total input cost: 0
 			# Total output cost: 0.0
 			# Profit: 0.0
@@ -8119,8 +8119,8 @@ pm_steam_donkey_building_logging_camp = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 1                          # Price:   60, Total cost: 60.0
-			goods_input_coal_add = 4                             # Price:   30, Total cost: 120.0
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (33.33%)
+			goods_input_coal_add = 4                             # Price:   30, Total cost:   120.0 (66.67%)
 			# Output goods
 			# Total input cost: 180.0
 			# Total output cost: 0
@@ -8149,8 +8149,8 @@ pm_chainsaws = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 1                          # Price:   60, Total cost: 60.0
-			goods_input_oil_add = 4                              # Price:   40, Total cost: 160.0
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (27.27%)
+			goods_input_oil_add = 4                              # Price:   40, Total cost:   160.0 (72.73%)
 			# Output goods
 			# Total input cost: 220.0
 			# Total output cost: 0
@@ -8184,7 +8184,7 @@ pm_rail_transport_building_logging_camp = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 5                   # Price:   30, Total cost: 150.0
+			goods_input_transportation_add = 5                   # Price:   30, Total cost:   150.0 (100.00%)
 			# Output goods
 			# Total input cost: 150.0
 			# Total output cost: 0
@@ -8216,7 +8216,7 @@ pm_log_carts = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 8                   # Price:   30, Total cost: 240.0
+			goods_input_transportation_add = 8                   # Price:   30, Total cost:   240.0 (100.00%)
 			# Output goods
 			# Total input cost: 240.0
 			# Total output cost: 0
@@ -8240,7 +8240,7 @@ default_building_rubber_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_rubber_add = 30                         # Price:   40, Total cost: 1200.0
+			goods_output_rubber_add = 30                         # Price:   40, Total cost:  1200.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 1200.0
 			# Profit: 1200.0
@@ -8273,9 +8273,9 @@ automatic_irrigation_building_rubber_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_rubber_add = 60                         # Price:   40, Total cost: 2400.0
+			goods_output_rubber_add = 60                         # Price:   40, Total cost:  2400.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 2400.0
 			# Profit: 2100.0
@@ -8300,7 +8300,7 @@ pm_simple_fishing = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_fish_add = 25                           # Price:   20, Total cost: 500.0
+			goods_output_fish_add = 25                           # Price:   20, Total cost:   500.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 500.0
 			# Profit: 500.0
@@ -8324,9 +8324,9 @@ pm_fishing_trawlers = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_clippers_add = 5                         # Price:   60, Total cost: 300.0
+			goods_input_clippers_add = 5                         # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_fish_add = 50                           # Price:   20, Total cost: 1000.0
+			goods_output_fish_add = 50                           # Price:   20, Total cost:  1000.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 1000.0
 			# Profit: 700.0
@@ -8360,10 +8360,10 @@ pm_steam_trawlers = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steamers_add = 5                         # Price:   70, Total cost: 350.0
-			goods_input_coal_add = 15                            # Price:   30, Total cost: 450.0
+			goods_input_steamers_add = 5                         # Price:   70, Total cost:   350.0 (43.75%)
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (56.25%)
 			# Output goods
-			goods_output_fish_add = 100                          # Price:   20, Total cost: 2000.0
+			goods_output_fish_add = 100                          # Price:   20, Total cost:  2000.0 (100.00%)
 			# Total input cost: 800.0
 			# Total output cost: 2000.0
 			# Profit: 1200.0
@@ -8393,7 +8393,7 @@ pm_refrigerated_storage_building_fishing_wharf = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (100.00%)
 			# Output goods
 			# Total input cost: 150.0
 			# Total output cost: 0
@@ -8429,8 +8429,8 @@ pm_refrigerated_rail_cars_building_fishing_wharf = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
-			goods_input_transportation_add = 5                   # Price:   30, Total cost: 150.0
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (50.00%)
+			goods_input_transportation_add = 5                   # Price:   30, Total cost:   150.0 (50.00%)
 			# Output goods
 			# Total input cost: 300.0
 			# Total output cost: 0
@@ -8460,8 +8460,8 @@ pm_flash_freezing_building_fishing_wharf = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 7                      # Price:   30, Total cost: 210.0
-			goods_input_transportation_add = 7                   # Price:   30, Total cost: 210.0
+			goods_input_electricity_add = 7                      # Price:   30, Total cost:   210.0 (50.00%)
+			goods_input_transportation_add = 7                   # Price:   30, Total cost:   210.0 (50.00%)
 			# Output goods
 			# Total input cost: 420.0
 			# Total output cost: 0
@@ -8488,8 +8488,8 @@ pm_simple_whaling = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_meat_add = 5                            # Price:   30, Total cost: 150.0
-			goods_output_oil_add = 10                            # Price:   40, Total cost: 400.0
+			goods_output_meat_add = 5                            # Price:   30, Total cost:   150.0 (27.27%)
+			goods_output_oil_add = 10                            # Price:   40, Total cost:   400.0 (72.73%)
 			# Total input cost: 0
 			# Total output cost: 550.0
 			# Profit: 550.0
@@ -8513,10 +8513,10 @@ pm_wooden_whaling_ships = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_clippers_add = 5                         # Price:   60, Total cost: 300.0
+			goods_input_clippers_add = 5                         # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_meat_add = 10                           # Price:   30, Total cost: 300.0
-			goods_output_oil_add = 20                            # Price:   40, Total cost: 800.0
+			goods_output_meat_add = 10                           # Price:   30, Total cost:   300.0 (27.27%)
+			goods_output_oil_add = 20                            # Price:   40, Total cost:   800.0 (72.73%)
 			# Total input cost: 300.0
 			# Total output cost: 1100.0
 			# Profit: 800.0
@@ -8550,11 +8550,11 @@ pm_steam_whaling_ships = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steamers_add = 5                         # Price:   70, Total cost: 350.0
-			goods_input_coal_add = 20                            # Price:   30, Total cost: 600.0
+			goods_input_steamers_add = 5                         # Price:   70, Total cost:   350.0 (36.84%)
+			goods_input_coal_add = 20                            # Price:   30, Total cost:   600.0 (63.16%)
 			# Output goods
-			goods_output_meat_add = 20                           # Price:   30, Total cost: 600.0
-			goods_output_oil_add = 40                            # Price:   40, Total cost: 1600.0
+			goods_output_meat_add = 20                           # Price:   30, Total cost:   600.0 (27.27%)
+			goods_output_oil_add = 40                            # Price:   40, Total cost:  1600.0 (72.73%)
 			# Total input cost: 950.0
 			# Total output cost: 2200.0
 			# Profit: 1250.0
@@ -8584,7 +8584,7 @@ pm_refrigerated_storage_building_whaling_station = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (100.00%)
 			# Output goods
 			# Total input cost: 150.0
 			# Total output cost: 0
@@ -8620,8 +8620,8 @@ pm_refrigerated_rail_cars_building_whaling_station = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 5                      # Price:   30, Total cost: 150.0
-			goods_input_transportation_add = 5                   # Price:   30, Total cost: 150.0
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (50.00%)
+			goods_input_transportation_add = 5                   # Price:   30, Total cost:   150.0 (50.00%)
 			# Output goods
 			# Total input cost: 300.0
 			# Total output cost: 0
@@ -8651,8 +8651,8 @@ pm_flash_freezing_building_whaling_station = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 7                      # Price:   30, Total cost: 210.0
-			goods_input_transportation_add = 7                   # Price:   30, Total cost: 210.0
+			goods_input_electricity_add = 7                      # Price:   30, Total cost:   210.0 (50.00%)
+			goods_input_transportation_add = 7                   # Price:   30, Total cost:   210.0 (50.00%)
 			# Output goods
 			# Total input cost: 420.0
 			# Total output cost: 0
@@ -8684,10 +8684,10 @@ pm_steam_derricks = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
-			goods_input_coal_add = 10                            # Price:   30, Total cost: 300.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (50.00%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (50.00%)
 			# Output goods
-			goods_output_oil_add = 60                            # Price:   40, Total cost: 2400.0
+			goods_output_oil_add = 60                            # Price:   40, Total cost:  2400.0 (100.00%)
 			# Total input cost: 600.0
 			# Total output cost: 2400.0
 			# Profit: 1800.0
@@ -8722,9 +8722,9 @@ pm_combustion_derricks = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 10                         # Price:   60, Total cost: 600.0
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (100.00%)
 			# Output goods
-			goods_output_oil_add = 100                           # Price:   40, Total cost: 4000.0
+			goods_output_oil_add = 100                           # Price:   40, Total cost:  4000.0 (100.00%)
 			# Total input cost: 600.0
 			# Total output cost: 4000.0
 			# Profit: 3400.0
@@ -8759,7 +8759,7 @@ pm_rail_transport_building_oil_rig = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 5                   # Price:   30, Total cost: 150.0
+			goods_input_transportation_add = 5                   # Price:   30, Total cost:   150.0 (100.00%)
 			# Output goods
 			# Total input cost: 150.0
 			# Total output cost: 0
@@ -8792,7 +8792,7 @@ pm_tanker_cars = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 10                  # Price:   30, Total cost: 300.0
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
 			# Total input cost: 300.0
 			# Total output cost: 0
@@ -8827,8 +8827,8 @@ pm_tanker_cars = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
-			goods_input_coal_add = 15                            # Price:   30, Total cost: 450.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (47.06%)
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (52.94%)
 			# Output goods
 			# Total input cost: 850.0
 			# Total output cost: 0
@@ -8867,9 +8867,9 @@ pm_basic_port = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_clippers_add = 5                         # Price:   60, Total cost: 300.0
+			goods_input_clippers_add = 5                         # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_merchant_marine_add = 10                # Price:   50, Total cost: 500.0
+			goods_output_merchant_marine_add = 10                # Price:   50, Total cost:   500.0 (100.00%)
 			# Total input cost: 300.0
 			# Total output cost: 500.0
 			# Profit: 200.0
@@ -8907,10 +8907,10 @@ pm_industrial_port = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steamers_add = 5                         # Price:   70, Total cost: 350.0
-			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
+			goods_input_steamers_add = 5                         # Price:   70, Total cost:   350.0 (70.00%)
+			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (30.00%)
 			# Output goods
-			goods_output_merchant_marine_add = 20                # Price:   50, Total cost: 1000.0
+			goods_output_merchant_marine_add = 20                # Price:   50, Total cost:  1000.0 (100.00%)
 			# Total input cost: 500.0
 			# Total output cost: 1000.0
 			# Profit: 500.0
@@ -8948,10 +8948,10 @@ pm_modern_port = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steamers_add = 5                         # Price:   70, Total cost: 350.0
-			goods_input_oil_add = 10                             # Price:   40, Total cost: 400.0
+			goods_input_steamers_add = 5                         # Price:   70, Total cost:   350.0 (46.67%)
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (53.33%)
 			# Output goods
-			goods_output_merchant_marine_add = 30                # Price:   50, Total cost: 1500.0
+			goods_output_merchant_marine_add = 30                # Price:   50, Total cost:  1500.0 (100.00%)
 			# Total input cost: 750.0
 			# Total output cost: 1500.0
 			# Profit: 750.0
@@ -8987,10 +8987,10 @@ pm_early_trains = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
-			goods_input_coal_add = 2                             # Price:   30, Total cost: 60.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (83.33%)
+			goods_input_coal_add = 2                             # Price:   30, Total cost:    60.0 (16.67%)
 			# Output goods
-			goods_output_transportation_add = 20                 # Price:   30, Total cost: 600.0
+			goods_output_transportation_add = 20                 # Price:   30, Total cost:   600.0 (100.00%)
 			# Total input cost: 360.0
 			# Total output cost: 600.0
 			# Profit: 240.0
@@ -9025,10 +9025,10 @@ pm_steam_trains = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
-			goods_input_coal_add = 5                             # Price:   30, Total cost: 150.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (66.67%)
+			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (33.33%)
 			# Output goods
-			goods_output_transportation_add = 25                 # Price:   30, Total cost: 750.0
+			goods_output_transportation_add = 25                 # Price:   30, Total cost:   750.0 (100.00%)
 			# Total input cost: 450.0
 			# Total output cost: 750.0
 			# Profit: 300.0
@@ -9067,10 +9067,10 @@ pm_steam_trains_principle_transport_3 = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 6                          # Price:   60, Total cost: 360.0
-			goods_input_coal_add = 6                             # Price:   30, Total cost: 180.0
+			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (66.67%)
+			goods_input_coal_add = 6                             # Price:   30, Total cost:   180.0 (33.33%)
 			# Output goods
-			goods_output_transportation_add = 30                 # Price:   30, Total cost: 900.0
+			goods_output_transportation_add = 30                 # Price:   30, Total cost:   900.0 (100.00%)
 			# Total input cost: 540.0
 			# Total output cost: 900.0
 			# Profit: 360.0
@@ -9105,10 +9105,10 @@ pm_electric_trains = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
-			goods_input_electricity_add = 8                      # Price:   30, Total cost: 240.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (55.56%)
+			goods_input_electricity_add = 8                      # Price:   30, Total cost:   240.0 (44.44%)
 			# Output goods
-			goods_output_transportation_add = 35                 # Price:   30, Total cost: 1050.0
+			goods_output_transportation_add = 35                 # Price:   30, Total cost:  1050.0 (100.00%)
 			# Total input cost: 540.0
 			# Total output cost: 1050.0
 			# Profit: 510.0
@@ -9149,10 +9149,10 @@ pm_electric_trains_principle_transport_3 = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 6                          # Price:   60, Total cost: 360.0
-			goods_input_electricity_add = 10                     # Price:   30, Total cost: 300.0
+			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (54.55%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (45.45%)
 			# Output goods
-			goods_output_transportation_add = 45                 # Price:   30, Total cost: 1350.0
+			goods_output_transportation_add = 45                 # Price:   30, Total cost:  1350.0 (100.00%)
 			# Total input cost: 660.0
 			# Total output cost: 1350.0
 			# Profit: 690.0
@@ -9189,10 +9189,10 @@ pm_diesel_trains = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost: 300.0
-			goods_input_oil_add = 6                              # Price:   40, Total cost: 240.0
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (55.56%)
+			goods_input_oil_add = 6                              # Price:   40, Total cost:   240.0 (44.44%)
 			# Output goods
-			goods_output_transportation_add = 40                 # Price:   30, Total cost: 1200.0
+			goods_output_transportation_add = 40                 # Price:   30, Total cost:  1200.0 (100.00%)
 			# Total input cost: 540.0
 			# Total output cost: 1200.0
 			# Profit: 660.0
@@ -9232,10 +9232,10 @@ pm_diesel_trains_principle_transport_3 = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 6                          # Price:   60, Total cost: 360.0
-			goods_input_oil_add = 8                              # Price:   40, Total cost: 320.0
+			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (52.94%)
+			goods_input_oil_add = 8                              # Price:   40, Total cost:   320.0 (47.06%)
 			# Output goods
-			goods_output_transportation_add = 50                 # Price:   30, Total cost: 1500.0
+			goods_output_transportation_add = 50                 # Price:   30, Total cost:  1500.0 (100.00%)
 			# Total input cost: 680.0
 			# Total output cost: 1500.0
 			# Profit: 820.0
@@ -9270,9 +9270,9 @@ pm_wooden_passenger_carriages = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 8                             # Price:   20, Total cost: 160.0
+			goods_input_wood_add = 8                             # Price:   20, Total cost:   160.0 (100.00%)
 			# Output goods
-			goods_output_transportation_add = 10                 # Price:   30, Total cost: 300.0
+			goods_output_transportation_add = 10                 # Price:   30, Total cost:   300.0 (100.00%)
 			# Total input cost: 160.0
 			# Total output cost: 300.0
 			# Profit: 140.0
@@ -9297,9 +9297,9 @@ pm_steel_passenger_carriages = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 5                            # Price:   50, Total cost: 250.0
+			goods_input_steel_add = 5                            # Price:   50, Total cost:   250.0 (100.00%)
 			# Output goods
-			goods_output_transportation_add = 15                 # Price:   30, Total cost: 450.0
+			goods_output_transportation_add = 15                 # Price:   30, Total cost:   450.0 (100.00%)
 			# Total input cost: 250.0
 			# Total output cost: 450.0
 			# Profit: 200.0
@@ -9369,7 +9369,7 @@ pm_trade_center_trade_quantity_limited = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_merchant_marine_add = 3                  # Price:   50, Total cost: 150.0
+			goods_input_merchant_marine_add = 3                  # Price:   50, Total cost:   150.0 (100.00%)
 			# Output goods
 			# Total input cost: 150.0
 			# Total output cost: 0
@@ -9394,7 +9394,7 @@ pm_trade_center_trade_quantity_normal = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_merchant_marine_add = 4                  # Price:   50, Total cost: 200.0
+			goods_input_merchant_marine_add = 4                  # Price:   50, Total cost:   200.0 (100.00%)
 			# Output goods
 			# Total input cost: 200.0
 			# Total output cost: 0
@@ -9415,7 +9415,7 @@ pm_trade_center_trade_quantity_high = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_merchant_marine_add = 5                  # Price:   50, Total cost: 250.0
+			goods_input_merchant_marine_add = 5                  # Price:   50, Total cost:   250.0 (100.00%)
 			# Output goods
 			# Total input cost: 250.0
 			# Total output cost: 0
@@ -9441,7 +9441,7 @@ pm_trade_center_trade_quantity_very_high = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_merchant_marine_add = 6                  # Price:   50, Total cost: 300.0
+			goods_input_merchant_marine_add = 6                  # Price:   50, Total cost:   300.0 (100.00%)
 			# Output goods
 			# Total input cost: 300.0
 			# Total output cost: 0
@@ -9675,10 +9675,10 @@ pm_company_headquarter_worker_cooperative = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 1.0                         # Price:   20, Total cost: 20.0
-			goods_output_fabric_add = 0.5                        # Price:   20, Total cost: 10.0
-			goods_output_wood_add = 0.5                          # Price:   20, Total cost: 10.0
-			goods_output_services_add = 0.5                      # Price:   30, Total cost: 15.0
+			goods_output_grain_add = 1.0                         # Price:   20, Total cost:    20.0 (36.36%)
+			goods_output_fabric_add = 0.5                        # Price:   20, Total cost:    10.0 (18.18%)
+			goods_output_wood_add = 0.5                          # Price:   20, Total cost:    10.0 (18.18%)
+			goods_output_services_add = 0.5                      # Price:   30, Total cost:    15.0 (27.27%)
 			# Total input cost: 0
 			# Total output cost: 55.0
 			# Profit: 55.0
@@ -9704,9 +9704,9 @@ pm_home_workshops_no_building_subsistence_farms = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 0.5                         # Price:   20, Total cost: 10.0
-			goods_output_fabric_add = 0.25                       # Price:   20, Total cost: 5.0
-			goods_output_wood_add = 0.25                         # Price:   20, Total cost: 5.0
+			goods_output_grain_add = 0.5                         # Price:   20, Total cost:    10.0 (50.00%)
+			goods_output_fabric_add = 0.25                       # Price:   20, Total cost:     5.0 (25.00%)
+			goods_output_wood_add = 0.25                         # Price:   20, Total cost:     5.0 (25.00%)
 			# Total input cost: 0
 			# Total output cost: 20.0
 			# Profit: 20.0
@@ -9728,9 +9728,9 @@ pm_home_workshops_building_subsistence_farms = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_clothes_add = 0.25                      # Price:   30, Total cost: 7.5
-			goods_output_furniture_add = 0.25                    # Price:   30, Total cost: 7.5
-			goods_output_liquor_add = 0.25                       # Price:   30, Total cost: 7.5
+			goods_output_clothes_add = 0.25                      # Price:   30, Total cost:     7.5 (33.33%)
+			goods_output_furniture_add = 0.25                    # Price:   30, Total cost:     7.5 (33.33%)
+			goods_output_liquor_add = 0.25                       # Price:   30, Total cost:     7.5 (33.33%)
 			# Total input cost: 0
 			# Total output cost: 22.5
 			# Profit: 22.5
@@ -9767,7 +9767,7 @@ pm_homesteading_building_subsistence = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 0.25                        # Price:   20, Total cost: 5.0
+			goods_output_grain_add = 0.25                        # Price:   20, Total cost:     5.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 5.0
 			# Profit: 5.0
@@ -9797,7 +9797,7 @@ pm_serfdom = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 0.5                         # Price:   20, Total cost: 10.0
+			goods_output_grain_add = 0.5                         # Price:   20, Total cost:    10.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 10.0
 			# Profit: 10.0
@@ -9820,11 +9820,11 @@ default_building_subsistence_orchards = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 0.25                        # Price:   20, Total cost: 5.0
-			goods_output_fruit_add = 0.5                         # Price:   30, Total cost: 15.0
-			goods_output_fabric_add = 0.5                        # Price:   20, Total cost: 10.0
-			goods_output_wood_add = 0.5                          # Price:   20, Total cost: 10.0
-			goods_output_services_add = 0.5                      # Price:   30, Total cost: 15.0
+			goods_output_grain_add = 0.25                        # Price:   20, Total cost:     5.0 (9.09%)
+			goods_output_fruit_add = 0.5                         # Price:   30, Total cost:    15.0 (27.27%)
+			goods_output_fabric_add = 0.5                        # Price:   20, Total cost:    10.0 (18.18%)
+			goods_output_wood_add = 0.5                          # Price:   20, Total cost:    10.0 (18.18%)
+			goods_output_services_add = 0.5                      # Price:   30, Total cost:    15.0 (27.27%)
 			# Total input cost: 0
 			# Total output cost: 55.0
 			# Profit: 55.0
@@ -9850,9 +9850,9 @@ pm_home_workshops_no_building_subsistence_orchards = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_fruit_add = 0.33                        # Price:   30, Total cost: 9.9
-			goods_output_fabric_add = 0.25                       # Price:   20, Total cost: 5.0
-			goods_output_wood_add = 0.25                         # Price:   20, Total cost: 5.0
+			goods_output_fruit_add = 0.33                        # Price:   30, Total cost:     9.9 (49.75%)
+			goods_output_fabric_add = 0.25                       # Price:   20, Total cost:     5.0 (25.13%)
+			goods_output_wood_add = 0.25                         # Price:   20, Total cost:     5.0 (25.13%)
 			# Total input cost: 0
 			# Total output cost: 19.9
 			# Profit: 19.9
@@ -9874,9 +9874,9 @@ pm_home_workshops_building_subsistence_orchards = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_clothes_add = 0.25                      # Price:   30, Total cost: 7.5
-			goods_output_furniture_add = 0.25                    # Price:   30, Total cost: 7.5
-			goods_output_liquor_add = 0.25                       # Price:   30, Total cost: 7.5
+			goods_output_clothes_add = 0.25                      # Price:   30, Total cost:     7.5 (33.33%)
+			goods_output_furniture_add = 0.25                    # Price:   30, Total cost:     7.5 (33.33%)
+			goods_output_liquor_add = 0.25                       # Price:   30, Total cost:     7.5 (33.33%)
 			# Total input cost: 0
 			# Total output cost: 22.5
 			# Profit: 22.5
@@ -9897,7 +9897,7 @@ pm_serfdom_building_subsistence_orchards = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_fruit_add = 0.33                        # Price:   30, Total cost: 9.9
+			goods_output_fruit_add = 0.33                        # Price:   30, Total cost:     9.9 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 9.9
 			# Profit: 9.9
@@ -9920,11 +9920,11 @@ default_building_subsistence_pastures = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 0.25                        # Price:   20, Total cost: 5.0
-			goods_output_meat_add = 0.5                          # Price:   30, Total cost: 15.0
-			goods_output_fabric_add = 0.75                       # Price:   20, Total cost: 15.0
-			goods_output_wood_add = 0.25                         # Price:   20, Total cost: 5.0
-			goods_output_services_add = 0.5                      # Price:   30, Total cost: 15.0
+			goods_output_grain_add = 0.25                        # Price:   20, Total cost:     5.0 (9.09%)
+			goods_output_meat_add = 0.5                          # Price:   30, Total cost:    15.0 (27.27%)
+			goods_output_fabric_add = 0.75                       # Price:   20, Total cost:    15.0 (27.27%)
+			goods_output_wood_add = 0.25                         # Price:   20, Total cost:     5.0 (9.09%)
+			goods_output_services_add = 0.5                      # Price:   30, Total cost:    15.0 (27.27%)
 			# Total input cost: 0
 			# Total output cost: 55.0
 			# Profit: 55.0
@@ -9950,8 +9950,8 @@ pm_home_workshops_no_building_subsistence_pastures = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_meat_add = 0.33                         # Price:   30, Total cost: 9.9
-			goods_output_fabric_add = 0.5                        # Price:   20, Total cost: 10.0
+			goods_output_meat_add = 0.33                         # Price:   30, Total cost:     9.9 (49.75%)
+			goods_output_fabric_add = 0.5                        # Price:   20, Total cost:    10.0 (50.25%)
 			# Total input cost: 0
 			# Total output cost: 19.9
 			# Profit: 19.9
@@ -9973,9 +9973,9 @@ pm_home_workshops_building_subsistence_pastures = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_clothes_add = 0.25                      # Price:   30, Total cost: 7.5
-			goods_output_furniture_add = 0.25                    # Price:   30, Total cost: 7.5
-			goods_output_liquor_add = 0.25                       # Price:   30, Total cost: 7.5
+			goods_output_clothes_add = 0.25                      # Price:   30, Total cost:     7.5 (33.33%)
+			goods_output_furniture_add = 0.25                    # Price:   30, Total cost:     7.5 (33.33%)
+			goods_output_liquor_add = 0.25                       # Price:   30, Total cost:     7.5 (33.33%)
 			# Total input cost: 0
 			# Total output cost: 22.5
 			# Profit: 22.5
@@ -9996,7 +9996,7 @@ pm_serfdom_building_subsistence_pastures = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_meat_add = 0.33                         # Price:   30, Total cost: 9.9
+			goods_output_meat_add = 0.33                         # Price:   30, Total cost:     9.9 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 9.9
 			# Profit: 9.9
@@ -10019,11 +10019,11 @@ default_building_subsistence_fishing_villages = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 0.5                         # Price:   20, Total cost: 10.0
-			goods_output_fish_add = 1.0                          # Price:   20, Total cost: 20.0
-			goods_output_fabric_add = 0.25                       # Price:   20, Total cost: 5.0
-			goods_output_wood_add = 0.25                         # Price:   20, Total cost: 5.0
-			goods_output_services_add = 0.5                      # Price:   30, Total cost: 15.0
+			goods_output_grain_add = 0.5                         # Price:   20, Total cost:    10.0 (18.18%)
+			goods_output_fish_add = 1.0                          # Price:   20, Total cost:    20.0 (36.36%)
+			goods_output_fabric_add = 0.25                       # Price:   20, Total cost:     5.0 (9.09%)
+			goods_output_wood_add = 0.25                         # Price:   20, Total cost:     5.0 (9.09%)
+			goods_output_services_add = 0.5                      # Price:   30, Total cost:    15.0 (27.27%)
 			# Total input cost: 0
 			# Total output cost: 55.0
 			# Profit: 55.0
@@ -10049,9 +10049,9 @@ pm_home_workshops_no_building_subsistence_fishing_villages = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_fish_add = 0.5                          # Price:   20, Total cost: 10.0
-			goods_output_fabric_add = 0.25                       # Price:   20, Total cost: 5.0
-			goods_output_wood_add = 0.25                         # Price:   20, Total cost: 5.0
+			goods_output_fish_add = 0.5                          # Price:   20, Total cost:    10.0 (50.00%)
+			goods_output_fabric_add = 0.25                       # Price:   20, Total cost:     5.0 (25.00%)
+			goods_output_wood_add = 0.25                         # Price:   20, Total cost:     5.0 (25.00%)
 			# Total input cost: 0
 			# Total output cost: 20.0
 			# Profit: 20.0
@@ -10073,9 +10073,9 @@ pm_home_workshops_building_subsistence_fishing_villages = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_clothes_add = 0.25                      # Price:   30, Total cost: 7.5
-			goods_output_furniture_add = 0.25                    # Price:   30, Total cost: 7.5
-			goods_output_liquor_add = 0.25                       # Price:   30, Total cost: 7.5
+			goods_output_clothes_add = 0.25                      # Price:   30, Total cost:     7.5 (33.33%)
+			goods_output_furniture_add = 0.25                    # Price:   30, Total cost:     7.5 (33.33%)
+			goods_output_liquor_add = 0.25                       # Price:   30, Total cost:     7.5 (33.33%)
 			# Total input cost: 0
 			# Total output cost: 22.5
 			# Profit: 22.5
@@ -10096,7 +10096,7 @@ pm_serfdom_building_subsistence_fishing_villages = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_fish_add = 0.5                          # Price:   20, Total cost: 10.0
+			goods_output_fish_add = 0.5                          # Price:   20, Total cost:    10.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 10.0
 			# Profit: 10.0
@@ -10119,10 +10119,10 @@ default_building_subsistence_rice_paddies = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 2                           # Price:   20, Total cost: 40.0
-			goods_output_fabric_add = 0.75                       # Price:   20, Total cost: 15.0
-			goods_output_wood_add = 0.75                         # Price:   20, Total cost: 15.0
-			goods_output_services_add = 1                        # Price:   30, Total cost: 30.0
+			goods_output_grain_add = 2                           # Price:   20, Total cost:    40.0 (40.00%)
+			goods_output_fabric_add = 0.75                       # Price:   20, Total cost:    15.0 (15.00%)
+			goods_output_wood_add = 0.75                         # Price:   20, Total cost:    15.0 (15.00%)
+			goods_output_services_add = 1                        # Price:   30, Total cost:    30.0 (30.00%)
 			# Total input cost: 0
 			# Total output cost: 100.0
 			# Profit: 100.0
@@ -10148,9 +10148,9 @@ pm_home_workshops_no_building_subsistence_rice_paddies = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 1                           # Price:   20, Total cost: 20.0
-			goods_output_fabric_add = 0.5                        # Price:   20, Total cost: 10.0
-			goods_output_wood_add = 0.5                          # Price:   20, Total cost: 10.0
+			goods_output_grain_add = 1                           # Price:   20, Total cost:    20.0 (50.00%)
+			goods_output_fabric_add = 0.5                        # Price:   20, Total cost:    10.0 (25.00%)
+			goods_output_wood_add = 0.5                          # Price:   20, Total cost:    10.0 (25.00%)
 			# Total input cost: 0
 			# Total output cost: 40.0
 			# Profit: 40.0
@@ -10172,9 +10172,9 @@ pm_home_workshops_building_subsistence_rice_paddies = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_clothes_add = 0.5                       # Price:   30, Total cost: 15.0
-			goods_output_furniture_add = 0.5                     # Price:   30, Total cost: 15.0
-			goods_output_liquor_add = 0.5                        # Price:   30, Total cost: 15.0
+			goods_output_clothes_add = 0.5                       # Price:   30, Total cost:    15.0 (33.33%)
+			goods_output_furniture_add = 0.5                     # Price:   30, Total cost:    15.0 (33.33%)
+			goods_output_liquor_add = 0.5                        # Price:   30, Total cost:    15.0 (33.33%)
 			# Total input cost: 0
 			# Total output cost: 45.0
 			# Profit: 45.0
@@ -10195,7 +10195,7 @@ pm_serfdom_building_subsistence_rice_paddies = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = 1                           # Price:   20, Total cost: 20.0
+			goods_output_grain_add = 1                           # Price:   20, Total cost:    20.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 20.0
 			# Profit: 20.0
@@ -10225,8 +10225,8 @@ pm_serfdom_building_subsistence_rice_paddies = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fabric_add = 25                          # Price:   20, Total cost: 500.0
-			goods_input_wood_add = 75                            # Price:   20, Total cost: 1500.0
+			goods_input_fabric_add = 25                          # Price:   20, Total cost:   500.0 (25.00%)
+			goods_input_wood_add = 75                            # Price:   20, Total cost:  1500.0 (75.00%)
 			# Output goods
 			# Total input cost: 2000.0
 			# Total output cost: 0
@@ -10270,10 +10270,10 @@ pm_iron_frame_buildings = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 40                            # Price:   20, Total cost: 800.0
-			goods_input_fabric_add = 20                          # Price:   20, Total cost: 400.0
-			goods_input_iron_add = 50                            # Price:   40, Total cost: 2000.0
-			goods_input_tools_add = 10                           # Price:   40, Total cost: 400.0
+			goods_input_wood_add = 40                            # Price:   20, Total cost:   800.0 (22.22%)
+			goods_input_fabric_add = 20                          # Price:   20, Total cost:   400.0 (11.11%)
+			goods_input_iron_add = 50                            # Price:   40, Total cost:  2000.0 (55.56%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (11.11%)
 			# Output goods
 			# Total input cost: 3600.0
 			# Total output cost: 0
@@ -10318,10 +10318,10 @@ pm_steel_frame_buildings = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 50                           # Price:   50, Total cost: 2500.0
-			goods_input_glass_add = 40                           # Price:   40, Total cost: 1600.0
-			goods_input_explosives_add = 10                      # Price:   50, Total cost: 500.0
-			goods_input_tools_add = 20                           # Price:   40, Total cost: 800.0
+			goods_input_steel_add = 50                           # Price:   50, Total cost:  2500.0 (46.30%)
+			goods_input_glass_add = 40                           # Price:   40, Total cost:  1600.0 (29.63%)
+			goods_input_explosives_add = 10                      # Price:   50, Total cost:   500.0 (9.26%)
+			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (14.81%)
 			# Output goods
 			# Total input cost: 5400.0
 			# Total output cost: 0
@@ -10366,11 +10366,11 @@ pm_arc_welded_buildings = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 50                           # Price:   50, Total cost: 2500.0
-			goods_input_glass_add = 40                           # Price:   40, Total cost: 1600.0
-			goods_input_explosives_add = 20                      # Price:   50, Total cost: 1000.0
-			goods_input_tools_add = 40                           # Price:   40, Total cost: 1600.0
-			goods_input_electricity_add = 40                     # Price:   30, Total cost: 1200.0
+			goods_input_steel_add = 50                           # Price:   50, Total cost:  2500.0 (31.65%)
+			goods_input_glass_add = 40                           # Price:   40, Total cost:  1600.0 (20.25%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (12.66%)
+			goods_input_tools_add = 40                           # Price:   40, Total cost:  1600.0 (20.25%)
+			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (15.19%)
 			# Output goods
 			# Total input cost: 7900.0
 			# Total output cost: 0

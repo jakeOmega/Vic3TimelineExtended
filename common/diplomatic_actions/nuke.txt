@@ -49,7 +49,35 @@ nuke_diplo_action = {
 
     ai = {
 		evaluation_chance = {
-            value = 1
+            value = 0.1
+            if = {
+                limit = {
+                    ruler = {
+                        OR = {
+                            has_trait = reckless
+                            has_trait = wrathful
+                            has_trait = ruthless
+                            has_trait = war_criminal
+                        }
+                    }
+                }
+                multiply = 5
+            }
+            if = {
+                limit = {
+                    ruler = {
+                        has_trait = cautious
+                        has_trait = honorable
+                    }
+                }
+                multiply = 0
+            }
+            if = {
+                limit = {
+                    scope:target_country = { has_modifier = nuclear_power }
+                }
+                multiply = 0.5 # less likely to nuke if they can retaliate
+            }
         }
 
 		will_select_as_second_state = {
@@ -63,6 +91,43 @@ nuke_diplo_action = {
                 who = scope:target_country
             }
             NOT = { infamy > 75 }
+            any_scope_state = {
+                is_target_of_wargoal = scope:target_country
+                is_incorporated = yes
+            }
+            OR = {
+                NOT = {
+                    scope:target_country = {
+                        has_modifier = nuclear_power
+                    }
+                }
+                ruler = {
+                    has_trait = reckless
+                    NOT = {
+                        has_trait = honorable
+                    }
+                }
+                ruler = {
+                    has_trait = wrathful
+                    NOT = {
+                        has_trait = honorable
+                    }
+                }
+                ruler = {
+                    has_trait = ruthless
+                    not = {
+                        has_trait = cautious
+                        has_trait = honorable
+                    }
+                }
+                ruler = {
+                    has_trait = war_criminal
+                    not = {
+                        has_trait = cautious
+                        has_trait = honorable
+                    }
+                }
+            }
         }
 
 		propose_score = {
@@ -166,6 +231,10 @@ tactical_nuke_diplo_action = {
                 who = scope:target_country
             }
             NOT = { infamy > 75 }
+            any_scope_state = {
+                is_target_of_wargoal = scope:target_country
+                is_incorporated = yes
+            }
         }
 	
 		propose_score = {

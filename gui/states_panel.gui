@@ -1438,6 +1438,55 @@ types state_panel_types
 				}
 			}
 
+			flowcontainer = {
+				spacing = 10
+				margin = { 10 10 }
+
+				background = {
+					using = entry_bg_simple
+				}
+				
+				flowcontainer = {
+					direction = vertical
+					parentanchor = vcenter
+					textbox = {
+						text = "tourism_title"
+						autoresize = yes
+						minimumsize = { 230 -1 }
+						maximumsize = { 230 -1 }
+						align = hcenter|nobaseline
+					}
+					icon = {
+						texture = "gfx/interface/icons/goods_icons/tourism.dds"
+						block "alpha" {}
+						size = { 70 70 }
+						parentanchor = hcenter
+					}
+					flowcontainer = {
+						parentanchor = hcenter
+						direction = horizontal
+
+						textbox = {
+							text = state_tourism_output_breakdown
+							autoresize = yes
+							minimumsize = { 115 -1 }
+							maximumsize = { 115 -1 }
+							multiline = yes
+							align = nobaseline
+						}
+
+						textbox = {
+							text = state_tourism_throughput_breakdown
+							autoresize = yes
+							minimumsize = { 115 -1 }
+							maximumsize = { 115 -1 }
+							multiline = yes
+							align = nobaseline
+						}
+					}
+				}
+			}
+
 			state_panel_status_item_small = {
 				visible = "[GetScriptedGui('decolonization_scripted_gui').IsShown( GuiScope.SetRoot( State.MakeScope ).End)]"
 				tooltip = ""

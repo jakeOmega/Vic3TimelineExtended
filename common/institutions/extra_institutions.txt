@@ -149,7 +149,7 @@ institution_ministry_of_urban_planning = {
 
 	modifier = {
 		building_urban_center_throughput_add = 0.1
-		state_urbanization_per_level_add = -10
+		state_urbanization_per_level_add = -5
 	}
 }
 

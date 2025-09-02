@@ -8,6 +8,7 @@ Created on Sun Nov 27 01:28:43 2022
 import math
 import re
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 from path_constants import base_game_path, mod_path
@@ -23,21 +24,57 @@ def convenience_need(i):
 def services_need(i):
     if i < 9:
         return 0
-    elif i < 20:
-        return 12 * (i - 9)
+    elif i == 9:
+        return 24
+    elif i == 10:
+        return 30
+    elif i == 11:
+        return 39
+    elif i == 12:
+        return 46
+    elif i == 13:
+        return 58
+    elif i == 14:
+        return 64
     else:
-        return services_need(19) + int(50 * (math.exp(0.2 * (i - 19)) - 1))
+        return 75 + int(50 * (math.exp(0.14 * (i - 15)) - 1))
 
 
 def art_need(i):
     if i < 25:
         return 0
     elif i < 50:
-        return int(0.02 * (i - 24) ** 4 + 1)
-    else:
-        base = int(0.02 * (25) ** 4 + 1)
-        exp = math.exp(0.2 * (i - 49))
+        return int(0.02 * (i - 24) ** 3.2 + 1)
+    elif i < 75:
+        base = int(0.02 * (25) ** 3.2 + 1)
+        exp = math.exp(0.12 * (i - 49))
         return int(base * exp)
+    else:
+        base = art_need(74)
+        exp = math.exp(0.15 * (i - 74))
+        return int(base * exp)
+
+
+def tourism_need(i):
+    if i < 25:
+        return 0
+    elif i < 35:
+        return int((i - 24) ** 1.5)
+    elif i < 40:
+        base = tourism_need(34)
+        exp = math.exp(0.4 * (i - 34))
+        return int(base * exp)
+    elif i < 45:
+        base = tourism_need(39)
+        exp = math.exp(0.2 * (i - 39))
+        return int(base * exp)
+    else:
+        base = tourism_need(44)
+        exp = math.exp(0.14 * (i - 44))
+        return int(base * exp)
+
+
+print(tourism_need(100))
 
 
 # Define the needs and their corresponding functions
@@ -45,6 +82,7 @@ needs = {
     "popneed_convenience": convenience_need,
     "popneed_services": services_need,
     "popneed_art": art_need,
+    "popneed_tourism": tourism_need,
 }
 
 
@@ -93,6 +131,99 @@ def fit_power_law(x, y):
 
 def extrapolate_power_law(x, a, b):
     return a * (x**b)
+
+
+def calculate_proportions(buy_packages, pop_needs_defaults, goods_cost):
+    """
+    Calculates the proportion of weekly expenditure for each need at each wealth level.
+    This version is corrected to handle missing needs and prevent data misalignment.
+    """
+    if not buy_packages:
+        return [], {}
+    max_wealth = max(buy_packages.keys())
+    wealth_levels = list(range(1, max_wealth + 1))
+
+    all_needs_set = set(f"popneed_{need}" for need in pop_needs_defaults.keys())
+    for wl in wealth_levels:
+        if wl in buy_packages:
+            all_needs_set.update(buy_packages[wl].keys())
+
+    all_needs_list = sorted(list(all_needs_set))
+
+    proportions = {need: [] for need in all_needs_list}
+
+    for wl in wealth_levels:
+        package = buy_packages.get(wl, {})
+        total_weekly_cost = 0
+        temp_need_costs = {}
+
+        for need, amount in package.items():
+            default_good = pop_needs_defaults.get(need.replace("popneed_", ""))
+            if default_good and default_good in goods_cost:
+                cost = amount * goods_cost[default_good]
+                total_weekly_cost += cost
+                temp_need_costs[need] = cost
+
+        for need in all_needs_list:
+            need_cost = temp_need_costs.get(need, 0)
+            if total_weekly_cost > 0:
+                proportion = (need_cost / total_weekly_cost) * 100
+                proportions[need].append(proportion)
+            else:
+                proportions[need].append(0)
+
+    return wealth_levels, proportions
+
+
+def plot_expenditure_proportions(
+    vanilla_buy_packages, modded_buy_packages, pop_needs_defaults, goods_cost
+):
+    """Generates subplots showing the proportion of expenditure on each need."""
+    vanilla_wl, vanilla_props = calculate_proportions(
+        vanilla_buy_packages, pop_needs_defaults, goods_cost
+    )
+    modded_wl, modded_props = calculate_proportions(
+        modded_buy_packages, pop_needs_defaults, goods_cost
+    )
+
+    all_need_labels = sorted(list(set(vanilla_props.keys()) | set(modded_props.keys())))
+
+    vanilla_data = [
+        vanilla_props.get(need, [0] * len(vanilla_wl)) for need in all_need_labels
+    ]
+    modded_data = [
+        modded_props.get(need, [0] * len(modded_wl)) for need in all_need_labels
+    ]
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 12), sharex=True)
+
+    ax1.stackplot(
+        vanilla_wl,
+        vanilla_data,
+        labels=[label.replace("popneed_", "") for label in all_need_labels],
+        alpha=0.8,
+    )
+    ax1.set_title("Vanilla: Proportion of Weekly Expenditure by Need", fontsize=16)
+    ax1.set_ylabel("Proportion of Expenditure (%)", fontsize=12)
+    ax1.legend(loc="center left", bbox_to_anchor=(1, 0.5))
+    ax1.set_ylim(0, 100)
+    ax1.grid(True)
+
+    ax2.stackplot(
+        modded_wl,
+        modded_data,
+        labels=[label.replace("popneed_", "") for label in all_need_labels],
+        alpha=0.8,
+    )
+    ax2.set_title("Modified: Proportion of Weekly Expenditure by Need", fontsize=16)
+    ax2.set_xlabel("Wealth Level", fontsize=12)
+    ax2.set_ylabel("Proportion of Expenditure (%)", fontsize=12)
+    ax2.set_ylim(0, 100)
+    ax2.grid(True)
+
+    plt.xlim(1, max(len(vanilla_wl), len(modded_wl)))
+    plt.tight_layout(rect=[0, 0, 0.85, 1])
+    plt.show()
 
 
 input_file_name = base_game_path + r"\game\common\buy_packages\00_buy_packages.txt"
@@ -242,7 +373,9 @@ def calculate_buy_package_costs(buy_packages, pop_needs_defaults, goods_cost):
             default_good = pop_needs_defaults.get(need.replace("popneed_", ""), None)
             if default_good in goods_cost:
                 total_cost += amount * goods_cost[default_good]
-        package_costs[wealth_level] = total_cost
+        package_costs[wealth_level] = (
+            total_cost / 10000
+        )  # buy packages are per 10k working adults
     return package_costs
 
 
@@ -255,41 +388,65 @@ def calculate_and_write_costs(
     goods_content = read_and_combine_files(goods_file_paths)
 
     # Extracting data
-    buy_packages = extract_buy_packages(buy_packages_content)
+    modded_buy_packages = extract_buy_packages(buy_packages_content)
     pop_needs_defaults = extract_pop_needs_default_goods(pop_needs_content)
     goods_cost = extract_goods_cost(goods_content)
 
-    # Calculating costs
-    buy_package_costs = calculate_buy_package_costs(
-        buy_packages, pop_needs_defaults, goods_cost
+    # Calculate Vanilla Costs
+    vanilla_buy_packages_content = read_and_combine_files([input_file_name])
+    vanilla_buy_packages = extract_buy_packages(vanilla_buy_packages_content)
+    vanilla_costs = calculate_buy_package_costs(
+        vanilla_buy_packages, pop_needs_defaults, goods_cost
     )
 
-    # Writing to output file
-    # with open(output_file_path, "w", encoding="utf-8-sig") as file:
-    #    file.write("wealth_in_pounds = {\n")
-    #    for wealth_level, cost in buy_package_costs.items():
-    #        file.write(
-    #            f"    if = {{ limit = {{ wealth = {wealth_level} }} value = {cost} }}\n"
-    #        )
-    #    file.write("}\n")
+    # Calculate Modded Costs
+    modded_costs = calculate_buy_package_costs(
+        modded_buy_packages, pop_needs_defaults, goods_cost
+    )
 
-    # print proportional costs of changed needs
-    for wealth_level, cost in buy_package_costs.items():
-        if wealth_level > 50:
-            break
-        print(f"wealth_{wealth_level} = {cost}")
-        for need in pop_needs_defaults.keys():
-            if "popneed_" + need not in needs:
-                continue
-            amount = needs["popneed_" + need](wealth_level - 1)
-            need_cost = amount * goods_cost[pop_needs_defaults[need]]
-            prop_cost = 100 * need_cost / cost
-            print(
-                f"\t{need} = {prop_cost:.2f}% ({need_cost} for {amount} {pop_needs_defaults[need]})"
-            )
+    print("Generating graph...")
+
+    # Prepare data for plotting
+    vanilla_wealth_levels = sorted(vanilla_costs.keys())
+    vanilla_pounds = [vanilla_costs[wl] for wl in vanilla_wealth_levels]
+
+    modded_wealth_levels = sorted(modded_costs.keys())
+    modded_pounds = [modded_costs[wl] for wl in modded_wealth_levels]
+
+    plt.style.use("seaborn-v0_8-whitegrid")
+    fig, ax = plt.subplots(figsize=(12, 8))
+
+    ax.plot(
+        vanilla_pounds,
+        vanilla_wealth_levels,
+        marker="o",
+        linestyle="-",
+        label="Vanilla",
+    )
+    ax.plot(
+        modded_pounds,
+        modded_wealth_levels,
+        marker="x",
+        linestyle="--",
+        label="Modified",
+    )
+
+    ax.set_title("Wealth Level vs. Annual Pop Need Expenditure", fontsize=16)
+    ax.set_xlabel("Annual Expenditure (£)", fontsize=12)
+    ax.set_ylabel("Wealth Level", fontsize=12)
+    ax.legend()
+    ax.grid(True)
+
+    # Set a logarithmic scale for the x-axis to better visualize the lower wealth levels
+    ax.set_xscale("log")
+
+    plt.tight_layout()
+
+    plot_expenditure_proportions(
+        vanilla_buy_packages, modded_buy_packages, pop_needs_defaults, goods_cost
+    )
 
 
-# Example file paths (replace with your actual file paths)
 buy_packages_file_paths = [pop_needs_out_path]
 
 pop_needs_file_paths = [

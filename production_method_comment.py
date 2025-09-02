@@ -65,7 +65,7 @@ def process_and_update_production_methods_grouped(
     Processes the production methods file and updates the 'workforce_scaled' section with input and output goods
     grouped separately, followed by a summary. Removes any existing unrelated comments.
     """
-    if type(pms_file_path) == str:
+    if isinstance(pms_file_path, str):
         pms_file_list = [pms_file_path]
     else:
         pms_file_list = pms_file_path
@@ -101,11 +101,27 @@ def process_and_update_production_methods_grouped(
             # Separate and process input and output goods
             input_goods_content, output_goods_content = "", ""
             good_pattern = re.compile(r"(goods_(input|output)_(\w+)_add = (-?[\d\.]+))")
+            total_input_cost, total_output_cost = 0, 0
             for good_match in good_pattern.finditer(workforce_scaled_content):
                 full_match, in_out, good, quantity = good_match.groups()
                 price = goods_dict.get(good, 0)
                 total_cost = price * float(quantity)
-                comment = f" # Price: {price: >4}, Total cost: {total_cost}\n"
+                if in_out == "input":
+                    total_input_cost += total_cost
+                else:
+                    total_output_cost += total_cost
+            for good_match in good_pattern.finditer(workforce_scaled_content):
+                full_match, in_out, good, quantity = good_match.groups()
+                price = goods_dict.get(good, 0)
+                total_cost = price * float(quantity)
+                percentage = (
+                    (total_cost / total_input_cost * 100)
+                    if in_out == "input" and total_input_cost != 0
+                    else (total_cost / total_output_cost * 100)
+                    if in_out == "output" and total_output_cost != 0
+                    else 0
+                )
+                comment = f" # Price: {price: >4}, Total cost: {total_cost:7.1f} ({percentage:.2f}%)\n"
                 if in_out == "input":
                     input_goods_content += ("\t\t\t" + full_match).ljust(
                         55, " "
@@ -208,7 +224,12 @@ def process_and_update_military_costs(
             price = goods_dict.get(good, 0)
             total_cost = price * float(quantity)
             full_cost += total_cost
-            comment = f" # Price: {price: >4}, Total cost: {total_cost}\n"
+        for good_match in good_pattern.finditer(cost_content):
+            full_match, good, quantity = good_match.groups()
+            price = goods_dict.get(good, 0)
+            total_cost = price * float(quantity)
+            percentage = (total_cost / full_cost * 100) if full_cost != 0 else 0
+            comment = f" # Price: {price: >4}, Total cost: {total_cost:7.1f} ({percentage:.2f}%)\n"
             goods_content += ("\t\t" + full_match).ljust(55, " ") + comment
         if len(goods_content) > 0:
             updated_cost_content = goods_content + f"\t\t# Total cost: {full_cost}\n\t"
@@ -236,7 +257,10 @@ goods_file_paths = [
     base_game_path + r"\game\common\goods\00_goods.txt",
     mod_path + r"\common\goods\timeline_extended_extra_goods.txt",
 ]
-pms_file_path = mod_path + r"\common\production_methods\extra_pms.txt"
+pms_file_paths = [
+    mod_path + r"\common\production_methods\extra_pms.txt",
+    mod_path + r"\common\production_methods\unique_pms.txt",
+]
 vanilla_pms_file_loc = base_game_path + r"\game\common\production_methods"
 vanilla_pm_file_paths = [
     os.path.join(vanilla_pms_file_loc, file)
@@ -246,9 +270,10 @@ vanilla_pm_file_paths = [
 output_file_path = mod_path + r"\commented_vanilla_pms.txt"
 goods_dict = parse_goods(goods_file_paths)
 
-process_and_update_production_methods_grouped(
-    pms_file_path, goods_dict, calculate_costs, calculate_employment
-)
+for file_path in pms_file_paths:
+    process_and_update_production_methods_grouped(
+        file_path, goods_dict, calculate_costs, calculate_employment
+    )
 
 process_and_update_production_methods_grouped(
     vanilla_pm_file_paths,

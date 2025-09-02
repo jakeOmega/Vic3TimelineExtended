@@ -1,0 +1,229 @@
+namespace = repeatable_events
+
+# =============================================================
+# FAMILY 1 — Election Debate → Holo-Debate → Neural Town Hall
+# =============================================================
+repeatable_events.10 = {
+    type = country_event
+    placement = ROOT
+
+    title = repeatable_events.10.t
+    desc = {
+        first_valid = {
+            triggered_desc = { desc = repeatable_events.10.d_neural trigger = { has_technology_researched = neural_lace } }
+            triggered_desc = { desc = repeatable_events.10.d_vr     trigger = { has_technology_researched = virtual_reality } }
+            triggered_desc = { desc = repeatable_events.10.d_tv     trigger = { has_technology_researched = television_broadcasting } }
+            desc = repeatable_events.10.d_tv
+        }
+    }
+    flavor = repeatable_events.10.f
+
+    event_image = { video = "southamerica_election" }
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+    icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+    duration = 3
+    cooldown = { days = normal_modifier_time }
+
+    trigger = {
+        in_election_campaign = yes
+        NOT = { has_law = law_type:law_single_party_state }
+
+        OR = {
+            has_law = law_type:law_landed_voting
+            has_law = law_type:law_wealth_voting
+            has_law = law_type:law_census_voting
+            has_law = law_type:law_universal_suffrage
+        }
+
+        OR = {
+            has_technology_researched = television_broadcasting
+            has_technology_researched = social_media
+            has_technology_researched = virtual_reality
+            has_technology_researched = neural_lace
+        }
+    }
+
+    immediate = {
+        # vanilla-style per-election cooldown
+        set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+
+        # save a gov & opposition party to scope, like vanilla
+        random_interest_group = {
+            limit = { has_party = yes is_in_government = yes }
+            party = { save_scope_as = re_debate_government_party }
+        }
+        random_interest_group = {
+            limit = { has_party = yes is_in_government = no }
+            party = { save_scope_as = re_debate_opposition_party }
+        }
+    }
+
+    cancellation_trigger = { in_election_campaign = no }
+
+    option = { # Open Debate
+        name = repeatable_events.10.a
+        default_option = yes
+        add_modifier = { name = re_debate_open days = short_modifier_time }
+        random_list = {
+            10 = { # Momentum for Government
+                limit = { exists = scope:re_debate_government_party }
+                scope:re_debate_government_party = { add_momentum = momentum_medium }
+            }
+            10 = { # Momentum for Opposition
+                limit = { exists = scope:re_debate_opposition_party }
+                scope:re_debate_opposition_party = { add_momentum = momentum_medium }
+            }
+        }
+        if = { limit = { OR = { has_law = law_type:law_outlawed_dissent has_law = law_type:law_censorship } } add_radicals = { value = small_radicals strata = lower } }
+    }
+
+    option = { # Stage-Manage
+        name = repeatable_events.10.b
+        add_modifier = { name = re_debate_stage_managed days = short_modifier_time }
+        if = { limit = { exists = scope:re_debate_government_party } scope:re_debate_government_party = { add_momentum = momentum_small } }
+    }
+
+    option = { # Microtarget
+        name = repeatable_events.10.c
+        trigger = { OR = { has_technology_researched = social_media has_technology_researched = virtual_reality has_technology_researched = neural_lace } }
+        add_modifier = { name = re_debate_microtargeting days = short_modifier_time }
+        if = { limit = { exists = scope:re_debate_government_party } scope:re_debate_government_party = { add_momentum = momentum_medium } }
+        if = { limit = { exists = scope:re_debate_opposition_party } scope:re_debate_opposition_party = { add_momentum = momentum_small_decrease } }
+    }
+}
+
+# =============================================================
+# FAMILY 4 — Supply Chain Snarl
+# =============================================================
+repeatable_events.20 = {
+    type = country_event
+    placement = ROOT
+
+    title = repeatable_events.20.t
+    desc  = repeatable_events.20.d
+    flavor = repeatable_events.20.f
+
+    event_image = { video = "unspecific_gears_pistons" }
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+    icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+    duration = 3
+    cooldown = { days = long_modifier_time }
+
+    trigger = {
+        OR = { has_technology_researched = containerization has_technology_researched = integrated_circuits }
+        any_market = { any_trade_route = { is_import = yes level >= 3 } }
+    }
+
+    option = { # Subsidize Freight
+        name = repeatable_events.20.a
+        default_option = yes
+        add_modifier = { name = re_supply_subsidy days = normal_modifier_time }
+    }
+
+    option = { # Prioritize Inputs
+        name = repeatable_events.20.b
+        
+        add_modifier = { name = re_supply_prioritize_inputs days = normal_modifier_time }
+    }
+
+    option = { # Fast-Track Ports
+        name = repeatable_events.20.c
+        add_modifier = { name = re_supply_fasttrack_ports days = long_modifier_time }
+    }
+}
+
+# =============================================================
+# FAMILY 5 — Automation Shock
+# =============================================================
+repeatable_events.30 = {
+    type = country_event
+    placement = ROOT
+
+    title = repeatable_events.30.t
+    desc = {
+        first_valid = {
+            triggered_desc = { desc = repeatable_events.30.d_ai      trigger = { has_technology_researched = machine_learning } }
+            triggered_desc = { desc = repeatable_events.30.d_robotics trigger = { has_technology_researched = robotics } }
+            desc = repeatable_events.30.d_robotics
+        }
+    }
+    flavor = repeatable_events.30.f
+
+    event_image = { video = "unspecific_gears_pistons" }
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+    icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+    duration = 3
+    cooldown = { days = long_modifier_time }
+
+    trigger = {
+        OR = { has_technology_researched = machine_learning has_technology_researched = robotics }
+        any_scope_building = { is_building_type = building_motor_industry level >= 5 }
+    }
+
+    option = { # Layoffs
+        name = repeatable_events.30.a
+        default_option = yes
+        add_radicals = { value = medium_radicals strata = lower }
+        add_modifier = { name = re_automation_layoffs days = normal_modifier_time }
+    }
+
+    option = { # Retraining
+        name = repeatable_events.30.b
+        trigger = { OR = { has_law = law_type:law_worker_protections has_law = law_type:law_regulatory_bodies } }
+        add_loyalists = { value = small_radicals strata = lower }
+        add_modifier = { name = re_automation_retraining days = long_modifier_time }
+    }
+
+    option = { # Co-Pilot
+        name = repeatable_events.30.c
+        trigger = { has_law = law_type:law_cooperative_ownership }
+        add_modifier = { name = re_automation_copilot days = long_modifier_time }
+    }
+}
+
+# =============================================================
+# FAMILY 7 — Media Panic
+# =============================================================
+repeatable_events.40 = {
+    type = country_event
+    placement = ROOT
+
+    title = repeatable_events.40.t
+    desc = {
+        first_valid = {
+            triggered_desc = { desc = repeatable_events.40.d_neural trigger = { has_technology_researched = neural_lace } }
+            triggered_desc = { desc = repeatable_events.40.d_social trigger = { has_technology_researched = social_media } }
+            triggered_desc = { desc = repeatable_events.40.d_mass   trigger = { has_technology_researched = mass_media } }
+            desc = repeatable_events.40.d_mass
+        }
+    }
+    flavor = repeatable_events.40.f
+
+    event_image = { video = "ep1_printing_press" }
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+    icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+    duration = 3
+    cooldown = { days = normal_modifier_time }
+
+    option = { name = repeatable_events.40.a default_option = yes add_modifier = { name = re_media_ignore days = short_modifier_time } }
+    option = {
+        name = repeatable_events.40.b
+        add_modifier = { name = re_media_transparency days = short_modifier_time }
+        add_radicals = { value = medium_radicals }
+    }
+    option = {
+        name = repeatable_events.40.c
+        trigger = {
+            OR = {
+                has_law = law_type:law_moderate_data_privacy
+                has_law = law_type:law_strong_privacy_rights
+                has_law = law_type:law_open_government
+            }
+        }
+        add_modifier = { name = re_media_moderation days = normal_modifier_time }
+    }
+}

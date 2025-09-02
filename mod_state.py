@@ -1,12 +1,32 @@
-from paradox_file_parser import ParadoxFileParser
 import os
+
+from paradox_file_parser import ParadoxFileParser
 
 
 class ModState:
     def __init__(self, base_game_dir, mod_dir, diff=False):
         self.base_parsers = {}
         self.mod_parsers = {}
+        self.localization = {}
         self.load_directory_files(base_game_dir, mod_dir, diff)
+
+    def add_localization(self, loc_path):
+        for file_name in os.listdir(loc_path):
+            if not file_name.endswith(".yml"):
+                continue
+            file_path = os.path.join(loc_path, file_name)
+            with open(file_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.startswith("#") or (":" not in line):
+                        continue
+                    key, value = line.split(":", 1)
+                    key = key.strip()
+                    quote_locations = [i for i, c in enumerate(value) if c == '"']
+                    if len(quote_locations) >= 2:
+                        value = value[
+                            quote_locations[0] + 1 : quote_locations[1]
+                        ].strip()
+                    self.localization[key] = value
 
     def load_directory_files(self, base_game_dir, mod_dir, diff=False):
         for entity_type, dir_path in base_game_dir.items():
@@ -81,3 +101,14 @@ class ModState:
                 )
             else:
                 raise Exception(f"entity_type {entity_type} not found")
+
+    def localize(self, text):
+        if text in self.localization:
+            return self.localization[text]
+        return text
+
+    def get_description(self, text):
+        desc_key = text + "_desc"
+        if desc_key in self.localization:
+            return self.localization[desc_key]
+        return None

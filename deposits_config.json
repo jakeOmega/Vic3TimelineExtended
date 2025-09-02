@@ -1,0 +1,469 @@
+{
+  "STATE_NORTHERN_CAPE": {
+    "Manganese": 10
+  },
+  "STATE_TAURIDA": {
+    "Manganese": 9
+  },
+  "STATE_GREATER_CAUCASUS": {
+    "Manganese": 8
+  },
+  "STATE_GUANGXI": {
+    "Manganese": 8
+  },
+  "STATE_NORTHERN_TERRITORY": {
+    "Manganese": 9
+  },
+  "STATE_GABON": {
+    "Manganese": 9
+  },
+  "STATE_JIANGXI": {
+    "Manganese": 5,
+    "Specialty Alloys": 9,
+    "Lithium": 7,
+    "Rare Earth Elements": 7
+  },
+  "STATE_HUNAN": {
+    "Manganese": 7
+  },
+  "STATE_ORISSA": {
+    "Manganese": 6,
+    "Chromium": 7,
+    "Bauxite": 6
+  },
+  "STATE_ANNAM": {
+    "Bauxite": 8
+  },
+  "STATE_CENTRAL_PROVINCES": {
+    "Manganese": 5
+  },
+  "STATE_WESTERN_AUSTRALIA": {
+    "Manganese": 5,
+    "Bauxite": 8,
+    "Nickel & Cobalt": 7,
+    "Lithium": 9,
+    "Rare Earth Elements": 8
+  },
+  "STATE_BAHIA": {
+    "Graphite": 6,
+    "Chromium": 6
+  },
+  "STATE_NORTHERN_MANCHURIA": {
+    "Graphite": 7
+  },
+  "STATE_KAZEMBE": {
+    "Manganese": 4
+  },
+  "STATE_KACHIN": {
+    "Rare Earth Elements": 5
+  },
+  "STATE_SHAN_STATES": {
+    "Rare Earth Elements": 5
+  },
+  "STATE_CUBA": {
+    "Manganese": 3,
+    "Nickel & Cobalt": 8
+  },
+  "STATE_TRANSVAAL": {
+    "Chromium": 10,
+    "Specialty Alloys": 8,
+    "Platinum Group Metals": 10
+  },
+  "STATE_ZAMBEZI": {
+    "Platinum Group Metals": 8,
+    "Chromium": 8,
+    "Lithium": 5
+  },
+  "STATE_OULU": {
+    "Chromium": 5
+  },
+  "STATE_URALSK": {
+    "Chromium": 9,
+    "Nickel & Cobalt": 6
+  },
+  "STATE_PERM": {
+    "Platinum Group Metals": 6
+  },
+  "STATE_LUZON": {
+    "Chromium": 6
+  },
+  "STATE_DIYARBAKIR": {
+    "Chromium": 5
+  },
+  "STATE_HUDAVENDIGAR": {
+    "Chromium": 5,
+    "Industrial Minerals & Salts": 9
+  },
+  "STATE_ALBANIA": {
+    "Chromium": 4
+  },
+  "STATE_OMAN": {
+    "Chromium": 3
+  },
+  "STATE_ANHALT": {
+    "Chromium": 2,
+    "Potash": 7
+  },
+  "STATE_COLORADO": {
+    "Specialty Alloys": 10
+  },
+  "STATE_HINGGAN": {
+    "Specialty Alloys": 9,
+    "Rare Earth Elements": 10
+  },
+  "STATE_QUEBEC": {
+    "Specialty Alloys": 7,
+    "Nickel & Cobalt": 5
+  },
+  "STATE_SICHUAN": {
+    "Specialty Alloys": 7,
+    "Lithium": 4,
+    "Industrial Minerals & Salts": 7
+  },
+  "STATE_SEOUL": {
+    "Specialty Alloys": 6
+  },
+  "STATE_LA_PAZ": {
+    "Specialty Alloys": 5
+  },
+  "STATE_TRAVANCORE": {
+    "Rare Earth Elements": 4
+  },
+  "STATE_WEST_COUNTRY": {
+    "Specialty Alloys": 4,
+    "Precious & Minor Base Metals": 5
+  },
+  "STATE_CHUBU": {
+    "Specialty Alloys": 3
+  },
+  "STATE_ANTOFAGASTA": {
+    "Copper": 10,
+    "Lithium": 9,
+    "Industrial Minerals & Salts": 8
+  },
+  "STATE_WESTERN_NEW_GUINEA": {
+    "Nickel & Cobalt": 6
+  },
+  "STATE_NEW_MEXICO": {
+    "Potash": 7
+  },
+  "STATE_NAKHON_RATCHASIMA": {
+    "Potash": 5
+  },
+  "STATE_NEWFOUNDLAND": {
+    "Copper": 9
+  },
+  "STATE_KATANGA": {
+    "Copper": 10,
+    "Nickel & Cobalt": 9
+  },
+  "STATE_UTAH": {
+    "Copper": 9,
+    "Industrial Minerals & Salts": 7
+  },
+  "STATE_ARIZONA": {
+    "Copper": 9
+  },
+  "STATE_SOUTH_AUSTRALIA": {
+    "Copper": 9
+  },
+  "STATE_TARAPACA": {
+    "Copper": 9,
+    "Industrial Minerals & Salts": 8
+  },
+  "STATE_TRANS_BAIKAL": {
+    "Copper": 9
+  },
+  "STATE_ZAMBIA": {
+    "Copper": 8
+  },
+  "STATE_SONORA": {
+    "Copper": 8
+  },
+  "STATE_SILESIA": {
+    "Copper": 8
+  },
+  "STATE_JUJUY": {
+    "Copper": 7,
+    "Lithium": 9,
+    "Precious & Minor Base Metals": 7
+  },
+  "STATE_LHASA": {
+    "Copper": 7
+  },
+  "STATE_ONTARIO": {
+    "Copper": 7,
+    "Nickel & Cobalt": 10,
+    "Platinum Group Metals": 4,
+    "Graphite": 5
+  },
+  "STATE_NEW_SOUTH_WALES": {
+    "Copper": 6,
+    "Precious & Minor Base Metals": 9
+  },
+  "STATE_BRITISH_COLUMBIA": {
+    "Copper": 6
+  },
+  "STATE_ANDALUSIA": {
+    "Copper": 5
+  },
+  "STATE_RIO_NEGRO": {
+    "Copper": 5,
+    "Precious & Minor Base Metals": 3
+  },
+  "STATE_BOLIVAR": {
+    "Copper": 4
+  },
+  "STATE_BAJA_CALIFORNIA": {
+    "Copper": 4
+  },
+  "STATE_GUINEA": {
+    "Bauxite": 10
+  },
+  "STATE_PARA": {
+    "Bauxite": 9
+  },
+  "STATE_QUEENSLAND": {
+    "Bauxite": 9
+  },
+  "STATE_JAMAICA": {
+    "Bauxite": 8
+  },
+  "STATE_CIRCARS": {
+    "Bauxite": 6
+  },
+  "STATE_ARKANSAS": {
+    "Bauxite": 5,
+    "Phosphate": 8
+  },
+  "STATE_ATTICA": {
+    "Bauxite": 4
+  },
+  "STATE_GUAYANA": {
+    "Bauxite": 4
+  },
+  "STATE_CENTRAL_HUNGARY": {
+    "Bauxite": 3
+  },
+  "STATE_MYSORE": {
+    "Bauxite": 3
+  },
+  "STATE_POTOSI": {
+    "Precious & Minor Base Metals": 10,
+    "Lithium": 10,
+    "Industrial Minerals & Salts": 10
+  },
+  "STATE_ZACATECAS": {
+    "Precious & Minor Base Metals": 9
+  },
+  "STATE_MALAYA": {
+    "Precious & Minor Base Metals": 8
+  },
+  "STATE_SOUTH_SUMATRA": {
+    "Precious & Minor Base Metals": 8
+  },
+  "STATE_ALASKA": {
+    "Precious & Minor Base Metals": 8
+  },
+  "STATE_YUNNAN": {
+    "Precious & Minor Base Metals": 7
+  },
+  "STATE_NEVADA": {
+    "Precious & Minor Base Metals": 7,
+    "Lithium": 7
+  },
+  "STATE_IDAHO": {
+    "Precious & Minor Base Metals": 5,
+    "Phosphate": 6
+  },
+  "STATE_NIGERIA": {
+    "Precious & Minor Base Metals": 5
+  },
+  "STATE_HEDJAZ": {
+    "Precious & Minor Base Metals": 1,
+    "Rare Earth Elements": 1
+  },
+  "STATE_CAUCA": {
+    "Precious & Minor Base Metals": 3,
+    "Platinum Group Metals": 2
+  },
+  "STATE_UPPER_YENISEYSK": {
+    "Nickel & Cobalt": 10,
+    "Platinum Group Metals": 9
+  },
+  "STATE_KANAK": {
+    "Nickel & Cobalt": 9
+  },
+  "STATE_CELEBES": {
+    "Nickel & Cobalt": 8
+  },
+  "STATE_MINDANAO": {
+    "Nickel & Cobalt": 7
+  },
+  "STATE_NORTHERN_SERBIA": {
+    "Lithium": 8
+  },
+  "STATE_NGARI": {
+    "Lithium": 7
+  },
+  "STATE_KONYA": {
+    "Lithium": 3
+  },
+  "STATE_MINAS_GERAIS": {
+    "Rare Earth Elements": 7,
+    "Specialty Alloys": 10
+  },
+  "STATE_CALIFORNIA": {
+    "Rare Earth Elements": 9,
+    "Industrial Minerals & Salts": 9
+  },
+  "STATE_GREENLAND": {
+    "Rare Earth Elements": 8
+  },
+  "STATE_TENASSERIM": {
+    "Rare Earth Elements": 4
+  },
+  "STATE_KASTAMONU": {
+    "Rare Earth Elements": 2
+  },
+  "STATE_MONTANA": {
+    "Platinum Group Metals": 8
+  },
+  "STATE_CEYLON": {
+    "Graphite": 10
+  },
+  "STATE_SHANDONG": {
+    "Graphite": 8
+  },
+  "STATE_SOUTH_MADAGASCAR": {
+    "Graphite": 7
+  },
+  "STATE_MOCAMBIQUE": {
+    "Graphite": 7
+  },
+  "STATE_TANGANYIKA": {
+    "Graphite": 5
+  },
+  "STATE_GANSU": {
+    "Nickel & Cobalt": 7
+  },
+  "STATE_TUCUMAN": {
+    "Lithium": 8
+  },
+  "STATE_LANCASHIRE": {
+    "Graphite": 1,
+    "Industrial Minerals & Salts": 1
+  },
+  "STATE_PENNSYLVANIA": {
+    "Graphite": 1
+  },
+  "STATE_WEST_SAHARA": {
+    "Phosphate": 10
+  },
+  "STATE_INNER_MOROCCO": {
+    "Phosphate": 9
+  },
+  "STATE_FLORIDA": {
+    "Phosphate": 8
+  },
+  "STATE_TUNISIA": {
+    "Phosphate": 7
+  },
+  "STATE_NAURU": {
+    "Phosphate": 7
+  },
+  "STATE_GUIZHOU": {
+    "Phosphate": 7
+  },
+  "STATE_TOGO": {
+    "Phosphate": 5
+  },
+  "STATE_SYRIA": {
+    "Phosphate": 4
+  },
+  "STATE_ICA": {
+    "Copper": 3
+  },
+  "STATE_AREQUIPA": {
+    "Copper": 8
+  },
+  "STATE_LIMA": {
+    "Copper": 3
+  },
+  "STATE_URGA": {
+    "Copper": 7
+  },
+  "STATE_SASKATCHEWAN": {
+    "Potash": 10
+  },
+  "STATE_MINSK": {
+    "Potash": 9
+  },
+  "STATE_ALSACE_LORRAINE": {
+    "Potash": 6
+  },
+  "STATE_TRANSJORDAN": {
+    "Potash": 7,
+    "Industrial Minerals & Salts": 6,
+    "Phosphate": 6
+  },
+  "STATE_PALESTINE": {
+    "Potash": 6,
+    "Industrial Minerals & Salts": 5
+  },
+  "STATE_PUNJAB": {
+    "Industrial Minerals & Salts": 5
+  },
+  "STATE_QINGHAI": {
+    "Potash": 4,
+    "Lithium": 6
+  },
+  "STATE_WYOMING": {
+    "Industrial Minerals & Salts": 9
+  },
+  "STATE_MADRAS": {
+    "Industrial Minerals & Salts": 6
+  },
+  "STATE_UPPER_EGYPT": {
+    "Industrial Minerals & Salts": 4
+  },
+  "STATE_NORMANDY": {
+    "Industrial Minerals & Salts": 3
+  },
+  "STATE_MEXICO": {
+    "Industrial Minerals & Salts": 4
+  },
+  "STATE_NAMAQUALAND": {
+    "Industrial Minerals & Salts": 4
+  },
+  "STATE_GUJARAT": {
+    "Industrial Minerals & Salts": 7
+  },
+  "STATE_BRUNSWICK": {
+    "Industrial Minerals & Salts": 3
+  },
+  "STATE_SYRDARYA": {
+    "Phosphate": 4
+  },
+  "STATE_HEREROLAND": {
+    "Industrial Minerals & Salts": 4
+  },
+  "STATE_NORTH_MADAGASCAR": {
+    "Graphite": 6
+  },
+  "STATE_MANITOBA": {
+    "Nickel & Cobalt": 5
+  },
+  "STATE_KOLA": {
+    "Nickel & Cobalt": 6,
+    "Phosphate": 8,
+    "Rare Earth Elements": 5,
+    "Platinum Group Metals": 4
+  },
+  "STATE_BOHEMIA": {
+    "Lithium": 5
+  },
+  "STATE_TONKIN": {
+    "Rare Earth Elements": 9
+  }
+}

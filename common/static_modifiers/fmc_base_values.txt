@@ -58,4 +58,6 @@
 
 	state_trade_advantage_from_capacity_add = 0.0005
 	state_max_trade_advantage_from_capacity_add = 0.2
+
+	country_bubble_pressure_monthly_add = -1
 }

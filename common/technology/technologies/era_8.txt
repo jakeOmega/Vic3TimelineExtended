@@ -140,7 +140,7 @@ containerization = {
 }
 
 fiber_optics = {
-	# Fiber Optics PM for Wired Telecommunication Industries
+	# Fiber Optics PM for Wired Telecommunication Industries. medium bandwidth for network infrastructure
 	era = era_8
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production

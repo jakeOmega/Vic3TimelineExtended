@@ -1,0 +1,69 @@
+﻿l_english:
+  # Family 1 — Election Debate
+  repeatable_events.10.t:0 "The Debate of the Century"
+  repeatable_events.10.d_tv:0 "With the campaign entering its final weeks, party leaders agree to a nationally broadcast debate. Editors haggle over formats; candidates rehearse answers and smiles. The audience will be vast—and so will the stakes."
+  repeatable_events.10.d_vr:0 "Mixed-reality auditoriums stitch together living rooms and town squares into one stage. The spectacle promises unmatched access, yet filters, avatars, and deepfakes tug at the seams of what voters think they saw."
+  repeatable_events.10.d_neural:0 "A live neural town hall streams not just words but sentiment. Waves of approval and doubt ripple across the nation in real time, and campaign tacticians wonder where persuasion ends and manipulation begins."
+  repeatable_events.10.f:0 "Elections are mirrors as much as contests. We dress our ambitions, rehearse our virtues, and pray the camera loves us.\n\nBut a lens is never neutral. Every frame excludes as it reveals; every cut invents a story. The voters will remember what they feel more than what they hear—and the feeling is up for sale."
+
+  repeatable_events.10.a:0 "Hold an open debate"
+  repeatable_events.10.b:0 "Stage-manage the broadcast"
+  repeatable_events.10.c:0 "Run microtargeted ads"
+
+  # Family 4 — Supply Chain Snarl
+  repeatable_events.20.t:0 "Supply Chain Snarl"
+  repeatable_events.20.d:0 "A tangle of port closures, container shortages, and bad luck has jammed critical imports. Producers plead for inputs; retailers for stock; the public for patience. We can pay to push cargo through, starve some sectors to feed others, or pour concrete fast."
+  repeatable_events.20.f:0 "Globalization is a promise rubbed smooth by millions of hands: everything, everywhere, on time.\n\nThen a crane breaks, a storm hits, a contract fails, and the whole myth coughs salt and rust. A nation learns which goods are truly strategic when the shelves go bare."
+
+  repeatable_events.20.a:0 "Subsidize emergency freight"
+  repeatable_events.20.b:0 "Prioritize key inputs"
+  repeatable_events.20.c:0 "Fast-track port upgrades"
+
+  # Family 5 — Automation Shock
+  repeatable_events.30.t:0 "Automation Shock"
+  repeatable_events.30.d_ai:0 "A new scheduling system eats overtime, errors, and egos. Managers eye the balance sheet; workers eye the exit. We can chase the gains, soften the blow, or try a different bargain entirely."
+  repeatable_events.30.d_robotics:0 "Machines master the night shift. Output surges, but the rumble on the shop floor is not just from motors. Layoffs promise cheaper goods and dearer politics."
+  repeatable_events.30.f:0 "Every revolution invents a new kind of worker—and a new kind of redundancy.\n\nThe old craft is never quite dead; it lingers in the whine of the servomotor and the hush after the whistle. What we choose to protect says more about us than what we can now produce."
+
+  repeatable_events.30.a:0 "Lay off workers and ramp output"
+  repeatable_events.30.b:0 "Retrain and redeploy"
+  repeatable_events.30.c:0 "Adopt worker co-pilots"
+
+  # Family 7 — Media Panic of the Week
+  repeatable_events.40.t:0 "Media Panic of the Week"
+  repeatable_events.40.d_mass:0 "Headlines thunder, panels chatter, and petitions circulate. Moralists call for bans; reformers for nuance; advertisers for a bigger buy. It will blow over—until it doesn’t."
+  repeatable_events.40.d_social:0 "A meme becomes a movement before dawn. Boycotts bloom, counter-boycotts answer, and every feed is a frontline. We can ride it out, speak plainly, or referee the brawl."
+  repeatable_events.40.d_neural:0 "Sentiment storms sweep across neural channels like weather fronts. A rumor with the right shape outruns any correction. There is calm to be found, but not by accident."
+  repeatable_events.40.f:0 "If it bleeds, it leads. If it trends, it bends. In public life, attention is the only currency that never devalues.\n\nThe trouble is simple: outrage is cheap to mint and costly to redeem. A state can ignore, explain, or impose order—each buys a different peace."
+
+  repeatable_events.40.a:0 "Ignore it"
+  repeatable_events.40.b:0 "Brief the public"
+  repeatable_events.40.c:0 "Enforce platform moderation"
+
+  # Family 10 — Cyber Breach / Quantum Panic
+  repeatable_events.50.t:0 "Network Compromised"
+  repeatable_events.50.d_cyber:0 "Intruders slipped past old defenses and wrote their demands in our ledgers. We can settle and patch, name and shame, or drag the whole sector up to a higher standard—ready or not."
+  repeatable_events.50.d_quantum:0 "Old ciphers crack under new math. Banks blink, ministries stall, and citizens wonder whether numbers still mean what they did yesterday."
+  repeatable_events.50.f:0 "There are two kinds of states: those that have been hacked, and those that keep better secrets.\n\nResilience is not a product; it’s a habit. We will pay now in money and pride—or pay later in something dearer."
+
+  repeatable_events.50.a:0 "Settle quietly and patch systems"
+  repeatable_events.50.b:0 "Launch public forensics"
+  repeatable_events.50.c:0 "Impose emergency security standards"
+
+  # Family 16 — Orbital Conjunction
+  repeatable_events.70.t:0 "Orbital Conjunction Alert"
+  repeatable_events.70.d:0 "Telemetry flags a chain of near-misses. Operators request maneuver windows; the military warns that standing down risks coverage. Clearing the lanes will cost—pressing on may cost more."
+  repeatable_events.70.f:0 "Space is vast; useful orbits are not. We have wrapped the planet in our own artifacts and called it progress.\n\nThe bill arrives as shrapnel. We can dodge it, sweep it, or pretend it isn’t there long enough to regret the pretense."
+
+  repeatable_events.70.a:0 "Perform debris-avoidance maneuvers"
+  repeatable_events.70.b:0 "Conduct a laser sweep"
+  repeatable_events.70.c:0 "Press on and accept risk"
+
+  # Family 18 — Space Power Curtailment
+  repeatable_events.80.t:0 "Space Power Curtailment"
+  repeatable_events.80.d:0 "Micrometeors, maintenance, and misfortune have dimmed orbital arrays. Demand does not dim with them. We can burn reserves, black out blocks, or buy from neighbours at a premium."
+  repeatable_events.80.f:0 "Beaming sunlight to earth was supposed to make nights shorter and planning easier. It did—until the first time the beam went thin.\n\nEnergy policy is a memory game: people forget the years of light and remember the week it flickered."
+
+  repeatable_events.80.a:0 "Draw from reserves"
+  repeatable_events.80.b:0 "Order rolling blackouts"
+  repeatable_events.80.c:0 "Import power from neighbours"

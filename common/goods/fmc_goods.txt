@@ -1,9 +1,0 @@
-﻿construction = {
-	texture = "gfx/interface/icons/goods_icons/construction_good.dds"
-	cost = 100
-	category = industrial
-
-	#tradeable = no
-	
-	prestige_factor = 5
-}

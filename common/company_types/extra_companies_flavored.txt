@@ -13,6 +13,7 @@ company_volkswagen = {
 	building_types = {
 		building_automotive_industry
 		building_motor_industry
+		building_volkswagen_autostadt
 	}
 	extension_building_types = {
 		building_steel_mills
@@ -40,6 +41,7 @@ company_volkswagen = {
 	prosperity_modifier = {
 		building_automotive_industry_throughput_add = 0.15
 		state_infrastructure_from_population_add = 10
+		state_building_volkswagen_autostadt_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_luxury_automobiles
@@ -68,6 +70,7 @@ company_toyota = {
 	building_types = {
 		building_automotive_industry
 		building_robotics_industry # For their later innovations
+		building_toyota_kaikan_plant
 	}
 	extension_building_types = {
 		building_steel_mills
@@ -95,6 +98,7 @@ company_toyota = {
 	prosperity_modifier = {
 		building_automotive_industry_throughput_add = 0.05
 		country_production_tech_research_speed_mult = 0.1
+		state_building_toyota_kaikan_plant_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_luxury_automobiles
@@ -125,6 +129,7 @@ company_samsung = {
 		building_electrics_industry_appliances
 		building_electronic_components_and_semiconductor_industry
 		building_shipyards
+		building_samsung_digital_city
 	}
 	extension_building_types = {
 		building_software_industry
@@ -152,6 +157,7 @@ company_samsung = {
 	prosperity_modifier = {
 		country_weekly_innovation_mult = 0.1
 		building_electrics_industry_appliances_throughput_add = 0.1
+		state_building_samsung_digital_city_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_consumer_appliances
@@ -181,6 +187,7 @@ company_hp = {
 	building_types = {
 		building_electrics_industry_appliances # Representing early calculators and later computers
 		building_electronic_components_and_semiconductor_industry
+		building_hp_labs
 	}
 	extension_building_types = {
 		building_software_industry
@@ -208,6 +215,7 @@ company_hp = {
 	prosperity_modifier = {
 		country_society_tech_research_speed_mult = 0.1
 		goods_output_consumer_appliances_mult = 0.15
+		state_building_hp_labs_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_consumer_appliances
@@ -237,6 +245,7 @@ company_sony = {
 		building_electrics_industry_appliances # Consumer Appliances
 		building_electronic_components_and_semiconductor_industry
 		building_arts_academy # Art and Entertainment
+		building_sony_pictures_studios
 	}
 	extension_building_types = {
 		building_software_industry
@@ -263,6 +272,7 @@ company_sony = {
 	prosperity_modifier = {
 		goods_output_consumer_appliances_mult = 0.1
 		country_prestige_mult = 0.05
+		state_building_sony_pictures_studios_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
@@ -291,6 +301,7 @@ company_ikea = {
 	}
 	building_types = {
 		building_furniture_manufacturies
+		building_ikea_almhult_campus
 	}
 	extension_building_types = {
 		building_logging_camp
@@ -318,6 +329,7 @@ company_ikea = {
 	prosperity_modifier = {
 		goods_input_wood_mult = -0.1
 		state_lower_strata_standard_of_living_add = 1
+		state_building_ikea_almhult_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_furniture
@@ -348,6 +360,7 @@ company_intel = {
 	}
 	building_types = {
 		building_electronic_components_and_semiconductor_industry
+		building_intel_ronler_acres
 	}
 	extension_building_types = {
 		building_software_industry
@@ -375,6 +388,7 @@ company_intel = {
 	prosperity_modifier = {
 		country_production_tech_research_speed_mult = 0.1
 		goods_output_electronic_components_mult = 0.1
+		state_building_intel_ronler_acres_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_electronic_components
@@ -402,6 +416,7 @@ company_microsoft = {
 	}
 	building_types = {
 		building_software_industry
+		building_microsoft_redmond_campus
 	}
 	extension_building_types = {
 		building_electrics_industry_appliances # For hardware like Surface, Xbox
@@ -429,6 +444,7 @@ company_microsoft = {
 	prosperity_modifier = {
 		state_education_access_add = 0.05
 		goods_output_digital_assets_mult = 0.15
+		state_building_microsoft_redmond_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
@@ -457,10 +473,13 @@ company_apple = {
 	building_types = {
 		building_electrics_industry_appliances # Consumer Appliances
 		building_software_industry # Digital Assets
+		building_electrics_industry # Wired telecom
+		building_apple_park
 	}
 	extension_building_types = {
 		building_network_infrastructure # Digital Access
 		building_electronic_components_and_semiconductor_industry
+		building_electrics_industry_radio
 	}
 	potential = {
 		has_interest_marker_in_region = region_pacific_coast
@@ -484,6 +503,7 @@ company_apple = {
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
 		country_weekly_innovation_mult = 0.1
+		state_building_apple_park_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_consumer_appliances
@@ -513,6 +533,7 @@ company_tsmc = {
 	building_types = {
 		building_electronic_components_and_semiconductor_industry
 		building_advanced_material_fabricator
+		building_tsmc_fab_18
 	}
 	extension_building_types = {
 		building_software_industry # For software development
@@ -540,6 +561,7 @@ company_tsmc = {
 	prosperity_modifier = {
 		building_electronic_components_and_semiconductor_industry_throughput_add = 0.2
 		country_production_tech_research_speed_mult = 0.1
+		state_building_tsmc_fab_18_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_electronic_components
@@ -569,6 +591,7 @@ company_huawei = {
 	building_types = {
 		building_network_infrastructure # Digital Access
 		building_electrics_industry_appliances # Consumer Appliances
+		building_huawei_ox_horn_campus # Represents Huawei's headquarters
 	}
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
@@ -596,9 +619,10 @@ company_huawei = {
 	prosperity_modifier = {
 		state_infrastructure_add = 10
 		country_society_tech_research_speed_mult = 0.1
+		goods_output_digital_assets_mult = 0.1
+		state_building_huawei_ox_horn_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_premium_networks 
 		prestige_good_advanced_telecom 
 	}
 	ai_will_do = {
@@ -628,6 +652,7 @@ company_amazon = {
 	building_types = {
 		building_network_infrastructure # Digital Access (for AWS)
 		building_port # Representing logistics network
+		building_amazon_fulfillment_center # Represents Amazon's fulfillment centers
 	}
 	extension_building_types = {
 		building_software_industry
@@ -655,10 +680,11 @@ company_amazon = {
 	prosperity_modifier = {
 		building_urban_center_throughput_add = 0.1 # For logistics and distribution
 		building_port_throughput_add = 0.2
+		goods_output_digital_assets_mult = 0.1
+		state_building_amazon_fulfillment_center_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_integrated_logistics 
-		prestige_good_premium_networks
 	}
 	ai_will_do = {
 		has_technology_researched = e-commerce
@@ -683,6 +709,7 @@ company_nvidia = {
 	}
 	building_types = {
 		building_electronic_components_and_semiconductor_industry
+		building_nvidia_endeavor_campus
 	}
 	extension_building_types = {
 		building_software_industry # For CUDA and AI software
@@ -710,6 +737,7 @@ company_nvidia = {
 	prosperity_modifier = {
 		country_tech_research_speed_mult = 0.05 # For AI and scientific computing
 		goods_output_electronic_components_mult = 0.25
+		state_building_nvidia_endeavor_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_electronic_components
@@ -738,6 +766,7 @@ company_google = {
 	building_types = {
 		building_network_infrastructure # Digital Access
 		building_software_industry # Digital Assets
+		building_googleplex # Represents Google's headquarters
 	}
 	extension_building_types = {
 		building_robotics_industry
@@ -763,12 +792,12 @@ company_google = {
 		}
 	}
 	prosperity_modifier = {
-		goods_output_digital_assets_mult = 0.05
+		goods_output_digital_assets_mult = 0.15
 		goods_output_digital_access_mult = 0.05
+		state_building_googleplex_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
-		prestige_good_premium_networks 
 	}
 	ai_will_do = {
 		has_technology_researched = world_wide_web
@@ -794,6 +823,7 @@ company_netflix = {
 	building_types = {
 		building_arts_academy # Fine Art and Entertainment
 		building_network_infrastructure # Digital Access
+		building_netflix_animation_studios
 	}
 	extension_building_types = {
 		building_software_industry
@@ -820,6 +850,7 @@ company_netflix = {
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
 		country_influence_mult = 0.05
+		state_building_netflix_animation_studios_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
@@ -849,6 +880,7 @@ company_spacex = {
 	building_types = {
 		building_launch_facility # Launch Capacity
 		building_space_mine
+		building_spacex_starbase
 	}
 	extension_building_types = {
 		building_network_infrastructure # For Starlink
@@ -886,6 +918,7 @@ company_spacex = {
 	prosperity_modifier = {
 		goods_output_launch_capacity_mult = 0.2
 		country_military_tech_research_speed_mult = 0.1
+		state_building_spacex_starbase_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_heavy_lift_launch 
@@ -920,6 +953,7 @@ company_bytedance = {
 	building_types = {
 		building_arts_academy # Art and Entertainment
 		building_software_industry # Digital Assets
+		building_bytedance_data_fortress
 	}
 	extension_building_types = {
 		building_network_infrastructure
@@ -946,6 +980,7 @@ company_bytedance = {
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
 		country_influence_mult = 0.05
+		state_building_bytedance_data_fortress_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
@@ -973,6 +1008,7 @@ company_openai = {
 	}
 	building_types = {
 		building_software_industry
+		building_openai_research_lab
 	}
 	extension_building_types = {
 		building_robotics_industry
@@ -1000,6 +1036,7 @@ company_openai = {
 	prosperity_modifier = {
 		country_tech_research_speed_mult = 0.10
 		country_weekly_innovation_mult = 0.10
+		state_building_openai_research_lab_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
@@ -1028,10 +1065,13 @@ company_catl = {
 	building_types = {
 		building_advanced_material_fabricator # For batteries
 		building_chemical_plants
+		building_catl_gigafactory
 	}
 	extension_building_types = {
 		building_electrics_industry
 		building_motor_industry
+		building_automotive_industry
+		building_renewable_energy_plant
 	}
 	potential = {
 		has_interest_marker_in_region = region_south_china
@@ -1055,8 +1095,10 @@ company_catl = {
 	prosperity_modifier = {
 		goods_output_advanced_materials_mult = 0.15
 		building_automotive_industry_throughput_add = 0.1
+		state_building_catl_gigafactory_max_level_add = 1
 	}
 	possible_prestige_goods = {
+		prestige_good_generic_fertilizer
 		prestige_good_generic_advanced_materials
 	}
 	ai_will_do = {
@@ -1082,6 +1124,7 @@ company_boston_dynamics = {
 	}
 	building_types = {
 		building_robotics_industry
+		building_boston_dynamics_ai_institute
 	}
 	extension_building_types = {
 		building_software_industry
@@ -1109,6 +1152,7 @@ company_boston_dynamics = {
 	prosperity_modifier = {
 		goods_output_robotics_mult = 0.2
 		unit_army_offense_mult = 0.05
+		state_building_boston_dynamics_ai_institute_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_precision_robotics 
@@ -1137,6 +1181,7 @@ company_asml = {
 	building_types = {
 		building_tooling_workshops # Representing their photolithography machines
 		building_electronic_components_and_semiconductor_industry
+		building_asml_veldhoven_campus
 	}
 	extension_building_types = {
 		building_advanced_material_fabricator
@@ -1163,6 +1208,7 @@ company_asml = {
 	prosperity_modifier = {
 		building_electronic_components_and_semiconductor_industry_throughput_add = 0.25 # Crucial for all semiconductors
 		country_production_tech_research_speed_mult = 0.1
+		state_building_asml_veldhoven_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_electronic_components
@@ -1194,6 +1240,7 @@ company_lockheed_martin = {
 		building_arms_industry
 		building_artillery_foundries
 		building_launch_facility
+		building_lockheed_skunk_works
 	}
 	extension_building_types = {
 		building_software_industry
@@ -1223,6 +1270,7 @@ company_lockheed_martin = {
 		unit_army_offense_mult = 0.1
 		unit_navy_offense_mult = 0.1
 		country_military_tech_research_speed_mult = 0.1
+		state_building_lockheed_skunk_works_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_advanced_aircraft 
@@ -1254,6 +1302,7 @@ company_bae_systems = {
 		building_arms_industry
 		building_artillery_foundries
 		building_military_shipyards
+		building_bae_samlesbury_aerodrome
 	}
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
@@ -1281,6 +1330,7 @@ company_bae_systems = {
 	prosperity_modifier = {
 		unit_army_defense_mult = 0.1
 		unit_navy_defense_mult = 0.1
+		state_building_bae_samlesbury_aerodrome_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_advanced_aircraft
@@ -1309,6 +1359,7 @@ company_roscosmos = {
 	building_types = {
 		building_launch_facility
 		building_aeroplanes_industry
+		building_roscosmos_vostochny_cosmodrome
 	}
 	extension_building_types = {
 		building_advanced_material_fabricator
@@ -1336,6 +1387,7 @@ company_roscosmos = {
 	prosperity_modifier = {
 		goods_output_launch_capacity_mult = 0.15
 		country_prestige_mult = 0.05
+		state_building_roscosmos_vostochny_cosmodrome_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_heavy_lift_launch
@@ -1364,6 +1416,8 @@ company_airbus = {
 	}
 	building_types = {
 		building_aeroplanes_industry
+		building_motor_industry
+		building_airbus_lagardere_plant
 	}
 	extension_building_types = {
 		building_launch_facility
@@ -1397,8 +1451,10 @@ company_airbus = {
 	}
 	prosperity_modifier = {
 		building_aeroplanes_industry_throughput_add = 0.15
-		state_infrastructure_add = 5
+		goods_output_aeroplanes_mult = 0.05
+		goods_output_engines_mult = 0.05
 		state_incorporation_speed_mult = 0.25
+		state_building_airbus_lagardere_plant_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_advanced_aircraft
@@ -1432,6 +1488,7 @@ company_dassault_aviation = {
 		building_aeroplanes_industry
 		building_arms_industry
 		building_artillery_foundries
+		building_dassault_merignac_plant
 	}
 	extension_building_types = {
 		building_software_industry
@@ -1460,6 +1517,7 @@ company_dassault_aviation = {
 		unit_army_offense_mult = 0.1
 		country_military_tech_research_speed_mult = 0.05
 		country_prestige_mult = 0.05
+		state_building_dassault_merignac_plant_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_advanced_aircraft 
@@ -1491,6 +1549,7 @@ company_hyundai = {
 		building_motor_industry
 		building_robotics_industry
 		building_shipyards
+		building_hyundai_ulsan_factory
 	}
 	extension_building_types = {
 		building_steel_mills
@@ -1516,6 +1575,7 @@ company_hyundai = {
 	prosperity_modifier = {
 		building_automotive_industry_throughput_add = 0.1
 		building_shipyards_throughput_add = 0.1
+		state_building_hyundai_ulsan_factory_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_luxury_automobiles
@@ -1545,6 +1605,7 @@ company_sap = {
 	building_types = {
 		building_software_industry
 		building_railway
+		building_sap_headquarters
 	}
 	extension_building_types = {
 		building_network_infrastructure
@@ -1571,6 +1632,7 @@ company_sap = {
 	prosperity_modifier = {
 		country_bureaucracy_mult = 0.1
 		country_bureaucracy_investment_cost_factor_mult = -0.1
+		state_building_sap_headquarters_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
@@ -1601,6 +1663,7 @@ company_tencent = {
 		building_software_industry
 		building_arts_academy
 		building_network_infrastructure
+		building_tencent_seafront_towers
 	}
 	extension_building_types = {
 		building_electrics_industry_appliances
@@ -1626,6 +1689,7 @@ company_tencent = {
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
 		state_education_access_add = 0.05
+		state_building_tencent_seafront_towers_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
@@ -1655,6 +1719,7 @@ company_alibaba = {
 	building_types = {
 		building_network_infrastructure
 		building_software_industry
+		building_alibaba_cainiao_park
 	}
 	extension_building_types = {
 		building_port
@@ -1680,6 +1745,7 @@ company_alibaba = {
 	prosperity_modifier = {
 		state_trade_advantage_mult = 0.1
 		goods_output_digital_access_mult = 0.1
+		state_building_alibaba_cainiao_park_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
@@ -1709,6 +1775,7 @@ company_nintendo = {
 		building_arts_academy
 		building_electrics_industry_appliances
 		building_software_industry
+		building_nintendo_development_center
 	}
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
@@ -1734,6 +1801,7 @@ company_nintendo = {
 	prosperity_modifier = {
 		country_prestige_mult = 0.15
 		goods_output_fine_art_mult = 0.1
+		state_building_nintendo_development_center_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
@@ -1763,6 +1831,7 @@ company_gazprom = {
 	building_types = {
 		building_oil_rig
 		building_power_plant
+		building_gazprom_lakhta_center
 	}
 	extension_building_types = {
 		building_chemical_plants
@@ -1787,6 +1856,7 @@ company_gazprom = {
 	}
 	prosperity_modifier = {
 		goods_output_oil_mult = 0.1
+		state_building_gazprom_lakhta_center_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_refined_petrochemicals
@@ -1814,6 +1884,7 @@ company_saudi_aramco = {
 	}
 	building_types = {
 		building_oil_rig
+		building_saudi_aramco_abqaiq_plant
 	}
 	extension_building_types = {
 		building_chemical_plants
@@ -1839,6 +1910,7 @@ company_saudi_aramco = {
 	}
 	prosperity_modifier = {
 		goods_output_oil_mult = 0.25
+		state_building_saudi_aramco_abqaiq_plant_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_refined_petrochemicals 
@@ -1866,6 +1938,7 @@ company_petrobras = {
 	}
 	building_types = {
 		building_oil_rig
+		building_petrobras_cenpes_center
 	}
 	extension_building_types = {
 		building_chemical_plants
@@ -1890,6 +1963,7 @@ company_petrobras = {
 	}
 	prosperity_modifier = {
 		goods_output_oil_mult = 0.10
+		state_building_petrobras_cenpes_center_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_refined_petrochemicals
@@ -1919,6 +1993,7 @@ company_rosatom = {
 		building_nuclear_plant
 		building_power_plant
 		building_advanced_material_fabricator
+		building_rosatom_mayak_association
 	}
 	extension_building_types = {
 		building_chemical_plants
@@ -1944,6 +2019,7 @@ company_rosatom = {
 	prosperity_modifier = {
 		goods_output_electricity_mult = 0.1
 		country_military_tech_research_speed_mult = 0.05
+		state_building_rosatom_mayak_association_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_advanced_materials 
@@ -1972,6 +2048,7 @@ company_oracle = {
 	building_types = {
 		building_software_industry
 		building_network_infrastructure
+		building_oracle_cloud_data_center
 	}
 	extension_building_types = {
 		building_electrics_industry_appliances
@@ -1998,6 +2075,7 @@ company_oracle = {
 		country_tech_research_speed_mult = 0.05
         country_weekly_innovation_mult = 0.05
         country_bureaucracy_mult = 0.05
+		state_building_oracle_cloud_data_center_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
@@ -2025,6 +2103,7 @@ company_softbank = {
 	}
 	building_types = {
 		building_network_infrastructure
+		building_softbank_vision_fund_hq
 	}
 	extension_building_types = {
 		building_software_industry
@@ -2050,10 +2129,9 @@ company_softbank = {
 	}
 	prosperity_modifier = {
 		state_capitalists_investment_pool_efficiency_mult = 0.05
-        country_tech_research_speed_mult = 0.05
-	}
-	possible_prestige_goods = {
-		prestige_good_premium_networks 
+		country_tech_research_speed_mult = 0.05
+		goods_output_digital_assets_mult = 0.1
+		state_building_softbank_vision_fund_hq_max_level_add = 1
 	}
     ai_will_do = {
         has_technology_researched = knowledge_economy
@@ -2079,6 +2157,7 @@ company_roche = {
 	building_types = {
 		building_chemical_plants
         building_synthetics_plants_opium
+		building_roche_tower
 	}
 	potential = {
 		has_interest_marker_in_region = region_south_germany
@@ -2100,9 +2179,8 @@ company_roche = {
 	}
 	prosperity_modifier = {
 		state_mortality_mult = -0.05
-		country_society_tech_research_speed_mult = 0.05
-        country_weekly_innovation_mult = 0.05
-        state_pollution_generation_mult = -0.1
+		country_society_tech_research_speed_mult = 0.1
+		state_building_roche_tower_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_opium
@@ -2131,6 +2209,7 @@ company_pfizer = {
 	building_types = {
 		building_chemical_plants
         building_synthetics_plants_opium
+		building_pfizer_rd_campus
 	}
 	potential = {
 		has_interest_marker_in_region = region_new_england
@@ -2153,7 +2232,8 @@ company_pfizer = {
 	prosperity_modifier = {
 		state_mortality_mult = -0.05
 		country_weekly_innovation_mult = 0.05
-        country_society_tech_research_speed_mult = 0.1
+		country_society_tech_research_speed_mult = 0.1
+		state_building_pfizer_rd_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_opium
@@ -2181,10 +2261,17 @@ company_vale = {
 	}
 	building_types = {
 		building_iron_mine
-		building_coal_mine
+		building_nickel_cobalt_mine
+		building_manganese_mine
+		building_bauxite_mine
+		building_copper_mine
+		building_potash_mine
 		building_steel_mills
-	}
+		building_vale_carajas_mine	}
 	extension_building_types = {
+		building_rare_earth_metals_mine
+		building_platinum_group_metals_mine
+		building_chromium_mine
 		building_railway
 		building_port
 	}
@@ -2201,7 +2288,15 @@ company_vale = {
 		any_scope_state = {
 			is_incorporated = yes
 			any_scope_building = {
-				is_building_type = building_iron_mine
+				OR = {
+					is_building_type = building_iron_mine
+					is_building_type = building_nickel_cobalt_mine
+					is_building_type = building_manganese_mine
+					is_building_type = building_bauxite_mine
+					is_building_type = building_copper_mine
+					is_building_type = building_potash_mine
+				}
+				
 				level >= 10
 			}
 		}
@@ -2209,6 +2304,7 @@ company_vale = {
 	prosperity_modifier = {
 		goods_output_iron_mult = 0.1
 		building_group_bg_mining_throughput_add = 0.05
+		state_building_vale_carajas_mine_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_steel
@@ -2236,6 +2332,8 @@ company_disney = {
 	}
 	building_types = {
 		building_arts_academy
+		building_tourism_industry
+		building_disney_world
 	}
 	extension_building_types = {
 		building_software_industry
@@ -2260,11 +2358,13 @@ company_disney = {
 		}
 	}
 	prosperity_modifier = {
-		country_prestige_mult = 0.2
 		country_infamy_generation_mult = -0.05
+		building_group_bg_urban_facilities_employee_mult = -0.1
+		state_building_disney_world_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
+		prestige_good_resort_travel
 	}
     ai_will_do = {
         has_technology_researched = mass_media
@@ -2290,6 +2390,7 @@ company_universal = {
 	}
 	building_types = {
 		building_arts_academy
+		building_universal_studios_hollywood
 	}
 	extension_building_types = {
 		building_software_industry
@@ -2321,6 +2422,7 @@ company_universal = {
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
 		goods_output_fine_art_mult = 0.1
+		state_building_universal_studios_hollywood_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
@@ -2351,9 +2453,11 @@ company_verizon = {
 	}
 	building_types = {
 		building_network_infrastructure
+		building_electrics_industry
+		building_verizon_building
 	}
 	extension_building_types = {
-		building_electrics_industry # for telephones
+		building_software_industry
 	}
 	potential = {
 		has_interest_marker_in_region = region_new_england
@@ -2374,11 +2478,12 @@ company_verizon = {
 		}
 	}
 	prosperity_modifier = {
+		goods_output_digital_assets_mult = 0.1
 		goods_output_digital_access_mult = 0.2
 		state_infrastructure_add = 10
+		state_building_verizon_building_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_premium_networks
 		prestige_good_advanced_telecom 
 	}
     ai_will_do = {
@@ -2406,6 +2511,7 @@ company_reliance = {
 		building_oil_rig
 		building_chemical_plants
 		building_network_infrastructure
+		building_reliance_jamnagar_refinery
 	}
 	extension_building_types = {
 		building_textile_mills
@@ -2432,6 +2538,7 @@ company_reliance = {
 	prosperity_modifier = {
 		state_market_access_price_impact = 0.05
 		state_infrastructure_add = 5
+		state_building_reliance_jamnagar_refinery_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_refined_petrochemicals
@@ -2461,6 +2568,7 @@ company_fanuc = {
 	building_types = {
 		building_robotics_industry
 		building_tooling_workshops
+		building_fanuc_forest
 	}
 	extension_building_types = {
 		building_software_industry
@@ -2486,6 +2594,7 @@ company_fanuc = {
 	prosperity_modifier = {
 		goods_output_robotics_mult = 0.25
 		building_group_bg_manufacturing_throughput_add = 0.05
+		state_building_fanuc_forest_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_tools
@@ -2518,6 +2627,7 @@ company_eni = {
 		building_oil_rig
 		building_chemical_plants
 		building_power_plant
+		building_eni_palazzo
 	}
 	extension_building_types = {
 		building_port
@@ -2545,6 +2655,7 @@ company_eni = {
 		building_oil_rig_throughput_add = 0.15
 		building_power_plant_throughput_add = 0.15
 		country_government_dividends_efficiency_add = 0.05
+		state_building_eni_palazzo_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_refined_petrochemicals 
@@ -2564,7 +2675,7 @@ company_eni = {
 
 # Ferrari (1947)
 company_ferrari = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/italian_ferrari.dds" # Placeholder
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/italian_ferrari.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -2573,6 +2684,7 @@ company_ferrari = {
 	building_types = {
 		building_automotive_industry
 		building_motor_industry
+		building_ferrari_maranello_factory
 	}
 	extension_building_types = {
 		building_arts_academy # Representing design and prestige
@@ -2598,6 +2710,7 @@ company_ferrari = {
 	prosperity_modifier = {
 		country_prestige_mult = 0.15
 		building_automotive_industry_throughput_add = 0.1
+		state_building_ferrari_maranello_factory_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_luxury_automobiles 
@@ -2620,7 +2733,7 @@ company_ferrari = {
 
 # BlackBerry (Research In Motion) (1984)
 company_blackberry = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/canadian_blackberry.dds" # Placeholder
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/canadian_blackberry.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -2630,6 +2743,7 @@ company_blackberry = {
 		building_network_infrastructure
 		building_software_industry
 		building_electrics_industry_appliances
+		building_blackberry_rim_campus
 	}
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
@@ -2655,10 +2769,11 @@ company_blackberry = {
 	prosperity_modifier = {
 		goods_output_digital_access_mult = 0.15
 		country_bureaucracy_mult = 0.05 # Representing secure enterprise communications
+		goods_output_digital_assets_mult = 0.1
+		state_building_blackberry_rim_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_advanced_telecom 
-		prestige_good_premium_networks
     }
     ai_will_do = {
         has_technology_researched = cellular_networks
@@ -2675,8 +2790,8 @@ company_blackberry = {
 
 # Shopify (2006)
 company_shopify = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/canadian_shopify.dds" # Placeholder
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_urban.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/canadian_shopify.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
 		STATE_ONTARIO
@@ -2684,6 +2799,7 @@ company_shopify = {
 	building_types = {
 		building_software_industry
 		building_network_infrastructure
+		building_shopify_fulfillment_hub
 	}
 	extension_building_types = {
 		building_port # Representing logistics network integration
@@ -2709,6 +2825,7 @@ company_shopify = {
 	prosperity_modifier = {
 		state_trade_advantage_mult = 0.1
 		country_weekly_innovation_mult = 0.05
+		state_building_shopify_fulfillment_hub_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
@@ -2732,7 +2849,7 @@ company_shopify = {
 
 # BHP Group (2001, modern entity)
 company_bhp_group = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/australian_bhp.dds" # Placeholder
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/australian_bhp.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_mining.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -2741,9 +2858,17 @@ company_bhp_group = {
 	building_types = {
 		building_iron_mine
 		building_coal_mine
-		building_lead_mine
+		building_copper_mine
+		building_potash_mine
+		building_nickel_cobalt_mine
+		building_bhp_mount_whaleback_mine
 	}
 	extension_building_types = {
+		building_manganese_mine
+		building_bauxite_mine
+		building_rare_earth_metals_mine
+		building_platinum_group_metals_mine
+		building_chromium_mine
 		building_railway
 		building_port
 		building_oil_rig
@@ -2761,16 +2886,25 @@ company_bhp_group = {
 		any_scope_state = {
 			is_incorporated = yes
 			any_scope_building = {
-				is_building_type = building_iron_mine
+				OR = {
+					is_building_type = building_iron_mine
+					is_building_type = building_coal_mine
+					is_building_type = building_copper_mine
+					is_building_type = building_nickel_cobalt_mine
+					is_building_type = building_manganese_mine
+					is_building_type = building_bauxite_mine
+					is_building_type = building_potash_mine
+				}
 				level >= 15
 			}
 		}
 	}
 	prosperity_modifier = {
 		building_group_bg_mining_throughput_add = 0.25
+		state_building_bhp_mount_whaleback_mine_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_generic_steel
+		prestige_good_generic_lead
 	}
     ai_will_do = {
         has_technology_researched = modern_tools
@@ -2787,7 +2921,7 @@ company_bhp_group = {
 
 # Cochlear (1981)
 company_cochlear = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/australian_cochlear.dds" # Placeholder
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/australian_cochlear.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -2796,6 +2930,7 @@ company_cochlear = {
 	building_types = {
 		building_chemical_plants # Proxy for medical manufacturing
 		building_electrics_industry_appliances
+		building_cochlear_global_hq
 	}
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
@@ -2821,6 +2956,7 @@ company_cochlear = {
 	prosperity_modifier = {
 		state_mortality_mult = -0.05
 		country_society_tech_research_speed_mult = 0.1
+		state_building_cochlear_global_hq_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_consumer_appliances 
@@ -2842,14 +2978,15 @@ company_cochlear = {
 
 # Infosys (1981)
 company_infosys = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_infosys.dds" # Placeholder
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_urban.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_infosys.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
 		STATE_MYSORE
 	}
 	building_types = {
 		building_software_industry
+		building_infosys_mysore_campus
 	}
 	extension_building_types = {
 		building_network_infrastructure
@@ -2875,6 +3012,7 @@ company_infosys = {
 	prosperity_modifier = {
 		country_company_throughput_bonus_add = 0.05
 		state_education_access_add = 0.05
+		state_building_infosys_mysore_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
@@ -2894,7 +3032,7 @@ company_infosys = {
 
 # JSW Steel (1982)
 company_jsw_steel = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_jsw_steel.dds" # Placeholder
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_jsw_steel.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -2902,6 +3040,7 @@ company_jsw_steel = {
 	}
 	building_types = {
 		building_steel_mills
+		building_jsw_vijayanagar_works
 	}
 	extension_building_types = {
 		building_iron_mine
@@ -2929,6 +3068,7 @@ company_jsw_steel = {
 	prosperity_modifier = {
 		goods_output_steel_mult = 0.15
 		building_group_bg_manufacturing_throughput_add = 0.05
+		state_building_jsw_vijayanagar_works_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_steel

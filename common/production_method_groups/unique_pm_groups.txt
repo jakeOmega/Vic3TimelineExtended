@@ -1,0 +1,564 @@
+pmg_volkswagen_autostadt = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_volkswagen_autostadt
+    }
+}
+pmg_toyota_kaikan_plant = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_toyota_kaikan_plant
+    }
+}
+pmg_samsung_digital_city = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_samsung_digital_city
+    }
+}
+pmg_hp_labs = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_hp_labs
+    }
+}
+pmg_sony_pictures_studios = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_sony_pictures_studios
+    }
+}
+pmg_ikea_almhult_campus = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_ikea_almhult_campus
+    }
+}
+pmg_intel_ronler_acres = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_intel_ronler_acres
+    }
+}
+pmg_microsoft_redmond_campus = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_microsoft_redmond_campus
+    }
+}
+pmg_apple_park = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_apple_park
+    }
+}
+pmg_tsmc_fab_18 = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_tsmc_fab_18
+    }
+}
+pmg_huawei_ox_horn_campus = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_huawei_ox_horn_campus
+    }
+}
+pmg_amazon_fulfillment_center = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_amazon_fulfillment_center
+    }
+}
+pmg_nvidia_endeavor_campus = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_nvidia_endeavor_campus
+    }
+}
+pmg_googleplex = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_googleplex
+    }
+}
+pmg_netflix_animation_studios = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_netflix_animation_studios
+    }
+}
+pmg_spacex_starbase = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_spacex_starbase
+    }
+}
+pmg_bytedance_data_fortress = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_bytedance_data_fortress
+    }
+}
+pmg_openai_research_lab = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_openai_research_lab
+    }
+}
+pmg_catl_gigafactory = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_catl_gigafactory
+    }
+}
+pmg_boston_dynamics_ai_institute = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_boston_dynamics_ai_institute
+    }
+}
+pmg_asml_veldhoven_campus = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_asml_veldhoven_campus
+    }
+}
+pmg_lockheed_skunk_works = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_lockheed_skunk_works
+    }
+}
+pmg_bae_samlesbury_aerodrome = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_bae_samlesbury_aerodrome
+    }
+}
+pmg_roscosmos_vostochny_cosmodrome = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_roscosmos_vostochny_cosmodrome
+    }
+}
+pmg_airbus_lagardere_plant = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_airbus_lagardere_plant
+    }
+}
+pmg_dassault_merignac_plant = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_dassault_merignac_plant
+    }
+}
+pmg_hyundai_ulsan_factory = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_hyundai_ulsan_factory
+    }
+}
+pmg_sap_headquarters = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_sap_headquarters
+    }
+}
+pmg_tencent_seafront_towers = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_tencent_seafront_towers
+    }
+}
+pmg_alibaba_cainiao_park = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_alibaba_cainiao_park
+    }
+}
+pmg_nintendo_development_center = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_nintendo_development_center
+    }
+}
+pmg_gazprom_lakhta_center = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_gazprom_lakhta_center
+    }
+}
+pmg_saudi_aramco_abqaiq_plant = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_saudi_aramco_abqaiq_plant
+    }
+}
+pmg_petrobras_cenpes_center = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_petrobras_cenpes_center
+    }
+}
+pmg_rosatom_mayak_association = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_rosatom_mayak_association
+    }
+}
+pmg_oracle_cloud_data_center = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_oracle_cloud_data_center
+    }
+}
+pmg_softbank_vision_fund_hq = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_softbank_vision_fund_hq
+    }
+}
+pmg_roche_tower = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_roche_tower
+    }
+}
+pmg_pfizer_rd_campus = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_pfizer_rd_campus
+    }
+}
+pmg_vale_carajas_mine = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_vale_carajas_mine
+    }
+}
+pmg_disney_world = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_disney_world
+    }
+}
+pmg_universal_studios_hollywood = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_universal_studios_hollywood
+    }
+}
+pmg_verizon_building = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_verizon_building
+    }
+}
+pmg_reliance_jamnagar_refinery = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_reliance_jamnagar_refinery
+    }
+}
+pmg_fanuc_forest = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_fanuc_forest
+    }
+}
+pmg_eni_palazzo = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_eni_palazzo
+    }
+}
+pmg_ferrari_maranello_factory = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_ferrari_maranello_factory
+    }
+}
+pmg_blackberry_rim_campus = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_blackberry_rim_campus
+    }
+}
+pmg_shopify_fulfillment_hub = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_shopify_fulfillment_hub
+    }
+}
+pmg_bhp_mount_whaleback_mine = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_bhp_mount_whaleback_mine
+    }
+}
+pmg_cochlear_global_hq = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_cochlear_global_hq
+    }
+}
+pmg_infosys_mysore_campus = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_infosys_mysore_campus
+    }
+}
+pmg_jsw_vijayanagar_works = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_jsw_vijayanagar_works
+    }
+}
+pmg_generic_rd_complex = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_rd_complex
+    }
+}
+pmg_generic_logistics_hub = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_logistics_hub
+    }
+}
+pmg_generic_hq_skyscraper = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_hq_skyscraper
+    }
+}
+pmg_generic_industrial_zone = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_industrial_zone
+    }
+}
+pmg_generic_mega_factory = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_mega_factory
+    }
+}
+pmg_generic_exhibition_centre = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_exhibition_centre
+    }
+}
+pmg_generic_shipping_terminal = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_shipping_terminal
+    }
+}
+pmg_generic_materials_lab = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_materials_lab
+    }
+}
+pmg_generic_robotics_institute = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_robotics_institute
+    }
+}
+pmg_generic_corporate_university = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_corporate_university
+    }
+}
+pmg_generic_data_fortress = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_data_fortress
+    }
+}
+pmg_generic_industrial_city = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_industrial_city
+    }
+}
+pmg_generic_media_hq = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_media_hq
+    }
+}
+pmg_generic_power_hub = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_power_hub
+    }
+}
+pmg_generic_pipeline_terminus = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_pipeline_terminus
+    }
+}
+pmg_generic_rail_nexus = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_rail_nexus
+    }
+}
+pmg_generic_proving_grounds = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_proving_grounds
+    }
+}
+pmg_generic_resource_depository = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_resource_depository
+    }
+}
+pmg_generic_financial_center = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_financial_center
+    }
+}
+pmg_generic_monument_to_industry = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_monument_to_industry
+    }
+}
+
+pmg_generic_spaceport = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_generic_spaceport
+    }
+}
+
+
+pmg_un_headquarters = {
+    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    ai_selection = most_productive
+    production_methods = { pm_un_headquarters }
+}
+pmg_power_bloc_hq = {
+    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    ai_selection = most_productive
+    production_methods = {
+        pm_hq_sovereign_empire
+        pm_hq_military_treaty
+        pm_hq_trade_league
+        pm_hq_religious_convocation
+        pm_hq_ideological_union
+        pm_hq_cultural_coalition
+        pm_hq_diplomatic_framework
+   }
+}
+pmg_wonder_golden_gate_bridge = {
+    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_golden_gate_bridge }
+}
+pmg_wonder_empire_state_building = {
+    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_empire_state_building }
+}
+pmg_wonder_sydney_opera_house = {
+    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_sydney_opera_house }
+}
+pmg_wonder_cn_tower = {
+    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_cn_tower }
+}
+pmg_wonder_burj_khalifa = {
+    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_burj_khalifa }
+}

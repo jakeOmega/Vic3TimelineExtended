@@ -78,7 +78,7 @@ combat_unit_type_line_infantry = {
     conscript_peasant_levies = yes
 
     upkeep_modifier = {
-		goods_input_small_arms_add = 1                        # Price:   60, Total cost: 60.0
+		goods_input_small_arms_add = 1                        # Price:   60, Total cost:    60.0 (100.00%)
 		# Total cost: 60.0
 	}
 
@@ -138,8 +138,8 @@ combat_unit_type_skirmish_infantry = {
     conscript_peasant_levies = yes
 
     upkeep_modifier = {
-		goods_input_small_arms_add = 2                        # Price:   60, Total cost: 120.0
-		goods_input_ammunition_add = 1                        # Price:   50, Total cost: 50.0
+		goods_input_small_arms_add = 2                        # Price:   60, Total cost:   120.0 (70.59%)
+		goods_input_ammunition_add = 1                        # Price:   50, Total cost:    50.0 (29.41%)
 		# Total cost: 170.0
 	}
 
@@ -198,8 +198,8 @@ combat_unit_type_trench_infantry = {
     conscript_peasant_levies = yes
 
     upkeep_modifier = {
-		goods_input_small_arms_add = 3                        # Price:   60, Total cost: 180.0
-		goods_input_ammunition_add = 2                        # Price:   50, Total cost: 100.0
+		goods_input_small_arms_add = 3                        # Price:   60, Total cost:   180.0 (64.29%)
+		goods_input_ammunition_add = 2                        # Price:   50, Total cost:   100.0 (35.71%)
 		# Total cost: 280.0
 	}
 
@@ -257,9 +257,9 @@ combat_unit_type_squad_infantry = {
     conscript_peasant_levies = yes
 
     upkeep_modifier = {
-		goods_input_small_arms_add = 3                        # Price:   60, Total cost: 180.0
-		goods_input_ammunition_add = 3                        # Price:   50, Total cost: 150.0
-		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
+		goods_input_small_arms_add = 3                        # Price:   60, Total cost:   180.0 (43.90%)
+		goods_input_ammunition_add = 3                        # Price:   50, Total cost:   150.0 (36.59%)
+		goods_input_radios_add = 1                            # Price:   80, Total cost:    80.0 (19.51%)
 		# Total cost: 410.0
 	}
 
@@ -314,11 +314,11 @@ combat_unit_type_mechanized_infantry = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_small_arms_add = 3                        # Price:   60, Total cost: 180.0
-		goods_input_ammunition_add = 3                        # Price:   50, Total cost: 150.0
-		goods_input_oil_add = 1                               # Price:   40, Total cost: 40.0
-		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
-		goods_input_tanks_add = 1                             # Price:  120, Total cost: 120.0
+		goods_input_small_arms_add = 3                        # Price:   60, Total cost:   180.0 (31.58%)
+		goods_input_ammunition_add = 3                        # Price:   50, Total cost:   150.0 (26.32%)
+		goods_input_oil_add = 1                               # Price:   40, Total cost:    40.0 (7.02%)
+		goods_input_radios_add = 1                            # Price:   80, Total cost:    80.0 (14.04%)
+		goods_input_tanks_add = 1                             # Price:  120, Total cost:   120.0 (21.05%)
 		# Total cost: 570.0
 	}
 
@@ -372,7 +372,7 @@ combat_unit_type_cannon_artillery = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_artillery_add = 1                         # Price:   70, Total cost: 70.0
+		goods_input_artillery_add = 1                         # Price:   70, Total cost:    70.0 (100.00%)
 		# Total cost: 70.0
 	}
 
@@ -436,7 +436,7 @@ combat_unit_type_mobile_artillery = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_artillery_add = 2                         # Price:   70, Total cost: 140.0
+		goods_input_artillery_add = 2                         # Price:   70, Total cost:   140.0 (100.00%)
 		# Total cost: 140.0
 	}
 
@@ -499,8 +499,8 @@ combat_unit_type_shrapnel_artillery = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_artillery_add = 3                         # Price:   70, Total cost: 210.0
-		goods_input_ammunition_add = 3                        # Price:   50, Total cost: 150.0
+		goods_input_artillery_add = 3                         # Price:   70, Total cost:   210.0 (58.33%)
+		goods_input_ammunition_add = 3                        # Price:   50, Total cost:   150.0 (41.67%)
 		# Total cost: 360.0
 	}
 
@@ -562,9 +562,9 @@ combat_unit_type_siege_artillery = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_artillery_add = 4                         # Price:   70, Total cost: 280.0
-		goods_input_ammunition_add = 4                        # Price:   50, Total cost: 200.0
-		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
+		goods_input_artillery_add = 4                         # Price:   70, Total cost:   280.0 (50.00%)
+		goods_input_ammunition_add = 4                        # Price:   50, Total cost:   200.0 (35.71%)
+		goods_input_radios_add = 1                            # Price:   80, Total cost:    80.0 (14.29%)
 		# Total cost: 560.0
 	}
 
@@ -622,11 +622,11 @@ combat_unit_type_heavy_tank = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_tanks_add = 3                             # Price:  120, Total cost: 360.0
-		goods_input_artillery_add = 4                         # Price:   70, Total cost: 280.0
-		goods_input_ammunition_add = 4                        # Price:   50, Total cost: 200.0
-		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
-		goods_input_oil_add = 3                               # Price:   40, Total cost: 120.0
+		goods_input_tanks_add = 3                             # Price:  120, Total cost:   360.0 (34.62%)
+		goods_input_artillery_add = 4                         # Price:   70, Total cost:   280.0 (26.92%)
+		goods_input_ammunition_add = 4                        # Price:   50, Total cost:   200.0 (19.23%)
+		goods_input_radios_add = 1                            # Price:   80, Total cost:    80.0 (7.69%)
+		goods_input_oil_add = 3                               # Price:   40, Total cost:   120.0 (11.54%)
 		# Total cost: 1040.0
 	}
 
@@ -658,7 +658,7 @@ combat_unit_type_hussars = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_grain_add = 1                             # Price:   20, Total cost: 20.0
+		goods_input_grain_add = 1                             # Price:   20, Total cost:    20.0 (100.00%)
 		# Total cost: 20.0
 	}
 
@@ -720,8 +720,8 @@ combat_unit_type_dragoons = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_grain_add = 1                             # Price:   20, Total cost: 20.0
-		goods_input_small_arms_add = 2                        # Price:   60, Total cost: 120.0
+		goods_input_grain_add = 1                             # Price:   20, Total cost:    20.0 (14.29%)
+		goods_input_small_arms_add = 2                        # Price:   60, Total cost:   120.0 (85.71%)
 		# Total cost: 140.0
 	}
 
@@ -779,8 +779,8 @@ combat_unit_type_cuirassiers = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_grain_add = 1                             # Price:   20, Total cost: 20.0
-		goods_input_small_arms_add = 2                        # Price:   60, Total cost: 120.0
+		goods_input_grain_add = 1                             # Price:   20, Total cost:    20.0 (14.29%)
+		goods_input_small_arms_add = 2                        # Price:   60, Total cost:   120.0 (85.71%)
 		# Total cost: 140.0
 	}
 
@@ -837,9 +837,9 @@ combat_unit_type_lancers = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_grain_add = 2                             # Price:   20, Total cost: 40.0
-		goods_input_small_arms_add = 2                        # Price:   60, Total cost: 120.0
-		goods_input_iron_add = 2                              # Price:   40, Total cost: 80.0
+		goods_input_grain_add = 2                             # Price:   20, Total cost:    40.0 (16.67%)
+		goods_input_small_arms_add = 2                        # Price:   60, Total cost:   120.0 (50.00%)
+		goods_input_iron_add = 2                              # Price:   40, Total cost:    80.0 (33.33%)
 		# Total cost: 240.0
 	}
 
@@ -898,11 +898,11 @@ combat_unit_type_light_tanks = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_tanks_add = 2                             # Price:  120, Total cost: 240.0
-		goods_input_artillery_add = 2                         # Price:   70, Total cost: 140.0
-		goods_input_oil_add = 2                               # Price:   40, Total cost: 80.0
-		goods_input_ammunition_add = 2                        # Price:   50, Total cost: 100.0
-		goods_input_radios_add = 2                            # Price:   80, Total cost: 160.0
+		goods_input_tanks_add = 2                             # Price:  120, Total cost:   240.0 (33.33%)
+		goods_input_artillery_add = 2                         # Price:   70, Total cost:   140.0 (19.44%)
+		goods_input_oil_add = 2                               # Price:   40, Total cost:    80.0 (11.11%)
+		goods_input_ammunition_add = 2                        # Price:   50, Total cost:   100.0 (13.89%)
+		goods_input_radios_add = 2                            # Price:   80, Total cost:   160.0 (22.22%)
 		# Total cost: 720.0
 	}
 
@@ -939,7 +939,7 @@ combat_unit_type_frigate = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_manowars_add = 1                          # Price:   70, Total cost: 70.0
+		goods_input_manowars_add = 1                          # Price:   70, Total cost:    70.0 (100.00%)
 		# Total cost: 70.0
 	}
 
@@ -966,9 +966,9 @@ combat_unit_type_monitor = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_ironclads_add = 1                         # Price:   80, Total cost: 80.0
-		goods_input_artillery_add = 1                         # Price:   70, Total cost: 70.0
-		goods_input_ammunition_add = 1                        # Price:   50, Total cost: 50.0
+		goods_input_ironclads_add = 1                         # Price:   80, Total cost:    80.0 (40.00%)
+		goods_input_artillery_add = 1                         # Price:   70, Total cost:    70.0 (35.00%)
+		goods_input_ammunition_add = 1                        # Price:   50, Total cost:    50.0 (25.00%)
 		# Total cost: 200.0
 	}
 
@@ -1001,9 +1001,9 @@ combat_unit_type_destroyer = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_ironclads_add = 2                         # Price:   80, Total cost: 160.0
-		goods_input_artillery_add = 2                         # Price:   70, Total cost: 140.0
-		goods_input_ammunition_add = 2                        # Price:   50, Total cost: 100.0
+		goods_input_ironclads_add = 2                         # Price:   80, Total cost:   160.0 (40.00%)
+		goods_input_artillery_add = 2                         # Price:   70, Total cost:   140.0 (35.00%)
+		goods_input_ammunition_add = 2                        # Price:   50, Total cost:   100.0 (25.00%)
 		# Total cost: 400.0
 	}
 
@@ -1034,8 +1034,8 @@ combat_unit_type_torpedo_boat = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_ironclads_add = 2                         # Price:   80, Total cost: 160.0
-		goods_input_explosives_add = 4                        # Price:   50, Total cost: 200.0
+		goods_input_ironclads_add = 2                         # Price:   80, Total cost:   160.0 (44.44%)
+		goods_input_explosives_add = 4                        # Price:   50, Total cost:   200.0 (55.56%)
 		# Total cost: 360.0
 	}
 
@@ -1067,10 +1067,10 @@ combat_unit_type_scout_cruiser = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_ironclads_add = 3                         # Price:   80, Total cost: 240.0
-		goods_input_ammunition_add = 3                        # Price:   50, Total cost: 150.0
-		goods_input_artillery_add = 3                         # Price:   70, Total cost: 210.0
-		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
+		goods_input_ironclads_add = 3                         # Price:   80, Total cost:   240.0 (35.29%)
+		goods_input_ammunition_add = 3                        # Price:   50, Total cost:   150.0 (22.06%)
+		goods_input_artillery_add = 3                         # Price:   70, Total cost:   210.0 (30.88%)
+		goods_input_radios_add = 1                            # Price:   80, Total cost:    80.0 (11.76%)
 		# Total cost: 680.0
 	}
 
@@ -1100,7 +1100,7 @@ combat_unit_type_man_o_war = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_manowars_add = 3                          # Price:   70, Total cost: 210.0
+		goods_input_manowars_add = 3                          # Price:   70, Total cost:   210.0 (100.00%)
 		# Total cost: 210.0
 	}
 
@@ -1128,9 +1128,9 @@ combat_unit_type_ironclad = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_ironclads_add = 3                         # Price:   80, Total cost: 240.0
-		goods_input_artillery_add = 3                         # Price:   70, Total cost: 210.0
-		goods_input_ammunition_add = 3                        # Price:   50, Total cost: 150.0
+		goods_input_ironclads_add = 3                         # Price:   80, Total cost:   240.0 (40.00%)
+		goods_input_artillery_add = 3                         # Price:   70, Total cost:   210.0 (35.00%)
+		goods_input_ammunition_add = 3                        # Price:   50, Total cost:   150.0 (25.00%)
 		# Total cost: 600.0
 	}
 
@@ -1162,10 +1162,10 @@ combat_unit_type_dreadnought = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_ironclads_add = 6                         # Price:   80, Total cost: 480.0
-		goods_input_artillery_add = 6                         # Price:   70, Total cost: 420.0
-		goods_input_ammunition_add = 6                        # Price:   50, Total cost: 300.0
-		goods_input_radios_add = 2                            # Price:   80, Total cost: 160.0
+		goods_input_ironclads_add = 6                         # Price:   80, Total cost:   480.0 (35.29%)
+		goods_input_artillery_add = 6                         # Price:   70, Total cost:   420.0 (30.88%)
+		goods_input_ammunition_add = 6                        # Price:   50, Total cost:   300.0 (22.06%)
+		goods_input_radios_add = 2                            # Price:   80, Total cost:   160.0 (11.76%)
 		# Total cost: 1360.0
 	}
 
@@ -1197,10 +1197,10 @@ combat_unit_type_battleship = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_ironclads_add = 8                         # Price:   80, Total cost: 640.0
-		goods_input_artillery_add = 8                         # Price:   70, Total cost: 560.0
-		goods_input_ammunition_add = 8                        # Price:   50, Total cost: 400.0
-		goods_input_radios_add = 3                            # Price:   80, Total cost: 240.0
+		goods_input_ironclads_add = 8                         # Price:   80, Total cost:   640.0 (34.78%)
+		goods_input_artillery_add = 8                         # Price:   70, Total cost:   560.0 (30.43%)
+		goods_input_ammunition_add = 8                        # Price:   50, Total cost:   400.0 (21.74%)
+		goods_input_radios_add = 3                            # Price:   80, Total cost:   240.0 (13.04%)
 		# Total cost: 1840.0
 	}
 
@@ -1230,10 +1230,10 @@ combat_unit_type_submarine = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_ironclads_add = 2                         # Price:   80, Total cost: 160.0
-		goods_input_artillery_add = 2                         # Price:   70, Total cost: 140.0
-		goods_input_ammunition_add = 2                        # Price:   50, Total cost: 100.0
-		goods_input_radios_add = 1                            # Price:   80, Total cost: 80.0
+		goods_input_ironclads_add = 2                         # Price:   80, Total cost:   160.0 (33.33%)
+		goods_input_artillery_add = 2                         # Price:   70, Total cost:   140.0 (29.17%)
+		goods_input_ammunition_add = 2                        # Price:   50, Total cost:   100.0 (20.83%)
+		goods_input_radios_add = 1                            # Price:   80, Total cost:    80.0 (16.67%)
 		# Total cost: 480.0
 	}
 
@@ -1261,10 +1261,10 @@ combat_unit_type_carrier = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_ironclads_add = 8                         # Price:   80, Total cost: 640.0
-		goods_input_ammunition_add = 8                        # Price:   50, Total cost: 400.0
-		goods_input_radios_add = 4                            # Price:   80, Total cost: 320.0
-		goods_input_aeroplanes_add = 8                        # Price:   80, Total cost: 640.0
+		goods_input_ironclads_add = 8                         # Price:   80, Total cost:   640.0 (32.00%)
+		goods_input_ammunition_add = 8                        # Price:   50, Total cost:   400.0 (20.00%)
+		goods_input_radios_add = 4                            # Price:   80, Total cost:   320.0 (16.00%)
+		goods_input_aeroplanes_add = 8                        # Price:   80, Total cost:   640.0 (32.00%)
 		# Total cost: 2000.0
 	}
 

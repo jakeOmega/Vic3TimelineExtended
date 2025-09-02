@@ -69,6 +69,7 @@ advanced_structural_engineering = {
 	
 	modifier = {
 		country_max_weekly_construction_progress_add = 25
+		state_urbanization_per_level_add = -5
 	}
 	
 	ai_weight = {

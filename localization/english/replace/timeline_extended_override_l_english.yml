@@ -1,0 +1,7 @@
+l_english:
+ concept_harvest_condition:"Local Condition"
+ concept_harvest_condition_desc:"A $concept_harvest_condition$ is an occurrence that affects a [Concept('concept_country','$concept_country_possessive$')] local economy with a variable [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short$')], duration, and range. It is generally a natural phenomenon and can have either #g positive#! or #r negative#! effects on the [Concept('concept_state','$concept_states$')] it affects. $concept_harvest_conditions$ will mostly affect the [concept_throughput] of agricultural [Concept('concept_building','$concept_buildings$')], but they can also have an effect on your [Concept('concept_pop','$concept_population$')] and $concept_states$ in other ways, such as reducing available [concept_infrastructure].\n\n$concept_harvest_conditions$ will often affect $concept_states$ surrounding their #b epicenter#!. In such cases, the [concept_harvest_condition_intensity] will generally decrease as the distance to the #b epicenter#! increases.\n\n#title Potential $concept_harvest_conditions$:#!#indent_newline:3 \n[GetHarvestConditionTypesList]#!"
+ concept_harvest_condition_intensity:"Intensity"
+ concept_harvest_conditions:"Local Conditions"
+ cultural_erasure:0 "Latent Hostility"
+ second_rate_citizen:0 "Provisional Acceptance"
