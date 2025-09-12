@@ -356,7 +356,7 @@
 
 # Inertial Navigation Systems - Cold War Tone
  notification_headlines_tech_inertial_navigation_systems_tooltip:0 "#header $notification_headlines_tech_inertial_navigation_systems_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_inertial_navigation_systems_desc$"
- notification_headlines_tech_inertial_navigation_name:0 "#b NAVIGATE ANYWHERE WITHOUT EXTERNAL SIGNALS #!"
+ notification_headlines_tech_inertial_navigation_systems_name:0 "#b NAVIGATE ANYWHERE WITHOUT EXTERNAL SIGNALS #!"
  notification_headlines_tech_inertial_navigation_systems_desc:1 "Using gyroscopes and accelerometers, $HEADLINES_TECH_NAME$ developed in [SCOPE.sCountry('headlines_inertial_navigation_systems_researcher').GetName] can guide vehicles with incredible accuracy. #lore They're especially useful for ballistic missiles, submarines, and strategic bombers, helping them to stay on course without external signals... #!"
 
 # Infrared Night Vision - Cold War/Modern Tone
@@ -450,8 +450,8 @@
  notification_headlines_tech_mind_backups_desc:1 "[SCOPE.sCountry('headlines_mind_backups_researcher').GetAdjective] scientists are developing the ability to store memories and consciousness in digital form. #lore These $HEADLINES_TECH_NAME$ are a path to a kind of immortality, allowing a person to live on long after their physical body has failed... #!"
 
 # Missile Defense Systems - Late Cold War/Modern Tone
- notification_headlines_tech_missile_defense_systems_tooltip:0 "#header $notification_headlines_tech_missile_defense_systems_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_missile_defense_name$"
- notification_headlines_tech_missile_defense_name:0 "#b DEFENSE SHIELD AGAINST MISSILES DEVELOPED #!"
+ notification_headlines_tech_missile_defense_systems_tooltip:0 "#header $notification_headlines_tech_missile_defense_systems_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_missile_defense_systems_desc$"
+ notification_headlines_tech_missile_defense_systems_name:0 "#b DEFENSE SHIELD AGAINST MISSILES DEVELOPED #!"
  notification_headlines_tech_missile_defense_systems_desc:1 "With anti-ballistic missiles and laser interceptors, [SCOPE.sCountry('headlines_missile_defense_systems_researcher').GetName] can now defend against incoming missile attacks. #lore These $HEADLINES_TECH_NAME$ should improve security and strategic stability, in theory... #!"
 
 # Advanced Automotive Production Techniques - 1920s-30s Tone

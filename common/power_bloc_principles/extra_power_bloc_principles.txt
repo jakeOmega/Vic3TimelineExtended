@@ -332,7 +332,7 @@ principle_advanced_research_4 = {
 		country_weekly_innovation_max_add = 15
 
 		country_tech_group_research_speed_mult = 0.01
-		country_academics_pol_str_mult = 0.1
+		country_academics_pol_str_mult = 0.05
 	}
 	
 	ai_weight = {
@@ -373,7 +373,7 @@ principle_advanced_research_5 = {
 		country_weekly_innovation_max_add = 25
 
 		country_tech_group_research_speed_mult = 0.01
-		country_academics_pol_str_mult = 0.3
+		country_academics_pol_str_mult = 0.15
 		country_authority_add = 50
 	}
 	

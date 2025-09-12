@@ -507,7 +507,7 @@ violent_hostility_on_action = {
 									culture = scope:curr_culture
 								}
 								trigger_mass_migration = {
-									POP_RATIO = 0.3
+									POP_RATIO = 0.8
 								}
 							}
 						}
@@ -568,7 +568,7 @@ violent_hostility_on_action = {
 									culture = scope:curr_culture
 								}
 								trigger_mass_migration = {
-									POP_RATIO = 0.1
+									POP_RATIO = 0.5
 								}
 							}
 						}

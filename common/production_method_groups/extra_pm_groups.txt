@@ -655,6 +655,9 @@ pmg_steam_automation_building_gold_mine = {
 pmg_mining_equipment_building_tech_metals_mine = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
+        # skipping prior to condensing engine pump as its obsolete when tech_metals_mine is available
+        pm_condensing_engine_pump_building_tech_metals_mine
+        pm_diesel_pump_building_tech_metals_mine
         pm_high_pressure_hydraulic_pump_building_tech_metals_mine
         pm_continuous_miners_building_tech_metals_mine
         pm_smart_miners_building_tech_metals_mine
@@ -663,6 +666,9 @@ pmg_mining_equipment_building_tech_metals_mine = {
 pmg_explosives_building_tech_metals_mine = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
+        pm_no_explosives
+        # skipping nitroglycerin as its obsolete when tech_metals_mine is available
+        pm_dynamite_building_tech_metals_mine
         pm_ammonium_nitrate_building_tech_metals_mine
         pm_metamaterial_explosives_building_tech_metals_mine
     }
@@ -670,6 +676,8 @@ pmg_explosives_building_tech_metals_mine = {
 pmg_steam_automation_building_tech_metals_mine = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
     production_methods = {
+        pm_no_steam_automation
+        pm_steam_donkey_mine
         pm_dragline_excavators_tech_metals_mine
         pm_large_scale_earth_movers_tech_metals_mine
         pm_geophysical_survey_techniques_tech_metals_mine

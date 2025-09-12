@@ -1,0 +1,231 @@
+je_banking_cycle = {
+    icon    = "gfx/interface/icons/event_icons/stock_bag.dds"
+    group = je_group_internal_affairs
+
+    is_shown_when_inactive = {
+        has_technology_researched = stock_exchange
+        any_scope_state = {
+            any_scope_building = { is_building_type = building_urban_center level >= 10 }
+        }
+    }
+
+    # Buttons
+    scripted_button = cb_policy_rate_hike
+    scripted_button = cb_open_market_ops
+    scripted_button = cb_countercyclical_buffer
+    scripted_button = cb_expand_deposit_guarantee
+    scripted_button = cb_directed_credit_infrastructure
+    scripted_button = cb_emergency_liquidity_program
+    scripted_button = cb_moral_suasion
+    scripted_button = cb_raise_margin_requirements
+    scripted_button = cb_fx_devaluation
+    scripted_button = cb_fx_support
+    scripted_button = cb_capital_controls_outflow
+    scripted_button = cb_fx_swap_lines
+    scripted_button = cb_export_credit_facility
+    scripted_button = cb_asset_relief_program
+
+
+    possible = { always = yes }
+
+    should_be_pinned_by_default = yes
+    can_revolution_inherit      = yes
+
+    immediate = {
+        # Cycle state vars
+        set_variable = { name = finance_cycle_value         value = 50 } # 0..100
+        set_variable = { name = finance_cycle_momentum      value = 0 }
+        set_variable = {
+            name = bubble_pressure
+            value = 0
+        }
+    }
+
+    # Progress bar: shows remaining points as % of initial allowance at activation.
+    progressbar      = no
+    progress_desc    = banking_cycle_progress_desc
+
+    status_desc = {
+        first_valid = {
+            triggered_desc = { desc = banking_cycle_status_panic       trigger = { var:finance_cycle_value < 10 } }
+            triggered_desc = { desc = banking_cycle_status_downturn    trigger = { var:finance_cycle_value >= 10  var:finance_cycle_value < 25 } }
+            triggered_desc = { desc = banking_cycle_status_stagnation  trigger = { var:finance_cycle_value >= 25  var:finance_cycle_value < 40 } }
+            triggered_desc = { desc = banking_cycle_status_stable      trigger = { var:finance_cycle_value >= 40  var:finance_cycle_value < 60 } }
+            triggered_desc = { desc = banking_cycle_status_expansion   trigger = { var:finance_cycle_value >= 60  var:finance_cycle_value < 75 } }
+            triggered_desc = { desc = banking_cycle_status_boom        trigger = { var:finance_cycle_value >= 75  var:finance_cycle_value < 88 } }
+            triggered_desc = { desc = banking_cycle_status_frenzy      trigger = { var:finance_cycle_value >= 88 } }
+        }
+
+        first_valid = {
+            triggered_desc = { desc = banking_cycle_status_fast_downturn    trigger = { var:finance_cycle_momentum < -4 } }
+            triggered_desc = { desc = banking_cycle_status_slow_downturn    trigger = { var:finance_cycle_momentum >= -4 var:finance_cycle_momentum < -2 } }
+            triggered_desc = { desc = banking_cycle_status_neutral          trigger = { var:finance_cycle_momentum >= -2 var:finance_cycle_momentum < 2 } }
+            triggered_desc = { desc = banking_cycle_status_slow_expansion   trigger = { var:finance_cycle_momentum >= 2 var:finance_cycle_momentum < 4 } }
+            triggered_desc = { desc = banking_cycle_status_fast_expansion   trigger = { var:finance_cycle_momentum >= 4 } }
+        }
+
+        first_valid = {
+            triggered_desc = { desc = banking_cycle_status_no_bubble          trigger = { var:bubble_pressure < 15 } }
+            triggered_desc = { desc = banking_cycle_status_bubble_stable      trigger = { var:bubble_pressure >= 15 var:bubble_pressure < 35 } }
+            triggered_desc = { desc = banking_cycle_status_bubble_expansion   trigger = { var:bubble_pressure >= 35 var:bubble_pressure < 65 } }
+            triggered_desc = { desc = banking_cycle_status_bubble_frenzy      trigger = { var:bubble_pressure >= 65 var:bubble_pressure < 85 } }
+            triggered_desc = { desc = banking_cycle_status_bubble_extreme     trigger = { var:bubble_pressure >= 85 } }
+        }
+
+        first_valid = {
+            triggered_desc = { desc = BANKING_CURR_MODIFIERS trigger = { always = yes } }
+        }
+    }
+
+    on_monthly_pulse = {
+        effect = {
+            # Update fiscal policy effect based on spending relative to GDP
+            remove_modifier = financial_cycle_government_fiscal_policy_effect
+            add_modifier = {
+                name = financial_cycle_government_fiscal_policy_effect
+                multiplier = financial_cycle_government_fiscal_policy_effect_size
+            }
+
+            # --- Cycle update ---
+            # Momentum decays:
+            change_variable = { name = finance_cycle_momentum multiply = 0.9 }
+
+            change_variable = {
+                name = finance_cycle_momentum
+                add = "modifier:country_finance_momentum_monthly_add"
+            }
+
+            change_variable = {
+                name = bubble_pressure
+                add = "modifier:country_bubble_pressure_monthly_add"
+            }
+
+            change_variable = {
+                name = finance_cycle_value
+                add = "modifier:country_finance_value_monthly_add"
+            }
+
+            add_investment_pool = investment_pool_banking_cycle_add
+
+            # Random nudge: -1 / 0 / +1
+            random_list = {
+                25 = {
+                    modifier = { # Biased towards lower momentum if economy is hot
+                        value =  = var:finance_cycle_value
+                    }
+                    change_variable = { name = finance_cycle_momentum add = -1 }
+                }
+                50 = { }
+                25 = {
+                    modifier = { # Biased towards higher momentum if economy is doing poorly
+                        value = 100
+                        subtract = var:finance_cycle_value
+                    }
+                    change_variable = { name = finance_cycle_momentum add =  1 }
+                }
+            }
+
+            # Apply momentum to value and clamp 0 to 100
+            change_variable = {
+                name = finance_cycle_value
+                add = var:finance_cycle_momentum
+                }
+            if = { limit = { var:finance_cycle_value < 0 }     set_variable = { name = finance_cycle_value value = 0 } }
+            if = { limit = { var:finance_cycle_value > 100 }   set_variable = { name = finance_cycle_value value = 100 } }
+
+            # clamp
+            if = { limit = { var:bubble_pressure < 0 }   set_variable = { name = bubble_pressure value = 0 } }
+            if = { limit = { var:bubble_pressure > 100 } set_variable = { name = bubble_pressure value = 100 } }
+
+            # --- sudden crash check (asymmetric) ---
+            # Base monthly crash chances by phase (tuneable):
+            # frenzy  = 0.05*bubble_pressure over 15; boom = 0.02*bubble_pressure over 35; expansion = 0.01*bubble_pressure over 65; stable = 0.01*bubble_pressure over 85
+            set_variable = { name = crash value = 0 }
+            random_list = {
+                0 = { 
+                    modifier = {
+                        add = var:bubble_pressure
+                        if = {
+                            limit = { var:finance_cycle_value >= 88 } # frenzy
+                            subtract = 15
+                            multiply = 0.3
+                        }
+                        else_if = {
+                            limit = { var:finance_cycle_value >= 75 } # boom
+                            subtract = 35
+                            multiply = 0.05
+                        }
+                        else_if = {
+                            limit = { var:finance_cycle_value >= 60 } # expansion
+                            subtract = 65
+                            multiply = 0.02
+                        }
+                        else_if = {
+                            limit = { var:finance_cycle_value >= 40 } # stable
+                            subtract = 85
+                            multiply = 0.01
+                        }
+                        min = 0
+                    }
+                    set_variable = { name = crash value = 1 }
+                }
+                100 = { }
+            }
+
+            # If we set crash, execute crash:
+            if = {
+                limit = { var:crash > 0 }
+                # Severity scales with bubble (more bubble -> likely PANIC; else DOWNTURN)
+                set_variable = { name = crash_severity value = var:bubble_pressure }
+                random_list = {
+                    10 = {
+                        change_variable = { name = crash_severity multiply = 0.5 }
+                    }
+                    20 = {
+                        change_variable = { name = crash_severity multiply = 0.75 }
+                    }
+                    40 = { }
+                    20 = {
+                        change_variable = { name = crash_severity multiply = 1.5 }
+                    }
+                    10 = {
+                        change_variable = { name = crash_severity multiply = 2 }
+                    }
+                }
+                if = {
+                    limit = { var:crash_severity >= 60 }
+                    # hard crash → PANIC floor & negative momentum
+                    set_variable   = { name = finance_cycle_value value = 10 }
+                    set_variable = { name = finance_cycle_momentum value = -5 }  # overwrite momentum hard negative
+                }
+                else = {
+                    # soft crash → DOWNTURN band & mild negative momentum
+                    set_variable   = { name = finance_cycle_value value = 30 }
+                    set_variable = { name = finance_cycle_momentum value = -3 }
+                }
+                # Clear bubble
+                set_variable = { name = bubble_pressure value = 0 }
+            }
+
+            # Sync a human-readable "max" for UI text:
+            set_variable = { name = banking_points_max_from_law value = banking_law_base_points_value }
+
+            # --- Phase modifiers (remove previous; add current) ---
+            remove_modifier = financial_cycle_phase_panic
+            remove_modifier = financial_cycle_phase_downturn
+            remove_modifier = financial_cycle_phase_stagnation
+            remove_modifier = financial_cycle_phase_expansion
+            remove_modifier = financial_cycle_phase_boom
+            remove_modifier = financial_cycle_phase_frenzy
+
+            if = { limit = { var:finance_cycle_value < 10 }  add_modifier = { name = financial_cycle_phase_panic } }
+            else_if = { limit = { var:finance_cycle_value < 25 } add_modifier = { name = financial_cycle_phase_downturn } }
+            else_if = { limit = { var:finance_cycle_value < 40 } add_modifier = { name = financial_cycle_phase_stagnation } }
+            else_if = { limit = { var:finance_cycle_value < 60 } } # Stable = no national mod
+            else_if = { limit = { var:finance_cycle_value < 75 } add_modifier = { name = financial_cycle_phase_expansion } }
+            else_if = { limit = { var:finance_cycle_value < 88 } add_modifier = { name = financial_cycle_phase_boom } }
+            else = { add_modifier = { name = financial_cycle_phase_frenzy } }
+
+        }
+    }
+}

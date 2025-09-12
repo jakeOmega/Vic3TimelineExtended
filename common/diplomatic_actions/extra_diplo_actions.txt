@@ -90,7 +90,10 @@ annex_subject_peaceful = {
             text = DIPLO_ACTION_GDP_REQUIREMENT
             scope:target_country = {
                 is_direct_subject_of = root
-                gdp < peaceful_annex_gdp_requirement
+				OR = {
+					gdp < peaceful_annex_gdp_requirement
+					peaceful_annex_gdp_requirement < 0
+				}
             }
         }
         scope:target_country = {

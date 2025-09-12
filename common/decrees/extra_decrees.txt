@@ -174,10 +174,8 @@ decree_cultural_emigration_initiative = {
 	country_trigger = {
 		custom_tooltip ={
 			text = "decree_migration_invalid_tooltip"
-			owner = {
-				power_bloc ?= {
-					modifier:power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
-				}
+			power_bloc ?= {
+				modifier:power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
 			}
 		}
 	} 

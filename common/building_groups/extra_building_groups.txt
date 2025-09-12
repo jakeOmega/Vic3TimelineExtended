@@ -29,7 +29,7 @@ bg_space = {
 }
 
 bg_company_buildings = {
-	parent_group = bg_heavy_industry
+	parent_group = bg_private_infrastructure
 	economy_of_scale = no
 	infrastructure_usage_per_level = 5
 }

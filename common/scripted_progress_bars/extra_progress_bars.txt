@@ -1,0 +1,11 @@
+﻿nuclear_program_bar = {
+ 	name = "great_game_core_progress_bar_name"
+ 	desc = "great_game_core_progress_bar_britain_desc"
+ 	second_desc = "great_game_core_progress_bar_russia_desc"
+
+ 	double_sided_gold = yes
+
+ 	start_value = 0
+ 	min_value = 0
+ 	max_value = 100
+}

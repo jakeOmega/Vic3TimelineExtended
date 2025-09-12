@@ -4,11 +4,12 @@
 
 # --- Volkswagen ---
 building_volkswagen_autostadt = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/german_volkswagen.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -38,11 +39,12 @@ building_volkswagen_autostadt = {
 
 # --- Toyota ---
 building_toyota_kaikan_plant = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_toyota.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -72,11 +74,12 @@ building_toyota_kaikan_plant = {
 
 # --- Samsung ---
 building_samsung_digital_city = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/korean_samsung.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -106,11 +109,12 @@ building_samsung_digital_city = {
 
 # --- Hewlett-Packard (HP) ---
 building_hp_labs = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_hp.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -140,11 +144,12 @@ building_hp_labs = {
 
 # --- Sony ---
 building_sony_pictures_studios = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_sony.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -174,11 +179,12 @@ building_sony_pictures_studios = {
 
 # --- IKEA ---
 building_ikea_almhult_campus = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/swedish_ikea.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -208,11 +214,12 @@ building_ikea_almhult_campus = {
 
 # --- Intel ---
 building_intel_ronler_acres = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_intel.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -242,11 +249,12 @@ building_intel_ronler_acres = {
 
 # --- Microsoft ---
 building_microsoft_redmond_campus = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_microsoft.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -276,11 +284,12 @@ building_microsoft_redmond_campus = {
 
 # --- Apple ---
 building_apple_park = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_apple.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -310,11 +319,12 @@ building_apple_park = {
 
 # --- TSMC ---
 building_tsmc_fab_18 = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/taiwanese_tsmc.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -344,11 +354,12 @@ building_tsmc_fab_18 = {
 
 # --- Huawei ---
 building_huawei_ox_horn_campus = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_huawei.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -378,11 +389,12 @@ building_huawei_ox_horn_campus = {
 
 # --- Amazon ---
 building_amazon_fulfillment_center = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_amazon.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -412,11 +424,12 @@ building_amazon_fulfillment_center = {
 
 # --- Nvidia ---
 building_nvidia_endeavor_campus = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_nvidia.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -446,11 +459,12 @@ building_nvidia_endeavor_campus = {
 
 # --- Google (Alphabet) ---
 building_googleplex = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_google.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -480,11 +494,12 @@ building_googleplex = {
 
 # --- Netflix ---
 building_netflix_animation_studios = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_netflix.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -514,11 +529,12 @@ building_netflix_animation_studios = {
 
 # --- SpaceX ---
 building_spacex_starbase = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_spacex.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -548,11 +564,12 @@ building_spacex_starbase = {
 
 # --- ByteDance ---
 building_bytedance_data_fortress = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_bytedance.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -582,11 +599,12 @@ building_bytedance_data_fortress = {
 
 # --- OpenAI ---
 building_openai_research_lab = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_openai.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -616,11 +634,12 @@ building_openai_research_lab = {
 
 # --- CATL ---
 building_catl_gigafactory = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_catl.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -650,11 +669,12 @@ building_catl_gigafactory = {
 
 # --- Boston Dynamics ---
 building_boston_dynamics_ai_institute = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_boston_dynamics.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -684,11 +704,12 @@ building_boston_dynamics_ai_institute = {
 
 # --- ASML ---
 building_asml_veldhoven_campus = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/dutch_asml.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -718,11 +739,12 @@ building_asml_veldhoven_campus = {
 
 # --- Lockheed Martin ---
 building_lockheed_skunk_works = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_lockheed_martin.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -752,11 +774,12 @@ building_lockheed_skunk_works = {
 
 # --- BAE Systems ---
 building_bae_samlesbury_aerodrome = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/gb_bae_systems.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -786,11 +809,12 @@ building_bae_samlesbury_aerodrome = {
 
 # --- Roscosmos ---
 building_roscosmos_vostochny_cosmodrome = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_roscosmos.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -820,11 +844,12 @@ building_roscosmos_vostochny_cosmodrome = {
 
 # --- Airbus ---
 building_airbus_lagardere_plant = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/eu_airbus.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -854,11 +879,12 @@ building_airbus_lagardere_plant = {
 
 # --- Dassault Aviation ---
 building_dassault_merignac_plant = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/french_dassault.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -888,11 +914,12 @@ building_dassault_merignac_plant = {
 
 # --- Hyundai ---
 building_hyundai_ulsan_factory = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/korean_hyundai.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -922,11 +949,12 @@ building_hyundai_ulsan_factory = {
 
 # --- SAP ---
 building_sap_headquarters = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/german_sap.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -956,11 +984,12 @@ building_sap_headquarters = {
 
 # --- Tencent ---
 building_tencent_seafront_towers = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_tencent.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -990,11 +1019,12 @@ building_tencent_seafront_towers = {
 
 # --- Alibaba ---
 building_alibaba_cainiao_park = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_alibaba.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1024,11 +1054,12 @@ building_alibaba_cainiao_park = {
 
 # --- Nintendo ---
 building_nintendo_development_center = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_nintendo.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1058,11 +1089,12 @@ building_nintendo_development_center = {
 
 # --- Gazprom ---
 building_gazprom_lakhta_center = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_gazprom.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1092,11 +1124,12 @@ building_gazprom_lakhta_center = {
 
 # --- Saudi Aramco ---
 building_saudi_aramco_abqaiq_plant = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/saudi_aramco.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1126,11 +1159,12 @@ building_saudi_aramco_abqaiq_plant = {
 
 # --- Petrobras ---
 building_petrobras_cenpes_center = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/brazilian_petrobras.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1160,11 +1194,12 @@ building_petrobras_cenpes_center = {
 
 # --- Rosatom ---
 building_rosatom_mayak_association = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_rosatom.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1194,11 +1229,12 @@ building_rosatom_mayak_association = {
 
 # --- Oracle ---
 building_oracle_cloud_data_center = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_oracle.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1228,11 +1264,12 @@ building_oracle_cloud_data_center = {
 
 # --- SoftBank ---
 building_softbank_vision_fund_hq = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_softbank.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1262,11 +1299,12 @@ building_softbank_vision_fund_hq = {
 
 # --- Roche ---
 building_roche_tower = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/swiss_roche.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1296,11 +1334,12 @@ building_roche_tower = {
 
 # --- Pfizer ---
 building_pfizer_rd_campus = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_pfizer.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1330,11 +1369,12 @@ building_pfizer_rd_campus = {
 
 # --- Vale ---
 building_vale_carajas_mine = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/brazilian_vale.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1364,11 +1404,12 @@ building_vale_carajas_mine = {
 
 # --- The Walt Disney Company ---
 building_disney_world = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_disney.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1398,11 +1439,12 @@ building_disney_world = {
 
 # --- Universal ---
 building_universal_studios_hollywood = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/eu_universal_music.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1432,11 +1474,12 @@ building_universal_studios_hollywood = {
 
 # --- Verizon ---
 building_verizon_building = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/american_verizon.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1466,11 +1509,12 @@ building_verizon_building = {
 
 # --- Reliance Industries ---
 building_reliance_jamnagar_refinery = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_reliance.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1500,11 +1544,12 @@ building_reliance_jamnagar_refinery = {
 
 # --- FANUC ---
 building_fanuc_forest = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_fanuc.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1534,11 +1579,12 @@ building_fanuc_forest = {
 
 # --- ENI ---
 building_eni_palazzo = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/italian_eni.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1568,11 +1614,12 @@ building_eni_palazzo = {
 
 # --- Ferrari ---
 building_ferrari_maranello_factory = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/italian_ferrari.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1602,11 +1649,12 @@ building_ferrari_maranello_factory = {
 
 # --- BlackBerry (Research In Motion) ---
 building_blackberry_rim_campus = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/canadian_blackberry.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1636,11 +1684,12 @@ building_blackberry_rim_campus = {
 
 # --- Shopify ---
 building_shopify_fulfillment_hub = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/canadian_shopify.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1673,11 +1722,12 @@ building_shopify_fulfillment_hub = {
 
 # --- BHP Group ---
 building_bhp_mount_whaleback_mine = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/australian_bhp.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1707,11 +1757,12 @@ building_bhp_mount_whaleback_mine = {
 
 # --- Cochlear ---
 building_cochlear_global_hq = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/australian_cochlear.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1743,11 +1794,12 @@ building_cochlear_global_hq = {
 
 # --- Infosys ---
 building_infosys_mysore_campus = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_infosys.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1777,11 +1829,12 @@ building_infosys_mysore_campus = {
 
 # --- JSW Steel ---
 building_jsw_vijayanagar_works = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_jsw_steel.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1815,11 +1868,12 @@ building_jsw_vijayanagar_works = {
 
 # --- Central Research & Development Complex ---
 building_generic_rd_complex = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1851,11 +1905,12 @@ building_generic_rd_complex = {
 
 # --- National Logistics Hub ---
 building_generic_logistics_hub = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1887,11 +1942,12 @@ building_generic_logistics_hub = {
 
 # --- Corporate Headquarters Skyscraper ---
 building_generic_hq_skyscraper = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1923,11 +1979,12 @@ building_generic_hq_skyscraper = {
 
 # --- Specialized Industrial Zone ---
 building_generic_industrial_zone = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1959,11 +2016,12 @@ building_generic_industrial_zone = {
 
 # --- Mega-Factory Complex ---
 building_generic_mega_factory = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1979,11 +2037,12 @@ building_generic_mega_factory = {
 
 # --- National Exhibition Centre ---
 building_generic_exhibition_centre = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -1999,11 +2058,12 @@ building_generic_exhibition_centre = {
 
 # --- Global Shipping Terminal ---
 building_generic_shipping_terminal = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = port
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2019,11 +2079,12 @@ building_generic_shipping_terminal = {
 
 # --- Advanced Materials Laboratory ---
 building_generic_materials_lab = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2055,11 +2116,12 @@ building_generic_materials_lab = {
 
 # --- Automation & Robotics Institute ---
 building_generic_robotics_institute = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2091,11 +2153,12 @@ building_generic_robotics_institute = {
 
 # --- Corporate University ---
 building_generic_corporate_university = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2111,11 +2174,12 @@ building_generic_corporate_university = {
 
 # --- National Data Fortress ---
 building_generic_data_fortress = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2147,11 +2211,12 @@ building_generic_data_fortress = {
 
 # --- Private Industrial City ---
 building_generic_industrial_city = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2167,11 +2232,12 @@ building_generic_industrial_city = {
 
 # --- Global Media Headquarters ---
 building_generic_media_hq = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2203,11 +2269,12 @@ building_generic_media_hq = {
 
 # --- High-Efficiency Power Hub ---
 building_generic_power_hub = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2239,11 +2306,12 @@ building_generic_power_hub = {
 
 # --- Cross-Continental Pipeline Terminus ---
 building_generic_pipeline_terminus = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2259,11 +2327,12 @@ building_generic_pipeline_terminus = {
 
 # --- Intercontinental Rail Nexus ---
 building_generic_rail_nexus = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2279,11 +2348,12 @@ building_generic_rail_nexus = {
 
 # --- Strategic Proving Grounds ---
 building_generic_proving_grounds = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2315,11 +2385,12 @@ building_generic_proving_grounds = {
 
 # --- National Resource Depository ---
 building_generic_resource_depository = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2351,11 +2422,12 @@ building_generic_resource_depository = {
 
 # --- International Financial Center ---
 building_generic_financial_center = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2371,11 +2443,12 @@ building_generic_financial_center = {
 
 # --- Monument to Industry ---
 building_generic_monument_to_industry = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -2391,11 +2464,12 @@ building_generic_monument_to_industry = {
 
 # --- National Spaceport ---
 building_generic_spaceport = {
-    building_group = bg_private_infrastructure
+    building_group = bg_company_buildings
     icon = "gfx/interface/icons/building_icons/skyscraper.dds"
     expandable = no
     downsizeable = no
     has_max_level = yes
+    unique = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {

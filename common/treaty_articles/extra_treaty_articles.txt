@@ -1068,6 +1068,12 @@ intelligence_sharing_pact = {
     relations_progress_per_day = 1.0
     relations_improvement_max = 60
 
+	usage_limit = once_per_treaty
+
+	mutual_exclusions = {
+		intelligence_sharing_pact
+	}
+
     icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 
     flags = {
@@ -1169,6 +1175,12 @@ joint_military_exercises = {
     # The act of training together builds trust and improves relations.
     relations_progress_per_day = 0.5
     relations_improvement_max = 30
+
+	usage_limit = once_per_treaty
+
+	mutual_exclusions = {
+		joint_military_exercises
+	}
 
     icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 

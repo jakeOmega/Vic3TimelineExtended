@@ -8,6 +8,7 @@
 	MIN_CONSTRUCTION_EFFICIENCY = 0.25
 	COMPANY_PROSPERITY_EMPLOYED_LEVELS_MAX = 75					# Max target prosperity from fully employed building levels
 	COMPANY_ON_ESTABLISH_COOLDOWN_MONTHS = 12
+	COMPANY_MONOPOLY_COOLDOWN_MONTHS = 6				# Cooldown in months after establishing a companies monopoly before you can revoke its monopoly
 }
 
 NPolitics = {

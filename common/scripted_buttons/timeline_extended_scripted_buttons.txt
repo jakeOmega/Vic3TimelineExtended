@@ -322,8 +322,7 @@ cb_emergency_liquidity_program = {
         add_modifier = { name = banking_emergency_liquidity_program days = 365 }
         # Big shock absorber
         change_variable = { name = finance_cycle_value add = 20 }        # jump out of panic quickly
-        change_variable = { name = finance_cycle_momentum add = 1 }
-        change_variable = { name = bubble_pressure add = 10 }
+        change_variable = { name = bubble_pressure add = 20 }
     }
 }
 

@@ -115,7 +115,7 @@ institution_ministry_of_science = {
 	icon = "gfx/interface/icons/institution_icons/schools.dds"
 	background_texture = "gfx/interface/illustrations/institutions/schools.dds"
 	modifier = {
-		country_academics_pol_str_mult = 0.1
+		country_academics_pol_str_mult = 0.05
 		country_tech_research_speed_mult = 0.05
 	}
 }
