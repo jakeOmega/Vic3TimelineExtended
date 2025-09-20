@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from mod_state import ModState
-from path_constants import base_game_path, mod_path
+from path_constants import base_game_path, mod_path, doc_path
 
 base_game_paths = {
     "Building Groups": base_game_path + r"\game\common\building_groups",
@@ -33,7 +33,7 @@ base_game_paths = {
     "Modifiers": base_game_path + r"\game\common\static_modifiers",
     # "On Actions": base_game_path + r"\game\common\on_actions",
     "Pop Needs": base_game_path + r"\game\common\pop_needs",
-    # "Script Values": base_game_path + r"\game\common\script_values",
+    #"Script Values": base_game_path + r"\game\common\script_values",
     # "Scripted Effects": base_game_path + r"\game\common\scripted_effects",
     "Subject Types": base_game_path + r"\game\common\subject_types",
 }
@@ -67,7 +67,7 @@ mod_paths = {
     "Modifiers": mod_path + r"\common\static_modifiers",
     # "On Actions": mod_path + r"\common\on_actions",
     "Pop Needs": mod_path + r"\common\pop_needs",
-    # "Script Values": mod_path + r"\common\script_values",
+    #"Script Values": mod_path + r"\common\script_values",
     # "Scripted Effects": mod_path + r"\common\scripted_effects",
     "Subject Types": mod_path + r"\common\subject_types",
 }
@@ -76,7 +76,7 @@ mod_state = ModState(base_game_paths, mod_paths)
 mod_state.add_localization(base_game_path + r"\game\localization\english")
 mod_state.add_localization(mod_path + r"\localization\english")
 mod_state.add_localization(mod_path + r"\localization\english\replace")
-doc_path = r"C:\Users\jakef\Documents\Old Victoria 3"
+
 
 laws_path = doc_path + r"\laws.txt"
 laws_output = ""
@@ -158,6 +158,13 @@ for era in range(1, 13):
         if description is not None:
             tech_output += f" - {description}"
         tech_output += "\n"
+        tech_requirement = tech[tech_id][1].get("unlocking_technologies", None)
+        if tech_requirement:
+            tech_requirement_ids = tech_requirement[1]
+            if tech_requirement_ids:
+                tech_output += f"\t\tUnlocking Technologies:\n"
+                for unlocking_tech_ids in tech_requirement_ids:
+                    tech_output += f"\t\t\t{mod_state.localize(unlocking_tech_ids)}\n"
 
 with open(tech_path, "w", encoding="utf-8") as f:
     f.write(tech_output)
@@ -170,6 +177,10 @@ production_methods = mod_state.get_data("PMs")
 for building_id, data in buildings_data.items():
     pm_groups = data[1].get("production_method_groups", ["", []])[1]
     building_output += f"{mod_state.localize(building_id)}:\n"
+    tech_requirement = data[1].get("unlocking_technologies", None)
+    if tech_requirement:
+        tech_name = mod_state.localize(tech_requirement[1][0])
+        building_output += f"\tUnlocking Technology: {tech_name}\n"    
     for pmg in pm_groups:
         if pmg not in pmg_groups.keys():
             building_output += f"Building {mod_state.localize(building_id)} references missing PM Group {mod_state.localize(pmg)}\n"
@@ -181,6 +192,18 @@ for building_id, data in buildings_data.items():
                 building_output += f"Building {mod_state.localize(building_id)} references missing PM {mod_state.localize(pm)}\n"
                 continue
             building_output += f"\t\t{mod_state.localize(pm)}\n"
+            pm_data = production_methods[pm][1]
+            # TODO: Why is it sometimes a list??
+            if isinstance(pm_data, list):
+                pm_data_flat = {}
+                for e in pm_data:
+                    pm_data_flat.update(e)
+                pm_data = pm_data_flat
+            tech_requirement = pm_data.get("unlocking_technologies", None)
+            if tech_requirement:
+                if tech_requirement[1]:
+                    tech_name = mod_state.localize(tech_requirement[1][0])
+                    building_output += f"\t\t\tUnlocking Technology: {tech_name}\n"  
     building_output += "\n"
 
 with open(building_path, "w", encoding="utf-8") as f:
@@ -194,6 +217,42 @@ for good_id, _ in goods.items():
 
 with open(goods_path, "w", encoding="utf-8") as f:
     f.write(goods_output)
+
+
+combat_units_path = doc_path + r"\combat_units.txt"
+combat_units_output = ""
+combat_unit_groups = mod_state.get_data("Combat Unit Groups")
+combat_unit_types = mod_state.get_data("Combat Unit Types")
+
+combat_unit_dict = defaultdict(list)
+for type, data in combat_unit_types.items():
+    group_data = data[1]
+    if isinstance(group_data, list):
+        group_data_flat = {}
+        for e in group_data:
+            group_data_flat.update(e)
+        group_data = group_data_flat
+    group = group_data.get("group")[1]
+    combat_unit_dict[group] += [type]
+
+for group in combat_unit_groups.keys():
+    combat_units_output += f"{mod_state.localize(group)}:\n"
+    for type in combat_unit_dict[group]:
+        combat_units_output += f"\t{mod_state.localize(type)}\n"
+        unit_data = combat_unit_types[type][1]
+        if isinstance(unit_data, list):
+            unit_data_flat = {}
+            for e in unit_data:
+                unit_data_flat.update(e)
+            unit_data = unit_data_flat
+        tech_requirement = unit_data.get("unlocking_technologies", None)
+        if tech_requirement:
+                if tech_requirement[1]:
+                    tech_name = mod_state.localize(tech_requirement[1][0])
+                    combat_units_output += f"\t\tUnlocking Technology: {tech_name}\n"
+
+with open(combat_units_path, "w", encoding="utf-8") as f:
+    f.write(combat_units_output)
 
 # Updating and writing back to a file
 # buildings_data['new_building'] = {...}

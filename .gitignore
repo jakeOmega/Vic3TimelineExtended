@@ -1,3 +1,6 @@
 
 path_constants.py
 *.pyc
+*.pyc
+path_constants.py
+/__pycache__
