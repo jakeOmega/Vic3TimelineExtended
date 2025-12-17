@@ -275,6 +275,7 @@ environmental_movement = {
 	modifier = {
 		country_institution_ministry_of_the_environment_max_investment_add = 2
 		state_building_national_park_max_level_add = 1
+		country_voting_power_mult = 0.1
 	}
 	
 	unlocking_technologies = {	
@@ -386,6 +387,7 @@ cellular_networks = {
 		country_institution_national_bank_max_investment_add = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
 		country_institution_ministry_of_commerce_max_investment_add = 1
+		country_voting_power_mult = 0.1
 	}
 	
 	ai_weight = {
@@ -430,7 +432,7 @@ precision_guided_munitions = {
 	modifier = {
 		state_building_naval_base_max_level_add = 20
 		country_weekly_innovation_max_add = 50
-		state_building_barracks_max_level_add = 50
+		state_building_barrack_max_level_add = 50
 	}
 	
 	ai_weight = {

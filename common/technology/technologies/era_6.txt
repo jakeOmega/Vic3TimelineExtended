@@ -186,7 +186,7 @@ combined_arms = {
 
 	modifier = {
 		country_institution_ministry_of_war_max_investment_add = 1
-		state_building_barracks_max_level_add = 50
+		state_building_barrack_max_level_add = 50
 	}
 	
 	ai_weight = {
@@ -413,6 +413,7 @@ mass_media = {
 		country_company_throughput_bonus_add = 0.05
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_free_charters_add = 1
+		country_voting_power_mult = 0.1
 	}
 	
 	ai_weight = {
@@ -426,7 +427,7 @@ animation = {
 	category = society
 	
 	modifier = {
-		building_arts_academy_throughput_add = 0.25
+		building_art_academy_throughput_add = 0.25
 		state_max_trade_advantage_from_capacity_add = 0.05
 	}
 	
@@ -448,6 +449,7 @@ rural_electrification = {
 		state_infrastructure_from_population_max_add = 100
 		state_expected_sol_from_literacy = 1
 		building_power_plant_throughput_add = 0.25
+		country_voting_power_mult = 0.1
 	}
 	
 	unlocking_technologies = {	
@@ -642,7 +644,7 @@ public_works_programs = {
 		country_weekly_innovation_max_add = 10
 		country_institution_schools_max_investment_add = 1
 		state_education_access_add = -0.1
-		state_building_barracks_max_level_add = 50
+		state_building_barrack_max_level_add = 50
 	}
 	
 	unlocking_technologies = {	

@@ -233,7 +233,7 @@ principle_vassalization_5 = {
 
 ### RESEARCH CONGLOMERATE
 
-principle_advanced_research_1 = {
+REPLACE:principle_advanced_research_1 = {
 	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
@@ -262,7 +262,7 @@ principle_advanced_research_1 = {
 	}
 }
 
-principle_advanced_research_2 = {
+REPLACE:principle_advanced_research_2 = {
 	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 	
@@ -280,7 +280,7 @@ principle_advanced_research_2 = {
 	}
 }
 
-principle_advanced_research_3 = {
+REPLACE:principle_advanced_research_3 = {
 	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
@@ -782,8 +782,8 @@ principle_military_industry_4 = {
 	member_modifier = {
 		building_automotive_industry_throughput_add = 0.15
 		building_arms_industry_throughput_add = 0.15
-		building_artillery_foundries_throughput_add = 0.15
-		building_military_shipyards_throughput_add = 0.15
+		building_artillery_foundry_throughput_add = 0.15
+		building_military_shipyard_throughput_add = 0.15
 		country_military_goods_cost_mult = -0.15
 		character_supply_route_cost_mult = -0.33
 		building_mobilization_cost_mult = -0.1
@@ -806,8 +806,8 @@ principle_military_industry_5 = {
 		# Modifiers from previous level(s)
 		building_automotive_industry_throughput_add = 0.25
 		building_arms_industry_throughput_add = 0.25
-		building_artillery_foundries_throughput_add = 0.25
-		building_military_shipyards_throughput_add = 0.25
+		building_artillery_foundry_throughput_add = 0.25
+		building_military_shipyard_throughput_add = 0.25
 		country_military_goods_cost_mult = -0.25
 		character_supply_route_cost_mult = -0.5
 		building_mobilization_cost_mult = -0.1
@@ -897,7 +897,7 @@ principle_colonial_offices_5 = {
 
 ### Foreign Investment
 
-principle_foreign_investment_1 = {
+REPLACE:principle_foreign_investment_1 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
@@ -929,7 +929,7 @@ principle_foreign_investment_1 = {
 	}
 }
 
-principle_foreign_investment_2 = {
+REPLACE:principle_foreign_investment_2 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
@@ -945,7 +945,7 @@ principle_foreign_investment_2 = {
 	}
 }
 
-principle_foreign_investment_3 = {
+REPLACE:principle_foreign_investment_3 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 	
@@ -1302,7 +1302,7 @@ principle_exploit_members_5 = {
 
 ### Sacred Civics
 
-principle_sacred_civics_1 = {
+REPLACE:principle_sacred_civics_1 = {
 	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
@@ -1313,7 +1313,7 @@ principle_sacred_civics_1 = {
 	ai_weight = -1000
 }
 
-principle_sacred_civics_2 = {
+REPLACE:principle_sacred_civics_2 = {
 	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 	
@@ -1322,7 +1322,7 @@ principle_sacred_civics_2 = {
 	}
 }
 
-principle_sacred_civics_3 = {
+REPLACE:principle_sacred_civics_3 = {
 	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
@@ -1497,7 +1497,7 @@ principle_ideological_truth_4 = {
 		interest_group_in_opposition_agitator_popularity_add = -33
 		country_bolster_cost_mult = -0.25
 		country_suppression_cost_mult = -0.25		
-		country_party_whip_impact_mult = 0.2
+		country_party_whip_impact_add = 0.2
 		country_legitimacy_min_add = 25		
 		country_enactment_success_chance_law_ministry_of_propaganda_add = 0.1
 		country_institution_cost_institution_ministry_of_propaganda_mult = -0.5
@@ -1527,7 +1527,7 @@ principle_ideological_truth_5 = {
 		interest_group_in_opposition_agitator_popularity_add = -33
 		country_bolster_cost_mult = -0.25
 		country_suppression_cost_mult = -0.25		
-		country_party_whip_impact_mult = 0.2
+		country_party_whip_impact_add = 0.2
 		country_legitimacy_min_add = 25		
 		country_enactment_success_chance_law_ministry_of_propaganda_add = 0.2
 		country_institution_cost_institution_ministry_of_propaganda_mult = -0.5
@@ -1553,6 +1553,10 @@ principle_cultural_unity_1 = {
 	
 	visible = {
 		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		state_assimilation_mult = 0.1
 	}
 
 	leader_modifier = {
@@ -1591,6 +1595,10 @@ principle_cultural_unity_2 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	member_modifier = {
+		state_assimilation_mult = 0.2
+	}
+
 	leader_modifier = {
 		# Modifiers from previous level(s)
 		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
@@ -1616,6 +1624,7 @@ principle_cultural_unity_3 = {
 		country_wage_violent_hostility_mult = -0.2
 		country_wage_cultural_erasure_mult = -0.2
 		country_wage_open_prejudice_mult = -0.2
+		state_assimilation_mult = 0.3
 	}
 
 	leader_modifier = {
@@ -1647,6 +1656,7 @@ principle_cultural_unity_4 = {
 		country_wage_violent_hostility_mult = -0.2
 		country_wage_cultural_erasure_mult = -0.2
 		country_wage_open_prejudice_mult = -0.2
+		state_assimilation_mult = 0.4
 
 		country_institution_cost_institution_ministry_of_culture_mult = -0.25
 	}
@@ -1665,7 +1675,8 @@ principle_cultural_unity_4 = {
 	institution = institution_ministry_of_culture
 	institution_modifier = {
 		country_loyalism_increases_full_acceptance_mult = 0.05
-		country_standard_of_living_full_acceptance_add = 0.5
+		state_assimilation_mult = 0.1
+		country_standard_of_living_full_acceptance_add = 0.25
 	}
 
 	ai_weight = {
@@ -1687,6 +1698,7 @@ principle_cultural_unity_5 = {
 		country_wage_violent_hostility_mult = -0.2
 		country_wage_cultural_erasure_mult = -0.2
 		country_wage_open_prejudice_mult = -0.2
+		state_assimilation_mult = 0.5
 		country_institution_cost_institution_ministry_of_culture_mult = -0.25
 	}
 
@@ -1705,6 +1717,7 @@ principle_cultural_unity_5 = {
 	institution = institution_ministry_of_culture
 	institution_modifier = {
 		country_loyalism_increases_full_acceptance_mult = 0.05
+		state_assimilation_mult = 0.2
 		country_standard_of_living_full_acceptance_add = 0.5
 	}
 
@@ -1836,8 +1849,7 @@ principle_cultural_plurality_4 = {
 	institution = institution_ministry_of_culture
 	institution_modifier = {
 		# less racist
-		country_acceptance_shared_cultural_trait_add = 1
-		country_acceptance_culture_base_add = 1
+		country_acceptance_no_shared_heritage_trait_add = 1
 	}
 
 	ai_weight = {
@@ -1870,8 +1882,7 @@ principle_cultural_plurality_5 = {
 	institution = institution_ministry_of_culture
 	institution_modifier = {
 		# less racist
-		country_acceptance_shared_cultural_trait_add = 1
-		country_acceptance_culture_base_add = 1
+		country_acceptance_no_shared_heritage_trait_add = 1
 		state_yearly_cultural_acceptance_add = 0.1
 	}
 
@@ -3472,7 +3483,7 @@ principle_military_training_4 = {
 		military_formation_mobilization_speed_mult = 0.25
 
 		state_building_conscription_center_max_level_add = 50
-		state_building_barracks_max_level_add = 50
+		state_building_barrack_max_level_add = 50
 	}
 
 	ai_weight = {
@@ -3496,7 +3507,7 @@ principle_military_training_5 = {
 		unit_army_experience_gain_add = 1
 		military_formation_mobilization_speed_mult = 0.25
 		state_building_conscription_center_max_level_add = 100
-		state_building_barracks_max_level_add = 100
+		state_building_barrack_max_level_add = 100
 	}
 
 	ai_weight = {
@@ -3577,7 +3588,6 @@ principle_engineering_and_logistics_3 = {
 		character_battle_condition_charted_terrain_mult = 0.2
 		character_battle_condition_dug_in_mult = 0.5
 
-		unit_convoy_requirements_mult = -0.25
 		unit_convoy_defense_mult = 0.5
 		unit_convoy_raiding_interception_mult = 0.5
 	}
@@ -3600,7 +3610,6 @@ principle_engineering_and_logistics_4 = {
 		character_battle_condition_broken_supply_line_mult = -0.2
 		character_battle_condition_charted_terrain_mult = 0.2
 		character_battle_condition_dug_in_mult = 0.5
-		unit_convoy_requirements_mult = -0.25
 
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
@@ -3627,7 +3636,6 @@ principle_engineering_and_logistics_5 = {
 		character_battle_condition_broken_supply_line_mult = -0.2
 		character_battle_condition_charted_terrain_mult = 0.2
 		character_battle_condition_dug_in_mult = 0.5
-		unit_convoy_requirements_mult = -0.25
 		state_building_airport_max_level_add = 2
 		state_building_highway_max_level_add = 2
 		unit_convoy_defense_mult = 1

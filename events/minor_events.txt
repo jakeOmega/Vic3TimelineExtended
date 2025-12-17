@@ -270,3 +270,28 @@ minor_events_timelineextended.5 = {
         }
     }
 }
+
+minor_events_timelineextended.6 = {
+    type = country_event
+    hidden = yes
+
+    immediate = {
+        every_scope_state = {
+            owner = {
+                random_primary_culture = {
+                    save_scope_as = primary_culture
+                }
+            }
+            random_scope_pop = {
+                change_pop_culture = {
+                    target = scope:primary_culture
+                    value = {
+                        value = 1000
+                        divide = total_size
+                        max = 0.5
+                    }
+                }
+            }
+        }
+    }
+}

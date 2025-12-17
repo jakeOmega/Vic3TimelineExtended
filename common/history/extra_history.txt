@@ -6,6 +6,20 @@ GLOBAL = {
 		activate_law = law_type:law_minimal_privacy_protection
 		activate_law = law_type:law_traditional_rules_of_war
 		activate_law = law_type:law_informal_government_secrecy
+		activate_law = law_type:law_guilds_chartered_monopolies
+		activate_law = law_type:law_local_vernacular
+		if = {
+			limit = {
+				NOT = { has_law = law_type:law_guild_system }
+			}
+			activate_law = law_type:law_freedom_of_contract
+		}
+		if = {
+			limit = {
+				country_has_primary_culture = cu:north_german
+			}
+			activate_law = law_type:law_civic_monolingualism
+		}
 		if = {
 			limit = { has_law = law_type:law_migration_controls }
 			set_institution_investment_level = {
@@ -63,6 +77,7 @@ GLOBAL = {
 	}
 	c:SWI = { # Switzerland
 		activate_law = law_type:law_federal_system
+		activate_law = law_type:law_multilingual_federalism
 	}
 	c:MEX = { # Mexico
 		activate_law = law_type:law_federal_system
@@ -120,6 +135,7 @@ GLOBAL = {
 	}
 	c:SER = { # Serbia
 		activate_law = law_type:law_feudal_contracts
+		activate_law = law_type:law_state_led_language_reform
 	}
 	c:WAL = { # Wallachia
 		activate_law = law_type:law_feudal_contracts
@@ -132,6 +148,12 @@ GLOBAL = {
 	}
 	c:NET = { # Netherlands
 		activate_law = law_type:law_universal_banking_light_prudence
+	}
+	c:DEN = { # Denmark
+		activate_law = law_type:law_civic_monolingualism
+	}
+	c:GRE = { # Greece
+		activate_law = law_type:law_state_led_language_reform
 	}
 	every_country = {
 		limit = {

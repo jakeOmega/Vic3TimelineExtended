@@ -598,7 +598,7 @@ types military_formation_panel_types
 		
 		
 		blockoverride "edit_visibility" {
-			visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+			visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 		}
 		
 		blockoverride "edit_tooltip" {
@@ -611,7 +611,7 @@ types military_formation_panel_types
 		}
 
 		blockoverride "top_left_button_visibility" {
-			visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+			visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 		}
 		
 		blockoverride "top_left_button_tooltip" {
@@ -1110,7 +1110,7 @@ types military_formation_panel_types
 		### If not Player and no commanders - Show empty state
 		empty_state = {
 			blockoverride "visible" {
-				visible = "[And(IsDataModelEmpty(MilitaryFormation.GetCommanders), Not(MilitaryFormation.GetCountry.IsPlayer))]"
+				visible = "[And(IsDataModelEmpty(MilitaryFormation.GetCommanders), Not(MilitaryFormation.GetCountry.IsLocalPlayer))]"
 			}
 			blockoverride "text" {
 				text = "NO_COMMANDERS_IN_MILITARY_FORMATION"
@@ -1119,7 +1119,7 @@ types military_formation_panel_types
 
 		### If not Player - Only show commanders
 		dynamicgridbox = {
-			visible = "[And( Not(MilitaryFormation.GetCountry.IsPlayer), Not(IsDataModelEmpty(MilitaryFormation.GetCommanders)))]"
+			visible = "[And( Not(MilitaryFormation.GetCountry.IsLocalPlayer), Not(IsDataModelEmpty(MilitaryFormation.GetCommanders)))]"
 			datamodel = "[MilitaryFormation.GetCommanders]"
 			parentanchor = hcenter
 			datamodel_wrap = "[GetDefine('NMilitary','MAX_NUM_COMMANDERS_PER_FORMATION')]"
@@ -1139,7 +1139,7 @@ types military_formation_panel_types
 
 		### If Player - Show commanders + extra slot
 		dynamicgridbox = {
-			visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+			visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 			datamodel = "[MilitaryFormation.GetCommandersWithRecruitableSlot]"
 			parentanchor = hcenter
 			datamodel_wrap = "[GetDefine('NMilitary','MAX_NUM_COMMANDERS_PER_FORMATION')]"
@@ -1161,7 +1161,7 @@ types military_formation_panel_types
 					### RECRUIT GENERAL
 					add_character_button = {
 						name = "tutorial_highlight_recruit_general"
-						visible = "[And(And(Not(Character.IsValid), MilitaryFormation.IsArmy), MilitaryFormation.GetCountry.IsPlayer)]"
+						visible = "[And(And(Not(Character.IsValid), MilitaryFormation.IsArmy), MilitaryFormation.GetCountry.IsLocalPlayer)]"
 						size = { 110 110 }
 						parentanchor = center
 						
@@ -1177,7 +1177,7 @@ types military_formation_panel_types
 					### RECRUIT ADMIRAL
 					add_character_button = {
 						name = "tutorial_highlight_recruit_admiral"
-						visible = "[And(And(Not(Character.IsValid), MilitaryFormation.IsFleet), MilitaryFormation.GetCountry.IsPlayer)]"
+						visible = "[And(And(Not(Character.IsValid), MilitaryFormation.IsFleet), MilitaryFormation.GetCountry.IsLocalPlayer)]"
 						size = { 110 110 }
 						parentanchor = center
 
@@ -1270,7 +1270,7 @@ types military_formation_panel_types
 		### UNIT RECRUITMENT
 		default_header = {
 			using = default_fade_in_out
-			visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+			visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 
 			blockoverride "text" {
 				text = "MILITARY_FORMATION_UNITS_RECRUITMENT"
@@ -1278,7 +1278,7 @@ types military_formation_panel_types
 		}
 
 		dynamicgridbox = {
-			visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+			visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 			parentanchor = hcenter
 			flipdirection = yes
 			datamodel = "[MilitaryFormation.GetEligibleGroups]"
@@ -1407,7 +1407,7 @@ types military_formation_panel_types
 			tooltip = "CHANGE_NEXT_COMMANDER_ORDER_TOOLTIP"
 
 			block "next_order_visibility" {
-				visible = "[And(MilitaryFormation.GetCountry.IsPlayer, Character.GetNextOrderType.IsValid)]"
+				visible = "[And(MilitaryFormation.GetCountry.IsLocalPlayer, Character.GetNextOrderType.IsValid)]"
 			}
 
 			blockoverride "size" {
@@ -1432,7 +1432,7 @@ types military_formation_panel_types
 			tooltip = "CHANGE_COMMANDER_ORDER_TOOLTIP"
 
 			block "current_order_visibility" {
-				visible = "[And(MilitaryFormation.GetCountry.IsPlayer, Not(Character.GetNextOrderType.IsValid))]"
+				visible = "[And(MilitaryFormation.GetCountry.IsLocalPlayer, Not(Character.GetNextOrderType.IsValid))]"
 			}
 
 			blockoverride "size" {
@@ -1470,6 +1470,21 @@ types military_formation_panel_types
 		commander_order_button = {
 			block "orders_visibility" {}
 		}
+
+
+
+		icon = {
+			block "warning_icon_properties" {
+				visible = no
+			}
+
+			parentanchor = bottom
+
+			position = { 14 0 }
+			size = { 25 25 }
+			using = look_at_me_animation
+			texture = "gfx/interface/icons/generic_icons/warning.dds"
+		}
 	}
 
 	type commander_order_button = widget {
@@ -1487,7 +1502,7 @@ types military_formation_panel_types
 			tooltip = "CHANGE_NEXT_COMMANDER_ORDER_TOOLTIP"
 
 			block "next_order_visibility" {
-				visible = "[And(Character.GetCountry.IsPlayer, Character.GetNextOrderType.IsValid)]"
+				visible = "[And(Character.GetCountry.IsLocalPlayer, Character.GetNextOrderType.IsValid)]"
 			}
 
 			blockoverride "size" {
@@ -1526,7 +1541,7 @@ types military_formation_panel_types
 			tooltip = "CHANGE_COMMANDER_ORDER_TOOLTIP"
 
 			block "current_order_visibility" {
-				visible = "[And(Character.GetCountry.IsPlayer, Not(Character.GetNextOrderType.IsValid))]"
+				visible = "[And(Character.GetCountry.IsLocalPlayer, Not(Character.GetNextOrderType.IsValid))]"
 			}
 
 			blockoverride "size" {
@@ -1561,14 +1576,14 @@ types military_formation_panel_types
 		}
 
 		icon = {
-			visible = "[Not(Character.GetCountry.IsPlayer)]"
+			visible = "[Not(Character.GetCountry.IsLocalPlayer)]"
 			size = { 100% 100% }
 			texture = "gfx/interface/backgrounds/round_button_bg.dds"
 			parentanchor = center
 		}
 
 		icon = {
-			visible = "[And( Not(Character.GetCountry.IsPlayer), Not(Character.GetNextOrderType.IsValid))]"
+			visible = "[And( Not(Character.GetCountry.IsLocalPlayer), Not(Character.GetNextOrderType.IsValid))]"
 			parentanchor = center
 			size = { 75% 75% }
 			tooltip = "COMMANDER_ORDER_TOOLTIP"
@@ -1590,7 +1605,7 @@ types military_formation_panel_types
 		}
 
 		icon = {
-			visible = "[And( Not(Character.GetCountry.IsPlayer), Character.GetNextOrderType.IsValid)]"
+			visible = "[And( Not(Character.GetCountry.IsLocalPlayer), Character.GetNextOrderType.IsValid)]"
 			parentanchor = center
 			size = { 75% 75% }
 			tooltip = "COMMANDER_NEXT_ORDER_TOOLTIP"
@@ -1609,17 +1624,6 @@ types military_formation_panel_types
 					size = { 20 20 }
 				}
 			}
-		}
-
-		icon = {
-			block "warning_icon_properties" {
-				visible = no
-			}
-
-			position = { -10 -10 }
-			size = { 25 25 }
-			using = look_at_me_animation
-			texture = "gfx/interface/icons/generic_icons/warning.dds"
 		}
 	}
 
@@ -1835,7 +1839,7 @@ types military_formation_panel_types
 
 			### REMOVE UNITS
 			button_icon_round_action = {
-				visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+				visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 				size = { 30 30 }
 				parentanchor = vcenter
 				tooltip = "MILITARY_FORMATION_REMOVE_UNIT_TOOLTIP"
@@ -1888,7 +1892,7 @@ types military_formation_panel_types
 			### RECRUIT UNITS
 			button_icon_round_map_interaction = {
 				name = "tutorial_highlight_recruit_unit"
-				visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+				visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 				size = { 30 30 }
 				parentanchor = vcenter
 				tooltip = "MILITARY_FORMATION_RECRUIT_DEFAULT_UNIT_TYPE_TOOLTIP"
@@ -1911,7 +1915,7 @@ types military_formation_panel_types
 
 			### REMOVE UNITS
 			button_icon_round_action = {
-				visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+				visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 				size = { 30 30 }
 				parentanchor = vcenter
 				tooltip = "MILITARY_FORMATION_REMOVE_CONSCRIPT_UNIT_TOOLTIP"
@@ -1964,7 +1968,7 @@ types military_formation_panel_types
 
 			### RECRUIT UNITS
 			button_icon_round_map_interaction = {
-				visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+				visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 				size = { 30 30 }
 				parentanchor = vcenter
 				tooltip = "MILITARY_FORMATION_RECRUIT_DEFAULT_UNIT_TYPE_CONSCRIPTS_TOOLTIP"
@@ -2285,7 +2289,7 @@ types military_formation_panel_types
 
 					### DEFAULT UNIT
 					unit_group_default_unit_button = {
-						visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+						visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 
 						block "text_max_width" {
 							max_width = 250
@@ -2298,7 +2302,7 @@ types military_formation_panel_types
 
 					### RECRUIT UNITS
 					button_icon_round_map_interaction = {
-						visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+						visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 						size = { 30 30 }
 						parentanchor = vcenter
 						onclick = "[MilitaryFormation.OnClickRecruitCombatUnit( MilitaryFormation.GetSelectedUnitTypeForGroup(CombatUnitGroup.Self) )]"
@@ -3274,7 +3278,7 @@ types military_formation_panel_types
 
 				### REMOVE UNITS
 				button_icon_round_action = {
-					visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+					visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 					size = { 23 23 }
 					parentanchor = vcenter
 					tooltip = "MILITARY_FORMATION_REMOVE_UNIT_TOOLTIP"
@@ -3315,7 +3319,7 @@ types military_formation_panel_types
 
 				### RECRUIT UNITS
 				button_icon_round_map_interaction = {
-					visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+					visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 					size = { 23 23 }
 					parentanchor = right
 					tooltip = "MILITARY_FORMATION_RECRUIT_UNIT_TOOLTIP"
@@ -3343,7 +3347,7 @@ types military_formation_panel_types
 
 				### REMOVE UNITS
 				button_icon_round_action = {
-					visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+					visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 					size = { 23 23 }
 					parentanchor = vcenter
 					tooltip = "MILITARY_FORMATION_REMOVE_CONSCRIPT_UNIT_TOOLTIP"
@@ -3371,7 +3375,7 @@ types military_formation_panel_types
 
 				### RECRUIT UNITS
 				button_icon_round_map_interaction = {
-					visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+					visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 					size = { 23 23 }
 					parentanchor = right
 					tooltip = "MILITARY_FORMATION_RECRUIT_CONSCRIPT_UNIT_TOOLTIP"
@@ -3497,7 +3501,7 @@ types military_formation_panel_types
 
 						### REMOVE UNITS
 						button_icon_round_action = {
-							visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+							visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 							size = { 30 30 }
 							parentanchor = vcenter
 							tooltip = "MILITARY_FORMATION_REMOVE_UNIT_TOOLTIP"
@@ -3544,7 +3548,7 @@ types military_formation_panel_types
 
 						### RECRUIT UNITS
 						button_icon_round_map_interaction = {
-							visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+							visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 							size = { 30 30 }
 							parentanchor = vcenter
 							tooltip = "MILITARY_FORMATION_RECRUIT_UNIT_TOOLTIP"
@@ -3559,7 +3563,7 @@ types military_formation_panel_types
 
 						### UPGRADE UNITS
 						button_icon_round_action = {
-							visible = "[And(MilitaryFormation.IsArmy, MilitaryFormation.GetCountry.IsPlayer)]"
+							visible = "[And(MilitaryFormation.IsArmy, MilitaryFormation.GetCountry.IsLocalPlayer)]"
 							clicksound = "event:/SFX/UI/Military/upgrade_battalion_in_formation"
 							blockoverride "icon_size" { size = { 75% 75% } }
 							parentanchor = vcenter
@@ -3581,7 +3585,7 @@ types military_formation_panel_types
 
 						### UPGRADE UNITS
 						button_icon_round_action = {
-							visible = "[And(MilitaryFormation.IsFleet, MilitaryFormation.GetCountry.IsPlayer)]"
+							visible = "[And(MilitaryFormation.IsFleet, MilitaryFormation.GetCountry.IsLocalPlayer)]"
 							clicksound = "event:/SFX/UI/Military/upgrade_flotilla_in_formation"
 							blockoverride "icon_size" { size = { 75% 75% } }
 							parentanchor = vcenter
@@ -3615,7 +3619,7 @@ types military_formation_panel_types
 
 						### REMOVE UNITS
 						button_icon_round_action = {
-							visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+							visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 							size = { 30 30 }
 							parentanchor = vcenter
 							tooltip = "MILITARY_FORMATION_REMOVE_CONSCRIPT_UNIT_TOOLTIP"
@@ -3668,7 +3672,7 @@ types military_formation_panel_types
 
 						### RECRUIT UNITS
 						button_icon_round_map_interaction = {
-							visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+							visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 							size = { 30 30 }
 							parentanchor = vcenter
 							tooltip = "MILITARY_FORMATION_RECRUIT_CONSCRIPT_UNIT_TOOLTIP"
@@ -3683,7 +3687,7 @@ types military_formation_panel_types
 
 						### UPGRADE UNITS
 						button_icon_round_action = {
-							visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+							visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 							clicksound = "event:/SFX/UI/Military/upgrade_conscripts"
 							blockoverride "icon_size" { size = { 75% 75% } }
 							parentanchor = vcenter
@@ -3780,7 +3784,7 @@ types military_formation_panel_types
 			parentanchor = vcenter
 
 			button = {
-				visible = "[MilitaryFormation.GetCountry.IsPlayer]"
+				visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 				onclick = "[PopupManager.ShowMilitaryFormationChangeName(MilitaryFormation.Self)]"
 				size = { 80 80 }
 			
@@ -3792,7 +3796,7 @@ types military_formation_panel_types
 			}
 
 			icon = {
-				visible = "[Not(MilitaryFormation.GetCountry.IsPlayer)]"
+				visible = "[Not(MilitaryFormation.GetCountry.IsLocalPlayer)]"
 				size = { 80 80 }
 				texture = "[MilitaryFormation.GetFlag]"
 				color = "[MilitaryFormation.GetFlagColor]"
@@ -4143,7 +4147,7 @@ types military_formation_panel_types
 		}
 			
 		flowcontainer = {
-			visible = "[And(MilitaryFormation.IsArmy, MilitaryFormation.GetCountry.IsPlayer)]"
+			visible = "[And(MilitaryFormation.IsArmy, MilitaryFormation.GetCountry.IsLocalPlayer)]"
 			parentanchor = hcenter
 
 			military_formation_mobilize_button = {
@@ -4275,7 +4279,7 @@ types military_formation_panel_types
 		}
 
 		flowcontainer = {
-			visible = "[And(MilitaryFormation.IsFleet, MilitaryFormation.GetCountry.IsPlayer)]"
+			visible = "[And(MilitaryFormation.IsFleet, MilitaryFormation.GetCountry.IsLocalPlayer)]"
 			spacing = 10
 			parentanchor = hcenter
 
@@ -4748,7 +4752,7 @@ types military_formation_panel_types
 			block "remove_unit" {
 				button_icon_round_action = {
 					size = { 23 23 }
-					visible = "[Country.IsPlayer]"
+					visible = "[Country.IsLocalPlayer]"
 					enabled = "[IsValid( CombatUnit.GetMilitaryFormation.GetDisbandUnitCommand( CombatUnit.Self ) )]"
 					onclick = "[Execute( CombatUnit.GetMilitaryFormation.GetDisbandUnitCommand( CombatUnit.Self ) )]"
 					tooltip = "DISBAND_COMBAT_UNIT"

@@ -70,6 +70,7 @@ smart_grids = {
 
 	modifier = {
 		state_bureaucracy_population_base_cost_factor_mult = 2
+		country_voting_power_mult = 0.2
 	}
 	
 	unlocking_technologies = {	
@@ -98,6 +99,7 @@ autonomous_vehicles = {
 		building_group_bg_trade_employee_mult = -0.1
 		country_institution_ministry_of_urban_planning_max_investment_add = 2
 		country_institution_ministry_of_commerce_max_investment_add = 1
+		country_voting_power_mult = 0.2
 	}
 	
 	ai_weight = {
@@ -200,7 +202,7 @@ swarm_technology = {
 
 	modifier = {
 		state_building_naval_base_max_level_add = 40
-		state_building_barracks_max_level_add = 100
+		state_building_barrack_max_level_add = 100
 	}
 	
 	ai_weight = {
@@ -244,7 +246,7 @@ bioenhanced_soldiers = {
 		unit_army_offense_mult = 0.1
 		unit_army_defense_mult = 0.1
 		country_institution_ministry_of_war_max_investment_add = 1
-		state_building_barracks_max_level_add = 100
+		state_building_barrack_max_level_add = 100
 	}
 	
 	ai_weight = {

@@ -520,12 +520,12 @@ pmg_generic_spaceport = {
 
 
 pmg_un_headquarters = {
-    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     ai_selection = most_productive
     production_methods = { pm_un_headquarters }
 }
 pmg_power_bloc_hq = {
-    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     ai_selection = most_productive
     production_methods = {
         pm_hq_sovereign_empire
@@ -538,27 +538,27 @@ pmg_power_bloc_hq = {
    }
 }
 pmg_wonder_golden_gate_bridge = {
-    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     ai_selection = most_productive
     production_methods = { pm_wonder_golden_gate_bridge }
 }
 pmg_wonder_empire_state_building = {
-    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     ai_selection = most_productive
     production_methods = { pm_wonder_empire_state_building }
 }
 pmg_wonder_sydney_opera_house = {
-    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     ai_selection = most_productive
     production_methods = { pm_wonder_sydney_opera_house }
 }
 pmg_wonder_cn_tower = {
-    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     ai_selection = most_productive
     production_methods = { pm_wonder_cn_tower }
 }
 pmg_wonder_burj_khalifa = {
-    texture = "gfx/interface/icons/production_method_icons/production_method_management.dds"
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     ai_selection = most_productive
     production_methods = { pm_wonder_burj_khalifa }
 }

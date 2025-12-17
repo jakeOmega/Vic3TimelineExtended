@@ -57,11 +57,11 @@ je_banking_cycle = {
         }
 
         first_valid = {
-            triggered_desc = { desc = banking_cycle_status_fast_downturn    trigger = { var:finance_cycle_momentum < -4 } }
-            triggered_desc = { desc = banking_cycle_status_slow_downturn    trigger = { var:finance_cycle_momentum >= -4 var:finance_cycle_momentum < -2 } }
-            triggered_desc = { desc = banking_cycle_status_neutral          trigger = { var:finance_cycle_momentum >= -2 var:finance_cycle_momentum < 2 } }
-            triggered_desc = { desc = banking_cycle_status_slow_expansion   trigger = { var:finance_cycle_momentum >= 2 var:finance_cycle_momentum < 4 } }
-            triggered_desc = { desc = banking_cycle_status_fast_expansion   trigger = { var:finance_cycle_momentum >= 4 } }
+            triggered_desc = { desc = banking_cycle_status_fast_downturn    trigger = { var:finance_cycle_momentum < -3 } }
+            triggered_desc = { desc = banking_cycle_status_slow_downturn    trigger = { var:finance_cycle_momentum >= -3 var:finance_cycle_momentum < -1 } }
+            triggered_desc = { desc = banking_cycle_status_neutral          trigger = { var:finance_cycle_momentum >= -1 var:finance_cycle_momentum < 1 } }
+            triggered_desc = { desc = banking_cycle_status_slow_expansion   trigger = { var:finance_cycle_momentum >= 1 var:finance_cycle_momentum < 3 } }
+            triggered_desc = { desc = banking_cycle_status_fast_expansion   trigger = { var:finance_cycle_momentum >= 3 } }
         }
 
         first_valid = {

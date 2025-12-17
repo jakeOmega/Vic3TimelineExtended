@@ -339,6 +339,7 @@ def extract_buy_packages(content):
         goods = {}
         for good in goods_data:
             good_name, amount = good.split(" = ")
+            amount = amount.split("#")[0].strip()  # Remove comments
             goods[good_name.strip()] = int(amount)
         buy_packages[wealth_level] = goods
     return buy_packages

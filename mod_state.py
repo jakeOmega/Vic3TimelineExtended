@@ -102,6 +102,9 @@ class ModState:
             else:
                 raise Exception(f"entity_type {entity_type} not found")
 
+    def has_localization(self, text):
+        return text in self.localization
+
     def localize(self, text):
         if text in self.localization:
             return self.localization[text]

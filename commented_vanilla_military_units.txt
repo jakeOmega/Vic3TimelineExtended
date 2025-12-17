@@ -24,9 +24,16 @@ combat_unit_type_irregular_infantry = {
 
     combat_unit_image = {
         trigger = {
-            has_culture_graphics = decentralised_americas
+			has_culture_graphics = decentralised_americas
         }
         texture = "gfx/unit_illustrations/infantry_decentralised_americas_irregular.dds"
+    }
+
+    combat_unit_image = {
+        trigger = {
+            has_culture_graphics = polynesian
+        }
+        texture = "gfx/unit_illustrations/infantry_decentralised_polynesian_irregular.dds"
     }
 
     combat_unit_image = {
@@ -1261,11 +1268,11 @@ combat_unit_type_carrier = {
 	max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_ironclads_add = 8                         # Price:   80, Total cost:   640.0 (32.00%)
-		goods_input_ammunition_add = 8                        # Price:   50, Total cost:   400.0 (20.00%)
-		goods_input_radios_add = 4                            # Price:   80, Total cost:   320.0 (16.00%)
-		goods_input_aeroplanes_add = 8                        # Price:   80, Total cost:   640.0 (32.00%)
-		# Total cost: 2000.0
+		goods_input_ironclads_add = 8                         # Price:   80, Total cost:   640.0 (24.24%)
+		goods_input_ammunition_add = 8                        # Price:   50, Total cost:   400.0 (15.15%)
+		goods_input_radios_add = 4                            # Price:   80, Total cost:   320.0 (12.12%)
+		goods_input_aeroplanes_add = 8                        # Price:  160, Total cost:  1280.0 (48.48%)
+		# Total cost: 2640.0
 	}
 
     battle_modifier = {

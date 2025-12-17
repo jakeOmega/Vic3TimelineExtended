@@ -1,110 +1,30 @@
-paved_roads = {
-	era = era_5
-	texture = "gfx/interface/icons/invention_icons/paved_roads.dds"
-	category = society
-	should_update_map = yes
-	
+INJECT:paved_roads = {
 	modifier = {
-		state_infrastructure_from_automobiles_consumption_add = 0.25
 		state_building_highway_max_level_add = 1
 	}
-	
-	unlocking_technologies = {	
-		elevator
-	}
-	
-	ai_weight = {
-		value = 2 # Important for those nice-looking roads!
-	}
+
 }
 
-military_aviation = {
-	# Unlocks Vehicles Industries
-	# Unlocks Tanks, Planes and Tanks PM in Barracks
-	era = era_5
-	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
-	category = military
-	
+INJECT:military_aviation = {
 	modifier = {
 		country_nuclear_weapon_defense_chance_add = 0.25
 	}
-	
-	unlocking_technologies = {	
-		defense_in_depth
-	}
-	
-	ai_weight = {
-		value = 1.5 # Important tech in general
-	}
 }
 
-intensive_agriculture = {
-	# Unlocks Chemical Plants
-	# Unlocks Intensive Agriculture PM on Rye Farms, Wheat Farms, Rice Farms, Maize Farms, Millet Farms
-	# Unlocks Intensize Grazing Ranch PM on Livestock Ranches
-	era = era_2
-	texture = "gfx/interface/icons/invention_icons/intensive_agriculture.dds"
-	category = production
-	
-	unlocking_technologies = {
-		enclosure
-	}
-
+INJECT:intensive_agriculture = {
     modifier = {
 		state_arable_land_mult = 0.05
 	}
-	
-	ai_weight = {
-		value = 2 # Important tech for everyone
-		
-		if = {
-			limit = {
-				OR = {
-					has_strategy = ai_strategy_agricultural_expansion 
-					has_strategy = ai_strategy_plantation_economy
-				}		
-			}
-			add = 2
-		}
-	}
 }
 
-improved_fertilizer = {
-	# Unlocks Improved Fertilizer PM in Chemical Plants
-	# Unlocks Fertilization PM in Rye, Wheat, Rice, Maize, Millet Farms
-	era = era_3
-	texture = "gfx/interface/icons/invention_icons/improved_fertilizer.dds"
-	category = production
-	
-	unlocking_technologies = {	
-		intensive_agriculture
-	}
-
+INJECT:improved_fertilizer = {
     modifier = {
 		state_arable_land_mult = 0.05
 	}
-	
-	ai_weight = {
-		value = 1
-	}
 }
 
-nitrogen_fixation = {
-	# Unlocks Nitrogen Fixation PM in Chemical Plants
-	# Unlocks Chemical Fertilizer PM in Rye, Wheat, Rice, Maize, Millet Farms
-	era = era_4
-	texture = "gfx/interface/icons/invention_icons/nitrogen_fixation.dds"
-	category = production
-	
-	unlocking_technologies = {
-		improved_fertilizer
-	}
-
+INJECT:nitrogen_fixation = {
     modifier = {
         state_arable_land_mult = 0.05
     }
-	
-	ai_weight = {
-		value = 1
-	}
 }

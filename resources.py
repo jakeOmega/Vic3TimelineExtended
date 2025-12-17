@@ -10,20 +10,20 @@ from pathlib import Path
 from path_constants import base_game_path, mod_path
 
 SUBGOOD_TO_BGTYPE = {
-    "Manganese": "bg_manganese_mining",
-    "Chromium": "bg_chromium_mining",
-    "Specialty Alloys": "bg_specialty_alloy_metals_mining",
-    "Copper": "bg_copper_mining",
-    "Bauxite": "bg_bauxite_mining",
-    "Precious & Minor Base Metals": "bg_precious_minor_base_metals_mining",
-    "Nickel & Cobalt": "bg_nickel_cobalt_mining",
-    "Lithium": "bg_lithium_mining",
-    "Rare Earth Elements": "bg_rare_earth_metals_mining",
-    "Platinum Group Metals": "bg_platinum_group_metals_mining",
-    "Graphite": "bg_graphite_mining",
-    "Phosphate": "bg_phosphate_mining",
-    "Potash": "bg_potash_mining",
-    "Industrial Minerals & Salts": "bg_industrial_minerals_salts_mining",
+    "Manganese": "building_manganese_mine",
+    "Chromium": "building_chromium_mine",
+    "Specialty Alloys": "building_specialty_alloy_metal_mine",
+    "Copper": "building_copper_mine",
+    "Bauxite": "building_bauxite_mine",
+    "Precious & Minor Base Metals": "building_precious_minor_base_metal_mine",
+    "Nickel & Cobalt": "building_nickel_cobalt_mine",
+    "Lithium": "building_lithium_mine",
+    "Rare Earth Elements": "building_rare_earth_metals_mine",
+    "Platinum Group Metals": "building_platinum_group_metals_mine",
+    "Graphite": "building_graphite_mine",
+    "Phosphate": "building_phosphate_mine",
+    "Potash": "building_potash_mine",
+    "Industrial Minerals & Salts": "building_industrial_mineral_salt_mine",
 }
 
 SUBGOOD_TO_SPREAD = {
@@ -129,15 +129,15 @@ def iter_state_blocks(text: str):
 
 
 def extract_existing_resource_types(block_text: str) -> dict:
-    """Return {bg_type: (block_start_idx, block_end_idx)} for resource blocks within block_text."""
+    """Return {building_type: (block_start_idx, block_end_idx)} for resource blocks within block_text."""
     existing = {}
     for m in RESOURCE_BLOCK_RE.finditer(block_text):
         block = m.group(0)
         # Find type within this block
         tm = TYPE_LINE_RE.search(block)
         if tm:
-            bg_type = tm.group(1).strip()
-            existing[bg_type] = (m.start(), m.end())
+            building_type = tm.group(1).strip()
+            existing[building_type] = (m.start(), m.end())
     return existing
 
 
@@ -145,14 +145,14 @@ def upsert_resource(
     block_text: str,
     insert_at: int,
     indent: str,
-    bg_type: str,
+    building_type: str,
     amount: int,
     existing: dict,
 ):
-    """If a resource block with bg_type exists, update its undiscovered_amount=max(existing,new).
+    """If a resource block with building_type exists, update its undiscovered_amount=max(existing,new).
     Otherwise, insert a new resource block at insert_at (character index in block_text)."""
-    if bg_type in existing:
-        start, end = existing[bg_type]
+    if building_type in existing:
+        start, end = existing[building_type]
         sub = block_text[start:end]
         # Update undiscovered_amount line
         um = UNDISC_LINE_RE.search(sub)
@@ -169,7 +169,7 @@ def upsert_resource(
     else:
         new_block = (
             f"\n{indent}resource = {{\n"
-            f'{indent}    type = "{bg_type}"\n'
+            f'{indent}    type = "{building_type}"\n'
             f"{indent}    undiscovered_amount = {amount}\n"
             f"{indent}}}\n"
         )
@@ -211,8 +211,8 @@ def process_state_block(block_text: str, state_name: str, mapping: dict) -> str:
 
     changed = False
     for subgood, score in mapping.get(state_name, {}).items():
-        bg_type = SUBGOOD_TO_BGTYPE.get(subgood)
-        if not bg_type:
+        building_type = SUBGOOD_TO_BGTYPE.get(subgood)
+        if not building_type:
             print(
                 f"[WARN] Unknown subgood {subgood!r} for {state_name}; skipping.",
                 file=sys.stderr,
@@ -220,7 +220,7 @@ def process_state_block(block_text: str, state_name: str, mapping: dict) -> str:
             continue
         amount = int(new_amount(score, subgood))
         block_text, did = upsert_resource(
-            block_text, insert_at, indent, bg_type, amount, existing
+            block_text, insert_at, indent, building_type, amount, existing
         )
         if did:
             # If we inserted a new block before insert_at, future insert_at moves forward

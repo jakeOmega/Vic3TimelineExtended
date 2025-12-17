@@ -114,9 +114,10 @@ civil_rights_movement = {
 		country_add_multicultural_ideology_to_intelligentsia_bool = yes
 		country_institution_ministry_of_labor_max_investment_add = 1
 		country_institution_ministry_of_religion_max_investment_add = 1
+		country_voting_power_mult = 0.1
 		# less racist
-		country_acceptance_shared_cultural_trait_add = 5
-		country_acceptance_culture_base_add = 5
+		country_acceptance_shared_heritage_trait_group_add = 5
+		country_acceptance_no_shared_heritage_trait_add = 10
 	}
 
 	on_researched = {
@@ -247,6 +248,7 @@ decolonization = {
 		country_liberty_desire_of_subjects_add = 0.05
 		country_add_anticolonial_ideology_to_igs_bool = yes
 		country_unrecognized_become_recognized_bool = yes
+		country_voting_power_mult = 0.1
 	}
 
 	on_researched = {
@@ -407,7 +409,7 @@ tactical_nuclear_weapons = {
 		country_diplomatic_play_maneuvers_add = 10
 		country_prestige_mult = 0.1
 		country_weekly_innovation_max_add = 50
-		state_building_barracks_max_level_add = 50
+		state_building_barrack_max_level_add = 50
 	}
 	
 	ai_weight = {
@@ -559,7 +561,7 @@ anti_war_movement = {
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
-		state_building_barracks_max_level_add = 50
+		state_building_barrack_max_level_add = 50
 	}
 	
 	unlocking_technologies = {	

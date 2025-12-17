@@ -1198,7 +1198,7 @@ war_propaganda_support_script_value = {
 	value = 0
 	if = {
 		limit = {
-			ROOT.modifier:country_war_support_monthly_add > 0
+			ROOT.modifier:state_war_support_monthly_add > 0
 		}
 		add = ROOT.modifier:state_war_support_monthly_add
 		multiply = {
@@ -1793,8 +1793,14 @@ city_size = {
 		limit = {
 			has_building = building_urban_center
 		}
-		add = b:building_urban_center.level
-		multiply = b:building_urban_center.occupancy
+		sg:services = {
+			add = state_goods_production
+		}
+		multiply = {
+			value = 20
+			add = average_sol
+			divide = 20
+		}
 	}
 }
 

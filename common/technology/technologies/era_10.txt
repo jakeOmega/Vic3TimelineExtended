@@ -163,7 +163,7 @@ cyber_warfare = {
 		country_weekly_innovation_max_add = 100
 		country_institution_ministry_of_thought_control_max_investment_add = 1
 		country_institution_police_max_investment_add = 1
-		state_building_barracks_max_level_add = 50
+		state_building_barrack_max_level_add = 50
 	}
 	
 	unlocking_technologies = {	
@@ -186,7 +186,7 @@ electronic_warfare = {
 	}
 
 	modifier = {
-		state_building_barracks_max_level_add = 50
+		state_building_barrack_max_level_add = 50
 		state_building_naval_base_max_level_add = 20
 	}
 	
@@ -230,6 +230,7 @@ telemedicine = {
 
 	modifier = {
 		country_institution_health_system_max_investment_add = 1
+		country_voting_power_mult = 0.2
 	}
 	
 	ai_weight = {
@@ -254,6 +255,7 @@ universal_basic_income = {
 		country_institution_social_security_max_investment_add = 1
 		country_institution_national_bank_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
+		country_voting_power_mult = 0.2
 	}
 	
 	ai_weight = {

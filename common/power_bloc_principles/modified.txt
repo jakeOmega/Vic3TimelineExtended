@@ -1,6 +1,6 @@
 
 
-principle_food_standardization_2 = {
+REPLACE:principle_food_standardization_2 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
@@ -14,7 +14,7 @@ principle_food_standardization_2 = {
 	}
 }
 
-principle_food_standardization_3 = {
+REPLACE:principle_food_standardization_3 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 

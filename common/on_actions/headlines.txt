@@ -2997,6 +2997,7 @@ extra_headlines_tech = {
                 }
                 post_notification = headlines_tech_abyssal_plain_mining
             }
+        }
     }
 }
 

@@ -775,7 +775,7 @@ pm_automation_disabled = {
 	texture = "gfx/interface/icons/production_method_icons/no_automation.dds"
 }
 
-pm_watertube_boiler_building_furniture_manufacturies = {
+pm_watertube_boiler_building_furniture_manufactory = {
 	texture = "gfx/interface/icons/production_method_icons/watertube_boiler.dds"
 
 	unlocking_technologies = {
@@ -813,7 +813,7 @@ pm_watertube_boiler_building_furniture_manufacturies = {
 	}
 }
 
-pm_rotary_valve_engine_building_furniture_manufacturies = {
+pm_rotary_valve_engine_building_furniture_manufactory = {
 	texture = "gfx/interface/icons/production_method_icons/rotary_valve_engine.dds"
 
 	unlocking_technologies = {
@@ -851,7 +851,7 @@ pm_rotary_valve_engine_building_furniture_manufacturies = {
 	}
 }
 
-pm_assembly_lines_building_furniture_manufacturies = {
+pm_assembly_lines_building_furniture_manufactory = {
 	texture = "gfx/interface/icons/production_method_icons/assembly_lines.dds"
 
 	unlocking_technologies = {
@@ -1251,7 +1251,7 @@ pm_rubber_grips = {
 	}
 }
 
-pm_watertube_boiler_building_tooling_workshops = {
+pm_watertube_boiler_building_tooling_workshop = {
 	texture = "gfx/interface/icons/production_method_icons/watertube_boiler.dds"
 
 	state_modifiers = {
@@ -1288,7 +1288,7 @@ pm_watertube_boiler_building_tooling_workshops = {
 	}
 }
 
-pm_rotary_valve_engine_building_tooling_workshops = {
+pm_rotary_valve_engine_building_tooling_workshop = {
 	texture = "gfx/interface/icons/production_method_icons/rotary_valve_engine.dds"
 
 	state_modifiers = {
@@ -1325,7 +1325,7 @@ pm_rotary_valve_engine_building_tooling_workshops = {
 	}
 }
 
-pm_assembly_lines_building_tooling_workshops = {
+pm_assembly_lines_building_tooling_workshop = {
 	texture = "gfx/interface/icons/production_method_icons/assembly_lines.dds"
 
 	state_modifiers = {
@@ -1464,7 +1464,7 @@ pm_bleached_paper = {
 	}
 }
 
-pm_watertube_boiler_building_paper_mills = {
+pm_watertube_boiler_building_paper_mill = {
 	texture = "gfx/interface/icons/production_method_icons/watertube_boiler.dds"
 
 	state_modifiers = {
@@ -1502,7 +1502,7 @@ pm_watertube_boiler_building_paper_mills = {
 	}
 }
 
-pm_rotary_valve_engine_building_paper_mills = {
+pm_rotary_valve_engine_building_paper_mill = {
 	texture = "gfx/interface/icons/production_method_icons/rotary_valve_engine.dds"
 
 	state_modifiers = {
@@ -2033,7 +2033,7 @@ pm_electric_arc_process = {
 	required_input_goods = electricity
 }
 
-pm_watertube_boiler_building_steel_mills = {
+pm_watertube_boiler_building_steel_mill = {
 	texture = "gfx/interface/icons/production_method_icons/watertube_boiler.dds"
 
 	state_modifiers = {
@@ -2067,7 +2067,7 @@ pm_watertube_boiler_building_steel_mills = {
 	}
 }
 
-pm_rotary_valve_engine_building_steel_mills = {
+pm_rotary_valve_engine_building_steel_mill = {
 	texture = "gfx/interface/icons/production_method_icons/rotary_valve_engine.dds"
 
 	state_modifiers = {
@@ -2730,15 +2730,15 @@ pm_aeroplane_production = {
 			goods_input_hardwood_add = 4                         # Price:   40, Total cost:   160.0 (66.67%)
 			goods_input_fabric_add = 4                           # Price:   20, Total cost:    80.0 (33.33%)
 			# Output goods
-			goods_output_automobiles_add = -10                   # Price:  100, Total cost: -1000.0 (500.00%)
-			goods_output_aeroplanes_add = 10                     # Price:   80, Total cost:   800.0 (-400.00%)
+			goods_output_automobiles_add = -10                   # Price:  100, Total cost: -1000.0 (-166.67%)
+			goods_output_aeroplanes_add = 10                     # Price:  160, Total cost:  1600.0 (266.67%)
 			# Total input cost: 240.0
-			# Total output cost: -200.0
-			# Profit: -440.0
-			# Profit margin: -183.33%
-			# Zero profit price multiplier: -1.20
+			# Total output cost: 600.0
+			# Profit: 360.0
+			# Profit margin: 150.00%
+			# Zero profit price multiplier: 0.40
 			# Employment: 250
-			# Wage breakeven: -1.76
+			# Wage breakeven: 1.44
 		}
 
 		level_scaled = {
@@ -3246,7 +3246,7 @@ pm_explosive_shells = {
 	}
 }
 
-pm_rotary_valve_engine_building_munition_plants = {
+pm_rotary_valve_engine_building_munition_plant = {
 	texture = "gfx/interface/icons/production_method_icons/rotary_valve_engine.dds"
 
 	state_modifiers = {
@@ -3279,7 +3279,7 @@ pm_rotary_valve_engine_building_munition_plants = {
 	}
 }
 
-pm_assembly_lines_building_munition_plants = {
+pm_assembly_lines_building_munition_plant = {
 	texture = "gfx/interface/icons/production_method_icons/assembly_lines.dds"
 
 	state_modifiers = {
@@ -3470,12 +3470,36 @@ pm_apple_orchards = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = -10                         # Price:   20, Total cost:  -200.0 (-200.00%)
-			goods_output_fruit_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
-			goods_output_sugar_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
+			goods_output_grain_add = -8                          # Price:   20, Total cost:  -160.0 (-200.00%)
+			goods_output_fruit_add = 7                           # Price:   30, Total cost:   210.0 (262.50%)
+			goods_output_sugar_add = 1                           # Price:   30, Total cost:    30.0 (37.50%)
 			# Total input cost: 0
-			# Total output cost: 100.0
-			# Profit: 100.0
+			# Total output cost: 80.0
+			# Profit: 80.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_sugar_beets = {
+	texture = "gfx/interface/icons/production_method_icons/sugar_beets.dds"
+
+	unlocking_technologies = {
+		fractional_distillation
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_grain_add = -5                          # Price:   20, Total cost:  -100.0 (-500.00%)
+			goods_output_sugar_add = 4                           # Price:   30, Total cost:   120.0 (600.00%)
+			# Total input cost: 0
+			# Total output cost: 20.0
+			# Profit: 20.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
@@ -3617,12 +3641,12 @@ pm_citrus_orchards = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = -10                         # Price:   20, Total cost:  -200.0 (-200.00%)
-			goods_output_fruit_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
-			goods_output_sugar_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
+			goods_output_grain_add = -8                          # Price:   20, Total cost:  -160.0 (-200.00%)
+			goods_output_fruit_add = 7                           # Price:   30, Total cost:   210.0 (262.50%)
+			goods_output_sugar_add = 1                           # Price:   30, Total cost:    30.0 (37.50%)
 			# Total input cost: 0
-			# Total output cost: 100.0
-			# Profit: 100.0
+			# Total output cost: 80.0
+			# Profit: 80.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
@@ -3650,6 +3674,9 @@ pm_simple_farming_building_rice_farm = {
 		level_scaled = {
 			building_employment_laborers_add = 8000
 			building_employment_farmers_add = 2000
+		}
+		unscaled = {
+			building_slaves_mortality_mult = 0.2
 		}
 	}
 }
@@ -3680,6 +3707,9 @@ pm_soil_enriching_farming_building_rice_farm = {
 			# earnings
 			building_employment_laborers_add = 7000
 			building_employment_farmers_add = 3000
+		}
+		unscaled = {
+			building_slaves_mortality_mult = 0.1
 		}
 	}
 }
@@ -3749,12 +3779,12 @@ pm_fig_orchards_building_rice_farm = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = -30                         # Price:   20, Total cost:  -600.0 (-200.00%)
-			goods_output_fruit_add = 12                          # Price:   30, Total cost:   360.0 (120.00%)
-			goods_output_sugar_add = 18                          # Price:   30, Total cost:   540.0 (180.00%)
+			goods_output_grain_add = -20                         # Price:   20, Total cost:  -400.0 (-363.64%)
+			goods_output_fruit_add = 15                          # Price:   30, Total cost:   450.0 (409.09%)
+			goods_output_sugar_add = 2                           # Price:   30, Total cost:    60.0 (54.55%)
 			# Total input cost: 0
-			# Total output cost: 300.0
-			# Profit: 300.0
+			# Total output cost: 110.0
+			# Profit: 110.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
@@ -3826,12 +3856,12 @@ pm_fig_orchards = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_grain_add = -10                         # Price:   20, Total cost:  -200.0 (-200.00%)
-			goods_output_fruit_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
-			goods_output_sugar_add = 5                           # Price:   30, Total cost:   150.0 (150.00%)
+			goods_output_grain_add = -8                          # Price:   20, Total cost:  -160.0 (-200.00%)
+			goods_output_fruit_add = 7                           # Price:   30, Total cost:   210.0 (262.50%)
+			goods_output_sugar_add = 1                           # Price:   30, Total cost:    30.0 (37.50%)
 			# Total input cost: 0
-			# Total output cost: 100.0
-			# Profit: 100.0
+			# Total output cost: 80.0
+			# Profit: 80.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
@@ -4151,6 +4181,69 @@ pm_refrigerated_rail_cars_building_livestock_ranch = {
 	}
 
 	required_input_goods = electricity
+}
+
+
+default_building_vineyard = {
+	texture = "gfx/interface/icons/production_method_icons/plantation_production.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_wine_add = 20                           # Price:   50, Total cost:  1000.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 1000.0
+			# Profit: 1000.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 5000
+			# Wage breakeven: 0.20
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 4000
+			building_employment_farmers_add = 1000
+		}
+	}
+}
+
+automatic_irrigation_building_vineyard = {
+	texture = "gfx/interface/icons/production_method_icons/automatic_irrigation.dds"
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+
+	unlocking_technologies = {
+		pumpjacks
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
+			# Output goods
+			goods_output_wine_add = 40                           # Price:   50, Total cost:  2000.0 (100.00%)
+			# Total input cost: 300.0
+			# Total output cost: 2000.0
+			# Profit: 1700.0
+			# Profit margin: 566.67%
+			# Zero profit price multiplier: 0.15
+			# Employment: 5000
+			# Wage breakeven: 0.34
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 3000
+			building_employment_farmers_add = 1500
+			building_employment_machinists_add = 500
+		}
+	}
 }
 
 ﻿pm_picks_and_shovels_building_coal_mine = {
@@ -5355,7 +5448,7 @@ pm_dynamite_building_gold_mine = {
 	}
 }
 
-default_building_gold_fields = {
+default_building_gold_field = {
 	texture = "gfx/interface/icons/production_method_icons/gold_mining.dds"
 
 	building_modifiers = {
@@ -5384,8 +5477,11 @@ default_building_gold_fields = {
 	}
 }
 
-﻿default_building_coffee_plantation = {
-	texture = "gfx/interface/icons/production_method_icons/plantation_production.dds"
+﻿coffee_plantation_dry_process = {
+	texture = "gfx/interface/icons/production_method_icons/coffee_plantation_dry_process.dds"
+
+	unlocking_geographic_regions = {
+	}
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -5397,51 +5493,162 @@ default_building_gold_fields = {
 			# Profit: 1000.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 5000
-			# Wage breakeven: 0.20
+			# Employment: 7000
+			# Wage breakeven: 0.14
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 4000
+			building_employment_laborers_add = 6000
 			building_employment_farmers_add = 1000
+		}
+		unscaled = {
 		}
 	}
 }
 
-automatic_irrigation_building_coffee_plantation = {
-	texture = "gfx/interface/icons/production_method_icons/automatic_irrigation.dds"
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 5
-		}
-	}
+coffee_plantation_wet_process_manual = {
+	texture = "gfx/interface/icons/production_method_icons/coffee_plantation_wet_process_manual.dds"
 
 	unlocking_technologies = {
-		pumpjacks
+		mechanical_tools
+	}
+
+	unlocking_geographic_regions = {
+		geographic_region_wet_process_coffee_region
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (100.00%)
 			# Output goods
-			goods_output_coffee_add = 40                         # Price:   50, Total cost:  2000.0 (100.00%)
-			# Total input cost: 300.0
-			# Total output cost: 2000.0
-			# Profit: 1700.0
-			# Profit margin: 566.67%
-			# Zero profit price multiplier: 0.15
-			# Employment: 5000
-			# Wage breakeven: 0.34
+			goods_output_coffee_add = 25                         # Price:   50, Total cost:  1250.0 (100.00%)
+			# Total input cost: 200.0
+			# Total output cost: 1250.0
+			# Profit: 1050.0
+			# Profit margin: 525.00%
+			# Zero profit price multiplier: 0.16
+			# Employment: 5500
+			# Wage breakeven: 0.19
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 3000
+			building_employment_laborers_add = 4000
+			building_employment_farmers_add = 1500
+		}
+		unscaled = {
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+}
+
+coffee_plantation_wet_process_mechanical = {
+	texture = "gfx/interface/icons/production_method_icons/coffee_plantation_wet_process_mechanical.dds"
+
+	unlocking_technologies = {
+		mechanized_workshops
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (52.63%)
+			goods_input_engines_add = 3                          # Price:   60, Total cost:   180.0 (47.37%)
+			# Output goods
+			goods_output_coffee_add = 35                         # Price:   50, Total cost:  1750.0 (100.00%)
+			# Total input cost: 380.0
+			# Total output cost: 1750.0
+			# Profit: 1370.0
+			# Profit margin: 360.53%
+			# Zero profit price multiplier: 0.22
+			# Employment: 5500
+			# Wage breakeven: 0.25
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 3500
 			building_employment_farmers_add = 1500
 			building_employment_machinists_add = 500
+		}
+		unscaled = {
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+}
+
+coffee_plantation_patio_drying = {
+	texture = "gfx/interface/icons/production_method_icons/coffee_plantation_patio_drying.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_coffee_add = 5                          # Price:   50, Total cost:   250.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 250.0
+			# Profit: 250.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 1500
+			# Wage breakeven: 0.17
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 1500
+		}
+		unscaled = {
+			building_laborers_mortality_mult = 0.05
+			building_slaves_mortality_mult = 0.1
+		}
+	}
+}
+
+coffee_plantation_mechanical_drying = {
+	texture = "gfx/interface/icons/production_method_icons/coffee_plantation_mechanical_drying.dds"
+
+	unlocking_technologies = {
+		mechanized_workshops
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (50.00%)
+			goods_input_engines_add = 2                          # Price:   60, Total cost:   120.0 (50.00%)
+			# Output goods
+			goods_output_coffee_add = 15                         # Price:   50, Total cost:   750.0 (100.00%)
+			# Total input cost: 240.0
+			# Total output cost: 750.0
+			# Profit: 510.0
+			# Profit margin: 212.50%
+			# Zero profit price multiplier: 0.32
+			# Employment: 1000
+			# Wage breakeven: 0.51
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 500
+			building_employment_machinists_add = 500
+		}
+		unscaled = {
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
 		}
 	}
 }
@@ -5486,19 +5693,19 @@ default_building_cotton_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_fabric_add = 40                         # Price:   20, Total cost:   800.0 (100.00%)
+			goods_output_fabric_add = 45                         # Price:   20, Total cost:   900.0 (100.00%)
 			# Total input cost: 0
-			# Total output cost: 800.0
-			# Profit: 800.0
+			# Total output cost: 900.0
+			# Profit: 900.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 5000
-			# Wage breakeven: 0.16
+			# Employment: 8000
+			# Wage breakeven: 0.11
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 4000
+			building_employment_laborers_add = 7000
 			building_employment_farmers_add = 1000
 		}
 	}
@@ -5522,19 +5729,19 @@ automatic_irrigation_building_cotton_plantation = {
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_fabric_add = 100                        # Price:   20, Total cost:  2000.0 (100.00%)
+			goods_output_fabric_add = 80                         # Price:   20, Total cost:  1600.0 (100.00%)
 			# Total input cost: 300.0
-			# Total output cost: 2000.0
-			# Profit: 1700.0
-			# Profit margin: 566.67%
-			# Zero profit price multiplier: 0.15
-			# Employment: 5000
-			# Wage breakeven: 0.34
+			# Total output cost: 1600.0
+			# Profit: 1300.0
+			# Profit margin: 433.33%
+			# Zero profit price multiplier: 0.19
+			# Employment: 7000
+			# Wage breakeven: 0.19
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 3000
+			building_employment_laborers_add = 5000
 			building_employment_farmers_add = 1500
 			building_employment_machinists_add = 500
 		}
@@ -5548,19 +5755,19 @@ default_building_dye_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_dye_add = 25                            # Price:   40, Total cost:  1000.0 (100.00%)
+			goods_output_dye_add = 30                            # Price:   40, Total cost:  1200.0 (100.00%)
 			# Total input cost: 0
-			# Total output cost: 1000.0
-			# Profit: 1000.0
+			# Total output cost: 1200.0
+			# Profit: 1200.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 5000
-			# Wage breakeven: 0.20
+			# Employment: 7000
+			# Wage breakeven: 0.17
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 4000
+			building_employment_laborers_add = 6000
 			building_employment_farmers_add = 1000
 		}
 	}
@@ -5584,19 +5791,19 @@ automatic_irrigation_building_dye_plantation = {
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_dye_add = 50                            # Price:   40, Total cost:  2000.0 (100.00%)
+			goods_output_dye_add = 45                            # Price:   40, Total cost:  1800.0 (100.00%)
 			# Total input cost: 300.0
-			# Total output cost: 2000.0
-			# Profit: 1700.0
-			# Profit margin: 566.67%
-			# Zero profit price multiplier: 0.15
-			# Employment: 5000
-			# Wage breakeven: 0.34
+			# Total output cost: 1800.0
+			# Profit: 1500.0
+			# Profit margin: 500.00%
+			# Zero profit price multiplier: 0.17
+			# Employment: 6500
+			# Wage breakeven: 0.23
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 3000
+			building_employment_laborers_add = 4500
 			building_employment_farmers_add = 1500
 			building_employment_machinists_add = 500
 		}
@@ -5646,19 +5853,19 @@ automatic_irrigation_building_opium_plantation = {
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_opium_add = 50                          # Price:   50, Total cost:  2500.0 (100.00%)
+			goods_output_opium_add = 40                          # Price:   50, Total cost:  2000.0 (100.00%)
 			# Total input cost: 300.0
-			# Total output cost: 2500.0
-			# Profit: 2200.0
-			# Profit margin: 733.33%
-			# Zero profit price multiplier: 0.12
-			# Employment: 5000
-			# Wage breakeven: 0.44
+			# Total output cost: 2000.0
+			# Profit: 1700.0
+			# Profit margin: 566.67%
+			# Zero profit price multiplier: 0.15
+			# Employment: 4500
+			# Wage breakeven: 0.38
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 3000
+			building_employment_laborers_add = 2500
 			building_employment_farmers_add = 1500
 			building_employment_machinists_add = 500
 		}
@@ -5678,13 +5885,13 @@ default_building_tea_plantation = {
 			# Profit: 1000.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 5000
-			# Wage breakeven: 0.20
+			# Employment: 7000
+			# Wage breakeven: 0.14
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 4000
+			building_employment_laborers_add = 6000
 			building_employment_farmers_add = 1000
 		}
 	}
@@ -5706,21 +5913,21 @@ automatic_irrigation_building_tea_plantation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
+			goods_input_engines_add = 4                          # Price:   60, Total cost:   240.0 (100.00%)
 			# Output goods
-			goods_output_tea_add = 40                            # Price:   50, Total cost:  2000.0 (100.00%)
-			# Total input cost: 300.0
-			# Total output cost: 2000.0
-			# Profit: 1700.0
-			# Profit margin: 566.67%
-			# Zero profit price multiplier: 0.15
-			# Employment: 5000
-			# Wage breakeven: 0.34
+			goods_output_tea_add = 35                            # Price:   50, Total cost:  1750.0 (100.00%)
+			# Total input cost: 240.0
+			# Total output cost: 1750.0
+			# Profit: 1510.0
+			# Profit margin: 629.17%
+			# Zero profit price multiplier: 0.14
+			# Employment: 6000
+			# Wage breakeven: 0.25
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 3000
+			building_employment_laborers_add = 4000
 			building_employment_farmers_add = 1500
 			building_employment_machinists_add = 500
 		}
@@ -5734,19 +5941,19 @@ default_building_tobacco_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_tobacco_add = 25                        # Price:   40, Total cost:  1000.0 (100.00%)
+			goods_output_tobacco_add = 30                        # Price:   40, Total cost:  1200.0 (100.00%)
 			# Total input cost: 0
-			# Total output cost: 1000.0
-			# Profit: 1000.0
+			# Total output cost: 1200.0
+			# Profit: 1200.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 5000
-			# Wage breakeven: 0.20
+			# Employment: 7000
+			# Wage breakeven: 0.17
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 4000
+			building_employment_laborers_add = 6000
 			building_employment_farmers_add = 1000
 		}
 	}
@@ -5770,23 +5977,93 @@ automatic_irrigation_building_tobacco_plantation = {
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_tobacco_add = 50                        # Price:   40, Total cost:  2000.0 (100.00%)
+			goods_output_tobacco_add = 45                        # Price:   40, Total cost:  1800.0 (100.00%)
 			# Total input cost: 300.0
-			# Total output cost: 2000.0
-			# Profit: 1700.0
-			# Profit margin: 566.67%
-			# Zero profit price multiplier: 0.15
-			# Employment: 5000
-			# Wage breakeven: 0.34
+			# Total output cost: 1800.0
+			# Profit: 1500.0
+			# Profit margin: 500.00%
+			# Zero profit price multiplier: 0.17
+			# Employment: 6000
+			# Wage breakeven: 0.25
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 3000
+			building_employment_laborers_add = 4000
 			building_employment_farmers_add = 1500
 			building_employment_machinists_add = 500
 		}
 	}
+}
+
+
+hand_rolled = {
+	texture = "gfx/interface/icons/production_method_icons/hand_rolled.dds"
+
+	building_modifiers = {
+
+		level_scaled = { #Skilled labor
+			building_employment_machinists_add = 500
+		}
+
+		unscaled = {
+			building_minimum_wage_mult = 0.05
+		}
+	}
+}
+
+molds = {
+	texture = "gfx/interface/icons/production_method_icons/molds.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_tobacco_add = 5                         # Price:   40, Total cost:   200.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 200.0
+			# Profit: 200.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 1000
+			# Wage breakeven: 0.20
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 1000
+		}
+	}
+}
+
+electric_rollers = {
+	texture = "gfx/interface/icons/production_method_icons/electric_rollers.dds"
+
+	unlocking_technologies = {
+		electrical_generation
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 2                             # Price:   40, Total cost:    80.0 (57.14%)
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (42.86%)
+			# Output goods
+			goods_output_tobacco_add = 20                        # Price:   40, Total cost:   800.0 (100.00%)
+			# Total input cost: 140.0
+			# Total output cost: 800.0
+			# Profit: 660.0
+			# Profit margin: 471.43%
+			# Zero profit price multiplier: 0.17
+			# Employment: -1000
+			# Wage breakeven: -0.66
+		}
+
+		level_scaled = {
+			building_employment_machinists_add = 500
+			building_employment_laborers_add = -1500
+		}
+	}
+
+	required_input_goods = electricity
 }
 
 default_building_sugar_plantation = {
@@ -5796,20 +6073,25 @@ default_building_sugar_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_sugar_add = 30                          # Price:   30, Total cost:   900.0 (100.00%)
+			goods_output_sugar_add = 50                          # Price:   30, Total cost:  1500.0 (100.00%)
 			# Total input cost: 0
-			# Total output cost: 900.0
-			# Profit: 900.0
+			# Total output cost: 1500.0
+			# Profit: 1500.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 5000
-			# Wage breakeven: 0.18
+			# Employment: 10000
+			# Wage breakeven: 0.15
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 4000
+			building_employment_laborers_add = 9000
 			building_employment_farmers_add = 1000
+		}
+		unscaled = {
+			building_laborers_mortality_mult = 0.05
+			building_slaves_mortality_mult = 0.1
+			building_slaves_standard_of_living_add = -1
 		}
 	}
 }
@@ -5832,24 +6114,121 @@ automatic_irrigation_building_sugar_plantation = {
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_sugar_add = 60                          # Price:   30, Total cost:  1800.0 (100.00%)
+			goods_output_sugar_add = 80                          # Price:   30, Total cost:  2400.0 (100.00%)
 			# Total input cost: 300.0
-			# Total output cost: 1800.0
-			# Profit: 1500.0
-			# Profit margin: 500.00%
-			# Zero profit price multiplier: 0.17
-			# Employment: 5000
-			# Wage breakeven: 0.30
+			# Total output cost: 2400.0
+			# Profit: 2100.0
+			# Profit margin: 700.00%
+			# Zero profit price multiplier: 0.12
+			# Employment: 8500
+			# Wage breakeven: 0.25
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 3000
-			building_employment_farmers_add = 1500
+			building_employment_laborers_add = 7000
+			building_employment_farmers_add = 1000
 			building_employment_machinists_add = 500
 		}
 	}
 }
+
+ox_driven_rollers_sugar = { #default PM
+	texture = "gfx/interface/icons/production_method_icons/ox_driven_rollers.dds"
+}
+
+vacuum_pan_sugar = {
+	texture = "gfx/interface/icons/production_method_icons/vacuum_pan.dds"
+
+	unlocking_technologies = {
+		watertube_boiler
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coal_add = 3                             # Price:   30, Total cost:    90.0 (100.00%)
+			# Output goods
+			goods_output_sugar_add = 20                          # Price:   30, Total cost:   600.0 (100.00%)
+			# Total input cost: 90.0
+			# Total output cost: 600.0
+			# Profit: 510.0
+			# Profit margin: 566.67%
+			# Zero profit price multiplier: 0.15
+			# Employment: -1000
+			# Wage breakeven: -0.51
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = -1000
+		}
+	}
+}
+
+steam_powered_evaporation_sugar = {
+	texture = "gfx/interface/icons/production_method_icons/steam_powered_evaporation.dds"
+
+	unlocking_technologies = {
+		fractional_distillation
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (28.57%)
+			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (71.43%)
+			# Output goods
+			goods_output_sugar_add = 40                          # Price:   30, Total cost:  1200.0 (100.00%)
+			# Total input cost: 210.0
+			# Total output cost: 1200.0
+			# Profit: 990.0
+			# Profit margin: 471.43%
+			# Zero profit price multiplier: 0.17
+			# Employment: -1500
+			# Wage breakeven: -0.66
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = -2000
+			building_employment_machinists_add = 500
+		}
+	}
+}
+
+centrifugal_machine_sugar = {
+	texture = "gfx/interface/icons/production_method_icons/centrifugal_machine.dds"
+
+	unlocking_technologies = {
+		rotary_valve_engine
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 2                          # Price:   60, Total cost:   120.0 (28.57%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (71.43%)
+			# Output goods
+			goods_output_sugar_add = 70                          # Price:   30, Total cost:  2100.0 (100.00%)
+			# Total input cost: 420.0
+			# Total output cost: 2100.0
+			# Profit: 1680.0
+			# Profit margin: 400.00%
+			# Zero profit price multiplier: 0.20
+			# Employment: -2000
+			# Wage breakeven: -0.84
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = -3500
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 500
+		}
+	}
+}
+
 
 default_building_banana_plantation = {
 	texture = "gfx/interface/icons/production_method_icons/plantation_production.dds"
@@ -5858,18 +6237,18 @@ default_building_banana_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_fruit_add = 30                          # Price:   30, Total cost:   900.0 (100.00%)
+			goods_output_fruit_add = 40                          # Price:   30, Total cost:  1200.0 (100.00%)
 			# Total input cost: 0
-			# Total output cost: 900.0
-			# Profit: 900.0
+			# Total output cost: 1200.0
+			# Profit: 1200.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 5000
-			# Wage breakeven: 0.18
+			# Employment: 6000
+			# Wage breakeven: 0.20
 		}
 
 		level_scaled = {
-			building_employment_laborers_add = 4000
+			building_employment_laborers_add = 5000
 			building_employment_farmers_add = 1000
 		}
 	}
@@ -5893,14 +6272,14 @@ automatic_irrigation_building_banana_plantation = {
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_fruit_add = 60                          # Price:   30, Total cost:  1800.0 (100.00%)
+			goods_output_fruit_add = 50                          # Price:   30, Total cost:  1500.0 (100.00%)
 			# Total input cost: 300.0
-			# Total output cost: 1800.0
-			# Profit: 1500.0
-			# Profit margin: 500.00%
-			# Zero profit price multiplier: 0.17
+			# Total output cost: 1500.0
+			# Profit: 1200.0
+			# Profit margin: 400.00%
+			# Zero profit price multiplier: 0.20
 			# Employment: 5000
-			# Wage breakeven: 0.30
+			# Wage breakeven: 0.24
 		}
 
 		level_scaled = {
@@ -5919,14 +6298,14 @@ default_building_silk_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_silk_add = 20                           # Price:   40, Total cost:   800.0 (100.00%)
+			goods_output_silk_add = 15                           # Price:   40, Total cost:   600.0 (100.00%)
 			# Total input cost: 0
-			# Total output cost: 800.0
-			# Profit: 800.0
+			# Total output cost: 600.0
+			# Profit: 600.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 5000
-			# Wage breakeven: 0.16
+			# Wage breakeven: 0.12
 		}
 
 		level_scaled = {
@@ -5974,64 +6353,678 @@ automatic_irrigation_building_silk_plantation = {
 	}
 }
 
-default_building_vineyard_plantation = {
-	texture = "gfx/interface/icons/production_method_icons/plantation_production.dds"
+###exploitation and working conditions
+default_labour = {
+	texture = "gfx/interface/icons/production_method_icons/standard_labor.dds"
+	disallowing_laws = {
+		law_slave_trade
+	}
+}
+
+slave_exploitation_sugar = {
+	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_slave_import_mult = 0.025
+		}
+	}
+
+	disallowing_laws = {
+		law_slavery_banned
+		law_colonial_slavery
+		law_debt_slavery ## So India uses other category
+	}
 
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_wine_add = 20                           # Price:   50, Total cost:  1000.0 (100.00%)
+			goods_output_sugar_add = 50                          # Price:   30, Total cost:  1500.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 1500.0
+			# Profit: 1500.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		unscaled = {
+			building_laborers_mortality_mult = 0.35
+			building_slaves_mortality_mult = 0.35 #sugar is the one slave mortality modifier we kept, for the deadliness 
+			building_laborers_job_attractiveness_mult = -0.9 #no one wants to work in sugar as a laborer
+			### 1.3-1.4 mortality works out to be around replacement rate (births equal deaths), depending on final SOL of the slave. Historically, sugar slaves were expected to live around 7 years before being replaced, with very few children surviving at all, let alone making adulthood. This mortality level is actually no where near as bad as history, but is much more accurate than previous, and safer for game stability. 
+			building_slaves_standard_of_living_add = -3
+			building_minimum_wage_mult = -0.15 #you have to pay sugar workers better than other plantations to get them to do this labor
+		}
+	}
+}
+
+worker_exploitation_sugar = {
+	texture = "gfx/interface/icons/production_method_icons/exploitative_practices.dds"
+
+	disallowing_laws = {
+		law_right_to_associate
+		law_corporatized_unions
+		law_factory_councils
+		law_guaranteed_liberties
+		law_regulatory_bodies
+		law_worker_protections
+		law_collectivized_agriculture
+		law_homesteading
+		law_multicultural
+		law_wage_subsidies
+		law_old_age_pension
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_sugar_add = 20                          # Price:   30, Total cost:   600.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 600.0
+			# Profit: 600.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		level_scaled = {
+		}
+
+		unscaled = {
+			building_laborers_mortality_mult = 0.25
+			building_slaves_mortality_mult = 0.25 #sugar is the one slave mortality modifier we kept, for the deadliness
+			building_laborers_job_attractiveness_mult = -0.35 #worse than others
+			building_slaves_standard_of_living_add = -2
+			building_minimum_wage_mult = -0.15 #you have to pay sugar workers better to get them to do this
+		}
+	}
+}
+
+slave_exploitation_coffee = {
+	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_slave_import_mult = 0.03
+		}
+	}
+
+	disallowing_laws = {
+		law_slavery_banned
+		law_colonial_slavery
+		law_debt_slavery ## So India uses other category
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_coffee_add = 10                         # Price:   50, Total cost:   500.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 500.0
+			# Profit: 500.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		unscaled = {
+			building_laborers_mortality_mult = 0.25
+			building_laborers_job_attractiveness_mult = -0.75
+			building_slaves_standard_of_living_add = -2.5 #coffee is 2nd worst
+			building_minimum_wage_mult = -0.25
+		}
+	}
+}
+
+worker_exploitation_coffee = {
+	texture = "gfx/interface/icons/production_method_icons/exploitative_practices.dds"
+
+	disallowing_laws = {
+		law_right_to_associate
+		law_corporatized_unions
+		law_factory_councils
+		law_guaranteed_liberties
+		law_regulatory_bodies
+		law_worker_protections
+		law_collectivized_agriculture
+		law_homesteading
+		law_multicultural
+		law_wage_subsidies
+		law_old_age_pension
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_coffee_add = 5                          # Price:   50, Total cost:   250.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 250.0
+			# Profit: 250.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		level_scaled = {
+		}
+
+		unscaled = {
+			building_laborers_mortality_mult = 0.15
+			building_laborers_job_attractiveness_mult = -0.25
+			building_slaves_standard_of_living_add = -1.5
+			building_minimum_wage_mult = -0.25
+		}
+	}
+}
+
+slave_exploitation_cotton = {
+	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_slave_import_mult = 0.025
+		}
+	}
+
+	disallowing_laws = {
+		law_slavery_banned
+		law_colonial_slavery
+		law_debt_slavery ## So India uses other category
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_fabric_add = 20                         # Price:   20, Total cost:   400.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 400.0
+			# Profit: 400.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		unscaled = {
+			building_laborers_mortality_mult = 0.2
+			building_laborers_job_attractiveness_mult = -0.75
+			building_slaves_standard_of_living_add = -2
+			building_minimum_wage_mult = -0.25
+		}
+	}
+}
+
+worker_exploitation_cotton = {
+	texture = "gfx/interface/icons/production_method_icons/exploitative_practices.dds"
+
+	disallowing_laws = {
+		law_right_to_associate
+		law_corporatized_unions
+		law_factory_councils
+		law_guaranteed_liberties
+		law_regulatory_bodies
+		law_worker_protections
+		law_collectivized_agriculture
+		law_homesteading
+		law_multicultural
+		law_wage_subsidies
+		law_old_age_pension
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_fabric_add = 10                         # Price:   20, Total cost:   200.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 200.0
+			# Profit: 200.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		level_scaled = {
+		}
+
+		unscaled = {
+			building_laborers_mortality_mult = 0.1
+			building_slaves_standard_of_living_add = -1
+			building_laborers_job_attractiveness_mult = -0.25
+			building_minimum_wage_mult = -0.25
+		}
+	}
+}
+
+slave_exploitation_dye = {
+	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_slave_import_mult = 0.025
+		}
+	}
+
+	disallowing_laws = {
+		law_slavery_banned
+		law_colonial_slavery
+		law_debt_slavery ## So India uses other category
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_dye_add = 15                            # Price:   40, Total cost:   600.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 600.0
+			# Profit: 600.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		unscaled = {
+			building_laborers_mortality_mult = 0.2
+			building_laborers_job_attractiveness_mult = -0.75
+			building_slaves_standard_of_living_add = -2
+			building_minimum_wage_mult = -0.25
+		}
+	}
+}
+
+worker_exploitation_dye = {
+	texture = "gfx/interface/icons/production_method_icons/exploitative_practices.dds"
+
+	disallowing_laws = {
+		law_right_to_associate
+		law_corporatized_unions
+		law_factory_councils
+		law_guaranteed_liberties
+		law_regulatory_bodies
+		law_worker_protections
+		law_collectivized_agriculture
+		law_homesteading
+		law_multicultural
+		law_wage_subsidies
+		law_old_age_pension
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_dye_add = 10                            # Price:   40, Total cost:   400.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 400.0
+			# Profit: 400.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		level_scaled = {
+		}
+
+		unscaled = {
+			building_laborers_mortality_mult = 0.1
+			building_slaves_standard_of_living_add = -1
+			building_laborers_job_attractiveness_mult = -0.25
+			building_minimum_wage_mult = -0.25
+		}
+	}
+}
+
+slave_exploitation_banana = {
+	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_slave_import_mult = 0.025
+		}
+	}
+
+	disallowing_laws = {
+		law_slavery_banned
+		law_colonial_slavery
+		law_debt_slavery ## So India uses other category
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_fruit_add = 25                          # Price:   30, Total cost:   750.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 750.0
+			# Profit: 750.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		unscaled = {
+			building_laborers_mortality_mult = 0.2
+			building_laborers_job_attractiveness_mult = -0.75
+			building_slaves_standard_of_living_add = -2
+			building_minimum_wage_mult = -0.25
+		}
+	}
+}
+
+worker_exploitation_banana = {
+	texture = "gfx/interface/icons/production_method_icons/exploitative_practices.dds"
+
+	disallowing_laws = {
+		law_right_to_associate
+		law_corporatized_unions
+		law_factory_councils
+		law_guaranteed_liberties
+		law_regulatory_bodies
+		law_worker_protections
+		law_collectivized_agriculture
+		law_homesteading
+		law_multicultural
+		law_wage_subsidies
+		law_old_age_pension
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_fruit_add = 20                          # Price:   30, Total cost:   600.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 600.0
+			# Profit: 600.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		level_scaled = {
+		}
+
+		unscaled = {
+			building_laborers_mortality_mult = 0.1
+			building_slaves_standard_of_living_add = -1
+			building_laborers_job_attractiveness_mult = -0.25
+			building_minimum_wage_mult = -0.25
+		}
+	}
+}
+
+slave_exploitation_tea = {
+	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_slave_import_mult = 0.025
+		}
+	}
+
+	disallowing_laws = {
+		law_slavery_banned
+		law_colonial_slavery
+		law_debt_slavery ## So India uses other category
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_tea_add = 20                            # Price:   50, Total cost:  1000.0 (100.00%)
 			# Total input cost: 0
 			# Total output cost: 1000.0
 			# Profit: 1000.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 5000
-			# Wage breakeven: 0.20
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
-		level_scaled = {
-			# profit
-			building_employment_laborers_add = 4000
-			building_employment_farmers_add = 1000
+		unscaled = {
+			building_slaves_standard_of_living_add = -1
+			building_laborers_job_attractiveness_mult = -0.20
+			building_minimum_wage_mult = -0.35 #tea is not deadly, but pays less
 		}
 	}
 }
 
-automatic_irrigation_building_vineyard_plantation = {
-	texture = "gfx/interface/icons/production_method_icons/automatic_irrigation.dds"
+worker_exploitation_tea = {
+	texture = "gfx/interface/icons/production_method_icons/exploitative_practices.dds"
 
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 5
-		}
-	}
-
-	unlocking_technologies = {
-		pumpjacks
+	disallowing_laws = {
+		law_right_to_associate
+		law_corporatized_unions
+		law_factory_councils
+		law_guaranteed_liberties
+		law_regulatory_bodies
+		law_worker_protections
+		law_collectivized_agriculture
+		law_homesteading
+		law_multicultural
+		law_wage_subsidies
+		law_old_age_pension
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_wine_add = 40                           # Price:   50, Total cost:  2000.0 (100.00%)
-			# Total input cost: 300.0
-			# Total output cost: 2000.0
-			# Profit: 1700.0
-			# Profit margin: 566.67%
-			# Zero profit price multiplier: 0.15
-			# Employment: 5000
-			# Wage breakeven: 0.34
+			goods_output_tea_add = 15                            # Price:   50, Total cost:   750.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 750.0
+			# Profit: 750.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
-			# profit
-			building_employment_laborers_add = 3000
-			building_employment_farmers_add = 1500
-			building_employment_machinists_add = 500
+		}
+
+		unscaled = {
+			building_slaves_standard_of_living_add = -0.5
+			building_laborers_job_attractiveness_mult = -0.20
+			building_minimum_wage_mult = -0.35 #tea is not deadly, but pays less
+		}
+	}
+}
+
+slave_exploitation_rubber = {
+	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_slave_import_mult = 0.025
+		}
+	}
+
+	disallowing_laws = {
+		law_slavery_banned
+		law_colonial_slavery
+		law_debt_slavery ## So India uses other category
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_rubber_add = 25                         # Price:   40, Total cost:  1000.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 1000.0
+			# Profit: 1000.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		unscaled = { #people were basically sent to rubber plantations to die. Also this late game SOL should be higher, mortality lower.
+			building_laborers_mortality_mult = 0.5 
+			building_laborers_job_attractiveness_mult = -0.85
+			building_slaves_standard_of_living_add = -2.5
+			building_minimum_wage_mult = -0.25
+		}
+	}
+}
+
+worker_exploitation_rubber = {
+	texture = "gfx/interface/icons/production_method_icons/exploitative_practices.dds"
+
+	disallowing_laws = {
+		law_right_to_associate
+		law_corporatized_unions
+		law_factory_councils
+		law_guaranteed_liberties
+		law_regulatory_bodies
+		law_worker_protections
+		law_collectivized_agriculture
+		law_homesteading
+		law_multicultural
+		law_wage_subsidies
+		law_old_age_pension
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_rubber_add = 10                         # Price:   40, Total cost:   400.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 400.0
+			# Profit: 400.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		level_scaled = {
+		}
+
+		unscaled = { ##Peru + Congo, people were basically sent to rubber plantations to die. Also this is late game, so SOL should be higher, mortality functionally lower.
+			building_laborers_mortality_mult = 0.4
+			building_slaves_standard_of_living_add = -1.5
+			building_laborers_job_attractiveness_mult = -0.75
+			building_minimum_wage_mult = -0.25
+		}
+	}
+}
+
+
+default_labour_tobacco = {
+	texture = "gfx/interface/icons/production_method_icons/standard_labor.dds"
+}
+
+worker_exploitation_tobacco = {
+	texture = "gfx/interface/icons/production_method_icons/exploitative_practices.dds"
+
+	disallowing_laws = {
+		law_right_to_associate
+		law_corporatized_unions
+		law_factory_councils
+		law_guaranteed_liberties
+		law_regulatory_bodies
+		law_worker_protections
+		law_collectivized_agriculture
+		law_homesteading
+		law_multicultural
+		law_wage_subsidies
+		law_old_age_pension
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_tobacco_add = 5                         # Price:   40, Total cost:   200.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 200.0
+			# Profit: 200.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 1000
+			# Wage breakeven: 0.20
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 1000
+		}
+
+		unscaled = {
+			building_laborers_mortality_mult = 0.05
+			building_slaves_standard_of_living_add = -1
+			building_laborers_job_attractiveness_mult = -0.25
+			building_minimum_wage_mult = -0.10
+		}
+	}
+}
+
+lectors_tobacco = {
+	texture = "gfx/interface/icons/production_method_icons/lectors.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_loyalists_from_political_movements_mult = 0.01
+			state_radicals_from_political_movements_mult = 0.01
+		}
+	}
+
+	disallowing_laws = {
+		law_censorship
+	}
+
+	building_modifiers = {
+		unscaled = {
+			building_slaves_standard_of_living_add = 1
+			building_laborers_job_attractiveness_mult = 0.05
+			building_minimum_wage_mult = 0.05
+			goods_output_tobacco_add = 2
+		}
+	}
+}
+
+radio_stations_tobacco = {
+	texture = "gfx/interface/icons/production_method_icons/radio_stations.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_loyalists_from_political_movements_mult = 0.005
+			state_radicals_from_political_movements_mult = 0.005
+		}
+	}
+
+	unlocking_technologies = {
+		radio
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_radios_add = 1                           # Price:   80, Total cost:    80.0 (100.00%)
+			# Output goods
+			goods_output_tobacco_add = 5                         # Price:   40, Total cost:   200.0 (100.00%)
+			# Total input cost: 80.0
+			# Total output cost: 200.0
+			# Profit: 120.0
+			# Profit margin: 150.00%
+			# Zero profit price multiplier: 0.40
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		unscaled = {
+			building_slaves_standard_of_living_add = 2
+			building_laborers_job_attractiveness_mult = 0.10
 		}
 	}
 }
@@ -6322,6 +7315,7 @@ pm_no_naval_theory = {
 
 		unscaled = {
 			building_training_rate_add = 10
+			state_blockade_resistance_add = 25
 		}
 	}
 }
@@ -6346,6 +7340,7 @@ pm_power_of_the_purse = {
 			unit_morale_loss_mult = -0.05
 			unit_morale_damage_mult = 0.1
 			building_training_rate_add = 10
+			state_blockade_resistance_add = 25
 		}
 	}
 }
@@ -6370,6 +7365,7 @@ pm_jeune_ecole = {
 			unit_morale_loss_mult = -0.1
 			unit_morale_damage_mult = 0.2
 			building_training_rate_add = 10
+			state_blockade_resistance_add = 25
 		}
 	}
 }
@@ -6394,6 +7390,7 @@ pm_sea_lane_strategies = {
 			unit_morale_loss_mult = -0.15
 			unit_morale_damage_mult = 0.3
 			building_training_rate_add = 10
+			state_blockade_resistance_add = 35
 		}
 	}
 }
@@ -6418,6 +7415,7 @@ pm_battlefleet_tactics = {
 			unit_morale_loss_mult = -0.2
 			unit_morale_damage_mult = 0.4
 			building_training_rate_add = 10
+			state_blockade_resistance_add = 25
 		}
 	}
 }
@@ -7082,6 +8080,8 @@ pm_oil-fired_plant = {
 			building_employment_clerks_add = 500
 		}
 	}
+
+	ai_value = -1000 # AI should get off this PM as fast as possible
 }
 
 pm_horizontal_drawer_cabinets = {
@@ -7205,6 +8205,7 @@ pm_hereditary_bureaucrats = {
 
 	unlocking_laws = {
 		law_hereditary_bureaucrats
+		law_crownland_diets
 	}
 
 	building_modifiers = {
@@ -7220,6 +8221,7 @@ pm_professional_bureaucrats = {
 
 	disallowing_laws = {
 		law_hereditary_bureaucrats
+		law_crownland_diets
 	}
 
 	building_modifiers = {
@@ -7546,8 +8548,8 @@ pm_default_building_angkor_wat = {
 	}
 
 	building_modifiers = {
-#		workforce_scaled = {
-#		}
+		#workforce_scaled = {
+		#}
 
 		level_scaled = {
 			building_employment_clergymen_add = 500
@@ -7767,6 +8769,7 @@ pm_default_building_white_house = {
 	state_modifiers = {
 		workforce_scaled = {
 			building_government_administration_throughput_add = 0.2
+			state_migration_pull_mult = 0.5
 		}
 	}
 
@@ -7960,6 +8963,287 @@ pm_default_building_victoria_terminus = {
 			building_employment_laborers_add = 200
 			building_employment_machinists_add = 200
 			building_employment_clerks_add = 100
+		}
+	}
+}
+
+### IP3 Monuments ###
+
+pm_default_building_kaiserforum_1 = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 10
+		}
+	}
+
+}
+
+pm_default_building_kaiserforum_2 = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 25
+		}
+	}
+}
+
+pm_default_building_kaiserforum_3 = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_legitimacy_headofstate_add = 5
+			country_prestige_add = 25
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			building_government_administration_throughput_add = 0.2
+			state_migration_pull_mult = 0.5
+		}
+	}
+
+	building_modifiers = {
+		#workforce_scaled = {
+		#}
+
+		level_scaled = {
+			building_employment_aristocrats_add = 100
+			building_employment_academics_add = 100
+			building_employment_bureaucrats_add = 200
+		}
+	}
+}
+
+pm_default_building_kaiserforum_4 = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_legitimacy_headofstate_add = 5
+			country_prestige_add = 25
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.5
+		}
+	}
+
+	building_modifiers = {
+		#workforce_scaled = {
+		#}
+
+		level_scaled = {
+			building_employment_aristocrats_add = 100
+			building_employment_academics_add = 100
+			building_employment_bureaucrats_add = 200
+		}
+	}
+}
+
+### IP4 Monuments ###
+
+pm_default_building_sagrada_familia_cathedral_1 = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			interest_group_ig_devout_pol_str_mult = 0.1
+			country_prestige_add = 25
+		}
+	}
+}
+
+pm_default_building_sagrada_familia_cathedral_2 = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			interest_group_ig_industrialists_pol_str_mult = 0.1
+			country_prestige_add = 25
+		}
+	}
+}
+
+pm_default_building_sagrada_familia_cathedral_3 = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			interest_group_ig_devout_pol_str_mult = 0.1
+			country_prestige_add = 50
+		}
+	}
+
+	building_modifiers = {
+		#workforce_scaled = {
+		#}
+
+		level_scaled = {
+			building_employment_clergymen_add = 400
+		}
+	}
+}
+
+pm_default_building_pena_convent = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			interest_group_ig_devout_pol_str_mult = 0.05
+			country_prestige_add = 10
+		}
+	}
+
+	building_modifiers = {
+		#workforce_scaled = {
+		#}
+
+		# level_scaled = {
+		# }
+	}
+}
+
+pm_default_building_pena_palace = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_legitimacy_headofstate_add = 5
+			country_prestige_add = 25
+		}
+	}
+
+	building_modifiers = {
+		#workforce_scaled = {
+		#}
+
+		level_scaled = {
+			building_employment_aristocrats_add = 100
+			building_employment_bureaucrats_add = 200
+		}
+	}
+}
+
+pm_default_building_gran_teatro_de_la_habana = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 25
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_paper_add = 10                           # Price:   30, Total cost:   300.0 (100.00%)
+			# Output goods
+			goods_output_fine_art_add = 5                        # Price:  200, Total cost:  1000.0 (100.00%)
+			# Total input cost: 300.0
+			# Total output cost: 1000.0
+			# Profit: 700.0
+			# Profit margin: 233.33%
+			# Zero profit price multiplier: 0.30
+			# Employment: 200
+			# Wage breakeven: 3.50
+		}
+
+		level_scaled = {
+			building_employment_academics_add = 200
+		}
+	}
+}
+
+pm_default_building_estacion_de_madrid_atocha = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 50
+			building_railway_throughput_add = 0.20
+		}
+	}
+
+	building_modifiers = {
+		#workforce_scaled = {
+		#}
+
+		level_scaled = {
+			building_employment_laborers_add = 200
+			building_employment_machinists_add = 200
+			building_employment_clerks_add = 100
+		}
+	}
+}
+
+pm_default_building_manila_cathedral_monument = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			interest_group_ig_devout_pol_str_mult = 0.1
+			country_prestige_add = 25
+		}
+	}
+
+	building_modifiers = {
+		#workforce_scaled = {
+		#}
+
+		level_scaled = {
+			building_employment_clergymen_add = 100
+		}
+	}
+}
+
+pm_default_building_manila_cathedral_ruins = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 10
+		}
+	}
+
+	building_modifiers = {
+		#workforce_scaled = {
+		#}
+
+		level_scaled = {
+			building_employment_clergymen_add = 50
 		}
 	}
 }
@@ -8240,18 +9524,18 @@ default_building_rubber_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_rubber_add = 30                         # Price:   40, Total cost:  1200.0 (100.00%)
+			goods_output_rubber_add = 20                         # Price:   40, Total cost:   800.0 (100.00%)
 			# Total input cost: 0
-			# Total output cost: 1200.0
-			# Profit: 1200.0
+			# Total output cost: 800.0
+			# Profit: 800.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 5000
-			# Wage breakeven: 0.24
+			# Employment: 7000
+			# Wage breakeven: 0.11
 		}
 
 		level_scaled = {
-			building_employment_laborers_add = 4000
+			building_employment_laborers_add = 6000
 			building_employment_farmers_add = 1000
 		}
 	}
@@ -8275,18 +9559,18 @@ automatic_irrigation_building_rubber_plantation = {
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_rubber_add = 60                         # Price:   40, Total cost:  2400.0 (100.00%)
+			goods_output_rubber_add = 40                         # Price:   40, Total cost:  1600.0 (100.00%)
 			# Total input cost: 300.0
-			# Total output cost: 2400.0
-			# Profit: 2100.0
-			# Profit margin: 700.00%
-			# Zero profit price multiplier: 0.12
-			# Employment: 5000
-			# Wage breakeven: 0.42
+			# Total output cost: 1600.0
+			# Profit: 1300.0
+			# Profit margin: 433.33%
+			# Zero profit price multiplier: 0.19
+			# Employment: 6000
+			# Wage breakeven: 0.22
 		}
 
 		level_scaled = {
-			building_employment_laborers_add = 3000
+			building_employment_laborers_add = 4000
 			building_employment_farmers_add = 1500
 			building_employment_machinists_add = 500
 		}
@@ -9585,90 +10869,7 @@ pm_manor_house_clergy_ownership = {
 	}
 }
 
-pm_company_headquarter_privately_owned = {
-	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
-
-	disallowing_laws = {
-		law_command_economy
-		law_cooperative_ownership
-	}
-
-	building_modifiers = {
-		level_scaled = {
-			building_employment_capitalists_add = 25
-			building_employment_clerks_add = 25
-		}
-		unscaled = {
-			building_capitalists_shares_add = 10
-		}
-	}
-}
-
-pm_company_headquarter_principle_divine_economics_2 = {
-	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
-	is_hidden_when_unavailable = yes
-
-	disallowing_laws = {
-		law_command_economy
-		law_cooperative_ownership
-	}
-
-	unlocking_principles = {
-		principle_divine_economics_2
-		principle_divine_economics_3
-	}
-
-	building_modifiers = {
-		level_scaled = {
-			building_employment_capitalists_add = 25
-			building_employment_clergymen_add = 25
-		}
-		unscaled = {
-			building_capitalists_shares_add = 10
-			building_clergymen_shares_add = 2
-		}
-	}
-}
-
-pm_company_headquarter_government_run = {
-	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
-
-	unlocking_laws = {
-		law_command_economy
-	}
-
-	building_modifiers = {
-		level_scaled = {
-			building_employment_bureaucrats_add = 50
-			building_employment_clerks_add = 50
-		}
-		unscaled = {
-			building_bureaucrats_shares_add = 10
-			building_clerks_shares_add = 2
-		}
-	}
-}
-
-pm_company_headquarter_worker_cooperative = {
-	texture = "gfx/interface/icons/production_method_icons/worker_cooperative.dds"
-
-	unlocking_laws = {
-		law_cooperative_ownership
-	}
-
-	building_modifiers = {
-		level_scaled = {
-			building_employment_shopkeepers_add = 50
-			building_employment_clerks_add = 50
-		}
-		unscaled = {
-			building_shopkeepers_shares_add = 10
-			building_clerks_shares_add = 2
-		}
-	}
-}
-
-﻿default_building_subsistence_farms = {
+﻿default_building_subsistence_farm = {
 	texture = "gfx/interface/icons/production_method_icons/subsistence_farming.dds"
 
 	building_modifiers = {
@@ -9694,7 +10895,7 @@ pm_company_headquarter_worker_cooperative = {
 	}
 }
 
-pm_home_workshops_no_building_subsistence_farms = {
+pm_home_workshops_no_building_subsistence_farm = {
 	texture = "gfx/interface/icons/production_method_icons/no_home_workshops.dds"
 	unlocking_laws = {
 		law_collectivized_agriculture
@@ -9718,7 +10919,7 @@ pm_home_workshops_no_building_subsistence_farms = {
 	}
 }
 
-pm_home_workshops_building_subsistence_farms = {
+pm_home_workshops_building_subsistence_farm = {
 	texture = "gfx/interface/icons/production_method_icons/home_workshops.dds"
 	disallowing_laws = {
 		law_collectivized_agriculture
@@ -9748,11 +10949,45 @@ pm_serfdom_no = {
 		law_tenant_farmers
 		law_commercialized_agriculture
 		law_collectivized_agriculture
+		law_latifundias
+		law_expanded_latifundias
 	}
 
 	building_modifiers = {
 		unscaled = {
 			building_subsistence_output_add = 4
+		}
+	}
+}
+
+pm_corvee_labor = {
+	texture = "gfx/interface/icons/production_method_icons/corvee_labor.dds"
+	unlocking_laws = {
+		law_manorialism
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_grain_add = 0.25                        # Price:   20, Total cost:     5.0 (100.00%)
+			# Total input cost: 0
+			# Total output cost: 5.0
+			# Profit: 5.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		unscaled = {
+			building_subsistence_output_add = 3
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			building_group_bg_agriculture_construction_efficiency_add = 0.001
+			building_group_bg_plantations_construction_efficiency_add = 0.001
 		}
 	}
 }
@@ -9813,7 +11048,7 @@ pm_serfdom = {
 	}
 }
 
-default_building_subsistence_orchards = {
+default_building_subsistence_orchard = {
 	texture = "gfx/interface/icons/production_method_icons/subsistence_farming.dds"
 
 	building_modifiers = {
@@ -9840,7 +11075,7 @@ default_building_subsistence_orchards = {
 	}
 }
 
-pm_home_workshops_no_building_subsistence_orchards = {
+pm_home_workshops_no_building_subsistence_orchard = {
 	texture = "gfx/interface/icons/production_method_icons/no_home_workshops.dds"
 	unlocking_laws = {
 		law_collectivized_agriculture
@@ -9864,7 +11099,7 @@ pm_home_workshops_no_building_subsistence_orchards = {
 	}
 }
 
-pm_home_workshops_building_subsistence_orchards = {
+pm_home_workshops_building_subsistence_orchard = {
 	texture = "gfx/interface/icons/production_method_icons/home_workshops.dds"
 	disallowing_laws = {
 		law_collectivized_agriculture
@@ -9888,7 +11123,7 @@ pm_home_workshops_building_subsistence_orchards = {
 	}
 }
 
-pm_serfdom_building_subsistence_orchards = {
+pm_serfdom_building_subsistence_orchard = {
 	texture = "gfx/interface/icons/production_method_icons/serfdom.dds"
 	unlocking_laws = {
 		law_serfdom
@@ -9913,7 +11148,7 @@ pm_serfdom_building_subsistence_orchards = {
 	}
 }
 
-default_building_subsistence_pastures = {
+default_building_subsistence_pasture = {
 	texture = "gfx/interface/icons/production_method_icons/subsistence_farming.dds"
 
 	building_modifiers = {
@@ -9940,7 +11175,7 @@ default_building_subsistence_pastures = {
 	}
 }
 
-pm_home_workshops_no_building_subsistence_pastures = {
+pm_home_workshops_no_building_subsistence_pasture = {
 	texture = "gfx/interface/icons/production_method_icons/no_home_workshops.dds"
 	unlocking_laws = {
 		law_collectivized_agriculture
@@ -9963,7 +11198,7 @@ pm_home_workshops_no_building_subsistence_pastures = {
 	}
 }
 
-pm_home_workshops_building_subsistence_pastures = {
+pm_home_workshops_building_subsistence_pasture = {
 	texture = "gfx/interface/icons/production_method_icons/home_workshops.dds"
 	disallowing_laws = {
 		law_collectivized_agriculture
@@ -9987,7 +11222,7 @@ pm_home_workshops_building_subsistence_pastures = {
 	}
 }
 
-pm_serfdom_building_subsistence_pastures = {
+pm_serfdom_building_subsistence_pasture = {
 	texture = "gfx/interface/icons/production_method_icons/serfdom.dds"
 	unlocking_laws = {
 		law_serfdom
@@ -10012,7 +11247,7 @@ pm_serfdom_building_subsistence_pastures = {
 	}
 }
 
-default_building_subsistence_fishing_villages = {
+default_building_subsistence_fishing_village = {
 	texture = "gfx/interface/icons/production_method_icons/subsistence_farming.dds"
 
 	building_modifiers = {
@@ -10039,7 +11274,7 @@ default_building_subsistence_fishing_villages = {
 	}
 }
 
-pm_home_workshops_no_building_subsistence_fishing_villages = {
+pm_home_workshops_no_building_subsistence_fishing_village = {
 	texture = "gfx/interface/icons/production_method_icons/no_home_workshops.dds"
 	unlocking_laws = {
 		law_collectivized_agriculture
@@ -10063,7 +11298,7 @@ pm_home_workshops_no_building_subsistence_fishing_villages = {
 	}
 }
 
-pm_home_workshops_building_subsistence_fishing_villages = {
+pm_home_workshops_building_subsistence_fishing_village = {
 	texture = "gfx/interface/icons/production_method_icons/home_workshops.dds"
 	disallowing_laws = {
 		law_collectivized_agriculture
@@ -10087,7 +11322,7 @@ pm_home_workshops_building_subsistence_fishing_villages = {
 	}
 }
 
-pm_serfdom_building_subsistence_fishing_villages = {
+pm_serfdom_building_subsistence_fishing_village = {
 	texture = "gfx/interface/icons/production_method_icons/serfdom.dds"
 	unlocking_laws = {
 		law_serfdom
@@ -10112,7 +11347,7 @@ pm_serfdom_building_subsistence_fishing_villages = {
 	}
 }
 
-default_building_subsistence_rice_paddies = {
+default_building_subsistence_rice_farm = {
 	texture = "gfx/interface/icons/production_method_icons/subsistence_farming.dds"
 
 	building_modifiers = {
@@ -10138,7 +11373,7 @@ default_building_subsistence_rice_paddies = {
 	}
 }
 
-pm_home_workshops_no_building_subsistence_rice_paddies = {
+pm_home_workshops_no_building_subsistence_rice_farm = {
 	texture = "gfx/interface/icons/production_method_icons/no_home_workshops.dds"
 	unlocking_laws = {
 		law_collectivized_agriculture
@@ -10162,7 +11397,7 @@ pm_home_workshops_no_building_subsistence_rice_paddies = {
 	}
 }
 
-pm_home_workshops_building_subsistence_rice_paddies = {
+pm_home_workshops_building_subsistence_rice_farm = {
 	texture = "gfx/interface/icons/production_method_icons/home_workshops.dds"
 	disallowing_laws = {
 		law_collectivized_agriculture
@@ -10186,7 +11421,7 @@ pm_home_workshops_building_subsistence_rice_paddies = {
 	}
 }
 
-pm_serfdom_building_subsistence_rice_paddies = {
+pm_serfdom_building_subsistence_rice_farm = {
 	texture = "gfx/interface/icons/production_method_icons/serfdom.dds"
 	unlocking_laws = {
 		law_serfdom
@@ -10400,4 +11635,403 @@ pm_arc_welded_buildings = {
 	}
 
 	required_input_goods = electricity
+}
+
+﻿pm_company_headquarter_privately_owned = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		capitalist_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 25
+			building_employment_clerks_add = 25
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+		}
+	}
+}
+
+pm_company_headquarter_privately_owned_aristocrats = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		aristocrat_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+		law_commercialized_agriculture
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 10
+			building_employment_aristocrats_add = 15
+			building_employment_clerks_add = 25
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+			building_aristocrats_shares_add = 10
+		}
+	}
+}
+
+pm_company_headquarter_privately_owned_aristocrats_commercial_agriculture = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		aristocrat_owned
+	}
+
+	unlocking_laws = {
+		law_commercialized_agriculture
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 15
+			building_employment_aristocrats_add = 10
+			building_employment_clerks_add = 25
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+			building_aristocrats_shares_add = 10
+		}
+	}
+}
+
+
+pm_company_headquarter_privately_owned_shopkeepers = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		shopkeeper_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 10
+			building_employment_shopkeepers_add = 25
+			building_employment_clerks_add = 15
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+			building_shopkeepers_shares_add = 5
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_privately_owned_bureaucrats = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		bureaucrat_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 10
+			building_employment_bureaucrats_add = 25
+			building_employment_clerks_add = 15
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+			building_bureaucrats_shares_add = 5
+			building_company_government_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_privately_owned_academics = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		academic_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 10
+			building_employment_academics_add = 25
+			building_employment_clerks_add = 15
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+			building_academics_shares_add = 5
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_principle_divine_economics_2 = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		capitalist_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	unlocking_principles = {
+		principle_divine_economics_2
+		principle_divine_economics_3
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 25
+			building_employment_clergymen_add = 25
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+			building_clergymen_shares_add = 2
+		}
+	}
+}
+
+pm_company_headquarter_principle_divine_economics_2_aristocrats = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		aristocrat_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+		law_commercialized_agriculture
+	}
+
+	unlocking_principles = {
+		principle_divine_economics_2
+		principle_divine_economics_3
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 10
+			building_employment_aristocrats_add = 15
+			building_employment_clergymen_add = 25
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+			building_aristocrats_shares_add = 10
+			building_clergymen_shares_add = 2
+		}
+	}
+}
+
+pm_company_headquarter_principle_divine_economics_2_aristocrats_commercial_agriculture = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		aristocrat_owned
+	}
+
+	unlocking_laws = {
+		law_commercialized_agriculture
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	unlocking_principles = {
+		principle_divine_economics_2
+		principle_divine_economics_3
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 15
+			building_employment_aristocrats_add = 10
+			building_employment_clergymen_add = 25
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+			building_aristocrats_shares_add = 10
+			building_clergymen_shares_add = 2
+		}
+	}
+}
+
+pm_company_headquarter_principle_divine_economics_2_shopkeepers = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		shopkeeper_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	unlocking_principles = {
+		principle_divine_economics_2
+		principle_divine_economics_3
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 10
+			building_employment_shopkeepers_add = 15
+			building_employment_clergymen_add = 25
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+			building_shopkeepers_shares_add = 5
+			building_clergymen_shares_add = 2
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_principle_divine_economics_2_bureaucrats = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		bureaucrat_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	unlocking_principles = {
+		principle_divine_economics_2
+		principle_divine_economics_3
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 10
+			building_employment_bureaucrats_add = 15
+			building_employment_clergymen_add = 25
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+			building_bureaucrats_shares_add = 5
+			building_clergymen_shares_add = 2
+			building_company_government_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_principle_divine_economics_2_academics = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		academic_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	unlocking_principles = {
+		principle_divine_economics_2
+		principle_divine_economics_3
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 10
+			building_employment_academics_add = 15
+			building_employment_clergymen_add = 25
+		}
+		unscaled = {
+			building_capitalists_shares_add = 10
+			building_academics_shares_add = 5
+			building_clergymen_shares_add = 2
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_government_run = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+
+	unlocking_laws = {
+		law_command_economy
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_bureaucrats_add = 50
+			building_employment_clerks_add = 50
+		}
+		unscaled = {
+			building_bureaucrats_shares_add = 10
+			building_clerks_shares_add = 2
+		}
+	}
+}
+
+pm_company_headquarter_worker_cooperative = {
+	texture = "gfx/interface/icons/production_method_icons/worker_cooperative.dds"
+
+	unlocking_laws = {
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_shopkeepers_add = 50
+			building_employment_clerks_add = 50
+		}
+		unscaled = {
+			building_shopkeepers_shares_add = 10
+			building_clerks_shares_add = 2
+		}
+	}
 }

@@ -3,8 +3,6 @@
 	background_texture = "gfx/interface/illustrations/institutions/police.dds"
 	modifier = {
 		unit_army_experience_gain_add = 0.2
-		character_battle_condition_blunder_mult = -0.1
-		character_battle_condition_broken_supply_line_mult = -0.1
 		interest_group_ig_armed_forces_pol_str_mult = 0.05
 		country_military_wages_mult = 0.2
 		country_military_goods_cost_mult = 0.05
@@ -54,8 +52,9 @@ institution_ministry_of_culture = {
 	icon = "gfx/interface/icons/institution_icons/schools.dds"
 	background_texture = "gfx/interface/illustrations/institutions/schools.dds"
 	modifier = {
-		state_assimilation_mult = 0.2
-		state_conversion_mult = 0.2
+		state_assimilation_mult = 0.1
+		state_conversion_mult = 0.1
+		country_primary_culture_fervor_from_laws_add = 2.5
 		country_society_tech_research_speed_mult = 0.05
 	}
 }
@@ -75,7 +74,7 @@ institution_ministry_of_the_environment = {
 		building_logging_camp_throughput_add = -0.01
 		building_group_bg_oil_extraction_throughput_add = -0.02
 		country_company_construction_efficiency_bonus_add = -0.02
-		state_pollution_generation_mult = -0.2
+		state_pollution_generation_mult = -0.1
 		state_building_national_park_max_level_add = 1
 	}
 }
@@ -87,6 +86,8 @@ institution_ministry_of_intelligence_and_security = {
 		country_tech_spread_mult = 0.1
 		political_movement_radicalism_add = -0.05
 		country_leverage_generation_mult = 0.02
+		country_support_separatism_resistance_mult = 0.05
+		country_support_separatism_resistance_mult = 0.1
 	}
 }
 
@@ -107,6 +108,8 @@ institution_ministry_of_propaganda = {
 	modifier = {
 		country_authority_add = 100
 		country_bolster_attraction_factor = 0.1
+		country_primary_culture_fervor_from_laws_add = 2.5
+		country_support_separatism_strength_mult = 0.05
 		political_movement_radicalism_from_enactment_disapproval_mult = 0.05
 	}
 }

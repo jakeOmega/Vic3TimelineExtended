@@ -114,7 +114,7 @@ building_wonder_empire_state_building = {
 
 building_wonder_sydney_opera_house = {
     building_group = bg_monuments
-    icon = "gfx/interface/icons/building_icons/building_arts_academy.dds"
+    icon = "gfx/interface/icons/building_icons/building_art_academy.dds"
     expandable = no
     downsizeable = no
     unique = yes

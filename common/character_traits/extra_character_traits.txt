@@ -79,3 +79,163 @@ mind_backups = {
         biological_immortality
 	}
 }
+
+trait_predictive_logistics = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/honorable.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+		character_command_limit_mult = 0.5
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+		
+		if = {
+			limit = {
+				owner = {
+					has_technology_researched = predictive_logistics
+				}
+			}
+			add = 10000
+		}
+	}
+
+	replace = {
+	}
+}
+
+trait_military_grade_cybersecurity = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/honorable.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+		character_command_limit_mult = 0.5
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+		
+		if = {
+			limit = {
+				owner = {
+					has_technology_researched = military_grade_cyberscurity
+				}
+			}
+			add = 10000
+		}
+	}
+
+	replace = {
+	}
+}
+
+trait_jadc2 = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/honorable.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+		character_command_limit_mult = 1.0
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+		
+		if = {
+			limit = {
+				owner = {
+					has_technology_researched = jadc2
+				}
+			}
+			add = 10000
+		}
+	}
+
+	replace = {
+	}
+}
+
+trait_swarm_technology = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/honorable.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+		character_command_limit_mult = 1.0
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+		
+		if = {
+			limit = {
+				owner = {
+					has_technology_researched = swarm_technology
+				}
+			}
+			add = 10000
+		}
+	}
+
+	replace = {
+	}
+}

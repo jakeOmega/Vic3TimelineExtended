@@ -12,7 +12,27 @@ test_event.1 = {
         default_option = yes
 
         every_scope_state = {
-            remove_building = building_manor_house
+            if = {
+                limit = {
+                    primary_cultures_percent_state = 0
+                    has_decree = decree_promote_national_values
+                }
+                save_scope_as = target_state
+                owner = {
+                    ordered_scope_pop = {
+                        limit = {
+                            is_primary_culture_of = ROOT.owner
+                        }
+                        order_by = total_size
+                        move_partial_pop = {
+                            state = scope:target_state
+                            population = {
+                                value = 100
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

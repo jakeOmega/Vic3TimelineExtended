@@ -7,62 +7,52 @@
 
 ### Infantry
 
-combat_unit_type_mechanized_infantry = {
-    group = combat_unit_group_infantry
-    max_manpower = 1000
-
-
-    upkeep_modifier = {
-		goods_input_small_arms_add = 3                        # Price:   60, Total cost:   180.0 (31.58%)
-		goods_input_ammunition_add = 3                        # Price:   50, Total cost:   150.0 (26.32%)
-		goods_input_oil_add = 1                               # Price:   40, Total cost:    40.0 (7.02%)
-		goods_input_radios_add = 1                            # Price:   80, Total cost:    80.0 (14.04%)
-		goods_input_tanks_add = 1                             # Price:  120, Total cost:   120.0 (21.05%)
-		# Total cost: 570.0
-	}
-    
-    battle_modifier = {
-        unit_offense_add = 50
-        unit_defense_add = 60
-        unit_morale_loss_add = 4
-        unit_devastation_mult = 0.1
+INJECT:combat_unit_type_irregular_infantry = {
+    upgrades = {
+        combat_unit_type_armored_infantry
+        combat_unit_type_robotic_soldiers
+        combat_unit_type_swarm_bots
+        combat_unit_type_grey_goo
     }
+}
 
-	unlocking_technologies = { mobile_armor }
-
-    combat_unit_image = {
-        trigger = { 
-            has_culture_graphics = east_asian
-        }
-        texture = "gfx/unit_illustrations/infantry_east_asian_mechanized.dds"
+INJECT:combat_unit_type_line_infantry = {
+    upgrades = {
+        combat_unit_type_armored_infantry
+        combat_unit_type_robotic_soldiers
+        combat_unit_type_swarm_bots
+        combat_unit_type_grey_goo
     }
+}
 
-    combat_unit_image = {
-        trigger = { 
-            has_culture_graphics = south_asian
-        }
-        texture = "gfx/unit_illustrations/infantry_south_asian_mechanized.dds"
+INJECT:combat_unit_type_skirmish_infantry = {
+    upgrades = {
+        combat_unit_type_armored_infantry
+        combat_unit_type_robotic_soldiers
+        combat_unit_type_swarm_bots
+        combat_unit_type_grey_goo
     }
+}
 
-    combat_unit_image = {
-        trigger = { 
-            has_culture_graphics = african
-        }
-        texture = "gfx/unit_illustrations/infantry_african_mechanized.dds"
+INJECT:combat_unit_type_trench_infantry = {
+    upgrades = {
+        combat_unit_type_armored_infantry
+        combat_unit_type_robotic_soldiers
+        combat_unit_type_swarm_bots
+        combat_unit_type_grey_goo
     }
+}
 
-    combat_unit_image = {
-        trigger = { 
-            has_culture_graphics = arabic
-        }
-        texture = "gfx/unit_illustrations/infantry_arabic_mechanized.dds"
+INJECT:combat_unit_type_squad_infantry = {
+    upgrades = {
+        combat_unit_type_armored_infantry
+        combat_unit_type_robotic_soldiers
+        combat_unit_type_swarm_bots
+        combat_unit_type_grey_goo
     }
+}
 
-    combat_unit_image = {
-		# fallback
-        texture = "gfx/unit_illustrations/infantry_eu_mechanized.dds"
-    }
-
+INJECT:combat_unit_type_mechanized_infantry = {
     upgrades = {
         combat_unit_type_armored_infantry
         combat_unit_type_robotic_soldiers
@@ -203,66 +193,37 @@ combat_unit_type_grey_goo = {
 
 ### Artillery
 
-combat_unit_type_siege_artillery = {
-    group = combat_unit_group_artillery
-    max_manpower = 1000
-
-    
-    upkeep_modifier = {
-		goods_input_artillery_add = 4                         # Price:   70, Total cost:   280.0 (50.00%)
-		goods_input_ammunition_add = 4                        # Price:   50, Total cost:   200.0 (35.71%)
-		goods_input_radios_add = 1                            # Price:   80, Total cost:    80.0 (14.29%)
-		# Total cost: 560.0
-	}
-
-    battle_modifier = {
-        unit_offense_add = 55
-        unit_defense_add = 30
-        unit_morale_loss_add = 6
-        unit_kill_rate_add = 0.25
-        unit_devastation_mult = 0.2
+INJECT:combat_unit_type_cannon_artillery = {
+    upgrades = {
+        combat_unit_type_motorized_artillery
+        combat_unit_type_guided_artillery_projectiles
+        combat_unit_type_networked_guided_artillery_projectiles
+        combat_unit_type_orbital_bombardment
+        combat_unit_type_orbital_precision_antimatter_strikes
     }
+}
 
-    formation_modifier = {
-        military_formation_mobilization_speed_mult = -0.2
-        military_formation_movement_speed_mult = -0.2
+INJECT:combat_unit_type_mobile_artillery = {
+    upgrades = {
+        combat_unit_type_motorized_artillery
+        combat_unit_type_guided_artillery_projectiles
+        combat_unit_type_networked_guided_artillery_projectiles
+        combat_unit_type_orbital_bombardment
+        combat_unit_type_orbital_precision_antimatter_strikes
     }
+}
 
-	unlocking_technologies = { defense_in_depth }
-
-    combat_unit_image = {
-        trigger = { 
-            has_culture_graphics = east_asian
-        }
-        texture = "gfx/unit_illustrations/artillery_east_asian_siege.dds"
+INJECT:combat_unit_type_shrapnel_artillery = {
+    upgrades = {
+        combat_unit_type_motorized_artillery
+        combat_unit_type_guided_artillery_projectiles
+        combat_unit_type_networked_guided_artillery_projectiles
+        combat_unit_type_orbital_bombardment
+        combat_unit_type_orbital_precision_antimatter_strikes
     }
+}
 
-    combat_unit_image = {
-        trigger = { 
-            has_culture_graphics = south_asian
-        }
-        texture = "gfx/unit_illustrations/artillery_south_asian_siege.dds"
-    }
-
-    combat_unit_image = {
-        trigger = { 
-            has_culture_graphics = african
-        }
-        texture = "gfx/unit_illustrations/artillery_african_siege.dds"
-    }
-
-    combat_unit_image = {
-        trigger = { 
-            has_culture_graphics = arabic
-        }
-        texture = "gfx/unit_illustrations/artillery_arabic_siege.dds"
-    }
-
-    combat_unit_image = {
-        # fallback
-        texture = "gfx/unit_illustrations/artillery_eu_siege.dds"
-    }
-
+INJECT:combat_unit_type_siege_artillery = {
     upgrades = {
         combat_unit_type_motorized_artillery
         combat_unit_type_guided_artillery_projectiles
@@ -483,44 +444,7 @@ combat_unit_type_orbital_precision_antimatter_strikes = {
 ### Cavalry
 
 
-combat_unit_type_light_tanks = {
-    group = combat_unit_group_cavalry
-    max_manpower = 1000
-
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
-
-    
-    upkeep_modifier = {
-		goods_input_tanks_add = 2                             # Price:  120, Total cost:   240.0 (33.33%)
-		goods_input_artillery_add = 2                         # Price:   70, Total cost:   140.0 (19.44%)
-		goods_input_oil_add = 2                               # Price:   40, Total cost:    80.0 (11.11%)
-		goods_input_ammunition_add = 2                        # Price:   50, Total cost:   100.0 (13.89%)
-		goods_input_radios_add = 2                            # Price:   80, Total cost:   160.0 (22.22%)
-		# Total cost: 720.0
-	}
-
-    battle_modifier = {
-        unit_offense_add = 45
-        unit_defense_add = 45
-        unit_morale_loss_add = 4
-        unit_devastation_mult = 0.1
-        unit_occupation_mult = 0.6
-    }
-
-    formation_modifier = {
-        military_formation_mobilization_speed_mult = 0.2
-    }
-
-	unlocking_technologies = { mobile_armor }  # era 5
-
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/cavalry_light_tank.dds"
-    }
-
+INJECT:combat_unit_type_light_tanks = {
     upgrades = {
         combat_unit_type_light_scout_tanks
         combat_unit_type_stealth_reconnaissance_drone_carrier
@@ -581,15 +505,15 @@ combat_unit_type_stealth_reconnaissance_drone_carrier = {
 
     
     upkeep_modifier = {
-		goods_input_tanks_add = 50                            # Price:  120, Total cost:  6000.0 (35.29%)
-		goods_input_artillery_add = 20                        # Price:   70, Total cost:  1400.0 (8.24%)
-		goods_input_oil_add = 6                               # Price:   40, Total cost:   240.0 (1.41%)
-		goods_input_ammunition_add = 16                       # Price:   50, Total cost:   800.0 (4.71%)
-		goods_input_radios_add = 35                           # Price:   80, Total cost:  2800.0 (16.47%)
-		goods_input_electronic_components_add = 40            # Price:   80, Total cost:  3200.0 (18.82%)
-		goods_input_robotics_add = 22                         # Price:   80, Total cost:  1760.0 (10.35%)
-		goods_input_aeroplanes_add = 10                       # Price:   80, Total cost:   800.0 (4.71%)
-		# Total cost: 17000.0
+		goods_input_tanks_add = 50                            # Price:  120, Total cost:  6000.0 (33.71%)
+		goods_input_artillery_add = 20                        # Price:   70, Total cost:  1400.0 (7.87%)
+		goods_input_oil_add = 6                               # Price:   40, Total cost:   240.0 (1.35%)
+		goods_input_ammunition_add = 16                       # Price:   50, Total cost:   800.0 (4.49%)
+		goods_input_radios_add = 35                           # Price:   80, Total cost:  2800.0 (15.73%)
+		goods_input_electronic_components_add = 40            # Price:   80, Total cost:  3200.0 (17.98%)
+		goods_input_robotics_add = 22                         # Price:   80, Total cost:  1760.0 (9.89%)
+		goods_input_aeroplanes_add = 10                       # Price:  160, Total cost:  1600.0 (8.99%)
+		# Total cost: 17800.0
 	}
 
     battle_modifier = {
@@ -623,15 +547,15 @@ combat_unit_type_holographic_ambush_combat_vehicle = {
 
     
     upkeep_modifier = {
-		goods_input_tanks_add = 95                            # Price:  120, Total cost: 11400.0 (33.73%)
-		goods_input_artillery_add = 40                        # Price:   70, Total cost:  2800.0 (8.28%)
-		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (5.92%)
-		goods_input_radios_add = 50                           # Price:   80, Total cost:  4000.0 (11.83%)
-		goods_input_electronic_components_add = 70            # Price:   80, Total cost:  5600.0 (16.57%)
-		goods_input_robotics_add = 40                         # Price:   80, Total cost:  3200.0 (9.47%)
-		goods_input_aeroplanes_add = 10                       # Price:   80, Total cost:   800.0 (2.37%)
-		goods_input_advanced_materials_add = 1                # Price: 4000, Total cost:  4000.0 (11.83%)
-		# Total cost: 33800.0
+		goods_input_tanks_add = 95                            # Price:  120, Total cost: 11400.0 (32.95%)
+		goods_input_artillery_add = 40                        # Price:   70, Total cost:  2800.0 (8.09%)
+		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (5.78%)
+		goods_input_radios_add = 50                           # Price:   80, Total cost:  4000.0 (11.56%)
+		goods_input_electronic_components_add = 70            # Price:   80, Total cost:  5600.0 (16.18%)
+		goods_input_robotics_add = 40                         # Price:   80, Total cost:  3200.0 (9.25%)
+		goods_input_aeroplanes_add = 10                       # Price:  160, Total cost:  1600.0 (4.62%)
+		goods_input_advanced_materials_add = 1                # Price: 4000, Total cost:  4000.0 (11.56%)
+		# Total cost: 34600.0
 	}
 
     battle_modifier = {
@@ -650,7 +574,7 @@ combat_unit_type_holographic_ambush_combat_vehicle = {
 }
 
 ### Tanks
-combat_unit_type_heavy_tank = {
+REPLACE:combat_unit_type_heavy_tank = {
     group = combat_unit_group_tanks
     max_manpower = 1000
 
@@ -877,11 +801,11 @@ combat_unit_type_bomber_aircraft = {
 
     
     upkeep_modifier = {
-		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (33.33%)
-		goods_input_aeroplanes_add = 30                       # Price:   80, Total cost:  2400.0 (40.00%)
-		goods_input_oil_add = 20                              # Price:   40, Total cost:   800.0 (13.33%)
-		goods_input_radios_add = 10                           # Price:   80, Total cost:   800.0 (13.33%)
-		# Total cost: 6000.0
+		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (23.81%)
+		goods_input_aeroplanes_add = 30                       # Price:  160, Total cost:  4800.0 (57.14%)
+		goods_input_oil_add = 20                              # Price:   40, Total cost:   800.0 (9.52%)
+		goods_input_radios_add = 10                           # Price:   80, Total cost:   800.0 (9.52%)
+		# Total cost: 8400.0
 	}
 
     battle_modifier = {
@@ -919,12 +843,12 @@ combat_unit_type_jet_powered_fighters = {
 
     
     upkeep_modifier = {
-		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (20.00%)
-		goods_input_aeroplanes_add = 60                       # Price:   80, Total cost:  4800.0 (48.00%)
-		goods_input_oil_add = 20                              # Price:   40, Total cost:   800.0 (8.00%)
-		goods_input_radios_add = 20                           # Price:   80, Total cost:  1600.0 (16.00%)
-		goods_input_electronic_components_add = 10            # Price:   80, Total cost:   800.0 (8.00%)
-		# Total cost: 10000.0
+		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (13.51%)
+		goods_input_aeroplanes_add = 60                       # Price:  160, Total cost:  9600.0 (64.86%)
+		goods_input_oil_add = 20                              # Price:   40, Total cost:   800.0 (5.41%)
+		goods_input_radios_add = 20                           # Price:   80, Total cost:  1600.0 (10.81%)
+		goods_input_electronic_components_add = 10            # Price:   80, Total cost:   800.0 (5.41%)
+		# Total cost: 14800.0
 	}
 
     battle_modifier = {
@@ -961,12 +885,12 @@ combat_unit_type_stealth_aircraft = {
 
     
     upkeep_modifier = {
-		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (10.00%)
-		goods_input_aeroplanes_add = 125                      # Price:   80, Total cost: 10000.0 (50.00%)
-		goods_input_oil_add = 20                              # Price:   40, Total cost:   800.0 (4.00%)
-		goods_input_radios_add = 50                           # Price:   80, Total cost:  4000.0 (20.00%)
-		goods_input_electronic_components_add = 40            # Price:   80, Total cost:  3200.0 (16.00%)
-		# Total cost: 20000.0
+		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (6.67%)
+		goods_input_aeroplanes_add = 125                      # Price:  160, Total cost: 20000.0 (66.67%)
+		goods_input_oil_add = 20                              # Price:   40, Total cost:   800.0 (2.67%)
+		goods_input_radios_add = 50                           # Price:   80, Total cost:  4000.0 (13.33%)
+		goods_input_electronic_components_add = 40            # Price:   80, Total cost:  3200.0 (10.67%)
+		# Total cost: 30000.0
 	}
 
     battle_modifier = {
@@ -1002,13 +926,13 @@ combat_unit_type_orbital_tactical_vehicles = {
 
     
     upkeep_modifier = {
-		goods_input_ammunition_add = 64                       # Price:   50, Total cost:  3200.0 (5.33%)
-		goods_input_aeroplanes_add = 240                      # Price:   80, Total cost: 19200.0 (32.00%)
-		goods_input_radios_add = 80                           # Price:   80, Total cost:  6400.0 (10.67%)
-		goods_input_electronic_components_add = 80            # Price:   80, Total cost:  6400.0 (10.67%)
-		goods_input_robotics_add = 60                         # Price:   80, Total cost:  4800.0 (8.00%)
-		goods_input_launch_capacity_add = 100                 # Price:  200, Total cost: 20000.0 (33.33%)
-		# Total cost: 60000.0
+		goods_input_ammunition_add = 64                       # Price:   50, Total cost:  3200.0 (4.04%)
+		goods_input_aeroplanes_add = 240                      # Price:  160, Total cost: 38400.0 (48.48%)
+		goods_input_radios_add = 80                           # Price:   80, Total cost:  6400.0 (8.08%)
+		goods_input_electronic_components_add = 80            # Price:   80, Total cost:  6400.0 (8.08%)
+		goods_input_robotics_add = 60                         # Price:   80, Total cost:  4800.0 (6.06%)
+		goods_input_launch_capacity_add = 100                 # Price:  200, Total cost: 20000.0 (25.25%)
+		# Total cost: 79200.0
 	}
 
     battle_modifier = {
@@ -1043,14 +967,14 @@ combat_unit_type_orbital_weapons_platforms = {
 
     
     upkeep_modifier = {
-		goods_input_ammunition_add = 64                       # Price:   50, Total cost:  3200.0 (2.67%)
-		goods_input_aeroplanes_add = 240                      # Price:   80, Total cost: 19200.0 (16.00%)
-		goods_input_radios_add = 80                           # Price:   80, Total cost:  6400.0 (5.33%)
-		goods_input_electronic_components_add = 80            # Price:   80, Total cost:  6400.0 (5.33%)
-		goods_input_robotics_add = 60                         # Price:   80, Total cost:  4800.0 (4.00%)
-		goods_input_launch_capacity_add = 300                 # Price:  200, Total cost: 60000.0 (50.00%)
-		goods_input_advanced_materials_add = 5                # Price: 4000, Total cost: 20000.0 (16.67%)
-		# Total cost: 120000.0
+		goods_input_ammunition_add = 64                       # Price:   50, Total cost:  3200.0 (2.30%)
+		goods_input_aeroplanes_add = 240                      # Price:  160, Total cost: 38400.0 (27.59%)
+		goods_input_radios_add = 80                           # Price:   80, Total cost:  6400.0 (4.60%)
+		goods_input_electronic_components_add = 80            # Price:   80, Total cost:  6400.0 (4.60%)
+		goods_input_robotics_add = 60                         # Price:   80, Total cost:  4800.0 (3.45%)
+		goods_input_launch_capacity_add = 300                 # Price:  200, Total cost: 60000.0 (43.10%)
+		goods_input_advanced_materials_add = 5                # Price: 4000, Total cost: 20000.0 (14.37%)
+		# Total cost: 139200.0
 	}
 
     battle_modifier = {
@@ -1078,12 +1002,12 @@ combat_unit_type_fleet_carrier = {
     max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_artillery_add = 4                         # Price:   70, Total cost:   280.0 (7.49%)
-		goods_input_ironclads_add = 12                        # Price:   80, Total cost:   960.0 (25.67%)
-		goods_input_ammunition_add = 10                       # Price:   50, Total cost:   500.0 (13.37%)
-		goods_input_radios_add = 5                            # Price:   80, Total cost:   400.0 (10.70%)
-		goods_input_aeroplanes_add = 20                       # Price:   80, Total cost:  1600.0 (42.78%)
-		# Total cost: 3740.0
+		goods_input_artillery_add = 4                         # Price:   70, Total cost:   280.0 (5.24%)
+		goods_input_ironclads_add = 12                        # Price:   80, Total cost:   960.0 (17.98%)
+		goods_input_ammunition_add = 10                       # Price:   50, Total cost:   500.0 (9.36%)
+		goods_input_radios_add = 5                            # Price:   80, Total cost:   400.0 (7.49%)
+		goods_input_aeroplanes_add = 20                       # Price:  160, Total cost:  3200.0 (59.93%)
+		# Total cost: 5340.0
 	}
 
     battle_modifier = {
@@ -1115,13 +1039,13 @@ combat_unit_type_nuclear_supercarrier = {
     max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_artillery_add = 15                        # Price:   70, Total cost:  1050.0 (8.54%)
-		goods_input_ironclads_add = 30                        # Price:   80, Total cost:  2400.0 (19.51%)
-		goods_input_ammunition_add = 25                       # Price:   50, Total cost:  1250.0 (10.16%)
-		goods_input_radios_add = 15                           # Price:   80, Total cost:  1200.0 (9.76%)
-		goods_input_aeroplanes_add = 60                       # Price:   80, Total cost:  4800.0 (39.02%)
-		goods_input_electronic_components_add = 20            # Price:   80, Total cost:  1600.0 (13.01%)
-		# Total cost: 12300.0
+		goods_input_artillery_add = 15                        # Price:   70, Total cost:  1050.0 (6.14%)
+		goods_input_ironclads_add = 30                        # Price:   80, Total cost:  2400.0 (14.04%)
+		goods_input_ammunition_add = 25                       # Price:   50, Total cost:  1250.0 (7.31%)
+		goods_input_radios_add = 15                           # Price:   80, Total cost:  1200.0 (7.02%)
+		goods_input_aeroplanes_add = 60                       # Price:  160, Total cost:  9600.0 (56.14%)
+		goods_input_electronic_components_add = 20            # Price:   80, Total cost:  1600.0 (9.36%)
+		# Total cost: 17100.0
 	}
     battle_modifier = {
         unit_offense_add = 700
@@ -1153,14 +1077,14 @@ combat_unit_type_arsenal_ship = {
     max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_artillery_add = 30                        # Price:   70, Total cost:  2100.0 (7.72%)
-		goods_input_ironclads_add = 75                        # Price:   80, Total cost:  6000.0 (22.06%)
-		goods_input_ammunition_add = 70                       # Price:   50, Total cost:  3500.0 (12.87%)
-		goods_input_radios_add = 30                           # Price:   80, Total cost:  2400.0 (8.82%)
-		goods_input_aeroplanes_add = 80                       # Price:   80, Total cost:  6400.0 (23.53%)
-		goods_input_electronic_components_add = 60            # Price:   80, Total cost:  4800.0 (17.65%)
-		goods_input_robotics_add = 25                         # Price:   80, Total cost:  2000.0 (7.35%)
-		# Total cost: 27200.0
+		goods_input_artillery_add = 30                        # Price:   70, Total cost:  2100.0 (6.25%)
+		goods_input_ironclads_add = 75                        # Price:   80, Total cost:  6000.0 (17.86%)
+		goods_input_ammunition_add = 70                       # Price:   50, Total cost:  3500.0 (10.42%)
+		goods_input_radios_add = 30                           # Price:   80, Total cost:  2400.0 (7.14%)
+		goods_input_aeroplanes_add = 80                       # Price:  160, Total cost: 12800.0 (38.10%)
+		goods_input_electronic_components_add = 60            # Price:   80, Total cost:  4800.0 (14.29%)
+		goods_input_robotics_add = 25                         # Price:   80, Total cost:  2000.0 (5.95%)
+		# Total cost: 33600.0
 	}
     battle_modifier = {
         unit_offense_add = 1800
@@ -1192,16 +1116,16 @@ combat_unit_type_hypersonic_missile_platform = {
     max_manpower = 1000
 
     upkeep_modifier = {
-		goods_input_artillery_add = 50                        # Price:   70, Total cost:  3500.0 (4.49%)
-		goods_input_ironclads_add = 150                       # Price:   80, Total cost: 12000.0 (15.40%)
-		goods_input_ammunition_add = 120                      # Price:   50, Total cost:  6000.0 (7.70%)
-		goods_input_radios_add = 75                           # Price:   80, Total cost:  6000.0 (7.70%)
-		goods_input_aeroplanes_add = 100                      # Price:   80, Total cost:  8000.0 (10.27%)
-		goods_input_electronic_components_add = 150           # Price:   80, Total cost: 12000.0 (15.40%)
-		goods_input_robotics_add = 80                         # Price:   80, Total cost:  6400.0 (8.22%)
-		goods_input_advanced_materials_add = 5                # Price: 4000, Total cost: 20000.0 (25.67%)
-		goods_input_launch_capacity_add = 20                  # Price:  200, Total cost:  4000.0 (5.13%)
-		# Total cost: 77900.0
+		goods_input_artillery_add = 50                        # Price:   70, Total cost:  3500.0 (4.07%)
+		goods_input_ironclads_add = 150                       # Price:   80, Total cost: 12000.0 (13.97%)
+		goods_input_ammunition_add = 120                      # Price:   50, Total cost:  6000.0 (6.98%)
+		goods_input_radios_add = 75                           # Price:   80, Total cost:  6000.0 (6.98%)
+		goods_input_aeroplanes_add = 100                      # Price:  160, Total cost: 16000.0 (18.63%)
+		goods_input_electronic_components_add = 150           # Price:   80, Total cost: 12000.0 (13.97%)
+		goods_input_robotics_add = 80                         # Price:   80, Total cost:  6400.0 (7.45%)
+		goods_input_advanced_materials_add = 5                # Price: 4000, Total cost: 20000.0 (23.28%)
+		goods_input_launch_capacity_add = 20                  # Price:  200, Total cost:  4000.0 (4.66%)
+		# Total cost: 85900.0
 	}
     battle_modifier = {
         unit_offense_add = 4000

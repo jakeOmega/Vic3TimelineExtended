@@ -1715,7 +1715,7 @@ types power_bloc_panel_types
 				size = { 150 30 }
 				text = "concept_power_bloc_leverage_advantage"
 				tooltip = "POWER_BLOC_MEMBER_LEVERAGE_HEADER_TOOLTIP"
-				onclick = "[PowerBloc.SortMembers('active_leverage')]"
+				onclick = "[PowerBloc.SortMembers('leverage_advantage')]"
 			}
 		}
 
@@ -1754,10 +1754,10 @@ types power_bloc_panel_types
 		background = {
 			visible = "[Country.IsLocalPlayer]"
 			using = fade_left_simple
-			texture = "gfx/interface/backgrounds/fancy_pattern_2.dds"
+			
+			using = fancy_pattern
 			color = "[Country.GetMapColor]"
 			using = frame_small_mask
-			alpha = 0.5
 		}
 
 		using = entry_bg_fancy
@@ -1830,8 +1830,6 @@ types power_bloc_panel_types
 			rank_badge = {
 				size = { 45 45 }
 				position = { -15 -15 }
-
-				blockoverride "datacontext " {}
 
 				blockoverride "font_size_under_100_rank" {
 					using = fontsize_medium
@@ -2382,8 +2380,6 @@ types power_bloc_panel_types
 			rank_badge = {
 				size = { 45 45 }
 				position = { -15 -15 }
-
-				blockoverride "datacontext " {}
 
 				blockoverride "font_size_under_100_rank" {
 					using = fontsize_medium

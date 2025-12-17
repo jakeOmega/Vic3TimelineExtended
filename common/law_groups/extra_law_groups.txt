@@ -5,225 +5,172 @@
 
 lawgroup_privacy_rights = {
 	law_group_category = power_structure
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.25
+	ideological_opinion_impact = 0.25
 }
 
 lawgroup_inheritance = {
 	law_group_category = power_structure
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.25
+	ideological_opinion_impact = 0
 }
 
 lawgroup_rules_of_war = {
 	law_group_category = power_structure
-	
-	progressive_movement_chance = 1
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.5
 }
 
 lawgroup_intellectual_property = {
 	law_group_category = economy
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.25
 }
 
 lawgroup_monetary_policy = {
 	law_group_category = economy
-	
-	progressive_movement_chance = 0.25
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_right_to_information = {
 	law_group_category = economy
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.25
 }
 
 lawgroup_minority_rights = {
 	law_group_category = human_rights
-	
-	progressive_movement_chance = 2
-	regressive_movement_chance = 1
+	ideological_opinion_impact = 1.0
 }
 
 lawgroup_criminal_justice = {
 	law_group_category = human_rights
-	
-	progressive_movement_chance = 2
-	regressive_movement_chance = 2
+	ideological_opinion_impact = 0.5
 }
 
 lawgroup_LGBTQ_rights = {
 	law_group_category = human_rights
-	
-	progressive_movement_chance = 2
-	regressive_movement_chance = 1
+	ideological_opinion_impact = 1.0
 }
 
 lawgroup_human_augmentation = {
 	law_group_category = human_rights
-	
-	progressive_movement_chance = 2
-	regressive_movement_chance = 2
+	ideological_opinion_impact = 0.5
 }
 
 lawgroup_state_power = {
 	law_group_category = power_structure
-
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_electoral_finance = {
 	law_group_category = power_structure
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.25
 }
 
 lawgroup_financial_regulation = {
 	law_group_category = economy
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.25
 }
 
 lawgroup_genetic_rights = {
 	law_group_category = economy
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.25
 }
 
 lawgroup_internet_governance = {
-	law_group_category = human_rights
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	law_group_category = power_structure
+	ideological_opinion_impact = 0.25
 }
 
 lawgroup_family_reproductive_policy = {
 	law_group_category = human_rights
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.5
 }
+
+lawgroup_language_policy = {
+    law_group_category = human_rights
+	ideological_opinion_impact = 0.25
+}
+
+lawgroup_antitrust = {
+    law_group_category = economy
+	ideological_opinion_impact = 0.25
+}
+
 
 
 lawgroup_ministry_of_foreign_affairs = {
 	law_group_category = power_structure
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_ministry_of_war = {
 	law_group_category = power_structure
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_ministry_of_intelligence_and_security = {
 	law_group_category = power_structure
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_ministry_of_commerce = {
 	law_group_category = economy
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_national_bank = {
 	law_group_category = economy
-	
-	progressive_movement_chance = 1
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_ministry_of_the_environment = {
 	law_group_category = economy
-	
-	progressive_movement_chance = 2
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.5
 }
 
 lawgroup_ministry_of_culture = {
 	law_group_category = human_rights
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_ministry_of_labor = {
 	law_group_category = human_rights
-	
-	progressive_movement_chance = 2
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.25
 }
 
 lawgroup_ministry_of_refugee_affairs = {
 	law_group_category = human_rights
-	
-	progressive_movement_chance = 0.25
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.25
 }
 
 lawgroup_ministry_of_propaganda = {
 	law_group_category = power_structure
-	
-	progressive_movement_chance = 0.25
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.25
 }
 
 lawgroup_ministry_of_science = {
 	law_group_category = power_structure
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_ministry_of_thought_control = {
 	law_group_category = power_structure
-	
-	progressive_movement_chance = 0.25
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0.5
 }
 
 lawgroup_ministry_of_consumer_protection = {
 	law_group_category = economy
-	
-	progressive_movement_chance = 2
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_ministry_of_urban_planning = {
 	law_group_category = economy
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_ministry_of_religion = {
 	law_group_category = human_rights
-	
-	progressive_movement_chance = 0.5
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }
 
 lawgroup_ministry_of_international_aid = {
 	law_group_category = human_rights
-	
-	progressive_movement_chance = 0.25
-	regressive_movement_chance = 0.5
+	ideological_opinion_impact = 0
 }

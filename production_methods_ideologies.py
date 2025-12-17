@@ -551,6 +551,117 @@ finreg_meritocratic = [
     ("law_central_bank_independence", "strongly_approve"),
 ]
 
+language_traditionalist = [
+    ("law_local_vernacular", "approve"),
+    ("law_civic_monolingualism", "neutral"),
+    ("law_regional_co_official", "disapprove"),
+    ("law_linguistic_purity", "approve"),
+    ("law_state_led_language_reform", "disapprove"),
+    ("law_ubiquitous_translation", "disapprove"),
+]
+
+language_assimilationist = [
+    ("law_local_vernacular", "disapprove"),
+    ("law_civic_monolingualism", "strongly_approve"),
+    ("law_regional_co_official", "disapprove"),
+    (
+        "law_linguistic_purity",
+        "disapprove",
+    ),  # moderate assimilationists dislike coercion
+    ("law_state_led_language_reform", "approve"),
+    ("law_ubiquitous_translation", "disapprove"),
+]
+
+language_ethno_nationalist = [
+    ("law_local_vernacular", "neutral"),
+    ("law_civic_monolingualism", "approve"),
+    ("law_regional_co_official", "strongly_disapprove"),
+    ("law_linguistic_purity", "strongly_approve"),
+    ("law_state_led_language_reform", "approve"),
+    ("law_ubiquitous_translation", "strongly_disapprove"),
+]
+
+language_pluralist = [
+    ("law_local_vernacular", "neutral"),
+    ("law_civic_monolingualism", "neutral"),
+    ("law_regional_co_official", "strongly_approve"),
+    ("law_linguistic_purity", "strongly_disapprove"),
+    ("law_state_led_language_reform", "approve"),
+    ("law_ubiquitous_translation", "approve"),
+]
+
+language_reformist = [
+    ("law_local_vernacular", "disapprove"),
+    ("law_civic_monolingualism", "approve"),
+    ("law_regional_co_official", "approve"),
+    ("law_linguistic_purity", "disapprove"),
+    ("law_state_led_language_reform", "strongly_approve"),
+    ("law_ubiquitous_translation", "approve"),
+]
+
+language_technologist = [
+    ("law_local_vernacular", "disapprove"),
+    ("law_civic_monolingualism", "neutral"),
+    ("law_regional_co_official", "approve"),
+    ("law_linguistic_purity", "strongly_disapprove"),
+    ("law_state_led_language_reform", "approve"),
+    ("law_ubiquitous_translation", "strongly_approve"),
+]
+
+antitrust_laissez_faire = [
+    ("law_guilds_chartered_monopolies", "neutral"),
+    ("law_freedom_of_contract", "strongly_approve"),
+    ("law_trust_busting", "disapprove"),
+    ("law_regulated_utilities", "disapprove"),
+    ("law_dirigisme", "disapprove"),
+    ("law_command_cooperative_economy", "strongly_disapprove"),
+]
+
+antitrust_ordoliberal = [
+    ("law_guilds_chartered_monopolies", "disapprove"),
+    ("law_freedom_of_contract", "neutral"),
+    ("law_trust_busting", "approve"),
+    ("law_regulated_utilities", "approve"),
+    ("law_dirigisme", "disapprove"),
+    ("law_command_cooperative_economy", "strongly_disapprove"),
+]
+
+antitrust_dirigiste = [
+    ("law_guilds_chartered_monopolies", "neutral"),
+    ("law_freedom_of_contract", "disapprove"),
+    ("law_trust_busting", "disapprove"),
+    ("law_regulated_utilities", "approve"),
+    ("law_dirigisme", "strongly_approve"),
+    ("law_command_cooperative_economy", "disapprove"),
+]
+
+antitrust_command_coop = [
+    ("law_guilds_chartered_monopolies", "disapprove"),
+    ("law_freedom_of_contract", "strongly_disapprove"),
+    ("law_trust_busting", "neutral"),
+    ("law_regulated_utilities", "approve"),
+    ("law_dirigisme", "disapprove"),
+    ("law_command_cooperative_economy", "strongly_approve"),
+]
+
+antitrust_corporatist_nat = [
+    ("law_guilds_chartered_monopolies", "neutral"),
+    ("law_freedom_of_contract", "disapprove"),
+    ("law_trust_busting", "neutral"),
+    ("law_regulated_utilities", "approve"),
+    ("law_dirigisme", "approve"),
+    ("law_command_cooperative_economy", "strongly_disapprove"),
+]
+
+antitrust_traditional = [
+    ("law_guilds_chartered_monopolies", "approve"),
+    ("law_freedom_of_contract", "disapprove"),
+    ("law_trust_busting", "disapprove"),
+    ("law_regulated_utilities", "neutral"),
+    ("law_dirigisme", "approve"),
+    ("law_command_cooperative_economy", "disapprove"),
+]
+
 
 modifications = {
     "ideology_paternalistic": {
@@ -597,6 +708,8 @@ modifications = {
             ("law_population_control_measures", "strongly_disapprove"),
             ("law_communal_child_rearing", "strongly_disapprove"),
         ],
+        "lawgroup_language_policy": language_traditionalist,
+        "lawgroup_antitrust": antitrust_dirigiste,
     },
     "ideology_particularist": {
         "lawgroup_privacy_rights": pro_privacy_entry,
@@ -618,6 +731,8 @@ modifications = {
             ("law_devolution", "strongly_approve"),
         ],
         "lawgroup_financial_regulation": finreg_populist,
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_traditional,
     },
     "ideology_patriotic": {
         "lawgroup_privacy_rights": anti_privacy_entry,
@@ -650,6 +765,8 @@ modifications = {
             ("law_federal_system", "neutral"),
             ("law_devolution", "disapprove"),
         ],
+        "lawgroup_language_policy": language_assimilationist,
+        "lawgroup_antitrust": antitrust_corporatist_nat,
     },
     "ideology_liberal": {
         "lawgroup_privacy_rights": pro_privacy_entry,
@@ -698,6 +815,8 @@ modifications = {
             ("law_state_controlled_internet", "strongly_disapprove"),
             ("law_net_neutrality", "approve"),
         ],
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_liberal_modern": {
         "lawgroup_privacy_rights": pro_privacy_entry,
@@ -764,6 +883,8 @@ modifications = {
             ("law_open_source_genetics", "strongly_approve"),
             ("law_state_eugenics_program", "strongly_disapprove"),
         ],
+        "lawgroup_language_policy": language_technologist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_market_liberal": {
         "lawgroup_privacy_rights": reform_privacy_entry,
@@ -799,6 +920,8 @@ modifications = {
         ),
         "lawgroup_minority_rights": minority_like,
         "lawgroup_financial_regulation": finreg_market_liberal,
+        "lawgroup_language_policy": language_assimilationist,
+        "lawgroup_antitrust": antitrust_laissez_faire,
     },
     "ideology_traditionalist": {
         "lawgroup_privacy_rights": trad_privacy_entry,
@@ -819,6 +942,8 @@ modifications = {
         ),
         "lawgroup_inheritance": traditional_inheritance,
         "lawgroup_minority_rights": minority_dislike,
+        "lawgroup_language_policy": language_traditionalist,
+        "lawgroup_antitrust": antitrust_traditional,
     },
     "ideology_reformer": {
         "lawgroup_privacy_rights": reform_privacy_entry,
@@ -836,6 +961,8 @@ modifications = {
         ),
         "lawgroup_inheritance": reform_inheritance,
         "lawgroup_minority_rights": minority_like,
+        "lawgroup_language_policy": language_reformist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_populist": {
         "lawgroup_privacy_rights": reform_privacy_entry,
@@ -881,6 +1008,8 @@ modifications = {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
         ],
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_social_democrat": {
         "lawgroup_privacy_rights": reform_privacy_entry,
@@ -929,6 +1058,8 @@ modifications = {
             ("law_population_control_measures", "strongly_disapprove"),
             ("law_communal_child_rearing", "disapprove"),
         ],
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_vanguardist": {
         "lawgroup_privacy_rights": extremist_privacy_entry,
@@ -968,6 +1099,8 @@ modifications = {
             ("law_population_control_measures", "approve"),
             ("law_communal_child_rearing", "strongly_approve"),
         ],
+        "lawgroup_language_policy": language_reformist,
+        "lawgroup_antitrust": antitrust_command_coop,
     },
     "ideology_fascist": {
         "lawgroup_privacy_rights": extremist_privacy_entry,
@@ -1023,6 +1156,8 @@ modifications = {
             ("law_open_source_genetics", "disapprove"),
             ("law_state_eugenics_program", "strongly_approve"),
         ],
+        "lawgroup_language_policy": language_ethno_nationalist,
+        "lawgroup_antitrust": antitrust_corporatist_nat,
     },
     "ideology_anarchist": {
         "lawgroup_privacy_rights": pro_privacy_entry,
@@ -1075,6 +1210,8 @@ modifications = {
             ("law_open_source_genetics", "approve"),
             ("law_state_eugenics_program", "strongly_disapprove"),
         ],
+        "lawgroup_language_policy": language_technologist,
+        "lawgroup_antitrust": antitrust_command_coop,
     },
     "ideology_laissez_faire": {
         "lawgroup_ministry_of_commerce": ministry_constructor(
@@ -1174,6 +1311,8 @@ modifications = {
         "lawgroup_ministry_of_science": ministry_constructor(
             "ministry_of_science", "+"
         ),
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_egalitarian_modern": {
         "lawgroup_LGBTQ_rights": lgbtq_love,
@@ -1182,6 +1321,8 @@ modifications = {
         "lawgroup_ministry_of_consumer_protection": ministry_constructor(
             "ministry_of_consumer_protection", "++"
         ),
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_meritocratic": {
         "lawgroup_human_augmentation": unregulated_augmentation,
@@ -1331,6 +1472,8 @@ modifications = {
             ("law_communal_child_rearing", "strongly_approve"),
         ],
         "lawgroup_financial_regulation": finreg_communist,
+        "lawgroup_language_policy": language_reformist,
+        "lawgroup_antitrust": antitrust_command_coop,
     },
     "ideology_pacifist": {
         "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "--"),
@@ -1513,6 +1656,8 @@ modifications = {
             ("law_population_control_measures", "neutral"),
             ("law_communal_child_rearing", "strongly_disapprove"),
         ],
+        "lawgroup_language_policy": language_traditionalist,
+        "lawgroup_antitrust": antitrust_traditional,
     },
     "ideology_theocrat": {
         "lawgroup_LGBTQ_rights": lgbtq_hate,
@@ -1602,6 +1747,8 @@ modifications = {
             ("law_population_control_measures", "disapprove"),
             ("law_communal_child_rearing", "neutral"),
         ],
+        "lawgroup_language_policy": language_reformist,
+        "lawgroupt_antitrust": antitrust_command_coop,
     },
     "ideology_scholar_paternalistic": {
         "lawgroup_governance_principles": [
@@ -2120,6 +2267,8 @@ modifications = {
             ("law_population_control_measures", "disapprove"),
             ("law_communal_child_rearing", "neutral"),
         ],
+        "lawgroup_language_policy": language_reformist,
+        "lawgroup_antitrust": antitrust_command_coop,
     },
     "ideology_communist_movement": {
         "lawgroup_governance_principles": [
@@ -2138,6 +2287,8 @@ modifications = {
             ("law_population_control_measures", "disapprove"),
             ("law_communal_child_rearing", "strongly_approve"),
         ],
+        "lawgroup_language_policy": language_reformist,
+        "lawgroup_antitrust": antitrust_command_coop,
     },
     "ideology_anarchist_movement": {
         "lawgroup_governance_principles": [
@@ -2161,6 +2312,8 @@ modifications = {
             ("law_population_control_measures", "strongly_disapprove"),
             ("law_communal_child_rearing", "neutral"),
         ],
+        "lawgroup_language_policy": language_technologist,
+        "lawgroup_antitrust": antitrust_command_coop,
     },
     "ideology_vanguardist_movement": {
         "lawgroup_governance_principles": [
@@ -2231,6 +2384,8 @@ modifications = {
             ("law_population_control_measures", "strongly_approve"),
             ("law_communal_child_rearing", "strongly_disapprove"),
         ],
+        "lawgroup_language_policy": language_ethno_nationalist,
+        "lawgroup_antitrust": antitrust_corporatist_nat,
     },
     "ideology_corporatist_movement": {
         "lawgroup_governance_principles": [
@@ -2251,6 +2406,8 @@ modifications = {
             ("law_algorithmic_governance", "disapprove"),
         ],
         "lawgroup_financial_regulation": finreg_liberal,
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_radical_movement": {
         "lawgroup_distribution_of_power": [
@@ -2276,6 +2433,8 @@ modifications = {
         "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
             "ministry_of_refugee_affairs", "+"
         ),
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_nihilist_movement": {
         "lawgroup_governance_principles": [

@@ -240,8 +240,16 @@ base_tourism_appeal_value = {
 		value = 70 # Isthmus with two long coastlines, tropical forests, and strategic importance.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_CUBA }
-		value = 80 # Beautiful beaches, tropical climate, unique terrain, and significant colonial history.
+		limit = { state_region = s:STATE_WESTERN_CUBA }
+		value = 75 # Beautiful beaches, tropical climate, unique terrain, and significant colonial history.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CENTRAL_CUBA }
+		value = 80 # Historic Havana, Varadero beaches, and diverse terrain.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EASTERN_CUBA }
+		value = 70 # Varied terrain, beautiful beaches, and rich history.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_URUGUAY }
@@ -300,7 +308,7 @@ base_tourism_appeal_value = {
 		value = 60 # Mountainous and scenic with historic cities like Sarajevo and Mostar.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_NAVARRA }
+		limit = { state_region = s:STATE_BASQUE_COUNTRY }
 		value = 70 # Pyrenees mountains and historical significance (Pamplona).
 	}
 	else_if = {
@@ -332,8 +340,8 @@ base_tourism_appeal_value = {
 		value = 75 # "Green Spain," rugged coastline and the Picos de Europa mountains.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_CASTILE }
-		value = 70 # High plateau with major historical cities (Le�n, Burgos, Salamanca).
+		limit = { state_region = s:STATE_OLD_CASTILE }
+		value = 70 # High plateau with major historical cities (Leon, Burgos, Salamanca).
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ARAGON }
@@ -344,7 +352,7 @@ base_tourism_appeal_value = {
 		value = 90 # Pyrenees, Costa Brava, and the immense historical/cultural weight of Barcelona.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_BALEARES }
+		limit = { state_region = s:STATE_BALEARIC_ISLANDS }
 		value = 85 # Famous Mediterranean islands (Majorca, Ibiza) with great beaches and climate.
 	}
 	else_if = {
@@ -440,7 +448,7 @@ base_tourism_appeal_value = {
 		value = 50 # Fouta Djallon highlands offer impressive scenery.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_GHANA }
+		limit = { state_region = s:STATE_GOLD_COAST }
 		value = 50 # Coastline with historical slave forts.
 	}
 	else_if = {
@@ -1028,24 +1036,36 @@ base_tourism_appeal_value = {
 		value = 85 # Dramatic volcanic islands with crater lakes and lush green landscapes.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_GRANADA }
+		limit = { state_region = s:STATE_ENTRE_DOURO_E_MINHO }
 		value = 90 # The Alhambra in Granada, Sierra Nevada mountains, and Mediterranean coast.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_ANDALUSIA }
-		value = 90 # Moorish heritage (Seville, C�rdoba), white villages, and Atlantic coast.
+		limit = { state_region = s:STATE_UPPER_ANDALUSIA }
+		value = 90 # Historic cities of Seville, Cordoba, and Granada, plus the Costa del Sol coastline.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_BADAJOZ }
-		value = 50 # Roman ruins (M�rida) but largely arid plains.
+		limit = { state_region = s:STATE_LOWER_ANDALUSIA }
+		value = 90 # Moorish heritage (Seville, Cordoba), white villages, and Atlantic coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EXTREMADURA }
+		value = 50 # Roman ruins (Merida) but largely arid plains.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_VALENCIA }
 		value = 80 # Long Mediterranean coastline and the historic city of Valencia.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_TOLEDO }
+		limit = { state_region = s:STATE_NEW_CASTILE }
 		value = 85 # Madrid (capital) and the historically crucial city of Toledo.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MURCIA }
+		value = 75 # Mediterranean coastline and historical sites (Cartagena).
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LEON }
+		value = 70 # Historic cities (Leon, Astorga) and natural beauty.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_WALLONIA }
@@ -1493,11 +1513,7 @@ base_tourism_appeal_value = {
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SENEGAL }
-		value = 60 # Historic slave trade islands (Gor�e), Sahelian wildlife.
-	}
-	else_if = {
-		limit = { state_region = s:STATE_GAMBIA }
-		value = 55 # Gambia River is a primary feature.
+		value = 60 # Historic slave trade islands (Goree), Sahelian wildlife.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SIERRA_LEONE }
@@ -1656,11 +1672,15 @@ base_tourism_appeal_value = {
 		value = 80 # Bay of Kotor is a fjord-like bay on the Adriatic. Rugged mountains.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_NORTHERN_SERBIA }
-		value = 65 # Capital of Belgrade at the confluence of the Danube and Sava.
+		limit = { state_region = s:STATE_WESTERN_SERBIA }
+		value = 70 # Historic sites like Belgrade and Novi Sad.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_SOUTHERN_SERBIA }
+		limit = { state_region = s:STATE_EASTERN_SERBIA }
+		value = 65 # Danube River and Iron Gates gorge.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KOSOVO }
 		value = 60 # Historically significant heartland of medieval Serbia.
 	}
 	else_if = {
@@ -2173,18 +2193,14 @@ base_tourism_appeal_value = {
 	}
 	else_if = {
 		limit = { state_region = s:STATE_WEST_GALICIA }
-		value = 80 # Historic city of Krak�w, a major cultural center. Access to Tatra mountains.
+		value = 80 # Historic city of Krakow, a major cultural center. Access to Tatra mountains.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_EAST_GALICIA }
 		value = 70 # Historic city of Lviv, with well-preserved architecture.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_EAST_SLOVAKIA }
-		value = 65 # Tatra mountains.
-	}
-	else_if = {
-		limit = { state_region = s:STATE_WEST_SLOVAKIA }
+		limit = { state_region = s:STATE_SLOVAKIA }
 		value = 70 # Historic capital of Bratislava on the Danube, with nearby castles.
 	}
 	else_if = {
@@ -2288,8 +2304,12 @@ base_tourism_appeal_value = {
 		value = 70 # Historic cities like Cologne (cathedral) and Aachen (Charlemagne's capital).
 	}
 	else_if = {
-		limit = { state_region = s:STATE_SILESIA }
-		value = 55 # Plains with some mountains on the border.
+		limit = { state_region = s:STATE_LOWER_SILESIA }
+		value = 55 # Historic city of Breslau/Wroclaw, but largely flat.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UPPER_SILESIA }
+		value = 50 # Industrial region, but contains the Beskid mountains.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BRANDENBURG }
@@ -2823,34 +2843,34 @@ tourism_throughput_from_land_transport = {
 tourism_throughput_from_art = {
 	value = 0
 	if = {
-		limit = { has_building = building_arts_academy }
+		limit = { has_building = building_art_academy }
 		add = { 
-			value = b:building_arts_academy.level
+			value = b:building_art_academy.level
 			max = 20
 			multiply = 0.01
 		}
 		if = {
-			limit = { b:building_arts_academy.level > 20 }
+			limit = { b:building_art_academy.level > 20 }
 			add = {
-				value = b:building_arts_academy.level
+				value = b:building_art_academy.level
 				subtract = 20
 				max = 80
 				multiply = 0.0025
 			}
 		}
 		if = {
-			limit = { b:building_arts_academy.level > 100 }
+			limit = { b:building_art_academy.level > 100 }
 			add = {
-				value = b:building_arts_academy.level
+				value = b:building_art_academy.level
 				subtract = 100
 				max = 400
 				multiply = 0.0005
 			}
 		}
 		if = {
-			limit = { b:building_arts_academy.level > 500 }
+			limit = { b:building_art_academy.level > 500 }
 			add = {
-				value = b:building_arts_academy.level
+				value = b:building_art_academy.level
 				subtract = 500
 				max = 1000
 				multiply = 0.0001

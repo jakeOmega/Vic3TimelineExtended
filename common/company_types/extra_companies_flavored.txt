@@ -16,26 +16,26 @@ company_volkswagen = {
 		building_volkswagen_autostadt
 	}
 	extension_building_types = {
-		building_steel_mills
+		building_steel_mill
 		building_electrics_industry_appliances # For consumer appliances
 	}
 	potential = {
-		has_interest_marker_in_region = region_north_germany
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_SAXONY
-		}
+		"goods_production_rank(g:automobiles)" <= 3
 	}
 	possible = {
 		has_technology_researched = modern_automotive_technology
 		any_scope_state = {
-			state_region = s:STATE_SAXONY
 			any_scope_building = {
 				is_building_type = building_automotive_industry
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:steel)" <= 5
+		gdp_ranking <= 10
+		literacy_rate > 0.75
 	}
 	prosperity_modifier = {
 		building_automotive_industry_throughput_add = 0.15
@@ -50,10 +50,7 @@ company_volkswagen = {
 	}
 	ai_construction_targets = {
 		building_automotive_industry = {
-			level = 10
-			state_trigger = {
-				state_region = s:STATE_SAXONY
-			}
+			level = 5
 		}
 	}
 }
@@ -72,26 +69,27 @@ company_toyota = {
 		building_toyota_kaikan_plant
 	}
 	extension_building_types = {
-		building_steel_mills
+		building_steel_mill
 		building_electronic_components_and_semiconductor_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_japan
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_CHUBU
-		}
+		"goods_production_rank(g:automobiles)" <= 3
 	}
 	possible = {
 		has_technology_researched = modern_automotive_technology
 		any_scope_state = {
-			state_region = s:STATE_CHUBU
 			any_scope_building = {
 				is_building_type = building_automotive_industry
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:consumer_appliances)" <= 10
+		gdp_per_capita_ranking <= 10
+		exists = ig:ig_industrialists
+		ig:ig_industrialists ?= { is_powerful = yes }
 	}
 	prosperity_modifier = {
 		building_automotive_industry_throughput_add = 0.05
@@ -108,9 +106,6 @@ company_toyota = {
 	ai_construction_targets = {
 		building_automotive_industry = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_CHUBU
-			}
 		}
 	}
 }
@@ -125,31 +120,32 @@ company_samsung = {
 	}
 	building_types = {
 		building_electrics_industry_appliances
-		building_electronic_components_and_semiconductor_industry
-		building_shipyards
+		building_electrics_industry
+		building_shipyard
 		building_samsung_digital_city
 	}
 	extension_building_types = {
+		building_electrics_industry_radio
 		building_software_industry
 		building_network_infrastructure
+		building_electronic_components_and_semiconductor_industry
 	}
 	potential = {
-		#has_interest_marker_in_region = region_manchuria
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_SEOUL
-		}
+		"goods_production_rank(g:consumer_appliances)" <= 3
 	}
 	possible = {
 		has_technology_researched = transistors
 		any_scope_state = {
-			state_region = s:STATE_SEOUL
 			any_scope_building = {
 				is_building_type = building_electrics_industry_appliances
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:telephones)" <= 5
+		gdp_ranking <= 15
 	}
 	prosperity_modifier = {
 		country_weekly_innovation_mult = 0.1
@@ -166,9 +162,6 @@ company_samsung = {
 	ai_construction_targets = {
 		building_electrics_industry_appliances = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_SEOUL
-			}
 		}
 	}
 }
@@ -191,22 +184,22 @@ company_hp = {
 		building_robotics_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_pacific_coast
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
-		}
+		"goods_production_rank(g:consumer_appliances)" <= 3
 	}
 	possible = {
 		has_technology_researched = transistors
 		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
 			any_scope_building = {
 				is_building_type = building_electrics_industry_appliances
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:electronic_components)" <= 5
+		exists = ig:ig_intelligentsia
+		ig:ig_intelligentsia ?= { is_in_government = yes }
 	}
 	prosperity_modifier = {
 		country_society_tech_research_speed_mult = 0.1
@@ -222,9 +215,6 @@ company_hp = {
 	ai_construction_targets = {
 		building_electrics_industry = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_CALIFORNIA
-			}
 		}
 	}
 }
@@ -240,29 +230,28 @@ company_sony = {
 	building_types = {
 		building_electrics_industry_appliances # Consumer Appliances
 		building_electronic_components_and_semiconductor_industry
-		building_arts_academy # Art and Entertainment
+		building_art_academy # Art and Entertainment
 		building_sony_pictures_studios
 	}
 	extension_building_types = {
 		building_software_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_japan
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_KANTO
-		}
+		"goods_production_rank(g:consumer_appliances)" <= 3
 	}
 	possible = {
 		has_technology_researched = transistors
 		any_scope_state = {
-			state_region = s:STATE_KANTO
 			any_scope_building = {
 				is_building_type = building_electrics_industry_appliances
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:fine_art)" <= 10
+		sol_ranking <= 20
 	}
 	prosperity_modifier = {
 		goods_output_consumer_appliances_mult = 0.1
@@ -279,9 +268,6 @@ company_sony = {
 	ai_construction_targets = {
 		building_electrics_industry_appliances = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_KANTO
-			}
 		}
 	}
 }
@@ -295,30 +281,29 @@ company_ikea = {
         STATE_GOTALAND
 	}
 	building_types = {
-		building_furniture_manufacturies
+		building_furniture_manufactory
 		building_ikea_almhult_campus
 	}
 	extension_building_types = {
 		building_logging_camp
-		building_textile_mills
+		building_textile_mill
 	}
 	potential = {
-		has_interest_marker_in_region = region_baltic
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_GOTALAND
-		}
+		"goods_production_rank(g:furniture)" <= 3
 	}
 	possible = {
 		has_technology_researched = marketing_research
 		any_scope_state = {
-			state_region = s:STATE_GOTALAND
 			any_scope_building = {
-				is_building_type = building_furniture_manufacturies
+				is_building_type = building_furniture_manufactory
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:wood)" <= 5
+		sol_ranking <= 20
 	}
 	prosperity_modifier = {
 		goods_input_wood_mult = -0.1
@@ -332,11 +317,8 @@ company_ikea = {
 		has_technology_researched = marketing_research
 	}
 	ai_construction_targets = {
-		building_furniture_manufacturies = {
+		building_furniture_manufactory = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_GOTALAND
-			}
 		}
 	}
 }
@@ -361,22 +343,22 @@ company_intel = {
 		building_robotics_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_pacific_coast
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
-		}
+		"goods_production_rank(g:electronic_components)" <= 3
 	}
 	possible = {
 		has_technology_researched = microprocessor
 		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
 			any_scope_building = {
 				is_building_type = building_electronic_components_and_semiconductor_industry
 				level >= 5
 			}
 		}
+		leading_producer_of = g:electronic_components
+		exists = ig:ig_intelligentsia
+		ig:ig_intelligentsia ?= { ig_approval >= 5 }
 	}
 	prosperity_modifier = {
 		country_production_tech_research_speed_mult = 0.1
@@ -392,9 +374,6 @@ company_intel = {
 	ai_construction_targets = {
 		building_electronic_components_and_semiconductor_industry = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_CALIFORNIA
-			}
 		}
 	}
 }
@@ -402,7 +381,7 @@ company_intel = {
 # Microsoft (1975)
 company_microsoft = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_microsoft.dds"
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
         STATE_WASHINGTON # Seattle area, Microsoft's home base
@@ -416,22 +395,21 @@ company_microsoft = {
 		building_network_infrastructure # For Azure cloud
 	}
 	potential = {
-		has_interest_marker_in_region = region_pacific_coast
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_WASHINGTON
-		}
+		"goods_production_rank(g:digital_assets)" <= 3
 	}
 	possible = {
 		has_technology_researched = personal_computers
 		any_scope_state = {
-			state_region = s:STATE_WASHINGTON
 			any_scope_building = {
 				is_building_type = building_software_industry
 				level >= 5
 			}
 		}
+		gdp_ranking <= 10
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		state_education_access_add = 0.05
@@ -447,9 +425,6 @@ company_microsoft = {
 	ai_construction_targets = {
 		building_software_industry = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_WASHINGTON
-			}
 		}
 	}
 }
@@ -457,7 +432,7 @@ company_microsoft = {
 # Apple (1976)
 company_apple = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_apple.dds"
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
         STATE_CALIFORNIA # Silicon Valley, Apple's home base
@@ -474,22 +449,21 @@ company_apple = {
 		building_electrics_industry_radio
 	}
 	potential = {
-		has_interest_marker_in_region = region_pacific_coast
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
-		}
+		"goods_production_rank(g:consumer_appliances)" <= 3
 	}
 	possible = {
 		has_technology_researched = personal_computers
 		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
 			any_scope_building = {
 				is_building_type = building_electrics_industry_appliances
 				level >= 5
 			}
 		}
+		gdp_per_capita_ranking <= 10
+		"goods_production_rank(g:digital_assets)" <= 5
 	}
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
@@ -506,9 +480,6 @@ company_apple = {
 	ai_construction_targets = {
 		building_electrics_industry_appliances = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_CALIFORNIA
-			}
 		}
 	}
 }
@@ -531,22 +502,23 @@ company_tsmc = {
 		building_robotics_industry # For manufacturing automation
 	}
 	potential = {
-		has_interest_marker_in_region = region_south_china
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_FORMOSA
-		}
+		"goods_production_rank(g:electronic_components)" <= 3
 	}
 	possible = {
 		has_technology_researched = integrated_circuits
 		any_scope_state = {
-			state_region = s:STATE_FORMOSA
 			any_scope_building = {
 				is_building_type = building_electronic_components_and_semiconductor_industry
 				level >= 10
 			}
 		}
+		leading_producer_of = g:electronic_components
+		exists = ig:ig_industrialists
+		ig:ig_industrialists ?= { ig_approval >= 5 }
+		ig:ig_industrialists ?= { is_powerful = yes }
 	}
 	prosperity_modifier = {
 		building_electronic_components_and_semiconductor_industry_throughput_add = 0.2
@@ -563,9 +535,6 @@ company_tsmc = {
 	ai_construction_targets = {
 		building_electronic_components_and_semiconductor_industry = {
 			level = 15
-			state_trigger = {
-				state_region = s:STATE_FORMOSA
-			}
 		}
 	}
 }
@@ -588,22 +557,22 @@ company_huawei = {
 		building_software_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_south_china
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_GUANGDONG
-		}
+		"goods_production_rank(g:telephones)" <= 3
 	}
 	possible = {
 		has_technology_researched = computer_networks
 		any_scope_state = {
-			state_region = s:STATE_GUANGDONG
 			any_scope_building = {
 				is_building_type = building_network_infrastructure
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:digital_assets)" <= 10
+		"goods_production_rank(g:consumer_appliances)" <= 10
+		"goods_production_rank(g:electronic_components)" <= 10
 	}
 	prosperity_modifier = {
 		state_infrastructure_add = 10
@@ -620,9 +589,6 @@ company_huawei = {
 	ai_construction_targets = {
 		building_network_infrastructure = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_GUANGDONG
-			}
 		}
 	}
 }
@@ -633,7 +599,7 @@ company_huawei = {
 # Amazon (1994)
 company_amazon = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_amazon.dds"
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
         STATE_WASHINGTON # Seattle area, Amazon's home base
@@ -648,22 +614,21 @@ company_amazon = {
 		building_robotics_industry # For warehouse automation
 	}
 	potential = {
-		has_interest_marker_in_region = region_pacific_coast
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_WASHINGTON
-		}
+		"goods_production_rank(g:merchant_marine)" <= 3
 	}
 	possible = {
 		has_technology_researched = e-commerce
 		any_scope_state = {
-			state_region = s:STATE_WASHINGTON
 			any_scope_building = {
 				is_building_type = building_network_infrastructure
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:digital_assets)" <= 5
+		has_law = law_type:law_free_trade
 	}
 	prosperity_modifier = {
 		building_urban_center_throughput_add = 0.1 # For logistics and distribution
@@ -680,9 +645,6 @@ company_amazon = {
 	ai_construction_targets = {
 		building_network_infrastructure = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_WASHINGTON
-			}
 		}
 	}
 }
@@ -704,22 +666,22 @@ company_nvidia = {
 		building_robotics_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_pacific_coast
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
-		}
+		"goods_production_rank(g:electronic_components)" <= 3
 	}
 	possible = {
 		has_technology_researched = computer_aided_design
 		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
 			any_scope_building = {
 				is_building_type = building_electronic_components_and_semiconductor_industry
 				level >= 5
 			}
 		}
+		exists = ig:ig_intelligentsia
+		ig:ig_intelligentsia ?= { ig_approval >= 5 }
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		country_tech_research_speed_mult = 0.05 # For AI and scientific computing
@@ -735,9 +697,6 @@ company_nvidia = {
 	ai_construction_targets = {
 		building_electronic_components_and_semiconductor_industry = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_CALIFORNIA
-			}
 		}
 	}
 }
@@ -745,7 +704,7 @@ company_nvidia = {
 # Google (Alphabet) (1998)
 company_google = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_google.dds"
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
         STATE_CALIFORNIA # Silicon Valley, Google's home base
@@ -760,21 +719,23 @@ company_google = {
 		building_automotive_industry # For Waymo
 	}
 	potential = {
-		has_interest_marker_in_region = region_pacific_coast
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
-		}
+		"goods_production_rank(g:digital_assets)" <= 3
 	}
 	possible = {
 		has_technology_researched = world_wide_web
 		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
 			any_scope_building = {
 				is_building_type = building_network_infrastructure
 				level >= 5
 			}
+		}
+		gdp_ranking <= 10
+		OR = {
+			has_law = law_type:law_net_neutrality
+			has_law = law_type:law_unregulated_internet
 		}
 	}
 	prosperity_modifier = {
@@ -791,9 +752,6 @@ company_google = {
 	ai_construction_targets = {
 		building_network_infrastructure = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_CALIFORNIA
-			}
 		}
 	}
 }
@@ -801,13 +759,13 @@ company_google = {
 # Netflix (1997)
 company_netflix = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_netflix.dds"
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
         STATE_CALIFORNIA # Silicon Valley, Netflix's home base
 	}
 	building_types = {
-		building_arts_academy # Fine Art and Entertainment
+		building_art_academy # Fine Art and Entertainment
 		building_network_infrastructure # Digital Access
 		building_netflix_animation_studios
 	}
@@ -815,22 +773,21 @@ company_netflix = {
 		building_software_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_pacific_coast
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
-		}
+		"goods_production_rank(g:fine_art)" <= 3
 	}
 	possible = {
 		has_technology_researched = wireless_internet
 		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
 			any_scope_building = {
-				is_building_type = building_arts_academy
+				is_building_type = building_art_academy
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:digital_assets)" <= 10
+		sol_ranking <= 20
 	}
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
@@ -844,11 +801,8 @@ company_netflix = {
 		has_technology_researched = wireless_internet
 	}
 	ai_construction_targets = {
-		building_arts_academy = {
+		building_art_academy = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_CALIFORNIA
-			}
 		}
 	}
 }
@@ -873,31 +827,23 @@ company_spacex = {
 		building_space_elevator
 	}
 	potential = {
-		OR = {
-			has_interest_marker_in_region = region_pacific_coast
-			has_interest_marker_in_region = region_dixie
-		}
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			OR = {
-				state_region = s:STATE_CALIFORNIA
-                state_region = s:STATE_TEXAS
-			}
-		}
+		"goods_production_rank(g:launch_capacity)" <= 3
 	}
 	possible = {
 		has_technology_researched = reusable_rocketry
 		any_scope_state = {
-			OR = {
-				state_region = s:STATE_CALIFORNIA
-                state_region = s:STATE_TEXAS
-			}
 			any_scope_building = {
 				is_building_type = building_launch_facility
 				level >= 2
 			}
 		}
+		leading_producer_of = g:launch_capacity
+		exists = ig:ig_industrialists
+		ig:ig_industrialists ?= { is_powerful = yes }
+		global_country_ranking <= 5
 	}
 	prosperity_modifier = {
 		goods_output_launch_capacity_mult = 0.2
@@ -913,12 +859,6 @@ company_spacex = {
 	ai_construction_targets = {
 		building_launch_facility = {
 			level = 5
-			state_trigger = {
-				OR = {
-					state_region = s:STATE_CALIFORNIA
-                    state_region = s:STATE_TEXAS
-				}
-			}
 		}
 	}
 }
@@ -929,13 +869,13 @@ company_spacex = {
 # ByteDance (2012)
 company_bytedance = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_bytedance.dds"
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
         STATE_BEIJING # Capital of China, ByteDance's home base
 	}
 	building_types = {
-		building_arts_academy # Art and Entertainment
+		building_art_academy # Art and Entertainment
 		building_software_industry # Digital Assets
 		building_bytedance_data_fortress
 	}
@@ -943,22 +883,21 @@ company_bytedance = {
 		building_network_infrastructure
 	}
 	potential = {
-		has_interest_marker_in_region = region_north_china
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_BEIJING
-		}
+		"goods_production_rank(g:digital_assets)" <= 3
 	}
 	possible = {
 		has_technology_researched = social_media
 		any_scope_state = {
-			state_region = s:STATE_BEIJING
 			any_scope_building = {
 				is_building_type = building_software_industry
 				level >= 5
 			}
 		}
+		gdp_ranking <= 10
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
@@ -974,9 +913,6 @@ company_bytedance = {
 	ai_construction_targets = {
 		building_software_industry = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_BEIJING
-			}
 		}
 	}
 }
@@ -984,7 +920,7 @@ company_bytedance = {
 # OpenAI (2015)
 company_openai = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_openai.dds"
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
         STATE_CALIFORNIA # Silicon Valley, OpenAI's home base
@@ -998,22 +934,28 @@ company_openai = {
 		building_network_infrastructure
 	}
 	potential = {
-		has_interest_marker_in_region = region_pacific_coast
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
-		}
+		"goods_production_rank(g:digital_assets)" <= 3
 	}
 	possible = {
 		has_technology_researched = machine_learning
 		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
 			any_scope_building = {
 				is_building_type = building_software_industry
 				level >= 10
 			}
 		}
+		OR = {
+			has_law = law_type:law_net_neutrality
+			has_law = law_type:law_unregulated_internet
+		}
+		OR = {
+			has_law = law_type:law_freedom_of_information
+			has_law = law_type:law_open_government
+		}
+		NOT = { has_law = law_type:law_strict_ip_protection }
 	}
 	prosperity_modifier = {
 		country_tech_research_speed_mult = 0.10
@@ -1029,9 +971,6 @@ company_openai = {
 	ai_construction_targets = {
 		building_software_industry = {
 			level = 15
-			state_trigger = {
-				state_region = s:STATE_CALIFORNIA
-			}
 		}
 	}
 }
@@ -1046,7 +985,7 @@ company_catl = {
 	}
 	building_types = {
 		building_advanced_material_fabricator # For batteries
-		building_chemical_plants
+		building_chemical_plant
 		building_catl_gigafactory
 	}
 	extension_building_types = {
@@ -1056,22 +995,22 @@ company_catl = {
 		building_renewable_energy_plant
 	}
 	potential = {
-		has_interest_marker_in_region = region_south_china
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_FUJIAN
-		}
+		"goods_production_rank(g:fertilizer)" <= 3
 	}
 	possible = {
 		has_technology_researched = clean_energy_technologies
 		any_scope_state = {
-			state_region = s:STATE_FUJIAN
 			any_scope_building = {
-				is_building_type = building_chemical_plants
+				is_building_type = building_chemical_plant
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:automobiles)" <= 10
+		literacy_rate >= 0.75
+		gdp_ranking <= 10
 	}
 	prosperity_modifier = {
 		goods_output_advanced_materials_mult = 0.15
@@ -1086,11 +1025,8 @@ company_catl = {
 		has_technology_researched = clean_energy_technologies
 	}
 	ai_construction_targets = {
-		building_chemical_plants = {
+		building_chemical_plant = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_FUJIAN
-			}
 		}
 	}
 }
@@ -1112,22 +1048,24 @@ company_boston_dynamics = {
 		building_arms_industry # For potential military applications
 	}
 	potential = {
-		has_interest_marker_in_region = region_new_england
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_MASSACHUSETTS
-		}
+		"goods_production_rank(g:robotics)" <= 3
 	}
 	possible = {
 		has_technology_researched = machine_learning
 		any_scope_state = {
-			state_region = s:STATE_MASSACHUSETTS
 			any_scope_building = {
 				is_building_type = building_robotics_industry
 				level >= 5
 			}
 		}
+		leading_producer_of = g:robotics
+		"goods_production_rank(g:electronic_components)" <= 10
+		"goods_production_rank(g:tools)" <= 10
+		exists = ig:ig_intelligentsia
+		ig:ig_intelligentsia ?= { ig_approval >= 5 }
 	}
 	prosperity_modifier = {
 		goods_output_robotics_mult = 0.2
@@ -1143,9 +1081,6 @@ company_boston_dynamics = {
 	ai_construction_targets = {
 		building_robotics_industry = {
 			level = 10
-			state_trigger = {
-				state_region = s:STATE_MASSACHUSETTS
-			}
 		}
 	}
 }
@@ -1159,7 +1094,7 @@ company_asml = {
         STATE_GELRE # North Brabant, ASML's home base
 	}
 	building_types = {
-		building_tooling_workshops # Representing their photolithography machines
+		building_tooling_workshop # Representing their photolithography machines
 		building_electronic_components_and_semiconductor_industry
 		building_asml_veldhoven_campus
 	}
@@ -1167,22 +1102,25 @@ company_asml = {
 		building_advanced_material_fabricator
 	}
 	potential = {
-		has_interest_marker_in_region = region_rhine
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_GELRE
-		}
+		"goods_production_rank(g:electronic_components)" <= 3
 	}
 	possible = {
 		has_technology_researched = early_nanotechnology
 		any_scope_state = {
-			state_region = s:STATE_GELRE
 			any_scope_building = {
 				is_building_type = building_electronic_components_and_semiconductor_industry
 				level >= 10
 			}
 		}
+		OR = {
+			leading_producer_of = g:electronic_components
+			leading_producer_of = g:tools
+		}
+		gdp_per_capita_ranking <= 10
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		building_electronic_components_and_semiconductor_industry_throughput_add = 0.25 # Crucial for all semiconductors
@@ -1199,9 +1137,6 @@ company_asml = {
 	ai_construction_targets = {
 		building_electronic_components_and_semiconductor_industry = {
 			level = 15
-			state_trigger = {
-				state_region = s:STATE_GELRE
-			}
 		}
 	}
 }
@@ -1215,9 +1150,9 @@ company_lockheed_martin = {
 		STATE_MARYLAND
 	}
 	building_types = {
-		building_aeroplanes_industry
+		building_automotive_industry
 		building_arms_industry
-		building_artillery_foundries
+		building_artillery_foundry
 		building_launch_facility
 		building_lockheed_skunk_works
 	}
@@ -1228,21 +1163,22 @@ company_lockheed_martin = {
         building_space_mine
 	}
 	potential = {
-		has_interest_marker_in_region = region_new_england
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_MARYLAND
-		}
+		global_country_ranking <= 5
 	}
 	possible = {
 		has_technology_researched = stealth_technology
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_aeroplanes_industry
+				is_building_type = building_automotive_industry
 				level >= 10
 			}
 		}
+		exists = ig:ig_armed_forces
+		ig:ig_armed_forces ?= { ig_approval >= 5 }
+		"goods_production_rank(g:aeroplanes)" <= 5
 	}
 	prosperity_modifier = {
 		unit_army_offense_mult = 0.1
@@ -1258,11 +1194,8 @@ company_lockheed_martin = {
         has_technology_researched = stealth_technology
     }
     ai_construction_targets = {
-        building_aeroplanes_industry = {
+        building_automotive_industry = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_MARYLAND
-            }
         }
     }
 }
@@ -1276,10 +1209,10 @@ company_bae_systems = {
 		STATE_HOME_COUNTIES
 	}
 	building_types = {
-		building_aeroplanes_industry
+		building_automotive_industry
 		building_arms_industry
-		building_artillery_foundries
-		building_military_shipyards
+		building_artillery_foundry
+		building_military_shipyard
 		building_bae_samlesbury_aerodrome
 	}
 	extension_building_types = {
@@ -1288,21 +1221,23 @@ company_bae_systems = {
         building_space_mine
 	}
 	potential = {
-		has_interest_marker_in_region = region_england
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_HOME_COUNTIES
-		}
+		"goods_production_rank(g:aeroplanes)" <= 5
 	}
 	possible = {
 		has_technology_researched = supersonic_aircraft
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_aeroplanes_industry
+				is_building_type = building_automotive_industry
 				level >= 10
 			}
 		}
+		exists = ig:ig_armed_forces
+		ig:ig_armed_forces ?= { is_in_government = yes }
+		"goods_production_rank(g:small_arms)" <= 5
+		"goods_production_rank(g:artillery)" <= 5
 	}
 	prosperity_modifier = {
 		unit_army_defense_mult = 0.1
@@ -1316,11 +1251,8 @@ company_bae_systems = {
         has_technology_researched = supersonic_aircraft
     }
     ai_construction_targets = {
-        building_aeroplanes_industry = {
+        building_automotive_industry = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_HOME_COUNTIES
-            }
         }
     }
 }
@@ -1335,7 +1267,7 @@ company_roscosmos = {
 	}
 	building_types = {
 		building_launch_facility
-		building_aeroplanes_industry
+		building_automotive_industry
 		building_roscosmos_vostochny_cosmodrome
 	}
 	extension_building_types = {
@@ -1344,12 +1276,10 @@ company_roscosmos = {
         building_space_mine
 	}
 	potential = {
-		has_interest_marker_in_region = region_russia
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_MOSCOW
-		}
+		"goods_production_rank(g:launch_capacity)" <= 3
 	}
 	possible = {
 		has_technology_researched = reusable_rocketry
@@ -1359,6 +1289,8 @@ company_roscosmos = {
 				level >= 5
 			}
 		}
+		global_country_ranking <= 10
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		goods_output_launch_capacity_mult = 0.15
@@ -1374,9 +1306,6 @@ company_roscosmos = {
     ai_construction_targets = {
         building_launch_facility = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_MOSCOW
-            }
         }
     }
 }
@@ -1391,7 +1320,7 @@ company_airbus = {
 		STATE_BAVARIA
 	}
 	building_types = {
-		building_aeroplanes_industry
+		building_automotive_industry
 		building_motor_industry
 		building_airbus_lagardere_plant
 	}
@@ -1402,31 +1331,32 @@ company_airbus = {
         building_space_mine
 	}
 	potential = {
-		OR = {
-			has_interest_marker_in_region = region_france
-			has_interest_marker_in_region = region_north_germany
-		}
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			OR = {
-				state_region = s:STATE_LANGUEDOC
-                state_region = s:STATE_BAVARIA
-			}
-		}
+		"goods_production_rank(g:aeroplanes)" <= 5
 	}
 	possible = {
 		has_technology_researched = supersonic_aircraft
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_aeroplanes_industry
+				is_building_type = building_automotive_industry
 				level >= 10
 			}
 		}
+		OR = {
+			has_law = law_type:law_free_trade
+			power_bloc ?= {
+				OR = {
+					has_identity = identity:identity_trade_league
+					has_principle_group = principle_group:principle_group_market_unification
+				}
+			}
+		}
+		"goods_production_rank(g:engines)" <= 5
 	}
 	prosperity_modifier = {
-		building_aeroplanes_industry_throughput_add = 0.15
-		goods_output_aeroplanes_mult = 0.05
+		goods_output_aeroplanes_mult = 0.15
 		goods_output_engines_mult = 0.05
 		state_incorporation_speed_mult = 0.25
 		state_building_airbus_lagardere_plant_max_level_add = 1
@@ -1439,14 +1369,8 @@ company_airbus = {
         has_technology_researched = supersonic_aircraft
     }
     ai_construction_targets = {
-        building_aeroplanes_industry = {
+        building_automotive_industry = {
             level = 10
-            state_trigger = {
-                OR = {
-                    state_region = s:STATE_LANGUEDOC
-                    state_region = s:STATE_BAVARIA
-                }
-            }
         }
     }
 }
@@ -1460,9 +1384,9 @@ company_dassault_aviation = {
 		STATE_ILE_DE_FRANCE
 	}
 	building_types = {
-		building_aeroplanes_industry
+		building_automotive_industry
 		building_arms_industry
-		building_artillery_foundries
+		building_artillery_foundry
 		building_dassault_merignac_plant
 	}
 	extension_building_types = {
@@ -1472,21 +1396,22 @@ company_dassault_aviation = {
         building_space_mine
 	}
 	potential = {
-		has_interest_marker_in_region = region_france
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_ILE_DE_FRANCE
-		}
+		"goods_production_rank(g:aeroplanes)" <= 5
 	}
 	possible = {
 		has_technology_researched = jet_engine_technology
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_aeroplanes_industry
+				is_building_type = building_automotive_industry
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:small_arms)" <= 10
+		literacy_rate >= 0.75
+		global_country_ranking <= 10
 	}
 	prosperity_modifier = {
 		unit_army_offense_mult = 0.1
@@ -1502,11 +1427,8 @@ company_dassault_aviation = {
         has_technology_researched = jet_engine_technology
     }
     ai_construction_targets = {
-        building_aeroplanes_industry = {
+        building_automotive_industry = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_ILE_DE_FRANCE
-            }
         }
     }
 }
@@ -1523,19 +1445,18 @@ company_hyundai = {
 		building_automotive_industry
 		building_motor_industry
 		building_robotics_industry
-		building_shipyards
+		building_shipyard
 		building_hyundai_ulsan_factory
 	}
 	extension_building_types = {
-		building_steel_mills
+		building_steel_mill
 	}
 	potential = {
-		has_interest_marker_in_region = region_manchuria
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_SEOUL
-		}
+		"goods_production_rank(g:automobiles)" <= 5
+		"goods_production_rank(g:ironclads)" <= 5
 	}
 	possible = {
 		has_technology_researched = modern_automotive_technology
@@ -1545,10 +1466,12 @@ company_hyundai = {
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:steel)" <= 10
+		gdp_ranking <= 10
 	}
 	prosperity_modifier = {
 		building_automotive_industry_throughput_add = 0.1
-		building_shipyards_throughput_add = 0.1
+		building_shipyard_throughput_add = 0.1
 		state_building_hyundai_ulsan_factory_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -1561,9 +1484,6 @@ company_hyundai = {
     ai_construction_targets = {
         building_automotive_industry = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_SEOUL
-            }
         }
     }
 }
@@ -1571,7 +1491,7 @@ company_hyundai = {
 # SAP (1972)
 company_sap = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_sap.dds" 
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = { 
 		STATE_BADEN
@@ -1586,12 +1506,10 @@ company_sap = {
 		building_port
 	}
 	potential = {
-		has_interest_marker_in_region = region_south_germany
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_BADEN
-		}
+		"goods_production_rank(g:digital_assets)" <= 5
 	}
 	possible = {
 		has_technology_researched = computer_networks
@@ -1600,6 +1518,11 @@ company_sap = {
 				is_building_type = building_software_industry
 				level >= 5
 			}
+		}
+		gdp_per_capita_ranking <= 10
+		literacy_rate >= 0.75
+		any_scope_state = {
+			any_scope_building = { is_building_type = building_urban_center level >= 100 }
 		}
 	}
 	prosperity_modifier = {
@@ -1617,9 +1540,6 @@ company_sap = {
     ai_construction_targets = {
         building_software_industry = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_BADEN
-            }
         }
     }
 }
@@ -1627,14 +1547,14 @@ company_sap = {
 # Tencent (1998)
 company_tencent = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_tencent.dds" 
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = { 
 		STATE_GUANGDONG
 	}
 	building_types = {
 		building_software_industry
-		building_arts_academy
+		building_art_academy
 		building_network_infrastructure
 		building_tencent_seafront_towers
 	}
@@ -1642,12 +1562,10 @@ company_tencent = {
 		building_electrics_industry_appliances
 	}
 	potential = {
-		has_interest_marker_in_region = region_south_china
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_GUANGDONG
-		}
+		"goods_production_rank(g:digital_assets)" <= 5
 	}
 	possible = {
 		has_technology_researched = social_media
@@ -1657,6 +1575,8 @@ company_tencent = {
 				level >= 5
 			}
 		}
+		gdp_ranking <= 10
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
@@ -1673,9 +1593,6 @@ company_tencent = {
     ai_construction_targets = {
         building_software_industry = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_GUANGDONG
-            }
         }
     }
 }
@@ -1683,7 +1600,7 @@ company_tencent = {
 # Alibaba (1999)
 company_alibaba = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_alibaba.dds" 
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = { 
 		STATE_ZHEJIANG
@@ -1697,12 +1614,10 @@ company_alibaba = {
 		building_port
 	}
 	potential = {
-		has_interest_marker_in_region = region_south_china
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_ZHEJIANG
-		}
+		"goods_production_rank(g:digital_assets)" <= 5
 	}
 	possible = {
 		has_technology_researched = e-commerce
@@ -1712,6 +1627,9 @@ company_alibaba = {
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:logistics)" <= 5
+		has_law = law_type:law_free_trade
+		gdp_ranking <= 10
 	}
 	prosperity_modifier = {
 		state_trade_advantage_mult = 0.1
@@ -1727,9 +1645,6 @@ company_alibaba = {
     ai_construction_targets = {
         building_network_infrastructure = {
             level = 5
-            state_trigger = {
-                state_region = s:STATE_ZHEJIANG
-            }
         }
     }
 }
@@ -1743,7 +1658,7 @@ company_nintendo = {
 		STATE_KANSAI
 	}
 	building_types = {
-		building_arts_academy
+		building_art_academy
 		building_electrics_industry_appliances
 		building_software_industry
 		building_nintendo_development_center
@@ -1752,11 +1667,12 @@ company_nintendo = {
 		building_electronic_components_and_semiconductor_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_japan
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_KANSAI
+		OR = {
+			"goods_production_rank(g:fine_art)" <= 3
+			"goods_production_rank(g:consumer_appliances)" <= 3
 		}
 	}
 	possible = {
@@ -1767,6 +1683,11 @@ company_nintendo = {
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:fine_art)" <= 3
+		"goods_production_rank(g:consumer_appliances)" <= 3
+		"goods_production_rank(g:digital_assets)" <= 10
+		gdp_per_capita_ranking <= 10
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		country_prestige_mult = 0.15
@@ -1783,9 +1704,6 @@ company_nintendo = {
     ai_construction_targets = {
         building_electrics_industry_appliances = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_KANSAI
-            }
         }
     }
 }
@@ -1804,15 +1722,13 @@ company_gazprom = {
 		building_gazprom_lakhta_center
 	}
 	extension_building_types = {
-		building_chemical_plants
+		building_chemical_plant
 	}
 	potential = {
-		has_interest_marker_in_region = region_russia
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_INGRIA
-		}
+		"goods_production_rank(g:oil)" <= 3
 	}
 	possible = {
 		has_technology_researched = containerization
@@ -1822,6 +1738,7 @@ company_gazprom = {
 				level >= 10
 			}
 		}
+		global_country_ranking <= 10
 	}
 	prosperity_modifier = {
 		goods_output_oil_mult = 0.1
@@ -1836,9 +1753,6 @@ company_gazprom = {
     ai_construction_targets = {
         building_oil_rig = {
             level = 15
-            state_trigger = {
-                state_region = s:STATE_INGRIA
-            }
         }
     }
 }
@@ -1856,16 +1770,14 @@ company_saudi_aramco = {
 		building_saudi_aramco_abqaiq_plant
 	}
 	extension_building_types = {
-		building_chemical_plants
+		building_chemical_plant
 		building_port
 	}
 	potential = {
-		has_interest_marker_in_region = region_arabic
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_NEJD
-		}
+		"goods_production_rank(g:oil)" <= 3
 	}
 	possible = {
 		has_technology_researched = transistors
@@ -1875,6 +1787,7 @@ company_saudi_aramco = {
 				level >= 15
 			}
 		}
+		leading_producer_of = g:oil
 	}
 	prosperity_modifier = {
 		goods_output_oil_mult = 0.25
@@ -1889,9 +1802,6 @@ company_saudi_aramco = {
     ai_construction_targets = {
         building_oil_rig = {
             level = 20
-            state_trigger = {
-                state_region = s:STATE_NEJD
-            }
         }
     }
 }
@@ -1909,15 +1819,14 @@ company_petrobras = {
 		building_petrobras_cenpes_center
 	}
 	extension_building_types = {
-		building_chemical_plants
+		building_chemical_plant
 	}
 	potential = {
-		has_interest_marker_in_region = region_brazil
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_RIO_DE_JANEIRO
-		}
+		"goods_production_rank(g:oil)" <= 10
+		"goods_production_rank(g:fertilizer)" <= 10
 	}
 	possible = {
 		has_technology_researched = transistors
@@ -1927,6 +1836,8 @@ company_petrobras = {
 				level >= 10
 			}
 		}
+		exists = ig:ig_industrialists
+		ig:ig_industrialists ?= { ig_approval >= 5 }
 	}
 	prosperity_modifier = {
 		goods_output_oil_mult = 0.10
@@ -1941,9 +1852,6 @@ company_petrobras = {
     ai_construction_targets = {
         building_oil_rig = {
             level = 15
-            state_trigger = {
-                state_region = s:STATE_RIO_DE_JANEIRO
-            }
         }
     }
 }
@@ -1963,24 +1871,25 @@ company_rosatom = {
 		building_rosatom_mayak_association
 	}
 	extension_building_types = {
-		building_chemical_plants
+		building_chemical_plant
 	}
 	potential = {
-		has_interest_marker_in_region = region_russia
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_MOSCOW
-		}
+		exists = ig:ig_armed_forces
+		ig:ig_armed_forces ?= { ig_approval >= 5 }
+		global_country_ranking <= 10
 	}
 	possible = {
 		has_technology_researched = nuclear_energy
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_nuclear_plant
-				level >= 5
+				level >= 10
 			}
 		}
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		goods_output_electricity_mult = 0.1
@@ -1996,9 +1905,6 @@ company_rosatom = {
     ai_construction_targets = {
         building_nuclear_plant = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_MOSCOW
-            }
         }
     }
 }
@@ -2006,7 +1912,7 @@ company_rosatom = {
 # Oracle (1977)
 company_oracle = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_oracle.dds" 
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = { 
 		STATE_TEXAS
@@ -2020,12 +1926,10 @@ company_oracle = {
 		building_electrics_industry_appliances
 	}
 	potential = {
-		has_interest_marker_in_region = region_dixie
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_TEXAS
-		}
+		"goods_production_rank(g:digital_assets)" <= 5
 	}
 	possible = {
 		has_technology_researched = knowledge_economy
@@ -2035,6 +1939,8 @@ company_oracle = {
 				level >= 5
 			}
 		}
+		gdp_per_capita_ranking <= 10
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		country_tech_research_speed_mult = 0.05
@@ -2051,9 +1957,6 @@ company_oracle = {
     ai_construction_targets = {
         building_software_industry = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_TEXAS
-            }
         }
     }
 }
@@ -2061,7 +1964,7 @@ company_oracle = {
 # SoftBank (1981)
 company_softbank = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_softbank.dds" 
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = { 
 		STATE_KANTO
@@ -2075,12 +1978,10 @@ company_softbank = {
 		building_robotics_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_japan
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_KANTO
-		}
+		"goods_production_rank(g:digital_assets)" <= 5
 	}
 	possible = {
 		has_technology_researched = knowledge_economy
@@ -2090,6 +1991,11 @@ company_softbank = {
 				level >= 5
 			}
 		}
+		any_scope_state = {
+			any_scope_building = { is_building_type = building_urban_center level >= 100 }
+		}
+		gdp_per_capita_ranking <= 10
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		state_capitalists_investment_pool_efficiency_mult = 0.05
@@ -2103,9 +2009,6 @@ company_softbank = {
     ai_construction_targets = {
         building_network_infrastructure = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_KANTO
-            }
         }
     }
 }
@@ -2119,26 +2022,26 @@ company_roche = {
 		STATE_EAST_SWITZERLAND # Basel area, Roche's home base
 	}
 	building_types = {
-		building_chemical_plants
-        building_synthetics_plants_opium
+		building_chemical_plant
+        building_synthetics_plant_opium
 		building_roche_tower
 	}
 	potential = {
-		has_interest_marker_in_region = region_south_germany
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_EAST_SWITZERLAND
-		}
+		"goods_production_rank(g:fertilizer)" <= 5
 	}
 	possible = {
 		has_technology_researched = modern_pharmaceuticals
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_chemical_plants
+				is_building_type = building_chemical_plant
 				level >= 5
 			}
 		}
+		gdp_per_capita_ranking <= 10
+		has_law = law_type:law_public_health_insurance
 	}
 	prosperity_modifier = {
 		state_mortality_mult = -0.05
@@ -2152,11 +2055,8 @@ company_roche = {
         has_technology_researched = modern_pharmaceuticals
     }
     ai_construction_targets = {
-        building_chemical_plants = {
+        building_chemical_plant = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_EAST_SWITZERLAND
-            }
         }
     }
 }
@@ -2170,26 +2070,26 @@ company_pfizer = {
 		STATE_NEW_YORK
 	}
 	building_types = {
-		building_chemical_plants
-        building_synthetics_plants_opium
+		building_chemical_plant
+        building_synthetics_plant_opium
 		building_pfizer_rd_campus
 	}
 	potential = {
-		has_interest_marker_in_region = region_new_england
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_NEW_YORK
-		}
+		"goods_production_rank(g:fertilizer)" <= 5
 	}
 	possible = {
 		has_technology_researched = modern_pharmaceuticals
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_chemical_plants
+				is_building_type = building_chemical_plant
 				level >= 5
 			}
 		}
+		gdp_per_capita_ranking <= 10
+		has_law = law_type:law_private_health_insurance
 	}
 	prosperity_modifier = {
 		state_mortality_mult = -0.05
@@ -2204,11 +2104,8 @@ company_pfizer = {
         has_technology_researched = modern_pharmaceuticals
     }
     ai_construction_targets = {
-        building_chemical_plants = {
+        building_chemical_plant = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_NEW_YORK
-            }
         }
     }
 }
@@ -2229,7 +2126,7 @@ company_vale = {
 		building_copper_mine
 		building_potash_mine
 		building_ocean_mine
-		building_steel_mills
+		building_steel_mill
 		building_vale_carajas_mine
 	}
 	extension_building_types = {
@@ -2240,12 +2137,10 @@ company_vale = {
 		building_port
 	}
 	potential = {
-		has_interest_marker_in_region = region_brazil
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_RIO_DE_JANEIRO
-		}
+		"goods_production_rank(g:iron)" <= 5
 	}
 	possible = {
 		has_technology_researched = modern_tools
@@ -2263,6 +2158,11 @@ company_vale = {
 				level >= 10
 			}
 		}
+		OR = {
+			leading_producer_of = g:iron
+			leading_producer_of = g:tech_metals
+			leading_producer_of = g:lead
+		}
 	}
 	prosperity_modifier = {
 		goods_output_iron_mult = 0.1
@@ -2278,9 +2178,6 @@ company_vale = {
     ai_construction_targets = {
         building_iron_mine = {
             level = 15
-            state_trigger = {
-                state_region = s:STATE_RIO_DE_JANEIRO
-            }
         }
     }
 }
@@ -2288,13 +2185,13 @@ company_vale = {
 # The Walt Disney Company (1923)
 company_disney = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_disney.dds" 
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = { 
 		STATE_CALIFORNIA
 	}
 	building_types = {
-		building_arts_academy
+		building_art_academy
 		building_tourism_industry
 		building_disney_world
 	}
@@ -2303,21 +2200,26 @@ company_disney = {
 		building_network_infrastructure
 	}
 	potential = {
-		has_interest_marker_in_region = region_pacific_coast
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_CALIFORNIA
-		}
+		"goods_production_rank(g:fine_art)" <= 5
+		"goods_production_rank(g:tourism)" <= 5
 	}
 	possible = {
 		has_technology_researched = mass_media
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_arts_academy
+				is_building_type = building_art_academy
 				level >= 5
 			}
 		}
+		OR = {
+			leading_producer_of = g:fine_art
+			leading_producer_of = g:tourism
+		}
+		sol_ranking <= 10
+		gdp_per_capita_ranking <= 10
 	}
 	prosperity_modifier = {
 		country_infamy_generation_mult = -0.05
@@ -2332,11 +2234,8 @@ company_disney = {
         has_technology_researched = mass_media
     }
     ai_construction_targets = {
-        building_arts_academy = {
+        building_art_academy = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_CALIFORNIA
-            }
         }
     }
 }
@@ -2344,14 +2243,14 @@ company_disney = {
 # Universal (1934)
 company_universal = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/eu_universal_music.dds" 
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = { 
 		STATE_ILE_DE_FRANCE
 		STATE_HOLLAND
 	}
 	building_types = {
-		building_arts_academy
+		building_art_academy
 		building_universal_studios_hollywood
 	}
 	extension_building_types = {
@@ -2359,27 +2258,22 @@ company_universal = {
 		building_tourism_industry
 	}
 	potential = {
-		OR = {
-			has_interest_marker_in_region = region_france
-			has_interest_marker_in_region = region_rhine
-		}
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			OR = {
-				state_region = s:STATE_ILE_DE_FRANCE
-				state_region = s:STATE_HOLLAND
-			}
-		}
+		"goods_production_rank(g:fine_art)" <= 5
 	}
 	possible = {
 		has_technology_researched = mass_media
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_arts_academy
+				is_building_type = building_art_academy
 				level >= 5
 			}
 		}
+		gdp_per_capita_ranking <= 10
+		literacy_rate >= 0.75
+		"goods_production_rank(g:telephones)" <= 10
 	}
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
@@ -2393,14 +2287,8 @@ company_universal = {
         has_technology_researched = mass_media
     }
     ai_construction_targets = {
-        building_arts_academy = {
+        building_art_academy = {
             level = 10
-            state_trigger = {
-                OR = {
-                    state_region = s:STATE_ILE_DE_FRANCE
-                    state_region = s:STATE_HOLLAND
-                }
-            }
         }
     }
 }
@@ -2422,12 +2310,10 @@ company_verizon = {
 		building_software_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_new_england
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_NEW_YORK
-		}
+		"goods_production_rank(g:telephones)" <= 5
 	}
 	possible = {
 		has_technology_researched = cellular_networks
@@ -2436,6 +2322,11 @@ company_verizon = {
 				is_building_type = building_network_infrastructure
 				level >= 10
 			}
+		}
+		OR = {
+			leading_producer_of = g:telephones
+			leading_producer_of = g:digital_assets
+			leading_producer_of = g:radios
 		}
 	}
 	prosperity_modifier = {
@@ -2453,9 +2344,6 @@ company_verizon = {
     ai_construction_targets = {
         building_network_infrastructure = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_NEW_YORK
-            }
         }
     }
 }
@@ -2470,30 +2358,31 @@ company_reliance = {
 	}
 	building_types = {
 		building_oil_rig
-		building_chemical_plants
+		building_chemical_plant
 		building_network_infrastructure
 		building_reliance_jamnagar_refinery
 	}
 	extension_building_types = {
-		building_textile_mills
+		building_textile_mill
 		building_port
 	}
 	potential = {
-		has_interest_marker_in_region = region_bombay
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_BOMBAY
-		}
+		"goods_production_rank(g:oil)" <= 10
+		"goods_production_rank(g:fertilizer)" <= 10
 	}
 	possible = {
 		has_technology_researched = containerization
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_chemical_plants
+				is_building_type = building_chemical_plant
 				level >= 10
 			}
 		}
+		exists = ig:ig_industrialists
+		ig:ig_industrialists ?= { ig_approval >= 5 }
 	}
 	prosperity_modifier = {
 		state_market_access_price_impact = 0.05
@@ -2508,11 +2397,8 @@ company_reliance = {
         has_technology_researched = containerization
     }
     ai_construction_targets = {
-        building_chemical_plants = {
+        building_chemical_plant = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_BOMBAY
-            }
         }
     }
 }
@@ -2527,19 +2413,17 @@ company_fanuc = {
 	}
 	building_types = {
 		building_robotics_industry
-		building_tooling_workshops
+		building_tooling_workshop
 		building_fanuc_forest
 	}
 	extension_building_types = {
 		building_software_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_japan
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_CHUBU
-		}
+		"goods_production_rank(g:robotics)" <= 5
 	}
 	possible = {
 		has_technology_researched = robotics
@@ -2549,6 +2433,11 @@ company_fanuc = {
 				level >= 5
 			}
 		}
+		OR = {
+			leading_producer_of = g:robotics
+			leading_producer_of = g:tools
+		}
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		goods_output_robotics_mult = 0.25
@@ -2565,9 +2454,6 @@ company_fanuc = {
     ai_construction_targets = {
         building_robotics_industry = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_CHUBU
-            }
         }
     }
 }
@@ -2584,7 +2470,7 @@ company_eni = {
 	}
 	building_types = {
 		building_oil_rig
-		building_chemical_plants
+		building_chemical_plant
 		building_power_plant
 		building_eni_palazzo
 	}
@@ -2593,12 +2479,10 @@ company_eni = {
 		building_railway
 	}
 	potential = {
-		has_interest_marker_in_region = region_italy
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_LAZIO
-		}
+		"goods_production_rank(g:fertilizer)" <= 5
 	}
 	possible = {
 		has_technology_researched = modern_chemical_processes
@@ -2607,6 +2491,11 @@ company_eni = {
 				is_building_type = building_oil_rig
 				level >= 10
 			}
+		}
+		OR = {
+			has_law = law_type:law_dirigisme
+			has_law = law_type:law_directed_credit_development_banks
+			has_law = law_type:law_technocracy
 		}
 	}
 	prosperity_modifier = {
@@ -2624,9 +2513,6 @@ company_eni = {
     ai_construction_targets = {
         building_oil_rig = {
             level = 15
-            state_trigger = {
-                state_region = s:STATE_LAZIO
-            }
         }
     }
 }
@@ -2645,15 +2531,14 @@ company_ferrari = {
 		building_ferrari_maranello_factory
 	}
 	extension_building_types = {
-		building_arts_academy # Representing design and prestige
+		building_art_academy # Representing design and prestige
 	}
 	potential = {
-		has_interest_marker_in_region = region_italy
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_EMILIA
-		}
+		"goods_production_rank(g:automobiles)" <= 10
+		"goods_production_rank(g:engines)" <= 10
 	}
 	possible = {
 		has_technology_researched = modern_automotive_technology
@@ -2663,6 +2548,9 @@ company_ferrari = {
 				level >= 5
 			}
 		}
+		"goods_production_rank(g:automobiles)" <= 5
+		"goods_production_rank(g:engines)" <= 5
+		gdp_per_capita_ranking <= 10
 	}
 	prosperity_modifier = {
 		country_prestige_mult = 0.15
@@ -2679,9 +2567,6 @@ company_ferrari = {
     ai_construction_targets = {
         building_automotive_industry = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_EMILIA
-            }
         }
     }
 }
@@ -2706,12 +2591,10 @@ company_blackberry = {
 		building_electronic_components_and_semiconductor_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_canada
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_ONTARIO
-		}
+		"goods_production_rank(g:consumer_appliances)" <= 10
 	}
 	possible = {
 		has_technology_researched = cellular_networks
@@ -2721,6 +2604,10 @@ company_blackberry = {
 				level >= 5
 			}
 		}
+		gdp_per_capita_ranking <= 10
+		literacy_rate >= 0.75
+		"goods_production_rank(g:telephones)" <= 10
+		"goods_production_rank(g:consumer_appliances)" <= 5
 	}
 	prosperity_modifier = {
 		goods_output_digital_access_mult = 0.15
@@ -2737,9 +2624,6 @@ company_blackberry = {
     ai_construction_targets = {
         building_network_infrastructure = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_ONTARIO
-            }
         }
     }
 }
@@ -2755,18 +2639,18 @@ company_shopify = {
 	building_types = {
 		building_software_industry
 		building_network_infrastructure
+		building_highway
 		building_shopify_fulfillment_hub
 	}
 	extension_building_types = {
 		building_port # Representing logistics network integration
 	}
 	potential = {
-		has_interest_marker_in_region = region_canada
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_ONTARIO
-		}
+		"goods_production_rank(g:digital_assets)" <= 10
+		"goods_production_rank(g:telephones)" <= 10
 	}
 	possible = {
 		has_technology_researched = e-commerce
@@ -2776,6 +2660,8 @@ company_shopify = {
 				level >= 5
 			}
 		}
+		gdp_per_capita_ranking <= 10
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		state_trade_advantage_mult = 0.1
@@ -2792,9 +2678,6 @@ company_shopify = {
     ai_construction_targets = {
         building_software_industry = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_ONTARIO
-            }
         }
     }
 }
@@ -2830,11 +2713,15 @@ company_bhp_group = {
 		building_oil_rig
 	}
 	potential = {
-		has_interest_marker_in_region = region_oceania
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_VICTORIA
+		OR = {
+			"goods_production_rank(g:iron)" <= 5
+			"goods_production_rank(g:coal)" <= 5
+			"goods_production_rank(g:lead)" <= 5
+			"goods_production_rank(g:sulfur)" <= 5
+			"goods_production_rank(g:tech_metals)" <= 5
 		}
 	}
 	possible = {
@@ -2853,6 +2740,13 @@ company_bhp_group = {
 				level >= 15
 			}
 		}
+		OR = {
+			leading_producer_of = g:iron
+			leading_producer_of = g:coal
+			leading_producer_of = g:lead
+			leading_producer_of = g:sulfur
+			leading_producer_of = g:tech_metals
+		}
 	}
 	prosperity_modifier = {
 		building_group_bg_mining_throughput_add = 0.25
@@ -2867,9 +2761,6 @@ company_bhp_group = {
     ai_construction_targets = {
         building_iron_mine = {
             level = 20
-            state_trigger = {
-                state_region = s:STATE_VICTORIA
-            }
         }
     }
 }
@@ -2883,7 +2774,7 @@ company_cochlear = {
 		STATE_NEW_SOUTH_WALES
 	}
 	building_types = {
-		building_chemical_plants # Proxy for medical manufacturing
+		building_chemical_plant # Proxy for medical manufacturing
 		building_electrics_industry_appliances
 		building_cochlear_global_hq
 	}
@@ -2891,21 +2782,25 @@ company_cochlear = {
 		building_electronic_components_and_semiconductor_industry
 	}
 	potential = {
-		has_interest_marker_in_region = region_oceania
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_NEW_SOUTH_WALES
+		OR = {
+			"goods_production_rank(g:fertilizer)" <= 5
+			"goods_production_rank(g:consumer_appliances)" <= 5
 		}
 	}
 	possible = {
 		has_technology_researched = modern_pharmaceuticals
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_chemical_plants
+				is_building_type = building_chemical_plant
 				level >= 5
 			}
 		}
+		gdp_per_capita_ranking <= 10
+		has_law = law_type:law_public_health_insurance
+		literacy_rate >= 0.75
 	}
 	prosperity_modifier = {
 		state_mortality_mult = -0.05
@@ -2919,11 +2814,8 @@ company_cochlear = {
         has_technology_researched = modern_pharmaceuticals
     }
     ai_construction_targets = {
-        building_chemical_plants = {
+        building_chemical_plant = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_NEW_SOUTH_WALES
-            }
         }
     }
 }
@@ -2946,12 +2838,10 @@ company_infosys = {
 		building_network_infrastructure
 	}
 	potential = {
-		has_interest_marker_in_region = region_madras
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_MYSORE
-		}
+		"goods_production_rank(g:digital_assets)" <= 10
 	}
 	possible = {
 		has_technology_researched = knowledge_economy
@@ -2961,6 +2851,9 @@ company_infosys = {
 				level >= 5
 			}
 		}
+		gdp_ranking <= 10
+		literacy_rate >= 0.75
+		sol_ranking <= 35
 	}
 	prosperity_modifier = {
 		country_company_throughput_bonus_add = 0.05
@@ -2976,9 +2869,6 @@ company_infosys = {
     ai_construction_targets = {
         building_software_industry = {
             level = 10
-            state_trigger = {
-                state_region = s:STATE_MYSORE
-            }
         }
     }
 }
@@ -2992,7 +2882,7 @@ company_jsw_steel = {
 		STATE_BOMBAY
 	}
 	building_types = {
-		building_steel_mills
+		building_steel_mill
 		building_jsw_vijayanagar_works
 	}
 	extension_building_types = {
@@ -3001,21 +2891,21 @@ company_jsw_steel = {
 		building_railway
 	}
 	potential = {
-		has_interest_marker_in_region = region_bombay
+		always = yes
 	}
 	attainable = {
-		any_scope_state = {
-			state_region = s:STATE_BOMBAY
-		}
+		"goods_production_rank(g:steel)" <= 5
 	}
 	possible = {
 		has_technology_researched = aluminum_mass_production
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_steel_mills
+				is_building_type = building_steel_mill
 				level >= 10
 			}
 		}
+		"goods_production_rank(g:iron)" <= 10
+		"goods_production_rank(g:coal)" <= 10
 	}
 	prosperity_modifier = {
 		goods_output_steel_mult = 0.15
@@ -3029,11 +2919,8 @@ company_jsw_steel = {
         has_technology_researched = aluminum_mass_production
     }
     ai_construction_targets = {
-        building_steel_mills = {
+        building_steel_mill = {
             level = 15
-            state_trigger = {
-                state_region = s:STATE_BOMBAY
-            }
         }
     }
 }

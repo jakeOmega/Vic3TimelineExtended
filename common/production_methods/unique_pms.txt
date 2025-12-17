@@ -168,7 +168,7 @@ pm_ikea_almhult_campus = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_furniture_manufacturies_throughput_add = 0.5
+			building_furniture_manufactory_throughput_add = 0.5
 			goods_input_wood_mult = -0.25
 		}
 	}
@@ -646,7 +646,7 @@ pm_asml_veldhoven_campus = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_tooling_workshops_throughput_add = 0.5
+			building_tooling_workshop_throughput_add = 0.5
 			building_electronic_components_and_semiconductor_industry_throughput_add = 0.5
 			building_economy_of_scale_level_cap_add = 10
 		}
@@ -678,7 +678,7 @@ pm_lockheed_skunk_works = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_aeroplanes_industry_throughput_add = 0.5
+			goods_output_aeroplanes_mult = 0.5
 		}
 	}
 	country_modifiers = {
@@ -691,14 +691,14 @@ pm_lockheed_skunk_works = {
 			# Input goods
 			goods_input_steel_add = 25                           # Price:   50, Total cost:  1250.0 (100.00%)
 			# Output goods
-			goods_output_aeroplanes_add = 80                     # Price:   80, Total cost:  6400.0 (100.00%)
+			goods_output_aeroplanes_add = 80                     # Price:  160, Total cost: 12800.0 (100.00%)
 			# Total input cost: 1250.0
-			# Total output cost: 6400.0
-			# Profit: 5150.0
-			# Profit margin: 412.00%
-			# Zero profit price multiplier: 0.20
+			# Total output cost: 12800.0
+			# Profit: 11550.0
+			# Profit margin: 924.00%
+			# Zero profit price multiplier: 0.10
 			# Employment: 10000
-			# Wage breakeven: 0.52
+			# Wage breakeven: 1.16
 		}
 		level_scaled = {
 			building_employment_engineers_add = 6000
@@ -714,8 +714,8 @@ pm_bae_samlesbury_aerodrome = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_aeroplanes_industry_throughput_add = 0.35
-			building_military_shipyards_throughput_add = 0.35
+			goods_output_aeroplanes_mult = 0.35
+			building_military_shipyard_throughput_add = 0.35
 		}
 	}
 	country_modifiers = {
@@ -729,14 +729,14 @@ pm_bae_samlesbury_aerodrome = {
 			# Input goods
 			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (100.00%)
 			# Output goods
-			goods_output_aeroplanes_add = 60                     # Price:   80, Total cost:  4800.0 (100.00%)
+			goods_output_aeroplanes_add = 60                     # Price:  160, Total cost:  9600.0 (100.00%)
 			# Total input cost: 1000.0
-			# Total output cost: 4800.0
-			# Profit: 3800.0
-			# Profit margin: 380.00%
-			# Zero profit price multiplier: 0.21
+			# Total output cost: 9600.0
+			# Profit: 8600.0
+			# Profit margin: 860.00%
+			# Zero profit price multiplier: 0.10
 			# Employment: 10000
-			# Wage breakeven: 0.38
+			# Wage breakeven: 0.86
 		}
 		level_scaled = {
 			building_employment_engineers_add = 4000
@@ -787,7 +787,7 @@ pm_airbus_lagardere_plant = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_aeroplanes_industry_throughput_add = 0.4
+			goods_output_aeroplanes_mult = 0.4
 			state_infrastructure_mult = 0.1
 		}
 	}
@@ -796,14 +796,14 @@ pm_airbus_lagardere_plant = {
 			# Input goods
 			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (100.00%)
 			# Output goods
-			goods_output_aeroplanes_add = 70                     # Price:   80, Total cost:  5600.0 (100.00%)
+			goods_output_aeroplanes_add = 70                     # Price:  160, Total cost: 11200.0 (100.00%)
 			# Total input cost: 1000.0
-			# Total output cost: 5600.0
-			# Profit: 4600.0
-			# Profit margin: 460.00%
-			# Zero profit price multiplier: 0.18
+			# Total output cost: 11200.0
+			# Profit: 10200.0
+			# Profit margin: 1020.00%
+			# Zero profit price multiplier: 0.09
 			# Employment: 10000
-			# Wage breakeven: 0.46
+			# Wage breakeven: 1.02
 		}
 		level_scaled = {
 			building_employment_engineers_add = 3000
@@ -818,8 +818,8 @@ pm_dassault_merignac_plant = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_aeroplanes_industry_throughput_add = 0.5
-			state_building_barracks_max_level_add = 100
+			goods_output_aeroplanes_mult = 0.5
+			state_building_barrack_max_level_add = 100
 		}
 	}
 	country_modifiers = {
@@ -832,14 +832,14 @@ pm_dassault_merignac_plant = {
 			# Input goods
 			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (100.00%)
 			# Output goods
-			goods_output_aeroplanes_add = 70                     # Price:   80, Total cost:  5600.0 (100.00%)
+			goods_output_aeroplanes_add = 70                     # Price:  160, Total cost: 11200.0 (100.00%)
 			# Total input cost: 1000.0
-			# Total output cost: 5600.0
-			# Profit: 4600.0
-			# Profit margin: 460.00%
-			# Zero profit price multiplier: 0.18
+			# Total output cost: 11200.0
+			# Profit: 10200.0
+			# Profit margin: 1020.00%
+			# Zero profit price multiplier: 0.09
 			# Employment: 10000
-			# Wage breakeven: 0.46
+			# Wage breakeven: 1.02
 		}
 		level_scaled = {
 			building_employment_engineers_add = 4000
@@ -855,7 +855,7 @@ pm_hyundai_ulsan_factory = {
 	state_modifiers = {
 		workforce_scaled = {
 			building_automotive_industry_throughput_add = 0.4
-			building_shipyards_throughput_add = 0.25
+			building_shipyard_throughput_add = 0.25
 		}
 	}
 	building_modifiers = {
@@ -1073,7 +1073,7 @@ pm_petrobras_cenpes_center = {
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.25
-			building_chemical_plants_throughput_add = 0.25
+			building_chemical_plant_throughput_add = 0.25
 			building_group_bg_heavy_industry_throughput_add = 0.05
 		}
 	}
@@ -1391,7 +1391,7 @@ pm_reliance_jamnagar_refinery = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_chemical_plants_throughput_add = 0.25
+			building_chemical_plant_throughput_add = 0.25
 			building_oil_rig_throughput_add = 0.25
 		}
 	}
@@ -1672,7 +1672,7 @@ pm_jsw_vijayanagar_works = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_steel_mills_throughput_add = 0.5
+			building_steel_mill_throughput_add = 0.5
 			goods_output_steel_mult = 0.1
 		}
 	}
@@ -2054,7 +2054,7 @@ pm_generic_media_hq = {
     state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
-			building_arts_academy_throughput_add = 0.25
+			building_art_academy_throughput_add = 0.25
 		}
 	}
 	building_modifiers = {
@@ -2167,7 +2167,7 @@ pm_generic_proving_grounds = {
     texture = "gfx/interface/icons/production_method_icons/base1.dds"
     state_modifiers = {
 		workforce_scaled = {
-			state_building_barracks_max_level_add = 100
+			state_building_barrack_max_level_add = 100
 		}
 	}
 	building_modifiers = {
@@ -2371,9 +2371,9 @@ pm_hq_military_treaty = {
 		workforce_scaled = {
             building_training_rate_mult = 1.0
 			building_arms_industry_throughput_add = 0.25
-			building_artillery_foundries_throughput_add = 0.25
-			building_military_shipyards_throughput_add = 0.25
-			building_munition_plants_throughput_add = 0.25
+			building_artillery_foundry_throughput_add = 0.25
+			building_military_shipyard_throughput_add = 0.25
+			building_munition_plant_throughput_add = 0.25
         }
 	}
 	building_modifiers = {
@@ -2467,7 +2467,7 @@ pm_hq_cultural_coalition = {
 	state_modifiers = {
 		workforce_scaled = {
             state_assimilation_mult = 1.0
-			building_arts_academy_throughput_add = 0.25
+			building_art_academy_throughput_add = 0.25
 			building_university_throughput_add = 0.25
 			building_government_administration_throughput_add = 0.25
 			building_urban_center_throughput_add = 0.1
@@ -2547,7 +2547,7 @@ pm_wonder_sydney_opera_house = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
 		workforce_scaled = {
-            building_arts_academy_throughput_add = 0.25
+            building_art_academy_throughput_add = 0.25
         }
 	}
 	building_modifiers = {

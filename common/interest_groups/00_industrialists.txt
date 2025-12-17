@@ -14,8 +14,6 @@ ig_industrialists = {
 		ideology_moderate
 		ideology_market_liberal
 		ideology_protectionist
-		ideology_orleanist
-		ideology_bonapartist
 	}
 
 	enable = {
@@ -30,7 +28,7 @@ ig_industrialists = {
 	}
 
 	on_enable = {
-		ig:ig_industrialists = {
+		ig:ig_industrialists ?= {
 			if = {
 				limit = {
 					owner = { c:JAP ?= this }
@@ -46,6 +44,18 @@ ig_industrialists = {
 				set_ig_trait = ig_trait:ig_trait_tax_avoidance
 				set_ig_trait = ig_trait:ig_trait_engines_of_progress
 				set_ig_trait = ig_trait:ig_trait_kommerskollegium
+			}
+			else_if = {
+				limit = {
+					has_dlc_feature = ip3_content
+					OR = {
+						owner = { c:NOR ?= this }
+						owner = { c:GRE ?= this }
+					}
+				}
+				set_ig_trait = ig_trait:ig_trait_tax_avoidance
+				set_ig_trait = ig_trait:ig_shipping_magnates
+				set_ig_trait = ig_trait:ig_trait_job_creators
 			}
 			else_if = {
 				limit = {
@@ -90,6 +100,8 @@ ig_industrialists = {
 						OR = {
 							c:DEI ?= this
 							c:ALK ?= this
+							c:HBC ?= this
+							is_country_type = company
 						}
 					}
 				}
@@ -122,9 +134,83 @@ ig_industrialists = {
 				british scottish irish
 			}
 		}
+		rule = {
+			trigger = {
+				c:ZAN ?= this
+				any_primary_culture = {
+					cu:bedouin = this
+				}
+			}
+			cultures = {
+				bedouin swahili north_german british gujarati
+			}
+		}
+		rule = {
+			trigger = {
+				c:HAW ?= this
+				NOT = { has_variable = deported_americans }
+			}
+			cultures = {
+				yankee dixie british hawaiian
+			}
+		}
+		rule = {
+			trigger = {
+				c:PHI ?= this
+				NOT = { has_variable = je_philippines_main_reliance_happened }
+				NOT = { any_primary_culture = { cu:filipino = this } }
+				NOT = { any_primary_culture = { cu:filipino_hispanophone = this } }
+				any_primary_culture = { cu:spanish = this }
+			}
+			cultures = {
+				spanish filipino_mestizo
+			}
+		}
+		rule = {
+			trigger = {
+				c:PHI ?= this
+				any_primary_culture = {
+					AND = {
+						cu:spanish = this
+						cu:filipino_hispanophone = this
+					}
+				}
+			}
+			cultures = {
+				spanish filipino_hispanophone
+			}
+		}
 	}
 
-	on_character_ig_membership = {}
+	on_character_ig_membership = {
+		if = {
+			limit = {
+				OR = {
+					culture = cu:british
+					culture = cu:north_german
+				}
+				owner = {
+					c:ZAN ?= this
+					any_primary_culture = {
+						cu:bedouin = this
+					}
+				}
+			}
+			change_character_religion = rel:protestant
+		}
+		if = {
+			limit = {
+				culture = cu:gujarati
+				owner = {
+					c:ZAN ?= this
+					any_primary_culture = {
+						cu:bedouin = this
+					}
+				}
+			}
+			change_character_religion = rel:shiite
+		}
+	}
 
 	pop_potential = {
 		OR = {
@@ -136,7 +222,7 @@ ig_industrialists = {
 				owner ?= c:BIC
 				OR = {
 					culture ?= {
-						has_discrimination_trait = european_heritage
+						has_discrimination_trait_group = heritage_group_european
 					}
 					is_pop_type = bureaucrats
 					is_pop_type = clerks
@@ -166,7 +252,10 @@ ig_industrialists = {
 					is_pop_type = engineers
 				}
 				value = 50
-				add = this.standard_of_living
+				add = {
+					value = this.standard_of_living
+					multiply = 2
+				}
 			}
 		}
 
@@ -177,7 +266,10 @@ ig_industrialists = {
 					is_pop_type = shopkeepers
 				}
 				value = 50
-				add = this.standard_of_living
+				add = {
+					value = this.standard_of_living
+					multiply = 2
+				}
 			}
 		}
 		if = {
@@ -186,7 +278,7 @@ ig_industrialists = {
 					c:BIC ?= this
 				}
 				culture = {
-					has_discrimination_trait = european_heritage
+					has_discrimination_trait_group = heritage_group_european
 				}
 				OR = {
 					strata = upper
@@ -212,7 +304,7 @@ ig_industrialists = {
 				limit = {
 					NOT = {
 						culture = {
-							has_discrimination_trait = european_heritage
+							has_discrimination_trait_group = heritage_group_european
 						}
 					}
 					OR = {
@@ -229,7 +321,7 @@ ig_industrialists = {
 				limit = {
 					NOT = {
 						culture = {
-							has_discrimination_trait = european_heritage
+							has_discrimination_trait_group = heritage_group_european
 						}
 					}
 					NOR = {
@@ -317,7 +409,7 @@ ig_industrialists = {
 		# Monarch is not likely to adopt a marginal IG
 		if = {
 			limit = {
-				is_marginal = yes
+				ig_counts_as_marginal = yes
 			}
 			multiply = {
 				value = 0.1
@@ -337,8 +429,8 @@ ig_industrialists = {
 			limit = {
 				owner = {
 					OR = {
-						has_law = law_type:law_oligarchy
-						has_law = law_type:law_wealth_voting
+						has_law_or_variant = law_type:law_oligarchy
+						has_law_or_variant = law_type:law_wealth_voting
 					}
 				}
 			}
@@ -350,7 +442,7 @@ ig_industrialists = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_laissez_faire
+					has_law_or_variant = law_type:law_laissez_faire
 				}
 			}
 			multiply = {
@@ -387,8 +479,8 @@ ig_industrialists = {
 		# Agitators will never be part of a marginalized IG
 		if = {
 			limit = {
-				owner.ig:ig_industrialists = {
-					is_marginal = yes
+				owner.ig:ig_industrialists ?= {
+					ig_counts_as_marginal = yes
 				}
 			}
 			multiply = {
@@ -503,7 +595,7 @@ ig_industrialists = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_womens_suffrage
+					has_law_or_variant = law_type:law_womens_suffrage
 				}
 
 			}
@@ -599,7 +691,7 @@ ig_industrialists = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_women_own_property
+					has_law_or_variant = law_type:law_women_own_property
 				}
 
 			}
@@ -611,7 +703,7 @@ ig_industrialists = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_women_in_the_workplace
+					has_law_or_variant = law_type:law_women_in_the_workplace
 				}
 
 			}
@@ -623,7 +715,7 @@ ig_industrialists = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_womens_suffrage
+					has_law_or_variant = law_type:law_womens_suffrage
 				}
 
 			}

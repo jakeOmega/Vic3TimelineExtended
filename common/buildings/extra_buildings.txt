@@ -1,74 +1,28 @@
-﻿building_oil_rig = {
-	building_group = bg_oil_extraction
-	icon = "gfx/interface/icons/building_icons/oil_rig.dds"
-	city_type = mine
-	levels_per_mesh = 5
-	required_construction = construction_cost_medium
-
-	unlocking_technologies = {
-		pumpjacks
-	}
-	
+﻿INJECT:building_oil_rig = {
 	production_method_groups = {
-		pmg_base_building_oil_rig
 		pmg_depth_oil_rig
-		pmg_transportation_building_oil_rig
 	}
-	ownership_type = self
-    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_textile_mills = {
-	building_group = bg_light_industry
-	icon = "gfx/interface/icons/building_icons/textile_industry.dds"
-	city_type = city
-	levels_per_mesh = 5
-	
-	unlocking_technologies = {
-		manufacturies
-	}
-
+INJECT:building_textile_mill = {
 	production_method_groups = {
-		pmg_base_building_textile_mills
-		pmg_luxury_building_textile_mills
-		pmg_automation_building_textile_mills
-		pmg_branding_building_textile_mills
+		pmg_branding_building_textile_mill
 		pmg_maintenance
 	}
-	
-	required_construction = construction_cost_high
-	ownership_type = self
-    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_furniture_manufacturies = {
-	building_group = bg_light_industry
-	icon = "gfx/interface/icons/building_icons/furniture_manufacturies.dds"
-	city_type = city
-	levels_per_mesh = 5
-	
-	unlocking_technologies = {
-		manufacturies
-	}
-
+INJECT:building_furniture_manufactory = {
 	production_method_groups = {
-		pmg_base_building_furniture_manufacturies
-		pmg_luxury_building_furniture_manufacturies
-		pmg_automation_building_furniture_manufacturies
-		pmg_branding_building_furniture_manufacturies
+		pmg_branding_building_furniture_manufactory
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_high
-	ownership_type = self
-    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_synthetics_plants = {
+REPLACE:building_synthetics_plant = {
 	building_group = bg_heavy_industry
 	icon = "gfx/interface/icons/building_icons/synthetics_plants.dds"
 	city_type = city
-	levels_per_mesh = 5
+	levels_per_mesh = 50
 	
 	unlocking_technologies = {
 		aniline
@@ -76,16 +30,19 @@ building_synthetics_plants = {
 	
 	production_method_groups = {
 		pmg_synthetic_dyes
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 	
 	required_construction = construction_cost_very_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -93,7 +50,7 @@ building_synthetics_plants = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_synthetics_plants_silk = {
+REPLACE_OR_CREATE:building_synthetics_plant_silk = {
 	building_group = bg_heavy_industry
 	icon = "gfx/interface/icons/building_icons/synthetics_plants.dds"
 	city_type = city
@@ -105,16 +62,19 @@ building_synthetics_plants_silk = {
 	
 	production_method_groups = {
 		pmg_synthetic_silk
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 	
 	required_construction = construction_cost_very_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -123,7 +83,7 @@ building_synthetics_plants_silk = {
 	
 }
 
-building_synthetics_plants_oil = {
+REPLACE_OR_CREATE:building_synthetics_plant_oil = {
 	building_group = bg_heavy_industry
 	icon = "gfx/interface/icons/building_icons/synth_oil.dds"
 	city_type = city
@@ -135,16 +95,19 @@ building_synthetics_plants_oil = {
 	
 	production_method_groups = {
 		pmg_synthetic_oil
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 	
 	required_construction = construction_cost_super_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -152,7 +115,7 @@ building_synthetics_plants_oil = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_synthetics_plants_rubber = {
+REPLACE_OR_CREATE:building_synthetics_plant_rubber = {
 	building_group = bg_heavy_industry
 	icon = "gfx/interface/icons/building_icons/synth_rubber.dds"
 	city_type = city
@@ -164,16 +127,19 @@ building_synthetics_plants_rubber = {
 	
 	production_method_groups = {
 		pmg_synthetic_rubber
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 	
 	required_construction = construction_cost_super_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -181,7 +147,7 @@ building_synthetics_plants_rubber = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_synthetics_plants_opium = {
+REPLACE_OR_CREATE:building_synthetics_plant_opium = {
 	building_group = bg_heavy_industry
 	icon = "gfx/interface/icons/building_icons/drugs.dds"
 	city_type = city
@@ -193,16 +159,19 @@ building_synthetics_plants_opium = {
 	
 	production_method_groups = {
 		pmg_synthetic_opium
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 	
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -210,7 +179,7 @@ building_synthetics_plants_opium = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_synthetics_plants_coal = {
+REPLACE_OR_CREATE:building_synthetics_plant_coal = {
 	building_group = bg_heavy_industry	
 	icon = "gfx/interface/icons/goods_icons/coal.dds"
 	city_type = city
@@ -222,16 +191,19 @@ building_synthetics_plants_coal = {
 
 	production_method_groups = {
 		pmg_synthetic_coal
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 
 	required_construction = construction_cost_super_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -239,7 +211,7 @@ building_synthetics_plants_coal = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_synthetics_plants_wood = {
+REPLACE_OR_CREATE:building_synthetics_plant_wood = {
 	building_group = bg_heavy_industry	
 	icon = "gfx/interface/icons/goods_icons/wood.dds"
 	city_type = city
@@ -251,16 +223,19 @@ building_synthetics_plants_wood = {
 
 	production_method_groups = {
 		pmg_synthetic_wood
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -268,7 +243,7 @@ building_synthetics_plants_wood = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_synthetics_plants_sugar = {
+REPLACE_OR_CREATE:building_synthetics_plant_sugar = {
 	building_group = bg_heavy_industry	
 	icon = "gfx/interface/icons/goods_icons/sugar.dds"
 	city_type = city
@@ -280,16 +255,19 @@ building_synthetics_plants_sugar = {
 
 	production_method_groups = {
 		pmg_synthetic_sugar
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 
 	required_construction = construction_cost_super_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -297,7 +275,7 @@ building_synthetics_plants_sugar = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_synthetics_plants_meat = {
+REPLACE_OR_CREATE:building_synthetics_plant_meat = {
 	building_group = bg_heavy_industry	
 	icon = "gfx/interface/icons/goods_icons/meat.dds"
 	city_type = city
@@ -309,16 +287,19 @@ building_synthetics_plants_meat = {
 
 	production_method_groups = {
 		pmg_synthetic_meat
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -326,7 +307,7 @@ building_synthetics_plants_meat = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_synthetics_plants_fruit = {
+REPLACE_OR_CREATE:building_synthetics_plant_fruit = {
 	building_group = bg_heavy_industry	
 	icon = "gfx/interface/icons/goods_icons/fruit.dds"
 	city_type = city
@@ -338,16 +319,19 @@ building_synthetics_plants_fruit = {
 
 	production_method_groups = {
 		pmg_synthetic_fruit
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -355,7 +339,7 @@ building_synthetics_plants_fruit = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_synthetics_plants_drinks = {
+REPLACE_OR_CREATE:building_synthetics_plant_drinks = {
 	building_group = bg_heavy_industry	
 	icon = "gfx/interface/icons/goods_icons/liquor.dds"
 	city_type = city
@@ -367,16 +351,19 @@ building_synthetics_plants_drinks = {
 
 	production_method_groups = {
 		pmg_synthetic_drinks
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 
 	required_construction = construction_cost_super_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -384,7 +371,7 @@ building_synthetics_plants_drinks = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_synthetics_plants_biomass = {
+REPLACE_OR_CREATE:building_synthetics_plant_biomass = {
 	building_group = bg_heavy_industry	
 	icon = "gfx/interface/icons/goods_icons/grain.dds"
 	city_type = city
@@ -396,16 +383,19 @@ building_synthetics_plants_biomass = {
 
 	production_method_groups = {
 		pmg_synthetic_biomass
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
 
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -413,100 +403,31 @@ building_synthetics_plants_biomass = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_chemical_plants = {
-	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/building_icons/chemicals_industry.dds"
-	
-	unlocking_technologies = {
-		intensive_agriculture
-	}
-	
-	city_type = city
-	levels_per_mesh = 5
-
+INJECT:building_chemical_plant = {
 	production_method_groups = {
-		pmg_fertilizer_production
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_very_high
-
-	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
-			}
-		}
-	}
-	ownership_type = self
-    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_explosives_factory = {
-	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/building_icons/explosives_factory.dds"
-	
-	unlocking_technologies = {
-		intensive_agriculture
-	}
-	
-	city_type = city
-	levels_per_mesh = 5
-
+INJECT:building_explosives_factory = {
 	production_method_groups = {
-		pmg_explosives_building_chemical_plants
-		pmg_automation_building_chemical_plants
+		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_very_high
-
-	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
-			}
-		}
-	}
-	ownership_type = self
-    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_motor_industry = {
-	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/building_icons/motor_industry.dds"
-	city_type = city
-	levels_per_mesh = 5
-	
-	unlocking_technologies = {
-		atmospheric_engine
-	}
-
+INJECT:building_motor_industry = {
 	production_method_groups = {
-		pmg_base_building_motor_industry
-		pmg_automation_building_motor_industry
 		pmg_maintenance
 	}
-	
-	required_construction = construction_cost_very_high
-
-	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
-			}
-		}
-	}
-	ownership_type = self
-    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_electrics_industry = {
+REPLACE:building_electrics_industry = {
 	building_group = bg_heavy_industry
 	icon = "gfx/interface/icons/building_icons/electrics_industry.dds"
 	city_type = city
-	levels_per_mesh = 5
+	levels_per_mesh = 50
 	
 	unlocking_technologies = {
 		telephone
@@ -521,9 +442,12 @@ building_electrics_industry = {
 	required_construction = construction_cost_super_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -531,7 +455,7 @@ building_electrics_industry = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_electrics_industry_radio = {
+REPLACE_OR_CREATE:building_electrics_industry_radio = {
 	building_group = bg_heavy_industry
 	icon = "gfx/interface/icons/goods_icons/radios.dds"
 	city_type = city
@@ -550,9 +474,12 @@ building_electrics_industry_radio = {
 	required_construction = construction_cost_super_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -560,7 +487,7 @@ building_electrics_industry_radio = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_electrics_industry_appliances = {
+REPLACE_OR_CREATE:building_electrics_industry_appliances = {
 	building_group = bg_heavy_industry
 	icon = "gfx/interface/icons/building_icons/appliance.dds"
 	city_type = city
@@ -579,9 +506,12 @@ building_electrics_industry_appliances = {
 	required_construction = construction_cost_super_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -590,95 +520,22 @@ building_electrics_industry_appliances = {
 }
 
 
-building_power_plant = {
-	building_group = bg_power
-	icon = "gfx/interface/icons/building_icons/power_plant.dds"
-	levels_per_mesh = 5
-	
-	unlocking_technologies = { 
-		electrical_generation 
-	}
-
+INJECT:building_power_plant = {
 	production_method_groups = {
-		pmg_base_building_power_plant
 		pmg_power_automation
 		pmg_emissions_control
 		pmg_maintenance
 	}
-	
-	required_construction = construction_cost_medium
-
-	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
-			}
-		}
-	}
-	ownership_type = self
-    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_automotive_industry = {
-	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/building_icons/vehicles_industry.dds"
-	city_type = city
-	levels_per_mesh = 5
-	
-	unlocking_technologies = {
-		combustion_engine
-	}
-
+INJECT:building_automotive_industry = {
 	production_method_groups = {
-		pmg_automobile_production
-		pmg_tanks
-		pmg_automation_building_automotive_industry
+		pmg_emissions_control
 		pmg_maintenance
 	}
-	
-	required_construction = construction_cost_super_high
-
-	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
-			}
-		}
-	}
-	ownership_type = self
-    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_aeroplanes_industry = {
-	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/building_icons/plane.dds"
-	city_type = city
-	levels_per_mesh = -1
-	
-	unlocking_technologies = {
-		military_aviation
-	}
-
-	production_method_groups = {
-		pmg_aeroplanes
-		pmg_automation_planes
-		pmg_maintenance
-	}
-	
-	required_construction = construction_cost_mega_high
-
-	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
-			}
-		}
-	}
-	ownership_type = self
-    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
-}
-
-building_airport = {
+REPLACE_OR_CREATE:building_airport = {
 	building_group = bg_private_infrastructure	
 	icon = "gfx/interface/icons/building_icons/airport.dds"
 	city_type = city
@@ -705,7 +562,7 @@ building_airport = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_highway = {
+REPLACE_OR_CREATE:building_highway = {
 	building_group = bg_private_infrastructure	
 	icon = "gfx/interface/icons/building_icons/highway.dds"
 	city_type = city
@@ -731,7 +588,7 @@ building_highway = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_software_industry = {
+REPLACE_OR_CREATE:building_software_industry = {
 	building_group = bg_light_industry
 	icon = "gfx/interface/icons/building_icons/software.dds"
 	city_type = city
@@ -752,7 +609,7 @@ building_software_industry = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_network_infrastructure = {
+REPLACE_OR_CREATE:building_network_infrastructure = {
 	building_group = bg_private_infrastructure	
 	icon = "gfx/interface/icons/building_icons/network.dds"
 	city_type = city
@@ -782,7 +639,7 @@ building_network_infrastructure = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_hydro_plant = {
+REPLACE_OR_CREATE:building_hydro_plant = {
 	building_group = bg_power
 	icon = "gfx/interface/icons/building_icons/hydro_plant.dds"
 	city_type = city
@@ -809,7 +666,7 @@ building_hydro_plant = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_nuclear_plant = {
+REPLACE_OR_CREATE:building_nuclear_plant = {
 	building_group = bg_power
 	icon = "gfx/interface/icons/building_icons/nuclear_plant.dds"
 	city_type = city
@@ -830,7 +687,7 @@ building_nuclear_plant = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_fusion_plant = {
+REPLACE_OR_CREATE:building_fusion_plant = {
 	building_group = bg_power
 	icon = "gfx/interface/icons/building_icons/fusion_plant.dds"
 	city_type = city
@@ -851,7 +708,7 @@ building_fusion_plant = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_renewable_energy_plant = {
+REPLACE_OR_CREATE:building_renewable_energy_plant = {
 	building_group = bg_power
 	icon = "gfx/interface/icons/building_icons/renewable_plant.dds"
 	city_type = city
@@ -872,7 +729,7 @@ building_renewable_energy_plant = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_electronic_components_and_semiconductor_industry = {
+REPLACE_OR_CREATE:building_electronic_components_and_semiconductor_industry = {
 	building_group = bg_heavy_industry	
 	icon = "gfx/interface/icons/building_icons/semiconductor.dds"
 	city_type = city
@@ -891,9 +748,12 @@ building_electronic_components_and_semiconductor_industry = {
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -901,7 +761,7 @@ building_electronic_components_and_semiconductor_industry = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_robotics_industry = {
+REPLACE_OR_CREATE:building_robotics_industry = {
 	building_group = bg_heavy_industry	
 	icon = "gfx/interface/icons/building_icons/robot.dds"
 	city_type = city
@@ -920,9 +780,12 @@ building_robotics_industry = {
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -930,7 +793,7 @@ building_robotics_industry = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_advanced_material_fabricator = {
+REPLACE_OR_CREATE:building_advanced_material_fabricator = {
 	building_group = bg_heavy_industry	
 	icon = "gfx/interface/icons/building_icons/advanced_materials.dds"
 	city_type = city
@@ -950,9 +813,12 @@ building_advanced_material_fabricator = {
 	required_construction = construction_cost_extreme
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
 			}
 		}
 	}
@@ -960,7 +826,7 @@ building_advanced_material_fabricator = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_launch_facility = {
+REPLACE_OR_CREATE:building_launch_facility = {
 	building_group = bg_space	
 	icon = "gfx/interface/icons/building_icons/space.dds"
 	city_type = city
@@ -981,7 +847,7 @@ building_launch_facility = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_space_elevator_construction_site = {
+REPLACE_OR_CREATE:building_space_elevator_construction_site = {
 	building_group = bg_government	
 	icon = "gfx/interface/icons/building_icons/space_elevator_construction_site.dds"
 	city_type = city
@@ -1105,7 +971,7 @@ building_space_elevator_construction_site = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_space_elevator = {
+REPLACE_OR_CREATE:building_space_elevator = {
 	building_group = bg_private_infrastructure	
 	icon = "gfx/interface/icons/building_icons/space_elevator.dds"
 	city_type = city
@@ -1123,7 +989,7 @@ building_space_elevator = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_space_mine = {
+REPLACE_OR_CREATE:building_space_mine = {
 	building_group = bg_space	
 	icon = "gfx/interface/icons/building_icons/space_base.dds"
 	city_type = city
@@ -1143,7 +1009,7 @@ building_space_mine = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_ocean_mine = {
+REPLACE_OR_CREATE:building_ocean_mine = {
 	building_group = bg_space	
 	icon = "gfx/interface/icons/building_icons/deep_sea_mine.dds"
 	city_type = city
@@ -1167,53 +1033,14 @@ building_ocean_mine = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_university = {
-
-	building_group = bg_technology
-
-	city_type = city
-
-	levels_per_mesh = 5
-
-	unlocking_technologies = {
-		academia
-	}
+INJECT:building_university = {
 
 	production_method_groups = {
-		pmg_base_building_university
-		pmg_university_academia
-		pmg_principle_freedom_of_movement_3
 		pmg_principle_education_3
 	}
-
-	icon = "gfx/interface/icons/building_icons/building_university.dds"
-
-	required_construction = construction_cost_medium
-
-	ai_value = {
-		value = 2000
-		if = {
-			limit = { owner.country_rank = rank_value:great_power }
-			add = 4000
-		}
-		if = {
-			limit = { owner.sol_ranking < 20 }
-			add = 4000
-		}
-		if = {
-			limit = { owner.country_innovation >= owner.modifier:country_weekly_innovation_max_add }
-			multiply = 0.1
-		}
-		if = {
-			limit = { owner = { taking_loans = yes } }
-			multiply = 0.5
-		}
-	}
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_space_program = {
+REPLACE_OR_CREATE:building_space_program = {
 	building_group = bg_monuments	
 	icon = "gfx/interface/icons/goods_icons/rocket.dds"
 	city_type = city
@@ -1246,7 +1073,7 @@ building_space_program = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_national_park = {
+REPLACE_OR_CREATE:building_national_park = {
 	building_group = bg_parks	
 	icon = "gfx/interface/icons/building_icons/national_park.dds"
 	city_type = city
@@ -1279,77 +1106,25 @@ building_national_park = {
 	}
 }
 
-building_arts_academy = {
-	building_group = bg_arts
-
-	city_type = city
-	
-	levels_per_mesh = 5
-
-	unlocking_technologies = {
-		romanticism
-	}
-
+INJECT:building_art_academy = {
 	production_method_groups = {
-		pmg_base_building_arts_academy
-		pmg_ownership_building_arts_academy
-		pmg_principle_freedom_of_movement_3
 		pmg_principle_artistic_expression
 		pmg_maintenance
 	}
-	
-	icon = "gfx/interface/icons/building_icons/building_arts_academy.dds"
-
-	required_construction = construction_cost_medium
-	
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_barracks = {
-	building_group = bg_army
-	recruits_combat_units = yes
-	icon = "gfx/interface/icons/building_icons/building_barracks.dds"
-	city_type = city
-	
-	has_max_level = yes
-	
-	levels_per_mesh = 25
-
-	unlocking_technologies = {
-		standing_army
-	}
-
+INJECT:building_barrack = {
 	production_method_groups = {
-		pmg_training
 		pmg_principle_engineering_and_logistics
 	}
-
-	required_construction = construction_cost_very_low
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_military.dds"
 }
 
-building_port = {
-	building_group = bg_private_infrastructure
-	city_type = port
-	icon = "gfx/interface/icons/building_icons/building_port.dds"
-
-	port = yes
-
-	unlocking_technologies = { navigation }
-
+INJECT:building_port = {
 	production_method_groups = {
-		pmg_base_building_port
 		pmg_water_personal_transport
 		pmg_emissions_control
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_medium
-
-	terrain_manipulator = urban_port
 	
 	possible = {
 		OR = {
@@ -1357,515 +1132,88 @@ building_port = {
 			on_river = yes
 		}
 	}
-
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_railway = {
-	building_group = bg_private_infrastructure
-	icon = "gfx/interface/icons/building_icons/building_railway.dds"
-
-	ai_nationalization_desire = 0.5 # AI is reluctant to privatize railways since they are likely to need subsidies anyway
-
-	unlocking_technologies = {
-		railways
-	}
-
+INJECT:building_railway = {
 	production_method_groups = {
-		pmg_base_building_railway
-		pmg_passenger_trains
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_very_high
-
-	ai_value = {
-		value = 2000 # Railways are important
-
-		if = { # Trans-Siberian Railway
-			limit = {
-				owner = {
-					has_journal_entry = je_trans_siberian_railway
-				}
-				OR = {
-					state_region = s:STATE_MOSCOW
-					state_region = s:STATE_YAROSLAVL
-					state_region = s:STATE_NIZHNY_NOVGOROD
-					state_region = s:STATE_CHUVASHIA
-					state_region = s:STATE_KAZAN
-					state_region = s:STATE_UFA
-					state_region = s:STATE_CHELYABINSK
-					state_region = s:STATE_URAL
-					state_region = s:STATE_TOBOLSK
-					state_region = s:STATE_TOMSK
-					state_region = s:STATE_KRASNOYARSK
-					state_region = s:STATE_IRKUTSK
-					state_region = s:STATE_BURYATIA
-					state_region = s:STATE_TRANS_BAIKAL
-					state_region = s:STATE_YAKUTSK
-					state_region = s:STATE_OKHOTSK
-					state_region = s:STATE_AMUR
-					state_region = s:STATE_OUTER_MANCHURIA
-				}
-				NOR = {
-					has_building = building_railway
-					any_scope_building = {
-						is_building_type = building_railway
-						is_under_construction = yes
-					}
-				}
-			}
-			add = 10000
-		}
-		else_if = { # Shinkansen, my beloved
-			limit = {
-				owner = {
-					has_journal_entry = je_meiji_economy
-				}
-				is_incorporated = yes # Japan proper
-				NOR = {
-					has_building = building_railway
-					any_scope_building = {
-						is_building_type = building_railway
-						is_under_construction = yes
-					}
-				}
-			}
-			add = 10000
-		}
-		else_if = { # Trans-Continental Railways
-			limit = {
-				owner = {
-					has_journal_entry = je_trans_continental_railway
-				}
-				OR = {
-					state_region = s:STATE_NEBRASKA
-					state_region = s:STATE_WYOMING
-					state_region = s:STATE_UTAH
-					state_region = s:STATE_NEVADA
-					state_region = s:STATE_CALIFORNIA
-				}
-				NOR = {
-					has_building = building_railway
-					any_scope_building = {
-						is_building_type = building_railway
-						is_under_construction = yes
-					}
-				}
-			}
-			add = 10000
-		}
-		else_if = { # Canadian Pacific Highway
-			limit = {
-				owner = {
-					has_journal_entry = je_canada_pacific_railway
-				}
-				OR = {
-					state_region = s:STATE_QUEBEC
-					state_region = s:STATE_BRITISH_COLUMBIA
-					state_region = s:STATE_ONTARIO
-					state_region = s:STATE_ALBERTA
-					state_region = s:STATE_SASKATCHEWAN
-					state_region = s:STATE_MANITOBA
-				}
-				NOR = {
-					has_building = building_railway
-					any_scope_building = {
-						is_building_type = building_railway
-						is_under_construction = yes
-					}
-				}
-			}
-			add = 10000
-		}
-
-		if = { # Manchurian Railway
-			limit = {
-				exists = c:RUS
-				c:RUS ?= owner
-				OR = {
-					region = sr:region_manchuria
-				}
-				any_scope_building = {
-					is_building_type = building_railway
-					levels_owned_by_country = {
-						target = c:RUS
-						value  < 1
-					}
-				}
-			}
-			add = 10000
-		}
-	}
-
-	should_auto_expand = {
-		occupancy >= 0.8
-		OR = {
-			cash_reserves_ratio > 0.5
-			is_subsidized = yes
-		}
-		OR = {
-			state = {
-				sg:transportation = {
-					state_goods_pricier > 0.5
-				}
-			}
-			state = {
-				infrastructure_delta <= -20
-			}
-		}
-		NOT = { is_under_construction = yes }
-
-	}
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_railways.dds"
 }
 
-building_trade_center = {
-	building_group = bg_trade
-	city_type = city
-	levels_per_mesh = 10
-
-	lens = infrastructure
-
-	required_construction = construction_cost_very_low
-
-	icon = "gfx/interface/icons/building_icons/building_trade_center.dds"
-
+INJECT:building_trade_center = {
 	production_method_groups = {
-		pmg_base_building_trade_center
-		pmg_trade_quantity_trade_center
 		pmg_maintenance
 	}
-
-	can_build_government = {
-		trade_center_construction_allowed = yes
-	}
-	
-	can_build_private = {
-		trade_center_construction_allowed = yes
-	}
-		
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_skyscraper = {
-
-	building_group = bg_skyscraper
-
-	city_type = city
-
-	levels_per_mesh = 1
-
-	enable_air_connection = yes
-
-	expandable = no
-
-	downsizeable = no
-
+INJECT:building_skyscraper = {
 	production_method_groups = {
-		pmg_base_building_skyscraper
-		pmg_airship_mooring_post
 		pmg_maintenance
 	}
-
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
-
-	required_construction = construction_cost_monument
-
-	can_build_government = {
-		custom_tooltip = {
-			text = skyscraper_can_construct_tt
-			has_modifier = skyscraper_site
-		}
-	}
-	can_build_private = {
-		always = no
-	}
-
-	ai_value = 50000
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_food_industry = {
-	building_group = bg_light_industry
-	icon = "gfx/interface/icons/building_icons/food_industry.dds"
-	city_type = city
-	levels_per_mesh = 5
-
-	ai_nationalization_desire = -0.25 # AI is generally fine with privatizing consumer goods industries
-
-	unlocking_technologies = {
-		manufacturies
-	}
-
+INJECT:building_food_industry = {
 	production_method_groups = {
-		pmg_base_building_food_industry
-		pmg_canning
-		pmg_distillery
-		pmg_automation_building_food_industry
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_high
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds"
 }
 
-building_glassworks = {
-	building_group = bg_light_industry
-	icon = "gfx/interface/icons/building_icons/glassworks.dds"
-	city_type = city
-	levels_per_mesh = 5
-
-	unlocking_technologies = {
-		manufacturies
-	}
-
+INJECT:building_glassworks = {
 	production_method_groups = {
-		pmg_base_building_glassworks
-		pmg_luxury_building_glassworks
-		pmg_glassblowing
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_high
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds"
 }
 
-building_tooling_workshops = {
-	building_group = bg_light_industry
-	icon = "gfx/interface/icons/building_icons/tooling_workshops.dds"
-
-	ai_nationalization_desire = 0.25 # AI is a bit reluctant to privatize tools due to importance for construction etc
-
-	unlocking_technologies = {
-		manufacturies
-	}
-
-	city_type = city
-	levels_per_mesh = 5
-
+INJECT:building_tooling_workshop = {
 	production_method_groups = {
-		pmg_base_building_tooling_workshops
-		pmg_automation_building_tooling_workshops
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_high
-
-	ai_value = 2000 # Tools are very important
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds"
 }
 
-building_paper_mills = {
-	building_group = bg_light_industry
-	icon = "gfx/interface/icons/building_icons/paper_mills.dds"
-
-	ai_nationalization_desire = 0.25 # AI is a bit reluctant to privatize government goods
-
-	unlocking_technologies = {
-		manufacturies
-	}
-
-	city_type = city
-	levels_per_mesh = 5
-
+INJECT:building_paper_mill = {
 	production_method_groups = {
-		pmg_base_building_paper_mills
-		pmg_automation_building_paper_mills
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_high
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds"
 }
 
-building_steel_mills = {
-	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/building_icons/steel_mills.dds"
-	city_type = city
-	levels_per_mesh = 5
-
-	ai_nationalization_desire = 0.25 # AI will generally not privatize steel mills due to importance for construction
-
-	unlocking_technologies = {
-		steelworking
-	}
-
+INJECT:building_steel_mill = {
 	production_method_groups = {
-		pmg_steelmaking_process
-		pmg_automation_building_steel_mills
 		pmg_emissions_control
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_very_high
-
-	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law = law_type:law_industry_banned
-					has_law = law_type:law_extraction_economy
-				}
-			}
-		}
-	}
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds"
 }
 
-building_shipyards = {
-	building_group = bg_shipyards
-	icon = "gfx/interface/icons/building_icons/shipyards.dds"
-	city_type = port
-
-	ai_nationalization_desire = 0.25 # AI is a bit reluctant to privatize government goods
-
-	unlocking_technologies = {
-		navigation
-	}
-
+INJECT:building_shipyard = {
 	production_method_groups = {
-		pmg_base_building_shipyards
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_high
-
-	potential = {
-		is_coastal = yes
-	}
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_harbour.dds"
 }
 
-building_military_shipyards = {
-	building_group = bg_military_shipyards
-	icon = "gfx/interface/icons/building_icons/military_shipyards.dds"
-	city_type = port
-
-	ai_nationalization_desire = 0.5 # AI generally does not want to privatize military goods industries
-
-	unlocking_technologies = {
-		admiralty
-	}
-
+INJECT:building_military_shipyard = {
 	production_method_groups = {
-		pmg_military_base
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_very_high
-
-	potential = {
-		is_coastal = yes
-	}
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_harbour.dds"
 }
 
-building_arms_industry = {
-	building_group = bg_arms_industries
-	icon = "gfx/interface/icons/building_icons/arms_industry.dds"
-	city_type = city
-	levels_per_mesh = 5
-
-	ai_nationalization_desire = 0.5 # AI generally does not want to privatize military goods industries
-
-	unlocking_technologies = {
-		gunsmithing
-	}
-
+INJECT:building_arms_industry = {
 	production_method_groups = {
-		pmg_firearms_manufacturing
-		pmg_automation_building_arms_industry
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_high
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds"
 }
 
-building_artillery_foundries = {
-	building_group = bg_artillery_foundaries
-	icon = "gfx/interface/icons/building_icons/artillery_foundry.dds"
-	city_type = city
-	levels_per_mesh = 5
-
-	ai_nationalization_desire = 0.5 # AI generally does not want to privatize military goods industries
-
-	unlocking_technologies = {
-		gunsmithing
-	}
-
+INJECT:building_artillery_foundry = {
 	production_method_groups = {
-		pmg_foundries
-		pmg_automation_building_arms_industry
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_high
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds"
 }
 
-building_munition_plants = {
-	building_group = bg_munition_plants
-	icon = "gfx/interface/icons/building_icons/munition_plants.dds"
-	city_type = city
-	levels_per_mesh = 5
-
-	ai_nationalization_desire = 0.5 # AI generally does not want to privatize military goods industries
-
-	unlocking_technologies = {
-		percussion_cap
-	}
-
+INJECT:building_munition_plant = {
 	production_method_groups = {
-		pmg_base_building_munition_plants
-		pmg_automation_building_munition_plants
 		pmg_maintenance
 	}
-
-	required_construction = construction_cost_very_high
-
-	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law = law_type:law_industry_banned
-					has_law = law_type:law_extraction_economy
-				}
-			}
-		}
-	}
-	ownership_type = self
-
-	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds"
 }
 
-building_tourism_industry = {
+REPLACE_OR_CREATE:building_tourism_industry = {
 	building_group = bg_arts
 	icon = "gfx/interface/icons/building_icons/tourism.dds"
 	city_type = city
@@ -1887,8 +1235,8 @@ building_tourism_industry = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds"
 }
 
-building_manganese_mine = {
-	building_group = bg_manganese_mining
+REPLACE_OR_CREATE:building_manganese_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/iron_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1907,9 +1255,11 @@ building_manganese_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -1918,8 +1268,8 @@ building_manganese_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_chromium_mine = {
-	building_group = bg_chromium_mining
+REPLACE_OR_CREATE:building_chromium_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/iron_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1938,9 +1288,11 @@ building_chromium_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -1949,8 +1301,8 @@ building_chromium_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_specialty_alloy_metal_mine = {
-	building_group = bg_specialty_alloy_metals_mining
+REPLACE_OR_CREATE:building_specialty_alloy_metal_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/iron_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1969,9 +1321,11 @@ building_specialty_alloy_metal_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -1980,8 +1334,8 @@ building_specialty_alloy_metal_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_copper_mine = {
-	building_group = bg_copper_mining
+REPLACE_OR_CREATE:building_copper_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/lead_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2000,9 +1354,11 @@ building_copper_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -2011,8 +1367,8 @@ building_copper_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_bauxite_mine = {
-	building_group = bg_bauxite_mining
+REPLACE_OR_CREATE:building_bauxite_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/iron_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2031,9 +1387,11 @@ building_bauxite_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -2042,8 +1400,8 @@ building_bauxite_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_precious_minor_base_metal_mine = {
-	building_group = bg_precious_minor_base_metals_mining
+REPLACE_OR_CREATE:building_precious_minor_base_metal_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/lead_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2062,9 +1420,11 @@ building_precious_minor_base_metal_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -2073,8 +1433,8 @@ building_precious_minor_base_metal_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_nickel_cobalt_mine = {
-	building_group = bg_nickel_cobalt_mining
+REPLACE_OR_CREATE:building_nickel_cobalt_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/gold_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2093,9 +1453,11 @@ building_nickel_cobalt_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -2104,8 +1466,8 @@ building_nickel_cobalt_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_lithium_mine = {
-	building_group = bg_lithium_mining
+REPLACE_OR_CREATE:building_lithium_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/gold_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2124,9 +1486,11 @@ building_lithium_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -2135,8 +1499,8 @@ building_lithium_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_rare_earth_metals_mine = {
-	building_group = bg_rare_earth_metals_mining
+REPLACE_OR_CREATE:building_rare_earth_metals_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/gold_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2155,9 +1519,11 @@ building_rare_earth_metals_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -2166,8 +1532,8 @@ building_rare_earth_metals_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_platinum_group_metals_mine = {
-	building_group = bg_platinum_group_metals_mining
+REPLACE_OR_CREATE:building_platinum_group_metals_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/gold_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2186,9 +1552,11 @@ building_platinum_group_metals_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -2197,8 +1565,8 @@ building_platinum_group_metals_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_graphite_mine = {
-	building_group = bg_graphite_mining
+REPLACE_OR_CREATE:building_graphite_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/coal_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2217,9 +1585,11 @@ building_graphite_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -2228,8 +1598,8 @@ building_graphite_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_phosphate_mine = {
-	building_group = bg_phosphate_mining
+REPLACE_OR_CREATE:building_phosphate_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/sulfur_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2248,9 +1618,11 @@ building_phosphate_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -2259,8 +1631,8 @@ building_phosphate_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_potash_mine = {
-	building_group = bg_potash_mining
+REPLACE_OR_CREATE:building_potash_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/sulfur_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2279,9 +1651,11 @@ building_potash_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}
@@ -2290,8 +1664,8 @@ building_potash_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-building_industrial_mineral_salt_mine = {
-	building_group = bg_industrial_mineral_salt_mining
+REPLACE_OR_CREATE:building_industrial_mineral_salt_mine = {
+	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/sulfur_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2310,9 +1684,11 @@ building_industrial_mineral_salt_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		this = {
-			owner = { 
-				NOT = { has_law = law_type:law_industry_banned } 
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+				}
 			}
 		}
 	}

@@ -123,8 +123,8 @@ goods_output_luxury_furniture_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_radios_mult = {
@@ -132,8 +132,8 @@ goods_output_radios_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_furniture_mult = {
@@ -141,8 +141,8 @@ goods_output_furniture_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_services_mult = {
@@ -150,8 +150,8 @@ goods_output_services_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_consumer_appliances_mult = {
@@ -159,8 +159,8 @@ goods_output_consumer_appliances_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_construction_mult = {
@@ -168,8 +168,8 @@ goods_output_construction_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_digital_access_mult = {
@@ -177,8 +177,8 @@ goods_output_digital_access_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_fine_art_mult = {
@@ -186,8 +186,8 @@ goods_output_fine_art_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_clothes_mult = {
@@ -195,8 +195,8 @@ goods_output_clothes_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_luxury_clothes_mult = {
@@ -204,8 +204,8 @@ goods_output_luxury_clothes_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_glass_mult = {
@@ -213,8 +213,8 @@ goods_output_glass_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_steel_mult = {
@@ -222,8 +222,8 @@ goods_output_steel_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_groceries_mult = {
@@ -231,8 +231,8 @@ goods_output_groceries_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_porcelain_mult = {
@@ -240,8 +240,8 @@ goods_output_porcelain_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_fertilizer_mult = {
@@ -249,8 +249,8 @@ goods_output_fertilizer_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_explosives_mult = {
@@ -258,8 +258,8 @@ goods_output_explosives_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_ammunition_mult = {
@@ -267,8 +267,8 @@ goods_output_ammunition_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_radios_mult = {
@@ -276,8 +276,8 @@ goods_output_radios_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_telephones_mult = {
@@ -285,8 +285,8 @@ goods_output_telephones_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_grain_mult = {
@@ -294,8 +294,8 @@ goods_output_grain_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_fish_mult = {
@@ -303,8 +303,8 @@ goods_output_fish_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_meat_mult = {
@@ -312,8 +312,8 @@ goods_output_meat_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_wood_mult = {
@@ -321,8 +321,8 @@ goods_output_wood_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_coal_mult = {
@@ -330,8 +330,8 @@ goods_output_coal_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_iron_mult = {
@@ -339,8 +339,8 @@ goods_output_iron_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_lead_mult = {
@@ -348,8 +348,8 @@ goods_output_lead_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_gold_mult = {
@@ -357,8 +357,8 @@ goods_output_gold_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_sulfur_mult = {
@@ -366,8 +366,8 @@ goods_output_sulfur_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_rubber_mult = {
@@ -375,8 +375,8 @@ goods_output_rubber_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_coffee_mult = {
@@ -384,8 +384,8 @@ goods_output_coffee_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_dye_mult = {
@@ -393,8 +393,8 @@ goods_output_dye_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_opium_mult = {
@@ -402,8 +402,8 @@ goods_output_opium_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_tea_mult = {
@@ -411,8 +411,8 @@ goods_output_tea_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_tobacco_mult = {
@@ -420,8 +420,8 @@ goods_output_tobacco_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_paper_mult = {
@@ -429,8 +429,8 @@ goods_output_paper_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_transportation_mult = {
@@ -447,8 +447,8 @@ goods_output_advanced_materials_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_tourism_mult = {
@@ -456,8 +456,8 @@ goods_output_tourism_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_input_coal_mult = {
@@ -501,8 +501,8 @@ goods_output_launch_capacity_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_electronic_components_mult = {
@@ -510,8 +510,8 @@ goods_output_electronic_components_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_tech_metals_mult = {
@@ -519,8 +519,8 @@ goods_output_tech_metals_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_robotics_mult = {
@@ -528,8 +528,8 @@ goods_output_robotics_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_output_digital_assets_mult = {
@@ -537,8 +537,8 @@ goods_output_digital_assets_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
-}
+	    ai_value = 250
+    }
 }
 
 goods_trade_advantage_digital_assets_mult = {
@@ -546,8 +546,17 @@ goods_trade_advantage_digital_assets_mult = {
 	percent = yes
 	
 	game_data = {
-	ai_value = 250
+	    ai_value = 250
+    }
 }
+
+goods_output_merchant_marine_mult = {
+    color = good
+        percent = yes
+
+        game_data = {
+            ai_value = 250
+    }
 }
 
 building_oil_rig_throughput_add = {
@@ -625,11 +634,6 @@ building_trade_center_throughput_add = {
 	percent = yes
 }
 
-building_aeroplanes_industry_throughput_add = {
-	color = good
-	percent = yes
-}
-
 building_renewable_energy_plant_throughput_add = {
 	color = good
 	percent = yes
@@ -670,13 +674,13 @@ building_electrics_industry_appliances_throughput_add = {
 	decimals = 0
 }
 
-building_synthetics_plants_rubber_throughput_add = {
+building_synthetics_plant_rubber_throughput_add = {
 	color = good
 	percent = yes
 	decimals = 0
 }
 
-building_synthetics_plants_oil_throughput_add = {
+building_synthetics_plant_oil_throughput_add = {
 	color = good
 	percent = yes
 	decimals = 0
@@ -1210,6 +1214,11 @@ building_group_bg_trade_throughput_add = {
 }
 
 building_group_bg_construction_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_nuclear_plant_throughput_add = {
 	color = good
 	percent = yes
 }

@@ -74,7 +74,7 @@ advanced_materials = {
 	traded_quantity = 0.1
 }
 
-transportation = {
+REPLACE:transportation = {
 	texture = "gfx/interface/icons/goods_icons/transportation.dds"
 	cost = 30
 	category = staple
@@ -86,9 +86,9 @@ transportation = {
 	pop_consumption_can_add_infrastructure = yes
 }
 
-aeroplanes = {
+REPLACE:aeroplanes = {
 	texture = "gfx/interface/icons/goods_icons/aeroplanes.dds"
-	cost = 80
+	cost = 160
 	category = military
 	
 	obsession_chance = 0.5
@@ -113,7 +113,7 @@ construction = {
 	traded_quantity = 0.1
 }
 
-fertilizer = {
+REPLACE:fertilizer = {
 	texture = "gfx/interface/icons/company_icons/basic_chemicals.dds"
 	cost = 30
 	category = industrial
@@ -123,7 +123,7 @@ fertilizer = {
 	traded_quantity = 7 # 210
 }
 
-tanks = {
+REPLACE:tanks = {
 	texture = "gfx/interface/icons/goods_icons/tanks.dds"
 	cost = 120
 	category = military

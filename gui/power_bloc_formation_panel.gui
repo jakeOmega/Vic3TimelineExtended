@@ -961,11 +961,12 @@ types power_bloc_formation
 					}
 				}
 
-				flowcontainer = {
-					visible = "[GetVariableSystem.HasValue('emblem_and_colors_tab', 'true')]"
+				fixedgridbox = {
 					parentanchor = hcenter
-					spacing = 40
-
+					addcolumn = 250
+					addrow = 40
+					datamodel_wrap = 2
+					flipdirection = yes
 					datamodel = "[PowerBlocCustomizationPopup.GetColorPickers]"
 
 					item = {
@@ -986,7 +987,7 @@ types power_bloc_formation
 							spriteType = Corneredtiled
 							spriteborder = { 0 0 }
 							using = fade_top_entry_header_colored
-							color = "[PowerBlocCustomizationPopup.GetPrimaryColor]"
+							color = "[PowerBlocCustomizationPopup.GetMapColor]"
 							texture = "[PowerBlocCustomizationPopup.GetMapTexture]"
 							using = frame_small_mask
 							alpha = 0.3
@@ -1072,7 +1073,7 @@ types power_bloc_formation
 					spacing = 20
 
 					widget = {
-						size = { 300 470 }
+						size = { 300 510 }
 						using = entry_bg_fancy
 
 						flowcontainer = {

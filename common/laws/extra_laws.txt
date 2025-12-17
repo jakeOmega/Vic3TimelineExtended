@@ -10,7 +10,6 @@ law_universal_basic_income = {
 	}	
 	
 	modifier = {
-		country_institution_social_security_max_investment_add = 2
 		state_expected_sol_from_literacy = 10
 	}
 
@@ -62,7 +61,6 @@ law_post-scarcity = {
 	}	
 	
 	modifier = {
-		country_institution_social_security_max_investment_add = 2
 		state_academics_investment_pool_contribution_add = 0.01
 		state_shopkeepers_investment_pool_contribution_add = -0.19
 		state_expected_sol_from_literacy = 30
@@ -120,6 +118,7 @@ law_intrusive_surveillance = {
 		country_tech_spread_mult = -0.5
 		country_society_tech_spread_mult = -0.5
 		country_leverage_resistance_mult = 0.1
+		country_support_separatism_resistance_mult = 0.2
 		country_authority_add = 100
 		country_institution_impact_institution_ministry_of_intelligence_and_security_mult = 0.20
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = 1
@@ -361,7 +360,7 @@ law_creative_commons = {
 	progressiveness = 75		
 	
 	modifier = {
-		building_arts_academy_throughput_add = 0.1
+		building_art_academy_throughput_add = 0.1
 		state_capitalists_investment_pool_contribution_add = 0.025
 		country_academics_pol_str_mult = 0.1
 		interest_group_ig_intelligentsia_pol_str_mult = 0.1
@@ -993,6 +992,7 @@ law_minority_rights_ghettoization = {
 	progressiveness = 25		
 
 	unlocking_laws = {
+		law_subjecthood
 		law_ethnostate
 		law_national_supremacy
 		law_racial_segregation
@@ -1189,6 +1189,7 @@ law_minority_rights_discrimination = {
 	progressiveness = 50		
 
 	unlocking_laws = {
+		law_subjecthood
 		law_ethnostate
 		law_national_supremacy
 		law_racial_segregation
@@ -1556,7 +1557,8 @@ law_federal_system = {
 	modifier = {
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 		state_tax_capacity_mult = -0.1
-		country_political_movement_radicalism_mult = -0.1
+		political_movement_radicalism_add = -0.1
+		country_support_separatism_resistance_mult = 0.1
 		state_decree_cost_mult = -0.25
 	}
 }
@@ -1569,9 +1571,11 @@ law_devolution = {
 	modifier = {
 		state_decree_cost_mult = 0.1
 		country_liberty_desire_of_subjects_add = -0.1
-		country_bureaucracy_investment_cost_factor_mult = -0.1
-		state_assimilation_mult = -0.5
-		state_conversion_mult = -0.5
+		country_bureaucracy_investment_cost_factor_mult = -0.2
+		state_institution_impact_add = -0.05
+		country_support_separatism_resistance_mult = 0.3
+		state_assimilation_mult = -0.25
+		state_conversion_mult = -0.25
 	}
 }
 
@@ -1679,7 +1683,7 @@ law_pro_natalist_subsidies = {
 	unlocking_technologies = { mass_propaganda }
 		
 	modifier = {
-		country_welfare_payments_mult = 0.10
+		state_welfare_payments_mult = 0.10
 		state_birth_rate_mult = 0.10
 		state_dependent_wage_mult = -0.1
 		state_working_adult_ratio_add = -0.05
@@ -1785,7 +1789,7 @@ law_prudential_narrow_banking = {
 	}
     modifier = {
         country_banking_intervention_max_add = 7
-		state_capitalists_investment_pool_efficiency_mult = -0.1
+		building_urban_center_throughput_add = 0.1
     }
 }
 
@@ -1802,7 +1806,7 @@ law_directed_credit_development_banks = {
     modifier = {
         country_banking_intervention_max_add = 7
 		country_government_dividends_efficiency_add = 0.1
-		state_capitalists_investment_pool_contribution_add = -0.1
+		state_capitalists_investment_pool_contribution_add = -0.05
     }
 }
 
@@ -1814,7 +1818,7 @@ law_central_bank_independence = {
 		keynesian_economics
 	}
 	unlocking_laws = {
-		law_institution_national_bank
+		law_national_bank
 	}
     institution = institution_national_bank
 	institution_modifier = {
@@ -1822,8 +1826,6 @@ law_central_bank_independence = {
 	}
     modifier = {
 		country_banking_intervention_max_add = 7
-		state_capitalists_investment_pool_efficiency_mult = -0.1
-		state_capitalists_investment_pool_contribution_add = -0.05
     }
 }
 
@@ -1855,7 +1857,7 @@ law_unregulated_internet = {
 	modifier = {
 		country_tech_spread_mult = 0.2
 		country_company_throughput_bonus_add = 0.1
-		country_political_movement_radicalism_mult = 0.1
+		political_movement_radicalism_add = 0.1
 	}
 }
 
@@ -1869,6 +1871,7 @@ law_state_controlled_internet = {
 	modifier = {
 		country_authority_add = 200
 		country_suppression_cost_mult = -0.5
+		country_support_separatism_resistance_mult = 0.2
 		country_tech_spread_mult = -0.25
 		state_radicals_from_political_movements_mult = 0.25
 	}
@@ -1917,7 +1920,7 @@ law_ban_on_genetic_modification = {
 	modifier = {
 		country_authority_add = 100
 		interest_group_ig_devout_pol_str_mult = 0.10
-		country_technology_spread_mult  = -0.1
+		country_tech_spread_mult  = -0.1
 	}
 }
 
@@ -1945,7 +1948,7 @@ law_open_source_genetics = {
 		building_group_bg_agriculture_throughput_add = 0.25
 		building_group_bg_ranching_throughput_add = 0.25
 		building_group_bg_plantations_throughput_add = 0.25
-		country_technology_spread_mult = 0.1
+		country_tech_spread_mult = 0.1
 	}
 }
 
@@ -1962,6 +1965,273 @@ law_state_eugenics_program = {
 		state_birth_rate_mult = 0.1
 	}
 }
+
+# =================================================================
+# Language Policy
+# Governs official status of languages, schooling standardization, and assimilation rights.
+# =================================================================
+
+# Local Vernacular (premodern default)
+law_local_vernacular = {
+    group = lawgroup_language_policy
+    icon = "gfx/interface/icons/law_icons/traditionalism.dds"
+    progressiveness = 0
+
+    # Patchwork practice; no statewide rights/duties
+    modifier = {
+        state_assimilation_mult = -0.25
+        state_conversion_mult = -0.10
+        state_institution_impact_add = -0.05
+        country_acceptance_homeland_add = 5
+		country_acceptance_not_homeland_add = -5
+        country_support_separatism_resistance_mult = -0.05
+        country_primary_culture_fervor_from_laws_add = -20
+        country_education_fervor_add = -5
+        country_authority_add = -50
+    }
+}
+
+# Civic Monolingualism
+law_civic_monolingualism = {
+    group = lawgroup_language_policy
+    icon = "gfx/interface/icons/law_icons/public_schools.dds"
+    progressiveness = 60
+
+    unlocking_technologies = { nationalism }
+
+	disallowing_laws = {
+		law_no_schools
+	}
+
+    institution = institution_schools
+    institution_modifier = {
+		state_assimilation_mult = 0.05
+	}
+
+    modifier = {
+        state_assimilation_mult = 0.15
+        country_bureaucracy_investment_cost_factor_mult = -0.05
+        country_primary_culture_fervor_from_laws_add = 10
+        country_acceptance_no_shared_language_trait_add = -10
+		country_acceptance_shared_language_trait_add = 5
+        country_support_separatism_resistance_mult = -0.10
+        country_support_separatism_strength_mult = 0.20
+    }
+}
+
+# Multilingual Federalism
+law_multilingual_federalism = {
+    group = lawgroup_language_policy
+    icon = "gfx/interface/icons/law_icons/census_voting.dds"
+    progressiveness = 75
+
+    unlocking_technologies = { human_rights }
+
+	disallowing_laws = {
+		law_ethnostate
+		law_minority_rights_violent_hostility
+		law_minority_rights_ghettoization
+		law_minority_rights_cultural_assimilation
+	}
+
+    modifier = {
+		country_bureaucracy_investment_cost_factor_mult = 0.05
+        country_acceptance_homeland_add = 20
+        country_support_separatism_strength_mult = -0.1
+        country_support_separatism_resistance_mult = 0.2
+    }
+}
+
+# Linguistic Purity (coercive suppression)
+law_linguistic_purity = {
+    group = lawgroup_language_policy
+    icon = "gfx/interface/icons/law_icons/autocracy.dds"
+    progressiveness = 20
+
+    unlocking_technologies = { mass_propaganda }
+
+    modifier = {
+        state_allow_assimilation_in_homeland_bool = yes
+        state_assimilation_mult = 0.25
+        country_primary_culture_fervor_from_laws_add = 20
+        country_support_separatism_resistance_mult = -0.5
+        country_support_separatism_strength_mult = 0.20
+        country_radicalism_increases_violent_hostility_mult = 0.5
+		country_radicalism_increases_cultural_erasure_mult = 0.3
+		country_radicalism_increases_open_prejudice_mult = 0.1
+		country_acceptance_no_shared_language_trait_add = -20
+    }
+}
+
+# State-Led Language Reform (script/orthography/terminology/revival/aux-lang)
+law_state_led_language_reform = {
+    group = lawgroup_language_policy
+    icon = "gfx/interface/icons/law_icons/guaranteed_liberties.dds"
+    progressiveness = 90
+
+    unlocking_technologies = { mass_media }
+
+	disallowing_laws = {
+		law_no_schools
+	}
+
+    modifier = {
+        state_institution_impact_add = 0.10
+        state_assimilation_mult = 0.25
+        country_bureaucracy_investment_cost_factor_mult = 0.05
+		country_primary_culture_fervor_from_laws_add = 15
+		country_support_separatism_strength_mult = 0.1
+		country_acceptance_shared_language_trait_add = 5
+		country_education_fervor_add = 5
+    }
+}
+
+# Ubiquitous Translation
+law_ubiquitous_translation = {
+    group = lawgroup_language_policy
+    icon = "gfx/interface/icons/law_icons/no_home_affairs.dds"
+    progressiveness = 110
+
+    unlocking_technologies = { machine_learning }
+
+    modifier = {
+        state_assimilation_mult = -0.20
+        state_institution_impact_add = 0.1
+        country_support_separatism_strength_mult = -0.1
+        country_support_separatism_resistance_mult = 0.1
+        country_bureaucracy_mult = -0.05
+        goods_output_services_mult = 0.05
+        country_influence_mult = 0.05
+    }
+}
+
+# =================================================================
+# Antitrust
+# Regulates market concentration, monopolies, mergers, and essential platforms/utilities.
+# =================================================================
+
+# Guilds and Chartered Monopolies (premodern default)
+law_guilds_chartered_monopolies = {
+    group = lawgroup_antitrust
+    icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+    progressiveness = 0
+
+	unlocking_laws = {
+		law_traditionalism
+		law_agrarianism
+		law_industry_banned
+		law_guild_system
+	}
+
+    modifier = {
+    }
+}
+
+# Freedom of Contract (hands-off competition)
+law_freedom_of_contract = {
+    group = lawgroup_antitrust
+    icon = "gfx/interface/icons/law_icons/wealth_voting.dds"
+    progressiveness = 25
+
+	unlocking_technologies = { international_trade }
+
+	unlocking_laws = {
+		law_laissez_faire
+		law_interventionism
+		law_extraction_economy
+		law_industry_banned
+		law_agrarianism
+	}
+
+    modifier = {
+        building_throughput_add = -0.1                            # monopolistic inefficiencies
+		country_company_throughput_bonus_add = 0.2                # companies do better
+		country_company_construction_efficiency_bonus_add = -0.2  # monopolies slow new entry
+    }
+}
+
+# Antitrust / Trust Busting (court-led conduct control)
+law_trust_busting = {
+    group = lawgroup_antitrust
+    icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+    progressiveness = 50
+
+    unlocking_technologies = { corporate_management }
+
+	disallowing_laws = {
+		law_command_economy
+		law_traditionalism
+	}
+
+    # Adjudicative, ex-post enforcement focus
+    modifier = {
+        country_forbid_monopoly_bool = yes
+        country_company_throughput_bonus_add = -0.2    # cartel rents trimmed
+        building_throughput_add = 0.1                  # competitive gains
+		country_free_charters_add = 1			       # ease of entry
+		country_weekly_innovation_mult = 0.1           # contestability spurs innovation
+		country_max_companies_add = 1                  # more firms		
+    }
+}
+
+# Regulated Utilities (sectoral regulators + unbundling)
+law_regulated_utilities = {
+    group = lawgroup_antitrust
+    icon = "gfx/interface/icons/law_icons/anarchy.dds"
+    progressiveness = 75
+
+    unlocking_technologies = { central_planning }
+
+    # Treat networks as regulated natural monopolies or unbundle "pipes" from "services"
+    modifier = {
+        country_forbid_monopoly_bool = yes
+        country_company_throughput_bonus_add = -0.2         # cartel rents trimmed
+        building_throughput_add = 0.1                       # competitive gains
+		country_weekly_innovation_mult = 0.01               # contestability spurs innovation
+        country_government_dividends_efficiency_add = 0.10  # stable utility revenues
+    }
+}
+
+# Dirigiste Policy
+law_dirigisme = {
+    group = lawgroup_antitrust
+    icon = "gfx/interface/icons/law_icons/autocracy.dds"
+    progressiveness = 30
+
+    unlocking_technologies = { mass_propaganda }
+
+	disallowing_laws = {
+		law_traditionalism
+		law_industry_banned
+	}
+
+    modifier = {
+        building_company_government_dividends_add = 0.05
+        country_government_dividends_efficiency_add = 0.05
+        state_export_advantage_mult = 0.05
+        state_trade_advantage_mult = 0.05
+        country_weekly_innovation_mult = -0.1
+    }
+}
+
+# Command/Cooperative Economy
+law_command_cooperative_economy = {
+    group = lawgroup_antitrust
+    icon = "gfx/interface/icons/law_icons/command_economy.dds"
+    progressiveness = 85
+
+	unlocking_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+    modifier = {
+        building_company_worker_dividends_add = 0.05
+        building_company_government_dividends_add = 0.05
+		country_company_construction_efficiency_bonus_add = -0.4
+    }
+}
+
 
 
 law_no_ministry_of_foreign_affairs = {
@@ -2201,9 +2471,7 @@ law_pro_labor_ministry_of_labor = {
 	institution = institution_ministry_of_labor
 	institution_modifier = {
 		state_working_adult_ratio_add = 0.01
-		state_migration_pull_mult = 0.05
-		state_dependent_wage_mult = 0.2
-		building_minimum_wage_mult = 0.05
+		building_company_worker_dividends_add = 0.01
 		state_political_strength_from_wealth_mult = -0.05
 	}
 
@@ -2920,6 +3188,7 @@ law_algorithmic_governance = {
 	}
 
 	modifier = {
+		country_max_companies_add = 2
 		country_law_enactment_time_mult = -0.5
 		country_law_enactment_stall_mult = -0.25
 

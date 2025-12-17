@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from mod_state import ModState
-from path_constants import base_game_path, mod_path, doc_path
+from path_constants import base_game_path, doc_path, mod_path
 
 base_game_paths = {
     "Building Groups": base_game_path + r"\game\common\building_groups",
@@ -29,11 +29,11 @@ base_game_paths = {
     "Mobilization Option Groups": base_game_path
     + r"\game\common\mobilization_option_groups",
     "Mobilization Options": base_game_path + r"\game\common\mobilization_options",
-    # "Modifier Types": base_game_path + r"\game\common\modifier_types",
+    "Modifier Types": base_game_path + r"\game\common\modifier_type_definitions",
     "Modifiers": base_game_path + r"\game\common\static_modifiers",
     # "On Actions": base_game_path + r"\game\common\on_actions",
     "Pop Needs": base_game_path + r"\game\common\pop_needs",
-    #"Script Values": base_game_path + r"\game\common\script_values",
+    # "Script Values": base_game_path + r"\game\common\script_values",
     # "Scripted Effects": base_game_path + r"\game\common\scripted_effects",
     "Subject Types": base_game_path + r"\game\common\subject_types",
 }
@@ -63,11 +63,11 @@ mod_paths = {
     "Law Groups": mod_path + r"\common\law_groups",
     "Mobilization Option Groups": mod_path + r"\common\mobilization_option_groups",
     "Mobilization Options": mod_path + r"\common\mobilization_options",
-    # "Modifier Types": mod_path + r"\common\modifier_types",
+    "Modifier Types": mod_path + r"\common\modifier_type_definitions",
     "Modifiers": mod_path + r"\common\static_modifiers",
     # "On Actions": mod_path + r"\common\on_actions",
     "Pop Needs": mod_path + r"\common\pop_needs",
-    #"Script Values": mod_path + r"\common\script_values",
+    # "Script Values": mod_path + r"\common\script_values",
     # "Scripted Effects": mod_path + r"\common\scripted_effects",
     "Subject Types": mod_path + r"\common\subject_types",
 }
@@ -91,7 +91,16 @@ for law_id, (_, law_data) in laws.items():
 for law_group in laws_dict.keys():
     laws_output += f"{mod_state.localize(law_group)}:\n"
     for law_id in laws_dict[law_group]:
-        laws_output += f"\t{mod_state.localize(law_id)}\n"
+        laws_output += f"\t{mod_state.localize(law_id)}"
+        variant_of = laws[law_id][1].get("parent", None)
+        if variant_of:
+            laws_output += f" (Variant of {mod_state.localize(variant_of[1])})"
+        unlocking_tech_ids = laws[law_id][1].get("unlocking_technologies", None)
+        if unlocking_tech_ids:
+            if unlocking_tech_ids[1]:
+                tech_name = mod_state.localize(unlocking_tech_ids[1][0])
+                laws_output += f" - Unlocking Technology: {tech_name}"
+        laws_output += "\n"
 
 with open(laws_path, "w", encoding="utf-8") as f:
     f.write(laws_output)
@@ -162,7 +171,7 @@ for era in range(1, 13):
         if tech_requirement:
             tech_requirement_ids = tech_requirement[1]
             if tech_requirement_ids:
-                tech_output += f"\t\tUnlocking Technologies:\n"
+                tech_output += "\t\tUnlocking Technologies:\n"
                 for unlocking_tech_ids in tech_requirement_ids:
                     tech_output += f"\t\t\t{mod_state.localize(unlocking_tech_ids)}\n"
 
@@ -180,7 +189,7 @@ for building_id, data in buildings_data.items():
     tech_requirement = data[1].get("unlocking_technologies", None)
     if tech_requirement:
         tech_name = mod_state.localize(tech_requirement[1][0])
-        building_output += f"\tUnlocking Technology: {tech_name}\n"    
+        building_output += f"\tUnlocking Technology: {tech_name}\n"
     for pmg in pm_groups:
         if pmg not in pmg_groups.keys():
             building_output += f"Building {mod_state.localize(building_id)} references missing PM Group {mod_state.localize(pmg)}\n"
@@ -203,7 +212,7 @@ for building_id, data in buildings_data.items():
             if tech_requirement:
                 if tech_requirement[1]:
                     tech_name = mod_state.localize(tech_requirement[1][0])
-                    building_output += f"\t\t\tUnlocking Technology: {tech_name}\n"  
+                    building_output += f"\t\t\tUnlocking Technology: {tech_name}\n"
     building_output += "\n"
 
 with open(building_path, "w", encoding="utf-8") as f:
@@ -247,9 +256,9 @@ for group in combat_unit_groups.keys():
             unit_data = unit_data_flat
         tech_requirement = unit_data.get("unlocking_technologies", None)
         if tech_requirement:
-                if tech_requirement[1]:
-                    tech_name = mod_state.localize(tech_requirement[1][0])
-                    combat_units_output += f"\t\tUnlocking Technology: {tech_name}\n"
+            if tech_requirement[1]:
+                tech_name = mod_state.localize(tech_requirement[1][0])
+                combat_units_output += f"\t\tUnlocking Technology: {tech_name}\n"
 
 with open(combat_units_path, "w", encoding="utf-8") as f:
     f.write(combat_units_output)
@@ -257,3 +266,4 @@ with open(combat_units_path, "w", encoding="utf-8") as f:
 # Updating and writing back to a file
 # buildings_data['new_building'] = {...}
 # mod_state.update_and_write_file("Buildings", "/path/to/mod/buildings/updated_building.txt")
+print("Done!")

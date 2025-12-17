@@ -1116,7 +1116,28 @@ intelligence_sharing_pact = {
     # Only visible and possible between significant powers who have something to share.
     visible = {
         has_law = law_type:law_ministry_of_intelligence_and_security
-    }
+
+		# Don't already have same article in existing treaty
+		NOT = {
+			scope:source_country = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					hidden_trigger = {
+						OR = {
+							scope:treaty = {
+								is_renegotiation = no
+							}
+							scope:treaty.amended_treaty != this
+						}
+					}
+					any_scope_article = {
+						has_type = intelligence_sharing_pact
+						source_country = scope:source_country
+					}
+				}
+			}
+		}
+	}
 
     possible = {
         # Both countries must have a spy agency to share intelligence.
@@ -1211,7 +1232,28 @@ joint_military_exercises = {
     visible = {
         NOT = { is_country_type = decentralized }
 		has_technology_researched = combined_arms
-    }
+
+		# Don't already have same article in existing treaty
+		NOT = {
+			scope:source_country = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					hidden_trigger = {
+						OR = {
+							scope:treaty = {
+								is_renegotiation = no
+							}
+							scope:treaty.amended_treaty != this
+						}
+					}
+					any_scope_article = {
+						has_type = joint_military_exercises
+						source_country = scope:source_country
+					}
+				}
+			}
+		}
+	}
 
     possible = {
         # Standard diplomatic checks

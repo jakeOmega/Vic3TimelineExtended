@@ -198,7 +198,10 @@ decree_pollution_control = {
 	cost = 100
 
 	state_trigger = {
-		state_region.pollution_amount > 0
+		OR = {
+			state_region.pollution_amount > 0
+			has_decree = decree_pollution_control
+		}
 	}
 
 	ai_weight = {

@@ -16,6 +16,7 @@ ig_trade_unions = {
 		ideology_reformer
 		ideology_radical
 		ideology_utopian
+		ideology_despotic_utopian
 	}
 
 	enable = {
@@ -30,7 +31,7 @@ ig_trade_unions = {
 	}
 
 	on_enable = {
-		ig:ig_trade_unions = {
+		ig:ig_trade_unions ?= {
 			if = {
 				limit = {
 					has_dlc_feature = voice_of_the_people_content
@@ -52,7 +53,7 @@ ig_trade_unions = {
 			limit = {
 				has_technology_researched = socialism
 			}
-			ig:ig_trade_unions = {
+			ig:ig_trade_unions ?= {
 				add_ideology = ideology_socialist
 			}
 		}
@@ -85,6 +86,17 @@ ig_trade_unions = {
 				assamese avadhi baluchi bengali bihari gujarati kannada malayalam marathi oriya panjabi pathan rajput sindi tamil telegu hindustani bundeli pahari gondi bageli chhattisgarhi deccani
 			}
 		}
+		rule = {
+			trigger = {
+				c:ZAN ?= this
+				any_primary_culture = {
+					cu:bedouin = this
+				}
+			}
+			cultures = {
+				swahili
+			}
+		}
 	}
 	on_character_ig_membership = {}
 
@@ -92,7 +104,6 @@ ig_trade_unions = {
 		NOR = {
 			is_pop_type = aristocrats
 			is_pop_type = capitalists
-			is_pop_type = shopkeepers
 			is_pop_type = officers
 		}
 		OR = {
@@ -101,8 +112,8 @@ ig_trade_unions = {
 					text = owner_has_modern_agriculture_tt
 					owner = {
 						OR = {
-							has_law = law_type:law_commercialized_agriculture
-							has_law = law_type:law_collectivized_agriculture
+							has_law_or_variant = law_type:law_commercialized_agriculture
+							has_law_or_variant = law_type:law_collectivized_agriculture
 						}
 					}
 				}
@@ -138,7 +149,10 @@ ig_trade_unions = {
 					limit = {
 						strata = middle
 					}
-					divide = 2
+					subtract = {
+						value = this.standard_of_living
+						add = 10 # 15 SoL [Middling] will halve middle-strata pops' attraction to the unions
+					}
 				}
 			}
 		}
@@ -149,7 +163,7 @@ ig_trade_unions = {
 				limit = {
 					is_pop_type = machinists
 				}
-				value = 100
+				value = 150
 			}
 		}
 
@@ -159,7 +173,41 @@ ig_trade_unions = {
 				limit = {
 					is_pop_type = laborers
 				}
-				value = 50
+				if = {
+					limit = {
+						NOR = {
+							pop_employment_building_group = bg_agriculture
+							pop_employment_building_group = bg_ranching
+							pop_employment_building_group = bg_plantations
+						}
+					}
+					value = 100
+				}
+				else = {
+					value = 50
+				}
+			}
+		}
+
+		add = {
+			desc = "POP_CLERKS"
+			if = {
+				limit = {
+					is_pop_type = clerks
+				}
+				value = 35
+				subtract = standard_of_living
+			}
+		}
+
+		add = {
+			desc = "CONSCRIPTS"
+			if = {
+				limit = {
+					is_pop_type = soldiers
+					pop_employment_building_group = bg_conscription
+				}
+				value = 25
 			}
 		}
 
@@ -173,34 +221,6 @@ ig_trade_unions = {
 					max = 1.25
 					min = 0.75
 				}
-			}
-		}
-
-		multiply = {
-			desc = "NO_LABOR_MOVEMENT"
-			value = 1.0
-
-			if = {
-				limit = {
-					owner = {
-						NOT = { has_technology_researched = labor_movement }
-					}
-				}
-				value = 0.5
-			}
-		}
-
-		multiply = {
-			desc = "NO_EGALITARIANISM"
-			value = 1.0
-
-			if = {
-				limit = {
-					owner = {
-						NOT = { has_technology_researched = egalitarianism }
-					}
-				}
-				value = 0.5
 			}
 		}
 
@@ -264,7 +284,7 @@ ig_trade_unions = {
 		# Monarch is not likely to adopt a marginal IG
 		if = {
 			limit = {
-				is_marginal = yes
+				ig_counts_as_marginal = yes
 			}
 			multiply = {
 				value = 0.1
@@ -283,7 +303,7 @@ ig_trade_unions = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_worker_protections
+					has_law_or_variant = law_type:law_worker_protections
 				}
 			}
 			multiply = {
@@ -294,7 +314,7 @@ ig_trade_unions = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_no_workers_rights
+					has_law_or_variant = law_type:law_no_workers_rights
 				}
 			}
 			multiply = {
@@ -309,8 +329,8 @@ ig_trade_unions = {
 		# Agitators will never be part of a marginalized IG
 		if = {
 			limit = {
-				owner.ig:ig_trade_unions = {
-					is_marginal = yes
+				owner.ig:ig_trade_unions ?= {
+					ig_counts_as_marginal = yes
 				}
 			}
 			multiply = {
@@ -325,13 +345,13 @@ ig_trade_unions = {
 
 	executive_weight = {
 		value = 0.2
-		
+
 		# The company owning BIC should not get non-industrialist executives
 		if = {
 			limit = {
 				exists = scope:company
 				exists = c:BIC
-				c:BIC = {
+				c:BIC ?= {
 					exists = owning_company
 					owning_company = scope:company
 				}
@@ -343,7 +363,7 @@ ig_trade_unions = {
 	}
 
 	noble_chance = {
-		value = 0.1
+		value = 0.05
 	}
 
 	female_commander_chance = {
@@ -430,12 +450,15 @@ ig_trade_unions = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_womens_suffrage
+					has_law_or_variant = law_type:law_womens_suffrage
 				}
-
+				law_stance = {
+					law = law_type:law_womens_suffrage
+					value >= approve
+				}
 			}
 			add = {
-				value = 0.05
+				value = 0.1
 			}
 		}
 	
@@ -516,7 +539,7 @@ ig_trade_unions = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_women_own_property
+					has_law_or_variant = law_type:law_women_own_property
 				}
 
 			}
@@ -528,7 +551,7 @@ ig_trade_unions = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_women_in_the_workplace
+					has_law_or_variant = law_type:law_women_in_the_workplace
 				}
 
 			}
@@ -540,7 +563,7 @@ ig_trade_unions = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_womens_suffrage
+					has_law_or_variant = law_type:law_womens_suffrage
 				}
 
 			}

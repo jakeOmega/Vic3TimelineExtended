@@ -213,7 +213,6 @@ wireless_internet = {
 }
 
 unmanned_aerial_vehicles = {
-	# UAVs PM for aeroplane industries
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
@@ -226,6 +225,7 @@ unmanned_aerial_vehicles = {
 		country_weekly_innovation_max_add = 100
 		state_building_naval_base_max_level_add = 20
 		state_building_airport_max_level_add = 1
+		goods_output_aeroplanes_mult = 0.2
 	}
 	
 	ai_weight = {
@@ -260,7 +260,7 @@ network_centric_warfare = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		state_building_barracks_max_level_add = 50
+		state_building_barrack_max_level_add = 50
 		state_building_naval_base_max_level_add = 20
 	}
 	
@@ -345,7 +345,7 @@ rapid_deployment_forces = {
 	}
 
 	modifier = {
-		state_building_barracks_max_level_add = 50
+		state_building_barrack_max_level_add = 50
 		state_building_naval_base_max_level_add = 20
 	}
 	
@@ -501,9 +501,10 @@ social_justice_movements = {
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 2
 		country_institution_social_security_max_investment_add = 1
 		state_expected_sol_from_literacy = 1
+		country_voting_power_mult = 0.1
 		# less racist
-		country_acceptance_shared_cultural_trait_add = 5
-		country_acceptance_culture_base_add = 5
+		country_acceptance_shared_heritage_trait_group_add = 5
+		country_acceptance_no_shared_heritage_trait_add = 10
 	}
 	
 	ai_weight = {
@@ -524,7 +525,7 @@ terrorism_and_anti_terrorism = {
 	
 	modifier = {
 		country_influence_mult = 0.1
-		state_building_barracks_max_level_add = 50
+		state_building_barrack_max_level_add = 50
 	}
 	
 	ai_weight = {
@@ -566,6 +567,7 @@ cybersecurity = {
 	modifier = {
 		building_network_infrastructure_throughput_add = 0.1
 		country_institution_home_affairs_max_investment_add = 1
+		country_voting_power_mult = 0.1
 	}
 	
 	ai_weight = {

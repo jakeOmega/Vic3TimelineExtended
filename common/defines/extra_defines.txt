@@ -1,5 +1,5 @@
 ﻿NEconomy = {
-    MIN_GOODS_PRICE = 0.01							# A good cannot have a lower base price than this                                                                                                      
+    MIN_GOODS_PRICE = 0.1							# A good cannot have a lower base price than this                                                                                                      
     PRICE_RANGE = 0.999							    # min price of a good is base * (1 - PRICE_RANGE), Max price is base * (1 + PRICE_RANGE), PRICE_RANGE is locked to [0-1]                                
 	BUY_SELL_DIFF_AT_MAX_FACTOR = 4
 	GOODS_SHORTAGE_PENALTY_THRESHOLD = 0.25		# If supply / demand is lower than this, start applying output penalties, by default this should be ( 1 / BUY_SELL_DIFF_AT_MAX_FACTOR )
@@ -37,13 +37,15 @@ NPops = {
 	NUM_WEALTH_LEVELS = 200
 
 	ALLOW_ASSIMILATION_IN_HOMELANDS = no		# Can pops assimilate when living in their homelands?
-	ALLOW_ASSIMILATION_ACROSS_HERITAGES = no 	# Can pops assimilate into pops of a different heritage?
+	# ALLOW_ASSIMILATION_ACROSS_HERITAGES = no 	# Can pops assimilate into pops of a different heritage?
 
 	CULTURAL_COMMUNITY_ACCEPTANCE_DELTA_ON_SPAWN = -0.4							# The percentage of the maximum cultural acceptance that should be added as a delta to the cultural community when it first appears
 	CULTURAL_COMMUNITY_ACCEPTANCE_DELTA_DECAY_PER_MONTH = 0.0833	# The percentage of the maximum cultural acceptance that should be removed as a delta to the cultural community each month
 	JOB_SATISFACTION_PER_SOL_ABOVE_EXPECTED_SOL = 1				# Job satisfaction gained per level of SoL above your expected SoL
 	JOB_SATISFACTION_FROM_CAN_AFFORD_EXPENSES = 0
 	WORKING_ADULT_RATIO_SKEW_MAXIMUM = 1000000
+
+	CULTURAL_FERVOR_ASSIMILATIOM_EFFECT = 0.0075
 }
 
 NPowerBlocs = {

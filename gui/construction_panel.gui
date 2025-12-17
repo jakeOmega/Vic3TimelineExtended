@@ -406,7 +406,7 @@ types construction_panel
 									icon = {
 										visible = "[GetPlayer.HasDiplomaticPactWith( Country.Self, 'foreign_investment_rights' )]"
 										name = "one_way_pact"
-										texture = "gfx/interface/icons/lens_toolbar_icons/grant_foreign_investment_rights.dds"
+										texture = "gfx/interface/icons/lens_toolbar_icons/foreign_investment_rights.dds"
 										size = { @foreign_invest_icon_size @foreign_invest_icon_size }
 										tooltip = FOREIGN_QUEUE_COUNTRY_ONE_WAY_PACT_TT
 									}

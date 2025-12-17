@@ -1,6 +1,8 @@
-company_construction_power_bloc = {
+REPLACE:company_construction_power_bloc = {
 	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+
+	category = bureaucrat_owned
 	
 	building_types = {  
         building_construction_sector
@@ -33,8 +35,8 @@ company_construction_power_bloc = {
 
     flavored_company = no
     extension_building_types = {
-		building_steel_mills
-        building_tooling_workshops
+		building_steel_mill
+        building_tooling_workshop
         building_highway
 	}
     ai_will_do = {
@@ -62,7 +64,7 @@ company_basic_entertainment = {
 	}
 	
 	building_types = {
-        building_arts_academy
+        building_art_academy
 		building_tourism_industry
 		building_generic_media_hq
 	}
@@ -71,7 +73,7 @@ company_basic_entertainment = {
 		any_scope_state = {
 			any_scope_building = {
                 OR = {
-                    is_building_type = building_arts_academy
+                    is_building_type = building_art_academy
                 }
 				level >= 10
 			}
@@ -97,7 +99,7 @@ company_basic_entertainment = {
     ai_will_do = {
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_arts_academy
+				is_building_type = building_art_academy
 				level >= 3
 			}
 		}
@@ -120,8 +122,8 @@ company_basic_autarky = {
 	}
 	
 	building_types = {
-		building_synthetics_plants_oil
-		building_synthetics_plants_rubber
+		building_synthetics_plant_oil
+		building_synthetics_plant_rubber
 		building_generic_resource_depository
 	}
 
@@ -130,8 +132,8 @@ company_basic_autarky = {
 			is_incorporated = yes
 			any_scope_building = {
 				OR = {
-					is_building_type = building_synthetics_plants_oil
-					is_building_type = building_synthetics_plants_rubber
+					is_building_type = building_synthetics_plant_oil
+					is_building_type = building_synthetics_plant_rubber
 				}
 				level >= 10
 			}
@@ -145,22 +147,22 @@ company_basic_autarky = {
 
     flavored_company = no
     extension_building_types = {
-		building_chemical_plants
-		building_synthetics_plants_biomass
+		building_chemical_plant
+		building_synthetics_plant_biomass
         building_fusion_plant
         building_renewable_energy_plant
 	}
     ai_will_do = {
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_arts_academy
+				is_building_type = building_art_academy
 				level >= 3
 			}
 		}
 	}
 }
 
-company_basic_electrics = {
+REPLACE:company_basic_electrics = {
 	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	
@@ -315,7 +317,7 @@ company_basic_electronics = {
 
     flavored_company = no
     extension_building_types = {
-		building_tooling_workshops
+		building_tooling_workshop
         building_software_industry
 		building_robotics_industry
 	}
@@ -352,7 +354,7 @@ company_basic_aerospace = {
     
     building_types = {
         building_launch_facility
-        building_aeroplanes_industry
+        building_automotive_industry
 		building_generic_proving_grounds
     }
 
@@ -360,7 +362,7 @@ company_basic_aerospace = {
         any_scope_state = {
             any_scope_building = {
                 OR = {
-                    is_building_type = building_aeroplanes_industry
+                    is_building_type = building_automotive_industry
                     is_building_type = building_launch_facility
                     is_building_type = building_space_mine
                 }
@@ -371,6 +373,7 @@ company_basic_aerospace = {
     
     prosperity_modifier = {
         country_tech_research_speed_mult = 0.05
+		goods_output_aeroplanes_mult = 0.05
 		state_building_generic_proving_grounds_max_level_add = 1
     }
     flavored_company = no
@@ -384,7 +387,7 @@ company_basic_aerospace = {
 		any_scope_state = {
 			any_scope_building = {
 				OR = {
-                    is_building_type = building_aeroplanes_industry
+                    is_building_type = building_automotive_industry
                     is_building_type = building_launch_facility
                     is_building_type = building_space_mine
                 }
@@ -513,13 +516,13 @@ company_basic_biotechnology = {
 	}
 	
 	building_types = {  
-        building_synthetics_plants_coal
-        building_synthetics_plants_wood
-        building_synthetics_plants_sugar
-        building_synthetics_plants_meat
-		building_synthetics_plants_fruit
-		building_synthetics_plants_drinks	
-        building_synthetics_plants_biomass
+        building_synthetics_plant_coal
+        building_synthetics_plant_wood
+        building_synthetics_plant_sugar
+        building_synthetics_plant_meat
+		building_synthetics_plant_fruit
+		building_synthetics_plant_drinks	
+        building_synthetics_plant_biomass
 		building_generic_rd_complex
 	}
 
@@ -527,12 +530,12 @@ company_basic_biotechnology = {
 		any_scope_state = {
 			any_scope_building = {
 				OR = {
-					is_building_type = building_synthetics_plants_coal
-					is_building_type = building_synthetics_plants_wood
-                    is_building_type = building_synthetics_plants_sugar
-                    is_building_type = building_synthetics_plants_meat
-                    is_building_type = building_synthetics_plants_fruit
-                    is_building_type = building_synthetics_plants_drinks
+					is_building_type = building_synthetics_plant_coal
+					is_building_type = building_synthetics_plant_wood
+                    is_building_type = building_synthetics_plant_sugar
+                    is_building_type = building_synthetics_plant_meat
+                    is_building_type = building_synthetics_plant_fruit
+                    is_building_type = building_synthetics_plant_drinks
 				}
 				level >= 10
 			}
@@ -550,21 +553,21 @@ company_basic_biotechnology = {
 
     flavored_company = no
     extension_building_types = {
-		building_synthetics_plants_rubber
-        building_synthetics_plants_oil
-        building_chemical_plants
+		building_synthetics_plant_rubber
+        building_synthetics_plant_oil
+        building_chemical_plant
 		building_food_industry
 	}
     ai_will_do = {
 		any_scope_state = {
 			any_scope_building = {
 				OR = {
-                    is_building_type = building_synthetics_plants_coal
-                    is_building_type = building_synthetics_plants_wood
-                    is_building_type = building_synthetics_plants_sugar
-                    is_building_type = building_synthetics_plants_meat
-                    is_building_type = building_synthetics_plants_fruit
-                    is_building_type = building_synthetics_plants_drinks
+                    is_building_type = building_synthetics_plant_coal
+                    is_building_type = building_synthetics_plant_wood
+                    is_building_type = building_synthetics_plant_sugar
+                    is_building_type = building_synthetics_plant_meat
+                    is_building_type = building_synthetics_plant_fruit
+                    is_building_type = building_synthetics_plant_drinks
                 }
 				level >= 3
 			}
@@ -574,7 +577,7 @@ company_basic_biotechnology = {
 
 company_infrastructure = {
 	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
-	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufactering_light.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 
 	uses_dynamic_naming = yes
 	
@@ -656,8 +659,8 @@ company_basic_synthetics = {
 	}
 	
 	building_types = {  
-		building_synthetics_plants
-		building_synthetics_plants_silk
+		building_synthetics_plant
+		building_synthetics_plant_silk
 	}
 
 	possible = { 
@@ -665,8 +668,8 @@ company_basic_synthetics = {
 			is_incorporated = yes
 			any_scope_building = {
 				OR = {
-					is_building_type = building_synthetics_plants
-					is_building_type = building_synthetics_plants_silk
+					is_building_type = building_synthetics_plant
+					is_building_type = building_synthetics_plant_silk
 				}
 				level >= 10
 			}
@@ -674,24 +677,48 @@ company_basic_synthetics = {
 	}
 	
 	prosperity_modifier = { 
-		building_textile_mills_throughput_add = 0.1
+		building_textile_mill_throughput_add = 0.1
 	}
 
 	flavored_company = no
 	extension_building_types = {
-		building_textile_mills
-		building_synthetics_plants_oil
-		building_synthetics_plants_rubber
+		building_textile_mill
+		building_synthetics_plant_oil
+		building_synthetics_plant_rubber
 	}
 	ai_will_do = {
 		any_scope_state = {
 			any_scope_building = {
 				OR = {
-					is_building_type = building_synthetics_plants
-					is_building_type = building_synthetics_plants_silk
+					is_building_type = building_synthetics_plant
+					is_building_type = building_synthetics_plant_silk
 				}
 				level >= 3
 			}
 		}
+	}
+}
+
+INJECT:company_basic_metal_mining = {
+	building_types = {
+		building_bauxite_mine
+		building_chromium_mine
+		building_manganese_mine
+		building_specialty_alloy_metal_mine
+		building_copper_mine
+		building_precious_minor_base_metal_mine
+		building_nickel_cobalt_mine
+		building_lithium_mine
+	}
+}
+
+INJECT:company_basic_mineral_mining = {
+	building_types = {
+		building_rare_earth_metals_mine
+		building_platinum_group_metals_mine
+		building_graphite_mine
+		building_phosphate_mine
+		building_potash_mine
+		building_industrial_mineral_salt_mine
 	}
 }

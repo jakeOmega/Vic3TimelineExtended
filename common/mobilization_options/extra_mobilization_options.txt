@@ -195,14 +195,14 @@ mobilization_option_modern_logistical_support = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_radios_add = 10                           # Price:   80, Total cost:   800.0 (34.78%)
-		goods_input_telephones_add = 10                       # Price:   70, Total cost:   700.0 (30.43%)
-		goods_input_automobiles_add = 2                       # Price:  100, Total cost:   200.0 (8.70%)
-		goods_input_launch_capacity_add = 1                   # Price:  200, Total cost:   200.0 (8.70%)
-		goods_input_aeroplanes_add = 1                        # Price:   80, Total cost:    80.0 (3.48%)
-		goods_input_electronic_components_add = 2             # Price:   80, Total cost:   160.0 (6.96%)
-		goods_input_consumer_appliances_add = 2               # Price:   80, Total cost:   160.0 (6.96%)
-		# Total cost: 2300.0
+		goods_input_radios_add = 10                           # Price:   80, Total cost:   800.0 (33.61%)
+		goods_input_telephones_add = 10                       # Price:   70, Total cost:   700.0 (29.41%)
+		goods_input_automobiles_add = 2                       # Price:  100, Total cost:   200.0 (8.40%)
+		goods_input_launch_capacity_add = 1                   # Price:  200, Total cost:   200.0 (8.40%)
+		goods_input_aeroplanes_add = 1                        # Price:  160, Total cost:   160.0 (6.72%)
+		goods_input_electronic_components_add = 2             # Price:   80, Total cost:   160.0 (6.72%)
+		goods_input_consumer_appliances_add = 2               # Price:   80, Total cost:   160.0 (6.72%)
+		# Total cost: 2380.0
 	}
 	unit_modifier = {
 		military_formation_attrition_risk_mult = -0.15
@@ -240,15 +240,15 @@ mobilization_option_advanced_logistical_support = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_launch_capacity_add = 10                  # Price:  200, Total cost:  2000.0 (32.36%)
-		goods_input_aeroplanes_add = 5                        # Price:   80, Total cost:   400.0 (6.47%)
-		goods_input_electronic_components_add = 5             # Price:   80, Total cost:   400.0 (6.47%)
-		goods_input_consumer_appliances_add = 1               # Price:   80, Total cost:    80.0 (1.29%)
-		goods_input_automobiles_add = 5                       # Price:  100, Total cost:   500.0 (8.09%)
-		goods_input_digital_assets_add = 20                   # Price:  100, Total cost:  2000.0 (32.36%)
-		goods_input_robotics_add = 5                          # Price:   80, Total cost:   400.0 (6.47%)
-		goods_input_radios_add = 5                            # Price:   80, Total cost:   400.0 (6.47%)
-		# Total cost: 6180.0
+		goods_input_launch_capacity_add = 10                  # Price:  200, Total cost:  2000.0 (30.40%)
+		goods_input_aeroplanes_add = 5                        # Price:  160, Total cost:   800.0 (12.16%)
+		goods_input_electronic_components_add = 5             # Price:   80, Total cost:   400.0 (6.08%)
+		goods_input_consumer_appliances_add = 1               # Price:   80, Total cost:    80.0 (1.22%)
+		goods_input_automobiles_add = 5                       # Price:  100, Total cost:   500.0 (7.60%)
+		goods_input_digital_assets_add = 20                   # Price:  100, Total cost:  2000.0 (30.40%)
+		goods_input_robotics_add = 5                          # Price:   80, Total cost:   400.0 (6.08%)
+		goods_input_radios_add = 5                            # Price:   80, Total cost:   400.0 (6.08%)
+		# Total cost: 6580.0
 	}
 	unit_modifier = {
 		military_formation_attrition_risk_mult = -0.1
@@ -422,7 +422,7 @@ mobilization_option_truck_transport = {
     group = transport
 }
 
-mobilization_option_rail_transport = {
+REPLACE:mobilization_option_rail_transport = {
 	texture = "gfx/interface/icons/mobilization_options/rail_transport.dds"
 	
 	possible = {
@@ -521,8 +521,8 @@ mobilization_option_air_transport = {
 		commercial_aviation
 	}
 	upkeep_modifier = {
-		goods_input_aeroplanes_add = 5                        # Price:   80, Total cost:   400.0 (100.00%)
-		# Total cost: 400.0
+		goods_input_aeroplanes_add = 5                        # Price:  160, Total cost:   800.0 (100.00%)
+		# Total cost: 800.0
 	}
 	unit_modifier = {
 		military_formation_movement_speed_mult = 1.5
@@ -578,9 +578,9 @@ mobilization_option_space_transport = {
 		rapid_deployment_forces
 	}
 	upkeep_modifier = {
-		goods_input_launch_capacity_add = 10                  # Price:  200, Total cost:  2000.0 (83.33%)
-		goods_input_aeroplanes_add = 5                        # Price:   80, Total cost:   400.0 (16.67%)
-		# Total cost: 2400.0
+		goods_input_launch_capacity_add = 10                  # Price:  200, Total cost:  2000.0 (71.43%)
+		goods_input_aeroplanes_add = 5                        # Price:  160, Total cost:   800.0 (28.57%)
+		# Total cost: 2800.0
 	}
 	unit_modifier = {
 		military_formation_movement_speed_mult = 3
@@ -680,9 +680,9 @@ mobilization_option_space_recon = {
 		recon_satellites
 	}
 	upkeep_modifier = {
-		goods_input_aeroplanes_add = 1                        # Price:   80, Total cost:    80.0 (7.41%)
-		goods_input_launch_capacity_add = 5                   # Price:  200, Total cost:  1000.0 (92.59%)
-		# Total cost: 1080.0
+		goods_input_aeroplanes_add = 1                        # Price:  160, Total cost:   160.0 (13.79%)
+		goods_input_launch_capacity_add = 5                   # Price:  200, Total cost:  1000.0 (86.21%)
+		# Total cost: 1160.0
 	}
 	unit_modifier = {
 		unit_occupation_mult = 1
@@ -839,7 +839,7 @@ mobilization_option_night_vision_gear = {
 	}
 	unit_modifier = {
 		unit_morale_loss_mult = -0.1
-		unit_advancement_speed_mult = 0.1
+		unit_morale_recovery_mult = 0.1
 		unit_army_defense_mult = 0.05
 		unit_army_offense_mult = 0.05
 	}
@@ -1121,7 +1121,7 @@ mobilization_option_exoskeleton_suits = {
     group = special_weapons
 }
 
-mobilization_option_first_aid = {
+REPLACE:mobilization_option_first_aid = {
 
 	unlocking_technologies = {
 		triage
@@ -1185,7 +1185,7 @@ mobilization_option_first_aid = {
 	group = medic_support
 }
 
-mobilization_option_field_hospitals = {
+REPLACE:mobilization_option_field_hospitals = {
 	texture = "gfx/interface/icons/mobilization_options/field_hospitals.dds"
 
 	unlocking_technologies = {
@@ -1305,11 +1305,11 @@ mobilization_option_medevac_helicopters = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_fabric_add = 2                            # Price:   20, Total cost:    40.0 (8.00%)
-		goods_input_liquor_add = 2                            # Price:   30, Total cost:    60.0 (12.00%)
-		goods_input_tools_add = 2                             # Price:   40, Total cost:    80.0 (16.00%)
-		goods_input_aeroplanes_add = 4                        # Price:   80, Total cost:   320.0 (64.00%)
-		# Total cost: 500.0
+		goods_input_fabric_add = 2                            # Price:   20, Total cost:    40.0 (4.88%)
+		goods_input_liquor_add = 2                            # Price:   30, Total cost:    60.0 (7.32%)
+		goods_input_tools_add = 2                             # Price:   40, Total cost:    80.0 (9.76%)
+		goods_input_aeroplanes_add = 4                        # Price:  160, Total cost:   640.0 (78.05%)
+		# Total cost: 820.0
 	}
 	unit_modifier = {
 		unit_recovery_rate_add = 0.80	

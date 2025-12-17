@@ -21,6 +21,11 @@ on_monthly_pulse_country = {
 		cheaty_on_action
 		change_culture_acceptance_on_action
 		investment_pool_setup_on_action
+		character_update_on_action
+	}
+
+	events = {
+		minor_events_timelineextended.6
 	}
 }
 
@@ -45,6 +50,7 @@ on_acquired_technology = {
 	on_actions = {
 		add_arable_land_effect_on_action
 		fix_incompatible_laws
+		character_update_on_action
 	}
 }
 
@@ -632,5 +638,11 @@ city_rank_on_action = {
 				add = 1
 			}
 		}
+	}
+}
+
+character_update_on_action = {
+	effect = {
+		update_characters = yes
 	}
 }

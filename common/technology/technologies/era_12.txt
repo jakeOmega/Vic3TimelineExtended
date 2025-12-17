@@ -136,7 +136,7 @@ compact_fusion_reactors = {
 		military_formation_movement_speed_mult = 1
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
-		state_building_barracks_max_level_add = 200
+		state_building_barrack_max_level_add = 200
 	}
 	
 	ai_weight = {
@@ -199,7 +199,7 @@ orbital_weapon_platforms = {
 	modifier = {
 		country_nuclear_weapon_attack_success_add = 0.5
 		country_nuclear_weapon_defense_chance_add = 0.5
-		state_building_barracks_max_level_add = 200
+		state_building_barrack_max_level_add = 200
 	}
 	
 	ai_weight = {
@@ -355,6 +355,7 @@ post-scarcity_economy = {
 		state_building_national_park_max_level_add = 1
 		country_institution_social_security_max_investment_add = 2
 		country_institution_ministry_of_the_environment_max_investment_add = 1
+		country_voting_power_mult = 0.2
 	}
 	
 	ai_weight = {
@@ -374,6 +375,7 @@ neural_lace = {
 
 	modifier = {
 		country_max_companies_add = 1
+		country_voting_power_mult = 0.2
 	}
 	
 	ai_weight = {

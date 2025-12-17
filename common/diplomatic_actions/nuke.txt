@@ -74,7 +74,7 @@ nuke_diplo_action = {
             }
             if = {
                 limit = {
-                    scope:target_country = { has_modifier = nuclear_power }
+                    scope:second_state.owner = { has_modifier = nuclear_power }
                 }
                 multiply = 0.5 # less likely to nuke if they can retaliate
             }
@@ -174,7 +174,7 @@ tactical_nuke_diplo_action = {
 	second_state_trigger = {
         owner = {
             has_war_with = scope:country
-            has_building = building_barracks
+            has_building = building_barrack
         }
     }
     
@@ -218,7 +218,7 @@ tactical_nuke_diplo_action = {
 
 		will_select_as_second_state = {
             OR = {
-                has_building = building_barracks
+                has_building = building_barrack
                 has_building = building_naval_base
                 has_building = building_conscription_center
             }
@@ -242,10 +242,10 @@ tactical_nuke_diplo_action = {
             scope:second_state = {
                 if = {
                     limit = {
-                        has_building = building_barracks
+                        has_building = building_barrack
                     }
                     add = {
-                        value = b:building_barracks.level
+                        value = b:building_barrack.level
                         divide = 100
                     }
                 }
