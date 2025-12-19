@@ -1,9 +1,11 @@
 # ----- Phase checks (driven by your JE's finance_cycle_value) -----
-banking_cycle_is_panic = { var:finance_cycle_value < 15 }
-banking_cycle_is_downturn = { var:finance_cycle_value >= 15 var:finance_cycle_value < 35 }
-banking_cycle_is_stable = { var:finance_cycle_value >= 35 var:finance_cycle_value < 65 }
-banking_cycle_is_expansion = { var:finance_cycle_value >= 65 var:finance_cycle_value < 85 }
-banking_cycle_is_frenzy = { var:finance_cycle_value >= 85 }
+banking_cycle_is_panic = { var:finance_cycle_value < 10 }
+banking_cycle_is_downturn = { var:finance_cycle_value >= 10 var:finance_cycle_value < 25 }
+banking_cycle_is_stagnation = { var:finance_cycle_value >= 25 var:finance_cycle_value < 40 }
+banking_cycle_is_stable = { var:finance_cycle_value >= 40 var:finance_cycle_value < 60 }
+banking_cycle_is_expansion = { var:finance_cycle_value >= 60 var:finance_cycle_value < 75 }
+banking_cycle_is_boom = { var:finance_cycle_value >= 75 var:finance_cycle_value < 88 }
+banking_cycle_is_frenzy = { var:finance_cycle_value >= 88 }
 
 # ----- Heat & risk signals -----
 banking_cycle_bubble_risk_high = {
@@ -18,8 +20,8 @@ banking_cycle_risk_falling = { var:finance_cycle_momentum <= -3 }
 # ----- Recession signal -----
 banking_cycle_is_recession = {
     OR = {
-        trigger:banking_cycle_is_panic = yes
-        trigger:banking_cycle_is_downturn = yes
+        banking_cycle_is_panic = yes
+        banking_cycle_is_downturn = yes
     }
 }
 
@@ -38,5 +40,5 @@ banking_tool_directed_active  = { has_modifier = banking_directed_credit_infrast
 banking_tool_eliq_active      = { has_modifier = banking_emergency_liquidity_program }
 
 # Fiscal stress nudge
-banking_fiscal_stress_low  = { country_treasury < 0 }
+banking_fiscal_stress_low  = { treasury < 0 }
 banking_fiscal_stress_high = { has_healthy_economy = no }

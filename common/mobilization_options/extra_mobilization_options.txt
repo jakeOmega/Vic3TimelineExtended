@@ -308,7 +308,7 @@ mobilization_option_appliances = {
 	group = supplements
 }
 
-mobilization_option_forced_march = {
+REPLACE:mobilization_option_forced_march = {
 	texture = "gfx/interface/icons/mobilization_options/forced_march.dds"
 	
 	possible = {
@@ -365,7 +365,7 @@ mobilization_option_forced_march = {
 	group = transport
 }
 
-mobilization_option_truck_transport = {
+REPLACE:mobilization_option_truck_transport = {
 	texture = "gfx/interface/icons/mobilization_options/truck_transport.dds"
 	
 	possible = {

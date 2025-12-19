@@ -164,7 +164,7 @@ institution_ministry_of_religion = {
 		state_conversion_mult = 0.2
 		country_clergymen_pol_str_mult = 0.2
 		country_acceptance_state_religion_add = 2
-		country_acceptance_religion_base_add = -2
+		country_acceptance_no_shared_religious_trait_add = -2
 	}
 }
 

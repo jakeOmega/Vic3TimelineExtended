@@ -22,7 +22,7 @@
 		law_ministry_of_commerce = disapprove
 	}
 
-	lawgroup_family_policy = {
+	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = neutral
 		law_pro_natalist_subsidies = disapprove
 		law_state_sponsored_family_planning = approve
@@ -421,9 +421,12 @@ ideology_corporate = {
 	}
 
 	lawgroup_financial_regulation = {
-		law_unregulated_banking = neutral
-		law_investment_banking_separation = disapprove
-		law_securitization_and_derivatives = approve
+		law_unregulated_banking = strongly_approve
+		law_free_mutual_banking = approve
+		law_universal_banking_light_prudence = neutral
+		law_prudential_narrow_banking = disapprove
+		law_directed_credit_development_banks = strongly_disapprove
+		law_central_bank_independence = approve
 	}
 
 	lawgroup_electoral_finance = {

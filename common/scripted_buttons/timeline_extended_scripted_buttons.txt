@@ -116,7 +116,7 @@ cb_policy_rate_hike = {
         if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 15 }
 
         # Law flavor: prefer if proper CB
-        if = { limit = { has_law = law_central_bank_independence } add = 15 }
+        if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
 
         # Resources
         if = { limit = { banking_points_high = yes } add = 10 }
@@ -156,7 +156,7 @@ cb_open_market_ops = {
         if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 
         # Law flavor
-        if = { limit = { has_law = law_central_bank_independence } add = 15 }
+        if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
 
         # Resources
         if = { limit = { banking_points_med = yes } add = 10 }
@@ -191,13 +191,14 @@ cb_countercyclical_buffer = {
         value = 0
         # Core: expansion/frenzy, especially with building heat
         if = { limit = { banking_cycle_is_expansion = yes } add = 25 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 30 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 35 }
         if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 15 }
 
         # Law flavor: prudential regimes lean this way
-        if = { limit = { has_law = law_prudential_narrow_banking } add = 15 }
-        if = { limit = { has_law = law_universal_banking_light_prudence } add = 10 }
-        if = { limit = { has_law = law_free_mutual_banking } add = 5 }
+        if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
+        if = { limit = { has_law = law_type:law_universal_banking_light_prudence } add = 10 }
+        if = { limit = { has_law = law_type:law_free_mutual_banking } add = 5 }
 
         # Resources
         if = { limit = { banking_points_low = yes } add = 10 }  # cheap, so attractive when points are scarce
@@ -231,8 +232,8 @@ cb_expand_deposit_guarantee = {
         if = { limit = { NOT = { banking_tool_eliq_active = yes } } add = 10 }
 
         # Law flavor
-        if = { limit = { has_law = law_prudential_narrow_banking } add = 15 }
-        if = { limit = { has_law = law_central_bank_independence } add = 10 }
+        if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
+        if = { limit = { has_law = law_type:law_central_bank_independence } add = 10 }
 
         # Avoid if already expanded or if in hot market
         if = { limit = { banking_tool_deposit_active = yes } add = -100 }
@@ -267,7 +268,7 @@ cb_directed_credit_infrastructure = {
         if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = yes } add = 15 }
 
         # Law flavor
-        if = { limit = { has_law = law_directed_credit_development_banks } add = 25 }
+        if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 25 }
 
         # Avoid in frenzy (overheats) and deep panic (prefer E-LIQ first)
         if = { limit = { banking_cycle_is_frenzy = yes } add = -35 }
@@ -299,11 +300,12 @@ cb_emergency_liquidity_program = {
         if = { limit = { banking_cycle_is_downturn = yes var:finance_cycle_momentum <= -4 } add = 35 }
 
         # Law flavor
-        if = { limit = { has_law = law_central_bank_independence } add = 10 }
-        if = { limit = { has_law = law_directed_credit_development_banks } add = 10 }
+        if = { limit = { has_law = law_type:law_central_bank_independence } add = 10 }
+        if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 10 }
 
         # Avoid otherwise
         if = { limit = { banking_cycle_is_expansion = yes } add = -60 }
+        if = { limit = { banking_cycle_is_boom = yes } add = -65 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = -70 }
 
         # Resources (if you barely have enough, still try)
@@ -365,13 +367,14 @@ cb_raise_margin_requirements = {
         value = 0
         # Core: expansion/frenzy, especially with building heat
         if = { limit = { banking_cycle_is_expansion = yes } add = 5 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 10 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 15 }
         if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 35 }
 
         # Law flavor: prudential regimes lean this way
-        if = { limit = { has_law = law_prudential_narrow_banking } add = 15 }
-        if = { limit = { has_law = law_universal_banking_light_prudence } add = 10 }
-        if = { limit = { has_law = law_free_mutual_banking } add = 5 }
+        if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
+        if = { limit = { has_law = law_type:law_universal_banking_light_prudence } add = 10 }
+        if = { limit = { has_law = law_type:law_free_mutual_banking } add = 5 }
 
         # Resources
         if = { limit = { banking_points_low = yes } add = 10 }  # cheap, so attractive when points are scarce
@@ -402,7 +405,7 @@ cb_fx_devaluation = {
         if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 
         # Law flavor
-        if = { limit = { has_law = law_central_bank_independence } add = 15 }
+        if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
 
         # Resources
         if = { limit = { banking_points_med = yes } add = 10 }
@@ -440,7 +443,7 @@ cb_fx_support = {
         if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 
         # Law flavor
-        if = { limit = { has_law = law_central_bank_independence } add = 15 }
+        if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
 
         # Resources
         if = { limit = { banking_points_med = yes } add = 10 }
@@ -565,7 +568,7 @@ cb_export_credit_facility = {
         if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 
         # Law flavor
-        if = { limit = { has_law = law_directed_credit_development_banks } add = 15 }
+        if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 15 }
 
         # Resources
         if = { limit = { banking_points_med = yes } add = 10 }

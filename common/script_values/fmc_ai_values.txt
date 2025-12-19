@@ -4,7 +4,7 @@
 			is_construction_paused = no
 			construction_queue_num_queued_government_levels > 0
 		}
-		value = weekly_net_fixed_income
+		value = net_fixed_income
 		min = 0
 		divide = var:fmc_price_stabiliser
 		multiply = {

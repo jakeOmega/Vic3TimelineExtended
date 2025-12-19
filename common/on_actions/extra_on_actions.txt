@@ -23,17 +23,12 @@ on_monthly_pulse_country = {
 		investment_pool_setup_on_action
 		character_update_on_action
 	}
-
-	events = {
-		minor_events_timelineextended.6
-	}
 }
 
 on_yearly_pulse_state = {
 	on_actions = {
 		global_warming_update_on_action
 		remove_or_create_homelands_on_action
-		decolonization_on_action
 		violent_hostility_on_action
 	}
 }
@@ -265,7 +260,8 @@ war_propaganda_on_action = {
 	effect = {
 		if = {
 			limit = {
-				always = yes
+				exists = owner
+				owner = { is_at_war = yes }
 			}
 			owner = {
 				every_scope_war = {
@@ -304,7 +300,7 @@ excess_private_construction_on_action = {
 						too_much_private_construction_script_value > 0
 					}
 					add_modifier = {
-					name = too_much_private_construction
+						name = too_much_private_construction
 						multiplier = too_much_private_construction_script_value
 	
 					}
@@ -318,6 +314,7 @@ excess_private_construction_on_action = {
 		remove_modifier = overinvestment_modifier
 		if = {
 			limit = {
+				has_variable = too_much_private_construction_cached
 				var:too_much_private_construction_cached > 1000
 				investment_pool > gdp
 			}
@@ -383,34 +380,6 @@ state_yearly_cultural_acceptance_add_on_action = {
 						}
 					}
 				}
-			}
-		}
-	}
-}
-
-decolonization_on_action = {
-	effect = {		
-		if = {
-			limit = { 
-				state_independence_movement_strength = 100
-				NOR = {
-					has_modifier = refused_decolonization_modifier
-					has_modifier = bribed_to_stop_decolonization_modifier
-				}
-				owner = {
-					is_diplomatic_play_committed_participant = no
-				}
-			}
-			random_list = {
-				20 = {
-					save_scope_as = colony_state
-					owner = {
-						top_overlord = {
-							trigger_event = { id = minor_events_timelineextended.5 }
-						}
-					}
-				}
-				80 = { }
 			}
 		}
 	}
@@ -491,7 +460,7 @@ violent_hostility_on_action = {
 								limit = {
 									scope:curr_state.owner = {
 										power_bloc ?= {
-											has_principle_group = principle_group_cultural_unity
+											has_principle_group = principle_group:principle_group_cultural_unity
 										}
 									}
 								}
@@ -552,11 +521,11 @@ violent_hostility_on_action = {
 								limit = {
 									scope:curr_state.owner = {
 										power_bloc ?= {
-											has_principle_group = principle_group_cultural_unity
+											has_principle_group = principle_group:principle_group_cultural_unity
 										}
 									}
-									multiply = 0.75
 								}
+								multiply = 0.75
 							}
 						}
 						scope:curr_state = {
@@ -608,12 +577,10 @@ tourism_on_action = {
 		remove_modifier = tourism_throughput
 		add_modifier = {
 			name = tourism_output
-			duration = 60
 			multiplier = total_tourism_output_bonus_percent
 		}
 		add_modifier = {
 			name = tourism_throughput
-			duration = 60
 			multiplier = total_tourism_throughput_bonus_percent
 		}
 	}

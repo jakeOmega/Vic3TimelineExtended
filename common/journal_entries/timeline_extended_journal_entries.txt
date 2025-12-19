@@ -80,12 +80,8 @@ je_nuclear_program = {
                     name = nuclear_weapon_program_progress
                     value = 0
                 }
-                remove_modifier = {
-                    name = nuclear_weapon_program_funding_modifier
-                }
-                remove_modifier = {
-                    name = nuclear_power
-                }
+                remove_modifier = nuclear_weapon_program_funding_modifier
+                remove_modifier = nuclear_power
             }
 			change_variable = {
 				name = nuclear_weapon_program_progress

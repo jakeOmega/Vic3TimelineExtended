@@ -1,0 +1,2489 @@
+def ministry_constructor(ministry_name, attitude):
+    if attitude == "+":
+        return [
+            ("law_no_" + ministry_name, "neutral"),
+            ("law_" + ministry_name, "approve"),
+        ]
+    elif attitude == "-":
+        return [
+            ("law_no_" + ministry_name, "approve"),
+            ("law_" + ministry_name, "neutral"),
+        ]
+    elif attitude == "++":
+        return [
+            ("law_no_" + ministry_name, "disapprove"),
+            ("law_" + ministry_name, "strongly_approve"),
+        ]
+    elif attitude == "--":
+        return [
+            ("law_no_" + ministry_name, "approve"),
+            ("law_" + ministry_name, "strongly_disapprove"),
+        ]
+    else:
+        raise ValueError
+
+
+def ministry_constructor_typed(ministry_name, types, attitudes):
+    attitude_list = [("law_no_" + ministry_name, "neutral")]
+    for ministry_type, attitude in zip(types, attitudes):
+        if attitude == "+":
+            attitude_text = "approve"
+        elif attitude == "-":
+            attitude_text = "disapprove"
+        elif attitude == "++":
+            attitude_text = "strongly_approve"
+        elif attitude == "--":
+            attitude_text = "strongly_disapprove"
+        else:
+            raise ValueError
+        attitude_list.append(
+            ("law_" + ministry_type + "_" + ministry_name, attitude_text)
+        )
+    return attitude_list
+
+
+anti_privacy_entry = [
+    ("law_minimal_privacy_protection", "neutral"),
+    ("law_moderate_data_privacy", "disapprove"),
+    ("law_strong_privacy_rights", "strongly_disapprove"),
+    ("law_intrusive_surveillance", "strongly_approve"),
+]
+pro_privacy_entry = [
+    ("law_minimal_privacy_protection", "neutral"),
+    ("law_moderate_data_privacy", "approve"),
+    ("law_strong_privacy_rights", "strongly_approve"),
+    ("law_intrusive_surveillance", "strongly_disapprove"),
+]
+trad_privacy_entry = [
+    ("law_minimal_privacy_protection", "neutral"),
+    ("law_moderate_data_privacy", "disapprove"),
+    ("law_strong_privacy_rights", "strongly_disapprove"),
+    ("law_intrusive_surveillance", "disapprove"),
+]
+reform_privacy_entry = [
+    ("law_minimal_privacy_protection", "neutral"),
+    ("law_moderate_data_privacy", "approve"),
+    ("law_strong_privacy_rights", "neutral"),
+    ("law_intrusive_surveillance", "disapprove"),
+]
+extremist_privacy_entry = [
+    ("law_minimal_privacy_protection", "strongly_disapprove"),
+    ("law_moderate_data_privacy", "strongly_disapprove"),
+    ("law_strong_privacy_rights", "strongly_disapprove"),
+    ("law_intrusive_surveillance", "strongly_approve"),
+]
+traditional_inheritance = [
+    ("law_primogeniture", "strongly_approve"),
+    ("law_partible", "neutral"),
+    ("law_equal_inheritance", "disapprove"),
+    ("law_non_inheritable_usage_rights", "strongly_disapprove"),
+]
+reform_inheritance = [
+    ("law_primogeniture", "disapprove"),
+    ("law_partible", "approve"),
+    ("law_equal_inheritance", "approve"),
+    ("law_non_inheritable_usage_rights", "disapprove"),
+]
+progressive_inheritance = [
+    ("law_primogeniture", "strongly_disapprove"),
+    ("law_partible", "neutral"),
+    ("law_equal_inheritance", "approve"),
+    ("law_non_inheritable_usage_rights", "strongly_approve"),
+]
+radical_inheritance = [
+    ("law_primogeniture", "strongly_disapprove"),
+    ("law_partible", "disapprove"),
+    ("law_equal_inheritance", "neutral"),
+    ("law_non_inheritable_usage_rights", "strongly_approve"),
+]
+communal_inheritance = [
+    ("law_primogeniture", "strongly_disapprove"),
+    ("law_partible", "disapprove"),
+    ("law_equal_inheritance", "neutral"),
+    ("law_non_inheritable_usage_rights", "strongly_approve"),
+]
+moderate_inheritance = [
+    ("law_primogeniture", "disapprove"),
+    ("law_partible", "approve"),
+    ("law_equal_inheritance", "neutral"),
+    ("law_non_inheritable_usage_rights", "strongly_disapprove"),
+]
+bonapartist_inheritance = [
+    ("law_primogeniture", "disapprove"),
+    ("law_partible", "neutral"),
+    ("law_equal_inheritance", "strongly_approve"),
+    ("law_non_inheritable_usage_rights", "disapprove"),
+]
+aggressive_rules_of_war = [
+    ("law_traditional_rules_of_war", "approve"),
+    ("law_war_crimes_forbidden", "neutral"),
+    ("law_humanitarian_regulations", "disapprove"),
+    ("law_limited_war", "strongly_disapprove"),
+    ("law_total_war", "strongly_approve"),
+]
+moderate_rules_of_war = [
+    ("law_traditional_rules_of_war", "neutral"),
+    ("law_war_crimes_forbidden", "approve"),
+    ("law_humanitarian_regulations", "neutral"),
+    ("law_limited_war", "disapprove"),
+    ("law_total_war", "disapprove"),
+]
+peaceful_rules_of_war = [
+    ("law_traditional_rules_of_war", "disapprove"),
+    ("law_war_crimes_forbidden", "neutral"),
+    ("law_humanitarian_regulations", "approve"),
+    ("law_limited_war", "strongly_approve"),
+    ("law_total_war", "strongly_disapprove"),
+]
+traditional_rules_of_war = [
+    ("law_traditional_rules_of_war", "approve"),
+    ("law_war_crimes_forbidden", "neutral"),
+    ("law_humanitarian_regulations", "disapprove"),
+    ("law_limited_war", "disapprove"),
+    ("law_total_war", "neutral"),
+]
+advanced_curency = [
+    ("law_commodity_money", "disapprove"),
+    ("law_gold_standard", "neutral"),
+    ("law_fiat_currency", "approve"),
+    ("law_digital_currency", "strongly_approve"),
+]
+simple_currency = [
+    ("law_commodity_money", "neutral"),
+    ("law_gold_standard", "approve"),
+    ("law_fiat_currency", "disapprove"),
+    ("law_digital_currency", "disapprove"),
+]
+pro_secrecy = [
+    ("law_informal_government_secrecy", "neutral"),
+    ("law_state_secrets", "approve"),
+    ("law_freedom_of_information", "disapprove"),
+    ("law_open_government", "strongly_disapprove"),
+]
+anti_secrecy = [
+    ("law_informal_government_secrecy", "neutral"),
+    ("law_state_secrets", "disapprove"),
+    ("law_freedom_of_information", "approve"),
+    ("law_open_government", "strongly_approve"),
+]
+regressive_criminal_justice = [
+    ("law_punishment_focused_criminal_justice", "strongly_approve"),
+    ("law_rehabilitation_focused_criminal_justice", "disapprove"),
+    ("law_restorative_justice", "neutral"),
+]
+progressive_criminal_justice = [
+    ("law_punishment_focused_criminal_justice", "disapprove"),
+    ("law_rehabilitation_focused_criminal_justice", "strongly_approve"),
+    ("law_restorative_justice", "neutral"),
+]
+moderate_criminal_justice = [
+    ("law_punishment_focused_criminal_justice", "disapprove"),
+    ("law_rehabilitation_focused_criminal_justice", "neutral"),
+    ("law_restorative_justice", "approve"),
+]
+anti_augmentation = [
+    ("law_no_augmentation", "neutral"),
+    ("law_unrestricted_augmentation", "strongly_disapprove"),
+    ("law_human_purity", "strongly_approve"),
+    ("law_medical_augmentation_only", "neutral"),
+    ("law_regulated_augmentation_market", "disapprove"),
+    ("law_mandatory_augmentation", "strongly_disapprove"),
+]
+highly_regulated_augmentation = [
+    ("law_no_augmentation", "neutral"),
+    ("law_unrestricted_augmentation", "strongly_disapprove"),
+    ("law_human_purity", "neutral"),
+    ("law_medical_augmentation_only", "approve"),
+    ("law_regulated_augmentation_market", "strongly_approve"),
+    ("law_mandatory_augmentation", "disapprove"),
+]
+lightly_regulated_augmentation = [
+    ("law_no_augmentation", "neutral"),
+    ("law_unrestricted_augmentation", "approve"),
+    ("law_human_purity", "disapprove"),
+    ("law_medical_augmentation_only", "approve"),
+    ("law_regulated_augmentation_market", "strongly_approve"),
+    ("law_mandatory_augmentation", "disapprove"),
+]
+unregulated_augmentation = [
+    ("law_no_augmentation", "neutral"),
+    ("law_unrestricted_augmentation", "strongly_approve"),
+    ("law_human_purity", "strongly_disapprove"),
+    ("law_medical_augmentation_only", "disapprove"),
+    ("law_regulated_augmentation_market", "neutral"),
+    ("law_mandatory_augmentation", "disapprove"),
+]
+medical_augmentation = [
+    ("law_no_augmentation", "neutral"),
+    ("law_unrestricted_augmentation", "disapprove"),
+    ("law_human_purity", "disapprove"),
+    ("law_medical_augmentation_only", "strongly_approve"),
+    ("law_regulated_augmentation_market", "approve"),
+    ("law_mandatory_augmentation", "strongly_disapprove"),
+]
+militarist_augmentation = [
+    ("law_no_augmentation", "neutral"),
+    ("law_unrestricted_augmentation", "neutral"),
+    ("law_human_purity", "strongly_disapprove"),
+    ("law_medical_augmentation_only", "disapprove"),
+    ("law_regulated_augmentation_market", "neutral"),
+    ("law_mandatory_augmentation", "strongly_approve"),
+]
+populist_augmentation = [
+    ("law_no_augmentation", "neutral"),
+    ("law_unrestricted_augmentation", "disapprove"),
+    ("law_human_purity", "strongly_approve"),
+    ("law_medical_augmentation_only", "strongly_approve"),
+    ("law_regulated_augmentation_market", "approve"),
+    ("law_mandatory_augmentation", "strongly_disapprove"),
+]
+extremist_augmentation = [
+    ("law_no_augmentation", "neutral"),
+    ("law_unrestricted_augmentation", "strongly_disapprove"),
+    ("law_human_purity", "strongly_approve"),
+    ("law_medical_augmentation_only", "strongly_disapprove"),
+    ("law_regulated_augmentation_market", "strongly_disapprove"),
+    ("law_mandatory_augmentation", "strongly_approve"),
+]
+strict_ip_laws = [
+    ("law_no_ip_protection", "disapprove"),
+    ("law_creative_commons", "neutral"),
+    ("law_traditional_ip_protection", "approve"),
+    ("law_strict_ip_protection", "strongly_approve"),
+    ("law_open_source_innovation", "disapprove"),
+]
+moderate_ip_laws = [
+    ("law_no_ip_protection", "disapprove"),
+    ("law_creative_commons", "neutral"),
+    ("law_traditional_ip_protection", "strongly_approve"),
+    ("law_strict_ip_protection", "approve"),
+    ("law_open_source_innovation", "neutral"),
+]
+loose_ip_laws = [
+    ("law_no_ip_protection", "neutral"),
+    ("law_creative_commons", "strongly_approve"),
+    ("law_traditional_ip_protection", "disapprove"),
+    ("law_strict_ip_protection", "disapprove"),
+    ("law_open_source_innovation", "approve"),
+]
+communal_ip_laws = [
+    ("law_no_ip_protection", "approve"),
+    ("law_creative_commons", "neutral"),
+    ("law_traditional_ip_protection", "disapprove"),
+    ("law_strict_ip_protection", "disapprove"),
+    ("law_open_source_innovation", "strongly_approve"),
+]
+lgbtq_hate = [
+    ("law_active_persecution", "strongly_approve"),
+    ("law_legal_limbo", "approve"),
+    ("law_basic_protections", "neutral"),
+    ("law_comprehensive_rights", "disapprove"),
+    ("law_full_equality_and_protection", "strongly_disapprove"),
+]
+lgbtq_dislike = [
+    ("law_active_persecution", "approve"),
+    ("law_legal_limbo", "neutral"),
+    ("law_basic_protections", "disapprove"),
+    ("law_comprehensive_rights", "disapprove"),
+    ("law_full_equality_and_protection", "strongly_disapprove"),
+]
+lgbtq_indifference = [
+    ("law_active_persecution", "disapprove"),
+    ("law_legal_limbo", "approve"),
+    ("law_basic_protections", "neutral"),
+    ("law_comprehensive_rights", "disapprove"),
+    ("law_full_equality_and_protection", "strongly_disapprove"),
+]
+lgbtq_like = [
+    ("law_active_persecution", "disapprove"),
+    ("law_legal_limbo", "neutral"),
+    ("law_basic_protections", "approve"),
+    ("law_comprehensive_rights", "strongly_approve"),
+    ("law_full_equality_and_protection", "approve"),
+]
+lgbtq_love = [
+    ("law_active_persecution", "strongly_disapprove"),
+    ("law_legal_limbo", "disapprove"),
+    ("law_basic_protections", "neutral"),
+    ("law_comprehensive_rights", "approve"),
+    ("law_full_equality_and_protection", "strongly_approve"),
+]
+minority_hate = [
+    ("law_minority_rights_violent_hostility", "strongly_approve"),
+    ("law_minority_rights_ghettoization", "approve"),
+    ("law_minority_rights_cultural_assimilation", "disapprove"),
+    ("law_minority_rights_discrimination", "neutral"),
+    ("law_minority_rights_indifference", "disapprove"),
+    ("law_minority_rights_protection", "strongly_disapprove"),
+    ("law_minority_rights_affirmative_action", "strongly_disapprove"),
+]
+minority_dislike = [
+    ("law_minority_rights_violent_hostility", "approve"),
+    ("law_minority_rights_ghettoization", "strongly_approve"),
+    ("law_minority_rights_cultural_assimilation", "approve"),
+    ("law_minority_rights_discrimination", "strongly_approve"),
+    ("law_minority_rights_indifference", "neutral"),
+    ("law_minority_rights_protection", "disapprove"),
+    ("law_minority_rights_affirmative_action", "strongly_disapprove"),
+]
+minority_like = [
+    ("law_minority_rights_violent_hostility", "strongly_disapprove"),
+    ("law_minority_rights_ghettoization", "disapprove"),
+    ("law_minority_rights_cultural_assimilation", "neutral"),
+    ("law_minority_rights_discrimination", "disapprove"),
+    ("law_minority_rights_indifference", "approve"),
+    ("law_minority_rights_protection", "approve"),
+    ("law_minority_rights_affirmative_action", "neutral"),
+]
+minority_love = [
+    ("law_minority_rights_violent_hostility", "strongly_disapprove"),
+    ("law_minority_rights_ghettoization", "strongly_disapprove"),
+    ("law_minority_rights_cultural_assimilation", "disapprove"),
+    ("law_minority_rights_discrimination", "disapprove"),
+    ("law_minority_rights_indifference", "neutral"),
+    ("law_minority_rights_protection", "approve"),
+    ("law_minority_rights_affirmative_action", "strongly_approve"),
+]
+# --- Financial regulation opinion sets for new banking laws ---
+
+finreg_laissez_faire = [
+    ("law_unregulated_banking", "strongly_approve"),
+    ("law_free_mutual_banking", "approve"),
+    ("law_universal_banking_light_prudence", "approve"),
+    ("law_prudential_narrow_banking", "disapprove"),
+    ("law_directed_credit_development_banks", "strongly_disapprove"),
+    ("law_central_bank_independence", "approve"),
+]
+
+finreg_market_liberal = [
+    ("law_unregulated_banking", "neutral"),
+    ("law_free_mutual_banking", "approve"),
+    ("law_universal_banking_light_prudence", "approve"),
+    ("law_prudential_narrow_banking", "disapprove"),
+    ("law_directed_credit_development_banks", "disapprove"),
+    ("law_central_bank_independence", "strongly_approve"),
+]
+
+finreg_liberal = [
+    ("law_unregulated_banking", "disapprove"),
+    ("law_free_mutual_banking", "neutral"),
+    ("law_universal_banking_light_prudence", "neutral"),
+    ("law_prudential_narrow_banking", "approve"),
+    ("law_directed_credit_development_banks", "disapprove"),
+    ("law_central_bank_independence", "strongly_approve"),
+]
+
+finreg_social_dem = [
+    ("law_unregulated_banking", "strongly_disapprove"),
+    ("law_free_mutual_banking", "neutral"),
+    ("law_universal_banking_light_prudence", "disapprove"),
+    ("law_prudential_narrow_banking", "strongly_approve"),
+    ("law_directed_credit_development_banks", "approve"),
+    ("law_central_bank_independence", "strongly_approve"),
+]
+
+finreg_socialist = [
+    ("law_unregulated_banking", "strongly_disapprove"),
+    ("law_free_mutual_banking", "approve"),
+    ("law_universal_banking_light_prudence", "disapprove"),
+    ("law_prudential_narrow_banking", "approve"),
+    ("law_directed_credit_development_banks", "strongly_approve"),
+    ("law_central_bank_independence", "neutral"),
+]
+
+finreg_communist = [
+    ("law_unregulated_banking", "strongly_disapprove"),
+    ("law_free_mutual_banking", "disapprove"),
+    ("law_universal_banking_light_prudence", "strongly_disapprove"),
+    ("law_prudential_narrow_banking", "approve"),
+    ("law_directed_credit_development_banks", "strongly_approve"),
+    ("law_central_bank_independence", "strongly_disapprove"),
+]
+
+finreg_anarchist = [
+    ("law_unregulated_banking", "approve"),
+    ("law_free_mutual_banking", "strongly_approve"),
+    ("law_universal_banking_light_prudence", "disapprove"),
+    ("law_prudential_narrow_banking", "strongly_disapprove"),
+    ("law_directed_credit_development_banks", "strongly_disapprove"),
+    ("law_central_bank_independence", "strongly_disapprove"),
+]
+
+finreg_paternalistic = [
+    ("law_unregulated_banking", "neutral"),
+    ("law_free_mutual_banking", "disapprove"),
+    ("law_universal_banking_light_prudence", "approve"),
+    ("law_prudential_narrow_banking", "strongly_approve"),
+    ("law_directed_credit_development_banks", "neutral"),
+    ("law_central_bank_independence", "approve"),
+]
+
+finreg_fascist = [
+    ("law_unregulated_banking", "neutral"),
+    ("law_free_mutual_banking", "strongly_disapprove"),
+    ("law_universal_banking_light_prudence", "approve"),
+    ("law_prudential_narrow_banking", "disapprove"),
+    ("law_directed_credit_development_banks", "strongly_approve"),
+    ("law_central_bank_independence", "neutral"),
+]
+
+finreg_populist = [
+    ("law_unregulated_banking", "disapprove"),
+    ("law_free_mutual_banking", "approve"),
+    ("law_universal_banking_light_prudence", "neutral"),
+    ("law_prudential_narrow_banking", "approve"),
+    ("law_directed_credit_development_banks", "strongly_approve"),
+    ("law_central_bank_independence", "neutral"),
+]
+
+finreg_meritocratic = [
+    ("law_unregulated_banking", "neutral"),
+    ("law_free_mutual_banking", "neutral"),
+    ("law_universal_banking_light_prudence", "approve"),
+    ("law_prudential_narrow_banking", "approve"),
+    ("law_directed_credit_development_banks", "disapprove"),
+    ("law_central_bank_independence", "strongly_approve"),
+]
+
+language_traditionalist = [
+    ("law_local_vernacular", "approve"),
+    ("law_civic_monolingualism", "neutral"),
+    ("law_multilingual_federalism", "disapprove"),
+    ("law_linguistic_purity", "approve"),
+    ("law_state_led_language_reform", "disapprove"),
+    ("law_ubiquitous_translation", "disapprove"),
+]
+
+language_assimilationist = [
+    ("law_local_vernacular", "disapprove"),
+    ("law_civic_monolingualism", "strongly_approve"),
+    ("law_multilingual_federalism", "disapprove"),
+    (
+        "law_linguistic_purity",
+        "disapprove",
+    ),  # moderate assimilationists dislike coercion
+    ("law_state_led_language_reform", "approve"),
+    ("law_ubiquitous_translation", "disapprove"),
+]
+
+language_ethno_nationalist = [
+    ("law_local_vernacular", "neutral"),
+    ("law_civic_monolingualism", "approve"),
+    ("law_multilingual_federalism", "strongly_disapprove"),
+    ("law_linguistic_purity", "strongly_approve"),
+    ("law_state_led_language_reform", "approve"),
+    ("law_ubiquitous_translation", "strongly_disapprove"),
+]
+
+language_pluralist = [
+    ("law_local_vernacular", "neutral"),
+    ("law_civic_monolingualism", "neutral"),
+    ("law_multilingual_federalism", "strongly_approve"),
+    ("law_linguistic_purity", "strongly_disapprove"),
+    ("law_state_led_language_reform", "approve"),
+    ("law_ubiquitous_translation", "approve"),
+]
+
+language_reformist = [
+    ("law_local_vernacular", "disapprove"),
+    ("law_civic_monolingualism", "approve"),
+    ("law_multilingual_federalism", "approve"),
+    ("law_linguistic_purity", "disapprove"),
+    ("law_state_led_language_reform", "strongly_approve"),
+    ("law_ubiquitous_translation", "approve"),
+]
+
+language_technologist = [
+    ("law_local_vernacular", "disapprove"),
+    ("law_civic_monolingualism", "neutral"),
+    ("law_multilingual_federalism", "approve"),
+    ("law_linguistic_purity", "strongly_disapprove"),
+    ("law_state_led_language_reform", "approve"),
+    ("law_ubiquitous_translation", "strongly_approve"),
+]
+
+antitrust_laissez_faire = [
+    ("law_guilds_chartered_monopolies", "neutral"),
+    ("law_freedom_of_contract", "strongly_approve"),
+    ("law_trust_busting", "disapprove"),
+    ("law_regulated_utilities", "disapprove"),
+    ("law_dirigisme", "disapprove"),
+    ("law_command_cooperative_economy", "strongly_disapprove"),
+]
+
+antitrust_ordoliberal = [
+    ("law_guilds_chartered_monopolies", "disapprove"),
+    ("law_freedom_of_contract", "neutral"),
+    ("law_trust_busting", "approve"),
+    ("law_regulated_utilities", "approve"),
+    ("law_dirigisme", "disapprove"),
+    ("law_command_cooperative_economy", "strongly_disapprove"),
+]
+
+antitrust_dirigiste = [
+    ("law_guilds_chartered_monopolies", "neutral"),
+    ("law_freedom_of_contract", "disapprove"),
+    ("law_trust_busting", "disapprove"),
+    ("law_regulated_utilities", "approve"),
+    ("law_dirigisme", "strongly_approve"),
+    ("law_command_cooperative_economy", "disapprove"),
+]
+
+antitrust_command_coop = [
+    ("law_guilds_chartered_monopolies", "disapprove"),
+    ("law_freedom_of_contract", "strongly_disapprove"),
+    ("law_trust_busting", "neutral"),
+    ("law_regulated_utilities", "approve"),
+    ("law_dirigisme", "disapprove"),
+    ("law_command_cooperative_economy", "strongly_approve"),
+]
+
+antitrust_corporatist_nat = [
+    ("law_guilds_chartered_monopolies", "neutral"),
+    ("law_freedom_of_contract", "disapprove"),
+    ("law_trust_busting", "neutral"),
+    ("law_regulated_utilities", "approve"),
+    ("law_dirigisme", "approve"),
+    ("law_command_cooperative_economy", "strongly_disapprove"),
+]
+
+antitrust_traditional = [
+    ("law_guilds_chartered_monopolies", "approve"),
+    ("law_freedom_of_contract", "disapprove"),
+    ("law_trust_busting", "disapprove"),
+    ("law_regulated_utilities", "neutral"),
+    ("law_dirigisme", "approve"),
+    ("law_command_cooperative_economy", "disapprove"),
+]
+
+
+modifications = {
+    "ideology_paternalistic": {
+        "lawgroup_privacy_rights": anti_privacy_entry,
+        "lawgroup_human_augmentation": highly_regulated_augmentation,
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "++"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "+"
+        ),
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "strongly_approve"),
+            ("law_unitary_state", "approve"),
+            ("law_federal_system", "neutral"),
+            ("law_devolution", "disapprove"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "approve"),
+            ("law_donation_limits", "disapprove"),
+            ("law_publicly_funded_elections", "strongly_disapprove"),
+        ],
+        "lawgroup_financial_regulation": finreg_paternalistic,
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "strongly_approve"),
+            ("law_ban_on_genetic_modification", "approve"),
+            ("law_corporate_genetic_licensing", "disapprove"),
+            ("law_open_source_genetics", "disapprove"),
+            ("law_state_eugenics_program", "strongly_disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "approve"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+        "lawgroup_language_policy": language_traditionalist,
+        "lawgroup_antitrust": antitrust_dirigiste,
+    },
+    "ideology_particularist": {
+        "lawgroup_privacy_rights": pro_privacy_entry,
+        "lawgroup_monetary_policy": simple_currency,
+        "lawgroup_national_bank": ministry_constructor("national_bank", "--"),
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "-"
+        ),
+        "lawgroup_ministry_of_urban_planning": ministry_constructor(
+            "ministry_of_urban_planning", "--"
+        ),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "-"
+        ),
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "approve"),
+            ("law_unitary_state", "strongly_disapprove"),
+            ("law_federal_system", "approve"),
+            ("law_devolution", "strongly_approve"),
+        ],
+        "lawgroup_financial_regulation": finreg_populist,
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_traditional,
+    },
+    "ideology_patriotic": {
+        "lawgroup_privacy_rights": anti_privacy_entry,
+        "lawgroup_rules_of_war": aggressive_rules_of_war,
+        "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
+            "ministry_of_foreign_affairs", "+"
+        ),
+        "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "++"),
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "++"
+        ),
+        "lawgroup_ministry_of_culture": ministry_constructor(
+            "ministry_of_culture", "+"
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "--"
+        ),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "--"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "+"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "+"
+        ),
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "disapprove"),
+            ("law_unitary_state", "strongly_approve"),
+            ("law_federal_system", "neutral"),
+            ("law_devolution", "disapprove"),
+        ],
+        "lawgroup_language_policy": language_assimilationist,
+        "lawgroup_antitrust": antitrust_corporatist_nat,
+    },
+    "ideology_liberal": {
+        "lawgroup_privacy_rights": pro_privacy_entry,
+        "lawgroup_right_to_information": anti_secrecy,
+        "lawgroup_human_augmentation": lightly_regulated_augmentation,
+        "lawgroup_LGBTQ_rights": lgbtq_like,
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
+        "lawgroup_rights_of_women": [("law_protected_class", "disapprove")],
+        "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
+            "ministry_of_foreign_affairs", "+"
+        ),
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "-"
+        ),
+        "lawgroup_ministry_of_culture": ministry_constructor(
+            "ministry_of_culture", "+"
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "+"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "-"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "--"
+        ),
+        "lawgroup_inheritance": moderate_inheritance,
+        "lawgroup_minority_rights": minority_like,
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "strongly_disapprove"),
+            ("law_unitary_state", "disapprove"),
+            ("law_federal_system", "approve"),
+            ("law_devolution", "neutral"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "disapprove"),
+            ("law_donation_limits", "approve"),
+            ("law_publicly_funded_elections", "approve"),
+        ],
+        "lawgroup_financial_regulation": finreg_liberal,
+        "lawgroup_internet_governance": [
+            ("law_no_internet_policy", "neutral"),
+            ("law_unregulated_internet", "strongly_approve"),
+            ("law_state_controlled_internet", "strongly_disapprove"),
+            ("law_net_neutrality", "approve"),
+        ],
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
+    },
+    "ideology_liberal_modern": {
+        "lawgroup_privacy_rights": pro_privacy_entry,
+        "lawgroup_human_augmentation": lightly_regulated_augmentation,
+        "lawgroup_LGBTQ_rights": lgbtq_like,
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
+        "lawgroup_rights_of_women": [("law_protected_class", "disapprove")],
+        "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
+            "ministry_of_foreign_affairs", "+"
+        ),
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "-"
+        ),
+        "lawgroup_ministry_of_culture": ministry_constructor(
+            "ministry_of_culture", "+"
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "+"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "-"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "--"
+        ),
+        "lawgroup_ministry_of_urban_planning": ministry_constructor(
+            "ministry_of_urban_planning", "+"
+        ),
+        "lawgroup_ministry_of_consumer_protection": ministry_constructor(
+            "ministry_of_consumer_protection", "+"
+        ),
+        "lawgroup_minority_rights": minority_like,
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "strongly_disapprove"),
+            ("law_unitary_state", "disapprove"),
+            ("law_federal_system", "approve"),
+            ("law_devolution", "approve"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "disapprove"),
+            ("law_donation_limits", "approve"),
+            ("law_publicly_funded_elections", "approve"),
+        ],
+        "lawgroup_financial_regulation": finreg_liberal,
+        "lawgroup_internet_governance": [
+            ("law_no_internet_policy", "neutral"),
+            ("law_unregulated_internet", "strongly_approve"),
+            ("law_state_controlled_internet", "strongly_disapprove"),
+            ("law_net_neutrality", "approve"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "disapprove"),
+            ("law_pro_natalist_subsidies", "disapprove"),
+            ("law_state_sponsored_family_planning", "strongly_approve"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "disapprove"),
+            ("law_ban_on_genetic_modification", "neutral"),
+            ("law_corporate_genetic_licensing", "disapprove"),
+            ("law_open_source_genetics", "strongly_approve"),
+            ("law_state_eugenics_program", "strongly_disapprove"),
+        ],
+        "lawgroup_language_policy": language_technologist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
+    },
+    "ideology_market_liberal": {
+        "lawgroup_privacy_rights": reform_privacy_entry,
+        "lawgroup_human_augmentation": lightly_regulated_augmentation,
+        "lawgroup_intellectual_property": moderate_ip_laws,
+        "lawgroup_LGBTQ_rights": lgbtq_indifference,
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_criminal_justice": moderate_criminal_justice,
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "-"
+        ),
+        "lawgroup_national_bank": ministry_constructor("national_bank", "+"),
+        "lawgroup_ministry_of_the_environment": ministry_constructor(
+            "ministry_of_the_environment", "-"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "-"
+        ),
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "-"
+        ),
+        "lawgroup_ministry_of_consumer_protection": ministry_constructor(
+            "ministry_of_consumer_protection", "--"
+        ),
+        "lawgroup_ministry_of_urban_planning": ministry_constructor(
+            "ministry_of_urban_planning", "-"
+        ),
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "-"
+        ),
+        "lawgroup_minority_rights": minority_like,
+        "lawgroup_financial_regulation": finreg_market_liberal,
+        "lawgroup_language_policy": language_assimilationist,
+        "lawgroup_antitrust": antitrust_laissez_faire,
+    },
+    "ideology_traditionalist": {
+        "lawgroup_privacy_rights": trad_privacy_entry,
+        "lawgroup_human_augmentation": anti_augmentation,
+        "lawgroup_intellectual_property": moderate_ip_laws,
+        "lawgroup_LGBTQ_rights": lgbtq_dislike,
+        "lawgroup_rules_of_war": traditional_rules_of_war,
+        "lawgroup_criminal_justice": regressive_criminal_justice,
+        "lawgroup_rights_of_women": [("law_protected_class", "strongly_disapprove")],
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "-"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "+"
+        ),
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "+"
+        ),
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_minority_rights": minority_dislike,
+        "lawgroup_language_policy": language_traditionalist,
+        "lawgroup_antitrust": antitrust_traditional,
+    },
+    "ideology_reformer": {
+        "lawgroup_privacy_rights": reform_privacy_entry,
+        "lawgroup_human_augmentation": medical_augmentation,
+        "lawgroup_intellectual_property": moderate_ip_laws,
+        "lawgroup_LGBTQ_rights": lgbtq_like,
+        "lawgroup_rules_of_war": moderate_rules_of_war,
+        "lawgroup_criminal_justice": moderate_criminal_justice,
+        "lawgroup_rights_of_women": [("law_protected_class", "disapprove")],
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
+        ),
+        "lawgroup_ministry_of_urban_planning": ministry_constructor(
+            "ministry_of_urban_planning", "+"
+        ),
+        "lawgroup_inheritance": reform_inheritance,
+        "lawgroup_minority_rights": minority_like,
+        "lawgroup_language_policy": language_reformist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
+    },
+    "ideology_populist": {
+        "lawgroup_privacy_rights": reform_privacy_entry,
+        "lawgroup_right_to_information": anti_secrecy,
+        "lawgroup_human_augmentation": populist_augmentation,
+        "lawgroup_ministry_of_culture": ministry_constructor(
+            "ministry_of_culture", "+"
+        ),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["+", "-"]
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "+"
+        ),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "-"
+        ),
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_minority_rights": minority_like,
+    },
+    "ideology_radical": {
+        "lawgroup_privacy_rights": pro_privacy_entry,
+        "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "-"
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "+"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "--"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "--"
+        ),
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "strongly_approve"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
+    },
+    "ideology_social_democrat": {
+        "lawgroup_privacy_rights": reform_privacy_entry,
+        "lawgroup_human_augmentation": medical_augmentation,
+        "lawgroup_intellectual_property": loose_ip_laws,
+        "lawgroup_LGBTQ_rights": lgbtq_like,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "-"
+        ),
+        "lawgroup_ministry_of_the_environment": ministry_constructor(
+            "ministry_of_the_environment", "+"
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "+"
+        ),
+        "lawgroup_welfare": [
+            ("law_no_social_security", "strongly_disapprove"),
+            ("law_poor_laws", "disapprove"),
+            ("law_wage_subsidies", "neutral"),
+            ("law_old_age_pension", "approve"),
+            ("law_universal_basic_income", "approve"),
+            ("law_post-scarcity", "strongly_approve"),
+        ],
+        "lawgroup_ministry_of_consumer_protection": ministry_constructor(
+            "ministry_of_consumer_protection", "++"
+        ),
+        "lawgroup_ministry_of_urban_planning": ministry_constructor(
+            "ministry_of_urban_planning", "+"
+        ),
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "--"
+        ),
+        "lawgroup_inheritance": reform_inheritance,
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "neutral"),
+        ],
+        "lawgroup_financial_regulation": finreg_social_dem,
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "disapprove"),
+            ("law_pro_natalist_subsidies", "disapprove"),
+            ("law_state_sponsored_family_planning", "strongly_approve"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "disapprove"),
+        ],
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
+    },
+    "ideology_vanguardist": {
+        "lawgroup_privacy_rights": extremist_privacy_entry,
+        "lawgroup_intellectual_property": communal_ip_laws,
+        "lawgroup_rules_of_war": aggressive_rules_of_war,
+        "lawgroup_criminal_justice": regressive_criminal_justice,
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "+"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "+"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "++"
+        ),
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "-"
+        ),
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "strongly_disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "approve"),
+        ],
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "disapprove"),
+            ("law_ban_on_genetic_modification", "disapprove"),
+            ("law_corporate_genetic_licensing", "neutral"),
+            ("law_open_source_genetics", "approve"),
+            ("law_state_eugenics_program", "approve"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_disapprove"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "approve"),
+            ("law_population_control_measures", "approve"),
+            ("law_communal_child_rearing", "strongly_approve"),
+        ],
+        "lawgroup_language_policy": language_reformist,
+        "lawgroup_antitrust": antitrust_command_coop,
+    },
+    "ideology_fascist": {
+        "lawgroup_privacy_rights": extremist_privacy_entry,
+        "lawgroup_human_augmentation": extremist_augmentation,
+        "lawgroup_LGBTQ_rights": lgbtq_hate,
+        "lawgroup_rules_of_war": aggressive_rules_of_war,
+        "lawgroup_right_to_information": pro_secrecy,
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "++"
+        ),
+        "lawgroup_ministry_of_the_environment": ministry_constructor(
+            "ministry_of_the_environment", "-"
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "--"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "++"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "++"
+        ),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "-"
+        ),
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_minority_rights": minority_hate,
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "strongly_disapprove"),
+            ("law_unitary_state", "strongly_approve"),
+            ("law_federal_system", "disapprove"),
+            ("law_devolution", "strongly_disapprove"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "approve"),
+            ("law_donation_limits", "neutral"),
+            ("law_publicly_funded_elections", "disapprove"),
+        ],
+        "lawgroup_financial_regulation": finreg_fascist,
+        "lawgroup_internet_governance": [
+            ("law_no_internet_policy", "neutral"),
+            ("law_unregulated_internet", "disapprove"),
+            ("law_state_controlled_internet", "strongly_approve"),
+            ("law_net_neutrality", "neutral"),
+        ],
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "disapprove"),
+            ("law_ban_on_genetic_modification", "neutral"),
+            ("law_corporate_genetic_licensing", "neutral"),
+            ("law_open_source_genetics", "disapprove"),
+            ("law_state_eugenics_program", "strongly_approve"),
+        ],
+        "lawgroup_language_policy": language_ethno_nationalist,
+        "lawgroup_antitrust": antitrust_corporatist_nat,
+    },
+    "ideology_anarchist": {
+        "lawgroup_privacy_rights": pro_privacy_entry,
+        "lawgroup_human_augmentation": unregulated_augmentation,
+        "lawgroup_intellectual_property": communal_ip_laws,
+        "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "--"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "--"
+        ),
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "-"
+        ),
+        "lawgroup_inheritance": communal_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "strongly_disapprove"),
+            ("law_direct_democracy", "approve"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_minority_rights": minority_like,
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "strongly_disapprove"),
+            ("law_unitary_state", "strongly_disapprove"),
+            ("law_federal_system", "disapprove"),
+            ("law_devolution", "approve"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "disapprove"),
+            ("law_donation_limits", "neutral"),
+            ("law_publicly_funded_elections", "approve"),
+        ],
+        "lawgroup_financial_regulation": finreg_anarchist,
+        "lawgroup_internet_governance": [
+            ("law_no_internet_policy", "neutral"),
+            ("law_unregulated_internet", "strongly_approve"),
+            ("law_state_controlled_internet", "strongly_disapprove"),
+            ("law_net_neutrality", "approve"),
+        ],
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "neutral"),
+            ("law_ban_on_genetic_modification", "neutral"),
+            ("law_corporate_genetic_licensing", "disapprove"),
+            ("law_open_source_genetics", "approve"),
+            ("law_state_eugenics_program", "strongly_disapprove"),
+        ],
+        "lawgroup_language_policy": language_technologist,
+        "lawgroup_antitrust": antitrust_command_coop,
+    },
+    "ideology_laissez_faire": {
+        "lawgroup_ministry_of_commerce": ministry_constructor(
+            "ministry_of_commerce", "++"
+        ),
+        "lawgroup_national_bank": ministry_constructor("national_bank", "+"),
+        "lawgroup_ministry_of_the_environment": ministry_constructor(
+            "ministry_of_the_environment", "--"
+        ),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["--", "+"]
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "-"
+        ),
+        "lawgroup_ministry_of_urban_planning": ministry_constructor(
+            "ministry_of_urban_planning", "-"
+        ),
+        "lawgroup_ministry_of_consumer_protection": ministry_constructor(
+            "ministry_of_consumer_protection", "--"
+        ),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "-"
+        ),
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "strongly_disapprove"),
+            ("law_unitary_state", "approve"),
+            ("law_federal_system", "disapprove"),
+            ("law_devolution", "neutral"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "strongly_approve"),
+            ("law_donation_limits", "disapprove"),
+            ("law_publicly_funded_elections", "strongly_disapprove"),
+        ],
+        "lawgroup_financial_regulation": finreg_laissez_faire,
+        "lawgroup_internet_governance": [
+            ("law_no_internet_policy", "neutral"),
+            ("law_unregulated_internet", "approve"),
+            ("law_state_controlled_internet", "disapprove"),
+            ("law_net_neutrality", "disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "neutral"),
+            ("law_pro_natalist_subsidies", "disapprove"),
+            ("law_state_sponsored_family_planning", "neutral"),
+            ("law_population_control_measures", "disapprove"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_moralist": {
+        "lawgroup_human_augmentation": anti_augmentation,
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "-"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "+"
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "-"
+        ),
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_internet_governance": [
+            ("law_no_internet_policy", "neutral"),
+            ("law_unregulated_internet", "disapprove"),
+            ("law_state_controlled_internet", "approve"),
+            ("law_net_neutrality", "neutral"),
+        ],
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "neutral"),
+            ("law_ban_on_genetic_modification", "strongly_approve"),
+            ("law_corporate_genetic_licensing", "disapprove"),
+            ("law_open_source_genetics", "disapprove"),
+            ("law_state_eugenics_program", "strongly_disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_approve"),
+            ("law_pro_natalist_subsidies", "approve"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_egalitarian": {
+        "lawgroup_LGBTQ_rights": lgbtq_indifference,
+        "lawgroup_criminal_justice": moderate_criminal_justice,
+        "lawgroup_ministry_of_consumer_protection": ministry_constructor(
+            "ministry_of_consumer_protection", "++"
+        ),
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
+        ),
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
+    },
+    "ideology_egalitarian_modern": {
+        "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
+        "lawgroup_rights_of_women": [("law_protected_class", "approve")],
+        "lawgroup_ministry_of_consumer_protection": ministry_constructor(
+            "ministry_of_consumer_protection", "++"
+        ),
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
+    },
+    "ideology_meritocratic": {
+        "lawgroup_human_augmentation": unregulated_augmentation,
+        "lawgroup_intellectual_property": strict_ip_laws,
+        "lawgroup_monetary_policy": advanced_curency,
+        "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "+"),
+        "lawgroup_ministry_of_commerce": ministry_constructor(
+            "ministry_of_commerce", "+"
+        ),
+        "lawgroup_national_bank": ministry_constructor("national_bank", "+"),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["--", "-"]
+        ),
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
+        ),
+        "lawgroup_ministry_of_consumer_protection": ministry_constructor(
+            "ministry_of_consumer_protection", "-"
+        ),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "-"
+        ),
+        "lawgroup_ministry_of_urban_planning": ministry_constructor(
+            "ministry_of_urban_planning", "+"
+        ),
+        "lawgroup_inheritance": moderate_inheritance,
+        "lawgroup_financial_regulation": finreg_meritocratic,
+    },
+    "ideology_jingoist": {
+        "lawgroup_human_augmentation": militarist_augmentation,
+        "lawgroup_right_to_information": pro_secrecy,
+        "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
+            "ministry_of_foreign_affairs", "+"
+        ),
+        "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "++"),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "+"
+        ),
+        "lawgroup_colonization": [("law_neocolonialism", "neutral")],
+        "lawgroup_internet_governance": [
+            ("law_no_internet_policy", "neutral"),
+            ("law_unregulated_internet", "disapprove"),
+            ("law_state_controlled_internet", "strongly_approve"),
+            ("law_net_neutrality", "disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "neutral"),
+            ("law_pro_natalist_subsidies", "strongly_approve"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "neutral"),
+            ("law_communal_child_rearing", "disapprove"),
+        ],
+    },
+    "ideology_jingoist_leader": {
+        "lawgroup_human_augmentation": militarist_augmentation,
+        "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
+            "ministry_of_foreign_affairs", "++"
+        ),
+        "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "++"),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "+"
+        ),
+        "lawgroup_rules_of_war": aggressive_rules_of_war,
+        "lawgroup_colonization": [("law_neocolonialism", "neutral")],
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "neutral"),
+            ("law_ban_on_genetic_modification", "disapprove"),
+            ("law_corporate_genetic_licensing", "neutral"),
+            ("law_open_source_genetics", "disapprove"),
+            ("law_state_eugenics_program", "strongly_approve"),
+        ],
+    },
+    "ideology_individualist": {
+        "lawgroup_human_augmentation": unregulated_augmentation,
+        "lawgroup_welfare": [
+            ("law_no_social_security", "neutral"),
+            ("law_poor_laws", "approve"),
+            ("law_wage_subsidies", "disapprove"),
+            ("law_old_age_pension", "strongly_disapprove"),
+            ("law_universal_basic_income", "strongly_disapprove"),
+            ("law_post-scarcity", "disapprove"),
+        ],
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
+        ),
+        "lawgroup_ministry_of_consumer_protection": ministry_constructor(
+            "ministry_of_consumer_protection", "--"
+        ),
+        "lawgroup_inheritance": moderate_inheritance,
+    },
+    "ideology_proletarian": {
+        "lawgroup_intellectual_property": communal_ip_laws,
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
+        ),
+        "lawgroup_welfare": [
+            ("law_no_social_security", "strongly_disapprove"),
+            ("law_poor_laws", "strongly_disapprove"),
+            ("law_wage_subsidies", "disapprove"),
+            ("law_old_age_pension", "neutral"),
+            ("law_universal_basic_income", "approve"),
+            ("law_post-scarcity", "strongly_approve"),
+        ],
+        "lawgroup_ministry_of_urban_planning": ministry_constructor(
+            "ministry_of_urban_planning", "++"
+        ),
+        "lawgroup_inheritance": progressive_inheritance,
+        "lawgroup_internet_governance": [
+            ("law_no_internet_policy", "neutral"),
+            ("law_unregulated_internet", "neutral"),
+            ("law_state_controlled_internet", "neutral"),
+            ("law_net_neutrality", "approve"),
+        ],
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "neutral"),
+            ("law_ban_on_genetic_modification", "neutral"),
+            ("law_corporate_genetic_licensing", "strongly_disapprove"),
+            ("law_open_source_genetics", "approve"),
+            ("law_state_eugenics_program", "disapprove"),
+        ],
+        "lawgroup_financial_regulation": finreg_socialist,
+    },
+    "ideology_communist": {
+        "lawgroup_intellectual_property": communal_ip_laws,
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "+"
+        ),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
+        ),
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "-"
+        ),
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "+"
+        ),
+        "lawgroup_inheritance": communal_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "strongly_disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_disapprove"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "neutral"),
+            ("law_population_control_measures", "disapprove"),
+            ("law_communal_child_rearing", "strongly_approve"),
+        ],
+        "lawgroup_financial_regulation": finreg_communist,
+        "lawgroup_language_policy": language_reformist,
+        "lawgroup_antitrust": antitrust_command_coop,
+    },
+    "ideology_pacifist": {
+        "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "--"),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "++"
+        ),
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_colonization": [("law_neocolonialism", "neutral")],
+    },
+    "ideology_plutocratic": {
+        "lawgroup_intellectual_property": strict_ip_laws,
+        "lawgroup_monetary_policy": advanced_curency,
+        "lawgroup_ministry_of_culture": ministry_constructor(
+            "ministry_of_culture", "-"
+        ),
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "approve"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_colonization": [("law_neocolonialism", "strongly_approve")],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "neutral"),
+        ],
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "neutral"),
+            ("law_ban_on_genetic_modification", "disapprove"),
+            ("law_corporate_genetic_licensing", "strongly_approve"),
+            ("law_open_source_genetics", "neutral"),
+            ("law_state_eugenics_program", "neutral"),
+        ],
+    },
+    "ideology_patriarchal": {
+        "lawgroup_LGBTQ_rights": lgbtq_dislike,
+        "lawgroup_rights_of_women": [("law_protected_class", "strongly_disapprove")],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_approve"),
+            ("law_pro_natalist_subsidies", "approve"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "disapprove"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_patriarchal_suffrage": {
+        "lawgroup_rights_of_women": [("law_protected_class", "disapprove")],
+        "lawgroup_LGBTQ_rights": lgbtq_dislike,
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_approve"),
+            ("law_pro_natalist_subsidies", "approve"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "disapprove"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_feminist": {
+        "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_rights_of_women": [
+            ("law_womens_suffrage", "approve"),
+            ("law_protected_class", "strongly_approve"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_disapprove"),
+            ("law_pro_natalist_subsidies", "strongly_disapprove"),
+            ("law_state_sponsored_family_planning", "strongly_approve"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "approve"),
+        ],
+    },
+    "ideology_feminist_ig": {
+        "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_rights_of_women": [
+            ("law_women_own_property", "disapprove"),
+            ("law_women_in_the_workplace", "neutral"),
+            ("law_womens_suffrage", "approve"),
+            ("law_protected_class", "strongly_approve"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_disapprove"),
+            ("law_pro_natalist_subsidies", "strongly_disapprove"),
+            ("law_state_sponsored_family_planning", "strongly_approve"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "approve"),
+        ],
+    },
+    "ideology_humanitarian": {
+        "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
+        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_right_to_information": anti_secrecy,
+        "lawgroup_rights_of_women": [("law_protected_class", "strongly_approve")],
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "+"
+        ),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "+"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "--"
+        ),
+        "lawgroup_minority_rights": minority_love,
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "neutral"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "approve"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "neutral"),
+        ],
+    },
+    "ideology_humanitarian_royalist": {
+        "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_criminal_justice": progressive_criminal_justice,
+        "lawgroup_rights_of_women": [("law_protected_class", "strongly_approve")],
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "+"
+        ),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "+"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "-"
+        ),
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "neutral"),
+        ],
+        "lawgroup_minority_rights": minority_love,
+    },
+    "ideology_reactionary": {
+        "lawgroup_LGBTQ_rights": lgbtq_hate,
+        "lawgroup_right_to_information": pro_secrecy,
+        "lawgroup_criminal_justice": regressive_criminal_justice,
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "++"
+        ),
+        "lawgroup_ministry_of_the_environment": ministry_constructor(
+            "ministry_of_the_environment", "-"
+        ),
+        "lawgroup_ministry_of_culture": ministry_constructor(
+            "ministry_of_culture", "+"
+        ),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["-", "+"]
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "--"
+        ),
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "+"
+        ),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "-"
+        ),
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "neutral"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_minority_rights": minority_dislike,
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "disapprove"),
+            ("law_donation_limits", "approve"),
+            ("law_publicly_funded_elections", "disapprove"),
+        ],
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "neutral"),
+            ("law_ban_on_genetic_modification", "approve"),
+            ("law_corporate_genetic_licensing", "disapprove"),
+            ("law_open_source_genetics", "neutral"),
+            ("law_state_eugenics_program", "disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_approve"),
+            ("law_pro_natalist_subsidies", "approve"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "neutral"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+        "lawgroup_language_policy": language_traditionalist,
+        "lawgroup_antitrust": antitrust_traditional,
+    },
+    "ideology_theocrat": {
+        "lawgroup_LGBTQ_rights": lgbtq_hate,
+        "lawgroup_rules_of_war": traditional_rules_of_war,
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "++"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "+"
+        ),
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+    },
+    "ideology_republican": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "neutral"),
+            ("law_direct_democracy", "approve"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_republican_paternalistic": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "approve"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "disapprove"),
+            ("law_unitary_state", "neutral"),
+            ("law_federal_system", "approve"),
+            ("law_devolution", "disapprove"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "approve"),
+            ("law_donation_limits", "disapprove"),
+            ("law_publicly_funded_elections", "strongly_disapprove"),
+        ],
+        "lawgroup_financial_regulation": finreg_paternalistic,
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "strongly_approve"),
+            ("law_ban_on_genetic_modification", "approve"),
+            ("law_corporate_genetic_licensing", "disapprove"),
+            ("law_open_source_genetics", "disapprove"),
+            ("law_state_eugenics_program", "strongly_disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "approve"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_socialist": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "strongly_disapprove"),
+            ("law_direct_democracy", "neutral"),
+        ],
+        "lawgroup_welfare": [
+            ("law_no_social_security", "strongly_disapprove"),
+            ("law_poor_laws", "strongly_disapprove"),
+            ("law_wage_subsidies", "disapprove"),
+            ("law_old_age_pension", "neutral"),
+            ("law_universal_basic_income", "approve"),
+            ("law_post-scarcity", "strongly_approve"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "strongly_disapprove"),
+            ("law_donation_limits", "approve"),
+            ("law_publicly_funded_elections", "strongly_approve"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "disapprove"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "approve"),
+            ("law_population_control_measures", "disapprove"),
+            ("law_communal_child_rearing", "neutral"),
+        ],
+        "lawgroup_language_policy": language_reformist,
+        "lawgroup_antitrust": antitrust_command_coop,
+    },
+    "ideology_scholar_paternalistic": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "neutral"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "disapprove"),
+            ("law_unitary_state", "strongly_approve"),
+            ("law_federal_system", "neutral"),
+            ("law_devolution", "disapprove"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "approve"),
+            ("law_donation_limits", "disapprove"),
+            ("law_publicly_funded_elections", "strongly_disapprove"),
+        ],
+        "lawgroup_financial_regulation": finreg_paternalistic,
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "strongly_approve"),
+            ("law_ban_on_genetic_modification", "approve"),
+            ("law_corporate_genetic_licensing", "disapprove"),
+            ("law_open_source_genetics", "disapprove"),
+            ("law_state_eugenics_program", "strongly_disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_approve"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_junker_paternalistic": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "neutral"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "approve"),
+            ("law_unitary_state", "strongly_approve"),
+            ("law_federal_system", "neutral"),
+            ("law_devolution", "disapprove"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "approve"),
+            ("law_donation_limits", "disapprove"),
+            ("law_publicly_funded_elections", "strongly_disapprove"),
+        ],
+        "lawgroup_financial_regulation": finreg_paternalistic,
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "strongly_approve"),
+            ("law_ban_on_genetic_modification", "approve"),
+            ("law_corporate_genetic_licensing", "disapprove"),
+            ("law_open_source_genetics", "disapprove"),
+            ("law_state_eugenics_program", "strongly_disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "approve"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_papal_paternalistic": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "neutral"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "neutral"),
+            ("law_unitary_state", "approve"),
+            ("law_federal_system", "neutral"),
+            ("law_devolution", "disapprove"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "approve"),
+            ("law_donation_limits", "disapprove"),
+            ("law_publicly_funded_elections", "strongly_disapprove"),
+        ],
+        "lawgroup_financial_regulation": finreg_paternalistic,
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "strongly_approve"),
+            ("law_ban_on_genetic_modification", "approve"),
+            ("law_corporate_genetic_licensing", "disapprove"),
+            ("law_open_source_genetics", "disapprove"),
+            ("law_state_eugenics_program", "strongly_disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_approve"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_papal_moralist": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+    },
+    "ideology_confucian": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+    },
+    "ideology_bakufu": {
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "neutral"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_shinto_moralist": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_caudillismo": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "approve"),
+        ],
+    },
+    "ideology_buddhist_moralist": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_inheritance": reform_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+    },
+    "ideology_hindu_moralist": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_inheritance": moderate_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+    },
+    "ideology_sikh_moralist": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_inheritance": reform_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+    },
+    "ideology_heavenly_kingdom_theocratic": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+    },
+    "ideology_orleanist": {
+        "lawgroup_inheritance": reform_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_legitimist": {
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_bonapartist": {
+        "lawgroup_inheritance": bonapartist_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_atheist": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "-"
+        ),
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "neutral"),
+            ("law_direct_democracy", "neutral"),
+        ],
+    },
+    "ideology_republican_leader": {
+        "lawgroup_inheritance": reform_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "neutral"),
+        ],
+    },
+    "ideology_royalist": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+    },
+    "ideology_jacksonian_democrat": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "neutral"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_positivist": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "neutral"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "strongly_approve"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "disapprove"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "approve"),
+            ("law_population_control_measures", "strongly_approve"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_russian_patriarch": {
+        "lawgroup_rights_of_women": [("law_protected_class", "strongly_disapprove")],
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_orthodox_patriarch": {
+        "lawgroup_rights_of_women": [("law_protected_class", "strongly_disapprove")],
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_oriental_orthodox_patriarch": {
+        "lawgroup_rights_of_women": [("law_protected_class", "strongly_disapprove")],
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_authoritarian": {
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "++"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "++"
+        ),
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "neutral"),
+        ],
+    },
+    "ideology_austrian_hegemony": {
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "++"
+        ),
+    },
+    "ideology_ethno_nationalist": {
+        "lawgroup_minority_rights": minority_hate,
+    },
+    "ideology_anti_clerical": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "--"
+        ),
+    },
+    "ideology_pious": {
+        "lawgroup_rules_of_war": moderate_rules_of_war,
+        "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
+            "ministry_of_foreign_affairs", "+"
+        ),
+        "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "-"),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "+"
+        ),
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "neutral"),
+            ("law_unitary_state", "approve"),
+            ("law_federal_system", "neutral"),
+            ("law_devolution", "disapprove"),
+        ],
+    },
+    "ideology_isolationist": {
+        "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
+            "ministry_of_foreign_affairs", "--"
+        ),
+        "lawgroup_ministry_of_commerce": ministry_constructor(
+            "ministry_of_commerce", "-"
+        ),
+        "lawgroup_ministry_of_international_aid": ministry_constructor(
+            "ministry_of_international_aid", "-"
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "-"
+        ),
+        "lawgroup_colonization": [("law_neocolonialism", "neutral")],
+    },
+    "ideology_agrarian": {
+        "lawgroup_ministry_of_the_environment": ministry_constructor(
+            "ministry_of_the_environment", "+"
+        ),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["+", "-"]
+        ),
+        "lawgroup_ministry_of_urban_planning": ministry_constructor(
+            "ministry_of_urban_planning", "-"
+        ),
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "-"
+        ),
+        "lawgroup_inheritance": reform_inheritance,
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "neutral"),
+            ("law_ban_on_genetic_modification", "approve"),
+            ("law_corporate_genetic_licensing", "disapprove"),
+            ("law_open_source_genetics", "neutral"),
+            ("law_state_eugenics_program", "disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "approve"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "disapprove"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_stratocratic": {
+        "lawgroup_welfare": [
+            ("law_no_social_security", "approve"),
+            ("law_poor_laws", "neutral"),
+            ("law_wage_subsidies", "disapprove"),
+            ("law_old_age_pension", "disapprove"),
+            ("law_universal_basic_income", "strongly_disapprove"),
+            ("law_post-scarcity", "disapprove"),
+        ],
+        "lawgroup_rules_of_war": traditional_rules_of_war,
+        "lawgroup_right_to_information": pro_secrecy,
+        "lawgroup_criminal_justice": regressive_criminal_justice,
+        "lawgroup_monetary_policy": simple_currency,
+    },
+    "ideology_constitutionalist": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "neutral"),
+            ("law_direct_democracy", "approve"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "approve"),
+        ],
+    },
+    "ideology_corporatist_leader": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "neutral"),
+            ("law_direct_democracy", "neutral"),
+        ],
+    },
+    "ideology_agrarian_jeffersonian": {
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_ministry_of_the_environment": ministry_constructor(
+            "ministry_of_the_environment", "+"
+        ),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["+", "-"]
+        ),
+        "lawgroup_inheritance": reform_inheritance,
+    },
+    "ideology_integralist": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "+"
+        ),
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_liberal_leader": {
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "neutral"),
+        ],
+        "lawgroup_minority_rights": minority_like,
+    },
+    "ideology_despotic_utopian": {
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "strongly_approve"),
+        ],
+        "lawgroup_minority_rights": minority_love,
+    },
+    "ideology_absolutist_movement": {
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+    },
+    "ideology_royalist_movement": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+    },
+    "ideology_proletarian_movement": {
+        "lawgroup_welfare": [
+            ("law_no_social_security", "strongly_disapprove"),
+            ("law_poor_laws", "strongly_disapprove"),
+            ("law_wage_subsidies", "disapprove"),
+            ("law_old_age_pension", "neutral"),
+            ("law_universal_basic_income", "approve"),
+            ("law_post-scarcity", "strongly_approve"),
+        ],
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
+        ),
+        "lawgroup_inheritance": communal_inheritance,
+        "lawgroup_intellectual_property": communal_ip_laws,
+        "lawgroup_internet_governance": [
+            ("law_no_internet_policy", "neutral"),
+            ("law_unregulated_internet", "neutral"),
+            ("law_state_controlled_internet", "neutral"),
+            ("law_net_neutrality", "approve"),
+        ],
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "neutral"),
+            ("law_ban_on_genetic_modification", "neutral"),
+            ("law_corporate_genetic_licensing", "strongly_disapprove"),
+            ("law_open_source_genetics", "approve"),
+            ("law_state_eugenics_program", "disapprove"),
+        ],
+    },
+    "ideology_socialist_movement": {
+        "lawgroup_welfare": [
+            ("law_no_social_security", "strongly_disapprove"),
+            ("law_poor_laws", "strongly_disapprove"),
+            ("law_wage_subsidies", "disapprove"),
+            ("law_old_age_pension", "neutral"),
+            ("law_universal_basic_income", "approve"),
+            ("law_post-scarcity", "strongly_approve"),
+        ],
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
+        ),
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "strongly_disapprove"),
+            ("law_direct_democracy", "neutral"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "strongly_disapprove"),
+            ("law_donation_limits", "approve"),
+            ("law_publicly_funded_elections", "strongly_approve"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "disapprove"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "approve"),
+            ("law_population_control_measures", "disapprove"),
+            ("law_communal_child_rearing", "neutral"),
+        ],
+        "lawgroup_language_policy": language_reformist,
+        "lawgroup_antitrust": antitrust_command_coop,
+    },
+    "ideology_communist_movement": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "strongly_disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
+        ),
+        "lawgroup_inheritance": communal_inheritance,
+        "lawgroup_intellectual_property": communal_ip_laws,
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_disapprove"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "neutral"),
+            ("law_population_control_measures", "disapprove"),
+            ("law_communal_child_rearing", "strongly_approve"),
+        ],
+        "lawgroup_language_policy": language_reformist,
+        "lawgroup_antitrust": antitrust_command_coop,
+    },
+    "ideology_anarchist_movement": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "strongly_disapprove"),
+            ("law_direct_democracy", "approve"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "--"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "--"
+        ),
+        "lawgroup_minority_rights": minority_love,
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "disapprove"),
+            ("law_pro_natalist_subsidies", "strongly_disapprove"),
+            ("law_state_sponsored_family_planning", "approve"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "neutral"),
+        ],
+        "lawgroup_language_policy": language_technologist,
+        "lawgroup_antitrust": antitrust_command_coop,
+    },
+    "ideology_vanguardist_movement": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "strongly_disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "neutral"),
+        ],
+        "lawgroup_minority_rights": minority_love,
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "disapprove"),
+            ("law_ban_on_genetic_modification", "disapprove"),
+            ("law_corporate_genetic_licensing", "neutral"),
+            ("law_open_source_genetics", "approve"),
+            ("law_state_eugenics_program", "approve"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_disapprove"),
+            ("law_pro_natalist_subsidies", "neutral"),
+            ("law_state_sponsored_family_planning", "approve"),
+            ("law_population_control_measures", "approve"),
+            ("law_communal_child_rearing", "strongly_approve"),
+        ],
+    },
+    "ideology_fascist_movement": {
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "++"
+        ),
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_minority_rights": minority_hate,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "neutral"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "strongly_disapprove"),
+            ("law_unitary_state", "strongly_approve"),
+            ("law_federal_system", "disapprove"),
+            ("law_devolution", "strongly_disapprove"),
+        ],
+        "lawgroup_electoral_finance": [
+            ("law_no_campaign_finance_laws", "neutral"),
+            ("law_unregulated_donations", "approve"),
+            ("law_donation_limits", "neutral"),
+            ("law_publicly_funded_elections", "disapprove"),
+        ],
+        "lawgroup_financial_regulation": finreg_fascist,
+        "lawgroup_internet_governance": [
+            ("law_no_internet_policy", "neutral"),
+            ("law_unregulated_internet", "disapprove"),
+            ("law_state_controlled_internet", "strongly_approve"),
+            ("law_net_neutrality", "neutral"),
+        ],
+        "lawgroup_genetic_rights": [
+            ("law_traditional_heredity", "disapprove"),
+            ("law_ban_on_genetic_modification", "neutral"),
+            ("law_corporate_genetic_licensing", "neutral"),
+            ("law_open_source_genetics", "disapprove"),
+            ("law_state_eugenics_program", "strongly_approve"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "approve"),
+            ("law_pro_natalist_subsidies", "strongly_approve"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "strongly_approve"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+        "lawgroup_language_policy": language_ethno_nationalist,
+        "lawgroup_antitrust": antitrust_corporatist_nat,
+    },
+    "ideology_corporatist_movement": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "neutral"),
+            ("law_direct_democracy", "neutral"),
+        ],
+        "lawgroup_welfare": [
+            ("law_no_social_security", "disapprove"),
+            ("law_poor_laws", "neutral"),
+            ("law_wage_subsidies", "approve"),
+            ("law_old_age_pension", "neutral"),
+            ("law_universal_basic_income", "disapprove"),
+            ("law_post-scarcity", "approve"),
+        ],
+    },
+    "ideology_liberal_movement": {
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_financial_regulation": finreg_liberal,
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
+    },
+    "ideology_radical_movement": {
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "neutral"),
+        ],
+        "lawgroup_minority_rights": minority_love,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "strongly_approve"),
+        ],
+        "lawgroup_ministry_of_propaganda": ministry_constructor(
+            "ministry_of_propaganda", "--"
+        ),
+        "lawgroup_ministry_of_thought_control": ministry_constructor(
+            "ministry_of_thought_control", "--"
+        ),
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "-"
+        ),
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "-"
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "+"
+        ),
+        "lawgroup_language_policy": language_pluralist,
+        "lawgroup_antitrust": antitrust_ordoliberal,
+    },
+    "ideology_nihilist_movement": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "approve"),
+        ],
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "--"
+        ),
+    },
+    "ideology_positivist_movement": {
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "neutral"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "strongly_approve"),
+        ],
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
+        ),
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "-"
+        ),
+    },
+    "ideology_feminist_movement": {
+        "lawgroup_LGBTQ_rights": lgbtq_love,
+        "lawgroup_rights_of_women": [
+            ("law_women_own_property", "disapprove"),
+            ("law_women_in_the_workplace", "neutral"),
+            ("law_womens_suffrage", "approve"),
+            ("law_protected_class", "strongly_approve"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_disapprove"),
+            ("law_pro_natalist_subsidies", "strongly_disapprove"),
+            ("law_state_sponsored_family_planning", "strongly_approve"),
+            ("law_population_control_measures", "strongly_disapprove"),
+            ("law_communal_child_rearing", "approve"),
+        ],
+    },
+    "ideology_reactionary_movement": {
+        "lawgroup_LGBTQ_rights": lgbtq_hate,
+        "lawgroup_right_to_information": pro_secrecy,
+        "lawgroup_criminal_justice": regressive_criminal_justice,
+        "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
+            "ministry_of_intelligence_and_security", "++"
+        ),
+        "lawgroup_ministry_of_the_environment": ministry_constructor(
+            "ministry_of_the_environment", "-"
+        ),
+        "lawgroup_ministry_of_culture": ministry_constructor(
+            "ministry_of_culture", "+"
+        ),
+        "lawgroup_ministry_of_labor": ministry_constructor_typed(
+            "ministry_of_labor", ["pro_labor", "pro_capital"], ["-", "+"]
+        ),
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "--"
+        ),
+        "lawgroup_minority_rights": minority_dislike,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "neutral"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_family_reproductive_policy": [
+            ("law_traditional_family_structure", "strongly_approve"),
+            ("law_pro_natalist_subsidies", "approve"),
+            ("law_state_sponsored_family_planning", "disapprove"),
+            ("law_population_control_measures", "neutral"),
+            ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_modernizer_movement": {
+        "lawgroup_ministry_of_science": ministry_constructor(
+            "ministry_of_science", "+"
+        ),
+    },
+    "ideology_traditionalist_movement": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "++"
+        ),
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "strongly_approve"),
+            ("law_unitary_state", "disapprove"),
+            ("law_federal_system", "neutral"),
+            ("law_devolution", "approve"),
+        ],
+    },
+    "ideology_traditionalist_minoritarian_movement": {
+        "lawgroup_ministry_of_religion": ministry_constructor(
+            "ministry_of_religion", "+"
+        ),
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_state_power": [
+            ("law_feudal_contracts", "approve"),
+            ("law_unitary_state", "disapprove"),
+            ("law_federal_system", "neutral"),
+            ("law_devolution", "strongly_approve"),
+        ],
+    },
+    "ideology_ethno_nationalist_movement": {
+        "lawgroup_minority_rights": minority_hate,
+    },
+    "ideology_pluralist_movement_1": {
+        "lawgroup_minority_rights": minority_like,
+    },
+    "ideology_pluralist_movement_2": {
+        "lawgroup_minority_rights": minority_like,
+    },
+    "ideology_pluralist_movement_3": {
+        "lawgroup_minority_rights": minority_like,
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "+"
+        ),
+    },
+    "ideology_pluralist_movement_4": {
+        "lawgroup_minority_rights": minority_love,
+        "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
+            "ministry_of_refugee_affairs", "++"
+        ),
+    },
+    "ideology_utilitarian_movement": {
+        "lawgroup_rights_of_women": [("law_protected_class", "strongly_approve")],
+        "lawgroup_minority_rights": minority_love,
+    },
+    "ideology_orleanist_movement": {
+        "lawgroup_inheritance": reform_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_bonapartist_movement": {
+        "lawgroup_inheritance": bonapartist_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+    "ideology_legitimist_movement": {
+        "lawgroup_inheritance": traditional_inheritance,
+        "lawgroup_governance_principles": [
+            ("law_corporation_state", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+        ],
+    },
+}

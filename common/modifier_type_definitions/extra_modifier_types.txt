@@ -23,11 +23,6 @@ goods_output_digital_assets_add = {
 	percent = no
 }
 
-goods_output_transportation_add = {
-	color = good
-	percent = no
-}
-
 goods_output_advanced_materials_add = {
 	color = good
 	percent = no
@@ -59,11 +54,6 @@ goods_input_digital_access_add = {
 }
 
 goods_input_digital_assets_add = {
-	color = bad
-	percent = no
-}
-
-goods_input_transportation_add = {
 	color = bad
 	percent = no
 }
@@ -119,15 +109,6 @@ goods_input_coffee_add = {
 }
 
 goods_output_luxury_furniture_mult = {
-	color = good
-	percent = yes
-	
-	game_data = {
-	    ai_value = 250
-    }
-}
-
-goods_output_radios_mult = {
 	color = good
 	percent = yes
 	
@@ -254,24 +235,6 @@ goods_output_fertilizer_mult = {
 }
 
 goods_output_explosives_mult = {
-	color = good
-	percent = yes
-	
-	game_data = {
-	    ai_value = 250
-    }
-}
-
-goods_output_ammunition_mult = {
-	color = good
-	percent = yes
-	
-	game_data = {
-	    ai_value = 250
-    }
-}
-
-goods_output_radios_mult = {
 	color = good
 	percent = yes
 	
@@ -629,11 +592,6 @@ state_building_national_park_max_level_add = {
 	percent = no
 }
 
-building_trade_center_throughput_add = {
-	color = good
-	percent = yes
-}
-
 building_renewable_energy_plant_throughput_add = {
 	color = good
 	percent = yes
@@ -692,12 +650,6 @@ building_network_infrastructure_throughput_add = {
 	decimals = 0
 }
 
-building_group_bg_arts_throughput_add = {
-	color = good
-	percent = yes
-	decimals = 0
-}
-
 building_launch_facility_throughput_add = {
 	color = good
 	percent = yes
@@ -719,6 +671,7 @@ building_tourism_industry_throughput_add = {
 building_weekly_space_elevator_progress = {
 	color = good
 	percent = yes
+	script_only = yes
 
 	game_data = {
 	ai_value = 50000000
@@ -728,6 +681,7 @@ building_weekly_space_elevator_progress = {
 building_total_space_elevator_progress = {
 	color = good
 	percent = yes
+	script_only = yes
 }
 
 unit_combat_unit_type_jet_powered_fighters_offense_mult = {
@@ -783,11 +737,13 @@ building_group_bg_urban_facilities_employee_mult = {
 state_pollution_generation_mult = {
 	color = bad
 	percent = yes
+	script_only = yes
 }
 
 country_monthly_loyalists_add = {
 	color = good
 	percent = yes
+	script_only = yes
 }
 
 country_banking_intervention_max_add = {
@@ -795,36 +751,42 @@ country_banking_intervention_max_add = {
 	percent = no
 	decimals = 0
 	game_data = { ai_value = 100 }
+	script_only = yes
 }
 
 country_finance_momentum_monthly_add = {
 	color = neutral
 	percent = no
 	decimals = 2
+	script_only = yes
 }
 
 country_bubble_pressure_monthly_add  = {
 	color = neutral
 	percent = no
 	decimals = 2
+	script_only = yes
 }
 
 country_finance_value_monthly_add    = {
 	color = neutral
 	percent = no
 	decimals = 2
+	script_only = yes
 }
 
 country_monthly_investment_pool_add = {
 	color = good
 	percent = no
 	decimals = 0
+	script_only = yes
 }
 
 country_monthly_investment_pool_mult = {
 	color = good
 	percent = yes
 	decimals = 2
+	script_only = yes
 }
 
 country_institution_ministry_of_war_max_investment_add = {
@@ -935,6 +897,7 @@ power_bloc_leader_can_force_cultural_acceptance_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_leader_can_force_cultural_adoption_bool = {
@@ -943,6 +906,7 @@ power_bloc_leader_can_force_cultural_adoption_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_leader_can_peacefully_annex_bool = {
@@ -951,6 +915,7 @@ power_bloc_leader_can_peacefully_annex_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_can_enact_greenest_grass_campaign_bool = {
@@ -959,6 +924,7 @@ power_bloc_can_enact_greenest_grass_campaign_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_can_use_extend_influence_bool = {
@@ -967,6 +933,7 @@ power_bloc_can_use_extend_influence_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_homelands_can_decay_bool = {
@@ -975,6 +942,7 @@ power_bloc_homelands_can_decay_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_can_give_humanitarian_aid_bool = {
@@ -983,6 +951,7 @@ power_bloc_can_give_humanitarian_aid_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_can_use_crisis_resolution_bool = {
@@ -991,6 +960,7 @@ power_bloc_can_use_crisis_resolution_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_can_enact_decree_cultural_emigration_initiative_bool = {
@@ -999,6 +969,7 @@ power_bloc_can_enact_decree_cultural_emigration_initiative_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_can_use_diplomatic_alignment_bool = {
@@ -1007,6 +978,7 @@ power_bloc_can_use_diplomatic_alignment_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_can_give_education_aid_bool = {
@@ -1015,6 +987,7 @@ power_bloc_can_give_education_aid_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 receiving_nuclear_program_aid = {
@@ -1023,6 +996,7 @@ receiving_nuclear_program_aid = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_can_give_healthcare_aid_bool = {
@@ -1031,6 +1005,7 @@ power_bloc_can_give_healthcare_aid_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_can_give_security_aid_bool = {
@@ -1039,6 +1014,7 @@ power_bloc_can_give_security_aid_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_can_give_science_aid_bool = {
@@ -1047,6 +1023,7 @@ power_bloc_can_give_science_aid_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 power_bloc_can_give_science_aid_2_bool = {
@@ -1055,6 +1032,7 @@ power_bloc_can_give_science_aid_2_bool = {
 	game_data = {
 		ai_value = 100
 	}
+	script_only = yes
 }
 
 state_infrastructure_from_aeroplanes_consumption_add = {
@@ -1099,11 +1077,6 @@ country_enactment_success_chance_law_ministry_of_commerce_add = {
 }
 
 country_enactment_success_chance_law_ministry_of_war_add = {
-	color = good
-	percent = yes
-}
-
-country_enactment_success_chance_law_ministry_of_commerce_add = {
 	color = good
 	percent = yes
 }
@@ -1168,22 +1141,7 @@ country_institution_cost_institution_ministry_of_urban_planning_mult = {
 	percent = yes
 }
 
-country_institution_cost_institution_ministry_of_culture_mult = {
-	color = bad
-	percent = yes
-}
-
 country_institution_cost_institution_migration_controls_mult = {
-	color = bad
-	percent = yes
-}
-
-country_institution_cost_institution_health_system_mult = {
-	color = bad
-	percent = yes
-}
-
-country_institution_cost_institution_social_security_mult = {
 	color = bad
 	percent = yes
 }
@@ -1199,11 +1157,6 @@ building_group_bg_military_standard_of_living_add = {
 }
 
 building_group_bg_bureaucracy_throughput_add = {
-	color = good
-	percent = yes
-}
-
-building_academics_shares_add = {
 	color = good
 	percent = yes
 }
@@ -1236,17 +1189,10 @@ building_group_bg_power_infrastructure_usage_mult = {
 country_leverage_threshold_change_add = {
 	color = bad
 	percent = no
+	script_only = yes
 }
 
 country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool = {
-	color = neutral
-	boolean = yes
-	game_data = {
-		ai_value = 0
-	}
-}
-
-country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
@@ -1268,6 +1214,7 @@ country_can_use_biotech_companies_bool = {
 	game_data = {
 		ai_value = 0
 	}
+	script_only = yes
 }
 
 state_harvest_condition_financial_panic_duration_mult = {
@@ -1305,6 +1252,7 @@ building_highway_throughput_add = {
 power_bloc_principle_groups_max_add = {
 	color = good
 	percent = no
+	script_only = yes
 }
 
 country_add_multicultural_ideology_to_intelligentsia_bool = {
@@ -1313,6 +1261,7 @@ country_add_multicultural_ideology_to_intelligentsia_bool = {
 	game_data = {
 		ai_value = 0
 	}
+	script_only = yes
 }
 
 country_add_anticolonial_ideology_to_igs_bool = {
@@ -1321,6 +1270,7 @@ country_add_anticolonial_ideology_to_igs_bool = {
 	game_data = {
 		ai_value = 0
 	}
+	script_only = yes
 }
 
 country_unrecognized_become_recognized_bool = {
@@ -1329,6 +1279,7 @@ country_unrecognized_become_recognized_bool = {
 	game_data = {
 		ai_value = 0
 	}
+	script_only = yes
 }
 
 state_mass_migration_encouragement_bool = {
@@ -1337,34 +1288,25 @@ state_mass_migration_encouragement_bool = {
 	game_data = {
 		ai_value = 0
 	}
+	script_only = yes
 }
 
 state_arable_land_mult = {
 	color = good
 	percent = yes
-}
-
-state_lower_strata_expected_sol_add={
-	decimals=1
-	color=neutral
-	game_data={
-		ai_value=0
-	}
-}
-
-state_academics_investment_pool_contribution_add = {
-	color = good
-	percent = yes
+	script_only = yes
 }
 
 country_nuclear_weapon_attack_success_add = {
 	color = good
 	percent = yes
+	script_only = yes
 }
 
 country_nuclear_weapon_defense_chance_add = {
 	color = good
 	percent = yes
+	script_only = yes
 }
 
 building_group_bg_arts_standard_of_living_add = {
@@ -1382,26 +1324,6 @@ building_deportee_mortality_mult = {
 	percent = yes
 }
 
-building_employment_slavedeportee_add = {
-	color = neutral
-	percent = no
-}
-
-building_slaves_mortality_mult = {
-	color = bad
-	percent = yes
-}
-
-state_clerks_investment_pool_contribution_add = {
-	color = good
-	percent = yes
-}
-
-state_clerks_investment_pool_efficiency_mult = {
-	color = good
-	percent = yes
-}
-
 building_farmers_shares_add={
 	decimals=0
 	color=neutral
@@ -1410,17 +1332,12 @@ building_farmers_shares_add={
 	}
 }
 
-building_group_bg_agriculture_infrastructure_usage_mult = {
-	color = bad
-	percent = yes
-}
-
 country_enactment_success_chance_law_compulsory_primary_school_add = {
 	color = good
 	percent = yes
 }
 
-state_working_adult_ratio_add={
+REPLACE:state_working_adult_ratio_add={
 	decimals=1
 	color=good
 	percent=yes
@@ -1434,7 +1351,7 @@ country_enactment_success_chance_law_free_trade_add = {
 	percent = yes
 }
 
-state_birth_rate_mult = {
+REPLACE:state_birth_rate_mult = {
 	decimals=1
 	color=good
 	percent=yes
@@ -1451,6 +1368,7 @@ building_employment_peasants_mult = {
 state_war_support_monthly_add = {
 	color = good
 	percent = no
+	script_only = yes
 }
 
 country_war_support_monthly_add_religion = {
@@ -1461,21 +1379,25 @@ country_war_support_monthly_add_religion = {
 country_foreign_investment_acceptance_add = {
 	color = good
 	percent = no
+	script_only = yes
 }
 
 country_economic_dependence_leverage_gain_mult = {
 	color = good
 	percent = yes
+	script_only = yes
 }
 
 state_yearly_cultural_acceptance_add = {
 	color = good
 	percent = no
+	script_only = yes
 }
 
 state_min_cultural_acceptance_delta_add = {
 	color = good
 	percent = no
+	script_only = yes
 }
 
 state_violence_against_minorities_bool = {
@@ -1484,6 +1406,7 @@ state_violence_against_minorities_bool = {
 	game_data = {
 		ai_value = 0
 	}
+	script_only = yes
 }
 
 country_institution_impact_institution_schools_mult = {
@@ -1517,15 +1440,6 @@ country_institution_impact_institution_national_bank_mult = {
 }
 
 country_institution_cost_institution_ministry_of_intelligence_and_security_mult = {
-	color = bad
-	percent = yes
-	decimals = 1
-	game_data = {
-		ai_value = 0
-	}
-}
-
-country_institution_cost_institution_police_mult = {
 	color = bad
 	percent = yes
 	decimals = 1

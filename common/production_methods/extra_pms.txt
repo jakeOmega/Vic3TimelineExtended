@@ -16083,7 +16083,6 @@ pm_rail_transport_mine_infrastructure_4 = {
 		pm_continuous_miners_building_tech_metals_mine
 		pm_smart_miners_building_tech_metals_mine
 
-		automatic_irrigation_building_coffee_plantation
         factory_farm_building_coffee_plantation
         GMO_plantation_building_coffee_plantation
 

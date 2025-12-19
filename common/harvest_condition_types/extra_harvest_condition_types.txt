@@ -48,12 +48,26 @@ financial_panic = {
 	chance = {
 		value = 0.001
 		 # National cycle stress → multiply chance
-		if = { limit = { owner = { var:finance_cycle_value < 10 } } multiply = 4.0 }   # Panic
-		else_if = { limit = { owner = { var:finance_cycle_value >= 10 var:finance_cycle_value < 25 } } multiply = 2.0 } # Downturn
-		else_if = { limit = { owner = { var:finance_cycle_value >= 40 } } multiply = 0 }
+		 if = {
+			limit = {
+				any_scope_state = {
+					owner = {
+						has_variable = finance_cycle_value
+						has_variable = bubble_pressure
+					}
+				}
+			}
+			if = { limit = { any_scope_state = { owner = { var:finance_cycle_value < 10 } } } multiply = 4.0 }   # Panic
+			else_if = { limit = { any_scope_state = { owner = { var:finance_cycle_value >= 10 var:finance_cycle_value < 25 } } } multiply = 2.0 } # Downturn
+			else_if = { limit = { any_scope_state = { owner = { var:finance_cycle_value >= 40 } } } multiply = 0 }
 
-		# Bubble can pop
-		if = { limit = { any_scope_state = { owner = { var:bubble_pressure >= 65 } } } multiply = 2.0 }
+			# Bubble can pop
+			if = { limit = { any_scope_state = { owner = { var:bubble_pressure >= 65 } } } multiply = 2.0 }
+		}
+		else = {
+			multiply = 0
+		}
+		
 	}
 
 	# Visuals
@@ -90,9 +104,21 @@ market_downturn = {
 
 	chance = {
 		value = 0.01
-			if = { limit = { owner = { var:finance_cycle_value < 25 } } multiply = 3.0 }  # Downturn
-			else_if = { limit = { owner = { var:finance_cycle_value >= 25 var:finance_cycle_value < 40 } } multiply = 1.8 } # Stagnation
-			else_if = { limit = { owner = { var:finance_cycle_value >= 60 } } multiply = 0 }
+		if = {
+			limit = {
+				any_scope_state = {
+					owner = {
+						has_variable = finance_cycle_value
+					}
+				}
+			}
+			if = { limit = { any_scope_state = { owner = { var:finance_cycle_value < 25 } } } multiply = 3.0 }  # Downturn
+			else_if = { limit = { any_scope_state = { owner = { var:finance_cycle_value >= 25 var:finance_cycle_value < 40 } } } multiply = 1.8 } # Stagnation
+			else_if = { limit = { any_scope_state = { owner = { var:finance_cycle_value >= 60 } } } multiply = 0 }
+		}
+		else = {
+			multiply = 0
+		}
 	}
 
 	color = { 200 100 100 }
@@ -130,9 +156,22 @@ bull_market = {
 
 	chance = {
 		value = 0.01 # Rare at first
-		if = { limit = { any_scope_state = { owner = { var:finance_cycle_value >= 40 var:finance_cycle_value < 60 } } } multiply = 2.0 } # Boom
-		else_if = { limit = { any_scope_state = { owner = { var:finance_cycle_value >= 60 var:finance_cycle_value < 80 } } } multiply = 1.5 } # Overheating
-		else_if = { limit = { any_scope_state = { owner = { var:finance_cycle_value < 40 } } } multiply = 0 }
+		 # National cycle boom → multiply chance
+		 if = {
+			limit = {
+				any_scope_state = {
+					owner = {
+						has_variable = finance_cycle_value
+					}
+				}
+			}
+			if = { limit = { any_scope_state = { owner = { var:finance_cycle_value >= 40 var:finance_cycle_value < 60 } } } multiply = 2.0 } # Boom
+			else_if = { limit = { any_scope_state = { owner = { var:finance_cycle_value >= 60 var:finance_cycle_value < 80 } } } multiply = 1.5 } # Overheating
+			else_if = { limit = { any_scope_state = { owner = { var:finance_cycle_value < 40 } } } multiply = 0 }
+		 }
+		else = {
+			multiply = 0
+		}
 	}
 
 	color = { 100 200 100 }

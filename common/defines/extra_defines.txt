@@ -1,5 +1,5 @@
 ﻿NEconomy = {
-    MIN_GOODS_PRICE = 0.1							# A good cannot have a lower base price than this                                                                                                      
+    MIN_GOODS_PRICE = 1							# A good cannot have a lower base price than this                                                                                                      
     PRICE_RANGE = 0.999							    # min price of a good is base * (1 - PRICE_RANGE), Max price is base * (1 + PRICE_RANGE), PRICE_RANGE is locked to [0-1]                                
 	BUY_SELL_DIFF_AT_MAX_FACTOR = 4
 	GOODS_SHORTAGE_PENALTY_THRESHOLD = 0.25		# If supply / demand is lower than this, start applying output penalties, by default this should be ( 1 / BUY_SELL_DIFF_AT_MAX_FACTOR )

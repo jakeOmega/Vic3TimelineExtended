@@ -111,7 +111,7 @@ je_banking_cycle = {
             random_list = {
                 25 = {
                     modifier = { # Biased towards lower momentum if economy is hot
-                        value =  = var:finance_cycle_value
+                        value = var:finance_cycle_value
                     }
                     change_variable = { name = finance_cycle_momentum add = -1 }
                 }

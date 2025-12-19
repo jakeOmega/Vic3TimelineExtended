@@ -10,29 +10,25 @@ disband_company = {
 	flags = {
 		can_be_enforced
 		can_be_renegotiated
-		is_monopoly_for_company
-		recipient_pays_maintenance
 	}
+
+	usage_limit = once_per_side_with_same_inputs
 
 	# This article requires you to specify which company you are targeting.
 	required_inputs = {
 		company
-		building_type
 	}
 		
 	visible = {
-		# Only visible if the target country has any companies to disband.
-		scope:other_country = {
-			any_company = {
-				is_active = yes
-			}
-		}
+		always = yes
 	}
 
 	possible = {
-		# Standard diplomatic checks
-		has_diplomatic_relevance = scope:other_country
-		NOT = { has_war_with = scope:other_country }
+		scope:other_country = {
+			any_company = {
+				owner = prev
+			}
+		}
 	}
 
 	can_ratify = {
@@ -54,7 +50,7 @@ disband_company = {
 	# This is the core effect that fires when the treaty is ratified.
 	on_entry_into_force = {
 		scope:target_country = {
-			remove_company = scope:article.input_company
+			remove_company = scope:article.input_company.type
 		}
 	}
 
@@ -64,10 +60,6 @@ disband_company = {
 	company_valid_trigger = {
 		always = yes
     }
-
-	building_type_valid_trigger = {
-		always = yes
-	}
 
 	# This section governs AI behavior regarding the treaty article.
 	ai = {
@@ -101,10 +93,7 @@ disband_company = {
 				add = {
 					value = 0
 					scope:article.input_company = {
-						every_scope_building = {
-							# For every level of a building belonging to this company, add a penalty.
-							add = level
-						}
+						add = company_employed_levels
 					}
 					multiply = -10 # A very high penalty per building level.
 					desc = "AI_REJECTS_DISBANDING_SIGNIFICANT_COMPANY"

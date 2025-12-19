@@ -14,16 +14,6 @@
  
 
 
- CAN_EXPAND_BUILDING_TOOLTIP: "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] in [STATE.GetName]#! (Size: [BUILDING.GetExpansionLevelBreakdownDesc])\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Predicted [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\n[ConcatIfNeitherEmpty('$PRODUCTIVITY$', '\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS$', '\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiency, '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction] ($CONSTRUCTION_COST_CHANGE$)\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\n\n$PRODUCTION_BREAKDOWN$\n\n[STATE.GetMarketAccessStatus]\nAvailable Labor: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO$', '\n')]\n\n$KEY_MODIFIER_INSTRUCTIONS$"
-
-
- EXPANSION_PROFIT_IMPACT:4 "#header Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] of new level#!\n#v @money!$VAL|K+=$#! Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\n(Excluding [Concept('concept_building_wage','$concept_building_wages$')])\n$TOOLTIP_DELIMITER$\n$IMPACT_DETAILS$\n\n$BUILDING_PREDICTION_DISCLAIMER$"
-
-
- BUILDING_MAP_LIST_PANEL_PROFIT_IMPACT_HEADER:3 "[SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')]"
-
- BUILDING_MAP_LIST_PANEL_PROFIT_IMPACT_TOOLTIP:2 "#header Predicted [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] after expansion#!\n(Excluding [Concept('concept_building_wage','$concept_building_wages$')])\n$TOOLTIP_DELIMITER$\nA prediction of how much expanding this building would affect its weekly [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')]."
-
 
 
 

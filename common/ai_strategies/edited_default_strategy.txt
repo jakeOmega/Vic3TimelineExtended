@@ -1,0 +1,359 @@
+﻿INJECT:ai_strategy_default = {
+	change_law_chance = { 
+		value = 1
+		if = {
+			limit = {
+				any_political_movement = {
+					political_movement_support > 0.2
+					political_movement_radicalism > 0.75
+				}
+			}
+			multiply = 10
+		}
+	}
+	institution_scores = {
+		institution_colonial_affairs = {	
+			if = {
+				limit = {
+					NOT = {
+						any_scope_state = {
+							is_under_colonization = yes
+						}
+					}
+					NOT = {
+						power_bloc ?= {
+							has_principle_group = principle_group:principle_group_colonial_offices
+						}
+					}
+					NOT = { has_law = law_type:law_neocolonialism }
+				}
+				subtract = 10
+			}
+		}		
+		institution_social_security = {
+			value = 10
+		}
+		institution_workplace_safety = {
+			value = 10
+		}
+		institution_schools = {
+			value = 10
+		}
+		institution_police = {
+			value = 10
+		}
+		institution_health_system = {
+			value = 10
+		}
+		institution_home_affairs = {
+			value = 10
+		}	
+		institution_ministry_of_war = {	
+			value = 50		
+		}
+		institution_ministry_of_commerce = {	
+			value = 10		
+		}
+		institution_ministry_of_foreign_affairs = {	
+			value = 50		
+		}
+		institution_national_bank = {	
+			value = 50		
+		}
+		institution_ministry_of_culture = {	
+			value = 5		
+		}
+		institution_ministry_of_labor = {	
+			value = 5		
+		}
+		institution_ministry_of_the_environment = {	
+			value = 100	
+			if = {
+				limit = {
+					any_political_movement = {
+						is_political_movement_type = movement_environmentalist
+						political_movement_radicalism > 0.1
+					}
+				}
+				add = 100
+			}
+			if = {
+				limit = {
+					any_political_movement = {
+						is_political_movement_type = movement_environmentalist
+						political_movement_radicalism > 0.25
+					}
+				}
+				add = 100
+			}
+			if = {
+				limit = {
+					any_political_movement = {
+						is_political_movement_type = movement_environmentalist
+						political_movement_radicalism > 0.5
+					}
+				}
+				add = 100
+			}
+		}
+		institution_ministry_of_intelligence_and_security = {	
+			value = 20		
+		}
+		institution_ministry_of_refugee_affairs = {	
+			value = 5		
+		}
+		institution_ministry_of_propaganda = {	
+			value = 5		
+		}
+		institution_ministry_of_science = {	
+			value = 50		
+		}
+		institution_ministry_of_thought_control = {	
+			value = 50	
+		}
+		institution_ministry_of_consumer_protection = {	
+			value = 20	
+		}
+		institution_ministry_of_urban_planning = {	
+			value = 20	
+		}
+		institution_ministry_of_religion = {	
+			value = 5	
+		}
+		institution_ministry_of_international_aid = {	
+			value = 5	
+		}
+		institution_migration_controls = {	
+			value = 0
+
+			every_interest_group = {
+				limit = {
+					OR = {
+						has_ideology = ideology:ideology_ethno_nationalist
+						has_ideology = ideology:ideology_ethno_nationalist_movement
+						has_ideology = ideology:ideology_fascist
+						has_ideology = ideology:ideology_fascist_movement
+						has_ideology = ideology:ideology_isolationist
+						has_ideology = ideology:ideology_traditionalist
+						has_ideology = ideology:ideology_traditionalist_movement
+						has_ideology = ideology:ideology_traditionalist_minoritarian
+						has_ideology = ideology:ideology_reactionary
+						has_ideology = ideology:ideology_reactionary_movement
+					}
+				}
+				add = {
+					value = 1
+					multiply = ig_clout
+				}
+			}
+
+			every_interest_group = {
+				limit = {
+					OR = {
+						has_ideology = ideology:ideology_jingoist
+						has_ideology = ideology:ideology_jingoist_leader
+						has_ideology = ideology:ideology_corporatist
+						has_ideology = ideology:ideology_corporatist_leader
+						has_ideology = ideology:ideology_corporatist_movement
+						has_ideology = ideology:ideology_particularist
+						has_ideology = ideology:ideology_patriotic
+						has_ideology = ideology:ideology_conservative_praetorian
+					}
+				}
+				add = {
+					value = 0.5
+					multiply = ig_clout
+				}
+			}
+
+			every_interest_group = {
+				limit = {
+					OR = {
+						has_ideology = ideology:ideology_liberal
+						has_ideology = ideology:ideology_liberal_leader
+						has_ideology = ideology:ideology_liberal_movement
+						has_ideology = ideology:ideology_market_liberal
+						has_ideology = ideology:ideology_radical
+						has_ideology = ideology:ideology_radical_movement
+						has_ideology = ideology:ideology_modernizer
+						has_ideology = ideology:ideology_modernizer_leader
+					}
+				}
+				subtract = {
+					value = 0.5
+					multiply = ig_clout
+				}
+			}
+
+			every_interest_group = {
+				limit = {
+					is_marginal = no
+					OR = {
+						has_ideology = ideology:ideology_humanitarian
+						has_ideology = ideology:ideology_humanitarian_royalist
+						has_ideology = ideology:ideology_anarchist
+						has_ideology = ideology:ideology_anarchist_movement
+						has_ideology = ideology:ideology_utopian
+						has_ideology = ideology:ideology_despotic_utopian
+						has_ideology = ideology:ideology_pluralist_movement_4
+					}
+				}
+				subtract = {
+					value = 1
+					multiply = ig_clout
+				}
+			}					
+		}
+	}	
+	
+	# How much construction output should the AI aim for
+	# Using this value in other strategies will function additively
+	wanted_construction_output = {
+		value = 0
+	}	
+	
+	# Set the weights for combat unit groups, this determines the ratio that the AI aims to have of each, and thus what unit types it adds to formations
+	# Using this value in other strategies will function additively
+	# root = country
+	# scope:military_formation = military formation
+	combat_unit_group_weights = {
+		combat_unit_group_infantry = {
+			value = 100
+		}
+		combat_unit_group_artillery = {
+			value = 0
+			if = {
+				limit = { has_technology_researched = artillery }
+				add = 15
+			}
+			if = {
+				limit = { has_technology_researched = napoleonic_warfare }
+				add = 5
+			}
+			if = {
+				limit = { has_technology_researched = breech_loading_artillery }
+				add = 10
+			}
+			if = {
+				limit = { has_technology_researched = wargaming }
+				add = 10
+			}
+			if = {
+				limit = { has_technology_researched = mobile_armor }
+				subtract = 5
+			}	
+			if = {
+				limit = { has_technology_researched = bombing_aircraft }
+				subtract = 10
+			}	
+
+			if = {
+				limit = { has_law_or_variant = law_type:law_peasant_levies }
+				multiply = 0.5
+			}
+			else_if = {
+				limit = { has_law_or_variant = law_type:law_national_militia }
+				multiply = 0.75
+			}
+			else_if = {
+				limit = { has_law_or_variant = law_type:law_professional_army }
+				multiply = 1.25
+			}
+		}
+		combat_unit_group_cavalry = {
+			value = 20
+			if = {
+				limit = { has_technology_researched = mobile_armor }
+				add = 10
+			}
+
+			if = {
+				limit = { has_law_or_variant = law_type:law_national_militia }
+				multiply = 0.5
+			}
+			else_if = {
+				limit = { has_law_or_variant = law_type:law_professional_army }
+				multiply = 1.25
+			}
+			else_if = {
+				limit = { has_law_or_variant = law_type:law_peasant_levies }
+				multiply = 1.5
+			}
+		}
+		combat_unit_group_light_ship = {
+			value = 100
+		}
+		combat_unit_group_capital_ship = {
+			value = 0
+			if = {
+				limit = { country_rank = rank_value:great_power }
+				add = 30
+			}
+			if = {
+				limit = { country_rank = rank_value:major_power }
+				add = 10
+			}
+		}
+		combat_unit_group_support_ship = {
+			value = 0
+			if = {
+				limit = { has_technology_researched = submarine }
+				add = 10
+			}
+			if = {
+				limit = { has_technology_researched = carrier_tech }
+				add = 10
+			}
+		}
+		combat_unit_group_tanks = {
+			value = 20
+		}
+		combat_unit_group_aircraft = {
+			value = 10
+		}
+	}
+	goods_stances = {
+		construction = { 
+			stance = wants_high_supply 
+			trigger = {
+				always = yes
+			}
+		}	
+		electronic_components = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = transistors
+			}
+		}
+		robotics = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = robotics
+			}
+		}
+		digital_access = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = computer_networks
+			}
+		}
+		digital_assets = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = computer_networks
+			}
+		}
+		launch_capacity = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = space_militarization
+			}
+		}
+		advanced_materials = { 
+			stance = wants_high_supply 
+			trigger = {
+				has_technology_researched = modern_material_science
+			}
+		}
+	}
+}

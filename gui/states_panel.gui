@@ -1488,20 +1488,6 @@ types state_panel_types
 			}
 
 			state_panel_status_item_small = {
-				visible = "[GetScriptedGui('decolonization_scripted_gui').IsShown( GuiScope.SetRoot( State.MakeScope ).End)]"
-				tooltip = ""
-				alwaystransparent = no
-				
-				blockoverride "texture" {
-					texture = "gfx/interface/icons/generic_icons/discriminated_icon.dds"
-				}
-				
-				blockoverride "name" {
-					text = "STATE_INDEPENDENCE_MOVEMENT_STRENGTH"
-				}
-			}
-
-			state_panel_status_item_small = {
 				visible = "[State.IsCapitalState]"
 				tooltip = "TOOLTIP_CAPITAL_STATE"
 

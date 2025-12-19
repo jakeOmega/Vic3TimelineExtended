@@ -19,7 +19,7 @@ nuke_diplo_action = {
             NOT = {
                 OR = {
                     has_law = law_type:law_humanitarian_regulations
-                    # has_law = law_type:law_limited_war
+                    has_law = law_type:law_limited_war
                 }
             }
             any_scope_state = {
@@ -71,12 +71,6 @@ nuke_diplo_action = {
                     }
                 }
                 multiply = 0
-            }
-            if = {
-                limit = {
-                    scope:second_state.owner = { has_modifier = nuclear_power }
-                }
-                multiply = 0.5 # less likely to nuke if they can retaliate
             }
         }
 

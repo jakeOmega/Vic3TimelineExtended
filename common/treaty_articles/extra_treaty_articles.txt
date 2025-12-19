@@ -699,7 +699,7 @@ science_aid_2 = {
 		# This upgraded pact requires the original to be active between the two countries.
 		# This is checked by looking for an existing treaty with the 'science_aid' article.
         custom_tooltip = {
-            text = "Requires the base Modernization Aid pact to be active."
+            text = REQ_BASE_SCIENCE_AID_ARTICLE
             any_scope_treaty = {
                 binds = scope:other_country
                 any_scope_article = {
@@ -1294,8 +1294,8 @@ joint_military_exercises = {
                     OR = {
 						any_interest_group = {
 							OR = {
-								has_ideology = ideology_jingoist
-								has_ideology = ideology_fascist
+								has_ideology = ideology:ideology_jingoist
+								has_ideology = ideology:ideology_fascist
 							}
 							is_in_government = yes
 						}
