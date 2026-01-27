@@ -396,7 +396,7 @@ ideology_corporate = {
 		law_presidential_republic = neutral
 		law_parliamentary_republic = neutral
 		law_council_republic = strongly_disapprove
-		law_corporation_state = strongly_approve
+		law_neocameralism = strongly_approve
 		law_direct_democracy = disapprove
 	}
 	
@@ -1622,7 +1622,7 @@ ideology_custom_religion_aristocratic_governance = {
 		law_presidential_republic = disapprove
 		law_parliamentary_republic = disapprove
 		law_council_republic = strongly_disapprove
-		law_corporation_state = disapprove
+		law_neocameralism = disapprove
 		law_direct_democracy = disapprove
 	}
 	
@@ -1694,7 +1694,7 @@ ideology_custom_religion_technocratic_governance = {
 		law_presidential_republic = approve
 		law_parliamentary_republic = approve
 		law_council_republic = strongly_disapprove
-		law_corporation_state = neutral
+		law_neocameralism = neutral
 		law_direct_democracy = disapprove
 	}
 	
@@ -1766,7 +1766,7 @@ ideology_custom_religion_republican_governance = {
 		law_presidential_republic = strongly_approve
 		law_parliamentary_republic = strongly_approve
 		law_council_republic = strongly_disapprove
-		law_corporation_state = disapprove
+		law_neocameralism = disapprove
 		law_direct_democracy = approve
 	}
 	
@@ -1838,7 +1838,7 @@ ideology_custom_religion_corporate_governance = {
 		law_presidential_republic = disapprove
 		law_parliamentary_republic = disapprove
 		law_council_republic = strongly_disapprove
-		law_corporation_state = strongly_approve
+		law_neocameralism = strongly_approve
 		law_direct_democracy = disapprove
 	}
 	
@@ -1910,7 +1910,7 @@ ideology_custom_religion_imperial_cult_governance = {
 		law_presidential_republic = disapprove
 		law_parliamentary_republic = strongly_disapprove
 		law_council_republic = strongly_disapprove
-		law_corporation_state = strongly_disapprove
+		law_neocameralism = strongly_disapprove
 		law_direct_democracy = strongly_disapprove
 	}
 	
@@ -1982,7 +1982,7 @@ ideology_custom_religion_theocratic_governance = {
 		law_presidential_republic = disapprove
 		law_parliamentary_republic = disapprove
 		law_council_republic = strongly_disapprove
-		law_corporation_state = disapprove
+		law_neocameralism = disapprove
 		law_direct_democracy = disapprove
 	}
 	

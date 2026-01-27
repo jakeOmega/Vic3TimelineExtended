@@ -16814,6 +16814,26 @@ pm_space_tourism = {
 	}
 }
 
+pm_voluntary_daycare = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_services_add = 0.5                       # Price:  30, Total cost:    15.0 (100.00%)
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_birth_rate_add = 0.01
+		}
+	}
+}
+
+pm_communal_child_rearing
+pm_state_wardship
+pm_eugenics_programs
+
 pm_maintenance = {
 	texture = "gfx/interface/icons/production_method_icons/transparent.dds"
 	is_hidden_when_unavailable = yes

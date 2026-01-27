@@ -1235,6 +1235,33 @@ REPLACE_OR_CREATE:building_tourism_industry = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds"
 }
 
+building_childrens_creche = {
+	building_group = bg_government
+	icon = "gfx/interface/icons/building_icons/urban_center.dds"
+	city_type = city
+
+	potential = {
+		owner = {
+			OR = {
+				has_law = law_type:law_pro_natalist_subsidies
+				has_law = law_type:law_state_sponsored_family_planning
+				has_law = law_type:law_communal_child_rearing
+				has_law = law_type:law_state_eugenics_program
+				has_law = law_type:law_mandatory_augmentation
+			}
+		}
+	}
+
+	production_method_groups = {
+		pmg_childrens_creche_philosophy
+		pmg_childrens_creche_advanced_nurturing
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_medium
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
 REPLACE_OR_CREATE:building_manganese_mine = {
 	building_group = bg_mining
 	icon = "gfx/interface/icons/building_icons/iron_mine.dds"

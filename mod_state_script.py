@@ -82,11 +82,21 @@ laws_path = doc_path + r"\laws.txt"
 laws_output = ""
 laws = mod_state.get_data("Laws")
 laws_dict = {}
+law_effects_dict = defaultdict(list)
+law_variant_dict = {}
 for law_id, (_, law_data) in laws.items():
     law_group = law_data["group"][1]
     if law_group not in laws_dict.keys():
         laws_dict[law_group] = []
     laws_dict[law_group].append(law_id)
+    modifiers = law_data.get("modifier", ['', {}])[1]
+    if modifiers:
+        modifier_list = [key + modifiers[key][0] + modifiers[key][1] for key in modifiers.keys()]
+        law_effects_dict[law_id] += modifier_list
+    parent = law_data.get("parent", None)
+    if parent:
+        parent_id = parent[1]
+        law_variant_dict[law_id] = parent_id
 
 for law_group in laws_dict.keys():
     laws_output += f"{mod_state.localize(law_group)}:\n"
@@ -188,8 +198,9 @@ for building_id, data in buildings_data.items():
     building_output += f"{mod_state.localize(building_id)}:\n"
     tech_requirement = data[1].get("unlocking_technologies", None)
     if tech_requirement:
-        tech_name = mod_state.localize(tech_requirement[1][0])
-        building_output += f"\tUnlocking Technology: {tech_name}\n"
+        if tech_requirement[1]:
+            tech_name = mod_state.localize(tech_requirement[1][0])
+            building_output += f"\tUnlocking Technology: {tech_name}\n"
     for pmg in pm_groups:
         if pmg not in pmg_groups.keys():
             building_output += f"Building {mod_state.localize(building_id)} references missing PM Group {mod_state.localize(pmg)}\n"
