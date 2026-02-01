@@ -229,7 +229,10 @@ def process_state_block(block_text: str, state_name: str, mapping: dict) -> str:
             insert_at = compute_insert_position(block_text)
             changed = True
 
-    return block_text if changed else block_text
+    #prefix_re = re.compile(rf"(?m)^(\s*){re.escape(state_name)}(\s*=\s*\{{)")
+    #block_text = prefix_re.sub(r"\1REPLACE:" + state_name + r"\2", block_text, count=1)
+
+    return block_text
 
 
 def process_file(in_path: Path, out_path: Path, mapping: dict):

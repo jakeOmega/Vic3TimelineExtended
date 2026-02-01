@@ -353,7 +353,7 @@ company_basic_aerospace = {
     }
     
     building_types = {
-        building_launch_facility
+        building_aerospace_industry
         building_automotive_industry
 		building_generic_proving_grounds
     }
@@ -363,7 +363,7 @@ company_basic_aerospace = {
             any_scope_building = {
                 OR = {
                     is_building_type = building_automotive_industry
-                    is_building_type = building_launch_facility
+                    is_building_type = building_aerospace_industry
                     is_building_type = building_space_mine
                 }
                 level >= 5
@@ -388,7 +388,7 @@ company_basic_aerospace = {
 			any_scope_building = {
 				OR = {
                     is_building_type = building_automotive_industry
-                    is_building_type = building_launch_facility
+                    is_building_type = building_aerospace_industry
                     is_building_type = building_space_mine
                 }
 				level >= 3

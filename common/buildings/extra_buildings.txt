@@ -528,11 +528,39 @@ INJECT:building_power_plant = {
 	}
 }
 
-INJECT:building_automotive_industry = {
+REPLACE:building_automotive_industry = {
+	building_group = bg_heavy_industry
+	icon = "gfx/interface/icons/building_icons/vehicles_industry.dds"
+	city_type = city
+	levels_per_mesh = 50
+
+	unlocking_technologies = {
+		combustion_engine
+	}
+
 	production_method_groups = {
+		pmg_automobile_production
+		pmg_tanks
+		pmg_automation_building_automotive_industry
 		pmg_emissions_control
 		pmg_maintenance
 	}
+
+	required_construction = construction_cost_very_high
+
+	possible = {
+		owner = {
+			NOT = {
+				OR = {
+					has_law_or_variant = law_type:law_industry_banned
+					has_law_or_variant = law_type:law_extraction_economy
+				}
+			}
+		}
+	}
+	ownership_type = self
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds"
 }
 
 REPLACE_OR_CREATE:building_airport = {
@@ -826,19 +854,20 @@ REPLACE_OR_CREATE:building_advanced_material_fabricator = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
-REPLACE_OR_CREATE:building_launch_facility = {
+REPLACE_OR_CREATE:building_aerospace_industry = {
 	building_group = bg_space	
 	icon = "gfx/interface/icons/building_icons/space.dds"
 	city_type = city
 	levels_per_mesh = -1
 	
 	unlocking_technologies = {
-		space_exploration
+		military_aviation
 	}
 
 	production_method_groups = {
-		pmg_base_building_launch_facility
-		pmg_automation_building_launch_facility
+		pmg_aeroplanes
+		pmg_base_building_aerospace_industry
+		pmg_automation_building_aerospace_industry
 		pmg_maintenance
 	}
 
@@ -1235,10 +1264,11 @@ REPLACE_OR_CREATE:building_tourism_industry = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds"
 }
 
-building_childrens_creche = {
+building_state_youth_centers = {
 	building_group = bg_government
 	icon = "gfx/interface/icons/building_icons/urban_center.dds"
 	city_type = city
+	has_max_level = yes
 
 	potential = {
 		owner = {
@@ -1263,7 +1293,7 @@ building_childrens_creche = {
 }
 
 REPLACE_OR_CREATE:building_manganese_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/iron_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1296,7 +1326,7 @@ REPLACE_OR_CREATE:building_manganese_mine = {
 }
 
 REPLACE_OR_CREATE:building_chromium_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/iron_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1329,7 +1359,7 @@ REPLACE_OR_CREATE:building_chromium_mine = {
 }
 
 REPLACE_OR_CREATE:building_specialty_alloy_metal_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/iron_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1362,7 +1392,7 @@ REPLACE_OR_CREATE:building_specialty_alloy_metal_mine = {
 }
 
 REPLACE_OR_CREATE:building_copper_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/lead_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1395,7 +1425,7 @@ REPLACE_OR_CREATE:building_copper_mine = {
 }
 
 REPLACE_OR_CREATE:building_bauxite_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/iron_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1428,7 +1458,7 @@ REPLACE_OR_CREATE:building_bauxite_mine = {
 }
 
 REPLACE_OR_CREATE:building_precious_minor_base_metal_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/lead_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1461,7 +1491,7 @@ REPLACE_OR_CREATE:building_precious_minor_base_metal_mine = {
 }
 
 REPLACE_OR_CREATE:building_nickel_cobalt_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/gold_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1494,7 +1524,7 @@ REPLACE_OR_CREATE:building_nickel_cobalt_mine = {
 }
 
 REPLACE_OR_CREATE:building_lithium_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/gold_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1527,7 +1557,7 @@ REPLACE_OR_CREATE:building_lithium_mine = {
 }
 
 REPLACE_OR_CREATE:building_rare_earth_metals_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/gold_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1560,7 +1590,7 @@ REPLACE_OR_CREATE:building_rare_earth_metals_mine = {
 }
 
 REPLACE_OR_CREATE:building_platinum_group_metals_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/gold_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1593,7 +1623,7 @@ REPLACE_OR_CREATE:building_platinum_group_metals_mine = {
 }
 
 REPLACE_OR_CREATE:building_graphite_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/coal_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1626,7 +1656,7 @@ REPLACE_OR_CREATE:building_graphite_mine = {
 }
 
 REPLACE_OR_CREATE:building_phosphate_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/sulfur_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1659,7 +1689,7 @@ REPLACE_OR_CREATE:building_phosphate_mine = {
 }
 
 REPLACE_OR_CREATE:building_potash_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/sulfur_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1692,7 +1722,7 @@ REPLACE_OR_CREATE:building_potash_mine = {
 }
 
 REPLACE_OR_CREATE:building_industrial_mineral_salt_mine = {
-	building_group = bg_mining
+	building_group = bg_discoverable_mining
 	icon = "gfx/interface/icons/building_icons/sulfur_mine.dds"
 	city_type = city
 	levels_per_mesh = -1

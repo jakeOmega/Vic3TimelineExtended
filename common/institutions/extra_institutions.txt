@@ -88,6 +88,7 @@ institution_ministry_of_intelligence_and_security = {
 		country_leverage_generation_mult = 0.02
 		country_support_separatism_resistance_mult = 0.05
 		country_support_separatism_resistance_mult = 0.1
+		country_coup_resistance_add = 0.05
 	}
 }
 
@@ -129,6 +130,7 @@ institution_ministry_of_thought_control = {
 
 	modifier = {
 		country_monthly_loyalists_add = 0.001
+		country_electoral_confidence_impact_mult = -0.1
 	}
 }
 
@@ -153,6 +155,7 @@ institution_ministry_of_urban_planning = {
 	modifier = {
 		building_urban_center_throughput_add = 0.1
 		state_urbanization_per_level_add = -5
+		state_devastation_decay_mult = 0.05
 	}
 }
 
@@ -176,6 +179,7 @@ institution_ministry_of_international_aid = {
 		country_infamy_decay_mult = 0.05
 		country_leverage_generation_mult = 0.05
 		country_minting_mult = -0.05
+		country_diplomatic_reputation_add = 10
 	}
 }
 

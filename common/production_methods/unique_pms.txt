@@ -487,7 +487,7 @@ pm_spacex_starbase = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_launch_facility_throughput_add = 0.25
+			building_aerospace_industry_throughput_add = 0.25
 			goods_output_launch_capacity_mult = 0.1
 			state_education_access_add = 0.1
 		}
@@ -751,7 +751,7 @@ pm_roscosmos_vostochny_cosmodrome = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_launch_facility_throughput_add = 0.5
+			building_aerospace_industry_throughput_add = 0.5
 		}
 	}
 	country_modifiers = {

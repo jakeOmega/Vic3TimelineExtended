@@ -62,7 +62,7 @@ class ModState:
 
     def parse_mod_file(self, file_path):
         parser = ParadoxFileParser()
-        parser.parse_file(file_path)
+        parser.parse_file(file_path, apply_directives=False)
         return parser.data
 
     def get_data(self, entity_type):

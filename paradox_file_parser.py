@@ -6,6 +6,7 @@ import copy
 
 INDENT_SIZE = 4
 conditional_tokens = ["=", "<", ">", "<=", ">="]
+directive_prefixes = ("INJECT:", "REPLACE:", "REPLACE_OR_CREATE:")
 
 
 class ParadoxFileParser:
@@ -131,20 +132,150 @@ class ParadoxFileParser:
                     else:
                         obj[key] = (symbol, value)
 
-    def parse_file(self, file_path):
+    def parse_file(self, file_path, apply_directives=True):
         # Update self.data with the parsed content
         with codecs.open(file_path, "r", "utf-8-sig") as f:
             text = f.read()
         tokens = self.tokenize("{" + text + "}")
         try:
-            self.merge_data(self.parse_object(tokens)[0])
+            parsed = self.parse_object(tokens)[0]
+            if apply_directives:
+                self.merge_data(parsed)
+            else:
+                self.data.update(parsed)
+                self.data = self._normalize_data(self.data)
         except Exception as e:
             print(f"Error parsing file: {file_path}")
             raise e
 
     def merge_data(self, new_data):
         # Merge new data into existing self.data, with new_data taking precedence
-        self.data.update(new_data)
+        for raw_key, raw_value in new_data.items():
+            directive, key = self._split_directive(raw_key)
+            if directive in ("REPLACE", "REPLACE_OR_CREATE"):
+                self.data[key] = raw_value
+            elif directive == "INJECT":
+                if key in self.data:
+                    self.data[key] = self._inject_value(self.data[key], raw_value)
+                else:
+                    self.data[key] = raw_value
+            else:
+                self.data[key] = raw_value
+        self.data = self._normalize_data(self.data)
+
+    def _split_directive(self, key):
+        for prefix in directive_prefixes:
+            if key.startswith(prefix):
+                return prefix[:-1], key[len(prefix) :]
+        return None, key
+
+    def _inject_value(self, base_value, injected_value):
+        if isinstance(base_value, tuple) and isinstance(injected_value, tuple):
+            base_operator = base_value[0]
+            base_right = base_value[1]
+            base_tail = base_value[2:] if len(base_value) > 2 else ()
+            injected_right = injected_value[1]
+            merged_right = self._inject_value(base_right, injected_right)
+            return (base_operator, merged_right, *base_tail)
+
+        if isinstance(base_value, dict) and isinstance(injected_value, dict):
+            merged = copy.deepcopy(base_value)
+            for raw_key, injected_child in injected_value.items():
+                directive, key = self._split_directive(raw_key)
+                if directive in ("REPLACE", "REPLACE_OR_CREATE"):
+                    merged[key] = injected_child
+                elif directive == "INJECT":
+                    if key in merged:
+                        merged[key] = self._inject_value(merged[key], injected_child)
+                    else:
+                        merged[key] = injected_child
+                else:
+                    if key in merged:
+                        merged[key] = self._inject_value(merged[key], injected_child)
+                    else:
+                        merged[key] = injected_child
+            return merged
+
+        if isinstance(base_value, list) and isinstance(injected_value, list):
+            merged = list(base_value)
+            for item in injected_value:
+                if not any(item == existing for existing in merged):
+                    merged.append(item)
+            return merged
+        if isinstance(base_value, list) and isinstance(injected_value, dict):
+            merged = list(base_value)
+            for raw_key, injected_child in injected_value.items():
+                directive, key = self._split_directive(raw_key)
+                matched_index = None
+                for index, item in enumerate(merged):
+                    if isinstance(item, dict) and key in item:
+                        matched_index = index
+                        break
+                if matched_index is None:
+                    merged.append({key: injected_child})
+                    continue
+
+                existing_value = merged[matched_index][key]
+                if directive in ("REPLACE", "REPLACE_OR_CREATE"):
+                    merged[matched_index][key] = injected_child
+                elif directive == "INJECT":
+                    merged[matched_index][key] = self._inject_value(
+                        existing_value, injected_child
+                    )
+                else:
+                    merged[matched_index][key] = self._inject_value(
+                        existing_value, injected_child
+                    )
+            return merged
+        base_number = self._try_parse_number(base_value)
+        injected_number = self._try_parse_number(injected_value)
+        if base_number is not None and injected_number is not None:
+            summed = base_number + injected_number
+            return str(summed)
+
+        return injected_value
+
+    def _normalize_data(self, data):
+        if isinstance(data, dict):
+            normalized = {}
+            for key, value in data.items():
+                normalized[key] = self._normalize_data(value)
+            return normalized
+        if isinstance(data, list):
+            if all(
+                isinstance(item, dict) and len(item) == 1 for item in data
+            ):
+                merged = {}
+                for item in data:
+                    key = next(iter(item))
+                    value = self._normalize_data(item[key])
+                    if key in merged:
+                        existing = merged[key]
+                        if isinstance(existing, list):
+                            existing.append(value)
+                        else:
+                            merged[key] = [existing, value]
+                    else:
+                        merged[key] = value
+                return merged
+            return [self._normalize_data(item) for item in data]
+        if isinstance(data, tuple) and len(data) >= 2:
+            operator = data[0]
+            right_value = self._normalize_data(data[1])
+            if len(data) > 2:
+                return (operator, right_value, *data[2:])
+            return (operator, right_value)
+        return data
+
+    def _try_parse_number(self, value):
+        if isinstance(value, (int, float)):
+            return value
+        if isinstance(value, str):
+            try:
+                return float(value) if "." in value or "e" in value.lower() else int(value)
+            except ValueError:
+                return None
+        return None
 
     def detect_modifications(self, base_parser):
         return self._compare_dicts(self.data, base_parser.data)

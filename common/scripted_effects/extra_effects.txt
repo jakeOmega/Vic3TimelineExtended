@@ -229,8 +229,8 @@ expand_building_private_construction = {
 		state = { start_privately_funded_building_construction = building_advanced_material_fabricator }
 	}
 	else_if = {
-		limit = { is_building_type = building_launch_facility }
-		state = { start_privately_funded_building_construction = building_launch_facility }
+		limit = { is_building_type = building_aerospace_industry }
+		state = { start_privately_funded_building_construction = building_aerospace_industry }
 	}
 	else_if = {
 		limit = { is_building_type = building_space_mine }
@@ -326,7 +326,7 @@ expand_random_building = {
 				is_building_type = building_electronic_components_and_semiconductor_industry
 				is_building_type = building_robotics_industry
 				is_building_type = building_advanced_material_fabricator
-				is_building_type = building_launch_facility
+				is_building_type = building_aerospace_industry
 				is_building_type = building_space_mine
 				is_building_type = building_steel_mill
 				is_building_type = building_food_industry

@@ -2343,13 +2343,12 @@ pm_assembly_lines_building_automotive_industry = {
 			# Profit: -550.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -2000
-			# Wage breakeven: 0.28
+			# Employment: -1500
+			# Wage breakeven: 0.37
 		}
 
 		level_scaled = {
 			building_employment_laborers_add = -1500
-			building_employment_machinists_add = -500
 		}
 	}
 
@@ -2694,14 +2693,14 @@ pm_mass_automobile_production = {
 			goods_input_rubber_add = 10                          # Price:   40, Total cost:   400.0 (28.57%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (28.57%)
 			# Output goods
-			goods_output_automobiles_add = 60                    # Price:  100, Total cost:  6000.0 (100.00%)
+			goods_output_automobiles_add = 50                    # Price:  100, Total cost:  5000.0 (100.00%)
 			# Total input cost: 1400.0
-			# Total output cost: 6000.0
-			# Profit: 4600.0
-			# Profit margin: 328.57%
-			# Zero profit price multiplier: 0.23
+			# Total output cost: 5000.0
+			# Profit: 3600.0
+			# Profit margin: 257.14%
+			# Zero profit price multiplier: 0.28
 			# Employment: 5000
-			# Wage breakeven: 0.92
+			# Wage breakeven: 0.72
 		}
 
 		level_scaled = {
@@ -6002,8 +6001,8 @@ hand_rolled = {
 
 	building_modifiers = {
 
-		level_scaled = { #Skilled labor
-			building_employment_machinists_add = 500
+		level_scaled = {
+			building_employment_laborers_add = 1000
 		}
 
 		unscaled = {
@@ -6018,19 +6017,20 @@ molds = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
+			goods_input_iron_add = 1                             # Price:   40, Total cost:    40.0 (100.00%)
 			# Output goods
 			goods_output_tobacco_add = 5                         # Price:   40, Total cost:   200.0 (100.00%)
-			# Total input cost: 0
+			# Total input cost: 40.0
 			# Total output cost: 200.0
-			# Profit: 200.0
-			# Profit margin: 0.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: 1000
-			# Wage breakeven: 0.20
+			# Profit: 160.0
+			# Profit margin: 400.00%
+			# Zero profit price multiplier: 0.20
+			# Employment: 500
+			# Wage breakeven: 0.32
 		}
 
 		level_scaled = {
-			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 500
 		}
 	}
 }
@@ -6073,14 +6073,14 @@ default_building_sugar_plantation = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_sugar_add = 50                          # Price:   30, Total cost:  1500.0 (100.00%)
+			goods_output_sugar_add = 25                          # Price:   30, Total cost:   750.0 (100.00%)
 			# Total input cost: 0
-			# Total output cost: 1500.0
-			# Profit: 1500.0
+			# Total output cost: 750.0
+			# Profit: 750.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 10000
-			# Wage breakeven: 0.15
+			# Wage breakeven: 0.07
 		}
 
 		level_scaled = {
@@ -6114,14 +6114,14 @@ automatic_irrigation_building_sugar_plantation = {
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_sugar_add = 80                          # Price:   30, Total cost:  2400.0 (100.00%)
+			goods_output_sugar_add = 50                          # Price:   30, Total cost:  1500.0 (100.00%)
 			# Total input cost: 300.0
-			# Total output cost: 2400.0
-			# Profit: 2100.0
-			# Profit margin: 700.00%
-			# Zero profit price multiplier: 0.12
+			# Total output cost: 1500.0
+			# Profit: 1200.0
+			# Profit margin: 400.00%
+			# Zero profit price multiplier: 0.20
 			# Employment: 8500
-			# Wage breakeven: 0.25
+			# Wage breakeven: 0.14
 		}
 
 		level_scaled = {
@@ -6147,16 +6147,16 @@ vacuum_pan_sugar = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_coal_add = 3                             # Price:   30, Total cost:    90.0 (100.00%)
+			goods_input_coal_add = 1                             # Price:   30, Total cost:    30.0 (100.00%)
 			# Output goods
-			goods_output_sugar_add = 20                          # Price:   30, Total cost:   600.0 (100.00%)
-			# Total input cost: 90.0
-			# Total output cost: 600.0
-			# Profit: 510.0
-			# Profit margin: 566.67%
-			# Zero profit price multiplier: 0.15
+			goods_output_sugar_add = 5                           # Price:   30, Total cost:   150.0 (100.00%)
+			# Total input cost: 30.0
+			# Total output cost: 150.0
+			# Profit: 120.0
+			# Profit margin: 400.00%
+			# Zero profit price multiplier: 0.20
 			# Employment: -1000
-			# Wage breakeven: -0.51
+			# Wage breakeven: -0.12
 		}
 
 		level_scaled = {
@@ -6176,17 +6176,17 @@ steam_powered_evaporation_sugar = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (28.57%)
-			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (71.43%)
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (50.00%)
+			goods_input_coal_add = 2                             # Price:   30, Total cost:    60.0 (50.00%)
 			# Output goods
-			goods_output_sugar_add = 40                          # Price:   30, Total cost:  1200.0 (100.00%)
-			# Total input cost: 210.0
-			# Total output cost: 1200.0
-			# Profit: 990.0
-			# Profit margin: 471.43%
-			# Zero profit price multiplier: 0.17
+			goods_output_sugar_add = 15                          # Price:   30, Total cost:   450.0 (100.00%)
+			# Total input cost: 120.0
+			# Total output cost: 450.0
+			# Profit: 330.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
 			# Employment: -1500
-			# Wage breakeven: -0.66
+			# Wage breakeven: -0.22
 		}
 
 		level_scaled = {
@@ -6207,17 +6207,17 @@ centrifugal_machine_sugar = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 2                          # Price:   60, Total cost:   120.0 (28.57%)
-			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (71.43%)
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (33.33%)
+			goods_input_coal_add = 4                             # Price:   30, Total cost:   120.0 (66.67%)
 			# Output goods
-			goods_output_sugar_add = 70                          # Price:   30, Total cost:  2100.0 (100.00%)
-			# Total input cost: 420.0
-			# Total output cost: 2100.0
-			# Profit: 1680.0
+			goods_output_sugar_add = 30                          # Price:   30, Total cost:   900.0 (100.00%)
+			# Total input cost: 180.0
+			# Total output cost: 900.0
+			# Profit: 720.0
 			# Profit margin: 400.00%
 			# Zero profit price multiplier: 0.20
 			# Employment: -2000
-			# Wage breakeven: -0.84
+			# Wage breakeven: -0.36
 		}
 
 		level_scaled = {
@@ -6364,8 +6364,8 @@ default_labour = {
 slave_exploitation_sugar = {
 	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
 	state_modifiers = {
-		workforce_scaled = {
-			state_slave_import_mult = 0.025
+		unscaled = {
+			state_slave_import_mult = 0.1
 		}
 	}
 
@@ -6379,10 +6379,10 @@ slave_exploitation_sugar = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_sugar_add = 50                          # Price:   30, Total cost:  1500.0 (100.00%)
+			goods_output_sugar_add = 40                          # Price:   30, Total cost:  1200.0 (100.00%)
 			# Total input cost: 0
-			# Total output cost: 1500.0
-			# Profit: 1500.0
+			# Total output cost: 1200.0
+			# Profit: 1200.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
@@ -6391,9 +6391,9 @@ slave_exploitation_sugar = {
 
 		unscaled = {
 			building_laborers_mortality_mult = 0.35
-			building_slaves_mortality_mult = 0.35 #sugar is the one slave mortality modifier we kept, for the deadliness 
+			building_slaves_mortality_mult = 0.35 #sugar is the one slave mortality modifier we kept, for the deadliness
 			building_laborers_job_attractiveness_mult = -0.9 #no one wants to work in sugar as a laborer
-			### 1.3-1.4 mortality works out to be around replacement rate (births equal deaths), depending on final SOL of the slave. Historically, sugar slaves were expected to live around 7 years before being replaced, with very few children surviving at all, let alone making adulthood. This mortality level is actually no where near as bad as history, but is much more accurate than previous, and safer for game stability. 
+			### 1.3-1.4 mortality works out to be around replacement rate (births equal deaths), depending on final SOL of the slave. Historically, sugar slaves were expected to live around 7 years before being replaced, with very few children surviving at all, let alone making adulthood. This mortality level is actually no where near as bad as history, but is much more accurate than previous, and safer for game stability.
 			building_slaves_standard_of_living_add = -3
 			building_minimum_wage_mult = -0.15 #you have to pay sugar workers better than other plantations to get them to do this labor
 		}
@@ -6447,8 +6447,8 @@ worker_exploitation_sugar = {
 slave_exploitation_coffee = {
 	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
 	state_modifiers = {
-		workforce_scaled = {
-			state_slave_import_mult = 0.03
+		unscaled = {
+			state_slave_import_mult = 0.1
 		}
 	}
 
@@ -6527,8 +6527,8 @@ worker_exploitation_coffee = {
 slave_exploitation_cotton = {
 	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
 	state_modifiers = {
-		workforce_scaled = {
-			state_slave_import_mult = 0.025
+		unscaled = {
+			state_slave_import_mult = 0.1
 		}
 	}
 
@@ -6607,8 +6607,8 @@ worker_exploitation_cotton = {
 slave_exploitation_dye = {
 	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
 	state_modifiers = {
-		workforce_scaled = {
-			state_slave_import_mult = 0.025
+		unscaled = {
+			state_slave_import_mult = 0.1
 		}
 	}
 
@@ -6687,8 +6687,8 @@ worker_exploitation_dye = {
 slave_exploitation_banana = {
 	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
 	state_modifiers = {
-		workforce_scaled = {
-			state_slave_import_mult = 0.025
+		unscaled = {
+			state_slave_import_mult = 0.1
 		}
 	}
 
@@ -6767,8 +6767,8 @@ worker_exploitation_banana = {
 slave_exploitation_tea = {
 	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
 	state_modifiers = {
-		workforce_scaled = {
-			state_slave_import_mult = 0.025
+		unscaled = {
+			state_slave_import_mult = 0.1
 		}
 	}
 
@@ -6845,8 +6845,8 @@ worker_exploitation_tea = {
 slave_exploitation_rubber = {
 	texture = "gfx/interface/icons/production_method_icons/violent_treatment.dds"
 	state_modifiers = {
-		workforce_scaled = {
-			state_slave_import_mult = 0.025
+		unscaled = {
+			state_slave_import_mult = 0.1
 		}
 	}
 
@@ -6871,7 +6871,7 @@ slave_exploitation_rubber = {
 		}
 
 		unscaled = { #people were basically sent to rubber plantations to die. Also this late game SOL should be higher, mortality lower.
-			building_laborers_mortality_mult = 0.5 
+			building_laborers_mortality_mult = 0.5
 			building_laborers_job_attractiveness_mult = -0.85
 			building_slaves_standard_of_living_add = -2.5
 			building_minimum_wage_mult = -0.25
@@ -6974,9 +6974,10 @@ worker_exploitation_tobacco = {
 lectors_tobacco = {
 	texture = "gfx/interface/icons/production_method_icons/lectors.dds"
 	state_modifiers = {
-		workforce_scaled = {
-			state_loyalists_from_political_movements_mult = 0.01
-			state_radicals_from_political_movements_mult = 0.01
+		unscaled = {
+			state_loyalists_from_political_movements_mult = 0.02
+			state_radicals_from_political_movements_mult = 0.02
+			state_conversion_mult = 0.1
 		}
 	}
 
@@ -6986,7 +6987,7 @@ lectors_tobacco = {
 
 	building_modifiers = {
 		unscaled = {
-			building_slaves_standard_of_living_add = 1
+			building_slaves_standard_of_living_add = 0.5
 			building_laborers_job_attractiveness_mult = 0.05
 			building_minimum_wage_mult = 0.05
 			goods_output_tobacco_add = 2
@@ -6997,9 +6998,9 @@ lectors_tobacco = {
 radio_stations_tobacco = {
 	texture = "gfx/interface/icons/production_method_icons/radio_stations.dds"
 	state_modifiers = {
-		workforce_scaled = {
-			state_loyalists_from_political_movements_mult = 0.005
-			state_radicals_from_political_movements_mult = 0.005
+		unscaled = {
+			state_loyalists_from_political_movements_mult = 0.05
+			state_radicals_from_political_movements_mult = 0.05
 		}
 	}
 
@@ -7023,7 +7024,7 @@ radio_stations_tobacco = {
 		}
 
 		unscaled = {
-			building_slaves_standard_of_living_add = 2
+			building_slaves_standard_of_living_add = 1
 			building_laborers_job_attractiveness_mult = 0.10
 		}
 	}
@@ -7308,6 +7309,12 @@ pm_no_naval_theory = {
 		officers = 10
 	}
 
+	state_modifiers = {
+		level_scaled = {
+			state_blockade_resistance_add = 25
+		}
+	}
+
 	building_modifiers = {
 		level_scaled = {
 			building_training_rate_add = 4
@@ -7315,7 +7322,6 @@ pm_no_naval_theory = {
 
 		unscaled = {
 			building_training_rate_add = 10
-			state_blockade_resistance_add = 25
 		}
 	}
 }
@@ -7331,6 +7337,13 @@ pm_power_of_the_purse = {
 	unlocking_technologies = {
 		power_of_the_purse
 	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_blockade_resistance_add = 25
+		}
+	}
+
 	building_modifiers = {
 		level_scaled = {
 			building_training_rate_add = 5
@@ -7340,7 +7353,6 @@ pm_power_of_the_purse = {
 			unit_morale_loss_mult = -0.05
 			unit_morale_damage_mult = 0.1
 			building_training_rate_add = 10
-			state_blockade_resistance_add = 25
 		}
 	}
 }
@@ -7356,6 +7368,13 @@ pm_jeune_ecole = {
 	unlocking_technologies = {
 		jeune_ecole
 	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_blockade_resistance_add = 25
+		}
+	}
+
 	building_modifiers = {
 		level_scaled = {
 			building_training_rate_add = 6
@@ -7365,7 +7384,6 @@ pm_jeune_ecole = {
 			unit_morale_loss_mult = -0.1
 			unit_morale_damage_mult = 0.2
 			building_training_rate_add = 10
-			state_blockade_resistance_add = 25
 		}
 	}
 }
@@ -7381,6 +7399,13 @@ pm_sea_lane_strategies = {
 	unlocking_technologies = {
 		sea_lane_strategies
 	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_blockade_resistance_add = 35
+		}
+	}
+
 	building_modifiers = {
 		level_scaled = {
 			building_training_rate_add = 7
@@ -7390,7 +7415,6 @@ pm_sea_lane_strategies = {
 			unit_morale_loss_mult = -0.15
 			unit_morale_damage_mult = 0.3
 			building_training_rate_add = 10
-			state_blockade_resistance_add = 35
 		}
 	}
 }
@@ -7406,6 +7430,13 @@ pm_battlefleet_tactics = {
 	unlocking_technologies = {
 		battlefleet_tactics
 	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_blockade_resistance_add = 35
+		}
+	}
+
 	building_modifiers = {
 		level_scaled = {
 			building_training_rate_add = 8
@@ -7415,7 +7446,6 @@ pm_battlefleet_tactics = {
 			unit_morale_loss_mult = -0.2
 			unit_morale_damage_mult = 0.4
 			building_training_rate_add = 10
-			state_blockade_resistance_add = 25
 		}
 	}
 }

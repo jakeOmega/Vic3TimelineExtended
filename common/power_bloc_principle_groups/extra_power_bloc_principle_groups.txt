@@ -332,3 +332,11 @@ INJECT:principle_group_companies = {
 		principle_companies_5
 	}
 }
+
+INJECT:principle_group_shared_canon = {
+
+	levels = {
+		principle_shared_canon_4
+		principle_shared_canon_5
+	}
+}

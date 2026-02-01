@@ -167,8 +167,9 @@ INJECT:pmg_military_base = {
         pm_military_shipbuilding_modern_2
     }
 }
-INJECT:pmg_aeroplanes = {
+REPLACE:pmg_aeroplanes = {
     production_methods = {
+        pm_aeroplane_production
         pm_aeroplane_production_2
         pm_aeroplane_production_3
     }
@@ -913,22 +914,24 @@ REPLACE_OR_CREATE:pmg_location_building_advanced_material_fabricator = {
         pm_orbital_fabrication
     }
 }
-REPLACE_OR_CREATE:pmg_base_building_launch_facility = {
+REPLACE_OR_CREATE:pmg_base_building_aerospace_industry = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
+        pm_no_rockets
         pm_chemical_rockets
         pm_reusable_rockets
         pm_ablative_rockets
         pm_fusion_ssto_craft
     }
 }
-REPLACE_OR_CREATE:pmg_automation_building_launch_facility = {
+REPLACE_OR_CREATE:pmg_automation_building_aerospace_industry = {
     texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
     production_methods = {
-        pm_manual_launch_operations
-        pm_autonomous_launch_control_systems
-        pm_launch_pad_robotics
-        pm_artificial_intelligence_guided_launches
+        pm_manual_production
+        pm_standardized_aerospace_production
+        pm_networked_control_systems
+        pm_robotic_assembly_handling
+        pm_ai_optimized_operations
     }
 }
 REPLACE_OR_CREATE:pmg_base_building_space_mine = {
@@ -1301,7 +1304,8 @@ REPLACE_OR_CREATE:pmg_childrens_creche_philosophy = {
     production_methods = {
         pm_voluntary_daycare
         pm_communal_child_rearing
-        pm_state_wardship
+        pm_youth_cadre_programs
+        pm_behavioral_conditioning
         pm_eugenics_programs
     }
 }

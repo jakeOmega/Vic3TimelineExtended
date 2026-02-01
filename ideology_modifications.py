@@ -569,7 +569,7 @@ modifications = {
         ),
         "lawgroup_inheritance": traditional_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
@@ -896,7 +896,7 @@ modifications = {
             "ministry_of_thought_control", "--"
         ),
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "strongly_approve"),
         ],
         "lawgroup_distribution_of_power": [
@@ -973,7 +973,7 @@ modifications = {
             "ministry_of_religion", "-"
         ),
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "strongly_disapprove"),
+            ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1071,7 +1071,7 @@ modifications = {
         ),
         "lawgroup_inheritance": communal_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "strongly_disapprove"),
+            ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "approve"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1172,7 +1172,7 @@ modifications = {
             "ministry_of_refugee_affairs", "-"
         ),
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_internet_governance": [
@@ -1355,7 +1355,7 @@ modifications = {
         ),
         "lawgroup_inheritance": communal_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "strongly_disapprove"),
+            ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_family_reproductive_policy": [
@@ -1384,7 +1384,7 @@ modifications = {
             "ministry_of_culture", "-"
         ),
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "approve"),
+            ("law_neocameralism", "approve"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_colonization": [("law_neocolonialism", "strongly_approve")],
@@ -1495,7 +1495,7 @@ modifications = {
             "ministry_of_thought_control", "-"
         ),
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
         "lawgroup_minority_rights": minority_love,
@@ -1526,7 +1526,7 @@ modifications = {
             "ministry_of_international_aid", "-"
         ),
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "neutral"),
+            ("law_neocameralism", "neutral"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_minority_rights": minority_dislike,
@@ -1566,13 +1566,13 @@ modifications = {
             "ministry_of_propaganda", "+"
         ),
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
     },
     "ideology_republican": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "neutral"),
+            ("law_neocameralism", "neutral"),
             ("law_direct_democracy", "approve"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1581,7 +1581,7 @@ modifications = {
     },
     "ideology_republican_paternalistic": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "approve"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1617,7 +1617,7 @@ modifications = {
     },
     "ideology_socialist": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "strongly_disapprove"),
+            ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
         "lawgroup_welfare": [
@@ -1646,7 +1646,7 @@ modifications = {
     },
     "ideology_scholar_paternalistic": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1682,7 +1682,7 @@ modifications = {
     },
     "ideology_junker_paternalistic": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1718,7 +1718,7 @@ modifications = {
     },
     "ideology_papal_paternalistic": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1758,7 +1758,7 @@ modifications = {
         ),
         "lawgroup_inheritance": traditional_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
     },
@@ -1768,14 +1768,14 @@ modifications = {
         ),
         "lawgroup_inheritance": traditional_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
     },
     "ideology_bakufu": {
         "lawgroup_inheritance": traditional_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "neutral"),
+            ("law_neocameralism", "neutral"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1788,7 +1788,7 @@ modifications = {
         ),
         "lawgroup_inheritance": traditional_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1797,7 +1797,7 @@ modifications = {
     },
     "ideology_caudillismo": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1810,7 +1810,7 @@ modifications = {
         ),
         "lawgroup_inheritance": reform_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
     },
@@ -1820,7 +1820,7 @@ modifications = {
         ),
         "lawgroup_inheritance": moderate_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
     },
@@ -1830,7 +1830,7 @@ modifications = {
         ),
         "lawgroup_inheritance": reform_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
     },
@@ -1839,14 +1839,14 @@ modifications = {
             "ministry_of_religion", "++"
         ),
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
     },
     "ideology_orleanist": {
         "lawgroup_inheritance": reform_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1856,7 +1856,7 @@ modifications = {
     "ideology_legitimist": {
         "lawgroup_inheritance": traditional_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1866,7 +1866,7 @@ modifications = {
     "ideology_bonapartist": {
         "lawgroup_inheritance": bonapartist_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1878,26 +1878,26 @@ modifications = {
             "ministry_of_religion", "-"
         ),
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "neutral"),
+            ("law_neocameralism", "neutral"),
             ("law_direct_democracy", "neutral"),
         ],
     },
     "ideology_republican_leader": {
         "lawgroup_inheritance": reform_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
     },
     "ideology_royalist": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
     },
     "ideology_jacksonian_democrat": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
         "lawgroup_distribution_of_power": [
@@ -1906,7 +1906,7 @@ modifications = {
     },
     "ideology_positivist": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
         "lawgroup_distribution_of_power": [
@@ -2041,7 +2041,7 @@ modifications = {
     },
     "ideology_constitutionalist": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "neutral"),
+            ("law_neocameralism", "neutral"),
             ("law_direct_democracy", "approve"),
         ],
         "lawgroup_distribution_of_power": [
@@ -2050,7 +2050,7 @@ modifications = {
     },
     "ideology_corporatist_leader": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "neutral"),
+            ("law_neocameralism", "neutral"),
             ("law_direct_democracy", "neutral"),
         ],
     },
@@ -2094,13 +2094,13 @@ modifications = {
             ("law_algorithmic_governance", "disapprove"),
         ],
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
     },
     "ideology_royalist_movement": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
     },
@@ -2145,7 +2145,7 @@ modifications = {
             "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
         ),
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "strongly_disapprove"),
+            ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
         "lawgroup_electoral_finance": [
@@ -2166,7 +2166,7 @@ modifications = {
     },
     "ideology_communist_movement": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "strongly_disapprove"),
+            ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_ministry_of_labor": ministry_constructor_typed(
@@ -2186,7 +2186,7 @@ modifications = {
     },
     "ideology_anarchist_movement": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "strongly_disapprove"),
+            ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "approve"),
         ],
         "lawgroup_distribution_of_power": [
@@ -2211,7 +2211,7 @@ modifications = {
     },
     "ideology_vanguardist_movement": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "strongly_disapprove"),
+            ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
@@ -2242,7 +2242,7 @@ modifications = {
         ],
         "lawgroup_minority_rights": minority_hate,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "neutral"),
+            ("law_neocameralism", "neutral"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_state_power": [
@@ -2283,7 +2283,7 @@ modifications = {
     },
     "ideology_corporatist_movement": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "neutral"),
+            ("law_neocameralism", "neutral"),
             ("law_direct_democracy", "neutral"),
         ],
         "lawgroup_welfare": [
@@ -2309,7 +2309,7 @@ modifications = {
         ],
         "lawgroup_minority_rights": minority_love,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "strongly_approve"),
         ],
         "lawgroup_ministry_of_propaganda": ministry_constructor(
@@ -2332,7 +2332,7 @@ modifications = {
     },
     "ideology_nihilist_movement": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "approve"),
         ],
         "lawgroup_ministry_of_religion": ministry_constructor(
@@ -2341,7 +2341,7 @@ modifications = {
     },
     "ideology_positivist_movement": {
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
         "lawgroup_distribution_of_power": [
@@ -2391,7 +2391,7 @@ modifications = {
         ),
         "lawgroup_minority_rights": minority_dislike,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "neutral"),
+            ("law_neocameralism", "neutral"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_family_reproductive_policy": [
@@ -2459,7 +2459,7 @@ modifications = {
     "ideology_orleanist_movement": {
         "lawgroup_inheritance": reform_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
@@ -2469,7 +2469,7 @@ modifications = {
     "ideology_bonapartist_movement": {
         "lawgroup_inheritance": bonapartist_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
@@ -2479,7 +2479,7 @@ modifications = {
     "ideology_legitimist_movement": {
         "lawgroup_inheritance": traditional_inheritance,
         "lawgroup_governance_principles": [
-            ("law_corporation_state", "disapprove"),
+            ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [

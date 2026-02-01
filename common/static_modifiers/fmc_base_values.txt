@@ -1,4 +1,0 @@
-﻿INJECT:base_values = {
-	building_port_throughput_add = -0.5
-	country_bubble_pressure_monthly_add = -1
-}

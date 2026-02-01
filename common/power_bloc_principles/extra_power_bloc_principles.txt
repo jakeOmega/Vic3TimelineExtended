@@ -3881,3 +3881,73 @@ principle_companies_5 = {
 		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
 	}
 }
+
+
+### Shared Canon
+
+principle_shared_canon_4 = {
+	icon = "gfx/interface/icons/principles_icons/shared_canon.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = mass_media
+	}
+
+	member_modifier = {
+		# Progressive scaling from Level 3
+		country_society_tech_spread_mult = 0.2
+		state_assimilation_mult = 0.2
+		country_radicalism_increases_full_acceptance_mult = -0.2
+		
+		# Institutional synergy
+		country_institution_cost_institution_ministry_of_culture_mult = -0.25
+		country_enactment_success_chance_law_ministry_of_culture_add = 0.1
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		# The Canon accelerates social understanding
+		country_society_tech_research_speed_mult = 0.02
+		state_assimilation_mult = 0.05
+	}
+
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_shared_canon_5 = {
+	icon = "gfx/interface/icons/principles_icons/shared_canon.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = social_media
+	}
+
+	leader_modifier = {
+		# The leader defines the global canon
+		country_leverage_generation_mult = 0.2
+		country_society_tech_research_speed_mult = 0.05
+	}
+
+	member_modifier = {
+		country_society_tech_spread_mult = 0.3
+		state_assimilation_mult = 0.3
+		country_radicalism_increases_full_acceptance_mult = -0.3
+		
+		# Maximized Institutional synergy
+		country_institution_cost_institution_ministry_of_culture_mult = -0.5
+		country_enactment_success_chance_law_ministry_of_culture_add = 0.2
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		country_society_tech_research_speed_mult = 0.05
+		state_assimilation_mult = 0.1
+		country_loyalism_increases_full_acceptance_mult = 0.05
+	}
+
+	ai_weight = {
+		value = 1000
+	}
+}

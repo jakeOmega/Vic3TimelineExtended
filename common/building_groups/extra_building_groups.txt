@@ -33,3 +33,9 @@ REPLACE_OR_CREATE:bg_company_buildings = {
 	economy_of_scale = no
 	infrastructure_usage_per_level = 5
 }
+
+REPLACE_OR_CREATE:bg_discoverable_mining = {
+	parent_group = bg_mining
+
+	discoverable_resource = yes
+}

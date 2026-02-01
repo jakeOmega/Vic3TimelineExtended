@@ -30,7 +30,7 @@ fmc_building_construction_site = {
 
 
 
-building_construction_sector = {
+REPLACE:building_construction_sector = {
 	building_group = bg_construction
 	icon = "gfx/interface/icons/building_icons/construction_camp.dds"
 	city_type = city

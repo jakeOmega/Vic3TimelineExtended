@@ -64,6 +64,7 @@ law_post-scarcity = {
 		state_academics_investment_pool_contribution_add = 0.01
 		state_shopkeepers_investment_pool_contribution_add = -0.19
 		state_expected_sol_from_literacy = 30
+		building_self_investment_chance_add = 0.5
 	}
 
 	institution = institution_social_security
@@ -264,7 +265,7 @@ law_total_war = {
 		unit_devastation_mult = 1
 		unit_kill_rate_add = 0.2
 		country_institution_ministry_of_foreign_affairs_max_investment_add = -1
-		country_institution_impact_institution_ministry_of_foreign_affairs_mult = -0.1
+		country_diplomatic_reputation_add = -20
 		country_war_exhaustion_casualties_mult = -0.75
 		country_institution_impact_institution_ministry_of_war_mult = 0.1
 	}
@@ -294,6 +295,7 @@ law_war_crimes_forbidden = {
 		unit_kill_rate_add = -0.05
 		country_institution_ministry_of_war_max_investment_add = -1
 		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.1
+		country_diplomatic_reputation_add = 10
 	}
 }
 
@@ -313,6 +315,7 @@ law_humanitarian_regulations = {
 		unit_kill_rate_add = -0.1
 		country_institution_ministry_of_war_max_investment_add = -2
 		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.25
+		country_diplomatic_reputation_add = 20
 	}
 	
 }
@@ -333,6 +336,7 @@ law_limited_war = {
 		unit_kill_rate_add = -0.15
 		country_institution_ministry_of_war_max_investment_add = -3
 		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.5
+		country_diplomatic_reputation_add = 30
 	}	
 }
 
@@ -456,7 +460,7 @@ law_open_source_innovation = {
 	modifier = {
 		country_weekly_innovation_mult = 0.1
 		country_tech_spread_mult = 0.1
-		country_tech_research_speed_mult = 0.05
+		building_company_worker_dividends_add = 0.05
 		interest_group_ig_intelligentsia_pop_attraction_mult = 0.1
 	}
 	ai_enact_weight_modifier = {
@@ -574,6 +578,7 @@ law_state_secrets = {
 		country_authority_add = 200
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = 1
+		country_amenability_add = -10
 	}
 }
 
@@ -828,7 +833,7 @@ law_medical_augmentation_only = {
 	institution_modifier = {
 		state_mortality_mult = -0.02
 		state_standard_of_living_add = 0.25
-		country_tech_research_speed_mult = 0.1
+		country_tech_research_speed_mult = 0.01
 	}
 	
 	progressiveness = 60
@@ -1577,6 +1582,7 @@ law_devolution = {
 		state_decree_cost_mult = 0.1
 		country_liberty_desire_of_subjects_add = -0.1
 		country_bureaucracy_investment_cost_factor_mult = -0.2
+		country_coup_resistance_mult = 0.20
 		state_institution_impact_add = -0.05
 		country_support_separatism_resistance_mult = 0.3
 		state_assimilation_mult = -0.25
@@ -1731,9 +1737,7 @@ law_communal_child_rearing = {
 	unlocking_technologies = { anarchism }
 		
 	modifier = {
-		state_assimilation_mult = 0.25
-		state_conversion_mult = 0.25
-		state_education_access_add = 0.25
+		state_birth_rate_mult = -0.2
 		state_working_adult_ratio_add = 0.1
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 	}

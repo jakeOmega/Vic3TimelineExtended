@@ -1,4 +1,10 @@
-﻿space_elevator_progress = {
+﻿INJECT:base_values = {
+	building_port_throughput_add = -0.5
+	country_bubble_pressure_monthly_add = -1
+	state_building_state_youth_centers_max_level_add = 1
+}
+
+space_elevator_progress = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_total_space_elevator_progress = 1
 }

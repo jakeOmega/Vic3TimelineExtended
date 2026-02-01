@@ -234,7 +234,7 @@ antimatter_production = {
 	}
 	
 	modifier = {
-		building_launch_facility_throughput_add = 0.25
+		building_aerospace_industry_throughput_add = 0.25
 		state_building_naval_base_max_level_add = 60
 		military_formation_movement_speed_mult = 1
 	}

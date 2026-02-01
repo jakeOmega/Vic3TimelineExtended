@@ -817,7 +817,7 @@ company_spacex = {
         STATE_TEXAS # For Starbase in Boca Chica
 	}
 	building_types = {
-		building_launch_facility # Launch Capacity
+		building_aerospace_industry # Launch Capacity
 		building_space_mine
 		building_spacex_starbase
 	}
@@ -836,7 +836,7 @@ company_spacex = {
 		has_technology_researched = reusable_rocketry
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_launch_facility
+				is_building_type = building_aerospace_industry
 				level >= 2
 			}
 		}
@@ -857,7 +857,7 @@ company_spacex = {
 		has_technology_researched = reusable_rocketry
 	}
 	ai_construction_targets = {
-		building_launch_facility = {
+		building_aerospace_industry = {
 			level = 5
 		}
 	}
@@ -1153,7 +1153,7 @@ company_lockheed_martin = {
 		building_automotive_industry
 		building_arms_industry
 		building_artillery_foundry
-		building_launch_facility
+		building_aerospace_industry
 		building_lockheed_skunk_works
 	}
 	extension_building_types = {
@@ -1266,7 +1266,7 @@ company_roscosmos = {
 		STATE_MOSCOW
 	}
 	building_types = {
-		building_launch_facility
+		building_aerospace_industry
 		building_automotive_industry
 		building_roscosmos_vostochny_cosmodrome
 	}
@@ -1285,7 +1285,7 @@ company_roscosmos = {
 		has_technology_researched = reusable_rocketry
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_launch_facility
+				is_building_type = building_aerospace_industry
 				level >= 5
 			}
 		}
@@ -1304,7 +1304,7 @@ company_roscosmos = {
         has_technology_researched = reusable_rocketry
     }
     ai_construction_targets = {
-        building_launch_facility = {
+        building_aerospace_industry = {
             level = 10
         }
     }
@@ -1325,7 +1325,7 @@ company_airbus = {
 		building_airbus_lagardere_plant
 	}
 	extension_building_types = {
-		building_launch_facility
+		building_aerospace_industry
 		building_software_industry
 		building_space_elevator
         building_space_mine
@@ -1390,7 +1390,7 @@ company_dassault_aviation = {
 		building_dassault_merignac_plant
 	}
 	extension_building_types = {
-		building_launch_facility
+		building_aerospace_industry
 		building_software_industry
 		building_space_elevator
         building_space_mine
