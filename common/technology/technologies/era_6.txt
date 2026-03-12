@@ -530,6 +530,7 @@ stainless_steel_mass_production = {
 
 	modifier = {
 		country_max_weekly_construction_progress_add = 10
+		country_construction_goods_cost_mult = 0.1
 	}
 	
 	ai_weight = {

@@ -92,6 +92,23 @@ re_cyber_standards = {
     country_convoy_damage_taken_mult = -0.15
 }
 
+# ======= Spectrum crunch
+re_spectrum_auction = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+    country_influence_mult = 0.05
+    country_legitimacy_base_add = -5
+}
+re_spectrum_public_grid = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+    country_bureaucracy_mult = -0.03
+    country_legitimacy_base_add = 5
+}
+re_spectrum_foreign_relays = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+    country_convoys_capacity_mult = 0.05
+    country_improve_relations_speed_mult = 0.10
+}
+
 # ======= Orbital conjunction
 re_orbit_avoid = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -105,6 +122,25 @@ re_orbit_laser_sweep = {
 }
 re_orbit_press_on = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+    country_legitimacy_base_add = -5
+}
+
+# ======= Quantum materials
+re_quantum_subsidy = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+    building_electronic_components_and_semiconductor_industry_throughput_add = 0.08
+    building_advanced_material_fabricator_throughput_add = 0.08
+    country_government_wages_mult = 0.03
+}
+re_quantum_patent_pool = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+    country_weekly_innovation_mult = 0.08
+    country_bureaucracy_mult = -0.03
+}
+re_quantum_rationing = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+    building_electronic_components_and_semiconductor_industry_throughput_add = 0.04
+    building_advanced_material_fabricator_throughput_add = 0.04
     country_legitimacy_base_add = -5
 }
 
@@ -122,4 +158,23 @@ re_sbsp_imports = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
     goods_output_electricity_mult = -0.03
     country_improve_relations_speed_mult = 0.10
+}
+
+# ======= Compute cluster crunch
+re_compute_fasttrack = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+    building_software_industry_throughput_add = 0.08
+    building_electronic_components_and_semiconductor_industry_throughput_add = 0.05
+    country_bureaucracy_mult = -0.03
+}
+re_compute_audit = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+    country_legitimacy_base_add = 5
+    country_weekly_innovation_mult = 0.03
+}
+re_compute_prioritization = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+    building_software_industry_throughput_add = 0.05
+    building_electronic_components_and_semiconductor_industry_throughput_add = 0.05
+    country_legitimacy_base_add = -5
 }

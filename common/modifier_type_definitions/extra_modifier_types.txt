@@ -1004,6 +1004,15 @@ receiving_nuclear_program_aid = {
 	script_only = yes
 }
 
+nuclear_disarmament = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = -100
+	}
+	script_only = yes
+}
+
 power_bloc_can_give_healthcare_aid_bool = {
 	color = neutral
 	boolean = yes

@@ -50,6 +50,16 @@
   repeatable_events.50.b:0 "Launch public forensics"
   repeatable_events.50.c:0 "Impose emergency security standards"
 
+  # Family 12 — Spectrum Crunch
+  repeatable_events.60.t:0 "Spectrum Crunch"
+  repeatable_events.60.d_sat:0 "Relay traffic, emergency services, and civilian networks are all crowding the same invisible lanes. Lobbyists demand auctions, planners demand order, and foreign carriers smell opportunity."
+  repeatable_events.60.d_quantum:0 "Quantum relays promise clarity, but their rollout has turned every old allocation fight into a jurisdictional knife-fight. Bandwidth is power, and everyone knows it."
+  repeatable_events.60.f:0 "The air was once empty to us. Then we filled it with signals, claims, and arguments, and discovered that even the invisible can become scarce.\n\nTo govern a network is to decide who gets heard first."
+
+  repeatable_events.60.a:0 "Auction fresh bandwidth"
+  repeatable_events.60.b:0 "Reserve a public service grid"
+  repeatable_events.60.c:0 "Lease foreign relay capacity"
+
   # Family 16 — Orbital Conjunction
   repeatable_events.70.t:0 "Orbital Conjunction Alert"
   repeatable_events.70.d:0 "Telemetry flags a chain of near-misses. Operators request maneuver windows; the military warns that standing down risks coverage. Clearing the lanes will cost—pressing on may cost more."
@@ -67,3 +77,23 @@
   repeatable_events.80.a:0 "Draw from reserves"
   repeatable_events.80.b:0 "Order rolling blackouts"
   repeatable_events.80.c:0 "Import power from neighbours"
+
+  # Family 19 — Quantum Materials Bottleneck
+  repeatable_events.90.t:0 "Quantum Materials Bottleneck"
+  repeatable_events.90.d_quantum:0 "Labs and fabs are all asking for the same rare substrates, and the supply chain cannot stretch that far without snapping. Production planners want subsidies; researchers want openness; everyone else wants first claim."
+  repeatable_events.90.d_orbital:0 "Orbital manufacturing has made miracles routine and shortages catastrophic. A delay in specialized feedstock now ripples from clean rooms to launch windows."
+  repeatable_events.90.f:0 "A frontier industry always looks elegant in retrospect. In the moment it is invoices, bottlenecks, and one mineral no one stocked enough of.\n\nScarcity is the tax collector of progress."
+
+  repeatable_events.90.a:0 "Subsidize priority output"
+  repeatable_events.90.b:0 "Open a patent pool"
+  repeatable_events.90.c:0 "Ration premium allotments"
+
+  # Family 20 — Compute Cluster Crunch
+  repeatable_events.100.t:0 "Compute Cluster Crunch"
+  repeatable_events.100.d_ai:0 "Forecasting engines, design suites, and automated logistics all want another rack online yesterday. Power, cooling, and talent are starting to pinch. We can build faster, inspect harder, or simply decide who gets priority."
+  repeatable_events.100.d_quantum:0 "Quantum cores have not ended the hunger for compute; they have only taught it new appetites. Ministries, firms, and laboratories queue for time on machines that are never idle enough."
+  repeatable_events.100.f:0 "Industrial power once meant coal at the pithead. Now it means cooled rooms, patient engineers, and enough machine time to turn possibility into habit.\n\nThe queue is where the future becomes political."
+
+  repeatable_events.100.a:0 "Fast-track new capacity"
+  repeatable_events.100.b:0 "Mandate safety audits"
+  repeatable_events.100.c:0 "Prioritize strategic workloads"

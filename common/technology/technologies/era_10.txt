@@ -50,6 +50,7 @@ additive_manufacturing = {
 	
 	modifier = {
 		country_max_weekly_construction_progress_add = 25
+		country_construction_goods_cost_mult = 0.1
 	}
 	
 	ai_weight = {
@@ -69,6 +70,7 @@ advanced_structural_engineering = {
 	
 	modifier = {
 		country_max_weekly_construction_progress_add = 25
+		country_construction_goods_cost_mult = 0.5
 		state_urbanization_per_level_add = -5
 	}
 	

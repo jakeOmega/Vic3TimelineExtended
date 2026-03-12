@@ -101,7 +101,7 @@ REPLACE:aeroplanes = {
 
 construction = {
 	texture = "gfx/interface/icons/goods_icons/construction_good.dds"
-	cost = 500
+	cost = 1000
 	category = industrial
 
 	#tradeable = no

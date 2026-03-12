@@ -1150,7 +1150,6 @@ company_lockheed_martin = {
 		STATE_MARYLAND
 	}
 	building_types = {
-		building_automotive_industry
 		building_arms_industry
 		building_artillery_foundry
 		building_aerospace_industry
@@ -1172,7 +1171,7 @@ company_lockheed_martin = {
 		has_technology_researched = stealth_technology
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_automotive_industry
+				is_building_type = building_aerospace_industry
 				level >= 10
 			}
 		}
@@ -1194,7 +1193,7 @@ company_lockheed_martin = {
         has_technology_researched = stealth_technology
     }
     ai_construction_targets = {
-        building_automotive_industry = {
+        building_aerospace_industry = {
             level = 10
         }
     }
@@ -1209,7 +1208,7 @@ company_bae_systems = {
 		STATE_HOME_COUNTIES
 	}
 	building_types = {
-		building_automotive_industry
+		building_aerospace_industry
 		building_arms_industry
 		building_artillery_foundry
 		building_military_shipyard
@@ -1230,7 +1229,7 @@ company_bae_systems = {
 		has_technology_researched = supersonic_aircraft
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_automotive_industry
+				is_building_type = building_aerospace_industry
 				level >= 10
 			}
 		}
@@ -1251,7 +1250,7 @@ company_bae_systems = {
         has_technology_researched = supersonic_aircraft
     }
     ai_construction_targets = {
-        building_automotive_industry = {
+        building_aerospace_industry = {
             level = 10
         }
     }
@@ -1267,7 +1266,6 @@ company_roscosmos = {
 	}
 	building_types = {
 		building_aerospace_industry
-		building_automotive_industry
 		building_roscosmos_vostochny_cosmodrome
 	}
 	extension_building_types = {
@@ -1320,7 +1318,7 @@ company_airbus = {
 		STATE_BAVARIA
 	}
 	building_types = {
-		building_automotive_industry
+		building_aerospace_industry
 		building_motor_industry
 		building_airbus_lagardere_plant
 	}
@@ -1340,7 +1338,7 @@ company_airbus = {
 		has_technology_researched = supersonic_aircraft
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_automotive_industry
+				is_building_type = building_aerospace_industry
 				level >= 10
 			}
 		}
@@ -1369,7 +1367,7 @@ company_airbus = {
         has_technology_researched = supersonic_aircraft
     }
     ai_construction_targets = {
-        building_automotive_industry = {
+        building_aerospace_industry = {
             level = 10
         }
     }
@@ -1384,7 +1382,7 @@ company_dassault_aviation = {
 		STATE_ILE_DE_FRANCE
 	}
 	building_types = {
-		building_automotive_industry
+		building_aerospace_industry
 		building_arms_industry
 		building_artillery_foundry
 		building_dassault_merignac_plant
@@ -1405,7 +1403,7 @@ company_dassault_aviation = {
 		has_technology_researched = jet_engine_technology
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_automotive_industry
+				is_building_type = building_aerospace_industry
 				level >= 5
 			}
 		}
@@ -1427,7 +1425,7 @@ company_dassault_aviation = {
         has_technology_researched = jet_engine_technology
     }
     ai_construction_targets = {
-        building_automotive_industry = {
+        building_aerospace_industry = {
             level = 10
         }
     }

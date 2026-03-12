@@ -2510,6 +2510,10 @@ pm_ammonium_nitrate_building_gold_mine = {
 pm_ammonium_nitrate_building_tech_metals_mine = {
 	texture = "gfx/interface/icons/production_method_icons/ammoniumnitrate.dds"
 
+	unlocking_technologies = {
+		modern_chemical_processes
+	}
+
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = 10
@@ -4285,12 +4289,6 @@ pm_department_stores = {
 		pm_smart_led_streetlights
 	}
 
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 1
-		}
-	}
-
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -4323,6 +4321,7 @@ pm_department_stores = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 0.01
+			state_pollution_generation_add = 1
 		}
 	}
 }
@@ -4338,12 +4337,6 @@ pm_shopping_malls = {
 		pm_high_pressure_sodium_streetlights
 		pm_led_streetlights
 		pm_smart_led_streetlights
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 2
-		}
 	}
 
 	building_modifiers = {
@@ -4379,6 +4372,7 @@ pm_shopping_malls = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 0.02
+			state_pollution_generation_add = 2
 		}
 	}
 }
@@ -4394,12 +4388,6 @@ pm_e-commerce = {
 		pm_high_pressure_sodium_streetlights
 		pm_led_streetlights
 		pm_smart_led_streetlights
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 2
-		}
 	}
 
 	building_modifiers = {
@@ -4436,6 +4424,7 @@ pm_e-commerce = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 0.04
+			state_pollution_generation_add = 3
 		}
 	}
 
@@ -4452,12 +4441,6 @@ pm_drone_delivery_systems = {
 		pm_high_pressure_sodium_streetlights
 		pm_led_streetlights
 		pm_smart_led_streetlights
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 1
-		}
 	}
 
 	building_modifiers = {
@@ -4493,6 +4476,7 @@ pm_drone_delivery_systems = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 0.08
+			state_pollution_generation_add = 2
 		}
 	}
 
@@ -4540,6 +4524,7 @@ pm_robotic_service_providers = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 0.1
+			state_pollution_generation_add = 1
 		}
 	}
 
@@ -10319,7 +10304,7 @@ pm_modern_coal-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 25
+			state_pollution_generation_add = 30
 		}
 	}
 	
@@ -10357,7 +10342,7 @@ pm_modern_oil-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 20
+			state_pollution_generation_add = 25
 		}
 	}
 	
@@ -10382,68 +10367,6 @@ pm_modern_oil-fired_plant = {
 			building_employment_laborers_add = 500
 			building_employment_machinists_add = 400
 			building_employment_engineers_add = 100
-		}
-	}
-}
-
-pm_no_emissions_control = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
-}
-
-pm_basic_emissions_control = {
-	texture = "gfx/interface/icons/production_method_icons/base2.dds"
-	
-	unlocking_technologies = { 
-		pollution_control
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = -10
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			# Input goods
-			goods_input_tools_add = 1                            # Price:   40, Total cost:    40.0 (57.14%)
-			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (42.86%)
-			# Output goods
-			# Total input cost: 70.0
-			# Total output cost: 0
-			# Profit: -70.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
-		}
-	}
-}
-
-pm_advanced_emissions_control = {
-	texture = "gfx/interface/icons/production_method_icons/base3.dds"
-	
-	unlocking_technologies = { 
-		environmental_movement
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = -20
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			# Input goods
-			goods_input_tools_add = 2                            # Price:   40, Total cost:    80.0 (57.14%)
-			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (42.86%)
-			# Output goods
-			# Total input cost: 140.0
-			# Total output cost: 0
-			# Profit: -140.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
 		}
 	}
 }
@@ -14521,7 +14444,7 @@ REPLACE:pm_wooden_buildings = {
 			goods_input_fabric_add = 10                          # Price:   20, Total cost:   200.0 (20.00%)
 			goods_input_wood_add = 40                            # Price:   20, Total cost:   800.0 (80.00%)
 			# Output goods
-			goods_output_construction_add = 2                    # Price:  500, Total cost:  1000.0 (100.00%)
+			goods_output_construction_add = 1                    # Price: 1000, Total cost:  1000.0 (100.00%)
 			# Total input cost: 1000.0
 			# Total output cost: 1000.0
 			# Profit: 0.0
@@ -14564,7 +14487,7 @@ REPLACE:pm_iron_frame_buildings = {
 			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (10.92%)
 			goods_input_merchant_marine_add = 0.50               # Price:   50, Total cost:    25.0 (1.71%)
 			# Output goods
-			goods_output_construction_add = 4                    # Price:  500, Total cost:  2000.0 (100.00%)
+			goods_output_construction_add = 2                    # Price: 1000, Total cost:  2000.0 (100.00%)
 			# Total input cost: 1465.0
 			# Total output cost: 2000.0
 			# Profit: 535.0
@@ -14608,7 +14531,7 @@ REPLACE:pm_steel_frame_buildings = {
 			goods_input_tools_add = 8                            # Price:   40, Total cost:   320.0 (12.03%)
 			goods_input_merchant_marine_add = 10                 # Price:   50, Total cost:   500.0 (18.80%)
 			# Output goods
-			goods_output_construction_add = 7                    # Price:  500, Total cost:  3500.0 (100.00%)
+			goods_output_construction_add = 3.5                  # Price: 1000, Total cost:  3500.0 (100.00%)
 			# Total input cost: 2660.0
 			# Total output cost: 3500.0
 			# Profit: 840.0
@@ -14653,7 +14576,7 @@ REPLACE:pm_arc_welded_buildings = {
 			goods_input_electricity_add = 16                     # Price:   30, Total cost:   480.0 (11.54%)
 			goods_input_merchant_marine_add = 20                 # Price:   50, Total cost:  1000.0 (24.04%)
 			# Output goods
-			goods_output_construction_add = 10                   # Price:  500, Total cost:  5000.0 (100.00%)
+			goods_output_construction_add = 5                    # Price: 1000, Total cost:  5000.0 (100.00%)
 			# Total input cost: 4160.0
 			# Total output cost: 5000.0
 			# Profit: 840.0
@@ -14702,7 +14625,7 @@ pm_reinforced_concrete_buildings = {
 			goods_input_merchant_marine_add = 25                 # Price:   50, Total cost:  1250.0 (27.59%)
 			goods_input_engines_add = 2                          # Price:   60, Total cost:   120.0 (2.65%)
 			# Output goods
-			goods_output_construction_add = 12                   # Price:  500, Total cost:  6000.0 (100.00%)
+			goods_output_construction_add = 6                    # Price: 1000, Total cost:  6000.0 (100.00%)
 			# Total input cost: 4530.0
 			# Total output cost: 6000.0
 			# Profit: 1470.0
@@ -14753,7 +14676,7 @@ pm_advanced_construction = {
 			goods_input_engines_add = 4                          # Price:   60, Total cost:   240.0 (3.55%)
 			goods_input_digital_assets_add = 20                  # Price:  100, Total cost:  2000.0 (29.54%)
 			# Output goods
-			goods_output_construction_add = 20                   # Price:  500, Total cost: 10000.0 (100.00%)
+			goods_output_construction_add = 10                   # Price: 1000, Total cost: 10000.0 (100.00%)
 			# Total input cost: 6770.0
 			# Total output cost: 10000.0
 			# Profit: 3230.0
@@ -14800,7 +14723,7 @@ pm_nanomaterial_buildings = {
 			goods_input_digital_assets_add = 20                  # Price:  100, Total cost:  2000.0 (18.57%)
 			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (37.14%)
 			# Output goods
-			goods_output_construction_add = 32                   # Price:  500, Total cost: 16000.0 (100.00%)
+			goods_output_construction_add = 16                   # Price: 1000, Total cost: 16000.0 (100.00%)
 			# Total input cost: 10770.0
 			# Total output cost: 16000.0
 			# Profit: 5230.0
@@ -16244,10 +16167,10 @@ pm_principle_engineering_and_logistics = {
 		workforce_scaled = {
 			# Input goods
 			# Output goods
-			goods_output_construction_add = 0.2                  # Price:  500, Total cost:   100.0 (100.00%)
+			goods_output_construction_add = 0.2                  # Price: 1000, Total cost:   200.0 (100.00%)
 			# Total input cost: 0
-			# Total output cost: 100.0
-			# Profit: 100.0
+			# Total output cost: 200.0
+			# Profit: 200.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
@@ -17156,6 +17079,416 @@ pm_maintenance = {
 	building_modifiers = {
 		level_scaled = {
 			goods_input_construction_add = 0.1                # Price:  500, Total cost: 50.0
+		}
+	}
+}
+
+# ===========================================================================================
+# POLLUTION MITIGATION PRODUCTION METHODS
+# ===========================================================================================
+
+# ---- Default "No Mitigation" Methods (zero cost, zero effect) ----
+
+pm_no_tailings_management = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+pm_no_facility_emission_standards = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+pm_no_synthesis_scrubbing = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+pm_no_precision_environmental_management = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+pm_no_effluent_filtration = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+pm_no_emissions_control = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+# ===== BASIC-TIER POLLUTION MITIGATION METHODS =====
+
+# ---- Settling Ponds (All Mines - Basic) ----
+# Pollution reduction: -5
+# Operational cost: +1 electricity
+
+pm_settling_ponds = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Ventilation Systems (Heavy Industry: Automotive, Arms, Munitions, Tooling - Basic) ----
+# Pollution reduction: -5, requires Rotary Valve Engine or Water-Tube Boiler
+# Operational cost: +1 electricity
+
+pm_ventilation_systems = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Basic Fume Scrubbers (Chemical Plants - Basic) ----
+# Pollution reduction: -10, requires Ammonia-Soda Process or Vacuum Evaporation
+# Operational cost: +1 electricity
+
+pm_basic_fume_scrubbers = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Improved Crop Rotation (Cereal Grain Farms - Basic) ----
+# Pollution reduction: -5, requires Soil Enriching Farming, Fertilization, or Steam Threshers
+# Operational cost: none (improved farming practices)
+
+pm_improved_crop_rotation = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -5
+		}
+	}
+}
+
+# ---- Waste Fiber Recovery (Paper Mills - Basic) ----
+# Pollution reduction: -3, requires Sulfite Pulping or Pulp Pressing
+# Operational cost: none (reuse of waste fiber)
+
+pm_waste_fiber_recovery = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -3
+		}
+	}
+}
+
+# ===== ADVANCED-TIER POLLUTION MITIGATION METHODS =====
+
+# ---- Tailings Treatment (All Mines) ----
+# Pollution reduction: -10, requires Continuous Miners or Condensing Engine Pump from any mine type
+# Operational cost: +2 electricity
+
+pm_tailings_treatment = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_continuous_miners_building_coal_mine
+		pm_condensing_engine_pump_building_coal_mine
+		pm_continuous_miners_building_iron_mine
+		pm_condensing_engine_pump_building_iron_mine
+		pm_continuous_miners_building_lead_mine
+		pm_condensing_engine_pump_building_lead_mine
+		pm_continuous_miners_building_sulfur_mine
+		pm_condensing_engine_pump_building_sulfur_mine
+		pm_continuous_miners_building_gold_mine
+		pm_condensing_engine_pump_building_gold_mine
+		pm_continuous_miners_building_tech_metals_mine
+		pm_condensing_engine_pump_building_tech_metals_mine
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (100.00%)
+			# Total input cost: 60.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Green Assembly (Heavy Industry: Automotive, Arms, Munitions, Tooling) ----
+# Pollution reduction: -10, requires Assembly Lines or Robotic Assembly Lines
+# Operational cost: +2 electricity
+
+pm_green_assembly = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_advanced_assembly_lines_building_tooling_workshop
+		pm_advanced_assembly_lines_building_arms_industry
+		pm_advanced_assembly_lines_building_munition_plant
+		pm_robotic_assembly_lines
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (100.00%)
+			# Total input cost: 60.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Closed-Loop Synthesis (Chemical Plants) ----
+# Pollution reduction: -15, requires Polymerization Processes or Catalytic Cracking
+# Operational cost: +3 electricity
+
+pm_closed_loop_synthesis = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_polymerization_processes
+		pm_catalytic_cracking
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -15
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 3                      # Price:   30, Total cost:    90.0 (100.00%)
+			# Total input cost: 90.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Precision Agriculture (Cereal Grain Farms: Rye, Wheat, Rice, Maize, Millet) ----
+# Pollution reduction: -10, requires Automated Harvesters or Hydraulic Equipment
+# Operational cost: +1 fertilizer (chemicals)
+
+pm_precision_agriculture = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_automated_mechanical_harvesters
+		pm_automated_harvesters_and_planters
+		pm_hydraulic_equipment
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 1                       # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+}
+
+# ---- Effluent Filtration (Paper Mills) ----
+# Pollution reduction: -5, requires Kraft Pulping or Bleached Paper
+# Operational cost: +1 fertilizer (chemicals)
+
+pm_effluent_filtration = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_kraft_pulping
+		pm_bleached_paper
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 1                       # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+}
+
+pm_basic_emissions_control = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+	
+	unlocking_technologies = { 
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 1                            # Price:   40, Total cost:    40.0 (57.14%)
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (42.86%)
+			# Output goods
+			# Total input cost: 70.0
+			# Total output cost: 0
+			# Profit: -70.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_advanced_emissions_control = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+	
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -20
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 2                            # Price:   40, Total cost:    80.0 (57.14%)
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (42.86%)
+			# Output goods
+			# Total input cost: 140.0
+			# Total output cost: 0
+			# Profit: -140.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 	}
 }

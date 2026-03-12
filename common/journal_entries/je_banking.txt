@@ -9,21 +9,39 @@ je_banking_cycle = {
         }
     }
 
+    scripted_progress_bar = banking_cycle_value_bar
+    scripted_progress_bar = banking_cycle_momentum_bar
+    scripted_progress_bar = banking_bubble_pressure_bar
+
     # Buttons
     scripted_button = cb_policy_rate_hike
+    scripted_button = cb_disable_policy_rate_hike
     scripted_button = cb_open_market_ops
+    scripted_button = cb_disable_open_market_ops
     scripted_button = cb_countercyclical_buffer
+    scripted_button = cb_disable_countercyclical_buffer
     scripted_button = cb_expand_deposit_guarantee
+    scripted_button = cb_disable_expand_deposit_guarantee
     scripted_button = cb_directed_credit_infrastructure
+    scripted_button = cb_disable_directed_credit_infrastructure
     scripted_button = cb_emergency_liquidity_program
+    scripted_button = cb_disable_emergency_liquidity_program
     scripted_button = cb_moral_suasion
+    scripted_button = cb_disable_moral_suasion
     scripted_button = cb_raise_margin_requirements
+    scripted_button = cb_disable_raise_margin_requirements
     scripted_button = cb_fx_devaluation
+    scripted_button = cb_disable_fx_devaluation
     scripted_button = cb_fx_support
+    scripted_button = cb_disable_fx_support
     scripted_button = cb_capital_controls_outflow
+    scripted_button = cb_disable_capital_controls_outflow
     scripted_button = cb_fx_swap_lines
+    scripted_button = cb_disable_fx_swap_lines
     scripted_button = cb_export_credit_facility
+    scripted_button = cb_disable_export_credit_facility
     scripted_button = cb_asset_relief_program
+    scripted_button = cb_disable_asset_relief_program
 
 
     possible = { always = yes }
@@ -39,6 +57,10 @@ je_banking_cycle = {
             name = bubble_pressure
             value = 0
         }
+
+        set_bar_progress = { name = banking_cycle_value_bar value = 50 }
+        set_bar_progress = { name = banking_cycle_momentum_bar value = 0 }
+        set_bar_progress = { name = banking_bubble_pressure_bar value = 0 }
     }
 
     # Progress bar: shows remaining points as % of initial allowance at activation.
@@ -175,6 +197,7 @@ je_banking_cycle = {
             # If we set crash, execute crash:
             if = {
                 limit = { var:crash > 0 }
+                save_scope_as = banking_crash_origin_country
                 # Severity scales with bubble (more bubble -> likely PANIC; else DOWNTURN)
                 set_variable = { name = crash_severity value = var:bubble_pressure }
                 random_list = {
@@ -205,6 +228,150 @@ je_banking_cycle = {
                 }
                 # Clear bubble
                 set_variable = { name = bubble_pressure value = 0 }
+
+                trigger_event = { id = minor_events_timelineextended.6 popup = yes }
+
+                every_country = {
+                    limit = {
+                        NOT = { THIS = scope:banking_crash_origin_country }
+                        has_technology_researched = stock_exchange
+                        any_scope_state = {
+                            any_scope_building = {
+                                is_building_type = building_urban_center
+                                level >= 10
+                            }
+                        }
+                        is_market_reachable_for_trade = scope:banking_crash_origin_country.market
+                        OR = {
+                            has_diplomatic_pact = {
+                                who = scope:banking_crash_origin_country
+                                type = trade_agreement
+                            }
+                            is_in_customs_union_with = scope:banking_crash_origin_country
+                            is_adjacent_to_country = scope:banking_crash_origin_country
+                            economic_dependence = {
+                                target = scope:banking_crash_origin_country
+                                value > 0.75
+                            }
+                            market = {
+                                market_trade_reliance = {
+                                    target = scope:banking_crash_origin_country.market
+                                    value > 0.03
+                                }
+                            }
+                            market = {
+                                market_trade = {
+                                    target = scope:banking_crash_origin_country.market
+                                    value > 500
+                                }
+                            }
+                            market = {
+                                market_production_share = {
+                                    target = scope:banking_crash_origin_country
+                                    value > 0.03
+                                }
+                            }
+                            market = {
+                                market_consumption_share = {
+                                    target = scope:banking_crash_origin_country
+                                    value > 0.03
+                                }
+                            }
+                        }
+                    }
+
+                    random = {
+                        chance = 1.5
+                        modifier = {
+                            add = 1.5
+                            has_diplomatic_pact = {
+                                who = scope:banking_crash_origin_country
+                                type = trade_agreement
+                            }
+                        }
+                        modifier = {
+                            add = 2
+                            is_in_customs_union_with = scope:banking_crash_origin_country
+                        }
+                        modifier = {
+                            add = 0.75
+                            is_adjacent_to_country = scope:banking_crash_origin_country
+                        }
+                        modifier = {
+                            add = 1.25
+                            economic_dependence = {
+                                target = scope:banking_crash_origin_country
+                                value > 1.25
+                            }
+                        }
+                        modifier = {
+                            add = 1
+                            market = {
+                                market_trade_reliance = {
+                                    target = scope:banking_crash_origin_country.market
+                                    value > 0.08
+                                }
+                            }
+                        }
+                        modifier = {
+                            add = 2
+                            market = {
+                                market_trade_reliance = {
+                                    target = scope:banking_crash_origin_country.market
+                                    value > 0.15
+                                }
+                            }
+                        }
+                        modifier = {
+                            add = 0.75
+                            market = {
+                                market_trade = {
+                                    target = scope:banking_crash_origin_country.market
+                                    value > 1500
+                                }
+                            }
+                        }
+                        modifier = {
+                            add = 1.5
+                            market = {
+                                market_trade = {
+                                    target = scope:banking_crash_origin_country.market
+                                    value > 4000
+                                }
+                            }
+                        }
+                        modifier = {
+                            add = 0.75
+                            scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial
+                        }
+                        modifier = {
+                            add = 0.75
+                            has_law_or_variant = law_type:law_free_trade
+                        }
+
+                        scope:banking_crash_origin_country = {
+                            save_scope_as = banking_crash_origin_country
+                        }
+
+                        change_variable = { name = finance_cycle_value subtract = 8 }
+                        if = {
+                            limit = { var:finance_cycle_value < 10 }
+                            set_variable = { name = finance_cycle_value value = 10 }
+                        }
+                        change_variable = { name = finance_cycle_momentum subtract = 1.5 }
+                        if = {
+                            limit = { var:finance_cycle_momentum < -5 }
+                            set_variable = { name = finance_cycle_momentum value = -5 }
+                        }
+                        change_variable = { name = bubble_pressure subtract = 25 }
+                        if = {
+                            limit = { var:bubble_pressure < 0 }
+                            set_variable = { name = bubble_pressure value = 0 }
+                        }
+
+                        trigger_event = { id = minor_events_timelineextended.7 popup = yes }
+                    }
+                }
             }
 
             # Sync a human-readable "max" for UI text:
@@ -226,6 +393,21 @@ je_banking_cycle = {
             else_if = { limit = { var:finance_cycle_value < 88 } add_modifier = { name = financial_cycle_phase_boom } }
             else = { add_modifier = { name = financial_cycle_phase_frenzy } }
 
+            scope:journal_entry = {
+                set_bar_progress = { name = banking_cycle_value_bar value = ROOT.var:finance_cycle_value }
+                if = {
+                    limit = { var:finance_cycle_momentum < -5 }
+                    set_bar_progress = { name = banking_cycle_momentum_bar value = -5 }
+                }
+                else_if = {
+                    limit = { var:finance_cycle_momentum > 5 }
+                    set_bar_progress = { name = banking_cycle_momentum_bar value = 5 }
+                }
+                else {
+                    set_bar_progress = { name = banking_cycle_momentum_bar value = ROOT.var:finance_cycle_momentum }
+                }
+                set_bar_progress = { name = banking_bubble_pressure_bar value = ROOT.var:bubble_pressure }
+            }
         }
     }
 }

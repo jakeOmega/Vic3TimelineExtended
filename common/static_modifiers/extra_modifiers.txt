@@ -127,23 +127,22 @@ REPLACE:country_gdp_construction = {
 forced_law_through_event = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_authority_add = -250
-	country_opposition_ig_approval_add = -2
-	political_movement_radicalism_from_enactment_disapproval_mult = 0.5
+	country_opposition_ig_approval_add = -1
 }
 
 forced_law_through_event_enactment_small = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.15
+	country_amenability_add = 10
 }
 
 forced_law_through_event_enactment_medium = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.3
+	country_amenability_add = 25
 }
 
 forced_law_through_event_enactment_large = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.45
+	country_amenability_add = 50
 }
 
 nuclear_power = {
@@ -210,6 +209,7 @@ INJECT:state_region_pollution_health = {
 	state_mortality_mult = 0.05
 	state_standard_of_living_add = -3
 	state_working_adult_ratio_add = -0.05
+	state_pollution_generation_mult = -0.9 # nonlinear scaling
 }
 
 too_much_private_construction = {
@@ -317,74 +317,78 @@ banking_policy_rate_hike = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
     country_loan_interest_rate_mult = 0.05
 	country_banking_intervention_max_add = -2
+	interest_group_ig_industrialists_approval_add = -2
 	# monthly:
-	country_finance_momentum_monthly_add = -0.3
-	country_bubble_pressure_monthly_add  = -1.5
+	country_finance_momentum_monthly_add = -0.25
+	country_bubble_pressure_monthly_add  = -2.0
 }
 
 banking_open_market_ops = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    country_loan_interest_rate_mult = -0.05
+    country_loan_interest_rate_mult = -0.04
 	goods_output_services_mult = 0.05
     country_banking_intervention_max_add = -4
 	# monthly:
-	country_finance_momentum_monthly_add = 0.5
-  	country_bubble_pressure_monthly_add  = 1
+	country_finance_momentum_monthly_add = 0.35
+	  country_bubble_pressure_monthly_add  = 0.8
 }
 
 banking_countercyclical_capital_buffer = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    state_capitalists_investment_pool_contribution_add = -0.025
-    state_shopkeepers_investment_pool_contribution_add = -0.025
+    state_capitalists_investment_pool_contribution_add = -0.05
+    state_shopkeepers_investment_pool_contribution_add = -0.05
     country_banking_intervention_max_add = -2
 	# monthly:
-	country_finance_momentum_monthly_add = -0.3
-  	country_bubble_pressure_monthly_add  = -3
+	country_finance_momentum_monthly_add = -0.15
+	  country_bubble_pressure_monthly_add  = -2.5
 }
 
 banking_expand_deposit_guarantee = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    country_loan_interest_rate_mult = 0.025
+    country_loan_interest_rate_mult = -0.01
     country_banking_intervention_max_add = -4
 	# monthly:
-	country_finance_momentum_monthly_add = -0.15
-  	country_bubble_pressure_monthly_add  = -1.5
+	country_finance_momentum_monthly_add = 0.1
+	  country_bubble_pressure_monthly_add  = -1.0
 }
 
 banking_directed_credit_infrastructure = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    country_construction_goods_cost_mult = -0.05
-    country_monthly_investment_pool_mult = -0.01
-	country_authority_add = 50
+	interest_group_ig_industrialists_approval_add = -5
+	interest_group_ig_armed_forces_approval_add = 1
+	interest_group_ig_trade_unions_approval_add = 1
+	state_decree_cost_mult = -0.1
+	building_group_bg_infrastructure_construction_efficiency_add = 0.1
     country_banking_intervention_max_add = -3
 	# monthly:
-	country_finance_momentum_monthly_add = 0.2
-  	country_bubble_pressure_monthly_add  = 0.4
+	country_finance_momentum_monthly_add = 0.15
+	  country_bubble_pressure_monthly_add  = 0.3
 }
 
 banking_emergency_liquidity_program = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-    country_loan_interest_rate_mult = -0.05
+    country_loan_interest_rate_mult = -0.04
     country_banking_intervention_max_add = -6
 	# monthly:
-	country_bubble_pressure_monthly_add  = 0.6
-	country_finance_momentum_monthly_add = -0.2
+	country_bubble_pressure_monthly_add  = 0.8
+	country_finance_momentum_monthly_add = 0.25
 }
 
 banking_moral_suasion = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_banking_intervention_max_add = -1
 	# monthly:
-	country_bubble_pressure_monthly_add = -0.2
+	country_bubble_pressure_monthly_add = -0.3
+	country_finance_momentum_monthly_add = -0.05
 }
 
 banking_raise_margin_requirements = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-    state_capitalists_investment_pool_contribution_add = -0.01
     country_banking_intervention_max_add = -2
+	state_middle_strata_standard_of_living_add = -0.5
 	# monthly:
-	country_finance_momentum_monthly_add = -0.3
-  	country_bubble_pressure_monthly_add  = -2.0
+	country_finance_momentum_monthly_add = -0.15
+	  country_bubble_pressure_monthly_add  = -2.0
 }
 
 banking_fx_devaluation = {
@@ -392,9 +396,9 @@ banking_fx_devaluation = {
     country_banking_intervention_max_add = -3
     state_import_advantage_mult = -0.25
 	state_export_advantage_mult = 0.25		     # exporters advantaged
-    country_loan_interest_rate_mult = 0.02       # inflation pass-through
-    country_finance_momentum_monthly_add = 0.2
-    country_bubble_pressure_monthly_add  = 0.5
+    country_loan_interest_rate_mult = 0.015       # inflation pass-through
+    country_finance_momentum_monthly_add = 0.1
+	country_bubble_pressure_monthly_add  = 0.3
 }
 
 banking_fx_support = {
@@ -402,9 +406,9 @@ banking_fx_support = {
     country_banking_intervention_max_add = -3
 	state_import_advantage_mult = 0.25
 	state_export_advantage_mult = -0.25		     # importers advantaged
-    country_loan_interest_rate_mult = -0.01
-    country_finance_momentum_monthly_add = -0.2
-    country_bubble_pressure_monthly_add  = -0.5
+    country_loan_interest_rate_mult = -0.005
+	country_finance_momentum_monthly_add = 0.05
+	country_bubble_pressure_monthly_add  = -0.4
 }
 
 banking_capital_controls_out = {
@@ -412,33 +416,34 @@ banking_capital_controls_out = {
 	country_banking_intervention_max_add = -2
 	state_capitalists_investment_pool_contribution_add = 0.05
 	country_bureaucracy_mult = -0.05
-	country_influence_mult = -0.05
+	country_influence_add = -100
 	country_authority_add = 100
-	country_finance_momentum_monthly_add = -0.1
-	country_bubble_pressure_monthly_add  = -0.8
+	country_finance_momentum_monthly_add = 0.05
+	country_bubble_pressure_monthly_add  = -0.6
 }
 
 banking_fx_swap_lines = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_banking_intervention_max_add = -4
 	state_import_advantage_mult = 0.05
-	country_influence_mult = 0.05
-	country_finance_momentum_monthly_add = -0.1
-	country_bubble_pressure_monthly_add  = -0.2
+	country_influence_add = -100
+	country_finance_momentum_monthly_add = 0.15
+	country_bubble_pressure_monthly_add  = -0.3
 }
 
 banking_export_credit_facility = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_banking_intervention_max_add = -2
-    country_finance_momentum_monthly_add = 0.1
-    country_bubble_pressure_monthly_add  = 0.1
+    country_finance_momentum_monthly_add = 0.15
+	country_bubble_pressure_monthly_add  = 0.15
+	state_export_advantage_mult = 0.25
 }
 
 banking_asset_relief_program = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_banking_intervention_max_add = -5         # cost: 5 pts
-	country_finance_value_monthly_add = 0.4
-	country_bubble_pressure_monthly_add = -0.2
+	country_finance_value_monthly_add = 0.3
+	country_bubble_pressure_monthly_add = -0.3
 	state_tax_collection_mult = -0.05
 	country_bureaucracy_mult = -0.05
 }

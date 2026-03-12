@@ -192,13 +192,13 @@ tactical_nuke_diplo_action = {
             0 = {
                 modifier = nuclear_strike_fail_chance
                 scope:target_country = {
-                    trigger_event = nuclear_weapon_events.7
+                    trigger_event = {id = nuclear_weapon_events.7 popup = yes }
                     change_relations = {
                         country = ROOT
                         value = -5
                     }
                 }
-                trigger_event = nuclear_weapon_events.8
+                trigger_event = {id = nuclear_weapon_events.8 popup = yes }
             }
         }
     }

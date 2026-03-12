@@ -1,4 +1,5 @@
 @tooltip_max_width = 600
+@fancy_tooltip_content_max_width = 552
 
 template tooltip_properties
 {
@@ -221,7 +222,9 @@ types TooltipTypes
 		container = {
 			# --- ADDED SCROLLAREA START ---
 			scrollarea = {
+				minimumsize = { @tooltip_max_width 0 }
 				maximumsize = { @tooltip_max_width 835 } 
+				scrollbaralign_vertical = right
 
 				position = { 0 65 }
 				
@@ -255,7 +258,7 @@ types TooltipTypes
 								}
 								autoresize = yes
 								multiline = yes
-								maximumsize = { @tooltip_max_width -1 }
+								maximumsize = { @fancy_tooltip_content_max_width -1 }
 								fonttintcolor = "[TooltipInfo.GetTintColor]"
 							}
 
@@ -267,7 +270,7 @@ types TooltipTypes
 								}
 								autoresize = yes
 								multiline = yes
-								maximumsize = { @tooltip_max_width -1 }
+								maximumsize = { @fancy_tooltip_content_max_width -1 }
 								fonttintcolor = "[TooltipInfo.GetTintColor]"
 							}
 
@@ -279,7 +282,7 @@ types TooltipTypes
 								}
 								autoresize = yes
 								multiline = yes
-								maximumsize = { @tooltip_max_width -1 }
+								maximumsize = { @fancy_tooltip_content_max_width -1 }
 								fonttintcolor = "[TooltipInfo.GetTintColor]"
 							}
 
@@ -291,7 +294,7 @@ types TooltipTypes
 								margin_bottom = 0
 								autoresize = yes
 								multiline = yes
-								maximumsize = { @tooltip_max_width -1 }
+								maximumsize = { @fancy_tooltip_content_max_width -1 }
 								fonttintcolor = "[TooltipInfo.GetTintColor]"
 							}
 							
@@ -301,7 +304,7 @@ types TooltipTypes
 								margin_top = 0
 								margin_bottom = 0
 								multiline = yes
-								maximumsize = { @tooltip_max_width -1 }
+								maximumsize = { @fancy_tooltip_content_max_width -1 }
 								fonttintcolor = "[TooltipInfo.GetTintColor]"
 							}
 
@@ -319,7 +322,7 @@ types TooltipTypes
 								margin_top = 0
 								margin_bottom = 0
 								multiline = yes
-								maximumsize = { @tooltip_max_width -1 }
+								maximumsize = { @fancy_tooltip_content_max_width -1 }
 								fonttintcolor = "[TooltipInfo.GetTintColor]"
 							}
 

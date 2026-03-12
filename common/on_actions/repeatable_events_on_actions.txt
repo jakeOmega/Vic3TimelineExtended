@@ -1,0 +1,15 @@
+on_yearly_events = {
+	random_events = {
+		chance_to_happen = 65
+		8 = repeatable_events.10
+		10 = repeatable_events.20
+		10 = repeatable_events.30
+		9 = repeatable_events.40
+		12 = repeatable_events.50
+		12 = repeatable_events.60
+		14 = repeatable_events.70
+		14 = repeatable_events.80
+		14 = repeatable_events.90
+		14 = repeatable_events.100
+	}
+}

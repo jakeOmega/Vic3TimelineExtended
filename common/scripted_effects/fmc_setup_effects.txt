@@ -37,7 +37,11 @@ country_construction_setup = {
 	# country_replace_sectors = yes
 	if = {
 		limit = {
-			fmc_num_of_construction_sites = 0
+			NOT = {
+				any_scope_building = {
+					type = bt:fmc_building_construction_site
+				}
+			}
 		}
 		capital = {
 			create_building = {

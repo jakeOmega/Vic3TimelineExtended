@@ -14,6 +14,33 @@ peaceful_annex_gdp_requirement = {
 
 peaceful_annex_gdp_requirement_multiplier = 10
 
+adjusted_produced_authority = {
+	value = produced_authority
+	divide = {
+		value = 1
+		add = modifier:country_authority_mult
+	}
+}
+
+forced_law_through_event_authority_multiplier_small = {
+	value = 1
+	divide = {
+		value = 1
+		add = modifier:country_authority_mult
+		min = 0.01
+	}
+}
+
+forced_law_through_event_authority_multiplier_medium = {
+	value = forced_law_through_event_authority_multiplier_small
+	multiply = 2
+}
+
+forced_law_through_event_authority_multiplier_large = {
+	value = forced_law_through_event_authority_multiplier_small
+	multiply = 3
+}
+
 ministry_of_thought_control_monthly_effect = 0.001
 
 construction_cost_super_high = 2000
@@ -349,6 +376,18 @@ country_nuclear_weapon_attack_success_add_display = {
 country_nuclear_weapon_defense_chance_add_display = {
 	value = modifier:country_nuclear_weapon_defense_chance_add
 	multiply = 100
+}
+
+nuclear_industrial_strike_killed_population = {
+	value = state_population
+	multiply = 0.1
+	round = yes
+}
+
+nuclear_tactical_strike_civilian_killed_population = {
+	value = state_population
+	multiply = 0.005
+	round = yes
 }
 
 nuclear_strike_success_chance = {
@@ -1272,9 +1311,8 @@ banking_monthly_cycle = {
 financial_cycle_government_fiscal_policy_effect_size = {
 	value = total_expenses
 	subtract = income
-	multiply = 52
 	divide = gdp
-	multiply = 5 # deficit spending 20% of GDP adds 1 points to the financial cycle monthly
+	multiply = 20 # deficit spending 5% of GDP per year adds 1 points to the financial cycle monthly
 }
 
 country_unemployment_rate = {
@@ -1289,4 +1327,40 @@ country_unemployment_rate = {
 		value = total_population
 		min = 1
 	}
+}
+
+emergency_liquidity_program_activation_cost = {
+	value = root.gdp
+	multiply = -0.012 # 1.2% of GDP
+	round = yes
+}
+
+emergency_liquidity_program_deactivation_refund = {
+	value = root.gdp
+	multiply = 0.01 # 1% of GDP
+	round = yes
+}
+
+fx_support_treasury_benefit = {
+	value = root.gdp
+	multiply = 0.005 # 0.5% of GDP
+	round = yes
+}
+
+fx_support_deactivation_cost = {
+	value = fx_support_treasury_benefit
+	multiply = -1.2
+	round = yes
+}
+
+export_credit_facility_treasury_benefit = {
+	value = root.gdp
+	multiply = 0.005 # 0.5% of GDP
+	round = yes
+}
+
+export_credit_facility_deactivation_cost = {
+	value = export_credit_facility_treasury_benefit
+	multiply = -1.2
+	round = yes
 }

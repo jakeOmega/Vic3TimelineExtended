@@ -173,7 +173,7 @@ repeatable_events.30 = {
     option = { # Retraining
         name = repeatable_events.30.b
         trigger = { OR = { has_law = law_type:law_worker_protections has_law = law_type:law_regulatory_bodies } }
-        add_loyalists = { value = small_radicals strata = lower }
+        add_loyalists = { value = small_loyalists strata = lower }
         add_modifier = { name = re_automation_retraining days = long_modifier_time }
     }
 
@@ -209,6 +209,14 @@ repeatable_events.40 = {
     duration = 3
     cooldown = { days = normal_modifier_time }
 
+    trigger = {
+        OR = {
+            has_technology_researched = mass_media
+            has_technology_researched = social_media
+            has_technology_researched = neural_lace
+        }
+    }
+
     option = { name = repeatable_events.40.a default_option = yes add_modifier = { name = re_media_ignore days = short_modifier_time } }
     option = {
         name = repeatable_events.40.b
@@ -225,5 +233,293 @@ repeatable_events.40 = {
             }
         }
         add_modifier = { name = re_media_moderation days = normal_modifier_time }
+    }
+}
+
+# =============================================================
+# FAMILY 10 — Cyber Breach / Quantum Panic
+# =============================================================
+repeatable_events.50 = {
+    type = country_event
+    placement = ROOT
+
+    title = repeatable_events.50.t
+    desc = {
+        first_valid = {
+            triggered_desc = { desc = repeatable_events.50.d_quantum trigger = { OR = { has_technology_researched = quantum_computing has_technology_researched = quantum_communications } } }
+            desc = repeatable_events.50.d_cyber
+        }
+    }
+    flavor = repeatable_events.50.f
+
+    event_image = { video = "event_skyscrapers_sunset" }
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+    icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+
+    duration = 3
+    cooldown = { days = long_modifier_time }
+
+    trigger = {
+        OR = {
+            has_technology_researched = cybersecurity
+            has_technology_researched = military_grade_cybersecurity
+            has_technology_researched = quantum_computing
+            has_technology_researched = quantum_communications
+        }
+    }
+
+    option = {
+        name = repeatable_events.50.a
+        default_option = yes
+        add_modifier = { name = re_cyber_pay_patch days = normal_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.50.b
+        add_modifier = { name = re_cyber_forensics days = normal_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.50.c
+        add_modifier = { name = re_cyber_standards days = long_modifier_time }
+    }
+}
+
+# =============================================================
+# FAMILY 12 — Spectrum Crunch
+# =============================================================
+repeatable_events.60 = {
+    type = country_event
+    placement = ROOT
+
+    title = repeatable_events.60.t
+    desc = {
+        first_valid = {
+            triggered_desc = { desc = repeatable_events.60.d_quantum trigger = { has_technology_researched = quantum_communications } }
+            triggered_desc = { desc = repeatable_events.60.d_sat trigger = { has_technology_researched = satellite_communications } }
+            desc = repeatable_events.60.d_sat
+        }
+    }
+    flavor = repeatable_events.60.f
+
+    event_image = { video = "ep1_printing_press" }
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+    icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+    duration = 3
+    cooldown = { days = normal_modifier_time }
+
+    trigger = {
+        OR = {
+            has_technology_researched = satellite_communications
+            has_technology_researched = recon_satellites
+            has_technology_researched = quantum_communications
+        }
+    }
+
+    option = {
+        name = repeatable_events.60.a
+        default_option = yes
+        add_modifier = { name = re_spectrum_auction days = short_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.60.b
+        add_modifier = { name = re_spectrum_public_grid days = normal_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.60.c
+        add_modifier = { name = re_spectrum_foreign_relays days = normal_modifier_time }
+    }
+}
+
+# =============================================================
+# FAMILY 16 — Orbital Conjunction
+# =============================================================
+repeatable_events.70 = {
+    type = country_event
+    placement = ROOT
+
+    title = repeatable_events.70.t
+    desc = repeatable_events.70.d
+    flavor = repeatable_events.70.f
+
+    event_image = { video = "event_space_station" }
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+    icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+    duration = 3
+    cooldown = { days = long_modifier_time }
+
+    trigger = {
+        OR = {
+            has_technology_researched = satellite_communications
+            has_technology_researched = orbital_manufacturing
+            has_technology_researched = orbital_weapon_platforms
+        }
+    }
+
+    option = {
+        name = repeatable_events.70.a
+        default_option = yes
+        add_modifier = { name = re_orbit_avoid days = short_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.70.b
+        trigger = {
+            OR = {
+                has_technology_researched = orbital_manufacturing
+                has_technology_researched = orbital_weapon_platforms
+            }
+        }
+        add_modifier = { name = re_orbit_laser_sweep days = normal_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.70.c
+        add_modifier = { name = re_orbit_press_on days = short_modifier_time }
+    }
+}
+
+# =============================================================
+# FAMILY 18 — Space Power Curtailment
+# =============================================================
+repeatable_events.80 = {
+    type = country_event
+    placement = ROOT
+
+    title = repeatable_events.80.t
+    desc = repeatable_events.80.d
+    flavor = repeatable_events.80.f
+
+    event_image = { video = "event_power_plant" }
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+    icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+    duration = 3
+    cooldown = { days = long_modifier_time }
+
+    trigger = {
+        has_technology_researched = space_based_solar_power
+    }
+
+    option = {
+        name = repeatable_events.80.a
+        default_option = yes
+        add_modifier = { name = re_sbsp_reserves days = short_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.80.b
+        add_modifier = { name = re_sbsp_blackouts days = normal_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.80.c
+        add_modifier = { name = re_sbsp_imports days = normal_modifier_time }
+    }
+}
+
+# =============================================================
+# FAMILY 19 — Quantum Materials Bottleneck
+# =============================================================
+repeatable_events.90 = {
+    type = country_event
+    placement = ROOT
+
+    title = repeatable_events.90.t
+    desc = {
+        first_valid = {
+            triggered_desc = { desc = repeatable_events.90.d_orbital trigger = { has_technology_researched = orbital_manufacturing } }
+            desc = repeatable_events.90.d_quantum
+        }
+    }
+    flavor = repeatable_events.90.f
+
+    event_image = { video = "unspecific_gears_pistons" }
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+    icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+    duration = 3
+    cooldown = { days = long_modifier_time }
+
+    trigger = {
+        OR = {
+            has_technology_researched = quantum_materials
+            has_technology_researched = orbital_manufacturing
+        }
+        OR = {
+            any_scope_building = { is_building_type = building_electronic_components_and_semiconductor_industry level >= 3 }
+            any_scope_building = { is_building_type = building_advanced_material_fabricator level >= 3 }
+        }
+    }
+
+    option = {
+        name = repeatable_events.90.a
+        default_option = yes
+        add_modifier = { name = re_quantum_subsidy days = normal_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.90.b
+        add_modifier = { name = re_quantum_patent_pool days = long_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.90.c
+        add_modifier = { name = re_quantum_rationing days = normal_modifier_time }
+    }
+}
+
+# =============================================================
+# FAMILY 20 — Compute Cluster Crunch
+# =============================================================
+repeatable_events.100 = {
+    type = country_event
+    placement = ROOT
+
+    title = repeatable_events.100.t
+    desc = {
+        first_valid = {
+            triggered_desc = { desc = repeatable_events.100.d_quantum trigger = { has_technology_researched = quantum_computing } }
+            desc = repeatable_events.100.d_ai
+        }
+    }
+    flavor = repeatable_events.100.f
+
+    event_image = { video = "event_skyscrapers_sunset" }
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+    icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+
+    duration = 3
+    cooldown = { days = long_modifier_time }
+
+    trigger = {
+        OR = {
+            has_technology_researched = machine_learning
+            has_technology_researched = quantum_computing
+        }
+        OR = {
+            any_scope_building = { is_building_type = building_software_industry level >= 4 }
+            any_scope_building = { is_building_type = building_electronic_components_and_semiconductor_industry level >= 4 }
+        }
+    }
+
+    option = {
+        name = repeatable_events.100.a
+        default_option = yes
+        add_modifier = { name = re_compute_fasttrack days = normal_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.100.b
+        add_modifier = { name = re_compute_audit days = short_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.100.c
+        add_modifier = { name = re_compute_prioritization days = normal_modifier_time }
     }
 }

@@ -7,6 +7,8 @@
 INJECT:law_interventionism = {
 	modifier = {
 		country_private_construction_allocation_mult = -0.5
+		country_building_airport_require_subsidies_bool = yes
+		country_building_highway_require_subsidies_bool = yes
 	}
 }
 
@@ -43,5 +45,7 @@ INJECT:law_cooperative_ownership = {
 INJECT:law_command_economy = {
 	modifier = {
 		country_private_construction_allocation_mult = -0.1
+		country_building_airport_require_subsidies_bool = yes
+		country_building_highway_require_subsidies_bool = yes
 	}
 }

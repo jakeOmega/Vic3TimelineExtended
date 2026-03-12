@@ -220,10 +220,18 @@ for building_id, data in buildings_data.items():
                     pm_data_flat.update(e)
                 pm_data = pm_data_flat
             tech_requirement = pm_data.get("unlocking_technologies", None)
+            pollution = None
+            state_modifiers = pm_data.get("state_modifiers", None)
+            if state_modifiers:
+                workforce_scaled = state_modifiers[1].get("workforce_scaled", None)
+                if workforce_scaled:
+                    pollution = workforce_scaled[1].get("state_pollution_generation_add", None)
             if tech_requirement:
                 if tech_requirement[1]:
                     tech_name = mod_state.localize(tech_requirement[1][0])
-                    building_output += f"\t\t\tUnlocking Technology: {tech_name}\n"
+                    # building_output += f"\t\t\tUnlocking Technology: {tech_name}\n"
+            if pollution is not None:
+                building_output += f"\t\t\tMonthly Pollution: {pollution[1]}\n"
     building_output += "\n"
 
 with open(building_path, "w", encoding="utf-8") as f:

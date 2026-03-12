@@ -106,7 +106,7 @@ cb_policy_rate_hike = {
     name = "CB_POLICY_RATE_HIKE"
     desc = "CB_POLICY_RATE_HIKE_DESC"
     visible = {
-        always = yes
+        NOT = { has_modifier = banking_policy_rate_hike }
     }
     ai_chance = {
         value = 0
@@ -131,13 +131,39 @@ cb_policy_rate_hike = {
 
     possible = {
         modifier:country_banking_intervention_max_add >= 2
-        NOT = { has_modifier = banking_policy_rate_hike }
+        NOT = { has_modifier = banking_open_market_ops }
     }
 
     effect = {
         # Spend 2 points (via the modifier) and cool the cycle
-        add_modifier = { name = banking_policy_rate_hike days = 365 }
+        add_modifier = { name = banking_policy_rate_hike }
         add_radicals = {
+            value = medium_radicals
+        }
+    }
+}
+
+cb_disable_policy_rate_hike = {
+    name = "CB_DISABLE_POLICY_RATE_HIKE"
+    desc = "CB_DISABLE_POLICY_RATE_HIKE_DESC"
+    visible = {
+        has_modifier = banking_policy_rate_hike
+    }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_recession = yes } add = 85 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 55 }
+        if = { limit = { banking_cycle_is_panic = yes } add = 40 }
+        if = { limit = { banking_cycle_risk_falling = yes } add = 20 }
+        if = { limit = { banking_tool_omo_active = yes } add = 20 }
+        if = { limit = { banking_tool_eliq_active = yes } add = 35 }
+    }
+    possible = {
+        has_modifier = banking_policy_rate_hike
+    }
+    effect = {
+        remove_modifier = banking_policy_rate_hike
+        add_loyalists = {
             value = small_radicals
         }
     }
@@ -146,7 +172,9 @@ cb_policy_rate_hike = {
 cb_open_market_ops = {
     name = "CB_OPEN_MARKET_OPS"
     desc = "CB_OPEN_MARKET_OPS_DESC"
-    visible = { always = yes }
+    visible = {
+        NOT = { has_modifier = banking_open_market_ops }
+    }
     
     ai_chance = {
         value = 0
@@ -175,17 +203,37 @@ cb_open_market_ops = {
     possible = {
         has_technology_researched = keynesian_economics
         modifier:country_banking_intervention_max_add >= 4
-        NOT = { has_modifier = banking_open_market_ops }
+        NOT = { has_modifier = banking_policy_rate_hike }
     }
     effect = {
-        add_modifier = { name = banking_open_market_ops days = 365 }
+        add_modifier = { name = banking_open_market_ops }
+    }
+}
+
+cb_disable_open_market_ops = {
+    name = "CB_DISABLE_OPEN_MARKET_OPS"
+    desc = "CB_DISABLE_OPEN_MARKET_OPS_DESC"
+    visible = { has_modifier = banking_open_market_ops }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_expansion = yes } add = 20 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 35 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+        if = { limit = { banking_cycle_bubble_risk_high = yes } add = 30 }
+        if = { limit = { banking_tool_rate_hike_active = yes } add = 35 }
+    }
+    possible = {
+        has_modifier = banking_open_market_ops
+    }
+    effect = {
+        remove_modifier = banking_open_market_ops
     }
 }
 
 cb_countercyclical_buffer = {
     name = "CB_COUNTERCYCLICAL_BUFFER"
     desc = "CB_COUNTERCYCLICAL_BUFFER_DESC"
-    visible = { always = yes }
+    visible = { NOT = { has_modifier = banking_countercyclical_capital_buffer } }
     
     ai_chance = {
         value = 0
@@ -210,17 +258,35 @@ cb_countercyclical_buffer = {
     possible = {
         has_technology_researched = international_exchange_standards
         modifier:country_banking_intervention_max_add >= 2
-        NOT = { has_modifier = banking_countercyclical_capital_buffer }
     }
     effect = {
-        add_modifier = { name = banking_countercyclical_capital_buffer days = 185 }
+        add_modifier = { name = banking_countercyclical_capital_buffer }
+    }
+}
+
+cb_disable_countercyclical_buffer = {
+    name = "CB_DISABLE_COUNTERCYCLICAL_BUFFER"
+    desc = "CB_DISABLE_COUNTERCYCLICAL_BUFFER_DESC"
+    visible = { has_modifier = banking_countercyclical_capital_buffer }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_recession = yes } add = 75 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 55 }
+        if = { limit = { banking_cycle_is_panic = yes } add = 45 }
+        if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 15 }
+    }
+    possible = {
+        has_modifier = banking_countercyclical_capital_buffer
+    }
+    effect = {
+        remove_modifier = banking_countercyclical_capital_buffer
     }
 }
 
 cb_expand_deposit_guarantee = {
     name = "CB_EXPAND_DEPOSIT_GUARANTEE"
     desc = "CB_EXPAND_DEPOSIT_GUARANTEE_DESC"
-    visible = { always = yes }
+    visible = { NOT = { has_modifier = banking_expand_deposit_guarantee } }
     
     ai_chance = {
         value = 0
@@ -246,12 +312,34 @@ cb_expand_deposit_guarantee = {
     possible = {
         has_technology_researched = consumer_credit
         modifier:country_banking_intervention_max_add >= 4
-        NOT = { has_modifier = banking_expand_deposit_guarantee }
     }
     effect = {
-        add_modifier = { name = banking_expand_deposit_guarantee days = 365 }
+        add_modifier = { name = banking_expand_deposit_guarantee }
         add_loyalists = {
             value = small_radicals
+        }
+    }
+}
+
+cb_disable_expand_deposit_guarantee = {
+    name = "CB_DISABLE_EXPAND_DEPOSIT_GUARANTEE"
+    desc = "CB_DISABLE_EXPAND_DEPOSIT_GUARANTEE_DESC"
+    visible = { has_modifier = banking_expand_deposit_guarantee }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_stable = yes } add = 15 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 45 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+        if = { limit = { banking_tool_eliq_active = yes banking_cycle_is_panic = no } add = 20 }
+    }
+    possible = {
+        has_modifier = banking_expand_deposit_guarantee
+    }
+    effect = {
+        remove_modifier = banking_expand_deposit_guarantee
+        add_radicals = {
+            value = medium_radicals
         }
     }
 }
@@ -259,7 +347,7 @@ cb_expand_deposit_guarantee = {
 cb_directed_credit_infrastructure = {
     name = "CB_DIRECTED_CREDIT_INFRA"
     desc = "CB_DIRECTED_CREDIT_INFRA_DESC"
-    visible = { always = yes }
+    visible = { NOT = { has_modifier = banking_directed_credit_infrastructure } }
     
     ai_chance = {
         value = 0
@@ -281,17 +369,36 @@ cb_directed_credit_infrastructure = {
 
     possible = {
         modifier:country_banking_intervention_max_add >= 3
-        NOT = { has_modifier = banking_directed_credit_infrastructure }
     }
     effect = {
-        add_modifier = { name = banking_directed_credit_infrastructure days = 730 }
+        add_modifier = { name = banking_directed_credit_infrastructure }
+    }
+}
+
+cb_disable_directed_credit_infrastructure = {
+    name = "CB_DISABLE_DIRECTED_CREDIT_INFRA"
+    desc = "CB_DISABLE_DIRECTED_CREDIT_INFRA_DESC"
+    visible = { has_modifier = banking_directed_credit_infrastructure }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_panic = yes } add = 45 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 20 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 35 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+        if = { limit = { banking_tool_eliq_active = yes } add = 20 }
+    }
+    possible = {
+        has_modifier = banking_directed_credit_infrastructure
+    }
+    effect = {
+        remove_modifier = banking_directed_credit_infrastructure
     }
 }
 
 cb_emergency_liquidity_program = {
     name = "CB_EMERGENCY_LIQUIDITY"
     desc = "CB_EMERGENCY_LIQUIDITY_DESC"
-    visible = { always = yes }
+    visible = { NOT = { has_modifier = banking_emergency_liquidity_program } }
     
     ai_chance = {
         value = 0
@@ -318,20 +425,46 @@ cb_emergency_liquidity_program = {
     possible = {
         has_technology_researched = investment_banks
         modifier:country_banking_intervention_max_add >= 6
-        NOT = { has_modifier = banking_emergency_liquidity_program }
     }
     effect = {
-        add_modifier = { name = banking_emergency_liquidity_program days = 365 }
+        add_modifier = { name = banking_emergency_liquidity_program }
         # Big shock absorber
-        change_variable = { name = finance_cycle_value add = 20 }        # jump out of panic quickly
-        change_variable = { name = bubble_pressure add = 20 }
+        custom_tooltip = {
+            text = "BUBBLE_PRESSURE_10_DESC"
+            change_variable = { name = bubble_pressure add = 10 }
+        }
+        custom_tooltip = {
+            text = "CYCLE_VALUE_12_DESC"
+            change_variable = { name = finance_cycle_value add = 12 }
+        }
+        add_treasury = emergency_liquidity_program_activation_cost
+    }
+}
+cb_disable_emergency_liquidity_program = {
+    name = "CB_DISABLE_EMERGENCY_LIQUIDITY"
+    desc = "CB_DISABLE_EMERGENCY_LIQUIDITY_DESC"
+    visible = { has_modifier = banking_emergency_liquidity_program }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_stable = yes } add = 25 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 45 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 60 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 70 }
+        if = { limit = { var:finance_cycle_momentum > -4 banking_cycle_is_panic = no } add = 20 }
+    }
+    possible = {
+        has_modifier = banking_emergency_liquidity_program
+    }
+    effect = {
+        remove_modifier = banking_emergency_liquidity_program
+        add_treasury = emergency_liquidity_program_deactivation_refund
     }
 }
 
 cb_moral_suasion = {
     name = "CB_MORAL_SUASION"
     desc = "CB_MORAL_SUASION_DESC"
-    visible = { always = yes }
+    visible = { NOT = { has_modifier = banking_moral_suasion } }
     
     ai_chance = {
         value = 0
@@ -350,18 +483,37 @@ cb_moral_suasion = {
 
     possible = {
         modifier:country_banking_intervention_max_add >= 1
-        NOT = { has_modifier = banking_moral_suasion }
     }
     effect = {
-        add_modifier = { name = banking_moral_suasion days = 365 }
+        add_modifier = { name = banking_moral_suasion }
 
+    }
+}
+
+cb_disable_moral_suasion = {
+    name = "CB_DISABLE_MORAL_SUASION"
+    desc = "CB_DISABLE_MORAL_SUASION_DESC"
+    visible = { has_modifier = banking_moral_suasion }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_panic = yes } add = 35 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 25 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 30 }
+        if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 20 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 15 }
+    }
+    possible = {
+        has_modifier = banking_moral_suasion
+    }
+    effect = {
+        remove_modifier = banking_moral_suasion
     }
 }
 
 cb_raise_margin_requirements = {
     name = "CB_RAISE_MARGIN_REQ"
     desc = "CB_RAISE_MARGIN_REQ_DESC"
-    visible = { always = yes }
+    visible = { NOT = { has_modifier = banking_raise_margin_requirements } }
     
     ai_chance = {
         value = 0
@@ -385,17 +537,37 @@ cb_raise_margin_requirements = {
 
     possible = {
         modifier:country_banking_intervention_max_add >= 2
-        NOT = { has_modifier = banking_raise_margin_requirements }
     }
     effect = {
-        add_modifier = { name = banking_raise_margin_requirements days = 185 }
+        add_modifier = { name = banking_raise_margin_requirements }
+    }
+}
+
+cb_disable_raise_margin_requirements = {
+    name = "CB_DISABLE_RAISE_MARGIN_REQ"
+    desc = "CB_DISABLE_RAISE_MARGIN_REQ_DESC"
+    visible = { has_modifier = banking_raise_margin_requirements }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_recession = yes } add = 75 }
+        if = { limit = { banking_cycle_is_downturn = yes } add = 55 }
+        if = { limit = { banking_cycle_is_panic = yes } add = 40 }
+        if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 20 }
+    }
+    possible = {
+        has_modifier = banking_raise_margin_requirements
+    }
+    effect = {
+        remove_modifier = banking_raise_margin_requirements
     }
 }
 
 cb_fx_devaluation = {
     name = "CB_FX_DEVALUATION"
     desc = "CB_FX_DEVALUATION_DESC"
-    visible = { always = yes }
+    visible = {
+        NOT = { has_modifier = banking_fx_devaluation }
+    }
 
     ai_chance = {
         value = 0
@@ -422,18 +594,41 @@ cb_fx_devaluation = {
 
     possible = {
         modifier:country_banking_intervention_max_add >= 3
-        NOT = { has_modifier = banking_fx_devaluation }
         has_technology_researched = keynesian_economics
+        NOT = { has_modifier = banking_fx_support }
     }
     effect = {
-        add_modifier = { name = banking_fx_devaluation days = 365 }
+        add_modifier = { name = banking_fx_devaluation }
+    }
+}
+
+cb_disable_fx_devaluation = {
+    name = "CB_DISABLE_FX_DEVALUATION"
+    desc = "CB_DISABLE_FX_DEVALUATION_DESC"
+    visible = { has_modifier = banking_fx_devaluation }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_stable = yes } add = 15 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 25 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 40 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+        if = { limit = { banking_tool_rate_hike_active = yes } add = 25 }
+        if = { limit = { has_modifier = banking_fx_support } add = 30 }
+    }
+    possible = {
+        has_modifier = banking_fx_devaluation
+    }
+    effect = {
+        remove_modifier = banking_fx_devaluation
     }
 }
 
 cb_fx_support = {
     name = "CB_FX_SUPPORT"
     desc = "CB_FX_SUPPORT_DESC"
-    visible = { always = yes }
+    visible = {
+        NOT = { has_modifier = banking_fx_support }
+    }
 
     ai_chance = {
         value = 0
@@ -460,18 +655,41 @@ cb_fx_support = {
 
     possible = {
         modifier:country_banking_intervention_max_add >= 3
-        NOT = { has_modifier = banking_fx_support }
         has_technology_researched = international_exchange_standards
+        NOT = { has_modifier = banking_fx_devaluation }
     }
     effect = {
-        add_modifier = { name = banking_fx_support days = 365 }
+        add_modifier = { name = banking_fx_support }
+        add_treasury = fx_support_treasury_benefit
+    }
+}
+
+cb_disable_fx_support = {
+    name = "CB_DISABLE_FX_SUPPORT"
+    desc = "CB_DISABLE_FX_SUPPORT_DESC"
+    visible = { has_modifier = banking_fx_support }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_stable = yes } add = 15 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 45 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+        if = { limit = { banking_tool_rate_hike_active = yes } add = 20 }
+        if = { limit = { has_modifier = banking_fx_devaluation } add = 30 }
+    }
+    possible = {
+        has_modifier = banking_fx_support
+    }
+    effect = {
+        remove_modifier = banking_fx_support
+        add_treasury = fx_support_deactivation_cost
     }
 }
 
 cb_capital_controls_outflow = {
     name = "CB_CAPITAL_CONTROLS_OUT"
     desc = "CB_CAPITAL_CONTROLS_OUT_DESC"
-    visible = { always = yes }
+    visible = { NOT = { has_modifier = banking_capital_controls_out } }
 
     ai_chance = {
         value = 0
@@ -499,21 +717,40 @@ cb_capital_controls_outflow = {
 
     possible = {
         modifier:country_banking_intervention_max_add >= 2
-        NOT = { has_modifier = banking_capital_controls_out }
         OR = {
             has_law = law_type:law_prudential_narrow_banking
             has_law = law_type:law_directed_credit_development_banks
         }
     }
     effect = {
-        add_modifier = { name = banking_capital_controls_out days = 365 }
+        add_modifier = { name = banking_capital_controls_out }
+    }
+}
+
+cb_disable_capital_controls_outflow = {
+    name = "CB_DISABLE_CAPITAL_CONTROLS_OUT"
+    desc = "CB_DISABLE_CAPITAL_CONTROLS_OUT_DESC"
+    visible = { has_modifier = banking_capital_controls_out }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_stable = yes } add = 20 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 35 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 45 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+        if = { limit = { banking_fiscal_stress_high = no banking_cycle_is_panic = no } add = 15 }
+    }
+    possible = {
+        has_modifier = banking_capital_controls_out
+    }
+    effect = {
+        remove_modifier = banking_capital_controls_out
     }
 }
 
 cb_fx_swap_lines = {
     name = "CB_FX_SWAP_LINES"
     desc = "CB_FX_SWAP_LINES_DESC"
-    visible = { always = yes }
+    visible = { NOT = { has_modifier = banking_fx_swap_lines } }
 
     ai_chance = {
         value = 0
@@ -541,24 +778,58 @@ cb_fx_swap_lines = {
 
     possible = {
         modifier:country_banking_intervention_max_add >= 4
-        NOT = { has_modifier = banking_fx_swap_lines }
         has_technology_researched = international_exchange_standards
         OR = {
             has_law = law_type:law_central_bank_independence
             has_law = law_type:law_directed_credit_development_banks
         }
+        NOT = {
+            country_rank = rank_value:great_power
+        }
     }
     effect = {
-        add_modifier = { name = banking_fx_swap_lines days = 365 }
-        change_variable = { name = finance_cycle_value add = 5 }
-  }
+        add_modifier = { name = banking_fx_swap_lines }
+        every_country = {
+            limit = {
+                country_rank = rank_value:great_power
+            }
+            change_relations = {
+                country = ROOT
+                value = -5
+            }
+            change_variable = {
+                name = bubble_pressure
+                add = 1
+            }
+        }
+    }
+}
+
+cb_disable_fx_swap_lines = {
+    name = "CB_DISABLE_FX_SWAP_LINES"
+    desc = "CB_DISABLE_FX_SWAP_LINES_DESC"
+    visible = { has_modifier = banking_fx_swap_lines }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_stable = yes } add = 20 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 35 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 45 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+        if = { limit = { banking_cycle_risk_falling = no banking_cycle_is_panic = no banking_cycle_is_downturn = no } add = 15 }
+    }
+    possible = {
+        has_modifier = banking_fx_swap_lines
+    }
+    effect = {
+        remove_modifier = banking_fx_swap_lines
+    }
 }
 
 
 cb_export_credit_facility = {
     name = "CB_EXPORT_CREDIT"
     desc = "CB_EXPORT_CREDIT_DESC"
-    visible = { always = yes }
+    visible = { NOT = { has_modifier = banking_export_credit_facility } }
 
     ai_chance = {
         value = 0
@@ -585,18 +856,39 @@ cb_export_credit_facility = {
 
     possible = {
         modifier:country_banking_intervention_max_add >= 2
-        NOT = { has_modifier = banking_export_credit_facility }
         has_technology_researched = corporate_management
     }
     effect = {
-        add_modifier = { name = banking_export_credit_facility days = 730 } # 24m commitment
+        add_modifier = { name = banking_export_credit_facility }
+        add_treasury = export_credit_facility_treasury_benefit
+    }
+}
+
+cb_disable_export_credit_facility = {
+    name = "CB_DISABLE_EXPORT_CREDIT"
+    desc = "CB_DISABLE_EXPORT_CREDIT_DESC"
+    visible = { has_modifier = banking_export_credit_facility }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_stable = yes } add = 15 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 25 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 40 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+        if = { limit = { banking_cycle_bubble_risk_high = yes } add = 20 }
+    }
+    possible = {
+        has_modifier = banking_export_credit_facility
+    }
+    effect = {
+        remove_modifier = banking_export_credit_facility
+        add_treasury = export_credit_facility_deactivation_cost
     }
 }
 
 cb_asset_relief_program = {
     name = "CB_ASSET_RELIEF"
     desc = "CB_ASSET_RELIEF_DESC"
-    visible = { always = yes }
+    visible = { NOT = { has_modifier = banking_asset_relief_program } }
 
     ai_chance = {
         value = 0
@@ -616,7 +908,6 @@ cb_asset_relief_program = {
 
     possible = {
         modifier:country_banking_intervention_max_add >= 5
-        NOT = { has_modifier = banking_asset_relief_program }
         OR = {
             has_technology_researched = keynesian_economics
         }
@@ -628,7 +919,27 @@ cb_asset_relief_program = {
     }
 
     effect = {
-        add_modifier = { name = banking_asset_relief_program days = 1080 } # 36 months
+        add_modifier = { name = banking_asset_relief_program }
+    }
+}
+
+cb_disable_asset_relief_program = {
+    name = "CB_DISABLE_ASSET_RELIEF"
+    desc = "CB_DISABLE_ASSET_RELIEF_DESC"
+    visible = { has_modifier = banking_asset_relief_program }
+    ai_chance = {
+        value = 0
+        if = { limit = { banking_cycle_is_stable = yes } add = 20 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 45 }
+        if = { limit = { banking_cycle_is_frenzy = yes } add = 60 }
+        if = { limit = { banking_fiscal_stress_low = yes } add = 15 }
+    }
+    possible = {
+        has_modifier = banking_asset_relief_program
+    }
+    effect = {
+        remove_modifier = banking_asset_relief_program
     }
 }
 

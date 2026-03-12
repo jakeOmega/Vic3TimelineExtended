@@ -1332,3 +1332,55 @@ REPLACE_OR_CREATE:pmg_maintenance = {
 		pm_maintenance
 	}
 }
+
+# ===== POLLUTION MITIGATION PRODUCTION METHOD GROUPS =====
+
+# Tailings and Wastewater Management - shared by all mines
+REPLACE_OR_CREATE:pmg_tailings_wastewater_management = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_no_tailings_management
+        pm_settling_ponds
+        pm_tailings_treatment
+    }
+}
+
+# Facility Emission Standards - for heavy industry (automotive, arms, munitions, tooling)
+REPLACE_OR_CREATE:pmg_facility_emission_standards = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_no_facility_emission_standards
+        pm_ventilation_systems
+        pm_green_assembly
+    }
+}
+
+# Industrial Synthesis Scrubbing - for chemical plants
+REPLACE_OR_CREATE:pmg_industrial_synthesis_scrubbing = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_no_synthesis_scrubbing
+        pm_basic_fume_scrubbers
+        pm_closed_loop_synthesis
+    }
+}
+
+# Precision Environmental Management - for all cereal grain farms (rye, wheat, rice, maize, millet)
+REPLACE_OR_CREATE:pmg_precision_environmental_management = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_no_precision_environmental_management
+        pm_improved_crop_rotation
+        pm_precision_agriculture
+    }
+}
+
+# Effluent Filtration - for paper mills
+REPLACE_OR_CREATE:pmg_effluent_filtration = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_no_effluent_filtration
+        pm_waste_fiber_recovery
+        pm_effluent_filtration
+    }
+}

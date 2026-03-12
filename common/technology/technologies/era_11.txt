@@ -100,6 +100,7 @@ autonomous_vehicles = {
 		country_institution_ministry_of_urban_planning_max_investment_add = 2
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_voting_power_mult = 0.2
+		country_construction_goods_cost_mult = 0.5
 	}
 	
 	ai_weight = {

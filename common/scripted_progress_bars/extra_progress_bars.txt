@@ -1,11 +1,32 @@
-﻿nuclear_program_bar = {
- 	name = "great_game_core_progress_bar_name"
- 	desc = "great_game_core_progress_bar_britain_desc"
- 	second_desc = "great_game_core_progress_bar_russia_desc"
+﻿banking_cycle_value_bar = {
+	name = "banking_cycle_value_bar_name"
+	desc = "banking_cycle_value_bar_name"
 
- 	double_sided_gold = yes
+	default_green = yes
 
- 	start_value = 0
- 	min_value = 0
- 	max_value = 100
+	start_value = 50
+	min_value = 0
+	max_value = 100
+}
+
+banking_cycle_momentum_bar = {
+	name = "banking_cycle_momentum_bar_name"
+	desc = "banking_cycle_momentum_bar_name"
+
+	double_sided_gold = yes
+
+	start_value = 0
+	min_value = -5
+	max_value = 5
+}
+
+banking_bubble_pressure_bar = {
+	name = "banking_bubble_pressure_bar_name"
+	desc = "banking_bubble_pressure_bar_name"
+
+	default_bad = yes
+
+	start_value = 0
+	min_value = 0
+	max_value = 100
 }

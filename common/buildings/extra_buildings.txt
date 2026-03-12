@@ -1,4 +1,4 @@
-﻿INJECT:building_oil_rig = {
+INJECT:building_oil_rig = {
 	production_method_groups = {
 		pmg_depth_oil_rig
 	}
@@ -406,6 +406,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_biomass = {
 INJECT:building_chemical_plant = {
 	production_method_groups = {
 		pmg_automation_building_chemical_plant
+		pmg_industrial_synthesis_scrubbing
 		pmg_maintenance
 	}
 }
@@ -543,6 +544,7 @@ REPLACE:building_automotive_industry = {
 		pmg_tanks
 		pmg_automation_building_automotive_industry
 		pmg_emissions_control
+		pmg_facility_emission_standards
 		pmg_maintenance
 	}
 
@@ -773,7 +775,7 @@ REPLACE_OR_CREATE:building_electronic_components_and_semiconductor_industry = {
 		pmg_maintenance
 	}
 
-	required_construction = construction_cost_mega_high
+	required_construction = construction_cost_extreme
 
 	possible = {
 		owner = {
@@ -871,7 +873,7 @@ REPLACE_OR_CREATE:building_aerospace_industry = {
 		pmg_maintenance
 	}
 
-	required_construction = construction_cost_extreme
+	required_construction = construction_cost_mega_high
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -1195,12 +1197,14 @@ INJECT:building_glassworks = {
 
 INJECT:building_tooling_workshop = {
 	production_method_groups = {
+		pmg_facility_emission_standards
 		pmg_maintenance
 	}
 }
 
 INJECT:building_paper_mill = {
 	production_method_groups = {
+		pmg_effluent_filtration
 		pmg_maintenance
 	}
 }
@@ -1226,6 +1230,7 @@ INJECT:building_military_shipyard = {
 
 INJECT:building_arms_industry = {
 	production_method_groups = {
+		pmg_facility_emission_standards
 		pmg_maintenance
 	}
 }
@@ -1238,6 +1243,7 @@ INJECT:building_artillery_foundry = {
 
 INJECT:building_munition_plant = {
 	production_method_groups = {
+		pmg_facility_emission_standards
 		pmg_maintenance
 	}
 }
@@ -1290,6 +1296,10 @@ building_state_youth_centers = {
 
 	required_construction = construction_cost_medium
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+
+	ai_value = {
+		value = 5000
+	}
 }
 
 REPLACE_OR_CREATE:building_manganese_mine = {
@@ -1307,6 +1317,7 @@ REPLACE_OR_CREATE:building_manganese_mine = {
 		pmg_explosives_building_iron_mine
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_very_high
@@ -1340,6 +1351,7 @@ REPLACE_OR_CREATE:building_chromium_mine = {
 		pmg_explosives_building_iron_mine
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_very_high
@@ -1373,6 +1385,7 @@ REPLACE_OR_CREATE:building_specialty_alloy_metal_mine = {
 		pmg_explosives_building_iron_mine
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_very_high
@@ -1406,6 +1419,7 @@ REPLACE_OR_CREATE:building_copper_mine = {
 		pmg_explosives_building_lead_mine
 		pmg_steam_automation_building_lead_mine
 		pmg_train_automation_building_lead_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_high
@@ -1439,6 +1453,7 @@ REPLACE_OR_CREATE:building_bauxite_mine = {
 		pmg_explosives_building_iron_mine
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_high
@@ -1472,6 +1487,7 @@ REPLACE_OR_CREATE:building_precious_minor_base_metal_mine = {
 		pmg_explosives_building_lead_mine
 		pmg_steam_automation_building_lead_mine
 		pmg_train_automation_building_lead_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_very_high
@@ -1505,6 +1521,7 @@ REPLACE_OR_CREATE:building_nickel_cobalt_mine = {
 		pmg_explosives_building_tech_metals_mine
 		pmg_steam_automation_building_tech_metals_mine
 		pmg_train_automation_building_tech_metals_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_very_high
@@ -1538,6 +1555,7 @@ REPLACE_OR_CREATE:building_lithium_mine = {
 		pmg_explosives_building_tech_metals_mine
 		pmg_steam_automation_building_tech_metals_mine
 		pmg_train_automation_building_tech_metals_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_very_high
@@ -1571,6 +1589,7 @@ REPLACE_OR_CREATE:building_rare_earth_metals_mine = {
 		pmg_explosives_building_tech_metals_mine
 		pmg_steam_automation_building_tech_metals_mine
 		pmg_train_automation_building_tech_metals_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_very_high
@@ -1604,6 +1623,7 @@ REPLACE_OR_CREATE:building_platinum_group_metals_mine = {
 		pmg_explosives_building_tech_metals_mine
 		pmg_steam_automation_building_tech_metals_mine
 		pmg_train_automation_building_tech_metals_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_very_high
@@ -1637,6 +1657,7 @@ REPLACE_OR_CREATE:building_graphite_mine = {
 		pmg_explosives_building_coal_mine
 		pmg_steam_automation_building_coal_mine
 		pmg_train_automation_building_coal_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_high
@@ -1670,6 +1691,7 @@ REPLACE_OR_CREATE:building_phosphate_mine = {
 		pmg_explosives_building_sulfur_mine
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_high
@@ -1703,6 +1725,7 @@ REPLACE_OR_CREATE:building_potash_mine = {
 		pmg_explosives_building_sulfur_mine
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_high
@@ -1736,6 +1759,7 @@ REPLACE_OR_CREATE:building_industrial_mineral_salt_mine = {
 		pmg_explosives_building_sulfur_mine
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
+		pmg_tailings_wastewater_management
 	}
 
 	required_construction = construction_cost_high
@@ -1752,4 +1776,66 @@ REPLACE_OR_CREATE:building_industrial_mineral_salt_mine = {
 
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+# Vanilla mine tailings and wastewater management
+INJECT:building_coal_mine = {
+	production_method_groups = {
+		pmg_tailings_wastewater_management
+	}
+}
+
+INJECT:building_iron_mine = {
+	production_method_groups = {
+		pmg_tailings_wastewater_management
+	}
+}
+
+INJECT:building_lead_mine = {
+	production_method_groups = {
+		pmg_tailings_wastewater_management
+	}
+}
+
+INJECT:building_sulfur_mine = {
+	production_method_groups = {
+		pmg_tailings_wastewater_management
+	}
+}
+
+INJECT:building_gold_mine = {
+	production_method_groups = {
+		pmg_tailings_wastewater_management
+	}
+}
+
+# Precision environmental management for cereal grain farms
+INJECT:building_rye_farm = {
+	production_method_groups = {
+		pmg_precision_environmental_management
+	}
+}
+
+INJECT:building_wheat_farm = {
+	production_method_groups = {
+		pmg_precision_environmental_management
+	}
+}
+
+INJECT:building_rice_farm = {
+	production_method_groups = {
+		pmg_precision_environmental_management
+	}
+}
+
+INJECT:building_maize_farm = {
+	production_method_groups = {
+		pmg_precision_environmental_management
+	}
+}
+
+INJECT:building_millet_farm = {
+	production_method_groups = {
+		pmg_precision_environmental_management
+	}
 }

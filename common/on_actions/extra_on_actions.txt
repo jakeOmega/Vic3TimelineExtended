@@ -19,7 +19,6 @@ on_monthly_pulse_country = {
 		ministry_of_thought_control_on_action
 		remove_invalid_buildings
 		cheaty_on_action
-		change_culture_acceptance_on_action
 		investment_pool_setup_on_action
 		character_update_on_action
 	}
@@ -329,15 +328,14 @@ state_yearly_cultural_acceptance_add_on_action = {
 	effect = {
 		if = {
 			limit = {
-				OR = {
-					modifier:state_yearly_cultural_acceptance_add > 0
-					modifier:state_min_cultural_acceptance_delta_add > 0
-				}
-				any_scope_culture = {
-					ROOT = {
-						cultural_acceptance_delta = {
-							target = PREV
-							value <-1
+				AND = {
+					OR = {
+						modifier:state_yearly_cultural_acceptance_add > 0
+						modifier:state_min_cultural_acceptance_delta_add > 0
+					}
+					any_scope_culture = {
+						ROOT = {
+							"cultural_acceptance_delta(PREV)" < -1
 						}
 					}
 				}
@@ -345,25 +343,18 @@ state_yearly_cultural_acceptance_add_on_action = {
 			every_scope_culture = {
 				limit = {
 					ROOT = {
-						cultural_acceptance_delta = {
-							target = PREV
-							value < -1
-						}
+						"cultural_acceptance_delta(PREV)" < -1
 					}
 				}
 				ROOT = {
 					if = {
 						limit = {
-							cultural_acceptance_delta = {
-								target = PREV
-								value < negative_state_min_cultural_acceptance_delta_add
-							}
+							"cultural_acceptance_delta(PREV)" < negative_state_min_cultural_acceptance_delta_add
 						}
 						add_acceptance = {
 							target = PREV
 							value = {
-								value = -40
-								add = modifier:state_min_cultural_acceptance_delta_add
+								value = negative_state_min_cultural_acceptance_delta_add
 								subtract = "cultural_acceptance_delta(PREV)"
 							}
 						}
@@ -375,8 +366,10 @@ state_yearly_cultural_acceptance_add_on_action = {
 							divide = 12 # monthly on_action
 							max = {
 								add = "cultural_acceptance_delta(PREV)"
-								multiply = -1 # cannot add more delta than what gets you to 0
+								multiply = -1
+								subtract = 1 # cannot add more delta than what gets you to -1
 							}
+							min = 0
 						}
 					}
 				}

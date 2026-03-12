@@ -845,6 +845,10 @@ nuclear_disarmament = {
 	kind = directed
 	cost = 200
 
+	target_modifier = {
+		nuclear_disarmament = yes
+	}
+
 	flags = { can_be_enforced }
 
 	usage_limit = once_per_side
@@ -855,6 +859,7 @@ nuclear_disarmament = {
 
 	possible = {
 		scope:other_country = { has_technology_researched = nuclear_weapons }
+		NOT = { scope:other_country = { nuclear_disarmament = yes } }
 	}
 
 	can_ratify = {
@@ -900,10 +905,23 @@ nuclear_disarmament = {
 			value = 0
 			if = {
 				limit = { scope:target_country = this } # Evaluator is the one demanding disarmament (source)
-				add = 75 # Countries want their rivals disarmed
 				if = {
-					limit = { has_attitude = { who = scope:target_country attitude = hostile } }
+					limit = { 
+						OR = {
+							has_attitude = { who = scope:target_country attitude = hostile }
+							has_attitude = { who = scope:target_country attitude = belligerent }
+							has_attitude = { who = scope:target_country attitude = antagonistic }
+							limit = { any_rival_country = { THIS = scope:source_country } }
+							scope:source_country = { any_rival_country = { THIS = scope:target_country } }
+						}
 					add = 25
+					}
+				}
+				if = {
+					limit = { 
+						has_attitude = { who = scope:target_country attitude = wary }
+					 }
+					add = 5
 				}
 			}
 			else = { # Evaluator is the one being asked to disarm (target)
@@ -966,7 +984,6 @@ nuclear_program_aid = {
 			NOT = {
 				scope:source_country = {
 					any_scope_treaty = {
-						binds = scope:target_country
 						hidden_trigger = {
 							OR = {
 								scope:treaty = {
@@ -1121,7 +1138,6 @@ intelligence_sharing_pact = {
 		NOT = {
 			scope:source_country = {
 				any_scope_treaty = {
-					binds = scope:target_country
 					hidden_trigger = {
 						OR = {
 							scope:treaty = {

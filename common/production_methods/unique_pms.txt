@@ -23,14 +23,14 @@ pm_volkswagen_autostadt = {
 			# Profit: 4000.0
 			# Profit margin: 400.00%
 			# Zero profit price multiplier: 0.20
-			# Employment: 10000
-			# Wage breakeven: 0.40
+			# Employment: 2000
+			# Wage breakeven: 2.00
 		}
 		level_scaled = {
-			building_employment_shopkeepers_add = 4000
-			building_employment_clerks_add = 4000
-			building_employment_engineers_add = 1000
-			building_employment_machinists_add = 1000
+			building_employment_shopkeepers_add = 800
+			building_employment_clerks_add = 800
+			building_employment_engineers_add = 200
+			building_employment_machinists_add = 200
 		}
 	}
 }
@@ -56,14 +56,14 @@ pm_toyota_kaikan_plant = {
 			# Profit: 4000.0
 			# Profit margin: 400.00%
 			# Zero profit price multiplier: 0.20
-			# Employment: 10000
-			# Wage breakeven: 0.40
+			# Employment: 2000
+			# Wage breakeven: 2.00
 		}
 		level_scaled = {
-			building_employment_machinists_add = 4000
-			building_employment_engineers_add = 2000
-			building_employment_clerks_add = 3000
-			building_employment_shopkeepers_add = 1000
+			building_employment_machinists_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 600
+			building_employment_shopkeepers_add = 200
 		}
 	}
 }
@@ -89,13 +89,13 @@ pm_samsung_digital_city = {
 			# Profit: 2000.0
 			# Profit margin: 166.67%
 			# Zero profit price multiplier: 0.38
-			# Employment: 10000
-			# Wage breakeven: 0.20
+			# Employment: 2000
+			# Wage breakeven: 1.00
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_clerks_add = 4000
-			building_employment_academics_add = 2000
+			building_employment_engineers_add = 800
+			building_employment_clerks_add = 800
+			building_employment_academics_add = 400
 		}
 	}
 }
@@ -121,13 +121,13 @@ pm_hp_labs = {
 			# Profit: 7700.0
 			# Profit margin: 2566.67%
 			# Zero profit price multiplier: 0.04
-			# Employment: 10000
-			# Wage breakeven: 0.77
+			# Employment: 2000
+			# Wage breakeven: 3.85
 		}
 		level_scaled = {
-			building_employment_academics_add = 6000
-			building_employment_engineers_add = 3000
-			building_employment_clerks_add = 1000
+			building_employment_academics_add = 1200
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 200
 		}
 	}
 }
@@ -152,13 +152,13 @@ pm_sony_pictures_studios = {
 			# Profit: 8800.0
 			# Profit margin: 4400.00%
 			# Zero profit price multiplier: 0.02
-			# Employment: 10000
-			# Wage breakeven: 0.88
+			# Employment: 2000
+			# Wage breakeven: 4.40
 		}
 		level_scaled = {
-			building_employment_clerks_add = 5000
-			building_employment_shopkeepers_add = 3000
-			building_employment_academics_add = 2000
+			building_employment_clerks_add = 1000
+			building_employment_shopkeepers_add = 600
+			building_employment_academics_add = 400
 		}
 	}
 }
@@ -183,14 +183,14 @@ pm_ikea_almhult_campus = {
 			# Profit: 2400.0
 			# Profit margin: 400.00%
 			# Zero profit price multiplier: 0.20
-			# Employment: 10000
-			# Wage breakeven: 0.24
+			# Employment: 2000
+			# Wage breakeven: 1.20
 		}
 		level_scaled = {
-			building_employment_shopkeepers_add = 2000
-			building_employment_clerks_add = 3000
-			building_employment_engineers_add = 2000
-			building_employment_laborers_add = 3000
+			building_employment_shopkeepers_add = 400
+			building_employment_clerks_add = 600
+			building_employment_engineers_add = 400
+			building_employment_laborers_add = 600
 		}
 	}
 }
@@ -215,13 +215,13 @@ pm_intel_ronler_acres = {
 			# Profit: 7600.0
 			# Profit margin: 633.33%
 			# Zero profit price multiplier: 0.14
-			# Employment: 10000
-			# Wage breakeven: 0.76
+			# Employment: 2000
+			# Wage breakeven: 3.80
 		}
 		level_scaled = {
-			building_employment_engineers_add = 6000
-			building_employment_machinists_add = 3000
-			building_employment_clerks_add = 1000
+			building_employment_engineers_add = 1200
+			building_employment_machinists_add = 600
+			building_employment_clerks_add = 200
 		}
 	}
 }
@@ -247,13 +247,13 @@ pm_microsoft_redmond_campus = {
 			# Profit: 7400.0
 			# Profit margin: 1233.33%
 			# Zero profit price multiplier: 0.07
-			# Employment: 10000
-			# Wage breakeven: 0.74
+			# Employment: 2000
+			# Wage breakeven: 3.70
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_academics_add = 3000
-			building_employment_clerks_add = 3000
+			building_employment_engineers_add = 800
+			building_employment_academics_add = 600
+			building_employment_clerks_add = 600
 		}
 	}
 }
@@ -279,13 +279,13 @@ pm_apple_park = {
 			# Profit: 3200.0
 			# Profit margin: 200.00%
 			# Zero profit price multiplier: 0.33
-			# Employment: 10000
-			# Wage breakeven: 0.32
+			# Employment: 2000
+			# Wage breakeven: 1.60
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_clerks_add = 4000
-			building_employment_shopkeepers_add = 2000
+			building_employment_engineers_add = 800
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 400
 		}
 	}
 }
@@ -311,13 +311,13 @@ pm_tsmc_fab_18 = {
 			# Profit: 10500.0
 			# Profit margin: 700.00%
 			# Zero profit price multiplier: 0.12
-			# Employment: 10000
-			# Wage breakeven: 1.05
+			# Employment: 2000
+			# Wage breakeven: 5.25
 		}
 		level_scaled = {
-			building_employment_engineers_add = 6000
-			building_employment_academics_add = 1000
-			building_employment_machinists_add = 3000
+			building_employment_engineers_add = 1200
+			building_employment_academics_add = 200
+			building_employment_machinists_add = 600
 		}
 	}
 }
@@ -343,13 +343,13 @@ pm_huawei_ox_horn_campus = {
 			# Profit: 2400.0
 			# Profit margin: 200.00%
 			# Zero profit price multiplier: 0.33
-			# Employment: 10000
-			# Wage breakeven: 0.24
+			# Employment: 2000
+			# Wage breakeven: 1.20
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_clerks_add = 4000
-			building_employment_academics_add = 2000
+			building_employment_engineers_add = 800
+			building_employment_clerks_add = 800
+			building_employment_academics_add = 400
 		}
 	}
 }
@@ -376,13 +376,13 @@ pm_amazon_fulfillment_center = {
 			# Profit: 11900.0
 			# Profit margin: 1983.33%
 			# Zero profit price multiplier: 0.05
-			# Employment: 10000
-			# Wage breakeven: 1.19
+			# Employment: 2000
+			# Wage breakeven: 5.95
 		}
 		level_scaled = {
-			building_employment_laborers_add = 5000
-			building_employment_clerks_add = 3000
-			building_employment_machinists_add = 2000
+			building_employment_laborers_add = 1000
+			building_employment_clerks_add = 600
+			building_employment_machinists_add = 400
 		}
 	}
 }
@@ -408,13 +408,13 @@ pm_nvidia_endeavor_campus = {
 			# Profit: 3100.0
 			# Profit margin: 344.44%
 			# Zero profit price multiplier: 0.23
-			# Employment: 10000
-			# Wage breakeven: 0.31
+			# Employment: 2000
+			# Wage breakeven: 1.55
 		}
 		level_scaled = {
-			building_employment_engineers_add = 5000
-			building_employment_academics_add = 3000
-			building_employment_clerks_add = 2000
+			building_employment_engineers_add = 1000
+			building_employment_academics_add = 600
+			building_employment_clerks_add = 400
 		}
 	}
 }
@@ -440,13 +440,13 @@ pm_googleplex = {
 			# Profit: 3800.0
 			# Profit margin: 316.67%
 			# Zero profit price multiplier: 0.24
-			# Employment: 10000
-			# Wage breakeven: 0.38
+			# Employment: 2000
+			# Wage breakeven: 1.90
 		}
 		level_scaled = {
-			building_employment_academics_add = 5000
-			building_employment_engineers_add = 4000
-			building_employment_clerks_add = 1000
+			building_employment_academics_add = 1000
+			building_employment_engineers_add = 800
+			building_employment_clerks_add = 200
 		}
 	}
 }
@@ -472,12 +472,12 @@ pm_netflix_animation_studios = {
 			# Profit: 3500.0
 			# Profit margin: 700.00%
 			# Zero profit price multiplier: 0.12
-			# Employment: 10000
-			# Wage breakeven: 0.35
+			# Employment: 2000
+			# Wage breakeven: 1.75
 		}
 		level_scaled = {
-			building_employment_academics_add = 4000
-			building_employment_clerks_add = 6000
+			building_employment_academics_add = 800
+			building_employment_clerks_add = 1200
 		}
 	}
 }
@@ -503,13 +503,13 @@ pm_spacex_starbase = {
 			# Profit: 9000.0
 			# Profit margin: 900.00%
 			# Zero profit price multiplier: 0.10
-			# Employment: 10000
-			# Wage breakeven: 0.90
+			# Employment: 2000
+			# Wage breakeven: 4.50
 		}
 		level_scaled = {
-			building_employment_engineers_add = 6000
-			building_employment_machinists_add = 3000
-			building_employment_academics_add = 1000
+			building_employment_engineers_add = 1200
+			building_employment_machinists_add = 600
+			building_employment_academics_add = 200
 		}
 	}
 }
@@ -534,12 +534,12 @@ pm_bytedance_data_fortress = {
 			# Profit: 4800.0
 			# Profit margin: 400.00%
 			# Zero profit price multiplier: 0.20
-			# Employment: 10000
-			# Wage breakeven: 0.48
+			# Employment: 2000
+			# Wage breakeven: 2.40
 		}
 		level_scaled = {
-			building_employment_engineers_add = 3000
-			building_employment_clerks_add = 7000
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 1400
 		}
 	}
 }
@@ -568,12 +568,12 @@ pm_openai_research_lab = {
 			# Profit: 8800.0
 			# Profit margin: 733.33%
 			# Zero profit price multiplier: 0.12
-			# Employment: 10000
-			# Wage breakeven: 0.88
+			# Employment: 2000
+			# Wage breakeven: 4.40
 		}
 		level_scaled = {
-			building_employment_academics_add = 8000
-			building_employment_engineers_add = 2000
+			building_employment_academics_add = 1600
+			building_employment_engineers_add = 400
 		}
 	}
 }
@@ -598,13 +598,13 @@ pm_catl_gigafactory = {
 			# Profit: 6800.0
 			# Profit margin: 566.67%
 			# Zero profit price multiplier: 0.15
-			# Employment: 10000
-			# Wage breakeven: 0.68
+			# Employment: 2000
+			# Wage breakeven: 3.40
 		}
 		level_scaled = {
-			building_employment_engineers_add = 3000
-			building_employment_machinists_add = 4000
-			building_employment_laborers_add = 3000
+			building_employment_engineers_add = 600
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
 		}
 	}
 }
@@ -630,13 +630,13 @@ pm_boston_dynamics_ai_institute = {
 			# Profit: 7400.0
 			# Profit margin: 1233.33%
 			# Zero profit price multiplier: 0.07
-			# Employment: 10000
-			# Wage breakeven: 0.74
+			# Employment: 2000
+			# Wage breakeven: 3.70
 		}
 		level_scaled = {
-			building_employment_academics_add = 4000
-			building_employment_engineers_add = 4000
-			building_employment_machinists_add = 2000
+			building_employment_academics_add = 800
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 400
 		}
 	}
 }
@@ -662,13 +662,13 @@ pm_asml_veldhoven_campus = {
 			# Profit: 5000.0
 			# Profit margin: 500.00%
 			# Zero profit price multiplier: 0.17
-			# Employment: 10000
-			# Wage breakeven: 0.50
+			# Employment: 2000
+			# Wage breakeven: 2.50
 		}
 		level_scaled = {
-			building_employment_engineers_add = 6000
-			building_employment_machinists_add = 3000
-			building_employment_academics_add = 1000
+			building_employment_engineers_add = 1200
+			building_employment_machinists_add = 600
+			building_employment_academics_add = 200
 		}
 	}
 }
@@ -697,14 +697,14 @@ pm_lockheed_skunk_works = {
 			# Profit: 11550.0
 			# Profit margin: 924.00%
 			# Zero profit price multiplier: 0.10
-			# Employment: 10000
-			# Wage breakeven: 1.16
+			# Employment: 2000
+			# Wage breakeven: 5.78
 		}
 		level_scaled = {
-			building_employment_engineers_add = 6000
-			building_employment_machinists_add = 2000
-			building_employment_officers_add = 1000
-			building_employment_clerks_add = 1000
+			building_employment_engineers_add = 1200
+			building_employment_machinists_add = 400
+			building_employment_officers_add = 200
+			building_employment_clerks_add = 200
 		}
 	}
 }
@@ -735,13 +735,13 @@ pm_bae_samlesbury_aerodrome = {
 			# Profit: 8600.0
 			# Profit margin: 860.00%
 			# Zero profit price multiplier: 0.10
-			# Employment: 10000
-			# Wage breakeven: 0.86
+			# Employment: 2000
+			# Wage breakeven: 4.30
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_machinists_add = 4000
-			building_employment_clerks_add = 2000
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 800
+			building_employment_clerks_add = 400
 		}
 	}
 }
@@ -770,14 +770,14 @@ pm_roscosmos_vostochny_cosmodrome = {
 			# Profit: 7000.0
 			# Profit margin: 700.00%
 			# Zero profit price multiplier: 0.12
-			# Employment: 10000
-			# Wage breakeven: 0.70
+			# Employment: 2000
+			# Wage breakeven: 3.50
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_machinists_add = 3000
-			building_employment_academics_add = 2000
-			building_employment_bureaucrats_add = 1000
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 600
+			building_employment_academics_add = 400
+			building_employment_bureaucrats_add = 200
 		}
 	}
 }
@@ -802,13 +802,13 @@ pm_airbus_lagardere_plant = {
 			# Profit: 10200.0
 			# Profit margin: 1020.00%
 			# Zero profit price multiplier: 0.09
-			# Employment: 10000
-			# Wage breakeven: 1.02
+			# Employment: 2000
+			# Wage breakeven: 5.10
 		}
 		level_scaled = {
-			building_employment_engineers_add = 3000
-			building_employment_machinists_add = 5000
-			building_employment_clerks_add = 2000
+			building_employment_engineers_add = 600
+			building_employment_machinists_add = 1000
+			building_employment_clerks_add = 400
 		}
 	}
 }
@@ -838,13 +838,13 @@ pm_dassault_merignac_plant = {
 			# Profit: 10200.0
 			# Profit margin: 1020.00%
 			# Zero profit price multiplier: 0.09
-			# Employment: 10000
-			# Wage breakeven: 1.02
+			# Employment: 2000
+			# Wage breakeven: 5.10
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_machinists_add = 4000
-			building_employment_clerks_add = 2000
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 800
+			building_employment_clerks_add = 400
 		}
 	}
 }
@@ -869,14 +869,14 @@ pm_hyundai_ulsan_factory = {
 			# Profit: 2500.0
 			# Profit margin: 166.67%
 			# Zero profit price multiplier: 0.38
-			# Employment: 10000
-			# Wage breakeven: 0.25
+			# Employment: 2000
+			# Wage breakeven: 1.25
 		}
 		level_scaled = {
-			building_employment_machinists_add = 6000
-			building_employment_laborers_add = 2000
-			building_employment_engineers_add = 1000
-			building_employment_clerks_add = 1000
+			building_employment_machinists_add = 1200
+			building_employment_laborers_add = 400
+			building_employment_engineers_add = 200
+			building_employment_clerks_add = 200
 		}
 	}
 }
@@ -901,13 +901,13 @@ pm_sap_headquarters = {
 			# Profit: 4400.0
 			# Profit margin: 733.33%
 			# Zero profit price multiplier: 0.12
-			# Employment: 10000
-			# Wage breakeven: 0.44
+			# Employment: 2000
+			# Wage breakeven: 2.20
 		}
 		level_scaled = {
-			building_employment_bureaucrats_add = 4000
-			building_employment_clerks_add = 4000
-			building_employment_academics_add = 2000
+			building_employment_bureaucrats_add = 800
+			building_employment_clerks_add = 800
+			building_employment_academics_add = 400
 		}
 	}
 }
@@ -933,13 +933,13 @@ pm_tencent_seafront_towers = {
 			# Profit: 2100.0
 			# Profit margin: 233.33%
 			# Zero profit price multiplier: 0.30
-			# Employment: 10000
-			# Wage breakeven: 0.21
+			# Employment: 2000
+			# Wage breakeven: 1.05
 		}
 		level_scaled = {
-			building_employment_clerks_add = 5000
-			building_employment_engineers_add = 3000
-			building_employment_academics_add = 2000
+			building_employment_clerks_add = 1000
+			building_employment_engineers_add = 600
+			building_employment_academics_add = 400
 		}
 	}
 }
@@ -964,13 +964,13 @@ pm_alibaba_cainiao_park = {
 			# Profit: 7050.0
 			# Profit margin: 1566.67%
 			# Zero profit price multiplier: 0.06
-			# Employment: 10000
-			# Wage breakeven: 0.70
+			# Employment: 2000
+			# Wage breakeven: 3.52
 		}
 		level_scaled = {
-			building_employment_laborers_add = 4000
-			building_employment_clerks_add = 3000
-			building_employment_machinists_add = 3000
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 600
+			building_employment_machinists_add = 600
 		}
 	}
 }
@@ -995,13 +995,13 @@ pm_nintendo_development_center = {
 			# Profit: 1200.0
 			# Profit margin: 150.00%
 			# Zero profit price multiplier: 0.40
-			# Employment: 10000
-			# Wage breakeven: 0.12
+			# Employment: 2000
+			# Wage breakeven: 0.60
 		}
 		level_scaled = {
-			building_employment_academics_add = 4000
-			building_employment_engineers_add = 2000
-			building_employment_clerks_add = 4000
+			building_employment_academics_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 800
 		}
 	}
 }
@@ -1026,12 +1026,12 @@ pm_gazprom_lakhta_center = {
 			# Profit: 1700.0
 			# Profit margin: 566.67%
 			# Zero profit price multiplier: 0.15
-			# Employment: 10000
-			# Wage breakeven: 0.17
+			# Employment: 2000
+			# Wage breakeven: 0.85
 		}
 		level_scaled = {
-			building_employment_clerks_add = 6000
-			building_employment_bureaucrats_add = 4000
+			building_employment_clerks_add = 1200
+			building_employment_bureaucrats_add = 800
 		}
 	}
 }
@@ -1056,13 +1056,13 @@ pm_saudi_aramco_abqaiq_plant = {
 			# Profit: 9250.0
 			# Profit margin: 1233.33%
 			# Zero profit price multiplier: 0.07
-			# Employment: 10000
-			# Wage breakeven: 0.93
+			# Employment: 2000
+			# Wage breakeven: 4.62
 		}
 		level_scaled = {
-			building_employment_machinists_add = 4000
-			building_employment_engineers_add = 3000
-			building_employment_laborers_add = 3000
+			building_employment_machinists_add = 800
+			building_employment_engineers_add = 600
+			building_employment_laborers_add = 600
 		}
 	}
 }
@@ -1088,13 +1088,13 @@ pm_petrobras_cenpes_center = {
 			# Profit: 2400.0
 			# Profit margin: 400.00%
 			# Zero profit price multiplier: 0.20
-			# Employment: 10000
-			# Wage breakeven: 0.24
+			# Employment: 2000
+			# Wage breakeven: 1.20
 		}
 		level_scaled = {
-			building_employment_academics_add = 6000
-			building_employment_engineers_add = 3000
-			building_employment_clerks_add = 1000
+			building_employment_academics_add = 1200
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 200
 		}
 	}
 }
@@ -1120,13 +1120,13 @@ pm_rosatom_mayak_association = {
 			# Profit: 8000.0
 			# Profit margin: 800.00%
 			# Zero profit price multiplier: 0.11
-			# Employment: 10000
-			# Wage breakeven: 0.80
+			# Employment: 2000
+			# Wage breakeven: 4.00
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_machinists_add = 4000
-			building_employment_bureaucrats_add = 2000
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 800
+			building_employment_bureaucrats_add = 400
 		}
 	}
 }
@@ -1153,12 +1153,12 @@ pm_oracle_cloud_data_center = {
 			# Profit: 3600.0
 			# Profit margin: 300.00%
 			# Zero profit price multiplier: 0.25
-			# Employment: 10000
-			# Wage breakeven: 0.36
+			# Employment: 2000
+			# Wage breakeven: 1.80
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_clerks_add = 6000
+			building_employment_engineers_add = 800
+			building_employment_clerks_add = 1200
 		}
 	}
 }
@@ -1183,12 +1183,12 @@ pm_softbank_vision_fund_hq = {
 			# Profit: 7200.0
 			# Profit margin: 2400.00%
 			# Zero profit price multiplier: 0.04
-			# Employment: 10000
-			# Wage breakeven: 0.72
+			# Employment: 2000
+			# Wage breakeven: 3.60
 		}
 		level_scaled = {
-			building_employment_clerks_add = 9000
-			building_employment_bureaucrats_add = 1000
+			building_employment_clerks_add = 1800
+			building_employment_bureaucrats_add = 200
 		}
 	}
 }
@@ -1214,12 +1214,12 @@ pm_roche_tower = {
 			# Profit: 7100.0
 			# Profit margin: 1775.00%
 			# Zero profit price multiplier: 0.05
-			# Employment: 10000
-			# Wage breakeven: 0.71
+			# Employment: 2000
+			# Wage breakeven: 3.55
 		}
 		level_scaled = {
-			building_employment_academics_add = 4000
-			building_employment_clerks_add = 6000
+			building_employment_academics_add = 800
+			building_employment_clerks_add = 1200
 		}
 	}
 }
@@ -1245,13 +1245,13 @@ pm_pfizer_rd_campus = {
 			# Profit: 8700.0
 			# Profit margin: 2900.00%
 			# Zero profit price multiplier: 0.03
-			# Employment: 10000
-			# Wage breakeven: 0.87
+			# Employment: 2000
+			# Wage breakeven: 4.35
 		}
 		level_scaled = {
-			building_employment_academics_add = 7000
-			building_employment_engineers_add = 2000
-			building_employment_clerks_add = 1000
+			building_employment_academics_add = 1400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
 		}
 	}
 }
@@ -1276,13 +1276,13 @@ pm_vale_carajas_mine = {
 			# Profit: 7200.0
 			# Profit margin: 900.00%
 			# Zero profit price multiplier: 0.10
-			# Employment: 10000
-			# Wage breakeven: 0.72
+			# Employment: 2000
+			# Wage breakeven: 3.60
 		}
 		level_scaled = {
-			building_employment_laborers_add = 7000
-			building_employment_machinists_add = 2000
-			building_employment_engineers_add = 1000
+			building_employment_laborers_add = 1400
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 200
 		}
 	}
 }
@@ -1300,23 +1300,23 @@ pm_disney_world = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_construction_add = 0.5                   # Price:  500, Total cost:   250.0 (100.00%)
+			goods_input_construction_add = 0.5                   # Price: 1000, Total cost:   500.0 (100.00%)
 			# Output goods
 			goods_output_tourism_add = 50                        # Price:  100, Total cost:  5000.0 (100.00%)
-			# Total input cost: 250.0
+			# Total input cost: 500.0
 			# Total output cost: 5000.0
-			# Profit: 4750.0
-			# Profit margin: 1900.00%
-			# Zero profit price multiplier: 0.05
-			# Employment: 10000
-			# Wage breakeven: 0.47
+			# Profit: 4500.0
+			# Profit margin: 900.00%
+			# Zero profit price multiplier: 0.10
+			# Employment: 2000
+			# Wage breakeven: 2.25
 		}
 		level_scaled = {
-			building_employment_shopkeepers_add = 2000
-			building_employment_clerks_add = 5000
-			building_employment_engineers_add = 1000
-			building_employment_machinists_add = 1000
-			building_employment_academics_add = 1000
+			building_employment_shopkeepers_add = 400
+			building_employment_clerks_add = 1000
+			building_employment_engineers_add = 200
+			building_employment_machinists_add = 200
+			building_employment_academics_add = 200
 		}
 	}
 }
@@ -1342,14 +1342,14 @@ pm_universal_studios_hollywood = {
 			# Profit: 3800.0
 			# Profit margin: 1900.00%
 			# Zero profit price multiplier: 0.05
-			# Employment: 10000
-			# Wage breakeven: 0.38
+			# Employment: 2000
+			# Wage breakeven: 1.90
 		}
 		level_scaled = {
-			building_employment_shopkeepers_add = 3000
-			building_employment_clerks_add = 4000
-			building_employment_engineers_add = 1500
-			building_employment_academics_add = 1500
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 800
+			building_employment_engineers_add = 300
+			building_employment_academics_add = 300
 		}
 	}
 }
@@ -1375,13 +1375,13 @@ pm_verizon_building = {
 			# Profit: 6300.0
 			# Profit margin: 700.00%
 			# Zero profit price multiplier: 0.12
-			# Employment: 10000
-			# Wage breakeven: 0.63
+			# Employment: 2000
+			# Wage breakeven: 3.15
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_clerks_add = 5000
-			building_employment_bureaucrats_add = 1000
+			building_employment_engineers_add = 800
+			building_employment_clerks_add = 1000
+			building_employment_bureaucrats_add = 200
 		}
 	}
 }
@@ -1406,13 +1406,13 @@ pm_reliance_jamnagar_refinery = {
 			# Profit: 2100.0
 			# Profit margin: 87.50%
 			# Zero profit price multiplier: 0.53
-			# Employment: 10000
-			# Wage breakeven: 0.21
+			# Employment: 2000
+			# Wage breakeven: 1.05
 		}
 		level_scaled = {
-			building_employment_engineers_add = 3000
-			building_employment_machinists_add = 4000
-			building_employment_laborers_add = 3000
+			building_employment_engineers_add = 600
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
 		}
 	}
 }
@@ -1437,13 +1437,13 @@ pm_fanuc_forest = {
 			# Profit: 7250.0
 			# Profit margin: 966.67%
 			# Zero profit price multiplier: 0.09
-			# Employment: 10000
-			# Wage breakeven: 0.72
+			# Employment: 2000
+			# Wage breakeven: 3.62
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_machinists_add = 5000
-			building_employment_clerks_add = 1000
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 1000
+			building_employment_clerks_add = 200
 		}
 	}
 }
@@ -1472,12 +1472,12 @@ pm_eni_palazzo = {
 			# Profit: 1150.0
 			# Profit margin: 255.56%
 			# Zero profit price multiplier: 0.28
-			# Employment: 10000
-			# Wage breakeven: 0.12
+			# Employment: 2000
+			# Wage breakeven: 0.57
 		}
 		level_scaled = {
-			building_employment_bureaucrats_add = 5000
-			building_employment_clerks_add = 5000
+			building_employment_bureaucrats_add = 1000
+			building_employment_clerks_add = 1000
 		}
 	}
 }
@@ -1502,13 +1502,13 @@ pm_ferrari_maranello_factory = {
 			# Profit: 8000.0
 			# Profit margin: 800.00%
 			# Zero profit price multiplier: 0.11
-			# Employment: 10000
-			# Wage breakeven: 0.80
+			# Employment: 2000
+			# Wage breakeven: 4.00
 		}
 		level_scaled = {
-			building_employment_machinists_add = 4000
-			building_employment_engineers_add = 4000
-			building_employment_clerks_add = 2000
+			building_employment_machinists_add = 800
+			building_employment_engineers_add = 800
+			building_employment_clerks_add = 400
 		}
 	}
 }
@@ -1533,13 +1533,13 @@ pm_blackberry_rim_campus = {
 			# Profit: 3000.0
 			# Profit margin: 250.00%
 			# Zero profit price multiplier: 0.29
-			# Employment: 10000
-			# Wage breakeven: 0.30
+			# Employment: 2000
+			# Wage breakeven: 1.50
 		}
 		level_scaled = {
-			building_employment_engineers_add = 4000
-			building_employment_clerks_add = 4000
-			building_employment_academics_add = 2000
+			building_employment_engineers_add = 800
+			building_employment_clerks_add = 800
+			building_employment_academics_add = 400
 		}
 	}
 }
@@ -1565,13 +1565,13 @@ pm_shopify_fulfillment_hub = {
 			# Profit: 3550.0
 			# Profit margin: 788.89%
 			# Zero profit price multiplier: 0.11
-			# Employment: 10000
-			# Wage breakeven: 0.35
+			# Employment: 2000
+			# Wage breakeven: 1.77
 		}
 		level_scaled = {
-			building_employment_clerks_add = 5000
-			building_employment_shopkeepers_add = 3000
-			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 1000
+			building_employment_shopkeepers_add = 600
+			building_employment_engineers_add = 400
 		}
 	}
 }
@@ -1596,13 +1596,13 @@ pm_bhp_mount_whaleback_mine = {
 			# Profit: 4800.0
 			# Profit margin: 400.00%
 			# Zero profit price multiplier: 0.20
-			# Employment: 10000
-			# Wage breakeven: 0.48
+			# Employment: 2000
+			# Wage breakeven: 2.40
 		}
 		level_scaled = {
-			building_employment_laborers_add = 6000
-			building_employment_machinists_add = 3000
-			building_employment_engineers_add = 1000
+			building_employment_laborers_add = 1200
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 200
 		}
 	}
 }
@@ -1627,13 +1627,13 @@ pm_cochlear_global_hq = {
 			# Profit: 4800.0
 			# Profit margin: 600.00%
 			# Zero profit price multiplier: 0.14
-			# Employment: 10000
-			# Wage breakeven: 0.48
+			# Employment: 2000
+			# Wage breakeven: 2.40
 		}
 		level_scaled = {
-			building_employment_academics_add = 5000
-			building_employment_engineers_add = 4000
-			building_employment_clerks_add = 1000
+			building_employment_academics_add = 1000
+			building_employment_engineers_add = 800
+			building_employment_clerks_add = 200
 		}
 	}
 }
@@ -1657,12 +1657,12 @@ pm_infosys_mysore_campus = {
 			# Profit: 3400.0
 			# Profit margin: 566.67%
 			# Zero profit price multiplier: 0.15
-			# Employment: 10000
-			# Wage breakeven: 0.34
+			# Employment: 2000
+			# Wage breakeven: 1.70
 		}
 		level_scaled = {
-			building_employment_academics_add = 4000
-			building_employment_clerks_add = 6000
+			building_employment_academics_add = 800
+			building_employment_clerks_add = 1200
 		}
 	}
 }
@@ -1687,13 +1687,13 @@ pm_jsw_vijayanagar_works = {
 			# Profit: 5500.0
 			# Profit margin: 275.00%
 			# Zero profit price multiplier: 0.27
-			# Employment: 10000
-			# Wage breakeven: 0.55
+			# Employment: 2000
+			# Wage breakeven: 2.75
 		}
 		level_scaled = {
-			building_employment_machinists_add = 5000
-			building_employment_laborers_add = 4000
-			building_employment_engineers_add = 1000
+			building_employment_machinists_add = 1000
+			building_employment_laborers_add = 800
+			building_employment_engineers_add = 200
 		}
 	}
 }
@@ -2030,16 +2030,16 @@ pm_generic_industrial_city = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_construction_add = 1                     # Price:  500, Total cost:   500.0 (100.00%)
+			goods_input_construction_add = 1                     # Price: 1000, Total cost:  1000.0 (100.00%)
 			# Output goods
 			goods_output_services_add = 150                      # Price:   30, Total cost:  4500.0 (100.00%)
-			# Total input cost: 500.0
+			# Total input cost: 1000.0
 			# Total output cost: 4500.0
-			# Profit: 4000.0
-			# Profit margin: 800.00%
-			# Zero profit price multiplier: 0.11
+			# Profit: 3500.0
+			# Profit margin: 350.00%
+			# Zero profit price multiplier: 0.22
 			# Employment: 10000
-			# Wage breakeven: 0.40
+			# Wage breakeven: 0.35
 		}
 		level_scaled = {
 			building_employment_laborers_add = 3000
@@ -2257,16 +2257,16 @@ pm_generic_monument_to_industry = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_construction_add = 0.5                   # Price:  500, Total cost:   250.0 (100.00%)
+			goods_input_construction_add = 0.5                   # Price: 1000, Total cost:   500.0 (100.00%)
 			# Output goods
 			goods_output_tourism_add = 30                        # Price:  100, Total cost:  3000.0 (100.00%)
-			# Total input cost: 250.0
+			# Total input cost: 500.0
 			# Total output cost: 3000.0
-			# Profit: 2750.0
-			# Profit margin: 1100.00%
-			# Zero profit price multiplier: 0.08
+			# Profit: 2500.0
+			# Profit margin: 500.00%
+			# Zero profit price multiplier: 0.17
 			# Employment: 10000
-			# Wage breakeven: 0.28
+			# Wage breakeven: 0.25
 		}
 		level_scaled = {
 			building_employment_clerks_add = 5000

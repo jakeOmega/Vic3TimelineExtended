@@ -1743,7 +1743,7 @@ principle_cultural_plurality_1 = {
 		state_pop_support_movement_cultural_minority_mult = -0.1
 	}
 
-	power_bloc_modifier = {
+	leader_modifier = {
 		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 	
@@ -1783,7 +1783,7 @@ principle_cultural_plurality_2 = {
 		state_education_access_add = 0.05
 	}
 
-	power_bloc_modifier = {
+	leader_modifier = {
 		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 	
@@ -1814,7 +1814,7 @@ principle_cultural_plurality_3 = {
 		state_yearly_cultural_acceptance_add = 0.25
 	}
 
-	power_bloc_modifier = {
+	leader_modifier = {
 		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 	
@@ -1842,7 +1842,7 @@ principle_cultural_plurality_4 = {
 		state_yearly_cultural_acceptance_add = 0.5
 	}
 
-	power_bloc_modifier = {
+	leader_modifier = {
 		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 
@@ -1875,7 +1875,7 @@ principle_cultural_plurality_5 = {
 		state_min_cultural_acceptance_delta_add = 10
 		state_yearly_cultural_acceptance_add = 0.5
 	}
-	power_bloc_modifier = {
+	leader_modifier = {
 		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
 	}
 

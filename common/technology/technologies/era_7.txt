@@ -589,6 +589,7 @@ modern_urban_planning = {
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		state_building_highway_max_level_add = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 2
+		country_construction_goods_cost_mult = 0.2
 	}
 	
 	ai_weight = {

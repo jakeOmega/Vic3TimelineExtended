@@ -21,7 +21,17 @@ je_nuclear_program = {
 	progressbar = yes
 
     possible = {
-        always = no
+        OR = {
+            country_rank = rank_value:great_power
+            AND = {
+                country_rank = rank_value:major_power
+                has_technology_researched = ICBMs
+            }
+            modifier:receiving_nuclear_program_aid = yes 
+        }
+        NOT = {
+            modifier:nuclear_disarmament = yes
+        }
     }
 
     immediate = {
@@ -61,16 +71,11 @@ je_nuclear_program = {
         }
 	}
 
-	on_monthly_pulse = {
+	on_weekly_pulse = {
 		effect = {
             if = {
                 limit = {
-                    any_scope_treaty = {
-                        any_scope_article = {
-                            has_type = nuclear_disarmament
-                            source_country = root
-                        }
-                    }
+                    modifier:nuclear_disarmament = yes
                 }
                 set_variable = {
                     name = nuclear_weapon_stockpile
@@ -85,7 +90,10 @@ je_nuclear_program = {
             }
 			change_variable = {
 				name = nuclear_weapon_program_progress
-				add = nuclear_weapon_program_monthly_progress
+				add = {
+                    value = nuclear_weapon_program_monthly_progress
+                    divide = 4
+                }
 			}
             while = {
                 limit = {var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value}
