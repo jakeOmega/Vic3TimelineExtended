@@ -514,6 +514,14 @@ temperature_anomaly_display = {
 	divide = 100
 }
 
+gw_emission_multiplier_script_value = {
+	# Evaluated in country scope.
+	# Returns the net emission multiplier for this country (1.0 = full, 0.8 = 20% reduction, etc.)
+	# Automatically picks up any modifiers that add country_greenhouse_gas_emissions_mult.
+	value = 1
+	add = modifier:country_greenhouse_gas_emissions_mult
+}
+
 gw_countries_with_carbon_tax_script_value = {
 	value = 0
 	every_country = {

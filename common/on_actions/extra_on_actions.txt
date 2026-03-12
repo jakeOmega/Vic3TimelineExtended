@@ -209,34 +209,15 @@ global_warming_update_on_action = {
 				owner.market_capital = THIS
 			}
 			market = {
+				# Apply market emissions scaled by the owner country's net emission multiplier.
+				# market_capital.owner evaluates gw_emission_multiplier_script_value in country scope,
+				# picking up carbon_tax_modifier (-20%), renewable_investment_modifier (-15%),
+				# and any future country_greenhouse_gas_emissions_mult modifiers automatically.
 				change_global_variable = {
 					name = greenhouse_gas_emissions
-					add = market_greenhouse_gas_emissions_script_value
-				}
-			}
-			# Carbon tax reduces this country's annual emissions contribution by 20%
-			if = {
-				limit = { owner = { has_modifier = carbon_tax_modifier } }
-				market = {
-					change_global_variable = {
-						name = greenhouse_gas_emissions
-						add = {
-							value = market_greenhouse_gas_emissions_script_value
-							multiply = -0.20
-						}
-					}
-				}
-			}
-			# Renewable investment reduces this country's annual emissions contribution by 15%
-			if = {
-				limit = { owner = { has_modifier = renewable_investment_modifier } }
-				market = {
-					change_global_variable = {
-						name = greenhouse_gas_emissions
-						add = {
-							value = market_greenhouse_gas_emissions_script_value
-							multiply = -0.15
-						}
+					add = {
+						value = market_greenhouse_gas_emissions_script_value
+						multiply = market_capital.owner.gw_emission_multiplier_script_value
 					}
 				}
 			}
