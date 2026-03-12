@@ -5858,3 +5858,605 @@ create_new_religion = {
         }
     }
 }
+# Global Warming mitigation buttons
+gw_carbon_tax_button = {
+    name = "GW_CARBON_TAX"
+    desc = "GW_CARBON_TAX_DESC"
+
+    visible = {
+        NOT = { has_modifier = carbon_tax_modifier }
+        temperature_anomaly_display >= 0.5
+        # Emissions reduction only applies for the market leader; restrict button accordingly
+        market_capital.owner = THIS
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 1.0 }
+            add = 30
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 2.0 }
+            add = 30
+        }
+        if = {
+            limit = {
+                has_law = law_type:law_laissez_faire
+            }
+            add = -50
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = carbon_tax_modifier }
+        temperature_anomaly_display >= 0.5
+        market_capital.owner = THIS
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_CARBON_TAX_DESC"
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    NOT = { has_modifier = carbon_tax_modifier }
+                }
+                add_modifier = { name = carbon_tax_modifier }
+            }
+        }
+    }
+}
+
+gw_remove_carbon_tax_button = {
+    name = "GW_REMOVE_CARBON_TAX"
+    desc = "GW_REMOVE_CARBON_TAX_DESC"
+
+    visible = {
+        has_modifier = carbon_tax_modifier
+        market_capital.owner = THIS
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display < 0.5 }
+            add = 50
+        }
+        if = {
+            limit = {
+                has_law = law_type:law_laissez_faire
+            }
+            add = 30
+        }
+    }
+
+    possible = {
+        has_modifier = carbon_tax_modifier
+        market_capital.owner = THIS
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_CARBON_TAX_DESC"
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    has_modifier = carbon_tax_modifier
+                }
+                remove_modifier = carbon_tax_modifier
+            }
+        }
+    }
+}
+
+gw_renewable_investment_button = {
+    name = "GW_RENEWABLE_INVESTMENT"
+    desc = "GW_RENEWABLE_INVESTMENT_DESC"
+
+    visible = {
+        NOT = { has_modifier = renewable_investment_modifier }
+        temperature_anomaly_display >= 0.5
+        # Emissions reduction only applies for the market leader; restrict button accordingly
+        market_capital.owner = THIS
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 1.0 }
+            add = 20
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 2.0 }
+            add = 20
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = renewable_investment_modifier }
+        temperature_anomaly_display >= 0.5
+        market_capital.owner = THIS
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_RENEWABLE_INVESTMENT_DESC"
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    NOT = { has_modifier = renewable_investment_modifier }
+                }
+                add_modifier = { name = renewable_investment_modifier }
+            }
+        }
+    }
+}
+
+gw_remove_renewable_investment_button = {
+    name = "GW_REMOVE_RENEWABLE_INVESTMENT"
+    desc = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
+
+    visible = {
+        has_modifier = renewable_investment_modifier
+        market_capital.owner = THIS
+    }
+
+    ai_chance = {
+        value = 0
+        # AI removes renewable investment only when warming is negligible
+        # (warming below threshold = less urgency to maintain green policies)
+        if = {
+            limit = { temperature_anomaly_display < 0.3 }
+            add = 60
+        }
+        # AI also more likely to remove if warming isn't worsening significantly
+        if = {
+            limit = {
+                has_law = law_type:law_laissez_faire
+                temperature_anomaly_display < 1.0
+            }
+            add = 30
+        }
+    }
+
+    possible = {
+        has_modifier = renewable_investment_modifier
+        market_capital.owner = THIS
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    has_modifier = renewable_investment_modifier
+                }
+                remove_modifier = renewable_investment_modifier
+            }
+        }
+    }
+}
+
+gw_climate_adaptation_button = {
+    name = "GW_CLIMATE_ADAPTATION"
+    desc = "GW_CLIMATE_ADAPTATION_DESC"
+
+    visible = {
+        NOT = { has_modifier = climate_adaptation_modifier }
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 0.5 }
+            add = 25
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 2.0 }
+            add = 25
+        }
+        if = {
+            limit = { country_authority < 50 }
+            add = -25
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = climate_adaptation_modifier }
+        country_authority >= 25
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_CLIMATE_ADAPTATION_DESC"
+            add_modifier = { name = climate_adaptation_modifier }
+        }
+    }
+}
+
+gw_remove_climate_adaptation_button = {
+    name = "GW_REMOVE_CLIMATE_ADAPTATION"
+    desc = "GW_REMOVE_CLIMATE_ADAPTATION_DESC"
+
+    visible = {
+        has_modifier = climate_adaptation_modifier
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display < 0.5 }
+            add = 50
+        }
+    }
+
+    possible = {
+        has_modifier = climate_adaptation_modifier
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_CLIMATE_ADAPTATION_DESC"
+            remove_modifier = climate_adaptation_modifier
+        }
+    }
+}
+
+# ---- Emission Standards Mandate (market leader only — uses country_greenhouse_gas_emissions_mult) ----
+
+gw_emission_standards_button = {
+    name = "GW_EMISSION_STANDARDS"
+    desc = "GW_EMISSION_STANDARDS_DESC"
+
+    visible = {
+        NOT = { has_modifier = emission_standards_modifier }
+        temperature_anomaly_display >= 0.5
+        market_capital.owner = THIS
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 1.0 }
+            add = 25
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 2.0 }
+            add = 25
+        }
+        if = {
+            limit = { has_law = law_type:law_laissez_faire }
+            add = -40
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = emission_standards_modifier }
+        temperature_anomaly_display >= 0.5
+        market_capital.owner = THIS
+        country_authority >= 20
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_EMISSION_STANDARDS_DESC"
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    NOT = { has_modifier = emission_standards_modifier }
+                }
+                add_modifier = { name = emission_standards_modifier }
+            }
+        }
+    }
+}
+
+gw_remove_emission_standards_button = {
+    name = "GW_REMOVE_EMISSION_STANDARDS"
+    desc = "GW_REMOVE_EMISSION_STANDARDS_DESC"
+
+    visible = {
+        has_modifier = emission_standards_modifier
+        market_capital.owner = THIS
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display < 0.5 }
+            add = 60
+        }
+        if = {
+            limit = { has_law = law_type:law_laissez_faire }
+            add = 30
+        }
+    }
+
+    possible = {
+        has_modifier = emission_standards_modifier
+        market_capital.owner = THIS
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_EMISSION_STANDARDS_DESC"
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    has_modifier = emission_standards_modifier
+                }
+                remove_modifier = emission_standards_modifier
+            }
+        }
+    }
+}
+
+# ---- Reforestation Subsidies (available to all countries) ----
+
+gw_reforestation_button = {
+    name = "GW_REFORESTATION"
+    desc = "GW_REFORESTATION_DESC"
+
+    visible = {
+        NOT = { has_modifier = reforestation_subsidies_modifier }
+        temperature_anomaly_display >= 0.5
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 0.5 }
+            add = 20
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 2.0 }
+            add = 20
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = reforestation_subsidies_modifier }
+        temperature_anomaly_display >= 0.5
+        country_authority >= 10
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REFORESTATION_DESC"
+            add_modifier = { name = reforestation_subsidies_modifier }
+        }
+    }
+}
+
+gw_remove_reforestation_button = {
+    name = "GW_REMOVE_REFORESTATION"
+    desc = "GW_REMOVE_REFORESTATION_DESC"
+
+    visible = {
+        has_modifier = reforestation_subsidies_modifier
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display < 0.3 }
+            add = 50
+        }
+    }
+
+    possible = {
+        has_modifier = reforestation_subsidies_modifier
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_REFORESTATION_DESC"
+            remove_modifier = reforestation_subsidies_modifier
+        }
+    }
+}
+
+# ---- Public Transit Initiatives (available to all countries) ----
+
+gw_public_transit_button = {
+    name = "GW_PUBLIC_TRANSIT"
+    desc = "GW_PUBLIC_TRANSIT_DESC"
+
+    visible = {
+        NOT = { has_modifier = public_transit_modifier }
+        temperature_anomaly_display >= 0.5
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 0.5 }
+            add = 15
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 1.5 }
+            add = 15
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = public_transit_modifier }
+        temperature_anomaly_display >= 0.5
+        country_authority >= 15
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_PUBLIC_TRANSIT_DESC"
+            add_modifier = { name = public_transit_modifier }
+        }
+    }
+}
+
+gw_remove_public_transit_button = {
+    name = "GW_REMOVE_PUBLIC_TRANSIT"
+    desc = "GW_REMOVE_PUBLIC_TRANSIT_DESC"
+
+    visible = {
+        has_modifier = public_transit_modifier
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display < 0.3 }
+            add = 40
+        }
+    }
+
+    possible = {
+        has_modifier = public_transit_modifier
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_PUBLIC_TRANSIT_DESC"
+            remove_modifier = public_transit_modifier
+        }
+    }
+}
+
+# ---- Fossil Fuel Divestment (available to all countries, requires 1.0°C) ----
+
+gw_fossil_fuel_divestment_button = {
+    name = "GW_FOSSIL_FUEL_DIVESTMENT"
+    desc = "GW_FOSSIL_FUEL_DIVESTMENT_DESC"
+
+    visible = {
+        NOT = { has_modifier = fossil_fuel_divestment_modifier }
+        temperature_anomaly_display >= 1.0
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 1.5 }
+            add = 20
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 2.5 }
+            add = 30
+        }
+        if = {
+            limit = { has_law = law_type:law_laissez_faire }
+            add = -50
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = fossil_fuel_divestment_modifier }
+        temperature_anomaly_display >= 1.0
+        country_authority >= 20
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_FOSSIL_FUEL_DIVESTMENT_DESC"
+            add_modifier = { name = fossil_fuel_divestment_modifier }
+        }
+    }
+}
+
+gw_remove_fossil_fuel_divestment_button = {
+    name = "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT"
+    desc = "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC"
+
+    visible = {
+        has_modifier = fossil_fuel_divestment_modifier
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display < 1.0 }
+            add = 60
+        }
+        if = {
+            limit = { has_law = law_type:law_laissez_faire }
+            add = 30
+        }
+    }
+
+    possible = {
+        has_modifier = fossil_fuel_divestment_modifier
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC"
+            remove_modifier = fossil_fuel_divestment_modifier
+        }
+    }
+}
+
+# ---- Green Building Codes (available to all countries) ----
+
+gw_green_building_codes_button = {
+    name = "GW_GREEN_BUILDING_CODES"
+    desc = "GW_GREEN_BUILDING_CODES_DESC"
+
+    visible = {
+        NOT = { has_modifier = green_building_codes_modifier }
+        temperature_anomaly_display >= 0.5
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 0.5 }
+            add = 15
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 1.5 }
+            add = 15
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = green_building_codes_modifier }
+        temperature_anomaly_display >= 0.5
+        country_authority >= 10
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_GREEN_BUILDING_CODES_DESC"
+            add_modifier = { name = green_building_codes_modifier }
+        }
+    }
+}
+
+gw_remove_green_building_codes_button = {
+    name = "GW_REMOVE_GREEN_BUILDING_CODES"
+    desc = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
+
+    visible = {
+        has_modifier = green_building_codes_modifier
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display < 0.3 }
+            add = 40
+        }
+    }
+
+    possible = {
+        has_modifier = green_building_codes_modifier
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
+            remove_modifier = green_building_codes_modifier
+        }
+    }
+}

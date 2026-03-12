@@ -1726,3 +1726,15 @@ state_building_generic_logistics_hub_max_level_add = {
 	color = good
 	percent = no
 }
+
+
+# ----- Global Warming -----
+country_greenhouse_gas_emissions_mult = {
+color = good
+percent = yes
+script_only = yes
+game_data = {
+ai_value = 0
+}
+}
+

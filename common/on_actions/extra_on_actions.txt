@@ -11,6 +11,7 @@ on_monthly_pulse_state = {
 on_monthly_pulse = {
 	on_actions = {
 		city_rank_on_action
+		global_warming_events_on_action
 	}
 }
 
@@ -57,6 +58,50 @@ on_law_enactment_started = {
 on_law_activated = {
 	on_actions = {
 		fix_incompatible_laws_from_law_scope
+	}
+}
+
+on_merge_markets = {
+	on_actions = {
+		gw_market_join_on_action
+	}
+}
+
+# Root = the dissolving (joining) market, scope:market = the absorbing market.
+# owner = the country whose market is dissolving (new market member).
+# scope:market.owner = the country that owns the absorbing market (the market leader).
+gw_market_join_on_action = {
+	effect = {
+		if = {
+			limit = {
+				exists = owner
+				exists = scope:market.owner
+			}
+			owner = {
+				# Apply any active market-leader policies from the absorbing market's leader.
+				if = {
+					limit = {
+						NOT = { has_modifier = carbon_tax_modifier }
+						scope:market.owner = { has_modifier = carbon_tax_modifier }
+					}
+					add_modifier = { name = carbon_tax_modifier }
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = renewable_investment_modifier }
+						scope:market.owner = { has_modifier = renewable_investment_modifier }
+					}
+					add_modifier = { name = renewable_investment_modifier }
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = emission_standards_modifier }
+						scope:market.owner = { has_modifier = emission_standards_modifier }
+					}
+					add_modifier = { name = emission_standards_modifier }
+				}
+			}
+		}
 	}
 }
 
@@ -208,14 +253,107 @@ global_warming_update_on_action = {
 				owner.market_capital = THIS
 			}
 			market = {
+				# Apply market emissions scaled by the owner country's net emission multiplier.
+				# market_capital.owner evaluates gw_emission_multiplier_script_value in country scope,
+				# picking up carbon_tax_modifier (-20%), renewable_investment_modifier (-15%),
+				# and any future country_greenhouse_gas_emissions_mult modifiers automatically.
 				change_global_variable = {
 					name = greenhouse_gas_emissions
-					add = market_greenhouse_gas_emissions_script_value
+					add = {
+						value = market_greenhouse_gas_emissions_script_value
+						multiply = market_capital.owner.gw_emission_multiplier_script_value
+					}
+				}
+			}
+		}
+		# Carbon capture: subtract synthetic oil/coal production (not fossil extraction)
+		every_scope_building = {
+			limit = { is_building_type = building_synthetics_plant_oil }
+			if = {
+				limit = { has_active_production_method = pm_synthetic_oil_2 }
+				change_global_variable = {
+					name = greenhouse_gas_emissions
+					add = {
+						value = level
+						multiply = -0.06  # 300 oil × 2 weight / 10000
+					}
+				}
+			}
+			else = {
+				change_global_variable = {
+					name = greenhouse_gas_emissions
+					add = {
+						value = level
+						multiply = -0.036  # 180 oil × 2 weight / 10000
+					}
+				}
+			}
+		}
+		every_scope_building = {
+			limit = { is_building_type = building_synthetics_plant_coal }
+			change_global_variable = {
+				name = greenhouse_gas_emissions
+				add = {
+					value = level
+					multiply = -0.168  # 840 coal × 2 weight / 10000
 				}
 			}
 		}
 	}
 }
+
+global_warming_events_on_action = {
+	effect = {
+		# Fire threshold events exactly once globally when temperature crosses each threshold.
+		# Runs in the global (world) scope of on_monthly_pulse — fires once per month,
+		# so every_country here reaches all countries without per-country duplication.
+		if = {
+			limit = {
+				temperature_anomaly_display >= 0.5
+				NOT = { has_global_variable = gw_mild_event_fired }
+			}
+			set_global_variable = gw_mild_event_fired
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = environmentalism_events.1 }
+			}
+		}
+		if = {
+			limit = {
+				temperature_anomaly_display >= 1.0
+				NOT = { has_global_variable = gw_moderate_event_fired }
+			}
+			set_global_variable = gw_moderate_event_fired
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = environmentalism_events.2 }
+			}
+		}
+		if = {
+			limit = {
+				temperature_anomaly_display >= 2.0
+				NOT = { has_global_variable = gw_severe_event_fired }
+			}
+			set_global_variable = gw_severe_event_fired
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = environmentalism_events.3 }
+			}
+		}
+		if = {
+			limit = {
+				temperature_anomaly_display >= 3.0
+				NOT = { has_global_variable = gw_catastrophic_event_fired }
+			}
+			set_global_variable = gw_catastrophic_event_fired
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = environmentalism_events.4 }
+			}
+		}
+	}
+}
+
 
 tech_spread_on_action = {
 	effect = {

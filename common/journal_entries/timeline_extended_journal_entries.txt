@@ -147,6 +147,34 @@ je_global_warming = {
         temperature_anomaly_display > 0.1
     }
 
+    # Progress bar: current temperature vs the 4°C critical threshold (above catastrophic at 3°C)
+    current_value = {
+        value = temperature_anomaly_display
+    }
+
+    goal_add_value = {
+        value = 4
+    }
+
+    progressbar = yes
+
+    scripted_button = gw_carbon_tax_button
+    scripted_button = gw_remove_carbon_tax_button
+    scripted_button = gw_renewable_investment_button
+    scripted_button = gw_remove_renewable_investment_button
+    scripted_button = gw_climate_adaptation_button
+    scripted_button = gw_remove_climate_adaptation_button
+    scripted_button = gw_emission_standards_button
+    scripted_button = gw_remove_emission_standards_button
+    scripted_button = gw_reforestation_button
+    scripted_button = gw_remove_reforestation_button
+    scripted_button = gw_public_transit_button
+    scripted_button = gw_remove_public_transit_button
+    scripted_button = gw_fossil_fuel_divestment_button
+    scripted_button = gw_remove_fossil_fuel_divestment_button
+    scripted_button = gw_green_building_codes_button
+    scripted_button = gw_remove_green_building_codes_button
+
     immediate = {
     }
 
@@ -155,10 +183,24 @@ je_global_warming = {
     }
 
     on_monthly_pulse = {
+        effect = {
+            # ---- Update warming modifier: temperature anomaly used directly as multiplier ----
+            if = {
+                limit = { temperature_anomaly_display >= 0.01 }
+                remove_modifier = global_warming
+                add_modifier = { name = global_warming multiplier = temperature_anomaly_display }
+            }
+            else_if = {
+                limit = { has_modifier = global_warming }
+                remove_modifier = global_warming
+            }
+        }
     }
 
     weight = 10
     should_be_pinned_by_default = yes
+    can_revolution_inherit = yes
+    can_deactivate = no
 }
 
 je_state_collapse = {

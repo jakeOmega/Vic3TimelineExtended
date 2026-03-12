@@ -474,13 +474,13 @@ market_greenhouse_gas_emissions_script_value = {
 	value = 0
 	mg:oil = {
 		add = {
-			value = market_goods_production
+			value = market_goods_consumption
 			multiply = 2
 		}
 	}
 	mg:coal = {
 		add = {
-			value = market_goods_production
+			value = market_goods_consumption
 			multiply = 2
 		}
 	}
@@ -509,9 +509,81 @@ global_greenhouse_gas_emissions_script_value_display = {
 
 temperature_anomaly_display = {
 	value = global_var:greenhouse_gas_emissions
-	divide = 1000
+	divide = 500
 	round = yes
 	divide = 100
+}
+
+gw_emission_multiplier_script_value = {
+	# Evaluated in country scope.
+	# Returns the net emission multiplier for this country (1.0 = full, 0.8 = 20% reduction, etc.)
+	# Automatically picks up any modifiers that add country_greenhouse_gas_emissions_mult.
+	value = 1
+	add = modifier:country_greenhouse_gas_emissions_mult
+}
+
+gw_countries_with_carbon_tax_script_value = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = carbon_tax_modifier }
+		add = 1
+	}
+}
+
+gw_countries_with_renewables_script_value = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = renewable_investment_modifier }
+		add = 1
+	}
+}
+
+gw_countries_with_adaptation_script_value = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = climate_adaptation_modifier }
+		add = 1
+	}
+}
+
+gw_countries_with_emission_standards_script_value = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = emission_standards_modifier }
+		add = 1
+	}
+}
+
+gw_countries_with_reforestation_script_value = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = reforestation_subsidies_modifier }
+		add = 1
+	}
+}
+
+gw_countries_with_public_transit_script_value = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = public_transit_modifier }
+		add = 1
+	}
+}
+
+gw_countries_with_divestment_script_value = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = fossil_fuel_divestment_modifier }
+		add = 1
+	}
+}
+
+gw_countries_with_green_buildings_script_value = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = green_building_codes_modifier }
+		add = 1
+	}
 }
 
 global_tech_spread_script_value = {
