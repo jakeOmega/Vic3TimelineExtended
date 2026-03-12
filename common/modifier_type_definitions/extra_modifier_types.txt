@@ -1726,3 +1726,59 @@ state_building_generic_logistics_hub_max_level_add = {
 	color = good
 	percent = no
 }
+
+
+# ----- Global Warming -----
+country_greenhouse_gas_emissions_mult = {
+color = good
+percent = yes
+script_only = yes
+game_data = {
+ai_value = 0
+}
+}
+
+state_harvest_condition_flood_impact_mult = {
+color = bad
+percent = yes
+decimals = 1
+game_data = {
+ai_value = 0
+}
+}
+
+state_harvest_condition_flood_duration_mult = {
+color = bad
+percent = yes
+decimals = 1
+game_data = {
+ai_value = 0
+}
+}
+
+state_harvest_condition_drought_impact_mult = {
+color = bad
+percent = yes
+decimals = 1
+game_data = {
+ai_value = 0
+}
+}
+
+state_harvest_condition_drought_duration_mult = {
+color = bad
+percent = yes
+decimals = 1
+game_data = {
+ai_value = 0
+}
+}
+
+state_harvest_condition_cold_snap_impact_mult = {
+color = good
+percent = yes
+decimals = 1
+game_data = {
+ai_value = 0
+}
+}
