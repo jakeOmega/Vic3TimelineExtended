@@ -207,7 +207,7 @@ environmentalism_events.5 = {
 
     trigger = {
         has_modifier = global_warming
-        check_variable = { name = gw_stage value >= 3 }
+        temperature_anomaly_display >= 2.0
         any_scope_state = {
             is_incorporated = yes
             any_scope_building = { is_building_type = building_wheat_farm }
@@ -255,7 +255,7 @@ environmentalism_events.6 = {
 
     trigger = {
         has_modifier = global_warming
-        check_variable = { name = gw_stage value >= 2 }
+        temperature_anomaly_display >= 1.0
     }
 
     immediate = {
@@ -358,7 +358,7 @@ environmentalism_events.8 = {
 
     trigger = {
         has_modifier = global_warming
-        check_variable = { name = gw_stage value >= 1 }
+        temperature_anomaly_display >= 0.5
         NOT = { has_modifier = carbon_tax_modifier }
         NOT = { has_modifier = renewable_investment_modifier }
     }
