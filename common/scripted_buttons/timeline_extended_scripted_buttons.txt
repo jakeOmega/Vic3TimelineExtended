@@ -5897,7 +5897,13 @@ gw_carbon_tax_button = {
     effect = {
         custom_tooltip = {
             text = "GW_CARBON_TAX_DESC"
-            add_modifier = { name = carbon_tax_modifier }
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    NOT = { has_modifier = carbon_tax_modifier }
+                }
+                add_modifier = { name = carbon_tax_modifier }
+            }
         }
     }
 }
@@ -5908,6 +5914,7 @@ gw_remove_carbon_tax_button = {
 
     visible = {
         has_modifier = carbon_tax_modifier
+        market_capital.owner = THIS
     }
 
     ai_chance = {
@@ -5926,12 +5933,19 @@ gw_remove_carbon_tax_button = {
 
     possible = {
         has_modifier = carbon_tax_modifier
+        market_capital.owner = THIS
     }
 
     effect = {
         custom_tooltip = {
             text = "GW_REMOVE_CARBON_TAX_DESC"
-            remove_modifier = carbon_tax_modifier
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    has_modifier = carbon_tax_modifier
+                }
+                remove_modifier = carbon_tax_modifier
+            }
         }
     }
 }
@@ -5968,7 +5982,13 @@ gw_renewable_investment_button = {
     effect = {
         custom_tooltip = {
             text = "GW_RENEWABLE_INVESTMENT_DESC"
-            add_modifier = { name = renewable_investment_modifier }
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    NOT = { has_modifier = renewable_investment_modifier }
+                }
+                add_modifier = { name = renewable_investment_modifier }
+            }
         }
     }
 }
@@ -5979,6 +5999,7 @@ gw_remove_renewable_investment_button = {
 
     visible = {
         has_modifier = renewable_investment_modifier
+        market_capital.owner = THIS
     }
 
     ai_chance = {
@@ -6001,12 +6022,19 @@ gw_remove_renewable_investment_button = {
 
     possible = {
         has_modifier = renewable_investment_modifier
+        market_capital.owner = THIS
     }
 
     effect = {
         custom_tooltip = {
             text = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
-            remove_modifier = renewable_investment_modifier
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    has_modifier = renewable_investment_modifier
+                }
+                remove_modifier = renewable_investment_modifier
+            }
         }
     }
 }
@@ -6114,7 +6142,13 @@ gw_emission_standards_button = {
     effect = {
         custom_tooltip = {
             text = "GW_EMISSION_STANDARDS_DESC"
-            add_modifier = { name = emission_standards_modifier }
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    NOT = { has_modifier = emission_standards_modifier }
+                }
+                add_modifier = { name = emission_standards_modifier }
+            }
         }
     }
 }
@@ -6125,6 +6159,7 @@ gw_remove_emission_standards_button = {
 
     visible = {
         has_modifier = emission_standards_modifier
+        market_capital.owner = THIS
     }
 
     ai_chance = {
@@ -6141,12 +6176,19 @@ gw_remove_emission_standards_button = {
 
     possible = {
         has_modifier = emission_standards_modifier
+        market_capital.owner = THIS
     }
 
     effect = {
         custom_tooltip = {
             text = "GW_REMOVE_EMISSION_STANDARDS_DESC"
-            remove_modifier = emission_standards_modifier
+            every_country = {
+                limit = {
+                    market_capital = ROOT.market_capital
+                    has_modifier = emission_standards_modifier
+                }
+                remove_modifier = emission_standards_modifier
+            }
         }
     }
 }

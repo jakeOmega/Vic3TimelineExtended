@@ -61,6 +61,50 @@ on_law_activated = {
 	}
 }
 
+on_merge_markets = {
+	on_actions = {
+		gw_market_join_on_action
+	}
+}
+
+# Root = the dissolving (joining) market, scope:market = the absorbing market.
+# owner = the country whose market is dissolving (new market member).
+# scope:market.owner = the country that owns the absorbing market (the market leader).
+gw_market_join_on_action = {
+	effect = {
+		if = {
+			limit = {
+				exists = owner
+				exists = scope:market.owner
+			}
+			owner = {
+				# Apply any active market-leader policies from the absorbing market's leader.
+				if = {
+					limit = {
+						NOT = { has_modifier = carbon_tax_modifier }
+						scope:market.owner = { has_modifier = carbon_tax_modifier }
+					}
+					add_modifier = { name = carbon_tax_modifier }
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = renewable_investment_modifier }
+						scope:market.owner = { has_modifier = renewable_investment_modifier }
+					}
+					add_modifier = { name = renewable_investment_modifier }
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = emission_standards_modifier }
+						scope:market.owner = { has_modifier = emission_standards_modifier }
+					}
+					add_modifier = { name = emission_standards_modifier }
+				}
+			}
+		}
+	}
+}
+
 space_elevator_on_action = {
 	effect = {
 		if = {
