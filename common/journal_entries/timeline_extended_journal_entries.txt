@@ -147,13 +147,13 @@ je_global_warming = {
         temperature_anomaly_display > 0.1
     }
 
-    # Progress bar: current temperature vs the 2°C critical threshold
+    # Progress bar: current temperature vs the 4°C critical threshold (above catastrophic at 3°C)
     current_value = {
         value = temperature_anomaly_display
     }
 
     goal_add_value = {
-        value = 2
+        value = 4
     }
 
     progressbar = yes
@@ -174,46 +174,15 @@ je_global_warming = {
 
     on_monthly_pulse = {
         effect = {
-            # ---- Update warming-stage country modifier ----
+            # ---- Update warming modifier: temperature anomaly used directly as multiplier ----
             if = {
-                limit = { temperature_anomaly_display >= 3.0 }
-                if = {
-                    limit = { NOT = { has_modifier = global_warming_catastrophic } }
-                    remove_modifier = global_warming_mild
-                    remove_modifier = global_warming_moderate
-                    remove_modifier = global_warming_severe
-                    add_modifier = { name = global_warming_catastrophic }
-                }
+                limit = { temperature_anomaly_display >= 0.01 }
+                remove_modifier = global_warming
+                add_modifier = { name = global_warming multiplier = temperature_anomaly_display }
             }
             else_if = {
-                limit = { temperature_anomaly_display >= 2.0 }
-                if = {
-                    limit = { NOT = { has_modifier = global_warming_severe } }
-                    remove_modifier = global_warming_mild
-                    remove_modifier = global_warming_moderate
-                    remove_modifier = global_warming_catastrophic
-                    add_modifier = { name = global_warming_severe }
-                }
-            }
-            else_if = {
-                limit = { temperature_anomaly_display >= 1.0 }
-                if = {
-                    limit = { NOT = { has_modifier = global_warming_moderate } }
-                    remove_modifier = global_warming_mild
-                    remove_modifier = global_warming_severe
-                    remove_modifier = global_warming_catastrophic
-                    add_modifier = { name = global_warming_moderate }
-                }
-            }
-            else_if = {
-                limit = { temperature_anomaly_display >= 0.5 }
-                if = {
-                    limit = { NOT = { has_modifier = global_warming_mild } }
-                    remove_modifier = global_warming_moderate
-                    remove_modifier = global_warming_severe
-                    remove_modifier = global_warming_catastrophic
-                    add_modifier = { name = global_warming_mild }
-                }
+                limit = { has_modifier = global_warming }
+                remove_modifier = global_warming
             }
 
             # ---- Fire threshold events exactly once (first country to cross each threshold triggers for all) ----

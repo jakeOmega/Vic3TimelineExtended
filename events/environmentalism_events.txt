@@ -185,3 +185,206 @@ environmentalism_events.4 = {
         add_radicals = { value = large_radicals }
     }
 }
+
+# Event 5: Crop Failure (random event, fires when severe or catastrophic warming is active)
+environmentalism_events.5 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+        video = "unspecific_fire"
+    }
+
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+    title = environmentalism_events.5.t
+    desc = environmentalism_events.5.d
+    flavor = environmentalism_events.5.f
+
+    duration = 3
+
+    trigger = {
+        has_modifier = global_warming
+        temperature_anomaly_display >= 2.0
+        any_scope_state = {
+            is_incorporated = yes
+            any_scope_building = { is_building_type = building_wheat_farm }
+        }
+    }
+
+    immediate = {
+    }
+
+    option = {
+        name = environmentalism_events.5.a
+        default_option = yes
+        ai_chance = { base = 2 }
+        # Import food to compensate - spend money on emergency food purchases
+        add_radicals = { value = small_radicals }
+        add_modifier = { name = climate_adaptation_modifier months = 12 }
+    }
+
+    option = {
+        name = environmentalism_events.5.b
+        ai_chance = { base = 1 }
+        # Ration food and weather the crisis
+        add_radicals = { value = medium_radicals }
+    }
+}
+
+# Event 6: Climate Refugee Crisis (random event, fires at moderate or above)
+environmentalism_events.6 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+        video = "unspecific_ruler_speaking_to_people"
+    }
+
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+    title = environmentalism_events.6.t
+    desc = environmentalism_events.6.d
+    flavor = environmentalism_events.6.f
+
+    duration = 3
+
+    trigger = {
+        has_modifier = global_warming
+        temperature_anomaly_display >= 1.0
+    }
+
+    immediate = {
+    }
+
+    option = {
+        name = environmentalism_events.6.a
+        default_option = yes
+        ai_chance = { base = 2 }
+        # Accept refugees
+        add_loyalists = { value = small_radicals }
+    }
+
+    option = {
+        name = environmentalism_events.6.b
+        ai_chance = { base = 1 }
+        # Close borders to refugees
+        add_radicals = { value = small_radicals }
+        country_authority_add = 10
+    }
+}
+
+# Event 7: Industrial Pollution Scandal (random event, early game)
+environmentalism_events.7 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+        video = "unspecific_factory"
+    }
+
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+    title = environmentalism_events.7.t
+    desc = environmentalism_events.7.d
+    flavor = environmentalism_events.7.f
+
+    duration = 3
+
+    trigger = {
+        has_global_variable = greenhouse_gas_emissions
+        NOT = { has_modifier = global_warming }
+        any_scope_state = {
+            is_incorporated = yes
+            any_scope_building = {
+                OR = {
+                    is_building_type = building_coal_mine
+                    is_building_type = building_oil_rig
+                }
+                level >= 3
+            }
+        }
+    }
+
+    immediate = {
+    }
+
+    option = {
+        name = environmentalism_events.7.a
+        default_option = yes
+        ai_chance = { base = 2 }
+        # Ignore the protests
+        add_radicals = { value = small_radicals }
+    }
+
+    option = {
+        name = environmentalism_events.7.b
+        ai_chance = {
+            base = 1
+            modifier = {
+                trigger = { temperature_anomaly_display >= 0.3 }
+                add = 2
+            }
+        }
+        # Commission an environmental impact review
+        add_modifier = { name = climate_adaptation_modifier months = 24 }
+    }
+}
+
+# Event 8: Environmentalist Movement Rises (random event, fires when mild+ warming)
+environmentalism_events.8 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+        video = "unspecific_ruler_speaking_to_people"
+    }
+
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+    title = environmentalism_events.8.t
+    desc = environmentalism_events.8.d
+    flavor = environmentalism_events.8.f
+
+    duration = 3
+
+    trigger = {
+        has_modifier = global_warming
+        temperature_anomaly_display >= 0.5
+        NOT = { has_modifier = carbon_tax_modifier }
+        NOT = { has_modifier = renewable_investment_modifier }
+    }
+
+    immediate = {
+    }
+
+    option = {
+        name = environmentalism_events.8.a
+        default_option = yes
+        ai_chance = { base = 1 }
+        # Dismiss the environmentalists
+        add_radicals = { value = small_radicals }
+    }
+
+    option = {
+        name = environmentalism_events.8.b
+        ai_chance = {
+            base = 2
+            modifier = {
+                trigger = { temperature_anomaly_display >= 1.0 }
+                add = 3
+            }
+        }
+        # Embrace green policies
+        add_modifier = { name = renewable_investment_modifier months = 36 }
+        add_loyalists = { value = small_radicals }
+    }
+}

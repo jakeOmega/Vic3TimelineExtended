@@ -448,38 +448,21 @@ banking_asset_relief_program = {
 	country_bureaucracy_mult = -0.05
 }
 
-# ----- Global Warming severity stages (applied to every country via JE monthly pulse) -----
-global_warming_mild = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
-	state_mortality_mult = 0.02
-	state_standard_of_living_add = -0.5
-	building_group_bg_agriculture_throughput_add = -0.05
-}
-
-global_warming_moderate = {
+# ----- Global Warming severity stage (applied to every country via JE monthly pulse, scaled by multiplier) -----
+# Multipliers used in journal entry: mild = 0.5, moderate = 1.0, severe = 2.0, catastrophic = 4.0
+global_warming = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	state_mortality_mult = 0.05
 	state_standard_of_living_add = -1.0
-	building_group_bg_agriculture_throughput_add = -0.10
-	state_migration_pull_mult = -0.05
-}
-
-global_warming_severe = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
-	state_mortality_mult = 0.10
-	state_standard_of_living_add = -2.0
-	building_group_bg_agriculture_throughput_add = -0.20
-	state_migration_pull_mult = -0.10
-	building_throughput_add = -0.05
-}
-
-global_warming_catastrophic = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
-	state_mortality_mult = 0.20
-	state_standard_of_living_add = -4.0
-	building_group_bg_agriculture_throughput_add = -0.30
-	state_migration_pull_mult = -0.20
-	building_throughput_add = -0.15
+	building_group_bg_agriculture_throughput_add = -0.075
+	country_migration_quota_add = 5                       # climate refugees; scales: mild=2.5, moderate=5, severe=10, catastrophic=20
+	state_construction_mult = 0.02                        # increased maintenance costs
+	building_throughput_add = -0.025                      # general economic disruption
+	state_harvest_condition_flood_impact_mult = 0.05      # more severe floods
+	state_harvest_condition_flood_duration_mult = 0.05    # longer floods
+	state_harvest_condition_drought_impact_mult = 0.05    # more severe droughts
+	state_harvest_condition_drought_duration_mult = 0.05  # longer droughts
+	state_harvest_condition_cold_snap_impact_mult = -0.03 # less severe cold snaps (warming benefit)
 }
 
 # ----- Climate mitigation and adaptation policies -----
@@ -488,13 +471,14 @@ carbon_tax_modifier = {
 	goods_output_coal_mult = -0.10
 	goods_output_oil_mult = -0.10
 	country_tax_capacity_mult = 0.03
+	country_greenhouse_gas_emissions_mult = -0.20         # 20% direct emissions reduction
 }
 
 renewable_investment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_weekly_innovation_add = -1
-	goods_output_coal_mult = -0.05
+	building_power_plant_throughput_add = -0.10           # transition away from conventional power
 	goods_output_electricity_mult = 0.15
+	country_greenhouse_gas_emissions_mult = -0.15         # 15% direct emissions reduction
 }
 
 climate_adaptation_modifier = {

@@ -214,6 +214,39 @@ global_warming_update_on_action = {
 				}
 			}
 		}
+		# Carbon capture: subtract synthetic oil/coal production (not fossil extraction)
+		every_scope_building = {
+			limit = { is_building_type = building_synthetics_plant_oil }
+			if = {
+				limit = { has_active_production_method = pm_synthetic_oil_2 }
+				change_global_variable = {
+					name = greenhouse_gas_emissions
+					add = {
+						value = level
+						multiply = -0.06  # 300 oil × 2 weight / 10000
+					}
+				}
+			}
+			else = {
+				change_global_variable = {
+					name = greenhouse_gas_emissions
+					add = {
+						value = level
+						multiply = -0.036  # 180 oil × 2 weight / 10000
+					}
+				}
+			}
+		}
+		every_scope_building = {
+			limit = { is_building_type = building_synthetics_plant_coal }
+			change_global_variable = {
+				name = greenhouse_gas_emissions
+				add = {
+					value = level
+					multiply = -0.168  # 840 coal × 2 weight / 10000
+				}
+			}
+		}
 	}
 }
 
