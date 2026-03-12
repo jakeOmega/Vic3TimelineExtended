@@ -184,60 +184,6 @@ je_global_warming = {
                 limit = { has_modifier = global_warming }
                 remove_modifier = global_warming
             }
-
-            # ---- Fire threshold events exactly once (first country to cross each threshold triggers for all) ----
-            if = {
-                limit = {
-                    temperature_anomaly_display >= 0.5
-                    NOT = { has_global_variable = gw_mild_event_fired }
-                }
-                set_global_variable = gw_mild_event_fired
-                trigger_event = { id = environmentalism_events.1 }
-                save_scope_as = gw_event_country
-                every_country = {
-                    limit = { NOT = { this = scope:gw_event_country } }
-                    trigger_event = { id = environmentalism_events.1 days = 1 }
-                }
-            }
-            if = {
-                limit = {
-                    temperature_anomaly_display >= 1.0
-                    NOT = { has_global_variable = gw_moderate_event_fired }
-                }
-                set_global_variable = gw_moderate_event_fired
-                trigger_event = { id = environmentalism_events.2 }
-                save_scope_as = gw_event_country
-                every_country = {
-                    limit = { NOT = { this = scope:gw_event_country } }
-                    trigger_event = { id = environmentalism_events.2 days = 1 }
-                }
-            }
-            if = {
-                limit = {
-                    temperature_anomaly_display >= 2.0
-                    NOT = { has_global_variable = gw_severe_event_fired }
-                }
-                set_global_variable = gw_severe_event_fired
-                trigger_event = { id = environmentalism_events.3 }
-                save_scope_as = gw_event_country
-                every_country = {
-                    limit = { NOT = { this = scope:gw_event_country } }
-                    trigger_event = { id = environmentalism_events.3 days = 1 }
-                }
-            }
-            if = {
-                limit = {
-                    temperature_anomaly_display >= 3.0
-                    NOT = { has_global_variable = gw_catastrophic_event_fired }
-                }
-                set_global_variable = gw_catastrophic_event_fired
-                trigger_event = { id = environmentalism_events.4 }
-                save_scope_as = gw_event_country
-                every_country = {
-                    limit = { NOT = { this = scope:gw_event_country } }
-                    trigger_event = { id = environmentalism_events.4 days = 1 }
-                }
-            }
         }
     }
 

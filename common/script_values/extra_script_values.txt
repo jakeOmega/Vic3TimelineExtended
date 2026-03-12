@@ -514,6 +514,30 @@ temperature_anomaly_display = {
 	divide = 100
 }
 
+gw_countries_with_carbon_tax_script_value = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = carbon_tax_modifier }
+		add = 1
+	}
+}
+
+gw_countries_with_renewables_script_value = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = renewable_investment_modifier }
+		add = 1
+	}
+}
+
+gw_countries_with_adaptation_script_value = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = climate_adaptation_modifier }
+		add = 1
+	}
+}
+
 global_tech_spread_script_value = {
 	value = 0
 	if = {
