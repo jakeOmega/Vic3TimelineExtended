@@ -266,7 +266,7 @@ environmentalism_events.6 = {
         default_option = yes
         ai_chance = { base = 2 }
         # Accept refugees
-        add_loyalists = { value = small_radicals }
+        add_loyalists = { value = small_loyalists }
     }
 
     option = {
