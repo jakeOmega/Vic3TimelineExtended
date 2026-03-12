@@ -164,6 +164,16 @@ je_global_warming = {
     scripted_button = gw_remove_renewable_investment_button
     scripted_button = gw_climate_adaptation_button
     scripted_button = gw_remove_climate_adaptation_button
+    scripted_button = gw_emission_standards_button
+    scripted_button = gw_remove_emission_standards_button
+    scripted_button = gw_reforestation_button
+    scripted_button = gw_remove_reforestation_button
+    scripted_button = gw_public_transit_button
+    scripted_button = gw_remove_public_transit_button
+    scripted_button = gw_fossil_fuel_divestment_button
+    scripted_button = gw_remove_fossil_fuel_divestment_button
+    scripted_button = gw_green_building_codes_button
+    scripted_button = gw_remove_green_building_codes_button
 
     immediate = {
     }
