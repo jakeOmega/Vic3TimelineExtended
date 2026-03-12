@@ -5858,3 +5858,205 @@ create_new_religion = {
         }
     }
 }
+# Global Warming mitigation buttons
+gw_carbon_tax_button = {
+    name = "GW_CARBON_TAX"
+    desc = "GW_CARBON_TAX_DESC"
+
+    visible = {
+        NOT = { has_modifier = carbon_tax_modifier }
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 1.0 }
+            add = 30
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 2.0 }
+            add = 30
+        }
+        if = {
+            limit = {
+                has_law = law_type:law_laissez_faire
+            }
+            add = -50
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = carbon_tax_modifier }
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_CARBON_TAX_DESC"
+            add_modifier = { name = carbon_tax_modifier }
+        }
+    }
+}
+
+gw_remove_carbon_tax_button = {
+    name = "GW_REMOVE_CARBON_TAX"
+    desc = "GW_REMOVE_CARBON_TAX_DESC"
+
+    visible = {
+        has_modifier = carbon_tax_modifier
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display < 0.5 }
+            add = 50
+        }
+        if = {
+            limit = {
+                has_law = law_type:law_laissez_faire
+            }
+            add = 30
+        }
+    }
+
+    possible = {
+        has_modifier = carbon_tax_modifier
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_CARBON_TAX_DESC"
+            remove_modifier = carbon_tax_modifier
+        }
+    }
+}
+
+gw_renewable_investment_button = {
+    name = "GW_RENEWABLE_INVESTMENT"
+    desc = "GW_RENEWABLE_INVESTMENT_DESC"
+
+    visible = {
+        NOT = { has_modifier = renewable_investment_modifier }
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 1.0 }
+            add = 20
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 2.0 }
+            add = 20
+        }
+        if = {
+            limit = { country_innovation < 2 }
+            add = -30
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = renewable_investment_modifier }
+        country_innovation >= 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_RENEWABLE_INVESTMENT_DESC"
+            add_modifier = { name = renewable_investment_modifier }
+        }
+    }
+}
+
+gw_remove_renewable_investment_button = {
+    name = "GW_REMOVE_RENEWABLE_INVESTMENT"
+    desc = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
+
+    visible = {
+        has_modifier = renewable_investment_modifier
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { country_innovation < 1 }
+            add = 60
+        }
+    }
+
+    possible = {
+        has_modifier = renewable_investment_modifier
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
+            remove_modifier = renewable_investment_modifier
+        }
+    }
+}
+
+gw_climate_adaptation_button = {
+    name = "GW_CLIMATE_ADAPTATION"
+    desc = "GW_CLIMATE_ADAPTATION_DESC"
+
+    visible = {
+        NOT = { has_modifier = climate_adaptation_modifier }
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 0.5 }
+            add = 25
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 2.0 }
+            add = 25
+        }
+        if = {
+            limit = { country_authority < 50 }
+            add = -25
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = climate_adaptation_modifier }
+        country_authority >= 25
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_CLIMATE_ADAPTATION_DESC"
+            add_modifier = { name = climate_adaptation_modifier }
+        }
+    }
+}
+
+gw_remove_climate_adaptation_button = {
+    name = "GW_REMOVE_CLIMATE_ADAPTATION"
+    desc = "GW_REMOVE_CLIMATE_ADAPTATION_DESC"
+
+    visible = {
+        has_modifier = climate_adaptation_modifier
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display < 0.5 }
+            add = 50
+        }
+    }
+
+    possible = {
+        has_modifier = climate_adaptation_modifier
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_CLIMATE_ADAPTATION_DESC"
+            remove_modifier = climate_adaptation_modifier
+        }
+    }
+}

@@ -1,1 +1,187 @@
 namespace = environmentalism_events
+
+# Event 1: First Signs of Climate Change (mild warming ≥ 0.5°C)
+environmentalism_events.1 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+        video = "unspecific_ruler_speaking_to_people"
+    }
+
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+    title = environmentalism_events.1.t
+    desc = environmentalism_events.1.d
+    flavor = environmentalism_events.1.f
+
+    duration = 3
+
+    trigger = {
+        # triggered by global warming journal entry at 0.5°C
+    }
+
+    immediate = {
+    }
+
+    option = {
+        name = environmentalism_events.1.a
+        default_option = yes
+        ai_chance = { base = 2 }
+    }
+
+    option = {
+        name = environmentalism_events.1.b
+        ai_chance = { base = 1 }
+        add_modifier = { name = climate_adaptation_modifier }
+    }
+}
+
+# Event 2: Unprecedented Heatwaves (moderate warming ≥ 1.0°C)
+environmentalism_events.2 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+        video = "unspecific_fire"
+    }
+
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+    title = environmentalism_events.2.t
+    desc = environmentalism_events.2.d
+    flavor = environmentalism_events.2.f
+
+    duration = 3
+
+    trigger = {
+        # triggered by global warming journal entry at 1.0°C
+    }
+
+    immediate = {
+    }
+
+    option = {
+        name = environmentalism_events.2.a
+        default_option = yes
+        ai_chance = { base = 1 }
+        # Ignore the warnings
+    }
+
+    option = {
+        name = environmentalism_events.2.b
+        ai_chance = { base = 2 }
+        # Invest in green technology
+        add_modifier = { name = carbon_tax_modifier }
+        add_loyalists = { value = small_radicals }
+    }
+
+    option = {
+        name = environmentalism_events.2.c
+        ai_chance = { base = 2 }
+        # Invest in adaptation infrastructure
+        add_modifier = { name = climate_adaptation_modifier }
+        add_radicals = { value = small_radicals }
+    }
+}
+
+# Event 3: Catastrophic Weather Events (severe warming ≥ 2.0°C)
+environmentalism_events.3 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+        video = "unspecific_fire"
+    }
+
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+    title = environmentalism_events.3.t
+    desc = environmentalism_events.3.d
+    flavor = environmentalism_events.3.f
+
+    duration = 3
+
+    trigger = {
+        # triggered by global warming journal entry at 2.0°C
+    }
+
+    immediate = {
+    }
+
+    option = {
+        name = environmentalism_events.3.a
+        default_option = yes
+        ai_chance = {
+            base = 2
+            modifier = {
+                trigger = { has_modifier = climate_adaptation_modifier }
+                add = 3
+            }
+        }
+        # Emergency adaptation spending
+        if = {
+            limit = { NOT = { has_modifier = climate_adaptation_modifier } }
+            add_modifier = { name = climate_adaptation_modifier }
+        }
+        add_radicals = { value = medium_radicals }
+    }
+
+    option = {
+        name = environmentalism_events.3.b
+        ai_chance = {
+            base = 1
+        }
+        # Do nothing, suffer consequences
+        add_radicals = { value = large_radicals }
+    }
+}
+
+# Event 4: Climate Crisis (catastrophic warming ≥ 3.0°C)
+environmentalism_events.4 = {
+    type = country_event
+    placement = root
+
+    event_image = {
+        video = "unspecific_fire"
+    }
+
+    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+    title = environmentalism_events.4.t
+    desc = environmentalism_events.4.d
+    flavor = environmentalism_events.4.f
+
+    duration = 3
+
+    trigger = {
+        # triggered by global warming journal entry at 3.0°C
+    }
+
+    immediate = {
+    }
+
+    option = {
+        name = environmentalism_events.4.a
+        default_option = yes
+        ai_chance = { base = 1 }
+        # Emergency international response
+        if = {
+            limit = { NOT = { has_modifier = climate_adaptation_modifier } }
+            add_modifier = { name = climate_adaptation_modifier }
+        }
+        if = {
+            limit = { NOT = { has_modifier = carbon_tax_modifier } }
+            add_modifier = { name = carbon_tax_modifier }
+        }
+        add_radicals = { value = large_radicals }
+    }
+}

@@ -447,3 +447,59 @@ banking_asset_relief_program = {
 	state_tax_collection_mult = -0.05
 	country_bureaucracy_mult = -0.05
 }
+
+# ----- Global Warming severity stages (applied to every country via JE monthly pulse) -----
+global_warming_mild = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	state_mortality_mult = 0.02
+	state_standard_of_living_add = -0.5
+	building_group_bg_agriculture_throughput_add = -0.05
+}
+
+global_warming_moderate = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	state_mortality_mult = 0.05
+	state_standard_of_living_add = -1.0
+	building_group_bg_agriculture_throughput_add = -0.10
+	state_migration_pull_mult = -0.05
+}
+
+global_warming_severe = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	state_mortality_mult = 0.10
+	state_standard_of_living_add = -2.0
+	building_group_bg_agriculture_throughput_add = -0.20
+	state_migration_pull_mult = -0.10
+	building_throughput_add = -0.05
+}
+
+global_warming_catastrophic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	state_mortality_mult = 0.20
+	state_standard_of_living_add = -4.0
+	building_group_bg_agriculture_throughput_add = -0.30
+	state_migration_pull_mult = -0.20
+	building_throughput_add = -0.15
+}
+
+# ----- Climate mitigation and adaptation policies -----
+carbon_tax_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_coal_mult = -0.10
+	goods_output_oil_mult = -0.10
+	country_tax_capacity_mult = 0.03
+}
+
+renewable_investment_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_weekly_innovation_add = -1
+	goods_output_coal_mult = -0.05
+	goods_output_electricity_mult = 0.15
+}
+
+climate_adaptation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_mortality_mult = -0.05
+	state_standard_of_living_add = 1.0
+	country_authority_add = -25
+}

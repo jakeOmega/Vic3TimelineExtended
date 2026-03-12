@@ -509,7 +509,7 @@ global_greenhouse_gas_emissions_script_value_display = {
 
 temperature_anomaly_display = {
 	value = global_var:greenhouse_gas_emissions
-	divide = 1000
+	divide = 500
 	round = yes
 	divide = 100
 }
