@@ -449,7 +449,7 @@ banking_asset_relief_program = {
 }
 
 # ----- Global Warming severity stage (applied to every country via JE monthly pulse, scaled by multiplier) -----
-# Multipliers used in journal entry: mild = 0.5, moderate = 1.0, severe = 2.0, catastrophic = 4.0
+# Note: The actual multiplier values are defined in the relevant journal entry (e.g. based on temperature anomaly or severity stage).
 global_warming = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	state_mortality_mult = 0.05
