@@ -385,6 +385,6 @@ environmentalism_events.8 = {
         }
         # Embrace green policies
         add_modifier = { name = renewable_investment_modifier months = 36 }
-        add_loyalists = { value = small_radicals }
+        add_loyalists = { value = small_loyalists }
     }
 }
