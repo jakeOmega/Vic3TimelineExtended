@@ -1,0 +1,1484 @@
+﻿namespace = ministry_law_events
+
+# ======================================================================
+#  1 – Staffing the New Ministry  (Generic – any ministry being created)
+# ======================================================================
+ministry_law_events.1 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.1.t
+	desc = ministry_law_events.1.d
+	flavor = ministry_law_events.1.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law_type_group = law_group_ministries
+		NOT = {
+			is_enacting_law = law_type:law_no_ministry_of_war
+			is_enacting_law = law_type:law_no_ministry_of_foreign_affairs
+			is_enacting_law = law_type:law_no_ministry_of_commerce
+			is_enacting_law = law_type:law_no_ministry_of_culture
+			is_enacting_law = law_type:law_no_ministry_of_labor
+			is_enacting_law = law_type:law_no_ministry_of_the_environment
+			is_enacting_law = law_type:law_no_ministry_of_intelligence_and_security
+			is_enacting_law = law_type:law_no_ministry_of_refugee_affairs
+			is_enacting_law = law_type:law_no_ministry_of_propaganda
+			is_enacting_law = law_type:law_no_ministry_of_science
+			is_enacting_law = law_type:law_no_ministry_of_thought_control
+			is_enacting_law = law_type:law_no_ministry_of_consumer_protection
+			is_enacting_law = law_type:law_no_ministry_of_urban_planning
+			is_enacting_law = law_type:law_no_ministry_of_religion
+			is_enacting_law = law_type:law_no_ministry_of_international_aid
+		}
+		NOR = {
+			has_modifier = ministry_staffing_advance
+			has_modifier = ministry_staffing_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Recruit aggressively — fill every desk
+		name = ministry_law_events.1.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_staffing_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Staff it gradually to ensure quality
+		name = ministry_law_events.1.b
+		add_enactment_modifier = {
+			name = ministry_staffing_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  2 – The Budget Debate  (Generic – any ministry being created)
+# ======================================================================
+ministry_law_events.2 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.2.t
+	desc = ministry_law_events.2.d
+	flavor = ministry_law_events.2.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law_type_group = law_group_ministries
+		NOT = {
+			is_enacting_law = law_type:law_no_ministry_of_war
+			is_enacting_law = law_type:law_no_ministry_of_foreign_affairs
+			is_enacting_law = law_type:law_no_ministry_of_commerce
+			is_enacting_law = law_type:law_no_ministry_of_culture
+			is_enacting_law = law_type:law_no_ministry_of_labor
+			is_enacting_law = law_type:law_no_ministry_of_the_environment
+			is_enacting_law = law_type:law_no_ministry_of_intelligence_and_security
+			is_enacting_law = law_type:law_no_ministry_of_refugee_affairs
+			is_enacting_law = law_type:law_no_ministry_of_propaganda
+			is_enacting_law = law_type:law_no_ministry_of_science
+			is_enacting_law = law_type:law_no_ministry_of_thought_control
+			is_enacting_law = law_type:law_no_ministry_of_consumer_protection
+			is_enacting_law = law_type:law_no_ministry_of_urban_planning
+			is_enacting_law = law_type:law_no_ministry_of_religion
+			is_enacting_law = law_type:law_no_ministry_of_international_aid
+		}
+		NOR = {
+			has_modifier = ministry_budget_advance
+			has_modifier = ministry_budget_cautious
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Allocate the full budget — half measures fail
+		name = ministry_law_events.2.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_budget_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+
+	option = { # Promise a lean operation to win over the skeptics
+		name = ministry_law_events.2.b
+		add_enactment_modifier = {
+			name = ministry_budget_cautious
+		}
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ministry_budget_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  3 – Bureaucratic Turf Wars  (Generic – any ministry being created)
+# ======================================================================
+ministry_law_events.3 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.3.t
+	desc = ministry_law_events.3.d
+	flavor = ministry_law_events.3.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law_type_group = law_group_ministries
+		NOT = {
+			is_enacting_law = law_type:law_no_ministry_of_war
+			is_enacting_law = law_type:law_no_ministry_of_foreign_affairs
+			is_enacting_law = law_type:law_no_ministry_of_commerce
+			is_enacting_law = law_type:law_no_ministry_of_culture
+			is_enacting_law = law_type:law_no_ministry_of_labor
+			is_enacting_law = law_type:law_no_ministry_of_the_environment
+			is_enacting_law = law_type:law_no_ministry_of_intelligence_and_security
+			is_enacting_law = law_type:law_no_ministry_of_refugee_affairs
+			is_enacting_law = law_type:law_no_ministry_of_propaganda
+			is_enacting_law = law_type:law_no_ministry_of_science
+			is_enacting_law = law_type:law_no_ministry_of_thought_control
+			is_enacting_law = law_type:law_no_ministry_of_consumer_protection
+			is_enacting_law = law_type:law_no_ministry_of_urban_planning
+			is_enacting_law = law_type:law_no_ministry_of_religion
+			is_enacting_law = law_type:law_no_ministry_of_international_aid
+		}
+		NOR = {
+			has_modifier = ministry_turf_advance
+			has_modifier = ministry_turf_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Assert the new ministry's jurisdiction firmly
+		name = ministry_law_events.3.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_turf_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Allow a transitional period to ease the change
+		name = ministry_law_events.3.b
+		add_enactment_modifier = {
+			name = ministry_turf_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  4 – The Redundant Clerks  (Generic – dissolving a ministry)
+# ======================================================================
+ministry_law_events.4 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.4.t
+	desc = ministry_law_events.4.d
+	flavor = ministry_law_events.4.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_no_ministry_of_war
+			is_enacting_law = law_type:law_no_ministry_of_foreign_affairs
+			is_enacting_law = law_type:law_no_ministry_of_commerce
+			is_enacting_law = law_type:law_no_ministry_of_culture
+			is_enacting_law = law_type:law_no_ministry_of_labor
+			is_enacting_law = law_type:law_no_ministry_of_the_environment
+			is_enacting_law = law_type:law_no_ministry_of_intelligence_and_security
+			is_enacting_law = law_type:law_no_ministry_of_refugee_affairs
+			is_enacting_law = law_type:law_no_ministry_of_propaganda
+			is_enacting_law = law_type:law_no_ministry_of_science
+			is_enacting_law = law_type:law_no_ministry_of_thought_control
+			is_enacting_law = law_type:law_no_ministry_of_consumer_protection
+			is_enacting_law = law_type:law_no_ministry_of_urban_planning
+			is_enacting_law = law_type:law_no_ministry_of_religion
+			is_enacting_law = law_type:law_no_ministry_of_international_aid
+		}
+		NOR = {
+			has_modifier = ministry_dissolution_advance
+			has_modifier = ministry_dissolution_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Swift dissolution is best — rip off the bandage
+		name = ministry_law_events.4.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_dissolution_advance
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Offer generous severance and retraining
+		name = ministry_law_events.4.b
+		add_enactment_modifier = {
+			name = ministry_dissolution_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  5 – The Generals' War Room  (Ministry of War)
+# ======================================================================
+ministry_law_events.5 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.5.t
+	desc = ministry_law_events.5.d
+	flavor = ministry_law_events.5.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_before_the_battle"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_war
+		NOR = {
+			has_modifier = ministry_war_generals_advance
+			has_modifier = ministry_war_generals_cautious
+		}
+		ig:ig_armed_forces ?= {
+			ig_counts_as_marginal = no
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_armed_forces ?= {
+			save_scope_as = armed_forces_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Civilian oversight is non-negotiable
+		name = ministry_law_events.5.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_war_generals_advance
+		}
+		scope:armed_forces_ig = {
+			add_modifier = {
+				name = ministry_war_generals_cautious
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Grant operational autonomy to ease the transition
+		name = ministry_law_events.5.b
+		add_enactment_modifier = {
+			name = ministry_war_generals_cautious
+		}
+		scope:armed_forces_ig = {
+			add_modifier = {
+				name = ministry_war_generals_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  6 – The Ambassador's Dilemma  (Ministry of Foreign Affairs)
+# ======================================================================
+ministry_law_events.6 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.6.t
+	desc = ministry_law_events.6.d
+	flavor = ministry_law_events.6.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_foreign_affairs
+		NOR = {
+			has_modifier = ministry_fa_diplomacy_advance
+			has_modifier = ministry_fa_diplomacy_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # This debacle proves we need a proper ministry
+		name = ministry_law_events.6.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_fa_diplomacy_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+
+	option = { # Use the incident to build a careful consensus
+		name = ministry_law_events.6.b
+		add_enactment_modifier = {
+			name = ministry_fa_diplomacy_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+#  7 – The Merchant's Petition  (Ministry of Commerce)
+# ======================================================================
+ministry_law_events.7 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.7.t
+	desc = ministry_law_events.7.d
+	flavor = ministry_law_events.7.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_commerce
+		NOR = {
+			has_modifier = ministry_commerce_trade_advance
+			has_modifier = ministry_commerce_trade_cautious
+		}
+		ig:ig_industrialists ?= {
+			ig_counts_as_marginal = no
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Commerce demands coordination — push it through
+		name = ministry_law_events.7.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_commerce_trade_advance
+		}
+		scope:industrialists_ig = {
+			add_modifier = {
+				name = ministry_commerce_trade_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Design the ministry to address merchant concerns
+		name = ministry_law_events.7.b
+		add_enactment_modifier = {
+			name = ministry_commerce_trade_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+}
+
+# ======================================================================
+#  8 – The Artist's Subsidy  (Ministry of Culture)
+# ======================================================================
+ministry_law_events.8 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.8.t
+	desc = ministry_law_events.8.d
+	flavor = ministry_law_events.8.f
+
+	category = enactment
+
+	event_image = {
+		video = "southamerica_election"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_culture
+		NOR = {
+			has_modifier = ministry_culture_patronage_advance
+			has_modifier = ministry_culture_patronage_cautious
+		}
+		ig:ig_intelligentsia ?= {
+			ig_counts_as_marginal = no
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # A great nation deserves a Ministry of Culture
+		name = ministry_law_events.8.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_culture_patronage_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Let the artists help design it to win their support
+		name = ministry_law_events.8.b
+		add_enactment_modifier = {
+			name = ministry_culture_patronage_cautious
+		}
+		scope:intelligentsia_ig = {
+			add_modifier = {
+				name = ministry_culture_patronage_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  9 – Capital vs. Labor  (Ministry of Labor – both variants)
+# ======================================================================
+ministry_law_events.9 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.9.t
+	desc = ministry_law_events.9.d
+	flavor = ministry_law_events.9.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_rich_and_poor"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_pro_labor_ministry_of_labor
+			is_enacting_law = law_type:law_pro_capital_ministry_of_labor
+		}
+		NOR = {
+			has_modifier = ministry_labor_struggle_advance
+			has_modifier = ministry_labor_struggle_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_trade_unions ?= {
+			save_scope_as = trade_unions_ig
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The ministry will serve the national interest
+		name = ministry_law_events.9.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_labor_struggle_advance
+		}
+		add_radicals = {
+			value = small_radicals
+		}
+	}
+
+	option = { # Proceed carefully to minimize opposition
+		name = ministry_law_events.9.b
+		add_enactment_modifier = {
+			name = ministry_labor_struggle_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+
+	option = { # Invite the key stakeholders to shape the ministry
+		name = ministry_law_events.9.c
+		trigger = {
+			OR = {
+				AND = {
+					is_enacting_law = law_type:law_pro_labor_ministry_of_labor
+					ig:ig_trade_unions ?= {
+						ig_counts_as_marginal = no
+					}
+				}
+				AND = {
+					is_enacting_law = law_type:law_pro_capital_ministry_of_labor
+					ig:ig_industrialists ?= {
+						ig_counts_as_marginal = no
+					}
+				}
+			}
+		}
+		highlighted_option = yes
+		add_enactment_modifier = {
+			name = ministry_labor_struggle_advance
+		}
+		if = {
+			limit = { is_enacting_law = law_type:law_pro_labor_ministry_of_labor }
+			scope:trade_unions_ig = {
+				add_modifier = {
+					name = ministry_labor_struggle_advance
+					days = normal_modifier_time
+				}
+			}
+			scope:industrialists_ig = {
+				add_modifier = {
+					name = ministry_labor_struggle_cautious
+					days = normal_modifier_time
+				}
+			}
+		}
+		if = {
+			limit = { is_enacting_law = law_type:law_pro_capital_ministry_of_labor }
+			scope:industrialists_ig = {
+				add_modifier = {
+					name = ministry_labor_struggle_advance
+					days = normal_modifier_time
+				}
+			}
+			scope:trade_unions_ig = {
+				add_modifier = {
+					name = ministry_labor_struggle_cautious
+					days = normal_modifier_time
+				}
+			}
+		}
+	}
+}
+
+# ======================================================================
+# 10 – The Smokestack Question  (Ministry of the Environment)
+# ======================================================================
+ministry_law_events.10 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.10.t
+	desc = ministry_law_events.10.d
+	flavor = ministry_law_events.10.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_rich_and_poor"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_the_environment
+		NOR = {
+			has_modifier = ministry_env_smokestacks_advance
+			has_modifier = ministry_env_smokestacks_cautious
+		}
+		ig:ig_industrialists ?= {
+			ig_counts_as_marginal = no
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The environment cannot wait — push through
+		name = ministry_law_events.10.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_env_smokestacks_advance
+		}
+		scope:industrialists_ig = {
+			add_modifier = {
+				name = ministry_env_smokestacks_cautious
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Offer industry a seat at the table
+		name = ministry_law_events.10.b
+		add_enactment_modifier = {
+			name = ministry_env_smokestacks_cautious
+		}
+		scope:industrialists_ig = {
+			add_modifier = {
+				name = ministry_env_smokestacks_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+# 11 – The Shadow Files  (Ministry of Intelligence and Security)
+# ======================================================================
+ministry_law_events.11 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.11.t
+	desc = ministry_law_events.11.d
+	flavor = ministry_law_events.11.f
+
+	category = enactment
+
+	event_image = {
+		video = "middleeast_police_breaking_door"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_intelligence_and_security
+		NOR = {
+			has_modifier = ministry_intel_shadow_advance
+			has_modifier = ministry_intel_shadow_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Security demands these tools — push forward
+		name = ministry_law_events.11.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_intel_shadow_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Build in strict oversight to reassure the public
+		name = ministry_law_events.11.b
+		add_enactment_modifier = {
+			name = ministry_intel_shadow_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+# 12 – The Refugee Ship  (Ministry of Refugee Affairs)
+# ======================================================================
+ministry_law_events.12 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.12.t
+	desc = ministry_law_events.12.d
+	flavor = ministry_law_events.12.f
+
+	category = enactment
+
+	event_image = {
+		video = "africa_public_protest"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_refugee_affairs
+		NOR = {
+			has_modifier = ministry_refugee_crisis_advance
+			has_modifier = ministry_refugee_crisis_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # A civilized nation does not turn away the desperate
+		name = ministry_law_events.12.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_refugee_crisis_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = poor
+		}
+	}
+
+	option = { # Frame it as an orderly process to ease domestic fears
+		name = ministry_law_events.12.b
+		add_enactment_modifier = {
+			name = ministry_refugee_crisis_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 13 – The Loudspeaker State  (Ministry of Propaganda)
+# ======================================================================
+ministry_law_events.13 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.13.t
+	desc = ministry_law_events.13.d
+	flavor = ministry_law_events.13.f
+
+	category = enactment
+
+	event_image = {
+		video = "middleeast_police_breaking_door"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_propaganda
+		NOR = {
+			has_modifier = ministry_prop_loudspeaker_advance
+			has_modifier = ministry_prop_loudspeaker_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The truth must be guided for the good of the people
+		name = ministry_law_events.13.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_prop_loudspeaker_advance
+		}
+		scope:intelligentsia_ig = {
+			add_modifier = {
+				name = ministry_prop_loudspeaker_cautious
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Rebrand it as public information to calm the press
+		name = ministry_law_events.13.b
+		add_enactment_modifier = {
+			name = ministry_prop_loudspeaker_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 14 – The Laboratory of the State  (Ministry of Science)
+# ======================================================================
+ministry_law_events.14 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.14.t
+	desc = ministry_law_events.14.d
+	flavor = ministry_law_events.14.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_science
+		NOR = {
+			has_modifier = ministry_sci_laboratory_advance
+			has_modifier = ministry_sci_laboratory_cautious
+		}
+		ig:ig_intelligentsia ?= {
+			ig_counts_as_marginal = no
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Science needs state coordination — push forward
+		name = ministry_law_events.14.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_sci_laboratory_advance
+		}
+		scope:intelligentsia_ig = {
+			add_modifier = {
+				name = ministry_sci_laboratory_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Let the universities lead the design process
+		name = ministry_law_events.14.b
+		add_enactment_modifier = {
+			name = ministry_sci_laboratory_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+# 15 – The Watchers  (Ministry of Thought Control)
+# ======================================================================
+ministry_law_events.15 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.15.t
+	desc = ministry_law_events.15.d
+	flavor = ministry_law_events.15.f
+
+	category = enactment
+
+	event_image = {
+		video = "middleeast_police_breaking_door"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_thought_control
+		NOR = {
+			has_modifier = ministry_thought_watchers_advance
+			has_modifier = ministry_thought_watchers_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Dissent must be monitored for the nation's safety
+		name = ministry_law_events.15.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_thought_watchers_advance
+		}
+		add_radicals = {
+			value = medium_radicals
+		}
+	}
+
+	option = { # Start with modest powers to avoid a backlash
+		name = ministry_law_events.15.b
+		add_enactment_modifier = {
+			name = ministry_thought_watchers_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+# 16 – The Tainted Product  (Ministry of Consumer Protection)
+# ======================================================================
+ministry_law_events.16 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.16.t
+	desc = ministry_law_events.16.d
+	flavor = ministry_law_events.16.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_rich_and_poor"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_consumer_protection
+		NOR = {
+			has_modifier = ministry_consumer_tainted_advance
+			has_modifier = ministry_consumer_tainted_cautious
+		}
+		ig:ig_industrialists ?= {
+			ig_counts_as_marginal = no
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Consumers deserve protection — act now
+		name = ministry_law_events.16.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_consumer_tainted_advance
+		}
+		scope:industrialists_ig = {
+			add_modifier = {
+				name = ministry_consumer_tainted_cautious
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Let industry self-regulate within the new framework
+		name = ministry_law_events.16.b
+		add_enactment_modifier = {
+			name = ministry_consumer_tainted_cautious
+		}
+		scope:industrialists_ig = {
+			add_modifier = {
+				name = ministry_consumer_tainted_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+# 17 – The City Rises  (Ministry of Urban Planning)
+# ======================================================================
+ministry_law_events.17 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.17.t
+	desc = ministry_law_events.17.d
+	flavor = ministry_law_events.17.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_urban_planning
+		NOR = {
+			has_modifier = ministry_urban_sprawl_advance
+			has_modifier = ministry_urban_sprawl_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Cities need plans, not chaos — establish the ministry
+		name = ministry_law_events.17.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_urban_sprawl_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+
+	option = { # Consult with developers to smooth the transition
+		name = ministry_law_events.17.b
+		add_enactment_modifier = {
+			name = ministry_urban_sprawl_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 18 – The Pulpit and the State  (Ministry of Religion)
+# ======================================================================
+ministry_law_events.18 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.18.t
+	desc = ministry_law_events.18.d
+	flavor = ministry_law_events.18.f
+
+	category = enactment
+
+	event_image = {
+		video = "southamerica_election"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_religion
+		NOR = {
+			has_modifier = ministry_religion_pulpit_advance
+			has_modifier = ministry_religion_pulpit_cautious
+		}
+		ig:ig_devout ?= {
+			ig_counts_as_marginal = no
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_devout ?= {
+			save_scope_as = devout_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Faith and governance shall strengthen each other
+		name = ministry_law_events.18.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_religion_pulpit_advance
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = ministry_religion_pulpit_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Promise clerical autonomy within the ministry
+		name = ministry_law_events.18.b
+		add_enactment_modifier = {
+			name = ministry_religion_pulpit_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 19 – The Distant Crisis  (Ministry of International Aid)
+# ======================================================================
+ministry_law_events.19 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.19.t
+	desc = ministry_law_events.19.d
+	flavor = ministry_law_events.19.f
+
+	category = enactment
+
+	event_image = {
+		video = "africa_public_protest"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_international_aid
+		NOR = {
+			has_modifier = ministry_aid_distant_advance
+			has_modifier = ministry_aid_distant_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # A great nation has obligations to the world
+		name = ministry_law_events.19.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ministry_aid_distant_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+
+	option = { # Frame it as strategic investment to win domestic support
+		name = ministry_law_events.19.b
+		add_enactment_modifier = {
+			name = ministry_aid_distant_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}

@@ -660,7 +660,7 @@ cb_fx_support = {
     }
     effect = {
         add_modifier = { name = banking_fx_support }
-        add_treasury = fx_support_treasury_benefit
+        add_treasury = fx_support_activation_cost
     }
 }
 
@@ -682,7 +682,6 @@ cb_disable_fx_support = {
     }
     effect = {
         remove_modifier = banking_fx_support
-        add_treasury = fx_support_deactivation_cost
     }
 }
 
@@ -860,7 +859,7 @@ cb_export_credit_facility = {
     }
     effect = {
         add_modifier = { name = banking_export_credit_facility }
-        add_treasury = export_credit_facility_treasury_benefit
+        add_treasury = export_credit_activation_cost
     }
 }
 
@@ -881,7 +880,6 @@ cb_disable_export_credit_facility = {
     }
     effect = {
         remove_modifier = banking_export_credit_facility
-        add_treasury = export_credit_facility_deactivation_cost
     }
 }
 
@@ -5865,7 +5863,6 @@ gw_carbon_tax_button = {
 
     visible = {
         NOT = { has_modifier = carbon_tax_modifier }
-        temperature_anomaly_display >= 0.5
         # Emissions reduction only applies for the market leader; restrict button accordingly
         market_capital.owner = THIS
     }
@@ -5956,7 +5953,6 @@ gw_renewable_investment_button = {
 
     visible = {
         NOT = { has_modifier = renewable_investment_modifier }
-        temperature_anomaly_display >= 0.5
         # Emissions reduction only applies for the market leader; restrict button accordingly
         market_capital.owner = THIS
     }
@@ -6058,14 +6054,15 @@ gw_climate_adaptation_button = {
             add = 25
         }
         if = {
-            limit = { country_authority < 50 }
+            limit = { country_authority < 250 }
             add = -25
         }
     }
 
     possible = {
         NOT = { has_modifier = climate_adaptation_modifier }
-        country_authority >= 25
+        adjusted_produced_authority > 250
+        temperature_anomaly_display >= 0.5
     }
 
     effect = {
@@ -6104,8 +6101,6 @@ gw_remove_climate_adaptation_button = {
     }
 }
 
-# ---- Emission Standards Mandate (market leader only — uses country_greenhouse_gas_emissions_mult) ----
-
 gw_emission_standards_button = {
     name = "GW_EMISSION_STANDARDS"
     desc = "GW_EMISSION_STANDARDS_DESC"
@@ -6136,7 +6131,7 @@ gw_emission_standards_button = {
         NOT = { has_modifier = emission_standards_modifier }
         temperature_anomaly_display >= 0.5
         market_capital.owner = THIS
-        country_authority >= 20
+        adjusted_produced_authority > 200
     }
 
     effect = {
@@ -6193,8 +6188,6 @@ gw_remove_emission_standards_button = {
     }
 }
 
-# ---- Reforestation Subsidies (available to all countries) ----
-
 gw_reforestation_button = {
     name = "GW_REFORESTATION"
     desc = "GW_REFORESTATION_DESC"
@@ -6219,7 +6212,7 @@ gw_reforestation_button = {
     possible = {
         NOT = { has_modifier = reforestation_subsidies_modifier }
         temperature_anomaly_display >= 0.5
-        country_authority >= 10
+        adjusted_produced_authority > 100
     }
 
     effect = {
@@ -6258,15 +6251,12 @@ gw_remove_reforestation_button = {
     }
 }
 
-# ---- Public Transit Initiatives (available to all countries) ----
-
 gw_public_transit_button = {
     name = "GW_PUBLIC_TRANSIT"
     desc = "GW_PUBLIC_TRANSIT_DESC"
 
     visible = {
         NOT = { has_modifier = public_transit_modifier }
-        temperature_anomaly_display >= 0.5
     }
 
     ai_chance = {
@@ -6284,7 +6274,7 @@ gw_public_transit_button = {
     possible = {
         NOT = { has_modifier = public_transit_modifier }
         temperature_anomaly_display >= 0.5
-        country_authority >= 15
+        adjusted_produced_authority > 150
     }
 
     effect = {
@@ -6323,15 +6313,12 @@ gw_remove_public_transit_button = {
     }
 }
 
-# ---- Fossil Fuel Divestment (available to all countries, requires 1.0°C) ----
-
 gw_fossil_fuel_divestment_button = {
     name = "GW_FOSSIL_FUEL_DIVESTMENT"
     desc = "GW_FOSSIL_FUEL_DIVESTMENT_DESC"
 
     visible = {
         NOT = { has_modifier = fossil_fuel_divestment_modifier }
-        temperature_anomaly_display >= 1.0
     }
 
     ai_chance = {
@@ -6353,7 +6340,7 @@ gw_fossil_fuel_divestment_button = {
     possible = {
         NOT = { has_modifier = fossil_fuel_divestment_modifier }
         temperature_anomaly_display >= 1.0
-        country_authority >= 20
+        adjusted_produced_authority > 200
     }
 
     effect = {
@@ -6422,7 +6409,7 @@ gw_green_building_codes_button = {
     possible = {
         NOT = { has_modifier = green_building_codes_modifier }
         temperature_anomaly_display >= 0.5
-        country_authority >= 10
+        adjusted_produced_authority > 100
     }
 
     effect = {

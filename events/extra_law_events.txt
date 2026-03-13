@@ -1,0 +1,1898 @@
+﻿namespace = extra_law_events
+
+# ======================================================================
+#  1 – The Bankers’ Lobby  (Financial Regulation)
+# ======================================================================
+extra_law_events.1 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.1.t
+	desc = extra_law_events.1.d
+	flavor = extra_law_events.1.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_prudential_narrow_banking
+			is_enacting_law = law_type:law_central_bank_independence
+			is_enacting_law = law_type:law_directed_credit_development_banks
+		}
+		NOR = {
+			has_modifier = finreg_bankers_lobby_advance
+			has_modifier = finreg_bankers_lobby_cautious
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Push through despite the lobby
+		name = extra_law_events.1.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = finreg_bankers_lobby_advance
+		}
+		scope:opposing_ig = {
+			add_modifier = {
+				name = finreg_bankers_lobby_cautious
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Hear their concerns to build broader support
+		name = extra_law_events.1.b
+		add_enactment_modifier = {
+			name = finreg_bankers_lobby_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+}
+
+# ======================================================================
+#  2 – A Run on the Banks  (Financial Regulation – panic angle)
+# ======================================================================
+extra_law_events.2 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.2.t
+	desc = extra_law_events.2.d
+	flavor = extra_law_events.2.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_rich_and_poor"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_prudential_narrow_banking
+			is_enacting_law = law_type:law_central_bank_independence
+			is_enacting_law = law_type:law_universal_banking_light_prudence
+		}
+		NOR = {
+			has_modifier = finreg_bank_panic_advance
+			has_modifier = finreg_bank_panic_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Use the panic to push reforms through
+		name = extra_law_events.2.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = finreg_bank_panic_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+
+	option = { # Calm the markets first, then proceed carefully
+		name = extra_law_events.2.b
+		add_enactment_modifier = {
+			name = finreg_bank_panic_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+}
+
+# ======================================================================
+#  3 – The Gold Question  (Monetary Policy)
+# ======================================================================
+extra_law_events.3 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.3.t
+	desc = extra_law_events.3.d
+	flavor = extra_law_events.3.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_gold_standard
+			is_enacting_law = law_type:law_fiat_currency
+			is_enacting_law = law_type:law_digital_currency
+		}
+		NOR = {
+			has_modifier = monpol_gold_hoarders_advance
+			has_modifier = monpol_gold_hoarders_cautious
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The old ways must give way — press forward
+		name = extra_law_events.3.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = monpol_gold_hoarders_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+
+	option = { # Bring the opposition into the conversation
+		name = extra_law_events.3.b
+		add_enactment_modifier = {
+			name = monpol_gold_hoarders_cautious
+		}
+		scope:opposing_ig = {
+			add_modifier = {
+				name = monpol_gold_hoarders_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  4 – The Printing Press of Money  (Monetary Policy – fiat angle)
+# ======================================================================
+extra_law_events.4 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.4.t
+	desc = extra_law_events.4.d
+	flavor = extra_law_events.4.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_fiat_currency
+		NOR = {
+			has_modifier = monpol_printing_press_advance
+			has_modifier = monpol_printing_press_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The power to print is the power to prosper
+		name = extra_law_events.4.a
+		default_option = yes
+		trigger = {
+			enactment_phase < 2
+		}
+		highlighted_option = yes
+		add_enactment_phase = 1
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+
+	option = { # Build an academic consensus first
+		name = extra_law_events.4.b
+		add_enactment_modifier = {
+			name = monpol_printing_press_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  5 – The Wiretapping Scandal  (Privacy Rights)
+# ======================================================================
+extra_law_events.5 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.5.t
+	desc = extra_law_events.5.d
+	flavor = extra_law_events.5.f
+
+	category = enactment
+
+	event_image = {
+		video = "middleeast_police_breaking_door"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_moderate_data_privacy
+			is_enacting_law = law_type:law_strong_privacy_rights
+			is_enacting_law = law_type:law_intrusive_surveillance
+		}
+		NOR = {
+			has_modifier = privacy_surveillance_debate_advance
+			has_modifier = privacy_surveillance_debate_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Use the scandal to rally support for the new law
+		name = extra_law_events.5.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = privacy_surveillance_debate_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Proceed quietly — don’t overplay our hand
+		name = extra_law_events.5.b
+		add_enactment_modifier = {
+			name = privacy_surveillance_debate_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+
+	option = { # Frame it as a security matter and force the issue
+		name = extra_law_events.5.c
+		trigger = {
+			OR = {
+				has_law = law_type:law_secret_police
+				has_law = law_type:law_ministry_of_intelligence_and_security
+			}
+		}
+		highlighted_option = yes
+		add_enactment_modifier = {
+			name = privacy_surveillance_debate_advance
+			multiplier = 2
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  6 – The Viral Campaign  (Internet Governance)
+# ======================================================================
+extra_law_events.6 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.6.t
+	desc = extra_law_events.6.d
+	flavor = extra_law_events.6.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_net_neutrality
+			is_enacting_law = law_type:law_state_controlled_internet
+			is_enacting_law = law_type:law_unregulated_internet
+		}
+		NOR = {
+			has_modifier = internet_viral_campaign_advance
+			has_modifier = internet_viral_campaign_cautious
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value > neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value > neutral
+				}
+			}
+			save_scope_as = supporting_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Ride the wave — let the campaign build pressure
+		name = extra_law_events.6.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = internet_viral_campaign_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Channel the energy into a measured public consultation
+		name = extra_law_events.6.b
+		add_enactment_modifier = {
+			name = internet_viral_campaign_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  7 – The Ethics of the Gene  (Genetic Rights)
+# ======================================================================
+extra_law_events.7 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.7.t
+	desc = extra_law_events.7.d
+	flavor = extra_law_events.7.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_ban_on_genetic_modification
+			is_enacting_law = law_type:law_corporate_genetic_licensing
+			is_enacting_law = law_type:law_open_source_genetics
+			is_enacting_law = law_type:law_state_eugenics_program
+		}
+		NOR = {
+			has_modifier = genetics_ethics_debate_advance
+			has_modifier = genetics_ethics_debate_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_devout ?= {
+			save_scope_as = devout_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Push forward — the science speaks for itself
+		name = extra_law_events.7.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = genetics_ethics_debate_advance
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = genetics_ethics_debate_cautious
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Invite the clergy into the drafting process
+		name = extra_law_events.7.b
+		add_enactment_modifier = {
+			name = genetics_ethics_debate_cautious
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = genetics_ethics_debate_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  8 – The Robber Barons  (Antitrust)
+# ======================================================================
+extra_law_events.8 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.8.t
+	desc = extra_law_events.8.d
+	flavor = extra_law_events.8.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_trust_busting
+			is_enacting_law = law_type:law_regulated_utilities
+			is_enacting_law = law_type:law_dirigisme
+		}
+		NOR = {
+			has_modifier = antitrust_public_outrage_advance
+			has_modifier = antitrust_public_outrage_cautious
+		}
+		ig:ig_industrialists ?= {
+			ig_counts_as_marginal = no
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The monopolists have had their day — break them
+		name = extra_law_events.8.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = antitrust_public_outrage_advance
+		}
+		scope:industrialists_ig = {
+			add_modifier = {
+				name = antitrust_public_outrage_cautious
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Negotiate a compromise with industry
+		name = extra_law_events.8.b
+		add_enactment_modifier = {
+			name = antitrust_public_outrage_cautious
+		}
+		scope:industrialists_ig = {
+			add_modifier = {
+				name = antitrust_public_outrage_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  9 – The Pirate’s Dilemma  (Intellectual Property)
+# ======================================================================
+extra_law_events.9 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.9.t
+	desc = extra_law_events.9.d
+	flavor = extra_law_events.9.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_strict_ip_protection
+			is_enacting_law = law_type:law_open_source_innovation
+			is_enacting_law = law_type:law_creative_commons
+		}
+		NOR = {
+			has_modifier = ip_piracy_debate_advance
+			has_modifier = ip_piracy_debate_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The reform is long overdue — pass it now
+		name = extra_law_events.9.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = ip_piracy_debate_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Build an academic consensus with the intelligentsia
+		name = extra_law_events.9.b
+		add_enactment_modifier = {
+			name = ip_piracy_debate_cautious
+		}
+		scope:intelligentsia_ig = {
+			add_modifier = {
+				name = ip_piracy_debate_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+# 10 – Reports from the Front  (Rules of War – humanitarian angle)
+# ======================================================================
+extra_law_events.10 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.10.t
+	desc = extra_law_events.10.d
+	flavor = extra_law_events.10.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_before_the_battle"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_war_crimes_forbidden
+			is_enacting_law = law_type:law_humanitarian_regulations
+			is_enacting_law = law_type:law_limited_war
+		}
+		NOR = {
+			has_modifier = row_atrocity_reports_advance
+			has_modifier = row_atrocity_reports_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The civilized world demands restraint — act now
+		name = extra_law_events.10.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = row_atrocity_reports_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Build a bipartisan coalition for lasting reform
+		name = extra_law_events.10.b
+		add_enactment_modifier = {
+			name = row_atrocity_reports_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 11 – The Generals Object  (Rules of War – military pushback)
+# ======================================================================
+extra_law_events.11 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.11.t
+	desc = extra_law_events.11.d
+	flavor = extra_law_events.11.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_before_the_battle"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_humanitarian_regulations
+			is_enacting_law = law_type:law_limited_war
+		}
+		NOR = {
+			has_modifier = row_military_pushback_advance
+			has_modifier = row_military_pushback_cautious
+		}
+		ig:ig_armed_forces ?= {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_armed_forces ?= {
+			save_scope_as = armed_forces_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Overrule the military brass
+		name = extra_law_events.11.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = row_military_pushback_advance
+		}
+		scope:armed_forces_ig = {
+			add_modifier = {
+				name = row_military_pushback_cautious
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Accommodate their concerns to keep them on side
+		name = extra_law_events.11.b
+		add_enactment_modifier = {
+			name = row_military_pushback_cautious
+		}
+		scope:armed_forces_ig = {
+			add_modifier = {
+				name = row_military_pushback_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+# 12 – A Question of Punishment  (Criminal Justice)
+# ======================================================================
+extra_law_events.12 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.12.t
+	desc = extra_law_events.12.d
+	flavor = extra_law_events.12.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_russian_serfs"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_restorative_justice
+			is_enacting_law = law_type:law_rehabilitation_focused_criminal_justice
+		}
+		NOR = {
+			has_modifier = crimjust_reform_debate_advance
+			has_modifier = crimjust_reform_debate_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Rehabilitation is the mark of a civilized nation
+		name = extra_law_events.12.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = crimjust_reform_debate_advance
+		}
+		add_radicals = {
+			value = small_radicals
+		}
+	}
+
+	option = { # Frame it as tough-on-crime reform to win over skeptics
+		name = extra_law_events.12.b
+		add_enactment_modifier = {
+			name = crimjust_reform_debate_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 13 – Tongues of the Nation  (Language Policy)
+# ======================================================================
+extra_law_events.13 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.13.t
+	desc = extra_law_events.13.d
+	flavor = extra_law_events.13.f
+
+	category = enactment
+
+	event_image = {
+		video = "southamerica_election"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_civic_monolingualism
+			is_enacting_law = law_type:law_multilingual_federalism
+			is_enacting_law = law_type:law_linguistic_purity
+			is_enacting_law = law_type:law_state_led_language_reform
+			is_enacting_law = law_type:law_ubiquitous_translation
+		}
+		NOR = {
+			has_modifier = langpol_cultural_resistance_advance
+			has_modifier = langpol_cultural_resistance_cautious
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # A unified tongue strengthens the nation — press on
+		name = extra_law_events.13.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = langpol_cultural_resistance_advance
+		}
+		add_radicals = {
+			value = small_radicals
+		}
+	}
+
+	option = { # Make concessions to the periphery to ease passage
+		name = extra_law_events.13.b
+		add_enactment_modifier = {
+			name = langpol_cultural_resistance_cautious
+		}
+		scope:opposing_ig = {
+			add_modifier = {
+				name = langpol_cultural_resistance_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+# 14 – A Donor Scandal  (Electoral Finance)
+# ======================================================================
+extra_law_events.14 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.14.t
+	desc = extra_law_events.14.d
+	flavor = extra_law_events.14.f
+
+	category = enactment
+
+	event_image = {
+		video = "southamerica_election"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_donation_limits
+			is_enacting_law = law_type:law_publicly_funded_elections
+		}
+		NOR = {
+			has_modifier = electfin_donor_scandal_advance
+			has_modifier = electfin_donor_scandal_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Expose the corruption and push for reform
+		name = extra_law_events.14.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = electfin_donor_scandal_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+
+	option = { # Use this quietly as leverage — no need for spectacle
+		name = extra_law_events.14.b
+		add_enactment_modifier = {
+			name = electfin_donor_scandal_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 15 – The Question of Autonomy  (State Power)
+# ======================================================================
+extra_law_events.15 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.15.t
+	desc = extra_law_events.15.d
+	flavor = extra_law_events.15.f
+
+	category = enactment
+
+	event_image = {
+		video = "southamerica_election"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_federal_system
+			is_enacting_law = law_type:law_devolution
+			is_enacting_law = law_type:law_unitary_state
+		}
+		NOR = {
+			has_modifier = statepower_autonomy_debate_advance
+			has_modifier = statepower_autonomy_debate_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Our proposed reform will settle the question
+		name = extra_law_events.15.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = statepower_autonomy_debate_advance
+		}
+		add_radicals = {
+			value = small_radicals
+		}
+	}
+
+	option = { # Allow the regions a voice in the drafting process
+		name = extra_law_events.15.b
+		add_enactment_modifier = {
+			name = statepower_autonomy_debate_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 16 – The Augmentation Hearing  (Human Augmentation)
+# ======================================================================
+extra_law_events.16 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.16.t
+	desc = extra_law_events.16.d
+	flavor = extra_law_events.16.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_unrestricted_augmentation
+			is_enacting_law = law_type:law_medical_augmentation_only
+			is_enacting_law = law_type:law_regulated_augmentation_market
+			is_enacting_law = law_type:law_mandatory_augmentation
+			is_enacting_law = law_type:law_human_purity
+		}
+		NOR = {
+			has_modifier = augment_ethics_board_advance
+			has_modifier = augment_ethics_board_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_devout ?= {
+			save_scope_as = devout_ig
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Progress demands that we push the boundaries
+		name = extra_law_events.16.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = augment_ethics_board_advance
+		}
+		add_radicals = {
+			value = small_radicals
+		}
+	}
+
+	option = { # Appoint an ethics board to reassure the public
+		name = extra_law_events.16.b
+		add_enactment_modifier = {
+			name = augment_ethics_board_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 17 – The Eldest Son’s Complaint  (Inheritance)
+# ======================================================================
+extra_law_events.17 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.17.t
+	desc = extra_law_events.17.d
+	flavor = extra_law_events.17.f
+
+	category = enactment
+
+	event_image = {
+		video = "southamerica_aristocrats"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_equal_inheritance
+			is_enacting_law = law_type:law_non_inheritable_usage_rights
+		}
+		NOR = {
+			has_modifier = inherit_succession_dispute_advance
+			has_modifier = inherit_succession_dispute_cautious
+		}
+		ig:ig_landowners ?= {
+			ig_counts_as_marginal = no
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_landowners ?= {
+			save_scope_as = landowners_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Equality before the law — push through
+		name = extra_law_events.17.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = inherit_succession_dispute_advance
+		}
+		scope:landowners_ig = {
+			add_modifier = {
+				name = inherit_succession_dispute_cautious
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Offer a transition period to ease the landowners’ fears
+		name = extra_law_events.17.b
+		add_enactment_modifier = {
+			name = inherit_succession_dispute_cautious
+		}
+		scope:landowners_ig = {
+			add_modifier = {
+				name = inherit_succession_dispute_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+# 18 – Petitions of the Heart  (LGBTQ Rights)
+# ======================================================================
+extra_law_events.18 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.18.t
+	desc = extra_law_events.18.d
+	flavor = extra_law_events.18.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_rich_and_poor"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_basic_protections
+			is_enacting_law = law_type:law_comprehensive_rights
+			is_enacting_law = law_type:law_full_equality_and_protection
+		}
+		NOR = {
+			has_modifier = lgbtq_public_petition_advance
+			has_modifier = lgbtq_public_petition_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_devout ?= {
+			save_scope_as = devout_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Amplify their voices — justice is overdue
+		name = extra_law_events.18.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = lgbtq_public_petition_advance
+		}
+		add_radicals = {
+			value = small_radicals
+		}
+	}
+
+	option = { # Work quietly behind the scenes to defuse opposition
+		name = extra_law_events.18.b
+		add_enactment_modifier = {
+			name = lgbtq_public_petition_cautious
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = lgbtq_public_petition_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+# 19 – The Cradle and the State  (Family & Reproductive Policy)
+# ======================================================================
+extra_law_events.19 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.19.t
+	desc = extra_law_events.19.d
+	flavor = extra_law_events.19.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_rich_and_poor"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_pro_natalist_subsidies
+			is_enacting_law = law_type:law_state_sponsored_family_planning
+			is_enacting_law = law_type:law_population_control_measures
+			is_enacting_law = law_type:law_communal_child_rearing
+		}
+		NOR = {
+			has_modifier = famrep_demographic_debate_advance
+			has_modifier = famrep_demographic_debate_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The demographic future demands decisive action
+		name = extra_law_events.19.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = famrep_demographic_debate_advance
+		}
+		add_radicals = {
+			value = small_radicals
+		}
+	}
+
+	option = { # Frame it as supporting families to build consensus
+		name = extra_law_events.19.b
+		add_enactment_modifier = {
+			name = famrep_demographic_debate_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 20 – The Whistleblower  (Right to Information)
+# ======================================================================
+extra_law_events.20 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.20.t
+	desc = extra_law_events.20.d
+	flavor = extra_law_events.20.f
+
+	category = enactment
+
+	event_image = {
+		video = "middleeast_police_breaking_door"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_freedom_of_information
+			is_enacting_law = law_type:law_open_government
+		}
+		NOR = {
+			has_modifier = rti_whistleblower_advance
+			has_modifier = rti_whistleblower_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The people have a right to know — full steam ahead
+		name = extra_law_events.20.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = rti_whistleblower_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+
+	option = { # Manage the revelations carefully to avoid chaos
+		name = extra_law_events.20.b
+		add_enactment_modifier = {
+			name = rti_whistleblower_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Use the leaks as leverage to silence opposition
+		name = extra_law_events.20.c
+		trigger = {
+			OR = {
+				has_law = law_type:law_secret_police
+				has_law = law_type:law_ministry_of_intelligence_and_security
+			}
+		}
+		highlighted_option = yes
+		add_enactment_modifier = {
+			name = rti_whistleblower_advance
+			multiplier = 2
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+# 21 – A March for Dignity  (Minority Rights)
+# ======================================================================
+extra_law_events.21 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.21.t
+	desc = extra_law_events.21.d
+	flavor = extra_law_events.21.f
+
+	category = enactment
+
+	event_image = {
+		video = "africa_public_protest"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_minority_rights_protection
+			is_enacting_law = law_type:law_minority_rights_affirmative_action
+			is_enacting_law = law_type:law_minority_rights_indifference
+		}
+		NOR = {
+			has_modifier = minrights_solidarity_march_advance
+			has_modifier = minrights_solidarity_march_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # March with them — show the world we are changing
+		name = extra_law_events.21.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = minrights_solidarity_march_advance
+		}
+		add_radicals = {
+			value = small_radicals
+		}
+		add_loyalists = {
+			value = medium_radicals
+		}
+	}
+
+	option = { # Support the cause from the legislature floor
+		name = extra_law_events.21.b
+		add_enactment_modifier = {
+			name = minrights_solidarity_march_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 22 – The Automation Question  (Welfare – UBI / Post-Scarcity)
+# ======================================================================
+extra_law_events.22 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.22.t
+	desc = extra_law_events.22.d
+	flavor = extra_law_events.22.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_rich_and_poor"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_universal_basic_income
+			is_enacting_law = law_type:law_post-scarcity
+		}
+		NOR = {
+			has_modifier = welfare_automation_fears_advance
+			has_modifier = welfare_automation_fears_cautious
+		}
+		ig:ig_trade_unions ?= {
+			ig_counts_as_marginal = no
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_trade_unions ?= {
+			save_scope_as = trade_unions_ig
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The machines free us — share the bounty now
+		name = extra_law_events.22.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = welfare_automation_fears_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		scope:trade_unions_ig = {
+			add_modifier = {
+				name = welfare_automation_fears_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = { # Phase it in gradually to win over industry
+		name = extra_law_events.22.b
+		add_enactment_modifier = {
+			name = welfare_automation_fears_cautious
+		}
+		scope:industrialists_ig = {
+			add_modifier = {
+				name = welfare_automation_fears_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+# 23 – The Algorithmic Showcase  (Governance – Algorithmic)
+# ======================================================================
+extra_law_events.23 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.23.t
+	desc = extra_law_events.23.d
+	flavor = extra_law_events.23.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_algorithmic_governance
+		NOR = {
+			has_modifier = govprin_technocrat_showcase_advance
+			has_modifier = govprin_technocrat_showcase_cautious
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # The demonstration speaks for itself — skip ahead
+		name = extra_law_events.23.a
+		default_option = yes
+		trigger = {
+			enactment_phase < 2
+		}
+		highlighted_option = yes
+		add_enactment_phase = 1
+		add_radicals = {
+			value = medium_radicals
+		}
+	}
+
+	option = { # Build public understanding before proceeding
+		name = extra_law_events.23.b
+		add_enactment_modifier = {
+			name = govprin_technocrat_showcase_cautious
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+	}
+}
+
+# ======================================================================
+# 24 – The People’s Assembly  (Governance – Direct Democracy)
+# ======================================================================
+extra_law_events.24 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.24.t
+	desc = extra_law_events.24.d
+	flavor = extra_law_events.24.f
+
+	category = enactment
+
+	event_image = {
+		video = "southamerica_election"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_direct_democracy
+		NOR = {
+			has_modifier = govprin_popular_assembly_advance
+			has_modifier = govprin_popular_assembly_cautious
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Ride the popular wave — push the reform through
+		name = extra_law_events.24.a
+		default_option = yes
+		add_enactment_modifier = {
+			name = govprin_popular_assembly_advance
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+	}
+
+	option = { # Bring the opposition into the process
+		name = extra_law_events.24.b
+		add_enactment_modifier = {
+			name = govprin_popular_assembly_cautious
+		}
+		scope:opposing_ig = {
+			add_modifier = {
+				name = govprin_popular_assembly_advance
+				days = normal_modifier_time
+			}
+		}
+	}
+}

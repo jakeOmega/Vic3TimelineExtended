@@ -1,0 +1,99 @@
+# ======================================================================
+#  LAW ENACTMENT EVENTS – ON ACTIONS
+#  Wires extra_law_events and ministry_law_events into the three
+#  law-enactment checkpoint on-actions (advance / debate / stall).
+#
+#  Classification (by narrative context, not option outcome —
+#  ALL event options advance the law; the difference is tradeoffs):
+#    ADVANCE  – momentum narrative (crises, scandals, rallies that
+#               naturally fit when the law is already progressing)
+#    DEBATE   – balanced narrative (genuine two-sided arguments)
+#    STALL    – opposition narrative (pushback events that fit when
+#               the law faces resistance; options still advance)
+#
+#  Some events appear in two categories where the narrative fits both.
+# ======================================================================
+
+# Root = owner Country of the Law
+on_law_checkpoint_advance = {
+	random_events = {
+		# --- Extra Law Events (non-ministry) ---
+		10 = extra_law_events.2		# A Run on the Banks (Financial Regulation – crisis = opportunity)
+		10 = extra_law_events.4		# The Printing Press of Money (Monetary Policy – fiat advocates)
+		10 = extra_law_events.5		# The Wiretapping Scandal (Privacy Rights – scandal fuels reform)
+		10 = extra_law_events.6		# The Viral Campaign (Internet Governance – grassroots support)
+		10 = extra_law_events.10	# Reports from the Front (Rules of War – atrocity reports galvanize)
+		10 = extra_law_events.14	# A Donor Scandal (Electoral Finance – corruption exposed)
+		10 = extra_law_events.18	# Petitions of the Heart (LGBTQ Rights – sympathetic petitioners)
+		10 = extra_law_events.20	# The Whistleblower (Right to Information – leak builds momentum)
+		10 = extra_law_events.21	# A March for Dignity (Minority Rights – popular momentum)
+		10 = extra_law_events.23	# The Algorithmic Showcase (Governance – impressive demonstration)
+
+		# --- Ministry Law Events ---
+		10 = ministry_law_events.1	# Staffing the New Ministry (Generic – building the institution)
+		10 = ministry_law_events.6	# The Ambassador's Dilemma (Foreign Affairs – incident proves need)
+		10 = ministry_law_events.7	# The Merchant's Petition (Commerce – business community rallies)
+		10 = ministry_law_events.12	# The Refugee Ship (Refugee Affairs – humanitarian momentum)
+		10 = ministry_law_events.14	# The Laboratory of the State (Science – breakthrough lends support)
+		10 = ministry_law_events.18	# The Pulpit and the State (Religion – devout community engages)
+	}
+}
+
+# Root = owner Country of the Law
+on_law_checkpoint_debate = {
+	random_events = {
+		# --- Extra Law Events (non-ministry) ---
+		10 = extra_law_events.1		# The Bankers' Lobby (Financial Regulation)
+		10 = extra_law_events.3		# The Gold Question (Monetary Policy)
+		10 = extra_law_events.5		# The Wiretapping Scandal (Privacy Rights)
+		10 = extra_law_events.7		# The Ethics of the Gene (Genetic Rights)
+		10 = extra_law_events.8		# The Robber Barons (Antitrust)
+		10 = extra_law_events.9		# The Pirate's Dilemma (Intellectual Property)
+		10 = extra_law_events.12	# A Question of Punishment (Criminal Justice)
+		10 = extra_law_events.13	# Tongues of the Nation (Language Policy)
+		10 = extra_law_events.15	# The Question of Autonomy (State Power)
+		10 = extra_law_events.16	# The Augmentation Hearing (Human Augmentation)
+		10 = extra_law_events.18	# Petitions of the Heart (LGBTQ Rights)
+		10 = extra_law_events.19	# The Cradle and the State (Family & Reproductive Policy)
+		10 = extra_law_events.22	# The Automation Question (Welfare / UBI)
+		10 = extra_law_events.24	# The People's Assembly (Governance – Direct Democracy)
+
+		# --- Ministry Law Events ---
+		10 = ministry_law_events.2	# The Budget Debate (Generic – funding contested)
+		10 = ministry_law_events.3	# Bureaucratic Turf Wars (Generic – jurisdictional conflict)
+		10 = ministry_law_events.5	# The Generals' War Room (War – civilian vs. military control)
+		10 = ministry_law_events.8	# The Artist's Subsidy (Culture – artists divided)
+		10 = ministry_law_events.9	# Capital vs. Labor (Labor – competing visions)
+		10 = ministry_law_events.10	# The Smokestack Question (Environment – industry vs. conservation)
+		10 = ministry_law_events.11	# The Shadow Files (Intelligence – security vs. liberty)
+		10 = ministry_law_events.13	# The Loudspeaker State (Propaganda – press vs. state)
+		10 = ministry_law_events.15	# The Watchers (Thought Control – dissent vs. order)
+		10 = ministry_law_events.16	# The Tainted Product (Consumer Protection – industry vs. safety)
+		10 = ministry_law_events.17	# The City Rises (Urban Planning – planning vs. freedom)
+		10 = ministry_law_events.19	# The Distant Crisis (International Aid – foreign vs. domestic)
+	}
+}
+
+# Root = owner Country of the Law
+on_law_checkpoint_stall = {
+	random_events = {
+		# --- Extra Law Events (non-ministry) ---
+		10 = extra_law_events.1		# The Bankers' Lobby (Financial Regulation – bankers block reform)
+		10 = extra_law_events.3		# The Gold Question (Monetary Policy – hard-money faction resists)
+		10 = extra_law_events.8		# The Robber Barons (Antitrust – industrialists dig in)
+		10 = extra_law_events.11	# The Generals Object (Rules of War – military pushback)
+		10 = extra_law_events.13	# Tongues of the Nation (Language Policy – cultural resistance)
+		10 = extra_law_events.15	# The Question of Autonomy (State Power – regional resistance)
+		10 = extra_law_events.17	# The Eldest Son's Complaint (Inheritance – landowner resistance)
+		10 = extra_law_events.22	# The Automation Question (Welfare – competing interests clash)
+
+		# --- Ministry Law Events ---
+		10 = ministry_law_events.2	# The Budget Debate (Generic – fiscal opposition)
+		10 = ministry_law_events.4	# The Redundant Clerks (Generic – dissolution resistance)
+		10 = ministry_law_events.5	# The Generals' War Room (War – generals resist civilian control)
+		10 = ministry_law_events.10	# The Smokestack Question (Environment – industry blocks regulation)
+		10 = ministry_law_events.13	# The Loudspeaker State (Propaganda – press opposition)
+		10 = ministry_law_events.15	# The Watchers (Thought Control – resistance and backlash)
+		10 = ministry_law_events.16	# The Tainted Product (Consumer Protection – manufacturers fight back)
+	}
+}

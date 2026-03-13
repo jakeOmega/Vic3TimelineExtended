@@ -1413,26 +1413,14 @@ emergency_liquidity_program_deactivation_refund = {
 	round = yes
 }
 
-fx_support_treasury_benefit = {
+fx_support_activation_cost = {
 	value = root.gdp
-	multiply = 0.005 # 0.5% of GDP
+	multiply = -0.003 # costs 0.3% of GDP to deploy reserves
 	round = yes
 }
 
-fx_support_deactivation_cost = {
-	value = fx_support_treasury_benefit
-	multiply = -1.2
-	round = yes
-}
-
-export_credit_facility_treasury_benefit = {
+export_credit_activation_cost = {
 	value = root.gdp
-	multiply = 0.005 # 0.5% of GDP
-	round = yes
-}
-
-export_credit_facility_deactivation_cost = {
-	value = export_credit_facility_treasury_benefit
-	multiply = -1.2
+	multiply = -0.002 # costs 0.2% of GDP to establish facility
 	round = yes
 }

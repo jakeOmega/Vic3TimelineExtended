@@ -409,6 +409,7 @@ banking_fx_support = {
     country_loan_interest_rate_mult = -0.005
 	country_finance_momentum_monthly_add = 0.05
 	country_bubble_pressure_monthly_add  = -0.4
+	state_tax_collection_mult = -0.03             # ongoing cost of deploying foreign reserves
 }
 
 banking_capital_controls_out = {
@@ -437,6 +438,7 @@ banking_export_credit_facility = {
     country_finance_momentum_monthly_add = 0.15
 	country_bubble_pressure_monthly_add  = 0.15
 	state_export_advantage_mult = 0.25
+	state_tax_collection_mult = -0.02     # ongoing fiscal cost of subsidised export loans
 }
 
 banking_asset_relief_program = {
@@ -454,74 +456,99 @@ global_warming = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	state_mortality_mult = 0.05
 	state_standard_of_living_add = -1.0
-	building_group_bg_agriculture_throughput_add = -0.075
-	country_migration_quota_add = 5                       # climate refugees; scales: mild=2.5, moderate=5, severe=10, catastrophic=20
-	state_construction_mult = 0.02                        # increased maintenance costs
+	building_group_bg_agriculture_throughput_add = -0.1
+	state_migration_quota_mult = 0.01                     # climate refugees; scales: mild=2.5, moderate=5, severe=10, catastrophic=20
+	goods_input_construction_mult = 0.05                  # increased maintenance costs
 	building_throughput_add = -0.025                      # general economic disruption
-	state_harvest_condition_flood_impact_mult = 0.05      # more severe floods
-	state_harvest_condition_flood_duration_mult = 0.05    # longer floods
-	state_harvest_condition_drought_impact_mult = 0.05    # more severe droughts
-	state_harvest_condition_drought_duration_mult = 0.05  # longer droughts
-	state_harvest_condition_cold_snap_impact_mult = -0.03 # less severe cold snaps (warming benefit)
+	state_harvest_condition_flood_impact_mult = 0.25
+	state_harvest_condition_flood_duration_mult = 0.25
+	state_harvest_condition_drought_impact_mult = 0.25
+	state_harvest_condition_drought_duration_mult = 0.25
+	state_harvest_condition_extreme_winds_impact_mult = 0.25
+	state_harvest_condition_extreme_winds_duration_mult = 0.25
+	state_harvest_condition_heatwave_impact_mult = 0.5
+	state_harvest_condition_heatwave_duration_mult = 0.5
+	state_harvest_condition_wildfire_impact_mult = 0.5
+	state_harvest_condition_wildfire_duration_mult = 0.5
+	state_harvest_condition_torrential_rains_impact_mult = 0.25
+	state_harvest_condition_torrential_rains_duration_mult = 0.25
+	state_harvest_condition_pollinator_surge_impact_mult = -0.25
+	state_harvest_condition_moderate_rainfall_impact_mult = -0.1
+
+	# warming benefit
+	state_harvest_condition_hailstorm_impact_mult = -0.15
+	state_harvest_condition_frost_impact_mult = -0.15
+	state_harvest_condition_frost_duration_mult = -0.15
+
 }
 
 # ----- Climate mitigation and adaptation policies -----
+# Market leader policies
 carbon_tax_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_coal_mult = -0.10
 	goods_output_oil_mult = -0.10
-	country_tax_capacity_mult = 0.03
+	building_group_bg_manufacturing_tax_mult = 0.1
+	building_group_bg_oil_extraction_tax_mult = 1
+	building_group_bg_coal_mining_tax_mult = 1
 	country_greenhouse_gas_emissions_mult = -0.20         # 20% direct emissions reduction
 }
 
 renewable_investment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	building_power_plant_throughput_add = -0.10           # transition away from conventional power
-	goods_output_electricity_mult = 0.15
-	country_greenhouse_gas_emissions_mult = -0.15         # 15% direct emissions reduction
+	country_building_renewable_energy_plant_require_subsidies_bool = yes      # forces renewable plants to require subsidies, representing government support and market distortion
+	building_renewable_energy_plant_throughput_add = 0.10                     # direct boost to clean energy output
+	building_power_plant_throughput_add = -0.10                               # transition away from conventional power
+	building_group_bg_power_construction_efficiency_add = 0.25                # accelerates renewable construction, indirectly reducing emissions
+	country_greenhouse_gas_emissions_mult = -0.15                             # 15% direct emissions reduction
 }
 
 climate_adaptation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	state_mortality_mult = -0.05
-	state_standard_of_living_add = 1.0
-	country_authority_add = -25
+	state_mortality_mult = -0.025
+	state_standard_of_living_add = 0.5
+	country_authority_add = -250
 }
 
-# Market-leader-only: direct emissions cut (uses country_greenhouse_gas_emissions_mult)
 emission_standards_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	building_throughput_add = -0.02          # compliance overhead across all industries
+	building_throughput_add = -0.05                 # compliance overhead across all industries
+	state_pollution_generation_mult = -0.25         # reduces pollution
 	country_greenhouse_gas_emissions_mult = -0.10   # 10% direct emissions reduction
-	country_authority_add = -20
+	country_authority_add = -200
 }
 
 # Indirect-effect policies (available to all countries)
 reforestation_subsidies_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	building_group_bg_agriculture_throughput_add = 0.03
-	state_harvest_condition_drought_impact_mult = -0.05
-	state_harvest_condition_drought_duration_mult = -0.05
-	country_authority_add = -10
+	building_group_bg_agriculture_throughput_add = 0.05
+	state_harvest_condition_drought_impact_mult = -0.25
+	state_harvest_condition_drought_duration_mult = -0.25
+	state_harvest_condition_flood_impact_mult = -0.25
+	state_harvest_condition_flood_duration_mult = -0.25
+	country_authority_add = -100
 }
 
 public_transit_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	state_standard_of_living_add = 0.5
-	state_construction_mult = -0.02
-	country_authority_add = -15
+	goods_output_transportation_mult = 0.10
+	building_group_bg_infrastructure_construction_efficiency_add = 0.1
+	state_infrastructure_from_automobiles_consumption_add = -0.25
+	country_authority_add = -150
 }
 
 fossil_fuel_divestment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	goods_output_coal_mult = -0.20
-	goods_output_oil_mult = -0.10
-	country_authority_add = -20
+	building_group_bg_coal_mining_tax_mult = 0.25
+	building_group_bg_oil_extraction_tax_mult = 0.25
+	goods_input_coal_mult = -0.05
+	goods_input_oil_mult = -0.05
+	country_authority_add = -200
 }
 
-green_building_codes_modifier = {
+carbon_tax_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	state_construction_mult = -0.03
-	goods_output_electricity_mult = 0.05
-	country_authority_add = -10
+	state_construction_mult = -0.20
+	building_urban_center_throughput_add = 0.25
+	country_authority_add = -100
 }

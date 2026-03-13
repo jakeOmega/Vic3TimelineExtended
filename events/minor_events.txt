@@ -48,7 +48,7 @@ minor_events_timelineextended.2 = {
  	flavor = minor_events_timelineextended.2.f
 
     trigger = {
-        adjusted_produced_authority > 250
+        produced_authority > 250
     }
 
     cancellation_trigger = {
@@ -85,7 +85,7 @@ minor_events_timelineextended.2 = {
 			base = 0
             modifier = {
                 trigger = {
-                    adjusted_produced_authority > 250
+                    produced_authority > 250
                 }
                 add = 2
             }
@@ -94,7 +94,7 @@ minor_events_timelineextended.2 = {
 
     option = {
         trigger = {
-            adjusted_produced_authority > 500
+            produced_authority > 500
         }
         name = minor_events_timelineextended.2.c
 
@@ -111,7 +111,7 @@ minor_events_timelineextended.2 = {
             base = 0
             modifier = {
                 trigger = {
-                    adjusted_produced_authority > 500
+                    produced_authority > 500
                 }
                 add = 4
             }
@@ -120,7 +120,7 @@ minor_events_timelineextended.2 = {
 
     option = {
         trigger = {
-            adjusted_produced_authority > 750
+            produced_authority > 750
         }
         name = minor_events_timelineextended.2.e
 
@@ -137,7 +137,7 @@ minor_events_timelineextended.2 = {
             base = 0
             modifier = {
                 trigger = {
-                    adjusted_produced_authority > 750
+                    produced_authority > 750
                 }
                 add = 6
             }

@@ -1,0 +1,243 @@
+﻿# ======================================================================
+#  ENACTMENT MODIFIERS  –  used by events/extra_law_events.txt
+#
+#  Design principle:  every option in an enactment event should move
+#  the law forward.  'Advance' modifiers give a strong push (+0.1/+0.15),
+#  while 'cautious' modifiers give a small nudge (+0.02/+0.05) in
+#  exchange for some other benefit (loyalists, IG approval, etc.).
+#
+#  When applied to an IG (not the country), the modifier represents
+#  that IG's reaction: advance = pleased, cautious = disgruntled.
+# ======================================================================
+
+# ----- Financial Regulation -----
+finreg_bankers_lobby_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+finreg_bankers_lobby_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+finreg_bank_panic_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.15
+}
+finreg_bank_panic_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = 0.05
+}
+
+# ----- Monetary Policy -----
+monpol_gold_hoarders_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+monpol_gold_hoarders_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+monpol_printing_press_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.15
+}
+monpol_printing_press_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = 0.05
+}
+
+# ----- Privacy Rights -----
+privacy_surveillance_debate_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+privacy_surveillance_debate_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Internet Governance -----
+internet_viral_campaign_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+internet_viral_campaign_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Genetic Rights -----
+genetics_ethics_debate_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+genetics_ethics_debate_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Antitrust -----
+antitrust_public_outrage_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.15
+}
+antitrust_public_outrage_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = 0.05
+}
+
+# ----- Intellectual Property -----
+ip_piracy_debate_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+ip_piracy_debate_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Rules of War -----
+row_atrocity_reports_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.15
+}
+row_atrocity_reports_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_law_enactment_success_add = 0.05
+}
+row_military_pushback_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+row_military_pushback_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Criminal Justice -----
+crimjust_reform_debate_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+crimjust_reform_debate_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Language Policy -----
+langpol_cultural_resistance_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+langpol_cultural_resistance_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Electoral Finance -----
+electfin_donor_scandal_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.15
+}
+electfin_donor_scandal_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = 0.05
+}
+
+# ----- State Power -----
+statepower_autonomy_debate_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+statepower_autonomy_debate_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Human Augmentation -----
+augment_ethics_board_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+augment_ethics_board_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Inheritance -----
+inherit_succession_dispute_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+inherit_succession_dispute_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- LGBTQ Rights -----
+lgbtq_public_petition_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+lgbtq_public_petition_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Family & Reproductive Policy -----
+famrep_demographic_debate_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+famrep_demographic_debate_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Right to Information -----
+rti_whistleblower_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.15
+}
+rti_whistleblower_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = 0.05
+}
+
+# ----- Minority Rights -----
+minrights_solidarity_march_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_law_enactment_success_add = 0.15
+}
+minrights_solidarity_march_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_law_enactment_success_add = 0.05
+}
+
+# ----- Welfare (UBI / Post-Scarcity) -----
+welfare_automation_fears_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+welfare_automation_fears_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+
+# ----- Governance Principles (Algorithmic / Direct Democracy / Neocameralism) -----
+govprin_technocrat_showcase_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+govprin_technocrat_showcase_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = 0.02
+}
+govprin_popular_assembly_advance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_law_enactment_success_add = 0.15
+}
+govprin_popular_assembly_cautious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_law_enactment_success_add = 0.05
+}
