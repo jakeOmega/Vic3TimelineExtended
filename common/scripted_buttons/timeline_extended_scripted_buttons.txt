@@ -130,7 +130,10 @@ cb_policy_rate_hike = {
 
 
     possible = {
-        modifier:country_banking_intervention_max_add >= 2
+            custom_tooltip = {
+                text = BANKING_POINTS_2
+                modifier:country_banking_intervention_max_add >= 2
+            }
         NOT = { has_modifier = banking_open_market_ops }
     }
 
@@ -202,7 +205,10 @@ cb_open_market_ops = {
 
     possible = {
         has_technology_researched = keynesian_economics
-        modifier:country_banking_intervention_max_add >= 4
+            custom_tooltip = {
+                text = BANKING_POINTS_4
+                modifier:country_banking_intervention_max_add >= 4
+            }
         NOT = { has_modifier = banking_policy_rate_hike }
     }
     effect = {
@@ -257,7 +263,10 @@ cb_countercyclical_buffer = {
 
     possible = {
         has_technology_researched = international_exchange_standards
-        modifier:country_banking_intervention_max_add >= 2
+            custom_tooltip = {
+                text = BANKING_POINTS_2
+                modifier:country_banking_intervention_max_add >= 2
+            }
     }
     effect = {
         add_modifier = { name = banking_countercyclical_capital_buffer }
@@ -311,7 +320,10 @@ cb_expand_deposit_guarantee = {
 
     possible = {
         has_technology_researched = consumer_credit
-        modifier:country_banking_intervention_max_add >= 4
+            custom_tooltip = {
+                text = BANKING_POINTS_4
+                modifier:country_banking_intervention_max_add >= 4
+            }
     }
     effect = {
         add_modifier = { name = banking_expand_deposit_guarantee }
@@ -368,7 +380,10 @@ cb_directed_credit_infrastructure = {
     }
 
     possible = {
-        modifier:country_banking_intervention_max_add >= 3
+            custom_tooltip = {
+                text = BANKING_POINTS_3
+                modifier:country_banking_intervention_max_add >= 3
+            }
     }
     effect = {
         add_modifier = { name = banking_directed_credit_infrastructure }
@@ -424,7 +439,10 @@ cb_emergency_liquidity_program = {
 
     possible = {
         has_technology_researched = investment_banks
-        modifier:country_banking_intervention_max_add >= 6
+            custom_tooltip = {
+                text = BANKING_POINTS_6
+                modifier:country_banking_intervention_max_add >= 6
+            }
     }
     effect = {
         add_modifier = { name = banking_emergency_liquidity_program }
@@ -482,7 +500,10 @@ cb_moral_suasion = {
     }
 
     possible = {
-        modifier:country_banking_intervention_max_add >= 1
+            custom_tooltip = {
+                text = BANKING_POINTS_1
+                modifier:country_banking_intervention_max_add >= 1
+            }
     }
     effect = {
         add_modifier = { name = banking_moral_suasion }
@@ -536,7 +557,10 @@ cb_raise_margin_requirements = {
     }
 
     possible = {
-        modifier:country_banking_intervention_max_add >= 2
+            custom_tooltip = {
+                text = BANKING_POINTS_2
+                modifier:country_banking_intervention_max_add >= 2
+            }
     }
     effect = {
         add_modifier = { name = banking_raise_margin_requirements }
@@ -593,7 +617,10 @@ cb_fx_devaluation = {
     }
 
     possible = {
-        modifier:country_banking_intervention_max_add >= 3
+            custom_tooltip = {
+                text = BANKING_POINTS_3
+                modifier:country_banking_intervention_max_add >= 3
+            }
         has_technology_researched = keynesian_economics
         NOT = { has_modifier = banking_fx_support }
     }
@@ -654,7 +681,10 @@ cb_fx_support = {
     }
 
     possible = {
-        modifier:country_banking_intervention_max_add >= 3
+            custom_tooltip = {
+                text = BANKING_POINTS_3
+                modifier:country_banking_intervention_max_add >= 3
+            }
         has_technology_researched = international_exchange_standards
         NOT = { has_modifier = banking_fx_devaluation }
     }
@@ -715,10 +745,14 @@ cb_capital_controls_outflow = {
     }
 
     possible = {
-        modifier:country_banking_intervention_max_add >= 2
+            custom_tooltip = {
+                text = BANKING_POINTS_2
+                modifier:country_banking_intervention_max_add >= 2
+            }
         OR = {
             has_law = law_type:law_prudential_narrow_banking
             has_law = law_type:law_directed_credit_development_banks
+            is_at_war = yes
         }
     }
     effect = {
@@ -776,7 +810,10 @@ cb_fx_swap_lines = {
     }
 
     possible = {
-        modifier:country_banking_intervention_max_add >= 4
+            custom_tooltip = {
+                text = BANKING_POINTS_4
+                modifier:country_banking_intervention_max_add >= 4
+            }
         has_technology_researched = international_exchange_standards
         OR = {
             has_law = law_type:law_central_bank_independence
@@ -854,7 +891,10 @@ cb_export_credit_facility = {
     }
 
     possible = {
-        modifier:country_banking_intervention_max_add >= 2
+            custom_tooltip = {
+                text = BANKING_POINTS_2
+                modifier:country_banking_intervention_max_add >= 2
+            }
         has_technology_researched = corporate_management
     }
     effect = {
@@ -905,7 +945,10 @@ cb_asset_relief_program = {
     }
 
     possible = {
-        modifier:country_banking_intervention_max_add >= 5
+            custom_tooltip = {
+                text = BANKING_POINTS_5
+                modifier:country_banking_intervention_max_add >= 5
+            }
         OR = {
             has_technology_researched = keynesian_economics
         }
@@ -6054,7 +6097,7 @@ gw_climate_adaptation_button = {
             add = 25
         }
         if = {
-            limit = { country_authority < 250 }
+            limit = { adjusted_produced_authority < 250 }
             add = -25
         }
     }
@@ -6379,71 +6422,6 @@ gw_remove_fossil_fuel_divestment_button = {
         custom_tooltip = {
             text = "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC"
             remove_modifier = fossil_fuel_divestment_modifier
-        }
-    }
-}
-
-# ---- Green Building Codes (available to all countries) ----
-
-gw_green_building_codes_button = {
-    name = "GW_GREEN_BUILDING_CODES"
-    desc = "GW_GREEN_BUILDING_CODES_DESC"
-
-    visible = {
-        NOT = { has_modifier = green_building_codes_modifier }
-        temperature_anomaly_display >= 0.5
-    }
-
-    ai_chance = {
-        value = 0
-        if = {
-            limit = { temperature_anomaly_display >= 0.5 }
-            add = 15
-        }
-        if = {
-            limit = { temperature_anomaly_display >= 1.5 }
-            add = 15
-        }
-    }
-
-    possible = {
-        NOT = { has_modifier = green_building_codes_modifier }
-        temperature_anomaly_display >= 0.5
-        adjusted_produced_authority > 100
-    }
-
-    effect = {
-        custom_tooltip = {
-            text = "GW_GREEN_BUILDING_CODES_DESC"
-            add_modifier = { name = green_building_codes_modifier }
-        }
-    }
-}
-
-gw_remove_green_building_codes_button = {
-    name = "GW_REMOVE_GREEN_BUILDING_CODES"
-    desc = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
-
-    visible = {
-        has_modifier = green_building_codes_modifier
-    }
-
-    ai_chance = {
-        value = 0
-        if = {
-            limit = { temperature_anomaly_display < 0.3 }
-            add = 40
-        }
-    }
-
-    possible = {
-        has_modifier = green_building_codes_modifier
-    }
-
-    effect = {
-        custom_tooltip = {
-            text = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
-            remove_modifier = green_building_codes_modifier
         }
     }
 }

@@ -147,6 +147,10 @@ je_global_warming = {
         temperature_anomaly_display > 0.1
     }
 
+    should_be_involved = {
+        has_global_variable = greenhouse_gas_emissions
+    }
+
     # Progress bar: current temperature vs the 4°C critical threshold (above catastrophic at 3°C)
     current_value = {
         value = temperature_anomaly_display

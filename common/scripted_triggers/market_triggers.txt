@@ -40,5 +40,5 @@ banking_tool_directed_active  = { has_modifier = banking_directed_credit_infrast
 banking_tool_eliq_active      = { has_modifier = banking_emergency_liquidity_program }
 
 # Fiscal stress nudge
-banking_fiscal_stress_low  = { treasury < 0 }
+banking_fiscal_stress_low  = { scaled_gold_reserves < 0.01 }
 banking_fiscal_stress_high = { has_healthy_economy = no }

@@ -29,14 +29,6 @@ decolonize_diplo_action = {
     }
     
 	accept_effect = {
-        custom_tooltip = {
-            text = ""
-            scope:second_state = {
-                trigger_event = {
-                    id = minor_events_timelineextended.4
-                }
-            }
-        }
     }
 
 	is_hostile = no

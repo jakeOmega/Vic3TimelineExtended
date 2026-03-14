@@ -396,7 +396,7 @@ banking_fx_devaluation = {
     country_banking_intervention_max_add = -3
     state_import_advantage_mult = -0.25
 	state_export_advantage_mult = 0.25		     # exporters advantaged
-    country_loan_interest_rate_mult = 0.015       # inflation pass-through
+    country_loan_interest_rate_mult = 0.02       # inflation pass-through
     country_finance_momentum_monthly_add = 0.1
 	country_bubble_pressure_monthly_add  = 0.3
 }
@@ -406,7 +406,7 @@ banking_fx_support = {
     country_banking_intervention_max_add = -3
 	state_import_advantage_mult = 0.25
 	state_export_advantage_mult = -0.25		     # importers advantaged
-    country_loan_interest_rate_mult = -0.005
+    country_loan_interest_rate_mult = -0.01
 	country_finance_momentum_monthly_add = 0.05
 	country_bubble_pressure_monthly_add  = -0.4
 	state_tax_collection_mult = -0.03             # ongoing cost of deploying foreign reserves

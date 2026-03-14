@@ -49,7 +49,7 @@ NPops = {
 }
 
 NPowerBlocs = {
-	MAX_PRINCIPLES = 8
+	MAX_PRINCIPLES = 4
 	MAX_MANDATES = 5
 }
 

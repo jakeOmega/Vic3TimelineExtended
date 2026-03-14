@@ -2025,20 +2025,6 @@ modifications = {
             ("law_communal_child_rearing", "strongly_disapprove"),
         ],
     },
-    "ideology_stratocratic": {
-        "lawgroup_welfare": [
-            ("law_no_social_security", "approve"),
-            ("law_poor_laws", "neutral"),
-            ("law_wage_subsidies", "disapprove"),
-            ("law_old_age_pension", "disapprove"),
-            ("law_universal_basic_income", "strongly_disapprove"),
-            ("law_post-scarcity", "disapprove"),
-        ],
-        "lawgroup_rules_of_war": traditional_rules_of_war,
-        "lawgroup_right_to_information": pro_secrecy,
-        "lawgroup_criminal_justice": regressive_criminal_justice,
-        "lawgroup_monetary_policy": simple_currency,
-    },
     "ideology_constitutionalist": {
         "lawgroup_governance_principles": [
             ("law_neocameralism", "neutral"),

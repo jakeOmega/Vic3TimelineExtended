@@ -22,7 +22,6 @@ financial_panic = {
 	}
 
 	# A state can't be in a panic and a boom at the same time.
-	incompatible_with = speculative_frenzy
 	incompatible_with = bull_market
 
 	# Financial panics are contagious and can spread to neighboring states.
@@ -88,7 +87,6 @@ market_downturn = {
 			}
 		}
 	}
-	incompatible_with = speculative_frenzy
 	incompatible_with = bull_market
 	incompatible_with = financial_panic
 
@@ -142,7 +140,6 @@ bull_market = {
 	}
 	incompatible_with = financial_panic
 	incompatible_with = market_downturn
-	incompatible_with = speculative_frenzy
 
 	range = { integer_range = { min = 0 max = 8 } }
 	duration = { fixed_range = { min = 26 max = 156 } } # 0.5 to 3 years

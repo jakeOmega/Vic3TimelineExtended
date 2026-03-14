@@ -58,9 +58,11 @@ je_banking_cycle = {
             value = 0
         }
 
-        set_bar_progress = { name = banking_cycle_value_bar value = 50 }
-        set_bar_progress = { name = banking_cycle_momentum_bar value = 0 }
-        set_bar_progress = { name = banking_bubble_pressure_bar value = 0 }
+        scope:journal_entry = {
+            set_bar_progress = { name = banking_cycle_value_bar value = 50 }
+            set_bar_progress = { name = banking_cycle_momentum_bar value = 0 }
+            set_bar_progress = { name = banking_bubble_pressure_bar value = 0 }
+        }
     }
 
     # Progress bar: shows remaining points as % of initial allowance at activation.
@@ -404,7 +406,7 @@ je_banking_cycle = {
                     limit = { var:finance_cycle_momentum > 5 }
                     set_bar_progress = { name = banking_cycle_momentum_bar value = 5 }
                 }
-                else {
+                else = {
                     set_bar_progress = { name = banking_cycle_momentum_bar value = ROOT.var:finance_cycle_momentum }
                 }
             }

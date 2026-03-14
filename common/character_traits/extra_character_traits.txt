@@ -149,7 +149,7 @@ trait_military_grade_cybersecurity = {
 		if = {
 			limit = {
 				owner = {
-					has_technology_researched = military_grade_cyberscurity
+					has_technology_researched = military_grade_cybersecurity
 				}
 			}
 			add = 10000

@@ -1249,15 +1249,6 @@ state_harvest_condition_financial_panic_impact_mult = {
 	}
 }
 
-state_harvest_condition_speculative_frenzy_duration_mult = {
-	color = good
-	percent = yes
-	decimals = 1
-	game_data = {
-		ai_value = 0
-	}
-}
-
 state_harvest_condition_pollinator_surge_impact_mult = {
 	color = good
 	percent = yes
@@ -1774,3 +1765,22 @@ ai_value = 0
 }
 }
 
+country_building_airport_require_subsidies_bool = {
+	color = bad
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+country_building_highway_require_subsidies_bool = {
+	color = bad
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_enactment_success_chance_law_ministry_of_culture_add = {
+	color = good
+	percent = yes
+}

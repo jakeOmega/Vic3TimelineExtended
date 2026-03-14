@@ -67,11 +67,11 @@ repeatable_events.10 = {
         add_modifier = { name = re_debate_open days = short_modifier_time }
         random_list = {
             10 = { # Momentum for Government
-                limit = { exists = scope:re_debate_government_party }
+                trigger = { exists = scope:re_debate_government_party }
                 scope:re_debate_government_party = { add_momentum = momentum_medium }
             }
             10 = { # Momentum for Opposition
-                limit = { exists = scope:re_debate_opposition_party }
+                trigger = { exists = scope:re_debate_opposition_party }
                 scope:re_debate_opposition_party = { add_momentum = momentum_medium }
             }
         }

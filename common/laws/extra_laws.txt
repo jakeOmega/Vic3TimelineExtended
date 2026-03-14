@@ -525,6 +525,10 @@ law_fiat_currency = {
 		country_government_dividends_efficiency_add = 0.005
 	}
 
+	on_enact = {
+		custom_tooltip = { text = LAW_FIAT_CURRENCY_INSTITUTION_MODIFIER_TT }
+	}
+
 	ai_enact_weight_modifier = {
 		value = 200
 	}
@@ -553,9 +557,15 @@ law_digital_currency = {
 	institution = institution_national_bank
 
 	institution_modifier = {
-		country_minting_mult = 0.2
-		state_capitalists_investment_pool_efficiency_mult = 0.05
-		country_government_dividends_efficiency_add = 0.01
+		hidden_effect = {
+			country_minting_mult = 0.2
+			state_capitalists_investment_pool_efficiency_mult = 0.05
+			country_government_dividends_efficiency_add = 0.01
+		}
+	}
+
+	on_enact = {
+		custom_tooltip = { text = LAW_DIGITAL_CURRENCY_INSTITUTION_MODIFIER_TT }
 	}
 
 	ai_enact_weight_modifier = {
@@ -835,6 +845,10 @@ law_medical_augmentation_only = {
 		state_standard_of_living_add = 0.25
 		country_tech_research_speed_mult = 0.01
 	}
+
+	on_enact = {
+		custom_tooltip = { text = LAW_MEDICAL_AUGMENTATION_ONLY_INSTITUTION_MODIFIER_TT }
+	}
 	
 	progressiveness = 60
 }
@@ -863,6 +877,10 @@ law_regulated_augmentation_market = {
 	institution_modifier = {
 		state_mortality_mult = -0.02
 		country_tech_research_speed_mult = 0.03
+	}
+
+	on_enact = {
+		custom_tooltip = { text = LAW_REGULATED_AUGMENTATION_MARKET_INSTITUTION_MODIFIER_TT }
 	}
 }
 
@@ -895,6 +913,10 @@ law_mandatory_augmentation = {
 		unit_defense_mult = 0.02
 		unit_offense_mult = 0.02
 		country_military_tech_research_speed_mult = 0.1
+	}
+
+	on_enact = {
+		custom_tooltip = { text = LAW_MANDATORY_AUGMENTATION_INSTITUTION_MODIFIER_TT }
 	}
 }
 
@@ -1834,9 +1856,13 @@ law_central_bank_independence = {
 	unlocking_laws = {
 		law_national_bank
 	}
-    institution = institution_national_bank
+	institution = institution_national_bank
 	institution_modifier = {
 		country_banking_intervention_max_add = 1
+	}
+
+	on_enact = {
+		custom_tooltip = { text = LAW_CENTRAL_BANK_INDEPENDENCE_INSTITUTION_MODIFIER_TT }
 	}
     modifier = {
 		country_banking_intervention_max_add = 7
@@ -2017,9 +2043,13 @@ law_civic_monolingualism = {
 		law_no_schools
 	}
 
-    institution = institution_schools
-    institution_modifier = {
+	institution = institution_schools
+	institution_modifier = {
 		state_assimilation_mult = 0.05
+	}
+
+	on_enact = {
+		custom_tooltip = { text = LAW_CIVIC_MONOLINGUALISM_INSTITUTION_MODIFIER_TT }
 	}
 
     modifier = {

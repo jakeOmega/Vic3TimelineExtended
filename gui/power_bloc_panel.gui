@@ -1570,24 +1570,6 @@ types power_bloc_panel_types
 								using = tooltip_se
 							}
 						}
-						
-						principle_slot = {
-							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)4' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, HasDlcFeature('power_bloc_features'))]"
-
-							blockoverride "tooltip_alignment" {
-								using = tooltip_se
-							}
-						}
-						
-						principle_slot = {
-							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)6' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, HasDlcFeature('power_bloc_features'))]"
-
-							blockoverride "tooltip_alignment" {
-								using = tooltip_se
-							}
-						}
 					}
 
 					# PRINCIPLES PROGRESSBAR
@@ -1631,16 +1613,6 @@ types power_bloc_panel_types
 
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)3' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, HasDlcFeature('power_bloc_features'))]"
-						}
-						
-						principle_slot = {
-							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)5' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, HasDlcFeature('power_bloc_features'))]"
-						}
-						
-						principle_slot = {
-							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)7' )]"
 							visible = "[Or(PowerBlocPrincipleSlot.IsActive, HasDlcFeature('power_bloc_features'))]"
 						}
 						

@@ -52,7 +52,7 @@ fmc_investment_pool_size_target = {
 	else = {
 		value = 100000
 	}
-	multiply = 10  
+	multiply = 24  
 }
 
 investment_pool_times_thousand = {
@@ -65,7 +65,7 @@ fmc_private_construction_use_target = {
 	divide = var:fmc_price_stabiliser
 	if = {
 		limit = {
-			investment_pool_gross_income > 1000000
+			investment_pool_gross_income > 100000000
 		}
 		min = 1000
 	}

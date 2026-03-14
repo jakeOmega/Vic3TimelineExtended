@@ -704,7 +704,6 @@ remove_all_ideologies = {
 	remove_ideology = ideology_paternalistic
 	remove_ideology = ideology_laissez_faire
 	remove_ideology = ideology_individualist
-	remove_ideology = ideology_stratocratic
 	remove_ideology = ideology_oligarchic
 	remove_ideology = ideology_pious
 	remove_ideology = ideology_agrarian
