@@ -1,0 +1,10 @@
+﻿un_authority_bar = {
+	name = "un_authority_bar_name"
+	desc = "un_authority_bar_desc"
+
+	default_green = yes
+
+	start_value = 50
+	min_value = 0
+	max_value = 100
+}

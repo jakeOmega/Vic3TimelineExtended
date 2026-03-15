@@ -8,6 +8,15 @@ GLOBAL = {
 		activate_law = law_type:law_informal_government_secrecy
 		activate_law = law_type:law_guilds_chartered_monopolies
 		activate_law = law_type:law_local_vernacular
+		activate_law = law_type:law_active_persecution
+		activate_law = law_type:law_punishment_focused_criminal_justice
+		activate_law = law_type:law_no_ip_protection
+		activate_law = law_type:law_commodity_money
+		activate_law = law_type:law_traditional_family_structure
+		activate_law = law_type:law_no_augmentation
+		activate_law = law_type:law_no_internet_policy
+		activate_law = law_type:law_traditional_heredity
+		activate_law = law_type:law_unregulated_banking
 		if = {
 			limit = {
 				NOT = { has_law = law_type:law_guild_system }
@@ -54,10 +63,12 @@ GLOBAL = {
 		activate_law = law_type:law_equal_inheritance
 		activate_law = law_type:law_minority_rights_cultural_assimilation
 		activate_law = law_type:law_universal_banking_light_prudence
+		activate_law = law_type:law_legal_limbo # Decriminalized during Revolution, 1791
 	}
 	c:GBR = {
 		activate_law = law_type:law_primogeniture
 		activate_law = law_type:law_universal_banking_light_prudence
+		activate_law = law_type:law_gold_standard # Gold Standard Act 1816
 	}
 	c:JAP = {
 		activate_law = law_type:law_primogeniture
@@ -87,12 +98,14 @@ GLOBAL = {
 	}
 	c:BRZ = { # Brazil
 		activate_law = law_type:law_federal_system
+		activate_law = law_type:law_legal_limbo # Decriminalized 1830
 	}
 	c:AUS = { # Austria
 		activate_law = law_type:law_feudal_contracts
 	}
 	c:TUR = { # Turkey/Ottoman Empire
 		activate_law = law_type:law_feudal_contracts
+		activate_law = law_type:law_legal_limbo # Not actively prosecuted; formal decrim 1858
 	}
 	c:BIC = { # East India Company
 		activate_law = law_type:law_devolution
@@ -108,9 +121,11 @@ GLOBAL = {
 	}
 	c:SPA = { # Spain
 		activate_law = law_type:law_feudal_contracts
+		activate_law = law_type:law_legal_limbo # Decriminalized 1822
 	}
 	c:SIC = { # Two Sicilies
 		activate_law = law_type:law_feudal_contracts
+		activate_law = law_type:law_legal_limbo # Decriminalized under Napoleonic code
 	}
 	c:CLM = { # Colombia
 		activate_law = law_type:law_devolution
@@ -130,6 +145,9 @@ GLOBAL = {
 	c:BOL = { # Bolivia
 		activate_law = law_type:law_devolution
 	}
+	c:BEL = { # Belgium
+		activate_law = law_type:law_legal_limbo # Decriminalized 1795 under French rule
+	}
 	c:URU = { # Uruguay
 		activate_law = law_type:law_devolution
 	}
@@ -148,6 +166,7 @@ GLOBAL = {
 	}
 	c:NET = { # Netherlands
 		activate_law = law_type:law_universal_banking_light_prudence
+		activate_law = law_type:law_legal_limbo # Decriminalized 1811 under Napoleonic code
 	}
 	c:DEN = { # Denmark
 		activate_law = law_type:law_civic_monolingualism

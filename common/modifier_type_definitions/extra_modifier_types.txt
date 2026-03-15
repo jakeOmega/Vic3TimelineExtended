@@ -1842,3 +1842,28 @@ country_combined_arms_bonus_enabled_bool = {
 		ai_value = 5000
 	}
 }
+
+# Custom modifier types for mod-added mechanics
+country_trade_route_competitiveness_mult = {
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 50
+	}
+}
+
+state_radicals_from_discrimination_mult = {
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+political_movement_support_add = {
+	color = neutral
+	percent = no
+	game_data = {
+		ai_value = 0
+	}
+}

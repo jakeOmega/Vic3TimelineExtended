@@ -1,11 +1,24 @@
 ### Combined Arms Effects ###
-# Applies or removes combined arms bonuses per military formation based on unit composition.
-# Each army unit group provides unique bonuses when at least 5% of the formation
-# belongs to that group AND the formation has 2+ qualifying groups.
+# Applies or removes combined arms traits on army generals based on their formation's
+# unit composition. Each army unit group provides unique combat bonuses (via command_modifier
+# on the trait) when at least 5% of the formation belongs to that group AND the formation
+# has 2+ qualifying groups. Traits are per-general (per-formation), so each army benefits
+# independently based on its own composition.
 # Called from on_monthly_pulse_country via combined_arms_update_on_action.
 
 apply_combined_arms_bonuses = {
-	# Evaluate each army formation independently
+	# Step 1: Remove all combined arms traits from all generals (clean slate).
+	# This handles generals reassigned or whose formation composition changed.
+	every_scope_general = {
+		remove_trait = trait_combined_arms_infantry_screen
+		remove_trait = trait_combined_arms_fire_support
+		remove_trait = trait_combined_arms_recon
+		remove_trait = trait_combined_arms_armor
+		remove_trait = trait_combined_arms_air_superiority
+		remove_trait = trait_combined_arms_full_spectrum
+	}
+
+	# Step 2: For each army formation, evaluate composition and apply traits to its general.
 	every_military_formation = {
 		limit = { is_army = yes }
 
@@ -43,7 +56,6 @@ apply_combined_arms_bonuses = {
 
 		# ---- Determine which groups meet 5% threshold ----
 		# Method: group_count * 20 >= total means group >= 5% of formation.
-		# We compute group_count * 20 - total and check >= 0.
 		# Guard: skip empty formations (0 * 20 - 0 = 0 would pass all checks).
 		set_local_variable = { name = ca_groups value = 0 }
 		set_local_variable = { name = ca_has_infantry value = 0 }
@@ -106,110 +118,52 @@ apply_combined_arms_bonuses = {
 			}
 		}
 
-		# ---- Apply or remove formation-level modifiers ----
-
-		# Infantry Screen: defense bonus when infantry supports other branches
-		if = {
-			limit = {
-				local_var:ca_groups >= 2
-				local_var:ca_has_infantry >= 1
-			}
+		# ---- Apply traits to this formation's general ----
+		every_scope_general = {
+			# Infantry Screen: defense bonus
 			if = {
-				limit = { NOT = { has_modifier = combined_arms_infantry_screens } }
-				add_modifier = { name = combined_arms_infantry_screens }
+				limit = {
+					local_var:ca_groups >= 2
+					local_var:ca_has_infantry >= 1
+				}
+				add_trait = trait_combined_arms_infantry_screen
 			}
-		}
-		else = {
+			# Fire Support: offense bonus
 			if = {
-				limit = { has_modifier = combined_arms_infantry_screens }
-				remove_modifier = combined_arms_infantry_screens
+				limit = {
+					local_var:ca_groups >= 2
+					local_var:ca_has_artillery >= 1
+				}
+				add_trait = trait_combined_arms_fire_support
 			}
-		}
-
-		# Fire Support: offense bonus when artillery supports other branches
-		if = {
-			limit = {
-				local_var:ca_groups >= 2
-				local_var:ca_has_artillery >= 1
-			}
+			# Recon: morale resilience bonus
 			if = {
-				limit = { NOT = { has_modifier = combined_arms_fire_support } }
-				add_modifier = { name = combined_arms_fire_support }
+				limit = {
+					local_var:ca_groups >= 2
+					local_var:ca_has_cavalry >= 1
+				}
+				add_trait = trait_combined_arms_recon
 			}
-		}
-		else = {
+			# Armored Spearhead: offense+defense bonus
 			if = {
-				limit = { has_modifier = combined_arms_fire_support }
-				remove_modifier = combined_arms_fire_support
+				limit = {
+					local_var:ca_groups >= 2
+					local_var:ca_has_tanks >= 1
+				}
+				add_trait = trait_combined_arms_armor
 			}
-		}
-
-		# Recon Advantage: mobility bonus when cavalry/scouts support other branches
-		if = {
-			limit = {
-				local_var:ca_groups >= 2
-				local_var:ca_has_cavalry >= 1
-			}
+			# Air Superiority: offense+morale damage bonus
 			if = {
-				limit = { NOT = { has_modifier = combined_arms_recon_advantage } }
-				add_modifier = { name = combined_arms_recon_advantage }
+				limit = {
+					local_var:ca_groups >= 2
+					local_var:ca_has_aircraft >= 1
+				}
+				add_trait = trait_combined_arms_air_superiority
 			}
-		}
-		else = {
+			# Full Spectrum Dominance: all 5 groups present
 			if = {
-				limit = { has_modifier = combined_arms_recon_advantage }
-				remove_modifier = combined_arms_recon_advantage
-			}
-		}
-
-		# Armored Spearhead: offense+defense bonus when tanks support other branches
-		if = {
-			limit = {
-				local_var:ca_groups >= 2
-				local_var:ca_has_tanks >= 1
-			}
-			if = {
-				limit = { NOT = { has_modifier = combined_arms_armored_spearhead } }
-				add_modifier = { name = combined_arms_armored_spearhead }
-			}
-		}
-		else = {
-			if = {
-				limit = { has_modifier = combined_arms_armored_spearhead }
-				remove_modifier = combined_arms_armored_spearhead
-			}
-		}
-
-		# Air Superiority: offense+morale bonus when aircraft support other branches
-		if = {
-			limit = {
-				local_var:ca_groups >= 2
-				local_var:ca_has_aircraft >= 1
-			}
-			if = {
-				limit = { NOT = { has_modifier = combined_arms_air_superiority } }
-				add_modifier = { name = combined_arms_air_superiority }
-			}
-		}
-		else = {
-			if = {
-				limit = { has_modifier = combined_arms_air_superiority }
-				remove_modifier = combined_arms_air_superiority
-			}
-		}
-
-		# Full Spectrum Dominance: all 5 army groups present at 5%+ each
-		if = {
-			limit = { local_var:ca_groups >= 5 }
-			if = {
-				limit = { NOT = { has_modifier = combined_arms_full_spectrum } }
-				add_modifier = { name = combined_arms_full_spectrum }
-			}
-		}
-		else = {
-			if = {
-				limit = { has_modifier = combined_arms_full_spectrum }
-				remove_modifier = combined_arms_full_spectrum
+				limit = { local_var:ca_groups >= 5 }
+				add_trait = trait_combined_arms_full_spectrum
 			}
 		}
 	}

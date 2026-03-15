@@ -1,0 +1,242 @@
+﻿# United Nations events - wired into monthly country pulse
+un_events_on_action = {
+	effect = {
+		# Formation event — fires once when tech is researched
+		if = {
+			limit = {
+				has_technology_researched = intergovernmental_organizations
+				NOT = { has_variable = un_charter_signed }
+				NOT = { has_modifier = un_member_modifier }
+				country_rank >= rank_value:major_power
+			}
+			trigger_event = { id = un_events.1 }
+		}
+
+		# Recurring events — only for members
+		if = {
+			limit = {
+				has_modifier = un_member_modifier
+			}
+			random_list = {
+				75 = { } # Nothing happens most months
+				3 = {
+					trigger = {
+						any_country = {
+							has_diplomatic_pact = { who = ROOT type = rivalry }
+							is_at_war = yes
+						}
+						NOT = { has_modifier = un_ga_resolution_modifier }
+					}
+					trigger_event = { id = un_events.2 }
+				}
+				3 = {
+					trigger = {
+						has_technology_researched = human_rights
+						var:un_authority >= 40
+						NOT = { has_modifier = un_human_rights_declaration_modifier }
+					}
+					trigger_event = { id = un_events.3 }
+				}
+				3 = {
+					trigger = {
+						has_modifier = un_peacekeeping_contributor_modifier
+						country_rank >= rank_value:major_power
+						any_country = {
+							NOT = { this = ROOT }
+							is_at_war = yes
+							NOT = { has_modifier = un_peacekeeping_deployed_modifier }
+						}
+					}
+					trigger_event = { id = un_events.4 }
+				}
+				3 = {
+					trigger = {
+						has_modifier = un_sanctions_enforcer_modifier
+						NOT = { has_modifier = un_sanctions_enforcement_modifier }
+					}
+					trigger_event = { id = un_events.5 }
+				}
+				2 = {
+					trigger = {
+						country_rank >= rank_value:great_power
+						var:un_authority >= 30
+						NOT = { has_modifier = un_reform_champion_modifier }
+						NOT = { has_modifier = un_reform_opponent_modifier }
+					}
+					trigger_event = { id = un_events.6 }
+				}
+				3 = {
+					trigger = {
+						country_rank >= rank_value:major_power
+						NOT = { has_modifier = un_humanitarian_aid_modifier }
+						NOT = { has_modifier = un_humanitarian_token_modifier }
+						any_country = {
+							NOT = { this = ROOT }
+							any_scope_state = {
+								state_standard_of_living < 8
+							}
+						}
+					}
+					trigger_event = { id = un_events.7 }
+				}
+				2 = {
+					trigger = {
+						var:un_authority >= 30
+						OR = {
+							is_at_war = yes
+							has_law = law_type:law_total_war
+						}
+						NOT = { has_modifier = un_court_compliance_modifier }
+						NOT = { has_modifier = un_court_defiance_modifier }
+					}
+					trigger_event = { id = un_events.8 }
+				}
+				2 = {
+					trigger = {
+						var:un_authority >= 40
+						NOT = { has_modifier = un_heritage_program_modifier }
+						NOT = { has_modifier = un_heritage_token_modifier }
+					}
+					trigger_event = { id = un_events.9 }
+				}
+				3 = {
+					trigger = {
+						country_rank >= rank_value:great_power
+						var:un_authority < 25
+						NOT = { has_modifier = un_authority_restored_modifier }
+						NOT = { has_modifier = un_authority_crisis_modifier }
+					}
+					trigger_event = { id = un_events.10 }
+				}
+				# ---- Expanded events (11-20) ----
+				2 = {
+					trigger = {
+						country_rank >= rank_value:great_power
+						var:un_authority >= 30
+						NOT = { has_modifier = un_veto_crisis_modifier }
+						NOT = { has_modifier = un_veto_abolition_modifier }
+						any_country = {
+							NOT = { this = ROOT }
+							country_rank >= rank_value:great_power
+							has_modifier = un_member_modifier
+						}
+					}
+					trigger_event = { id = un_events.11 }
+				}
+				2 = {
+					trigger = {
+						var:un_authority >= 30
+						NOT = { has_modifier = un_decolonization_champion_modifier }
+						NOT = { has_modifier = un_colonial_defender_modifier }
+						any_country = {
+							any_subject_or_below = { count >= 1 }
+						}
+					}
+					trigger_event = { id = un_events.12 }
+				}
+				2 = {
+					trigger = {
+						country_rank >= rank_value:great_power
+						var:un_authority >= 20
+						NOT = { has_modifier = un_ideological_champion_modifier }
+						NOT = { has_modifier = un_coexistence_modifier }
+						any_country = {
+							NOT = { this = ROOT }
+							country_rank >= rank_value:great_power
+							has_modifier = un_member_modifier
+							has_diplomatic_pact = { who = ROOT type = rivalry }
+						}
+					}
+					trigger_event = { id = un_events.13 }
+				}
+				2 = {
+					trigger = {
+						var:un_authority >= 40
+						has_technology_researched = nuclear_weapons
+						NOT = { has_modifier = un_nonproliferation_modifier }
+						NOT = { has_modifier = un_nonproliferation_refusal_modifier }
+					}
+					trigger_event = { id = un_events.14 }
+				}
+				2 = {
+					trigger = {
+						var:un_authority >= 30
+						NOT = { has_modifier = un_trade_arbitration_modifier }
+						NOT = { has_modifier = un_unilateral_tariffs_modifier }
+						any_country = {
+							NOT = { this = ROOT }
+							has_modifier = un_member_modifier
+							has_diplomatic_pact = { who = ROOT type = rivalry }
+						}
+					}
+					trigger_event = { id = un_events.15 }
+				}
+				2 = {
+					trigger = {
+						country_rank >= rank_value:major_power
+						var:un_authority >= 20
+						has_technology_researched = antibiotics
+						NOT = { has_modifier = un_pandemic_cooperation_modifier }
+						NOT = { has_modifier = un_pandemic_isolationist_modifier }
+					}
+					trigger_event = { id = un_events.16 }
+				}
+				2 = {
+					trigger = {
+						var:un_authority >= 30
+						has_technology_researched = environmental_movement
+						NOT = { has_modifier = un_climate_binding_modifier }
+						NOT = { has_modifier = un_climate_refusal_modifier }
+					}
+					trigger_event = { id = un_events.17 }
+				}
+				2 = {
+					trigger = {
+						var:un_authority >= 20
+						NOT = { has_modifier = un_refugee_program_modifier }
+						NOT = { has_modifier = un_refugee_closed_modifier }
+						any_country = {
+							NOT = { this = ROOT }
+							OR = {
+								is_at_war = yes
+								any_scope_state = { state_standard_of_living < 6 }
+							}
+						}
+					}
+					trigger_event = { id = un_events.18 }
+				}
+				2 = {
+					trigger = {
+						var:un_authority >= 40
+						has_technology_researched = space_exploration
+						country_rank >= rank_value:major_power
+						NOT = { has_modifier = un_space_partnership_modifier }
+						NOT = { has_modifier = un_space_independent_modifier }
+					}
+					trigger_event = { id = un_events.19 }
+				}
+				2 = {
+					trigger = {
+						country_rank >= rank_value:great_power
+						var:un_authority < 50
+						NOT = { has_modifier = un_walkout_condemn_modifier }
+						NOT = { has_modifier = un_walkout_join_modifier }
+						any_country = {
+							NOT = { this = ROOT }
+							country_rank >= rank_value:major_power
+							has_modifier = un_member_modifier
+							has_diplomatic_pact = { who = ROOT type = rivalry }
+						}
+					}
+					trigger_event = { id = un_events.20 }
+				}
+			}
+		}
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		un_events_on_action
+	}
+}

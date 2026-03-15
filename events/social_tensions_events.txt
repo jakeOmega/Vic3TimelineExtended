@@ -1,0 +1,1384 @@
+﻿namespace = social_tensions_events
+
+# =============================================================
+# CATEGORY 1 â€” TERRORISM
+# =============================================================
+
+# Event 1: Domestic Terror Attack
+# A bombing or mass-casualty attack by radical elements. Tied to terrorism_and_anti_terrorism tech era.
+social_tensions_events.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.1.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = social_tensions_events.1.d_cyber trigger = { has_technology_researched = cyber_warfare } }
+			triggered_desc = { desc = social_tensions_events.1.d_modern trigger = { has_technology_researched = terrorism_and_anti_terrorism } }
+			desc = social_tensions_events.1.d_base
+		}
+	}
+	flavor = social_tensions_events.1.f
+
+	event_image = { video = "unspecific_fire" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		country_rank >= rank_value:major_power
+		OR = {
+			has_technology_researched = dynamite
+			has_technology_researched = terrorism_and_anti_terrorism
+		}
+		NOR = {
+			has_modifier = terror_crackdown_modifier
+			has_modifier = terror_resilience_modifier
+			has_modifier = terror_surveillance_modifier
+		}
+		# More likely in countries with political turmoil
+		OR = {
+			has_radicals >= 0.1
+			is_at_war = yes
+			any_scope_state = { has_radical_political_movement = yes }
+		}
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				state_population > 100000
+			}
+			save_scope_as = terror_target_state
+		}
+	}
+
+	option = { # Security crackdown
+		name = social_tensions_events.1.a
+		default_option = yes
+		add_modifier = { name = terror_crackdown_modifier days = long_modifier_time is_decaying = yes }
+		add_radicals = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = officers }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_militarized_police } add = 5 }
+		}
+	}
+
+	option = { # Rally national resilience
+		name = social_tensions_events.1.b
+		add_modifier = { name = terror_resilience_modifier days = normal_modifier_time is_decaying = yes }
+		add_loyalists = { value = medium_radicals }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_dedicated_police } add = 3 }
+		}
+	}
+
+	option = { # Expand surveillance
+		name = social_tensions_events.1.c
+		trigger = {
+			OR = {
+				has_technology_researched = mass_surveillance
+				has_technology_researched = automated_surveillance
+			}
+		}
+		add_modifier = { name = terror_surveillance_modifier days = long_modifier_time is_decaying = yes }
+		add_radicals = { value = very_small_radicals strata = lower }
+		add_loyalists = { value = small_radicals strata = upper }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_intrusive_surveillance } add = 5 }
+		}
+	}
+}
+
+# Event 2: Foreign-linked Terrorism
+# A cell with foreign connections is uncovered.
+social_tensions_events.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.2.t
+	desc = social_tensions_events.2.d
+	flavor = social_tensions_events.2.f
+
+	event_image = { video = "unspecific_fire" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = terrorism_and_anti_terrorism
+		country_rank >= rank_value:major_power
+		any_country = {
+			has_diplomatic_pact = { who = ROOT type = rivalry }
+		}
+		NOR = {
+			has_modifier = foreign_terror_retaliation_modifier
+			has_modifier = foreign_terror_diplomacy_modifier
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = { has_diplomatic_pact = { who = ROOT type = rivalry } }
+			save_scope_as = terror_linked_country
+		}
+	}
+
+	option = { # Blame and sanction the rival
+		name = social_tensions_events.2.a
+		default_option = yes
+		add_modifier = { name = foreign_terror_retaliation_modifier days = normal_modifier_time is_decaying = yes }
+		change_relations = { country = scope:terror_linked_country value = -30 }
+		add_loyalists = { value = small_radicals pop_type = officers }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_attitude = { who = scope:terror_linked_country attitude = belligerent } } add = 5 }
+		}
+	}
+
+	option = { # Pursue quiet intelligence cooperation
+		name = social_tensions_events.2.b
+		trigger = { has_law = law_type:law_ministry_of_intelligence }
+		add_modifier = { name = foreign_terror_diplomacy_modifier days = long_modifier_time is_decaying = yes }
+		change_relations = { country = scope:terror_linked_country value = 10 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_attitude = { who = scope:terror_linked_country attitude = cooperative } } add = 5 }
+		}
+	}
+
+	option = { # Focus on domestic defense
+		name = social_tensions_events.2.c
+		add_modifier = { name = terror_resilience_modifier days = normal_modifier_time is_decaying = yes }
+		ai_chance = { base = 3 }
+	}
+}
+
+# =============================================================
+# CATEGORY 2 â€” CORPORATE LOBBYING
+# Tied to antitrust and economic system laws. Disadvantage to freedom of contract.
+# =============================================================
+
+# Event 3: Corporate Lobbyists in the Legislature
+social_tensions_events.3 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.3.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = social_tensions_events.3.d_digital trigger = { has_technology_researched = social_media } }
+			desc = social_tensions_events.3.d_base
+		}
+	}
+	flavor = social_tensions_events.3.f
+
+	event_image = { video = "southamerica_election" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = corporate_management
+		OR = {
+			has_law = law_type:law_freedom_of_contract
+			has_law = law_type:law_laissez_faire
+		}
+		NOR = {
+			has_modifier = corporate_lobbying_accepted_modifier
+			has_modifier = corporate_lobbying_restricted_modifier
+			has_modifier = corporate_lobbying_exposed_modifier
+		}
+		any_interest_group = {
+			is_interest_group_type = ig_industrialists
+			is_in_government = yes
+		}
+	}
+
+	option = { # Accept corporate input â€” benefits business, costs democracy
+		name = social_tensions_events.3.a
+		default_option = yes
+		add_modifier = { name = corporate_lobbying_accepted_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals strata = lower }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_laissez_faire } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_freedom_of_contract } add = 3 }
+		}
+	}
+
+	option = { # Restrict lobbyist access
+		name = social_tensions_events.3.b
+		add_modifier = { name = corporate_lobbying_restricted_modifier days = normal_modifier_time is_decaying = yes }
+		add_radicals = { value = small_radicals strata = upper }
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_trust_busting } add = 5 }
+		}
+	}
+
+	option = { # Investigative journalism exposes the corruption
+		name = social_tensions_events.3.c
+		trigger = {
+			OR = {
+				has_technology_researched = mass_media
+				has_technology_researched = social_media
+			}
+		}
+		add_modifier = { name = corporate_lobbying_exposed_modifier days = normal_modifier_time is_decaying = yes }
+		add_radicals = { value = medium_radicals strata = upper }
+		add_radicals = { value = very_small_radicals strata = lower }
+		ai_chance = {
+			base = 2
+			modifier = { trigger = { has_law = law_type:law_open_government } add = 5 }
+		}
+	}
+}
+
+# Event 4: Monopoly Power â€” A corporate trust dominates an industry
+social_tensions_events.4 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.4.t
+	desc = social_tensions_events.4.d
+	flavor = social_tensions_events.4.f
+
+	event_image = { video = "unspecific_gears_pistons" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = corporate_management
+		has_law = law_type:law_freedom_of_contract
+		NOR = {
+			has_modifier = monopoly_tolerated_modifier
+			has_modifier = monopoly_broken_modifier
+			has_modifier = monopoly_nationalized_modifier
+		}
+		# Need significant industrial base
+		any_scope_building = {
+			OR = {
+				is_building_type = building_steel_mills
+				is_building_type = building_motor_industry
+				is_building_type = building_chemical_plants
+			}
+			level >= 8
+		}
+	}
+
+	option = { # Tolerate the monopoly â€” throughput bonus but freedom_of_contract disadvantage
+		name = social_tensions_events.4.a
+		default_option = yes
+		add_modifier = { name = monopoly_tolerated_modifier days = long_modifier_time is_decaying = yes }
+		add_radicals = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals strata = upper }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_laissez_faire } add = 5 }
+		}
+	}
+
+	option = { # Break up the trust
+		name = social_tensions_events.4.b
+		trigger = {
+			OR = {
+				has_law = law_type:law_trust_busting
+				has_law = law_type:law_regulated_utilities
+				has_law = law_type:law_interventionism
+			}
+		}
+		add_modifier = { name = monopoly_broken_modifier days = normal_modifier_time is_decaying = yes }
+		add_radicals = { value = small_radicals strata = upper }
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_trust_busting } add = 5 }
+		}
+	}
+
+	option = { # Nationalize the industry
+		name = social_tensions_events.4.c
+		trigger = {
+			OR = {
+				has_law = law_type:law_command_economy
+				has_law = law_type:law_dirigisme
+			}
+		}
+		add_modifier = { name = monopoly_nationalized_modifier days = long_modifier_time is_decaying = yes }
+		add_radicals = { value = large_radicals strata = upper }
+		add_loyalists = { value = medium_radicals strata = lower }
+		ai_chance = {
+			base = 2
+			modifier = { trigger = { has_law = law_type:law_command_economy } add = 5 }
+		}
+	}
+}
+
+# =============================================================
+# CATEGORY 3 â€” CRIMINAL JUSTICE AND POLICING
+# George Floyd-style incidents, LA race riots, police brutality
+# =============================================================
+
+# Event 5: Police Brutality Incident
+# A police killing of a minority citizen sparks outrage.
+social_tensions_events.5 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.5.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = social_tensions_events.5.d_camera trigger = { has_technology_researched = social_media } }
+			triggered_desc = { desc = social_tensions_events.5.d_tv trigger = { has_technology_researched = television_broadcasting } }
+			desc = social_tensions_events.5.d_base
+		}
+	}
+	flavor = social_tensions_events.5.f
+
+	event_image = { video = "europenorthamerica_political_extremism" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_law = law_type:law_dedicated_police
+			has_law = law_type:law_militarized_police
+		}
+		NOR = {
+			has_modifier = police_reform_modifier
+			has_modifier = police_defended_modifier
+			has_modifier = police_accountability_modifier
+		}
+		# Must have discrimination/tensions
+		OR = {
+			has_law = law_type:law_racial_segregation
+			has_law = law_type:law_national_supremacy
+			has_law = law_type:law_cultural_exclusion
+			has_law = law_type:law_minority_rights_discrimination
+			has_law = law_type:law_minority_rights_ghettoization
+			any_scope_pop = {
+				is_pop_type = laborers
+				pop_is_discriminated = yes
+				pop_acceptance < 0.5
+			}
+		}
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				state_population > 50000
+				any_scope_pop = { pop_is_discriminated = yes }
+			}
+			save_scope_as = brutality_state
+		}
+	}
+
+	option = { # Defend the police â€” order is paramount
+		name = social_tensions_events.5.a
+		add_modifier = { name = police_defended_modifier days = normal_modifier_time is_decaying = yes }
+		add_radicals = { value = large_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = officers }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_militarized_police } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_punishment_focused_criminal_justice } add = 3 }
+		}
+	}
+
+	option = { # Reform policing practices
+		name = social_tensions_events.5.b
+		default_option = yes
+		add_modifier = { name = police_reform_modifier days = long_modifier_time is_decaying = yes }
+		add_radicals = { value = small_radicals pop_type = officers }
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_restorative_justice } add = 5 }
+		}
+	}
+
+	option = { # Establish civilian oversight board
+		name = social_tensions_events.5.c
+		trigger = {
+			OR = {
+				has_technology_researched = civil_rights_movement
+				has_technology_researched = social_justice_movements
+			}
+		}
+		add_modifier = { name = police_accountability_modifier days = long_modifier_time is_decaying = yes }
+		add_radicals = { value = medium_radicals pop_type = officers }
+		add_loyalists = { value = medium_radicals strata = lower }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_rehabilitation_focused_criminal_justice } add = 5 }
+		}
+	}
+}
+
+# Event 6: Urban Riots
+# Racial/class tensions boil over into rioting. Follows police incidents or general discrimination.
+social_tensions_events.6 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.6.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = social_tensions_events.6.d_modern trigger = { has_technology_researched = social_media } }
+			desc = social_tensions_events.6.d_base
+		}
+	}
+	flavor = social_tensions_events.6.f
+
+	event_image = { video = "europenorthamerica_political_extremism" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_radicals >= 0.15
+		NOR = {
+			has_modifier = riot_curfew_modifier
+			has_modifier = riot_concessions_modifier
+			has_modifier = riot_commission_modifier
+		}
+		any_scope_state = {
+			is_incorporated = yes
+			state_population > 100000
+			any_scope_pop = { pop_is_discriminated = yes }
+		}
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				state_population > 100000
+				any_scope_pop = { pop_is_discriminated = yes }
+			}
+			save_scope_as = riot_state
+		}
+	}
+
+	option = { # Impose curfew and restore order
+		name = social_tensions_events.6.a
+		add_modifier = { name = riot_curfew_modifier days = normal_modifier_time is_decaying = yes }
+		if = {
+			limit = { exists = scope:riot_state }
+			scope:riot_state = {
+				add_modifier = { name = riot_property_damage_modifier days = short_modifier_time is_decaying = yes }
+			}
+		}
+		add_radicals = { value = medium_radicals strata = lower }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_militarized_police } add = 3 }
+		}
+	}
+
+	option = { # Make concessions to rioters' demands
+		name = social_tensions_events.6.b
+		default_option = yes
+		add_modifier = { name = riot_concessions_modifier days = normal_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = upper }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_restorative_justice } add = 3 }
+		}
+	}
+
+	option = { # Commission an inquiry into root causes
+		name = social_tensions_events.6.c
+		trigger = {
+			OR = {
+				has_technology_researched = civil_rights_movement
+				has_technology_researched = behaviorism
+			}
+		}
+		add_modifier = { name = riot_commission_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals strata = lower }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_rehabilitation_focused_criminal_justice } add = 5 }
+		}
+	}
+}
+
+# =============================================================
+# CATEGORY 4 â€” WAR CRIMES
+# My Lai-style massacres. Player responds, doesn't trigger them.
+# Tied to Rules of War laws.
+# =============================================================
+
+# Event 7: Wartime Atrocity Uncovered
+social_tensions_events.7 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.7.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = social_tensions_events.7.d_media trigger = { has_technology_researched = television_broadcasting } }
+			desc = social_tensions_events.7.d_base
+		}
+	}
+	flavor = social_tensions_events.7.f
+
+	event_image = { video = "europenorthamerica_before_the_battle" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		is_at_war = yes
+		country_rank >= rank_value:major_power
+		NOR = {
+			has_modifier = war_crime_coverup_modifier
+			has_modifier = war_crime_tribunal_modifier
+			has_modifier = war_crime_reform_modifier
+		}
+		# More likely with total war doctrine
+		OR = {
+			has_law = law_type:law_total_war
+			has_law = law_type:law_traditional_rules_of_war
+		}
+	}
+
+	option = { # Cover it up
+		name = social_tensions_events.7.a
+		add_modifier = { name = war_crime_coverup_modifier days = long_modifier_time is_decaying = yes }
+		# Risk: if it leaks later, huge scandal
+		random_list = {
+			40 = { # Cover holds
+				add_loyalists = { value = small_radicals pop_type = officers }
+			}
+			60 = { # Leak!
+				add_radicals = { value = large_radicals }
+				add_modifier = { name = war_crime_scandal_modifier days = normal_modifier_time is_decaying = yes }
+			}
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_total_war } add = 5 }
+		}
+	}
+
+	option = { # Prosecute those responsible
+		name = social_tensions_events.7.b
+		default_option = yes
+		add_modifier = { name = war_crime_tribunal_modifier days = normal_modifier_time is_decaying = yes }
+		add_radicals = { value = small_radicals pop_type = officers }
+		add_loyalists = { value = small_radicals strata = lower }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_war_crimes_forbidden } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_humanitarian_regulations } add = 5 }
+		}
+	}
+
+	option = { # Overhaul military doctrine
+		name = social_tensions_events.7.c
+		trigger = {
+			OR = {
+				has_law = law_type:law_war_crimes_forbidden
+				has_law = law_type:law_humanitarian_regulations
+				has_law = law_type:law_limited_war
+			}
+		}
+		add_modifier = { name = war_crime_reform_modifier days = long_modifier_time is_decaying = yes }
+		add_radicals = { value = medium_radicals pop_type = officers }
+		add_loyalists = { value = medium_radicals strata = lower }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_humanitarian_regulations } add = 5 }
+		}
+	}
+}
+
+# Event 8: Enemy War Crimes Against Our Troops/Civilians
+social_tensions_events.8 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.8.t
+	desc = social_tensions_events.8.d
+	flavor = social_tensions_events.8.f
+
+	event_image = { video = "europenorthamerica_before_the_battle" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		is_at_war = yes
+		NOR = {
+			has_modifier = enemy_war_crime_rage_modifier
+			has_modifier = enemy_war_crime_tribunal_modifier
+		}
+	}
+
+	option = { # Use it as propaganda â€” total war response
+		name = social_tensions_events.8.a
+		default_option = yes
+		add_modifier = { name = enemy_war_crime_rage_modifier days = normal_modifier_time is_decaying = yes }
+		add_loyalists = { value = medium_radicals }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_total_war } add = 5 }
+		}
+	}
+
+	option = { # Demand international tribunal
+		name = social_tensions_events.8.b
+		add_modifier = { name = enemy_war_crime_tribunal_modifier days = long_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_humanitarian_regulations } add = 5 }
+		}
+	}
+}
+
+# =============================================================
+# CATEGORY 5 â€” ELECTION CAMPAIGNS
+# Tied to electoral finance laws.
+# =============================================================
+
+# Event 9: Campaign Finance Scandal
+social_tensions_events.9 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.9.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = social_tensions_events.9.d_digital trigger = { has_technology_researched = social_media } }
+			desc = social_tensions_events.9.d_base
+		}
+	}
+	flavor = social_tensions_events.9.f
+
+	event_image = { video = "southamerica_election" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		OR = {
+			has_law = law_type:law_no_campaign_finance_laws
+			has_law = law_type:law_unregulated_donations
+		}
+		NOR = {
+			has_modifier = campaign_scandal_ignored_modifier
+			has_modifier = campaign_scandal_reform_modifier
+			has_modifier = campaign_scandal_investigation_modifier
+		}
+	}
+
+	immediate = {
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = scandal_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Ignore it â€” business as usual
+		name = social_tensions_events.9.a
+		add_modifier = { name = campaign_scandal_ignored_modifier days = normal_modifier_time is_decaying = yes }
+		add_radicals = { value = small_radicals strata = lower }
+		if = {
+			limit = { exists = scope:scandal_party }
+			scope:scandal_party = { add_momentum = momentum_small_decrease }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_no_campaign_finance_laws } add = 3 }
+		}
+	}
+
+	option = { # Launch an investigation
+		name = social_tensions_events.9.b
+		default_option = yes
+		add_modifier = { name = campaign_scandal_investigation_modifier days = normal_modifier_time is_decaying = yes }
+		if = {
+			limit = { exists = scope:scandal_party }
+			scope:scandal_party = { add_momentum = momentum_medium_decrease }
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Push for campaign finance reform
+		name = social_tensions_events.9.c
+		trigger = {
+			OR = {
+				has_technology_researched = mass_media
+				has_technology_researched = social_media
+			}
+		}
+		add_modifier = { name = campaign_scandal_reform_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = upper }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_donation_limits } add = 5 }
+		}
+	}
+}
+
+# Event 10: Big-Money Election â€” Wealthy interests flood an election
+social_tensions_events.10 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.10.t
+	desc = social_tensions_events.10.d
+	flavor = social_tensions_events.10.f
+
+	event_image = { video = "southamerica_election" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		OR = {
+			has_law = law_type:law_no_campaign_finance_laws
+			has_law = law_type:law_unregulated_donations
+		}
+		any_interest_group = {
+			is_interest_group_type = ig_industrialists
+			ig_clout >= 0.15
+		}
+		NOR = {
+			has_modifier = big_money_election_modifier
+			has_modifier = grassroots_campaign_modifier
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Let the money flow â€” industrialists get their way
+		name = social_tensions_events.10.a
+		default_option = yes
+		add_modifier = { name = big_money_election_modifier days = normal_modifier_time is_decaying = yes }
+		add_loyalists = { value = medium_radicals strata = upper }
+		add_radicals = { value = small_radicals strata = lower }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_laissez_faire } add = 3 }
+		}
+	}
+
+	option = { # Grassroots counter-campaign
+		name = social_tensions_events.10.b
+		add_modifier = { name = grassroots_campaign_modifier days = normal_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals strata = lower }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_donation_limits } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_publicly_funded_elections } add = 5 }
+		}
+	}
+}
+
+# =============================================================
+# CATEGORY 6 â€” MIGRATION AND IMMIGRATION TENSIONS
+# Non-accepted pops far from homelands cause tensions.
+# =============================================================
+
+# Event 11: Immigration Wave â€” Surge of newcomers strains public services
+social_tensions_events.11 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.11.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = social_tensions_events.11.d_modern trigger = { has_technology_researched = globalization } }
+			desc = social_tensions_events.11.d_base
+		}
+	}
+	flavor = social_tensions_events.11.f
+
+	event_image = { video = "asia_poor_people_moving" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_law = law_type:law_no_migration_controls
+		country_rank >= rank_value:major_power
+		NOR = {
+			has_modifier = immigration_welcome_modifier
+			has_modifier = immigration_restrict_modifier
+			has_modifier = immigration_integrate_modifier
+		}
+		# Must have significant unaccepted population
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_pop = {
+				pop_is_discriminated = yes
+				pop_acceptance < 0.5
+			}
+		}
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				any_scope_pop = { pop_is_discriminated = yes }
+			}
+			save_scope_as = immigration_state
+		}
+	}
+
+	option = { # Welcome the newcomers â€” economic growth but cultural friction
+		name = social_tensions_events.11.a
+		default_option = yes
+		add_modifier = { name = immigration_welcome_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals pop_type = aristocrats }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_multicultural } add = 5 }
+		}
+	}
+
+	option = { # Restrict the flow
+		name = social_tensions_events.11.b
+		add_modifier = { name = immigration_restrict_modifier days = normal_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals pop_type = aristocrats }
+		add_radicals = { value = small_radicals strata = lower }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_national_supremacy } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_ethnostate } add = 5 }
+		}
+	}
+
+	option = { # Fund integration programs
+		name = social_tensions_events.11.c
+		trigger = {
+			OR = {
+				has_technology_researched = civil_rights_movement
+				has_technology_researched = social_justice_movements
+			}
+		}
+		add_modifier = { name = immigration_integrate_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = upper }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_multicultural } add = 5 }
+		}
+	}
+}
+
+# Event 12: Anti-Immigrant Backlash
+# Nativist movement gains strength in response to cultural change
+social_tensions_events.12 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.12.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = social_tensions_events.12.d_social_media trigger = { has_technology_researched = social_media } }
+			desc = social_tensions_events.12.d_base
+		}
+	}
+	flavor = social_tensions_events.12.f
+
+	event_image = { video = "europenorthamerica_political_extremism" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = nativist_appeased_modifier
+			has_modifier = nativist_countered_modifier
+			has_modifier = nativist_dialogue_modifier
+		}
+		# Must have discriminated pops and some nativist sentiment
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_pop = {
+				pop_is_discriminated = yes
+				pop_acceptance < 0.5
+			}
+		}
+		OR = {
+			has_law = law_type:law_national_supremacy
+			has_law = law_type:law_racial_segregation
+			has_law = law_type:law_cultural_exclusion
+			has_law = law_type:law_minority_rights_discrimination
+			has_law = law_type:law_minority_rights_ghettoization
+			any_interest_group = {
+				is_interest_group_type = ig_rural_folk
+				ig_clout >= 0.10
+			}
+		}
+	}
+
+	option = { # Appease the nativists â€” restrict immigration
+		name = social_tensions_events.12.a
+		add_modifier = { name = nativist_appeased_modifier days = normal_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals pop_type = aristocrats }
+		add_radicals = { value = medium_radicals strata = lower }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_rural_folk }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_ethnostate } add = 5 }
+		}
+	}
+
+	option = { # Counter with pro-diversity messaging
+		name = social_tensions_events.12.b
+		default_option = yes
+		add_modifier = { name = nativist_countered_modifier days = normal_modifier_time is_decaying = yes }
+		add_radicals = { value = small_radicals pop_type = aristocrats }
+		add_loyalists = { value = small_radicals strata = lower }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_multicultural } add = 5 }
+		}
+	}
+
+	option = { # Host a national dialogue on identity
+		name = social_tensions_events.12.c
+		trigger = {
+			OR = {
+				has_technology_researched = mass_media
+				has_technology_researched = television_broadcasting
+			}
+		}
+		add_modifier = { name = nativist_dialogue_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+}
+
+# =============================================================
+# CATEGORY 7 â€” RELIGIOUS REVIVALS
+# Keep ig_devout relevant in later eras, at least intermittently.
+# =============================================================
+
+# Event 13: Religious Revival Movement
+# A charismatic preacher or spiritual movement sweeps the nation
+social_tensions_events.13 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.13.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = social_tensions_events.13.d_tv trigger = { has_technology_researched = television_broadcasting } }
+			triggered_desc = { desc = social_tensions_events.13.d_social trigger = { has_technology_researched = social_media } }
+			desc = social_tensions_events.13.d_base
+		}
+	}
+	flavor = social_tensions_events.13.f
+
+	event_image = { video = "southamerica_christianity" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = revival_embraced_modifier
+			has_modifier = revival_secular_modifier
+			has_modifier = revival_channeled_modifier
+		}
+		# Must not be state atheism
+		NOT = { has_law = law_type:law_state_atheism }
+		# More likely when devout IG is marginalized
+		any_interest_group = {
+			is_interest_group_type = ig_devout
+			is_marginal = yes
+		}
+		# Need some technology that makes religion feel threatened
+		OR = {
+			has_technology_researched = decline_of_organized_religion
+			has_technology_researched = sexual_revolution
+			has_technology_researched = social_media
+		}
+	}
+
+	option = { # Embrace the revival â€” boost devout IG
+		name = social_tensions_events.13.a
+		default_option = yes
+		add_modifier = { name = revival_embraced_modifier days = long_modifier_time is_decaying = yes }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_positive_modifier days = long_modifier_time is_decaying = yes }
+		}
+		add_loyalists = { value = medium_radicals pop_type = clergymen }
+		add_radicals = { value = very_small_radicals pop_type = academics }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_state_religion } add = 5 }
+		}
+	}
+
+	option = { # Maintain secular governance
+		name = social_tensions_events.13.b
+		add_modifier = { name = revival_secular_modifier days = normal_modifier_time is_decaying = yes }
+		add_radicals = { value = small_radicals pop_type = clergymen }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_total_separation } add = 5 }
+		}
+	}
+
+	option = { # Channel it into charitable works
+		name = social_tensions_events.13.c
+		add_modifier = { name = revival_channeled_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals pop_type = clergymen }
+		add_loyalists = { value = very_small_radicals strata = lower }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_freedom_of_conscience } add = 3 }
+		}
+	}
+}
+
+# Event 14: Faith vs. Modernity
+# Religious leaders clash with modernization, creating political tension
+social_tensions_events.14 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.14.t
+	desc = social_tensions_events.14.d
+	flavor = social_tensions_events.14.f
+
+	event_image = { video = "southamerica_christianity" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = faith_tradition_modifier
+			has_modifier = faith_modernize_modifier
+			has_modifier = faith_compromise_modifier
+		}
+		NOT = { has_law = law_type:law_state_atheism }
+		any_interest_group = {
+			is_interest_group_type = ig_devout
+			ig_clout >= 0.05
+		}
+		# Tension between religion and progressive laws
+		OR = {
+			has_law = law_type:law_total_separation
+			has_technology_researched = LGBTQ_rights_movement
+			has_technology_researched = second_wave_feminism
+			has_technology_researched = sexual_revolution
+		}
+	}
+
+	option = { # Side with tradition
+		name = social_tensions_events.14.a
+		add_modifier = { name = faith_tradition_modifier days = normal_modifier_time is_decaying = yes }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_loyalists = { value = small_radicals pop_type = clergymen }
+		add_radicals = { value = small_radicals pop_type = academics }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_state_religion } add = 5 }
+		}
+	}
+
+	option = { # Prioritize modernization
+		name = social_tensions_events.14.b
+		default_option = yes
+		add_modifier = { name = faith_modernize_modifier days = normal_modifier_time is_decaying = yes }
+		add_radicals = { value = medium_radicals pop_type = clergymen }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_total_separation } add = 5 }
+		}
+	}
+
+	option = { # Seek a theological compromise
+		name = social_tensions_events.14.c
+		add_modifier = { name = faith_compromise_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals pop_type = clergymen }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_freedom_of_conscience } add = 5 }
+		}
+	}
+}
+
+# =============================================================
+# CATEGORY 8 â€” GLOBALIZATION TENSIONS
+# More trade leads to internal tensions â€” cultural backlash, job displacement.
+# =============================================================
+
+# Event 15: Globalization Backlash
+# Cheap imports undercut domestic industry, sparking protectionist sentiment
+social_tensions_events.15 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.15.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = social_tensions_events.15.d_internet trigger = { has_technology_researched = world_wide_web } }
+			desc = social_tensions_events.15.d_base
+		}
+	}
+	flavor = social_tensions_events.15.f
+
+	event_image = { video = "unspecific_gears_pistons" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = globalization
+		country_rank >= rank_value:major_power
+		NOR = {
+			has_modifier = globalization_embrace_modifier
+			has_modifier = globalization_protect_modifier
+			has_modifier = globalization_retrain_modifier
+		}
+		# Must be in free-ish trade
+		OR = {
+			has_law = law_type:law_free_trade
+			has_law = law_type:law_laissez_faire
+		}
+	}
+
+	option = { # Embrace free trade â€” growth but displacement
+		name = social_tensions_events.15.a
+		default_option = yes
+		add_modifier = { name = globalization_embrace_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = medium_radicals strata = lower }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_laissez_faire } add = 5 }
+		}
+	}
+
+	option = { # Impose protective tariffs
+		name = social_tensions_events.15.b
+		add_modifier = { name = globalization_protect_modifier days = normal_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = upper }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_protectionism } add = 5 }
+		}
+	}
+
+	option = { # Fund worker retraining
+		name = social_tensions_events.15.c
+		trigger = {
+			OR = {
+				has_technology_researched = keynesian_economics
+				has_law = law_type:law_interventionism
+			}
+		}
+		add_modifier = { name = globalization_retrain_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_interventionism } add = 5 }
+		}
+	}
+}
+
+# Event 16: Cultural Homogenization Fears
+# Global culture erodes local traditions
+social_tensions_events.16 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.16.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = social_tensions_events.16.d_streaming trigger = { has_technology_researched = digital_entertainment } }
+			desc = social_tensions_events.16.d_base
+		}
+	}
+	flavor = social_tensions_events.16.f
+
+	event_image = { video = "ep1_printing_press" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = globalization
+			has_technology_researched = world_wide_web
+		}
+		NOR = {
+			has_modifier = cultural_openness_modifier
+			has_modifier = cultural_protection_modifier
+			has_modifier = cultural_synthesis_modifier
+		}
+	}
+
+	option = { # Embrace cultural exchange
+		name = social_tensions_events.16.a
+		default_option = yes
+		add_modifier = { name = cultural_openness_modifier days = long_modifier_time is_decaying = yes }
+		add_radicals = { value = small_radicals pop_type = clergymen }
+		add_radicals = { value = small_radicals pop_type = aristocrats }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_multicultural } add = 5 }
+		}
+	}
+
+	option = { # Protect local culture
+		name = social_tensions_events.16.b
+		add_modifier = { name = cultural_protection_modifier days = normal_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals pop_type = clergymen }
+		add_loyalists = { value = small_radicals pop_type = aristocrats }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_rural_folk }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_national_supremacy } add = 5 }
+		}
+	}
+
+	option = { # Foster cultural synthesis
+		name = social_tensions_events.16.c
+		trigger = {
+			OR = {
+				has_technology_researched = pop_culture
+				has_technology_researched = digital_entertainment
+			}
+		}
+		add_modifier = { name = cultural_synthesis_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+}

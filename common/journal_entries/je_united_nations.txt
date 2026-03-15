@@ -1,0 +1,174 @@
+﻿je_united_nations = {
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_technology_researched = intergovernmental_organizations
+	}
+
+	possible = {
+		has_technology_researched = intergovernmental_organizations
+	}
+
+	should_be_involved = {
+		has_modifier = un_member_modifier
+	}
+
+	should_show_when_not_involved = {
+		always = yes
+	}
+
+	scripted_progress_bar = un_authority_bar
+
+	# ---- Membership buttons ----
+	scripted_button = un_join_button
+	scripted_button = un_leave_button
+
+	# ---- Policy buttons (members only) ----
+	scripted_button = un_propose_sanctions_button
+	scripted_button = un_lift_sanctions_button
+	scripted_button = un_peacekeeping_mission_button
+	scripted_button = un_end_peacekeeping_button
+	scripted_button = un_fund_development_button
+	scripted_button = un_defund_development_button
+	scripted_button = un_human_rights_resolution_button
+	scripted_button = un_withdraw_human_rights_button
+	scripted_button = un_arms_control_button
+	scripted_button = un_withdraw_arms_control_button
+
+	immediate = {
+		# Set initial UN authority to 50 (moderate legitimacy)
+		set_variable = { name = un_authority value = 50 }
+		scope:journal_entry = {
+			set_bar_progress = { name = un_authority_bar value = 50 }
+		}
+	}
+
+	complete = {
+		always = no
+	}
+
+	progressbar = no
+	progress_desc = un_authority_progress_desc
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_un_status_not_member
+				trigger = { NOT = { has_modifier = un_member_modifier } }
+			}
+			triggered_desc = {
+				desc = je_un_status_member
+				trigger = { has_modifier = un_member_modifier }
+			}
+		}
+
+		first_valid = {
+			triggered_desc = {
+				desc = je_un_authority_collapsed
+				trigger = { var:un_authority < 10 }
+			}
+			triggered_desc = {
+				desc = je_un_authority_weak
+				trigger = { var:un_authority >= 10 var:un_authority < 30 }
+			}
+			triggered_desc = {
+				desc = je_un_authority_moderate
+				trigger = { var:un_authority >= 30 var:un_authority < 60 }
+			}
+			triggered_desc = {
+				desc = je_un_authority_strong
+				trigger = { var:un_authority >= 60 var:un_authority < 85 }
+			}
+			triggered_desc = {
+				desc = je_un_authority_dominant
+				trigger = { var:un_authority >= 85 }
+			}
+		}
+
+		first_valid = {
+			triggered_desc = {
+				desc = je_un_active_policies
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			# ---- Drift UN authority toward equilibrium based on member count ----
+			# Count GP members — more GPs = more authority
+			if = {
+				limit = { has_modifier = un_member_modifier }
+
+				# Base monthly drift: toward 50
+				if = {
+					limit = { var:un_authority > 55 }
+					change_variable = { name = un_authority add = -0.5 }
+				}
+				else_if = {
+					limit = { var:un_authority < 45 }
+					change_variable = { name = un_authority add = 0.5 }
+				}
+
+				# Boost authority if country has strong diplomacy
+				if = {
+					limit = {
+						country_rank >= rank_value:great_power
+						has_law = law_type:law_humanitarian_regulations
+					}
+					change_variable = { name = un_authority add = 0.2 }
+				}
+
+				# Wars involving members hurt authority
+				if = {
+					limit = {
+						is_at_war = yes
+						any_country = {
+							has_diplomatic_pact = { who = ROOT type = war }
+							has_modifier = un_member_modifier
+						}
+					}
+					change_variable = { name = un_authority add = -1 }
+				}
+
+				# Clamp 0-100
+				if = {
+					limit = { var:un_authority > 100 }
+					set_variable = { name = un_authority value = 100 }
+				}
+				else_if = {
+					limit = { var:un_authority < 0 }
+					set_variable = { name = un_authority value = 0 }
+				}
+
+				# Sync progress bar
+				scope:journal_entry = {
+					set_bar_progress = { name = un_authority_bar value = root.var:un_authority }
+				}
+
+				# ---- Apply scaled UN membership modifier ----
+				if = {
+					limit = { var:un_authority >= 30 }
+					remove_modifier = un_membership_benefits_modifier
+					add_modifier = {
+						name = un_membership_benefits_modifier
+						multiplier = {
+							value = var:un_authority
+							divide = 50
+						}
+					}
+				}
+				else = {
+					remove_modifier = un_membership_benefits_modifier
+				}
+			}
+		}
+	}
+
+	weight = 500
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = no
+}

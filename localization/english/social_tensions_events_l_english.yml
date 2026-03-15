@@ -1,0 +1,251 @@
+﻿l_english:
+
+#
+# SOCIAL TENSIONS EVENTS
+#
+
+# ===== CATEGORY 1: TERRORISM =====
+ social_tensions_events.1.t:0 "Terror Strikes the Homeland"
+ social_tensions_events.1.d_base:0 "An explosion rips through a crowded market district, leaving rubble and screaming in its wake. The attackers are quickly identified as radicals with a poisonous ideology and access to modern explosives. Citizens demand actionâ€”but what kind?"
+ social_tensions_events.1.d_modern:0 "A coordinated bombing attack targets public transportation during rush hour. Footage spreads within minutes, sowing panic far beyond the blast radius. Intelligence agencies scramble to trace the network before the next cell acts."
+ social_tensions_events.1.d_cyber:0 "The attack combines physical violence with a devastating cyberattack on emergency services. As first responders struggle with jammed communications, the death toll climbs. The perpetrators broadcast their manifesto through hijacked networks."
+ social_tensions_events.1.f:0 "Terror is theater. The bomb kills dozens; the fear reaches millions. And in that gap between the dead and the afraid, every government must choose what kind of country it intends to become.\n\nSecurity or liberty. Usually both suffer."
+ social_tensions_events.1.a:0 "Launch a security crackdown"
+ social_tensions_events.1.b:0 "Rally national resilience"
+ social_tensions_events.1.c:0 "Expand the surveillance net"
+
+ social_tensions_events.2.t:0 "Foreign-Linked Terror Cell Uncovered"
+ social_tensions_events.2.d:0 "Intelligence operatives have dismantled a cell with clear ties to a hostile foreign power. Documents and communications link the plotters to agents of [SCOPE.sCountry('terror_linked_country').GetName]. The question now is whether to respond with a diplomatic hammer or a quiet scalpel."
+ social_tensions_events.2.f:0 "The borders we draw on maps have never contained the currents of hate. When violence arrives wrapped in a foreign flag, the temptation is to strike back. But the trail of evidence is rarely as simple as the trail of blood."
+ social_tensions_events.2.a:0 "Blame and sanction them"
+ social_tensions_events.2.b:0 "Pursue quiet intelligence cooperation"
+ social_tensions_events.2.c:0 "Focus on domestic defense"
+
+# ===== CATEGORY 2: CORPORATE LOBBYING =====
+ social_tensions_events.3.t:0 "Corporate Lobbyists in the Legislature"
+ social_tensions_events.3.d_base:0 "A leaked memorandum reveals the extent to which corporate interests have penetrated the legislative process. Industry representatives practically draft regulations themselves, while elected officials collect generous 'consulting fees.' The public is outragedâ€”or at least, the part of the public that reads the financial pages."
+ social_tensions_events.3.d_digital:0 "A data breach exposes a vast lobbying operation: algorithmic targeting of legislators, shell companies funneling donations, and a revolving door between corporate boards and regulatory agencies. The hashtag trends for days, but turning outrage into policy is another matter entirely."
+ social_tensions_events.3.f:0 "The lobbyist's art is old as government itself. What changes is the scale. When a single corporation commands more wealth than many nations, its whisper in a legislator's ear carries the weight of an army.\n\nFreedom of contract, some call it. Others have less polite names."
+ social_tensions_events.3.a:0 "Accept their input"
+ social_tensions_events.3.b:0 "Restrict lobbyist access"
+ social_tensions_events.3.c:0 "Let journalists expose it all"
+
+ social_tensions_events.4.t:0 "The Trust Problem"
+ social_tensions_events.4.d:0 "A single corporate conglomerate has achieved near-total dominance over a vital industry. Competitors have been bought out or driven under. Prices creep upward while quality stagnates. Workers have nowhere else to go. Under our current freedom of contract laws, this is perfectly legalâ€”but is it wise?"
+ social_tensions_events.4.f:0 "The invisible hand, left entirely to itself, tends to close into a fist. Market freedom, taken to its logical extreme, produces the very monopolies it was meant to prevent.\n\nThe question is not whether to act, but whether we dare."
+ social_tensions_events.4.a:0 "Tolerate the monopoly"
+ social_tensions_events.4.b:0 "Break up the trust"
+ social_tensions_events.4.c:0 "Nationalize the industry"
+
+# ===== CATEGORY 3: CRIMINAL JUSTICE & POLICING =====
+ social_tensions_events.5.t:0 "Police Brutality Sparks Outrage"
+ social_tensions_events.5.d_base:0 "A member of a discriminated community has died at the hands of the police under deeply troubling circumstances. Witnesses describe excessive force against an unarmed individual. Anger builds in the affected neighborhoods as community leaders demand accountability."
+ social_tensions_events.5.d_tv:0 "Television cameras capture the aftermath of a police killing that has shocked the nation. A member of a discriminated community lies dead, and the grainy footage tells a damning story. Commentators debate; protestors gather; the government must respond."
+ social_tensions_events.5.d_camera:0 "A bystander's phone captures every second of a police officer killing an unarmed member of a discriminated community. The video goes viral within hours. Millions watch a person die in real time. The streets fill with protestors chanting the victim's name. The world is watching."
+ social_tensions_events.5.f:0 "The badge is supposed to mean protection. When it becomes a weapon, something breaks in the social contract that no amount of authority can mend.\n\nEvery society must choose: do we arm our guardians and trust them, or do we watch the watchers?"
+ social_tensions_events.5.a:0 "Defend law enforcement"
+ social_tensions_events.5.b:0 "Reform policing practices"
+ social_tensions_events.5.c:0 "Establish civilian oversight"
+
+ social_tensions_events.6.t:0 "Urban Riots"
+ social_tensions_events.6.d_base:0 "Years of pent-up frustration over discrimination, poverty, and heavy-handed policing have finally boiled over. Neighborhoods burn as rioters clash with police. Businesses are looted, property destroyed, and lives lost. The underlying grievances are realâ€”but so is the damage."
+ social_tensions_events.6.d_modern:0 "Livestreamed footage of running street battles fills every screen. What began as a peaceful protest has spiraled into full-scale urban unrest, organized in real time through social media. Fires illuminate the night sky as the city tears itself apart."
+ social_tensions_events.6.f:0 "A riot is the language of the unheard, they say. But it is also the sound of a community destroying its own foundations in a cry for help.\n\nThe rubble will be cleared. The question is what gets built in its place."
+ social_tensions_events.6.a:0 "Impose a curfew and restore order"
+ social_tensions_events.6.b:0 "Make concessions to their demands"
+ social_tensions_events.6.c:0 "Commission an inquiry into root causes"
+
+# ===== CATEGORY 4: WAR CRIMES =====
+ social_tensions_events.7.t:0 "Wartime Atrocity Uncovered"
+ social_tensions_events.7.d_base:0 "Reports are filtering back from the front of a massacre committed by our own troops. Soldiers appear to have killed unarmed civiliansâ€”men, women, and childrenâ€”in a village that posed no military threat. Officers are either complicit or negligent. The survivors' accounts are harrowing."
+ social_tensions_events.7.d_media:0 "A war correspondent has filed a devastating report, complete with photographs, documenting a massacre committed by our forces. Unarmed civilians, including women and children, were systematically killed. The images are broadcast nationwide. There is no ambiguity, no fog of war to hide behind."
+ social_tensions_events.7.f:0 "War makes monsters of ordinary men. That is not an excuseâ€”it is a warning. Every nation that sends its sons to kill must reckon with what they become.\n\nThe dead cannot testify. But the living must answer."
+ social_tensions_events.7.a:0 "Suppress the reports"
+ social_tensions_events.7.b:0 "Prosecute those responsible"
+ social_tensions_events.7.c:0 "Overhaul military doctrine"
+
+ social_tensions_events.8.t:0 "Enemy Atrocities Against Our People"
+ social_tensions_events.8.d:0 "Horrifying reports emerge of enemy forces committing atrocities against our captured soldiers and civilians in occupied territories. The accounts speak of summary executions, torture, and deliberate targeting of non-combatants. Public fury is white-hot."
+ social_tensions_events.8.f:0 "When the enemy crosses the line, the line itself becomes the battlefield. Do we match their savagery, or do we prove that our cause is worth more than vengeance?"
+ social_tensions_events.8.a:0 "Use it as propaganda"
+ social_tensions_events.8.b:0 "Demand an international tribunal"
+
+# ===== CATEGORY 5: ELECTION CAMPAIGNS =====
+ social_tensions_events.9.t:0 "Campaign Finance Scandal"
+ social_tensions_events.9.d_base:0 "An explosive investigation reveals massive unreported donations flowing to the ruling party from industrial magnates. Secret bank accounts, shell companies, and quid pro quo arrangements paint a picture of a political class thoroughly bought and paid for."
+ social_tensions_events.9.d_digital:0 "A whistleblower releases a trove of digital records showing that dark money has saturated the election. Cryptocurrency transfers, anonymous PACs, and algorithmically targeted disinformation campaigns have turned democracy into an auction house."
+ social_tensions_events.9.f:0 "Democracy's great promise is one person, one vote. Its great temptation is one dollar, one voice.\n\nWhen the price of a campaign exceeds what any honest candidate can raise, the gates of power swing open only for those with wealthy friends."
+ social_tensions_events.9.a:0 "Ignore it"
+ social_tensions_events.9.b:0 "Launch an investigation"
+ social_tensions_events.9.c:0 "Push for campaign finance reform"
+
+ social_tensions_events.10.t:0 "Big Money Floods the Election"
+ social_tensions_events.10.d:0 "With no effective limits on campaign donations, wealthy industrialists are pouring unprecedented sums into the election. Slick advertisements dominate every medium, and candidates without deep-pocketed backers find themselves drowned out. The election may be free, but it is hardly fair."
+ social_tensions_events.10.f:0 "The advertisement is the sermon of the age. He who pays the piper calls the tuneâ€”and in an unregulated system, the piper plays very loudly indeed."
+ social_tensions_events.10.a:0 "Let the money flow"
+ social_tensions_events.10.b:0 "Launch a grassroots counter-campaign"
+
+# ===== CATEGORY 6: MIGRATION & IMMIGRATION =====
+ social_tensions_events.11.t:0 "Immigration Wave"
+ social_tensions_events.11.d_base:0 "A surge of newcomers from distant lands has strained public services in our cities. Schools overflow, hospitals queue endlessly, and established residents complain that their neighborhoods are unrecognizable. The immigrants themselves face suspicion and hostility even as they seek a better life."
+ social_tensions_events.11.d_modern:0 "Global economic disruption has sent waves of migrants toward our borders. Social media amplifies both heartbreaking stories of refugees and alarmist narratives about cultural invasion. The reality, as always, is more complicated than either side admits."
+ social_tensions_events.11.f:0 "They come because they must. Because war or famine or despair has left them no home worth the name. We are the promised landâ€”whether we asked for the title or not.\n\nThe question has never been whether they will come. It is what we become when they arrive."
+ social_tensions_events.11.a:0 "Welcome the newcomers"
+ social_tensions_events.11.b:0 "Restrict the flow"
+ social_tensions_events.11.c:0 "Fund integration programs"
+
+ social_tensions_events.12.t:0 "Anti-Immigrant Backlash"
+ social_tensions_events.12.d_base:0 "A nativist movement is gaining alarming momentum. Rallies draw thousands who blame immigrants for unemployment, crime, and cultural decline. Pamphlets and speeches invoke the purity of the national character, and isolated incidents of violence against foreigners are becoming disturbingly common."
+ social_tensions_events.12.d_social_media:0 "Viral videos and memes have supercharged a nativist movement that blames immigrants for every social ill. Online radicalization pipelines funnel anxious citizens toward extremist rallies. Hate crimes are spiking, and community leaders from discriminated groups fear for their safety."
+ social_tensions_events.12.f:0 "The stranger has always been the easiest scapegoat. When wages fall and prices rise, when the future feels uncertain, the man who looks different or prays differently becomes the explanation for everything.\n\nIt is the oldest lie in politics. And the most effective."
+ social_tensions_events.12.a:0 "Appease the nativists"
+ social_tensions_events.12.b:0 "Counter with pro-diversity messaging"
+ social_tensions_events.12.c:0 "Host a national dialogue on identity"
+
+# ===== CATEGORY 7: RELIGIOUS REVIVALS =====
+ social_tensions_events.13.t:0 "Religious Revival Sweeps the Nation"
+ social_tensions_events.13.d_base:0 "A charismatic preacher has ignited a spiritual awakening that is spreading like wildfire. Tent meetings draw enormous crowds, new congregations spring up in every city, and long-empty churches are full again. The faithful speak of a great renewal; secularists see a troubling regression."
+ social_tensions_events.13.d_tv:0 "A telegenic preacher has become a national sensation, filling stadiums and dominating the airwaves. Millions tune in to watch fiery sermons that blend traditional faith with modern anxieties. The devout see a prophet; critics see a demagogue."
+ social_tensions_events.13.d_social:0 "A new wave of religious content creators has made faith go viral. Slickly produced devotional videos, online prayer groups, and algorithmically promoted spiritual content have created a digital revival that cuts across class and geography. The devout IG sees a renaissance."
+ social_tensions_events.13.f:0 "Every age of doubt births an age of faith. When science explains the universe but cannot explain suffering, when progress delivers comfort but not meaning, the old answers find new tongues.\n\nThe revival may pass. Or it may not. Either way, the pews are full tonight."
+ social_tensions_events.13.a:0 "Embrace the revival"
+ social_tensions_events.13.b:0 "Maintain secular governance"
+ social_tensions_events.13.c:0 "Channel it into charitable works"
+
+ social_tensions_events.14.t:0 "Faith Against Modernity"
+ social_tensions_events.14.d:0 "Religious leaders have declared open opposition to recent social reforms, calling them an affront to sacred tradition. Congregations are urged to resist, politicians who supported the reforms are denounced from the pulpit, and the devout organize politically with renewed vigor. The clash between faith and progress threatens to dominate national discourse."
+ social_tensions_events.14.f:0 "The church steeple and the university tower have always eyed each other warily. In the space between revelation and reason, nations are built and torn apart.\n\nNeither side will yield. The question is whether they can share the same country."
+ social_tensions_events.14.a:0 "Side with tradition"
+ social_tensions_events.14.b:0 "Prioritize modernization"
+ social_tensions_events.14.c:0 "Seek a theological compromise"
+
+# ===== CATEGORY 8: GLOBALIZATION =====
+ social_tensions_events.15.t:0 "Globalization Backlash"
+ social_tensions_events.15.d_base:0 "Cheap imports are flooding domestic markets, undercutting local producers who cannot compete with foreign labor costs. Factories close, workers are laid off, and once-prosperous towns decay. Trade unions demand protection; industrialists praise efficiency. The displaced workers care about neither theory."
+ social_tensions_events.15.d_internet:0 "The global marketplace is now frictionlessâ€”goods, services, and capital flow across borders at the speed of light. But the communities left behind by this transformation are anything but fluid. Hollowed-out industrial regions breed resentment, and populist politicians offer simple answers to complex problems."
+ social_tensions_events.15.f:0 "The world grows smaller every year. Goods cross oceans for pennies; wealth accumulates in places that produce nothing tangible. The winners toast to progress; the losers are told to retrain.\n\nFree trade is wonderfulâ€”until it is your job that becomes free."
+ social_tensions_events.15.a:0 "Embrace free trade"
+ social_tensions_events.15.b:0 "Impose protective tariffs"
+ social_tensions_events.15.c:0 "Fund worker retraining programs"
+
+ social_tensions_events.16.t:0 "Cultural Homogenization Fears"
+ social_tensions_events.16.d_base:0 "Global commerce brings not just goods but culture. Foreign music, fashion, food, and values pour through every open market. Traditional artisans lose their livelihoods, local languages fade, and the young adopt foreign customs. A growing movement demands that the nation protect its cultural heritage before it is swallowed whole."
+ social_tensions_events.16.d_streaming:0 "Streaming platforms have turned culture into a global commodity. The same shows, music, and influencers dominate screens from one end of the earth to the other. Local artists and traditions struggle to compete with algorithmically optimized content. The devout and rural communities are especially alarmed."
+ social_tensions_events.16.f:0 "A nation is not merely its borders and its laws. It is its songs, its stories, the way a grandmother speaks to a grandchild. When the world's culture arrives at the doorstep, packaged and priced to sell, something irreplaceable may be lost.\n\nOr perhaps something new may be born. That is the wager of every open society."
+ social_tensions_events.16.a:0 "Embrace cultural exchange"
+ social_tensions_events.16.b:0 "Protect local culture"
+ social_tensions_events.16.c:0 "Foster a cultural synthesis"
+
+#
+# SOCIAL TENSIONS MODIFIERS
+#
+
+# --- Terrorism ---
+ terror_crackdown_modifier:0 "Security Crackdown"
+ terror_crackdown_modifier_desc:0 "In response to a devastating attack, the government has expanded police powers and tightened security across the nation."
+ terror_resilience_modifier:0 "National Resilience"
+ terror_resilience_modifier_desc:0 "The nation has rallied together in defiance after a terrorist attack, strengthening social cohesion."
+ terror_surveillance_modifier:0 "Expanded Surveillance"
+ terror_surveillance_modifier_desc:0 "A comprehensive surveillance program has been enacted to prevent future attacks, at the cost of civil liberties."
+ foreign_terror_retaliation_modifier:0 "Retaliatory Sanctions"
+ foreign_terror_retaliation_modifier_desc:0 "The government has imposed harsh sanctions against a nation linked to terrorism on our soil."
+ foreign_terror_diplomacy_modifier:0 "Intelligence Cooperation"
+ foreign_terror_diplomacy_modifier_desc:0 "Quiet intelligence-sharing agreements help prevent future attacks while maintaining diplomatic channels."
+
+# --- Corporate Lobbying ---
+ corporate_lobbying_accepted_modifier:0 "Corporate Access"
+ corporate_lobbying_accepted_modifier_desc:0 "Industry lobbyists enjoy open access to the legislative process, boosting business confidence at the expense of democratic accountability."
+ corporate_lobbying_restricted_modifier:0 "Lobbyist Restrictions"
+ corporate_lobbying_restricted_modifier_desc:0 "New rules limit corporate influence on legislation, strengthening democratic legitimacy."
+ corporate_lobbying_exposed_modifier:0 "Lobbying Scandal"
+ corporate_lobbying_exposed_modifier_desc:0 "Investigative journalism has exposed the extent of corporate influence over government, damaging public trust."
+ monopoly_tolerated_modifier:0 "Tolerated Monopoly"
+ monopoly_tolerated_modifier_desc:0 "A dominant corporation controls a key industry, boosting output but harming consumers and workers."
+ monopoly_broken_modifier:0 "Trust Broken Up"
+ monopoly_broken_modifier_desc:0 "A dominant monopoly has been dismantled, restoring competition to a key industry."
+ monopoly_nationalized_modifier:0 "Industry Nationalized"
+ monopoly_nationalized_modifier_desc:0 "The state has seized control of a monopolistic industry, redistributing its profits to the public."
+
+# --- Criminal Justice & Policing ---
+ police_defended_modifier:0 "Police Authority Reinforced"
+ police_defended_modifier_desc:0 "The government has backed its police force, reinforcing authority but deepening mistrust among discriminated communities."
+ police_reform_modifier:0 "Policing Reforms"
+ police_reform_modifier_desc:0 "New policing guidelines reduce use of force and mandate de-escalation training."
+ police_accountability_modifier:0 "Civilian Oversight Board"
+ police_accountability_modifier_desc:0 "An independent civilian board now reviews police conduct, improving accountability."
+ riot_curfew_modifier:0 "Curfew Imposed"
+ riot_curfew_modifier_desc:0 "A curfew has been imposed to contain urban unrest, restricting movement and economic activity."
+ riot_concessions_modifier:0 "Concessions to Protestors"
+ riot_concessions_modifier_desc:0 "The government has addressed some grievances of the rioters, easing tensions at a cost."
+ riot_commission_modifier:0 "Root Causes Commission"
+ riot_commission_modifier_desc:0 "A government commission investigates the underlying causes of urban unrest."
+ riot_property_damage_modifier:0 "Riot Damage"
+ riot_property_damage_modifier_desc:0 "Widespread property damage from rioting has disrupted local commerce and infrastructure."
+
+# --- War Crimes ---
+ war_crime_coverup_modifier:0 "Atrocity Covered Up"
+ war_crime_coverup_modifier_desc:0 "The government has attempted to suppress reports of war crimes committed by its forces."
+ war_crime_scandal_modifier:0 "War Crimes Scandal"
+ war_crime_scandal_modifier_desc:0 "A failed cover-up has made a war crimes scandal far worse, devastating national prestige and government credibility."
+ war_crime_tribunal_modifier:0 "War Crimes Tribunal"
+ war_crime_tribunal_modifier_desc:0 "Those responsible for wartime atrocities are being prosecuted, restoring some faith in military justice."
+ war_crime_reform_modifier:0 "Military Doctrine Reform"
+ war_crime_reform_modifier_desc:0 "A comprehensive overhaul of military doctrine emphasizes rules of engagement and protection of civilians."
+ enemy_war_crime_rage_modifier:0 "Righteous Fury"
+ enemy_war_crime_rage_modifier_desc:0 "Enemy atrocities have enraged the nation, reducing war exhaustion and steeling morale."
+ enemy_war_crime_tribunal_modifier:0 "International Justice Demanded"
+ enemy_war_crime_tribunal_modifier_desc:0 "The nation has called for an international tribunal to prosecute enemy war crimes, gaining moral authority."
+
+# --- Election Campaigns ---
+ campaign_scandal_ignored_modifier:0 "Scandal Swept Under the Rug"
+ campaign_scandal_ignored_modifier_desc:0 "A campaign finance scandal has been ignored by the ruling party, eroding public trust."
+ campaign_scandal_investigation_modifier:0 "Campaign Finance Investigation"
+ campaign_scandal_investigation_modifier_desc:0 "An official investigation into campaign finance irregularities is underway."
+ campaign_scandal_reform_modifier:0 "Campaign Finance Reform Push"
+ campaign_scandal_reform_modifier_desc:0 "Public pressure has created momentum for meaningful campaign finance reform."
+ big_money_election_modifier:0 "Big Money Election"
+ big_money_election_modifier_desc:0 "Wealthy interests dominate the election, boosting business confidence but undermining democratic legitimacy."
+ grassroots_campaign_modifier:0 "Grassroots Counter-Campaign"
+ grassroots_campaign_modifier_desc:0 "A popular grassroots movement has mobilized to counter the influence of wealthy donors."
+
+# --- Migration ---
+ immigration_welcome_modifier:0 "Open-Arms Immigration"
+ immigration_welcome_modifier_desc:0 "The nation has welcomed a wave of immigrants, boosting the labor pool but straining public services."
+ immigration_restrict_modifier:0 "Immigration Restricted"
+ immigration_restrict_modifier_desc:0 "The government has tightened immigration controls in response to public pressure."
+ immigration_integrate_modifier:0 "Integration Programs"
+ immigration_integrate_modifier_desc:0 "Government-funded programs help new arrivals learn the language, find work, and assimilate into society."
+ nativist_appeased_modifier:0 "Nativist Appeasement"
+ nativist_appeased_modifier_desc:0 "The government has made concessions to anti-immigrant sentiment, reducing immigration but emboldening discriminatory attitudes."
+ nativist_countered_modifier:0 "Pro-Diversity Campaign"
+ nativist_countered_modifier_desc:0 "The government has pushed back against nativist sentiment with pro-diversity public messaging."
+ nativist_dialogue_modifier:0 "National Identity Dialogue"
+ nativist_dialogue_modifier_desc:0 "A government-sponsored dialogue on national identity helps ease tensions between communities."
+
+# --- Religious Revivals ---
+ revival_embraced_modifier:0 "Religious Revival Embraced"
+ revival_embraced_modifier_desc:0 "The government has embraced a popular religious revival, boosting the political strength of the devout."
+ revival_secular_modifier:0 "Secular Governance Maintained"
+ revival_secular_modifier_desc:0 "The government has resisted religious pressure, maintaining the separation of faith and state."
+ revival_channeled_modifier:0 "Faith in Service"
+ revival_channeled_modifier_desc:0 "Religious enthusiasm has been channeled into charitable works and community service."
+ faith_tradition_modifier:0 "Tradition Upheld"
+ faith_tradition_modifier_desc:0 "The government has sided with religious tradition over social reform, pleasing the devout but slowing modernization."
+ faith_modernize_modifier:0 "Modernization Prioritized"
+ faith_modernize_modifier_desc:0 "The government has prioritized progressive reforms over religious objections."
+ faith_compromise_modifier:0 "Theological Compromise"
+ faith_compromise_modifier_desc:0 "A delicate compromise between religious tradition and modern values has been brokered."
+
+# --- Globalization ---
+ globalization_embrace_modifier:0 "Globalization Embraced"
+ globalization_embrace_modifier_desc:0 "The nation has doubled down on free trade, boosting throughput but displacing domestic workers."
+ globalization_protect_modifier:0 "Protective Tariffs"
+ globalization_protect_modifier_desc:0 "New tariffs shield domestic industry from foreign competition, at the cost of overall efficiency."
+ globalization_retrain_modifier:0 "Worker Retraining Programs"
+ globalization_retrain_modifier_desc:0 "Government-funded retraining programs help displaced workers transition to new industries."
+ cultural_openness_modifier:0 "Cultural Openness"
+ cultural_openness_modifier_desc:0 "The nation embraces cultural exchange, accelerating assimilation and international prestige."
+ cultural_protection_modifier:0 "Cultural Protectionism"
+ cultural_protection_modifier_desc:0 "Measures to protect local culture from foreign influence strengthen traditional institutions."
+ cultural_synthesis_modifier:0 "Cultural Synthesis"
+ cultural_synthesis_modifier_desc:0 "A creative blending of local and global culture produces something new and prestigious."

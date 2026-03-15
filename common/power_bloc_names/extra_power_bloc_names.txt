@@ -35,7 +35,7 @@ cultural_concord = {
 germanic_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = german_speaking
+			has_discrimination_trait = language_germanophone
 		}
 		scope:selected_identity = identity:identity_cultural
 	}
@@ -44,7 +44,7 @@ germanic_union = {
 french_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = francophone
+			has_discrimination_trait = language_francophone
 		}
 		scope:selected_identity = identity:identity_cultural
 	}
@@ -53,7 +53,7 @@ french_union = {
 anglo_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = anglophone
+			has_discrimination_trait = language_anglophone
 		}
 		scope:selected_identity = identity:identity_cultural
 	}
@@ -62,7 +62,7 @@ anglo_union = {
 hispanic_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = hispanophone
+			has_discrimination_trait = language_hispanophone
 		}
 		scope:selected_identity = identity:identity_cultural
 	}
@@ -71,7 +71,11 @@ hispanic_union = {
 slavic_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = slavic
+			OR = {
+				has_discrimination_trait = language_east_slavic
+				has_discrimination_trait = language_west_slavic
+				has_discrimination_trait = language_south_slavic
+			}
 		}
 		scope:selected_identity = identity:identity_cultural
 	}
@@ -80,7 +84,7 @@ slavic_union = {
 arabic_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = arab_speaking
+			has_discrimination_trait = language_arabic
 		}
 		scope:selected_identity = identity:identity_cultural
 	}
@@ -89,7 +93,7 @@ arabic_union = {
 chinese_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = han_chinese
+			has_discrimination_trait = heritage_han
 		}
 		scope:selected_identity = identity:identity_cultural
 	}
@@ -98,7 +102,16 @@ chinese_union = {
 indian_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = south_asian_heritage
+			OR = {
+				has_discrimination_trait = heritage_gangetic
+				has_discrimination_trait = heritage_carnatic
+				has_discrimination_trait = heritage_deccani
+				has_discrimination_trait = heritage_rajasthani
+				has_discrimination_trait = heritage_gujarati
+				has_discrimination_trait = heritage_assamese
+				has_discrimination_trait = heritage_kashmiri
+				has_discrimination_trait = heritage_indusine
+			}
 		}
 		scope:selected_identity = identity:identity_cultural
 	}
@@ -107,7 +120,7 @@ indian_union = {
 japanese_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = yamato
+			has_discrimination_trait = heritage_japanese
 		}
 		scope:selected_identity = identity:identity_cultural
 	}
@@ -116,7 +129,11 @@ japanese_union = {
 bantu_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = bantu
+			OR = {
+				has_discrimination_trait = heritage_eastern_bantu
+				has_discrimination_trait = heritage_southern_bantu
+				has_discrimination_trait = heritage_southwest_bantu
+			}
 		}
 		scope:selected_identity = identity:identity_cultural
 	}
@@ -125,7 +142,7 @@ bantu_union = {
 italian_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = italophone
+			has_discrimination_trait = language_italian
 		}
 		scope:selected_identity = identity:identity_cultural
 	}
@@ -134,7 +151,7 @@ italian_union = {
 hellenic_union = {
 	trigger = {
 		any_primary_culture = {
-			has_discrimination_trait = greek_culture
+			has_discrimination_trait = heritage_greek
 		}
 		scope:selected_identity = identity:identity_cultural
 	}

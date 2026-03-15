@@ -5,9 +5,10 @@
 building_un_headquarters = {
     building_group = bg_bureaucracy
     icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
-    expandable = no
-    downsizeable = no
-    unique = yes
+    expandable = yes
+    downsizeable = yes
+    unique = no
+    has_max_level = yes
     city_type = city
     ai_nationalization_desire = 0
     production_method_groups = {
@@ -18,6 +19,18 @@ building_un_headquarters = {
     potential = {
         owner = {
             has_variable = can_build_un_hq
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_un_headquarters
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_un_headquarters
+                    }
+                }
+            }
         }
     }
 }

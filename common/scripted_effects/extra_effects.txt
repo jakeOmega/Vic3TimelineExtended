@@ -173,8 +173,8 @@ expand_building_private_construction = {
 		state = { start_privately_funded_building_construction = building_motor_industry }
 	}
 	else_if = {
-		limit = { is_building_type = building_car_industry }
-		state = { start_privately_funded_building_construction = building_car_industry }
+		limit = { is_building_type = building_automotive_industry }
+		state = { start_privately_funded_building_construction = building_automotive_industry }
 	}
 	else_if = {
 		limit = { is_building_type = building_electrics_industry }
@@ -191,10 +191,6 @@ expand_building_private_construction = {
 	if = {
 		limit = { is_building_type = building_power_plant }
 		state = { start_privately_funded_building_construction = building_power_plant }
-	}
-	else_if = {
-		limit = { is_building_type = building_war_machine_industry }
-		state = { start_privately_funded_building_construction = building_war_machine_industry }
 	}
 	else_if = {
 		limit = { is_building_type = building_software_industry }
@@ -312,12 +308,11 @@ expand_random_building = {
 				is_building_type = building_chemical_plant
 				is_building_type = building_explosives_factory
 				is_building_type = building_motor_industry
-				is_building_type = building_car_industry
+				is_building_type = building_automotive_industry
 				is_building_type = building_electrics_industry
 				is_building_type = building_electrics_industry_radio
 				is_building_type = building_electrics_industry_appliances
 				is_building_type = building_power_plant
-				is_building_type = building_war_machine_industry
 				is_building_type = building_software_industry
 				is_building_type = building_network_infrastructure
 				is_building_type = building_nuclear_plant

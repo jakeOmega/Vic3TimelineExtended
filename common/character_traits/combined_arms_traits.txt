@@ -1,0 +1,194 @@
+﻿### Combined Arms Traits ###
+# Applied/removed dynamically by apply_combined_arms_bonuses in combined_arms_effects.txt.
+# Each trait represents a combined arms synergy bonus, applied to a general's formation
+# via command_modifier. Traits are managed entirely by scripted effects (never generated
+# randomly), so weight is always -1000 and possible is empty.
+
+trait_combined_arms_infantry_screen = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/defense_in_depth_specialist.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+		unit_defense_mult = 0.05
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+	}
+
+	replace = {
+	}
+}
+
+trait_combined_arms_fire_support = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/expert_offensive_planner.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+		unit_offense_mult = 0.05
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+	}
+
+	replace = {
+	}
+}
+
+trait_combined_arms_recon = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/surveyor.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+		unit_morale_loss_mult = -0.05
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+	}
+
+	replace = {
+	}
+}
+
+trait_combined_arms_armor = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/trench_rat.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+		unit_offense_mult = 0.05
+		unit_defense_mult = 0.03
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+	}
+
+	replace = {
+	}
+}
+
+trait_combined_arms_air_superiority = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/innovative.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+		unit_offense_mult = 0.08
+		unit_morale_damage_mult = 0.03
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+	}
+
+	replace = {
+	}
+}
+
+trait_combined_arms_full_spectrum = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/direct.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+		unit_offense_mult = 0.05
+		unit_defense_mult = 0.05
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	possible = {
+	}
+
+	weight = {
+		value = -1000
+	}
+
+	replace = {
+	}
+}

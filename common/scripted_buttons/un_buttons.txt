@@ -1,0 +1,438 @@
+﻿# ============================================================================
+# UNITED NATIONS SCRIPTED BUTTONS
+# 6 toggle pairs = 12 buttons for UN policy actions
+# ============================================================================
+
+# ---- 1. JOIN / LEAVE UN ----
+
+un_join_button = {
+	name = "UN_JOIN"
+	desc = "UN_JOIN_DESC"
+
+	visible = {
+		NOT = { has_modifier = un_member_modifier }
+	}
+
+	possible = {
+		NOT = { has_modifier = un_member_modifier }
+		has_technology_researched = intergovernmental_organizations
+		is_sufficiently_independent = yes
+		NOT = { has_modifier = un_expelled_cooldown }
+	}
+
+	ai_chance = {
+		value = 50
+		if = { limit = { country_rank >= rank_value:great_power } add = 30 }
+		if = { limit = { country_rank >= rank_value:major_power } add = 15 }
+		if = { limit = { has_law = law_type:law_isolationism } add = -80 }
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 20 }
+		if = { limit = { has_law = law_type:law_limited_war } add = 20 }
+		if = { limit = { has_law = law_type:law_total_war } add = -40 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_JOIN_DESC"
+			add_modifier = { name = un_member_modifier }
+		}
+	}
+}
+
+un_leave_button = {
+	name = "UN_LEAVE"
+	desc = "UN_LEAVE_DESC"
+
+	visible = {
+		has_modifier = un_member_modifier
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { has_law = law_type:law_isolationism } add = 20 }
+		if = { limit = { has_law = law_type:law_total_war } add = 15 }
+		if = { limit = { var:un_authority < 20 } add = 10 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_LEAVE_DESC"
+			remove_modifier = un_member_modifier
+			remove_modifier = un_membership_benefits_modifier
+			remove_modifier = un_sanctions_target_modifier
+			remove_modifier = un_sanctions_enforcer_modifier
+			remove_modifier = un_peacekeeping_contributor_modifier
+			remove_modifier = un_development_contributor_modifier
+			remove_modifier = un_human_rights_champion_modifier
+			remove_modifier = un_arms_control_participant_modifier
+			add_modifier = {
+				name = un_withdrawal_penalty_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# ---- 2. SANCTIONS ----
+
+un_propose_sanctions_button = {
+	name = "UN_PROPOSE_SANCTIONS"
+	desc = "UN_PROPOSE_SANCTIONS_DESC"
+
+	visible = {
+		has_modifier = un_member_modifier
+		NOT = { has_modifier = un_sanctions_enforcer_modifier }
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+		country_rank >= rank_value:major_power
+		any_country = {
+			has_diplomatic_pact = { who = ROOT type = rivalry }
+			NOT = { has_modifier = un_sanctions_target_modifier }
+		}
+		NOT = { has_modifier = un_sanctions_cooldown }
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { var:un_authority >= 50 } add = 20 }
+		if = {
+			limit = {
+				any_country = {
+					has_diplomatic_pact = { who = ROOT type = rivalry }
+					has_law = law_type:law_total_war
+				}
+			}
+			add = 30
+		}
+		if = { limit = { country_rank >= rank_value:great_power } add = 10 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_PROPOSE_SANCTIONS_DESC"
+			add_modifier = { name = un_sanctions_enforcer_modifier }
+			add_modifier = {
+				name = un_sanctions_cooldown
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			random_country = {
+				limit = {
+					has_diplomatic_pact = { who = ROOT type = rivalry }
+					NOT = { has_modifier = un_sanctions_target_modifier }
+				}
+				add_modifier = { name = un_sanctions_target_modifier }
+			}
+			change_variable = { name = un_authority add = 5 }
+		}
+	}
+}
+
+un_lift_sanctions_button = {
+	name = "UN_LIFT_SANCTIONS"
+	desc = "UN_LIFT_SANCTIONS_DESC"
+
+	visible = {
+		has_modifier = un_sanctions_enforcer_modifier
+	}
+
+	possible = {
+		has_modifier = un_sanctions_enforcer_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { var:un_authority < 30 } add = 20 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_LIFT_SANCTIONS_DESC"
+			remove_modifier = un_sanctions_enforcer_modifier
+			every_country = {
+				limit = { has_modifier = un_sanctions_target_modifier }
+				remove_modifier = un_sanctions_target_modifier
+			}
+			change_variable = { name = un_authority add = -3 }
+		}
+	}
+}
+
+# ---- 3. PEACEKEEPING ----
+
+un_peacekeeping_mission_button = {
+	name = "UN_PEACEKEEPING"
+	desc = "UN_PEACEKEEPING_DESC"
+
+	visible = {
+		has_modifier = un_member_modifier
+		NOT = { has_modifier = un_peacekeeping_contributor_modifier }
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+		country_rank >= rank_value:major_power
+		NOT = { has_modifier = un_peacekeeping_contributor_modifier }
+		NOT = { has_modifier = un_peacekeeping_cooldown }
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { var:un_authority >= 40 } add = 15 }
+		if = { limit = { country_rank >= rank_value:great_power } add = 20 }
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 15 }
+		if = { limit = { has_law = law_type:law_limited_war } add = 15 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_PEACEKEEPING_DESC"
+			add_modifier = { name = un_peacekeeping_contributor_modifier }
+			add_modifier = {
+				name = un_peacekeeping_cooldown
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			change_variable = { name = un_authority add = 3 }
+		}
+	}
+}
+
+un_end_peacekeeping_button = {
+	name = "UN_END_PEACEKEEPING"
+	desc = "UN_END_PEACEKEEPING_DESC"
+
+	visible = {
+		has_modifier = un_peacekeeping_contributor_modifier
+	}
+
+	possible = {
+		has_modifier = un_peacekeeping_contributor_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { var:un_authority < 20 } add = 15 }
+		if = { limit = { is_at_war = yes } add = 25 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_END_PEACEKEEPING_DESC"
+			remove_modifier = un_peacekeeping_contributor_modifier
+			change_variable = { name = un_authority add = -2 }
+		}
+	}
+}
+
+# ---- 4. DEVELOPMENT PROGRAMS ----
+
+un_fund_development_button = {
+	name = "UN_FUND_DEVELOPMENT"
+	desc = "UN_FUND_DEVELOPMENT_DESC"
+
+	visible = {
+		has_modifier = un_member_modifier
+		NOT = { has_modifier = un_development_contributor_modifier }
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+		country_rank >= rank_value:major_power
+		NOT = { has_modifier = un_development_contributor_modifier }
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { var:un_authority >= 40 } add = 10 }
+		if = { limit = { country_rank >= rank_value:great_power } add = 15 }
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_interventionism
+					has_law = law_type:law_command_economy
+				}
+			}
+			add = 10
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_FUND_DEVELOPMENT_DESC"
+			add_modifier = { name = un_development_contributor_modifier }
+			change_variable = { name = un_authority add = 2 }
+		}
+	}
+}
+
+un_defund_development_button = {
+	name = "UN_DEFUND_DEVELOPMENT"
+	desc = "UN_DEFUND_DEVELOPMENT_DESC"
+
+	visible = {
+		has_modifier = un_development_contributor_modifier
+	}
+
+	possible = {
+		has_modifier = un_development_contributor_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { has_law = law_type:law_laissez_faire } add = 15 }
+		if = { limit = { var:un_authority < 25 } add = 10 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_DEFUND_DEVELOPMENT_DESC"
+			remove_modifier = un_development_contributor_modifier
+			change_variable = { name = un_authority add = -2 }
+		}
+	}
+}
+
+# ---- 5. HUMAN RIGHTS RESOLUTIONS ----
+
+un_human_rights_resolution_button = {
+	name = "UN_HUMAN_RIGHTS"
+	desc = "UN_HUMAN_RIGHTS_DESC"
+
+	visible = {
+		has_modifier = un_member_modifier
+		NOT = { has_modifier = un_human_rights_champion_modifier }
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+		NOT = { has_modifier = un_human_rights_champion_modifier }
+		OR = {
+			has_law = law_type:law_multicultural
+			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_protected_speech
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { has_law = law_type:law_multicultural } add = 20 }
+		if = { limit = { has_law = law_type:law_universal_suffrage } add = 15 }
+		if = { limit = { has_law = law_type:law_protected_speech } add = 15 }
+		if = { limit = { var:un_authority >= 50 } add = 10 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_HUMAN_RIGHTS_DESC"
+			add_modifier = { name = un_human_rights_champion_modifier }
+			change_variable = { name = un_authority add = 3 }
+		}
+	}
+}
+
+un_withdraw_human_rights_button = {
+	name = "UN_WITHDRAW_HUMAN_RIGHTS"
+	desc = "UN_WITHDRAW_HUMAN_RIGHTS_DESC"
+
+	visible = {
+		has_modifier = un_human_rights_champion_modifier
+	}
+
+	possible = {
+		has_modifier = un_human_rights_champion_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { has_law = law_type:law_ethnostate } add = 30 }
+		if = { limit = { has_law = law_type:law_outlawed_dissent } add = 20 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_WITHDRAW_HUMAN_RIGHTS_DESC"
+			remove_modifier = un_human_rights_champion_modifier
+			change_variable = { name = un_authority add = -3 }
+		}
+	}
+}
+
+# ---- 6. ARMS CONTROL ----
+
+un_arms_control_button = {
+	name = "UN_ARMS_CONTROL"
+	desc = "UN_ARMS_CONTROL_DESC"
+
+	visible = {
+		has_modifier = un_member_modifier
+		NOT = { has_modifier = un_arms_control_participant_modifier }
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+		NOT = { has_modifier = un_arms_control_participant_modifier }
+		OR = {
+			has_law = law_type:law_war_crimes_forbidden
+			has_law = law_type:law_humanitarian_regulations
+			has_law = law_type:law_limited_war
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { has_law = law_type:law_limited_war } add = 25 }
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 20 }
+		if = { limit = { var:un_authority >= 50 } add = 10 }
+		if = {
+			limit = {
+				any_country = {
+					has_diplomatic_pact = { who = ROOT type = rivalry }
+					has_modifier = un_arms_control_participant_modifier
+				}
+			}
+			add = 15
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_ARMS_CONTROL_DESC"
+			add_modifier = { name = un_arms_control_participant_modifier }
+			change_variable = { name = un_authority add = 3 }
+		}
+	}
+}
+
+un_withdraw_arms_control_button = {
+	name = "UN_WITHDRAW_ARMS_CONTROL"
+	desc = "UN_WITHDRAW_ARMS_CONTROL_DESC"
+
+	visible = {
+		has_modifier = un_arms_control_participant_modifier
+	}
+
+	possible = {
+		has_modifier = un_arms_control_participant_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { has_law = law_type:law_total_war } add = 30 }
+		if = { limit = { is_at_war = yes } add = 20 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_WITHDRAW_ARMS_CONTROL_DESC"
+			remove_modifier = un_arms_control_participant_modifier
+			change_variable = { name = un_authority add = -3 }
+		}
+	}
+}
