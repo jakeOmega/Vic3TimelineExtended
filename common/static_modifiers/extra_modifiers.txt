@@ -546,9 +546,667 @@ fossil_fuel_divestment_modifier = {
 	country_authority_add = -200
 }
 
-carbon_tax_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	state_construction_mult = -0.20
-	building_urban_center_throughput_add = 0.25
+green_building_codes_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_construction_mult = -0.05
+	building_group_bg_power_throughput_add = 0.05
 	country_authority_add = -100
+}
+
+# ----- Climate event modifiers (timed, from environmentalism events) -----
+climate_awareness_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_institution_cost_institution_ministry_of_the_environment_mult = -0.25
+	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.10
+}
+
+emergency_climate_spending_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_bureaucracy_mult = -0.05
+	state_mortality_mult = -0.03
+	state_standard_of_living_add = 0.5
+}
+
+green_tech_stimulus_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	building_renewable_energy_plant_throughput_add = 0.15
+	country_institution_size_change_speed_institution_ministry_of_the_environment_mult = 0.50
+}
+
+climate_crisis_emergency_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_bureaucracy_mult = -0.10
+	state_mortality_mult = -0.05
+	state_standard_of_living_add = 1
+	country_institution_cost_institution_ministry_of_the_environment_mult = -0.50
+}
+
+crop_failure_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.15
+	state_mortality_mult = 0.03
+}
+
+crop_failure_relief_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.05
+	country_bureaucracy_mult = -0.03
+	state_standard_of_living_add = 0.5
+}
+
+climate_refugee_welcome_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_migration_pull_mult = 0.25
+	state_standard_of_living_add = -0.5
+	country_prestige_add = 50
+}
+
+climate_refugee_rejection_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_migration_pull_mult = -0.25
+	country_prestige_add = -25
+}
+
+pollution_scandal_review_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_pollution_generation_mult = -0.10
+	building_group_bg_mining_throughput_add = -0.05
+	building_group_bg_oil_extraction_throughput_add = -0.05
+}
+
+environmentalist_momentum_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	political_movement_pop_attraction_mult = 0.25
+	country_institution_size_change_speed_institution_ministry_of_the_environment_mult = 0.25
+	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.05
+}
+
+coastal_flooding_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_port_throughput_add = -0.15
+	building_group_bg_fishing_throughput_add = -0.10
+	state_standard_of_living_add = -1
+}
+
+water_crisis_rationing_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_standard_of_living_add = -1.5
+	state_mortality_mult = 0.02
+	building_group_bg_agriculture_throughput_add = -0.10
+}
+
+water_crisis_infrastructure_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	state_standard_of_living_add = -0.5
+	country_bureaucracy_mult = -0.05
+	state_infrastructure_add = 5
+}
+
+green_tech_boom_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	building_renewable_energy_plant_throughput_add = 0.20
+	country_tech_research_speed_mult = 0.05
+	country_prestige_add = 100
+}
+
+fossil_lobby_concessions_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_group_bg_coal_mining_throughput_add = 0.10
+	building_group_bg_oil_extraction_throughput_add = 0.10
+	country_greenhouse_gas_emissions_mult = 0.10
+}
+
+climate_summit_leader_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 200
+	country_greenhouse_gas_emissions_mult = -0.05
+	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.10
+}
+
+climate_summit_pledge_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	country_greenhouse_gas_emissions_mult = -0.03
+}
+
+tropical_disease_spread_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_mortality_mult = 0.05
+	state_standard_of_living_add = -1
+	building_group_bg_service_throughput_add = -0.10
+}
+
+tropical_disease_research_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_mortality_mult = 0.02
+	country_tech_research_speed_mult = 0.03
+	country_bureaucracy_mult = -0.03
+}
+
+climate_political_turmoil_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	political_movement_radicalism_add = 5
+	state_radicals_from_political_movements_mult = 0.25
+}
+
+arctic_melting_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_port_throughput_add = -0.10
+	building_group_bg_fishing_throughput_add = -0.15
+	state_mortality_mult = 0.01
+}
+
+coastal_relocation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_standard_of_living_add = -2
+	state_migration_pull_mult = 0.15
+	building_port_throughput_add = -0.05
+}
+
+green_tech_market_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	building_renewable_energy_plant_throughput_add = 0.10
+	country_prestige_add = 50
+}
+
+arctic_adaptation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.03
+	country_prestige_add = -50
+	building_port_throughput_add = -0.05
+}
+
+# ============================================================================
+# IG APPROVAL MODIFIERS (for interest group reactions to events)
+# ============================================================================
+
+ig_approval_positive_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_approval_add = 3
+}
+
+ig_approval_negative_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_approval_add = -3
+}
+
+ig_approval_very_negative_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_approval_add = -5
+}
+
+# ============================================================================
+# INTERNATIONAL RELATIONS EVENT MODIFIERS
+# ============================================================================
+
+# Event 1a: Arms Race — match buildup (military boost but expensive)
+arms_race_escalation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	country_prestige_from_army_power_projection_mult = 0.15
+	country_prestige_from_navy_power_projection_mult = 0.15
+	country_military_goods_cost_mult = 0.10
+	country_prestige_add = 25
+}
+
+# Event 1b: Diplomacy — overture accepted (influence, but military weakened)
+diplomatic_overture_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 20
+	country_influence_add = 50
+}
+
+# Event 1b (risk): Diplomacy rebuffed — humiliation
+diplomatic_overture_rebuffed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -50
+	country_influence_add = -25
+}
+
+# Event 1c: Ignore the arms race — save money but lose deterrence
+arms_race_ignored_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	country_military_goods_cost_mult = -0.05
+	country_prestige_from_army_power_projection_mult = -0.10
+	country_prestige_from_navy_power_projection_mult = -0.10
+}
+
+# Event 2a: Proxy conflict funding (weaken rival, but costly and risky)
+proxy_conflict_funding_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	country_prestige_from_army_power_projection_mult = 0.05
+	country_prestige_add = -25
+	country_bureaucracy_mult = -0.05
+}
+
+# Event 2b: Stay out of proxy conflict (cautious, lose influence)
+proxy_conflict_avoided_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_influence_add = -25
+	country_prestige_add = -10
+}
+
+# Event 3a: Host summit (prestige but costly to organize)
+summit_host_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 150
+	country_influence_add = 100
+	country_bureaucracy_mult = -0.05
+}
+
+# Event 3b: Attend summit (modest gains, some concessions)
+summit_attendee_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	country_influence_add = 25
+	country_authority_add = -100
+}
+
+# Event 3c: Boycott summit (isolationist, but retain authority)
+summit_boycott_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -50
+	country_authority_add = 100
+}
+
+# Event 4a: Counter-propaganda campaign (costly but effective)
+propaganda_campaign_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 25
+	country_bureaucracy_mult = -0.03
+}
+
+# Event 4b: Ignore propaganda (save resources, lose prestige)
+propaganda_ignored_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -30
+}
+
+# Event 5a: Trade embargo (hurt rival but hurt self too)
+trade_embargo_imposed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_prestige_add = 25
+	country_influence_add = -25
+	state_trade_capacity_mult = -0.10
+}
+
+# Event 5b: Trade diplomacy instead (maintain trade, look weak)
+trade_diplomacy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_trade_capacity_mult = 0.05
+	country_prestige_add = -15
+}
+
+# Event 6b: Prisoner exchange (pragmatic, lose face)
+espionage_prisoner_exchange_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -25
+	country_influence_add = 25
+}
+
+# Event 7a: Space investment (prestige/research, but expensive)
+space_race_achievement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_prestige_add = 200
+	country_tech_research_speed_mult = 0.05
+	country_bureaucracy_mult = -0.03
+}
+
+# Event 7b: Redirect space resources (practical, lose prestige)
+space_race_redirected_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_prestige_add = -50
+	state_standard_of_living_add = 1
+}
+
+# Event 8a: Nuclear brinkmanship — stand firm
+nuclear_brinkmanship_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	country_prestige_from_army_power_projection_mult = 0.15
+	state_standard_of_living_add = -1
+	state_radicals_from_political_movements_mult = 0.10
+}
+
+# Event 8b: Nuclear de-escalation (peace, but look weak)
+nuclear_deescalation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = -30
+	country_influence_add = 50
+}
+
+# Event 8c: Nuclear mobilization (aggressive, terrifies population)
+nuclear_mobilization_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	country_prestige_from_army_power_projection_mult = 0.20
+	country_prestige_from_navy_power_projection_mult = 0.20
+	state_standard_of_living_add = -2
+}
+
+# ============================================================================
+# DECOLONIZATION EVENT MODIFIERS
+# ============================================================================
+
+decolonization_negotiations_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = -50
+	country_influence_add = 25
+	country_bureaucracy_mult = -0.03
+}
+
+colonial_crackdown_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	country_prestige_add = -75
+	country_prestige_from_army_power_projection_mult = 0.05
+	country_bureaucracy_mult = -0.05
+}
+
+peaceful_decolonization_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 100
+	country_influence_add = 50
+}
+
+colonial_war_exhaustion_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	country_prestige_add = -100
+	state_standard_of_living_add = -1
+	country_prestige_from_army_power_projection_mult = -0.10
+}
+
+cultural_reclamation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	state_standard_of_living_add = 1
+}
+
+post_colonial_partnership_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 75
+	country_influence_add = 25
+}
+
+colonial_reparations_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_prestige_add = -100
+	country_influence_add = -25
+	country_bureaucracy_mult = -0.05
+}
+
+nation_building_investment_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.05
+	state_standard_of_living_add = 1
+	country_bureaucracy_mult = -0.03
+}
+
+foreign_investment_dependency_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_prestige_add = -25
+	state_standard_of_living_add = 2
+}
+
+post_colonial_self_reliance_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_prestige_add = 25
+	country_tech_research_speed_mult = 0.02
+}
+
+# ============================================================================
+# COLONIAL EMPIRE JOURNAL ENTRY MODIFIERS
+# ============================================================================
+
+# Toggle policies (permanent while active, applied via scripted buttons)
+colonial_development_investment_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_bureaucracy_mult = -0.05
+	country_prestige_add = -25
+}
+
+colonial_military_garrison_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	country_prestige_from_army_power_projection_mult = -0.05
+	country_bureaucracy_mult = -0.03
+}
+
+colonial_cultural_assimilation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_bureaucracy_mult = -0.04
+	country_acceptance_not_homeland_add = 10
+}
+
+# Phase modifiers (applied automatically by JE pulse based on stability level)
+colonial_empire_under_pressure_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -50
+	country_bureaucracy_mult = -0.03
+	political_movement_radicalism_add = 3
+}
+
+colonial_empire_crumbling_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -100
+	country_bureaucracy_mult = -0.06
+	political_movement_radicalism_add = 8
+	state_radicals_from_political_movements_mult = 0.20
+}
+
+# End-state modifiers
+colonial_empire_solidified_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 200
+	country_acceptance_not_homeland_add = 15
+}
+
+colonial_empire_collapsed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -200
+	state_standard_of_living_add = -2
+}
+
+# Event modifiers for new decolonization events (9-12)
+colonial_integration_progress_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	country_acceptance_not_homeland_add = 5
+}
+
+colonial_unrest_suppressed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	country_prestige_add = -50
+	country_prestige_from_army_power_projection_mult = 0.05
+}
+
+gp_condemns_colonialism_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -75
+	country_influence_add = -50
+}
+
+gp_supports_colonialism_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	country_influence_add = 25
+}
+
+# Event flag modifiers — used as flags for the progress bar monthly_progress
+# to detect recent event effects (positive or negative)
+colonial_stability_positive_event = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 5
+}
+
+colonial_stability_negative_event = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -5
+}
+
+# Great power colonial policy stance modifiers (applied when GP chooses a stance)
+gp_anti_colonial_policy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = 25
+	country_influence_add = 25
+}
+
+gp_pro_colonial_policy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 10
+	country_influence_add = -10
+}
+
+# ============================================================================
+# CIVIL RIGHTS MOVEMENT EVENT MODIFIERS
+# ============================================================================
+
+civil_rights_march_momentum_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 25
+	political_movement_radicalism_add = -2
+}
+
+civil_rights_suppression_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -25
+	state_turmoil_effects_mult = 0.10
+}
+
+civil_rights_government_endorsement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	country_law_enactment_success_add = 0.05
+}
+
+segregation_exception_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_bureaucracy_mult = -0.03
+	country_acceptance_not_homeland_add = 5
+}
+
+minority_rights_reform_push_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.05
+	political_movement_radicalism_add = 3
+}
+
+cultural_renaissance_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_acceptance_not_homeland_add = 10
+	country_prestige_add = 50
+}
+
+cultural_cooptation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 75
+}
+
+human_rights_reform_pledge_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+	country_diplomatic_reputation_add = 3
+}
+
+# ============================================================================
+# ANTI-WAR MOVEMENT EVENT MODIFIERS
+# ============================================================================
+
+draft_enforcement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	state_conscription_rate_mult = 0.10
+	state_turmoil_effects_mult = 0.10
+}
+
+alternative_service_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_conscription_rate_mult = -0.05
+}
+
+veterans_peace_testimony_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	political_movement_radicalism_add = -3
+}
+
+veteran_advisory_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_military_tech_research_speed_mult = 0.05
+}
+
+peace_rally_suppressed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -25
+	state_turmoil_effects_mult = 0.15
+}
+
+peace_rally_diplomatic_leverage_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_influence_add = 50
+	country_diplomatic_reputation_add = 3
+}
+
+war_profiteering_investigation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_prestige_add = 25
+	country_bureaucracy_mult = -0.03
+}
+
+war_profit_tax_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_tax_income_add = 50000
+}
+
+# ============================================================================
+# TRANSHUMANIST MOVEMENT EVENT MODIFIERS
+# ============================================================================
+
+neural_implant_trials_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.05
+}
+
+military_neural_program_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_military_tech_research_speed_mult = 0.10
+}
+
+neural_trial_ban_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds
+	country_tech_research_speed_mult = -0.03
+}
+
+augmentation_subsidy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	state_standard_of_living_add = 1
+	country_bureaucracy_mult = -0.03
+}
+
+augmentation_market_forces_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_upper_strata_standard_of_living_add = 2
+	state_lower_strata_standard_of_living_add = -1
+}
+
+biohacker_legalized_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.03
+	country_bureaucracy_mult = -0.02
+}
+
+biohacker_research_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.05
+}
+
+digital_property_ruling_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_throughput_add = 0.02
+}
+
+digital_consciousness_commission_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_tech_research_speed_mult = 0.02
+	country_bureaucracy_mult = -0.01
+}
+
+digital_rights_recognition_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_prestige_add = 100
+	country_tech_research_speed_mult = 0.03
 }

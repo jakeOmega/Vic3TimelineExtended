@@ -4,3 +4,4 @@ path_constants.py
 *.pyc
 path_constants.py
 *__pycache__
+.github/

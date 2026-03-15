@@ -1784,3 +1784,53 @@ country_enactment_success_chance_law_ministry_of_culture_add = {
 	color = good
 	percent = yes
 }
+
+# Missing modifier type definitions for climate/colonial systems
+country_enactment_success_chance_law_ministry_of_the_environment_add = {
+	color = good
+	percent = yes
+}
+
+country_building_renewable_energy_plant_require_subsidies_bool = {
+	color = bad
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+building_group_bg_coal_mining_tax_mult = {
+	decimals = 1
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+building_group_bg_coal_mining_throughput_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+building_group_bg_power_throughput_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+building_group_bg_power_construction_efficiency_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}

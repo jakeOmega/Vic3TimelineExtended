@@ -315,18 +315,6 @@
                 }
                 add = { value = 5 desc = "POLICY_POSSIBLE_FOSSIL_FUEL_DIVESTMENT" }
             }
-
-            if = { # Green building codes
-                limit = { has_modifier = green_building_codes_modifier }
-                add = { value = -5 desc = "POLICY_ACTIVE_GREEN_BUILDING_CODES" }
-            }
-            else_if = {
-                limit = {
-                    temperature_anomaly_display >= 0.5
-                    adjusted_produced_authority > 100
-                }
-                add = { value = 5 desc = "POLICY_POSSIBLE_GREEN_BUILDING_CODES" }
-            }
 		}
     }
 }
@@ -898,6 +886,231 @@ movement_anti_war = {
                 add = {
                     value = 0.25
                     desc = "AT_WAR"
+                }
+            }
+        }
+    }
+}
+
+movement_transhumanist = {
+    category = movement_category_ideological
+
+    ideology = ideology_optimist_transhumanist
+    character_ideologies = {
+        ideology_optimist_transhumanist
+    }
+    
+    disband_trigger = {
+        # Never disbands — technology marches on
+        always = no
+    }
+    on_disbanded = {
+    }
+    
+    creation_trigger = {
+        has_technology_researched = brain_computer_interfaces
+        NOT = { has_law = law_type:law_unrestricted_augmentation }
+    }
+    creation_weight = {
+        value = 100
+    }    
+    on_created = {
+        add_movement_enthusiasm_modifier = yes
+    }
+    
+    character_support_trigger = {
+        OR = {
+            has_ideology = ideology:ideology_optimist_transhumanist
+            is_interest_group_type = ig_intelligentsia
+        }
+    }
+    character_support_weight = {
+        value = 50
+        if = {
+            limit = {
+                has_ideology = ideology:ideology_optimist_transhumanist
+            }
+            multiply = {
+                value = 5
+            }
+        }
+    }
+    
+    pop_support_factors = {
+        movement_support_high_literacy
+        movement_support_academics
+        movement_support_high_urbanization
+    }    
+
+    pop_support_weight = {
+        add = {
+            value = 3
+            desc = "POP_BASE_SUPPORT"
+        }
+
+        add = {
+            desc = "URBAN_STATE"
+            value = 5
+            multiply = state.state_urbanization_rate
+        }
+
+        if = {
+            limit = { owner = { has_technology_researched = biohacking_and_human_augmentation } }
+            multiply = {
+                value = 2
+                desc = "TECHNOLOGY_RESEARCHED_biohacking_and_human_augmentation"
+            }
+        }
+
+        if = {
+            limit = { owner = { has_technology_researched = mind_backups } }
+            multiply = {
+                value = 1.5
+                desc = "TECHNOLOGY_RESEARCHED_mind_backups"
+            }
+        }
+
+        if = {
+            limit = { owner = { has_technology_researched = post-scarcity_economy } }
+            multiply = {
+                value = 1.5
+                desc = "TECHNOLOGY_RESEARCHED_post-scarcity_economy"
+            }
+        }
+
+        # Strata weights — strongly favors educated, urban, wealthy pops
+        if = {
+            limit = {
+                strata = upper
+            }
+            if = {
+                limit = {
+                    is_pop_type = capitalists
+                }
+                multiply = {
+                    value = 3
+                    desc = "POP_CAPITALISTS"
+                }
+            }
+            else = {
+                multiply = {
+                    value = 2
+                    desc = "UPPER_CLASS"
+                }
+            }
+        }
+        else_if = {
+            limit = {
+                strata = middle
+            }
+            if = {
+                limit = {
+                    is_pop_type = academics
+                }
+                multiply = {
+                    value = 5
+                    desc = "POP_ACADEMICS"
+                }
+            }
+            else_if = {
+                limit = {
+                    is_pop_type = engineers
+                }
+                multiply = {
+                    value = 4
+                    desc = "POP_ENGINEERS"
+                }
+            }
+            else_if = {
+                limit = {
+                    is_pop_type = clergymen
+                }
+                multiply = {
+                    value = 0.25
+                    desc = "POP_CLERGYMEN"
+                }
+            }
+            else = {
+                multiply = {
+                    value = 1.5
+                    desc = "MIDDLE_CLASS"
+                }
+            }
+        }
+        else_if = {
+            limit = {
+                strata = lower
+            }
+            multiply = {
+                value = 0.25
+                desc = "LOWER_CLASS"
+            }
+        }
+
+        multiply = { # Illiterate pops participate at 1/10 the rate of fully literate pops
+            desc = "POP_LITERACY"
+            value = literacy_rate
+            multiply = 0.9
+            add = 0.10
+        }
+    }
+
+    revolution = {
+        possible = {
+            political_movement_support >= 0.05
+        }
+        
+        weight = {
+            value = 50
+        }
+    
+        state_weight = {
+            value = 1
+        }
+    }
+
+    secession = {
+        possible = {
+            always = no
+        }    
+    
+        weight = {
+            value = 1
+        }  
+
+        state_weight = {
+            value = 1          
+        }        
+    }
+
+    additional_radicalism_factors = {
+        owner = {
+            if = {
+                limit = { has_law = law_type:law_human_purity }
+                add = {
+                    value = 0.25
+                    desc = "LAW_HUMAN_PURITY"
+                }
+            }
+            if = {
+                limit = { has_law = law_type:law_ban_on_genetic_modification }
+                add = {
+                    value = 0.15
+                    desc = "LAW_BAN_ON_GENETIC_MODIFICATION"
+                }
+            }
+            if = {
+                limit = { has_law = law_type:law_unrestricted_augmentation }
+                add = {
+                    value = -0.10
+                    desc = "LAW_UNRESTRICTED_AUGMENTATION"
+                }
+            }
+            if = {
+                limit = { has_law = law_type:law_regulated_augmentation_market }
+                add = {
+                    value = -0.05
+                    desc = "LAW_REGULATED_AUGMENTATION"
                 }
             }
         }

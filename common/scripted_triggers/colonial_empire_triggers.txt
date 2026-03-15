@@ -1,0 +1,107 @@
+﻿# ============================================================================
+# COLONIAL EMPIRE SCRIPTED TRIGGERS
+# ============================================================================
+
+# Checks if a state is on a different continent/landmass from the owner's capital.
+# Scope: state
+# Landmass groupings:
+#   - Western Eurasia: Europe + Central Asia + Middle East (contiguous by land)
+#   - Southern/Eastern Asia: India + East Asia + Southeast Asia
+#   - Americas (North, Central, South)
+#   - Africa
+#   - Unclassified (Oceania, Pacific — anything not in the above groups)
+# This means Russia → Central Asia is NOT overseas (same landmass),
+# but France → Vietnam IS overseas (different landmass).
+is_overseas_from_capital = {
+	OR = {
+		# Capital in Western Eurasia, state NOT in Western Eurasia
+		AND = {
+			owner = {
+				capital = {
+					OR = {
+						is_in_geographic_region = geographic_region_europe
+						is_in_geographic_region = geographic_region_central_asia
+						is_in_geographic_region = geographic_region_middle_east
+					}
+				}
+			}
+			NOR = {
+				is_in_geographic_region = geographic_region_europe
+				is_in_geographic_region = geographic_region_central_asia
+				is_in_geographic_region = geographic_region_middle_east
+			}
+		}
+		# Capital in Americas, state NOT in Americas
+		AND = {
+			owner = { capital = { is_in_geographic_region = geographic_region_americas } }
+			NOT = { is_in_geographic_region = geographic_region_americas }
+		}
+		# Capital in Africa, state NOT in Africa
+		AND = {
+			owner = { capital = { is_in_geographic_region = geographic_region_africa } }
+			NOT = { is_in_geographic_region = geographic_region_africa }
+		}
+		# Capital in Southern/Eastern Asia, state NOT in that group
+		AND = {
+			owner = {
+				capital = {
+					OR = {
+						is_in_geographic_region = geographic_region_india
+						is_in_geographic_region = geographic_region_east_asia
+						is_in_geographic_region = geographic_region_south_east_asia
+					}
+				}
+			}
+			NOR = {
+				is_in_geographic_region = geographic_region_india
+				is_in_geographic_region = geographic_region_east_asia
+				is_in_geographic_region = geographic_region_south_east_asia
+			}
+		}
+		# Capital in unclassified region (Oceania etc.), state in any classified region
+		AND = {
+			owner = {
+				capital = {
+					NOR = {
+						is_in_geographic_region = geographic_region_europe
+						is_in_geographic_region = geographic_region_central_asia
+						is_in_geographic_region = geographic_region_middle_east
+						is_in_geographic_region = geographic_region_americas
+						is_in_geographic_region = geographic_region_africa
+						is_in_geographic_region = geographic_region_india
+						is_in_geographic_region = geographic_region_east_asia
+						is_in_geographic_region = geographic_region_south_east_asia
+					}
+				}
+			}
+			OR = {
+				is_in_geographic_region = geographic_region_europe
+				is_in_geographic_region = geographic_region_central_asia
+				is_in_geographic_region = geographic_region_middle_east
+				is_in_geographic_region = geographic_region_americas
+				is_in_geographic_region = geographic_region_africa
+				is_in_geographic_region = geographic_region_india
+				is_in_geographic_region = geographic_region_east_asia
+				is_in_geographic_region = geographic_region_south_east_asia
+			}
+		}
+	}
+}
+
+# A state that structurally qualifies as an overseas colony.
+# Does NOT include acceptance/integration checks — those are context-dependent.
+# Scope: state
+is_overseas_colonial_state = {
+	# Not a homeland of the owner's primary/accepted cultures
+	NOT = { is_homeland_of_country_cultures = owner }
+	# Meaningful population — filters tiny outposts (Falklands, Wallis & Futuna, etc.)
+	state_population >= 100000
+	# Has non-integrated population — proxy for "significant indigenous population
+	# and majority is NOT the owner's primary culture"
+	# Places where everyone has been fully assimilated don't count.
+	any_scope_pop = {
+		pop_acceptance < 50
+	}
+	# On a different continent/landmass from the capital
+	is_overseas_from_capital = yes
+}

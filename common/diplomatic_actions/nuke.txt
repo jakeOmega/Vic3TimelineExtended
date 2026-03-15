@@ -72,6 +72,20 @@ nuke_diplo_action = {
                 }
                 multiply = 0
             }
+            if = {
+                limit = {
+                    any_scope_state = {
+                        has_modifier = nuclear_strike_aftermath
+                    }
+                }
+                multiply = 3 # retaliation is more likely
+            }
+            if = {
+                limit = {
+                    var:nuclear_weapon_stockpile > 5
+                }
+                multiply = 1.5 # more willing with a larger stockpile
+            }
         }
 
 		will_select_as_second_state = {

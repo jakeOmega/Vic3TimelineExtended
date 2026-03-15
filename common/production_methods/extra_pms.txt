@@ -1,4 +1,4 @@
-pm_dragline_excavators_coal_mine = {
+﻿pm_dragline_excavators_coal_mine = {
 	texture = "gfx/interface/icons/production_method_icons/assembly_lines.dds"
 		
 	unlocking_technologies = {
@@ -17491,4 +17491,92 @@ pm_advanced_emissions_control = {
 			# Wage breakeven: 0.00
 		}
 	}
+}
+
+# ===== GLASSWORKS FUME VENTILATION =====
+
+# ---- No Glassworks Fume Ventilation (Default) ----
+
+pm_no_glassworks_fume_ventilation = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+# ---- Glassworks Fume Extraction (Basic) ----
+# Pollution reduction: -5
+# Gated behind any PM with >=5 pollution so no combo goes negative
+# Min possible: leaded_glass(5)+manual(0)-5 = 0; forest_glass(0)+auto(5)-5 = 0
+# Operational cost: +1 electricity
+
+pm_glassworks_fume_extraction = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	unlocking_production_methods = {
+		pm_leaded_glass
+		pm_crystal_glass
+		pm_houseware_plastics
+		pm_injection_molding
+		pm_blow_molding
+		pm_automatic_bottle_blowers
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Glassworks Closed-Loop Recycling (Advanced) ----
+# Pollution reduction: -10
+# Gated behind PMs with >=10 pollution so no combo goes negative
+# Min possible: crystal_glass(10)+manual(0)-10 = 0
+# Operational cost: +2 electricity
+
+pm_glassworks_closed_loop_recycling = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_crystal_glass
+		pm_houseware_plastics
+		pm_injection_molding
+		pm_blow_molding
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (100.00%)
+			# Total input cost: 60.0
+		}
+	}
+
+	required_input_goods = electricity
 }

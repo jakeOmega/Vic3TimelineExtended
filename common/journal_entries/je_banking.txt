@@ -1,4 +1,4 @@
-je_banking_cycle = {
+﻿je_banking_cycle = {
     icon    = "gfx/interface/icons/event_icons/stock_bag.dds"
     group = je_group_internal_affairs
 
@@ -409,6 +409,20 @@ je_banking_cycle = {
                 else = {
                     set_bar_progress = { name = banking_cycle_momentum_bar value = ROOT.var:finance_cycle_momentum }
                 }
+            }
+
+            if = {
+                limit = {
+                    has_modifier = banking_capital_controls_out
+                    NOT = {
+                        OR = {
+                            has_law = law_type:law_prudential_narrow_banking
+                            has_law = law_type:law_directed_credit_development_banks
+                            is_at_war = yes
+                        }
+                    }
+                }
+                remove_modifier = banking_capital_controls_out
             }
         }
     }

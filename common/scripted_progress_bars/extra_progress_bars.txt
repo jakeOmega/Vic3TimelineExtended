@@ -30,3 +30,125 @@ banking_bubble_pressure_bar = {
 	min_value = 0
 	max_value = 100
 }
+
+colonial_stability_bar = {
+	name = "colonial_stability_bar_name"
+	desc = "colonial_stability_bar_desc"
+
+	default_green = yes
+
+	start_value = 50
+	min_value = 0
+	max_value = 100
+
+	monthly_progress = {
+		# Base: natural drift toward decolonization
+		add = {
+			desc = "colonial_base_drift_tt"
+			value = -0.5
+		}
+
+		# Great power rank bonus — easier to hold empire as a great power
+		if = {
+			limit = { owner = { country_rank >= rank_value:great_power } }
+			add = {
+				desc = "colonial_gp_rank_bonus_tt"
+				value = 0.3
+			}
+		}
+
+		# GP condemnation pressure — GPs that chose anti-colonial stance
+		if = {
+			limit = { owner = { colonial_gp_condemners_count > 0 } }
+			add = {
+				desc = "colonial_gp_condemnation_tt"
+				value = owner.colonial_gp_condemners_count
+				multiply = -0.5
+			}
+		}
+
+		# GP support — GPs that chose pro-colonial stance
+		if = {
+			limit = { owner = { colonial_gp_supporters_count > 0 } }
+			add = {
+				desc = "colonial_gp_support_tt"
+				value = owner.colonial_gp_supporters_count
+				multiply = 0.3
+			}
+		}
+
+		# Policy: Development investment
+		if = {
+			limit = { owner = { has_modifier = colonial_development_investment_modifier } }
+			add = {
+				desc = "colonial_development_bonus_tt"
+				value = 1.0
+			}
+		}
+
+		# Policy: Military garrison
+		if = {
+			limit = { owner = { has_modifier = colonial_military_garrison_modifier } }
+			add = {
+				desc = "colonial_garrison_bonus_tt"
+				value = 0.5
+			}
+		}
+
+		# Policy: Cultural assimilation
+		if = {
+			limit = { owner = { has_modifier = colonial_cultural_assimilation_modifier } }
+			add = {
+				desc = "colonial_assimilation_bonus_tt"
+				value = 0.8
+			}
+		}
+
+		# Penalty per colonial state with very low acceptance
+		if = {
+			limit = { owner = { colonial_low_acceptance_count > 0 } }
+			add = {
+				desc = "colonial_low_acceptance_tt"
+				value = owner.colonial_low_acceptance_count
+				multiply = -0.3
+			}
+		}
+
+		# Bonus per colonial state with high acceptance (fully integrated pops)
+		if = {
+			limit = { owner = { colonial_high_acceptance_count > 0 } }
+			add = {
+				desc = "colonial_high_acceptance_tt"
+				value = owner.colonial_high_acceptance_count
+				multiply = 0.5
+			}
+		}
+
+		# Penalty if at war — colonial maintenance is harder during wartime
+		if = {
+			limit = { owner = { is_at_war = yes } }
+			add = {
+				desc = "colonial_war_penalty_tt"
+				value = -0.5
+			}
+		}
+
+		# Recent positive event effects (timed modifier flag)
+		if = {
+			limit = { owner = { has_modifier = colonial_stability_positive_event } }
+			add = {
+				desc = "colonial_positive_events_tt"
+				value = 1
+			}
+		}
+
+		# Recent negative event effects (timed modifier flag)
+		if = {
+			limit = { owner = { has_modifier = colonial_stability_negative_event } }
+			add = {
+				desc = "colonial_negative_events_tt"
+				value = -1
+			}
+		}
+	}
+}

@@ -1,4 +1,4 @@
-INJECT:building_oil_rig = {
+﻿INJECT:building_oil_rig = {
 	production_method_groups = {
 		pmg_depth_oil_rig
 	}
@@ -544,7 +544,6 @@ REPLACE:building_automotive_industry = {
 		pmg_tanks
 		pmg_automation_building_automotive_industry
 		pmg_emissions_control
-		pmg_facility_emission_standards
 		pmg_maintenance
 	}
 
@@ -1191,6 +1190,7 @@ INJECT:building_food_industry = {
 
 INJECT:building_glassworks = {
 	production_method_groups = {
+		pmg_glassworks_fume_ventilation
 		pmg_maintenance
 	}
 }

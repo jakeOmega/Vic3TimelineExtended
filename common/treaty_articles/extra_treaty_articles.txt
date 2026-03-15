@@ -57,9 +57,31 @@ request_influence = {
     }
 
     ai = {
-        # AI will never offer or request this article.
-        article_ai_usage = { none }
-        evaluation_chance = { value = 0 }
+        treaty_categories = { power_bloc }
+        article_ai_usage = { request }
+        evaluation_chance = {
+            value = 5
+            if = {
+                limit = { is_in_power_bloc = no }
+                add = 10
+            }
+            if = {
+                limit = { country_rank <= rank_value:minor_power }
+                add = 10
+            }
+            if = {
+                limit = {
+                    has_attitude = { who = scope:other_country attitude = cooperative }
+                }
+                add = 10
+            }
+            if = {
+                limit = {
+                    has_attitude = { who = scope:other_country attitude = conciliatory }
+                }
+                add = 5
+            }
+        }
 
         inherent_accept_score = {
             value = 0
@@ -859,7 +881,7 @@ nuclear_disarmament = {
 
 	possible = {
 		scope:other_country = { has_technology_researched = nuclear_weapons }
-		NOT = { scope:other_country = { nuclear_disarmament = yes } }
+		NOT = { scope:other_country = { modifier:nuclear_disarmament = yes } }
 	}
 
 	can_ratify = {
@@ -891,52 +913,116 @@ nuclear_disarmament = {
 		treaty_categories = { other }
 		article_ai_usage = { request }
 		evaluation_chance = {
-			value = 5.0
+			value = 0
+			# Only consider demanding disarmament of hostile/rival countries
 			if = {
 				limit = { has_attitude = { who = scope:other_country attitude = hostile } }
 				add = 10
 			}
 			if = {
+				limit = { has_attitude = { who = scope:other_country attitude = belligerent } }
+				add = 15
+			}
+			if = {
 				limit = { any_rival_country = { THIS = scope:other_country } }
-				add = 20
+				add = 25
+			}
+			# Never try to disarm allies or friendly nations
+			if = {
+				limit = {
+					OR = {
+						has_attitude = { who = scope:other_country attitude = genial }
+						has_attitude = { who = scope:other_country attitude = loyal }
+						has_attitude = { who = scope:other_country attitude = protective }
+					}
+				}
+				add = -100
+			}
+			# Don't try if we're in the same power bloc
+			if = {
+				limit = {
+					scope:other_country = {
+						is_in_same_power_bloc = root
+					}
+				}
+				add = -50
 			}
 		}
 		inherent_accept_score = {
 			value = 0
 			if = {
-				limit = { scope:target_country = this } # Evaluator is the one demanding disarmament (source)
+				limit = { scope:target_country = this }
+				# SOURCE perspective: do I want this article demanding the other side disarm?
+				# Strongly want rivals/enemies to disarm
 				if = {
-					limit = { 
-						OR = {
-							has_attitude = { who = scope:target_country attitude = hostile }
-							has_attitude = { who = scope:target_country attitude = belligerent }
-							has_attitude = { who = scope:target_country attitude = antagonistic }
-							limit = { any_rival_country = { THIS = scope:source_country } }
-							scope:source_country = { any_rival_country = { THIS = scope:target_country } }
-						}
-					add = 25
-					}
+					limit = { any_rival_country = { THIS = scope:target_country } }
+					add = 50
 				}
 				if = {
-					limit = { 
-						has_attitude = { who = scope:target_country attitude = wary }
-					 }
+					limit = { has_attitude = { who = scope:target_country attitude = hostile } }
+					add = 30
+				}
+				if = {
+					limit = { has_attitude = { who = scope:target_country attitude = belligerent } }
+					add = 40
+				}
+				if = {
+					limit = { has_attitude = { who = scope:target_country attitude = antagonistic } }
+					add = 20
+				}
+				# Wary countries still somewhat want rivals disarmed
+				if = {
+					limit = { has_attitude = { who = scope:target_country attitude = wary } }
 					add = 5
 				}
+				# Do NOT want allies to disarm - their nukes help us
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:target_country attitude = genial }
+							has_attitude = { who = scope:target_country attitude = loyal }
+							has_attitude = { who = scope:target_country attitude = protective }
+						}
+					}
+					add = -100
+				}
+				if = {
+					limit = {
+						scope:target_country = { is_in_same_power_bloc = root }
+					}
+					add = -75
+				}
 			}
-			else = { # Evaluator is the one being asked to disarm (target)
+			else = {
+				# TARGET perspective: I'm being asked to give up my nukes
 				add = -100
+				# Great powers absolutely refuse
 				if = {
 					limit = { country_rank >= rank_value:great_power }
-					add = -50
-				}
-				if = {
-					limit = { scope:source_country.relations:target_country < relations_threshold:cordial }
-					add = -50
-				}
-				if = {
-					limit = { any_rival_country = { THIS = scope:source_country } }
 					add = -100
+				}
+				# Major powers strongly resist
+				if = {
+					limit = { country_rank >= rank_value:major_power }
+					add = -50
+				}
+				# Having rivals makes disarmament unthinkable
+				if = {
+					limit = { any_rival_country = { always = yes } }
+					add = -20
+				}
+				# Bad relations with the one asking makes it worse
+				if = {
+					limit = { scope:source_country.relations:target_country < relations_threshold:neutral }
+					add = -50
+				}
+				# Very good relations with a powerful ally may slightly reduce resistance
+				if = {
+					limit = {
+						scope:source_country.relations:target_country >= relations_threshold:amicable
+						scope:source_country = { country_rank >= rank_value:great_power }
+					}
+					add = 25
 				}
 			}
 		}
@@ -1019,7 +1105,7 @@ nuclear_program_aid = {
 		inherent_accept_score = {
 			value = 0
 			if = {
-				limit = { scope:target_country = this } # Evaluator is the one offering aid (source)
+				limit = { NOT = { scope:target_country = this } } # Evaluator is the one offering aid (source)
 				add = -100
 				if = {
 					limit = { is_in_same_power_bloc = scope:target_country }

@@ -1384,3 +1384,16 @@ REPLACE_OR_CREATE:pmg_effluent_filtration = {
         pm_effluent_filtration
     }
 }
+
+# Glassworks Fume Ventilation - for glassworks
+# Max pollution: 25 (blow_molding + auto_bottle_blowers)
+# Basic (-5) gated behind any PM with >=5 pollution, so min combo = 5-5 = 0
+# Advanced (-10) gated behind any PM with >=10 pollution, so min combo = 10-10 = 0
+REPLACE_OR_CREATE:pmg_glassworks_fume_ventilation = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    production_methods = {
+        pm_no_glassworks_fume_ventilation
+        pm_glassworks_fume_extraction
+        pm_glassworks_closed_loop_recycling
+    }
+}

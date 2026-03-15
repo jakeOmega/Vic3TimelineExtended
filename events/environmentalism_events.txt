@@ -1,390 +1,1166 @@
-namespace = environmentalism_events
+﻿namespace = environmentalism_events
 
-# Event 1: First Signs of Climate Change (mild warming ≥ 0.5°C)
+# ============================================================================
+# THRESHOLD EVENTS (fire once globally when temperature crosses each level)
+# ============================================================================
+
+# Event 1: First Signs of Climate Change (mild warming >= 0.5 C)
 environmentalism_events.1 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = {
-        video = "unspecific_ruler_speaking_to_people"
-    }
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-    title = environmentalism_events.1.t
-    desc = environmentalism_events.1.d
-    flavor = environmentalism_events.1.f
+	title = environmentalism_events.1.t
+	desc = environmentalism_events.1.d
+	flavor = environmentalism_events.1.f
 
-    duration = 3
+	duration = 3
 
-    trigger = {
-        # triggered by global warming journal entry at 0.5°C
-    }
+	trigger = {
+		# triggered by global warming on_action at 0.5 C
+	}
 
-    immediate = {
-    }
+	immediate = {
+	}
 
-    option = {
-        name = environmentalism_events.1.a
-        default_option = yes
-        ai_chance = { base = 2 }
-    }
+	option = {
+		name = environmentalism_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = pollution_control }
+				add = -1
+			}
+		}
+		# Dismiss the findings
+		add_radicals = { value = very_small_radicals pop_type = academics }
+	}
 
-    option = {
-        name = environmentalism_events.1.b
-        ai_chance = { base = 1 }
-        add_modifier = { name = climate_adaptation_modifier }
-    }
+	option = {
+		name = environmentalism_events.1.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_technology_researched = pollution_control }
+				add = 3
+			}
+		}
+		# Begin studying the issue - boosts Ministry of Environment enactment
+		add_modifier = {
+			name = climate_awareness_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = very_small_radicals strata = upper }
+	}
 }
 
-# Event 2: Unprecedented Heatwaves (moderate warming ≥ 1.0°C)
+# Event 2: Unprecedented Heatwaves (moderate warming >= 1.0 C)
 environmentalism_events.2 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = {
-        video = "unspecific_fire"
-    }
+	event_image = {
+		video = "unspecific_fire"
+	}
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-    title = environmentalism_events.2.t
-    desc = environmentalism_events.2.d
-    flavor = environmentalism_events.2.f
+	title = environmentalism_events.2.t
+	desc = environmentalism_events.2.d
+	flavor = environmentalism_events.2.f
 
-    duration = 3
+	duration = 3
 
-    trigger = {
-        # triggered by global warming journal entry at 1.0°C
-    }
+	trigger = {
+		# triggered by global warming on_action at 1.0 C
+	}
 
-    immediate = {
-    }
+	immediate = {
+	}
 
-    option = {
-        name = environmentalism_events.2.a
-        default_option = yes
-        ai_chance = { base = 1 }
-        # Ignore the warnings
-    }
+	option = {
+		name = environmentalism_events.2.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { NOT = { has_technology_researched = pollution_control } }
+				add = 2
+			}
+		}
+		# Ignore the warnings - population suffers
+		add_radicals = { value = medium_radicals }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
 
-    option = {
-        name = environmentalism_events.2.b
-        ai_chance = { base = 2 }
-        # Invest in green technology
-        add_modifier = { name = carbon_tax_modifier }
-        add_loyalists = { value = small_loyalists }
-    }
+	option = {
+		name = environmentalism_events.2.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = environmental_movement }
+				add = 3
+			}
+		}
+		# Invest in green technology - stimulates renewables and Ministry of Environment
+		add_modifier = {
+			name = green_tech_stimulus_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = very_small_radicals strata = upper }
+	}
 
-    option = {
-        name = environmentalism_events.2.c
-        ai_chance = { base = 2 }
-        # Invest in adaptation infrastructure
-        add_modifier = { name = climate_adaptation_modifier }
-        add_radicals = { value = small_radicals }
-    }
+	option = {
+		name = environmentalism_events.2.c
+		ai_chance = {
+			base = 2
+		}
+		# Emergency climate spending - direct adaptation
+		add_modifier = {
+			name = emergency_climate_spending_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals strata = upper }
+	}
 }
 
-# Event 3: Catastrophic Weather Events (severe warming ≥ 2.0°C)
+# Event 3: Catastrophic Weather Events (severe warming >= 2.0 C)
 environmentalism_events.3 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = {
-        video = "unspecific_fire"
-    }
+	event_image = {
+		video = "unspecific_fire"
+	}
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-    title = environmentalism_events.3.t
-    desc = environmentalism_events.3.d
-    flavor = environmentalism_events.3.f
+	title = environmentalism_events.3.t
+	desc = environmentalism_events.3.d
+	flavor = environmentalism_events.3.f
 
-    duration = 3
+	duration = 3
 
-    trigger = {
-        # triggered by global warming journal entry at 2.0°C
-    }
+	trigger = {
+		# triggered by global warming on_action at 2.0 C
+	}
 
-    immediate = {
-    }
+	immediate = {
+	}
 
-    option = {
-        name = environmentalism_events.3.a
-        default_option = yes
-        ai_chance = {
-            base = 2
-            modifier = {
-                trigger = { has_modifier = climate_adaptation_modifier }
-                add = 3
-            }
-        }
-        # Emergency adaptation spending
-        if = {
-            limit = { NOT = { has_modifier = climate_adaptation_modifier } }
-            add_modifier = { name = climate_adaptation_modifier }
-        }
-        add_radicals = { value = medium_radicals }
-    }
+	option = {
+		name = environmentalism_events.3.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_technology_researched = environmental_movement }
+				add = 2
+			}
+		}
+		# Emergency adaptation and institution boost
+		add_modifier = {
+			name = emergency_climate_spending_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# Environmentalist IG leader gains ideology
+		ig:ig_intelligentsia ?= {
+			leader = {
+				set_ideology = ideology:ideology_environmentalists
+			}
+		}
+		add_radicals = { value = medium_radicals }
+	}
 
-    option = {
-        name = environmentalism_events.3.b
-        ai_chance = {
-            base = 1
-        }
-        # Do nothing, suffer consequences
-        add_radicals = { value = large_radicals }
-    }
+	option = {
+		name = environmentalism_events.3.b
+		ai_chance = {
+			base = 1
+		}
+		# Do nothing - severe consequences
+		add_radicals = { value = large_radicals }
+		add_modifier = {
+			name = crop_failure_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+	}
 }
 
-# Event 4: Climate Crisis (catastrophic warming ≥ 3.0°C)
+# Event 4: Climate Crisis (catastrophic warming >= 3.0 C)
 environmentalism_events.4 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = {
-        video = "unspecific_fire"
-    }
+	event_image = {
+		video = "unspecific_fire"
+	}
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-    title = environmentalism_events.4.t
-    desc = environmentalism_events.4.d
-    flavor = environmentalism_events.4.f
+	title = environmentalism_events.4.t
+	desc = environmentalism_events.4.d
+	flavor = environmentalism_events.4.f
 
-    duration = 3
+	duration = 3
 
-    trigger = {
-        # triggered by global warming journal entry at 3.0°C
-    }
+	trigger = {
+		# triggered by global warming on_action at 3.0 C
+	}
 
-    immediate = {
-    }
+	immediate = {
+	}
 
-    option = {
-        name = environmentalism_events.4.a
-        default_option = yes
-        ai_chance = { base = 1 }
-        # Emergency international response
-        if = {
-            limit = { NOT = { has_modifier = climate_adaptation_modifier } }
-            add_modifier = { name = climate_adaptation_modifier }
-        }
-        if = {
-            limit = { NOT = { has_modifier = carbon_tax_modifier } }
-            add_modifier = { name = carbon_tax_modifier }
-        }
-        add_radicals = { value = large_radicals }
-    }
+	option = {
+		name = environmentalism_events.4.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		# Emergency international response - massive institution push
+		add_modifier = {
+			name = climate_crisis_emergency_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# Convert both Intelligentsia and Trade Union leaders to environmentalists
+		ig:ig_intelligentsia ?= {
+			leader = {
+				set_ideology = ideology:ideology_environmentalists
+			}
+		}
+		ig:ig_trade_unions ?= {
+			leader = {
+				set_ideology = ideology:ideology_environmentalists
+			}
+		}
+		add_radicals = { value = large_radicals }
+	}
 }
 
-# Event 5: Crop Failure (random event, fires when severe or catastrophic warming is active)
+# ============================================================================
+# RECURRING RANDOM EVENTS (fire periodically based on conditions)
+# ============================================================================
+
+# Event 5: Widespread Crop Failures (fires when severe+ warming, has farms)
 environmentalism_events.5 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = {
-        video = "unspecific_fire"
-    }
+	event_image = {
+		video = "unspecific_fire"
+	}
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-    title = environmentalism_events.5.t
-    desc = environmentalism_events.5.d
-    flavor = environmentalism_events.5.f
+	title = environmentalism_events.5.t
+	desc = environmentalism_events.5.d
+	flavor = environmentalism_events.5.f
 
-    duration = 3
+	duration = 3
 
-    trigger = {
-        has_modifier = global_warming
-        temperature_anomaly_display >= 2.0
-        any_scope_state = {
-            is_incorporated = yes
-            any_scope_building = { is_building_type = building_wheat_farm }
-        }
-    }
+	cooldown = { days = normal_modifier_time }
 
-    immediate = {
-    }
+	trigger = {
+		NOR = {
+			has_modifier = crop_failure_relief_modifier
+			has_modifier = crop_failure_modifier
+		}
+		has_modifier = global_warming
+		temperature_anomaly_display >= 2.0
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = { is_building_type = building_wheat_farm }
+		}
+	}
 
-    option = {
-        name = environmentalism_events.5.a
-        default_option = yes
-        ai_chance = { base = 2 }
-        # Import food to compensate - spend money on emergency food purchases
-        add_radicals = { value = small_radicals }
-        add_modifier = { name = climate_adaptation_modifier months = 12 }
-    }
+	immediate = {
+	}
 
-    option = {
-        name = environmentalism_events.5.b
-        ai_chance = { base = 1 }
-        # Ration food and weather the crisis
-        add_radicals = { value = medium_radicals }
-    }
+	option = {
+		name = environmentalism_events.5.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { average_sol < 10 }
+				add = 3
+			}
+		}
+		# Import food and invest in relief - expensive but mitigates damage
+		add_modifier = {
+			name = crop_failure_relief_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals }
+	}
+
+	option = {
+		name = environmentalism_events.5.b
+		ai_chance = { base = 1 }
+		# Endure the crisis
+		add_modifier = {
+			name = crop_failure_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = medium_radicals strata = lower }
+		add_loyalists = { value = very_small_radicals strata = upper }
+	}
 }
 
-# Event 6: Climate Refugee Crisis (random event, fires at moderate or above)
+# Event 6: Climate Refugee Crisis (fires at moderate+ warming)
 environmentalism_events.6 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = {
-        video = "unspecific_ruler_speaking_to_people"
-    }
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-    title = environmentalism_events.6.t
-    desc = environmentalism_events.6.d
-    flavor = environmentalism_events.6.f
+	title = environmentalism_events.6.t
+	desc = environmentalism_events.6.d
+	flavor = environmentalism_events.6.f
 
-    duration = 3
+	duration = 3
 
-    trigger = {
-        has_modifier = global_warming
-        temperature_anomaly_display >= 1.0
-    }
+	cooldown = { days = normal_modifier_time }
 
-    immediate = {
-    }
+	trigger = {
+		NOR = {
+			has_modifier = climate_refugee_welcome_modifier
+			has_modifier = climate_refugee_rejection_modifier
+		}
+		has_modifier = global_warming
+		temperature_anomaly_display >= 1.0
+	}
 
-    option = {
-        name = environmentalism_events.6.a
-        default_option = yes
-        ai_chance = { base = 2 }
-        # Accept refugees
-        add_loyalists = { value = small_loyalists }
-    }
+	immediate = {
+	}
 
-    option = {
-        name = environmentalism_events.6.b
-        ai_chance = { base = 1 }
-        # Close borders to refugees
-        add_radicals = { value = small_radicals }
-        country_authority_add = 10
-    }
+	option = {
+		name = environmentalism_events.6.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					ig:ig_intelligentsia ?= { leader = { has_ideology = ideology:ideology_environmentalists } }
+				}
+				add = 2
+			}
+		}
+		# Accept refugees - migration boost, prestige, slight SoL hit
+		add_modifier = {
+			name = climate_refugee_welcome_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = environmentalism_events.6.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { average_sol < 8 }
+				add = 2
+			}
+		}
+		# Close borders - prestige hit but no migration pressure
+		add_modifier = {
+			name = climate_refugee_rejection_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
 }
 
-# Event 7: Industrial Pollution Scandal (random event, early game)
+# Event 7: Industrial Pollution Scandal (early game, pre-warming)
 environmentalism_events.7 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = {
-        video = "unspecific_factory"
-    }
+	event_image = {
+		video = "unspecific_factory"
+	}
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-    title = environmentalism_events.7.t
-    desc = environmentalism_events.7.d
-    flavor = environmentalism_events.7.f
+	title = environmentalism_events.7.t
+	desc = environmentalism_events.7.d
+	flavor = environmentalism_events.7.f
 
-    duration = 3
+	duration = 3
 
-    trigger = {
-        has_global_variable = greenhouse_gas_emissions
-        NOT = { has_modifier = global_warming }
-        any_scope_state = {
-            is_incorporated = yes
-            any_scope_building = {
-                OR = {
-                    is_building_type = building_coal_mine
-                    is_building_type = building_oil_rig
-                }
-                level >= 3
-            }
-        }
-    }
+	cooldown = { days = normal_modifier_time }
 
-    immediate = {
-    }
+	trigger = {
+		NOT = { has_modifier = pollution_scandal_review_modifier }
+		has_global_variable = greenhouse_gas_emissions
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_building = {
+				OR = {
+					is_building_type = building_coal_mine
+					is_building_type = building_oil_rig
+				}
+				level >= 3
+			}
+		}
+	}
 
-    option = {
-        name = environmentalism_events.7.a
-        default_option = yes
-        ai_chance = { base = 2 }
-        # Ignore the protests
-        add_radicals = { value = small_radicals }
-    }
+	immediate = {
+	}
 
-    option = {
-        name = environmentalism_events.7.b
-        ai_chance = {
-            base = 1
-            modifier = {
-                trigger = { temperature_anomaly_display >= 0.3 }
-                add = 2
-            }
-        }
-        # Commission an environmental impact review
-        add_modifier = { name = climate_adaptation_modifier months = 24 }
-    }
+	option = {
+		name = environmentalism_events.7.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { NOT = { has_technology_researched = pollution_control } }
+				add = 2
+			}
+		}
+		# Ignore the protests - industrialists happy, radicals among workers
+		add_radicals = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = environmentalism_events.7.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_technology_researched = pollution_control }
+				add = 3
+			}
+			modifier = {
+				trigger = { temperature_anomaly_display >= 0.3 }
+				add = 2
+			}
+		}
+		# Commission environmental review - reduces pollution, slows mining
+		add_modifier = {
+			name = pollution_scandal_review_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
 }
 
-# Event 8: Environmentalist Movement Rises (random event, fires when mild+ warming)
+# Event 8: Rise of the Environmentalist Movement (fires at mild+ warming)
 environmentalism_events.8 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = {
-        video = "unspecific_ruler_speaking_to_people"
-    }
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-    icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-    title = environmentalism_events.8.t
-    desc = environmentalism_events.8.d
-    flavor = environmentalism_events.8.f
+	title = environmentalism_events.8.t
+	desc = environmentalism_events.8.d
+	flavor = environmentalism_events.8.f
 
-    duration = 3
+	duration = 3
 
-    trigger = {
-        has_modifier = global_warming
-        temperature_anomaly_display >= 0.5
-        NOT = { has_modifier = carbon_tax_modifier }
-        NOT = { has_modifier = renewable_investment_modifier }
-    }
+	cooldown = { days = long_modifier_time }
 
-    immediate = {
-    }
+	trigger = {
+		NOR = {
+			has_modifier = climate_political_turmoil_modifier
+			has_modifier = environmentalist_momentum_modifier
+		}
+		has_modifier = global_warming
+		temperature_anomaly_display >= 0.5
+		has_technology_researched = pollution_control
+	}
 
-    option = {
-        name = environmentalism_events.8.a
-        default_option = yes
-        ai_chance = { base = 1 }
-        # Dismiss the environmentalists
-        add_radicals = { value = small_radicals }
-    }
+	immediate = {
+	}
 
-    option = {
-        name = environmentalism_events.8.b
-        ai_chance = {
-            base = 2
-            modifier = {
-                trigger = { temperature_anomaly_display >= 1.0 }
-                add = 3
-            }
-        }
-        # Embrace green policies
-        add_modifier = { name = renewable_investment_modifier months = 36 }
-        add_loyalists = { value = small_loyalists }
-    }
+	option = {
+		name = environmentalism_events.8.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_industrialists ?= { is_in_government = yes }
+				}
+				add = 2
+			}
+		}
+		# Dismiss the environmentalists - radicalizes academics and movement
+		add_radicals = { value = medium_radicals pop_type = academics }
+		add_modifier = {
+			name = climate_political_turmoil_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	option = {
+		name = environmentalism_events.8.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = environmental_movement }
+				add = 3
+			}
+			modifier = {
+				trigger = { temperature_anomaly_display >= 1.0 }
+				add = 3
+			}
+		}
+		# Embrace green policies - environmentalist momentum + IG leader conversion
+		add_modifier = {
+			name = environmentalist_momentum_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		ig:ig_intelligentsia ?= {
+			leader = {
+				set_ideology = ideology:ideology_environmentalists
+			}
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+}
+
+# ============================================================================
+# NEW RECURRING EVENTS
+# ============================================================================
+
+# Event 9: Coastal Flooding (fires at moderate+ warming, has ports)
+environmentalism_events.9 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_fire"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.9.t
+	desc = environmentalism_events.9.d
+	flavor = environmentalism_events.9.f
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = coastal_flooding_modifier
+			has_modifier = coastal_relocation_modifier
+		}
+		has_modifier = global_warming
+		temperature_anomaly_display >= 1.0
+		any_scope_state = {
+			is_incorporated = yes
+			is_coastal = yes
+			has_building = building_port
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.9.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { temperature_anomaly_display >= 2.0 }
+				add = 2
+			}
+		}
+		# Build sea walls and flood barriers
+		add_modifier = {
+			name = coastal_flooding_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals }
+	}
+
+	option = {
+		name = environmentalism_events.9.b
+		ai_chance = { base = 1 }
+		# Relocate coastal populations inland
+		add_modifier = {
+			name = coastal_relocation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals }
+	}
+}
+
+# Event 10: Water Shortage Crisis (fires at severe+ warming)
+environmentalism_events.10 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_fire"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.10.t
+	desc = environmentalism_events.10.d
+	flavor = environmentalism_events.10.f
+
+	duration = 3
+
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = water_crisis_rationing_modifier
+			has_modifier = water_crisis_infrastructure_modifier
+		}
+		has_modifier = global_warming
+		temperature_anomaly_display >= 2.0
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.10.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+		# Strict water rationing
+		add_modifier = {
+			name = water_crisis_rationing_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = environmentalism_events.10.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_rank >= rank_value:major_power }
+				add = 2
+			}
+		}
+		# Invest in water infrastructure
+		add_modifier = {
+			name = water_crisis_infrastructure_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+}
+
+# Event 11: Green Technology Boom (fires if has environmental tech + renewables)
+environmentalism_events.11 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_factory"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.11.t
+	desc = environmentalism_events.11.d
+	flavor = environmentalism_events.11.f
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = green_tech_boom_modifier
+			has_modifier = green_tech_market_modifier
+		}
+		has_modifier = global_warming
+		has_technology_researched = environmental_movement
+		any_scope_state = {
+			has_building = building_renewable_energy_plant
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.11.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		# Capitalize on the boom - prestige, tech, and renewables boost
+		add_modifier = {
+			name = green_tech_boom_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals strata = middle }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = environmentalism_events.11.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_industrialists ?= { is_in_government = yes }
+				}
+				add = 2
+			}
+		}
+		# Let the market decide - no intervention
+		add_modifier = {
+			name = green_tech_market_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+}
+
+# Event 12: Fossil Fuel Lobby Pressure (fires when has emission policies)
+environmentalism_events.12 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.12.t
+	desc = environmentalism_events.12.d
+	flavor = environmentalism_events.12.f
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		NOT = { has_modifier = fossil_lobby_concessions_modifier }
+		OR = {
+			has_modifier = carbon_tax_modifier
+			has_modifier = emission_standards_modifier
+			has_modifier = fossil_fuel_divestment_modifier
+		}
+		any_scope_state = {
+			any_scope_building = {
+				OR = {
+					is_building_type = building_coal_mine
+					is_building_type = building_oil_rig
+				}
+				level >= 5
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.12.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { temperature_anomaly_display >= 1.5 }
+				add = 3
+			}
+		}
+		# Stand firm - keep policies, anger industrialists
+		add_radicals = { value = small_radicals strata = upper }
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = environmentalism_events.12.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_industrialists ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		# Grant concessions to fossil fuel industry
+		add_modifier = {
+			name = fossil_lobby_concessions_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Event 13: International Climate Summit (fires for great/major powers at moderate+ warming)
+environmentalism_events.13 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.13.t
+	desc = environmentalism_events.13.d
+	flavor = environmentalism_events.13.f
+
+	duration = 3
+
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = climate_summit_leader_modifier
+			has_modifier = climate_summit_pledge_modifier
+		}
+		has_modifier = global_warming
+		temperature_anomaly_display >= 1.0
+		country_rank >= rank_value:major_power
+		has_technology_researched = pollution_control
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.13.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 3
+			}
+		}
+		# Lead the summit - massive prestige, emission pledges
+		add_modifier = {
+			name = climate_summit_leader_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = environmentalism_events.13.b
+		ai_chance = {
+			base = 2
+		}
+		# Sign the accord but let others lead
+		add_modifier = {
+			name = climate_summit_pledge_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	option = {
+		name = environmentalism_events.13.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { NOT = { has_technology_researched = environmental_movement } }
+				add = 2
+			}
+		}
+		# Reject the accord
+		add_radicals = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+}
+
+# Event 14: Climate-Driven Disease Outbreak (fires at severe+ warming)
+environmentalism_events.14 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_fire"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.14.t
+	desc = environmentalism_events.14.d
+	flavor = environmentalism_events.14.f
+
+	duration = 3
+
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = tropical_disease_spread_modifier
+			has_modifier = tropical_disease_research_modifier
+		}
+		has_modifier = global_warming
+		temperature_anomaly_display >= 2.0
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.14.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+		# Quarantine and endure — harsh but brief
+		add_modifier = {
+			name = tropical_disease_spread_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = environmentalism_events.14.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_rank >= rank_value:major_power }
+				add = 2
+			}
+		}
+		# Fund medical research
+		add_modifier = {
+			name = tropical_disease_research_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = very_small_radicals strata = upper }
+	}
+}
+
+# Event 15: Environmental vs Industrial Political Clash
+environmentalism_events.15 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.15.t
+	desc = environmentalism_events.15.d
+	flavor = environmentalism_events.15.f
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		NOT = { has_modifier = climate_political_turmoil_modifier }
+		has_modifier = global_warming
+		temperature_anomaly_display >= 3.0
+		has_technology_researched = clean_energy_technologies
+		ig:ig_industrialists ?= { is_in_government = yes }
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.15.a
+		default_option = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { temperature_anomaly_display >= 3.5 }
+				add = 3
+			}
+		}
+		# Side with environmentalists — even the industrialists must concede at 3 C
+		# Comes with severe economic and political fallout
+		ig:ig_industrialists ?= {
+			leader = {
+				set_ideology = ideology:ideology_environmentalists
+			}
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = large_radicals strata = upper }
+		add_modifier = {
+			name = climate_political_turmoil_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	option = {
+		name = environmentalism_events.15.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					ig:ig_industrialists ?= { ig_clout >= 0.20 }
+				}
+				add = 3
+			}
+		}
+		# Side with industrialists
+		add_modifier = {
+			name = climate_political_turmoil_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = environmentalism_events.15.c
+		ai_chance = {
+			base = 1
+		}
+		# Try to find a compromise
+		add_radicals = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 16: Melting Ice Caps (fires at high warming, coastal nations)
+environmentalism_events.16 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_fire"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.16.t
+	desc = environmentalism_events.16.d
+	flavor = environmentalism_events.16.f
+
+	duration = 3
+
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = arctic_melting_modifier
+			has_modifier = arctic_adaptation_modifier
+		}
+		has_modifier = global_warming
+		temperature_anomaly_display >= 2.5
+		any_scope_state = {
+			is_coastal = yes
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.16.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		# Emergency coastal defense
+		add_modifier = {
+			name = arctic_melting_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = medium_radicals }
+	}
+
+	option = {
+		name = environmentalism_events.16.b
+		ai_chance = { base = 1 }
+		# Accept the inevitable — redirect resources to adaptation research
+		add_modifier = {
+			name = arctic_adaptation_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = large_radicals }
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
 }

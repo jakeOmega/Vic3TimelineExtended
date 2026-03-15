@@ -1,4 +1,4 @@
-# Nuclear weapons
+﻿# Nuclear weapons
 increase_funding_nuclear_program = {
 	name = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING"
 	desc = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
@@ -26,12 +26,7 @@ increase_funding_nuclear_program = {
 	possible = {
 		country_innovation > nuclear_weapon_program_funding_step
         NOT = {
-            any_scope_treaty = {
-                any_scope_article = {
-                    has_type = nuclear_disarmament
-                    source_country = root
-                }
-            }
+            modifier:nuclear_disarmament = yes
         }
 	}
 
@@ -6422,6 +6417,76 @@ gw_remove_fossil_fuel_divestment_button = {
         custom_tooltip = {
             text = "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC"
             remove_modifier = fossil_fuel_divestment_modifier
+        }
+    }
+}
+
+gw_green_building_codes_button = {
+    name = "GW_GREEN_BUILDING_CODES"
+    desc = "GW_GREEN_BUILDING_CODES_DESC"
+
+    visible = {
+        NOT = { has_modifier = green_building_codes_modifier }
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display >= 0.5 }
+            add = 15
+        }
+        if = {
+            limit = { temperature_anomaly_display >= 1.5 }
+            add = 25
+        }
+        if = {
+            limit = { has_law = law_type:law_laissez_faire }
+            add = -30
+        }
+    }
+
+    possible = {
+        NOT = { has_modifier = green_building_codes_modifier }
+        temperature_anomaly_display >= 0.5
+        adjusted_produced_authority > 100
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_GREEN_BUILDING_CODES_DESC"
+            add_modifier = { name = green_building_codes_modifier }
+        }
+    }
+}
+
+gw_remove_green_building_codes_button = {
+    name = "GW_REMOVE_GREEN_BUILDING_CODES"
+    desc = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
+
+    visible = {
+        has_modifier = green_building_codes_modifier
+    }
+
+    ai_chance = {
+        value = 0
+        if = {
+            limit = { temperature_anomaly_display < 0.3 }
+            add = 50
+        }
+        if = {
+            limit = { has_law = law_type:law_laissez_faire }
+            add = 20
+        }
+    }
+
+    possible = {
+        has_modifier = green_building_codes_modifier
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
+            remove_modifier = green_building_codes_modifier
         }
     }
 }

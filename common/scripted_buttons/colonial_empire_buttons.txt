@@ -1,0 +1,347 @@
+﻿# ============================================================================
+# COLONIAL EMPIRE SCRIPTED BUTTONS
+# Used by je_colonial_empire journal entry
+# ============================================================================
+
+# ------ Invest in Colonial Development ------
+ce_invest_in_development = {
+	name = "CE_INVEST_IN_DEVELOPMENT"
+	desc = "CE_INVEST_IN_DEVELOPMENT_DESC"
+
+	visible = {
+		NOT = { has_modifier = colonial_development_investment_modifier }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { colonial_state_count >= 1 }
+			add = 30
+		}
+		if = {
+			limit = { colonial_low_acceptance_count >= 2 }
+			add = 20
+		}
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			add = 10
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = CE_NEEDS_COLONIAL_STATES
+			any_scope_state = {
+				is_overseas_colonial_state = yes
+			}
+		}
+		NOT = { has_modifier = colonial_development_investment_modifier }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CE_INVEST_IN_DEVELOPMENT_DESC"
+			add_modifier = { name = colonial_development_investment_modifier }
+		}
+	}
+}
+
+ce_remove_invest_in_development = {
+	name = "CE_REMOVE_INVEST_IN_DEVELOPMENT"
+	desc = "CE_REMOVE_INVEST_IN_DEVELOPMENT_DESC"
+
+	visible = {
+		has_modifier = colonial_development_investment_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { colonial_state_count = 0 }
+			add = 50
+		}
+	}
+
+	possible = {
+		has_modifier = colonial_development_investment_modifier
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CE_REMOVE_INVEST_IN_DEVELOPMENT_DESC"
+			remove_modifier = colonial_development_investment_modifier
+		}
+	}
+}
+
+# ------ Military Garrison ------
+ce_military_garrison = {
+	name = "CE_MILITARY_GARRISON"
+	desc = "CE_MILITARY_GARRISON_DESC"
+
+	visible = {
+		NOT = { has_modifier = colonial_military_garrison_modifier }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { colonial_low_acceptance_count >= 2 }
+			add = 40
+		}
+		if = {
+			limit = { colonial_low_acceptance_count >= 4 }
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = CE_NEEDS_COLONIAL_STATES
+			any_scope_state = {
+				is_overseas_colonial_state = yes
+			}
+		}
+		NOT = { has_modifier = colonial_military_garrison_modifier }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CE_MILITARY_GARRISON_DESC"
+			add_modifier = { name = colonial_military_garrison_modifier }
+		}
+	}
+}
+
+ce_remove_military_garrison = {
+	name = "CE_REMOVE_MILITARY_GARRISON"
+	desc = "CE_REMOVE_MILITARY_GARRISON_DESC"
+
+	visible = {
+		has_modifier = colonial_military_garrison_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { colonial_low_acceptance_count = 0 }
+			add = 30
+		}
+	}
+
+	possible = {
+		has_modifier = colonial_military_garrison_modifier
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CE_REMOVE_MILITARY_GARRISON_DESC"
+			remove_modifier = colonial_military_garrison_modifier
+		}
+	}
+}
+
+# ------ Cultural Assimilation Program ------
+ce_cultural_assimilation = {
+	name = "CE_CULTURAL_ASSIMILATION"
+	desc = "CE_CULTURAL_ASSIMILATION_DESC"
+
+	visible = {
+		NOT = { has_modifier = colonial_cultural_assimilation_modifier }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { colonial_state_count >= 1 }
+			add = 20
+		}
+		if = {
+			limit = { colonial_high_acceptance_count >= 1 }
+			add = 15
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = CE_NEEDS_COLONIAL_STATES
+			any_scope_state = {
+				is_overseas_colonial_state = yes
+			}
+		}
+		has_technology_researched = decolonization
+		NOT = { has_modifier = colonial_cultural_assimilation_modifier }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CE_CULTURAL_ASSIMILATION_DESC"
+			add_modifier = { name = colonial_cultural_assimilation_modifier }
+		}
+	}
+}
+
+ce_remove_cultural_assimilation = {
+	name = "CE_REMOVE_CULTURAL_ASSIMILATION"
+	desc = "CE_REMOVE_CULTURAL_ASSIMILATION_DESC"
+
+	visible = {
+		has_modifier = colonial_cultural_assimilation_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { colonial_state_count = 0 }
+			add = 30
+		}
+	}
+
+	possible = {
+		has_modifier = colonial_cultural_assimilation_modifier
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CE_REMOVE_CULTURAL_ASSIMILATION_DESC"
+			remove_modifier = colonial_cultural_assimilation_modifier
+		}
+	}
+}
+
+# ------ Release Colonial Territory (one region at a time) ------
+ce_release_colonial_territory = {
+	name = "CE_RELEASE_COLONIAL_TERRITORY"
+	desc = "CE_RELEASE_COLONIAL_TERRITORY_DESC"
+
+	visible = {
+		any_scope_state = {
+			is_overseas_colonial_state = yes
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { colonial_gp_condemners_count >= 3 }
+			add = 15
+		}
+		if = {
+			limit = { colonial_low_acceptance_count >= 3 }
+			add = 20
+		}
+		# Less likely for great powers
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			add = -20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = CE_NEEDS_COLONIAL_STATES
+			any_scope_state = {
+				is_overseas_colonial_state = yes
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CE_RELEASE_COLONIAL_TERRITORY_DESC"
+			# Pick one colonial state and form a country from it
+			random_scope_state = {
+				limit = {
+					is_overseas_colonial_state = yes
+				}
+				set_variable = decolonization_marker
+				form_decolonized_country = yes
+			}
+		}
+		add_modifier = {
+			name = peaceful_decolonization_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		# Positive stability effect via timed modifier
+		add_modifier = {
+			name = colonial_stability_positive_event
+			months = 8
+		}
+	}
+}
+
+# ------ Planned Full Decolonization ------
+ce_planned_decolonization = {
+	name = "CE_PLANNED_DECOLONIZATION"
+	desc = "CE_PLANNED_DECOLONIZATION_DESC"
+
+	visible = {
+		any_scope_state = {
+			is_overseas_colonial_state = yes
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		# AI only does this under extreme pressure
+		if = {
+			limit = { colonial_gp_condemners_count >= 4 }
+			add = 20
+		}
+		if = {
+			limit = { colonial_low_acceptance_count >= 5 }
+			add = 20
+		}
+		# Never if things are going well
+		if = {
+			limit = { colonial_high_acceptance_count >= 2 }
+			add = -100
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = CE_NEEDS_COLONIAL_STATES
+			any_scope_state = {
+				is_overseas_colonial_state = yes
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CE_PLANNED_DECOLONIZATION_DESC"
+			# Mark all colonial states and form countries from them
+			every_scope_state = {
+				limit = {
+					NOT = { is_homeland_of_country_cultures = ROOT }
+					is_overseas_from_capital = yes
+				}
+				set_variable = decolonization_marker
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			# Clean up remaining markers
+			every_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				remove_variable = decolonization_marker
+			}
+		}
+		add_modifier = {
+			name = peaceful_decolonization_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}

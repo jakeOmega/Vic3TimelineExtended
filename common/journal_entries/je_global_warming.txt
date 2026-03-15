@@ -1,0 +1,105 @@
+﻿je_global_warming = {
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	group = je_group_internal_affairs
+
+	is_shown_when_inactive = {
+		always = yes
+	}
+
+	possible = {
+		temperature_anomaly_display > 0.1
+	}
+
+	should_be_involved = {
+		always = yes
+	}
+
+	should_show_when_not_involved = {
+		always = yes
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_global_warming_status_catastrophic
+				trigger = { temperature_anomaly_display >= 3.0 }
+			}
+			triggered_desc = {
+				desc = je_global_warming_status_severe
+				trigger = { temperature_anomaly_display >= 2.0 }
+			}
+			triggered_desc = {
+				desc = je_global_warming_status_significant
+				trigger = { temperature_anomaly_display >= 1.0 }
+			}
+			triggered_desc = {
+				desc = je_global_warming_status_moderate
+				trigger = { temperature_anomaly_display >= 0.5 }
+			}
+			triggered_desc = {
+				desc = je_global_warming_status_slight
+				trigger = { temperature_anomaly_display >= 0.1 }
+			}
+			triggered_desc = {
+				desc = je_global_warming_status_negligible
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	# Progress bar: current temperature vs the 4 deg C critical threshold
+	current_value = {
+		value = temperature_anomaly_display
+	}
+
+	goal_add_value = {
+		value = 4
+	}
+
+	progressbar = yes
+
+	scripted_button = gw_carbon_tax_button
+	scripted_button = gw_remove_carbon_tax_button
+	scripted_button = gw_renewable_investment_button
+	scripted_button = gw_remove_renewable_investment_button
+	scripted_button = gw_climate_adaptation_button
+	scripted_button = gw_remove_climate_adaptation_button
+	scripted_button = gw_emission_standards_button
+	scripted_button = gw_remove_emission_standards_button
+	scripted_button = gw_reforestation_button
+	scripted_button = gw_remove_reforestation_button
+	scripted_button = gw_public_transit_button
+	scripted_button = gw_remove_public_transit_button
+	scripted_button = gw_fossil_fuel_divestment_button
+	scripted_button = gw_remove_fossil_fuel_divestment_button
+	scripted_button = gw_green_building_codes_button
+	scripted_button = gw_remove_green_building_codes_button
+
+	immediate = {
+	}
+
+	complete = {
+		always = no
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			# ---- Update warming modifier: temperature anomaly used directly as multiplier ----
+			if = {
+				limit = { temperature_anomaly_display >= 0.01 }
+				remove_modifier = global_warming
+				add_modifier = { name = global_warming multiplier = temperature_anomaly_display }
+			}
+			else_if = {
+				limit = { has_modifier = global_warming }
+				remove_modifier = global_warming
+			}
+		}
+	}
+
+	weight = 1000
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = no
+}

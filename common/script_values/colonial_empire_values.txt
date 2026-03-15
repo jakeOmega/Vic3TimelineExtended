@@ -1,0 +1,88 @@
+﻿# ============================================================================
+# COLONIAL EMPIRE SCRIPT VALUES
+# Used by colonial_stability_bar monthly_progress and decolonization events
+# ============================================================================
+
+# Count of overseas colonial states (non-homeland, overseas, 100k+ pop, has unintegrated pops)
+colonial_state_count = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			is_overseas_colonial_state = yes
+		}
+		add = 1
+	}
+}
+
+# Count of overseas colonial states with very low acceptance pops (< 20)
+colonial_low_acceptance_count = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			is_overseas_colonial_state = yes
+			any_scope_pop = {
+				pop_acceptance < 20
+			}
+		}
+		add = 1
+	}
+}
+
+# Count of overseas colonial states where ALL pops have high acceptance (>= 60)
+colonial_high_acceptance_count = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			NOT = { is_homeland_of_country_cultures = owner }
+			state_population >= 100000
+			is_overseas_from_capital = yes
+			NOT = {
+				any_scope_pop = {
+					pop_acceptance < acceptance_status_4
+				}
+			}
+		}
+		add = 1
+	}
+}
+
+# Count of great powers with anti-colonial stance (set via event 14)
+colonial_gp_condemners_count = {
+	value = 0
+	every_country = {
+		limit = {
+			NOT = { this = ROOT }
+			country_rank >= rank_value:great_power
+			has_variable = gp_anti_colonial_stance
+		}
+		add = 1
+	}
+}
+
+# Count of great powers with pro-colonial stance (set via event 14)
+colonial_gp_supporters_count = {
+	value = 0
+	every_country = {
+		limit = {
+			NOT = { this = ROOT }
+			country_rank >= rank_value:great_power
+			has_variable = gp_pro_colonial_stance
+		}
+		add = 1
+	}
+}
+
+# Bureaucracy cost of colonial maintenance — scaled by number of colonial states
+colonial_maintenance_bureaucracy_cost = {
+	value = colonial_state_count
+	multiply = -0.01
+	min = -0.25
+}
+
+# Colonial development investment cost — scales with colonial holdings
+colonial_development_cost = {
+	value = colonial_state_count
+	multiply = 50
+	add = 100
+	min = 100
+}

@@ -1,0 +1,1222 @@
+﻿namespace = movement_events_te
+
+# ============================================================================
+# CIVIL RIGHTS MOVEMENT EVENTS (1-4)
+# ============================================================================
+
+# Event 1: Civil Rights March
+# A mass march by discriminated communities demanding equal rights.
+movement_events_te.1 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = movement_events_te.1.t
+	desc = movement_events_te.1.d
+	flavor = movement_events_te.1.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_civil_rights
+		}
+		has_technology_researched = civil_rights_movement
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_pop = {
+				pop_acceptance < acceptance_status_4
+			}
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_civil_rights
+			}
+		}
+	}
+
+	immediate = {
+		random_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			save_scope_as = civil_rights_movement
+		}
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				any_scope_pop = {
+					pop_acceptance < acceptance_status_4
+				}
+			}
+			save_scope_as = march_state
+		}
+	}
+
+	option = {
+		name = movement_events_te.1.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 2
+			}
+		}
+		# Let them march — democratic legitimacy, moderate outcome
+		add_modifier = {
+			name = civil_rights_march_momentum_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_radicals = { value = very_small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.1.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_minority_rights_violent_hostility
+						has_law = law_type:law_minority_rights_ghettoization
+					}
+				}
+				add = 2
+			}
+		}
+		# Disperse the crowds — order maintained, popular anger
+		add_modifier = {
+			name = civil_rights_suppression_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = medium_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = middle }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.1.c
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 3
+			}
+		}
+		# Government endorses the march — radical political shift
+		add_modifier = {
+			name = civil_rights_government_endorsement_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig:ig_intelligentsia ?= {
+			leader = {
+				set_ideology = ideology:ideology_multicultural
+			}
+		}
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = medium_radicals strata = upper }
+	}
+}
+
+# Event 2: Segregation Incident
+# A discriminated community member is denied service at a public establishment.
+movement_events_te.2 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = movement_events_te.2.t
+	desc = movement_events_te.2.d
+	flavor = movement_events_te.2.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_civil_rights
+		}
+		OR = {
+			has_law = law_type:law_minority_rights_violent_hostility
+			has_law = law_type:law_minority_rights_ghettoization
+			has_law = law_type:law_minority_rights_cultural_assimilation
+			has_law = law_type:law_minority_rights_discrimination
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_civil_rights
+			}
+		}
+	}
+
+	immediate = {
+		random_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			save_scope_as = civil_rights_movement
+		}
+	}
+
+	option = {
+		name = movement_events_te.2.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					ig:ig_landowners ?= { is_in_government = yes }
+				}
+				add = 2
+			}
+		}
+		# Enforce existing law — stability but simmering anger
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = movement_events_te.2.b
+		ai_chance = {
+			base = 1
+		}
+		# Make an exception — bureaucratic cost, minor acceptance gain
+		add_modifier = {
+			name = segregation_exception_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = very_small_radicals strata = upper }
+		add_loyalists = { value = very_small_radicals strata = lower }
+	}
+
+	option = {
+		name = movement_events_te.2.c
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 3
+			}
+		}
+		# Push for systemic reform — powerful but politically costly
+		add_modifier = {
+			name = minority_rights_reform_push_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+}
+
+# Event 3: Cultural Renaissance
+# Discriminated communities spark a cultural renaissance of art, literature, and music.
+movement_events_te.3 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = movement_events_te.3.t
+	desc = movement_events_te.3.d
+	flavor = movement_events_te.3.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_civil_rights
+		}
+		literacy_rate >= 0.4
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_civil_rights
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = movement_events_te.3.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_rank >= rank_value:major_power }
+				add = 2
+			}
+		}
+		# Fund a cultural program — costly but builds acceptance
+		add_modifier = {
+			name = cultural_renaissance_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = -100000
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = very_small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.3.b
+		ai_chance = {
+			base = 2
+		}
+		# Let it flourish on its own — no cost, small effect
+		add_loyalists = { value = very_small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = movement_events_te.3.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_landowners ?= { is_in_government = yes }
+				}
+				add = 2
+			}
+		}
+		# Channel it into national unity propaganda — cynical but effective
+		add_modifier = {
+			name = cultural_cooptation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+}
+
+# Event 4: International Pressure on Human Rights
+# Foreign nations criticize our treatment of minorities, demanding reform.
+movement_events_te.4 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_signed_contract"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = movement_events_te.4.t
+	desc = movement_events_te.4.d
+	flavor = movement_events_te.4.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_civil_rights
+		}
+		NOT = { has_law = law_type:law_multicultural }
+		any_country = {
+			NOT = { this = root }
+			country_rank >= rank_value:great_power
+			has_technology_researched = civil_rights_movement
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_civil_rights
+			}
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				country_rank >= rank_value:great_power
+				has_technology_researched = civil_rights_movement
+			}
+			save_scope_as = criticizing_country
+		}
+	}
+
+	option = {
+		name = movement_events_te.4.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 2
+			}
+		}
+		# Reject foreign interference — sovereignty preserved, reputation damaged
+		change_relations = {
+			who = scope:criticizing_country
+			value = -30
+		}
+		add_radicals = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.4.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 3
+			}
+		}
+		# Promise reforms — diplomatic goodwill, domestic nationalist backlash
+		add_modifier = {
+			name = human_rights_reform_pledge_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			who = scope:criticizing_country
+			value = 20
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.4.c
+		ai_chance = {
+			base = 1
+		}
+		# Deflect with counter-accusations — risky diplomacy
+		change_relations = {
+			who = scope:criticizing_country
+			value = -50
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+}
+
+# ============================================================================
+# ANTI-WAR MOVEMENT EVENTS (5-8)
+# ============================================================================
+
+# Event 5: Draft Resistance
+# Citizens refuse conscription as anti-war sentiment grows.
+movement_events_te.5 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_military"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = movement_events_te.5.t
+	desc = movement_events_te.5.d
+	flavor = movement_events_te.5.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_anti_war
+		}
+		is_at_war = yes
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_anti_war
+			}
+		}
+	}
+
+	immediate = {
+		random_political_movement = {
+			limit = { is_political_movement_type = movement_anti_war }
+			save_scope_as = anti_war_movement
+		}
+	}
+
+	option = {
+		name = movement_events_te.5.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					ig:ig_armed_forces ?= { is_in_government = yes }
+				}
+				add = 2
+			}
+		}
+		# Hunt down the deserters — military strength at social cost
+		add_modifier = {
+			name = draft_enforcement_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = officers }
+	}
+
+	option = {
+		name = movement_events_te.5.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 2
+			}
+		}
+		# Allow alternative service — weaker military, social peace
+		add_modifier = {
+			name = alternative_service_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals pop_type = officers }
+	}
+
+	option = {
+		name = movement_events_te.5.c
+		ai_chance = {
+			base = 1
+		}
+		# Ignore the problem — cheap option, both sides unhappy
+		add_radicals = { value = small_radicals strata = lower }
+		add_radicals = { value = very_small_radicals pop_type = officers }
+	}
+}
+
+# Event 6: Veterans Speak Against the War
+# Decorated veterans publicly denounce the conduct of the war.
+movement_events_te.6 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = movement_events_te.6.t
+	desc = movement_events_te.6.d
+	flavor = movement_events_te.6.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_anti_war
+		}
+		has_technology_researched = anti_war_movement
+		OR = {
+			is_at_war = yes
+			any_scope_war = { always = yes }
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_anti_war
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = movement_events_te.6.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_armed_forces ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		# Discredit these traitors — military unity, popular trust damaged
+		add_loyalists = { value = small_radicals pop_type = officers }
+		add_radicals = { value = medium_radicals strata = lower }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = movement_events_te.6.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 2
+			}
+		}
+		# They have earned the right to speak — democratic legitimacy
+		add_modifier = {
+			name = veterans_peace_testimony_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals pop_type = officers }
+	}
+
+	option = {
+		name = movement_events_te.6.c
+		ai_chance = {
+			base = 2
+		}
+		# Invite them to advise on military policy — pragmatic compromise
+		add_modifier = {
+			name = veteran_advisory_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = very_small_radicals pop_type = officers }
+		add_loyalists = { value = very_small_radicals pop_type = academics }
+	}
+}
+
+# Event 7: Peace Rally Fills the Capital
+# Hundreds of thousands gather in the capital demanding an end to military adventurism.
+movement_events_te.7 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = movement_events_te.7.t
+	desc = movement_events_te.7.d
+	flavor = movement_events_te.7.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_anti_war
+		}
+		country_population >= 1000000
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_anti_war
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = movement_events_te.7.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_right_of_assembly
+						has_law = law_type:law_protected_speech
+					}
+				}
+				add = 2
+			}
+		}
+		# Allow the rally — democratic norms upheld
+		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals pop_type = officers }
+	}
+
+	option = {
+		name = movement_events_te.7.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_armed_forces ?= { is_in_government = yes }
+				}
+				add = 2
+			}
+		}
+		# Suppress the rally — order maintained at social cost
+		add_modifier = {
+			name = peace_rally_suppressed_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = medium_radicals strata = lower }
+		add_radicals = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = officers }
+	}
+
+	option = {
+		name = movement_events_te.7.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { country_rank >= rank_value:major_power }
+				add = 2
+			}
+		}
+		# Use the momentum for diplomatic leverage — clever statecraft
+		add_modifier = {
+			name = peace_rally_diplomatic_leverage_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = very_small_radicals strata = lower }
+	}
+}
+
+# Event 8: War Profiteering Exposed
+# Anti-war activists expose industrialists making fortunes from military contracts.
+movement_events_te.8 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_factory"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = movement_events_te.8.t
+	desc = movement_events_te.8.d
+	flavor = movement_events_te.8.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_anti_war
+		}
+		any_scope_state = {
+			any_scope_building = {
+				OR = {
+					is_building_group = bg:bg_military_industry
+					is_building_type = building_arms_industry
+					is_building_type = building_munitions_industry
+				}
+				level >= 3
+			}
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_anti_war
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = movement_events_te.8.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 3
+			}
+		}
+		# Investigate and prosecute — justice is expensive but earns trust
+		add_modifier = {
+			name = war_profiteering_investigation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = medium_radicals strata = upper }
+		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = movement_events_te.8.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_industrialists ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		# Dismiss as propaganda — protects business interests, damages trust
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = movement_events_te.8.c
+		ai_chance = {
+			base = 2
+		}
+		# Tax their excess profits — pragmatic compromise
+		add_modifier = {
+			name = war_profit_tax_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = very_small_radicals strata = upper }
+		add_radicals = { value = very_small_radicals strata = lower }
+	}
+}
+
+# ============================================================================
+# TRANSHUMANIST MOVEMENT EVENTS (9-12)
+# ============================================================================
+
+# Event 9: Neural Implant Human Trials
+# Scientists request approval for the first human trials of neural implants.
+movement_events_te.9 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_factory"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = movement_events_te.9.t
+	desc = movement_events_te.9.d
+	flavor = movement_events_te.9.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_transhumanist
+		}
+		has_technology_researched = brain_computer_interfaces
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_transhumanist
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = movement_events_te.9.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = biohacking_and_human_augmentation }
+				add = 2
+			}
+		}
+		# Approve the trials — innovation at some risk
+		add_modifier = {
+			name = neural_implant_trials_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals pop_type = clergymen }
+	}
+
+	option = {
+		name = movement_events_te.9.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_armed_forces ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		# Military applications only — strategic advantage, civil restrictions
+		add_modifier = {
+			name = military_neural_program_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = officers }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = movement_events_te.9.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_devout ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		# Too dangerous — safety first, progress stalls
+		add_modifier = {
+			name = neural_trial_ban_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = clergymen }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 10: The Augmentation Divide
+# Only the wealthy can afford augmentation, creating a visible gap between enhanced and natural.
+movement_events_te.10 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_factory"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = movement_events_te.10.t
+	desc = movement_events_te.10.d
+	flavor = movement_events_te.10.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_transhumanist
+		}
+		has_technology_researched = biohacking_and_human_augmentation
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_transhumanist
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = movement_events_te.10.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_trade_unions ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		# Subsidize augmentations for all — equality at economic cost
+		add_modifier = {
+			name = augmentation_subsidy_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.10.b
+		ai_chance = {
+			base = 2
+		}
+		# Regulate pricing — moderate approach
+		add_loyalists = { value = very_small_radicals strata = lower }
+		add_loyalists = { value = very_small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.10.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_industrialists ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		# Let the market decide — efficiency, but inequality grows
+		add_modifier = {
+			name = augmentation_market_forces_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = medium_radicals strata = lower }
+	}
+}
+
+# Event 11: The Biohacker Underground
+# An underground community of unlicensed biohackers performs unsanctioned augmentations.
+movement_events_te.11 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_factory"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = movement_events_te.11.t
+	desc = movement_events_te.11.d
+	flavor = movement_events_te.11.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_transhumanist
+		}
+		has_technology_researched = biohacking_and_human_augmentation
+		NOT = { has_law = law_type:law_human_purity }
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_transhumanist
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = movement_events_te.11.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_devout ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		# Shut them down — order and safety, innovation lost
+		add_loyalists = { value = small_radicals pop_type = clergymen }
+		add_radicals = { value = small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = movement_events_te.11.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = brain_computer_interfaces }
+				add = 2
+			}
+		}
+		# License and regulate them — harness grassroots innovation
+		add_modifier = {
+			name = biohacker_legalized_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_radicals = { value = very_small_radicals pop_type = clergymen }
+	}
+
+	option = {
+		name = movement_events_te.11.c
+		ai_chance = {
+			base = 2
+		}
+		# Send researchers to study their methods — academic interest
+		add_modifier = {
+			name = biohacker_research_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 12: Digital Consciousness Debate
+# The first mind upload raises profound questions about the nature of personhood.
+movement_events_te.12 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = movement_events_te.12.t
+	desc = movement_events_te.12.d
+	flavor = movement_events_te.12.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_transhumanist
+		}
+		has_technology_researched = mind_backups
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_transhumanist
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = movement_events_te.12.a
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_industrialists ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		# Digital copies are property — economic clarity, philosophical controversy
+		add_modifier = {
+			name = digital_property_ruling_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = movement_events_te.12.b
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		# Form an ethics commission — cautious, buys time
+		add_modifier = {
+			name = digital_consciousness_commission_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	option = {
+		name = movement_events_te.12.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_technology_researched = post-scarcity_economy }
+				add = 3
+			}
+		}
+		# Recognize digital consciousness — visionary but destabilizing
+		add_modifier = {
+			name = digital_rights_recognition_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_radicals = { value = small_radicals pop_type = clergymen }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+}

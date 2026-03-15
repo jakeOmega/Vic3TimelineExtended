@@ -1,0 +1,809 @@
+﻿namespace = international_relations_events
+
+# ============================================================================
+# WW2 AND COLD WAR ERA INTERNATIONAL RELATIONS EVENTS
+# Gated by era 6-8 technologies (1919-1987+)
+# ============================================================================
+
+# Event 1: Arms Race Escalation (rival powers building up military)
+international_relations_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_military_parade"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = international_relations_events.1.t
+	desc = international_relations_events.1.d
+	flavor = international_relations_events.1.f
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = arms_race_escalation_modifier
+			has_modifier = diplomatic_overture_modifier
+			has_modifier = diplomatic_overture_rebuffed_modifier
+			has_modifier = arms_race_ignored_modifier
+		}
+		has_technology_researched = radar
+		country_rank >= rank_value:major_power
+		any_rival_country = {
+			country_rank >= rank_value:major_power
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				country_rank >= rank_value:major_power
+			}
+			save_scope_as = arms_race_rival
+		}
+	}
+
+	option = {
+		name = international_relations_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 2
+			}
+		}
+		# Match their buildup — military boost but expensive
+		add_modifier = {
+			name = arms_race_escalation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		# Armed forces approve, but raises military costs
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	option = {
+		name = international_relations_events.1.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					has_attitude = { who = scope:arms_race_rival attitude = cautious }
+				}
+				add = 1
+			}
+		}
+		# Seek diplomatic channels — risky, may be rebuffed
+		random_list = {
+			60 = {
+				# Diplomacy succeeds
+				add_modifier = {
+					name = diplomatic_overture_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+				change_relations = {
+					country = scope:arms_race_rival
+					value = 10
+				}
+			}
+			40 = {
+				# Rival rebuffs us — humiliation
+				add_modifier = {
+					name = diplomatic_overture_rebuffed_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+				change_relations = {
+					country = scope:arms_race_rival
+					value = -15
+				}
+			}
+		}
+		# Armed forces disapprove of diplomatic approach
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	option = {
+		name = international_relations_events.1.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { country_rank < rank_value:great_power }
+				add = 2
+			}
+		}
+		# Ignore the threat — save money on military costs, but weaker and lose face
+		add_modifier = {
+			name = arms_race_ignored_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:arms_race_rival
+			value = -20
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_very_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# Event 2: Proxy Conflict (supporting insurgency in rival's sphere)
+international_relations_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_military_parade"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = international_relations_events.2.t
+	desc = international_relations_events.2.d
+	flavor = international_relations_events.2.f
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = proxy_conflict_funding_modifier
+			has_modifier = proxy_conflict_avoided_modifier
+		}
+		has_technology_researched = intergovernmental_organizations
+		country_rank >= rank_value:major_power
+		any_rival_country = {
+			country_rank >= rank_value:major_power
+			any_subject_or_below = { always = yes }
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				country_rank >= rank_value:major_power
+				any_subject_or_below = { always = yes }
+			}
+			save_scope_as = proxy_rival
+		}
+	}
+
+	option = {
+		name = international_relations_events.2.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 2
+			}
+		}
+		# Fund the insurgency — weaken the rival, but costly and damages reputation
+		add_modifier = {
+			name = proxy_conflict_funding_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:proxy_rival
+			value = -30
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	option = {
+		name = international_relations_events.2.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					has_attitude = { who = scope:proxy_rival attitude = cautious }
+				}
+				add = 2
+			}
+		}
+		# Stay out of it — maintain deniability but lose influence and look passive
+		add_modifier = {
+			name = proxy_conflict_avoided_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# Event 3: International Summit (great power diplomacy)
+international_relations_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = international_relations_events.3.t
+	desc = international_relations_events.3.d
+	flavor = international_relations_events.3.f
+
+	duration = 3
+
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = summit_host_modifier
+			has_modifier = summit_attendee_modifier
+			has_modifier = summit_boycott_modifier
+		}
+		has_technology_researched = intergovernmental_organizations
+		country_rank >= rank_value:great_power
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = international_relations_events.3.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		# Host the summit — great prestige but bureaucratically expensive
+		add_modifier = {
+			name = summit_host_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	option = {
+		name = international_relations_events.3.b
+		ai_chance = { base = 2 }
+		# Attend but pursue our own agenda — modest gains, but concessions expected
+		add_modifier = {
+			name = summit_attendee_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	option = {
+		name = international_relations_events.3.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 3
+			}
+		}
+		# Boycott the summit — lose prestige, but retain domestic authority
+		add_modifier = {
+			name = summit_boycott_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# Event 4: Propaganda War (information warfare)
+international_relations_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = international_relations_events.4.t
+	desc = international_relations_events.4.d
+	flavor = international_relations_events.4.f
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = propaganda_campaign_modifier
+			has_modifier = propaganda_ignored_modifier
+		}
+		has_technology_researched = mass_media
+		any_rival_country = { always = yes }
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+			}
+			save_scope_as = propaganda_rival
+		}
+	}
+
+	option = {
+		name = international_relations_events.4.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 1
+			}
+		}
+		# Launch a counter-propaganda campaign — effective but costly
+		add_modifier = {
+			name = propaganda_campaign_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals }
+		change_relations = {
+			country = scope:propaganda_rival
+			value = -20
+		}
+	}
+
+	option = {
+		name = international_relations_events.4.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_rank < rank_value:great_power }
+				add = 1
+			}
+		}
+		# Ignore it — save resources, but lose prestige and face
+		add_modifier = {
+			name = propaganda_ignored_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals }
+	}
+}
+
+# Event 5: Trade Embargo (economic pressure)
+international_relations_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_signed_treaty"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = international_relations_events.5.t
+	desc = international_relations_events.5.d
+	flavor = international_relations_events.5.f
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = trade_embargo_imposed_modifier
+			has_modifier = trade_diplomacy_modifier
+		}
+		has_technology_researched = keynesian_economics
+		country_rank >= rank_value:major_power
+		any_rival_country = {
+			country_rank >= rank_value:major_power
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				country_rank >= rank_value:major_power
+			}
+			save_scope_as = embargo_rival
+		}
+	}
+
+	option = {
+		name = international_relations_events.5.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 1
+			}
+		}
+		# Impose trade restrictions — hurt them, but also hurt ourselves
+		add_modifier = {
+			name = trade_embargo_imposed_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:embargo_rival
+			value = -30
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	option = {
+		name = international_relations_events.5.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_attitude = { who = scope:embargo_rival attitude = cautious } }
+				add = 2
+			}
+		}
+		# Pursue trade diplomacy instead — keep trade flowing, but look weak
+		add_modifier = {
+			name = trade_diplomacy_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# Event 6: Espionage Scandal (spy caught)
+international_relations_events.6 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = international_relations_events.6.t
+	desc = international_relations_events.6.d
+	flavor = international_relations_events.6.f
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = propaganda_campaign_modifier
+			has_modifier = espionage_prisoner_exchange_modifier
+		}
+		has_technology_researched = cryptography
+		any_rival_country = { always = yes }
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+			}
+			save_scope_as = espionage_rival
+		}
+	}
+
+	option = {
+		name = international_relations_events.6.a
+		default_option = yes
+		ai_chance = { base = 2 }
+		# Deny everything and expel their diplomats — patriotic but diplomatic cost
+		change_relations = {
+			country = scope:espionage_rival
+			value = -30
+		}
+		add_loyalists = { value = small_radicals }
+		# Lose diplomatic access
+		add_modifier = {
+			name = propaganda_campaign_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	option = {
+		name = international_relations_events.6.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					has_attitude = { who = scope:espionage_rival attitude = cautious }
+				}
+				add = 1
+			}
+		}
+		# Quietly negotiate a prisoner exchange — pragmatic, but lose face
+		add_modifier = {
+			name = espionage_prisoner_exchange_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = very_small_radicals }
+	}
+
+	option = {
+		name = international_relations_events.6.c
+		ai_chance = { base = 1 }
+		# Make a public spectacle — rally the nation, but severely damage relations
+		change_relations = {
+			country = scope:espionage_rival
+			value = -50
+		}
+		add_loyalists = { value = medium_radicals }
+		add_radicals = { value = small_radicals pop_type = academics }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# Event 7: Space Race Achievement
+international_relations_events.7 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = international_relations_events.7.t
+	desc = international_relations_events.7.d
+	flavor = international_relations_events.7.f
+
+	duration = 3
+
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = space_race_achievement_modifier
+			has_modifier = space_race_redirected_modifier
+		}
+		has_technology_researched = space_exploration
+		country_rank >= rank_value:great_power
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = international_relations_events.7.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 1
+			}
+		}
+		# Celebrate the achievement and invest further — prestige and research, but expensive
+		add_modifier = {
+			name = space_race_achievement_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = international_relations_events.7.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_rank < rank_value:great_power }
+				add = 2
+			}
+		}
+		# Redirect resources to more pressing needs — practical, but lose prestige
+		add_modifier = {
+			name = space_race_redirected_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 8: Nuclear Brinkmanship
+international_relations_events.8 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_military_parade"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = international_relations_events.8.t
+	desc = international_relations_events.8.d
+	flavor = international_relations_events.8.f
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		NOR = {
+			has_modifier = nuclear_brinkmanship_modifier
+			has_modifier = nuclear_deescalation_modifier
+			has_modifier = nuclear_mobilization_modifier
+		}
+		has_modifier = nuclear_power
+		any_rival_country = {
+			has_modifier = nuclear_power
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				has_modifier = nuclear_power
+			}
+			save_scope_as = nuclear_rival
+		}
+	}
+
+	option = {
+		name = international_relations_events.8.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 1
+			}
+		}
+		# Stand firm — demonstrate resolve, but terrify the population
+		add_modifier = {
+			name = nuclear_brinkmanship_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:nuclear_rival
+			value = -40
+		}
+		add_radicals = { value = medium_radicals }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	option = {
+		name = international_relations_events.8.b
+		ai_chance = {
+			base = 3
+		}
+		# De-escalate through back channels — peace, but look weak
+		add_modifier = {
+			name = nuclear_deescalation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:nuclear_rival
+			value = 20
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	option = {
+		name = international_relations_events.8.c
+		ai_chance = { base = 1 }
+		# Mobilize forces — aggressive show of strength, terrifies everyone
+		add_modifier = {
+			name = nuclear_mobilization_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:nuclear_rival
+			value = -60
+		}
+		add_radicals = { value = large_radicals }
+	}
+}

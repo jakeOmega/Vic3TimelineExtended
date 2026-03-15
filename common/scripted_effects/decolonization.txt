@@ -1,0 +1,252 @@
+form_decolonized_country = { # scope is capital state of new country, must be a homeland of something
+	save_scope_as = new_country_capital
+	random_scope_culture = {
+		limit = {
+			has_homeland = scope:new_country_capital
+		}
+		save_scope_as = new_country_culture
+	}
+	
+	random_list = {
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 0 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 30 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 60 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 90 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 120 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 150 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 180 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 210 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 240 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 270 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 300 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+		1 = {
+			create_dynamic_country = {  
+				origin = owner
+				country_type = recognized  
+				tier = principality  
+				culture = scope:new_country_culture  
+				religion = owner.religion 
+				capital = THIS
+				cede_state_trigger = {
+					has_variable = decolonization_marker
+				}
+				color = hsv360{ 330 80 80 }
+				on_created = {
+					every_scope_state = {
+						remove_variable = decolonization_marker
+					}
+					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+		}
+	}
+}

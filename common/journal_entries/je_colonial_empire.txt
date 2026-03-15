@@ -1,0 +1,195 @@
+﻿je_colonial_empire = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_technology_researched = decolonization
+	}
+
+	possible = {
+		# Has at least one overseas colonial state with unintegrated population
+		any_scope_state = {
+			is_overseas_colonial_state = yes
+		}
+	}
+
+	should_be_pinned_by_default = yes
+
+	scripted_progress_bar = colonial_stability_bar
+
+	# Scripted buttons — policies the player/AI can toggle
+	scripted_button = ce_invest_in_development
+	scripted_button = ce_remove_invest_in_development
+	scripted_button = ce_military_garrison
+	scripted_button = ce_remove_military_garrison
+	scripted_button = ce_cultural_assimilation
+	scripted_button = ce_remove_cultural_assimilation
+	scripted_button = ce_release_colonial_territory
+	scripted_button = ce_planned_decolonization
+
+	immediate = {
+	}
+
+	progressbar = no
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_colonial_empire_status_solidified
+				trigger = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" >= 90 }
+				}
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_status_stable
+				trigger = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" >= 65 }
+				}
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_status_strained
+				trigger = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" >= 40 }
+				}
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_status_crumbling
+				trigger = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" >= 20 }
+				}
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_status_collapsing
+				trigger = { always = yes }
+			}
+		}
+		first_valid = {
+			triggered_desc = {
+				desc = je_colonial_empire_pressure_none
+				trigger = { colonial_gp_condemners_count = 0 }
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_pressure_low
+				trigger = { colonial_gp_condemners_count <= 1 }
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_pressure_moderate
+				trigger = { colonial_gp_condemners_count <= 3 }
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_pressure_high
+				trigger = { colonial_gp_condemners_count <= 5 }
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_pressure_extreme
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	complete = {
+		custom_tooltip = {
+			text = je_colonial_empire_complete_tt
+			scope:journal_entry = {
+				"scripted_bar_progress(colonial_stability_bar)" >= 100
+			}
+		}
+	}
+
+	on_complete = {
+		# Permanent solidified modifier — massive acceptance growth to continue integration
+		add_modifier = {
+			name = colonial_empire_solidified_modifier
+			days = -1
+		}
+		# Grant homeland ONLY to colonial states that already achieved high acceptance
+		# (prevents gaming by conquering at 99 stability)
+		every_scope_state = {
+			limit = {
+				NOT = { is_homeland_of_country_cultures = ROOT }
+				state_population >= 100000
+				is_overseas_from_capital = yes
+				NOT = {
+					any_scope_pop = {
+						pop_acceptance < acceptance_status_4
+					}
+				}
+			}
+			state_region = {
+				ROOT = {
+					every_primary_culture = {
+						add_homeland = PREV
+					}
+				}
+			}
+		}
+	}
+
+	fail = {
+		scope:journal_entry = {
+			"scripted_bar_progress(colonial_stability_bar)" <= 0
+		}
+	}
+
+	on_fail = {
+		# Colonial empire collapses — forced decolonization of all overseas territories
+		custom_tooltip = {
+			text = je_colonial_empire_fail_tt
+			every_scope_state = {
+				limit = {
+					NOT = { is_homeland_of_country_cultures = ROOT }
+					is_overseas_from_capital = yes
+				}
+				set_variable = decolonization_marker
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			# Clean up any remaining markers
+			every_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				remove_variable = decolonization_marker
+			}
+		}
+		add_modifier = {
+			name = colonial_empire_collapsed_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			# Phase modifiers based on current bar value
+			remove_modifier = colonial_empire_under_pressure_modifier
+			remove_modifier = colonial_empire_crumbling_modifier
+
+			if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 20 }
+				}
+				add_modifier = { name = colonial_empire_crumbling_modifier }
+			}
+			else_if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 40 }
+				}
+				add_modifier = { name = colonial_empire_under_pressure_modifier }
+			}
+		}
+	}
+
+	weight = 500
+	can_revolution_inherit = yes
+	can_deactivate = no
+}

@@ -195,6 +195,16 @@ colonial_culture_change = {
 	ai = {
 		evaluation_chance = {
 			value = 0.25
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 0.25
+			}
+			if = {
+				limit = {
+					has_attitude = { who = scope:target_country attitude = domineering }
+				}
+				add = 0.25
+			}
 		}
 		
 		will_propose = {
@@ -206,10 +216,28 @@ colonial_culture_change = {
 				scope:target_country = { c:HBC ?= THIS } 
 				ROOT = {c:GBR ?= THIS }
 			}
+			OR = {
+				has_attitude = { who = scope:target_country attitude = domineering }
+				has_attitude = { who = scope:target_country attitude = protective }
+			}
 		}
 
 		propose_score = {								
-			value = 10			
+			value = 10
+			if = {
+				limit = { prestige >= { value = scope:target_country.prestige multiply = 5 } }
+				add = 10
+			}
+			if = {
+				limit = {
+					has_attitude = { who = scope:target_country attitude = domineering }
+				}
+				add = 15
+			}
+			if = {
+				limit = { scope:target_country = { liberty_desire < 25 } }
+				add = 10
+			}
 		}
 	}
 }
@@ -757,7 +785,15 @@ force_cultural_acceptance = {
 	
 	ai = {
 		evaluation_chance = {
-			value = 0.025 # AI shouldn't use this very often
+			value = 0.025
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 0.05
+			}
+			if = {
+				limit = { power_bloc = { current_cohesion_percentage >= 0.85 } }
+				add = 0.05
+			}
 		}
 		
 		will_propose = {
@@ -766,12 +802,30 @@ force_cultural_acceptance = {
 				has_attitude = {
 					who = scope:target_country
 					attitude = domineering
-				}									
+				}
+				has_attitude = {
+					who = scope:target_country
+					attitude = protective
+				}
+			}
+			prestige >= {
+				value = scope:target_country.prestige
+				multiply = 4
 			}
 		}
 
 		propose_score = {								
-			value = 10			
+			value = 10
+			if = {
+				limit = {
+					has_attitude = { who = scope:target_country attitude = domineering }
+				}
+				add = 15
+			}
+			if = {
+				limit = { power_bloc = { current_cohesion_percentage >= 0.9 } }
+				add = 10
+			}
 		}
 	}
 }
@@ -844,7 +898,15 @@ force_cultural_adoption = {
 	
 	ai = {
 		evaluation_chance = {
-			value = 0.025 # AI shouldn't use this very often
+			value = 0.025
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 0.05
+			}
+			if = {
+				limit = { power_bloc = { current_cohesion_percentage >= 0.85 } }
+				add = 0.05
+			}
 		}
 		
 		will_propose = {
@@ -855,10 +917,24 @@ force_cultural_adoption = {
 					attitude = domineering
 				}									
 			}
+			prestige >= {
+				value = scope:target_country.prestige
+				multiply = 4
+			}
 		}
 
 		propose_score = {								
-			value = 10			
+			value = 10
+			if = {
+				limit = {
+					has_attitude = { who = scope:target_country attitude = domineering }
+				}
+				add = 15
+			}
+			if = {
+				limit = { power_bloc = { current_cohesion_percentage >= 0.9 } }
+				add = 10
+			}
 		}
 	}
 }
