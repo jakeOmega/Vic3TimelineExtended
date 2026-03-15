@@ -1721,7 +1721,7 @@ un_humanitarian_aid_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_diplomatic_reputation_add = 10
 	country_prestige_add = 250
-	country_bureaucracy_mult = -5000
+	country_bureaucracy_add = -5000
 }
 
 un_humanitarian_token_modifier = {
