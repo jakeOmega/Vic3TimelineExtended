@@ -1,3 +1,17 @@
+"""Annotate production method files with input/output cost comments.
+
+Parses goods prices, then calculates and injects cost summaries into
+workforce_scaled blocks of PM files. Also handles military unit upkeep costs.
+
+Usage:
+    python pm_costs.py             # Annotate mod PMs + generate commented vanilla files
+    python pm_costs.py --dry-run   # Show what would be written without writing
+
+Functions are importable:
+    from pm_costs import parse_goods, calculate_costs, calculate_employment
+"""
+
+import argparse
 import os
 import re
 
@@ -253,54 +267,72 @@ def process_and_update_military_costs(
             file.write(updated_mil_cost_data)
 
 
-goods_file_paths = [
-    base_game_path + r"\game\common\goods\00_goods.txt",
-    mod_path + r"\common\goods\timeline_extended_extra_goods.txt",
-]
-pms_file_paths = [
-    mod_path + r"\common\production_methods\extra_pms.txt",
-    mod_path + r"\common\production_methods\unique_pms.txt",
-]
-vanilla_pms_file_loc = base_game_path + r"\game\common\production_methods"
-vanilla_pm_file_paths = [
-    os.path.join(vanilla_pms_file_loc, file)
-    for file in os.listdir(vanilla_pms_file_loc)
-    if file.endswith(".txt")
-]
-output_file_path = mod_path + r"\commented_vanilla_pms.txt"
-goods_dict = parse_goods(goods_file_paths)
+def main():
+    parser = argparse.ArgumentParser(description="Annotate PM files with cost/revenue comments")
+    parser.add_argument("--dry-run", action="store_true", help="Print actions without writing files")
+    args = parser.parse_args()
 
-for file_path in pms_file_paths:
-    process_and_update_production_methods_grouped(
-        file_path, goods_dict, calculate_costs, calculate_employment
-    )
+    goods_file_paths = [
+        os.path.join(base_game_path, "game", "common", "goods", "00_goods.txt"),
+        os.path.join(mod_path, "common", "goods", "timeline_extended_extra_goods.txt"),
+    ]
+    pms_file_paths = [
+        os.path.join(mod_path, "common", "production_methods", "extra_pms.txt"),
+        os.path.join(mod_path, "common", "production_methods", "unique_pms.txt"),
+    ]
+    vanilla_pms_file_loc = os.path.join(base_game_path, "game", "common", "production_methods")
+    vanilla_pm_file_paths = [
+        os.path.join(vanilla_pms_file_loc, f)
+        for f in os.listdir(vanilla_pms_file_loc)
+        if f.endswith(".txt")
+    ]
+    output_file_path = os.path.join(mod_path, "commented_vanilla_pms.txt")
+    goods_dict = parse_goods(goods_file_paths)
 
-process_and_update_production_methods_grouped(
-    vanilla_pm_file_paths,
-    goods_dict,
-    calculate_costs,
-    calculate_employment,
-    output_file_path,
-)
-print("Production methods file updated successfully.")
+    if args.dry_run:
+        print("[dry-run] Would annotate mod PM files:")
+        for fp in pms_file_paths:
+            print(f"  {fp}")
+        print(f"[dry-run] Would write commented vanilla PMs to: {output_file_path}")
+    else:
+        for file_path in pms_file_paths:
+            process_and_update_production_methods_grouped(
+                file_path, goods_dict, calculate_costs, calculate_employment
+            )
 
-# Military costs
-vanilla_military_unit_file_path = [
-    base_game_path + r"\game\common\combat_unit_types\00_land_combat_unit_types.txt",
-    base_game_path + r"\game\common\combat_unit_types\01_navy_combat_unit_types.txt",
-]
-military_unit_file_path = mod_path + r"\common\combat_unit_types\extra_combat_units.txt"
-mobilization_file_path = (
-    mod_path + r"\common\mobilization_options\extra_mobilization_options.txt"
-)
+        process_and_update_production_methods_grouped(
+            vanilla_pm_file_paths,
+            goods_dict,
+            calculate_costs,
+            calculate_employment,
+            output_file_path,
+        )
+        print("Production methods file updated successfully.")
 
-process_and_update_military_costs(military_unit_file_path, goods_dict)
+    # Military costs
+    vanilla_military_unit_file_path = [
+        os.path.join(base_game_path, "game", "common", "combat_unit_types", "00_land_combat_unit_types.txt"),
+        os.path.join(base_game_path, "game", "common", "combat_unit_types", "01_navy_combat_unit_types.txt"),
+    ]
+    military_unit_file_path = os.path.join(mod_path, "common", "combat_unit_types", "extra_combat_units.txt")
+    mobilization_file_path = os.path.join(mod_path, "common", "mobilization_options", "extra_mobilization_options.txt")
+    mil_output_path = os.path.join(mod_path, "commented_vanilla_military_units.txt")
 
-process_and_update_military_costs(mobilization_file_path, goods_dict)
+    if args.dry_run:
+        print(f"[dry-run] Would annotate military files:")
+        print(f"  {military_unit_file_path}")
+        print(f"  {mobilization_file_path}")
+        print(f"[dry-run] Would write commented vanilla military units to: {mil_output_path}")
+    else:
+        process_and_update_military_costs(military_unit_file_path, goods_dict)
+        process_and_update_military_costs(mobilization_file_path, goods_dict)
+        process_and_update_military_costs(
+            vanilla_military_unit_file_path,
+            goods_dict,
+            write_path=mil_output_path,
+        )
+        print("Military costs file updated successfully.")
 
-process_and_update_military_costs(
-    vanilla_military_unit_file_path,
-    goods_dict,
-    write_path=mod_path + r"\commented_vanilla_military_units.txt",
-)
-print("Military costs file updated successfully.")
+
+if __name__ == "__main__":
+    main()

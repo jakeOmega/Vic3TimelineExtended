@@ -1,4 +1,5 @@
 import os
+from collections import defaultdict
 
 from paradox_file_parser import ParadoxFileParser
 
@@ -8,6 +9,7 @@ class ModState:
         self.base_parsers = {}
         self.mod_parsers = {}
         self.localization = {}
+        self._reverse_loc = None
         self.load_directory_files(base_game_dir, mod_dir, diff)
 
     def add_localization(self, loc_path):
@@ -27,6 +29,8 @@ class ModState:
                             quote_locations[0] + 1 : quote_locations[1]
                         ].strip()
                     self.localization[key] = value
+        # Invalidate reverse localization cache when new loc is added
+        self._reverse_loc = None
 
     def load_directory_files(self, base_game_dir, mod_dir, diff=False):
         for entity_type, dir_path in base_game_dir.items():
@@ -115,3 +119,29 @@ class ModState:
         if desc_key in self.localization:
             return self.localization[desc_key]
         return None
+
+    def build_reverse_localization(self):
+        """Build reverse mapping from display text (lowercase) to list of keys."""
+        self._reverse_loc = defaultdict(list)
+        for key, value in self.localization.items():
+            self._reverse_loc[value.lower()].append(key)
+
+    def unlocalize(self, text):
+        """Find all localization keys that map to the given display text (case-insensitive)."""
+        if self._reverse_loc is None:
+            self.build_reverse_localization()
+        return list(self._reverse_loc.get(text.lower(), []))
+
+    def search_localization(self, query, limit=50):
+        """Search localization keys and values for a substring (case-insensitive).
+
+        Returns a list of {"key": ..., "value": ...} dicts.
+        """
+        query_lower = query.lower()
+        results = []
+        for key, value in self.localization.items():
+            if query_lower in key.lower() or query_lower in value.lower():
+                results.append({"key": key, "value": value})
+                if len(results) >= limit:
+                    break
+        return results

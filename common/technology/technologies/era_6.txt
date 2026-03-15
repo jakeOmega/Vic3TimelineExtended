@@ -187,6 +187,7 @@ combined_arms = {
 	modifier = {
 		country_institution_ministry_of_war_max_investment_add = 1
 		state_building_barrack_max_level_add = 50
+		country_combined_arms_bonus_enabled_bool = yes
 	}
 	
 	ai_weight = {

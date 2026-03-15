@@ -312,6 +312,22 @@ financial_cycle_government_fiscal_policy_effect = {
 	country_finance_value_monthly_add = 1
 }
 
+# ----- Banking cycle event modifiers -----
+banking_event_consolidation_boom = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_services_mult = 0.10
+}
+
+banking_event_new_instrument_boom = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_manufacturing_throughput_add = 0.05
+}
+
+banking_event_investigation_chill = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	goods_output_services_mult = -0.05
+}
+
 # ----- Interventions (buttons spend points here via negative adds) -----
 banking_policy_rate_hike = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
@@ -599,6 +615,45 @@ climate_refugee_welcome_modifier = {
 	state_migration_pull_mult = 0.25
 	state_standard_of_living_add = -0.5
 	country_prestige_add = 50
+}
+
+# ============================================================================
+# COMBINED ARMS BONUSES
+# Applied/removed by combined_arms_update_on_action based on army composition.
+# Each army unit group provides unique bonuses when present alongside others.
+# ============================================================================
+
+combined_arms_infantry_screens = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	unit_army_defense_mult = 0.05
+}
+
+combined_arms_fire_support = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	unit_army_offense_mult = 0.05
+}
+
+combined_arms_recon_advantage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	military_formation_movement_speed_mult = 0.05
+}
+
+combined_arms_armored_spearhead = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	unit_army_offense_mult = 0.05
+	unit_army_defense_mult = 0.03
+}
+
+combined_arms_air_superiority = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	unit_army_offense_mult = 0.08
+	unit_morale_damage_mult = 0.03
+}
+
+combined_arms_full_spectrum = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	unit_army_offense_mult = 0.05
+	unit_army_defense_mult = 0.05
 }
 
 climate_refugee_rejection_modifier = {
@@ -1071,7 +1126,7 @@ civil_rights_suppression_modifier = {
 civil_rights_government_endorsement_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 50
-	country_law_enactment_success_add = 0.05
+	political_movement_support_add = 0.05
 }
 
 segregation_exception_modifier = {
@@ -1082,7 +1137,7 @@ segregation_exception_modifier = {
 
 minority_rights_reform_push_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_law_enactment_success_add = 0.05
+	country_acceptance_not_homeland_add = 5
 	political_movement_radicalism_add = 3
 }
 
@@ -1099,7 +1154,7 @@ cultural_cooptation_modifier = {
 
 human_rights_reform_pledge_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	country_acceptance_not_homeland_add = 3
 	country_diplomatic_reputation_add = 3
 }
 

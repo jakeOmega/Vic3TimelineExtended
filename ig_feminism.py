@@ -1,7 +1,20 @@
+"""Modify interest group files to add/adjust female leader and commander probability.
+
+Applies probability adjustments for female leaders, commanders, and agitators
+based on laws and technologies. Each interest group gets a different profile
+(tech-heavy, balanced, or law-heavy).
+
+Usage:
+    python ig_feminism.py          # Apply modifications to IG files
+
+Functions are importable:
+    from ig_feminism import modify_interest_group_files, normalize_values
+"""
+
 import os
+import copy
 import regex
 from path_constants import mod_path, base_game_path
-import copy
 
 
 def modify_interest_group_files(input_dir, output_dir, modification_dict):
@@ -133,8 +146,8 @@ law_heavy = {
     },
 }
 
-input_directory = base_game_path + r"\game\common\interest_groups"
-output_directory = mod_path + r"\common\interest_groups"
+input_directory = os.path.join(base_game_path, "game", "common", "interest_groups")
+output_directory = os.path.join(mod_path, "common", "interest_groups")
 modifications = {
     "00_armed_forces.txt": {
         "female_commander_chance": normalize_values(balanced, 0.3),
@@ -180,5 +193,10 @@ modifications = {
 
 # print(json.dumps(modifications, indent=4))
 
-# Call the function
-modify_interest_group_files(input_directory, output_directory, modifications)
+def main():
+    modify_interest_group_files(input_directory, output_directory, modifications)
+    print(f"Modified {len(modifications)} interest group files.")
+
+
+if __name__ == "__main__":
+    main()

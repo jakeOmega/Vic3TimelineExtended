@@ -49,28 +49,36 @@ nuke_diplo_action = {
 
     ai = {
 		evaluation_chance = {
-            value = 0.1
+            value = 0.05 # base 5% chance to evaluate — nuclear use is a grave decision
             if = {
                 limit = {
                     ruler = {
                         OR = {
                             has_trait = reckless
                             has_trait = wrathful
-                            has_trait = ruthless
                             has_trait = war_criminal
                         }
                     }
                 }
-                multiply = 5
+                multiply = 3
+            }
+            if = {
+                limit = {
+                    ruler = { has_trait = ruthless }
+                    NOT = { ruler = { has_trait = cautious } }
+                }
+                multiply = 2
             }
             if = {
                 limit = {
                     ruler = {
-                        has_trait = cautious
-                        has_trait = honorable
+                        OR = {
+                            has_trait = cautious
+                            has_trait = honorable
+                        }
                     }
                 }
-                multiply = 0
+                multiply = 0 # cautious or honorable leaders never initiate nuclear strikes
             }
             if = {
                 limit = {
@@ -78,13 +86,13 @@ nuke_diplo_action = {
                         has_modifier = nuclear_strike_aftermath
                     }
                 }
-                multiply = 3 # retaliation is more likely
+                multiply = 5 # retaliation after being nuked is strongly favored
             }
             if = {
                 limit = {
-                    var:nuclear_weapon_stockpile > 5
+                    scope:target_country = { has_modifier = nuclear_power }
                 }
-                multiply = 1.5 # more willing with a larger stockpile
+                multiply = 0.1 # extreme reluctance against nuclear-armed targets (MAD)
             }
         }
 
@@ -99,40 +107,46 @@ nuke_diplo_action = {
                 who = scope:target_country
             }
             NOT = { infamy > 75 }
+            # Must have incorporated territory threatened by enemy wargoals
             any_scope_state = {
                 is_target_of_wargoal = scope:target_country
                 is_incorporated = yes
             }
             OR = {
+                # Case 1: Target is NOT nuclear-armed — normal first strike logic
                 NOT = {
                     scope:target_country = {
                         has_modifier = nuclear_power
                     }
                 }
-                ruler = {
-                    has_trait = reckless
-                    NOT = {
-                        has_trait = honorable
+                # Case 2: Target IS nuclear-armed — requires BOTH losing core territory AND radical leader
+                AND = {
+                    scope:target_country = { has_modifier = nuclear_power }
+                    # Must have core territory actually occupied or nearly lost
+                    any_scope_state = {
+                        is_incorporated = yes
+                        is_occupied = yes
+                    }
+                    # AND leader must be aggressive/unstable
+                    OR = {
+                        ruler = {
+                            has_trait = reckless
+                            NOT = { has_trait = honorable }
+                        }
+                        ruler = {
+                            has_trait = wrathful
+                            NOT = { has_trait = honorable }
+                        }
+                        ruler = {
+                            has_trait = war_criminal
+                        }
                     }
                 }
-                ruler = {
-                    has_trait = wrathful
-                    NOT = {
-                        has_trait = honorable
-                    }
-                }
-                ruler = {
-                    has_trait = ruthless
-                    not = {
-                        has_trait = cautious
-                        has_trait = honorable
-                    }
-                }
-                ruler = {
-                    has_trait = war_criminal
-                    not = {
-                        has_trait = cautious
-                        has_trait = honorable
+                # Case 3: Already been nuked — retaliation regardless of enemy's nuclear status
+                any_scope_state = {
+                    OR = {
+                        has_modifier = nuclear_strike_aftermath
+                        has_modifier = tactical_nuke_aftermath
                     }
                 }
             }
@@ -221,7 +235,47 @@ tactical_nuke_diplo_action = {
 
     ai = {
 		evaluation_chance = {
-            value = 1
+            value = 0.5 # tactical nukes considered more readily than strategic, but still not routine
+            if = {
+                limit = {
+                    ruler = {
+                        OR = {
+                            has_trait = reckless
+                            has_trait = wrathful
+                            has_trait = war_criminal
+                        }
+                    }
+                }
+                multiply = 2
+            }
+            if = {
+                limit = {
+                    ruler = {
+                        OR = {
+                            has_trait = cautious
+                            has_trait = honorable
+                        }
+                    }
+                }
+                multiply = 0.25 # cautious/honorable leaders very reluctant even for tactical use
+            }
+            if = {
+                limit = {
+                    scope:target_country = { has_modifier = nuclear_power }
+                }
+                multiply = 0.1 # extreme reluctance against nuclear-armed targets
+            }
+            if = {
+                limit = {
+                    any_scope_state = {
+                        OR = {
+                            has_modifier = nuclear_strike_aftermath
+                            has_modifier = tactical_nuke_aftermath
+                        }
+                    }
+                }
+                multiply = 3 # retaliation after being nuked
+            }
         }
 
 		will_select_as_second_state = {
@@ -242,6 +296,39 @@ tactical_nuke_diplo_action = {
             any_scope_state = {
                 is_target_of_wargoal = scope:target_country
                 is_incorporated = yes
+            }
+            OR = {
+                # Case 1: Target is NOT nuclear-armed — use tactical nukes more freely
+                NOT = {
+                    scope:target_country = { has_modifier = nuclear_power }
+                }
+                # Case 2: Target IS nuclear-armed — require occupied core territory AND aggressive leader
+                AND = {
+                    scope:target_country = { has_modifier = nuclear_power }
+                    any_scope_state = {
+                        is_incorporated = yes
+                        is_occupied = yes
+                    }
+                    OR = {
+                        ruler = {
+                            has_trait = reckless
+                            NOT = { has_trait = honorable }
+                        }
+                        ruler = {
+                            has_trait = wrathful
+                            NOT = { has_trait = honorable }
+                        }
+                        ruler = { has_trait = war_criminal }
+                        ruler = { has_trait = ruthless NOT = { has_trait = cautious } }
+                    }
+                }
+                # Case 3: Already been nuked — retaliation
+                any_scope_state = {
+                    OR = {
+                        has_modifier = nuclear_strike_aftermath
+                        has_modifier = tactical_nuke_aftermath
+                    }
+                }
             }
         }
 	
@@ -277,7 +364,7 @@ tactical_nuke_diplo_action = {
                 }
                 if = {
                     limit = { owner = { has_modifier = nuclear_power }}
-                    divide = 100 # hesitant to nuke if they can retaliate
+                    divide = 1000 # near-zero priority against nuclear-armed targets
                 }
             }
         }

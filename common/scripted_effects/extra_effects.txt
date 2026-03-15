@@ -865,34 +865,37 @@ update_characters = {
 		}
 
 		if = {
+			limit = { ROOT = { has_technology_researched = swarm_technology }}
+			remove_trait = trait_predictive_logistics
+			remove_trait = trait_military_grade_cybersecurity
+			remove_trait = trait_jadc2
+			add_trait = trait_swarm_technology
+		}
+		else_if = {
+			limit = { ROOT = { has_technology_researched = jadc2 }}
+			remove_trait = trait_predictive_logistics
+			remove_trait = trait_military_grade_cybersecurity
+			remove_trait = trait_swarm_technology
+			add_trait = trait_jadc2
+		}
+		else_if = {
+			limit = { ROOT = { has_technology_researched = military_grade_cybersecurity }}
+			remove_trait = trait_predictive_logistics
+			remove_trait = trait_jadc2
+			remove_trait = trait_swarm_technology
+			add_trait = trait_military_grade_cybersecurity
+		}
+		else_if = {
 			limit = { ROOT = { has_technology_researched = predictive_logistics }}
+			remove_trait = trait_military_grade_cybersecurity
+			remove_trait = trait_jadc2
+			remove_trait = trait_swarm_technology
 			add_trait = trait_predictive_logistics
 		}
 		else = {
 			remove_trait = trait_predictive_logistics
-		}
-
-		if = {
-			limit = { ROOT = { has_technology_researched = military_grade_cybersecurity }}
-			add_trait = trait_military_grade_cybersecurity
-		}
-		else = {
 			remove_trait = trait_military_grade_cybersecurity
-		}
-
-		if = {
-			limit = { ROOT = { has_technology_researched = jadc2 }}
-			add_trait = trait_jadc2
-		}
-		else = {
 			remove_trait = trait_jadc2
-		}
-
-		if = {
-			limit = { ROOT = { has_technology_researched = swarm_technology }}
-			add_trait = trait_swarm_technology
-		}
-		else = {
 			remove_trait = trait_swarm_technology
 		}
 	}

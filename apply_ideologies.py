@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Jul  6 23:22:15 2023
+"""Apply ideology attitude modifications to vanilla ideology files.
 
-@author: jakef
+Reads modification directives from ideology_modifications.py, applies REPLACE
+(overwrite existing sub-entry) or INJECT (add new sub-entry) to vanilla ideology
+files, and writes the result to the mod's common/ideologies/ directory.
+
+Usage:
+    python apply_ideologies.py          # Apply all modifications
+    python apply_ideologies.py --dry-run  # Show what would change without writing
 """
 
+import argparse
+import os
 import re
 from os import walk
 
@@ -206,21 +213,33 @@ def write_to_file(file_path, entries):
                 f.write(f"{key} = {value}\n")
 
 
-entries = {}
-filenames = next(
-    walk(base_game_path + r"\game\common\ideologies"),
-    (None, None, []),
-)[2]
-for file in filenames:
-    print("Parsing: ", file)
-    new_entries = parse_file(base_game_path + r"\game\common\ideologies\\" + file)
-    print("Found ", len(new_entries.keys()), " new entries")
-    entries.update(new_entries)
+def main():
+    parser = argparse.ArgumentParser(description="Apply ideology modifications to vanilla files")
+    parser.add_argument("--dry-run", action="store_true", help="Show what would change without writing")
+    args = parser.parse_args()
+
+    entries = {}
+    ideologies_dir = os.path.join(base_game_path, "game", "common", "ideologies")
+    filenames = next(walk(ideologies_dir), (None, None, []))[2]
+    for file in filenames:
+        print("Parsing: ", file)
+        new_entries = parse_file(os.path.join(ideologies_dir, file))
+        print("Found ", len(new_entries.keys()), " new entries")
+        entries.update(new_entries)
+
+    modified_entries = modify_entries(entries, modifications)
+    modified_entries = update_law_reqs(modified_entries)
+
+    output_path = os.path.join(mod_path, "common", "ideologies", "modified.txt")
+    if args.dry_run:
+        inject_count = sum(1 for v in modified_entries.values() if isinstance(v, tuple) and v[0] == "INJECT")
+        replace_count = sum(1 for v in modified_entries.values() if isinstance(v, tuple) and v[0] == "REPLACE")
+        print(f"\n[dry-run] Would write {len(modified_entries)} ideologies to {output_path}")
+        print(f"  INJECT: {inject_count}, REPLACE: {replace_count}")
+    else:
+        write_to_file(output_path, modified_entries)
+        print(f"\nWrote {len(modified_entries)} modified ideologies to {output_path}")
 
 
-modified_entries = modify_entries(entries, modifications)
-modified_entries = update_law_reqs(modified_entries)
-write_to_file(
-    mod_path + r"\common\ideologies\modified.txt",
-    modified_entries,
-)
+if __name__ == "__main__":
+    main()

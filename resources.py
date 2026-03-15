@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""Inject resource deposit blocks into state region files.
 
+Reads deposits_config.json for subgood-to-state mappings (Manganese, Chromium,
+Copper, Bauxite, etc.), computes deposit amounts from scores, and writes
+updated state region files to map_data/state_regions/.
+
+Usage:
+    python resources.py              # Inject deposits + print score table
+    python resources.py --table      # Only print deposit score table (no file writes)
+"""
+
+import argparse
 import json
 import re
 import sys
@@ -294,12 +305,22 @@ def main():
 mod_path = Path(mod_path)
 base_game_path = Path(base_game_path)
 
-for key in SUBGOOD_TO_SPREAD.keys():
-    print(f"Deposits for {key}:")
-    for i in range(1, 11):
-        score = i
-        amount = new_amount(score, key)
-        print(f"\t{key} score {score}: {amount}")
+
+def print_score_table():
+    """Print deposit amounts for each subgood at each score level."""
+    print(f"{'Subgood':<35} " + "  ".join(f"{'S' + str(i):>6}" for i in range(1, 11)))
+    print("-" * 35 + "  " + "  ".join("-" * 6 for _ in range(10)))
+    for key in SUBGOOD_TO_SPREAD.keys():
+        amounts = [str(new_amount(i, key)) for i in range(1, 11)]
+        print(f"{key:<35} " + "  ".join(f"{a:>6}" for a in amounts))
+
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Inject resource deposits into state region files")
+    parser.add_argument("--table", action="store_true", help="Only print score table, don't write files")
+    args = parser.parse_args()
+
+    print_score_table()
+    if not args.table:
+        print()
+        main()

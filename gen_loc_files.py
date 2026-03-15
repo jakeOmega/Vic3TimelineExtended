@@ -1,4 +1,11 @@
-"""Write two localization YAML files for Victoria 3 mod with UTF-8 BOM encoding."""
+"""Generate localization YAML files for Victoria 3 mod events.
+
+Produces localization files for extra_law_events and ministry_law_events
+with UTF-8 BOM encoding.
+
+Usage:
+    python gen_loc_files.py    # Generate localization files
+"""
 
 import os
 

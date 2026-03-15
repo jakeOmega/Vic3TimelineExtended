@@ -1,0 +1,65 @@
+### Combined Arms Triggers ###
+# Combat-unit-scope triggers that classify a unit into its army group.
+# Used by apply_combined_arms_bonuses to count units per group per formation.
+
+combat_unit_is_infantry_group = {
+	OR = {
+		has_unit_type = unit_type:combat_unit_type_irregular_infantry
+		has_unit_type = unit_type:combat_unit_type_line_infantry
+		has_unit_type = unit_type:combat_unit_type_skirmish_infantry
+		has_unit_type = unit_type:combat_unit_type_trench_infantry
+		has_unit_type = unit_type:combat_unit_type_squad_infantry
+		has_unit_type = unit_type:combat_unit_type_mechanized_infantry
+		has_unit_type = unit_type:combat_unit_type_armored_infantry
+		has_unit_type = unit_type:combat_unit_type_robotic_soldiers
+		has_unit_type = unit_type:combat_unit_type_swarm_bots
+		has_unit_type = unit_type:combat_unit_type_grey_goo
+	}
+}
+
+combat_unit_is_artillery_group = {
+	OR = {
+		has_unit_type = unit_type:combat_unit_type_cannon_artillery
+		has_unit_type = unit_type:combat_unit_type_mobile_artillery
+		has_unit_type = unit_type:combat_unit_type_shrapnel_artillery
+		has_unit_type = unit_type:combat_unit_type_siege_artillery
+		has_unit_type = unit_type:combat_unit_type_motorized_artillery
+		has_unit_type = unit_type:combat_unit_type_guided_artillery_projectiles
+		has_unit_type = unit_type:combat_unit_type_networked_guided_artillery_projectiles
+		has_unit_type = unit_type:combat_unit_type_orbital_bombardment
+		has_unit_type = unit_type:combat_unit_type_orbital_precision_antimatter_strikes
+	}
+}
+
+combat_unit_is_cavalry_group = {
+	OR = {
+		has_unit_type = unit_type:combat_unit_type_hussars
+		has_unit_type = unit_type:combat_unit_type_dragoons
+		has_unit_type = unit_type:combat_unit_type_cuirassiers
+		has_unit_type = unit_type:combat_unit_type_lancers
+		has_unit_type = unit_type:combat_unit_type_light_tanks
+		has_unit_type = unit_type:combat_unit_type_light_scout_tanks
+		has_unit_type = unit_type:combat_unit_type_stealth_reconnaissance_drone_carrier
+		has_unit_type = unit_type:combat_unit_type_holographic_ambush_combat_vehicle
+	}
+}
+
+combat_unit_is_tank_group = {
+	OR = {
+		has_unit_type = unit_type:combat_unit_type_heavy_tank
+		has_unit_type = unit_type:combat_unit_type_main_battle_tank
+		has_unit_type = unit_type:combat_unit_type_reactive_armor_tank
+		has_unit_type = unit_type:combat_unit_type_railgun_tank
+		has_unit_type = unit_type:combat_unit_type_DEW_tank
+	}
+}
+
+combat_unit_is_aircraft_group = {
+	OR = {
+		has_unit_type = unit_type:combat_unit_type_bomber_aircraft
+		has_unit_type = unit_type:combat_unit_type_jet_powered_fighters
+		has_unit_type = unit_type:combat_unit_type_stealth_aircraft
+		has_unit_type = unit_type:combat_unit_type_orbital_tactical_vehicles
+		has_unit_type = unit_type:combat_unit_type_orbital_weapons_platforms
+	}
+}

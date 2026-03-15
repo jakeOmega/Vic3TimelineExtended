@@ -390,7 +390,7 @@ movement_events_te.4 = {
 		}
 		# Reject foreign interference — sovereignty preserved, reputation damaged
 		change_relations = {
-			who = scope:criticizing_country
+			country = scope:criticizing_country
 			value = -30
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
@@ -413,7 +413,7 @@ movement_events_te.4 = {
 			is_decaying = yes
 		}
 		change_relations = {
-			who = scope:criticizing_country
+			country = scope:criticizing_country
 			value = 20
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -427,7 +427,7 @@ movement_events_te.4 = {
 		}
 		# Deflect with counter-accusations — risky diplomacy
 		change_relations = {
-			who = scope:criticizing_country
+			country = scope:criticizing_country
 			value = -50
 		}
 		add_loyalists = { value = small_radicals strata = upper }
@@ -656,7 +656,7 @@ movement_events_te.7 = {
 		any_political_movement = {
 			is_political_movement_type = movement_anti_war
 		}
-		country_population >= 1000000
+		country_rank >= rank_value:minor_power
 	}
 
 	cancellation_trigger = {
@@ -760,9 +760,9 @@ movement_events_te.8 = {
 		any_scope_state = {
 			any_scope_building = {
 				OR = {
-					is_building_group = bg:bg_military_industry
+					is_building_group = bg_military_industry
 					is_building_type = building_arms_industry
-					is_building_type = building_munitions_industry
+					is_building_type = building_munition_plant
 				}
 				level >= 3
 			}

@@ -1,4 +1,11 @@
-"""Generate ministry_law_events.txt with proper tab indentation and UTF-8 BOM."""
+"""Generate ministry_law_events.txt with proper tab indentation and UTF-8 BOM.
+
+Code generator that produces events/ministry_law_events.txt. Generates ministry
+law enactment events with options, modifiers, and radical/loyalist effects.
+
+Usage:
+    python gen_ministry_events.py    # Generate events file
+"""
 import os
 
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "events", "ministry_law_events.txt")

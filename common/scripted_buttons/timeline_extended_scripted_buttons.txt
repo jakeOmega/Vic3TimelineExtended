@@ -176,9 +176,10 @@ cb_open_market_ops = {
     
     ai_chance = {
         value = 0
-        # Core: use in panic/downturn, or when momentum is sharply negative
+        # Core: use in panic/downturn/stagnation, or when momentum is sharply negative
         if = { limit = { banking_cycle_is_panic = yes } add = 60 }
         if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+        if = { limit = { banking_cycle_is_stagnation = yes } add = 25 }
         if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 
         # Law flavor
@@ -217,8 +218,8 @@ cb_disable_open_market_ops = {
     visible = { has_modifier = banking_open_market_ops }
     ai_chance = {
         value = 0
-        if = { limit = { banking_cycle_is_expansion = yes } add = 20 }
-        if = { limit = { banking_cycle_is_boom = yes } add = 35 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 25 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
         if = { limit = { banking_cycle_bubble_risk_high = yes } add = 30 }
         if = { limit = { banking_tool_rate_hike_active = yes } add = 35 }
@@ -238,8 +239,8 @@ cb_countercyclical_buffer = {
     
     ai_chance = {
         value = 0
-        # Core: expansion/frenzy, especially with building heat
-        if = { limit = { banking_cycle_is_expansion = yes } add = 25 }
+        # Core: boom/frenzy, especially with building heat — don't activate too early in expansion
+        if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
         if = { limit = { banking_cycle_is_boom = yes } add = 30 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 35 }
         if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 15 }
@@ -277,6 +278,7 @@ cb_disable_countercyclical_buffer = {
         if = { limit = { banking_cycle_is_recession = yes } add = 75 }
         if = { limit = { banking_cycle_is_downturn = yes } add = 55 }
         if = { limit = { banking_cycle_is_panic = yes } add = 45 }
+        if = { limit = { banking_cycle_is_stagnation = yes } add = 35 }
         if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 15 }
     }
     possible = {
@@ -358,8 +360,9 @@ cb_directed_credit_infrastructure = {
     
     ai_chance = {
         value = 0
-        # Core: best in downturn; OK in stable if momentum is falling
+        # Core: best in downturn/stagnation; OK in stable if momentum is falling
         if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
+        if = { limit = { banking_cycle_is_stagnation = yes } add = 30 }
         if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = yes } add = 15 }
 
         # Law flavor
@@ -392,7 +395,7 @@ cb_disable_directed_credit_infrastructure = {
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_panic = yes } add = 45 }
-        if = { limit = { banking_cycle_is_expansion = yes } add = 20 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
         if = { limit = { banking_cycle_is_boom = yes } add = 35 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
         if = { limit = { banking_tool_eliq_active = yes } add = 20 }
@@ -482,7 +485,7 @@ cb_moral_suasion = {
     ai_chance = {
         value = 0
         # Use in light heat or light weakness when other tools are gated/expensive
-        if = { limit = { banking_cycle_is_expansion = yes } add = 15 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 5 }
         if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 30 }
 
         # Prefer when points are scarce
@@ -533,8 +536,7 @@ cb_raise_margin_requirements = {
     
     ai_chance = {
         value = 0
-        # Core: expansion/frenzy, especially with building heat
-        if = { limit = { banking_cycle_is_expansion = yes } add = 5 }
+        # Core: boom/frenzy, especially with building heat — don't react during mild expansion
         if = { limit = { banking_cycle_is_boom = yes } add = 10 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 15 }
         if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 35 }
@@ -571,6 +573,7 @@ cb_disable_raise_margin_requirements = {
         if = { limit = { banking_cycle_is_recession = yes } add = 75 }
         if = { limit = { banking_cycle_is_downturn = yes } add = 55 }
         if = { limit = { banking_cycle_is_panic = yes } add = 40 }
+        if = { limit = { banking_cycle_is_stagnation = yes } add = 30 }
         if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 20 }
     }
     possible = {
@@ -590,9 +593,10 @@ cb_fx_devaluation = {
 
     ai_chance = {
         value = 0
-        # Core: use in panic/downturn, or when momentum is sharply negative
+        # Core: use in panic/downturn/stagnation, or when momentum is sharply negative
         if = { limit = { banking_cycle_is_panic = yes } add = 60 }
         if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+        if = { limit = { banking_cycle_is_stagnation = yes } add = 25 }
         if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 
         # Law flavor
@@ -631,8 +635,8 @@ cb_disable_fx_devaluation = {
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_stable = yes } add = 15 }
-        if = { limit = { banking_cycle_is_expansion = yes } add = 25 }
-        if = { limit = { banking_cycle_is_boom = yes } add = 40 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 15 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 35 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
         if = { limit = { banking_tool_rate_hike_active = yes } add = 25 }
         if = { limit = { has_modifier = banking_fx_support } add = 30 }
@@ -654,9 +658,10 @@ cb_fx_support = {
 
     ai_chance = {
         value = 0
-        # Core: use in panic/downturn, or when momentum is sharply negative
+        # Core: use in panic/downturn/stagnation, or when momentum is sharply negative
         if = { limit = { banking_cycle_is_panic = yes } add = 60 }
         if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+        if = { limit = { banking_cycle_is_stagnation = yes } add = 25 }
         if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 
         # Law flavor
@@ -696,8 +701,8 @@ cb_disable_fx_support = {
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_stable = yes } add = 15 }
-        if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
-        if = { limit = { banking_cycle_is_boom = yes } add = 45 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 15 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 35 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
         if = { limit = { banking_tool_rate_hike_active = yes } add = 20 }
         if = { limit = { has_modifier = banking_fx_devaluation } add = 30 }
@@ -864,9 +869,10 @@ cb_export_credit_facility = {
 
     ai_chance = {
         value = 0
-        # Core: use in panic/downturn, or when momentum is sharply negative
+        # Core: use in panic/downturn/stagnation, or when momentum is sharply negative
         if = { limit = { banking_cycle_is_panic = yes } add = 60 }
         if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+        if = { limit = { banking_cycle_is_stagnation = yes } add = 25 }
         if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 
         # Law flavor
@@ -905,8 +911,8 @@ cb_disable_export_credit_facility = {
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_stable = yes } add = 15 }
-        if = { limit = { banking_cycle_is_expansion = yes } add = 25 }
-        if = { limit = { banking_cycle_is_boom = yes } add = 40 }
+        if = { limit = { banking_cycle_is_expansion = yes } add = 15 }
+        if = { limit = { banking_cycle_is_boom = yes } add = 35 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
         if = { limit = { banking_cycle_bubble_risk_high = yes } add = 20 }
     }

@@ -1,4 +1,4 @@
-namespace = repeatable_events
+﻿namespace = repeatable_events
 
 # =============================================================
 # FAMILY 1 — Election Debate → Holo-Debate → Neural Town Hall
@@ -113,7 +113,7 @@ repeatable_events.20 = {
 
     trigger = {
         OR = { has_technology_researched = containerization has_technology_researched = integrated_circuits }
-        any_market = { any_trade_route = { is_import = yes level >= 3 } }
+        country_rank >= rank_value:major_power
     }
 
     option = { # Subsidize Freight
@@ -173,7 +173,7 @@ repeatable_events.30 = {
     option = { # Retraining
         name = repeatable_events.30.b
         trigger = { OR = { has_law = law_type:law_worker_protections has_law = law_type:law_regulatory_bodies } }
-        add_loyalists = { value = small_loyalists strata = lower }
+        add_loyalists = { value = small_radicals strata = lower }
         add_modifier = { name = re_automation_retraining days = long_modifier_time }
     }
 

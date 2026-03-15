@@ -1,0 +1,216 @@
+### Combined Arms Effects ###
+# Applies or removes combined arms bonuses per military formation based on unit composition.
+# Each army unit group provides unique bonuses when at least 5% of the formation
+# belongs to that group AND the formation has 2+ qualifying groups.
+# Called from on_monthly_pulse_country via combined_arms_update_on_action.
+
+apply_combined_arms_bonuses = {
+	# Evaluate each army formation independently
+	every_military_formation = {
+		limit = { is_army = yes }
+
+		# ---- Count units per group ----
+		set_local_variable = { name = ca_total value = 0 }
+		set_local_variable = { name = ca_infantry value = 0 }
+		set_local_variable = { name = ca_artillery value = 0 }
+		set_local_variable = { name = ca_cavalry value = 0 }
+		set_local_variable = { name = ca_tanks value = 0 }
+		set_local_variable = { name = ca_aircraft value = 0 }
+
+		every_combat_unit = {
+			change_local_variable = { name = ca_total add = 1 }
+			if = {
+				limit = { combat_unit_is_infantry_group = yes }
+				change_local_variable = { name = ca_infantry add = 1 }
+			}
+			else_if = {
+				limit = { combat_unit_is_artillery_group = yes }
+				change_local_variable = { name = ca_artillery add = 1 }
+			}
+			else_if = {
+				limit = { combat_unit_is_cavalry_group = yes }
+				change_local_variable = { name = ca_cavalry add = 1 }
+			}
+			else_if = {
+				limit = { combat_unit_is_tank_group = yes }
+				change_local_variable = { name = ca_tanks add = 1 }
+			}
+			else_if = {
+				limit = { combat_unit_is_aircraft_group = yes }
+				change_local_variable = { name = ca_aircraft add = 1 }
+			}
+		}
+
+		# ---- Determine which groups meet 5% threshold ----
+		# Method: group_count * 20 >= total means group >= 5% of formation.
+		# We compute group_count * 20 - total and check >= 0.
+		# Guard: skip empty formations (0 * 20 - 0 = 0 would pass all checks).
+		set_local_variable = { name = ca_groups value = 0 }
+		set_local_variable = { name = ca_has_infantry value = 0 }
+		set_local_variable = { name = ca_has_artillery value = 0 }
+		set_local_variable = { name = ca_has_cavalry value = 0 }
+		set_local_variable = { name = ca_has_tanks value = 0 }
+		set_local_variable = { name = ca_has_aircraft value = 0 }
+
+		if = {
+			limit = { local_var:ca_total >= 1 }
+
+			# Infantry threshold check
+			set_local_variable = { name = ca_check value = local_var:ca_infantry }
+			change_local_variable = { name = ca_check multiply = 20 }
+			change_local_variable = { name = ca_check add = { value = local_var:ca_total multiply = -1 } }
+			if = {
+				limit = { local_var:ca_check >= 0 }
+				set_local_variable = { name = ca_has_infantry value = 1 }
+				change_local_variable = { name = ca_groups add = 1 }
+			}
+
+			# Artillery threshold check
+			set_local_variable = { name = ca_check value = local_var:ca_artillery }
+			change_local_variable = { name = ca_check multiply = 20 }
+			change_local_variable = { name = ca_check add = { value = local_var:ca_total multiply = -1 } }
+			if = {
+				limit = { local_var:ca_check >= 0 }
+				set_local_variable = { name = ca_has_artillery value = 1 }
+				change_local_variable = { name = ca_groups add = 1 }
+			}
+
+			# Cavalry/Recon threshold check
+			set_local_variable = { name = ca_check value = local_var:ca_cavalry }
+			change_local_variable = { name = ca_check multiply = 20 }
+			change_local_variable = { name = ca_check add = { value = local_var:ca_total multiply = -1 } }
+			if = {
+				limit = { local_var:ca_check >= 0 }
+				set_local_variable = { name = ca_has_cavalry value = 1 }
+				change_local_variable = { name = ca_groups add = 1 }
+			}
+
+			# Tanks threshold check
+			set_local_variable = { name = ca_check value = local_var:ca_tanks }
+			change_local_variable = { name = ca_check multiply = 20 }
+			change_local_variable = { name = ca_check add = { value = local_var:ca_total multiply = -1 } }
+			if = {
+				limit = { local_var:ca_check >= 0 }
+				set_local_variable = { name = ca_has_tanks value = 1 }
+				change_local_variable = { name = ca_groups add = 1 }
+			}
+
+			# Aircraft threshold check
+			set_local_variable = { name = ca_check value = local_var:ca_aircraft }
+			change_local_variable = { name = ca_check multiply = 20 }
+			change_local_variable = { name = ca_check add = { value = local_var:ca_total multiply = -1 } }
+			if = {
+				limit = { local_var:ca_check >= 0 }
+				set_local_variable = { name = ca_has_aircraft value = 1 }
+				change_local_variable = { name = ca_groups add = 1 }
+			}
+		}
+
+		# ---- Apply or remove formation-level modifiers ----
+
+		# Infantry Screen: defense bonus when infantry supports other branches
+		if = {
+			limit = {
+				local_var:ca_groups >= 2
+				local_var:ca_has_infantry >= 1
+			}
+			if = {
+				limit = { NOT = { has_modifier = combined_arms_infantry_screens } }
+				add_modifier = { name = combined_arms_infantry_screens }
+			}
+		}
+		else = {
+			if = {
+				limit = { has_modifier = combined_arms_infantry_screens }
+				remove_modifier = combined_arms_infantry_screens
+			}
+		}
+
+		# Fire Support: offense bonus when artillery supports other branches
+		if = {
+			limit = {
+				local_var:ca_groups >= 2
+				local_var:ca_has_artillery >= 1
+			}
+			if = {
+				limit = { NOT = { has_modifier = combined_arms_fire_support } }
+				add_modifier = { name = combined_arms_fire_support }
+			}
+		}
+		else = {
+			if = {
+				limit = { has_modifier = combined_arms_fire_support }
+				remove_modifier = combined_arms_fire_support
+			}
+		}
+
+		# Recon Advantage: mobility bonus when cavalry/scouts support other branches
+		if = {
+			limit = {
+				local_var:ca_groups >= 2
+				local_var:ca_has_cavalry >= 1
+			}
+			if = {
+				limit = { NOT = { has_modifier = combined_arms_recon_advantage } }
+				add_modifier = { name = combined_arms_recon_advantage }
+			}
+		}
+		else = {
+			if = {
+				limit = { has_modifier = combined_arms_recon_advantage }
+				remove_modifier = combined_arms_recon_advantage
+			}
+		}
+
+		# Armored Spearhead: offense+defense bonus when tanks support other branches
+		if = {
+			limit = {
+				local_var:ca_groups >= 2
+				local_var:ca_has_tanks >= 1
+			}
+			if = {
+				limit = { NOT = { has_modifier = combined_arms_armored_spearhead } }
+				add_modifier = { name = combined_arms_armored_spearhead }
+			}
+		}
+		else = {
+			if = {
+				limit = { has_modifier = combined_arms_armored_spearhead }
+				remove_modifier = combined_arms_armored_spearhead
+			}
+		}
+
+		# Air Superiority: offense+morale bonus when aircraft support other branches
+		if = {
+			limit = {
+				local_var:ca_groups >= 2
+				local_var:ca_has_aircraft >= 1
+			}
+			if = {
+				limit = { NOT = { has_modifier = combined_arms_air_superiority } }
+				add_modifier = { name = combined_arms_air_superiority }
+			}
+		}
+		else = {
+			if = {
+				limit = { has_modifier = combined_arms_air_superiority }
+				remove_modifier = combined_arms_air_superiority
+			}
+		}
+
+		# Full Spectrum Dominance: all 5 army groups present at 5%+ each
+		if = {
+			limit = { local_var:ca_groups >= 5 }
+			if = {
+				limit = { NOT = { has_modifier = combined_arms_full_spectrum } }
+				add_modifier = { name = combined_arms_full_spectrum }
+			}
+		}
+		else = {
+			if = {
+				limit = { has_modifier = combined_arms_full_spectrum }
+				remove_modifier = combined_arms_full_spectrum
+			}
+		}
+	}
+}

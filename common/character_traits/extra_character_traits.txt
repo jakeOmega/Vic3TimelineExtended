@@ -110,6 +110,7 @@ trait_predictive_logistics = {
 			limit = {
 				owner = {
 					has_technology_researched = predictive_logistics
+					NOT = { has_technology_researched = military_grade_cybersecurity }
 				}
 			}
 			add = 10000
@@ -128,7 +129,7 @@ trait_military_grade_cybersecurity = {
 	}
 
 	command_modifier = {
-		character_command_limit_mult = 0.5
+		character_command_limit_mult = 1.0
 	}
 
 	country_modifier = {
@@ -150,6 +151,7 @@ trait_military_grade_cybersecurity = {
 			limit = {
 				owner = {
 					has_technology_researched = military_grade_cybersecurity
+					NOT = { has_technology_researched = jadc2 }
 				}
 			}
 			add = 10000
@@ -157,6 +159,7 @@ trait_military_grade_cybersecurity = {
 	}
 
 	replace = {
+		trait_predictive_logistics
 	}
 }
 
@@ -168,7 +171,7 @@ trait_jadc2 = {
 	}
 
 	command_modifier = {
-		character_command_limit_mult = 1.0
+		character_command_limit_mult = 2.0
 	}
 
 	country_modifier = {
@@ -190,6 +193,7 @@ trait_jadc2 = {
 			limit = {
 				owner = {
 					has_technology_researched = jadc2
+					NOT = { has_technology_researched = swarm_technology }
 				}
 			}
 			add = 10000
@@ -197,6 +201,7 @@ trait_jadc2 = {
 	}
 
 	replace = {
+		trait_military_grade_cybersecurity
 	}
 }
 
@@ -208,7 +213,7 @@ trait_swarm_technology = {
 	}
 
 	command_modifier = {
-		character_command_limit_mult = 1.0
+		character_command_limit_mult = 3.0
 	}
 
 	country_modifier = {
@@ -237,5 +242,6 @@ trait_swarm_technology = {
 	}
 
 	replace = {
+		trait_jadc2
 	}
 }

@@ -20,11 +20,13 @@ on_monthly_pulse_country = {
 		ministry_of_thought_control_on_action
 		remove_invalid_buildings
 		cheaty_on_action
+		combined_arms_update_on_action
 		investment_pool_setup_on_action
 		character_update_on_action
 		international_relations_events_on_action
 		decolonization_events_on_action
 		movement_events_te_on_action
+		society_technology_events_on_action
 	}
 }
 
@@ -125,6 +127,15 @@ space_elevator_on_action = {
 					multiplier = this.var:space_elevator_progress_var
 				}
 			}
+		}
+	}
+}
+
+combined_arms_update_on_action = {
+	effect = {
+		if = {
+			limit = { modifier:country_combined_arms_bonus_enabled_bool = yes }
+			apply_combined_arms_bonuses = yes
 		}
 	}
 }
@@ -1309,7 +1320,7 @@ movement_events_te_on_action = {
 			10 = {
 				trigger = {
 					any_political_movement = { is_political_movement_type = movement_anti_war }
-					country_population >= 1000000
+					country_rank >= rank_value:minor_power
 				}
 				trigger_event = { id = movement_events_te.7 }
 			}
@@ -1320,9 +1331,9 @@ movement_events_te_on_action = {
 					any_scope_state = {
 						any_scope_building = {
 							OR = {
-								is_building_group = bg:bg_military_industry
+								is_building_group = bg_military_industry
 								is_building_type = building_arms_industry
-								is_building_type = building_munitions_industry
+								is_building_type = building_munition_plant
 							}
 							level >= 3
 						}
@@ -1365,6 +1376,258 @@ movement_events_te_on_action = {
 					has_technology_researched = mind_backups
 				}
 				trigger_event = { id = movement_events_te.12 }
+			}
+		}
+	}
+}
+
+# ============================================================================
+# SOCIETY & TECHNOLOGY EVENTS — monthly chance for eligible countries
+# ============================================================================
+society_technology_events_on_action = {
+	effect = {
+		random_list = {
+			900 = { } # ~90% chance of nothing
+
+			# === SECOND WAVE FEMINISM ===
+			5 = {
+				trigger = {
+					has_technology_researched = second_wave_feminism
+					OR = { has_law = law_type:law_women_in_the_workplace has_law = law_type:law_women_own_property }
+				}
+				trigger_event = { id = society_technology_events.1 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = second_wave_feminism
+					has_law = law_type:law_women_in_the_workplace
+				}
+				trigger_event = { id = society_technology_events.2 }
+			}
+
+			# === CONTRACEPTIVE PILLS ===
+			5 = {
+				trigger = { has_technology_researched = contraceptive_pill }
+				trigger_event = { id = society_technology_events.3 }
+			}
+
+			# === SEXUAL REVOLUTION ===
+			5 = {
+				trigger = { has_technology_researched = sexual_revolution }
+				trigger_event = { id = society_technology_events.4 }
+			}
+			5 = {
+				trigger = { has_technology_researched = sexual_revolution }
+				trigger_event = { id = society_technology_events.5 }
+			}
+
+			# === VIDEO GAMES ===
+			5 = {
+				trigger = {
+					has_technology_researched = video_games
+					any_scope_building = {
+						OR = { is_building_type = building_art_academy is_building_type = building_software_industry }
+						level >= 2
+					}
+				}
+				trigger_event = { id = society_technology_events.6 }
+			}
+
+			# === LGBTQ+ RIGHTS ===
+			5 = {
+				trigger = {
+					has_technology_researched = LGBTQ_rights_movement
+					NOT = { has_law = law_type:law_full_equality_and_protection }
+				}
+				trigger_event = { id = society_technology_events.7 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = LGBTQ_rights_movement
+					OR = { has_law = law_type:law_basic_protections has_law = law_type:law_comprehensive_rights has_law = law_type:law_full_equality_and_protection }
+				}
+				trigger_event = { id = society_technology_events.8 }
+			}
+
+			# === GLOBALIZATION ===
+			5 = {
+				trigger = {
+					has_technology_researched = globalization
+					country_rank >= rank_value:major_power
+				}
+				trigger_event = { id = society_technology_events.9 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = globalization
+					country_rank >= rank_value:major_power
+				}
+				trigger_event = { id = society_technology_events.10 }
+			}
+
+			# === TERRORISM ===
+			5 = {
+				trigger = {
+					has_technology_researched = terrorism_and_anti_terrorism
+					country_rank >= rank_value:minor_power
+				}
+				trigger_event = { id = society_technology_events.11 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = terrorism_and_anti_terrorism
+					OR = { has_technology_researched = cybersecurity has_technology_researched = social_media }
+				}
+				trigger_event = { id = society_technology_events.12 }
+			}
+
+			# === SOCIAL MEDIA ===
+			5 = {
+				trigger = { has_technology_researched = social_media }
+				trigger_event = { id = society_technology_events.13 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = social_media
+					NOT = { has_law = law_type:law_single_party_state }
+					any_country = {
+						NOT = { this = root }
+						has_technology_researched = social_media
+					}
+				}
+				trigger_event = { id = society_technology_events.14 }
+			}
+
+			# === SOCIAL JUSTICE ===
+			5 = {
+				trigger = {
+					has_technology_researched = social_justice_movements
+					any_scope_building = { is_building_type = building_university level >= 3 }
+				}
+				trigger_event = { id = society_technology_events.15 }
+			}
+
+			# === BRAIN-COMPUTER INTERFACES ===
+			5 = {
+				trigger = { has_technology_researched = brain_computer_interfaces }
+				trigger_event = { id = society_technology_events.16 }
+			}
+
+			# === HUMAN AUGMENTATION ===
+			5 = {
+				trigger = {
+					has_technology_researched = biohacking_and_human_augmentation
+					NOT = { has_law = law_type:law_human_purity }
+				}
+				trigger_event = { id = society_technology_events.17 }
+			}
+
+			# === SPACE COLONIZATION ===
+			5 = {
+				trigger = {
+					has_technology_researched = space_colonization
+					any_scope_building = { is_building_type = building_space_program level >= 3 }
+				}
+				trigger_event = { id = society_technology_events.18 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = space_colonization
+					any_scope_building = { is_building_type = building_space_elevator level >= 1 }
+				}
+				trigger_event = { id = society_technology_events.19 }
+			}
+
+			# === TELEPATHIC COMMUNITIES ===
+			5 = {
+				trigger = { has_technology_researched = telepathic_communities }
+				trigger_event = { id = society_technology_events.20 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = telepathic_communities
+					any_country = {
+						NOT = { this = root }
+						has_technology_researched = telepathic_communities
+					}
+				}
+				trigger_event = { id = society_technology_events.21 }
+			}
+
+			# === NUCLEAR POWER / MELTDOWNS ===
+			5 = {
+				trigger = {
+					has_technology_researched = nuclear_energy
+					any_scope_building = { is_building_type = building_nuclear_plant level >= 1 }
+				}
+				trigger_event = { id = society_technology_events.22 }
+			}
+			3 = {
+				trigger = {
+					has_technology_researched = nuclear_energy
+					any_scope_building = { is_building_type = building_nuclear_plant level >= 3 }
+				}
+				trigger_event = { id = society_technology_events.23 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = nuclear_energy
+					any_scope_building = { is_building_type = building_nuclear_plant level >= 2 }
+					OR = {
+						has_modifier = ste_reactor_leak_contained
+						has_modifier = ste_reactor_leak_coverup
+						has_modifier = ste_reactor_leak_shutdown
+						has_modifier = ste_meltdown_evacuate
+						has_modifier = ste_meltdown_contain
+					}
+				}
+				trigger_event = { id = society_technology_events.24 }
+			}
+
+			# === ARTIFICIAL INTELLIGENCE ===
+			5 = {
+				trigger = { has_technology_researched = generative_ai }
+				trigger_event = { id = society_technology_events.25 }
+			}
+			5 = {
+				trigger = { has_technology_researched = artificial_intelligence }
+				trigger_event = { id = society_technology_events.26 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = artificial_intelligence
+					NOT = { has_law = law_type:law_algorithmic_governance }
+				}
+				trigger_event = { id = society_technology_events.27 }
+			}
+
+			# === BIOENGINEERING ===
+			5 = {
+				trigger = { has_technology_researched = genetic_engineering }
+				trigger_event = { id = society_technology_events.28 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = synthetic_biology
+					any_scope_building = {
+						OR = { is_building_group = bg_agriculture is_building_group = bg_ranching }
+						level >= 3
+					}
+				}
+				trigger_event = { id = society_technology_events.29 }
+			}
+
+			# === AUTONOMOUS VEHICLES ===
+			5 = {
+				trigger = { has_technology_researched = autonomous_vehicles }
+				trigger_event = { id = society_technology_events.30 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = autonomous_vehicles
+					OR = { has_modifier = ste_av_full_adoption has_modifier = ste_av_cautious_rollout }
+				}
+				trigger_event = { id = society_technology_events.31 }
 			}
 		}
 	}
