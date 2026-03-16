@@ -305,21 +305,7 @@ remove_or_create_homelands_on_action = {
 
 pollution_on_action = {
 	effect = {
-		if = {
-			limit = { has_modifier = pollution_generation_mult_effect }
-			remove_modifier = pollution_generation_mult_effect
-		}
-		if = {
-			limit = { institution_ministry_of_the_environment_pollution_generation < 0 }
-			add_modifier = {
-				name = pollution_generation_mult_effect
-				multiplier = institution_ministry_of_the_environment_pollution_generation
-			}
-			set_variable = {
-				name = prior_pollution_reduction
-				value = institution_ministry_of_the_environment_pollution_generation
-			}
-		}
+		te_update_pollution_modifier = yes
 	}
 }
 
@@ -928,16 +914,7 @@ fix_incompatible_laws = {
 
 tourism_on_action = {
 	effect = {
-		remove_modifier = tourism_output
-		remove_modifier = tourism_throughput
-		add_modifier = {
-			name = tourism_output
-			multiplier = total_tourism_output_bonus_percent
-		}
-		add_modifier = {
-			name = tourism_throughput
-			multiplier = total_tourism_throughput_bonus_percent
-		}
+		te_update_tourism_modifier = yes
 	}
 }
 
@@ -1653,11 +1630,7 @@ construction_cost_scaling_on_action = {
 # See extra_script_values.txt for tuning constants.
 migration_crowding_on_action = {
 	effect = {
-		remove_modifier = migration_crowding
-		if = {
-			limit = { migration_crowding_mult > 0 }
-			add_modifier = { name = migration_crowding multiplier = migration_crowding_mult }
-		}
+		te_update_migration_crowding_modifier = yes
 	}
 }
 
