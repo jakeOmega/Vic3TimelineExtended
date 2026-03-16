@@ -1,0 +1,1220 @@
+select_name_a = {
+    name = "custom_religion_name_a"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_a_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_a_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_a = {
+    name = "custom_religion_name_a"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_a_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_a_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_b = {
+    name = "custom_religion_name_b"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_b_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_b_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_b = {
+    name = "custom_religion_name_b"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_b_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_b_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_c = {
+    name = "custom_religion_name_c"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_c_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_c_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_c = {
+    name = "custom_religion_name_c"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_c_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_c_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_d = {
+    name = "custom_religion_name_d"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_d_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_d_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_d = {
+    name = "custom_religion_name_d"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_d_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_d_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_e = {
+    name = "custom_religion_name_e"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_e_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_e_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_e = {
+    name = "custom_religion_name_e"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_e_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_e_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_f = {
+    name = "custom_religion_name_f"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_f_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_f_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_f = {
+    name = "custom_religion_name_f"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_f_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_f_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_g = {
+    name = "custom_religion_name_g"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_g_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_g_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_g = {
+    name = "custom_religion_name_g"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_g_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_g_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_h = {
+    name = "custom_religion_name_h"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_h_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_h_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_h = {
+    name = "custom_religion_name_h"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_h_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_h_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_i = {
+    name = "custom_religion_name_i"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_i_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_i_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_i = {
+    name = "custom_religion_name_i"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_i_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_i_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_j = {
+    name = "custom_religion_name_j"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_j_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_j_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_j = {
+    name = "custom_religion_name_j"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_j_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_j_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_k = {
+    name = "custom_religion_name_k"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_k_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_k_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_k = {
+    name = "custom_religion_name_k"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_k_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_k_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_l = {
+    name = "custom_religion_name_l"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_l_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_l_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_l = {
+    name = "custom_religion_name_l"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_l_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_l_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_m = {
+    name = "custom_religion_name_m"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_m_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_m_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_m = {
+    name = "custom_religion_name_m"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_m_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_m_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_n = {
+    name = "custom_religion_name_n"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_n_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_n_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_n = {
+    name = "custom_religion_name_n"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_n_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_n_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_o = {
+    name = "custom_religion_name_o"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_o_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_o_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_o = {
+    name = "custom_religion_name_o"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_o_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_o_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_p = {
+    name = "custom_religion_name_p"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_p_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_p_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_p = {
+    name = "custom_religion_name_p"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_p_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_p_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_q = {
+    name = "custom_religion_name_q"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_q_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_q_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_q = {
+    name = "custom_religion_name_q"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_q_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_q_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_r = {
+    name = "custom_religion_name_r"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_r_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_r_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_r = {
+    name = "custom_religion_name_r"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_r_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_r_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_s = {
+    name = "custom_religion_name_s"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_s_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_s_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_s = {
+    name = "custom_religion_name_s"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_s_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_s_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_name_t = {
+    name = "custom_religion_name_t"
+    desc = "SELECT_NAME_DESC"
+
+    visible = {
+        NOT = { has_variable = custom_religion_name_t_selected }
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_NAME_DESC"
+            set_variable = {
+                name = custom_religion_name_t_selected
+                value = 1
+            }
+            change_variable = {
+                name = selected_name
+                add = 1
+            }
+        }
+    }
+}
+
+deselect_name_t = {
+    name = "custom_religion_name_t"
+    desc = "DESELECT_NAME_DESC"
+
+    visible = {
+        has_variable = custom_religion_name_t_selected
+        var:current_stage = 3
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_name > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_NAME_DESC"
+            remove_variable = custom_religion_name_t_selected
+            change_variable = {
+                name = selected_name
+                subtract = 1
+            }
+        }
+    }
+}
+
