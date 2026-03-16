@@ -115,6 +115,12 @@
                         name = nuclear_weapon_program_progress
                         multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
                     }
+                    # Track whether this is the first nuclear power in the world
+                    if = {
+                        limit = { NOT = { has_global_variable = world_first_nuclear_weapon } }
+                        set_variable = { name = is_world_first_nuclear_power value = yes }
+                    }
+                    set_global_variable = { name = world_first_nuclear_weapon value = yes }
                     trigger_event = { id = nuclear_weapon_events.10 }
                     save_scope_as = first_nuke_country
                     every_country = {

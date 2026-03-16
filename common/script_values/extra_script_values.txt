@@ -1522,11 +1522,11 @@ migration_crowding_density_reference = 50000
 migration_crowding_floor_ratio = 1  # 1x reference = normal density
 
 # Maximum penalty at this multiple of reference density
-migration_crowding_ceiling_ratio = 10  # 10x reference = extremely overcrowded
+migration_crowding_ceiling_ratio = 20  # 20x reference = extremely overcrowded
 
 # Maximum multiplier applied to migration_crowding modifier
-# With base -0.1 migration pull mult, 10 = -100% pull at ceiling
-migration_crowding_max_mult = 10
+# With base -0.1 migration pull mult, 20 = -200% pull at ceiling
+migration_crowding_max_mult = 20
 
 # Derived thresholds (do not edit — change the ratios above instead)
 migration_crowding_density_floor = {

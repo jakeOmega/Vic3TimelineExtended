@@ -1,4 +1,4 @@
-# ======================================================================
+﻿# ======================================================================
 #  LAW ENACTMENT EVENTS – ON ACTIONS
 #  Wires extra_law_events and ministry_law_events into the three
 #  law-enactment checkpoint on-actions (advance / debate / stall).
@@ -58,6 +58,15 @@ on_law_checkpoint_debate = {
 		10 = extra_law_events.22	# The Automation Question (Welfare / UBI)
 		10 = extra_law_events.24	# The People's Assembly (Governance – Direct Democracy)
 
+		# --- Amendment Events ---
+		10 = extra_law_events.28	# The Language Compromise (Language Policy – Amendment)
+		10 = extra_law_events.29	# The Trust Question (Antitrust – Amendment)
+		10 = extra_law_events.30	# The Sentencing Debate (Criminal Justice – Amendment)
+		10 = extra_law_events.31	# The Privacy Bargain (Privacy Rights – Amendment)
+		10 = extra_law_events.32	# Laws of the New Battlefield (Rules of War – Amendment)
+		10 = extra_law_events.33	# Small Donors, Big Voices (Electoral Finance – Amendment)
+		10 = extra_law_events.34	# A Question of Conscience (LGBTQ Rights – Amendment)
+
 		# --- Ministry Law Events ---
 		10 = ministry_law_events.2	# The Budget Debate (Generic – funding contested)
 		10 = ministry_law_events.3	# Bureaucratic Turf Wars (Generic – jurisdictional conflict)
@@ -86,6 +95,15 @@ on_law_checkpoint_stall = {
 		10 = extra_law_events.15	# The Question of Autonomy (State Power – regional resistance)
 		10 = extra_law_events.17	# The Eldest Son's Complaint (Inheritance – landowner resistance)
 		10 = extra_law_events.22	# The Automation Question (Welfare – competing interests clash)
+
+		# --- Amendment Events (also in stall — amendments can break deadlocks) ---
+		10 = extra_law_events.28	# The Language Compromise (Language Policy – Amendment)
+		10 = extra_law_events.29	# The Trust Question (Antitrust – Amendment)
+		10 = extra_law_events.30	# The Sentencing Debate (Criminal Justice – Amendment)
+		10 = extra_law_events.31	# The Privacy Bargain (Privacy Rights – Amendment)
+		10 = extra_law_events.32	# Laws of the New Battlefield (Rules of War – Amendment)
+		10 = extra_law_events.33	# Small Donors, Big Voices (Electoral Finance – Amendment)
+		10 = extra_law_events.34	# A Question of Conscience (LGBTQ Rights – Amendment)
 
 		# --- Ministry Law Events ---
 		10 = ministry_law_events.2	# The Budget Debate (Generic – fiscal opposition)

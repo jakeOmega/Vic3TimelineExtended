@@ -1896,3 +1896,1059 @@ extra_law_events.24 = {
 		}
 	}
 }
+
+# ======================================================================
+# 25 – The Nature of the Reform  (State-Led Language Reform — Founding)
+#
+#   When the law is activated, the government must decide the
+#   fundamental character of the reform:
+#     (a) Revive a classical or historical language
+#     (b) Construct a new national language from scratch
+#     (c) Simplify and standardize the existing language
+#
+#   Fires once on law activation (+ yearly fallback for existing
+#   saves).  Sets a permanent variable and applies a permanent
+#   modifier that persists until the law changes.
+# ======================================================================
+extra_law_events.25 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.25.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_semitic } }
+				desc = extra_law_events.25.d_semitic
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_romance } }
+				desc = extra_law_events.25.d_romance
+			}
+			triggered_desc = {
+				trigger = {
+					any_primary_culture = {
+						OR = {
+							has_discrimination_trait_group = language_group_sinic
+							has_discrimination_trait = language_japanese
+							has_discrimination_trait = language_korean
+						}
+					}
+				}
+				desc = extra_law_events.25.d_east_asian
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_indic } }
+				desc = extra_law_events.25.d_indic
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.25.d_default
+			}
+		}
+	}
+	flavor = extra_law_events.25.f
+
+	event_image = {
+		video = "southamerica_election"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	trigger = {
+		has_law = law_type:law_state_led_language_reform
+		NOT = { has_variable = language_reform_type }
+	}
+
+	immediate = {
+	}
+
+	option = { # Revive a classical or historical language
+		name = extra_law_events.25.a
+		default_option = yes
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_revival }
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Construct a new national language
+		name = extra_law_events.25.b
+		set_variable = { name = language_reform_type value = 2 }
+		add_modifier = { name = langreform_constructed }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = clergymen
+		}
+	}
+
+	option = { # Simplify and standardize the existing language
+		name = extra_law_events.25.c
+		set_variable = { name = language_reform_type value = 3 }
+		add_modifier = { name = langreform_simplification }
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = clergymen
+		}
+	}
+}
+
+# ======================================================================
+# 26 – The Language Academy  (State-Led Language Reform)
+#
+#   Who governs the reformed language?  A powerful regulatory body
+#   (Académie française, TDK) with binding authority, or a lighter
+#   consultative panel of scholars?
+#
+#   Works equally for a revived classical language, a constructed
+#   language, or a simplified existing one.  Permanent modifier.
+# ======================================================================
+extra_law_events.26 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.26.t
+	desc = extra_law_events.26.d
+	flavor = extra_law_events.26.f
+
+	event_image = {
+		video = "europenorthamerica_capitalists_meeting"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_law = law_type:law_state_led_language_reform
+		NOR = {
+			has_modifier = langreform_powerful_academy
+			has_modifier = langreform_advisory_panel
+		}
+	}
+
+	immediate = {
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	option = { # Powerful regulatory academy
+		name = extra_law_events.26.a
+		default_option = yes
+		add_modifier = { name = langreform_powerful_academy }
+		if = {
+			limit = { exists = scope:intelligentsia_ig }
+			scope:intelligentsia_ig = {
+				add_modifier = {
+					name = ig_approval_positive_modifier
+					days = normal_modifier_time
+				}
+			}
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = poor
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	option = { # Consultative panel of scholars
+		name = extra_law_events.26.b
+		add_modifier = { name = langreform_advisory_panel }
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = poor
+		}
+	}
+}
+
+# ======================================================================
+# 27 – Voices From the Margin  (State-Led Language Reform)
+#
+#   The reform raises the question of minority and regional languages.
+#   Should the state include protections and revival programmes for
+#   endangered tongues, or concentrate all resources on promoting the
+#   national language?  Permanent modifier.
+# ======================================================================
+extra_law_events.27 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.27.t
+	desc = extra_law_events.27.d
+	flavor = extra_law_events.27.f
+
+	event_image = {
+		video = "africa_public_protest"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_law = law_type:law_state_led_language_reform
+		NOR = {
+			has_modifier = langreform_minority_protection
+			has_modifier = langreform_national_focus
+		}
+		any_scope_state = {
+			any_scope_culture = {
+				NOT = { is_primary_culture_of = root }
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	option = { # Include minority language revival programmes
+		name = extra_law_events.27.a
+		default_option = yes
+		add_modifier = { name = langreform_minority_protection }
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Focus entirely on the national language
+		name = extra_law_events.27.b
+		add_modifier = { name = langreform_national_focus }
+		add_radicals = {
+			value = small_radicals
+			strata = poor
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+	}
+}
+
+# ======================================================================
+#  AMENDMENT EVENTS (28–34)
+#  These events offer amendments as compromises during law enactment.
+#  Pattern: 2-3 amendment options + 1 "reject all" default option.
+#  Accepting an amendment = compromise that speeds enactment but
+#  has political side-effects. Rejecting = purer law, less momentum.
+# ======================================================================
+
+# ======================================================================
+#  28 – The Language Compromise  (Language Policy – Amendment)
+# ======================================================================
+extra_law_events.28 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.28.t
+	desc = extra_law_events.28.d
+	flavor = extra_law_events.28.f
+
+	category = enactment
+
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_state_led_language_reform
+			is_enacting_law = law_type:law_civic_monolingualism
+			is_enacting_law = law_type:law_multilingual_federalism
+		}
+		NOT = {
+			currently_enacting_law = {
+				OR = {
+					has_amendment = amendment_type:amendment_minority_script_preservation
+					has_amendment = amendment_type:amendment_official_bilingualism
+				}
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Minority script preservation
+		name = extra_law_events.28.a
+		trigger = {
+			OR = {
+				is_enacting_law = law_type:law_state_led_language_reform
+				is_enacting_law = law_type:law_civic_monolingualism
+			}
+		}
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_minority_script_preservation
+				sponsor = scope:intelligentsia_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+	}
+
+	option = { # Official bilingualism
+		name = extra_law_events.28.b
+		trigger = {
+			OR = {
+				is_enacting_law = law_type:law_state_led_language_reform
+				is_enacting_law = law_type:law_multilingual_federalism
+			}
+		}
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_official_bilingualism
+				sponsor = scope:intelligentsia_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # No amendment
+		name = extra_law_events.28.c
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  29 – The Trust Question  (Antitrust – Amendment)
+# ======================================================================
+extra_law_events.29 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.29.t
+	desc = extra_law_events.29.d
+	flavor = extra_law_events.29.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_capitalists_meeting"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_trust_busting
+			is_enacting_law = law_type:law_regulated_utilities
+		}
+		NOT = {
+			currently_enacting_law = {
+				OR = {
+					has_amendment = amendment_type:amendment_national_champion_exemption
+					has_amendment = amendment_type:amendment_cooperative_preference
+				}
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+		ig:ig_trade_unions ?= {
+			save_scope_as = unions_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # National champion exemption
+		name = extra_law_events.29.a
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_national_champion_exemption
+				sponsor = scope:industrialists_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = capitalists
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = shopkeepers
+		}
+	}
+
+	option = { # Worker cooperative preference
+		name = extra_law_events.29.b
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_cooperative_preference
+				sponsor = scope:unions_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = capitalists
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = machinists
+		}
+	}
+
+	option = { # No amendment
+		name = extra_law_events.29.c
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  30 – The Sentencing Debate  (Criminal Justice – Amendment)
+# ======================================================================
+extra_law_events.30 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.30.t
+	desc = extra_law_events.30.d
+	flavor = extra_law_events.30.f
+
+	category = enactment
+
+	event_image = {
+		video = "votp_cops_march"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_restorative_justice
+			is_enacting_law = law_type:law_rehabilitation_focused_criminal_justice
+			is_enacting_law = law_type:law_punishment_focused_criminal_justice
+		}
+		NOT = {
+			currently_enacting_law = {
+				OR = {
+					has_amendment = amendment_type:amendment_mandatory_minimums
+					has_amendment = amendment_type:amendment_community_service
+				}
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_petty_bourgeoisie ?= {
+			save_scope_as = bourgeoisie_ig
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Mandatory minimums (compromise when passing reform)
+		name = extra_law_events.30.a
+		trigger = {
+			OR = {
+				is_enacting_law = law_type:law_restorative_justice
+				is_enacting_law = law_type:law_rehabilitation_focused_criminal_justice
+			}
+		}
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_mandatory_minimums
+				sponsor = scope:bourgeoisie_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = poor
+		}
+	}
+
+	option = { # Community service alternative (compromise when passing tough law)
+		name = extra_law_events.30.b
+		trigger = {
+			is_enacting_law = law_type:law_punishment_focused_criminal_justice
+		}
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_community_service
+				sponsor = scope:intelligentsia_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+	}
+
+	option = { # No amendment
+		name = extra_law_events.30.c
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  31 – The Privacy Bargain  (Privacy Rights – Amendment)
+# ======================================================================
+extra_law_events.31 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.31.t
+	desc = extra_law_events.31.d
+	flavor = extra_law_events.31.f
+
+	category = enactment
+
+	event_image = {
+		video = "unspecific_signed_contract"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_moderate_data_privacy
+			is_enacting_law = law_type:law_strong_privacy_rights
+		}
+		NOT = {
+			currently_enacting_law = {
+				OR = {
+					has_amendment = amendment_type:amendment_corporate_data_exemption
+					has_amendment = amendment_type:amendment_whistleblower_shield
+				}
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Corporate data exemption
+		name = extra_law_events.31.a
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_corporate_data_exemption
+				sponsor = scope:industrialists_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = capitalists
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = poor
+		}
+	}
+
+	option = { # Whistleblower shield
+		name = extra_law_events.31.b
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_whistleblower_shield
+				sponsor = scope:intelligentsia_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = rich
+		}
+	}
+
+	option = { # No amendment
+		name = extra_law_events.31.c
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  32 – Laws of the New Battlefield  (Rules of War – Amendment)
+# ======================================================================
+extra_law_events.32 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.32.t
+	desc = extra_law_events.32.d
+	flavor = extra_law_events.32.f
+
+	category = enactment
+
+	event_image = {
+		video = "europenorthamerica_before_the_battle"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_humanitarian_regulations
+			is_enacting_law = law_type:law_limited_war
+			is_enacting_law = law_type:law_war_crimes_forbidden
+		}
+		NOT = {
+			currently_enacting_law = {
+				OR = {
+					has_amendment = amendment_type:amendment_no_first_strike
+					has_amendment = amendment_type:amendment_military_necessity_clause
+				}
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_intelligentsia ?= {
+			save_scope_as = intelligentsia_ig
+		}
+		ig:ig_armed_forces ?= {
+			save_scope_as = military_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # No-first-strike pledge
+		name = extra_law_events.32.a
+		trigger = {
+			has_technology_researched = nuclear_weapons
+			OR = {
+				is_enacting_law = law_type:law_humanitarian_regulations
+				is_enacting_law = law_type:law_limited_war
+			}
+		}
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_no_first_strike
+				sponsor = scope:intelligentsia_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = officers
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	option = { # Military necessity clause
+		name = extra_law_events.32.b
+		trigger = {
+			OR = {
+				is_enacting_law = law_type:law_war_crimes_forbidden
+				is_enacting_law = law_type:law_humanitarian_regulations
+			}
+		}
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_military_necessity_clause
+				sponsor = scope:military_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = officers
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	option = { # No amendment
+		name = extra_law_events.32.c
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  33 – Small Donors, Big Voices  (Electoral Finance – Amendment)
+# ======================================================================
+extra_law_events.33 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.33.t
+	desc = extra_law_events.33.d
+	flavor = extra_law_events.33.f
+
+	category = enactment
+
+	event_image = {
+		video = "southamerica_election"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_donation_limits
+			is_enacting_law = law_type:law_publicly_funded_elections
+		}
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_small_donor_matching
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_trade_unions ?= {
+			save_scope_as = unions_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Accept small donor matching
+		name = extra_law_events.33.a
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_small_donor_matching
+				sponsor = scope:unions_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+	}
+
+	option = { # Reject the proposal
+		name = extra_law_events.33.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = rich
+		}
+	}
+}
+
+# ======================================================================
+#  34 – A Question of Conscience  (LGBTQ Rights – Amendment)
+# ======================================================================
+extra_law_events.34 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.34.t
+	desc = extra_law_events.34.d
+	flavor = extra_law_events.34.f
+
+	category = enactment
+
+	event_image = {
+		video = "southamerica_christianity"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_basic_protections
+			is_enacting_law = law_type:law_comprehensive_rights
+			is_enacting_law = law_type:law_full_equality_and_protection
+		}
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_religious_exemption
+			}
+		}
+		ig:ig_devout ?= {
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_devout ?= {
+			save_scope_as = devout_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Accept religious exemption
+		name = extra_law_events.34.a
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_religious_exemption
+				sponsor = scope:devout_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		scope:devout_ig = {
+			improve_law_stance = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	option = { # Reject the exemption
+		name = extra_law_events.34.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		ig:ig_devout ?= {
+			add_modifier = {
+				name = ig_approval_very_negative_modifier
+				days = normal_modifier_time
+			}
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}

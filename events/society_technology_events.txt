@@ -774,6 +774,10 @@ society_technology_events.11 = {
 		NOT = { has_modifier = ste_terror_unity_resilience }
 		NOT = { has_modifier = ste_terror_intelligence_reform }
 		country_rank >= rank_value:minor_power
+		# Strong intelligence ministry (level 5) prevents most attacks
+		NOT = {
+			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 5 }
+		}
 	}
 
 	immediate = {
@@ -819,6 +823,12 @@ society_technology_events.11 = {
 		}
 		ai_chance = {
 			base = 4
+			modifier = {
+				trigger = {
+					institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
+				}
+				add = 4
+			}
 		}
 		# Invest in intelligence reform
 		add_modifier = {
@@ -1070,6 +1080,25 @@ society_technology_events.14 = {
 			is_decaying = yes
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = society_technology_events.14.c
+		trigger = {
+			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
+		}
+		ai_chance = { base = 8 }
+		# Deploy intelligence-backed cyber defense — neutralize the interference
+		add_modifier = {
+			name = ste_election_interference_cyber_defense
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:interfering_country }
+			change_relations = { country = scope:interfering_country value = -10 }
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
 	}
 }
 
@@ -1618,6 +1647,7 @@ society_technology_events.22 = {
 		NOT = { has_modifier = ste_reactor_leak_contained }
 		NOT = { has_modifier = ste_reactor_leak_coverup }
 		NOT = { has_modifier = ste_reactor_leak_shutdown }
+		NOT = { has_modifier = ste_reactor_leak_audit }
 		any_scope_building = {
 			is_building_type = building_nuclear_plant
 			level >= 1
@@ -1641,6 +1671,12 @@ society_technology_events.22 = {
 		default_option = yes
 		ai_chance = {
 			base = 3
+			modifier = {
+				trigger = {
+					institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
+				}
+				add = 3
+			}
 		}
 		# Contain the leak transparently
 		add_modifier = {
@@ -1683,6 +1719,28 @@ society_technology_events.22 = {
 		add_radicals = { value = small_radicals strata = upper }
 		add_loyalists = { value = small_radicals strata = lower }
 	}
+
+	option = {
+		name = society_technology_events.22.dd
+		trigger = {
+			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_technology_researched = fusion_power }
+				add = 3
+			}
+		}
+		# Proactive safety audit — strong institutions catch it early
+		add_modifier = {
+			name = ste_reactor_leak_audit
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = very_small_radicals strata = lower }
+	}
 }
 
 # Event 23: Nuclear Meltdown
@@ -1704,8 +1762,14 @@ society_technology_events.23 = {
 
 	trigger = {
 		has_technology_researched = nuclear_energy
+		NOT = { has_technology_researched = fusion_power } # fusion reactors don't melt down
 		NOT = { has_modifier = ste_meltdown_evacuate }
 		NOT = { has_modifier = ste_meltdown_contain }
+		NOT = { has_modifier = ste_meltdown_institutional_response }
+		# Strong consumer protection (level 5) prevents full meltdowns
+		NOT = {
+			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 }
+		}
 		any_scope_building = {
 			is_building_type = building_nuclear_plant
 			level >= 3
@@ -1753,6 +1817,24 @@ society_technology_events.23 = {
 		}
 		add_radicals = { value = medium_radicals strata = lower }
 		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = society_technology_events.23.c
+		trigger = {
+			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
+		}
+		ai_chance = {
+			base = 5
+		}
+		# Deploy institutional emergency response — faster containment
+		add_modifier = {
+			name = ste_meltdown_institutional_response
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
 	}
 }
 
@@ -2325,5 +2407,21 @@ society_technology_events.31 = {
 		}
 		add_radicals = { value = small_radicals strata = lower }
 		add_loyalists = { value = very_small_radicals strata = upper }
+	}
+
+	option = {
+		name = society_technology_events.31.c
+		trigger = {
+			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
+		}
+		ai_chance = { base = 8 }
+		# Ministry-led safety investigation — balanced resolution
+		add_modifier = {
+			name = ste_av_crash_investigation
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = very_small_radicals pop_type = academics }
 	}
 }

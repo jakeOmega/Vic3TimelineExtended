@@ -611,6 +611,13 @@ crop_failure_relief_modifier = {
 	state_standard_of_living_add = 0.5
 }
 
+crop_failure_ministry_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	building_group_bg_agriculture_throughput_add = -0.03
+	state_standard_of_living_add = 0.3
+	country_legitimacy_base_add = 5
+}
+
 climate_refugee_welcome_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_migration_pull_mult = 0.25
@@ -645,6 +652,13 @@ coastal_flooding_modifier = {
 	state_standard_of_living_add = -1
 }
 
+coastal_flood_defense_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	building_port_throughput_add = -0.05
+	state_infrastructure_add = 3
+	country_legitimacy_base_add = 5
+}
+
 water_crisis_rationing_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	state_standard_of_living_add = -1.5
@@ -657,6 +671,13 @@ water_crisis_infrastructure_modifier = {
 	state_standard_of_living_add = -0.5
 	country_bureaucracy_mult = -0.05
 	state_infrastructure_add = 5
+}
+
+water_crisis_ministry_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_standard_of_living_add = -0.3
+	state_infrastructure_add = 3
+	country_legitimacy_base_add = 5
 }
 
 green_tech_boom_modifier = {
@@ -698,6 +719,13 @@ tropical_disease_research_modifier = {
 	state_mortality_mult = 0.02
 	country_tech_research_speed_mult = 0.03
 	country_bureaucracy_mult = -0.03
+}
+
+tropical_disease_public_health_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_mortality_mult = 0.01
+	country_legitimacy_base_add = 10
+	state_standard_of_living_add = -0.3
 }
 
 climate_political_turmoil_modifier = {
@@ -1245,6 +1273,13 @@ terror_surveillance_modifier = {
 	country_authority_add = 150
 	state_radicals_from_discrimination_mult = -0.15
 	country_bureaucracy_mult = -0.05
+}
+
+terror_preempted_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	country_authority_add = 50
+	country_legitimacy_base_add = 10
 }
 
 foreign_terror_retaliation_modifier = {
@@ -2153,4 +2188,56 @@ minority_reform_movement_radicalism = {
 veterans_testimony_movement_calming = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	political_movement_radicalism_add = -0.20
+}
+
+# ======================================================================
+#  LANGUAGE REFORM MODIFIERS (permanent while law_state_led_language_reform active)
+# ======================================================================
+
+# Event 25 – The Nature of the Reform (founding – choose one)
+langreform_revival = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_bureaucracy_investment_cost_factor_mult = 0.05
+	country_education_fervor_add = 3
+}
+langreform_constructed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.10
+	country_tech_research_speed_mult = 0.03
+	country_bureaucracy_investment_cost_factor_mult = 0.03
+	country_primary_culture_fervor_from_laws_add = -3
+}
+langreform_simplification = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.10
+	country_education_fervor_add = 5
+	country_bureaucracy_investment_cost_factor_mult = -0.03
+}
+
+# Event 26 – The Language Academy (choose one)
+langreform_powerful_academy = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_bureaucracy_investment_cost_factor_mult = 0.05
+	state_assimilation_mult = 0.10
+	country_primary_culture_fervor_from_laws_add = 5
+}
+langreform_advisory_panel = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_influence_mult = 0.03
+	country_education_fervor_add = 3
+}
+
+# Event 27 – Voices From the Margin (choose one)
+langreform_minority_protection = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_support_separatism_resistance_mult = 0.15
+	country_bureaucracy_investment_cost_factor_mult = 0.05
+	state_assimilation_mult = -0.10
+}
+langreform_national_focus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_assimilation_mult = 0.15
+	country_support_separatism_strength_mult = 0.10
 }

@@ -18,6 +18,7 @@
   repeatable_events.20.a:0 "Subsidize emergency freight"
   repeatable_events.20.b:0 "Prioritize key inputs"
   repeatable_events.20.c:0 "Fast-track port upgrades"
+  repeatable_events.20.dd:0 "Activate ministry logistics coordination"
 
   # Family 5 — Automation Shock
   repeatable_events.30.t:0 "Automation Shock"
@@ -39,6 +40,7 @@
   repeatable_events.40.a:0 "Ignore it"
   repeatable_events.40.b:0 "Brief the public"
   repeatable_events.40.c:0 "Enforce platform moderation"
+  repeatable_events.40.d:0 "Deploy state media control"
 
   # Family 10 — Cyber Breach / Quantum Panic
   repeatable_events.50.t:0 "Network Compromised"
@@ -49,6 +51,7 @@
   repeatable_events.50.a:0 "Settle quietly and patch systems"
   repeatable_events.50.b:0 "Launch public forensics"
   repeatable_events.50.c:0 "Impose emergency security standards"
+  repeatable_events.50.d:0 "Deploy intelligence-assisted forensics"
 
   # Family 12 — Spectrum Crunch
   repeatable_events.60.t:0 "Spectrum Crunch"

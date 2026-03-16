@@ -5,3 +5,4 @@ path_constants.py
 path_constants.py
 *__pycache__
 .github/
+*.exe

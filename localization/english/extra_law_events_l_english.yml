@@ -173,3 +173,85 @@
  extra_law_events.24.f:0 ""For a single afternoon, the square was not a marketplace but a parliament. Fishmongers debated with professors, and the vote of a seamstress carried the same weight as that of a factory owner. It was, depending upon one's disposition, either the dawn of a new age or the beginning of the end.""
  extra_law_events.24.a:0 "Ride the popular wave — push the reform through!"
  extra_law_events.24.b:0 "Bring the opposition into the process."
+
+ # ===== 25 – The Nature of the Reform (State-Led Language Reform — Founding) =====
+ extra_law_events.25.t:0 "The Nature of the Reform"
+ extra_law_events.25.d_semitic:0 "With the state-led language reform now underway, the government must choose its fundamental character. Some scholars champion the revival of a classical tongue — Hebrew, the language of scripture and scholarship, reborn as a modern vehicle for law, commerce, and science. Others propose an entirely new constructed language, designed from first principles for clarity and ease of learning. A third faction urges pragmatism: simplify and standardize the existing language, purging archaic irregularities and unifying regional dialects."
+ extra_law_events.25.d_romance:0 "With the state-led language reform now underway, the government must choose its fundamental character. Classicists in the academy propose a return to the roots — reviving Latin, the mother of our tongue, as a common language of learning, diplomacy, and administration. Modernists counter with a bolder vision: a constructed language, designed from scratch for logical grammar and universal accessibility. Pragmatists urge the simplest path: standardize the existing language, unify spellings, and simplify its most bewildering irregularities."
+ extra_law_events.25.d_east_asian:0 "With the state-led language reform now underway, the government must choose its fundamental character. Traditionalist scholars advocate a return to the classical written language — the literary tongue of centuries of philosophy, law, and poetry — as the foundation for a modernized standard. Reformers propose something more radical: an entirely new constructed writing system, phonetic and accessible to all classes. A third camp argues for simplification of the existing script — reducing stroke counts, standardizing variant forms, and making literacy attainable for the common people."
+ extra_law_events.25.d_indic:0 "With the state-led language reform now underway, the government must choose its fundamental character. Sanskrit scholars argue for a revival of the sacred classical language — a tongue of unmatched grammatical precision that could unify the educated classes across regional divides. Linguists from the universities propose a novel approach: a constructed language combining the best features of our linguistic heritage into a modern, regular grammar. Administrators favour the practical option: standardize and simplify the existing language, reconciling regional dialects and streamlining its script."
+ extra_law_events.25.d_default:0 "With the state-led language reform now underway, the government must choose its fundamental character. Should we reach back into history and revive a classical or ancestral tongue as the basis for a modern standard? Or forge something entirely new — a constructed language designed from first principles for logic, clarity, and ease of learning? The most cautious voices urge a simpler path: take the language as it is, prune its irregularities, standardize its spelling, and unify its dialects."
+ extra_law_events.25.f:0 ""A nation's language is not merely a means of communication — it is the vessel in which the people carry their past into the future. The question before us is not which words to use, but what kind of nation we wish to become.""
+ extra_law_events.25.a:0 "Revive a classical or ancestral tongue."
+ extra_law_events.25.b:0 "Construct an entirely new language."
+ extra_law_events.25.c:0 "Simplify and standardize the existing language."
+
+ # ===== 26 – The Language Academy (State-Led Language Reform) =====
+ extra_law_events.26.t:0 "The Language Academy"
+ extra_law_events.26.d:0 "The language reform has advanced far enough that the question of institutional authority can no longer be deferred. Who shall govern the evolving standard — settling disputes over grammar, coining new technical terms, and policing loan-word policy? Proponents of a powerful regulatory academy argue that only binding rulings can ensure nationwide consistency. Others prefer a lighter consultative panel of scholars whose recommendations carry moral weight but no force of law."
+ extra_law_events.26.f:0 ""Give me twelve grammarians with the power of decree and I shall give you a language fit for science, commerce, and diplomacy within a generation. Give me twelve grammarians without it, and I shall give you twelve conflicting style guides.""
+ extra_law_events.26.a:0 "Establish a powerful academy with regulatory authority."
+ extra_law_events.26.b:0 "A consultative panel of scholars will suffice."
+
+ # ===== 27 – Voices From the Margin (State-Led Language Reform) =====
+ extra_law_events.27.t:0 "Voices From the Margin"
+ extra_law_events.27.d:0 "As the state-led language reform reshapes the linguistic landscape, delegations from minority communities have arrived in the capital with a plea: do not let the national language project become a weapon against their mother tongues. They ask for funding for regional-language schools, bilingual signage, and official recognition of minority literary traditions. Nationalists counter that the entire purpose of the reform is unity — and that dividing resources among dozens of regional tongues will only slow progress."
+ extra_law_events.27.f:0 ""We do not ask you to stop building bridges — only to remember that some of us live on both sides of the river. Our children can learn the national tongue without being forced to forget the lullabies their grandmothers sang.""
+ extra_law_events.27.a:0 "Include minority language revival programmes."
+ extra_law_events.27.b:0 "The national language must come first."
+
+ # ===== AMENDMENT EVENTS (28–34) =====
+
+ # ===== 28 – The Language Compromise (Language Policy – Amendment) =====
+ extra_law_events.28.t:0 "The Language Compromise"
+ extra_law_events.28.d:0 "The [SCOPE.sLaw('current_law_scope').GetName] bill has stalled in committee as rival factions propose amendments to shape the final law. Minority-language advocates want protections written into the text, while others push for official recognition of a second language. Each amendment would help secure enough votes to pass the bill — but each comes with political baggage."
+ extra_law_events.28.f:0 ""A law without compromise is a speech without an audience. You may admire the purity of the words, but no one will hear them.""
+ extra_law_events.28.a:0 "Guarantee minority script preservation."
+ extra_law_events.28.b:0 "Enshrine official bilingualism."
+ extra_law_events.28.c:0 "Pass the law as written — no amendments."
+
+ # ===== 29 – The Trust Question (Antitrust – Amendment) =====
+ extra_law_events.29.t:0 "The Trust Question"
+ extra_law_events.29.d:0 "As the [SCOPE.sLaw('current_law_scope').GetName] legislation works its way through the halls of power, two competing visions have emerged. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] propose exempting the nation's largest enterprise from breakup — a 'national champion' clause that would preserve our ability to compete on the world stage. Meanwhile, the [SCOPE.gsInterestGroup('unions_ig').GetName] counter with a cooperative preference amendment, arguing that worker-owned enterprises should receive favorable treatment under the new rules."
+ extra_law_events.29.f:0 ""Every trust was once a small business. Every monopoly was once an innovation. The question is not whether to regulate — it is whom the regulation should serve.""
+ extra_law_events.29.a:0 "Exempt our national champion from breakup."
+ extra_law_events.29.b:0 "Give cooperatives preferential treatment."
+ extra_law_events.29.c:0 "The law needs no carve-outs."
+
+ # ===== 30 – The Sentencing Debate (Criminal Justice – Amendment) =====
+ extra_law_events.30.t:0 "The Sentencing Debate"
+ extra_law_events.30.d:0 "Reform of the criminal justice system has ignited fierce debate about the proper balance between punishment and rehabilitation. Opponents of the bill are willing to vote for it — but only if their preferred amendment is attached. The compromise would weaken the law's ideological purity but might be the only path to passage."
+ extra_law_events.30.f:0 ""Justice that cannot be enacted is no justice at all. Sometimes the perfect must yield to the possible, even when the possible tastes of compromise.""
+ extra_law_events.30.a:0 "Accept mandatory minimum sentences."
+ extra_law_events.30.b:0 "Introduce a community service alternative."
+ extra_law_events.30.c:0 "Hold the line — no concessions."
+
+ # ===== 31 – The Privacy Bargain (Privacy Rights – Amendment) =====
+ extra_law_events.31.t:0 "The Privacy Bargain"
+ extra_law_events.31.d:0 "The privacy bill has attracted strange bedfellows. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] want a carve-out allowing businesses to collect personal data for commercial purposes — claiming that innovation requires information. Meanwhile, the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] push for whistleblower protections, arguing that no privacy law is complete without shields for those who expose government wrongdoing."
+ extra_law_events.31.f:0 ""Privacy is the right to keep secrets. But whose secrets, and from whom? That is where the arguments begin and the friendships end.""
+ extra_law_events.31.a:0 "Allow a corporate data access exemption."
+ extra_law_events.31.b:0 "Add whistleblower protections."
+ extra_law_events.31.c:0 "The bill is fine as it stands."
+
+ # ===== 32 – Laws of the New Battlefield (Rules of War – Amendment) =====
+ extra_law_events.32.t:0 "Laws of the New Battlefield"
+ extra_law_events.32.d:0 "The debate over the rules of war has reached a critical juncture. The [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] urge us to adopt a no-first-strike pledge for our most terrible weapons — a gesture they say would enhance our diplomatic standing enormously. The [SCOPE.gsInterestGroup('military_ig').GetName], however, demand a 'military necessity' clause that would preserve the flexibility of our commanders in the field."
+ extra_law_events.32.f:0 ""The laws of war are written by those who have never heard a shell burst overhead. But it is those who have who must enforce them — and they know, as the legislators do not, that war refuses to obey legislation.""
+ extra_law_events.32.a:0 "Pledge never to strike first with nuclear weapons."
+ extra_law_events.32.b:0 "Carve out a military necessity exception."
+ extra_law_events.32.c:0 "The law needs no additional clauses."
+
+ # ===== 33 – Small Donors, Big Voices (Electoral Finance – Amendment) =====
+ extra_law_events.33.t:0 "Small Donors, Big Voices"
+ extra_law_events.33.d:0 "The [SCOPE.gsInterestGroup('unions_ig').GetName] have proposed a popular amendment to the campaign finance bill: a small donor matching programme in which the government matches modest individual contributions, multiplying the political voice of ordinary citizens. The measure would strengthen grassroots participation but add to the bureaucratic cost of elections."
+ extra_law_events.33.f:0 ""A farmer's penny, matched by the state, becomes worth as much as a factory owner's guinea. That is either the purest form of democracy or the surest road to fiscal ruin, depending on whom you ask.""
+ extra_law_events.33.a:0 "Match small donations with public funds."
+ extra_law_events.33.b:0 "The existing provisions are sufficient."
+
+ # ===== 34 – A Question of Conscience (LGBTQ Rights – Amendment) =====
+ extra_law_events.34.t:0 "A Question of Conscience"
+ extra_law_events.34.d:0 "The [SCOPE.gsInterestGroup('devout_ig').GetName] have made their position clear: they will cease their opposition to [SCOPE.sLaw('current_law_scope').GetName] if — and only if — a religious exemption clause is added. Houses of worship, religious schools, and faith-based charities would be exempt from the law's requirements. It is a bitter pill for reformers, but without it the bill may never pass."
+ extra_law_events.34.f:0 ""Render unto Caesar the things which are Caesar's, they said. But when Caesar legislates the bedroom, even the pulpit has an opinion.""
+ extra_law_events.34.a:0 "Grant the religious exemption."
+ extra_law_events.34.b:0 "No exceptions — the law applies to all."

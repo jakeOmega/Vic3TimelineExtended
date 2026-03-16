@@ -6,13 +6,14 @@
 
 # ===== CATEGORY 1: TERRORISM =====
  social_tensions_events.1.t:0 "Terror Strikes the Homeland"
- social_tensions_events.1.d_base:0 "An explosion rips through a crowded market district, leaving rubble and screaming in its wake. The attackers are quickly identified as radicals with a poisonous ideology and access to modern explosives. Citizens demand actionâ€”but what kind?"
+ social_tensions_events.1.d_base:0 "An explosion rips through a crowded market district, leaving rubble and screaming in its wake. The attackers are quickly identified as radicals with a poisonous ideology and access to modern explosives. Citizens demand action, but what kind?"
  social_tensions_events.1.d_modern:0 "A coordinated bombing attack targets public transportation during rush hour. Footage spreads within minutes, sowing panic far beyond the blast radius. Intelligence agencies scramble to trace the network before the next cell acts."
  social_tensions_events.1.d_cyber:0 "The attack combines physical violence with a devastating cyberattack on emergency services. As first responders struggle with jammed communications, the death toll climbs. The perpetrators broadcast their manifesto through hijacked networks."
  social_tensions_events.1.f:0 "Terror is theater. The bomb kills dozens; the fear reaches millions. And in that gap between the dead and the afraid, every government must choose what kind of country it intends to become.\n\nSecurity or liberty. Usually both suffer."
  social_tensions_events.1.a:0 "Launch a security crackdown"
  social_tensions_events.1.b:0 "Rally national resilience"
  social_tensions_events.1.c:0 "Expand the surveillance net"
+ social_tensions_events.1.d:0 "Intelligence-led preemption"
 
  social_tensions_events.2.t:0 "Foreign-Linked Terror Cell Uncovered"
  social_tensions_events.2.d:0 "Intelligence operatives have dismantled a cell with clear ties to a hostile foreign power. Documents and communications link the plotters to agents of [SCOPE.sCountry('terror_linked_country').GetName]. The question now is whether to respond with a diplomatic hammer or a quiet scalpel."
@@ -23,7 +24,7 @@
 
 # ===== CATEGORY 2: CORPORATE LOBBYING =====
  social_tensions_events.3.t:0 "Corporate Lobbyists in the Legislature"
- social_tensions_events.3.d_base:0 "A leaked memorandum reveals the extent to which corporate interests have penetrated the legislative process. Industry representatives practically draft regulations themselves, while elected officials collect generous 'consulting fees.' The public is outragedâ€”or at least, the part of the public that reads the financial pages."
+ social_tensions_events.3.d_base:0 "A leaked memorandum reveals the extent to which corporate interests have penetrated the legislative process. Industry representatives practically draft regulations themselves, while elected officials collect generous 'consulting fees.' The public is outraged, or at least, the part of the public that reads the financial pages."
  social_tensions_events.3.d_digital:0 "A data breach exposes a vast lobbying operation: algorithmic targeting of legislators, shell companies funneling donations, and a revolving door between corporate boards and regulatory agencies. The hashtag trends for days, but turning outrage into policy is another matter entirely."
  social_tensions_events.3.f:0 "The lobbyist's art is old as government itself. What changes is the scale. When a single corporation commands more wealth than many nations, its whisper in a legislator's ear carries the weight of an army.\n\nFreedom of contract, some call it. Others have less polite names."
  social_tensions_events.3.a:0 "Accept their input"
@@ -31,7 +32,7 @@
  social_tensions_events.3.c:0 "Let journalists expose it all"
 
  social_tensions_events.4.t:0 "The Trust Problem"
- social_tensions_events.4.d:0 "A single corporate conglomerate has achieved near-total dominance over a vital industry. Competitors have been bought out or driven under. Prices creep upward while quality stagnates. Workers have nowhere else to go. Under our current freedom of contract laws, this is perfectly legalâ€”but is it wise?"
+ social_tensions_events.4.d:0 "A single corporate conglomerate has achieved near-total dominance over a vital industry. Competitors have been bought out or driven under. Prices creep upward while quality stagnates. Workers have nowhere else to go. Under our current freedom of contract laws, this is perfectly legal, but is it wise?"
  social_tensions_events.4.f:0 "The invisible hand, left entirely to itself, tends to close into a fist. Market freedom, taken to its logical extreme, produces the very monopolies it was meant to prevent.\n\nThe question is not whether to act, but whether we dare."
  social_tensions_events.4.a:0 "Tolerate the monopoly"
  social_tensions_events.4.b:0 "Break up the trust"
@@ -48,7 +49,7 @@
  social_tensions_events.5.c:0 "Establish civilian oversight"
 
  social_tensions_events.6.t:0 "Urban Riots"
- social_tensions_events.6.d_base:0 "Years of pent-up frustration over discrimination, poverty, and heavy-handed policing have finally boiled over. Neighborhoods burn as rioters clash with police. Businesses are looted, property destroyed, and lives lost. The underlying grievances are realâ€”but so is the damage."
+ social_tensions_events.6.d_base:0 "Years of pent-up frustration over discrimination, poverty, and heavy-handed policing have finally boiled over. Neighborhoods burn as rioters clash with police. Businesses are looted, property destroyed, and lives lost. The underlying grievances are real, but so is the damage."
  social_tensions_events.6.d_modern:0 "Livestreamed footage of running street battles fills every screen. What began as a peaceful protest has spiraled into full-scale urban unrest, organized in real time through social media. Fires illuminate the night sky as the city tears itself apart."
  social_tensions_events.6.f:0 "A riot is the language of the unheard, they say. But it is also the sound of a community destroying its own foundations in a cry for help.\n\nThe rubble will be cleared. The question is what gets built in its place."
  social_tensions_events.6.a:0 "Impose a curfew and restore order"
@@ -57,9 +58,9 @@
 
 # ===== CATEGORY 4: WAR CRIMES =====
  social_tensions_events.7.t:0 "Wartime Atrocity Uncovered"
- social_tensions_events.7.d_base:0 "Reports are filtering back from the front of a massacre committed by our own troops. Soldiers appear to have killed unarmed civiliansâ€”men, women, and childrenâ€”in a village that posed no military threat. Officers are either complicit or negligent. The survivors' accounts are harrowing."
+ social_tensions_events.7.d_base:0 "Reports are filtering back from the front of a massacre committed by our own troops. Soldiers appear to have killed unarmed civilians, men, women, and children, in a village that posed no military threat. Officers are either complicit or negligent. The survivors' accounts are harrowing."
  social_tensions_events.7.d_media:0 "A war correspondent has filed a devastating report, complete with photographs, documenting a massacre committed by our forces. Unarmed civilians, including women and children, were systematically killed. The images are broadcast nationwide. There is no ambiguity, no fog of war to hide behind."
- social_tensions_events.7.f:0 "War makes monsters of ordinary men. That is not an excuseâ€”it is a warning. Every nation that sends its sons to kill must reckon with what they become.\n\nThe dead cannot testify. But the living must answer."
+ social_tensions_events.7.f:0 "War makes monsters of ordinary men. That is not an excuse, it is a warning. Every nation that sends its sons to kill must reckon with what they become.\n\nThe dead cannot testify. But the living must answer."
  social_tensions_events.7.a:0 "Suppress the reports"
  social_tensions_events.7.b:0 "Prosecute those responsible"
  social_tensions_events.7.c:0 "Overhaul military doctrine"
@@ -81,7 +82,7 @@
 
  social_tensions_events.10.t:0 "Big Money Floods the Election"
  social_tensions_events.10.d:0 "With no effective limits on campaign donations, wealthy industrialists are pouring unprecedented sums into the election. Slick advertisements dominate every medium, and candidates without deep-pocketed backers find themselves drowned out. The election may be free, but it is hardly fair."
- social_tensions_events.10.f:0 "The advertisement is the sermon of the age. He who pays the piper calls the tuneâ€”and in an unregulated system, the piper plays very loudly indeed."
+ social_tensions_events.10.f:0 "The advertisement is the sermon of the age. He who pays the piper calls the tune, and in an unregulated system, the piper plays very loudly indeed."
  social_tensions_events.10.a:0 "Let the money flow"
  social_tensions_events.10.b:0 "Launch a grassroots counter-campaign"
 
@@ -89,7 +90,7 @@
  social_tensions_events.11.t:0 "Immigration Wave"
  social_tensions_events.11.d_base:0 "A surge of newcomers from distant lands has strained public services in our cities. Schools overflow, hospitals queue endlessly, and established residents complain that their neighborhoods are unrecognizable. The immigrants themselves face suspicion and hostility even as they seek a better life."
  social_tensions_events.11.d_modern:0 "Global economic disruption has sent waves of migrants toward our borders. Social media amplifies both heartbreaking stories of refugees and alarmist narratives about cultural invasion. The reality, as always, is more complicated than either side admits."
- social_tensions_events.11.f:0 "They come because they must. Because war or famine or despair has left them no home worth the name. We are the promised landâ€”whether we asked for the title or not.\n\nThe question has never been whether they will come. It is what we become when they arrive."
+ social_tensions_events.11.f:0 "They come because they must. Because war or famine or despair has left them no home worth the name. We are the promised land, whether we asked for the title or not.\n\nThe question has never been whether they will come. It is what we become when they arrive."
  social_tensions_events.11.a:0 "Welcome the newcomers"
  social_tensions_events.11.b:0 "Restrict the flow"
  social_tensions_events.11.c:0 "Fund integration programs"
@@ -122,8 +123,8 @@
 # ===== CATEGORY 8: GLOBALIZATION =====
  social_tensions_events.15.t:0 "Globalization Backlash"
  social_tensions_events.15.d_base:0 "Cheap imports are flooding domestic markets, undercutting local producers who cannot compete with foreign labor costs. Factories close, workers are laid off, and once-prosperous towns decay. Trade unions demand protection; industrialists praise efficiency. The displaced workers care about neither theory."
- social_tensions_events.15.d_internet:0 "The global marketplace is now frictionlessâ€”goods, services, and capital flow across borders at the speed of light. But the communities left behind by this transformation are anything but fluid. Hollowed-out industrial regions breed resentment, and populist politicians offer simple answers to complex problems."
- social_tensions_events.15.f:0 "The world grows smaller every year. Goods cross oceans for pennies; wealth accumulates in places that produce nothing tangible. The winners toast to progress; the losers are told to retrain.\n\nFree trade is wonderfulâ€”until it is your job that becomes free."
+ social_tensions_events.15.d_internet:0 "The global marketplace is now frictionless, goods, services, and capital flow across borders at the speed of light. But the communities left behind by this transformation are anything but fluid. Hollowed-out industrial regions breed resentment, and populist politicians offer simple answers to complex problems."
+ social_tensions_events.15.f:0 "The world grows smaller every year. Goods cross oceans for pennies; wealth accumulates in places that produce nothing tangible. The winners toast to progress; the losers are told to retrain.\n\nFree trade is wonderful, until it is your job that becomes free."
  social_tensions_events.15.a:0 "Embrace free trade"
  social_tensions_events.15.b:0 "Impose protective tariffs"
  social_tensions_events.15.c:0 "Fund worker retraining programs"

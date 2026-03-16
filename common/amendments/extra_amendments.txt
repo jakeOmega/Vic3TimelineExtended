@@ -1,0 +1,641 @@
+﻿# ======================================================================
+#  AMENDMENTS FOR MOD-ADDED LAWS
+#
+#  These amendments modify the effects of mod-added laws when attached
+#  through events or negotiation. Each amendment targets specific
+#  allowed_laws and has a parent law that determines IG stances.
+# ======================================================================
+
+# ======================================================================
+#  LANGUAGE POLICY
+# ======================================================================
+
+# Minority Script Preservation — preserves minority writing systems
+# alongside the reformed national script. Reduces assimilation pressure
+# but calms separatist sentiment.
+amendment_minority_script_preservation = {
+	parent = law_multilingual_federalism
+
+	allowed_laws = {
+		law_state_led_language_reform
+		law_civic_monolingualism
+	}
+
+	modifier = {
+		state_assimilation_mult = -0.10
+		country_support_separatism_resistance_mult = 0.10
+		country_bureaucracy_investment_cost_factor_mult = 0.03
+	}
+
+	possible = {
+		any_scope_state = {
+			any_scope_culture = {
+				NOT = { is_primary_culture_of = root }
+			}
+		}
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_intelligentsia
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_multilingual_federalism
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.25
+}
+
+# Language Requirement for Naturalization — ties citizenship to national
+# language proficiency. Increases assimilation but slows migration.
+amendment_language_naturalization_requirement = {
+	parent = law_civic_monolingualism
+
+	allowed_laws = {
+		law_national_supremacy
+		law_cultural_exclusion
+		law_multicultural
+	}
+
+	modifier = {
+		state_assimilation_mult = 0.10
+		country_migration_restrictiveness_add = 5
+	}
+
+	possible = {
+		OR = {
+			has_law = law_type:law_civic_monolingualism
+			has_law = law_type:law_state_led_language_reform
+			has_law = law_type:law_linguistic_purity
+		}
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_petty_bourgeoisie
+			is_interest_group_type = ig_rural_folk
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_civic_monolingualism
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Official Bilingualism — makes the top minority language a co-official
+# language alongside the national tongue. Expensive but powerful for
+# stability in diverse nations.
+amendment_official_bilingualism = {
+	parent = law_multilingual_federalism
+
+	allowed_laws = {
+		law_multilingual_federalism
+		law_state_led_language_reform
+	}
+
+	modifier = {
+		country_support_separatism_strength_mult = -0.15
+		country_support_separatism_resistance_mult = 0.10
+		country_bureaucracy_investment_cost_factor_mult = 0.10
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_intelligentsia
+			is_interest_group_type = ig_trade_unions
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_multilingual_federalism
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# ======================================================================
+#  ANTITRUST
+# ======================================================================
+
+# National Champion Exemption — exempts the largest national company from
+# antitrust breakup. Preserves a "national champion" at the cost of
+# competition.
+amendment_national_champion_exemption = {
+	parent = law_freedom_of_contract
+
+	allowed_laws = {
+		law_trust_busting
+		law_regulated_utilities
+	}
+
+	modifier = {
+		country_company_throughput_bonus_add = 0.10
+		building_throughput_add = -0.05
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_industrialists
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_freedom_of_contract
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Worker Cooperative Preference — gives worker-owned cooperatives
+# preferential treatment in antitrust enforcement.
+amendment_cooperative_preference = {
+	parent = law_command_cooperative_economy
+
+	allowed_laws = {
+		law_trust_busting
+		law_regulated_utilities
+	}
+
+	modifier = {
+		interest_group_ig_trade_unions_pol_str_mult = 0.10
+		interest_group_ig_industrialists_pol_str_mult = -0.10
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_trade_unions
+			leader ?= {
+				has_ideology = ideology:ideology_anarchist
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			is_interest_group_type = ig_industrialists
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.25
+}
+
+# ======================================================================
+#  CRIMINAL JUSTICE
+# ======================================================================
+
+# Mandatory Minimum Sentences — introduced as a compromise to get
+# rehabilitation laws passed, but undermines their effectiveness.
+amendment_mandatory_minimums = {
+	parent = law_punishment_focused_criminal_justice
+
+	allowed_laws = {
+		law_restorative_justice
+		law_rehabilitation_focused_criminal_justice
+	}
+
+	modifier = {
+		state_working_adult_ratio_add = -0.01
+		interest_group_ig_petty_bourgeoisie_approval_add = 1
+		interest_group_ig_devout_approval_add = 1
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_petty_bourgeoisie
+			is_interest_group_type = ig_armed_forces
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_punishment_focused_criminal_justice
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Community Service Alternative — allows community service as an
+# alternative to incarceration even under a punishment-focused system.
+amendment_community_service = {
+	parent = law_restorative_justice
+
+	allowed_laws = {
+		law_punishment_focused_criminal_justice
+	}
+
+	modifier = {
+		state_working_adult_ratio_add = 0.01
+		interest_group_ig_intelligentsia_approval_add = 1
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_intelligentsia
+			is_interest_group_type = ig_trade_unions
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_restorative_justice
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.25
+}
+
+# ======================================================================
+#  PRIVACY RIGHTS
+# ======================================================================
+
+# Corporate Data Access Exemption — carves out an exception allowing
+# businesses to collect and use personal data for commerce.
+amendment_corporate_data_exemption = {
+	parent = law_minimal_privacy_protection
+
+	allowed_laws = {
+		law_moderate_data_privacy
+		law_strong_privacy_rights
+	}
+
+	modifier = {
+		interest_group_ig_industrialists_pol_str_mult = 0.10
+		country_tech_spread_mult = 0.05
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_industrialists
+			is_interest_group_type = ig_petty_bourgeoisie
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_minimal_privacy_protection
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Whistleblower Shield — protects government whistleblowers who expose
+# malfeasance, boosting transparency at the cost of state authority.
+amendment_whistleblower_shield = {
+	parent = law_strong_privacy_rights
+
+	allowed_laws = {
+		law_moderate_data_privacy
+		law_strong_privacy_rights
+	}
+
+	modifier = {
+		country_authority_mult = -0.05
+		country_legitimacy_base_add = 5
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_intelligentsia
+			leader ?= {
+				OR = {
+					has_ideology = ideology:ideology_liberal
+					has_ideology = ideology:ideology_radical
+				}
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_strong_privacy_rights
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.25
+}
+
+# ======================================================================
+#  RULES OF WAR
+# ======================================================================
+
+# No-First-Strike Pledge — a formal commitment never to initiate use of
+# nuclear weapons. Boosts diplomacy but limits military options.
+amendment_no_first_strike = {
+	parent = law_limited_war
+
+	allowed_laws = {
+		law_humanitarian_regulations
+		law_limited_war
+	}
+
+	modifier = {
+		country_diplomatic_reputation_add = 10
+	}
+
+	possible = {
+		has_technology_researched = nuclear_weapons
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_intelligentsia
+			is_interest_group_type = ig_trade_unions
+		}
+	}
+
+	ai_will_revoke = {
+		always = no
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Military Necessity Clause — carves out exceptions for "military
+# necessity," weakening humanitarian protections but appeasing the
+# armed forces.
+amendment_military_necessity_clause = {
+	parent = law_total_war
+
+	allowed_laws = {
+		law_war_crimes_forbidden
+		law_humanitarian_regulations
+	}
+
+	modifier = {
+		interest_group_ig_armed_forces_approval_add = 2
+		country_diplomatic_reputation_add = -5
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_armed_forces
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_total_war
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# ======================================================================
+#  ELECTORAL FINANCE
+# ======================================================================
+
+# Small Donor Matching — the government matches small individual
+# donations, boosting grassroots participation.
+amendment_small_donor_matching = {
+	parent = law_publicly_funded_elections
+
+	allowed_laws = {
+		law_donation_limits
+		law_publicly_funded_elections
+	}
+
+	modifier = {
+		country_legitimacy_base_add = 5
+		country_bureaucracy_investment_cost_factor_mult = 0.03
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_intelligentsia
+			is_interest_group_type = ig_trade_unions
+			leader ?= {
+				OR = {
+					has_ideology = ideology:ideology_radical
+					has_ideology = ideology:ideology_social_democrat
+				}
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			OR = {
+				is_interest_group_type = ig_industrialists
+				is_interest_group_type = ig_landowners
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.25
+}
+
+# ======================================================================
+#  LGBTQ RIGHTS
+# ======================================================================
+
+# Religious Exemption Clause — exempts religious institutions from
+# LGBTQ protections. A compromise that gets the devout on board
+# but weakens the law's reach.
+amendment_religious_exemption = {
+	parent = law_active_persecution
+
+	allowed_laws = {
+		law_basic_protections
+		law_comprehensive_rights
+		law_full_equality_and_protection
+	}
+
+	modifier = {
+		interest_group_ig_devout_approval_add = 2
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_devout
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_active_persecution
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}

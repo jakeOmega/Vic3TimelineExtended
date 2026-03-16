@@ -37,6 +37,11 @@ social_tensions_events.1 = {
 			has_modifier = terror_crackdown_modifier
 			has_modifier = terror_resilience_modifier
 			has_modifier = terror_surveillance_modifier
+			has_modifier = terror_preempted_modifier
+		}
+		# Strong intelligence ministry (level 5) prevents most attacks
+		NOT = {
+			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 5 }
 		}
 		# More likely in countries with political turmoil
 		OR = {
@@ -94,6 +99,18 @@ social_tensions_events.1 = {
 			modifier = { trigger = { has_law = law_type:law_intrusive_surveillance } add = 5 }
 		}
 	}
+
+	option = { # Intelligence-led preemption — best outcome, requires strong institutions
+		name = social_tensions_events.1.d
+		trigger = {
+			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
+		}
+		add_modifier = { name = terror_preempted_modifier days = long_modifier_time is_decaying = yes }
+		add_loyalists = { value = small_radicals }
+		ai_chance = {
+			base = 8
+		}
+	}
 }
 
 # Event 2: Foreign-linked Terrorism
@@ -122,6 +139,10 @@ social_tensions_events.2 = {
 		NOR = {
 			has_modifier = foreign_terror_retaliation_modifier
 			has_modifier = foreign_terror_diplomacy_modifier
+		}
+		# Strong intelligence ministry (level 5) prevents foreign terror cells
+		NOT = {
+			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 5 }
 		}
 	}
 
@@ -363,6 +384,13 @@ social_tensions_events.5 = {
 			has_law = law_type:law_dedicated_police
 			has_law = law_type:law_militarized_police
 		}
+		# Guaranteed liberties + rehabilitation justice prevents most incidents
+		NOT = {
+			AND = {
+				has_law = law_type:law_guaranteed_liberties
+				has_law = law_type:law_rehabilitation_focused_criminal_justice
+			}
+		}
 		NOR = {
 			has_modifier = police_reform_modifier
 			has_modifier = police_defended_modifier
@@ -473,6 +501,13 @@ social_tensions_events.6 = {
 			has_modifier = riot_concessions_modifier
 			has_modifier = riot_commission_modifier
 		}
+		# Multicultural + guaranteed liberties prevents most riots
+		NOT = {
+			AND = {
+				has_law = law_type:law_multicultural
+				has_law = law_type:law_guaranteed_liberties
+			}
+		}
 		any_scope_state = {
 			is_incorporated = yes
 			state_population > 100000
@@ -575,6 +610,8 @@ social_tensions_events.7 = {
 			has_modifier = war_crime_tribunal_modifier
 			has_modifier = war_crime_reform_modifier
 		}
+		# Humanitarian regulations prevent war crimes
+		NOT = { has_law = law_type:law_humanitarian_regulations }
 		# More likely with total war doctrine
 		OR = {
 			has_law = law_type:law_total_war

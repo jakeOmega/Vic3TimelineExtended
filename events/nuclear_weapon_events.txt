@@ -318,16 +318,49 @@ nuclear_weapon_events.9 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_ruler_speaking_to_people"
+ 		texture = "gfx/event_pictures/mushroom_cloud.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
  	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
- 	title = nuclear_weapon_events.9.t
- 	desc = nuclear_weapon_events.9.d
- 	flavor = nuclear_weapon_events.9.f
+ 	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:first_nuke_country = { has_variable = is_world_first_nuclear_power } }
+				desc = nuclear_weapon_events.9.t_world_first
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.9.t
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:first_nuke_country = { has_variable = is_world_first_nuclear_power } }
+				desc = nuclear_weapon_events.9.d_world_first
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.9.d
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:first_nuke_country = { has_variable = is_world_first_nuclear_power } }
+				desc = nuclear_weapon_events.9.f_world_first
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.9.f
+			}
+		}
+	}
 
     duration = 3
 
@@ -339,8 +372,20 @@ nuclear_weapon_events.9 = {
  		
  	}
 
+	# World-first: shock and existential dread
+	option = {
+		name = nuclear_weapon_events.9.a_world_first
+		trigger = { scope:first_nuke_country = { has_variable = is_world_first_nuclear_power } }
+		default_option = yes
+		add_radicals = {
+			value = very_small_radicals
+		}
+	}
+
+	# Subsequent nuclear powers: concern, but not shock
  	option = {
  		name = nuclear_weapon_events.9.a
+		trigger = { NOT = { scope:first_nuke_country = { has_variable = is_world_first_nuclear_power } } }
  		default_option = yes
  	}
 }
@@ -350,16 +395,49 @@ nuclear_weapon_events.10 = {
 	placement = root
 
 	event_image = {
- 		video = "unspecific_fire"
+ 		texture = "gfx/event_pictures/mushroom_cloud.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
  	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
- 	title = nuclear_weapon_events.10.t
- 	desc = nuclear_weapon_events.10.d
- 	flavor = nuclear_weapon_events.10.f
+ 	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = is_world_first_nuclear_power }
+				desc = nuclear_weapon_events.10.t_world_first
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.10.t
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = is_world_first_nuclear_power }
+				desc = nuclear_weapon_events.10.d_world_first
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.10.d
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = is_world_first_nuclear_power }
+				desc = nuclear_weapon_events.10.f_world_first
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.10.f
+			}
+		}
+	}
 
 	duration = 3
 
@@ -371,8 +449,23 @@ nuclear_weapon_events.10 = {
  		
  	}
 
+	# World-first: a historic achievement
+	option = {
+		name = nuclear_weapon_events.10.a_world_first
+		trigger = { has_variable = is_world_first_nuclear_power }
+		default_option = yes
+		add_modifier = {
+			name = nuclear_power
+		}
+		add_loyalists = {
+			value = medium_radicals
+		}
+	}
+
+	# Subsequent: joining the nuclear club
  	option = {
  		name = nuclear_weapon_events.10.a
+		trigger = { NOT = { has_variable = is_world_first_nuclear_power } }
  		default_option = yes
 		add_modifier = {
 			name = nuclear_power

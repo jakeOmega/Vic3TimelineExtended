@@ -285,9 +285,14 @@ environmentalism_events.5 = {
 		NOR = {
 			has_modifier = crop_failure_relief_modifier
 			has_modifier = crop_failure_modifier
+			has_modifier = crop_failure_ministry_modifier
 		}
 		has_modifier = global_warming
 		temperature_anomaly_display >= 2.0
+		# Strong environment ministry (level 5) prevents widespread crop failures
+		NOT = {
+			institution_investment_level = { institution = institution_ministry_of_the_environment value >= 5 }
+		}
 		any_scope_state = {
 			is_incorporated = yes
 			any_scope_building = { is_building_type = building_wheat_farm }
@@ -327,6 +332,22 @@ environmentalism_events.5 = {
 		}
 		add_radicals = { value = medium_radicals strata = lower }
 		add_loyalists = { value = very_small_radicals strata = upper }
+	}
+
+	option = {
+		name = environmentalism_events.5.c
+		trigger = {
+			institution_investment_level = { institution = institution_ministry_of_the_environment value >= 3 }
+		}
+		ai_chance = { base = 8 }
+		# Ministry-coordinated drought response — faster, less radical
+		add_modifier = {
+			name = crop_failure_ministry_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = very_small_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
 	}
 }
 
@@ -644,6 +665,22 @@ environmentalism_events.9 = {
 		}
 		add_loyalists = { value = small_radicals }
 	}
+
+	option = {
+		name = environmentalism_events.9.c
+		trigger = {
+			institution_investment_level = { institution = institution_ministry_of_the_environment value >= 3 }
+		}
+		ai_chance = { base = 8 }
+		# Engineered flood defense — ministry coordinates large-scale infrastructure
+		add_modifier = {
+			name = coastal_flood_defense_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = very_small_radicals pop_type = academics }
+	}
 }
 
 # Event 10: Water Shortage Crisis (fires at severe+ warming)
@@ -712,6 +749,22 @@ environmentalism_events.10 = {
 		}
 		add_radicals = { value = small_radicals strata = lower }
 		add_radicals = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = environmentalism_events.10.c
+		trigger = {
+			institution_investment_level = { institution = institution_ministry_of_the_environment value >= 3 }
+		}
+		ai_chance = { base = 8 }
+		# Ministry-coordinated desalination and water recycling
+		add_modifier = {
+			name = water_crisis_ministry_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = very_small_radicals strata = upper }
+		add_loyalists = { value = small_radicals strata = lower }
 	}
 }
 
@@ -975,9 +1028,14 @@ environmentalism_events.14 = {
 		NOR = {
 			has_modifier = tropical_disease_spread_modifier
 			has_modifier = tropical_disease_research_modifier
+			has_modifier = tropical_disease_public_health_modifier
 		}
 		has_modifier = global_warming
 		temperature_anomaly_display >= 2.0
+		# Strong consumer protection (level 5) prevents outbreaks through public health systems
+		NOT = {
+			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 }
+		}
 	}
 
 	immediate = {
@@ -1015,6 +1073,22 @@ environmentalism_events.14 = {
 			is_decaying = yes
 		}
 		add_radicals = { value = very_small_radicals strata = upper }
+	}
+
+	option = {
+		name = environmentalism_events.14.c
+		trigger = {
+			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
+		}
+		ai_chance = { base = 8 }
+		# Mobilize public health infrastructure — rapid containment
+		add_modifier = {
+			name = tropical_disease_public_health_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = very_small_radicals pop_type = academics }
 	}
 }
 

@@ -67,6 +67,41 @@ on_law_activated = {
 	on_actions = {
 		fix_incompatible_laws_from_law_scope
 	}
+	effect = {
+		owner = {
+			# Fire founding event immediately when language reform is activated
+			if = {
+				limit = {
+					has_law = law_type:law_state_led_language_reform
+					NOT = { has_variable = language_reform_type }
+				}
+				trigger_event = { id = extra_law_events.25 }
+			}
+			# Clean up all language reform modifiers when law changes away
+			if = {
+				limit = {
+					NOT = { has_law = law_type:law_state_led_language_reform }
+					OR = {
+						has_modifier = langreform_revival
+						has_modifier = langreform_constructed
+						has_modifier = langreform_simplification
+						has_modifier = langreform_powerful_academy
+						has_modifier = langreform_advisory_panel
+						has_modifier = langreform_minority_protection
+						has_modifier = langreform_national_focus
+					}
+				}
+				remove_modifier = langreform_revival
+				remove_modifier = langreform_constructed
+				remove_modifier = langreform_simplification
+				remove_modifier = langreform_powerful_academy
+				remove_modifier = langreform_advisory_panel
+				remove_modifier = langreform_minority_protection
+				remove_modifier = langreform_national_focus
+				remove_variable = language_reform_type
+			}
+		}
+	}
 }
 
 on_merge_markets = {
@@ -1404,6 +1439,9 @@ society_technology_events_on_action = {
 				trigger = {
 					has_technology_researched = terrorism_and_anti_terrorism
 					country_rank >= rank_value:minor_power
+					NOT = {
+						institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 5 }
+					}
 				}
 				trigger_event = { id = society_technology_events.11 }
 			}
@@ -1489,16 +1527,20 @@ society_technology_events_on_action = {
 			}
 
 			# === NUCLEAR POWER / MELTDOWNS ===
-			5 = {
+			3 = {
 				trigger = {
 					has_technology_researched = nuclear_energy
 					any_scope_building = { is_building_type = building_nuclear_plant level >= 1 }
 				}
 				trigger_event = { id = society_technology_events.22 }
 			}
-			3 = {
+			2 = {
 				trigger = {
 					has_technology_researched = nuclear_energy
+					NOT = { has_technology_researched = fusion_power }
+					NOT = {
+						institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 }
+					}
 					any_scope_building = { is_building_type = building_nuclear_plant level >= 3 }
 				}
 				trigger_event = { id = society_technology_events.23 }

@@ -132,6 +132,15 @@ repeatable_events.20 = {
         name = repeatable_events.20.c
         add_modifier = { name = re_supply_fasttrack_ports days = long_modifier_time }
     }
+
+    option = { # Ministry coordination — commerce ministry streamlines logistics
+        name = repeatable_events.20.dd
+        trigger = {
+            institution_investment_level = { institution = institution_ministry_of_commerce value >= 3 }
+        }
+        add_modifier = { name = re_supply_ministry_coordination days = long_modifier_time }
+        ai_chance = { base = 8 }
+    }
 }
 
 # =============================================================
@@ -161,6 +170,13 @@ repeatable_events.30 = {
     trigger = {
         OR = { has_technology_researched = machine_learning has_technology_researched = robotics }
         any_scope_building = { is_building_type = building_motor_industry level >= 5 }
+        # Strong worker protections + old age pension cushion the shock
+        NOT = {
+            AND = {
+                has_law = law_type:law_worker_protections
+                has_law = law_type:law_old_age_pension
+            }
+        }
     }
 
     option = { # Layoffs
@@ -215,6 +231,13 @@ repeatable_events.40 = {
             has_technology_researched = social_media
             has_technology_researched = neural_lace
         }
+        # Strong free press with privacy protections prevents panics
+        NOT = {
+            AND = {
+                has_law = law_type:law_protected_speech
+                has_law = law_type:law_strong_privacy_rights
+            }
+        }
     }
 
     option = { name = repeatable_events.40.a default_option = yes add_modifier = { name = re_media_ignore days = short_modifier_time } }
@@ -233,6 +256,19 @@ repeatable_events.40 = {
             }
         }
         add_modifier = { name = re_media_moderation days = normal_modifier_time }
+    }
+    option = {
+        name = repeatable_events.40.d
+        trigger = {
+            institution_investment_level = { institution = institution_ministry_of_propaganda value >= 3 }
+        }
+        # State media control — suppress the panic, at a cost to freedom
+        add_modifier = { name = re_media_state_control days = normal_modifier_time }
+        add_radicals = { value = small_radicals pop_type = academics }
+        ai_chance = {
+            base = 3
+            modifier = { trigger = { has_law = law_type:law_outlawed_dissent } add = 5 }
+        }
     }
 }
 
@@ -266,6 +302,10 @@ repeatable_events.50 = {
             has_technology_researched = quantum_computing
             has_technology_researched = quantum_communications
         }
+        # Strong intelligence ministry (level 5) prevents most breaches
+        NOT = {
+            institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 5 }
+        }
     }
 
     option = {
@@ -282,6 +322,16 @@ repeatable_events.50 = {
     option = {
         name = repeatable_events.50.c
         add_modifier = { name = re_cyber_standards days = long_modifier_time }
+    }
+
+    option = {
+        name = repeatable_events.50.d
+        trigger = {
+            institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
+        }
+        # Intelligence-assisted forensics — faster resolution, better outcome
+        add_modifier = { name = re_cyber_intel_response days = long_modifier_time }
+        ai_chance = { base = 8 }
     }
 }
 
