@@ -895,3 +895,16 @@ update_characters = {
 		}
 	}
 }
+
+# ============================================================================
+# STATE MODIFIER REFRESH (state scope)
+# Single authoritative place that updates all event-driven state modifiers
+# (migration crowding, tourism, pollution).  Every trigger that can cause
+# these values to change should call this effect so that a new modifier only
+# ever needs to be added here to be picked up everywhere.
+# ============================================================================
+te_update_state_modifiers = {
+	migration_crowding_on_action
+	tourism_on_action
+	pollution_on_action
+}

@@ -86,6 +86,20 @@ on_building_expanded = {
 	}
 }
 
+# Root = institution, owner = country. Fires when institution investment rises.
+on_investment_increased = {
+	on_actions = {
+		te_modifier_update_on_investment_on_action
+	}
+}
+
+# Root = institution, owner = country. Fires when institution investment falls.
+on_investment_decreased = {
+	on_actions = {
+		te_modifier_update_on_investment_on_action
+	}
+}
+
 language_reform_law_on_action = {
 	effect = {
 		owner = {
@@ -1649,9 +1663,11 @@ migration_crowding_on_action = {
 
 # ============================================================================
 # INTELLIGENT MODIFIER UPDATE ON_ACTIONS
-# These fire immediately when buildings, technologies, or laws change,
-# so that migration crowding, tourism, and pollution modifiers respond
-# quickly rather than waiting for the next periodic pulse.
+# These fire immediately when buildings, technologies, laws, or institution
+# investment changes, so that migration crowding, tourism, and pollution
+# modifiers respond quickly rather than waiting for the next periodic pulse.
+# Each handler delegates to te_update_state_modifiers (see extra_effects.txt)
+# so that adding a new modifier update only requires a single change there.
 # ============================================================================
 
 # Building scope (ROOT = building). Updates the state that contains the
@@ -1659,9 +1675,7 @@ migration_crowding_on_action = {
 te_modifier_update_on_building_on_action = {
 	effect = {
 		state = {
-			migration_crowding_on_action
-			tourism_on_action
-			pollution_on_action
+			te_update_state_modifiers = yes
 		}
 	}
 }
@@ -1672,22 +1686,32 @@ te_modifier_update_on_building_on_action = {
 te_modifier_update_on_technology_on_action = {
 	effect = {
 		every_scope_state = {
-			migration_crowding_on_action
-			tourism_on_action
-			pollution_on_action
+			te_update_state_modifiers = yes
 		}
 	}
 }
 
 # Law scope (ROOT = law type, owner = enacting country). Updates all
 # states owned by the country when a law is enacted.
-# Tourism is directly influenced by laws (bonus/penalty from specific law types).
-# Migration crowding and pollution are not law-driven so are excluded here.
 te_modifier_update_on_law_on_action = {
 	effect = {
 		owner = {
 			every_scope_state = {
-				tourism_on_action
+				te_update_state_modifiers = yes
+			}
+		}
+	}
+}
+
+# Institution scope (ROOT = institution, owner = country). Updates all
+# states owned by the country when institution investment changes.
+# Covers institutions such as ministry_of_the_environment (pollution)
+# and ministry_of_urban_planning (migration crowding density tolerance).
+te_modifier_update_on_investment_on_action = {
+	effect = {
+		owner = {
+			every_scope_state = {
+				te_update_state_modifiers = yes
 			}
 		}
 	}
