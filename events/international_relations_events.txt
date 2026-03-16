@@ -1,4 +1,4 @@
-﻿namespace = international_relations_events
+namespace = international_relations_events
 
 # ============================================================================
 # WW2 AND COLD WAR ERA INTERNATIONAL RELATIONS EVENTS
@@ -67,14 +67,7 @@ international_relations_events.1 = {
 			is_decaying = yes
 		}
 		# Armed forces approve, but raises military costs
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 	}
 
 	option = {
@@ -116,14 +109,7 @@ international_relations_events.1 = {
 			}
 		}
 		# Armed forces disapprove of diplomatic approach
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_negative = yes
 	}
 
 	option = {
@@ -145,14 +131,7 @@ international_relations_events.1 = {
 			country = scope:arms_race_rival
 			value = -20
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_very_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_very_negative = yes
 	}
 }
 
@@ -221,14 +200,7 @@ international_relations_events.2 = {
 			country = scope:proxy_rival
 			value = -30
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 	}
 
 	option = {
@@ -248,14 +220,7 @@ international_relations_events.2 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_negative = yes
 	}
 }
 
@@ -331,14 +296,7 @@ international_relations_events.3 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 	}
 }
 
@@ -486,14 +444,7 @@ international_relations_events.5 = {
 			country = scope:embargo_rival
 			value = -30
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_industrialists_approval_negative = yes
 	}
 
 	option = {
@@ -511,14 +462,7 @@ international_relations_events.5 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_negative = yes
 	}
 }
 
@@ -609,14 +553,7 @@ international_relations_events.6 = {
 		}
 		add_loyalists = { value = medium_radicals }
 		add_radicals = { value = small_radicals pop_type = academics }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 	}
 }
 
@@ -756,14 +693,7 @@ international_relations_events.8 = {
 			value = -40
 		}
 		add_radicals = { value = medium_radicals }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 	}
 
 	option = {
@@ -781,14 +711,7 @@ international_relations_events.8 = {
 			country = scope:nuclear_rival
 			value = 20
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_negative = yes
 	}
 
 	option = {

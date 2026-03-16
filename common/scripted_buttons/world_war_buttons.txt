@@ -1,4 +1,4 @@
-﻿
+
 # ============================================================================
 # WORLD WAR SCRIPTED BUTTONS
 # Toggle pairs for wartime policies and late entry
@@ -50,14 +50,7 @@ ww_rearm_button = {
 
 	effect = {
 		add_modifier = { name = ww_rearmament_modifier }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 		add_radicals = {
 			value = small_radicals
 			strata = lower
@@ -88,14 +81,7 @@ ww_stop_rearm_button = {
 
 	effect = {
 		remove_modifier = ww_rearmament_modifier
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_negative = yes
 	}
 }
 
@@ -139,22 +125,8 @@ ww_appease_button = {
 
 	effect = {
 		add_modifier = { name = ww_appeasement_modifier }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_intelligentsia_approval_positive = yes
+		ig_armed_forces_approval_negative = yes
 	}
 }
 
@@ -235,14 +207,7 @@ ww_lend_lease_button = {
 
 	effect = {
 		add_modifier = { name = ww_lend_lease_modifier }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_industrialists_approval_positive = yes
 	}
 }
 
@@ -313,14 +278,7 @@ ww_total_war_economy_button = {
 			value = medium_radicals
 			pop_type = soldiers
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_trade_unions }
 			add_modifier = {

@@ -1,0 +1,22 @@
+# Base production method for the private construction hub.
+# Each labourer adds 1 unit of construction capacity and consumes 1 unit of
+# construction goods.
+pm_private_construction = {
+	texture = "gfx/interface/icons/production_method_icons/wooden_buildings.dds"
+	is_default = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_construction_add = 1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_construction_add = 1
+		}
+		level_scaled = {
+			building_employment_laborers_add = 10
+		}
+	}
+}

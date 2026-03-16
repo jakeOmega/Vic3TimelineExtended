@@ -277,7 +277,18 @@ def main():
         os.path.join(mod_path, "common", "goods", "timeline_extended_extra_goods.txt"),
     ]
     pms_file_paths = [
-        os.path.join(mod_path, "common", "production_methods", "extra_pms.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_mining.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_drilling.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_services.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_manufacturing.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_communications.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_electronics.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_industry.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_transport.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_digital.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_space.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_construction.txt"),
+        os.path.join(mod_path, "common", "production_methods", "pm_pollution.txt"),
         os.path.join(mod_path, "common", "production_methods", "unique_pms.txt"),
     ]
     vanilla_pms_file_loc = os.path.join(base_game_path, "game", "common", "production_methods")

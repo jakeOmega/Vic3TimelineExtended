@@ -1,0 +1,773 @@
+# Religion selection scripted buttons.
+select_christian = {
+    name = "SELECT_CHRISTIAN"
+    desc = "SELECT_CHRISTIAN_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_christian_selected }
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_CHRISTIAN_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_christian_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_christian = {
+    name = "DESELECT_CHRISTIAN"
+    desc = "DESELECT_CHRISTIAN_DESC"
+
+    visible = {
+        has_variable = custom_religion_christian_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_CHRISTIAN_DESC"
+            remove_variable = custom_religion_christian_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_muslim = {
+    name = "SELECT_MUSLIM"
+    desc = "SELECT_MUSLIM_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_muslim_selected }
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_MUSLIM_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_muslim_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_muslim = {
+    name = "DESELECT_MUSLIM"
+    desc = "DESELECT_MUSLIM_DESC"
+
+    visible = {
+        has_variable = custom_religion_muslim_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_MUSLIM_DESC"
+            remove_variable = custom_religion_muslim_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_judaism = {
+    name = "SELECT_JUDAISM"
+    desc = "SELECT_JUDAISM_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_judaism_selected }
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_JUDAISM_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_judaism_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_judaism = {
+    name = "DESELECT_JUDAISM"
+    desc = "DESELECT_JUDAISM_DESC"
+
+    visible = {
+        has_variable = custom_religion_judaism_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_JUDAISM_DESC"
+            remove_variable = custom_religion_judaism_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_eastern = {
+    name = "SELECT_EASTERN"
+    desc = "SELECT_EASTERN_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_eastern_selected }
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_EASTERN_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_eastern_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_eastern = {
+    name = "DESELECT_EASTERN"
+    desc = "DESELECT_EASTERN_DESC"
+
+    visible = {
+        has_variable = custom_religion_eastern_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_EASTERN_DESC"
+            remove_variable = custom_religion_eastern_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_animist = {
+    name = "SELECT_ANIMIST"
+    desc = "SELECT_ANIMIST_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_animist_selected }
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_ANIMIST_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_animist_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_animist = {
+    name = "DESELECT_ANIMIST"
+    desc = "DESELECT_ANIMIST_DESC"
+
+    visible = {
+        has_variable = custom_religion_animist_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_ANIMIST_DESC"
+            remove_variable = custom_religion_animist_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_buddhist = {
+    name = "SELECT_BUDDHIST"
+    desc = "SELECT_BUDDHIST_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_buddhist_selected }
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_BUDDHIST_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_buddhist_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_buddhist = {
+    name = "DESELECT_BUDDHIST"
+    desc = "DESELECT_BUDDHIST_DESC"
+
+    visible = {
+        has_variable = custom_religion_buddhist_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_BUDDHIST_DESC"
+            remove_variable = custom_religion_buddhist_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+select_custom = {
+    name = "SELECT_CUSTOM"
+    desc = "SELECT_CUSTOM_DESC"
+
+    visible = {
+        var:current_stage = 4
+        NOT = { has_variable = custom_religion_custom_selected }
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group < 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "SELECT_CUSTOM_DESC"
+            set_variable = {
+                name = selected_religion_group
+                value = 1
+            }
+            set_variable = {
+                name = custom_religion_custom_selected
+                value = 1
+            }
+        }
+    }
+}
+
+deselect_custom = {
+    name = "DESELECT_CUSTOM"
+    desc = "DESELECT_CUSTOM_DESC"
+
+    visible = {
+        has_variable = custom_religion_custom_selected
+        var:current_stage = 4
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:selected_religion_group > 0
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "DESELECT_CUSTOM_DESC"
+            remove_variable = custom_religion_custom_selected
+            change_variable = {
+                name = selected_religion_group
+                subtract = 1
+            }
+        }
+    }
+}
+
+custom_religion_back = {
+    name = "CUSTOM_RELIGION_BACK"
+    desc = "CUSTOM_RELIGION_BACK_DESC"
+
+    visible = {
+        var:current_stage > 1
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        var:current_stage > 1
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "CUSTOM_RELIGION_BACK_DESC"
+            change_variable = {
+                name = current_stage
+                subtract = 1
+            }
+        }
+    }
+}
+
+custom_religion_next = {
+    name = "CUSTOM_RELIGION_NEXT"
+    desc = "CUSTOM_RELIGION_NEXT_DESC"
+
+    visible = {
+        OR = {
+            AND = {
+                var:selected_idelogies = 3
+                var:current_stage = 1
+            }
+            AND = {
+                var:selected_traits = 3
+                var:current_stage = 2
+            }
+            AND = {
+                var:selected_name = 1
+                var:current_stage = 3
+            }
+        }
+    }
+
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        always = yes
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "CUSTOM_RELIGION_NEXT_DESC"
+            change_variable = {
+                name = current_stage
+                add = 1
+            }
+        }
+    }
+}
+
+create_new_religion = {
+    name = "CREATE_NEW_RELIGION"
+    desc = "CREATE_NEW_RELIGION_DESC"
+
+    visible = {
+        var:selected_idelogies = 3
+        var:selected_traits = 3
+        var:selected_name = 1
+        var:selected_religion_group = 1
+        var:current_stage = 4
+    }
+    
+    ai_chance = {
+        value = 0
+    }
+
+    possible = {
+        always = yes
+    }
+
+    effect = {
+        custom_tooltip = {
+            text = "CREATE_NEW_RELIGION_DESC"
+            every_scope_character = {
+                limit = {
+                    interest_group = ROOT.ig:ig_devout
+                }
+                exile_character = yes
+            }
+            if = {
+                limit = { has_variable = custom_religion_christian_selected }
+                rel:custom_religion_christian = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_muslim_selected }
+                rel:custom_religion_muslim = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_judaism_selected }
+                rel:custom_religion_jewish = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_eastern_selected }
+                rel:custom_religion_eastern = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_animist_selected }
+                rel:custom_religion_animist = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_buddhist_selected }
+                rel:custom_religion_buddhist = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            if = {
+                limit = { has_variable = custom_religion_custom_selected }
+                rel:custom_religion_custom = {
+                    save_scope_as = custom_religion_scope
+                }
+            }
+            set_state_religion = scope:custom_religion_scope
+            ruler = {
+                change_character_religion = scope:custom_religion_scope
+            }
+            heir ?= {
+                change_character_religion = scope:custom_religion_scope
+            }
+            ig:ig_devout = {
+                hidden_effect = { set_interest_group_name = custom_religion }
+                # remove old ideologies
+                remove_all_ideologies = yes
+                # add relevant ideologies
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }}
+                    add_ideology = ideology_custom_religion_traditionalist_economy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_free_market_economy_selected }}
+                    add_ideology = ideology_custom_religion_free_market_economy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_socialist_economy_selected }}
+                    add_ideology = ideology_custom_religion_socialist_economy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }}
+                    add_ideology = ideology_custom_religion_social_democratic_economy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_imperial_cult_economy_selected }}
+                    add_ideology = ideology_custom_religion_imperial_cult_economy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_economy_selected }}
+                    add_ideology = ideology_custom_religion_theocratic_economy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }}
+                    add_ideology = ideology_custom_religion_traditionalist_society
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_inclusive_society_selected }}
+                    add_ideology = ideology_custom_religion_inclusive_society
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }}
+                    add_ideology = ideology_custom_religion_totalitarian_society
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }}
+                    add_ideology = ideology_custom_religion_meritocratic_society
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_imperial_cult_society_selected }}
+                    add_ideology = ideology_custom_religion_imperial_cult_society
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_society_selected }}
+                    add_ideology = ideology_custom_religion_theocratic_society
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }}
+                    add_ideology = ideology_custom_religion_aristocratic_governance
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }}
+                    add_ideology = ideology_custom_religion_technocratic_governance
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_republican_governance_selected }}
+                    add_ideology = ideology_custom_religion_republican_governance
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_corporate_governance_selected }}
+                    add_ideology = ideology_custom_religion_corporate_governance
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_imperial_cult_governance_selected }}
+                    add_ideology = ideology_custom_religion_imperial_cult_governance
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_governance_selected }}
+                    add_ideology = ideology_custom_religion_theocratic_governance
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }}
+                    add_ideology = ideology_custom_religion_pacifist_outlook
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }}
+                    add_ideology = ideology_custom_religion_militarist_outlook
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }}
+                    add_ideology = ideology_custom_religion_isolationist_outlook
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }}
+                    add_ideology = ideology_custom_religion_exploitative_outlook
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_imperialist_outlook_selected }}
+                    add_ideology = ideology_custom_religion_imperialist_outlook
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_outlook_selected }}
+                    add_ideology = ideology_custom_religion_theocratic_outlook
+                }
+                # set ig traits
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_loyal_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_loyal
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_happy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_happy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_unhappy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_unhappy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_loyal_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_loyal
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_happy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_happy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_unhappy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_unhappy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_loyal_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_loyal
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_happy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_happy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_unhappy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_unhappy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_loyal_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_loyal
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_happy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_happy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_unhappy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_unhappy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_imperial_cult_loyal_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_imperial_cult_loyal
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_imperial_cult_happy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_imperial_cult_happy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_imperial_cult_unhappy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_imperial_cult_unhappy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_theocratic_loyal_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_theocratic_loyal
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_theocratic_happy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_theocratic_happy
+                }
+                if = {
+                    limit = { ROOT = { has_variable = custom_religion_trait_theocratic_unhappy_selected }}
+                    set_ig_trait = ig_trait:ig_trait_custom_religion_theocratic_unhappy
+                }
+            }
+            random_scope_state = {
+                limit = {
+                    owner = ROOT
+                    is_capital = yes
+                }
+                convert_population = {
+                    target = scope:custom_religion_scope
+                    value = 0.2
+                }
+            }
+            every_scope_state = {
+                limit = {
+                    owner = ROOT
+                    is_incorporated = yes
+                    NOT = { is_capital = yes }
+                }
+                convert_population = {
+                    target = scope:custom_religion_scope
+                    value = 0.1
+                }
+            }
+        }
+    }
+}
+# Global Warming mitigation buttons

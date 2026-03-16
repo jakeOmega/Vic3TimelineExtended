@@ -1,0 +1,40 @@
+# The private construction hub is placed automatically by the private
+# construction system in states with active building queues. Players and AI
+# cannot build or expand it directly. Its throughput modifier is updated each
+# weekly pulse to match the investment pool's current construction demand.
+
+building_private_construction_hub = {
+	building_group = bg_private_construction
+	icon = "gfx/interface/icons/building_icons/construction_camp.dds"
+	levels_per_mesh = -1
+	buildable = no
+	expandable = no
+	downsizeable = no
+	min_raise_to_hire = -1.0
+	residence_points_per_level = 0
+	production_method_groups = {
+		pmg_private_construction_hub
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds"
+}
+
+REPLACE:building_construction_sector = {
+	building_group = bg_construction
+	icon = "gfx/interface/icons/building_icons/construction_camp.dds"
+	city_type = city
+	levels_per_mesh = 5
+	ai_nationalization_desire = 0.25
+	ownership_type = self
+	required_construction = construction_cost_low
+	unlocking_technologies = {
+		urbanization
+	}
+	production_method_groups = {
+		pmg_base_building_construction_sector
+		pmg_construction_automation
+		pmg_construction_principle
+		pmg_maintenance
+	}
+	ai_value = 3000
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds"
+}

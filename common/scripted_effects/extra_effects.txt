@@ -954,3 +954,230 @@ te_update_state_modifiers = {
 	te_update_tourism_modifier = yes
 	te_update_migration_crowding_modifier = yes
 }
+
+# ============================================================================
+# WELFARE LAW ACTIVATION (country scope)
+# Used by law_universal_basic_income and law_post-scarcity on_activate.
+# Recalculates IG support and sets the social security institution level:
+# level 1 if at or below cap (<=5), level 2 otherwise.
+# ============================================================================
+te_activate_welfare_law = {
+	recalculate_pop_ig_support = yes
+	if = {
+		limit = {
+			institution_investment_level = {
+				institution = institution_social_security
+				value <= 5
+			}
+		}
+		set_institution_investment_level = {
+			institution = institution_social_security
+			level = 1
+		}
+	}
+	else = {
+		set_institution_investment_level = {
+			institution = institution_social_security
+			level = 2
+		}
+	}
+}
+
+# ============================================================================
+# LANGUAGE REFORM CLEANUP (country scope)
+# Removes all active language reform modifiers and the reform type variable.
+# Used in language_reform_law_on_action when the law is deactivated.
+# ============================================================================
+remove_all_langreform_modifiers = {
+	remove_modifier = langreform_revival
+	remove_modifier = langreform_constructed
+	remove_modifier = langreform_simplification
+	remove_modifier = langreform_powerful_academy
+	remove_modifier = langreform_advisory_panel
+	remove_modifier = langreform_minority_protection
+	remove_modifier = langreform_national_focus
+	remove_variable = language_reform_type
+}
+
+# ============================================================================
+# GLOBAL WARMING — INHERIT MARKET LEADER POLICIES (country scope)
+# Applies any active market-leader climate policies (carbon tax, renewable
+# investment, emission standards) from scope:market.owner to this country,
+# if not already present.  Called when a country joins a new market.
+# Requires: scope:market.owner to be set (the absorbing market's owner).
+# ============================================================================
+gw_inherit_market_leader_policies = {
+	# Carbon tax: add if market leader has it, remove if market leader does not
+	if = {
+		limit = {
+			NOT = { has_modifier = carbon_tax_modifier }
+			scope:market.owner = { has_modifier = carbon_tax_modifier }
+		}
+		add_modifier = { name = carbon_tax_modifier }
+	}
+	else_if = {
+		limit = {
+			has_modifier = carbon_tax_modifier
+			NOT = { scope:market.owner = { has_modifier = carbon_tax_modifier } }
+		}
+		remove_modifier = carbon_tax_modifier
+	}
+	# Renewable investment: add if market leader has it, remove if market leader does not
+	if = {
+		limit = {
+			NOT = { has_modifier = renewable_investment_modifier }
+			scope:market.owner = { has_modifier = renewable_investment_modifier }
+		}
+		add_modifier = { name = renewable_investment_modifier }
+	}
+	else_if = {
+		limit = {
+			has_modifier = renewable_investment_modifier
+			NOT = { scope:market.owner = { has_modifier = renewable_investment_modifier } }
+		}
+		remove_modifier = renewable_investment_modifier
+	}
+	# Emission standards: add if market leader has it, remove if market leader does not
+	if = {
+		limit = {
+			NOT = { has_modifier = emission_standards_modifier }
+			scope:market.owner = { has_modifier = emission_standards_modifier }
+		}
+		add_modifier = { name = emission_standards_modifier }
+	}
+	else_if = {
+		limit = {
+			has_modifier = emission_standards_modifier
+			NOT = { scope:market.owner = { has_modifier = emission_standards_modifier } }
+		}
+		remove_modifier = emission_standards_modifier
+	}
+}
+
+# ============================================================================
+# INTEREST GROUP APPROVAL EFFECTS
+# Each gives the named IG type the standard approval/disapproval modifier.
+# Scope: country.  Used across world_war, international_relations, and un events
+# as well as world_war_buttons scripted buttons.
+# ============================================================================
+
+# Armed Forces — positive approval
+ig_armed_forces_approval_positive = {
+	every_interest_group = {
+		limit = { is_interest_group_type = ig_armed_forces }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+ig_armed_forces_approval_positive_short = {
+	every_interest_group = {
+		limit = { is_interest_group_type = ig_armed_forces }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Armed Forces — negative approval
+ig_armed_forces_approval_negative = {
+	every_interest_group = {
+		limit = { is_interest_group_type = ig_armed_forces }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+ig_armed_forces_approval_very_negative = {
+	every_interest_group = {
+		limit = { is_interest_group_type = ig_armed_forces }
+		add_modifier = {
+			name = ig_approval_very_negative_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Intelligentsia — positive approval
+ig_intelligentsia_approval_positive = {
+	every_interest_group = {
+		limit = { is_interest_group_type = ig_intelligentsia }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+ig_intelligentsia_approval_positive_short = {
+	every_interest_group = {
+		limit = { is_interest_group_type = ig_intelligentsia }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Industrialists — approval effects
+ig_industrialists_approval_positive = {
+	every_interest_group = {
+		limit = { is_interest_group_type = ig_industrialists }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+ig_industrialists_approval_negative = {
+	every_interest_group = {
+		limit = { is_interest_group_type = ig_industrialists }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+ig_industrialists_approval_negative_short = {
+	every_interest_group = {
+		limit = { is_interest_group_type = ig_industrialists }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# ============================================================================
+# WORLD WAR CLEANUP (country scope)
+# Removes all active world-war economy/warfare modifiers.
+# Called in the peace conclusion event (world_war_events.100) immediate block.
+# ============================================================================
+clear_all_ww_modifiers = {
+	if = { limit = { has_modifier = ww_total_war_economy_modifier } remove_modifier = ww_total_war_economy_modifier }
+	if = { limit = { has_modifier = ww_war_propaganda_modifier } remove_modifier = ww_war_propaganda_modifier }
+	if = { limit = { has_modifier = ww_wartime_rationing_modifier } remove_modifier = ww_wartime_rationing_modifier }
+	if = { limit = { has_modifier = ww_home_front_strain_modifier } remove_modifier = ww_home_front_strain_modifier }
+	if = { limit = { has_modifier = ww_prolonged_war_exhaustion_modifier } remove_modifier = ww_prolonged_war_exhaustion_modifier }
+	if = { limit = { has_modifier = ww_rearmament_modifier } remove_modifier = ww_rearmament_modifier }
+	if = { limit = { has_modifier = ww_lend_lease_modifier } remove_modifier = ww_lend_lease_modifier }
+	if = { limit = { has_modifier = ww_fresh_forces_modifier } remove_modifier = ww_fresh_forces_modifier }
+	if = { limit = { has_modifier = ww_arsenal_of_democracy_modifier } remove_modifier = ww_arsenal_of_democracy_modifier }
+	if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
+}

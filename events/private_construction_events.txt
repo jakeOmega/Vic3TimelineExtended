@@ -1,0 +1,11 @@
+namespace = pc_events
+
+# Game-start country setup: initialise variables and place the first hub.
+# Fired for every country by the GLOBAL history block.
+pc_events.1 = {
+    type = country_event
+    hidden = yes
+    immediate = {
+        pc_country_setup = yes
+    }
+}

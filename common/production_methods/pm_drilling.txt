@@ -1,0 +1,1020 @@
+# Production methods for oil and gas drilling rigs.
+pm_electrified_rotary_drilling_rigs = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	
+	unlocking_technologies = {
+		modern_tools
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 15
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (20.00%)
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (40.00%)
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (40.00%)
+			# Output goods
+			goods_output_oil_add = 160                           # Price:   40, Total cost:  6400.0 (100.00%)
+			# Total input cost: 1500.0
+			# Total output cost: 6400.0
+			# Profit: 4900.0
+			# Profit margin: 326.67%
+			# Zero profit price multiplier: 0.23
+			# Employment: 4250
+			# Wage breakeven: 1.15
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 250
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 1000
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_offshore_rigs = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+	
+	
+	unlocking_technologies = {
+		transistors
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 15
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (4.48%)
+			goods_input_engines_add = 20                         # Price:   60, Total cost:  1200.0 (17.91%)
+			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (17.91%)
+			goods_input_radios_add = 20                          # Price:   80, Total cost:  1600.0 (23.88%)
+			goods_input_electronic_components_add = 30           # Price:   80, Total cost:  2400.0 (35.82%)
+			# Output goods
+			goods_output_oil_add = 300                           # Price:   40, Total cost: 12000.0 (100.00%)
+			# Total input cost: 6700.0
+			# Total output cost: 12000.0
+			# Profit: 5300.0
+			# Profit margin: 79.10%
+			# Zero profit price multiplier: 0.56
+			# Employment: 3750
+			# Wage breakeven: 1.41
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 100
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 650
+			building_employment_engineers_add = 1000
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_directional_drilling_rigs = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+	
+	
+	unlocking_technologies = {
+		integrated_circuits
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (2.75%)
+			goods_input_engines_add = 20                         # Price:   60, Total cost:  1200.0 (11.01%)
+			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (11.01%)
+			goods_input_radios_add = 20                          # Price:   80, Total cost:  1600.0 (14.68%)
+			goods_input_electronic_components_add = 60           # Price:   80, Total cost:  4800.0 (44.04%)
+			goods_input_rubber_add = 20                          # Price:   40, Total cost:   800.0 (7.34%)
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (9.17%)
+			# Output goods
+			goods_output_oil_add = 450                           # Price:   40, Total cost: 18000.0 (100.00%)
+			# Total input cost: 10900.0
+			# Total output cost: 18000.0
+			# Profit: 7100.0
+			# Profit margin: 65.14%
+			# Zero profit price multiplier: 0.61
+			# Employment: 3500
+			# Wage breakeven: 2.03
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 1000
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_fracking = {
+	texture = "gfx/interface/icons/production_method_icons/base4.dds"
+	
+	
+	unlocking_technologies = {
+		hydraulic_fracturing
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 15
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 50                      # Price:   30, Total cost:  1500.0 (12.40%)
+			goods_input_engines_add = 20                         # Price:   60, Total cost:  1200.0 (9.92%)
+			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (9.92%)
+			goods_input_radios_add = 20                          # Price:   80, Total cost:  1600.0 (13.22%)
+			goods_input_electronic_components_add = 60           # Price:   80, Total cost:  4800.0 (39.67%)
+			goods_input_rubber_add = 20                          # Price:   40, Total cost:   800.0 (6.61%)
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (8.26%)
+			# Output goods
+			goods_output_oil_add = 600                           # Price:   40, Total cost: 24000.0 (100.00%)
+			# Total input cost: 12100.0
+			# Total output cost: 24000.0
+			# Profit: 11900.0
+			# Profit margin: 98.35%
+			# Zero profit price multiplier: 0.50
+			# Employment: 3500
+			# Wage breakeven: 3.40
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 800
+			building_employment_academics_add = 200
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_intelligent_drilling_rigs = {
+	texture = "gfx/interface/icons/production_method_icons/base5.dds"
+	
+	
+	unlocking_technologies = {
+		quantum_computing
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (2.26%)
+			goods_input_engines_add = 20                         # Price:   60, Total cost:  1200.0 (9.02%)
+			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (9.02%)
+			goods_input_radios_add = 20                          # Price:   80, Total cost:  1600.0 (12.03%)
+			goods_input_electronic_components_add = 60           # Price:   80, Total cost:  4800.0 (36.09%)
+			goods_input_rubber_add = 20                          # Price:   40, Total cost:   800.0 (6.02%)
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (7.52%)
+			goods_input_digital_access_add = 20                  # Price:  120, Total cost:  2400.0 (18.05%)
+			# Output goods
+			goods_output_oil_add = 700                           # Price:   40, Total cost: 28000.0 (100.00%)
+			# Total input cost: 13300.0
+			# Total output cost: 28000.0
+			# Profit: 14700.0
+			# Profit margin: 110.53%
+			# Zero profit price multiplier: 0.47
+			# Employment: 3000
+			# Wage breakeven: 4.90
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_shallow_well = {
+	texture = "gfx/interface/icons/production_method_icons/simple_oil_extraction.dds"
+}
+
+pm_medium_well = {
+	texture = "gfx/interface/icons/production_method_icons/simple_oil_extraction_plus.dds"
+	
+	unlocking_production_methods = {
+		pm_combustion_derricks
+		pm_electrified_rotary_drilling_rigs
+		pm_offshore_rigs
+		pm_directional_drilling_rigs
+		pm_fracking
+		pm_intelligent_drilling_rigs
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 50                         # Price:   60, Total cost:  3000.0 (75.00%)
+			goods_input_merchant_marine_add = 20                 # Price:   50, Total cost:  1000.0 (25.00%)
+			# Output goods
+			goods_output_oil_add = 90                            # Price:   40, Total cost:  3600.0 (100.00%)
+			# Total input cost: 4000.0
+			# Total output cost: 3600.0
+			# Profit: -400.0
+			# Profit margin: -10.00%
+			# Zero profit price multiplier: 1.11
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_deep_well = {
+	texture = "gfx/interface/icons/production_method_icons/simple_oil_extraction_plus2.dds"
+	
+	unlocking_production_methods = {
+		pm_combustion_derricks
+		pm_electrified_rotary_drilling_rigs
+		pm_offshore_rigs
+		pm_directional_drilling_rigs
+		pm_fracking
+		pm_intelligent_drilling_rigs
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	unlocking_technologies = {
+		modern_materials
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 60                         # Price:   60, Total cost:  3600.0 (74.23%)
+			goods_input_merchant_marine_add = 25                 # Price:   50, Total cost:  1250.0 (25.77%)
+			# Output goods
+			goods_output_oil_add = 120                           # Price:   40, Total cost:  4800.0 (100.00%)
+			# Total input cost: 4850.0
+			# Total output cost: 4800.0
+			# Profit: -50.0
+			# Profit margin: -1.03%
+			# Zero profit price multiplier: 1.01
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_ultra_deep_well = {
+	texture = "gfx/interface/icons/production_method_icons/simple_oil_extraction_plus3.dds"
+	
+	unlocking_production_methods = {
+		pm_electrified_rotary_drilling_rigs
+		pm_offshore_rigs
+		pm_directional_drilling_rigs
+		pm_fracking
+		pm_intelligent_drilling_rigs
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 15
+		}
+	}
+	
+	unlocking_technologies = {
+		modern_tools
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 80                         # Price:   60, Total cost:  4800.0 (70.59%)
+			goods_input_merchant_marine_add = 40                 # Price:   50, Total cost:  2000.0 (29.41%)
+			# Output goods
+			goods_output_oil_add = 165                           # Price:   40, Total cost:  6600.0 (100.00%)
+			# Total input cost: 6800.0
+			# Total output cost: 6600.0
+			# Profit: -200.0
+			# Profit margin: -2.94%
+			# Zero profit price multiplier: 1.03
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+factory_farm_building_vineyard = {
+	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
+
+		
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.58%)
+			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
+			# Output goods
+			goods_output_wine_add = 75                           # Price:   50, Total cost:  3750.0 (100.00%)
+			# Total input cost: 950.0
+			# Total output cost: 3750.0
+			# Profit: 2800.0
+			# Profit margin: 294.74%
+			# Zero profit price multiplier: 0.25
+			# Employment: 4250
+			# Wage breakeven: 0.66
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 2000
+			building_employment_farmers_add = 1500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+factory_farm_building_coffee_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
+
+		
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.58%)
+			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
+			# Output goods
+			goods_output_coffee_add = 75                         # Price:   50, Total cost:  3750.0 (100.00%)
+			# Total input cost: 950.0
+			# Total output cost: 3750.0
+			# Profit: 2800.0
+			# Profit margin: 294.74%
+			# Zero profit price multiplier: 0.25
+			# Employment: 4250
+			# Wage breakeven: 0.66
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 2000
+			building_employment_farmers_add = 1500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+factory_farm_building_cotton_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
+
+		
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.58%)
+			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
+			# Output goods
+			goods_output_fabric_add = 180                        # Price:   20, Total cost:  3600.0 (100.00%)
+			# Total input cost: 950.0
+			# Total output cost: 3600.0
+			# Profit: 2650.0
+			# Profit margin: 278.95%
+			# Zero profit price multiplier: 0.26
+			# Employment: 4250
+			# Wage breakeven: 0.62
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 2000
+			building_employment_farmers_add = 1500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+factory_farm_building_dye_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
+
+		
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.58%)
+			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
+			# Output goods
+			goods_output_dye_add = 90                            # Price:   40, Total cost:  3600.0 (100.00%)
+			# Total input cost: 950.0
+			# Total output cost: 3600.0
+			# Profit: 2650.0
+			# Profit margin: 278.95%
+			# Zero profit price multiplier: 0.26
+			# Employment: 4250
+			# Wage breakeven: 0.62
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 2000
+			building_employment_farmers_add = 1500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+factory_farm_building_opium_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
+
+		
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.58%)
+			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
+			# Output goods
+			goods_output_opium_add = 75                          # Price:   50, Total cost:  3750.0 (100.00%)
+			# Total input cost: 950.0
+			# Total output cost: 3750.0
+			# Profit: 2800.0
+			# Profit margin: 294.74%
+			# Zero profit price multiplier: 0.25
+			# Employment: 4250
+			# Wage breakeven: 0.66
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 2000
+			building_employment_farmers_add = 1500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+factory_farm_building_tea_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
+
+		
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.58%)
+			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
+			# Output goods
+			goods_output_tea_add = 75                            # Price:   50, Total cost:  3750.0 (100.00%)
+			# Total input cost: 950.0
+			# Total output cost: 3750.0
+			# Profit: 2800.0
+			# Profit margin: 294.74%
+			# Zero profit price multiplier: 0.25
+			# Employment: 4250
+			# Wage breakeven: 0.66
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 2000
+			building_employment_farmers_add = 1500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+factory_farm_building_tobacco_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
+
+		
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.58%)
+			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
+			# Output goods
+			goods_output_tobacco_add = 90                        # Price:   40, Total cost:  3600.0 (100.00%)
+			# Total input cost: 950.0
+			# Total output cost: 3600.0
+			# Profit: 2650.0
+			# Profit margin: 278.95%
+			# Zero profit price multiplier: 0.26
+			# Employment: 4250
+			# Wage breakeven: 0.62
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 2000
+			building_employment_farmers_add = 1500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+factory_farm_building_sugar_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
+
+		
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.58%)
+			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
+			# Output goods
+			goods_output_sugar_add = 120                         # Price:   30, Total cost:  3600.0 (100.00%)
+			# Total input cost: 950.0
+			# Total output cost: 3600.0
+			# Profit: 2650.0
+			# Profit margin: 278.95%
+			# Zero profit price multiplier: 0.26
+			# Employment: 4250
+			# Wage breakeven: 0.62
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 2000
+			building_employment_farmers_add = 1500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+factory_farm_building_banana_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
+
+		
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.58%)
+			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
+			# Output goods
+			goods_output_fruit_add = 120                         # Price:   30, Total cost:  3600.0 (100.00%)
+			# Total input cost: 950.0
+			# Total output cost: 3600.0
+			# Profit: 2650.0
+			# Profit margin: 278.95%
+			# Zero profit price multiplier: 0.26
+			# Employment: 4250
+			# Wage breakeven: 0.62
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 2000
+			building_employment_farmers_add = 1500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+factory_farm_building_silk_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
+
+		
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.58%)
+			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
+			# Output goods
+			goods_output_silk_add = 90                           # Price:   40, Total cost:  3600.0 (100.00%)
+			# Total input cost: 950.0
+			# Total output cost: 3600.0
+			# Profit: 2650.0
+			# Profit margin: 278.95%
+			# Zero profit price multiplier: 0.26
+			# Employment: 4250
+			# Wage breakeven: 0.62
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 2000
+			building_employment_farmers_add = 1500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+factory_farm_building_rubber_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
+	
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.58%)
+			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
+			# Output goods
+			goods_output_rubber_add = 90                         # Price:   40, Total cost:  3600.0 (100.00%)
+			# Total input cost: 950.0
+			# Total output cost: 3600.0
+			# Profit: 2650.0
+			# Profit margin: 278.95%
+			# Zero profit price multiplier: 0.26
+			# Employment: 2400
+			# Wage breakeven: 1.10
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 800
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 100
+		}
+	}
+}
+
+GMO_plantation_building_vineyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+		
+	unlocking_technologies = {
+		biotechnology
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (24.00%)
+			goods_input_automobiles_add = 10                     # Price:  100, Total cost:  1000.0 (40.00%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (24.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (12.00%)
+			# Output goods
+			goods_output_wine_add = 150                          # Price:   50, Total cost:  7500.0 (100.00%)
+			# Total input cost: 2500.0
+			# Total output cost: 7500.0
+			# Profit: 5000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 3000
+			# Wage breakeven: 1.67
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 1000
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+GMO_plantation_building_coffee_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+		
+	unlocking_technologies = {
+		biotechnology
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (24.00%)
+			goods_input_automobiles_add = 10                     # Price:  100, Total cost:  1000.0 (40.00%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (24.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (12.00%)
+			# Output goods
+			goods_output_coffee_add = 150                        # Price:   50, Total cost:  7500.0 (100.00%)
+			# Total input cost: 2500.0
+			# Total output cost: 7500.0
+			# Profit: 5000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 3000
+			# Wage breakeven: 1.67
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 1000
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+GMO_plantation_building_tea_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+		
+	unlocking_technologies = {
+		biotechnology
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (24.00%)
+			goods_input_automobiles_add = 10                     # Price:  100, Total cost:  1000.0 (40.00%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (24.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (12.00%)
+			# Output goods
+			goods_output_tea_add = 150                           # Price:   50, Total cost:  7500.0 (100.00%)
+			# Total input cost: 2500.0
+			# Total output cost: 7500.0
+			# Profit: 5000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 3000
+			# Wage breakeven: 1.67
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 1000
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+GMO_plantation_building_tobacco_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+		
+	unlocking_technologies = {
+		biotechnology
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (24.00%)
+			goods_input_automobiles_add = 10                     # Price:  100, Total cost:  1000.0 (40.00%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (24.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (12.00%)
+			# Output goods
+			goods_output_tobacco_add = 200                       # Price:   40, Total cost:  8000.0 (100.00%)
+			# Total input cost: 2500.0
+			# Total output cost: 8000.0
+			# Profit: 5500.0
+			# Profit margin: 220.00%
+			# Zero profit price multiplier: 0.31
+			# Employment: 3000
+			# Wage breakeven: 1.83
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 1000
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+GMO_plantation_building_sugar_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+		
+	unlocking_technologies = {
+		biotechnology
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (24.00%)
+			goods_input_automobiles_add = 10                     # Price:  100, Total cost:  1000.0 (40.00%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (24.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (12.00%)
+			# Output goods
+			goods_output_sugar_add = 250                         # Price:   30, Total cost:  7500.0 (100.00%)
+			# Total input cost: 2500.0
+			# Total output cost: 7500.0
+			# Profit: 5000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 3000
+			# Wage breakeven: 1.67
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 1000
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+GMO_plantation_building_banana_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+		
+	unlocking_technologies = {
+		biotechnology
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (24.00%)
+			goods_input_automobiles_add = 10                     # Price:  100, Total cost:  1000.0 (40.00%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (24.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (12.00%)
+			# Output goods
+			goods_output_fruit_add = 250                         # Price:   30, Total cost:  7500.0 (100.00%)
+			# Total input cost: 2500.0
+			# Total output cost: 7500.0
+			# Profit: 5000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 3000
+			# Wage breakeven: 1.67
+		}
+
+		level_scaled = {
+			# profit
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 1000
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+

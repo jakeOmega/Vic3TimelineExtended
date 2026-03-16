@@ -1,0 +1,591 @@
+### Sacred Civics
+
+REPLACE:principle_sacred_civics_1 = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	visible = {
+		always = no
+	}
+	
+	ai_weight = -1000
+}
+
+REPLACE:principle_sacred_civics_2 = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+	
+	ai_weight = {
+		value = -1000
+	}
+}
+
+REPLACE:principle_sacred_civics_3 = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	ai_weight = {
+		value = -1000
+	}
+}
+
+principle_sacred_civics_1_mod = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		interest_group_ig_devout_approval_add = 5
+		interest_group_ig_devout_pop_attraction_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 200 # Religious PBs should tend towards picking the religious principles
+		
+		if = {
+			limit = {
+				ig:ig_devout ?= { is_in_government = yes }
+			}	
+			add = 100
+		}
+		
+		if = {
+			limit = { 
+				power_bloc ?= { NOT = { has_identity = identity:identity_religious } } 
+				# State Atheist Ideology bloc wants the power to enforce atheism
+				NAND = {
+					has_law = law_type:law_state_atheism
+					power_bloc ?= { has_identity = identity:identity_ideological_union }				
+				}
+			}
+			multiply = 0.25
+		}				
+	}
+}
+
+principle_sacred_civics_2_mod = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		interest_group_ig_devout_approval_add = 5
+		interest_group_ig_devout_pop_attraction_mult = 0.1
+
+		country_war_support_monthly_add_religion = 10
+		state_conscription_rate_mult = 0.25
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_sacred_civics_3_mod = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		interest_group_ig_devout_approval_add = 5
+		interest_group_ig_devout_pop_attraction_mult = 0.1
+		country_war_support_monthly_add_religion = 10
+		state_conscription_rate_mult = 0.25
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_church_and_state_in_power_bloc_bool = yes
+		country_influence_add = 500
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_sacred_civics_4_mod = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = mass_media
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		interest_group_ig_devout_approval_add = 5
+		interest_group_ig_devout_pop_attraction_mult = 0.1
+		country_war_support_monthly_add_religion = 10
+		state_conscription_rate_mult = 0.25
+
+		country_enactment_success_chance_law_ministry_of_religion_add = 0.1
+		country_institution_cost_institution_ministry_of_religion_mult = -0.25
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_church_and_state_in_power_bloc_bool = yes
+		country_influence_add = 500
+	}
+
+	institution = institution_ministry_of_religion
+	institution_modifier = {
+		# Modifiers from previous level(s)		
+		country_authority_add = 50
+		country_clergymen_pol_str_mult = 0.1
+		country_influence_add = 100
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_sacred_civics_5_mod = {
+	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = social_media
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		interest_group_ig_devout_approval_add = 5
+		interest_group_ig_devout_pop_attraction_mult = 0.1
+		country_war_support_monthly_add_religion = 10
+		state_conscription_rate_mult = 0.25
+		country_enactment_success_chance_law_ministry_of_religion_add = 0.2
+		country_institution_cost_institution_ministry_of_religion_mult = -0.5
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_church_and_state_in_power_bloc_bool = yes
+		country_influence_add = 500
+	}
+
+	institution = institution_ministry_of_religion
+	institution_modifier = {
+		# Modifiers from previous level(s)		
+		country_authority_add = 100
+		country_clergymen_pol_str_mult = 0.2
+		country_influence_add = 100
+		country_war_support_monthly_add_religion = 2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Ideological Truth
+
+
+principle_ideological_truth_4 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = mass_media
+	}
+	
+	member_modifier = {
+		interest_group_in_opposition_agitator_popularity_add = -33
+		country_bolster_cost_mult = -0.25
+		country_suppression_cost_mult = -0.25		
+		country_party_whip_impact_add = 0.2
+		country_legitimacy_min_add = 25		
+		country_enactment_success_chance_law_ministry_of_propaganda_add = 0.1
+		country_institution_cost_institution_ministry_of_propaganda_mult = -0.5
+		country_leader_has_law_enactment_success_mult = 0.1
+	}
+
+	institution = institution_ministry_of_propaganda
+	institution_modifier = {
+		interest_group_in_government_approval_add = 1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_ideological_truth_5 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = social_media
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		interest_group_in_opposition_agitator_popularity_add = -33
+		country_bolster_cost_mult = -0.25
+		country_suppression_cost_mult = -0.25		
+		country_party_whip_impact_add = 0.2
+		country_legitimacy_min_add = 25		
+		country_enactment_success_chance_law_ministry_of_propaganda_add = 0.2
+		country_institution_cost_institution_ministry_of_propaganda_mult = -0.5
+		country_leader_has_law_enactment_success_mult = 0.2
+	}
+
+	institution = institution_ministry_of_propaganda
+	institution_modifier = {
+		# Modifiers from previous level(s)	
+		interest_group_in_government_approval_add = 2
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Cultural Unity
+
+principle_cultural_unity_1 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		state_assimilation_mult = 0.1
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+	}
+	
+	ai_weight = {
+		value = 50 # High base weight if the leader has colonies
+		
+		if = {
+			limit = { has_strategy = ai_strategy_reactionary_agenda }
+			multiply = 2.0
+		}
+
+		if = {
+			limit = { has_strategy = ai_strategy_colonial_expansion }
+			multiply = 2.0
+		}		
+		if = {
+			limit = { has_law = law_type:law_racial_segregation }
+			multiply = 0.5
+		}
+		if = {
+			limit = { has_law = law_type:law_ethnostate }
+			multiply = 4.0
+		}
+	}
+}
+
+principle_cultural_unity_2 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	member_modifier = {
+		state_assimilation_mult = 0.2
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s)
+		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+		power_bloc_homelands_can_decay_bool = yes
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_unity_3 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	member_modifier = {
+		country_standard_of_living_full_acceptance_add = 1
+		country_wage_violent_hostility_mult = -0.2
+		country_wage_cultural_erasure_mult = -0.2
+		country_wage_open_prejudice_mult = -0.2
+		state_assimilation_mult = 0.3
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s)
+		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+		power_bloc_homelands_can_decay_bool = yes
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_unity_4 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = marketing_research
+	}
+	
+	member_modifier = {
+		country_standard_of_living_full_acceptance_add = 1
+		country_wage_violent_hostility_mult = -0.2
+		country_wage_cultural_erasure_mult = -0.2
+		country_wage_open_prejudice_mult = -0.2
+		state_assimilation_mult = 0.4
+
+		country_institution_cost_institution_ministry_of_culture_mult = -0.25
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s)
+		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+		power_bloc_homelands_can_decay_bool = yes
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		country_loyalism_increases_full_acceptance_mult = 0.05
+		state_assimilation_mult = 0.1
+		country_standard_of_living_full_acceptance_add = 0.25
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_unity_5 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = globalization
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_standard_of_living_full_acceptance_add = 1
+		country_wage_violent_hostility_mult = -0.2
+		country_wage_cultural_erasure_mult = -0.2
+		country_wage_open_prejudice_mult = -0.2
+		state_assimilation_mult = 0.5
+		country_institution_cost_institution_ministry_of_culture_mult = -0.25
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s)
+		country_can_impose_same_lawgroup_citizenship_in_power_bloc_bool = yes
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+		power_bloc_homelands_can_decay_bool = yes
+		power_bloc_leader_can_force_cultural_adoption_bool = yes
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		country_loyalism_increases_full_acceptance_mult = 0.05
+		state_assimilation_mult = 0.2
+		country_standard_of_living_full_acceptance_add = 0.5
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Cultural Plurality
+
+principle_cultural_plurality_1 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	member_modifier = {
+		# Members get cheaper and faster cultural institution
+		country_mass_migration_attraction_mult = 0.25
+		state_pop_support_movement_cultural_majority_mult = -0.25
+		state_pop_support_movement_cultural_minority_mult = -0.1
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+	}
+	
+	ai_weight = {
+		value = 50
+		
+		if = {
+			limit = { has_strategy = ai_strategy_progressive_agenda }
+			multiply = 2.0
+		}
+
+		if = {
+			limit = {
+				has_law = law_type:law_cultural_exclusion
+			}
+			multiply = 2.0
+		}			
+
+		if = {
+			limit = {
+				has_law = law_type:law_multicultural
+			}
+			multiply = 4.0
+		}
+	}
+}
+
+principle_cultural_plurality_2 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_mass_migration_attraction_mult = 0.25
+		state_pop_support_movement_cultural_majority_mult = -0.5
+		state_pop_support_movement_cultural_minority_mult = -0.2
+		state_education_access_add = 0.05
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_plurality_3 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		OR = {
+			has_law = law_type:law_cultural_exclusion
+			has_law = law_type:law_multicultural
+		}
+	}
+	
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_mass_migration_attraction_mult = 0.25
+		state_pop_support_movement_cultural_majority_mult = -0.5
+		state_pop_support_movement_cultural_minority_mult = -0.2
+		state_education_access_add = 0.05
+		country_tech_spread_mult = 0.25
+		state_min_cultural_acceptance_delta_add = 5
+		state_yearly_cultural_acceptance_add = 0.25
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_plurality_4 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = civil_rights_movement
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_mass_migration_attraction_mult = 0.25
+		state_pop_support_movement_cultural_majority_mult = -0.5
+		state_pop_support_movement_cultural_minority_mult = -0.3
+		state_education_access_add = 0.05
+		country_tech_spread_mult = 0.25
+		state_min_cultural_acceptance_delta_add = 10
+		state_yearly_cultural_acceptance_add = 0.5
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		# less racist
+		country_acceptance_no_shared_heritage_trait_add = 1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_cultural_plurality_5 = {
+	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = globalization
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)	
+		country_mass_migration_attraction_mult = 0.25
+		state_pop_support_movement_cultural_majority_mult = -0.75
+		state_pop_support_movement_cultural_minority_mult = -0.4
+		state_education_access_add = 0.05
+		country_tech_spread_mult = 0.25
+		state_min_cultural_acceptance_delta_add = 10
+		state_yearly_cultural_acceptance_add = 0.5
+	}
+	leader_modifier = {
+		country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+	}
+
+	institution = institution_ministry_of_culture
+	institution_modifier = {
+		# less racist
+		country_acceptance_no_shared_heritage_trait_add = 1
+		state_yearly_cultural_acceptance_add = 0.1
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+

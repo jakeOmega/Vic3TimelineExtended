@@ -1,0 +1,19 @@
+# ============================================================================
+# LAW IMPOSITION TRIGGERS
+# Shared can_impose trigger blocks for law groups that allow power bloc
+# members with the relevant modifier to impose those laws on one another.
+# ============================================================================
+
+# Used by all seven minority rights laws (law_minority_rights_* group).
+can_impose_minority_rights_law = {
+	OR = {
+		AND = {
+			is_in_same_power_bloc = scope:target_country
+			AND = {
+				modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
+				has_law = scope:law
+			}
+		}
+		can_impose_law_default = yes
+	}
+}

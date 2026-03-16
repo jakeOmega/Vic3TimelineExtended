@@ -1,0 +1,496 @@
+# ===========================================================================================
+# POLLUTION MITIGATION PRODUCTION METHODS
+# ===========================================================================================
+
+# ---- Default "No Mitigation" Methods (zero cost, zero effect) ----
+
+pm_no_tailings_management = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+pm_no_facility_emission_standards = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+pm_no_synthesis_scrubbing = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+pm_no_precision_environmental_management = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+pm_no_effluent_filtration = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+pm_no_emissions_control = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+# ===== BASIC-TIER POLLUTION MITIGATION METHODS =====
+
+# ---- Settling Ponds (All Mines - Basic) ----
+# Pollution reduction: -5
+# Operational cost: +1 electricity
+
+pm_settling_ponds = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Ventilation Systems (Heavy Industry: Automotive, Arms, Munitions, Tooling - Basic) ----
+# Pollution reduction: -5, requires Rotary Valve Engine or Water-Tube Boiler
+# Operational cost: +1 electricity
+
+pm_ventilation_systems = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Basic Fume Scrubbers (Chemical Plants - Basic) ----
+# Pollution reduction: -10, requires Ammonia-Soda Process or Vacuum Evaporation
+# Operational cost: +1 electricity
+
+pm_basic_fume_scrubbers = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Improved Crop Rotation (Cereal Grain Farms - Basic) ----
+# Pollution reduction: -5, requires Soil Enriching Farming, Fertilization, or Steam Threshers
+# Operational cost: none (improved farming practices)
+
+pm_improved_crop_rotation = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -5
+		}
+	}
+}
+
+# ---- Waste Fiber Recovery (Paper Mills - Basic) ----
+# Pollution reduction: -3, requires Sulfite Pulping or Pulp Pressing
+# Operational cost: none (reuse of waste fiber)
+
+pm_waste_fiber_recovery = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -3
+		}
+	}
+}
+
+# ===== ADVANCED-TIER POLLUTION MITIGATION METHODS =====
+
+# ---- Tailings Treatment (All Mines) ----
+# Pollution reduction: -10, requires Continuous Miners or Condensing Engine Pump from any mine type
+# Operational cost: +2 electricity
+
+pm_tailings_treatment = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_continuous_miners_building_coal_mine
+		pm_condensing_engine_pump_building_coal_mine
+		pm_continuous_miners_building_iron_mine
+		pm_condensing_engine_pump_building_iron_mine
+		pm_continuous_miners_building_lead_mine
+		pm_condensing_engine_pump_building_lead_mine
+		pm_continuous_miners_building_sulfur_mine
+		pm_condensing_engine_pump_building_sulfur_mine
+		pm_continuous_miners_building_gold_mine
+		pm_condensing_engine_pump_building_gold_mine
+		pm_continuous_miners_building_tech_metals_mine
+		pm_condensing_engine_pump_building_tech_metals_mine
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (100.00%)
+			# Total input cost: 60.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Green Assembly (Heavy Industry: Automotive, Arms, Munitions, Tooling) ----
+# Pollution reduction: -10, requires Assembly Lines or Robotic Assembly Lines
+# Operational cost: +2 electricity
+
+pm_green_assembly = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_advanced_assembly_lines_building_tooling_workshop
+		pm_advanced_assembly_lines_building_arms_industry
+		pm_advanced_assembly_lines_building_munition_plant
+		pm_robotic_assembly_lines
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (100.00%)
+			# Total input cost: 60.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Closed-Loop Synthesis (Chemical Plants) ----
+# Pollution reduction: -15, requires Polymerization Processes or Catalytic Cracking
+# Operational cost: +3 electricity
+
+pm_closed_loop_synthesis = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_polymerization_processes
+		pm_catalytic_cracking
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -15
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 3                      # Price:   30, Total cost:    90.0 (100.00%)
+			# Total input cost: 90.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Precision Agriculture (Cereal Grain Farms: Rye, Wheat, Rice, Maize, Millet) ----
+# Pollution reduction: -10, requires Automated Harvesters or Hydraulic Equipment
+# Operational cost: +1 fertilizer (chemicals)
+
+pm_precision_agriculture = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_automated_mechanical_harvesters
+		pm_automated_harvesters_and_planters
+		pm_hydraulic_equipment
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 1                       # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+}
+
+# ---- Effluent Filtration (Paper Mills) ----
+# Pollution reduction: -5, requires Kraft Pulping or Bleached Paper
+# Operational cost: +1 fertilizer (chemicals)
+
+pm_effluent_filtration = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_kraft_pulping
+		pm_bleached_paper
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 1                       # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+}
+
+pm_basic_emissions_control = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+	
+	unlocking_technologies = { 
+		pollution_control
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 1                            # Price:   40, Total cost:    40.0 (57.14%)
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (42.86%)
+			# Output goods
+			# Total input cost: 70.0
+			# Total output cost: 0
+			# Profit: -70.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_advanced_emissions_control = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+	
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -20
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 2                            # Price:   40, Total cost:    80.0 (57.14%)
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (42.86%)
+			# Output goods
+			# Total input cost: 140.0
+			# Total output cost: 0
+			# Profit: -140.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+# ===== GLASSWORKS FUME VENTILATION =====
+
+# ---- No Glassworks Fume Ventilation (Default) ----
+
+pm_no_glassworks_fume_ventilation = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+
+	unlocking_laws = {
+		law_no_ministry_of_the_environment
+	}
+}
+
+# ---- Glassworks Fume Extraction (Basic) ----
+# Pollution reduction: -5
+# Gated behind any PM with >=5 pollution so no combo goes negative
+# Min possible: leaded_glass(5)+manual(0)-5 = 0; forest_glass(0)+auto(5)-5 = 0
+# Operational cost: +1 electricity
+
+pm_glassworks_fume_extraction = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		pollution_control
+	}
+
+	unlocking_production_methods = {
+		pm_leaded_glass
+		pm_crystal_glass
+		pm_houseware_plastics
+		pm_injection_molding
+		pm_blow_molding
+		pm_automatic_bottle_blowers
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 1                      # Price:   30, Total cost:    30.0 (100.00%)
+			# Total input cost: 30.0
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# ---- Glassworks Closed-Loop Recycling (Advanced) ----
+# Pollution reduction: -10
+# Gated behind PMs with >=10 pollution so no combo goes negative
+# Min possible: crystal_glass(10)+manual(0)-10 = 0
+# Operational cost: +2 electricity
+
+pm_glassworks_closed_loop_recycling = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_crystal_glass
+		pm_houseware_plastics
+		pm_injection_molding
+		pm_blow_molding
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = -10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (100.00%)
+			# Total input cost: 60.0
+		}
+	}
+
+	required_input_goods = electricity

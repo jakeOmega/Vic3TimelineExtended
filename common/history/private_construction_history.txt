@@ -1,0 +1,6 @@
+﻿# Private construction system initialisation — runs for every country at game start.
+GLOBAL = {
+    every_country = {
+        trigger_event = { id = pc_events.1 }
+    }
+}

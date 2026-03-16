@@ -1,0 +1,908 @@
+# Production methods for space industry and related advanced tech buildings.
+
+pm_chemical_rockets = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+	unlocking_technologies = {
+		space_exploration
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 30                      # Price:   30, Total cost:   900.0 (14.75%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (8.20%)
+			goods_input_consumer_appliances_add = 10             # Price:   80, Total cost:   800.0 (13.11%)
+			goods_input_telephones_add = 10                      # Price:   70, Total cost:   700.0 (11.48%)
+			goods_input_radios_add = 10                          # Price:   80, Total cost:   800.0 (13.11%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (13.11%)
+			goods_input_aeroplanes_add = 10                      # Price:  160, Total cost:  1600.0 (26.23%)
+			# Output goods
+			goods_output_launch_capacity_add = 30                # Price:  200, Total cost:  6000.0 (100.00%)
+			# Total input cost: 6100.0
+			# Total output cost: 6000.0
+			# Profit: -100.0
+			# Profit margin: -1.64%
+			# Zero profit price multiplier: 1.02
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_reusable_rockets = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+	unlocking_technologies = {
+		reusable_rocketry
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 30                      # Price:   30, Total cost:   900.0 (12.08%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (10.74%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (6.71%)
+			goods_input_tech_metals_add = 5                      # Price:   80, Total cost:   400.0 (5.37%)
+			goods_input_lead_add = 5                             # Price:   40, Total cost:   200.0 (2.68%)
+			goods_input_consumer_appliances_add = 10             # Price:   80, Total cost:   800.0 (10.74%)
+			goods_input_telephones_add = 10                      # Price:   70, Total cost:   700.0 (9.40%)
+			goods_input_radios_add = 10                          # Price:   80, Total cost:   800.0 (10.74%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (2.01%)
+			goods_input_aeroplanes_add = 10                      # Price:  160, Total cost:  1600.0 (21.48%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (8.05%)
+			# Output goods
+			goods_output_launch_capacity_add = 50                # Price:  200, Total cost: 10000.0 (100.00%)
+			# Total input cost: 7450.0
+			# Total output cost: 10000.0
+			# Profit: 2550.0
+			# Profit margin: 34.23%
+			# Zero profit price multiplier: 0.74
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_ablative_rockets = {
+	texture = "gfx/interface/icons/production_method_icons/base4.dds"
+	unlocking_technologies = {
+		directed_energy_weapons
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (1.86%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (9.94%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (6.21%)
+			goods_input_tech_metals_add = 5                      # Price:   80, Total cost:   400.0 (4.97%)
+			goods_input_lead_add = 5                             # Price:   40, Total cost:   200.0 (2.48%)
+			goods_input_consumer_appliances_add = 10             # Price:   80, Total cost:   800.0 (9.94%)
+			goods_input_telephones_add = 10                      # Price:   70, Total cost:   700.0 (8.70%)
+			goods_input_radios_add = 10                          # Price:   80, Total cost:   800.0 (9.94%)
+			goods_input_electricity_add = 50                     # Price:   30, Total cost:  1500.0 (18.63%)
+			goods_input_aeroplanes_add = 10                      # Price:  160, Total cost:  1600.0 (19.88%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (7.45%)
+			# Output goods
+			goods_output_launch_capacity_add = 70                # Price:  200, Total cost: 14000.0 (100.00%)
+			# Total input cost: 8050.0
+			# Total output cost: 14000.0
+			# Profit: 5950.0
+			# Profit margin: 73.91%
+			# Zero profit price multiplier: 0.57
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_fusion_ssto_craft = {
+	texture = "gfx/interface/icons/production_method_icons/base5.dds"
+	unlocking_technologies = {
+		compact_fusion_reactors
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (1.29%)
+			goods_input_electronic_components_add = 30           # Price:   80, Total cost:  2400.0 (20.60%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (4.29%)
+			goods_input_tech_metals_add = 5                      # Price:   80, Total cost:   400.0 (3.43%)
+			goods_input_lead_add = 5                             # Price:   40, Total cost:   200.0 (1.72%)
+			goods_input_consumer_appliances_add = 10             # Price:   80, Total cost:   800.0 (6.87%)
+			goods_input_telephones_add = 10                      # Price:   70, Total cost:   700.0 (6.01%)
+			goods_input_radios_add = 30                          # Price:   80, Total cost:  2400.0 (20.60%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (2.58%)
+			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (10.30%)
+			goods_input_advanced_materials_add = 0.25            # Price: 4000, Total cost:  1000.0 (8.58%)
+			goods_input_aeroplanes_add = 10                      # Price:  160, Total cost:  1600.0 (13.73%)
+			# Output goods
+			goods_output_launch_capacity_add = 110               # Price:  200, Total cost: 22000.0 (100.00%)
+			# Total input cost: 11650.0
+			# Total output cost: 22000.0
+			# Profit: 10350.0
+			# Profit margin: 88.84%
+			# Zero profit price multiplier: 0.53
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_space_elevator_construction_paused = {
+	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_advanced_materials_add = 5               # Price: 4000, Total cost: 20000.0 (100.00%)
+			# Output goods
+			# Total input cost: 20000.0
+			# Total output cost: 0
+			# Profit: -20000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 500
+			# Wage breakeven: -40.00
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_engineers_add = 500
+		}
+	}
+}
+
+pm_space_elevator_construction_slow = {
+	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 5000                    # Price:   30, Total cost: 150000.0 (0.21%)
+			goods_input_electronic_components_add = 7500         # Price:   80, Total cost: 600000.0 (0.83%)
+			goods_input_steel_add = 500                          # Price:   50, Total cost: 25000.0 (0.03%)
+			goods_input_lead_add = 500                           # Price:   40, Total cost: 20000.0 (0.03%)
+			goods_input_tech_metals_add = 500                    # Price:   80, Total cost: 40000.0 (0.06%)
+			goods_input_consumer_appliances_add = 2500           # Price:   80, Total cost: 200000.0 (0.28%)
+			goods_input_telephones_add = 2500                    # Price:   70, Total cost: 175000.0 (0.24%)
+			goods_input_radios_add = 7500                        # Price:   80, Total cost: 600000.0 (0.83%)
+			goods_input_electricity_add = 2500                   # Price:   30, Total cost: 75000.0 (0.10%)
+			goods_input_digital_access_add = 5000                # Price:  120, Total cost: 600000.0 (0.83%)
+			goods_input_advanced_materials_add = 12500           # Price: 4000, Total cost: 50000000.0 (68.98%)
+			goods_input_launch_capacity_add = 100000             # Price:  200, Total cost: 20000000.0 (27.59%)
+			# Output goods
+			# Total input cost: 72485000.0
+			# Total output cost: 0
+			# Profit: -72485000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 100000
+			# Wage breakeven: -724.85
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_engineers_add = 50000
+			building_employment_academics_add = 50000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_space_elevator_construction_medium = {
+	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 10000                   # Price:   30, Total cost: 300000.0 (0.21%)
+			goods_input_electronic_components_add = 15000        # Price:   80, Total cost: 1200000.0 (0.83%)
+			goods_input_steel_add = 1000                         # Price:   50, Total cost: 50000.0 (0.03%)
+			goods_input_lead_add = 1000                          # Price:   40, Total cost: 40000.0 (0.03%)
+			goods_input_tech_metals_add = 1000                   # Price:   80, Total cost: 80000.0 (0.06%)
+			goods_input_consumer_appliances_add = 5000           # Price:   80, Total cost: 400000.0 (0.28%)
+			goods_input_telephones_add = 5000                    # Price:   70, Total cost: 350000.0 (0.24%)
+			goods_input_radios_add = 15000                       # Price:   80, Total cost: 1200000.0 (0.83%)
+			goods_input_electricity_add = 5000                   # Price:   30, Total cost: 150000.0 (0.10%)
+			goods_input_digital_access_add = 10000               # Price:  120, Total cost: 1200000.0 (0.83%)
+			goods_input_advanced_materials_add = 25000           # Price: 4000, Total cost: 100000000.0 (68.98%)
+			goods_input_launch_capacity_add = 200000             # Price:  200, Total cost: 40000000.0 (27.59%)
+			# Output goods
+			# Total input cost: 144970000.0
+			# Total output cost: 0
+			# Profit: -144970000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 100000
+			# Wage breakeven: -1449.70
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_engineers_add = 50000
+			building_employment_academics_add = 50000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_space_elevator_construction_fast = {
+	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 20000                   # Price:   30, Total cost: 600000.0 (0.21%)
+			goods_input_electronic_components_add = 30000        # Price:   80, Total cost: 2400000.0 (0.83%)
+			goods_input_steel_add = 2000                         # Price:   50, Total cost: 100000.0 (0.03%)
+			goods_input_lead_add = 2000                          # Price:   40, Total cost: 80000.0 (0.03%)
+			goods_input_tech_metals_add = 2000                   # Price:   80, Total cost: 160000.0 (0.06%)
+			goods_input_consumer_appliances_add = 10000          # Price:   80, Total cost: 800000.0 (0.28%)
+			goods_input_telephones_add = 10000                   # Price:   70, Total cost: 700000.0 (0.24%)
+			goods_input_radios_add = 30000                       # Price:   80, Total cost: 2400000.0 (0.83%)
+			goods_input_electricity_add = 10000                  # Price:   30, Total cost: 300000.0 (0.10%)
+			goods_input_digital_access_add = 20000               # Price:  120, Total cost: 2400000.0 (0.83%)
+			goods_input_advanced_materials_add = 50000           # Price: 4000, Total cost: 200000000.0 (68.98%)
+			goods_input_launch_capacity_add = 400000             # Price:  200, Total cost: 80000000.0 (27.59%)
+			# Output goods
+			# Total input cost: 289940000.0
+			# Total output cost: 0
+			# Profit: -289940000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 100000
+			# Wage breakeven: -2899.40
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_engineers_add = 50000
+			building_employment_academics_add = 50000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_space_elevator = {
+	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 1000                    # Price:   30, Total cost: 30000.0 (0.14%)
+			goods_input_electronic_components_add = 3000         # Price:   80, Total cost: 240000.0 (1.14%)
+			goods_input_steel_add = 200                          # Price:   50, Total cost: 10000.0 (0.05%)
+			goods_input_lead_add = 200                           # Price:   40, Total cost:  8000.0 (0.04%)
+			goods_input_tech_metals_add = 200                    # Price:   80, Total cost: 16000.0 (0.08%)
+			goods_input_consumer_appliances_add = 1000           # Price:   80, Total cost: 80000.0 (0.38%)
+			goods_input_telephones_add = 1000                    # Price:   70, Total cost: 70000.0 (0.33%)
+			goods_input_radios_add = 3000                        # Price:   80, Total cost: 240000.0 (1.14%)
+			goods_input_electricity_add = 1000                   # Price:   30, Total cost: 30000.0 (0.14%)
+			goods_input_digital_access_add = 2000                # Price:  120, Total cost: 240000.0 (1.14%)
+			goods_input_advanced_materials_add = 5000            # Price: 4000, Total cost: 20000000.0 (95.40%)
+			# Output goods
+			goods_output_launch_capacity_add = 1000000           # Price:  200, Total cost: 200000000.0 (100.00%)
+			# Total input cost: 20964000.0
+			# Total output cost: 200000000.0
+			# Profit: 179036000.0
+			# Profit margin: 854.02%
+			# Zero profit price multiplier: 0.10
+			# Employment: 10000
+			# Wage breakeven: 17903.60
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_engineers_add = 5000
+			building_employment_academics_add = 5000
+		}
+	}
+}
+
+pm_manual_production = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+}
+
+pm_standardized_aerospace_production = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+	
+	unlocking_technologies = {
+		modern_management_techniques
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 5                       # Price:   70, Total cost:   350.0 (100.00%)
+			# Output goods
+			# Total input cost: 350.0
+			# Total output cost: 0
+			# Profit: -350.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -1800
+			# Wage breakeven: 0.19
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_machinists_add = -1000
+			building_employment_engineers_add = -400
+			building_employment_academics_add = -400
+		}
+	}
+}
+
+pm_networked_control_systems = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+	
+	unlocking_technologies = {
+		computer_networks
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (32.00%)
+			goods_input_telephones_add = 5                       # Price:   70, Total cost:   350.0 (28.00%)
+			goods_input_digital_assets_add = 5                   # Price:  100, Total cost:   500.0 (40.00%)
+			# Output goods
+			# Total input cost: 1250.0
+			# Total output cost: 0
+			# Profit: -1250.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -3400
+			# Wage breakeven: 0.37
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_machinists_add = -1600
+			building_employment_engineers_add = -1100
+			building_employment_academics_add = -700
+		}
+	}
+}
+
+pm_robotic_assembly_handling = {
+	texture = "gfx/interface/icons/production_method_icons/base4.dds"
+	
+	unlocking_technologies = {
+		robotics
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_robotics_add = 5                         # Price:   80, Total cost:   400.0 (19.51%)
+			goods_input_consumer_appliances_add = 5              # Price:   80, Total cost:   400.0 (19.51%)
+			goods_input_telephones_add = 5                       # Price:   70, Total cost:   350.0 (17.07%)
+			goods_input_radios_add = 5                           # Price:   80, Total cost:   400.0 (19.51%)
+			goods_input_digital_assets_add = 5                   # Price:  100, Total cost:   500.0 (24.39%)
+			# Output goods
+			# Total input cost: 2050.0
+			# Total output cost: 0
+			# Profit: -2050.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -4450
+			# Wage breakeven: 0.46
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_machinists_add = -1900
+			building_employment_engineers_add = -1700
+			building_employment_academics_add = -850
+		}
+	}
+}
+
+pm_ai_optimized_operations = {
+	texture = "gfx/interface/icons/production_method_icons/base5.dds"
+	
+	unlocking_technologies = {
+		artificial_intelligence
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_robotics_add = 10                        # Price:   80, Total cost:   800.0 (22.54%)
+			goods_input_consumer_appliances_add = 5              # Price:   80, Total cost:   400.0 (11.27%)
+			goods_input_telephones_add = 5                       # Price:   70, Total cost:   350.0 (9.86%)
+			goods_input_radios_add = 5                           # Price:   80, Total cost:   400.0 (11.27%)
+			goods_input_digital_assets_add = 10                  # Price:  100, Total cost:  1000.0 (28.17%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (16.90%)
+			# Output goods
+			# Total input cost: 3550.0
+			# Total output cost: 0
+			# Profit: -3550.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -4990
+			# Wage breakeven: 0.71
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_machinists_add = -2000
+			building_employment_engineers_add = -2000
+			building_employment_academics_add = -990
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_space_mine = {
+	texture = "gfx/interface/icons/production_method_icons/picks_and_shovels.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 30           # Price:   80, Total cost:  2400.0 (8.00%)
+			goods_input_radios_add = 30                          # Price:   80, Total cost:  2400.0 (8.00%)
+			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (4.00%)
+			goods_input_launch_capacity_add = 120                # Price:  200, Total cost: 24000.0 (80.00%)
+			# Output goods
+			goods_output_gold_add = 50                           # Price:  100, Total cost:  5000.0 (13.42%)
+			goods_output_iron_add = 250                          # Price:   40, Total cost: 10000.0 (26.85%)
+			goods_output_lead_add = 25                           # Price:   40, Total cost:  1000.0 (2.68%)
+			goods_output_sulfur_add = 25                         # Price:   50, Total cost:  1250.0 (3.36%)
+			goods_output_tech_metals_add = 250                   # Price:   80, Total cost: 20000.0 (53.69%)
+			# Total input cost: 30000.0
+			# Total output cost: 37250.0
+			# Profit: 7250.0
+			# Profit margin: 24.17%
+			# Zero profit price multiplier: 0.81
+			# Employment: 1000
+			# Wage breakeven: 7.25
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 400
+			building_employment_academics_add = 100
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_space_colony_mining = {
+	texture = "gfx/interface/icons/production_method_icons/diesel_pump.dds"
+	
+	unlocking_technologies = {
+		space_colonization
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 30           # Price:   80, Total cost:  2400.0 (4.62%)
+			goods_input_radios_add = 30                          # Price:   80, Total cost:  2400.0 (4.62%)
+			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (2.31%)
+			goods_input_advanced_materials_add = 2.5             # Price: 4000, Total cost: 10000.0 (19.23%)
+			goods_input_launch_capacity_add = 180                # Price:  200, Total cost: 36000.0 (69.23%)
+			# Output goods
+			goods_output_gold_add = 100                          # Price:  100, Total cost: 10000.0 (13.42%)
+			goods_output_iron_add = 500                          # Price:   40, Total cost: 20000.0 (26.85%)
+			goods_output_lead_add = 50                           # Price:   40, Total cost:  2000.0 (2.68%)
+			goods_output_sulfur_add = 50                         # Price:   50, Total cost:  2500.0 (3.36%)
+			goods_output_tech_metals_add = 500                   # Price:   80, Total cost: 40000.0 (53.69%)
+			# Total input cost: 52000.0
+			# Total output cost: 74500.0
+			# Profit: 22500.0
+			# Profit margin: 43.27%
+			# Zero profit price multiplier: 0.70
+			# Employment: 1000
+			# Wage breakeven: 22.50
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_engineers_add = 900
+			building_employment_academics_add = 100
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_space_colony_grain = {
+	texture = "gfx/interface/icons/production_method_icons/simple_farming.dds"
+	
+	unlocking_technologies = {
+		space_colonization
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 30           # Price:   80, Total cost:  2400.0 (4.62%)
+			goods_input_radios_add = 30                          # Price:   80, Total cost:  2400.0 (4.62%)
+			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (2.31%)
+			goods_input_advanced_materials_add = 2.5             # Price: 4000, Total cost: 10000.0 (19.23%)
+			goods_input_launch_capacity_add = 180                # Price:  200, Total cost: 36000.0 (69.23%)
+			# Output goods
+			goods_output_grain_add = 750                         # Price:   20, Total cost: 15000.0 (16.67%)
+			goods_output_coffee_add = 300                        # Price:   50, Total cost: 15000.0 (16.67%)
+			goods_output_fruit_add = 500                         # Price:   30, Total cost: 15000.0 (16.67%)
+			goods_output_meat_add = 500                          # Price:   30, Total cost: 15000.0 (16.67%)
+			goods_output_tea_add = 300                           # Price:   50, Total cost: 15000.0 (16.67%)
+			goods_output_wine_add = 300                          # Price:   50, Total cost: 15000.0 (16.67%)
+			# Total input cost: 52000.0
+			# Total output cost: 90000.0
+			# Profit: 38000.0
+			# Profit margin: 73.08%
+			# Zero profit price multiplier: 0.58
+			# Employment: 1000
+			# Wage breakeven: 38.00
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_farmers_add = 500
+			building_employment_engineers_add = 400
+			building_employment_academics_add = 100
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_space_colony_vacation = {
+	texture = "gfx/interface/icons/production_method_icons/film_art.dds"
+	
+	unlocking_technologies = {
+		space_colonization
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 30           # Price:   80, Total cost:  2400.0 (4.62%)
+			goods_input_radios_add = 30                          # Price:   80, Total cost:  2400.0 (4.62%)
+			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (2.31%)
+			goods_input_advanced_materials_add = 2.5             # Price: 4000, Total cost: 10000.0 (19.23%)
+			goods_input_launch_capacity_add = 180                # Price:  200, Total cost: 36000.0 (69.23%)
+			# Output goods
+			goods_output_fine_art_add = 256                      # Price:  200, Total cost: 51200.0 (66.67%)
+			goods_output_tourism_add = 256                       # Price:  100, Total cost: 25600.0 (33.33%)
+			# Total input cost: 52000.0
+			# Total output cost: 76800.0
+			# Profit: 24800.0
+			# Profit margin: 47.69%
+			# Zero profit price multiplier: 0.68
+			# Employment: 1000
+			# Wage breakeven: 24.80
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_shopkeepers_add = 500
+			building_employment_engineers_add = 400
+			building_employment_academics_add = 100
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_ocean_mine = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steamers_add = 40                        # Price:   70, Total cost:  2800.0 (13.21%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.83%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (4.72%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (11.32%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (15.09%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (30.19%)
+			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (22.64%)
+			# Output goods
+			goods_output_lead_add = 260                          # Price:   40, Total cost: 10400.0 (36.88%)
+			goods_output_sulfur_add = 100                        # Price:   50, Total cost:  5000.0 (17.73%)
+			goods_output_tech_metals_add = 100                   # Price:   80, Total cost:  8000.0 (28.37%)
+			goods_output_gold_add = 40                           # Price:  100, Total cost:  4000.0 (14.18%)
+			goods_output_iron_add = 20                           # Price:   40, Total cost:   800.0 (2.84%)
+			# Total input cost: 21200.0
+			# Total output cost: 28200.0
+			# Profit: 7000.0
+			# Profit margin: 33.02%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 3.50
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 800
+			building_employment_academics_add = 200
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_advanced_ocean_mine  = {
+	texture = "gfx/interface/icons/production_method_icons/base2.dds"
+
+	unlocking_technologies = {
+		advanced_nanofabrication
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steamers_add = 40                        # Price:   70, Total cost:  2800.0 (11.11%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.38%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.97%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (9.52%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (12.70%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (25.40%)
+			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (19.05%)
+			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (15.87%)
+			# Output goods
+			goods_output_lead_add = 520                          # Price:   40, Total cost: 20800.0 (36.88%)
+			goods_output_sulfur_add = 200                        # Price:   50, Total cost: 10000.0 (17.73%)
+			goods_output_tech_metals_add = 200                   # Price:   80, Total cost: 16000.0 (28.37%)
+			goods_output_gold_add = 80                           # Price:  100, Total cost:  8000.0 (14.18%)
+			goods_output_iron_add = 40                           # Price:   40, Total cost:  1600.0 (2.84%)
+			# Total input cost: 25200.0
+			# Total output cost: 56400.0
+			# Profit: 31200.0
+			# Profit margin: 123.81%
+			# Zero profit price multiplier: 0.45
+			# Employment: 1000
+			# Wage breakeven: 31.20
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_engineers_add = 800
+			building_employment_academics_add = 200
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_automated_ocean_mine  = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	unlocking_technologies = {
+		artificial_intelligence
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steamers_add = 40                        # Price:   70, Total cost:  2800.0 (9.33%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.00%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.33%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (8.00%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (10.67%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (21.33%)
+			goods_input_digital_access_add = 80                  # Price:  120, Total cost:  9600.0 (32.00%)
+			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (13.33%)
+			# Output goods
+			goods_output_lead_add = 520                          # Price:   40, Total cost: 20800.0 (36.88%)
+			goods_output_sulfur_add = 200                        # Price:   50, Total cost: 10000.0 (17.73%)
+			goods_output_tech_metals_add = 200                   # Price:   80, Total cost: 16000.0 (28.37%)
+			goods_output_gold_add = 80                           # Price:  100, Total cost:  8000.0 (14.18%)
+			goods_output_iron_add = 40                           # Price:   40, Total cost:  1600.0 (2.84%)
+			# Total input cost: 30000.0
+			# Total output cost: 56400.0
+			# Profit: 26400.0
+			# Profit margin: 88.00%
+			# Zero profit price multiplier: 0.53
+			# Employment: 10
+			# Wage breakeven: 2640.00
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_academics_add = 10
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+REPLACE:pm_wooden_buildings = {
+	texture = "gfx/interface/icons/production_method_icons/wooden_buildings.dds"
+	
+	is_default = yes
+
+	state_modifiers = {
+		unscaled = {
+			state_construction_mult = 0.025
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                          # Price:   20, Total cost:   200.0 (20.00%)
+			goods_input_wood_add = 40                            # Price:   20, Total cost:   800.0 (80.00%)
+			# Output goods
+			goods_output_construction_add = 1                    # Price: 1000, Total cost:  1000.0 (100.00%)
+			# Total input cost: 1000.0
+			# Total output cost: 1000.0
+			# Profit: 0.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 1.00
+			# Employment: 5000
+			# Wage breakeven: 0.00
+		}
+
+		level_scaled = {
+			building_employment_bureaucrats_add = 500
+			building_employment_clerks_add = 500
+			building_employment_laborers_add = 4000
+		}
+		unscaled = {
+			building_laborers_mortality_mult = 0.1
+		}
+	}
+}
+
+REPLACE:pm_iron_frame_buildings = {
+	texture = "gfx/interface/icons/production_method_icons/iron_frame_buildings.dds"
+	
+	unlocking_technologies = {
+		urban_planning
+	}
+
+	state_modifiers = {
+		unscaled = {
+			state_construction_mult = 0.05
+		}
+	}
+			
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 16                            # Price:   20, Total cost:   320.0 (21.84%)
+			goods_input_fabric_add = 8                           # Price:   20, Total cost:   160.0 (10.92%)
+			goods_input_iron_add = 20                            # Price:   40, Total cost:   800.0 (54.61%)
+			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (10.92%)
+			goods_input_merchant_marine_add = 0.50               # Price:   50, Total cost:    25.0 (1.71%)
+			# Output goods
+			goods_output_construction_add = 2                    # Price: 1000, Total cost:  2000.0 (100.00%)
+			# Total input cost: 1465.0
+			# Total output cost: 2000.0
+			# Profit: 535.0
+			# Profit margin: 36.52%
+			# Zero profit price multiplier: 0.73
+			# Employment: 5000
+			# Wage breakeven: 0.11
+		}
+
+		level_scaled = {
+			building_employment_bureaucrats_add = 500
+			building_employment_clerks_add = 500
+			building_employment_machinists_add = 250
+			building_employment_laborers_add = 3750
+		}
+		unscaled = {
+			building_laborers_mortality_mult = 0.1
+		}
+	}
+}
+
+REPLACE:pm_steel_frame_buildings = {
+	texture = "gfx/interface/icons/production_method_icons/steel_frame_buildings.dds"
+
+	unlocking_technologies = {
+		steel_frame_buildings
+	}
+
+	state_modifiers = {
+		unscaled = {
+			state_construction_mult = 0.075
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (37.59%)
+			goods_input_glass_add = 16                           # Price:   40, Total cost:   640.0 (24.06%)
+			goods_input_explosives_add = 4                       # Price:   50, Total cost:   200.0 (7.52%)
+			goods_input_tools_add = 8                            # Price:   40, Total cost:   320.0 (12.03%)
+			goods_input_merchant_marine_add = 10                 # Price:   50, Total cost:   500.0 (18.80%)
+			# Output goods
+			goods_output_construction_add = 3.5                  # Price: 1000, Total cost:  3500.0 (100.00%)
+			# Total input cost: 2660.0
+			# Total output cost: 3500.0
+			# Profit: 840.0
+			# Profit margin: 31.58%
+			# Zero profit price multiplier: 0.76
+			# Employment: 5000
+			# Wage breakeven: 0.17
+		}
+
+		level_scaled = {
+			building_employment_bureaucrats_add = 500
+			building_employment_clerks_add = 500
+			building_employment_machinists_add = 750
+			building_employment_laborers_add = 3250
+		}
+		unscaled = {
+			building_laborers_mortality_mult = 0.1
+		}
+	}
+}
+
+REPLACE:pm_arc_welded_buildings = {
+	texture = "gfx/interface/icons/production_method_icons/arc_welded_buildings.dds"
+
+	unlocking_technologies = {
+		arc_welding
+	}
+	
+	state_modifiers = {
+		unscaled = {
+			state_construction_mult = 0.1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (24.04%)
+			goods_input_glass_add = 16                           # Price:   40, Total cost:   640.0 (15.38%)
+			goods_input_explosives_add = 8                       # Price:   50, Total cost:   400.0 (9.62%)
+			goods_input_tools_add = 16                           # Price:   40, Total cost:   640.0 (15.38%)
+			goods_input_electricity_add = 16                     # Price:   30, Total cost:   480.0 (11.54%)
+			goods_input_merchant_marine_add = 20                 # Price:   50, Total cost:  1000.0 (24.04%)
+			# Output goods
+			goods_output_construction_add = 5                    # Price: 1000, Total cost:  5000.0 (100.00%)
+			# Total input cost: 4160.0
+			# Total output cost: 5000.0
+			# Profit: 840.0
+			# Profit margin: 20.19%
+			# Zero profit price multiplier: 0.83
+			# Employment: 5000
+			# Wage breakeven: 0.17
+		} 
+
+		level_scaled = {
+			building_employment_bureaucrats_add = 500
+			building_employment_clerks_add = 500
+			building_employment_engineers_add = 250
+			building_employment_machinists_add = 750
+			building_employment_laborers_add = 3000
+		}
+		unscaled = {
+			building_laborers_mortality_mult = 0.1
+		}
+	}
+
+	required_input_goods = electricity
+}
+

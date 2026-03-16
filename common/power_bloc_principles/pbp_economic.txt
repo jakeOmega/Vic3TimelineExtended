@@ -1,0 +1,233 @@
+﻿### See power_bloc_principle_groups for grouping, primary groups for identities etc.
+
+### CONSTRUCTION
+
+principle_construction_4 = {
+	icon  = "gfx/interface/icons/principles_icons/construction.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = modern_tools
+	}
+
+	member_modifier = {
+		state_construction_mult = 0.1
+		building_group_bg_construction_infrastructure_usage_mult = -0.75
+		country_construction_goods_cost_mult = -0.05
+		country_max_weekly_construction_progress_add = 20
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}	
+}
+
+principle_construction_5 = {
+	icon  = "gfx/interface/icons/principles_icons/construction.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = robotics
+	}
+
+	member_modifier = {	
+		state_construction_mult = 0.15
+		building_group_bg_construction_infrastructure_usage_mult = -0.75
+		country_construction_goods_cost_mult = -0.1
+		country_max_weekly_construction_progress_add = 50
+		state_infrastructure_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}	
+}
+
+### INTERNAL TRADE
+
+principle_internal_trade_4 = {
+	icon = "gfx/interface/icons/principles_icons/internal_trade.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = keynesian_economics
+	}
+
+	member_modifier = {
+		country_company_throughput_bonus_add = 0.05
+		country_convoy_contribution_to_market_owner_add = 0.4
+		state_infrastructure_mult = 0.1
+		country_port_connection_cost_mult = -0.25
+		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
+		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		country_company_throughput_bonus_add = 0.01
+		country_port_connection_cost_mult = -0.05
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_internal_trade_5 = {
+	icon = "gfx/interface/icons/principles_icons/internal_trade.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = containerization
+	}
+
+	member_modifier = {
+		country_company_throughput_bonus_add = 0.1
+		country_convoy_contribution_to_market_owner_add = 0.5
+		state_infrastructure_mult = 0.1
+		country_port_connection_cost_mult = -0.25
+		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
+		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		country_company_throughput_bonus_add = 0.02
+		country_port_connection_cost_mult = -0.05
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### MARKET UNIFICATION
+
+principle_market_unification_4 = {
+	icon = "gfx/interface/icons/principles_icons/market_unification.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = intergovernmental_organizations
+	}
+
+	leader_modifier = {
+		country_convoys_capacity_mult = 0.2
+	}
+
+	member_modifier = {
+		state_infrastructure_mult = 0.2
+		country_convoy_contribution_to_market_owner_add = 0.3
+		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	power_bloc_modifier = {
+		# Members are permanently part of the same Customs Union
+		power_bloc_customs_union_bool = yes
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		state_infrastructure_mult = 0.05
+		building_group_bg_heavy_industry_infrastructure_usage_mult = -0.02
+		building_group_bg_power_infrastructure_usage_mult = -0.02
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_market_unification_5 = {
+	icon = "gfx/interface/icons/principles_icons/market_unification.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = satellite_communications
+	}
+
+	leader_modifier = {
+		country_convoys_capacity_mult = 0.4
+	}
+
+	member_modifier = {
+		state_infrastructure_mult = 0.3
+		country_convoy_contribution_to_market_owner_add = 0.4
+		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	power_bloc_modifier = {
+		# Members are permanently part of the same Customs Union
+		power_bloc_customs_union_bool = yes
+	}
+
+	institution = institution_ministry_of_commerce
+	institution_modifier = {
+		state_infrastructure_mult = 0.1
+		building_group_bg_heavy_industry_infrastructure_usage_mult = -0.04
+		building_group_bg_power_infrastructure_usage_mult = -0.04
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+
+### SOVEREIGN EMPIRE
+### Vassal Subjects
+
+principle_vassalization_4 = {
+	icon = "gfx/interface/icons/principles_icons/vassals_subjects.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = rocketry
+	}
+
+	power_bloc_modifier = {
+		power_bloc_leader_can_peacefully_annex_bool = yes
+	}
+
+	member_modifier = {
+		country_authority_per_subject_add = 20
+		country_subject_income_transfer_mult = 0.25
+
+		country_allow_enacting_decrees_in_subject_bool = yes
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_vassalization_5 = {
+	icon = "gfx/interface/icons/principles_icons/vassals_subjects.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = tactical_nuclear_weapons
+	}
+
+	leader_modifier = {
+		country_liberty_desire_of_subjects_add = -0.1
+		country_radicals_from_conquest_mult = -0.25
+	}
+
+	power_bloc_modifier = {
+		power_bloc_leader_can_peacefully_annex_bool = yes
+	}
+
+	member_modifier = {
+		country_authority_per_subject_add = 30
+		country_subject_income_transfer_mult = 0.25
+
+		country_allow_enacting_decrees_in_subject_bool = yes
+		country_leader_has_law_enactment_success_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+

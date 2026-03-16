@@ -1,0 +1,195 @@
+# ==============================================================================
+# FMC (Free Market Construction) — Scripted Effects
+# Scope: country unless noted.
+# ==============================================================================
+
+# Initialise the government construction buy target variable if missing.
+fmc_init_public_target = {
+	if = {
+		limit = { NOT = { has_variable = fmc_public_construction_buy_target } }
+		set_variable = {
+			name = fmc_public_construction_buy_target
+			value = 0
+		}
+	}
+}
+
+# One-time country setup: initialise variables and ensure at least one
+# fmc_building_construction_site exists (in the capital if none yet).
+fmc_country_setup = {
+	fmc_init_public_target = yes
+	if = {
+		limit = {
+			NOT = {
+				any_scope_building = {
+					type = bt:fmc_building_construction_site
+				}
+			}
+		}
+		capital = {
+			create_building = {
+				building = fmc_building_construction_site
+				level = 1
+			}
+		}
+	}
+}
+
+# Update the price-stabiliser variable toward the current construction price
+# using an exponential moving average (steps 1/10th of the gap each update).
+fmc_update_price_stabiliser = {
+	set_variable = {
+		name = fmc_price_stabiliser
+		value = fmc_price_stabiliser_next_value
+	}
+}
+
+# Refresh the private/public construction allocation modifier and the
+# per-site construction throughput modifier on every active construction site.
+fmc_update_construction_allocation = {
+	# Private/public split modifier
+	remove_modifier = fmc_private_public_share_modifier
+	add_modifier = {
+		name = fmc_private_public_share_modifier
+		multiplier = fmc_private_public_construction_ratio_target
+	}
+	# Per-site throughput: multiplier is (construction_per_site - 1) so that
+	# the base level-1 output produces exactly fmc_construction_per_site units.
+	set_local_variable = {
+		name = fmc_per_site
+		value = fmc_construction_per_site
+	}
+	change_local_variable = {
+		name = fmc_per_site
+		subtract = 1
+	}
+	every_scope_building = {
+		limit = { type = bt:fmc_building_construction_site }
+		remove_modifier = fmc_add_construction_modifier
+		# Reset overflowed buildings (occupancy > 1 indicates a stale level).
+		if = {
+			limit = { occupancy > 1 }
+			state = {
+				remove_building = fmc_building_construction_site
+				create_building = {
+					building = fmc_building_construction_site
+					level = 1
+				}
+			}
+		}
+		add_modifier = {
+			name = fmc_add_construction_modifier
+			multiplier = local_var:fmc_per_site
+		}
+	}
+}
+
+# AI: set the government purchase target based on queue depth and finances.
+fmc_ai_set_public_target = {
+	set_variable = {
+		name = fmc_public_construction_buy_target
+		value = fmc_ai_construction_purchase_target
+	}
+}
+
+# Ensure each state with active construction has exactly one
+# fmc_building_construction_site, and remove sites from idle non-capital states.
+# Called after any border / sovereignty change.
+fmc_rebuild_construction_sites = {
+	every_scope_state = {
+		# Add site to states that are building but have no site
+		if = {
+			limit = {
+				any_scope_building = { is_under_construction = yes }
+				NOT = {
+					any_scope_building = { type = bt:fmc_building_construction_site }
+				}
+			}
+			create_building = {
+				building = fmc_building_construction_site
+				level = 1
+			}
+		}
+		# Remove idle sites from non-capital states
+		else_if = {
+			limit = {
+				NOT = { any_scope_building = { is_under_construction = yes } }
+				any_scope_building = { type = bt:fmc_building_construction_site }
+				NOT = { is_capital = yes }
+			}
+			remove_building = fmc_building_construction_site
+		}
+	}
+	# Always guarantee one site exists (fallback to capital)
+	if = {
+		limit = {
+			NOT = {
+				any_scope_building = { type = bt:fmc_building_construction_site }
+			}
+		}
+		capital = {
+			create_building = {
+				building = fmc_building_construction_site
+				level = 1
+			}
+		}
+	}
+}
+
+# State scope: called when construction starts in a state.
+fmc_on_construction_start = {
+	# Ensure this state has a construction site
+	if = {
+		limit = {
+			NOT = {
+				any_scope_building = { type = bt:fmc_building_construction_site }
+			}
+		}
+		create_building = {
+			building = fmc_building_construction_site
+			level = 1
+		}
+	}
+	# Remove the idle capital placeholder if construction is happening elsewhere
+	owner = {
+		if = {
+			limit = {
+				capital = {
+					any_scope_building = { type = bt:fmc_building_construction_site }
+					NOT = { any_scope_building = { is_under_construction = yes } }
+					NOT = { THIS = prev }
+				}
+			}
+			capital = { remove_building = fmc_building_construction_site }
+		}
+	}
+}
+
+# State scope: called when a building finishes in a state.
+fmc_on_construction_end = {
+	# Remove site from idle non-capital states
+	if = {
+		limit = {
+			NOT = { any_scope_building = { is_under_construction = yes } }
+			any_scope_building = { type = bt:fmc_building_construction_site }
+			NOT = { is_capital = yes }
+		}
+		remove_building = fmc_building_construction_site
+	}
+	# Ensure at least one site remains (fallback to capital)
+	owner = {
+		if = {
+			limit = {
+				NOT = {
+					any_scope_building = { type = bt:fmc_building_construction_site }
+				}
+			}
+			capital = {
+				create_building = {
+					building = fmc_building_construction_site
+					level = 1
+				}
+			}
+		}
+	}
+}
