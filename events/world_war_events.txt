@@ -1,4 +1,4 @@
-﻿namespace = world_war_events
+namespace = world_war_events
 
 # ============================================================================
 # LEADUP EVENTS (1-9) â€” Fired during rising tensions before war breaks out
@@ -64,14 +64,7 @@ world_war_events.1 = {
 			value = medium_radicals
 			pop_type = soldiers
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 	}
 
 	# Option B: Negotiate â€” try diplomacy, less escalation
@@ -96,14 +89,7 @@ world_war_events.1 = {
 			value = small_radicals
 			strata = middle
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_negative = yes
 	}
 
 	# Option C: Issue an ultimatum â€” high risk, high reward
@@ -194,14 +180,7 @@ world_war_events.2 = {
 			country = scope:border_rival
 			value = 20
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive_short = yes
 	}
 
 	# Option B: Downplay the incident â€” de-escalate
@@ -321,14 +300,7 @@ world_war_events.3 = {
 			value = small_radicals
 			strata = middle
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 	}
 
 	# Option B: Abandon them â€” "peace in our time"
@@ -349,14 +321,7 @@ world_war_events.3 = {
 			value = medium_radicals
 			strata = middle
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_very_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_very_negative = yes
 	}
 
 	# Option C: Form a defensive alliance â€” commit fully
@@ -533,14 +498,7 @@ world_war_events.10 = {
 			value = medium_radicals
 			strata = middle
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 	}
 
 	# Option B: Use the moment for conscription drives
@@ -632,14 +590,7 @@ world_war_events.11 = {
 			value = medium_radicals
 			pop_type = soldiers
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 	}
 
 	# Option C: Accept the losses and focus on ground offensive
@@ -702,14 +653,7 @@ world_war_events.12 = {
 			value = medium_radicals
 			strata = lower
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_intelligentsia_approval_positive = yes
 	}
 
 	# Option B: Crack down ruthlessly â€” secure but brutal
@@ -870,14 +814,7 @@ world_war_events.20 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_industrialists_approval_positive = yes
 		add_modifier = {
 			name = ww_late_entry_cooldown
 			days = 365
@@ -899,14 +836,7 @@ world_war_events.20 = {
 			value = small_radicals
 			pop_type = soldiers
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_negative = yes
 		add_modifier = {
 			name = ww_late_entry_cooldown
 			days = 365
@@ -963,14 +893,7 @@ world_war_events.30 = {
 			value = medium_radicals
 			pop_type = soldiers
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_trade_unions }
 			add_modifier = {
@@ -1002,22 +925,8 @@ world_war_events.30 = {
 			value = small_radicals
 			strata = lower
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_very_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_intelligentsia_approval_positive = yes
+		ig_armed_forces_approval_very_negative = yes
 	}
 }
 
@@ -1046,16 +955,7 @@ world_war_events.100 = {
 
 	immediate = {
 		# Clean up all war modifiers
-		if = { limit = { has_modifier = ww_total_war_economy_modifier } remove_modifier = ww_total_war_economy_modifier }
-		if = { limit = { has_modifier = ww_war_propaganda_modifier } remove_modifier = ww_war_propaganda_modifier }
-		if = { limit = { has_modifier = ww_wartime_rationing_modifier } remove_modifier = ww_wartime_rationing_modifier }
-		if = { limit = { has_modifier = ww_home_front_strain_modifier } remove_modifier = ww_home_front_strain_modifier }
-		if = { limit = { has_modifier = ww_prolonged_war_exhaustion_modifier } remove_modifier = ww_prolonged_war_exhaustion_modifier }
-		if = { limit = { has_modifier = ww_rearmament_modifier } remove_modifier = ww_rearmament_modifier }
-		if = { limit = { has_modifier = ww_lend_lease_modifier } remove_modifier = ww_lend_lease_modifier }
-		if = { limit = { has_modifier = ww_fresh_forces_modifier } remove_modifier = ww_fresh_forces_modifier }
-		if = { limit = { has_modifier = ww_arsenal_of_democracy_modifier } remove_modifier = ww_arsenal_of_democracy_modifier }
-		if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
+		clear_all_ww_modifiers = yes
 	}
 
 	# Option A: Impose a harsh peace â€” regime change, reparations
@@ -1122,14 +1022,7 @@ world_war_events.100 = {
 			value = medium_radicals
 			strata = middle
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_intelligentsia_approval_positive = yes
 		# Trigger reconstruction event on defeated powers
 		every_country = {
 			limit = {
@@ -1369,14 +1262,7 @@ world_war_events.103 = {
 			value = medium_radicals
 			strata = middle
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_intelligentsia_approval_positive = yes
 	}
 
 	# Option B: Focus on moving forward â€” forgive but remember
@@ -1473,14 +1359,7 @@ world_war_events.104 = {
 			value = medium_radicals
 			pop_type = soldiers
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_armed_forces_approval_positive = yes
 	}
 
 	# Option B: Champion self-determination â€” support new nations
