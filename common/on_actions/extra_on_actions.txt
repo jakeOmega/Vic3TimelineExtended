@@ -54,6 +54,7 @@ on_acquired_technology = {
 		add_arable_land_effect_on_action
 		fix_incompatible_laws
 		character_update_on_action
+		te_modifier_update_on_technology_on_action
 	}
 }
 
@@ -67,6 +68,21 @@ on_law_activated = {
 	on_actions = {
 		fix_incompatible_laws_from_law_scope
 		language_reform_law_on_action
+		te_modifier_update_on_law_on_action
+	}
+}
+
+# Root = building. Fires when a new building is placed in a state.
+on_building_built = {
+	on_actions = {
+		te_modifier_update_on_building_on_action
+	}
+}
+
+# Root = building. Fires when an existing building gains a level.
+on_building_expanded = {
+	on_actions = {
+		te_modifier_update_on_building_on_action
 	}
 }
 
@@ -1627,6 +1643,52 @@ migration_crowding_on_action = {
 		if = {
 			limit = { migration_crowding_mult > 0 }
 			add_modifier = { name = migration_crowding multiplier = migration_crowding_mult }
+		}
+	}
+}
+
+# ============================================================================
+# INTELLIGENT MODIFIER UPDATE ON_ACTIONS
+# These fire immediately when buildings, technologies, or laws change,
+# so that migration crowding, tourism, and pollution modifiers respond
+# quickly rather than waiting for the next periodic pulse.
+# ============================================================================
+
+# Building scope (ROOT = building). Updates the state that contains the
+# building when any construction completes.
+te_modifier_update_on_building_on_action = {
+	effect = {
+		state = {
+			migration_crowding_on_action
+			tourism_on_action
+			pollution_on_action
+		}
+	}
+}
+
+# Country scope. Updates all states owned by the country when a technology
+# is researched, since techs can unlock production methods that carry
+# modifiers such as state_migration_crowding_density_mult.
+te_modifier_update_on_technology_on_action = {
+	effect = {
+		every_scope_state = {
+			migration_crowding_on_action
+			tourism_on_action
+			pollution_on_action
+		}
+	}
+}
+
+# Law scope (ROOT = law type, owner = enacting country). Updates all
+# states owned by the country when a law is enacted.
+# Tourism is directly influenced by laws (bonus/penalty from specific law types).
+# Migration crowding and pollution are not law-driven so are excluded here.
+te_modifier_update_on_law_on_action = {
+	effect = {
+		owner = {
+			every_scope_state = {
+				tourism_on_action
+			}
 		}
 	}
 }
