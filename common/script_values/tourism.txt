@@ -1,4 +1,4 @@
-base_tourism_appeal_value = {
+﻿base_tourism_appeal_value = {
 	if = {
 		limit = { state_region = s:STATE_MINSK }
 		value = 45 # Pleasant, but flat terrain. Some historical architecture in Minsk, but less of a major draw.

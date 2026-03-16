@@ -1,4 +1,4 @@
-pm_deportee_camp = {
+﻿pm_deportee_camp = {
 	texture = "gfx/interface/icons/production_method_icons/passenger_trains.dds"
 
 	building_modifiers = {

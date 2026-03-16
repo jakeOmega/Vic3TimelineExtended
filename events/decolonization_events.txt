@@ -804,11 +804,12 @@ decolonization_events.10 = {
 		# Celebrate the integration — grant full homeland status
 		scope:integrating_colony = {
 			state_region = {
-				ROOT = {
-					every_primary_culture = {
-						add_homeland = PREV
-					}
-				}
+				save_scope_as = colony_state_region
+			}
+		}
+		ROOT = {
+			every_primary_culture = {
+				add_homeland = scope:colony_state_region
 			}
 		}
 		add_modifier = {

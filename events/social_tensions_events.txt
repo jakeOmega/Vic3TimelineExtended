@@ -45,9 +45,9 @@ social_tensions_events.1 = {
 		}
 		# More likely in countries with political turmoil
 		OR = {
-			has_radicals >= 0.1
+			radical_fraction >= 0.1
 			is_at_war = yes
-			any_scope_state = { has_radical_political_movement = yes }
+			any_political_movement = { political_movement_radicalism >= 25 }
 		}
 	}
 
@@ -167,7 +167,7 @@ social_tensions_events.2 = {
 
 	option = { # Pursue quiet intelligence cooperation
 		name = social_tensions_events.2.b
-		trigger = { has_law = law_type:law_ministry_of_intelligence }
+		trigger = { has_law = law_type:law_ministry_of_intelligence_and_security }
 		add_modifier = { name = foreign_terror_diplomacy_modifier days = long_modifier_time is_decaying = yes }
 		change_relations = { country = scope:terror_linked_country value = 10 }
 		ai_chance = {
@@ -405,7 +405,7 @@ social_tensions_events.5 = {
 			has_law = law_type:law_minority_rights_ghettoization
 			any_scope_pop = {
 				is_pop_type = laborers
-				pop_is_discriminated = yes
+				pop_acceptance < acceptance_status_4
 				pop_acceptance < 0.5
 			}
 		}
@@ -416,7 +416,7 @@ social_tensions_events.5 = {
 			limit = {
 				is_incorporated = yes
 				state_population > 50000
-				any_scope_pop = { pop_is_discriminated = yes }
+				any_scope_pop = { pop_acceptance < acceptance_status_4 }
 			}
 			save_scope_as = brutality_state
 		}
@@ -495,7 +495,7 @@ social_tensions_events.6 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_radicals >= 0.15
+		radical_fraction >= 0.15
 		NOR = {
 			has_modifier = riot_curfew_modifier
 			has_modifier = riot_concessions_modifier
@@ -511,7 +511,7 @@ social_tensions_events.6 = {
 		any_scope_state = {
 			is_incorporated = yes
 			state_population > 100000
-			any_scope_pop = { pop_is_discriminated = yes }
+			any_scope_pop = { pop_acceptance < acceptance_status_4 }
 		}
 	}
 
@@ -520,7 +520,7 @@ social_tensions_events.6 = {
 			limit = {
 				is_incorporated = yes
 				state_population > 100000
-				any_scope_pop = { pop_is_discriminated = yes }
+				any_scope_pop = { pop_acceptance < acceptance_status_4 }
 			}
 			save_scope_as = riot_state
 		}
@@ -923,7 +923,7 @@ social_tensions_events.11 = {
 		any_scope_state = {
 			is_incorporated = yes
 			any_scope_pop = {
-				pop_is_discriminated = yes
+				pop_acceptance < acceptance_status_4
 				pop_acceptance < 0.5
 			}
 		}
@@ -933,7 +933,7 @@ social_tensions_events.11 = {
 		random_scope_state = {
 			limit = {
 				is_incorporated = yes
-				any_scope_pop = { pop_is_discriminated = yes }
+				any_scope_pop = { pop_acceptance < acceptance_status_4 }
 			}
 			save_scope_as = immigration_state
 		}
@@ -1017,7 +1017,7 @@ social_tensions_events.12 = {
 		any_scope_state = {
 			is_incorporated = yes
 			any_scope_pop = {
-				pop_is_discriminated = yes
+				pop_acceptance < acceptance_status_4
 				pop_acceptance < 0.5
 			}
 		}

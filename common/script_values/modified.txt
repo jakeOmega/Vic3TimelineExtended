@@ -1,4 +1,4 @@
-# ROOT is the leader of the power bloc.
+﻿# ROOT is the leader of the power bloc.
 # scope:target is the target country.
 # scope:has_interest is whether the power bloc has interest on the target country.
 # scope:has_capital_interest is whether the power bloc has interest on the capital of the target country.

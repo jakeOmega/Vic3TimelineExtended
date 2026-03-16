@@ -708,7 +708,7 @@ un_events.7 = {
 		any_country = {
 			NOT = { this = ROOT }
 			any_scope_state = {
-				state_average_sol_less_than = 8
+				average_sol < 8
 			}
 		}
 	}
@@ -718,7 +718,7 @@ un_events.7 = {
 			limit = {
 				NOT = { this = ROOT }
 				any_scope_state = {
-					state_average_sol_less_than = 8
+					average_sol < 8
 				}
 			}
 			save_scope_as = crisis_country
@@ -2001,7 +2001,7 @@ un_events.18 = {
 			OR = {
 				is_at_war = yes
 				any_scope_state = {
-					state_average_sol_less_than = 6
+					average_sol < 6
 				}
 			}
 		}
@@ -2013,7 +2013,7 @@ un_events.18 = {
 				NOT = { this = ROOT }
 				OR = {
 					is_at_war = yes
-					any_scope_state = { state_average_sol_less_than = 6 }
+					any_scope_state = { average_sol < 6 }
 				}
 			}
 			save_scope_as = refugee_source

@@ -1,4 +1,4 @@
-biological_immortality = {
+﻿biological_immortality = {
 	type = condition
 	texture = "gfx/interface/icons/character_trait_icons/honorable.dds"
 

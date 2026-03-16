@@ -1,4 +1,4 @@
-hydraulic_fracturing = {
+﻿hydraulic_fracturing = {
 	# Fracking PM for Oil Rigs, Flow Chemistry Production PM for Chemical Plants
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"

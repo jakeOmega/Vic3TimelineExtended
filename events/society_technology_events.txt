@@ -2178,8 +2178,8 @@ society_technology_events.28 = {
 		name = society_technology_events.28.c
 		trigger = {
 			OR = {
-				has_law = law_type:law_state_eugenics
-				has_law = law_type:law_open_source_genetic_commons
+				has_law = law_type:law_state_eugenics_program
+				has_law = law_type:law_open_source_genetics
 			}
 		}
 		ai_chance = {

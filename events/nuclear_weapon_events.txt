@@ -1,4 +1,4 @@
-namespace = nuclear_weapon_events
+﻿namespace = nuclear_weapon_events
 
 nuclear_weapon_events.1 = {
     type = country_event
@@ -496,7 +496,7 @@ nuclear_weapon_events.11 = {
  	}
 	
  	immediate = {
-		post_notification = industrial_nuke_response_succeeds_defender
+		post_notification = industrial_nuke_succeeds_defender
  	}
 
  	option = {
@@ -583,7 +583,7 @@ nuclear_weapon_events.12 = {
  	}
 	
  	immediate = {
- 		post_notification = industrial_nuke_response_succeeds_attacker
+ 		post_notification = industrial_nuke_succeeds_attacker
  	}
 
  	option = {
@@ -615,7 +615,7 @@ nuclear_weapon_events.13 = {
  	}
 	
  	immediate = {
- 		post_notification = industrial_nuke_response_fails_defender
+ 		post_notification = industrial_nuke_fails_defender
  	}
 
  	option = {
@@ -647,7 +647,7 @@ nuclear_weapon_events.14 = {
  	}
 	
  	immediate = {
- 		post_notification = industrial_nuke_response_fails_attacker
+ 		post_notification = industrial_nuke_fails_attacker
  	}
 
  	option = {

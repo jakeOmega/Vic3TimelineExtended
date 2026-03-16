@@ -1,4 +1,4 @@
-REPLACE_OR_CREATE:bg_parks = {
+﻿REPLACE_OR_CREATE:bg_parks = {
     category = development
 
     land_usage = rural

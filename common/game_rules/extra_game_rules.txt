@@ -1,4 +1,4 @@
-custom_religions_allowed_rule = {
+﻿custom_religions_allowed_rule = {
     default = custom_religions_not_allowed
 
     custom_religions_not_allowed = {

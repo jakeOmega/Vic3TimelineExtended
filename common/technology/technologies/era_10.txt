@@ -1,4 +1,4 @@
-machine_learning = {
+﻿machine_learning = {
 	# Smart Robots PM for Robotics Industries, High Bandwidth PM for Network Infrastructure
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"

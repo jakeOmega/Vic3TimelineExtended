@@ -1,4 +1,4 @@
-satellite_communications = {
+﻿satellite_communications = {
 	# Satellite Communications PM for Wireless Telecommunication Industries, Moon Mission PM for Space Program
 	era = era_8
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"

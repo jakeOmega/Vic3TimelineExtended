@@ -1,4 +1,4 @@
-FMC_CONSTRUCTION_SERVICES_PRICE = 500
+﻿FMC_CONSTRUCTION_SERVICES_PRICE = 500
 
 fmc_investment_pool_spending = {
 	value = investment_pool_gross_income

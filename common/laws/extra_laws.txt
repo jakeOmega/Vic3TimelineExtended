@@ -2922,8 +2922,8 @@ law_ministry_of_religion = {
 			limit = {
 				power_bloc ?= {
 					OR = {
-						has_principle = principle:principle_sacred_civics_4
-						has_principle = principle:principle_sacred_civics_5
+						has_principle = principle:principle_sacred_civics_4_mod
+						has_principle = principle:principle_sacred_civics_5_mod
 					}
 				}
 			}
@@ -3050,7 +3050,7 @@ law_neocameralism = {
 			add = base_impose_law_weight
 			if = {
 				limit = {
-					scope:target_country = { has_law = law_type:council_republic }
+					scope:target_country = { has_law = law_type:law_council_republic }
 					NOT = { has_strategy = ai_strategy_egalitarian_agenda }
 				}
 					multiply = 5
@@ -3138,7 +3138,7 @@ law_direct_democracy = {
 			add = base_impose_law_weight
 			if = {
 				limit = {
-					scope:target_country = { has_law = law_type:council_republic }
+					scope:target_country = { has_law = law_type:law_council_republic }
 					NOT = { has_strategy = ai_strategy_egalitarian_agenda }
 				}
 					multiply = 5

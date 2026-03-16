@@ -1,4 +1,4 @@
-### Combined Arms Triggers ###
+﻿### Combined Arms Triggers ###
 # Combat-unit-scope triggers that classify a unit into its army group.
 # Used by apply_combined_arms_bonuses to count units per group per formation.
 

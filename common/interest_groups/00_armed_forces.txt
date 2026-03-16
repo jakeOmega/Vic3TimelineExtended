@@ -1,4 +1,4 @@
-ig_armed_forces = {
+﻿ig_armed_forces = {
 	color = hsv{ 0.09 0.29 0.39 }
 	texture = "gfx/interface/icons/ig_icons/armed_forces.dds"
 	layer = "revolution_dynamic_armed_forces"

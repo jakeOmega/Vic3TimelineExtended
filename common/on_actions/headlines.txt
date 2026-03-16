@@ -1,4 +1,4 @@
-on_acquired_technology = {
+﻿on_acquired_technology = {
 	on_actions = {
 		extra_headlines_tech
 	}

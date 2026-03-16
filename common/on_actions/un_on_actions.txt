@@ -73,7 +73,7 @@ un_events_on_action = {
 						any_country = {
 							NOT = { this = ROOT }
 							any_scope_state = {
-								state_standard_of_living < 8
+								average_sol < 8
 							}
 						}
 					}
@@ -199,7 +199,7 @@ un_events_on_action = {
 							NOT = { this = ROOT }
 							OR = {
 								is_at_war = yes
-								any_scope_state = { state_standard_of_living < 6 }
+								any_scope_state = { average_sol < 6 }
 							}
 						}
 					}

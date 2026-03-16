@@ -1,4 +1,4 @@
-bg_migrant_camps = {
+﻿bg_migrant_camps = {
 	parent_group = bg_government
 	
 	default_building = building_migrant_camp

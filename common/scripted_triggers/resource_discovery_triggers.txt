@@ -1,4 +1,4 @@
-country_has_resource_discovery_access = {
+﻿country_has_resource_discovery_access = {
 	OR = {
 		$TARGET$ = { is_subject_of = ROOT }
 		has_treaty_foreign_investment_rights_with = { TARGET = $TARGET$ }

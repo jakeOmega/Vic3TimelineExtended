@@ -1,4 +1,4 @@
-adopt_local_culture = {
+﻿adopt_local_culture = {
 	is_shown = {
 		NOT = {
             any_scope_state = {

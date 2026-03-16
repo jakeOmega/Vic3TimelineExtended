@@ -1,4 +1,4 @@
-transistors = {
+﻿transistors = {
 	# Unlocks Transistors Factory building, Continuous Miners PM for mines, Teletype PM for Government Administration
 	# Electronic Brokarage PM for Financial Districts/Companies, Offshore Rigs PM for Oil Rigs,
 	# Textile Finishing Machinery PM for Textile Mills

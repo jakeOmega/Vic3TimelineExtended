@@ -1,4 +1,4 @@
-bergius_process = {
+﻿bergius_process = {
 	# Unlocks Synthetic Oil Plants building
 	# Unlocks Catalytic Cracking for Chemical Plants
 	era = era_6

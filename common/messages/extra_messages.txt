@@ -1,4 +1,4 @@
-# Nukes
+﻿# Nukes
 industrial_nuke_succeeds_attacker = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/military.dds"

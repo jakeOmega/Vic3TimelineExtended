@@ -1,4 +1,4 @@
-modern_material_science = {
+﻿modern_material_science = {
 	# Advanced Material Fabricator building, Laser Excavation PM for mines,
 	# Integrated Optical Chip Networks PM for Wired Telecommunications Industries
 	# Advanced Metamaterials Shipbuilding PM for civilian shipyards

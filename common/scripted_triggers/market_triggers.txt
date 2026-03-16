@@ -1,4 +1,4 @@
-# ----- Phase checks (driven by your JE's finance_cycle_value) -----
+﻿# ----- Phase checks (driven by your JE's finance_cycle_value) -----
 banking_cycle_is_panic = { var:finance_cycle_value < 10 }
 banking_cycle_is_downturn = { var:finance_cycle_value >= 10 var:finance_cycle_value < 25 }
 banking_cycle_is_stagnation = { var:finance_cycle_value >= 25 var:finance_cycle_value < 40 }

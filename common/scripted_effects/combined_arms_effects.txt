@@ -1,4 +1,4 @@
-### Combined Arms Effects ###
+﻿### Combined Arms Effects ###
 # Applies or removes combined arms traits on army generals based on their formation's
 # unit composition. Each army unit group provides unique combat bonuses (via command_modifier
 # on the trait) when at least 5% of the formation belongs to that group AND the formation

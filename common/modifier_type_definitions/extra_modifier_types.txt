@@ -597,6 +597,11 @@ state_building_state_youth_centers_max_level_add = {
 	percent = no
 }
 
+state_building_un_headquarters_max_level_add = {
+	color = good
+	percent = no
+}
+
 building_renewable_energy_plant_throughput_add = {
 	color = good
 	percent = yes

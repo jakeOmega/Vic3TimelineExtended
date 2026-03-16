@@ -110,10 +110,15 @@ world_war_conditions_met = {
 		ROOT = { country_has_opposed_ideology = { TARGET = prev } }
 	}
 	# At least 3 great powers exist (need enough participants)
-	count = {
-		target = every_country
-		limit = { country_rank >= rank_value:great_power }
-		value >= 3
+	# ROOT is already a great power (checked above), so check for 2 more
+	any_country = {
+		country_rank >= rank_value:great_power
+		NOT = { this = ROOT }
+		any_country = {
+			country_rank >= rank_value:great_power
+			NOT = { this = ROOT }
+			NOT = { this = PREV }
+		}
 	}
 }
 
