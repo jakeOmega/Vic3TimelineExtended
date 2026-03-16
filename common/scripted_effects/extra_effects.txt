@@ -895,3 +895,62 @@ update_characters = {
 		}
 	}
 }
+
+# ============================================================================
+# STATE MODIFIER REFRESH (state scope)
+# Individual scripted effects hold the actual modifier logic so they can be
+# called from both on_actions (periodic pulses) and te_update_state_modifiers
+# (immediate trigger hooks).  Adding a new state modifier only requires a
+# one-line change in te_update_state_modifiers.
+# ============================================================================
+
+# Refreshes the pollution_generation_mult_effect modifier.
+te_update_pollution_modifier = {
+	if = {
+		limit = { has_modifier = pollution_generation_mult_effect }
+		remove_modifier = pollution_generation_mult_effect
+	}
+	if = {
+		limit = { institution_ministry_of_the_environment_pollution_generation < 0 }
+		add_modifier = {
+			name = pollution_generation_mult_effect
+			multiplier = institution_ministry_of_the_environment_pollution_generation
+		}
+		set_variable = {
+			name = prior_pollution_reduction
+			value = institution_ministry_of_the_environment_pollution_generation
+		}
+	}
+}
+
+# Refreshes the tourism_output and tourism_throughput modifiers.
+te_update_tourism_modifier = {
+	remove_modifier = tourism_output
+	remove_modifier = tourism_throughput
+	add_modifier = {
+		name = tourism_output
+		multiplier = total_tourism_output_bonus_percent
+	}
+	add_modifier = {
+		name = tourism_throughput
+		multiplier = total_tourism_throughput_bonus_percent
+	}
+}
+
+# Refreshes the migration_crowding modifier.
+te_update_migration_crowding_modifier = {
+	remove_modifier = migration_crowding
+	if = {
+		limit = { migration_crowding_mult > 0 }
+		add_modifier = { name = migration_crowding multiplier = migration_crowding_mult }
+	}
+}
+
+# Combined refresh — delegates to each individual effect above.
+# Every immediate trigger hook calls this so a new modifier only needs
+# to be added in one place.
+te_update_state_modifiers = {
+	te_update_pollution_modifier = yes
+	te_update_tourism_modifier = yes
+	te_update_migration_crowding_modifier = yes
+}

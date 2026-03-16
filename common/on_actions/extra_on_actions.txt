@@ -54,6 +54,7 @@ on_acquired_technology = {
 		add_arable_land_effect_on_action
 		fix_incompatible_laws
 		character_update_on_action
+		te_modifier_update_on_technology_on_action
 	}
 }
 
@@ -67,6 +68,35 @@ on_law_activated = {
 	on_actions = {
 		fix_incompatible_laws_from_law_scope
 		language_reform_law_on_action
+		te_modifier_update_on_law_on_action
+	}
+}
+
+# Root = building. Fires when a new building is placed in a state.
+on_building_built = {
+	on_actions = {
+		te_modifier_update_on_building_on_action
+	}
+}
+
+# Root = building. Fires when an existing building gains a level.
+on_building_expanded = {
+	on_actions = {
+		te_modifier_update_on_building_on_action
+	}
+}
+
+# Root = institution, owner = country. Fires when institution investment rises.
+on_investment_increased = {
+	on_actions = {
+		te_modifier_update_on_investment_on_action
+	}
+}
+
+# Root = institution, owner = country. Fires when institution investment falls.
+on_investment_decreased = {
+	on_actions = {
+		te_modifier_update_on_investment_on_action
 	}
 }
 
@@ -275,21 +305,7 @@ remove_or_create_homelands_on_action = {
 
 pollution_on_action = {
 	effect = {
-		if = {
-			limit = { has_modifier = pollution_generation_mult_effect }
-			remove_modifier = pollution_generation_mult_effect
-		}
-		if = {
-			limit = { institution_ministry_of_the_environment_pollution_generation < 0 }
-			add_modifier = {
-				name = pollution_generation_mult_effect
-				multiplier = institution_ministry_of_the_environment_pollution_generation
-			}
-			set_variable = {
-				name = prior_pollution_reduction
-				value = institution_ministry_of_the_environment_pollution_generation
-			}
-		}
+		te_update_pollution_modifier = yes
 	}
 }
 
@@ -898,16 +914,7 @@ fix_incompatible_laws = {
 
 tourism_on_action = {
 	effect = {
-		remove_modifier = tourism_output
-		remove_modifier = tourism_throughput
-		add_modifier = {
-			name = tourism_output
-			multiplier = total_tourism_output_bonus_percent
-		}
-		add_modifier = {
-			name = tourism_throughput
-			multiplier = total_tourism_throughput_bonus_percent
-		}
+		te_update_tourism_modifier = yes
 	}
 }
 
@@ -1623,10 +1630,62 @@ construction_cost_scaling_on_action = {
 # See extra_script_values.txt for tuning constants.
 migration_crowding_on_action = {
 	effect = {
-		remove_modifier = migration_crowding
-		if = {
-			limit = { migration_crowding_mult > 0 }
-			add_modifier = { name = migration_crowding multiplier = migration_crowding_mult }
+		te_update_migration_crowding_modifier = yes
+	}
+}
+
+# ============================================================================
+# INTELLIGENT MODIFIER UPDATE ON_ACTIONS
+# These fire immediately when buildings, technologies, laws, or institution
+# investment changes, so that migration crowding, tourism, and pollution
+# modifiers respond quickly rather than waiting for the next periodic pulse.
+# Each handler delegates to te_update_state_modifiers (see extra_effects.txt)
+# so that adding a new modifier update only requires a single change there.
+# ============================================================================
+
+# Building scope (ROOT = building). Updates the state that contains the
+# building when any construction completes.
+te_modifier_update_on_building_on_action = {
+	effect = {
+		state = {
+			te_update_state_modifiers = yes
+		}
+	}
+}
+
+# Country scope. Updates all states owned by the country when a technology
+# is researched, since techs can unlock production methods that carry
+# modifiers such as state_migration_crowding_density_mult.
+te_modifier_update_on_technology_on_action = {
+	effect = {
+		every_scope_state = {
+			te_update_state_modifiers = yes
+		}
+	}
+}
+
+# Law scope (ROOT = law type, owner = enacting country). Updates all
+# states owned by the country when a law is enacted.
+te_modifier_update_on_law_on_action = {
+	effect = {
+		owner = {
+			every_scope_state = {
+				te_update_state_modifiers = yes
+			}
+		}
+	}
+}
+
+# Institution scope (ROOT = institution, owner = country). Updates all
+# states owned by the country when institution investment changes.
+# Covers institutions such as ministry_of_the_environment (pollution)
+# and ministry_of_urban_planning (migration crowding density tolerance).
+te_modifier_update_on_investment_on_action = {
+	effect = {
+		owner = {
+			every_scope_state = {
+				te_update_state_modifiers = yes
+			}
 		}
 	}
 }
