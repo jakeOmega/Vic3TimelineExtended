@@ -1,3 +1,4 @@
+# Production methods for digital and advanced transport buildings (cruise ships, digital services, space).
 pm_modern_cruise_ships = {
 	texture = "gfx/interface/icons/production_method_icons/base5.dds"
 	

@@ -1,4 +1,4 @@
-﻿add_construction_scriptedgui = {
+add_construction_scriptedgui = {
 
 	scope = country 
 
@@ -16,13 +16,13 @@
     
     effect = {	
 		#custom_tooltip = ""
-        initialize_gov_factories_variable = yes
+        fmc_init_public_target = yes
         change_variable = { 
             name = fmc_public_construction_buy_target 
             add = 1
         }
-        fmc_country_update_private_public = yes
-        fmc_update_construction_effect = yes
+        # (allocation updated by fmc_update_construction_allocation)
+        fmc_update_construction_allocation = yes
     }
 }
 
@@ -44,13 +44,13 @@ add_construction_shift_scriptedgui = {
     
     effect = {	
 		#custom_tooltip = ""
-        initialize_gov_factories_variable = yes
+        fmc_init_public_target = yes
         change_variable = { 
             name = fmc_public_construction_buy_target 
             add = 10
         }
-        fmc_country_update_private_public = yes
-        fmc_update_construction_effect = yes
+        # (allocation updated by fmc_update_construction_allocation)
+        fmc_update_construction_allocation = yes
     }
 }
 
@@ -72,13 +72,13 @@ add_construction_ctrl_scriptedgui = {
     
     effect = {	
 		#custom_tooltip = ""
-        initialize_gov_factories_variable = yes
+        fmc_init_public_target = yes
         change_variable = { 
             name = fmc_public_construction_buy_target 
             add = 100
         }
-        fmc_country_update_private_public = yes
-        fmc_update_construction_effect = yes
+        # (allocation updated by fmc_update_construction_allocation)
+        fmc_update_construction_allocation = yes
     }
 }
 
@@ -100,13 +100,13 @@ add_construction_alt_scriptedgui = {
     
     effect = {	
 		#custom_tooltip = ""
-        initialize_gov_factories_variable = yes
+        fmc_init_public_target = yes
         change_variable = { 
             name = fmc_public_construction_buy_target 
             add = 1000
         }
-        fmc_country_update_private_public = yes
-        fmc_update_construction_effect = yes
+        # (allocation updated by fmc_update_construction_allocation)
+        fmc_update_construction_allocation = yes
     }
 }
 
@@ -128,13 +128,13 @@ add_construction_rightclick_scriptedgui = {
     
     effect = {	
         #custom_tooltip = ""
-        initialize_gov_factories_variable = yes
+        fmc_init_public_target = yes
         change_variable = { 
             name = fmc_public_construction_buy_target 
             add = 10000
         }
-        fmc_country_update_private_public = yes
-        fmc_update_construction_effect = yes
+        # (allocation updated by fmc_update_construction_allocation)
+        fmc_update_construction_allocation = yes
     }
 }
 
@@ -155,13 +155,13 @@ remove_construction_scriptedgui = {
 
     effect = {          
         #custom_tooltip = "" 
-        initialize_gov_factories_variable = yes
+        fmc_init_public_target = yes
         change_variable = { 
             name = fmc_public_construction_buy_target 
             subtract = 1
         }
-        fmc_country_update_private_public = yes
-        fmc_update_construction_effect = yes
+        # (allocation updated by fmc_update_construction_allocation)
+        fmc_update_construction_allocation = yes
     }
 }
 
@@ -182,13 +182,13 @@ remove_construction_shift_scriptedgui = {
 
     effect = {          
         #custom_tooltip = "" 
-        initialize_gov_factories_variable = yes
+        fmc_init_public_target = yes
         change_variable = { 
             name = fmc_public_construction_buy_target 
             subtract = 10
         }
-        fmc_country_update_private_public = yes
-        fmc_update_construction_effect = yes
+        # (allocation updated by fmc_update_construction_allocation)
+        fmc_update_construction_allocation = yes
     }
 }
 
@@ -209,13 +209,13 @@ remove_construction_ctrl_scriptedgui = {
 
     effect = {          
         #custom_tooltip = "" 
-        initialize_gov_factories_variable = yes
+        fmc_init_public_target = yes
         change_variable = { 
             name = fmc_public_construction_buy_target 
             subtract = 100
         }
-        fmc_country_update_private_public = yes
-        fmc_update_construction_effect = yes
+        # (allocation updated by fmc_update_construction_allocation)
+        fmc_update_construction_allocation = yes
     }
 }
 
@@ -236,13 +236,13 @@ remove_construction_alt_scriptedgui = {
 
     effect = {          
         #custom_tooltip = "" 
-        initialize_gov_factories_variable = yes
+        fmc_init_public_target = yes
         change_variable = { 
             name = fmc_public_construction_buy_target 
             subtract = 1000
         }
-        fmc_country_update_private_public = yes
-        fmc_update_construction_effect = yes
+        # (allocation updated by fmc_update_construction_allocation)
+        fmc_update_construction_allocation = yes
     }
 }
 
@@ -263,12 +263,12 @@ remove_construction_rightclick_scriptedgui = {
 
     effect = {          
         #custom_tooltip = "" 
-        initialize_gov_factories_variable = yes
+        fmc_init_public_target = yes
         set_variable = { 
             name = fmc_public_construction_buy_target 
             value = 0
         }
-        fmc_country_update_private_public = yes
-        fmc_update_construction_effect = yes
+        # (allocation updated by fmc_update_construction_allocation)
+        fmc_update_construction_allocation = yes
     }
 }

@@ -1,3 +1,4 @@
+# Religion selection scripted buttons.
 select_christian = {
     name = "SELECT_CHRISTIAN"
     desc = "SELECT_CHRISTIAN_DESC"

@@ -1,3 +1,4 @@
+# Diplomacy and trade power bloc principles.
 principle_external_trade_4 = {
 	icon = "gfx/interface/icons/principles_icons/external_trade.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"

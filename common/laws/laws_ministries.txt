@@ -1,3 +1,4 @@
+# Ministry laws: toggles and variants for each governmental ministry.
 law_no_ministry_of_foreign_affairs = {
 	group = lawgroup_ministry_of_foreign_affairs
 	

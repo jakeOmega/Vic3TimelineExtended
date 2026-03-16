@@ -1,3 +1,4 @@
+# Production methods for electronics and semiconductor industries.
 pm_transistors = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	

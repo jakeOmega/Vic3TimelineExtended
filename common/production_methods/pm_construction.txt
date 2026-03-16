@@ -1,3 +1,4 @@
+# Production methods for construction sectors (building materials and techniques).
 pm_reinforced_concrete_buildings = {
 		texture = "gfx/interface/icons/production_method_icons/base1.dds"
 

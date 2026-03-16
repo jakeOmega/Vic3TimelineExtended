@@ -1,3 +1,4 @@
+# Production methods for communications buildings (telegraphs, telephones, radio, internet infrastructure).
 REPLACE:pm_telephones = {
 	texture = "gfx/interface/icons/production_method_icons/telephones.dds"
 	building_modifiers = {

@@ -1,3 +1,4 @@
+# Global warming climate policy scripted buttons.
 gw_carbon_tax_button = {
     name = "GW_CARBON_TAX"
     desc = "GW_CARBON_TAX_DESC"

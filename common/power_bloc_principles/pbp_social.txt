@@ -1,3 +1,4 @@
+# Social, education, and civic power bloc principles.
 principle_education_1 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"

@@ -1,0 +1,256 @@
+# ==============================================================================
+# FMC (Free Market Construction) — Script Values
+# Scope: country unless noted.
+# ==============================================================================
+
+# ---- Construction price ----
+
+# Base construction-services price constant (raw-goods equivalent price index).
+FMC_CONSTRUCTION_SERVICES_PRICE = 500
+
+# Current market price of construction goods, scaled to the services baseline.
+fmc_construction_price = {
+	value = this.market.mg:construction.market_goods_pricier
+	add = 1
+	multiply = FMC_CONSTRUCTION_SERVICES_PRICE
+}
+
+# ---- Investment pool flows ----
+
+# Total investment pool spending this week.
+fmc_investment_pool_spending = {
+	value = investment_pool_gross_income
+	subtract = investment_pool_net_income
+}
+
+# Construction units privately purchased this week.
+fmc_private_construction_bought = {
+	value = fmc_investment_pool_spending
+	divide = fmc_construction_price
+}
+
+# Price incentive factor used to scale the spending target.
+fmc_investment_price_incentive = {
+	value = this.market.mg:construction.market_goods_pricier
+	add = 2.25
+	divide = 2.25
+}
+
+# ---- Current construction usage ----
+
+# Total construction-goods consumed across the whole market this week.
+fmc_total_construction_use = {
+	value = this.market.mg:construction.market_goods_consumption
+}
+
+# Total construction spending in market-goods terms.
+fmc_total_construction_spending = {
+	value = fmc_total_construction_use
+	multiply = fmc_construction_price
+}
+
+# Government share of construction spending.
+fmc_public_construction_spending = {
+	value = fmc_total_construction_spending
+	subtract = fmc_investment_pool_spending
+}
+
+# Private construction units used.
+fmc_private_construction_use = {
+	value = fmc_investment_pool_spending
+	divide = fmc_construction_price
+}
+
+# Government construction units used.
+fmc_public_construction_use = {
+	value = fmc_public_construction_spending
+	divide = fmc_construction_price
+}
+
+# ---- Target calculations ----
+
+# Target investment-pool size: enough to sustain 24 weeks of gross income.
+fmc_investment_pool_size_target = {
+	if = {
+		limit = { investment_pool_gross_income > 0 }
+		value = investment_pool_gross_income
+	}
+	else = {
+		value = 100000
+	}
+	multiply = 24
+}
+
+# How much of gross income the private sector should spend on construction.
+# Scales up when the pool is above target and down when below.
+fmc_private_construction_spending_target = {
+	value = investment_pool_gross_income
+	multiply = {
+		value = investment_pool
+		subtract = fmc_investment_pool_size_target
+		divide = fmc_investment_pool_size_target
+		add = 1
+	}
+}
+
+# Government construction units to purchase (zero if paused or variable unset).
+fmc_public_construction_use_target = {
+	if = {
+		limit = { has_variable = fmc_public_construction_buy_target }
+		if = {
+			limit = { is_construction_paused = no }
+			value = var:fmc_public_construction_buy_target
+		}
+		else = {
+			value = 0
+		}
+	}
+	else = {
+		value = 1
+	}
+}
+
+# Private construction units target, capped at 1000 × construction multiplier.
+fmc_private_construction_use_target = {
+	value = fmc_private_construction_spending_target
+	divide = var:fmc_price_stabiliser
+	if = {
+		limit = { investment_pool_gross_income > 100000000 }
+		min = 1000
+	}
+	max = {
+		value = 1000
+		multiply = modifier:country_max_weekly_construction_progress_add
+	}
+}
+
+# Combined public + private construction target.
+fmc_total_construction_use_target = {
+	value = fmc_private_construction_use_target
+	add = fmc_public_construction_use_target
+}
+
+# Private share as a percentage of the total target (used as the modifier multiplier).
+fmc_private_public_construction_ratio_target = {
+	if = {
+		limit = { fmc_total_construction_use_target > 0 }
+		value = fmc_private_construction_use_target
+		divide = fmc_total_construction_use_target
+	}
+	else = {
+		value = 1
+	}
+	multiply = 100
+}
+
+# Exponential moving average toward the current construction price.
+# Steps 1/10th of the gap each update.
+fmc_price_stabiliser_next_value = {
+	if = {
+		limit = { NOT = { has_variable = fmc_price_stabiliser } }
+		value = FMC_CONSTRUCTION_SERVICES_PRICE
+	}
+	else_if = {
+		limit = { var:fmc_price_stabiliser < fmc_construction_price }
+		value = var:fmc_price_stabiliser
+		add = {
+			value = fmc_construction_price
+			subtract = var:fmc_price_stabiliser
+			divide = 10
+		}
+	}
+	else = {
+		value = var:fmc_price_stabiliser
+		subtract = {
+			value = var:fmc_price_stabiliser
+			subtract = fmc_construction_price
+			divide = 10
+		}
+	}
+}
+
+# ---- Construction queue length estimates ----
+
+fmc_num_points_left_queue_government = {
+	value = construction_queue_government_duration
+	multiply = fmc_total_construction_use
+	if = {
+		limit = { construction_queue_government_duration > 52000 }
+		value = 0
+	}
+}
+
+fmc_num_points_left_queue_private = {
+	value = construction_queue_private_duration
+	multiply = fmc_total_construction_use
+	if = {
+		limit = { construction_queue_private_duration > 52000 }
+		value = 0
+	}
+}
+
+# ---- Site placement helpers (country scope) ----
+
+# Number of active fmc_building_construction_site buildings across all of this country's states.
+fmc_num_construction_sites = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			type = bt:fmc_building_construction_site
+			occupancy > 0
+		}
+		add = 1
+	}
+}
+
+# Target construction output per site, used as the modifier multiplier.
+fmc_construction_per_site = {
+	value = fmc_total_construction_use_target
+	if = {
+		limit = { fmc_num_construction_sites > 0 }
+		divide = fmc_num_construction_sites
+	}
+}
+
+# ---- AI values ----
+
+# How many construction units the AI should purchase from the government queue.
+fmc_ai_construction_purchase_target = {
+	if = {
+		limit = {
+			is_construction_paused = no
+			construction_queue_num_queued_government_levels > 0
+		}
+		value = net_fixed_income
+		min = 0
+		divide = var:fmc_price_stabiliser
+		multiply = {
+			add = scaled_gold_reserves
+			subtract = scaled_debt
+			add = 1
+		}
+		min = {
+			value = 10
+			if = {
+				limit = { bureaucracy < 0 }
+				add = {
+					value = income
+					divide = {
+						value = fmc_construction_price
+						min = 50
+						max = 150
+					}
+					divide = 5
+				}
+			}
+		}
+		round_to = 1
+		max = {
+			value = construction_queue_num_queued_government_levels
+			multiply = modifier:country_max_weekly_construction_progress_add
+		}
+	}
+	else = {
+		value = 0
+	}
+}

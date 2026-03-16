@@ -1,3 +1,4 @@
+# Country / entity name selection scripted buttons.
 select_name_a = {
     name = "custom_religion_name_a"
     desc = "SELECT_NAME_DESC"

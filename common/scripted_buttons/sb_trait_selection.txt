@@ -1,3 +1,4 @@
+# Leader trait selection scripted buttons.
 select_trait_traditionalist_loyal = {
     name = "SELECT_TRAIT_TRADITIONALIST_LOYAL"
     desc = "SELECT_TRAIT_TRADITIONALIST_LOYAL_DESC"

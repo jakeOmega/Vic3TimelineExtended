@@ -1,4 +1,5 @@
-﻿pm_dragline_excavators_coal_mine = {
+# Production methods for mining buildings (coal, iron, gold, etc.).
+pm_dragline_excavators_coal_mine = {
 	texture = "gfx/interface/icons/production_method_icons/assembly_lines.dds"
 		
 	unlocking_technologies = {

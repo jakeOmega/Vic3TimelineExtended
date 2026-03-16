@@ -1,3 +1,4 @@
+# Central bank policy rate and reserve requirement scripted buttons.
 cb_policy_rate_hike = {
     name = "CB_POLICY_RATE_HIKE"
     desc = "CB_POLICY_RATE_HIKE_DESC"

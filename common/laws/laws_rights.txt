@@ -1,3 +1,4 @@
+# Minority rights laws: spectrum from violent hostility to affirmative action.
 law_minority_rights_violent_hostility = {
 	group = lawgroup_minority_rights
 	

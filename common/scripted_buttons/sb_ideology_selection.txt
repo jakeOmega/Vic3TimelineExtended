@@ -1,3 +1,4 @@
+# Ideology selection scripted buttons for leader trait assignment.
 select_ideology_traditionalist_economy = {
     name = "SELECT_IDEOLOGY_TRADITIONALIST_ECONOMY"
     desc = "SELECT_IDEOLOGY_TRADITIONALIST_ECONOMY_DESC"

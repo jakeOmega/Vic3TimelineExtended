@@ -1,3 +1,4 @@
+# Production methods for transport infrastructure (railways, ports, canals, refineries).
 pm_catalytic_cracking = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
 	state_modifiers = {
