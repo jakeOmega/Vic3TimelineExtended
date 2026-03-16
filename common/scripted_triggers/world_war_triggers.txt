@@ -1,0 +1,142 @@
+﻿
+# ============================================================================
+# WORLD WAR SCRIPTED TRIGGERS
+# Ideology classification and war eligibility triggers
+# ============================================================================
+
+# --- Ideology Bucket Triggers ---
+# These classify countries into broad ideological camps for world war purposes
+
+country_is_democratic = {
+	OR = {
+		has_law = law_type:law_census_voting
+		has_law = law_type:law_universal_suffrage
+		has_law = law_type:law_wealth_voting
+		has_law = law_type:law_landed_voting
+	}
+	OR = {
+		has_law = law_type:law_presidential_republic
+		has_law = law_type:law_parliamentary_republic
+		has_law = law_type:law_monarchy
+	}
+	NOR = {
+		has_law = law_type:law_single_party_state
+		has_law = law_type:law_autocracy
+	}
+}
+
+country_is_communist = {
+	has_law = law_type:law_council_republic
+	OR = {
+		has_law = law_type:law_command_economy
+		has_law = law_type:law_cooperative_ownership
+	}
+}
+
+country_is_fascist = {
+	OR = {
+		AND = {
+			has_law = law_type:law_corporate_state
+			has_law = law_type:law_single_party_state
+		}
+		AND = {
+			has_law = law_type:law_autocracy
+			has_law = law_type:law_single_party_state
+			OR = {
+				has_law = law_type:law_ethnostate
+				has_law = law_type:law_national_supremacy
+				has_law = law_type:law_racial_segregation
+			}
+		}
+	}
+}
+
+country_is_authoritarian = {
+	OR = {
+		has_law = law_type:law_autocracy
+		has_law = law_type:law_single_party_state
+		has_law = law_type:law_oligarchy
+	}
+	NOR = {
+		country_is_communist = yes
+		country_is_fascist = yes
+	}
+}
+
+# --- True if this country's ideology is opposed to SCOPE country ---
+country_has_opposed_ideology = {
+	OR = {
+		# Democratic vs communist
+		AND = {
+			country_is_democratic = yes
+			$TARGET$ = { country_is_communist = yes }
+		}
+		AND = {
+			country_is_communist = yes
+			$TARGET$ = { country_is_democratic = yes }
+		}
+		# Democratic vs fascist
+		AND = {
+			country_is_democratic = yes
+			$TARGET$ = { country_is_fascist = yes }
+		}
+		AND = {
+			country_is_fascist = yes
+			$TARGET$ = { country_is_democratic = yes }
+		}
+		# Communist vs fascist (the deepest opposition)
+		AND = {
+			country_is_communist = yes
+			$TARGET$ = { country_is_fascist = yes }
+		}
+		AND = {
+			country_is_fascist = yes
+			$TARGET$ = { country_is_communist = yes }
+		}
+	}
+}
+
+# --- True if global conditions are ripe for a world war ---
+world_war_conditions_met = {
+	# Must be at least a great power
+	country_rank >= rank_value:great_power
+	# Must have era 6 military technology
+	has_technology_researched = combined_arms
+	# Not already in a world war
+	NOT = { has_variable = world_war_active }
+	# Must have at least one great power rival with opposed ideology
+	any_rival_country = {
+		country_rank >= rank_value:great_power
+		ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+	}
+	# At least 3 great powers exist (need enough participants)
+	count = {
+		target = every_country
+		limit = { country_rank >= rank_value:great_power }
+		value >= 3
+	}
+}
+
+# --- True if this country can join an ongoing world war late ---
+can_join_world_war = {
+	country_rank >= rank_value:major_power
+	is_at_war = no
+	has_variable = world_war_active
+	NOT = { has_modifier = ww_late_entry_cooldown }
+	# Must have relations < -20 with one of the belligerents on the aggressor side
+	any_country = {
+		has_variable = ww_aggressor_side
+		is_at_war = yes
+		relations:root < -20
+	}
+}
+
+# --- True if country is on the aggressor side of the world war ---
+country_is_ww_aggressor = {
+	has_variable = ww_aggressor_side
+}
+
+# --- True if country is on the defender side of the world war ---
+country_is_ww_defender = {
+	has_variable = ww_defender_side
+}

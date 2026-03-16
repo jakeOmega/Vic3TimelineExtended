@@ -1,0 +1,582 @@
+﻿
+# ============================================================================
+# WORLD WAR SCRIPTED BUTTONS
+# Toggle pairs for wartime policies and late entry
+# ============================================================================
+
+# ---- LEADUP PHASE: Rearmament ----
+
+ww_rearm_button = {
+	name = "WW_REARM_BUTTON"
+	desc = "WW_REARM_BUTTON_DESC"
+
+	visible = {
+		NOT = { has_modifier = ww_rearmament_modifier }
+		NOT = { has_variable = ww_active_phase }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				ww_ideological_tension >= 50
+				country_is_fascist = yes
+			}
+			add = 80
+		}
+		if = {
+			limit = {
+				ww_ideological_tension >= 50
+				country_is_authoritarian = yes
+			}
+			add = 60
+		}
+		if = {
+			limit = {
+				ww_ideological_tension >= 70
+			}
+			add = 40
+		}
+	}
+
+	possible = {
+		NOT = { has_modifier = ww_appeasement_modifier }
+		ww_ideological_tension >= 30
+		custom_tooltip = {
+			text = WW_REARM_POSSIBLE_TT
+			has_technology_researched = combined_arms
+		}
+	}
+
+	effect = {
+		add_modifier = { name = ww_rearmament_modifier }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}
+
+ww_stop_rearm_button = {
+	name = "WW_STOP_REARM_BUTTON"
+	desc = "WW_STOP_REARM_BUTTON_DESC"
+
+	visible = {
+		has_modifier = ww_rearmament_modifier
+		NOT = { has_variable = ww_active_phase }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { ww_ideological_tension < 30 }
+			add = 50
+		}
+	}
+
+	possible = {
+		has_modifier = ww_rearmament_modifier
+	}
+
+	effect = {
+		remove_modifier = ww_rearmament_modifier
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# ---- LEADUP PHASE: Appeasement ----
+
+ww_appease_button = {
+	name = "WW_APPEASE_BUTTON"
+	desc = "WW_APPEASE_BUTTON_DESC"
+
+	visible = {
+		NOT = { has_modifier = ww_appeasement_modifier }
+		NOT = { has_variable = ww_active_phase }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				country_is_democratic = yes
+				ww_ideological_tension >= 30
+				ww_ideological_tension < 70
+			}
+			add = 60
+		}
+		if = {
+			limit = {
+				ww_ideological_tension < 50
+			}
+			add = 30
+		}
+	}
+
+	possible = {
+		NOT = { has_modifier = ww_rearmament_modifier }
+		ww_ideological_tension >= 20
+		custom_tooltip = {
+			text = WW_APPEASE_POSSIBLE_TT
+			country_is_democratic = yes
+		}
+	}
+
+	effect = {
+		add_modifier = { name = ww_appeasement_modifier }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+ww_stop_appease_button = {
+	name = "WW_STOP_APPEASE_BUTTON"
+	desc = "WW_STOP_APPEASE_BUTTON_DESC"
+
+	visible = {
+		has_modifier = ww_appeasement_modifier
+		NOT = { has_variable = ww_active_phase }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { ww_ideological_tension >= 70 }
+			add = 80
+		}
+	}
+
+	possible = {
+		has_modifier = ww_appeasement_modifier
+	}
+
+	effect = {
+		remove_modifier = ww_appeasement_modifier
+	}
+}
+
+# ---- LEADUP PHASE: Lend-Lease (support one side without joining) ----
+
+ww_lend_lease_button = {
+	name = "WW_LEND_LEASE_BUTTON"
+	desc = "WW_LEND_LEASE_BUTTON_DESC"
+
+	visible = {
+		NOT = { has_modifier = ww_lend_lease_modifier }
+		# Available during both leadup (supporting rearmament of allies) and active war
+		OR = {
+			ww_ideological_tension >= 40
+			has_variable = ww_active_phase
+		}
+		is_at_war = no
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_variable = ww_active_phase
+				is_at_war = no
+				country_rank >= rank_value:great_power
+			}
+			add = 70
+		}
+		if = {
+			limit = {
+				country_is_democratic = yes
+				any_country = {
+					has_variable = ww_defender_side
+					country_is_democratic = yes
+				}
+			}
+			add = 40
+		}
+	}
+
+	possible = {
+		country_rank >= rank_value:major_power
+		custom_tooltip = {
+			text = WW_LEND_LEASE_POSSIBLE_TT
+			OR = {
+				ww_ideological_tension >= 40
+				has_variable = ww_active_phase
+			}
+		}
+	}
+
+	effect = {
+		add_modifier = { name = ww_lend_lease_modifier }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+ww_stop_lend_lease_button = {
+	name = "WW_STOP_LEND_LEASE_BUTTON"
+	desc = "WW_STOP_LEND_LEASE_BUTTON_DESC"
+
+	visible = {
+		has_modifier = ww_lend_lease_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { is_at_war = yes }
+			add = 80 # stop lend-lease if we're now directly in the war
+		}
+	}
+
+	possible = {
+		has_modifier = ww_lend_lease_modifier
+	}
+
+	effect = {
+		remove_modifier = ww_lend_lease_modifier
+	}
+}
+
+# ---- ACTIVE WAR: Total War Economy ----
+
+ww_total_war_economy_button = {
+	name = "WW_TOTAL_WAR_ECONOMY_BUTTON"
+	desc = "WW_TOTAL_WAR_ECONOMY_BUTTON_DESC"
+
+	visible = {
+		NOT = { has_modifier = ww_total_war_economy_modifier }
+		has_variable = ww_active_phase
+		is_at_war = yes
+	}
+
+	ai_chance = {
+		value = 50
+		if = {
+			limit = {
+				has_variable = ww_years_elapsed
+				var:ww_years_elapsed >= 1
+			}
+			add = 50
+		}
+	}
+
+	possible = {
+		has_variable = ww_active_phase
+		is_at_war = yes
+		custom_tooltip = {
+			text = WW_TOTAL_WAR_POSSIBLE_TT
+			has_technology_researched = combined_arms
+		}
+	}
+
+	effect = {
+		add_modifier = { name = ww_total_war_economy_modifier }
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = medium_radicals
+			pop_type = soldiers
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+ww_stop_total_war_economy_button = {
+	name = "WW_STOP_TOTAL_WAR_ECONOMY_BUTTON"
+	desc = "WW_STOP_TOTAL_WAR_ECONOMY_BUTTON_DESC"
+
+	visible = {
+		has_modifier = ww_total_war_economy_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { is_at_war = no }
+			add = 100
+		}
+	}
+
+	possible = {
+		has_modifier = ww_total_war_economy_modifier
+	}
+
+	effect = {
+		remove_modifier = ww_total_war_economy_modifier
+	}
+}
+
+# ---- ACTIVE WAR: War Propaganda ----
+
+ww_war_propaganda_button = {
+	name = "WW_WAR_PROPAGANDA_BUTTON"
+	desc = "WW_WAR_PROPAGANDA_BUTTON_DESC"
+
+	visible = {
+		NOT = { has_modifier = ww_war_propaganda_modifier }
+		has_variable = ww_active_phase
+		is_at_war = yes
+	}
+
+	ai_chance = {
+		value = 40
+		if = {
+			limit = { country_is_fascist = yes }
+			add = 40
+		}
+		if = {
+			limit = { country_is_authoritarian = yes }
+			add = 30
+		}
+	}
+
+	possible = {
+		has_variable = ww_active_phase
+		is_at_war = yes
+		custom_tooltip = {
+			text = WW_PROPAGANDA_POSSIBLE_TT
+			has_technology_researched = mass_media
+		}
+	}
+
+	effect = {
+		add_modifier = { name = ww_war_propaganda_modifier }
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+ww_stop_war_propaganda_button = {
+	name = "WW_STOP_WAR_PROPAGANDA_BUTTON"
+	desc = "WW_STOP_WAR_PROPAGANDA_BUTTON_DESC"
+
+	visible = {
+		has_modifier = ww_war_propaganda_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { is_at_war = no }
+			add = 100
+		}
+	}
+
+	possible = {
+		has_modifier = ww_war_propaganda_modifier
+	}
+
+	effect = {
+		remove_modifier = ww_war_propaganda_modifier
+	}
+}
+
+# ---- ACTIVE WAR: Wartime Rationing ----
+
+ww_wartime_rationing_button = {
+	name = "WW_WARTIME_RATIONING_BUTTON"
+	desc = "WW_WARTIME_RATIONING_BUTTON_DESC"
+
+	visible = {
+		NOT = { has_modifier = ww_wartime_rationing_modifier }
+		has_variable = ww_active_phase
+		is_at_war = yes
+	}
+
+	ai_chance = {
+		value = 30
+		if = {
+			limit = {
+				has_variable = ww_years_elapsed
+				var:ww_years_elapsed >= 2
+			}
+			add = 50
+		}
+	}
+
+	possible = {
+		has_variable = ww_active_phase
+		is_at_war = yes
+	}
+
+	effect = {
+		add_modifier = { name = ww_wartime_rationing_modifier }
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}
+
+ww_stop_wartime_rationing_button = {
+	name = "WW_STOP_WARTIME_RATIONING_BUTTON"
+	desc = "WW_STOP_WARTIME_RATIONING_BUTTON_DESC"
+
+	visible = {
+		has_modifier = ww_wartime_rationing_modifier
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { is_at_war = no }
+			add = 100
+		}
+	}
+
+	possible = {
+		has_modifier = ww_wartime_rationing_modifier
+	}
+
+	effect = {
+		remove_modifier = ww_wartime_rationing_modifier
+	}
+}
+
+# ---- LATE ENTRY: Join the War ----
+
+ww_join_war_button = {
+	name = "WW_JOIN_WAR_BUTTON"
+	desc = "WW_JOIN_WAR_BUTTON_DESC"
+
+	visible = {
+		has_variable = ww_active_phase
+		is_at_war = no
+		country_rank >= rank_value:major_power
+	}
+
+	ai_chance = {
+		value = 0
+		# Democratic countries join if their democratic allies are losing
+		if = {
+			limit = {
+				country_is_democratic = yes
+				any_country = {
+					has_variable = ww_defender_side
+					country_is_democratic = yes
+					is_at_war = yes
+				}
+			}
+			add = 30
+		}
+		# Communist countries join against fascists
+		if = {
+			limit = {
+				country_is_communist = yes
+				any_country = {
+					has_variable = ww_aggressor_side
+					country_is_fascist = yes
+					is_at_war = yes
+				}
+			}
+			add = 40
+		}
+		# Countries with rivalries against aggressors
+		if = {
+			limit = {
+				any_rival_country = {
+					has_variable = ww_aggressor_side
+					is_at_war = yes
+				}
+			}
+			add = 50
+		}
+		# War has gone on long enough â€” time to intervene
+		if = {
+			limit = {
+				has_variable = ww_years_elapsed
+				var:ww_years_elapsed >= 2
+			}
+			add = 20
+		}
+		# Great powers more likely
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			add = 20
+		}
+	}
+
+	possible = {
+		NOT = { has_modifier = ww_late_entry_cooldown }
+		custom_tooltip = {
+			text = WW_JOIN_WAR_POSSIBLE_TT
+			has_variable = ww_active_phase
+			is_at_war = no
+			any_country = {
+				has_variable = ww_aggressor_side
+				is_at_war = yes
+			}
+		}
+	}
+
+	effect = {
+		# Fire the join-war event which handles the actual diplomatic play joining
+		trigger_event = { id = world_war_events.20 }
+		add_modifier = {
+			name = ww_late_entry_cooldown
+			days = 365
+			is_decaying = yes
+		}
+	}
+}

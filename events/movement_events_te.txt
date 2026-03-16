@@ -78,6 +78,13 @@ movement_events_te.1 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		scope:civil_rights_movement = {
+			add_modifier = {
+				name = civil_rights_march_calming
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 		add_loyalists = { value = small_radicals strata = lower }
 		add_radicals = { value = very_small_radicals strata = upper }
 	}
@@ -228,6 +235,13 @@ movement_events_te.2 = {
 			name = minority_rights_reform_push_modifier
 			days = normal_modifier_time
 			is_decaying = yes
+		}
+		scope:civil_rights_movement = {
+			add_modifier = {
+				name = minority_reform_movement_radicalism
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals strata = lower }
@@ -575,6 +589,10 @@ movement_events_te.6 = {
 	}
 
 	immediate = {
+		random_political_movement = {
+			limit = { is_political_movement_type = movement_anti_war }
+			save_scope_as = anti_war_movement
+		}
 	}
 
 	option = {
@@ -609,6 +627,13 @@ movement_events_te.6 = {
 			name = veterans_peace_testimony_modifier
 			days = normal_modifier_time
 			is_decaying = yes
+		}
+		scope:anti_war_movement = {
+			add_modifier = {
+				name = veterans_testimony_movement_calming
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_loyalists = { value = small_radicals strata = lower }
 		add_loyalists = { value = small_radicals pop_type = academics }

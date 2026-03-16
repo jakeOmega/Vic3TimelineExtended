@@ -588,7 +588,6 @@ advanced_workflow_optimization = {
 
 	modifier = {
 		country_max_weekly_construction_progress_add = 15
-		country_construction_goods_cost_mult = 0.4
 	}
 	
 	ai_weight = {

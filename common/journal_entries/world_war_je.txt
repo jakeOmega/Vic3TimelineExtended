@@ -1,0 +1,243 @@
+﻿
+# ============================================================================
+# WORLD WAR JOURNAL ENTRY
+# Tracks ideological polarization building toward a global conflict
+# Two phases: Leadup (rising tensions) â†’ Active War â†’ Peace Conference
+# ============================================================================
+
+je_world_war = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_technology_researched = combined_arms
+		country_rank >= rank_value:great_power
+		NOT = { has_variable = ww_peace_concluded }
+	}
+
+	possible = {
+		has_technology_researched = combined_arms
+		country_rank >= rank_value:great_power
+		# Must have opposing ideology great powers
+		any_rival_country = {
+			country_rank >= rank_value:great_power
+			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			# Active war phase descriptions
+			triggered_desc = {
+				desc = je_world_war_status_total_war
+				trigger = {
+					has_variable = ww_active_phase
+					is_at_war = yes
+					has_variable = ww_years_elapsed
+					var:ww_years_elapsed >= 3
+				}
+			}
+			triggered_desc = {
+				desc = je_world_war_status_active_war
+				trigger = {
+					has_variable = ww_active_phase
+					is_at_war = yes
+				}
+			}
+			triggered_desc = {
+				desc = je_world_war_status_war_declared
+				trigger = { has_variable = ww_active_phase }
+			}
+			# Leadup phase descriptions
+			triggered_desc = {
+				desc = je_world_war_status_crisis
+				trigger = { ww_ideological_tension >= 70 }
+			}
+			triggered_desc = {
+				desc = je_world_war_status_high_tension
+				trigger = { ww_ideological_tension >= 50 }
+			}
+			triggered_desc = {
+				desc = je_world_war_status_rising_tension
+				trigger = { ww_ideological_tension >= 30 }
+			}
+			triggered_desc = {
+				desc = je_world_war_status_simmering
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	# Second status block: current ideology classification
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_world_war_ideology_democratic
+				trigger = { country_is_democratic = yes }
+			}
+			triggered_desc = {
+				desc = je_world_war_ideology_communist
+				trigger = { country_is_communist = yes }
+			}
+			triggered_desc = {
+				desc = je_world_war_ideology_fascist
+				trigger = { country_is_fascist = yes }
+			}
+			triggered_desc = {
+				desc = je_world_war_ideology_authoritarian
+				trigger = { country_is_authoritarian = yes }
+			}
+			triggered_desc = {
+				desc = je_world_war_ideology_nonaligned
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	progressbar = no
+
+	# --- Leadup Phase Buttons ---
+	scripted_button = ww_rearm_button
+	scripted_button = ww_stop_rearm_button
+	scripted_button = ww_appease_button
+	scripted_button = ww_stop_appease_button
+	scripted_button = ww_lend_lease_button
+	scripted_button = ww_stop_lend_lease_button
+
+	# --- Active War Phase Buttons ---
+	scripted_button = ww_total_war_economy_button
+	scripted_button = ww_stop_total_war_economy_button
+	scripted_button = ww_war_propaganda_button
+	scripted_button = ww_stop_war_propaganda_button
+	scripted_button = ww_wartime_rationing_button
+	scripted_button = ww_stop_wartime_rationing_button
+
+	# --- Late Entry Button ---
+	scripted_button = ww_join_war_button
+
+	immediate = { }
+
+	complete = {
+		has_variable = ww_peace_concluded
+	}
+
+	on_complete = {
+		# Fire peace conference event
+		trigger_event = { id = world_war_events.100 }
+		remove_variable = ww_active_phase
+		remove_variable = ww_aggressor_side
+		remove_variable = ww_defender_side
+		remove_variable = ww_years_elapsed
+	}
+
+	fail = {
+		# Failed if no longer a great power
+		country_rank < rank_value:great_power
+	}
+
+	on_fail = {
+		remove_variable = ww_active_phase
+		remove_variable = ww_aggressor_side
+		remove_variable = ww_defender_side
+		remove_variable = ww_years_elapsed
+	}
+
+	on_monthly_pulse = {
+		# Track war duration
+		effect = {
+			# Apply rising tensions during leadup
+			if = {
+				limit = {
+					NOT = { has_variable = ww_active_phase }
+					NOT = { has_modifier = ww_rising_tensions_modifier }
+					ww_ideological_tension >= 30
+				}
+				add_modifier = { name = ww_rising_tensions_modifier }
+			}
+			if = {
+				limit = {
+					NOT = { has_variable = ww_active_phase }
+					has_modifier = ww_rising_tensions_modifier
+					ww_ideological_tension < 30
+				}
+				remove_modifier = ww_rising_tensions_modifier
+			}
+			# Track years during active war
+			if = {
+				limit = {
+					has_variable = ww_active_phase
+					is_at_war = yes
+				}
+				if = {
+					limit = { NOT = { has_variable = ww_months_counter } }
+					set_variable = { name = ww_months_counter value = 0 }
+				}
+				change_variable = { name = ww_months_counter add = 1 }
+				# Every 12 months, increment years
+				if = {
+					limit = { var:ww_months_counter >= 12 }
+					change_variable = { name = ww_months_counter add = -12 }
+					if = {
+						limit = { NOT = { has_variable = ww_years_elapsed } }
+						set_variable = { name = ww_years_elapsed value = 1 }
+					}
+					if = {
+						limit = { has_variable = ww_years_elapsed }
+						change_variable = { name = ww_years_elapsed add = 1 }
+					}
+				}
+			}
+			# Home front strain after 2+ years of war
+			if = {
+				limit = {
+					has_variable = ww_active_phase
+					is_at_war = yes
+					has_variable = ww_years_elapsed
+					var:ww_years_elapsed >= 2
+					NOT = { has_modifier = ww_home_front_strain_modifier }
+				}
+				add_modifier = { name = ww_home_front_strain_modifier }
+			}
+			# Prolonged war exhaustion after 4+ years
+			if = {
+				limit = {
+					has_variable = ww_active_phase
+					is_at_war = yes
+					has_variable = ww_years_elapsed
+					var:ww_years_elapsed >= 4
+					NOT = { has_modifier = ww_prolonged_war_exhaustion_modifier }
+				}
+				add_modifier = { name = ww_prolonged_war_exhaustion_modifier }
+			}
+			# Clean up modifiers when war ends
+			if = {
+				limit = {
+					has_variable = ww_active_phase
+					is_at_war = no
+				}
+				set_variable = ww_peace_concluded
+			}
+		}
+		# Fire random wartime events
+		random_events = {
+			200 = 0 # mostly nothing
+			# Leadup events
+			10 = world_war_events.1   # ideological confrontation
+			10 = world_war_events.2   # border incident
+			10 = world_war_events.3   # diplomatic crisis
+			# Active war events
+			10 = world_war_events.10  # home front rally
+			10 = world_war_events.11  # strategic bombing
+			10 = world_war_events.12  # resistance movement
+			# Late entry prompt
+			5 = world_war_events.20   # opportunity to join
+			# Peace-related
+			5 = world_war_events.30   # war weariness grows
+		}
+	}
+
+	weight = 500
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = no
+}

@@ -1424,3 +1424,149 @@ export_credit_activation_cost = {
 	multiply = -0.002 # costs 0.2% of GDP to establish facility
 	round = yes
 }
+
+# ====================================================================================
+# CONSTRUCTION COST SCALING
+# ====================================================================================
+# Makes construction more expensive for richer countries (GDP per capita based).
+# Prevents exponential growth and provides catchup for poorer nations.
+# Applied via on_yearly_pulse_country → construction_cost_scaling_on_action.
+# Modifier: construction_cost_scaling (country_construction_goods_cost_mult = 1, scaled by multiplier).
+#
+# TUNING GUIDE:
+# 1. Adjust construction_cost_gdppc_reference to match a "developed 1836 nation" GDP/c.
+#    Check in-game with debug_log or console: a developed 1836 nation (UK, Netherlands)
+#    should have GDP/c roughly equal to this value.
+# 2. floor_ratio and ceiling_ratio are multiples of the reference:
+#    - floor_ratio = 1 means no penalty at the reference level (a rich 1836 nation).
+#    - ceiling_ratio = 14 means max penalty at 14x the reference (late-game AI economy).
+# 3. max_mult is the maximum construction cost multiplier (10 = +1000% cost at ceiling).
+#
+# GDP is in yearly terms. GDP/c = gdp / total_population (country scope).
+# ====================================================================================
+
+# Reference GDP/c for a "developed 1836 nation" (UK, Netherlands).
+# If in-game GDP/c for UK 1836 ≈ 50, set this to 50. If ≈ 0.5, set to 0.5.
+construction_cost_gdppc_reference = 1
+
+# No construction penalty below this multiple of reference GDP/c
+construction_cost_floor_ratio = 1  # 1x reference = rich 1836 nation baseline
+
+# Maximum penalty reached at this multiple of reference GDP/c
+construction_cost_ceiling_ratio = 100  # 100x reference = very rich late-game economy
+
+# Maximum construction cost multiplier at ceiling (10 = construction costs up to +1000%)
+construction_cost_max_mult = 10
+
+# Derived thresholds (do not edit — change the ratios above instead)
+construction_cost_gdppc_floor = {
+	value = construction_cost_gdppc_reference
+	multiply = construction_cost_floor_ratio
+}
+construction_cost_gdppc_ceiling = {
+	value = construction_cost_gdppc_reference
+	multiply = construction_cost_ceiling_ratio
+}
+
+# Country-scope GDP per capita
+country_gdp_per_capita = {
+	value = gdp
+	divide = {
+		value = total_population
+		min = 1
+	}
+}
+
+# Computed construction cost penalty: 0 at floor, max_mult at ceiling, linear interpolation.
+# Formula: clamp(0, max_mult, (gdppc - floor) / (ceiling - floor) * max_mult)
+construction_cost_scaling_mult = {
+	value = country_gdp_per_capita
+	subtract = construction_cost_gdppc_floor
+	min = 0  # poor countries: no penalty
+	divide = {
+		value = construction_cost_gdppc_ceiling
+		subtract = construction_cost_gdppc_floor
+		min = 1  # prevent division by zero
+	}
+	multiply = construction_cost_max_mult
+	min = 0
+	max = construction_cost_max_mult
+}
+
+# ====================================================================================
+# MIGRATION CROWDING
+# ====================================================================================
+# Reduces migration pull to heavily populated states based on population DENSITY.
+# Uses arable_land as a proxy for state geographic size, so large states (Texas)
+# can absorb far more people than small ones (Rhode Island) before crowding kicks in.
+# Prevents unrealistic population concentrations (e.g., 250M Scandinavia).
+# Applied via on_yearly_pulse_state → migration_crowding_on_action.
+# Modifier: migration_crowding (state_migration_pull_mult = -0.1, scaled by multiplier).
+#
+# TUNING GUIDE:
+# 1. density_reference = population per unit of arable land for a "normally full" state.
+#    Example: a state with 100 arable land and 5M people → density 50000.
+# 2. floor_ratio = 1 means no penalty at the reference density.
+# 3. ceiling_ratio = 10 means max penalty at 10x the reference density.
+# 4. max_mult = 10 means max -100% migration pull (modifier base is -0.1).
+#    Increase max_mult beyond 10 to make pull go negative (active repulsion).
+#
+# Arable land ranges: small states ~20-50, medium ~80-150, large ~200-500+.
+# ====================================================================================
+
+# Reference density: population per unit of arable_land for a "normally developed" state.
+# E.g., 5M people / 100 arable_land = 50000. Adjust based on observed in-game values.
+migration_crowding_density_reference = 50000
+
+# No migration penalty below this multiple of reference density
+migration_crowding_floor_ratio = 1  # 1x reference = normal density
+
+# Maximum penalty at this multiple of reference density
+migration_crowding_ceiling_ratio = 10  # 10x reference = extremely overcrowded
+
+# Maximum multiplier applied to migration_crowding modifier
+# With base -0.1 migration pull mult, 10 = -100% pull at ceiling
+migration_crowding_max_mult = 10
+
+# Derived thresholds (do not edit — change the ratios above instead)
+migration_crowding_density_floor = {
+	value = migration_crowding_density_reference
+	multiply = migration_crowding_floor_ratio
+}
+migration_crowding_density_ceiling = {
+	value = migration_crowding_density_reference
+	multiply = migration_crowding_ceiling_ratio
+}
+
+# State population density: population / arable_land (state scope).
+# arable_land serves as a proxy for geographic size.
+# The density is then divided by (1 + state_migration_crowding_density_mult)
+# so that Urban Planning, highways, airports etc. effectively increase capacity.
+state_population_density = {
+	value = state_population
+	divide = {
+		value = arable_land
+		min = 1  # prevent division by zero for states with 0 arable land
+	}
+	divide = {
+		value = 1
+		add = modifier:state_migration_crowding_density_mult
+		min = 0.1  # safety floor
+	}
+}
+
+# Computed migration crowding penalty for current state (state scope).
+# 0 at density floor, max_mult at density ceiling, linear interpolation.
+migration_crowding_mult = {
+	value = state_population_density
+	subtract = migration_crowding_density_floor
+	min = 0  # no penalty below floor
+	divide = {
+		value = migration_crowding_density_ceiling
+		subtract = migration_crowding_density_floor
+		min = 1
+	}
+	multiply = migration_crowding_max_mult
+	min = 0
+	max = migration_crowding_max_mult
+}

@@ -533,6 +533,14 @@ environmentalism_events.8 = {
 			days = short_modifier_time
 			is_decaying = yes
 		}
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_environmental }
+			add_modifier = {
+				name = climate_turmoil_movement_radicalism
+				days = short_modifier_time
+				is_decaying = yes
+			}
+		}
 	}
 
 	option = {
@@ -1066,6 +1074,14 @@ environmentalism_events.15 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_environmental }
+			add_modifier = {
+				name = climate_turmoil_movement_radicalism
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 	}
 
 	option = {
@@ -1084,6 +1100,14 @@ environmentalism_events.15 = {
 			name = climate_political_turmoil_modifier
 			days = normal_modifier_time
 			is_decaying = yes
+		}
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_environmental }
+			add_modifier = {
+				name = climate_turmoil_movement_radicalism
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_loyalists = { value = small_radicals strata = upper }
 		add_radicals = { value = medium_radicals pop_type = academics }

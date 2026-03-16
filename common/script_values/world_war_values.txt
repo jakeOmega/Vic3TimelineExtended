@@ -1,0 +1,100 @@
+﻿
+# ============================================================================
+# WORLD WAR SCRIPT VALUES
+# ============================================================================
+
+# Number of great powers with opposing ideology to ROOT
+ww_opposing_great_powers = {
+	value = 0
+	every_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			NOT = { this = root }
+			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+		}
+		add = 1
+	}
+}
+
+# Ideological tension â€” higher when more great powers have fundamentally opposed ideologies
+ww_ideological_tension = {
+	value = 0
+	# Base tension from having any opposing GP rival
+	if = {
+		limit = {
+			any_rival_country = {
+				country_rank >= rank_value:great_power
+				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+		}
+		add = 20
+	}
+	# Additional tension per opposing GP beyond the first
+	every_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			NOT = { this = root }
+			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+		}
+		add = 10
+	}
+	# Fascist or communist countries add extra volatility
+	if = {
+		limit = { country_is_fascist = yes }
+		add = 15
+	}
+	if = {
+		limit = { country_is_communist = yes }
+		add = 10
+	}
+	# Nuclear powers reduce tension (MAD deterrent)
+	if = {
+		limit = { has_modifier = nuclear_power }
+		add = -30
+	}
+	# Existing wars raise tension
+	if = {
+		limit = { is_at_war = yes }
+		add = 20
+	}
+	min = 0
+	max = 100
+}
+
+# How many countries are involved in the world war (both sides)
+ww_belligerent_count = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_variable = ww_aggressor_side
+				has_variable = ww_defender_side
+			}
+		}
+		add = 1
+	}
+}
+
+# War exhaustion pressure â€” grows over time during the war
+ww_war_exhaustion_pressure = {
+	value = 0
+	if = {
+		limit = { has_variable = ww_years_elapsed }
+		add = var:ww_years_elapsed
+		multiply = 5
+	}
+	# Losing territory increases exhaustion
+	if = {
+		limit = { is_at_war = yes }
+		every_scope_state = {
+			limit = { is_under_colonization = no }
+			# Each occupied state adds pressure
+			if = {
+				limit = { has_modifier = ww_devastation_modifier }
+				add = 2
+			}
+		}
+	}
+	min = 0
+	max = 100
+}

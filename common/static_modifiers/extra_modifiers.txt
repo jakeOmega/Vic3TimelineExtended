@@ -702,7 +702,6 @@ tropical_disease_research_modifier = {
 
 climate_political_turmoil_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	political_movement_radicalism_add = 5
 	state_radicals_from_political_movements_mult = 0.25
 }
 
@@ -995,14 +994,12 @@ colonial_empire_under_pressure_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_add = -50
 	country_bureaucracy_mult = -0.03
-	political_movement_radicalism_add = 3
 }
 
 colonial_empire_crumbling_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_add = -100
 	country_bureaucracy_mult = -0.06
-	political_movement_radicalism_add = 8
 	state_radicals_from_political_movements_mult = 0.20
 }
 
@@ -1076,7 +1073,6 @@ gp_pro_colonial_policy_modifier = {
 civil_rights_march_momentum_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 25
-	political_movement_radicalism_add = -2
 }
 
 civil_rights_suppression_modifier = {
@@ -1100,7 +1096,6 @@ segregation_exception_modifier = {
 minority_rights_reform_push_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_acceptance_not_homeland_add = 5
-	political_movement_radicalism_add = 3
 }
 
 cultural_renaissance_modifier = {
@@ -1138,7 +1133,6 @@ alternative_service_modifier = {
 veterans_peace_testimony_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 50
-	political_movement_radicalism_add = -3
 }
 
 veteran_advisory_modifier = {
@@ -1922,4 +1916,241 @@ un_walkout_join_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_diplomatic_reputation_add = -10
 	country_authority_add = 25
+}
+
+# ============================================================================
+# WORLD WAR MODIFIERS
+# ============================================================================
+
+# ---- Leadup Phase Modifiers ----
+
+# Rising ideological tensions (applied during leadup, scales with tension)
+ww_rising_tensions_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_diplomatic_play_maneuvers_add = 25
+	country_military_goods_cost_mult = 0.05
+	country_prestige_from_army_power_projection_mult = 0.1
+}
+
+# Aggressive rearmament during leadup
+ww_rearmament_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	country_military_goods_cost_mult = 0.15
+	unit_army_offense_mult = 0.1
+	unit_army_defense_mult = 0.1
+	country_prestige_from_army_power_projection_mult = 0.2
+}
+
+# Diplomatic efforts to prevent war
+ww_appeasement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_diplomatic_reputation_add = 5
+	country_influence_add = 50
+	country_military_goods_cost_mult = -0.05
+}
+
+# ---- Active War Phase Modifiers ----
+
+# Total war economy — massive production boost at cost of civilian economy
+ww_total_war_economy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_military_goods_cost_mult = -0.15
+	unit_army_offense_mult = 0.15
+	unit_army_defense_mult = 0.15
+	unit_morale_recovery_mult = 0.1
+	country_construction_goods_cost_mult = 0.25
+	state_standard_of_living_add = -2
+	state_conscription_rate_mult = 0.25
+}
+
+# War propaganda — boosts morale, generates loyalists among nationalists
+ww_war_propaganda_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	unit_morale_loss_mult = -0.1
+	country_authority_add = 100
+	political_movement_radicalism_add = -0.30
+}
+
+# Wartime rationing — keeps economy functional but hurts SoL
+ww_wartime_rationing_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	state_standard_of_living_add = -3
+	building_group_bg_agriculture_throughput_add = 0.1
+	country_bureaucracy_mult = -0.1
+}
+
+# Home front strain — war drags on too long
+ww_home_front_strain_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_standard_of_living_add = -2
+	state_radicals_from_political_movements_mult = 0.5
+	state_mortality_mult = 0.02
+	state_birth_rate_mult = -0.1
+}
+
+# ---- Late Entry Modifiers ----
+
+# Fresh forces — late entrant has rested, well-supplied troops
+ww_fresh_forces_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	unit_army_offense_mult = 0.2
+	unit_morale_recovery_mult = 0.2
+	unit_army_defense_mult = 0.1
+	country_war_exhaustion_casualties_mult = -0.25
+}
+
+# Arsenal of democracy — late-joining democratic power supplies allies
+ww_arsenal_of_democracy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_prestige_add = 200
+	country_influence_add = 100
+	country_military_goods_cost_mult = 0.1
+	unit_army_offense_mult = 0.1
+}
+
+# Lend-lease (supporting a side without direct combat — applied to non-combatant supporters)
+ww_lend_lease_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_prestige_add = 100
+	country_military_goods_cost_mult = 0.15
+	country_influence_add = 50
+}
+
+# War exhaustion from prolonged world war
+ww_prolonged_war_exhaustion_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_war_exhaustion_casualties_mult = 0.25
+	state_mortality_mult = 0.03
+	state_standard_of_living_add = -4
+	state_radicals_from_political_movements_mult = 1.0
+}
+
+# Cooldown for late entry to prevent spam
+ww_late_entry_cooldown = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+}
+
+# ---- War Devastation (state-level) ----
+
+ww_devastation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_standard_of_living_add = -5
+	state_infrastructure_add = -10
+	state_mortality_mult = 0.05
+	building_group_bg_agriculture_throughput_add = -0.2
+	state_migration_pull_mult = -0.5
+}
+
+# ---- Peace Conference Modifiers ----
+
+# Victor's peace — the winning side
+ww_victors_peace_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 500
+	country_influence_add = 200
+	country_diplomatic_reputation_add = 10
+	country_authority_add = 50
+}
+
+# Defeated and occupied
+ww_defeated_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -500
+	country_influence_add = -200
+	country_diplomatic_reputation_add = -15
+	state_standard_of_living_add = -3
+	unit_army_offense_mult = -0.25
+	unit_army_defense_mult = -0.25
+}
+
+# Regime change imposed on defeated nation
+ww_regime_change_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_authority_add = -100
+	political_movement_radicalism_add = 0.35
+	state_radicals_from_political_movements_mult = 0.5
+}
+
+# Post-war reconstruction effort
+ww_reconstruction_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_construction_goods_cost_mult = -0.15
+	state_infrastructure_add = 5
+	country_tech_research_speed_mult = 0.05
+}
+
+# Post-war occupation duties (victor's burden)
+ww_occupation_duties_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	country_military_goods_cost_mult = 0.15
+	country_bureaucracy_mult = -0.1
+	country_prestige_add = 50
+}
+
+# War crimes exposed — international condemnation
+ww_war_crimes_exposed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -300
+	country_diplomatic_reputation_add = -20
+	state_radicals_from_political_movements_mult = 0.5
+}
+
+# Liberation hero — freed from oppression
+ww_liberation_hero_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 100
+	country_diplomatic_reputation_add = 5
+	political_movement_radicalism_add = -0.25
+}
+
+# ---- Dynamic Scaling Modifiers ----
+# Applied via on_yearly_pulse with multiplier = <script_value>. See extra_script_values.txt for tuning constants.
+
+construction_cost_scaling = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	goods_input_construction_mult = 1
+}
+
+migration_crowding = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_migration_pull_mult = -0.1
+}
+
+# ---- Movement-Scoped Radicalism Modifiers ----
+# Applied directly to specific political movements (not country-wide).
+# Values in vanilla range: -0.50 to +0.35.
+
+# Colonial empire instability → civil rights movement
+colonial_pressure_movement_radicalism = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	political_movement_radicalism_add = 0.15
+}
+
+colonial_crumbling_movement_radicalism = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	political_movement_radicalism_add = 0.25
+}
+
+# Climate turmoil → environmental movement
+climate_turmoil_movement_radicalism = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	political_movement_radicalism_add = 0.25
+}
+
+# Civil rights march calming effect → civil rights movement
+civil_rights_march_calming = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	political_movement_radicalism_add = -0.15
+}
+
+# Minority rights reform push → civil rights movement
+minority_reform_movement_radicalism = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	political_movement_radicalism_add = 0.20
+}
+
+# Veterans peace testimony → anti-war movement
+veterans_testimony_movement_calming = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	political_movement_radicalism_add = -0.20
 }

@@ -186,6 +186,31 @@
 				}
 				add_modifier = { name = colonial_empire_under_pressure_modifier }
 			}
+
+			# Apply radicalism to civil rights movement specifically (not all movements)
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_civil_rights }
+				remove_modifier = colonial_pressure_movement_radicalism
+				remove_modifier = colonial_crumbling_movement_radicalism
+			}
+			if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 20 }
+				}
+				every_political_movement = {
+					limit = { is_political_movement_type = movement_civil_rights }
+					add_modifier = { name = colonial_crumbling_movement_radicalism }
+				}
+			}
+			else_if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 40 }
+				}
+				every_political_movement = {
+					limit = { is_political_movement_type = movement_civil_rights }
+					add_modifier = { name = colonial_pressure_movement_radicalism }
+				}
+			}
 		}
 	}
 

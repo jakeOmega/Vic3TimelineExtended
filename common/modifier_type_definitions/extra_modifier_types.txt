@@ -1867,3 +1867,11 @@ political_movement_support_add = {
 		ai_value = 0
 	}
 }
+
+state_migration_crowding_density_mult = {
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 50
+	}
+}

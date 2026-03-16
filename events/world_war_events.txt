@@ -1,0 +1,1610 @@
+﻿namespace = world_war_events
+
+# ============================================================================
+# LEADUP EVENTS (1-9) â€” Fired during rising tensions before war breaks out
+# ============================================================================
+
+# Event 1: Ideological Confrontation â€” rival ideological bloc demands concessions
+world_war_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "europenorthamerica_political_extremism" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = world_war_events.1.t
+	desc = world_war_events.1.d
+	flavor = world_war_events.1.f
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = ww_active_phase }
+		ww_ideological_tension >= 30
+		any_rival_country = {
+			country_rank >= rank_value:great_power
+			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+		}
+	}
+
+	cooldown = { days = normal_modifier_time }
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				country_rank >= rank_value:great_power
+				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+			save_scope_as = ideological_rival
+		}
+	}
+
+	# Option A: Stand firm â€” refuse concessions, escalate
+	option = {
+		name = world_war_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_is_fascist = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { has_modifier = ww_rearmament_modifier }
+				add = 2
+			}
+		}
+		change_relations = {
+			country = scope:ideological_rival
+			value = -30
+		}
+		add_loyalists = {
+			value = medium_radicals
+			pop_type = soldiers
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option B: Negotiate â€” try diplomacy, less escalation
+	option = {
+		name = world_war_events.1.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { has_modifier = ww_appeasement_modifier }
+				add = 3
+			}
+		}
+		change_relations = {
+			country = scope:ideological_rival
+			value = 10
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option C: Issue an ultimatum â€” high risk, high reward
+	option = {
+		name = world_war_events.1.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					country_is_fascist = yes
+					ww_ideological_tension >= 60
+				}
+				add = 4
+			}
+		}
+		change_relations = {
+			country = scope:ideological_rival
+			value = -50
+		}
+		change_tension = {
+			country = scope:ideological_rival
+			value = 30
+		}
+		add_loyalists = {
+			value = large_radicals
+			pop_type = soldiers
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+}
+
+# Event 2: Border Incident â€” military skirmish on the frontier
+world_war_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "europenorthamerica_before_the_battle" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = world_war_events.2.t
+	desc = world_war_events.2.d
+	flavor = world_war_events.2.f
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = ww_active_phase }
+		ww_ideological_tension >= 40
+		any_rival_country = {
+			country_rank >= rank_value:great_power
+			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+		}
+	}
+
+	cooldown = { days = normal_modifier_time }
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				country_rank >= rank_value:great_power
+				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+			save_scope_as = border_rival
+		}
+	}
+
+	# Option A: Demand an apology â€” escalate
+	option = {
+		name = world_war_events.2.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { has_modifier = ww_rearmament_modifier }
+				add = 2
+			}
+		}
+		change_relations = {
+			country = scope:border_rival
+			value = -20
+		}
+		change_tension = {
+			country = scope:border_rival
+			value = 20
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = short_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option B: Downplay the incident â€” de-escalate
+	option = {
+		name = world_war_events.2.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 2
+			}
+		}
+		change_relations = {
+			country = scope:border_rival
+			value = 5
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = soldiers
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = short_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option C: Mobilize troops to the border â€” war footing
+	option = {
+		name = world_war_events.2.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ww_ideological_tension >= 60
+				}
+				add = 3
+			}
+		}
+		change_relations = {
+			country = scope:border_rival
+			value = -40
+		}
+		change_tension = {
+			country = scope:border_rival
+			value = 40
+		}
+		add_modifier = {
+			name = ww_rearmament_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Event 3: Diplomatic Crisis â€” an allied minor power is threatened
+world_war_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_politicians_arguing" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = world_war_events.3.t
+	desc = world_war_events.3.d
+	flavor = world_war_events.3.f
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = ww_active_phase }
+		ww_ideological_tension >= 50
+		country_rank >= rank_value:great_power
+		any_rival_country = {
+			country_rank >= rank_value:great_power
+			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+		}
+	}
+
+	cooldown = { days = normal_modifier_time }
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				country_rank >= rank_value:great_power
+				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+			save_scope_as = crisis_aggressor
+		}
+	}
+
+	# Option A: Guarantee the threatened nation â€” draw a line
+	option = {
+		name = world_war_events.3.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 2
+			}
+		}
+		change_relations = {
+			country = scope:crisis_aggressor
+			value = -30
+		}
+		change_tension = {
+			country = scope:crisis_aggressor
+			value = 25
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option B: Abandon them â€” "peace in our time"
+	option = {
+		name = world_war_events.3.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_modifier = ww_appeasement_modifier }
+				add = 4
+			}
+		}
+		change_relations = {
+			country = scope:crisis_aggressor
+			value = 10
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_very_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option C: Form a defensive alliance â€” commit fully
+	option = {
+		name = world_war_events.3.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ww_ideological_tension >= 70 }
+				add = 3
+			}
+		}
+		change_relations = {
+			country = scope:crisis_aggressor
+			value = -50
+		}
+		change_tension = {
+			country = scope:crisis_aggressor
+			value = 40
+		}
+		add_loyalists = {
+			value = medium_radicals
+			pop_type = soldiers
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+	}
+}
+
+# ============================================================================
+# WAR OUTBREAK EVENT (5) â€” Triggers the actual world war
+# Fired from the on_action when tension reaches critical
+# ============================================================================
+
+world_war_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "europenorthamerica_before_the_battle" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = world_war_events.5.t
+	desc = world_war_events.5.d
+	flavor = world_war_events.5.f
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = ww_active_phase }
+		world_war_conditions_met = yes
+		ww_ideological_tension >= 70
+	}
+
+	cooldown = { days = long_modifier_time }
+
+	immediate = {
+		# Find the primary rival for the war
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				country_rank >= rank_value:great_power
+				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+			save_scope_as = war_target
+		}
+		# Mark both sides
+		set_variable = ww_active_phase
+		set_variable = ww_aggressor_side
+		set_variable = { name = ww_years_elapsed value = 0 }
+		set_variable = { name = ww_months_counter value = 0 }
+		scope:war_target = {
+			set_variable = ww_active_phase
+			set_variable = ww_defender_side
+			set_variable = { name = ww_years_elapsed value = 0 }
+			set_variable = { name = ww_months_counter value = 0 }
+		}
+		# Mark ideologically aligned great powers
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+				NOT = { this = root }
+				NOT = { this = scope:war_target }
+				root = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+			set_variable = ww_active_phase
+			set_variable = ww_defender_side
+		}
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+				NOT = { this = root }
+				NOT = { this = scope:war_target }
+				NOT = { has_variable = ww_defender_side }
+				scope:war_target = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+			set_variable = ww_active_phase
+			set_variable = ww_aggressor_side
+		}
+	}
+
+	# Only option: war has begun
+	option = {
+		name = world_war_events.5.a
+		default_option = yes
+		ai_chance = { base = 10 }
+		# Create the diplomatic play against the rival
+		create_diplomatic_play = {
+			target_country = scope:war_target
+			type = dp_contain_threat
+			escalation = 90
+		}
+		# Remove leadup modifiers and apply war modifiers
+		if = {
+			limit = { has_modifier = ww_rising_tensions_modifier }
+			remove_modifier = ww_rising_tensions_modifier
+		}
+		if = {
+			limit = { has_modifier = ww_appeasement_modifier }
+			remove_modifier = ww_appeasement_modifier
+		}
+		# National rally effect
+		add_loyalists = {
+			value = large_radicals
+			pop_type = soldiers
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+	}
+}
+
+# ============================================================================
+# ACTIVE WAR EVENTS (10-19) â€” Fired during the war
+# ============================================================================
+
+# Event 10: Home Front Rally â€” patriotic surge
+world_war_events.10 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = world_war_events.10.t
+	desc = world_war_events.10.d
+	flavor = world_war_events.10.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = ww_active_phase
+		is_at_war = yes
+	}
+
+	cooldown = { days = normal_modifier_time }
+
+	immediate = { }
+
+	# Option A: Channel the patriotism into war bonds
+	option = {
+		name = world_war_events.10.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_loyalists = {
+			value = large_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = middle
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option B: Use the moment for conscription drives
+	option = {
+		name = world_war_events.10.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					has_variable = ww_years_elapsed
+					var:ww_years_elapsed >= 2
+				}
+				add = 3
+			}
+		}
+		add_loyalists = {
+			value = medium_radicals
+			pop_type = soldiers
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}
+
+# Event 11: Strategic Bombing â€” enemy bombs our cities or we bomb theirs
+world_war_events.11 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_devastation" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = world_war_events.11.t
+	desc = world_war_events.11.d
+	flavor = world_war_events.11.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = ww_active_phase
+		is_at_war = yes
+		has_technology_researched = bombing_aircraft
+	}
+
+	cooldown = { days = normal_modifier_time }
+
+	immediate = { }
+
+	# Option A: Focus on air defense â€” protect civilians
+	option = {
+		name = world_war_events.11.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = ww_home_front_strain_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	# Option B: Retaliate with strategic bombing â€” escalation
+	option = {
+		name = world_war_events.11.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_modifier = ww_total_war_economy_modifier }
+				add = 3
+			}
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = medium_radicals
+			pop_type = soldiers
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option C: Accept the losses and focus on ground offensive
+	option = {
+		name = world_war_events.11.c
+		ai_chance = { base = 2 }
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# Event 12: Resistance Movement â€” occupied territories fight back
+world_war_events.12 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_soldiers_breaking_protest" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = world_war_events.12.t
+	desc = world_war_events.12.d
+	flavor = world_war_events.12.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = ww_active_phase
+		is_at_war = yes
+		has_variable = ww_years_elapsed
+		var:ww_years_elapsed >= 1
+	}
+
+	cooldown = { days = normal_modifier_time }
+
+	immediate = { }
+
+	# Option A: Support the resistance â€” boost morale
+	option = {
+		name = world_war_events.12.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 2
+			}
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option B: Crack down ruthlessly â€” secure but brutal
+	option = {
+		name = world_war_events.12.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_is_fascist = yes }
+				add = 4
+			}
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = soldiers
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = {
+				name = ig_approval_very_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# ============================================================================
+# LATE ENTRY EVENT (20) â€” Opportunity to join the war
+# ============================================================================
+
+world_war_events.20 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_military_parade" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = world_war_events.20.t
+	desc = world_war_events.20.d
+	flavor = world_war_events.20.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = ww_active_phase
+		is_at_war = no
+		country_rank >= rank_value:major_power
+		NOT = { has_modifier = ww_late_entry_cooldown }
+		any_country = {
+			has_variable = ww_aggressor_side
+			is_at_war = yes
+		}
+	}
+
+	cooldown = { days = normal_modifier_time }
+
+	immediate = {
+		# Find the main aggressor still at war
+		random_country = {
+			limit = {
+				has_variable = ww_aggressor_side
+				is_at_war = yes
+				country_rank >= rank_value:great_power
+			}
+			save_scope_as = ww_main_aggressor
+		}
+		# Find a defender we could ally with
+		random_country = {
+			limit = {
+				has_variable = ww_defender_side
+				is_at_war = yes
+				country_rank >= rank_value:great_power
+			}
+			save_scope_as = ww_main_defender
+		}
+	}
+
+	# Option A: Join the war against the aggressors â€” full commitment
+	option = {
+		name = world_war_events.20.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					country_is_democratic = yes
+					scope:ww_main_aggressor = { country_is_fascist = yes }
+				}
+				add = 5
+			}
+			modifier = {
+				trigger = {
+					country_is_communist = yes
+					scope:ww_main_aggressor = { country_is_fascist = yes }
+				}
+				add = 5
+			}
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 3
+			}
+		}
+		# Join the existing war on the defender's side
+		scope:ww_main_defender = {
+			every_scope_war = {
+				limit = {
+					is_war_participant = scope:ww_main_aggressor
+				}
+				join_war = {
+					target = root
+					side = scope:ww_main_defender
+				}
+			}
+		}
+		set_variable = ww_defender_side
+		add_modifier = {
+			name = ww_fresh_forces_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { country_is_democratic = yes }
+			add_modifier = {
+				name = ww_arsenal_of_democracy_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_loyalists = {
+			value = large_radicals
+			pop_type = soldiers
+		}
+		add_modifier = {
+			name = ww_late_entry_cooldown
+			days = 365
+			is_decaying = yes
+		}
+	}
+
+	# Option B: Provide lend-lease support only â€” stay out of direct combat
+	option = {
+		name = world_war_events.20.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_rank < rank_value:great_power }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = ww_lend_lease_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_modifier = {
+			name = ww_late_entry_cooldown
+			days = 365
+			is_decaying = yes
+		}
+	}
+
+	# Option C: Stay neutral â€” preserve peace but lose influence
+	option = {
+		name = world_war_events.20.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_rank < rank_value:major_power }
+				add = 5
+			}
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = soldiers
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_modifier = {
+			name = ww_late_entry_cooldown
+			days = 365
+			is_decaying = yes
+		}
+	}
+}
+
+# ============================================================================
+# WAR WEARINESS EVENT (30) â€” the war drags on
+# ============================================================================
+
+world_war_events.30 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "middleeast_battlefield_trenches" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = world_war_events.30.t
+	desc = world_war_events.30.d
+	flavor = world_war_events.30.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = ww_active_phase
+		is_at_war = yes
+		has_variable = ww_years_elapsed
+		var:ww_years_elapsed >= 2
+	}
+
+	cooldown = { days = normal_modifier_time }
+
+	immediate = { }
+
+	# Option A: Redouble efforts â€” push through the exhaustion
+	option = {
+		name = world_war_events.30.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { country_is_fascist = yes }
+				add = 3
+			}
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = medium_radicals
+			pop_type = soldiers
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = {
+				name = ig_approval_very_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option B: Seek terms â€” try to end it diplomatically
+	option = {
+		name = world_war_events.30.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					has_variable = ww_years_elapsed
+					var:ww_years_elapsed >= 4
+				}
+				add = 3
+			}
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_very_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# ============================================================================
+# PEACE CONFERENCE EVENTS (100-105)
+# ============================================================================
+
+# Event 100: Victory â€” the war is over, you won (or survived)
+world_war_events.100 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_signed_contract" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = world_war_events.100.t
+	desc = world_war_events.100.d
+	flavor = world_war_events.100.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = ww_peace_concluded
+	}
+
+	immediate = {
+		# Clean up all war modifiers
+		if = { limit = { has_modifier = ww_total_war_economy_modifier } remove_modifier = ww_total_war_economy_modifier }
+		if = { limit = { has_modifier = ww_war_propaganda_modifier } remove_modifier = ww_war_propaganda_modifier }
+		if = { limit = { has_modifier = ww_wartime_rationing_modifier } remove_modifier = ww_wartime_rationing_modifier }
+		if = { limit = { has_modifier = ww_home_front_strain_modifier } remove_modifier = ww_home_front_strain_modifier }
+		if = { limit = { has_modifier = ww_prolonged_war_exhaustion_modifier } remove_modifier = ww_prolonged_war_exhaustion_modifier }
+		if = { limit = { has_modifier = ww_rearmament_modifier } remove_modifier = ww_rearmament_modifier }
+		if = { limit = { has_modifier = ww_lend_lease_modifier } remove_modifier = ww_lend_lease_modifier }
+		if = { limit = { has_modifier = ww_fresh_forces_modifier } remove_modifier = ww_fresh_forces_modifier }
+		if = { limit = { has_modifier = ww_arsenal_of_democracy_modifier } remove_modifier = ww_arsenal_of_democracy_modifier }
+		if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
+	}
+
+	# Option A: Impose a harsh peace â€” regime change, reparations
+	option = {
+		name = world_war_events.100.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { country_is_fascist = yes }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = ww_victors_peace_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = ww_occupation_duties_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = large_radicals
+			pop_type = soldiers
+		}
+		# Trigger regime change event on defeated powers
+		every_country = {
+			limit = {
+				OR = {
+					has_variable = ww_aggressor_side
+					has_variable = ww_defender_side
+				}
+				NOT = { this = root }
+				is_at_war = no
+				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+			trigger_event = { id = world_war_events.101 }
+		}
+	}
+
+	# Option B: Seek a just peace â€” reconstruction and reconciliation
+	option = {
+		name = world_war_events.100.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = ww_victors_peace_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = ww_reconstruction_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = middle
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		# Trigger reconstruction event on defeated powers
+		every_country = {
+			limit = {
+				OR = {
+					has_variable = ww_aggressor_side
+					has_variable = ww_defender_side
+				}
+				NOT = { this = root }
+				is_at_war = no
+				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+			trigger_event = { id = world_war_events.102 }
+		}
+	}
+
+	# Option C: Establish a new world order â€” create institutions
+	option = {
+		name = world_war_events.100.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = ww_victors_peace_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = middle
+		}
+	}
+}
+
+# Event 101: Regime Change Imposed â€” defeated nation forced to change government
+world_war_events.101 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "votp_conspiring" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = world_war_events.101.t
+	desc = world_war_events.101.d
+	flavor = world_war_events.101.f
+
+	duration = 3
+
+	trigger = { always = no } # Only fired from event 100
+
+	immediate = { }
+
+	# Option A: Accept the imposed changes
+	option = {
+		name = world_war_events.101.a
+		default_option = yes
+		ai_chance = { base = 8 }
+		add_modifier = {
+			name = ww_defeated_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = ww_regime_change_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_large_radicals
+			strata = upper
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		# Clean up war variables
+		remove_variable = ww_active_phase
+		remove_variable = ww_aggressor_side
+		remove_variable = ww_defender_side
+		remove_variable = ww_years_elapsed
+		remove_variable = ww_months_counter
+		set_variable = ww_peace_concluded
+	}
+
+	# Option B: Resist â€” causes internal turmoil
+	option = {
+		name = world_war_events.101.b
+		ai_chance = { base = 2 }
+		add_modifier = {
+			name = ww_defeated_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_large_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = very_large_radicals
+			strata = upper
+		}
+		# Clean up war variables
+		remove_variable = ww_active_phase
+		remove_variable = ww_aggressor_side
+		remove_variable = ww_defender_side
+		remove_variable = ww_years_elapsed
+		remove_variable = ww_months_counter
+		set_variable = ww_peace_concluded
+	}
+}
+
+# Event 102: Reconstruction Aid â€” victors offer to help rebuild (from just peace)
+world_war_events.102 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "southamerica_factory_opening" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = world_war_events.102.t
+	desc = world_war_events.102.d
+	flavor = world_war_events.102.f
+
+	duration = 3
+
+	trigger = { always = no } # Only fired from event 100
+
+	immediate = { }
+
+	# Option A: Accept reconstruction aid â€” rebuild faster but under their influence
+	option = {
+		name = world_war_events.102.a
+		default_option = yes
+		ai_chance = { base = 7 }
+		add_modifier = {
+			name = ww_defeated_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = ww_reconstruction_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		# Clean up war variables
+		remove_variable = ww_active_phase
+		remove_variable = ww_aggressor_side
+		remove_variable = ww_defender_side
+		remove_variable = ww_years_elapsed
+		remove_variable = ww_months_counter
+		set_variable = ww_peace_concluded
+	}
+
+	# Option B: Reject foreign aid â€” rebuild independently, slower but sovereign
+	option = {
+		name = world_war_events.102.b
+		ai_chance = { base = 3 }
+		add_modifier = {
+			name = ww_defeated_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		# Clean up war variables
+		remove_variable = ww_active_phase
+		remove_variable = ww_aggressor_side
+		remove_variable = ww_defender_side
+		remove_variable = ww_years_elapsed
+		remove_variable = ww_months_counter
+		set_variable = ww_peace_concluded
+	}
+}
+
+# Event 103: War Crimes Tribunal â€” exposure of atrocities committed during the war
+world_war_events.103 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "middleeast_courtroom_upheaval" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = world_war_events.103.t
+	desc = world_war_events.103.d
+	flavor = world_war_events.103.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = ww_peace_concluded
+		country_rank >= rank_value:great_power
+		NOT = { has_modifier = ww_war_crimes_exposed_modifier }
+		NOT = { has_modifier = ww_liberation_hero_modifier }
+	}
+
+	cooldown = { days = long_modifier_time }
+
+	immediate = { }
+
+	# Option A: Prosecute war criminals â€” establish precedent
+	option = {
+		name = world_war_events.103.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = ww_liberation_hero_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = middle
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option B: Focus on moving forward â€” forgive but remember
+	option = {
+		name = world_war_events.103.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_is_authoritarian = yes }
+				add = 3
+			}
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	# Option C: Suppress the evidence â€” our side committed crimes too
+	option = {
+		name = world_war_events.103.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { country_is_fascist = yes }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = ww_war_crimes_exposed_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = {
+				name = ig_approval_very_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# Event 104: Post-War Order â€” reshaping the world after the conflict
+world_war_events.104 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = world_war_events.104.t
+	desc = world_war_events.104.d
+	flavor = world_war_events.104.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = ww_peace_concluded
+		country_rank >= rank_value:great_power
+	}
+
+	cooldown = { days = long_modifier_time }
+
+	immediate = { }
+
+	# Option A: Establish a sphere of influence â€” dominate the post-war order
+	option = {
+		name = world_war_events.104.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = ww_victors_peace_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = medium_radicals
+			pop_type = soldiers
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option B: Champion self-determination â€” support new nations
+	option = {
+		name = world_war_events.104.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = ww_liberation_hero_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = middle
+		}
+	}
+
+	# Option C: Focus inward â€” we've done enough
+	option = {
+		name = world_war_events.104.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					has_modifier = ww_home_front_strain_modifier
+				}
+				add = 3
+			}
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_modifier = {
+			name = ww_reconstruction_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Event 105: The New Rivalry â€” emerging superpowers eye each other
+world_war_events.105 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_politicians_arguing" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = world_war_events.105.t
+	desc = world_war_events.105.d
+	flavor = world_war_events.105.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = ww_peace_concluded
+		country_rank >= rank_value:great_power
+		# Must have a former ally who's now ideologically different
+		any_country = {
+			country_rank >= rank_value:great_power
+			NOT = { this = root }
+			NOT = { has_war_with = root }
+			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+		}
+	}
+
+	cooldown = { days = long_modifier_time }
+
+	immediate = {
+		random_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+				NOT = { this = root }
+				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+			save_scope_as = new_rival_power
+		}
+	}
+
+	# Option A: Prepare for the next conflict â€” cold war begins
+	option = {
+		name = world_war_events.105.a
+		default_option = yes
+		ai_chance = { base = 4 }
+		change_relations = {
+			country = scope:new_rival_power
+			value = -30
+		}
+		add_modifier = {
+			name = arms_race_escalation_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# Final cleanup of all WW variables
+		remove_variable = ww_peace_concluded
+	}
+
+	# Option B: Seek coexistence â€” attempt peaceful relations
+	option = {
+		name = world_war_events.105.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 2
+			}
+		}
+		change_relations = {
+			country = scope:new_rival_power
+			value = 10
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		# Final cleanup of all WW variables
+		remove_variable = ww_peace_concluded
+	}
+}
