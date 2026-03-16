@@ -1,0 +1,17 @@
+# Building group for the private construction hub. Government-funded, no
+# urbanisation, always hires at full capacity.
+bg_private_construction = {
+	is_shown_in_outliner = no
+	always_possible = yes
+	min_hiring_rate = 1.0
+	max_hiring_rate = 1.0
+	is_government_funded = yes
+	economy_of_scale = no
+	can_use_slaves = yes
+	urbanization = 0
+	infrastructure_usage_per_level = 0
+	fired_pops_become_radical = no
+	should_auto_expand = {
+		always = no
+	}
+}

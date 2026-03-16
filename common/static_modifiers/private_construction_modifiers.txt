@@ -1,0 +1,12 @@
+# Adds construction throughput to a private construction hub building.
+# Multiplier is set each weekly pulse to (construction_per_hub - 1).
+pc_throughput_modifier = {
+	building_throughput_add = 1
+}
+
+# Controls what share of total construction capacity goes to private investors.
+# Multiplier is set each weekly pulse to the private share as a percentage.
+pc_private_share_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_private_construction_allocation_mult = 0.01
+}

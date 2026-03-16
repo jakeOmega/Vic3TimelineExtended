@@ -1,0 +1,134 @@
+# ==============================================================================
+# Private Construction System — Scripted Effects
+# Scope: country unless noted.
+# ==============================================================================
+
+# Initialise pc_government_target variable if missing.
+pc_init_government_target = {
+	if = {
+		limit = { NOT = { has_variable = pc_government_target } }
+		set_variable = { name = pc_government_target value = 0 }
+	}
+}
+
+# One-time country setup at game start.
+pc_country_setup = {
+	pc_init_government_target = yes
+	if = {
+		limit = {
+			NOT = { any_scope_building = { type = bt:building_private_construction_hub } }
+		}
+		capital = {
+			create_building = { building = building_private_construction_hub level = 1 }
+		}
+	}
+}
+
+# Advance the smoothed construction price one step toward the live price.
+pc_update_price_smoothed = {
+	set_variable = { name = pc_price_smoothed value = pc_price_smoothed_next }
+}
+
+# Refresh the private/public allocation modifier and per-hub throughput.
+pc_update_allocation = {
+	remove_modifier = pc_private_share_modifier
+	add_modifier = {
+		name = pc_private_share_modifier
+		multiplier = pc_private_share_pct
+	}
+	set_local_variable = { name = pc_per_hub value = pc_throughput_per_hub }
+	change_local_variable = { name = pc_per_hub subtract = 1 }
+	every_scope_building = {
+		limit = { type = bt:building_private_construction_hub }
+		remove_modifier = pc_throughput_modifier
+		if = {
+			limit = { occupancy > 1 }
+			state = {
+				remove_building = building_private_construction_hub
+				create_building = { building = building_private_construction_hub level = 1 }
+			}
+		}
+		add_modifier = {
+			name = pc_throughput_modifier
+			multiplier = local_var:pc_per_hub
+		}
+	}
+}
+
+# AI: set the government construction purchase target.
+pc_set_ai_government_target = {
+	set_variable = { name = pc_government_target value = pc_ai_government_target }
+}
+
+# Rebuild hub placement after territory changes (country scope).
+pc_rebuild_hubs = {
+	every_scope_state = {
+		if = {
+			limit = {
+				any_scope_building = { is_under_construction = yes }
+				NOT = { any_scope_building = { type = bt:building_private_construction_hub } }
+			}
+			create_building = { building = building_private_construction_hub level = 1 }
+		}
+		else_if = {
+			limit = {
+				NOT = { any_scope_building = { is_under_construction = yes } }
+				any_scope_building = { type = bt:building_private_construction_hub }
+				NOT = { is_capital = yes }
+			}
+			remove_building = building_private_construction_hub
+		}
+	}
+	if = {
+		limit = {
+			NOT = { any_scope_building = { type = bt:building_private_construction_hub } }
+		}
+		capital = {
+			create_building = { building = building_private_construction_hub level = 1 }
+		}
+	}
+}
+
+# State scope: called when construction starts.
+pc_on_construction_start = {
+	if = {
+		limit = {
+			NOT = { any_scope_building = { type = bt:building_private_construction_hub } }
+		}
+		create_building = { building = building_private_construction_hub level = 1 }
+	}
+	owner = {
+		if = {
+			limit = {
+				capital = {
+					any_scope_building = { type = bt:building_private_construction_hub }
+					NOT = { any_scope_building = { is_under_construction = yes } }
+					NOT = { THIS = prev }
+				}
+			}
+			capital = { remove_building = building_private_construction_hub }
+		}
+	}
+}
+
+# State scope: called when a building finishes.
+pc_on_construction_end = {
+	if = {
+		limit = {
+			NOT = { any_scope_building = { is_under_construction = yes } }
+			any_scope_building = { type = bt:building_private_construction_hub }
+			NOT = { is_capital = yes }
+		}
+		remove_building = building_private_construction_hub
+	}
+	owner = {
+		if = {
+			limit = {
+				NOT = { any_scope_building = { type = bt:building_private_construction_hub } }
+			}
+			capital = {
+				create_building = { building = building_private_construction_hub level = 1 }
+			}
+		}
+	}
+}

@@ -1,0 +1,125 @@
+# ==============================================================================
+# Private Construction System — On Actions
+# ==============================================================================
+
+# Weekly update: advance price smoother and refresh allocation.
+on_weekly_pulse_country = {
+	on_actions = { pc_weekly_update }
+}
+
+pc_weekly_update = {
+	effect = {
+		if = {
+			limit = { NOT = { is_country_type = decentralized } }
+			pc_update_price_smoothed = yes
+			pc_update_allocation = yes
+			if = {
+				limit = { is_ai = yes }
+				pc_set_ai_government_target = yes
+			}
+		}
+	}
+}
+
+# Hub placement: add hub when construction starts.
+on_start_expanding_building = {
+	on_actions = { pc_on_start_expanding }
+}
+
+pc_on_start_expanding = {
+	effect = {
+		state = { pc_on_construction_start = yes }
+	}
+}
+
+# Hub placement: clean up when construction ends.
+on_building_expanded = { on_actions = { pc_on_building_done } }
+on_building_built    = { on_actions = { pc_on_building_done } }
+
+pc_on_building_done = {
+	effect = {
+		state = { pc_on_construction_end = yes }
+	}
+}
+
+# Territory changes: rebuild hub placement for affected countries.
+on_merge_markets = { on_actions = { pc_on_merge_markets } }
+
+pc_on_merge_markets = {
+	effect = {
+		if = { limit = { exists = owner } owner = { pc_rebuild_hubs = yes } }
+		if = { limit = { exists = scope:market.owner } scope:market.owner = { pc_rebuild_hubs = yes } }
+	}
+}
+
+on_create_market = { on_actions = { pc_on_create_market } }
+
+pc_on_create_market = {
+	effect = { owner = { pc_rebuild_hubs = yes } }
+}
+
+on_country_released_as_independent   = { on_actions = { pc_on_country_released } }
+on_country_released_as_own_subject   = { on_actions = { pc_on_country_released } }
+on_country_released_as_overlord_subject = { on_actions = { pc_on_country_released } }
+
+pc_on_country_released = {
+	effect = {
+		pc_rebuild_hubs = yes
+		if = { limit = { exists = scope:target } scope:target = { pc_rebuild_hubs = yes } }
+	}
+}
+
+on_country_formed = {
+	effect = {
+		set_variable = { name = recently_formed_country days = 7300 }
+	}
+	on_actions = { pc_on_country_formed }
+}
+
+pc_on_country_formed = {
+	effect = { pc_rebuild_hubs = yes }
+}
+
+on_capitulation               = { on_actions = { pc_on_boundary_change } }
+on_enemy_capitulated_notification = { on_actions = { pc_on_boundary_change } }
+on_ally_capitulated_notification  = { on_actions = { pc_on_boundary_change } }
+
+pc_on_boundary_change = {
+	effect = { pc_rebuild_hubs = yes }
+}
+
+on_diplo_play_back_down = { on_actions = { pc_on_diplo_play_back_down } }
+
+pc_on_diplo_play_back_down = {
+	effect = {
+		if = { limit = { exists = scope:actor } scope:actor = { pc_rebuild_hubs = yes } }
+		if = { limit = { exists = scope:notification_target } scope:notification_target = { pc_rebuild_hubs = yes } }
+	}
+}
+
+on_revolution_start = { on_actions = { pc_on_split_country } }
+on_secession_start  = { on_actions = { pc_on_split_country } }
+
+pc_on_split_country = {
+	effect = {
+		pc_rebuild_hubs = yes
+		if = { limit = { exists = scope:target } scope:target = { pc_rebuild_hubs = yes } }
+	}
+}
+
+on_wargoal_enforced = { on_actions = { pc_on_wargoal_enforced } }
+
+pc_on_wargoal_enforced = {
+	effect = {
+		if = { limit = { exists = scope:actor } scope:actor = { pc_rebuild_hubs = yes } }
+		if = { limit = { exists = scope:target } scope:target = { pc_rebuild_hubs = yes } }
+	}
+}
+
+on_war_end = { on_actions = { pc_on_war_end } }
+
+pc_on_war_end = {
+	effect = {
+		if = { limit = { exists = scope:actor } scope:actor = { pc_rebuild_hubs = yes } }
+	}
+}
