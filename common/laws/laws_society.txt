@@ -23,25 +23,7 @@
 	
 	# Below needed since this Law changes Politial Participation
 	on_activate = {
-		recalculate_pop_ig_support = yes
-		if = {
-			limit = {
-				institution_investment_level = {
-					institution = institution_social_security
-					value <= 5
-				}
-			}
-			set_institution_investment_level = {
-				institution = institution_social_security
-				level = 1
-			}
-		}
-		else = {
-			set_institution_investment_level = {
-				institution = institution_social_security
-				level = 2
-			}
-		}
+		te_activate_welfare_law = yes
 	}
 	
 	on_deactivate = {
@@ -77,25 +59,7 @@ law_post-scarcity = {
 	
 	# Below needed since this Law changes Politial Participation
 	on_activate = {
-		recalculate_pop_ig_support = yes
-		if = {
-			limit = {
-				institution_investment_level = {
-					institution = institution_social_security
-					value <= 5
-				}
-			}
-			set_institution_investment_level = {
-				institution = institution_social_security
-				level = 1
-			}
-		}
-		else = {
-			set_institution_investment_level = {
-				institution = institution_social_security
-				level = 2
-			}
-		}
+		te_activate_welfare_law = yes
 	}
 	
 	on_deactivate = {

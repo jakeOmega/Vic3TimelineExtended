@@ -73,16 +73,7 @@ law_minority_rights_violent_hostility = {
 	}
 
 	can_impose = {
-		OR = {
-			AND = {
-				is_in_same_power_bloc = scope:target_country
-				AND = {
-					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
-					has_law = scope:law
-				}
-			}
-			can_impose_law_default = yes
-		}
+		can_impose_minority_rights_law = yes
 	}
 }
 
@@ -173,16 +164,7 @@ law_minority_rights_ghettoization = {
 	}
 
 	can_impose = {
-		OR = {
-			AND = {
-				is_in_same_power_bloc = scope:target_country
-				AND = {
-					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
-					has_law = scope:law
-				}
-			}
-			can_impose_law_default = yes
-		}
+		can_impose_minority_rights_law = yes
 	}
 }
 
@@ -276,16 +258,7 @@ law_minority_rights_cultural_assimilation = {
 	}
 
 	can_impose = {
-		OR = {
-			AND = {
-				is_in_same_power_bloc = scope:target_country
-				AND = {
-					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
-					has_law = scope:law
-				}
-			}
-			can_impose_law_default = yes
-		}
+		can_impose_minority_rights_law = yes
 	}
 }
 
@@ -373,16 +346,7 @@ law_minority_rights_discrimination = {
 	}
 
 	can_impose = {
-		OR = {
-			AND = {
-				is_in_same_power_bloc = scope:target_country
-				AND = {
-					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
-					has_law = scope:law
-				}
-			}
-			can_impose_law_default = yes
-		}
+		can_impose_minority_rights_law = yes
 	}
 }
 
@@ -458,16 +422,7 @@ law_minority_rights_indifference = {
 	}
 
 	can_impose = {
-		OR = {
-			AND = {
-				is_in_same_power_bloc = scope:target_country
-				AND = {
-					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
-					has_law = scope:law
-				}
-			}
-			can_impose_law_default = yes
-		}
+		can_impose_minority_rights_law = yes
 	}
 }
 
@@ -539,16 +494,7 @@ law_minority_rights_protection = {
 	}
 
 	can_impose = {
-		OR = {
-			AND = {
-				is_in_same_power_bloc = scope:target_country
-				AND = {
-					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
-					has_law = scope:law
-				}
-			}
-			can_impose_law_default = yes
-		}
+		can_impose_minority_rights_law = yes
 	}
 }
 
@@ -618,16 +564,7 @@ law_minority_rights_affirmative_action = {
 	}
 
 	can_impose = {
-		OR = {
-			AND = {
-				is_in_same_power_bloc = scope:target_country
-				AND = {
-					modifier:country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = yes
-					has_law = scope:law
-				}
-			}
-			can_impose_law_default = yes
-		}
+		can_impose_minority_rights_law = yes
 	}
 }
 

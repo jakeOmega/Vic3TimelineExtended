@@ -954,3 +954,78 @@ te_update_state_modifiers = {
 	te_update_tourism_modifier = yes
 	te_update_migration_crowding_modifier = yes
 }
+
+# ============================================================================
+# WELFARE LAW ACTIVATION (country scope)
+# Used by law_universal_basic_income and law_post-scarcity on_activate.
+# Recalculates IG support and sets the social security institution level:
+# level 1 if at or below cap (<=5), level 2 otherwise.
+# ============================================================================
+te_activate_welfare_law = {
+	recalculate_pop_ig_support = yes
+	if = {
+		limit = {
+			institution_investment_level = {
+				institution = institution_social_security
+				value <= 5
+			}
+		}
+		set_institution_investment_level = {
+			institution = institution_social_security
+			level = 1
+		}
+	}
+	else = {
+		set_institution_investment_level = {
+			institution = institution_social_security
+			level = 2
+		}
+	}
+}
+
+# ============================================================================
+# LANGUAGE REFORM CLEANUP (country scope)
+# Removes all active language reform modifiers and the reform type variable.
+# Used in language_reform_law_on_action when the law is deactivated.
+# ============================================================================
+remove_all_langreform_modifiers = {
+	remove_modifier = langreform_revival
+	remove_modifier = langreform_constructed
+	remove_modifier = langreform_simplification
+	remove_modifier = langreform_powerful_academy
+	remove_modifier = langreform_advisory_panel
+	remove_modifier = langreform_minority_protection
+	remove_modifier = langreform_national_focus
+	remove_variable = language_reform_type
+}
+
+# ============================================================================
+# GLOBAL WARMING — INHERIT MARKET LEADER POLICIES (country scope)
+# Applies any active market-leader climate policies (carbon tax, renewable
+# investment, emission standards) from scope:market.owner to this country,
+# if not already present.  Called when a country joins a new market.
+# Requires: scope:market.owner to be set (the absorbing market's owner).
+# ============================================================================
+gw_inherit_market_leader_policies = {
+	if = {
+		limit = {
+			NOT = { has_modifier = carbon_tax_modifier }
+			scope:market.owner = { has_modifier = carbon_tax_modifier }
+		}
+		add_modifier = { name = carbon_tax_modifier }
+	}
+	if = {
+		limit = {
+			NOT = { has_modifier = renewable_investment_modifier }
+			scope:market.owner = { has_modifier = renewable_investment_modifier }
+		}
+		add_modifier = { name = renewable_investment_modifier }
+	}
+	if = {
+		limit = {
+			NOT = { has_modifier = emission_standards_modifier }
+			scope:market.owner = { has_modifier = emission_standards_modifier }
+		}
+		add_modifier = { name = emission_standards_modifier }
+	}
+}
