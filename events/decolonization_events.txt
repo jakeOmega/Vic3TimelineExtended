@@ -70,14 +70,8 @@ decolonization_events.1 = {
 			post_notification = colonial_negotiations_started_notice
 		}
 		# Intelligentsia approve of diplomacy, landowners see weakness
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_negative_event days = 90 }
 	}
 
@@ -98,14 +92,8 @@ decolonization_events.1 = {
 		}
 		add_radicals = { value = medium_radicals pop_type = academics }
 		# Armed forces approve, intelligentsia horrified
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event months = 2 }
 	}
 
@@ -142,10 +130,7 @@ decolonization_events.1 = {
 			FACTOR = appeasement_relations_increased
 		}
 		# Prestige boost from moral leadership, but landowners furious
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_very_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 150 }
 	}
 
@@ -185,14 +170,8 @@ decolonization_events.1 = {
 			FACTOR = appeasement_relations_decreased
 		}
 		# Industrialists love this, intelligentsia see through it
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 90 }
 	}
 }
@@ -283,14 +262,8 @@ decolonization_events.2 = {
 			post_notification = colonial_negotiations_started_notice
 		}
 		# Intelligentsia relieve, landowners dismayed
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_negative_event months = 3 }
 	}
 
@@ -316,14 +289,8 @@ decolonization_events.2 = {
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
 		# Landowners and armed forces rally, intelligentsia dismayed
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event months = 2 }
 	}
 
@@ -356,10 +323,7 @@ decolonization_events.2 = {
 			post_notification = colonial_neocolonial_terms_notice
 		}
 		# Industrialists approve, intelligentsia skeptical
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event months = 2 }
 	}
 }
@@ -435,14 +399,8 @@ decolonization_events.3 = {
 			FACTOR = appeasement_relations_increased
 		}
 		# Armed forces humiliated, intelligentsia relieved
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 90 }
 	}
 
@@ -463,14 +421,8 @@ decolonization_events.3 = {
 			post_notification = colonial_crackdown_begun_notice
 		}
 		# Armed forces approve, everyone else uneasy
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_very_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_negative_event days = 150 }
 	}
 
@@ -510,10 +462,7 @@ decolonization_events.3 = {
 			FACTOR = appeasement_relations_decreased
 		}
 		# Industrialists pleased, armed forces accept pragmatic solution
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 60 }
 	}
 }
@@ -658,10 +607,7 @@ decolonization_events.5 = {
 		}
 		# Some at home see imperial nostalgia
 		add_radicals = { value = very_small_radicals pop_type = academics }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Maintain distance
@@ -742,10 +688,7 @@ decolonization_events.6 = {
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 		# Industrialists and upper strata balk at the cost
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_radicals = { value = small_radicals strata = upper }
 	}
 
@@ -763,10 +706,7 @@ decolonization_events.6 = {
 		add_radicals = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals strata = upper }
 		# Industrialists approve of keeping the money
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -927,14 +867,8 @@ decolonization_events.8 = {
 			add_liberty_desire = 10
 		}
 		# Intelligentsia delighted, landowners and armed forces dismayed
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Resist the movement
@@ -953,18 +887,9 @@ decolonization_events.8 = {
 			is_decaying = yes
 		}
 		# Armed forces and landowners approve, intelligentsia radicalized
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_very_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 60 }
 	}
 }
@@ -1040,14 +965,8 @@ decolonization_events.9 = {
 			is_decaying = yes
 		}
 		# Costs bureaucracy but earns goodwill
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 90 }
 	}
 
@@ -1070,14 +989,8 @@ decolonization_events.9 = {
 			add_radicals_in_state = { value = large_radicals }
 		}
 		# Armed forces approve, intelligentsia appalled
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_negative_event days = 60 }
 	}
 
@@ -1101,10 +1014,7 @@ decolonization_events.9 = {
 			is_decaying = yes
 		}
 		# Landowners furious at losing territory
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_very_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 240 }
 	}
 
@@ -1128,10 +1038,7 @@ decolonization_events.9 = {
 			is_decaying = yes
 		}
 		# Industrialists love the deal, intelligentsia see through it
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 150 }
 	}
 }
@@ -1212,10 +1119,7 @@ decolonization_events.10 = {
 		add_loyalists = { value = medium_radicals }
 		# Integration disrupts domestic politics - some resent diluting the homeland
 		add_radicals = { value = small_radicals strata = upper }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Maintain the current arrangement
@@ -1225,14 +1129,8 @@ decolonization_events.10 = {
 		add_loyalists = { value = small_radicals }
 		add_modifier = { name = colonial_stability_positive_event months = 2 }
 		# Devout and landowners prefer the status quo
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -1312,14 +1210,8 @@ decolonization_events.11 = {
 			add_liberty_desire = 10
 		}
 		# Intelligentsia approve, landowners dismayed
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_negative_event days = 150 }
 	}
 
@@ -1346,18 +1238,9 @@ decolonization_events.11 = {
 			post_notification = gp_condemnation_rejected_notice
 		}
 		# Landowners and armed forces rally round the flag
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_negative_event days = 60 }
 	}
 }
@@ -1427,10 +1310,7 @@ decolonization_events.12 = {
 		add_modifier = { name = colonial_stability_positive_event days = 150 }
 		# Intelligentsia dismayed at accepting imperialist backing
 		add_radicals = { value = small_radicals pop_type = academics }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Decline - handle it ourselves
@@ -1519,14 +1399,8 @@ decolonization_events.13 = {
 			is_decaying = yes
 		}
 		# Armed forces humiliated by retreat
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 150 }
 	}
 
@@ -1546,14 +1420,8 @@ decolonization_events.13 = {
 		}
 		add_radicals = { value = medium_radicals pop_type = academics }
 		# Armed forces relish the fight, everyone else suffers
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_very_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_negative_event days = 150 }
 	}
 
@@ -1577,10 +1445,7 @@ decolonization_events.13 = {
 			is_decaying = yes
 		}
 		# Industrialists profit, armed forces accept the pragmatic retreat
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 90 }
 	}
 }
@@ -1664,23 +1529,11 @@ decolonization_events.14 = {
 			is_decaying = yes
 		}
 		# Intelligentsia and trade unions approve - progressive stance
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		# Landowners and industrialists lose colonial markets
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Remain neutral
@@ -1738,23 +1591,11 @@ decolonization_events.14 = {
 			is_decaying = yes
 		}
 		# Landowners and industrialists approve - colonial markets
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		# Intelligentsia and trade unions dismayed
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
 }

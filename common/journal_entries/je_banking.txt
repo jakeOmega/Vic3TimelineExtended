@@ -329,12 +329,7 @@
             banking_cycle_random_event_effect = yes
 
             # --- Phase modifiers (remove previous; add current) ---
-            remove_modifier = financial_cycle_phase_panic
-            remove_modifier = financial_cycle_phase_downturn
-            remove_modifier = financial_cycle_phase_stagnation
-            remove_modifier = financial_cycle_phase_expansion
-            remove_modifier = financial_cycle_phase_boom
-            remove_modifier = financial_cycle_phase_frenzy
+            remove_all_banking_phase_modifiers = yes
 
             if = { limit = { var:finance_cycle_value < 10 }  add_modifier = { name = financial_cycle_phase_panic } }
             else_if = { limit = { var:finance_cycle_value < 25 } add_modifier = { name = financial_cycle_phase_downturn } }

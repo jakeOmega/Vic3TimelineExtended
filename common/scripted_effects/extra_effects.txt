@@ -291,52 +291,7 @@ expand_random_building = {
 		limit = {
 			weekly_profit > 0
 			occupancy > 0.9
-			OR = {
-				is_building_type = building_textile_mill
-				is_building_type = building_furniture_manufactory
-				is_building_type = building_synthetics_plant
-				is_building_type = building_synthetics_plant_silk
-				is_building_type = building_synthetics_plant_oil
-				is_building_type = building_synthetics_plant_rubber
-				is_building_type = building_synthetics_plant_opium
-				is_building_type = building_synthetics_plant_coal
-				is_building_type = building_synthetics_plant_wood
-				is_building_type = building_synthetics_plant_sugar
-				is_building_type = building_synthetics_plant_meat
-				is_building_type = building_synthetics_plant_fruit
-				is_building_type = building_synthetics_plant_drinks
-				is_building_type = building_chemical_plant
-				is_building_type = building_explosives_factory
-				is_building_type = building_motor_industry
-				is_building_type = building_automotive_industry
-				is_building_type = building_electrics_industry
-				is_building_type = building_electrics_industry_radio
-				is_building_type = building_electrics_industry_appliances
-				is_building_type = building_power_plant
-				is_building_type = building_software_industry
-				is_building_type = building_network_infrastructure
-				is_building_type = building_nuclear_plant
-				is_building_type = building_fusion_plant
-				is_building_type = building_renewable_energy_plant
-				is_building_type = building_electronic_components_and_semiconductor_industry
-				is_building_type = building_robotics_industry
-				is_building_type = building_advanced_material_fabricator
-				is_building_type = building_aerospace_industry
-				is_building_type = building_space_mine
-				is_building_type = building_steel_mill
-				is_building_type = building_food_industry
-				is_building_type = building_glassworks
-				is_building_type = building_tooling_workshop
-				is_building_type = building_paper_mill
-				is_building_type = building_shipyard
-				is_building_type = building_military_shipyard
-				is_building_type = building_arms_industry
-				is_building_type = building_artillery_foundry
-				is_building_type = building_munition_plant
-				is_building_type = building_art_academy
-				is_building_type = building_railway
-				is_building_type = fmc_building_construction_site
-			}
+			is_privately_expandable_building_type = yes
 		}
 		while = {
 			count = expand_levels
@@ -953,4 +908,83 @@ te_update_state_modifiers = {
 	te_update_pollution_modifier = yes
 	te_update_tourism_modifier = yes
 	te_update_migration_crowding_modifier = yes
+}
+
+# Remove infrastructure buildings from a state (state scope).
+# Used during state collapse events.
+state_collapse_remove_infrastructure = {
+	if = { limit = { has_building = building_barrack } remove_building = building_barrack }
+	if = { limit = { has_building = building_naval_base } remove_building = building_naval_base }
+	if = { limit = { has_building = building_port } remove_building = building_port }
+	if = { limit = { has_building = building_railway } remove_building = building_railway }
+	if = { limit = { has_building = building_university } remove_building = building_university }
+	if = { limit = { has_building = building_government_administration } remove_building = building_government_administration }
+}
+
+# Reset all institutions and ministries to their "none" law (country scope).
+# Used during state collapse / total failure events.
+reset_all_institutions_and_ministries = {
+	activate_law = law_type:law_no_schools
+	activate_law = law_type:law_no_health_system
+	activate_law = law_type:law_no_police
+	activate_law = law_type:law_no_social_security
+	activate_law = law_type:law_no_workers_rights
+	activate_law = law_type:law_no_colonial_affairs
+	activate_law = law_type:law_no_home_affairs
+	activate_law = law_type:law_no_migration_controls
+	activate_law = law_type:law_no_national_bank
+	activate_law = law_type:law_no_ministry_of_commerce
+	activate_law = law_type:law_no_ministry_of_consumer_protection
+	activate_law = law_type:law_no_ministry_of_culture
+	activate_law = law_type:law_no_ministry_of_foreign_affairs
+	activate_law = law_type:law_no_ministry_of_intelligence_and_security
+	activate_law = law_type:law_no_ministry_of_international_aid
+	activate_law = law_type:law_no_ministry_of_labor
+	activate_law = law_type:law_no_ministry_of_propaganda
+	activate_law = law_type:law_no_ministry_of_refugee_affairs
+	activate_law = law_type:law_no_ministry_of_religion
+	activate_law = law_type:law_no_ministry_of_science
+	activate_law = law_type:law_no_ministry_of_the_environment
+	activate_law = law_type:law_no_ministry_of_thought_control
+	activate_law = law_type:law_no_ministry_of_urban_planning
+	activate_law = law_type:law_no_ministry_of_war
+}
+
+# Copy active global warming policy modifiers from the absorbing market's leader
+# to a new market member (country scope, expects scope:market.owner).
+gw_copy_market_policy_modifiers = {
+	if = {
+		limit = {
+			NOT = { has_modifier = carbon_tax_modifier }
+			scope:market.owner = { has_modifier = carbon_tax_modifier }
+		}
+		add_modifier = { name = carbon_tax_modifier }
+	}
+	if = {
+		limit = {
+			NOT = { has_modifier = renewable_investment_modifier }
+			scope:market.owner = { has_modifier = renewable_investment_modifier }
+		}
+		add_modifier = { name = renewable_investment_modifier }
+	}
+	if = {
+		limit = {
+			NOT = { has_modifier = emission_standards_modifier }
+			scope:market.owner = { has_modifier = emission_standards_modifier }
+		}
+		add_modifier = { name = emission_standards_modifier }
+	}
+}
+
+# Remove all language reform modifiers and the reform type variable.
+# Called when the country no longer has the state-led language reform law.
+remove_all_langreform_modifiers = {
+	remove_modifier = langreform_revival
+	remove_modifier = langreform_constructed
+	remove_modifier = langreform_simplification
+	remove_modifier = langreform_powerful_academy
+	remove_modifier = langreform_advisory_panel
+	remove_modifier = langreform_minority_protection
+	remove_modifier = langreform_national_focus
+	remove_variable = language_reform_type
 }

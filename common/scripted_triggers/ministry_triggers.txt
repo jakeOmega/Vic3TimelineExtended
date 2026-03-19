@@ -1,0 +1,90 @@
+﻿# ======================================================================
+#  Ministry Triggers
+#  Reusable triggers for ministry law enactment checks and
+#  institution investment level gates.
+# ======================================================================
+
+# True if the country is enacting ANY ministry creation law
+is_enacting_any_ministry_law = {
+	OR = {
+		is_enacting_law = law_type:law_ministry_of_war
+		is_enacting_law = law_type:law_ministry_of_foreign_affairs
+		is_enacting_law = law_type:law_ministry_of_commerce
+		is_enacting_law = law_type:law_ministry_of_culture
+		is_enacting_law = law_type:law_pro_capital_ministry_of_labor
+		is_enacting_law = law_type:law_pro_labor_ministry_of_labor
+		is_enacting_law = law_type:law_ministry_of_the_environment
+		is_enacting_law = law_type:law_ministry_of_intelligence_and_security
+		is_enacting_law = law_type:law_ministry_of_refugee_affairs
+		is_enacting_law = law_type:law_ministry_of_propaganda
+		is_enacting_law = law_type:law_ministry_of_science
+		is_enacting_law = law_type:law_ministry_of_thought_control
+		is_enacting_law = law_type:law_ministry_of_consumer_protection
+		is_enacting_law = law_type:law_ministry_of_urban_planning
+		is_enacting_law = law_type:law_ministry_of_religion
+		is_enacting_law = law_type:law_ministry_of_international_aid
+	}
+}
+
+# True if the country is enacting ANY ministry dissolution law
+is_dissolving_any_ministry_law = {
+	OR = {
+		is_enacting_law = law_type:law_no_ministry_of_war
+		is_enacting_law = law_type:law_no_ministry_of_foreign_affairs
+		is_enacting_law = law_type:law_no_ministry_of_commerce
+		is_enacting_law = law_type:law_no_ministry_of_culture
+		is_enacting_law = law_type:law_no_ministry_of_labor
+		is_enacting_law = law_type:law_no_ministry_of_the_environment
+		is_enacting_law = law_type:law_no_ministry_of_intelligence_and_security
+		is_enacting_law = law_type:law_no_ministry_of_refugee_affairs
+		is_enacting_law = law_type:law_no_ministry_of_propaganda
+		is_enacting_law = law_type:law_no_ministry_of_science
+		is_enacting_law = law_type:law_no_ministry_of_thought_control
+		is_enacting_law = law_type:law_no_ministry_of_consumer_protection
+		is_enacting_law = law_type:law_no_ministry_of_urban_planning
+		is_enacting_law = law_type:law_no_ministry_of_religion
+		is_enacting_law = law_type:law_no_ministry_of_international_aid
+	}
+}
+
+# ======================================================================
+#  Institution Investment Level Gates
+#  Named triggers for commonly-checked ministry thresholds.
+# ======================================================================
+
+# Intelligence & Security
+has_intelligence_ministry_2 = {
+	institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 2 }
+}
+has_intelligence_ministry_3 = {
+	institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
+}
+has_intelligence_ministry_5 = {
+	institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 5 }
+}
+
+# Environment
+has_environment_ministry_3 = {
+	institution_investment_level = { institution = institution_ministry_of_the_environment value >= 3 }
+}
+has_environment_ministry_5 = {
+	institution_investment_level = { institution = institution_ministry_of_the_environment value >= 5 }
+}
+
+# Consumer Protection
+has_consumer_protection_ministry_3 = {
+	institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
+}
+has_consumer_protection_ministry_5 = {
+	institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 }
+}
+
+# Commerce
+has_commerce_ministry_3 = {
+	institution_investment_level = { institution = institution_ministry_of_commerce value >= 3 }
+}
+
+# Propaganda
+has_propaganda_ministry_3 = {
+	institution_investment_level = { institution = institution_ministry_of_propaganda value >= 3 }
+}

@@ -88,12 +88,6 @@
                 }
                 multiply = 5 # retaliation after being nuked is strongly favored
             }
-            if = {
-                limit = {
-                    scope:target_country = { has_modifier = nuclear_power }
-                }
-                multiply = 0.1 # extreme reluctance against nuclear-armed targets (MAD)
-            }
         }
 
 		will_select_as_second_state = {
@@ -258,12 +252,6 @@ tactical_nuke_diplo_action = {
                     }
                 }
                 multiply = 0.25 # cautious/honorable leaders very reluctant even for tactical use
-            }
-            if = {
-                limit = {
-                    scope:target_country = { has_modifier = nuclear_power }
-                }
-                multiply = 0.1 # extreme reluctance against nuclear-armed targets
             }
             if = {
                 limit = {

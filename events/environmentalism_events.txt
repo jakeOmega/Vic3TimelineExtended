@@ -281,7 +281,7 @@ environmentalism_events.5 = {
 		temperature_anomaly_display >= 2.0
 		# Strong environment ministry (level 5) prevents widespread crop failures
 		NOT = {
-			institution_investment_level = { institution = institution_ministry_of_the_environment value >= 5 }
+			has_environment_ministry_5 = yes
 		}
 		any_scope_state = {
 			is_incorporated = yes
@@ -327,7 +327,7 @@ environmentalism_events.5 = {
 	option = {
 		name = environmentalism_events.5.c
 		trigger = {
-			institution_investment_level = { institution = institution_ministry_of_the_environment value >= 3 }
+			has_environment_ministry_3 = yes
 		}
 		highlighted_option = yes
 		custom_tooltip = environmentalism_events_ministry_environment_3_tt
@@ -653,7 +653,7 @@ environmentalism_events.9 = {
 	option = {
 		name = environmentalism_events.9.c
 		trigger = {
-			institution_investment_level = { institution = institution_ministry_of_the_environment value >= 3 }
+			has_environment_ministry_3 = yes
 		}
 		highlighted_option = yes
 		custom_tooltip = environmentalism_events_ministry_environment_3_tt
@@ -738,7 +738,7 @@ environmentalism_events.10 = {
 	option = {
 		name = environmentalism_events.10.c
 		trigger = {
-			institution_investment_level = { institution = institution_ministry_of_the_environment value >= 3 }
+			has_environment_ministry_3 = yes
 		}
 		highlighted_option = yes
 		custom_tooltip = environmentalism_events_ministry_environment_3_tt
@@ -1012,7 +1012,7 @@ environmentalism_events.14 = {
 		temperature_anomaly_display >= 2.0
 		# Strong consumer protection (level 5) prevents outbreaks through public health systems
 		NOT = {
-			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 }
+			has_consumer_protection_ministry_5 = yes
 		}
 	}
 
@@ -1056,7 +1056,7 @@ environmentalism_events.14 = {
 	option = {
 		name = environmentalism_events.14.c
 		trigger = {
-			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
+			has_consumer_protection_ministry_3 = yes
 		}
 		highlighted_option = yes
 		custom_tooltip = environmentalism_events_ministry_consumer_3_tt

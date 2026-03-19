@@ -138,7 +138,7 @@ repeatable_events.20 = {
     option = { # Ministry coordination - commerce ministry streamlines logistics
         name = repeatable_events.20.dd
         trigger = {
-            institution_investment_level = { institution = institution_ministry_of_commerce value >= 3 }
+            has_commerce_ministry_3 = yes
         }
         highlighted_option = yes
         custom_tooltip = re_supply_ministry_tt
@@ -270,7 +270,7 @@ repeatable_events.40 = {
     option = {
         name = repeatable_events.40.d
         trigger = {
-            institution_investment_level = { institution = institution_ministry_of_propaganda value >= 3 }
+            has_propaganda_ministry_3 = yes
         }
         highlighted_option = yes
         custom_tooltip = re_media_state_control_tt
@@ -316,7 +316,7 @@ repeatable_events.50 = {
         }
         # Strong intelligence ministry (level 5) prevents most breaches
         NOT = {
-            institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 5 }
+            has_intelligence_ministry_5 = yes
         }
     }
 
@@ -339,7 +339,7 @@ repeatable_events.50 = {
     option = {
         name = repeatable_events.50.d
         trigger = {
-            institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
+            has_intelligence_ministry_3 = yes
         }
         custom_tooltip = re_cyber_intel_tt
         # Intelligence-assisted forensics - faster resolution, better outcome

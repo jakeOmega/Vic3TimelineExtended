@@ -1013,7 +1013,7 @@ society_technology_events.11 = {
 		country_rank >= rank_value:minor_power
 		# Strong intelligence ministry (level 5) prevents most attacks
 		NOT = {
-			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 5 }
+			has_intelligence_ministry_5 = yes
 		}
 	}
 
@@ -1055,7 +1055,7 @@ society_technology_events.11 = {
 		trigger = {
 			AND = {
 				has_technology_researched = military_grade_cybersecurity
-				institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 2 }
+				has_intelligence_ministry_2 = yes
 			}
 		}
 		highlighted_option = yes
@@ -1064,7 +1064,7 @@ society_technology_events.11 = {
 			base = 4
 			modifier = {
 				trigger = {
-					institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
+					has_intelligence_ministry_3 = yes
 				}
 				add = 4
 			}
@@ -1342,7 +1342,7 @@ society_technology_events.14 = {
 	option = {
 		name = society_technology_events.14.c
 		trigger = {
-			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
+			has_intelligence_ministry_3 = yes
 		}
 		highlighted_option = yes
 		custom_tooltip = ste_intel_ministry_3_tt
@@ -1942,7 +1942,7 @@ society_technology_events.22 = {
 			base = 3
 			modifier = {
 				trigger = {
-					institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
+					has_consumer_protection_ministry_3 = yes
 				}
 				add = 3
 			}
@@ -1992,7 +1992,7 @@ society_technology_events.22 = {
 	option = {
 		name = society_technology_events.22.dd
 		trigger = {
-			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
+			has_consumer_protection_ministry_3 = yes
 		}
 		highlighted_option = yes
 		custom_tooltip = ste_consumer_ministry_3_tt
@@ -2039,7 +2039,7 @@ society_technology_events.23 = {
 		NOT = { has_modifier = ste_meltdown_institutional_response }
 		# Strong consumer protection (level 5) prevents full meltdowns
 		NOT = {
-			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 }
+			has_consumer_protection_ministry_5 = yes
 		}
 		any_scope_building = {
 			is_building_type = building_nuclear_plant
@@ -2093,7 +2093,7 @@ society_technology_events.23 = {
 	option = {
 		name = society_technology_events.23.c
 		trigger = {
-			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
+			has_consumer_protection_ministry_3 = yes
 		}
 		highlighted_option = yes
 		custom_tooltip = ste_consumer_ministry_3_tt
@@ -2694,7 +2694,7 @@ society_technology_events.31 = {
 	option = {
 		name = society_technology_events.31.c
 		trigger = {
-			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
+			has_consumer_protection_ministry_3 = yes
 		}
 		highlighted_option = yes
 		custom_tooltip = ste_consumer_ministry_3_tt

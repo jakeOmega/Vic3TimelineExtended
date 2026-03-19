@@ -1,0 +1,80 @@
+﻿# ======================================================================
+#  Miscellaneous Reusable Triggers
+# ======================================================================
+
+# True if the country has any language reform modifier active
+has_any_langreform_modifier = {
+	OR = {
+		has_modifier = langreform_revival
+		has_modifier = langreform_constructed
+		has_modifier = langreform_simplification
+		has_modifier = langreform_powerful_academy
+		has_modifier = langreform_advisory_panel
+		has_modifier = langreform_minority_protection
+		has_modifier = langreform_national_focus
+	}
+}
+
+# True if the country has adopted any custom religion as state religion
+country_has_any_custom_religion = {
+	OR = {
+		country_has_state_religion = rel:custom_religion_christian
+		country_has_state_religion = rel:custom_religion_muslim
+		country_has_state_religion = rel:custom_religion_jewish
+		country_has_state_religion = rel:custom_religion_eastern
+		country_has_state_religion = rel:custom_religion_animist
+		country_has_state_religion = rel:custom_religion_buddhist
+		country_has_state_religion = rel:custom_religion_custom
+	}
+}
+
+# True if this building is a type eligible for private expansion
+# Used by expand_random_building and expand_building_private_construction
+is_privately_expandable_building_type = {
+	OR = {
+		is_building_type = building_textile_mill
+		is_building_type = building_furniture_manufactory
+		is_building_type = building_synthetics_plant
+		is_building_type = building_synthetics_plant_silk
+		is_building_type = building_synthetics_plant_oil
+		is_building_type = building_synthetics_plant_rubber
+		is_building_type = building_synthetics_plant_opium
+		is_building_type = building_synthetics_plant_coal
+		is_building_type = building_synthetics_plant_wood
+		is_building_type = building_synthetics_plant_sugar
+		is_building_type = building_synthetics_plant_meat
+		is_building_type = building_synthetics_plant_fruit
+		is_building_type = building_synthetics_plant_drinks
+		is_building_type = building_chemical_plant
+		is_building_type = building_explosives_factory
+		is_building_type = building_motor_industry
+		is_building_type = building_automotive_industry
+		is_building_type = building_electrics_industry
+		is_building_type = building_electrics_industry_radio
+		is_building_type = building_electrics_industry_appliances
+		is_building_type = building_power_plant
+		is_building_type = building_software_industry
+		is_building_type = building_network_infrastructure
+		is_building_type = building_nuclear_plant
+		is_building_type = building_fusion_plant
+		is_building_type = building_renewable_energy_plant
+		is_building_type = building_electronic_components_and_semiconductor_industry
+		is_building_type = building_robotics_industry
+		is_building_type = building_advanced_material_fabricator
+		is_building_type = building_aerospace_industry
+		is_building_type = building_space_mine
+		is_building_type = building_steel_mill
+		is_building_type = building_food_industry
+		is_building_type = building_glassworks
+		is_building_type = building_tooling_workshop
+		is_building_type = building_paper_mill
+		is_building_type = building_shipyard
+		is_building_type = building_military_shipyard
+		is_building_type = building_arms_industry
+		is_building_type = building_artillery_foundry
+		is_building_type = building_munition_plant
+		is_building_type = building_art_academy
+		is_building_type = building_railway
+		is_building_type = fmc_building_construction_site
+	}
+}

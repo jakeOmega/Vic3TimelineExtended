@@ -336,3 +336,14 @@ banking_cycle_random_event_effect = {
 		}
 	}
 }
+
+# Remove all financial cycle phase modifiers.
+# Called before applying the current phase modifier each month.
+remove_all_banking_phase_modifiers = {
+	remove_modifier = financial_cycle_phase_panic
+	remove_modifier = financial_cycle_phase_downturn
+	remove_modifier = financial_cycle_phase_stagnation
+	remove_modifier = financial_cycle_phase_expansion
+	remove_modifier = financial_cycle_phase_boom
+	remove_modifier = financial_cycle_phase_frenzy
+}

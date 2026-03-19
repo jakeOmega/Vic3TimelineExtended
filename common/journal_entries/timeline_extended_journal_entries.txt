@@ -190,67 +190,9 @@ je_state_collapse = {
                     is_decaying = yes
                 }
                 every_scope_state = {
-                    if = {
-                        limit = {
-                            has_building = building_barrack
-                        }
-                        remove_building = building_barrack
-                    }
-                    if = {
-                        limit = {
-                            has_building = building_naval_base
-                        }
-                        remove_building = building_naval_base
-                    }
-                    if = {
-                        limit = {
-                            has_building = building_port
-                        }
-                        remove_building = building_port
-                    }
-                    if = {
-                        limit = {
-                            has_building = building_railway
-                        }
-                        remove_building = building_railway
-                    }
-                    if = {
-                        limit = {
-                            has_building = building_university
-                        }
-                        remove_building = building_university
-                    }
-                    if = {
-                        limit = {
-                            has_building = building_government_administration
-                        }
-                        remove_building = building_government_administration
-                    }
+                    state_collapse_remove_infrastructure = yes
                 }
-                activate_law = law_type:law_no_schools
-                activate_law = law_type:law_no_health_system
-                activate_law = law_type:law_no_police
-                activate_law = law_type:law_no_social_security
-                activate_law = law_type:law_no_workers_rights
-                activate_law = law_type:law_no_colonial_affairs
-                activate_law = law_type:law_no_home_affairs
-                activate_law = law_type:law_no_migration_controls
-                activate_law = law_type:law_no_national_bank
-                activate_law = law_type:law_no_ministry_of_commerce
-                activate_law = law_type:law_no_ministry_of_consumer_protection
-                activate_law = law_type:law_no_ministry_of_culture
-                activate_law = law_type:law_no_ministry_of_foreign_affairs
-                activate_law = law_type:law_no_ministry_of_intelligence_and_security
-                activate_law = law_type:law_no_ministry_of_international_aid
-                activate_law = law_type:law_no_ministry_of_labor
-                activate_law = law_type:law_no_ministry_of_propaganda
-                activate_law = law_type:law_no_ministry_of_refugee_affairs
-                activate_law = law_type:law_no_ministry_of_religion
-                activate_law = law_type:law_no_ministry_of_science
-                activate_law = law_type:law_no_ministry_of_the_environment
-                activate_law = law_type:law_no_ministry_of_thought_control
-                activate_law = law_type:law_no_ministry_of_urban_planning
-                activate_law = law_type:law_no_ministry_of_war
+                reset_all_institutions_and_ministries = yes
             }
         }
 	}
@@ -268,15 +210,7 @@ je_create_new_religion = {
     group = je_group_internal_affairs
 
     is_shown_when_inactive = {
-        AND = {
-            NOT = { country_has_state_religion = rel:custom_religion_christian }
-            NOT = { country_has_state_religion = rel:custom_religion_muslim }
-            NOT = { country_has_state_religion = rel:custom_religion_jewish }
-            NOT = { country_has_state_religion = rel:custom_religion_eastern }
-            NOT = { country_has_state_religion = rel:custom_religion_animist }
-            NOT = { country_has_state_religion = rel:custom_religion_buddhist }
-            NOT = { country_has_state_religion = rel:custom_religion_custom }
-        }
+        NOT = { country_has_any_custom_religion = yes }
         has_game_rule = custom_religions_allowed
     }
 
@@ -450,15 +384,7 @@ je_create_new_religion = {
     }
 
     complete = {
-        OR = {
-            country_has_state_religion = rel:custom_religion_christian
-            country_has_state_religion = rel:custom_religion_muslim
-            country_has_state_religion = rel:custom_religion_jewish
-            country_has_state_religion = rel:custom_religion_eastern
-            country_has_state_religion = rel:custom_religion_animist
-            country_has_state_religion = rel:custom_religion_buddhist
-            country_has_state_religion = rel:custom_religion_custom
-        }
+        country_has_any_custom_religion = yes
     }
 
     on_weekly_pulse = {

@@ -61,14 +61,7 @@ un_events.1 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
 	# Option B: Observe but don't join yet
@@ -103,14 +96,7 @@ un_events.1 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 }
 
@@ -253,14 +239,7 @@ un_events.2 = {
 			}
 		}
 		change_variable = { name = un_authority add = -2 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -324,23 +303,9 @@ un_events.3 = {
 		}
 		change_variable = { name = un_authority add = 5 }
 		# Progressives love it
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# But it may radicalize traditionalists
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Sign with reservations
@@ -381,14 +346,7 @@ un_events.3 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -453,14 +411,7 @@ un_events.4 = {
 		}
 		change_variable = { name = un_authority add = 5 }
 		change_relations = { country = scope:peacekeeping_target value = 20 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Military costs
 		add_radicals = {
 			value = small_radicals
@@ -560,14 +511,7 @@ un_events.5 = {
 		}
 		change_variable = { name = un_authority add = 5 }
 		change_relations = { country = scope:sanctioned_country value = -20 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 
 	# Option B: Partial compliance - token effort
@@ -602,14 +546,7 @@ un_events.5 = {
 		}
 		change_variable = { name = un_authority add = -5 }
 		change_relations = { country = scope:sanctioned_country value = 10 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 }
 
@@ -686,14 +623,7 @@ un_events.6 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 5 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		# Costs prestige - giving up exclusive power
 		add_radicals = {
 			value = very_small_radicals
@@ -802,22 +732,8 @@ un_events.7 = {
 		}
 		change_variable = { name = un_authority add = 5 }
 		change_relations = { country = scope:crisis_country value = 30 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Notify the crisis country of incoming aid
 		save_scope_as = aid_donor
 		scope:crisis_country = {
@@ -864,14 +780,7 @@ un_events.7 = {
 			value = very_small_radicals
 			strata = upper
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -934,14 +843,7 @@ un_events.8 = {
 			value = small_radicals
 			strata = upper
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 
 	# Option B: Contest the jurisdiction
@@ -978,14 +880,7 @@ un_events.8 = {
 			value = small_radicals
 			strata = upper
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 }
 
@@ -1037,14 +932,7 @@ un_events.9 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 3 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
 	# Option B: Contribute nominally
@@ -1139,14 +1027,7 @@ un_events.10 = {
 			value = very_small_radicals
 			strata = upper
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
 	# Option B: Propose incremental fixes
@@ -1178,14 +1059,7 @@ un_events.10 = {
 			value = small_radicals
 			strata = upper
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 }
 
@@ -1266,14 +1140,7 @@ un_events.11 = {
 		}
 		change_variable = { name = un_authority add = -3 }
 		change_relations = { country = scope:veto_power value = -15 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Accept the veto as institutional procedure
@@ -1375,22 +1242,8 @@ un_events.12 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 5 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Defend development programs in overseas territories
@@ -1409,14 +1262,7 @@ un_events.12 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = -3 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
 	# Option C: Call for a gradual, orderly transition
@@ -1526,14 +1372,7 @@ un_events.13 = {
 			value = small_radicals
 			strata = upper
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Call for peaceful coexistence despite differences
@@ -1553,14 +1392,7 @@ un_events.13 = {
 		}
 		change_variable = { name = un_authority add = 3 }
 		change_relations = { country = scope:ideological_rival value = 10 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
 	# Option C: Walk out in dramatic protest
@@ -1579,14 +1411,7 @@ un_events.13 = {
 			value = small_radicals
 			strata = upper
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -1646,22 +1471,8 @@ un_events.14 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 5 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Sign with reservations on existing arsenals
@@ -1697,14 +1508,7 @@ un_events.14 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = -5 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 }
 
@@ -1777,14 +1581,7 @@ un_events.15 = {
 		}
 		change_variable = { name = un_authority add = 3 }
 		change_relations = { country = scope:trade_rival value = 5 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Negotiate a bilateral deal outside the UN
@@ -1834,14 +1631,7 @@ un_events.15 = {
 				is_decaying = yes
 			}
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -1902,22 +1692,8 @@ un_events.16 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 5 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Cooperate selectively - share what doesn't hurt us
@@ -2008,22 +1784,8 @@ un_events.17 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 5 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 
 	# Option B: Pledge voluntary targets - no binding commitments
@@ -2051,14 +1813,7 @@ un_events.17 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = -5 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 }
 
@@ -2137,14 +1892,7 @@ un_events.18 = {
 		}
 		change_variable = { name = un_authority add = 5 }
 		change_relations = { country = scope:refugee_source value = 20 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = {
 			value = small_radicals
 			strata = lower
@@ -2187,14 +1935,7 @@ un_events.18 = {
 			value = small_radicals
 			strata = lower
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_rural_folk }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -2255,14 +1996,7 @@ un_events.19 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 5 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
 	# Option B: Limited contribution - observe but don't lead
@@ -2290,14 +2024,7 @@ un_events.19 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = -3 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -2393,14 +2120,7 @@ un_events.20 = {
 		}
 		change_variable = { name = un_authority add = 3 }
 		change_relations = { country = scope:walkout_leader value = -15 }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Call for dialogue and reconciliation
@@ -2439,14 +2159,7 @@ un_events.20 = {
 			value = small_radicals
 			strata = upper
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -2571,14 +2284,7 @@ un_events.102 = {
 			value = very_small_radicals
 			strata = lower
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Resent the intervention - this is an insult to our sovereignty
@@ -2605,14 +2311,7 @@ un_events.102 = {
 			value = small_radicals
 			strata = upper
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 }
 

@@ -41,11 +41,11 @@ social_tensions_events.1 = {
 		}
 		# Strong intelligence ministry (level 5) prevents most attacks
 		NOT = {
-			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 5 }
+			has_intelligence_ministry_5 = yes
 		}
 		# More likely in countries with political turmoil
 		OR = {
-			radical_fraction >= 0.1
+			radical_fraction = { value >= 0.1 }
 			is_at_war = yes
 			any_political_movement = { political_movement_radicalism >= 25 }
 		}
@@ -105,7 +105,7 @@ social_tensions_events.1 = {
 	option = { # Intelligence-led preemption - best outcome, requires strong institutions
 		name = social_tensions_events.1.d
 		trigger = {
-			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
+			has_intelligence_ministry_3 = yes
 		}
 		highlighted_option = yes
 		custom_tooltip = social_tensions_intel_ministry_3_tt
@@ -146,7 +146,7 @@ social_tensions_events.2 = {
 		}
 		# Strong intelligence ministry (level 5) prevents foreign terror cells
 		NOT = {
-			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 5 }
+			has_intelligence_ministry_5 = yes
 		}
 	}
 
@@ -453,10 +453,7 @@ social_tensions_events.5 = {
 		add_modifier = { name = police_defended_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = large_radicals strata = lower }
 		add_loyalists = { value = small_radicals pop_type = officers }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_militarized_police } add = 5 }
@@ -489,10 +486,7 @@ social_tensions_events.5 = {
 		add_modifier = { name = police_accountability_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals pop_type = officers }
 		add_loyalists = { value = medium_radicals strata = lower }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_rehabilitation_focused_criminal_justice } add = 5 }
@@ -523,7 +517,7 @@ social_tensions_events.6 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		radical_fraction >= 0.15
+		radical_fraction = { value >= 0.15 }
 		NOR = {
 			has_modifier = riot_curfew_modifier
 			has_modifier = riot_concessions_modifier
@@ -594,10 +588,7 @@ social_tensions_events.6 = {
 		custom_tooltip = social_tensions_civil_rights_tech_tt
 		add_modifier = { name = riot_commission_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_rehabilitation_focused_criminal_justice } add = 5 }
@@ -674,10 +665,7 @@ social_tensions_events.7 = {
 		add_modifier = { name = war_crime_tribunal_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = officers }
 		add_loyalists = { value = small_radicals strata = lower }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_war_crimes_forbidden } add = 5 }
@@ -699,10 +687,7 @@ social_tensions_events.7 = {
 		add_modifier = { name = war_crime_reform_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals pop_type = officers }
 		add_loyalists = { value = medium_radicals strata = lower }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_humanitarian_regulations } add = 5 }
@@ -739,10 +724,7 @@ social_tensions_events.8 = {
 		default_option = yes
 		add_modifier = { name = enemy_war_crime_rage_modifier days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = medium_radicals }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_total_war } add = 5 }
@@ -893,10 +875,7 @@ social_tensions_events.10 = {
 		add_modifier = { name = big_money_election_modifier days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = medium_radicals strata = upper }
 		add_radicals = { value = small_radicals strata = lower }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_laissez_faire } add = 3 }
@@ -907,10 +886,7 @@ social_tensions_events.10 = {
 		name = social_tensions_events.10.b
 		add_modifier = { name = grassroots_campaign_modifier days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_donation_limits } add = 5 }
@@ -990,10 +966,7 @@ social_tensions_events.11 = {
 		add_modifier = { name = immigration_restrict_modifier days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals pop_type = aristocrats }
 		add_radicals = { value = small_radicals strata = lower }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_national_supremacy } add = 5 }
@@ -1075,10 +1048,7 @@ social_tensions_events.12 = {
 		add_modifier = { name = nativist_appeased_modifier days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals pop_type = aristocrats }
 		add_radicals = { value = medium_radicals strata = lower }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_rural_folk }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_ethnostate } add = 5 }
@@ -1091,10 +1061,7 @@ social_tensions_events.12 = {
 		add_modifier = { name = nativist_countered_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = aristocrats }
 		add_loyalists = { value = small_radicals strata = lower }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_multicultural } add = 5 }
@@ -1170,10 +1137,7 @@ social_tensions_events.13 = {
 		name = social_tensions_events.13.a
 		default_option = yes
 		add_modifier = { name = revival_embraced_modifier days = long_modifier_time is_decaying = yes }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_positive_modifier days = long_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = long_modifier_time }
 		add_loyalists = { value = medium_radicals pop_type = clergymen }
 		add_radicals = { value = very_small_radicals pop_type = academics }
 		ai_chance = {
@@ -1187,10 +1151,7 @@ social_tensions_events.13 = {
 		add_modifier = { name = revival_secular_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = clergymen }
 		add_loyalists = { value = small_radicals pop_type = academics }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_total_separation } add = 5 }
@@ -1249,10 +1210,7 @@ social_tensions_events.14 = {
 	option = { # Side with tradition
 		name = social_tensions_events.14.a
 		add_modifier = { name = faith_tradition_modifier days = normal_modifier_time is_decaying = yes }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals pop_type = clergymen }
 		add_radicals = { value = small_radicals pop_type = academics }
 		ai_chance = {
@@ -1267,10 +1225,7 @@ social_tensions_events.14 = {
 		add_modifier = { name = faith_modernize_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals pop_type = clergymen }
 		add_loyalists = { value = small_radicals pop_type = academics }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_total_separation } add = 5 }
@@ -1348,10 +1303,7 @@ social_tensions_events.15 = {
 		add_modifier = { name = globalization_protect_modifier days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		add_radicals = { value = small_radicals strata = upper }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_protectionism } add = 5 }
@@ -1417,10 +1369,7 @@ social_tensions_events.16 = {
 		add_modifier = { name = cultural_openness_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = clergymen }
 		add_radicals = { value = small_radicals pop_type = aristocrats }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_multicultural } add = 5 }
@@ -1432,14 +1381,8 @@ social_tensions_events.16 = {
 		add_modifier = { name = cultural_protection_modifier days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals pop_type = clergymen }
 		add_loyalists = { value = small_radicals pop_type = aristocrats }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_rural_folk }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_national_supremacy } add = 5 }

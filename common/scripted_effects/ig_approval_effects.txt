@@ -1,0 +1,23 @@
+﻿# ======================================================================
+#  IG Approval Effects
+#  Reusable scripted effect for applying IG approval modifiers.
+# ======================================================================
+
+# Apply an IG approval modifier to a specific interest group.
+# Parameters:
+#   $IG$       - Interest group key (e.g. ig_armed_forces, ig_intelligentsia)
+#   $MODIFIER$ - Modifier name (ig_approval_positive_modifier, ig_approval_negative_modifier, ig_approval_very_negative_modifier)
+#   $DAYS$     - Duration script value (short_modifier_time, normal_modifier_time, long_modifier_time)
+#
+# Usage:
+#   ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+ig_approval_effect = {
+	every_interest_group = {
+		limit = { is_interest_group_type = $IG$ }
+		add_modifier = {
+			name = $MODIFIER$
+			days = $DAYS$
+			is_decaying = yes
+		}
+	}
+}

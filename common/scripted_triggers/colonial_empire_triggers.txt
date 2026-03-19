@@ -96,20 +96,13 @@ is_overseas_colonial_state = {
 	NOT = { is_homeland_of_country_cultures = owner }
 	# Meaningful population - filters tiny outposts (Falklands, Wallis & Futuna, etc.)
 	state_population >= 100000
-	# Has non-integrated population - proxy for significant indigenous population
-	# and majority is NOT the owner's primary culture
-	# Places where everyone has been fully assimilated don't count.
+	# Has a non-primary culture with low acceptance (proxy for significant indigenous population)
 	any_scope_culture = {
-		PREV = {
-            culture_percent_state = { target = PREV value > 0.10 }        # >10% of state
-            state_average_culture_pop_acceptance = { target = PREV value < 0.6 }  # low acceptance
-        }
+		NOT = { is_primary_culture_of = owner }
+		prev = {
+			state_average_culture_pop_acceptance = { culture = prev value < 0.6 }
+		}
 	}
-    NOT = {
-        any_primary_culture = {
-            culture_percent_state = { target = PREV value > 0.5 }
-        }
-    }
 	# On a different continent/landmass from the capital
 	is_overseas_from_capital = yes
 }
