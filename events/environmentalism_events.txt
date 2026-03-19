@@ -329,6 +329,7 @@ environmentalism_events.5 = {
 		trigger = {
 			institution_investment_level = { institution = institution_ministry_of_the_environment value >= 3 }
 		}
+		highlighted_option = yes
 		custom_tooltip = environmentalism_events_ministry_environment_3_tt
 		ai_chance = { base = 8 }
 		# Ministry-coordinated drought response - faster, less radical
@@ -654,6 +655,7 @@ environmentalism_events.9 = {
 		trigger = {
 			institution_investment_level = { institution = institution_ministry_of_the_environment value >= 3 }
 		}
+		highlighted_option = yes
 		custom_tooltip = environmentalism_events_ministry_environment_3_tt
 		ai_chance = { base = 8 }
 		# Engineered flood defense - ministry coordinates large-scale infrastructure
@@ -738,6 +740,7 @@ environmentalism_events.10 = {
 		trigger = {
 			institution_investment_level = { institution = institution_ministry_of_the_environment value >= 3 }
 		}
+		highlighted_option = yes
 		custom_tooltip = environmentalism_events_ministry_environment_3_tt
 		ai_chance = { base = 8 }
 		# Ministry-coordinated desalination and water recycling
@@ -1055,6 +1058,7 @@ environmentalism_events.14 = {
 		trigger = {
 			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
 		}
+		highlighted_option = yes
 		custom_tooltip = environmentalism_events_ministry_consumer_3_tt
 		ai_chance = { base = 8 }
 		# Mobilize public health infrastructure - rapid containment

@@ -91,6 +91,7 @@ social_tensions_events.1 = {
 				has_technology_researched = automated_surveillance
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_surveillance_tech_tt
 		add_modifier = { name = terror_surveillance_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = very_small_radicals strata = lower }
@@ -106,6 +107,7 @@ social_tensions_events.1 = {
 		trigger = {
 			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_intel_ministry_3_tt
 		add_modifier = { name = terror_preempted_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals }
@@ -177,6 +179,7 @@ social_tensions_events.2 = {
 	option = { # Pursue quiet intelligence cooperation
 		name = social_tensions_events.2.b
 		trigger = { has_law = law_type:law_ministry_of_intelligence_and_security }
+		highlighted_option = yes
 		custom_tooltip = social_tensions_intel_law_tt
 		add_modifier = { name = foreign_terror_diplomacy_modifier days = long_modifier_time is_decaying = yes }
 		change_relations = { country = scope:terror_linked_country value = 10 }
@@ -275,6 +278,7 @@ social_tensions_events.3 = {
 				has_technology_researched = social_media
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_media_tech_tt
 		add_modifier = { name = corporate_lobbying_exposed_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals strata = upper }
@@ -342,6 +346,7 @@ social_tensions_events.4 = {
 				has_law = law_type:law_interventionism
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_antitrust_law_tt
 		add_modifier = { name = monopoly_broken_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals strata = upper }
@@ -360,6 +365,7 @@ social_tensions_events.4 = {
 				has_law = law_type:law_dirigisme
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_command_economy_tt
 		add_modifier = { name = monopoly_nationalized_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = large_radicals strata = upper }
@@ -478,6 +484,7 @@ social_tensions_events.5 = {
 				has_technology_researched = social_justice_movements
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_civil_rights_tech_tt
 		add_modifier = { name = police_accountability_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals pop_type = officers }
@@ -583,6 +590,7 @@ social_tensions_events.6 = {
 				has_technology_researched = behaviorism
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_civil_rights_tech_tt
 		add_modifier = { name = riot_commission_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
@@ -686,6 +694,7 @@ social_tensions_events.7 = {
 				has_law = law_type:law_limited_war
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_war_law_tt
 		add_modifier = { name = war_crime_reform_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals pop_type = officers }
@@ -832,6 +841,7 @@ social_tensions_events.9 = {
 				has_technology_researched = social_media
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_media_tech_tt
 		add_modifier = { name = campaign_scandal_reform_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = medium_radicals strata = lower }
@@ -999,6 +1009,7 @@ social_tensions_events.11 = {
 				has_technology_researched = social_justice_movements
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_civil_rights_tech_tt
 		add_modifier = { name = immigration_integrate_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = medium_radicals strata = lower }
@@ -1098,6 +1109,7 @@ social_tensions_events.12 = {
 				has_technology_researched = television_broadcasting
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_broadcast_tech_tt
 		add_modifier = { name = nativist_dialogue_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals }
@@ -1354,6 +1366,7 @@ social_tensions_events.15 = {
 				has_law = law_type:law_interventionism
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_interventionist_tt
 		add_modifier = { name = globalization_retrain_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
@@ -1441,6 +1454,7 @@ social_tensions_events.16 = {
 				has_technology_researched = digital_entertainment
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = social_tensions_entertainment_tech_tt
 		add_modifier = { name = cultural_synthesis_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals }

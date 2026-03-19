@@ -42,6 +42,7 @@ nuclear_weapon_events.1 = {
 				var:nuclear_weapon_stockpile > 0
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = nuclear_retaliation_single_tt
 
 		ai_chance = {
@@ -64,6 +65,7 @@ nuclear_weapon_events.1 = {
 				var:nuclear_weapon_stockpile > 2
 			}
 		}
+		highlighted_option = yes
 		custom_tooltip = nuclear_retaliation_full_tt
 
 		ai_chance = {

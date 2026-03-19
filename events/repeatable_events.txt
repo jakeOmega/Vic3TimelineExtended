@@ -87,6 +87,7 @@ repeatable_events.10 = {
     option = { # Microtarget
         name = repeatable_events.10.c
         trigger = { OR = { has_technology_researched = social_media has_technology_researched = virtual_reality has_technology_researched = neural_lace } }
+        highlighted_option = yes
         custom_tooltip = re_debate_microtarget_tt
         add_modifier = { name = re_debate_microtargeting days = short_modifier_time }
         if = { limit = { exists = scope:re_debate_government_party } scope:re_debate_government_party = { add_momentum = momentum_medium } }
@@ -139,6 +140,7 @@ repeatable_events.20 = {
         trigger = {
             institution_investment_level = { institution = institution_ministry_of_commerce value >= 3 }
         }
+        highlighted_option = yes
         custom_tooltip = re_supply_ministry_tt
         add_modifier = { name = re_supply_ministry_coordination days = long_modifier_time }
         ai_chance = { base = 8 }
@@ -191,6 +193,7 @@ repeatable_events.30 = {
     option = { # Retraining
         name = repeatable_events.30.b
         trigger = { OR = { has_law = law_type:law_worker_protections has_law = law_type:law_regulatory_bodies } }
+        highlighted_option = yes
         custom_tooltip = re_automation_retraining_tt
         add_loyalists = { value = small_radicals strata = lower }
         add_modifier = { name = re_automation_retraining days = long_modifier_time }
@@ -199,6 +202,7 @@ repeatable_events.30 = {
     option = { # Co-Pilot
         name = repeatable_events.30.c
         trigger = { has_law = law_type:law_cooperative_ownership }
+        highlighted_option = yes
         custom_tooltip = re_automation_copilot_tt
         add_modifier = { name = re_automation_copilot days = long_modifier_time }
     }
@@ -259,6 +263,7 @@ repeatable_events.40 = {
                 has_law = law_type:law_open_government
             }
         }
+        highlighted_option = yes
         custom_tooltip = re_media_moderation_tt
         add_modifier = { name = re_media_moderation days = normal_modifier_time }
     }
@@ -267,6 +272,7 @@ repeatable_events.40 = {
         trigger = {
             institution_investment_level = { institution = institution_ministry_of_propaganda value >= 3 }
         }
+        highlighted_option = yes
         custom_tooltip = re_media_state_control_tt
         # State media control - suppress the panic, at a cost to freedom
         add_modifier = { name = re_media_state_control days = normal_modifier_time }

@@ -96,6 +96,7 @@ minor_events_timelineextended.2 = {
         trigger = {
             produced_authority > 500
         }
+        highlighted_option = yes
         name = minor_events_timelineextended.2.c
         custom_tooltip = minor_events_force_law_medium_tt
 
@@ -123,6 +124,7 @@ minor_events_timelineextended.2 = {
         trigger = {
             produced_authority > 750
         }
+        highlighted_option = yes
         name = minor_events_timelineextended.2.e
         custom_tooltip = minor_events_force_law_large_tt
 
