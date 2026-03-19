@@ -92,6 +92,142 @@ violence_against_minorities = {
 	color = neutral
 }
 
+# Decolonization bilateral notifications
+colonial_negotiations_started_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = neutral
+}
+
+colonial_crackdown_begun_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+colonial_independence_granted_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+colonial_neocolonial_terms_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+colonial_ceasefire_granted_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+colonial_reparations_paid_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+colonial_reparations_refused_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+former_colony_ties_welcomed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+former_colony_ties_declined_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = neutral
+}
+
+gp_condemnation_reforms_announced_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+gp_condemnation_rejected_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+gp_support_accepted_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+gp_support_declined_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = neutral
+}
+
+# International Relations bilateral notifications
+arms_race_pressure = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = bad
+}
+
+counter_propaganda_backlash = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = bad
+}
+
+espionage_agent_quietly_exposed = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = bad
+}
+
+# UN bilateral notifications
+un_humanitarian_token_received = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+un_trade_deal_received = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+un_tariff_retaliation_received = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
 headlines_tech_ICBMs = {
     type = country
     texture = "gfx/interface/icons/notification_icons/news_tech.dds"

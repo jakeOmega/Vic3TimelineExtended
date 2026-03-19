@@ -1,15 +1,15 @@
 ﻿namespace = world_war_events
 
 # ============================================================================
-# LEADUP EVENTS (1-9) â€” Fired during rising tensions before war breaks out
+# LEADUP EVENTS (1-9) - Fired during rising tensions before war breaks out
 # ============================================================================
 
-# Event 1: Ideological Confrontation â€” rival ideological bloc demands concessions
+# Event 1: Ideological Confrontation - rival ideological bloc demands concessions
 world_war_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "europenorthamerica_political_extremism" }
+	event_image = { texture = "gfx/event_pictures/fascist_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
 
@@ -41,7 +41,7 @@ world_war_events.1 = {
 		}
 	}
 
-	# Option A: Stand firm â€” refuse concessions, escalate
+	# Option A: Stand firm - refuse concessions, escalate
 	option = {
 		name = world_war_events.1.a
 		default_option = yes
@@ -60,6 +60,13 @@ world_war_events.1 = {
 			country = scope:ideological_rival
 			value = -30
 		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:ideological_rival
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_relations_decreased
+		}
 		add_loyalists = {
 			value = medium_radicals
 			pop_type = soldiers
@@ -74,7 +81,7 @@ world_war_events.1 = {
 		}
 	}
 
-	# Option B: Negotiate â€” try diplomacy, less escalation
+	# Option B: Negotiate - try diplomacy, less escalation
 	option = {
 		name = world_war_events.1.b
 		ai_chance = {
@@ -92,6 +99,13 @@ world_war_events.1 = {
 			country = scope:ideological_rival
 			value = 10
 		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:ideological_rival
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_increased
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
@@ -106,7 +120,7 @@ world_war_events.1 = {
 		}
 	}
 
-	# Option C: Issue an ultimatum â€” high risk, high reward
+	# Option C: Issue an ultimatum - high risk, high reward
 	option = {
 		name = world_war_events.1.c
 		ai_chance = {
@@ -123,6 +137,13 @@ world_war_events.1 = {
 			country = scope:ideological_rival
 			value = -50
 		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:ideological_rival
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_relations_decreased
+		}
 		change_tension = {
 			country = scope:ideological_rival
 			value = 30
@@ -138,12 +159,12 @@ world_war_events.1 = {
 	}
 }
 
-# Event 2: Border Incident â€” military skirmish on the frontier
+# Event 2: Border Incident - military skirmish on the frontier
 world_war_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "europenorthamerica_before_the_battle" }
+	event_image = { texture = "gfx/event_pictures/battlefield.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -175,7 +196,7 @@ world_war_events.2 = {
 		}
 	}
 
-	# Option A: Demand an apology â€” escalate
+	# Option A: Demand an apology - escalate
 	option = {
 		name = world_war_events.2.a
 		default_option = yes
@@ -189,6 +210,13 @@ world_war_events.2 = {
 		change_relations = {
 			country = scope:border_rival
 			value = -20
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:border_rival
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_relations_decreased
 		}
 		change_tension = {
 			country = scope:border_rival
@@ -204,7 +232,7 @@ world_war_events.2 = {
 		}
 	}
 
-	# Option B: Downplay the incident â€” de-escalate
+	# Option B: Downplay the incident - de-escalate
 	option = {
 		name = world_war_events.2.b
 		ai_chance = {
@@ -217,6 +245,13 @@ world_war_events.2 = {
 		change_relations = {
 			country = scope:border_rival
 			value = 5
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:border_rival
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_increased
 		}
 		add_radicals = {
 			value = small_radicals
@@ -232,7 +267,7 @@ world_war_events.2 = {
 		}
 	}
 
-	# Option C: Mobilize troops to the border â€” war footing
+	# Option C: Mobilize troops to the border - war footing
 	option = {
 		name = world_war_events.2.c
 		ai_chance = {
@@ -248,6 +283,13 @@ world_war_events.2 = {
 			country = scope:border_rival
 			value = -40
 		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:border_rival
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_relations_decreased
+		}
 		change_tension = {
 			country = scope:border_rival
 			value = 40
@@ -260,12 +302,12 @@ world_war_events.2 = {
 	}
 }
 
-# Event 3: Diplomatic Crisis â€” an allied minor power is threatened
+# Event 3: Diplomatic Crisis - an allied minor power is threatened
 world_war_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_politicians_arguing" }
+	event_image = { texture = "gfx/event_pictures/war_debate.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
 
@@ -298,7 +340,7 @@ world_war_events.3 = {
 		}
 	}
 
-	# Option A: Guarantee the threatened nation â€” draw a line
+	# Option A: Guarantee the threatened nation - draw a line
 	option = {
 		name = world_war_events.3.a
 		default_option = yes
@@ -312,6 +354,13 @@ world_war_events.3 = {
 		change_relations = {
 			country = scope:crisis_aggressor
 			value = -30
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:crisis_aggressor
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_relations_decreased
 		}
 		change_tension = {
 			country = scope:crisis_aggressor
@@ -331,7 +380,7 @@ world_war_events.3 = {
 		}
 	}
 
-	# Option B: Abandon them â€” "peace in our time"
+	# Option B: Abandon them - "peace in our time"
 	option = {
 		name = world_war_events.3.b
 		ai_chance = {
@@ -344,6 +393,13 @@ world_war_events.3 = {
 		change_relations = {
 			country = scope:crisis_aggressor
 			value = 10
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:crisis_aggressor
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_increased
 		}
 		add_radicals = {
 			value = medium_radicals
@@ -359,7 +415,7 @@ world_war_events.3 = {
 		}
 	}
 
-	# Option C: Form a defensive alliance â€” commit fully
+	# Option C: Form a defensive alliance - commit fully
 	option = {
 		name = world_war_events.3.c
 		ai_chance = {
@@ -372,6 +428,13 @@ world_war_events.3 = {
 		change_relations = {
 			country = scope:crisis_aggressor
 			value = -50
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:crisis_aggressor
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_relations_decreased
 		}
 		change_tension = {
 			country = scope:crisis_aggressor
@@ -389,7 +452,7 @@ world_war_events.3 = {
 }
 
 # ============================================================================
-# WAR OUTBREAK EVENT (5) â€” Triggers the actual world war
+# WAR OUTBREAK EVENT (5) - Triggers the actual world war
 # Fired from the on_action when tension reaches critical
 # ============================================================================
 
@@ -397,7 +460,7 @@ world_war_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "europenorthamerica_before_the_battle" }
+	event_image = { texture = "gfx/event_pictures/battlefield.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -493,15 +556,15 @@ world_war_events.5 = {
 }
 
 # ============================================================================
-# ACTIVE WAR EVENTS (10-19) â€” Fired during the war
+# ACTIVE WAR EVENTS (10-19) - Fired during the war
 # ============================================================================
 
-# Event 10: Home Front Rally â€” patriotic surge
+# Event 10: Home Front Rally - patriotic surge
 world_war_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/wartime_leader.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -567,12 +630,12 @@ world_war_events.10 = {
 	}
 }
 
-# Event 11: Strategic Bombing â€” enemy bombs our cities or we bomb theirs
+# Event 11: Strategic Bombing - enemy bombs our cities or we bomb theirs
 world_war_events.11 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_devastation" }
+	event_image = { texture = "gfx/event_pictures/war_devastation.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -592,7 +655,7 @@ world_war_events.11 = {
 
 	immediate = { }
 
-	# Option A: Focus on air defense â€” protect civilians
+	# Option A: Focus on air defense - protect civilians
 	option = {
 		name = world_war_events.11.a
 		default_option = yes
@@ -614,7 +677,7 @@ world_war_events.11 = {
 		}
 	}
 
-	# Option B: Retaliate with strategic bombing â€” escalation
+	# Option B: Retaliate with strategic bombing - escalation
 	option = {
 		name = world_war_events.11.b
 		ai_chance = {
@@ -661,12 +724,12 @@ world_war_events.11 = {
 	}
 }
 
-# Event 12: Resistance Movement â€” occupied territories fight back
+# Event 12: Resistance Movement - occupied territories fight back
 world_war_events.12 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "africa_soldiers_breaking_protest" }
+	event_image = { texture = "gfx/event_pictures/military_occupation.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -687,7 +750,7 @@ world_war_events.12 = {
 
 	immediate = { }
 
-	# Option A: Support the resistance â€” boost morale
+	# Option A: Support the resistance - boost morale
 	option = {
 		name = world_war_events.12.a
 		default_option = yes
@@ -712,7 +775,7 @@ world_war_events.12 = {
 		}
 	}
 
-	# Option B: Crack down ruthlessly â€” secure but brutal
+	# Option B: Crack down ruthlessly - secure but brutal
 	option = {
 		name = world_war_events.12.b
 		ai_chance = {
@@ -742,14 +805,14 @@ world_war_events.12 = {
 }
 
 # ============================================================================
-# LATE ENTRY EVENT (20) â€” Opportunity to join the war
+# LATE ENTRY EVENT (20) - Opportunity to join the war
 # ============================================================================
 
 world_war_events.20 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_military_parade" }
+	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -793,7 +856,7 @@ world_war_events.20 = {
 		}
 	}
 
-	# Option A: Join the war against the aggressors â€” full commitment
+	# Option A: Join the war against the aggressors - full commitment
 	option = {
 		name = world_war_events.20.a
 		default_option = yes
@@ -855,7 +918,7 @@ world_war_events.20 = {
 		}
 	}
 
-	# Option B: Provide lend-lease support only â€” stay out of direct combat
+	# Option B: Provide lend-lease support only - stay out of direct combat
 	option = {
 		name = world_war_events.20.b
 		ai_chance = {
@@ -885,7 +948,7 @@ world_war_events.20 = {
 		}
 	}
 
-	# Option C: Stay neutral â€” preserve peace but lose influence
+	# Option C: Stay neutral - preserve peace but lose influence
 	option = {
 		name = world_war_events.20.c
 		ai_chance = {
@@ -916,14 +979,14 @@ world_war_events.20 = {
 }
 
 # ============================================================================
-# WAR WEARINESS EVENT (30) â€” the war drags on
+# WAR WEARINESS EVENT (30) - the war drags on
 # ============================================================================
 
 world_war_events.30 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "middleeast_battlefield_trenches" }
+	event_image = { texture = "gfx/event_pictures/battlefield.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -944,7 +1007,7 @@ world_war_events.30 = {
 
 	immediate = { }
 
-	# Option A: Redouble efforts â€” push through the exhaustion
+	# Option A: Redouble efforts - push through the exhaustion
 	option = {
 		name = world_war_events.30.a
 		default_option = yes
@@ -981,7 +1044,7 @@ world_war_events.30 = {
 		}
 	}
 
-	# Option B: Seek terms â€” try to end it diplomatically
+	# Option B: Seek terms - try to end it diplomatically
 	option = {
 		name = world_war_events.30.b
 		ai_chance = {
@@ -1025,12 +1088,12 @@ world_war_events.30 = {
 # PEACE CONFERENCE EVENTS (100-105)
 # ============================================================================
 
-# Event 100: Victory â€” the war is over, you won (or survived)
+# Event 100: Victory - the war is over, you won (or survived)
 world_war_events.100 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_signed_contract" }
+	event_image = { texture = "gfx/event_pictures/peace_treaty.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
 
@@ -1058,7 +1121,7 @@ world_war_events.100 = {
 		if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
 	}
 
-	# Option A: Impose a harsh peace â€” regime change, reparations
+	# Option A: Impose a harsh peace - regime change, reparations
 	option = {
 		name = world_war_events.100.a
 		default_option = yes
@@ -1098,7 +1161,7 @@ world_war_events.100 = {
 		}
 	}
 
-	# Option B: Seek a just peace â€” reconstruction and reconciliation
+	# Option B: Seek a just peace - reconstruction and reconciliation
 	option = {
 		name = world_war_events.100.b
 		ai_chance = {
@@ -1145,7 +1208,7 @@ world_war_events.100 = {
 		}
 	}
 
-	# Option C: Establish a new world order â€” create institutions
+	# Option C: Establish a new world order - create institutions
 	option = {
 		name = world_war_events.100.c
 		ai_chance = {
@@ -1171,12 +1234,12 @@ world_war_events.100 = {
 	}
 }
 
-# Event 101: Regime Change Imposed â€” defeated nation forced to change government
+# Event 101: Regime Change Imposed - defeated nation forced to change government
 world_war_events.101 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "votp_conspiring" }
+	event_image = { texture = "gfx/event_pictures/war_conspiracy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -1222,7 +1285,7 @@ world_war_events.101 = {
 		set_variable = ww_peace_concluded
 	}
 
-	# Option B: Resist â€” causes internal turmoil
+	# Option B: Resist - causes internal turmoil
 	option = {
 		name = world_war_events.101.b
 		ai_chance = { base = 2 }
@@ -1249,12 +1312,12 @@ world_war_events.101 = {
 	}
 }
 
-# Event 102: Reconstruction Aid â€” victors offer to help rebuild (from just peace)
+# Event 102: Reconstruction Aid - victors offer to help rebuild (from just peace)
 world_war_events.102 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "southamerica_factory_opening" }
+	event_image = { texture = "gfx/event_pictures/war_production.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1268,7 +1331,7 @@ world_war_events.102 = {
 
 	immediate = { }
 
-	# Option A: Accept reconstruction aid â€” rebuild faster but under their influence
+	# Option A: Accept reconstruction aid - rebuild faster but under their influence
 	option = {
 		name = world_war_events.102.a
 		default_option = yes
@@ -1296,7 +1359,7 @@ world_war_events.102 = {
 		set_variable = ww_peace_concluded
 	}
 
-	# Option B: Reject foreign aid â€” rebuild independently, slower but sovereign
+	# Option B: Reject foreign aid - rebuild independently, slower but sovereign
 	option = {
 		name = world_war_events.102.b
 		ai_chance = { base = 3 }
@@ -1323,12 +1386,12 @@ world_war_events.102 = {
 	}
 }
 
-# Event 103: War Crimes Tribunal â€” exposure of atrocities committed during the war
+# Event 103: War Crimes Tribunal - exposure of atrocities committed during the war
 world_war_events.103 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "middleeast_courtroom_upheaval" }
+	event_image = { texture = "gfx/event_pictures/war_tribunal.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -1349,7 +1412,7 @@ world_war_events.103 = {
 
 	immediate = { }
 
-	# Option A: Prosecute war criminals â€” establish precedent
+	# Option A: Prosecute war criminals - establish precedent
 	option = {
 		name = world_war_events.103.a
 		default_option = yes
@@ -1379,7 +1442,7 @@ world_war_events.103 = {
 		}
 	}
 
-	# Option B: Focus on moving forward â€” forgive but remember
+	# Option B: Focus on moving forward - forgive but remember
 	option = {
 		name = world_war_events.103.b
 		ai_chance = {
@@ -1399,7 +1462,7 @@ world_war_events.103 = {
 		}
 	}
 
-	# Option C: Suppress the evidence â€” our side committed crimes too
+	# Option C: Suppress the evidence - our side committed crimes too
 	option = {
 		name = world_war_events.103.c
 		ai_chance = {
@@ -1429,12 +1492,12 @@ world_war_events.103 = {
 	}
 }
 
-# Event 104: Post-War Order â€” reshaping the world after the conflict
+# Event 104: Post-War Order - reshaping the world after the conflict
 world_war_events.104 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_world_fair" }
+	event_image = { texture = "gfx/event_pictures/post_war_reconstruction.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
 
@@ -1453,7 +1516,7 @@ world_war_events.104 = {
 
 	immediate = { }
 
-	# Option A: Establish a sphere of influence â€” dominate the post-war order
+	# Option A: Establish a sphere of influence - dominate the post-war order
 	option = {
 		name = world_war_events.104.a
 		default_option = yes
@@ -1483,7 +1546,7 @@ world_war_events.104 = {
 		}
 	}
 
-	# Option B: Champion self-determination â€” support new nations
+	# Option B: Champion self-determination - support new nations
 	option = {
 		name = world_war_events.104.b
 		ai_chance = {
@@ -1504,7 +1567,7 @@ world_war_events.104 = {
 		}
 	}
 
-	# Option C: Focus inward â€” we've done enough
+	# Option C: Focus inward - we've done enough
 	option = {
 		name = world_war_events.104.c
 		ai_chance = {
@@ -1528,12 +1591,12 @@ world_war_events.104 = {
 	}
 }
 
-# Event 105: The New Rivalry â€” emerging superpowers eye each other
+# Event 105: The New Rivalry - emerging superpowers eye each other
 world_war_events.105 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_politicians_arguing" }
+	event_image = { texture = "gfx/event_pictures/war_debate.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
 
@@ -1568,7 +1631,7 @@ world_war_events.105 = {
 		}
 	}
 
-	# Option A: Prepare for the next conflict â€” cold war begins
+	# Option A: Prepare for the next conflict - cold war begins
 	option = {
 		name = world_war_events.105.a
 		default_option = yes
@@ -1586,7 +1649,7 @@ world_war_events.105 = {
 		remove_variable = ww_peace_concluded
 	}
 
-	# Option B: Seek coexistence â€” attempt peaceful relations
+	# Option B: Seek coexistence - attempt peaceful relations
 	option = {
 		name = world_war_events.105.b
 		ai_chance = {

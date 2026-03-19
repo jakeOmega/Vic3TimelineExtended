@@ -1,101 +1,101 @@
 ﻿l_english:
-  # Family 1 — Election Debate
+  # Family 1 - Election Debate
   repeatable_events.10.t:0 "The Debate of the Century"
-  repeatable_events.10.d_tv:0 "With the campaign entering its final weeks, party leaders agree to a nationally broadcast debate. Editors haggle over formats; candidates rehearse answers and smiles. The audience will be vast—and so will the stakes."
-  repeatable_events.10.d_vr:0 "Mixed-reality auditoriums stitch together living rooms and town squares into one stage. The spectacle promises unmatched access, yet filters, avatars, and deepfakes tug at the seams of what voters think they saw."
+  repeatable_events.10.d_tv:0 "With the campaign entering its final weeks, party leaders agree to a nationally broadcast debate. Editors haggle over formats; candidates rehearse answers and smiles. The audience will be vast-and so will the stakes."
+  repeatable_events.10.d_vr:0 "Mixed-reality auditoriums stitch together living rooms and town squares into a single stage. The spectacle promises unmatched access, but filters, avatars, and deepfakes make voters question what they actually saw."
   repeatable_events.10.d_neural:0 "A live neural town hall streams not just words but sentiment. Waves of approval and doubt ripple across the nation in real time, and campaign tacticians wonder where persuasion ends and manipulation begins."
-  repeatable_events.10.f:0 "Elections are mirrors as much as contests. We dress our ambitions, rehearse our virtues, and pray the camera loves us.\n\nBut a lens is never neutral. Every frame excludes as it reveals; every cut invents a story. The voters will remember what they feel more than what they hear—and the feeling is up for sale."
+  repeatable_events.10.f:0 "The candidate studied herself in the dressing-room mirror. 'How do I look?'\n\n'Confident,' her advisor said. 'Approachable. Electable.'\n\n'And honest?'\n\nA pause. 'Let's not overreach. Just remember: answer the question you wish they'd asked, not the one they did. Smile when the other fellow talks. Never look at the clock.'\n\nShe straightened her collar. 'What if they ask about the tariff numbers?'\n\n'Nobody remembers numbers. They remember how you made them feel.'"
 
   repeatable_events.10.a:0 "Hold an open debate"
   repeatable_events.10.b:0 "Stage-manage the broadcast"
   repeatable_events.10.c:0 "Run microtargeted ads"
 
-  # Family 4 — Supply Chain Snarl
+  # Family 4 - Supply Chain Snarl
   repeatable_events.20.t:0 "Supply Chain Snarl"
   repeatable_events.20.d:0 "A tangle of port closures, container shortages, and bad luck has jammed critical imports. Producers plead for inputs; retailers for stock; the public for patience. We can pay to push cargo through, starve some sectors to feed others, or pour concrete fast."
-  repeatable_events.20.f:0 "Globalization is a promise rubbed smooth by millions of hands: everything, everywhere, on time.\n\nThen a crane breaks, a storm hits, a contract fails, and the whole myth coughs salt and rust. A nation learns which goods are truly strategic when the shelves go bare."
+  repeatable_events.20.f:0 "'Where is my steel?' the construction foreman asked, for the third time that week.\n\nThe shipping clerk pointed at a map covered in red pins. 'Your steel is behind forty thousand containers of consumer electronics that are behind a broken crane that is behind a labor dispute that is behind a trade policy nobody remembers voting for.'\n\n'So when do I get it?'\n\n'When the world sorts itself out.' The clerk shrugged. 'I would not hold your breath.'"
 
   repeatable_events.20.a:0 "Subsidize emergency freight"
   repeatable_events.20.b:0 "Prioritize key inputs"
   repeatable_events.20.c:0 "Fast-track port upgrades"
   repeatable_events.20.dd:0 "Activate ministry logistics coordination"
 
-  # Family 5 — Automation Shock
+  # Family 5 - Automation Shock
   repeatable_events.30.t:0 "Automation Shock"
   repeatable_events.30.d_ai:0 "A new scheduling system eats overtime, errors, and egos. Managers eye the balance sheet; workers eye the exit. We can chase the gains, soften the blow, or try a different bargain entirely."
   repeatable_events.30.d_robotics:0 "Machines master the night shift. Output surges, but the rumble on the shop floor is not just from motors. Layoffs promise cheaper goods and dearer politics."
-  repeatable_events.30.f:0 "Every revolution invents a new kind of worker—and a new kind of redundancy.\n\nThe old craft is never quite dead; it lingers in the whine of the servomotor and the hush after the whistle. What we choose to protect says more about us than what we can now produce."
+  repeatable_events.30.f:0 "The machinist watched the new arm swing through its arc - faster than any human hand, steadier, tireless.\n\n'Beautiful, isn't it?' the engineer said.\n\n'It's doing my job.'\n\n'It's doing the dangerous part of your job. You'll supervise.'\n\nThe machinist folded his arms. 'Supervise. That's what they told the weavers when the power loom arrived. Supervise until the day you're not needed to supervise anymore.'\n\nThe arm swung again. It did not care about the conversation."
 
   repeatable_events.30.a:0 "Lay off workers and ramp output"
   repeatable_events.30.b:0 "Retrain and redeploy"
   repeatable_events.30.c:0 "Adopt worker co-pilots"
 
-  # Family 7 — Media Panic of the Week
+  # Family 7 - Media Panic of the Week
   repeatable_events.40.t:0 "Media Panic of the Week"
-  repeatable_events.40.d_mass:0 "Headlines thunder, panels chatter, and petitions circulate. Moralists call for bans; reformers for nuance; advertisers for a bigger buy. It will blow over—until it doesn’t."
+  repeatable_events.40.d_mass:0 "Headlines thunder, panels chatter, and petitions circulate. Moralists call for bans; reformers for nuance; advertisers for a bigger buy. It will blow over-until it doesn’t."
   repeatable_events.40.d_social:0 "A meme becomes a movement before dawn. Boycotts bloom, counter-boycotts answer, and every feed is a frontline. We can ride it out, speak plainly, or referee the brawl."
   repeatable_events.40.d_neural:0 "Sentiment storms sweep across neural channels like weather fronts. A rumor with the right shape outruns any correction. There is calm to be found, but not by accident."
-  repeatable_events.40.f:0 "If it bleeds, it leads. If it trends, it bends. In public life, attention is the only currency that never devalues.\n\nThe trouble is simple: outrage is cheap to mint and costly to redeem. A state can ignore, explain, or impose order—each buys a different peace."
+  repeatable_events.40.f:0 "The press secretary dropped the morning clippings on the minister's desk. Every headline screamed.\n\n'It's everywhere,' she said. 'The opposition is calling for a statement by noon.'\n\n'It'll blow over.'\n\n'It might. Or it might be the thing that doesn't. You won't know until it's too late.' She tapped the top headline. 'The public doesn't want an explanation. They want someone to look like they're in charge.'\n\n'And if I say the wrong thing?'\n\n'Then tomorrow's headlines will be about you.'"
 
   repeatable_events.40.a:0 "Ignore it"
   repeatable_events.40.b:0 "Brief the public"
   repeatable_events.40.c:0 "Enforce platform moderation"
   repeatable_events.40.d:0 "Deploy state media control"
 
-  # Family 10 — Cyber Breach / Quantum Panic
+  # Family 10 - Cyber Breach / Quantum Panic
   repeatable_events.50.t:0 "Network Compromised"
-  repeatable_events.50.d_cyber:0 "Intruders slipped past old defenses and wrote their demands in our ledgers. We can settle and patch, name and shame, or drag the whole sector up to a higher standard—ready or not."
+  repeatable_events.50.d_cyber:0 "Intruders slipped past old defenses and wrote their demands in our ledgers. We can settle and patch, name and shame, or drag the whole sector up to a higher standard-ready or not."
   repeatable_events.50.d_quantum:0 "Old ciphers crack under new math. Banks blink, ministries stall, and citizens wonder whether numbers still mean what they did yesterday."
-  repeatable_events.50.f:0 "There are two kinds of states: those that have been hacked, and those that keep better secrets.\n\nResilience is not a product; it’s a habit. We will pay now in money and pride—or pay later in something dearer."
+  repeatable_events.50.f:0 "The systems administrator stared at lines of code scrolling across her terminal at three in the morning. The coffee had gone cold an hour ago.\n\n'They were inside for six weeks,' she told the director. 'Maybe longer.'\n\n'What did they take?'\n\n'Everything they could read. Which, given our permissions structure, was almost everything.'\n\n'Can we fix it?'\n\n'We can rebuild. But the data is already out there. You can't un-ring a bell.'"
 
   repeatable_events.50.a:0 "Settle quietly and patch systems"
   repeatable_events.50.b:0 "Launch public forensics"
   repeatable_events.50.c:0 "Impose emergency security standards"
   repeatable_events.50.d:0 "Deploy intelligence-assisted forensics"
 
-  # Family 12 — Spectrum Crunch
+  # Family 12 - Spectrum Crunch
   repeatable_events.60.t:0 "Spectrum Crunch"
   repeatable_events.60.d_sat:0 "Relay traffic, emergency services, and civilian networks are all crowding the same invisible lanes. Lobbyists demand auctions, planners demand order, and foreign carriers smell opportunity."
   repeatable_events.60.d_quantum:0 "Quantum relays promise clarity, but their rollout has turned every old allocation fight into a jurisdictional knife-fight. Bandwidth is power, and everyone knows it."
-  repeatable_events.60.f:0 "The air was once empty to us. Then we filled it with signals, claims, and arguments, and discovered that even the invisible can become scarce.\n\nTo govern a network is to decide who gets heard first."
+  repeatable_events.60.f:0 "'We need the band,' the emergency services chief said.\n\n'We need the band,' the telecommunications executive said.\n\n'We need the band,' the military attaché said.\n\nThe spectrum regulator looked at the three of them and then at the allocation chart, which had more colors than a cathedral window and not a single gap.\n\n'Gentlemen,' she said, 'you cannot all have the same invisible thing. Someone is going to be unhappy. My job is to decide who.'"
 
   repeatable_events.60.a:0 "Auction fresh bandwidth"
   repeatable_events.60.b:0 "Reserve a public service grid"
   repeatable_events.60.c:0 "Lease foreign relay capacity"
 
-  # Family 16 — Orbital Conjunction
+  # Family 16 - Orbital Conjunction
   repeatable_events.70.t:0 "Orbital Conjunction Alert"
-  repeatable_events.70.d:0 "Telemetry flags a chain of near-misses. Operators request maneuver windows; the military warns that standing down risks coverage. Clearing the lanes will cost—pressing on may cost more."
-  repeatable_events.70.f:0 "Space is vast; useful orbits are not. We have wrapped the planet in our own artifacts and called it progress.\n\nThe bill arrives as shrapnel. We can dodge it, sweep it, or pretend it isn’t there long enough to regret the pretense."
+  repeatable_events.70.d:0 "Telemetry flags a chain of near-misses. Operators request maneuver windows; the military warns that standing down risks coverage. Clearing the lanes will cost, but pressing on may cost more."
+  repeatable_events.70.f:0 "The tracking officer circled three objects on the display. 'These will pass within two hundred meters of our relay platform in forty-seven hours.'\n\n'Can we move?'\n\n'We can. It costs fuel we budgeted for next quarter, and we lose coverage over the eastern seaboard for six hours.'\n\n'And if we don't move?'\n\n'Then we trust that a bolt traveling at eight kilometers per second misses a solar panel the size of a tennis court.' She set down her pen. 'I would move.'"
 
   repeatable_events.70.a:0 "Perform debris-avoidance maneuvers"
   repeatable_events.70.b:0 "Conduct a laser sweep"
   repeatable_events.70.c:0 "Press on and accept risk"
 
-  # Family 18 — Space Power Curtailment
+  # Family 18 - Space Power Curtailment
   repeatable_events.80.t:0 "Space Power Curtailment"
   repeatable_events.80.d:0 "Micrometeors, maintenance, and misfortune have dimmed orbital arrays. Demand does not dim with them. We can burn reserves, black out blocks, or buy from neighbours at a premium."
-  repeatable_events.80.f:0 "Beaming sunlight to earth was supposed to make nights shorter and planning easier. It did—until the first time the beam went thin.\n\nEnergy policy is a memory game: people forget the years of light and remember the week it flickered."
+  repeatable_events.80.f:0 "The grid operator watched the output gauge drop and reached for the telephone.\n\n'Array seven is offline,' she reported. 'Micrometeorite damage to the collector surface. Repair window: three weeks.'\n\n'Three weeks? We promised the manufacturing district uninterrupted supply.'\n\n'Yes. And the universe promised nothing.' She pulled up the reserve figures. 'We have four days of buffer. After that, someone goes dark. Your call who.'"
 
   repeatable_events.80.a:0 "Draw from reserves"
   repeatable_events.80.b:0 "Order rolling blackouts"
   repeatable_events.80.c:0 "Import power from neighbours"
 
-  # Family 19 — Quantum Materials Bottleneck
+  # Family 19 - Quantum Materials Bottleneck
   repeatable_events.90.t:0 "Quantum Materials Bottleneck"
   repeatable_events.90.d_quantum:0 "Labs and fabs are all asking for the same rare substrates, and the supply chain cannot stretch that far without snapping. Production planners want subsidies; researchers want openness; everyone else wants first claim."
   repeatable_events.90.d_orbital:0 "Orbital manufacturing has made miracles routine and shortages catastrophic. A delay in specialized feedstock now ripples from clean rooms to launch windows."
-  repeatable_events.90.f:0 "A frontier industry always looks elegant in retrospect. In the moment it is invoices, bottlenecks, and one mineral no one stocked enough of.\n\nScarcity is the tax collector of progress."
+  repeatable_events.90.f:0 "The procurement officer spread his hands. 'There are three suppliers on the planet. One is in a country that hates us, one is six months behind on deliveries, and one just doubled their price.'\n\n'Can we substitute?'\n\n'If you'd like your quantum processors to work slightly less well than an abacus, certainly.'\n\nThe minister pinched the bridge of his nose. 'How did we build an entire industry on a mineral we can't reliably obtain?'\n\n'The same way we always do, sir. Optimistically.'"
 
   repeatable_events.90.a:0 "Subsidize priority output"
   repeatable_events.90.b:0 "Open a patent pool"
   repeatable_events.90.c:0 "Ration premium allotments"
 
-  # Family 20 — Compute Cluster Crunch
+  # Family 20 - Compute Cluster Crunch
   repeatable_events.100.t:0 "Compute Cluster Crunch"
   repeatable_events.100.d_ai:0 "Forecasting engines, design suites, and automated logistics all want another rack online yesterday. Power, cooling, and talent are starting to pinch. We can build faster, inspect harder, or simply decide who gets priority."
   repeatable_events.100.d_quantum:0 "Quantum cores have not ended the hunger for compute; they have only taught it new appetites. Ministries, firms, and laboratories queue for time on machines that are never idle enough."
-  repeatable_events.100.f:0 "Industrial power once meant coal at the pithead. Now it means cooled rooms, patient engineers, and enough machine time to turn possibility into habit.\n\nThe queue is where the future becomes political."
+  repeatable_events.100.f:0 "The data center hummed like a cathedral organ. Rows of machines blinked in patient sequence, generating heat enough to warm a small town - which, in fact, they did.\n\n'We're at ninety-six percent capacity,' the facility manager said. 'The defense ministry wants twenty percent more. The weather service wants fifteen. Research wants thirty.'\n\n'That's sixty-five percent we don't have.'\n\n'Correct. And every one of them says their need is the most critical.'\n\nShe smiled thinly. 'Welcome to the future. It runs on the same thing as the past: not enough.'"
 
   repeatable_events.100.a:0 "Fast-track new capacity"
   repeatable_events.100.b:0 "Mandate safety audits"

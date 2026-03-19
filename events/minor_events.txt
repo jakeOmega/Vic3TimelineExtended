@@ -36,7 +36,7 @@ minor_events_timelineextended.2 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_ruler_speaking_to_people"
+ 		texture = "gfx/event_pictures/government_building.dds"
  	}
 
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -97,6 +97,7 @@ minor_events_timelineextended.2 = {
             produced_authority > 500
         }
         name = minor_events_timelineextended.2.c
+        custom_tooltip = minor_events_force_law_medium_tt
 
         add_modifier = {
             name = forced_law_through_event
@@ -123,6 +124,7 @@ minor_events_timelineextended.2 = {
             produced_authority > 750
         }
         name = minor_events_timelineextended.2.e
+        custom_tooltip = minor_events_force_law_large_tt
 
         add_modifier = {
             name = forced_law_through_event
@@ -146,13 +148,13 @@ minor_events_timelineextended.2 = {
 }
 
 
-# Post-Independence Setup Event — fired by form_decolonized_country scripted effect
+# Post-Independence Setup Event - fired by form_decolonized_country scripted effect
 minor_events_timelineextended.3 = {
     type = country_event
     placement = root
 
     event_image = {
- 		video = "unspecific_ruler_speaking_to_people"
+ 		texture = "gfx/event_pictures/independence_celebration.dds"
  	}
 
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -174,7 +176,7 @@ minor_events_timelineextended.3 = {
         ai_chance = {
 			base = 3
 		}
-		# Chart our own course — nation building
+		# Chart our own course - nation building
 		add_modifier = {
 			name = nation_building_investment_modifier
 			days = long_modifier_time
@@ -203,12 +205,12 @@ minor_events_timelineextended.6 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_ruler_speaking_to_people"
+ 		texture = "gfx/event_pictures/stock_exchange.dds"
  	}
 
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
 	title = minor_events_timelineextended.6.t
 	desc = minor_events_timelineextended.6.d
@@ -220,13 +222,44 @@ minor_events_timelineextended.6 = {
     duration = 3
     is_popup = yes
 
+	# Option A: Weather the storm - accept the pain
     option = {
         name = minor_events_timelineextended.6.a
         default_option = yes
+		add_radicals = {
+			value = medium_radicals
+			strata = rich
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
         ai_chance = {
-			base = 1
+			base = 50
 		}
     }
+
+	# Option B: Emergency fiscal response - spend to cushion the blow
+	option = {
+		name = minor_events_timelineextended.6.b
+		add_modifier = {
+			name = banking_event_deposit_guarantee_emergency
+			multiplier = banking_event_expense_huge
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = poor
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
 }
 
 minor_events_timelineextended.7 = {
@@ -234,12 +267,12 @@ minor_events_timelineextended.7 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_ruler_speaking_to_people"
+ 		texture = "gfx/event_pictures/stock_exchange.dds"
  	}
 
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
 	title = minor_events_timelineextended.7.t
 	desc = minor_events_timelineextended.7.d
@@ -251,11 +284,36 @@ minor_events_timelineextended.7 = {
     duration = 3
     is_popup = yes
 
+	# Option A: Close the gates - protect domestic banks
     option = {
         name = minor_events_timelineextended.7.a
         default_option = yes
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
         ai_chance = {
-			base = 1
+			base = 50
 		}
     }
+
+	# Option B: Maintain open markets - ride it out
+	option = {
+		name = minor_events_timelineextended.7.b
+		add_radicals = {
+			value = medium_radicals
+			strata = rich
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = poor
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
 }

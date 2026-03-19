@@ -3,7 +3,7 @@
 #  Wires extra_law_events and ministry_law_events into the three
 #  law-enactment checkpoint on-actions (advance / debate / stall).
 #
-#  Classification (by narrative context, not option outcome —
+#  Classification (by narrative context, not option outcome -
 #  ALL event options advance the law; the difference is tradeoffs):
 #    ADVANCE  – momentum narrative (crises, scandals, rallies that
 #               naturally fit when the law is already progressing)
@@ -96,7 +96,7 @@ on_law_checkpoint_stall = {
 		10 = extra_law_events.17	# The Eldest Son's Complaint (Inheritance – landowner resistance)
 		10 = extra_law_events.22	# The Automation Question (Welfare – competing interests clash)
 
-		# --- Amendment Events (also in stall — amendments can break deadlocks) ---
+		# --- Amendment Events (also in stall - amendments can break deadlocks) ---
 		10 = extra_law_events.28	# The Language Compromise (Language Policy – Amendment)
 		10 = extra_law_events.29	# The Trust Question (Antitrust – Amendment)
 		10 = extra_law_events.30	# The Sentencing Debate (Criminal Justice – Amendment)

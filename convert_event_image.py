@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-convert_event_image.py — Convert images to Victoria 3 event-image DDS format.
+convert_event_image.py - Convert images to Victoria 3 event-image DDS format.
 
 Produces a 1700×1200 BC7-compressed DDS suitable for use in event_image blocks.
 Requires:
@@ -103,11 +103,11 @@ def resize_and_crop(img: "Image.Image") -> "Image.Image":
     src_aspect = w / h
 
     if src_aspect > ASPECT:
-        # Source is wider — fit height, crop sides
+        # Source is wider - fit height, crop sides
         new_h = EVENT_HEIGHT
         new_w = round(new_h * src_aspect)
     else:
-        # Source is taller — fit width, crop top/bottom
+        # Source is taller - fit width, crop top/bottom
         new_w = EVENT_WIDTH
         new_h = round(new_w / src_aspect)
 
@@ -165,9 +165,21 @@ def convert_image(
             print(f"  texconv stderr: {result.stderr}")
             raise RuntimeError(f"texconv failed (exit {result.returncode})")
 
-        # texconv outputs to out_dir/temp_input.dds — rename to target
+        # texconv outputs to out_dir/temp_input.dds - move/replace to target
         produced = out_dir / "temp_input.dds"
-        if produced != output_path:
+        if not produced.exists():
+            raise RuntimeError("texconv did not produce temp_input.dds as expected.")
+
+        try:
+            # Use replace() to atomically overwrite existing target if present
+            produced.replace(output_path)
+        except Exception:
+            # Fallback: remove target if it exists and rename
+            if output_path.exists():
+                try:
+                    output_path.unlink()
+                except Exception:
+                    pass
             produced.rename(output_path)
 
     print(f"  ✓ {output_path}  ({output_path.stat().st_size:,} bytes)")
@@ -206,7 +218,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument(
         "--no-resize",
         action="store_true",
-        help="Skip resize/crop — use input dimensions as-is.",
+        help="Skip resize/crop - use input dimensions as-is.",
     )
     return p.parse_args()
 
@@ -215,13 +227,29 @@ def main() -> None:
     args = parse_args()
 
     # Expand globs on Windows (cmd.exe doesn't expand them)
-    files: list[Path] = []
+    # Expand globs on Windows (cmd.exe doesn't expand them). Also support
+    # passing a directory: collect supported image files and convert them
+    # into a `converted` subfolder inside that directory.
+    SUPPORTED_EXTS = {'.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.tga', '.gif', '.webp'}
+    raw_paths: list[Path] = []
     for pattern in args.inputs:
         expanded = glob(pattern)
         if expanded:
-            files.extend(Path(f) for f in expanded)
+            raw_paths.extend(Path(f) for f in expanded)
         else:
-            files.append(Path(pattern))
+            raw_paths.append(Path(pattern))
+
+    files: list[Path] = []
+    for p in raw_paths:
+        if p.is_dir():
+            for child in sorted(p.iterdir()):
+                if child.is_file() and child.suffix.lower() in SUPPORTED_EXTS:
+                    files.append(child)
+        elif p.is_file():
+            files.append(p)
+        else:
+            # keep non-existent paths for the existing warning later
+            files.append(p)
 
     if len(files) > 1 and args.output:
         print("Error: -o/--output can only be used with a single input file.")
@@ -243,7 +271,17 @@ def main() -> None:
             print(f"Warning: {f} not found, skipping.")
             continue
         print(f"Converting {f} ...")
-        out = Path(args.output) if args.output else None
+
+        # Determine per-file output. If a single explicit output was passed
+        # it was already validated above. Otherwise place outputs into a
+        # `converted` subfolder next to the input file.
+        if args.output:
+            out = Path(args.output)
+        else:
+            out_dir = f.parent / "converted"
+            out_dir.mkdir(parents=True, exist_ok=True)
+            out = out_dir / f.with_suffix('.dds').name
+
         convert_image(f, out, texconv, fmt=fmt, do_resize=not args.no_resize)
 
 

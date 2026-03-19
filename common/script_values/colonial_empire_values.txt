@@ -72,14 +72,14 @@ colonial_gp_supporters_count = {
 	}
 }
 
-# Bureaucracy cost of colonial maintenance — scaled by number of colonial states
+# Bureaucracy cost of colonial maintenance - scaled by number of colonial states
 colonial_maintenance_bureaucracy_cost = {
 	value = colonial_state_count
 	multiply = -0.01
 	min = -0.25
 }
 
-# Colonial development investment cost — scales with colonial holdings
+# Colonial development investment cost - scales with colonial holdings
 colonial_development_cost = {
 	value = colonial_state_count
 	multiply = 50

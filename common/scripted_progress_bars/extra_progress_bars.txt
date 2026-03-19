@@ -48,7 +48,7 @@ colonial_stability_bar = {
 			value = -0.5
 		}
 
-		# Great power rank bonus — easier to hold empire as a great power
+		# Great power rank bonus - easier to hold empire as a great power
 		if = {
 			limit = { owner = { country_rank >= rank_value:great_power } }
 			add = {
@@ -57,7 +57,7 @@ colonial_stability_bar = {
 			}
 		}
 
-		# GP condemnation pressure — GPs that chose anti-colonial stance
+		# GP condemnation pressure - GPs that chose anti-colonial stance
 		if = {
 			limit = { owner = { colonial_gp_condemners_count > 0 } }
 			add = {
@@ -67,7 +67,7 @@ colonial_stability_bar = {
 			}
 		}
 
-		# GP support — GPs that chose pro-colonial stance
+		# GP support - GPs that chose pro-colonial stance
 		if = {
 			limit = { owner = { colonial_gp_supporters_count > 0 } }
 			add = {
@@ -124,7 +124,7 @@ colonial_stability_bar = {
 			}
 		}
 
-		# Penalty if at war — colonial maintenance is harder during wartime
+		# Penalty if at war - colonial maintenance is harder during wartime
 		if = {
 			limit = { owner = { is_at_war = yes } }
 			add = {

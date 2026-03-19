@@ -2642,6 +2642,7 @@ company_shopify = {
 	}
 	extension_building_types = {
 		building_port # Representing logistics network integration
+		building_airport
 	}
 	potential = {
 		always = yes

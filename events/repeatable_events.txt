@@ -1,7 +1,7 @@
 ﻿namespace = repeatable_events
 
 # =============================================================
-# FAMILY 1 — Election Debate → Holo-Debate → Neural Town Hall
+# FAMILY 1 - Election Debate → Holo-Debate → Neural Town Hall
 # =============================================================
 repeatable_events.10 = {
     type = country_event
@@ -18,7 +18,7 @@ repeatable_events.10 = {
     }
     flavor = repeatable_events.10.f
 
-    event_image = { video = "southamerica_election" }
+    event_image = { texture = "gfx/event_pictures/election_rally.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -87,6 +87,7 @@ repeatable_events.10 = {
     option = { # Microtarget
         name = repeatable_events.10.c
         trigger = { OR = { has_technology_researched = social_media has_technology_researched = virtual_reality has_technology_researched = neural_lace } }
+        custom_tooltip = re_debate_microtarget_tt
         add_modifier = { name = re_debate_microtargeting days = short_modifier_time }
         if = { limit = { exists = scope:re_debate_government_party } scope:re_debate_government_party = { add_momentum = momentum_medium } }
         if = { limit = { exists = scope:re_debate_opposition_party } scope:re_debate_opposition_party = { add_momentum = momentum_small_decrease } }
@@ -94,7 +95,7 @@ repeatable_events.10 = {
 }
 
 # =============================================================
-# FAMILY 4 — Supply Chain Snarl
+# FAMILY 4 - Supply Chain Snarl
 # =============================================================
 repeatable_events.20 = {
     type = country_event
@@ -104,7 +105,7 @@ repeatable_events.20 = {
     desc  = repeatable_events.20.d
     flavor = repeatable_events.20.f
 
-    event_image = { video = "unspecific_gears_pistons" }
+    event_image = { texture = "gfx/event_pictures/supply_chain.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -133,18 +134,19 @@ repeatable_events.20 = {
         add_modifier = { name = re_supply_fasttrack_ports days = long_modifier_time }
     }
 
-    option = { # Ministry coordination — commerce ministry streamlines logistics
+    option = { # Ministry coordination - commerce ministry streamlines logistics
         name = repeatable_events.20.dd
         trigger = {
             institution_investment_level = { institution = institution_ministry_of_commerce value >= 3 }
         }
+        custom_tooltip = re_supply_ministry_tt
         add_modifier = { name = re_supply_ministry_coordination days = long_modifier_time }
         ai_chance = { base = 8 }
     }
 }
 
 # =============================================================
-# FAMILY 5 — Automation Shock
+# FAMILY 5 - Automation Shock
 # =============================================================
 repeatable_events.30 = {
     type = country_event
@@ -160,7 +162,7 @@ repeatable_events.30 = {
     }
     flavor = repeatable_events.30.f
 
-    event_image = { video = "unspecific_gears_pistons" }
+    event_image = { texture = "gfx/event_pictures/automation_factory.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -189,6 +191,7 @@ repeatable_events.30 = {
     option = { # Retraining
         name = repeatable_events.30.b
         trigger = { OR = { has_law = law_type:law_worker_protections has_law = law_type:law_regulatory_bodies } }
+        custom_tooltip = re_automation_retraining_tt
         add_loyalists = { value = small_radicals strata = lower }
         add_modifier = { name = re_automation_retraining days = long_modifier_time }
     }
@@ -196,12 +199,13 @@ repeatable_events.30 = {
     option = { # Co-Pilot
         name = repeatable_events.30.c
         trigger = { has_law = law_type:law_cooperative_ownership }
+        custom_tooltip = re_automation_copilot_tt
         add_modifier = { name = re_automation_copilot days = long_modifier_time }
     }
 }
 
 # =============================================================
-# FAMILY 7 — Media Panic
+# FAMILY 7 - Media Panic
 # =============================================================
 repeatable_events.40 = {
     type = country_event
@@ -218,7 +222,7 @@ repeatable_events.40 = {
     }
     flavor = repeatable_events.40.f
 
-    event_image = { video = "ep1_printing_press" }
+    event_image = { texture = "gfx/event_pictures/propaganda_broadcast.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -255,6 +259,7 @@ repeatable_events.40 = {
                 has_law = law_type:law_open_government
             }
         }
+        custom_tooltip = re_media_moderation_tt
         add_modifier = { name = re_media_moderation days = normal_modifier_time }
     }
     option = {
@@ -262,7 +267,8 @@ repeatable_events.40 = {
         trigger = {
             institution_investment_level = { institution = institution_ministry_of_propaganda value >= 3 }
         }
-        # State media control — suppress the panic, at a cost to freedom
+        custom_tooltip = re_media_state_control_tt
+        # State media control - suppress the panic, at a cost to freedom
         add_modifier = { name = re_media_state_control days = normal_modifier_time }
         add_radicals = { value = small_radicals pop_type = academics }
         ai_chance = {
@@ -273,7 +279,7 @@ repeatable_events.40 = {
 }
 
 # =============================================================
-# FAMILY 10 — Cyber Breach / Quantum Panic
+# FAMILY 10 - Cyber Breach / Quantum Panic
 # =============================================================
 repeatable_events.50 = {
     type = country_event
@@ -288,7 +294,7 @@ repeatable_events.50 = {
     }
     flavor = repeatable_events.50.f
 
-    event_image = { video = "event_skyscrapers_sunset" }
+    event_image = { texture = "gfx/event_pictures/cyber_attack.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
 
@@ -329,14 +335,15 @@ repeatable_events.50 = {
         trigger = {
             institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
         }
-        # Intelligence-assisted forensics — faster resolution, better outcome
+        custom_tooltip = re_cyber_intel_tt
+        # Intelligence-assisted forensics - faster resolution, better outcome
         add_modifier = { name = re_cyber_intel_response days = long_modifier_time }
         ai_chance = { base = 8 }
     }
 }
 
 # =============================================================
-# FAMILY 12 — Spectrum Crunch
+# FAMILY 12 - Spectrum Crunch
 # =============================================================
 repeatable_events.60 = {
     type = country_event
@@ -352,7 +359,7 @@ repeatable_events.60 = {
     }
     flavor = repeatable_events.60.f
 
-    event_image = { video = "ep1_printing_press" }
+    event_image = { texture = "gfx/event_pictures/satellite_dish.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -385,7 +392,7 @@ repeatable_events.60 = {
 }
 
 # =============================================================
-# FAMILY 16 — Orbital Conjunction
+# FAMILY 16 - Orbital Conjunction
 # =============================================================
 repeatable_events.70 = {
     type = country_event
@@ -395,7 +402,7 @@ repeatable_events.70 = {
     desc = repeatable_events.70.d
     flavor = repeatable_events.70.f
 
-    event_image = { video = "event_space_station" }
+    event_image = { texture = "gfx/event_pictures/space_station.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -424,6 +431,7 @@ repeatable_events.70 = {
                 has_technology_researched = orbital_weapon_platforms
             }
         }
+        custom_tooltip = re_orbit_laser_sweep_tt
         add_modifier = { name = re_orbit_laser_sweep days = normal_modifier_time }
     }
 
@@ -434,7 +442,7 @@ repeatable_events.70 = {
 }
 
 # =============================================================
-# FAMILY 18 — Space Power Curtailment
+# FAMILY 18 - Space Power Curtailment
 # =============================================================
 repeatable_events.80 = {
     type = country_event
@@ -444,7 +452,7 @@ repeatable_events.80 = {
     desc = repeatable_events.80.d
     flavor = repeatable_events.80.f
 
-    event_image = { video = "event_power_plant" }
+    event_image = { texture = "gfx/event_pictures/space_station.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -473,7 +481,7 @@ repeatable_events.80 = {
 }
 
 # =============================================================
-# FAMILY 19 — Quantum Materials Bottleneck
+# FAMILY 19 - Quantum Materials Bottleneck
 # =============================================================
 repeatable_events.90 = {
     type = country_event
@@ -488,7 +496,7 @@ repeatable_events.90 = {
     }
     flavor = repeatable_events.90.f
 
-    event_image = { video = "unspecific_gears_pistons" }
+    event_image = { texture = "gfx/event_pictures/scientific_laboratory.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -524,7 +532,7 @@ repeatable_events.90 = {
 }
 
 # =============================================================
-# FAMILY 20 — Compute Cluster Crunch
+# FAMILY 20 - Compute Cluster Crunch
 # =============================================================
 repeatable_events.100 = {
     type = country_event
@@ -539,7 +547,7 @@ repeatable_events.100 = {
     }
     flavor = repeatable_events.100.f
 
-    event_image = { video = "event_skyscrapers_sunset" }
+    event_image = { texture = "gfx/event_pictures/cyber_attack.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
 

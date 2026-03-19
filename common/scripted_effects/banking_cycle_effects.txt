@@ -1,0 +1,338 @@
+﻿# Banking cycle random event selection
+# Called from je_banking_cycle monthly pulse.
+# Handles cooldown countdown and weighted random event selection.
+
+banking_cycle_random_event_effect = {
+	# Cooldown countdown
+	if = {
+		limit = { has_variable = banking_event_cooldown }
+		change_variable = { name = banking_event_cooldown add = -1 }
+		if = {
+			limit = { var:banking_event_cooldown <= 0 }
+			remove_variable = banking_event_cooldown
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_variable = banking_event_cooldown }
+			var:crash <= 0  # don't fire events in the same month as a crash
+		}
+		random_list = {
+			120 = { } # no event this month
+
+			# ---- EARLY ERA (no extra tech gate beyond stock_exchange) ----
+
+			# Event 1: Speculative Mania (expansion+, bubble building)
+			0 = {
+				modifier = {
+					if = { limit = { var:bubble_pressure >= 15 banking_cycle_is_expansion = yes } add = 5 }
+					if = { limit = { var:bubble_pressure >= 15 banking_cycle_is_boom = yes } add = 5 }
+					if = { limit = { var:bubble_pressure >= 15 banking_cycle_is_frenzy = yes } add = 5 }
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 3 }
+				}
+				trigger_event = { id = banking_cycle_events.1 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 2: Foreign Capital Inflow (stable+, not at war)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							is_at_war = no
+							OR = {
+								banking_cycle_is_stable = yes
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 5
+					}
+				}
+				trigger_event = { id = banking_cycle_events.2 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 3: Credit Crunch Fears (stagnation/downturn)
+			0 = {
+				modifier = {
+					if = { limit = { banking_cycle_is_stagnation = yes } add = 6 }
+					if = { limit = { banking_cycle_is_downturn = yes } add = 9 }
+				}
+				trigger_event = { id = banking_cycle_events.3 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 4: Country Bank Run (RARE, HIGH IMPACT - downturn/panic)
+			0 = {
+				modifier = {
+					if = { limit = { banking_cycle_is_downturn = yes } add = 1 }
+					if = { limit = { banking_cycle_is_panic = yes } add = 2 }
+					if = { limit = { var:bubble_pressure >= 50 } add = 1 }
+				}
+				trigger_event = { id = banking_cycle_events.4 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 5: Railway Bond Fever (expansion+, railroads tech)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = railroads
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+								banking_cycle_is_frenzy = yes
+							}
+						}
+						add = 5
+					}
+				}
+				trigger_event = { id = banking_cycle_events.5 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 6: Harvest Failure & Credit (any phase)
+			0 = {
+				modifier = {
+					add = 4
+				}
+				trigger_event = { id = banking_cycle_events.6 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+
+			# ---- MID ERA (central_banking / investment_banks / mutual_funds) ----
+
+			# Event 7: Bank Consolidation Wave (boom/frenzy, central_banking)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = central_banking
+							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.7 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 8: Novel Financial Instrument (expansion+, investment_banks)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = investment_banks
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+								banking_cycle_is_frenzy = yes
+							}
+						}
+						add = 5
+					}
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
+				}
+				trigger_event = { id = banking_cycle_events.8 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 9: Asset Price Uncertainty (expansion/boom, bubble>=30, central_banking)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = central_banking
+							var:bubble_pressure >= 30
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 5
+					}
+				}
+				trigger_event = { id = banking_cycle_events.9 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 10: Sovereign Debt Scare (stagnation/downturn/panic, central_banking)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = central_banking
+							OR = {
+								banking_cycle_is_stagnation = yes
+								banking_cycle_is_downturn = yes
+								banking_cycle_is_panic = yes
+							}
+						}
+						add = 4
+					}
+					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
+				}
+				trigger_event = { id = banking_cycle_events.10 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 11: Insurance Sector Wobble (expansion+, mutual_funds)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = mutual_funds
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+								banking_cycle_is_frenzy = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.11 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 12: Gold Standard Pressure (any phase, international_exchange_standards)
+			0 = {
+				modifier = {
+					if = {
+						limit = { has_technology_researched = international_exchange_standards }
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.12 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 13: Industrial Overinvestment (boom/frenzy, corporate_management)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = corporate_management
+							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
+						}
+						add = 4
+					}
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
+				}
+				trigger_event = { id = banking_cycle_events.13 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+
+			# ---- LATE ERA (keynesian_economics / modern_financial_instruments / consumer_credit) ----
+
+			# Event 14: Housing Price Spiral (HIGH IMPACT, boom/frenzy, consumer_credit)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = consumer_credit
+							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
+						}
+						add = 4
+					}
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
+				}
+				trigger_event = { id = banking_cycle_events.14 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 15: Currency Crisis (downturn/panic, modern_financial_instruments)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = modern_financial_instruments
+							OR = {
+								banking_cycle_is_downturn = yes
+								banking_cycle_is_panic = yes
+							}
+						}
+						add = 5
+					}
+					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
+				}
+				trigger_event = { id = banking_cycle_events.15 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 16: CB Independence Debate (stable+, keynesian_economics)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = keynesian_economics
+							OR = {
+								banking_cycle_is_stable = yes
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.16 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 17: Consumer Credit Boom (expansion+, consumer_credit)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = consumer_credit
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+								banking_cycle_is_frenzy = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.17 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 18: Derivatives Scandal (RARE, boom/frenzy, modern_financial_instruments)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = modern_financial_instruments
+							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
+							var:bubble_pressure >= 40
+						}
+						add = 2
+					}
+				}
+				trigger_event = { id = banking_cycle_events.18 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 19: Sovereign Wealth Fund Proposal (expansion+, keynesian_economics, NOT laissez_faire)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = keynesian_economics
+							NOT = { has_law = law_type:law_laissez_faire }
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 3
+					}
+				}
+				trigger_event = { id = banking_cycle_events.19 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 20: Shadow Banking Discovery (RARE, HIGH IMPACT, boom/frenzy, modern_financial_instruments)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = modern_financial_instruments
+							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
+							var:bubble_pressure >= 50
+						}
+						add = 2
+					}
+				}
+				trigger_event = { id = banking_cycle_events.20 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+		}
+	}
+}

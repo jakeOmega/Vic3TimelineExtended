@@ -1,4 +1,4 @@
-"""Production method balance calculator — find input goods amounts for a target profit.
+"""Production method balance calculator - find input goods amounts for a target profit.
 
 Uses a Newton-Raphson solver to determine how much of each input good a production
 method should consume to achieve a desired profit, given fixed output goods.
@@ -79,8 +79,8 @@ def calculate_input_goods_amounts(
 
     Args:
         goods_prices: {good_name: base_price}
-        input_goods: [(good_name, ratio), ...] — relative proportions of inputs
-        output_goods: [(good_name, fixed_amount), ...] — fixed output quantities
+        input_goods: [(good_name, ratio), ...] - relative proportions of inputs
+        output_goods: [(good_name, fixed_amount), ...] - fixed output quantities
         desired_profit: target profit (output_revenue - input_cost)
         rounding_base: round each input amount to nearest multiple of this
 

@@ -13,9 +13,7 @@ ministry_law_events.1 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/ministry_building.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -60,7 +58,7 @@ ministry_law_events.1 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Recruit aggressively — fill every desk
+	option = { # Recruit aggressively - fill every desk
 		name = ministry_law_events.1.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -97,9 +95,7 @@ ministry_law_events.2 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/ministry_building.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -161,7 +157,7 @@ ministry_law_events.2 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Allocate the full budget — half measures fail
+	option = { # Allocate the full budget - half measures fail
 		name = ministry_law_events.2.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -178,11 +174,9 @@ ministry_law_events.2 = {
 		add_enactment_modifier = {
 			name = ministry_budget_cautious
 		}
-		scope:opposing_ig = {
-			add_modifier = {
-				name = ministry_budget_advance
-				days = normal_modifier_time
-			}
+		add_loyalists = {
+			value = medium_radicals
+			interest_group = scope:opposing_ig
 		}
 	}
 }
@@ -200,9 +194,7 @@ ministry_law_events.3 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/ministry_building.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -284,9 +276,7 @@ ministry_law_events.4 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/ministry_building.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -330,7 +320,7 @@ ministry_law_events.4 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Swift dissolution is best — rip off the bandage
+	option = { # Swift dissolution is best - rip off the bandage
 		name = ministry_law_events.4.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -367,9 +357,7 @@ ministry_law_events.5 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_before_the_battle"
-	}
+	event_image = { texture = "gfx/event_pictures/war_room.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -444,9 +432,7 @@ ministry_law_events.6 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -510,9 +496,7 @@ ministry_law_events.7 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/trade_agreement.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -546,7 +530,7 @@ ministry_law_events.7 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Commerce demands coordination — push it through
+	option = { # Commerce demands coordination - push it through
 		name = ministry_law_events.7.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -585,9 +569,7 @@ ministry_law_events.8 = {
 
 	category = enactment
 
-	event_image = {
-		video = "southamerica_election"
-	}
+	event_image = { texture = "gfx/event_pictures/cultural_patronage.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -660,9 +642,7 @@ ministry_law_events.9 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_rich_and_poor"
-	}
+	event_image = { texture = "gfx/event_pictures/labor_dispute.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -738,6 +718,7 @@ ministry_law_events.9 = {
 				}
 			}
 		}
+		custom_tooltip = mle_labor_stakeholders_tt
 		highlighted_option = yes
 		add_enactment_modifier = {
 			name = ministry_labor_struggle_advance
@@ -788,9 +769,7 @@ ministry_law_events.10 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_rich_and_poor"
-	}
+	event_image = { texture = "gfx/event_pictures/industrial_pollution.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -824,7 +803,7 @@ ministry_law_events.10 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # The environment cannot wait — push through
+	option = { # The environment cannot wait - push through
 		name = ministry_law_events.10.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -865,9 +844,7 @@ ministry_law_events.11 = {
 
 	category = enactment
 
-	event_image = {
-		video = "middleeast_police_breaking_door"
-	}
+	event_image = { texture = "gfx/event_pictures/intelligence_office.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -895,7 +872,7 @@ ministry_law_events.11 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Security demands these tools — push forward
+	option = { # Security demands these tools - push forward
 		name = ministry_law_events.11.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -932,9 +909,7 @@ ministry_law_events.12 = {
 
 	category = enactment
 
-	event_image = {
-		video = "africa_public_protest"
-	}
+	event_image = { texture = "gfx/event_pictures/refugee_crisis.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -998,9 +973,7 @@ ministry_law_events.13 = {
 
 	category = enactment
 
-	event_image = {
-		video = "middleeast_police_breaking_door"
-	}
+	event_image = { texture = "gfx/event_pictures/propaganda_office.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1069,9 +1042,7 @@ ministry_law_events.14 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/scientific_laboratory.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1105,7 +1076,7 @@ ministry_law_events.14 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Science needs state coordination — push forward
+	option = { # Science needs state coordination - push forward
 		name = ministry_law_events.14.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -1144,9 +1115,7 @@ ministry_law_events.15 = {
 
 	category = enactment
 
-	event_image = {
-		video = "middleeast_police_breaking_door"
-	}
+	event_image = { texture = "gfx/event_pictures/surveillance_state.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1213,9 +1182,7 @@ ministry_law_events.16 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_rich_and_poor"
-	}
+	event_image = { texture = "gfx/event_pictures/consumer_safety.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1249,7 +1216,7 @@ ministry_law_events.16 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Consumers deserve protection — act now
+	option = { # Consumers deserve protection - act now
 		name = ministry_law_events.16.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -1290,9 +1257,7 @@ ministry_law_events.17 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/urban_planning.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1320,7 +1285,7 @@ ministry_law_events.17 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Cities need plans, not chaos — establish the ministry
+	option = { # Cities need plans, not chaos - establish the ministry
 		name = ministry_law_events.17.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -1356,9 +1321,7 @@ ministry_law_events.18 = {
 
 	category = enactment
 
-	event_image = {
-		video = "southamerica_election"
-	}
+	event_image = { texture = "gfx/event_pictures/religious_institution.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1430,9 +1393,7 @@ ministry_law_events.19 = {
 
 	category = enactment
 
-	event_image = {
-		video = "africa_public_protest"
-	}
+	event_image = { texture = "gfx/event_pictures/humanitarian_aid.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

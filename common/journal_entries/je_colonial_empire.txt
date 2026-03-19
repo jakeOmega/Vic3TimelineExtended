@@ -18,7 +18,7 @@
 
 	scripted_progress_bar = colonial_stability_bar
 
-	# Scripted buttons — policies the player/AI can toggle
+	# Scripted buttons - policies the player/AI can toggle
 	scripted_button = ce_invest_in_development
 	scripted_button = ce_remove_invest_in_development
 	scripted_button = ce_military_garrison
@@ -98,7 +98,7 @@
 	}
 
 	on_complete = {
-		# Permanent solidified modifier — massive acceptance growth to continue integration
+		# Permanent solidified modifier - massive acceptance growth to continue integration
 		add_modifier = {
 			name = colonial_empire_solidified_modifier
 			days = -1
@@ -133,7 +133,7 @@
 	}
 
 	on_fail = {
-		# Colonial empire collapses — forced decolonization of all overseas territories
+		# Colonial empire collapses - forced decolonization of all overseas territories
 		custom_tooltip = {
 			text = je_colonial_empire_fail_tt
 			every_scope_state = {

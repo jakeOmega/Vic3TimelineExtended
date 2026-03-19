@@ -5,7 +5,7 @@ nuclear_weapon_events.1 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_fire"
+ 		texture = "gfx/event_pictures/mushroom_cloud.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -42,6 +42,7 @@ nuclear_weapon_events.1 = {
 				var:nuclear_weapon_stockpile > 0
 			}
 		}
+		custom_tooltip = nuclear_retaliation_single_tt
 
 		ai_chance = {
 			base = 10
@@ -63,6 +64,8 @@ nuclear_weapon_events.1 = {
 				var:nuclear_weapon_stockpile > 2
 			}
 		}
+		custom_tooltip = nuclear_retaliation_full_tt
+
 		ai_chance = {
 			base = 20
 		}
@@ -94,7 +97,7 @@ nuclear_weapon_events.2 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_fire"
+ 		texture = "gfx/event_pictures/mushroom_cloud.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -126,7 +129,7 @@ nuclear_weapon_events.3 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_ruler_speaking_to_people"
+ 		texture = "gfx/event_pictures/missile_defense.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -158,7 +161,7 @@ nuclear_weapon_events.4 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_ruler_speaking_to_people"
+ 		texture = "gfx/event_pictures/missile_defense.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -190,7 +193,7 @@ nuclear_weapon_events.5 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_fire"
+ 		texture = "gfx/event_pictures/tactical_nuclear_strike.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -222,7 +225,7 @@ nuclear_weapon_events.6 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_fire"
+ 		texture = "gfx/event_pictures/tactical_nuclear_strike.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -254,7 +257,7 @@ nuclear_weapon_events.7 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_ruler_speaking_to_people"
+ 		texture = "gfx/event_pictures/missile_defense.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -286,12 +289,12 @@ nuclear_weapon_events.8 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_ruler_spending_money"
+ 		texture = "gfx/event_pictures/missile_defense.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_money.dds"
+ 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
  	title = nuclear_weapon_events.8.t
  	desc = nuclear_weapon_events.8.d
@@ -478,7 +481,7 @@ nuclear_weapon_events.11 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_fire"
+ 		texture = "gfx/event_pictures/mushroom_cloud.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -515,6 +518,8 @@ nuclear_weapon_events.11 = {
 				var:nuclear_weapon_stockpile > 0
 			}
 		}
+		custom_tooltip = nuclear_retaliation_single_tt
+
 		ai_chance = {
 			base = 10
 		}
@@ -535,6 +540,8 @@ nuclear_weapon_events.11 = {
 				var:nuclear_weapon_stockpile > 2
 			}
 		}
+		custom_tooltip = nuclear_retaliation_full_tt
+
 		ai_chance = {
 			base = 30
 		}
@@ -565,7 +572,7 @@ nuclear_weapon_events.12 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_fire"
+ 		texture = "gfx/event_pictures/mushroom_cloud.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -597,7 +604,7 @@ nuclear_weapon_events.13 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_ruler_speaking_to_people"
+ 		texture = "gfx/event_pictures/missile_defense.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -629,7 +636,7 @@ nuclear_weapon_events.14 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_ruler_speaking_to_people"
+ 		texture = "gfx/event_pictures/missile_defense.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -661,7 +668,7 @@ nuclear_weapon_events.15 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_fire"
+ 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -689,7 +696,7 @@ nuclear_weapon_events.16 = {
     placement = root
 
     event_image = {
- 		video = "unspecific_fire"
+ 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"

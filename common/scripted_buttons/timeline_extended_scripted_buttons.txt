@@ -239,7 +239,7 @@ cb_countercyclical_buffer = {
     
     ai_chance = {
         value = 0
-        # Core: boom/frenzy, especially with building heat — don't activate too early in expansion
+        # Core: boom/frenzy, especially with building heat - don't activate too early in expansion
         if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
         if = { limit = { banking_cycle_is_boom = yes } add = 30 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 35 }
@@ -536,7 +536,7 @@ cb_raise_margin_requirements = {
     
     ai_chance = {
         value = 0
-        # Core: boom/frenzy, especially with building heat — don't react during mild expansion
+        # Core: boom/frenzy, especially with building heat - don't react during mild expansion
         if = { limit = { banking_cycle_is_boom = yes } add = 10 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 15 }
         if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 35 }

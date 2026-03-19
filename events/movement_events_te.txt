@@ -11,7 +11,7 @@ movement_events_te.1 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/political_rally.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -72,7 +72,7 @@ movement_events_te.1 = {
 				add = 2
 			}
 		}
-		# Let them march — democratic legitimacy, moderate outcome
+		# Let them march - democratic legitimacy, moderate outcome
 		add_modifier = {
 			name = civil_rights_march_momentum_modifier
 			days = normal_modifier_time
@@ -103,7 +103,7 @@ movement_events_te.1 = {
 				add = 2
 			}
 		}
-		# Disperse the crowds — order maintained, popular anger
+		# Disperse the crowds - order maintained, popular anger
 		add_modifier = {
 			name = civil_rights_suppression_modifier
 			days = normal_modifier_time
@@ -116,6 +116,11 @@ movement_events_te.1 = {
 
 	option = {
 		name = movement_events_te.1.c
+		trigger = {
+			any_political_movement = {
+				is_political_movement_type = movement_civil_rights
+			}
+		}
 		ai_chance = {
 			base = 0
 			modifier = {
@@ -123,11 +128,14 @@ movement_events_te.1 = {
 				add = 3
 			}
 		}
-		# Government endorses the march — radical political shift
-		add_modifier = {
-			name = civil_rights_government_endorsement_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		# Government endorses the march - radical political shift
+		random_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			add_modifier = {
+				name = civil_rights_government_endorsement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		ig:ig_intelligentsia ?= {
 			leader = {
@@ -147,7 +155,7 @@ movement_events_te.2 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_politicians_arguing"
+		texture = "gfx/event_pictures/parliamentary_debate.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -200,7 +208,7 @@ movement_events_te.2 = {
 				add = 2
 			}
 		}
-		# Enforce existing law — stability but simmering anger
+		# Enforce existing law - stability but simmering anger
 		add_loyalists = { value = small_radicals strata = upper }
 		add_radicals = { value = small_radicals strata = lower }
 		add_radicals = { value = small_radicals pop_type = academics }
@@ -211,7 +219,7 @@ movement_events_te.2 = {
 		ai_chance = {
 			base = 1
 		}
-		# Make an exception — bureaucratic cost, minor acceptance gain
+		# Make an exception - bureaucratic cost, minor acceptance gain
 		add_modifier = {
 			name = segregation_exception_modifier
 			days = short_modifier_time
@@ -230,7 +238,7 @@ movement_events_te.2 = {
 				add = 3
 			}
 		}
-		# Push for systemic reform — powerful but politically costly
+		# Push for systemic reform - powerful but politically costly
 		add_modifier = {
 			name = minority_rights_reform_push_modifier
 			days = normal_modifier_time
@@ -256,7 +264,7 @@ movement_events_te.3 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/cultural_renaissance.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -298,13 +306,16 @@ movement_events_te.3 = {
 				add = 2
 			}
 		}
-		# Fund a cultural program — costly but builds acceptance
+		# Fund a cultural program - costly but builds acceptance
 		add_modifier = {
 			name = cultural_renaissance_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_treasury = -100000
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.2
+		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_radicals = { value = very_small_radicals strata = upper }
 	}
@@ -314,7 +325,7 @@ movement_events_te.3 = {
 		ai_chance = {
 			base = 2
 		}
-		# Let it flourish on its own — no cost, small effect
+		# Let it flourish on its own - no cost, small effect
 		add_loyalists = { value = very_small_radicals pop_type = academics }
 	}
 
@@ -329,7 +340,7 @@ movement_events_te.3 = {
 				add = 2
 			}
 		}
-		# Channel it into national unity propaganda — cynical but effective
+		# Channel it into national unity propaganda - cynical but effective
 		add_modifier = {
 			name = cultural_cooptation_modifier
 			days = normal_modifier_time
@@ -347,7 +358,7 @@ movement_events_te.4 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_signed_contract"
+		texture = "gfx/event_pictures/human_rights.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -365,7 +376,17 @@ movement_events_te.4 = {
 		any_political_movement = {
 			is_political_movement_type = movement_civil_rights
 		}
-		NOT = { has_law = law_type:law_multicultural }
+		OR = {
+			NOT = { 
+				OR = {
+					has_law = law_type:law_multicultural
+					has_law = law_type:law_minority_rights_protection
+					has_law = law_type:law_minority_rights_affirmative_action
+				}
+			}
+			has_law = law_type:law_active_persecution
+			has_law = law_type:law_no_womens_rights
+		}
 		any_country = {
 			NOT = { this = root }
 			country_rank >= rank_value:great_power
@@ -390,6 +411,10 @@ movement_events_te.4 = {
 			}
 			save_scope_as = criticizing_country
 		}
+		random_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			save_scope_as = civil_rights_movement
+		}
 	}
 
 	option = {
@@ -402,13 +427,27 @@ movement_events_te.4 = {
 				add = 2
 			}
 		}
-		# Reject foreign interference — sovereignty preserved, reputation damaged
+		# Reject foreign interference - sovereignty preserved, reputation damaged
 		change_relations = {
 			country = scope:criticizing_country
 			value = -30
 		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:criticizing_country
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_decreased
+		}
 		add_radicals = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals strata = upper }
+		scope:civil_rights_movement = {
+			add_modifier = {
+				name = international_criticism_movement_radicalism
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 	}
 
 	option = {
@@ -420,7 +459,7 @@ movement_events_te.4 = {
 				add = 3
 			}
 		}
-		# Promise reforms — diplomatic goodwill, domestic nationalist backlash
+		# Promise reforms - diplomatic goodwill, domestic nationalist backlash
 		add_modifier = {
 			name = human_rights_reform_pledge_modifier
 			days = normal_modifier_time
@@ -432,6 +471,20 @@ movement_events_te.4 = {
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_radicals = { value = small_radicals strata = upper }
+		scope:civil_rights_movement = {
+			add_modifier = {
+				name = international_criticism_promises
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:criticizing_country
+			PRO_AMOUNT = 2
+			ANTI_AMOUNT = -2
+			FACTOR = appeasement_relations_decreased
+		}
 	}
 
 	option = {
@@ -439,7 +492,7 @@ movement_events_te.4 = {
 		ai_chance = {
 			base = 1
 		}
-		# Deflect with counter-accusations — risky diplomacy
+		# Deflect with counter-accusations - risky diplomacy
 		change_relations = {
 			country = scope:criticizing_country
 			value = -50
@@ -459,7 +512,7 @@ movement_events_te.5 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_military"
+		texture = "gfx/event_pictures/political_mobilization.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -507,7 +560,7 @@ movement_events_te.5 = {
 				add = 2
 			}
 		}
-		# Hunt down the deserters — military strength at social cost
+		# Hunt down the deserters - military strength at social cost
 		add_modifier = {
 			name = draft_enforcement_modifier
 			days = normal_modifier_time
@@ -526,7 +579,7 @@ movement_events_te.5 = {
 				add = 2
 			}
 		}
-		# Allow alternative service — weaker military, social peace
+		# Allow alternative service - weaker military, social peace
 		add_modifier = {
 			name = alternative_service_modifier
 			days = normal_modifier_time
@@ -542,7 +595,7 @@ movement_events_te.5 = {
 		ai_chance = {
 			base = 1
 		}
-		# Ignore the problem — cheap option, both sides unhappy
+		# Ignore the problem - cheap option, both sides unhappy
 		add_radicals = { value = small_radicals strata = lower }
 		add_radicals = { value = very_small_radicals pop_type = officers }
 	}
@@ -555,7 +608,7 @@ movement_events_te.6 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/political_rally.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -607,7 +660,7 @@ movement_events_te.6 = {
 				add = 3
 			}
 		}
-		# Discredit these traitors — military unity, popular trust damaged
+		# Discredit these traitors - military unity, popular trust damaged
 		add_loyalists = { value = small_radicals pop_type = officers }
 		add_radicals = { value = medium_radicals strata = lower }
 		add_radicals = { value = small_radicals pop_type = academics }
@@ -622,7 +675,7 @@ movement_events_te.6 = {
 				add = 2
 			}
 		}
-		# They have earned the right to speak — democratic legitimacy
+		# They have earned the right to speak - democratic legitimacy
 		add_modifier = {
 			name = veterans_peace_testimony_modifier
 			days = normal_modifier_time
@@ -645,7 +698,7 @@ movement_events_te.6 = {
 		ai_chance = {
 			base = 2
 		}
-		# Invite them to advise on military policy — pragmatic compromise
+		# Invite them to advise on military policy - pragmatic compromise
 		add_modifier = {
 			name = veteran_advisory_modifier
 			days = normal_modifier_time
@@ -663,7 +716,7 @@ movement_events_te.7 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/political_rally.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -710,7 +763,7 @@ movement_events_te.7 = {
 				add = 2
 			}
 		}
-		# Allow the rally — democratic norms upheld
+		# Allow the rally - democratic norms upheld
 		add_loyalists = { value = small_radicals strata = lower }
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_radicals = { value = small_radicals pop_type = officers }
@@ -727,7 +780,7 @@ movement_events_te.7 = {
 				add = 2
 			}
 		}
-		# Suppress the rally — order maintained at social cost
+		# Suppress the rally - order maintained at social cost
 		add_modifier = {
 			name = peace_rally_suppressed_modifier
 			days = short_modifier_time
@@ -747,7 +800,7 @@ movement_events_te.7 = {
 				add = 2
 			}
 		}
-		# Use the momentum for diplomatic leverage — clever statecraft
+		# Use the momentum for diplomatic leverage - clever statecraft
 		add_modifier = {
 			name = peace_rally_diplomatic_leverage_modifier
 			days = normal_modifier_time
@@ -764,7 +817,7 @@ movement_events_te.8 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_factory"
+		texture = "gfx/event_pictures/labor_movement.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -815,7 +868,7 @@ movement_events_te.8 = {
 				add = 3
 			}
 		}
-		# Investigate and prosecute — justice is expensive but earns trust
+		# Investigate and prosecute - justice is expensive but earns trust
 		add_modifier = {
 			name = war_profiteering_investigation_modifier
 			days = normal_modifier_time
@@ -837,7 +890,7 @@ movement_events_te.8 = {
 				add = 3
 			}
 		}
-		# Dismiss as propaganda — protects business interests, damages trust
+		# Dismiss as propaganda - protects business interests, damages trust
 		add_loyalists = { value = small_radicals strata = upper }
 		add_radicals = { value = small_radicals strata = lower }
 		add_radicals = { value = small_radicals pop_type = academics }
@@ -848,7 +901,7 @@ movement_events_te.8 = {
 		ai_chance = {
 			base = 2
 		}
-		# Tax their excess profits — pragmatic compromise
+		# Tax their excess profits - pragmatic compromise
 		add_modifier = {
 			name = war_profit_tax_modifier
 			days = normal_modifier_time
@@ -870,7 +923,7 @@ movement_events_te.9 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_factory"
+		texture = "gfx/event_pictures/labor_movement.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -912,7 +965,7 @@ movement_events_te.9 = {
 				add = 2
 			}
 		}
-		# Approve the trials — innovation at some risk
+		# Approve the trials - innovation at some risk
 		add_modifier = {
 			name = neural_implant_trials_modifier
 			days = long_modifier_time
@@ -933,7 +986,7 @@ movement_events_te.9 = {
 				add = 3
 			}
 		}
-		# Military applications only — strategic advantage, civil restrictions
+		# Military applications only - strategic advantage, civil restrictions
 		add_modifier = {
 			name = military_neural_program_modifier
 			days = long_modifier_time
@@ -954,7 +1007,7 @@ movement_events_te.9 = {
 				add = 3
 			}
 		}
-		# Too dangerous — safety first, progress stalls
+		# Too dangerous - safety first, progress stalls
 		add_modifier = {
 			name = neural_trial_ban_modifier
 			days = normal_modifier_time
@@ -972,7 +1025,7 @@ movement_events_te.10 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_factory"
+		texture = "gfx/event_pictures/labor_movement.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1016,7 +1069,7 @@ movement_events_te.10 = {
 				add = 3
 			}
 		}
-		# Subsidize augmentations for all — equality at economic cost
+		# Subsidize augmentations for all - equality at economic cost
 		add_modifier = {
 			name = augmentation_subsidy_modifier
 			days = normal_modifier_time
@@ -1031,7 +1084,7 @@ movement_events_te.10 = {
 		ai_chance = {
 			base = 2
 		}
-		# Regulate pricing — moderate approach
+		# Regulate pricing - moderate approach
 		add_loyalists = { value = very_small_radicals strata = lower }
 		add_loyalists = { value = very_small_radicals strata = upper }
 	}
@@ -1047,7 +1100,7 @@ movement_events_te.10 = {
 				add = 3
 			}
 		}
-		# Let the market decide — efficiency, but inequality grows
+		# Let the market decide - efficiency, but inequality grows
 		add_modifier = {
 			name = augmentation_market_forces_modifier
 			days = normal_modifier_time
@@ -1065,7 +1118,7 @@ movement_events_te.11 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_factory"
+		texture = "gfx/event_pictures/labor_movement.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1110,7 +1163,7 @@ movement_events_te.11 = {
 				add = 3
 			}
 		}
-		# Shut them down — order and safety, innovation lost
+		# Shut them down - order and safety, innovation lost
 		add_loyalists = { value = small_radicals pop_type = clergymen }
 		add_radicals = { value = small_radicals pop_type = academics }
 		add_radicals = { value = small_radicals pop_type = engineers }
@@ -1125,7 +1178,7 @@ movement_events_te.11 = {
 				add = 2
 			}
 		}
-		# License and regulate them — harness grassroots innovation
+		# License and regulate them - harness grassroots innovation
 		add_modifier = {
 			name = biohacker_legalized_modifier
 			days = normal_modifier_time
@@ -1141,7 +1194,7 @@ movement_events_te.11 = {
 		ai_chance = {
 			base = 2
 		}
-		# Send researchers to study their methods — academic interest
+		# Send researchers to study their methods - academic interest
 		add_modifier = {
 			name = biohacker_research_modifier
 			days = normal_modifier_time
@@ -1158,7 +1211,7 @@ movement_events_te.12 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_politicians_arguing"
+		texture = "gfx/event_pictures/parliamentary_debate.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1201,7 +1254,7 @@ movement_events_te.12 = {
 				add = 3
 			}
 		}
-		# Digital copies are property — economic clarity, philosophical controversy
+		# Digital copies are property - economic clarity, philosophical controversy
 		add_modifier = {
 			name = digital_property_ruling_modifier
 			days = long_modifier_time
@@ -1217,7 +1270,7 @@ movement_events_te.12 = {
 		ai_chance = {
 			base = 2
 		}
-		# Form an ethics commission — cautious, buys time
+		# Form an ethics commission - cautious, buys time
 		add_modifier = {
 			name = digital_consciousness_commission_modifier
 			days = normal_modifier_time
@@ -1234,7 +1287,7 @@ movement_events_te.12 = {
 				add = 3
 			}
 		}
-		# Recognize digital consciousness — visionary but destabilizing
+		# Recognize digital consciousness - visionary but destabilizing
 		add_modifier = {
 			name = digital_rights_recognition_modifier
 			days = long_modifier_time

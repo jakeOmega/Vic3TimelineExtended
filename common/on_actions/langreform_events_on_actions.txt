@@ -1,4 +1,4 @@
-﻿# Language reform events — fire yearly while law_state_led_language_reform is active.
+﻿# Language reform events - fire yearly while law_state_led_language_reform is active.
 # Event 25 (founding) also fires immediately from on_law_activated in extra_on_actions.txt;
 # it is included here as a fallback for existing saves that already have the law active.
 on_yearly_events = {

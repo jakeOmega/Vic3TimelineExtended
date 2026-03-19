@@ -20,7 +20,7 @@ society_technology_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/feminist_movement.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -54,7 +54,7 @@ society_technology_events.1 = {
 				add = 2
 			}
 		}
-		# Embrace integration — productivity boost, traditionalist anger
+		# Embrace integration - productivity boost, traditionalist anger
 		add_modifier = {
 			name = ste_women_workforce
 			days = long_modifier_time
@@ -78,7 +78,7 @@ society_technology_events.1 = {
 				add = 2
 			}
 		}
-		# Maintain traditional roles — stability, but stifle growth
+		# Maintain traditional roles - stability, but stifle growth
 		add_modifier = {
 			name = ste_women_workforce_blocked
 			days = normal_modifier_time
@@ -95,7 +95,7 @@ society_technology_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "ep1_printing_press" }
+	event_image = { texture = "gfx/event_pictures/equal_pay_debate.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -163,7 +163,7 @@ society_technology_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/medical_breakthrough.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -236,6 +236,7 @@ society_technology_events.3 = {
 				has_law = law_type:law_public_health_insurance
 			}
 		}
+		custom_tooltip = ste_family_planning_law_tt
 		ai_chance = {
 			base = 4
 		}
@@ -261,7 +262,7 @@ society_technology_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "ep1_printing_press" }
+	event_image = { texture = "gfx/event_pictures/social_revolution.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -291,7 +292,7 @@ society_technology_events.4 = {
 				add = 2
 			}
 		}
-		# Let society evolve — personal freedom, cultural upheaval
+		# Let society evolve - personal freedom, cultural upheaval
 		add_modifier = {
 			name = ste_sexual_revolution_embraced
 			days = long_modifier_time
@@ -332,7 +333,7 @@ society_technology_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/divorce_reform.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -358,7 +359,7 @@ society_technology_events.5 = {
 		ai_chance = {
 			base = 3
 		}
-		# Liberalize divorce — personal freedom, some instability
+		# Liberalize divorce - personal freedom, some instability
 		add_modifier = {
 			name = ste_divorce_reform
 			days = long_modifier_time
@@ -399,7 +400,7 @@ society_technology_events.6 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_skyscrapers_sunset" }
+	event_image = { texture = "gfx/event_pictures/gaming_industry.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
 
@@ -438,7 +439,7 @@ society_technology_events.6 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = very_small_radicals strata = lower }
+		add_loyalists = { value = very_small_radicals strata = middle }
 	}
 
 	option = {
@@ -455,7 +456,7 @@ society_technology_events.6 = {
 				add = 2
 			}
 		}
-		# Regulate content — parents happy, industry less so
+		# Regulate content - parents happy, industry less so
 		add_modifier = {
 			name = ste_gaming_industry_regulated
 			days = normal_modifier_time
@@ -473,17 +474,50 @@ society_technology_events.6 = {
 
 # Event 7: Pride and Protest
 # The community demands visibility and legal recognition
+# Options differ based on current LGBTQ law: repressive vs progressive
 society_technology_events.7 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/pride_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = society_technology_events.7.t
-	desc = society_technology_events.7.d
-	flavor = society_technology_events.7.f
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_active_persecution
+						has_law = law_type:law_legal_limbo
+					}
+				}
+				desc = society_technology_events.7.d_repressive
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = society_technology_events.7.d_progressive
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_active_persecution
+						has_law = law_type:law_legal_limbo
+					}
+				}
+				desc = society_technology_events.7.f_repressive
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = society_technology_events.7.f_progressive
+			}
+		}
+	}
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
@@ -498,22 +532,98 @@ society_technology_events.7 = {
 	immediate = {
 	}
 
+	# --- REPRESSIVE OPTIONS (active_persecution or legal_limbo) ---
+
 	option = {
 		name = society_technology_events.7.a
 		default_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_active_persecution
+				has_law = law_type:law_legal_limbo
+			}
+		}
 		ai_chance = {
-			base = 3
+			base = 1
 			modifier = {
-				trigger = {
-					OR = {
-						has_law = law_type:law_basic_protections
-						has_law = law_type:law_comprehensive_rights
-					}
-				}
+				trigger = { has_law = law_type:law_legal_limbo }
 				add = 2
 			}
 		}
-		# Support the marchers
+		# Bold move: protect the gathering despite repressive laws
+		add_modifier = {
+			name = ste_pride_celebrated
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_radicals = { value = medium_radicals pop_type = clergymen }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = society_technology_events.7.b
+		trigger = {
+			OR = {
+				has_law = law_type:law_active_persecution
+				has_law = law_type:law_legal_limbo
+			}
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_legal_limbo }
+				add = 2
+			}
+		}
+		# Quiet tolerance - don't escalate
+		add_loyalists = { value = very_small_radicals strata = lower }
+		add_radicals = { value = very_small_radicals pop_type = clergymen }
+	}
+
+	option = {
+		name = society_technology_events.7.c
+		trigger = {
+			OR = {
+				has_law = law_type:law_active_persecution
+				has_law = law_type:law_legal_limbo
+			}
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_law = law_type:law_active_persecution }
+				add = 4
+			}
+		}
+		# Full crackdown
+		add_modifier = {
+			name = ste_pride_suppressed
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = clergymen }
+		add_radicals = { value = medium_radicals strata = lower }
+	}
+
+	# --- PROGRESSIVE OPTIONS (basic_protections or comprehensive_rights) ---
+
+	option = {
+		name = society_technology_events.7.e
+		trigger = {
+			OR = {
+				has_law = law_type:law_basic_protections
+				has_law = law_type:law_comprehensive_rights
+			}
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_comprehensive_rights }
+				add = 2
+			}
+		}
+		# Official celebration
 		add_modifier = {
 			name = ste_pride_celebrated
 			days = long_modifier_time
@@ -524,20 +634,33 @@ society_technology_events.7 = {
 	}
 
 	option = {
-		name = society_technology_events.7.b
-		ai_chance = {
-			base = 2
-			modifier = {
-				trigger = {
-					OR = {
-						has_law = law_type:law_active_persecution
-						has_law = law_type:law_legal_limbo
-					}
-				}
-				add = 3
+		name = society_technology_events.7.g
+		trigger = {
+			OR = {
+				has_law = law_type:law_basic_protections
+				has_law = law_type:law_comprehensive_rights
 			}
 		}
-		# Crack down on demonstrations
+		ai_chance = {
+			base = 3
+		}
+		# Acknowledge but maintain distance
+		add_loyalists = { value = very_small_radicals strata = lower }
+		add_loyalists = { value = very_small_radicals pop_type = clergymen }
+	}
+
+	option = {
+		name = society_technology_events.7.h
+		trigger = {
+			OR = {
+				has_law = law_type:law_basic_protections
+				has_law = law_type:law_comprehensive_rights
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+		# Suppress - conservative backlash even under progressive law
 		add_modifier = {
 			name = ste_pride_suppressed
 			days = normal_modifier_time
@@ -550,17 +673,40 @@ society_technology_events.7 = {
 
 # Event 8: Marriage Equality Question
 # Should same-sex partnerships be legally recognized?
+# Options differ based on current LGBTQ law: basic_protections vs comprehensive_rights
 society_technology_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "ep1_printing_press" }
+	event_image = { texture = "gfx/event_pictures/pride_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	title = society_technology_events.8.t
-	desc = society_technology_events.8.d
-	flavor = society_technology_events.8.f
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_law = law_type:law_basic_protections }
+				desc = society_technology_events.8.d_basic
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = society_technology_events.8.d_comprehensive
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_law = law_type:law_basic_protections }
+				desc = society_technology_events.8.f_basic
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = society_technology_events.8.f_comprehensive
+			}
+		}
+	}
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
@@ -569,49 +715,139 @@ society_technology_events.8 = {
 		has_technology_researched = LGBTQ_rights_movement
 		NOT = { has_modifier = ste_marriage_equality }
 		NOT = { has_modifier = ste_marriage_traditional }
+		NOT = { has_modifier = ste_civil_unions }
 		OR = {
 			has_law = law_type:law_basic_protections
 			has_law = law_type:law_comprehensive_rights
-			has_law = law_type:law_full_equality_and_protection
 		}
 	}
 
 	immediate = {
 	}
 
+	# --- BASIC PROTECTIONS OPTIONS ---
+
 	option = {
 		name = society_technology_events.8.a
 		default_option = yes
+		trigger = { has_law = law_type:law_basic_protections }
 		ai_chance = {
 			base = 3
+		}
+		# Civil partnerships as a compromise
+		add_modifier = {
+			name = ste_civil_unions
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = middle }
+		add_radicals = { value = very_small_radicals pop_type = clergymen }
+	}
+
+	option = {
+		name = society_technology_events.8.b
+		trigger = { has_law = law_type:law_basic_protections }
+		ai_chance = {
+			base = 1
 			modifier = {
-				trigger = { has_law = law_type:law_comprehensive_rights }
+				trigger = {
+					any_interest_group = {
+						is_interest_group_type = ig_intelligentsia
+						is_in_government = yes
+					}
+				}
 				add = 2
 			}
 		}
-		# Legalize it
+		# Full marriage equality - bold under basic protections
 		add_modifier = {
 			name = ste_marriage_equality
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = medium_radicals strata = lower }
-		add_radicals = { value = small_radicals pop_type = clergymen }
+		add_loyalists = { value = medium_radicals strata = middle }
+		add_radicals = { value = medium_radicals pop_type = clergymen }
+		add_radicals = { value = small_radicals strata = upper }
 	}
 
 	option = {
-		name = society_technology_events.8.b
+		name = society_technology_events.8.c
+		trigger = { has_law = law_type:law_basic_protections }
 		ai_chance = {
 			base = 2
+			modifier = {
+				trigger = {
+					any_interest_group = {
+						is_interest_group_type = ig_devout
+						is_in_government = yes
+					}
+				}
+				add = 3
+			}
 		}
-		# Preserve traditional definition
+		# Preserve traditional marriage definition
 		add_modifier = {
 			name = ste_marriage_traditional
 			days = normal_modifier_time
 			is_decaying = yes
 		}
 		add_loyalists = { value = small_radicals pop_type = clergymen }
-		add_radicals = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = middle }
+	}
+
+	# --- COMPREHENSIVE RIGHTS OPTIONS ---
+
+	option = {
+		name = society_technology_events.8.e
+		default_option = yes
+		trigger = { OR = { has_law = law_type:law_comprehensive_rights has_law = law_type:law_full_equality_and_protection } }
+		ai_chance = {
+			base = 4
+		}
+		# Legalize marriage equality - natural progression
+		add_modifier = {
+			name = ste_marriage_equality
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = middle }
+		add_radicals = { value = small_radicals pop_type = clergymen }
+	}
+
+	option = {
+		name = society_technology_events.8.g
+		trigger = { OR = { has_law = law_type:law_comprehensive_rights has_law = law_type:law_full_equality_and_protection } }
+		ai_chance = {
+			base = 2
+		}
+		# Let courts and legislatures handle it gradually
+		add_loyalists = { value = very_small_radicals strata = middle }
+		add_loyalists = { value = very_small_radicals pop_type = clergymen }
+	}
+
+	option = {
+		name = society_technology_events.8.h
+		trigger = { OR = { has_law = law_type:law_comprehensive_rights has_law = law_type:law_full_equality_and_protection } }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					any_interest_group = {
+						is_interest_group_type = ig_devout
+						is_in_government = yes
+					}
+				}
+				add = 2
+			}
+		}
+		# Conservative pushback - draw the line
+		add_modifier = {
+			name = ste_marriage_traditional
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = clergymen }
+		add_radicals = { value = medium_radicals strata = middle }
 	}
 }
 
@@ -626,7 +862,7 @@ society_technology_events.9 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_gears_pistons" }
+	event_image = { texture = "gfx/event_pictures/outsourcing.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -693,7 +929,7 @@ society_technology_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/globalization_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -757,7 +993,7 @@ society_technology_events.11 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_fire" }
+	event_image = { texture = "gfx/event_pictures/terrorist_attack.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -810,17 +1046,18 @@ society_technology_events.11 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = medium_radicals strata = lower }
+		add_loyalists = { value = medium_radicals strata = middle }
 	}
 
 	option = {
 		name = society_technology_events.11.c
 		trigger = {
-			OR = {
-				has_technology_researched = cybersecurity
-				has_technology_researched = satellite_communications
+			AND = {
+				has_technology_researched = military_grade_cybersecurity
+				institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 2 }
 			}
 		}
+		custom_tooltip = ste_intelligence_tech_tt
 		ai_chance = {
 			base = 4
 			modifier = {
@@ -837,6 +1074,7 @@ society_technology_events.11 = {
 			is_decaying = yes
 		}
 		add_radicals = { value = very_small_radicals strata = lower }
+		add_loyalists = { value = small_radicals strata = middle }
 	}
 }
 
@@ -846,7 +1084,7 @@ society_technology_events.12 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "ep1_printing_press" }
+	event_image = { texture = "gfx/event_pictures/surveillance_debate.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -932,7 +1170,7 @@ society_technology_events.13 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "ep1_printing_press" }
+	event_image = { texture = "gfx/event_pictures/social_media_crisis.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -959,7 +1197,7 @@ society_technology_events.13 = {
 		ai_chance = {
 			base = 2
 		}
-		# Regulate platforms — less chaos, less freedom
+		# Regulate platforms - less chaos, less freedom
 		add_modifier = {
 			name = ste_misinfo_regulate
 			days = long_modifier_time
@@ -990,7 +1228,8 @@ society_technology_events.13 = {
 
 	option = {
 		name = society_technology_events.13.c
-		trigger = { literacy_rate >= 0.7 }
+		trigger = { literacy_rate >= 0.9 }
+		custom_tooltip = ste_high_literacy_tt
 		ai_chance = {
 			base = 4
 		}
@@ -1010,7 +1249,7 @@ society_technology_events.14 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "southamerica_election" }
+	event_image = { texture = "gfx/event_pictures/cyber_attack.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -1029,10 +1268,16 @@ society_technology_events.14 = {
 		any_country = {
 			NOT = { this = root }
 			has_technology_researched = social_media
-			OR = {
+			AND = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 				country_rank >= rank_value:great_power
 			}
+		}
+		OR = {
+			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_census_voting
+			has_law = law_type:law_wealth_voting
+			has_law = law_type:law_landed_voting
 		}
 	}
 
@@ -1041,7 +1286,7 @@ society_technology_events.14 = {
 			limit = {
 				NOT = { this = root }
 				has_technology_researched = social_media
-				OR = {
+				AND = {
 					has_diplomatic_pact = { who = ROOT type = rivalry }
 					country_rank >= rank_value:great_power
 				}
@@ -1065,7 +1310,15 @@ society_technology_events.14 = {
 		if = {
 			limit = { exists = scope:interfering_country }
 			change_relations = { country = scope:interfering_country value = -20 }
+			add_lobby_appeasement_from_diplomacy_unidirectional = {
+				FIRST = root
+				SECOND = scope:interfering_country
+				PRO_AMOUNT = 1
+				ANTI_AMOUNT = -1
+				FACTOR = appeasement_relations_decreased
+			}
 		}
+		add_electoral_confidence = -0.1
 	}
 
 	option = {
@@ -1080,6 +1333,7 @@ society_technology_events.14 = {
 			is_decaying = yes
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
+		add_electoral_confidence = -0.05
 	}
 
 	option = {
@@ -1087,8 +1341,9 @@ society_technology_events.14 = {
 		trigger = {
 			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
 		}
+		custom_tooltip = ste_intel_ministry_3_tt
 		ai_chance = { base = 8 }
-		# Deploy intelligence-backed cyber defense — neutralize the interference
+		# Deploy intelligence-backed cyber defense - neutralize the interference
 		add_modifier = {
 			name = ste_election_interference_cyber_defense
 			days = long_modifier_time
@@ -1097,6 +1352,13 @@ society_technology_events.14 = {
 		if = {
 			limit = { exists = scope:interfering_country }
 			change_relations = { country = scope:interfering_country value = -10 }
+			add_lobby_appeasement_from_diplomacy_unidirectional = {
+				FIRST = root
+				SECOND = scope:interfering_country
+				PRO_AMOUNT = 1
+				ANTI_AMOUNT = -1
+				FACTOR = appeasement_relations_decreased
+			}
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -1104,7 +1366,7 @@ society_technology_events.14 = {
 
 # ============================================================================
 # 9. SOCIAL JUSTICE MOVEMENTS (Event 15)
-# Tech: social_justice_movements (era_9) — supplement to existing movement_events_te
+# Tech: social_justice_movements (era_9) - supplement to existing movement_events_te
 # ============================================================================
 
 # Event 15: Campus Activism Surge
@@ -1113,7 +1375,7 @@ society_technology_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/campus_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -1184,7 +1446,7 @@ society_technology_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_skyscrapers_sunset" }
+	event_image = { texture = "gfx/event_pictures/neural_interface.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
 
@@ -1211,7 +1473,7 @@ society_technology_events.16 = {
 		ai_chance = {
 			base = 3
 		}
-		# Open market — innovation, but inequality risks
+		# Open market - innovation, but inequality risks
 		add_modifier = {
 			name = ste_bci_consumer_rollout
 			days = long_modifier_time
@@ -1248,6 +1510,7 @@ society_technology_events.16 = {
 	option = {
 		name = society_technology_events.16.c
 		trigger = { has_law = law_type:law_human_purity }
+		custom_tooltip = ste_human_purity_law_tt
 		ai_chance = {
 			base = 5
 		}
@@ -1273,7 +1536,7 @@ society_technology_events.17 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/augmented_athlete.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1340,7 +1603,7 @@ society_technology_events.18 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_colony.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -1370,7 +1633,7 @@ society_technology_events.18 = {
 		ai_chance = {
 			base = 3
 		}
-		# National colony — prestige and sovereignty
+		# National colony - prestige and sovereignty
 		add_modifier = {
 			name = ste_space_colony_national
 			days = long_modifier_time
@@ -1405,7 +1668,7 @@ society_technology_events.19 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_colony.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -1472,7 +1735,7 @@ society_technology_events.20 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_skyscrapers_sunset" }
+	event_image = { texture = "gfx/event_pictures/hive_mind.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
 
@@ -1513,6 +1776,7 @@ society_technology_events.20 = {
 		trigger = {
 			NOT = { has_law = law_type:law_human_purity }
 		}
+		custom_tooltip = ste_no_human_purity_tt
 		ai_chance = {
 			base = 2
 			modifier = {
@@ -1556,7 +1820,7 @@ society_technology_events.21 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/telepathic_diplomacy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -1610,7 +1874,7 @@ society_technology_events.21 = {
 		ai_chance = {
 			base = 2
 		}
-		# Too dangerous — minds could be read
+		# Too dangerous - minds could be read
 		add_modifier = {
 			name = ste_telepathic_diplomacy_rejected
 			days = normal_modifier_time
@@ -1621,7 +1885,7 @@ society_technology_events.21 = {
 }
 
 # ============================================================================
-# 14. NUCLEAR POWER — MELTDOWNS (Events 22-24)
+# 14. NUCLEAR POWER - MELTDOWNS (Events 22-24)
 # Tech: nuclear_energy (era_7), building_nuclear_plant
 # ============================================================================
 
@@ -1631,7 +1895,7 @@ society_technology_events.22 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_fire" }
+	event_image = { texture = "gfx/event_pictures/nuclear_leak.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -1684,7 +1948,8 @@ society_technology_events.22 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_radicals = { value = small_radicals }
 	}
 
 	option = {
@@ -1696,7 +1961,7 @@ society_technology_events.22 = {
 				add = 3
 			}
 		}
-		# Cover it up — save face, risk catastrophe
+		# Cover it up - save face, risk catastrophe
 		add_modifier = {
 			name = ste_reactor_leak_coverup
 			days = normal_modifier_time
@@ -1716,8 +1981,7 @@ society_technology_events.22 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = small_radicals strata = upper }
-		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
@@ -1725,31 +1989,32 @@ society_technology_events.22 = {
 		trigger = {
 			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
 		}
+		custom_tooltip = ste_consumer_ministry_3_tt
 		ai_chance = {
-			base = 5
+			base = 10
 			modifier = {
 				trigger = { has_technology_researched = fusion_power }
 				add = 3
 			}
 		}
-		# Proactive safety audit — strong institutions catch it early
+		# Proactive safety audit - strong institutions catch it early
 		add_modifier = {
 			name = ste_reactor_leak_audit
 			days = long_modifier_time
 			is_decaying = yes
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_loyalists = { value = very_small_radicals strata = lower }
+		add_loyalists = { value = very_small_radicals }
 	}
 }
 
 # Event 23: Nuclear Meltdown
-# A catastrophic reactor failure — Three Mile Island/Chernobyl/Fukushima
+# A catastrophic reactor failure - Three Mile Island/Chernobyl/Fukushima
 society_technology_events.23 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_fire" }
+	event_image = { texture = "gfx/event_pictures/nuclear_meltdown.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -1824,10 +2089,11 @@ society_technology_events.23 = {
 		trigger = {
 			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
 		}
+		custom_tooltip = ste_consumer_ministry_3_tt
 		ai_chance = {
 			base = 5
 		}
-		# Deploy institutional emergency response — faster containment
+		# Deploy institutional emergency response - faster containment
 		add_modifier = {
 			name = ste_meltdown_institutional_response
 			days = long_modifier_time
@@ -1844,7 +2110,7 @@ society_technology_events.24 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/anti_nuclear_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -1923,7 +2189,7 @@ society_technology_events.25 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "ep1_printing_press" }
+	event_image = { texture = "gfx/event_pictures/deepfake_crisis.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -1963,11 +2229,9 @@ society_technology_events.25 = {
 	option = {
 		name = society_technology_events.25.b
 		trigger = {
-			OR = {
-				has_technology_researched = cybersecurity
-				has_technology_researched = machine_learning
-			}
+			has_technology_researched = military_grade_cybersecurity
 		}
+		custom_tooltip = ste_cyber_ml_tech_tt
 		ai_chance = {
 			base = 4
 		}
@@ -2001,7 +2265,7 @@ society_technology_events.26 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_gears_pistons" }
+	event_image = { texture = "gfx/event_pictures/ai_labor.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2059,7 +2323,7 @@ society_technology_events.27 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_skyscrapers_sunset" }
+	event_image = { texture = "gfx/event_pictures/algorithmic_governance.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
 
@@ -2123,7 +2387,7 @@ society_technology_events.28 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/genetic_engineering.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -2182,6 +2446,7 @@ society_technology_events.28 = {
 				has_law = law_type:law_open_source_genetics
 			}
 		}
+		custom_tooltip = ste_eugenics_law_tt
 		ai_chance = {
 			base = 2
 		}
@@ -2197,12 +2462,12 @@ society_technology_events.28 = {
 }
 
 # Event 29: Synthetic Crop Revolution
-# Lab-grown food could end hunger — or destroy agriculture
+# Lab-grown food could end hunger - or destroy agriculture
 society_technology_events.29 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_gears_pistons" }
+	event_image = { texture = "gfx/event_pictures/synthetic_crops.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2272,7 +2537,7 @@ society_technology_events.30 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_gears_pistons" }
+	event_image = { texture = "gfx/event_pictures/self_driving.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2299,7 +2564,7 @@ society_technology_events.30 = {
 		ai_chance = {
 			base = 3
 		}
-		# Full steam ahead — maximum efficiency
+		# Full steam ahead - maximum efficiency
 		add_modifier = {
 			name = ste_av_full_adoption
 			days = long_modifier_time
@@ -2307,6 +2572,10 @@ society_technology_events.30 = {
 		}
 		add_radicals = { value = medium_radicals strata = lower }
 		add_loyalists = { value = small_radicals strata = upper }
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_6_DESC"
+			change_variable = { name = bubble_pressure add = 6 }
+		}
 	}
 
 	option = {
@@ -2345,6 +2614,10 @@ society_technology_events.30 = {
 		}
 		add_loyalists = { value = medium_radicals strata = lower }
 		add_radicals = { value = small_radicals strata = upper }
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
 	}
 }
 
@@ -2354,7 +2627,7 @@ society_technology_events.31 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_fire" }
+	event_image = { texture = "gfx/event_pictures/autonomous_vehicle_crash.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -2399,7 +2672,7 @@ society_technology_events.31 = {
 		ai_chance = {
 			base = 2
 		}
-		# Statistical safety is better than human drivers — press on
+		# Statistical safety is better than human drivers - press on
 		add_modifier = {
 			name = ste_av_crash_continue
 			days = normal_modifier_time
@@ -2414,8 +2687,9 @@ society_technology_events.31 = {
 		trigger = {
 			institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 }
 		}
+		custom_tooltip = ste_consumer_ministry_3_tt
 		ai_chance = { base = 8 }
-		# Ministry-led safety investigation — balanced resolution
+		# Ministry-led safety investigation - balanced resolution
 		add_modifier = {
 			name = ste_av_crash_investigation
 			days = long_modifier_time

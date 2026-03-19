@@ -901,7 +901,7 @@ movement_transhumanist = {
     }
     
     disband_trigger = {
-        # Never disbands — technology marches on
+        # Never disbands - technology marches on
         always = no
     }
     on_disbanded = {
@@ -978,7 +978,7 @@ movement_transhumanist = {
             }
         }
 
-        # Strata weights — strongly favors educated, urban, wealthy pops
+        # Strata weights - strongly favors educated, urban, wealthy pops
         if = {
             limit = {
                 strata = upper

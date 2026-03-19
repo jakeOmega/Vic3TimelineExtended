@@ -10,7 +10,7 @@
 #  LANGUAGE POLICY
 # ======================================================================
 
-# Minority Script Preservation — preserves minority writing systems
+# Minority Script Preservation - preserves minority writing systems
 # alongside the reformed national script. Reduces assimilation pressure
 # but calms separatist sentiment.
 amendment_minority_script_preservation = {
@@ -62,7 +62,7 @@ amendment_minority_script_preservation = {
 	amendment_activism_multiplier = 0.25
 }
 
-# Language Requirement for Naturalization — ties citizenship to national
+# Language Requirement for Naturalization - ties citizenship to national
 # language proficiency. Increases assimilation but slows migration.
 amendment_language_naturalization_requirement = {
 	parent = law_civic_monolingualism
@@ -114,7 +114,7 @@ amendment_language_naturalization_requirement = {
 	amendment_activism_multiplier = 0.5
 }
 
-# Official Bilingualism — makes the top minority language a co-official
+# Official Bilingualism - makes the top minority language a co-official
 # language alongside the national tongue. Expensive but powerful for
 # stability in diverse nations.
 amendment_official_bilingualism = {
@@ -163,7 +163,7 @@ amendment_official_bilingualism = {
 #  ANTITRUST
 # ======================================================================
 
-# National Champion Exemption — exempts the largest national company from
+# National Champion Exemption - exempts the largest national company from
 # antitrust breakup. Preserves a "national champion" at the cost of
 # competition.
 amendment_national_champion_exemption = {
@@ -210,7 +210,7 @@ amendment_national_champion_exemption = {
 	amendment_activism_multiplier = 0.5
 }
 
-# Worker Cooperative Preference — gives worker-owned cooperatives
+# Worker Cooperative Preference - gives worker-owned cooperatives
 # preferential treatment in antitrust enforcement.
 amendment_cooperative_preference = {
 	parent = law_command_cooperative_economy
@@ -256,7 +256,7 @@ amendment_cooperative_preference = {
 #  CRIMINAL JUSTICE
 # ======================================================================
 
-# Mandatory Minimum Sentences — introduced as a compromise to get
+# Mandatory Minimum Sentences - introduced as a compromise to get
 # rehabilitation laws passed, but undermines their effectiveness.
 amendment_mandatory_minimums = {
 	parent = law_punishment_focused_criminal_justice
@@ -304,7 +304,7 @@ amendment_mandatory_minimums = {
 	amendment_activism_multiplier = 0.5
 }
 
-# Community Service Alternative — allows community service as an
+# Community Service Alternative - allows community service as an
 # alternative to incarceration even under a punishment-focused system.
 amendment_community_service = {
 	parent = law_restorative_justice
@@ -354,7 +354,7 @@ amendment_community_service = {
 #  PRIVACY RIGHTS
 # ======================================================================
 
-# Corporate Data Access Exemption — carves out an exception allowing
+# Corporate Data Access Exemption - carves out an exception allowing
 # businesses to collect and use personal data for commerce.
 amendment_corporate_data_exemption = {
 	parent = law_minimal_privacy_protection
@@ -401,7 +401,7 @@ amendment_corporate_data_exemption = {
 	amendment_activism_multiplier = 0.5
 }
 
-# Whistleblower Shield — protects government whistleblowers who expose
+# Whistleblower Shield - protects government whistleblowers who expose
 # malfeasance, boosting transparency at the cost of state authority.
 amendment_whistleblower_shield = {
 	parent = law_strong_privacy_rights
@@ -453,7 +453,7 @@ amendment_whistleblower_shield = {
 #  RULES OF WAR
 # ======================================================================
 
-# No-First-Strike Pledge — a formal commitment never to initiate use of
+# No-First-Strike Pledge - a formal commitment never to initiate use of
 # nuclear weapons. Boosts diplomacy but limits military options.
 amendment_no_first_strike = {
 	parent = law_limited_war
@@ -489,7 +489,7 @@ amendment_no_first_strike = {
 	amendment_activism_multiplier = 0.5
 }
 
-# Military Necessity Clause — carves out exceptions for "military
+# Military Necessity Clause - carves out exceptions for "military
 # necessity," weakening humanitarian protections but appeasing the
 # armed forces.
 amendment_military_necessity_clause = {
@@ -540,7 +540,7 @@ amendment_military_necessity_clause = {
 #  ELECTORAL FINANCE
 # ======================================================================
 
-# Small Donor Matching — the government matches small individual
+# Small Donor Matching - the government matches small individual
 # donations, boosting grassroots participation.
 amendment_small_donor_matching = {
 	parent = law_publicly_funded_elections
@@ -593,7 +593,7 @@ amendment_small_donor_matching = {
 #  LGBTQ RIGHTS
 # ======================================================================
 
-# Religious Exemption Clause — exempts religious institutions from
+# Religious Exemption Clause - exempts religious institutions from
 # LGBTQ protections. A compromise that gets the devout on board
 # but weakens the law's reach.
 amendment_religious_exemption = {

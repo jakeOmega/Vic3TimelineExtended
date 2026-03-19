@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-create_event_video.py — Generate a panning BK2 video from a still image.
+create_event_video.py - Generate a panning BK2 video from a still image.
 
 Produces a 1700×1200 video at 30 fps with a slow Ken Burns (pan/zoom) effect,
 suitable for Victoria 3 event_image video blocks.
@@ -55,7 +55,7 @@ EVENT_HEIGHT = 1200
 EVENT_ASPECT = EVENT_WIDTH / EVENT_HEIGHT
 
 DEFAULT_FPS = 30
-DEFAULT_DURATION = 10  # seconds — matches vanilla (300 frames)
+DEFAULT_DURATION = 10  # seconds - matches vanilla (300 frames)
 DEFAULT_MARGIN = 0.15  # 15% extra on each side for panning headroom
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -66,7 +66,7 @@ RAD_TOOLS_SEARCH_PATHS = [
     Path(r"C:\Program Files (x86)\RAD Video Tools"),
     Path(r"C:\Program Files\RAD Video Tools"),
 ]
-# The free RAD Video Tools distribution only includes a GUI — the command-line
+# The free RAD Video Tools distribution only includes a GUI - the command-line
 # Bink encoder ("bink2.exe") is part of the paid SDK and not normally available.
 # radvideo64.exe IS the GUI; binkplay/smackplw are just players (not encoders).
 RAD_GUI_NAMES = ["radvideo64.exe", "radvideo32.exe"]
@@ -140,7 +140,7 @@ def prepare_canvas(
     src_aspect = w / h
     canvas_aspect = canvas_w / canvas_h
 
-    # Cover mode — scale to fill, then center-crop
+    # Cover mode - scale to fill, then center-crop
     if src_aspect > canvas_aspect:
         new_h = canvas_h
         new_w = round(new_h * src_aspect)
@@ -226,7 +226,7 @@ def assemble_video(
 ) -> None:
     """Generate panning frames and write to uncompressed AVI via imageio + ffmpeg.
 
-    Uses rawvideo BGR24 — large file, but guaranteed compatible with RAD Video
+    Uses rawvideo BGR24 - large file, but guaranteed compatible with RAD Video
     Tools which is picky about AVI codecs.
     """
     import imageio.v2 as imageio
@@ -283,7 +283,7 @@ def convert_to_bk2(avi_path: Path, bk2_path: Path) -> bool:
     """Open RAD Video Tools GUI for manual AVI → BK2 conversion.
 
     The free RAD Video Tools distribution does not include a command-line Bink
-    encoder — only the GUI (radvideo64.exe) which has a "Bink it!" button.
+    encoder - only the GUI (radvideo64.exe) which has a "Bink it!" button.
     We launch the GUI pointed at the AVI's directory so the user can select
     the file and encode it interactively.
     """
@@ -300,7 +300,7 @@ def convert_to_bk2(avi_path: Path, bk2_path: Path) -> bool:
         print(f"    5. Output will be: {bk2_path}")
         print()
 
-        # Launch the GUI — it accepts a directory path as argument
+        # Launch the GUI - it accepts a directory path as argument
         try:
             subprocess.Popen(
                 [str(gui), str(avi_path.parent)],

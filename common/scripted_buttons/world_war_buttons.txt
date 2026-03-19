@@ -542,7 +542,7 @@ ww_join_war_button = {
 			}
 			add = 50
 		}
-		# War has gone on long enough â€” time to intervene
+		# War has gone on long enough - time to intervene
 		if = {
 			limit = {
 				has_variable = ww_years_elapsed

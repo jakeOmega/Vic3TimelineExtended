@@ -18,6 +18,9 @@ un_join_button = {
 		has_technology_researched = intergovernmental_organizations
 		is_sufficiently_independent = yes
 		NOT = { has_modifier = un_expelled_cooldown }
+		NOT = {
+			has_modifier = un_withdrawal_penalty_modifier
+		}
 	}
 
 	ai_chance = {

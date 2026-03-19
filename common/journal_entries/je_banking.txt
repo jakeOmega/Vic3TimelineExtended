@@ -285,70 +285,16 @@
                     random = {
                         chance = 1.5
                         modifier = {
-                            add = 1.5
-                            has_diplomatic_pact = {
-                                who = scope:banking_crash_origin_country
-                                type = trade_agreement
-                            }
-                        }
-                        modifier = {
-                            add = 2
-                            is_in_customs_union_with = scope:banking_crash_origin_country
-                        }
-                        modifier = {
-                            add = 0.75
-                            is_adjacent_to_country = scope:banking_crash_origin_country
-                        }
-                        modifier = {
-                            add = 1.25
-                            economic_dependence = {
-                                target = scope:banking_crash_origin_country
-                                value > 1.25
-                            }
-                        }
-                        modifier = {
-                            add = 1
-                            market = {
-                                market_trade_reliance = {
-                                    target = scope:banking_crash_origin_country.market
-                                    value > 0.08
-                                }
-                            }
-                        }
-                        modifier = {
-                            add = 2
-                            market = {
-                                market_trade_reliance = {
-                                    target = scope:banking_crash_origin_country.market
-                                    value > 0.15
-                                }
-                            }
-                        }
-                        modifier = {
-                            add = 0.75
-                            market = {
-                                market_trade = {
-                                    target = scope:banking_crash_origin_country.market
-                                    value > 1500
-                                }
-                            }
-                        }
-                        modifier = {
-                            add = 1.5
-                            market = {
-                                market_trade = {
-                                    target = scope:banking_crash_origin_country.market
-                                    value > 4000
-                                }
-                            }
-                        }
-                        modifier = {
-                            add = 0.75
-                            scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial
-                        }
-                        modifier = {
-                            add = 0.75
-                            has_law_or_variant = law_type:law_free_trade
+                            if = { limit = { has_diplomatic_pact = { who = scope:banking_crash_origin_country type = trade_agreement } } add = 1.5 }
+                            if = { limit = { is_in_customs_union_with = scope:banking_crash_origin_country } add = 2 }
+                            if = { limit = { is_adjacent_to_country = scope:banking_crash_origin_country } add = 0.75 }
+                            if = { limit = { economic_dependence = { target = scope:banking_crash_origin_country value > 1.25 } } add = 1.25 }
+                            if = { limit = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.08 } } } add = 1 }
+                            if = { limit = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.15 } } } add = 2 }
+                            if = { limit = { market = { market_trade = { target = scope:banking_crash_origin_country.market value > 1500 } } } add = 0.75 }
+                            if = { limit = { market = { market_trade = { target = scope:banking_crash_origin_country.market value > 4000 } } } add = 1.5 }
+                            if = { limit = { scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial } add = 0.75 }
+                            if = { limit = { has_law_or_variant = law_type:law_free_trade } add = 0.75 }
                         }
 
                         scope:banking_crash_origin_country = {
@@ -380,71 +326,7 @@
             set_variable = { name = banking_points_max_from_law value = banking_law_base_points_value }
 
             # --- Banking cycle random events (cooldown-gated) ---
-            if = {
-                limit = { has_variable = banking_event_cooldown }
-                change_variable = { name = banking_event_cooldown add = -1 }
-                if = {
-                    limit = { var:banking_event_cooldown <= 0 }
-                    remove_variable = banking_event_cooldown
-                }
-            }
-            if = {
-                limit = {
-                    NOT = { has_variable = banking_event_cooldown }
-                    var:crash <= 0  # don't fire events in the same month as a crash
-                }
-                random_list = {
-                    80 = { } # no event this month
-                    # Event 1: Speculative Mania (expansion+, bubble building)
-                    0 = {
-                        modifier = { add = 5 banking_cycle_is_expansion = yes var:bubble_pressure >= 15 }
-                        modifier = { add = 5 banking_cycle_is_boom = yes var:bubble_pressure >= 15 }
-                        modifier = { add = 5 banking_cycle_is_frenzy = yes var:bubble_pressure >= 15 }
-                        modifier = { add = 3 banking_cycle_is_frenzy = yes }
-                        trigger_event = { id = banking_cycle_events.1 }
-                        set_variable = { name = banking_event_cooldown value = 8 }
-                    }
-                    # Event 2: Foreign Capital Inflow (stable+, not at war)
-                    0 = {
-                        modifier = { add = 5 banking_cycle_is_stable = yes is_at_war = no }
-                        modifier = { add = 5 banking_cycle_is_expansion = yes is_at_war = no }
-                        modifier = { add = 5 banking_cycle_is_boom = yes is_at_war = no }
-                        trigger_event = { id = banking_cycle_events.2 }
-                        set_variable = { name = banking_event_cooldown value = 8 }
-                    }
-                    # Event 3: Bank Consolidation Wave (boom/frenzy)
-                    0 = {
-                        modifier = { add = 4 banking_cycle_is_boom = yes }
-                        modifier = { add = 4 banking_cycle_is_frenzy = yes }
-                        trigger_event = { id = banking_cycle_events.3 }
-                        set_variable = { name = banking_event_cooldown value = 8 }
-                    }
-                    # Event 4: Novel Financial Instrument (expansion+, needs tech)
-                    0 = {
-                        modifier = { add = 5 banking_cycle_is_expansion = yes has_technology_researched = investment_banks }
-                        modifier = { add = 5 banking_cycle_is_boom = yes has_technology_researched = investment_banks }
-                        modifier = { add = 5 banking_cycle_is_frenzy = yes has_technology_researched = investment_banks }
-                        modifier = { add = 2 banking_cycle_is_frenzy = yes }
-                        trigger_event = { id = banking_cycle_events.4 }
-                        set_variable = { name = banking_event_cooldown value = 8 }
-                    }
-                    # Event 5: Credit Crunch Fears (stagnation/downturn)
-                    0 = {
-                        modifier = { add = 6 banking_cycle_is_stagnation = yes }
-                        modifier = { add = 6 banking_cycle_is_downturn = yes }
-                        modifier = { add = 3 banking_cycle_is_downturn = yes }
-                        trigger_event = { id = banking_cycle_events.5 }
-                        set_variable = { name = banking_event_cooldown value = 8 }
-                    }
-                    # Event 6: Asset Price Uncertainty (expansion/boom, significant bubble)
-                    0 = {
-                        modifier = { add = 5 banking_cycle_is_expansion = yes var:bubble_pressure >= 30 }
-                        modifier = { add = 5 banking_cycle_is_boom = yes var:bubble_pressure >= 30 }
-                        trigger_event = { id = banking_cycle_events.6 }
-                        set_variable = { name = banking_event_cooldown value = 8 }
-                    }
-                }
-            }
+            banking_cycle_random_event_effect = yes
 
             # --- Phase modifiers (remove previous; add current) ---
             remove_modifier = financial_cycle_phase_panic

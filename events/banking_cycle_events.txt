@@ -4,18 +4,47 @@
 # BANKING CYCLE EVENTS
 # Random shocks and policy dilemmas that inject uncertainty into the cycle.
 # Fired from je_banking_cycle monthly pulse with cooldown.
+#
+# EVENT ROSTER (~20 events):
+# --- EARLY ERA (no extra tech gate beyond stock_exchange) ---
+#  1. Speculative Mania       - expansion+, bubble building
+#  2. Foreign Capital Inflow   - stable+, not at war
+#  3. Credit Crunch Fears      - stagnation/downturn
+#  4. Country Bank Run         - downturn/panic, RARE, high impact
+#  5. Railway Bond Fever       - expansion+, railroads tech
+#  6. Harvest Failure & Credit - any phase, agrarian economy
+#
+# --- MID ERA (central_banking / investment_banks / mutual_funds) ---
+#  7. Bank Consolidation Wave  - boom/frenzy, central_banking
+#  8. Novel Financial Instrument - expansion+, investment_banks
+#  9. Asset Price Uncertainty  - expansion/boom, bubble >= 30, central_banking
+# 10. Sovereign Debt Scare    - stagnation/downturn/panic, central_banking
+# 11. Insurance Sector Wobble - expansion+, mutual_funds
+# 12. Gold Standard Pressure  - any phase, international_exchange_standards
+# 13. Industrial Overinvestment - boom/frenzy, corporate_management
+#
+# --- LATE ERA (keynesian_economics / modern_financial_instruments / consumer_credit) ---
+# 14. Housing Price Spiral     - boom/frenzy, consumer_credit, high impact
+# 15. Currency Crisis          - downturn+, modern_financial_instruments
+# 16. Central Bank Independence Debate - stable+, keynesian_economics
+# 17. Consumer Credit Boom    - expansion+, consumer_credit
+# 18. Derivatives Scandal     - boom/frenzy, modern_financial_instruments, RARE
+# 19. Sovereign Wealth Fund Proposal - expansion+, keynesian_economics, law gate
+# 20. Shadow Banking Discovery - boom/frenzy, modern_financial_instruments, RARE, high impact
 # ============================================================================
+
 
 # --------------------------------------------------------------------------
 # 1. Speculative Mania
 # Fires during expansion/boom/frenzy when bubble is building.
+# No extra tech gate (can happen in early stock exchange era).
 # --------------------------------------------------------------------------
 banking_cycle_events.1 = {
 	type = country_event
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/stock_exchange.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -31,7 +60,7 @@ banking_cycle_events.1 = {
 	immediate = {
 	}
 
-	# Option A: Let the market ride — high reward, high risk
+	# Option A: Let the market ride - high reward, high risk
 	option = {
 		name = banking_cycle_events.1.a
 		default_option = yes
@@ -43,6 +72,10 @@ banking_cycle_events.1 = {
 			text = "MOMENTUM_2_DESC"
 			change_variable = { name = finance_cycle_momentum add = 2 }
 		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
 		ai_chance = {
 			base = 40
 			modifier = { add = 20 banking_cycle_is_frenzy = yes }
@@ -50,7 +83,7 @@ banking_cycle_events.1 = {
 		}
 	}
 
-	# Option B: Issue a regulatory warning — moderate caution
+	# Option B: Issue a regulatory warning - moderate caution
 	option = {
 		name = banking_cycle_events.1.b
 		custom_tooltip = {
@@ -61,17 +94,13 @@ banking_cycle_events.1 = {
 			text = "MOMENTUM_MINUS_1_DESC"
 			change_variable = { name = finance_cycle_momentum add = -1 }
 		}
-		add_radicals = {
-			value = small_radicals
-			strata = rich
-		}
 		ai_chance = {
 			base = 35
 			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
 		}
 	}
 
-	# Option C: Impose emergency lending restrictions — aggressive cooling
+	# Option C: Impose emergency lending restrictions - aggressive cooling
 	option = {
 		name = banking_cycle_events.1.c
 		custom_tooltip = {
@@ -103,7 +132,7 @@ banking_cycle_events.2 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/stock_exchange.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -119,7 +148,7 @@ banking_cycle_events.2 = {
 	immediate = {
 	}
 
-	# Option A: Welcome the investment — big boost, big bubble
+	# Option A: Welcome the investment - big boost, big bubble
 	option = {
 		name = banking_cycle_events.2.a
 		default_option = yes
@@ -142,7 +171,7 @@ banking_cycle_events.2 = {
 		}
 	}
 
-	# Option B: Apply modest screening — moderate approach
+	# Option B: Apply modest screening - moderate approach
 	option = {
 		name = banking_cycle_events.2.b
 		custom_tooltip = {
@@ -159,7 +188,7 @@ banking_cycle_events.2 = {
 		}
 	}
 
-	# Option C: Restrict capital inflows — defensive
+	# Option C: Restrict capital inflows - defensive
 	option = {
 		name = banking_cycle_events.2.c
 		custom_tooltip = {
@@ -182,15 +211,15 @@ banking_cycle_events.2 = {
 }
 
 # --------------------------------------------------------------------------
-# 3. Bank Consolidation Wave
-# Fires during boom/frenzy as banks merge into "too big to fail" entities.
+# 3. Credit Crunch Fears
+# Fires during stagnation/downturn. No extra tech gate.
 # --------------------------------------------------------------------------
 banking_cycle_events.3 = {
 	type = country_event
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/stock_exchange.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -206,162 +235,9 @@ banking_cycle_events.3 = {
 	immediate = {
 	}
 
-	# Option A: Endorse the consolidation — services boom but systemic risk
+	# Option A: Pressure banks to resume lending - stimulative but risky
 	option = {
 		name = banking_cycle_events.3.a
-		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_6_DESC"
-			change_variable = { name = bubble_pressure add = 6 }
-		}
-		add_modifier = {
-			name = banking_event_consolidation_boom
-			months = normal_modifier_time
-			is_decaying = yes
-		}
-		ai_chance = {
-			base = 45
-			modifier = { add = -25 banking_cycle_bubble_risk_high = yes }
-		}
-	}
-
-	# Option B: Require antitrust review — cautious
-	option = {
-		name = banking_cycle_events.3.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_2_DESC"
-			change_variable = { name = bubble_pressure add = 2 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
-		add_loyalists = {
-			value = small_radicals
-		}
-		ai_chance = {
-			base = 55
-			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
-		}
-	}
-}
-
-# --------------------------------------------------------------------------
-# 4. Novel Financial Instrument
-# Fires during expansion+ with investment_banks tech.
-# --------------------------------------------------------------------------
-banking_cycle_events.4 = {
-	type = country_event
-	placement = root
-
-	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
-	}
-
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
-
-	title = banking_cycle_events.4.t
-	desc = banking_cycle_events.4.d
-	flavor = banking_cycle_events.4.f
-
-	duration = 3
-	is_popup = yes
-
-	immediate = {
-	}
-
-	# Option A: Embrace it — huge bubble but economic stimulus
-	option = {
-		name = banking_cycle_events.4.a
-		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_12_DESC"
-			change_variable = { name = bubble_pressure add = 12 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = 3 }
-		}
-		add_modifier = {
-			name = banking_event_new_instrument_boom
-			months = short_modifier_time
-			is_decaying = yes
-		}
-		ai_chance = {
-			base = 30
-			modifier = { add = 15 banking_cycle_is_expansion = yes }
-			modifier = { add = -30 banking_cycle_bubble_risk_high = yes }
-		}
-	}
-
-	# Option B: Require disclosure and registration — moderate
-	option = {
-		name = banking_cycle_events.4.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_5_DESC"
-			change_variable = { name = bubble_pressure add = 5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		ai_chance = {
-			base = 45
-			modifier = { add = 10 banking_cycle_bubble_risk_rising = yes }
-		}
-	}
-
-	# Option C: Ban it outright — deflationary but safe
-	option = {
-		name = banking_cycle_events.4.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = -2 }
-		}
-		add_radicals = {
-			value = medium_radicals
-			strata = rich
-		}
-		ai_chance = {
-			base = 25
-			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
-		}
-	}
-}
-
-# --------------------------------------------------------------------------
-# 5. Credit Crunch Fears
-# Fires during stagnation/downturn to help push out of the rut.
-# --------------------------------------------------------------------------
-banking_cycle_events.5 = {
-	type = country_event
-	placement = root
-
-	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
-	}
-
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
-
-	title = banking_cycle_events.5.t
-	desc = banking_cycle_events.5.d
-	flavor = banking_cycle_events.5.f
-
-	duration = 3
-	is_popup = yes
-
-	immediate = {
-	}
-
-	# Option A: Pressure banks to resume lending — stimulative but risky
-	option = {
-		name = banking_cycle_events.5.a
 		default_option = yes
 		custom_tooltip = {
 			text = "CYCLE_VALUE_5_DESC"
@@ -385,9 +261,9 @@ banking_cycle_events.5 = {
 		}
 	}
 
-	# Option B: Let prudence take its course — safe but slow recovery
+	# Option B: Let prudence take its course - safe but slow recovery
 	option = {
-		name = banking_cycle_events.5.b
+		name = banking_cycle_events.3.b
 		add_loyalists = {
 			value = small_radicals
 			strata = rich
@@ -400,16 +276,193 @@ banking_cycle_events.5 = {
 }
 
 # --------------------------------------------------------------------------
-# 6. Asset Price Uncertainty
-# Fires during expansion/boom with significant bubble pressure.
-# Central bank can't tell if it's a bubble — reflects real-world uncertainty.
+# 4. Country Bank Run  (RARE, HIGH IMPACT)
+# Fires during downturn/panic. The public has lost confidence in banks.
+# No extra tech gate - bank runs predate modern finance.
+# --------------------------------------------------------------------------
+banking_cycle_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = banking_cycle_events.4.t
+	desc = banking_cycle_events.4.d
+	flavor = banking_cycle_events.4.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Let banks fail - deflationary purge, political cost
+	option = {
+		name = banking_cycle_events.4.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_15_DESC"
+			change_variable = { name = finance_cycle_value add = -15 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_4_DESC"
+			change_variable = { name = finance_cycle_momentum add = -4 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_20_DESC"
+			change_variable = { name = bubble_pressure add = -20 }
+		}
+		add_radicals = {
+			value = large_radicals
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+
+	# Option B: Government guarantee of deposits - costly but stabilizing
+	option = {
+		name = banking_cycle_events.4.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_5_DESC"
+			change_variable = { name = finance_cycle_value add = -5 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_10_DESC"
+			change_variable = { name = bubble_pressure add = -10 }
+		}
+		add_modifier = {
+			name = banking_event_deposit_guarantee_emergency
+			multiplier = banking_event_expense_huge
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+		ai_chance = {
+			base = 60
+		}
+	}
+
+	# Option C: Selective bailout of key institutions
+	option = {
+		name = banking_cycle_events.4.c
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_8_DESC"
+			change_variable = { name = finance_cycle_value add = -8 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_15_DESC"
+			change_variable = { name = bubble_pressure add = -15 }
+		}
+		add_modifier = {
+			name = banking_event_selective_bailout
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_event_selective_bailout_cost
+			multiplier = banking_event_expense_medium
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = poor
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 5. Railway Bond Fever
+# Fires during expansion+ with railroads tech. Early-era speculation event.
+# --------------------------------------------------------------------------
+banking_cycle_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+
+	title = banking_cycle_events.5.t
+	desc = banking_cycle_events.5.d
+	flavor = banking_cycle_events.5.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Encourage the railway companies - infrastructure + bubble
+	option = {
+		name = banking_cycle_events.5.a
+		default_option = yes
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_6_DESC"
+			change_variable = { name = bubble_pressure add = 6 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		add_modifier = {
+			name = banking_event_railway_fever
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = { add = -25 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option B: Insist on due diligence for bond offerings
+	option = {
+		name = banking_cycle_events.5.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_2_DESC"
+			change_variable = { name = bubble_pressure add = 2 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		ai_chance = {
+			base = 50
+			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 6. Harvest Failure & Credit Squeeze
+# Can fire in any phase. Agricultural economy under stress.
 # --------------------------------------------------------------------------
 banking_cycle_events.6 = {
 	type = country_event
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/stock_exchange.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -425,13 +478,281 @@ banking_cycle_events.6 = {
 	immediate = {
 	}
 
-	# Option A: "Prices reflect fundamentals" — optimistic, adds risk
+	# Option A: Extend emergency rural credit - props up cycle, bubble
 	option = {
 		name = banking_cycle_events.6.a
 		default_option = yes
 		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_4_DESC"
+			change_variable = { name = bubble_pressure add = 4 }
+		}
+		add_modifier = {
+			name = banking_event_rural_credit
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_event_rural_credit_cost
+			multiplier = banking_event_expense_small
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+
+	# Option B: Let rural debtors default - harsh but clears risk
+	option = {
+		name = banking_cycle_events.6.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_5_DESC"
+			change_variable = { name = finance_cycle_value add = -5 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = poor
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 30
+		}
+	}
+
+	# Option C: Import grain and subsidize - costly fiscal approach
+	option = {
+		name = banking_cycle_events.6.c
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		add_modifier = {
+			name = banking_event_harvest_subsidy
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_event_harvest_subsidy_cost
+			multiplier = banking_event_expense_medium
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+}
+
+
+# ============================================================================
+# MID ERA EVENTS (require central_banking / investment_banks / mutual_funds)
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# 7. Bank Consolidation Wave
+# Fires during boom/frenzy. Requires central_banking.
+# --------------------------------------------------------------------------
+banking_cycle_events.7 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+
+	title = banking_cycle_events.7.t
+	desc = banking_cycle_events.7.d
+	flavor = banking_cycle_events.7.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Endorse the consolidation - services boom but systemic risk
+	option = {
+		name = banking_cycle_events.7.a
+		default_option = yes
+		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_6_DESC"
 			change_variable = { name = bubble_pressure add = 6 }
+		}
+		add_modifier = {
+			name = banking_event_consolidation_boom
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 45
+			modifier = { add = -25 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option B: Require antitrust review - cautious
+	option = {
+		name = banking_cycle_events.7.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_2_DESC"
+			change_variable = { name = bubble_pressure add = 2 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		add_loyalists = {
+			value = small_radicals
+		}
+		ai_chance = {
+			base = 55
+			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 8. Novel Financial Instrument
+# Fires during expansion+ with investment_banks tech.
+# --------------------------------------------------------------------------
+banking_cycle_events.8 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+
+	title = banking_cycle_events.8.t
+	desc = banking_cycle_events.8.d
+	flavor = banking_cycle_events.8.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Embrace it - huge bubble but economic stimulus
+	option = {
+		name = banking_cycle_events.8.a
+		default_option = yes
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_12_DESC"
+			change_variable = { name = bubble_pressure add = 12 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_3_DESC"
+			change_variable = { name = finance_cycle_momentum add = 3 }
+		}
+		add_modifier = {
+			name = banking_event_new_instrument_boom
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 30
+			modifier = { add = 15 banking_cycle_is_expansion = yes }
+			modifier = { add = -30 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option B: Require disclosure and registration - moderate
+	option = {
+		name = banking_cycle_events.8.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_5_DESC"
+			change_variable = { name = bubble_pressure add = 5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		ai_chance = {
+			base = 45
+			modifier = { add = 10 banking_cycle_bubble_risk_rising = yes }
+		}
+	}
+
+	# Option C: Ban it outright - deflationary but safe
+	option = {
+		name = banking_cycle_events.8.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = -2 }
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 25
+			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 9. Asset Price Uncertainty
+# Fires during expansion/boom with significant bubble. Requires central_banking.
+# Fixed: Option A now gives momentum boost to differentiate from C.
+# --------------------------------------------------------------------------
+banking_cycle_events.9 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+
+	title = banking_cycle_events.9.t
+	desc = banking_cycle_events.9.d
+	flavor = banking_cycle_events.9.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: "Prices reflect fundamentals" - optimistic, adds risk but boosts growth
+	option = {
+		name = banking_cycle_events.9.a
+		default_option = yes
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_6_DESC"
+			change_variable = { name = bubble_pressure add = 6 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
 		}
 		ai_chance = {
 			base = 35
@@ -440,9 +761,9 @@ banking_cycle_events.6 = {
 		}
 	}
 
-	# Option B: Commission an investigation — short-term pain, bubble relief
+	# Option B: Commission an investigation - short-term pain, bubble relief
 	option = {
-		name = banking_cycle_events.6.b
+		name = banking_cycle_events.9.b
 		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
 			change_variable = { name = bubble_pressure add = -5 }
@@ -453,7 +774,7 @@ banking_cycle_events.6 = {
 		}
 		add_modifier = {
 			name = banking_event_investigation_chill
-			months = short_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		ai_chance = {
@@ -462,15 +783,1069 @@ banking_cycle_events.6 = {
 		}
 	}
 
-	# Option C: Take no public position — mild neglect worsens uncertainty
+	# Option C: Take no public position - mild neglect worsens uncertainty
 	option = {
-		name = banking_cycle_events.6.c
+		name = banking_cycle_events.9.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		ai_chance = {
+			base = 30
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 10. Sovereign Debt Scare
+# Fires during stagnation/downturn/panic. Requires central_banking.
+# Government borrowing costs spike as bond market loses confidence.
+# --------------------------------------------------------------------------
+banking_cycle_events.10 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = banking_cycle_events.10.t
+	desc = banking_cycle_events.10.d
+	flavor = banking_cycle_events.10.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Announce austerity measures - calms bondholders, hurts population
+	option = {
+		name = banking_cycle_events.10.a
+		default_option = yes
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		add_modifier = {
+			name = banking_event_austerity
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = poor
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 45
+		}
+	}
+
+	# Option B: Reassure markets with central bank intervention
+	option = {
+		name = banking_cycle_events.10.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_5_DESC"
+			change_variable = { name = bubble_pressure add = 5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		ai_chance = {
+			base = 35
+			modifier = { add = 15 banking_cycle_is_panic = yes }
+		}
+	}
+
+	# Option C: Default on some obligations - drastic
+	option = {
+		name = banking_cycle_events.10.c
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_10_DESC"
+			change_variable = { name = finance_cycle_value add = -10 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_15_DESC"
+			change_variable = { name = bubble_pressure add = -15 }
+		}
+		add_modifier = {
+			name = banking_event_partial_default
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 20
+			modifier = { add = 20 banking_cycle_is_panic = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 11. Insurance Sector Wobble
+# Fires during expansion+. Requires mutual_funds.
+# Insurance companies have overextended their guarantees.
+# --------------------------------------------------------------------------
+banking_cycle_events.11 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = banking_cycle_events.11.t
+	desc = banking_cycle_events.11.d
+	flavor = banking_cycle_events.11.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Let the insurance sector self-correct
+	option = {
+		name = banking_cycle_events.11.a
+		default_option = yes
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_4_DESC"
+			change_variable = { name = bubble_pressure add = 4 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	# Option B: Force insurers to increase reserves - costly for sector
+	option = {
+		name = banking_cycle_events.11.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = -2 }
+		}
+		add_modifier = {
+			name = banking_event_insurance_reserves
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 40
+			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option C: Government backstop for critical policies - moral hazard
+	option = {
+		name = banking_cycle_events.11.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_8_DESC"
+			change_variable = { name = bubble_pressure add = 8 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 30
+			modifier = { add = -20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 12. Gold Standard Pressure
+# Fires in any phase. Requires international_exchange_standards.
+# Foreign gold flows are pressuring the currency peg.
+# --------------------------------------------------------------------------
+banking_cycle_events.12 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = banking_cycle_events.12.t
+	desc = banking_cycle_events.12.d
+	flavor = banking_cycle_events.12.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Defend the peg at all costs - deflationary but credible
+	option = {
+		name = banking_cycle_events.12.a
+		default_option = yes
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = -2 }
+		}
+		add_modifier = {
+			name = banking_event_gold_defense
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = poor
+		}
+		ai_chance = {
+			base = 45
+		}
+	}
+
+	# Option B: Allow a managed devaluation
+	option = {
+		name = banking_cycle_events.12.b
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		add_modifier = {
+			name = banking_event_managed_devaluation
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 35
+			modifier = { add = 15 banking_cycle_is_recession = yes }
+		}
+	}
+
+	# Option C: Abandon the gold standard entirely
+	option = {
+		name = banking_cycle_events.12.c
+		custom_tooltip = {
+			text = "MOMENTUM_3_DESC"
+			change_variable = { name = finance_cycle_momentum add = 3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_8_DESC"
+			change_variable = { name = bubble_pressure add = 8 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+		ai_chance = {
+			base = 20
+			modifier = { add = 25 banking_cycle_is_panic = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 13. Industrial Overinvestment
+# Fires during boom/frenzy. Requires corporate_management.
+# Factories are being built faster than demand can absorb.
+# --------------------------------------------------------------------------
+banking_cycle_events.13 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = banking_cycle_events.13.t
+	desc = banking_cycle_events.13.d
+	flavor = banking_cycle_events.13.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: The market will sort it out - risky optimism
+	option = {
+		name = banking_cycle_events.13.a
+		default_option = yes
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_8_DESC"
+			change_variable = { name = bubble_pressure add = 8 }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 35
+			modifier = { add = -20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option B: Redirect credit toward consumption sectors
+	option = {
+		name = banking_cycle_events.13.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		add_modifier = {
+			name = banking_event_credit_rebalance
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 45
+			modifier = { add = 10 banking_cycle_bubble_risk_rising = yes }
+		}
+	}
+
+	# Option C: Order a halt to new factory loans - aggressive cooldown
+	option = {
+		name = banking_cycle_events.13.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_8_DESC"
+			change_variable = { name = bubble_pressure add = -8 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_momentum add = -3 }
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 20
+			modifier = { add = 25 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+}
+
+
+# ============================================================================
+# LATE ERA EVENTS (keynesian_economics / modern_financial_instruments / consumer_credit)
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# 14. Housing Price Spiral  (HIGH IMPACT)
+# Fires during boom/frenzy. Requires consumer_credit.
+# --------------------------------------------------------------------------
+banking_cycle_events.14 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = banking_cycle_events.14.t
+	desc = banking_cycle_events.14.d
+	flavor = banking_cycle_events.14.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Easy credit for homeowners - massive bubble, short-term boom
+	option = {
+		name = banking_cycle_events.14.a
+		default_option = yes
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_15_DESC"
+			change_variable = { name = bubble_pressure add = 15 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		add_modifier = {
+			name = banking_event_housing_boom
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 30
+			modifier = { add = -30 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option B: Impose lending standards - moderate cooling
+	option = {
+		name = banking_cycle_events.14.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_5_DESC"
+			change_variable = { name = bubble_pressure add = 5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 45
+			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
+		}
+	}
+
+	# Option C: Cap mortgage lending entirely - deflationary
+	option = {
+		name = banking_cycle_events.14.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_momentum add = -3 }
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 25
+			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 15. Currency Crisis
+# Fires during downturn/panic. Requires modern_financial_instruments.
+# Foreign exchange markets are attacking the national currency.
+# --------------------------------------------------------------------------
+banking_cycle_events.15 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = banking_cycle_events.15.t
+	desc = banking_cycle_events.15.d
+	flavor = banking_cycle_events.15.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Burn reserves to defend the currency - expensive, stabilizing
+	option = {
+		name = banking_cycle_events.15.a
+		default_option = yes
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		add_modifier = {
+			name = banking_event_fx_defense
+			multiplier = banking_event_expense_large
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	# Option B: Impose emergency capital controls
+	option = {
+		name = banking_cycle_events.15.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_8_DESC"
+			change_variable = { name = bubble_pressure add = -8 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = -2 }
+		}
+		add_modifier = {
+			name = banking_event_emergency_controls
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 35
+			modifier = { add = 15 banking_cycle_is_panic = yes }
+		}
+	}
+
+	# Option C: Let the currency float - painful adjustment
+	option = {
+		name = banking_cycle_events.15.c
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_8_DESC"
+			change_variable = { name = finance_cycle_value add = -8 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_momentum add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_15_DESC"
+			change_variable = { name = bubble_pressure add = -15 }
+		}
+		add_radicals = {
+			value = medium_radicals
+		}
+		add_modifier = {
+			name = banking_event_currency_collapse
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 16. Central Bank Independence Debate
+# Fires during stable/expansion+. Requires keynesian_economics.
+# Political pressure to override central bank decisions.
+# --------------------------------------------------------------------------
+banking_cycle_events.16 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = banking_cycle_events.16.t
+	desc = banking_cycle_events.16.d
+	flavor = banking_cycle_events.16.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Affirm central bank independence - credibility boost
+	option = {
+		name = banking_cycle_events.16.a
+		default_option = yes
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		add_modifier = {
+			name = banking_event_cb_independence
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = capitalists
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+
+	# Option B: Override the central bank for political goals - short-term gain
+	option = {
+		name = banking_cycle_events.16.b
+		custom_tooltip = {
+			text = "MOMENTUM_3_DESC"
+			change_variable = { name = finance_cycle_momentum add = 3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_8_DESC"
+			change_variable = { name = bubble_pressure add = 8 }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+		ai_chance = {
+			base = 30
+			modifier = { add = 15 banking_cycle_is_recession = yes }
+		}
+	}
+
+	# Option C: Restructure the central bank mandate - compromise
+	option = {
+		name = banking_cycle_events.16.c
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
 		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_2_DESC"
 			change_variable = { name = bubble_pressure add = 2 }
 		}
+		add_modifier = {
+			name = banking_event_dual_mandate
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 17. Consumer Credit Boom
+# Fires during expansion+. Requires consumer_credit.
+# Households are borrowing aggressively for consumption.
+# --------------------------------------------------------------------------
+banking_cycle_events.17 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+
+	title = banking_cycle_events.17.t
+	desc = banking_cycle_events.17.d
+	flavor = banking_cycle_events.17.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Let the good times roll - popular but dangerous
+	option = {
+		name = banking_cycle_events.17.a
+		default_option = yes
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_10_DESC"
+			change_variable = { name = bubble_pressure add = 10 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+		ai_chance = {
+			base = 35
+			modifier = { add = -25 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option B: Introduce borrowing limits - moderate
+	option = {
+		name = banking_cycle_events.17.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 40
+			modifier = { add = 10 banking_cycle_bubble_risk_rising = yes }
+		}
+	}
+
+	# Option C: Ban consumer lending - draconian
+	option = {
+		name = banking_cycle_events.17.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = -2 }
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = poor
+		}
+		ai_chance = {
+			base = 15
+			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 18. Derivatives Scandal  (RARE, HIGH IMPACT)
+# Fires during boom/frenzy. Requires modern_financial_instruments.
+# A major financial firm has been caught hiding catastrophic losses.
+# --------------------------------------------------------------------------
+banking_cycle_events.18 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = banking_cycle_events.18.t
+	desc = banking_cycle_events.18.d
+	flavor = banking_cycle_events.18.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Seize the firm and prosecute - market confidence hit
+	option = {
+		name = banking_cycle_events.18.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_10_DESC"
+			change_variable = { name = finance_cycle_value add = -10 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_momentum add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_15_DESC"
+			change_variable = { name = bubble_pressure add = -15 }
+		}
+		add_modifier = {
+			name = banking_event_derivatives_crackdown
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = rich
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+
+	# Option B: Arrange a quiet rescue - contain the damage, moral hazard
+	option = {
+		name = banking_cycle_events.18.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_value add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		add_modifier = {
+			name = banking_event_quiet_rescue
+			multiplier = banking_event_expense_large
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	# Option C: Deny knowledge and hope it blows over - risky cover-up
+	option = {
+		name = banking_cycle_events.18.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_10_DESC"
+			change_variable = { name = bubble_pressure add = 10 }
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 19. Sovereign Wealth Fund Proposal
+# Fires during expansion+. Requires keynesian_economics.
+# Law-gated: only for countries NOT using laissez_faire.
+# --------------------------------------------------------------------------
+banking_cycle_events.19 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = banking_cycle_events.19.t
+	desc = banking_cycle_events.19.d
+	flavor = banking_cycle_events.19.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Establish the fund - long-term stabilization at short-term cost
+	option = {
+		name = banking_cycle_events.19.a
+		default_option = yes
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = -2 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		add_modifier = {
+			name = banking_event_sovereign_wealth_fund
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_event_sovereign_wealth_fund_cost
+			multiplier = banking_event_expense_medium
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+
+	# Option B: Invest the surplus into the economy directly
+	option = {
+		name = banking_cycle_events.19.b
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_5_DESC"
+			change_variable = { name = bubble_pressure add = 5 }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = poor
+		}
+		ai_chance = {
+			base = 35
+		}
+	}
+
+	# Option C: Return the surplus as tax cuts
+	option = {
+		name = banking_cycle_events.19.c
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = rich
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
 		ai_chance = {
 			base = 30
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 20. Shadow Banking Discovery  (RARE, HIGH IMPACT)
+# Fires during boom/frenzy. Requires modern_financial_instruments.
+# An unregulated parallel banking system has grown enormous.
+# --------------------------------------------------------------------------
+banking_cycle_events.20 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = banking_cycle_events.20.t
+	desc = banking_cycle_events.20.d
+	flavor = banking_cycle_events.20.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	# Option A: Bring shadow banks under regulation - massive bubble pop, long-term safety
+	option = {
+		name = banking_cycle_events.20.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_15_DESC"
+			change_variable = { name = finance_cycle_value add = -15 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_4_DESC"
+			change_variable = { name = finance_cycle_momentum add = -4 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_25_DESC"
+			change_variable = { name = bubble_pressure add = -25 }
+		}
+		add_modifier = {
+			name = banking_event_shadow_regulation
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = large_radicals
+			strata = rich
+		}
+		ai_chance = {
+			base = 40
+			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option B: Extend an implicit guarantee - stabilize but grow the problem
+	option = {
+		name = banking_cycle_events.20.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_15_DESC"
+			change_variable = { name = bubble_pressure add = 15 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		ai_chance = {
+			base = 30
+			modifier = { add = -20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option C: Ignore it - willful blindness
+	option = {
+		name = banking_cycle_events.20.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_20_DESC"
+			change_variable = { name = bubble_pressure add = 20 }
+		}
+		ai_chance = {
+			base = 15
 		}
 	}
 }

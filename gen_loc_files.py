@@ -22,9 +22,9 @@ FILES = {
  # ===== 1 – The Bankers' Lobby (Financial Regulation) =====
  extra_law_events.1.t:0 "The Bankers' Lobby"
  extra_law_events.1.d:0 "Our proposed reforms to the financial sector have drawn the attention of powerful banking interests. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have dispatched a delegation of well-dressed men to the halls of government, armed with ledgers full of dire predictions about the consequences of [SCOPE.sLaw('current_law_scope').GetName]."
- extra_law_events.1.f:0 ""You must understand, gentlemen, that if you proceed with this legislation, you will be sawing through the very branch upon which the prosperity of this nation sits. We are not here to threaten — merely to illuminate the consequences of haste.""
+ extra_law_events.1.f:0 ""You must understand, gentlemen, that if you proceed with this legislation, you will be sawing through the very branch upon which the prosperity of this nation sits. We are not here to threaten - merely to illuminate the consequences of haste.""
  extra_law_events.1.a:0 "We shall hear their concerns, but the reform proceeds."
- extra_law_events.1.b:0 "Build a broader coalition — hear the bankers out."
+ extra_law_events.1.b:0 "Build a broader coalition - hear the bankers out."
 
  # ===== 2 – A Run on the Banks (Financial Regulation) =====
  extra_law_events.2.t:0 "A Run on the Banks"
@@ -50,16 +50,16 @@ FILES = {
  # ===== 5 – The Wiretapping Scandal (Privacy Rights) =====
  extra_law_events.5.t:0 "The Wiretapping Scandal"
  extra_law_events.5.d:0 "A journalist has published a damning exposé revealing that government agents have been intercepting the private correspondence of ordinary citizens. The revelations have ignited a fierce public debate about the proper limits of state surveillance."
- extra_law_events.5.f:0 ""They read my letters to my mother. My mother! And for what? Because I once attended a lecture by a man who attended a lecture by a man the police found suspicious? This is not security — this is tyranny dressed in a clerk's coat.""
+ extra_law_events.5.f:0 ""They read my letters to my mother. My mother! And for what? Because I once attended a lecture by a man who attended a lecture by a man the police found suspicious? This is not security - this is tyranny dressed in a clerk's coat.""
  extra_law_events.5.a:0 "This outrage proves the need for our proposed law!"
- extra_law_events.5.b:0 "Proceed quietly — don't overplay our hand."
+ extra_law_events.5.b:0 "Proceed quietly - don't overplay our hand."
  extra_law_events.5.c:0 "Frame it as a security matter and force the issue."
 
  # ===== 6 – The Viral Campaign (Internet Governance) =====
  extra_law_events.6.t:0 "The Viral Campaign"
  extra_law_events.6.d:0 "A grassroots campaign organized by the [SCOPE.gsInterestGroup('supporting_ig').GetName] has gone viral across the nation's digital networks, generating enormous public interest in our proposed [SCOPE.sLaw('current_law_scope').GetName] legislation."
  extra_law_events.6.f:0 ""It started as a single post on a message board, and within forty-eight hours it had been shared by millions. The old guard doesn't understand: you cannot put the genie of information back in the bottle.""
- extra_law_events.6.a:0 "Ride the wave — let the campaign build pressure."
+ extra_law_events.6.a:0 "Ride the wave - let the campaign build pressure."
  extra_law_events.6.b:0 "Channel the energy into a measured public consultation."
 
  # ===== 7 – The Ethics of the Gene (Genetic Rights) =====
@@ -73,14 +73,14 @@ FILES = {
  extra_law_events.8.t:0 "The Robber Barons"
  extra_law_events.8.d:0 "Public anger has been building against the great industrial combines. Pamphlets circulate depicting the [SCOPE.gsInterestGroup('industrialists_ig').GetName] as bloated spiders sitting at the center of a web of monopoly, choking fair competition and gouging the common consumer."
  extra_law_events.8.f:0 ""The great trusts have turned the marketplace into a private fiefdom. Where once a hundred firms competed, now one baron sits upon a throne of steel and oil, and dares to call his extortion 'efficiency.'""
- extra_law_events.8.a:0 "The monopolists have had their day — break the trusts!"
+ extra_law_events.8.a:0 "The monopolists have had their day - break the trusts!"
  extra_law_events.8.b:0 "Negotiate a compromise with industry."
 
  # ===== 9 – The Pirate's Dilemma (Intellectual Property) =====
  extra_law_events.9.t:0 "The Pirate's Dilemma"
  extra_law_events.9.d:0 "Our proposed changes to intellectual property law have split the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName]. Some argue passionately that ideas are the common heritage of mankind, while others insist that without the protection of patents, the wellspring of invention will dry up."
  extra_law_events.9.f:0 ""If I plant an apple tree, the apples are mine. But if I sing a song, does it not belong to everyone who hears it? The question of who owns an idea is, I suspect, the question that will define this century.""
- extra_law_events.9.a:0 "The reform is long overdue — pass it now!"
+ extra_law_events.9.a:0 "The reform is long overdue - pass it now!"
  extra_law_events.9.b:0 "Build an academic consensus with the intelligentsia."
 
  # ===== 10 – Reports from the Front (Rules of War) =====
@@ -93,8 +93,8 @@ FILES = {
  # ===== 11 – The Generals Object (Rules of War – Military Pushback) =====
  extra_law_events.11.t:0 "The Generals Object"
  extra_law_events.11.d:0 "Senior officers of the [SCOPE.gsInterestGroup('armed_forces_ig').GetName] have submitted a memorandum to the government protesting the proposed [SCOPE.sLaw('current_law_scope').GetName]. They argue that binding the hands of commanders in wartime will cost more lives than it saves."
- extra_law_events.11.f:0 ""With the greatest respect, gentlemen of the legislature have never held a field command. War is not a gentleman's game. If you tie our hands with these regulations, the enemy will not reciprocate, and it is our soldiers — not yours — who will pay the price.""
- extra_law_events.11.a:0 "Overrule the generals — this is a matter of principle."
+ extra_law_events.11.f:0 ""With the greatest respect, gentlemen of the legislature have never held a field command. War is not a gentleman's game. If you tie our hands with these regulations, the enemy will not reciprocate, and it is our soldiers - not yours - who will pay the price.""
+ extra_law_events.11.a:0 "Overrule the generals - this is a matter of principle."
  extra_law_events.11.b:0 "Accommodate their concerns to keep them on side."
 
  # ===== 12 – A Question of Punishment (Criminal Justice) =====
@@ -116,7 +116,7 @@ FILES = {
  extra_law_events.14.d:0 "An investigation has revealed that several prominent politicians received lavish gifts and secret payments from wealthy donors in exchange for favorable legislation. The public is outraged, and reformers are seizing the moment to push for [SCOPE.sLaw('current_law_scope').GetName]."
  extra_law_events.14.f:0 ""The honorable member's vote, it seems, was not so much cast as it was purchased. One wonders if the legislature might save time by simply auctioning off its seats to the highest bidder.""
  extra_law_events.14.a:0 "Expose the corruption and push for reform!"
- extra_law_events.14.b:0 "Use this quietly as leverage — no need for spectacle."
+ extra_law_events.14.b:0 "Use this quietly as leverage - no need for spectacle."
 
  # ===== 15 – The Question of Autonomy (State Power) =====
  extra_law_events.15.t:0 "The Question of Autonomy"
@@ -135,7 +135,7 @@ FILES = {
  # ===== 17 – The Eldest Son's Complaint (Inheritance) =====
  extra_law_events.17.t:0 "The Eldest Son's Complaint"
  extra_law_events.17.d:0 "The proposed changes to inheritance law have provoked outrage among the [SCOPE.gsInterestGroup('landowners_ig').GetName]. The eldest sons of several prominent families have petitioned the government, warning that dividing their estates will destroy the great houses that form the backbone of rural society."
- extra_law_events.17.f:0 ""My father built this estate with his own hands, and his father before him. Now you tell me I must share it equally with my younger brothers, one of whom has not visited in five years and the other of whom is a notorious gambler? This is not justice — this is vandalism.""
+ extra_law_events.17.f:0 ""My father built this estate with his own hands, and his father before him. Now you tell me I must share it equally with my younger brothers, one of whom has not visited in five years and the other of whom is a notorious gambler? This is not justice - this is vandalism.""
  extra_law_events.17.a:0 "All children deserve an equal share."
  extra_law_events.17.b:0 "Offer a transition period to ease the landowners' fears."
 
@@ -143,7 +143,7 @@ FILES = {
  extra_law_events.18.t:0 "Petitions of the Heart"
  extra_law_events.18.d:0 "A group of citizens has delivered a moving petition to the legislature, sharing personal stories of discrimination and asking for the protections promised by [SCOPE.sLaw('current_law_scope').GetName]. The petition has generated significant public sympathy, though the [SCOPE.gsInterestGroup('devout_ig').GetName] have denounced it."
  extra_law_events.18.f:0 ""We do not ask for special treatment. We ask only to walk the same streets, hold the same jobs, and love the same as any other citizen of this nation, without fear of the magistrate's knock upon the door.""
- extra_law_events.18.a:0 "The petitioners shall be heard — their cause is just."
+ extra_law_events.18.a:0 "The petitioners shall be heard - their cause is just."
  extra_law_events.18.b:0 "Work quietly behind the scenes to defuse opposition."
 
  # ===== 19 – The Cradle and the State (Family & Reproductive Policy) =====
@@ -165,28 +165,28 @@ FILES = {
  extra_law_events.21.t:0 "A March for Dignity"
  extra_law_events.21.d:0 "Thousands of citizens have taken to the streets in a peaceful march demanding equal rights and protections under [SCOPE.sLaw('current_law_scope').GetName]. The procession stretches through the heart of the capital, drawing international attention."
  extra_law_events.21.f:0 ""They marched in silence for the first mile. Then someone began to sing, and by the time they reached the steps of the legislature, ten thousand voices carried the melody. It was, by any measure, the most powerful argument ever made without a single word of debate.""
- extra_law_events.21.a:0 "March with them — show the world we are changing!"
+ extra_law_events.21.a:0 "March with them - show the world we are changing!"
  extra_law_events.21.b:0 "Support the cause from the legislature floor."
 
  # ===== 22 – The Automation Question (Welfare – UBI / Post-Scarcity) =====
  extra_law_events.22.t:0 "The Automation Question"
  extra_law_events.22.d:0 "The relentless march of automation has left thousands without work, and the [SCOPE.gsInterestGroup('trade_unions_ig').GetName] are demanding radical action. Proponents of [SCOPE.sLaw('current_law_scope').GetName] argue that when machines do the work, the bounty must be shared with all."
  extra_law_events.22.f:0 ""The loom does not eat. The steam-hammer does not sleep. The calculating engine does not demand a pension. And yet the men they replaced must still feed their families. If the machines have taken the work, then the machines must pay the wages.""
- extra_law_events.22.a:0 "The machines free us — we must share the bounty!"
+ extra_law_events.22.a:0 "The machines free us - we must share the bounty!"
  extra_law_events.22.b:0 "Phase it in gradually to win over industry."
 
  # ===== 23 – The Algorithmic Showcase (Governance – Algorithmic) =====
  extra_law_events.23.t:0 "The Algorithmic Showcase"
- extra_law_events.23.d:0 "Proponents of algorithmic governance have organized a dramatic public demonstration, allowing a prototype system to allocate a city's budget in real time. The results are impressive — eliminating waste, optimizing services, and doing it all in minutes rather than months."
+ extra_law_events.23.d:0 "Proponents of algorithmic governance have organized a dramatic public demonstration, allowing a prototype system to allocate a city's budget in real time. The results are impressive - eliminating waste, optimizing services, and doing it all in minutes rather than months."
  extra_law_events.23.f:0 ""The machine does not accept bribes. It does not favor one district over another because of a cousin's connections. It simply calculates the optimal outcome and executes it. Whether this is liberation or damnation, I confess, I cannot yet tell.""
- extra_law_events.23.a:0 "The demonstration speaks for itself — forge ahead!"
+ extra_law_events.23.a:0 "The demonstration speaks for itself - forge ahead!"
  extra_law_events.23.b:0 "Build public understanding before proceeding."
 
  # ===== 24 – The People's Assembly (Governance – Direct Democracy) =====
  extra_law_events.24.t:0 "The People's Assembly"
  extra_law_events.24.d:0 "A mass gathering of citizens has spontaneously organized in the capital's central square, debating policy and passing informal resolutions by show of hands. The [SCOPE.gsInterestGroup('opposing_ig').GetName] view this spectacle with alarm, but supporters of [SCOPE.sLaw('current_law_scope').GetName] see it as proof that the people are ready to govern themselves."
  extra_law_events.24.f:0 ""For a single afternoon, the square was not a marketplace but a parliament. Fishmongers debated with professors, and the vote of a seamstress carried the same weight as that of a factory owner. It was, depending upon one's disposition, either the dawn of a new age or the beginning of the end.""
- extra_law_events.24.a:0 "Ride the popular wave — push the reform through!"
+ extra_law_events.24.a:0 "Ride the popular wave - push the reform through!"
  extra_law_events.24.b:0 "Bring the opposition into the process."
 """,
 
@@ -198,30 +198,30 @@ FILES = {
 
  # ===== 1 – Staffing the New Ministry (Generic – Establishing) =====
  ministry_law_events.1.t:0 "Staffing the New Ministry"
- ministry_law_events.1.d:0 "The government has begun the enormous task of standing up [SCOPE.sLaw('current_law_scope').GetName]. Advertisements for clerks, administrators, and departmental heads have been posted across every public notice board, and a flood of applications — some qualified, many spectacularly not — has poured in."
- ministry_law_events.1.f:0 "The new ministry shall require, at minimum, fourteen senior administrators, forty-two departmental heads, two hundred and seven clerks, and — if the budget permits — a reliable doorman. I trust these positions will be filled strictly on merit, which is to say, by the cousins of those already appointed."
- ministry_law_events.1.a:0 "Recruit aggressively — fill every desk."
+ ministry_law_events.1.d:0 "The government has begun the enormous task of standing up [SCOPE.sLaw('current_law_scope').GetName]. Advertisements for clerks, administrators, and departmental heads have been posted across every public notice board, and a flood of applications - some qualified, many spectacularly not - has poured in."
+ ministry_law_events.1.f:0 "The new ministry shall require, at minimum, fourteen senior administrators, forty-two departmental heads, two hundred and seven clerks, and - if the budget permits - a reliable doorman. I trust these positions will be filled strictly on merit, which is to say, by the cousins of those already appointed."
+ ministry_law_events.1.a:0 "Recruit aggressively - fill every desk."
  ministry_law_events.1.b:0 "Staff it gradually to ensure quality."
 
  # ===== 2 – The Budget Debate (Generic – Establishing) =====
  ministry_law_events.2.t:0 "The Budget Debate"
  ministry_law_events.2.d:0 "Parliament has erupted into heated argument over the proposed funding for [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] insist the money would be better spent elsewhere, while proponents argue that the new ministry cannot function without proper resources."
  ministry_law_events.2.f:0 "The honorable member claims this ministry will cost a mere trifle. Allow me to remind him that the last 'trifle' we approved has consumed an entire wing of the treasury and shows no sign of producing anything more useful than memoranda addressed to other memoranda."
- ministry_law_events.2.a:0 "Allocate the full budget — half measures produce half results."
+ ministry_law_events.2.a:0 "Allocate the full budget - half measures produce half results."
  ministry_law_events.2.b:0 "Promise a lean operation to win the skeptics over."
 
  # ===== 3 – Bureaucratic Turf Wars (Generic – Establishing) =====
  ministry_law_events.3.t:0 "Bureaucratic Turf Wars"
  ministry_law_events.3.d:0 "The creation of [SCOPE.sLaw('current_law_scope').GetName] has provoked a turf war among existing government departments. Senior officials who have managed these matters for years are reluctant to cede authority to a new ministry and its untested staff."
  ministry_law_events.3.f:0 "The permanent secretary looked as though I had asked him to hand over his firstborn child. 'You cannot simply take the Trade Division,' he said, clutching his files to his chest. 'I have been nurturing this department since before you were in Parliament.'"
- ministry_law_events.3.a:0 "Assert the new ministry's jurisdiction — clarity is essential."
+ ministry_law_events.3.a:0 "Assert the new ministry's jurisdiction - clarity is essential."
  ministry_law_events.3.b:0 "Allow a transitional period to ease the change."
 
  # ===== 4 – The Redundant Clerks (Generic – Dissolving) =====
  ministry_law_events.4.t:0 "The Redundant Clerks"
  ministry_law_events.4.d:0 "With the proposed passage of [SCOPE.sLaw('current_law_scope').GetName], hundreds of government employees face the prospect of redundancy. The corridors of the soon-to-be-dissolved ministry are filled with anxious functionaries, their desks already half-packed, their futures uncertain."
  ministry_law_events.4.f:0 "Twenty-three years I have given to this ministry. Twenty-three years of filing, stamping, and indexing. And now they tell me my services are no longer required. I suppose I shall have to learn what it is that ordinary people do with their afternoons."
- ministry_law_events.4.a:0 "Swift dissolution is best — rip off the bandage."
+ ministry_law_events.4.a:0 "Swift dissolution is best - rip off the bandage."
  ministry_law_events.4.b:0 "Offer generous severance and retraining."
 
  # ===== 5 – The Generals' War Room (Ministry of War) =====
@@ -233,7 +233,7 @@ FILES = {
 
  # ===== 6 – The Ambassador's Dilemma (Ministry of Foreign Affairs) =====
  ministry_law_events.6.t:0 "The Ambassador's Dilemma"
- ministry_law_events.6.d:0 "A diplomatic incident with a foreign power has exposed the embarrassing inadequacy of our current foreign affairs apparatus. Communiqués were bungled, protocols were ignored, and the resulting misunderstanding nearly escalated into a crisis — lending fresh urgency to the case for [SCOPE.sLaw('current_law_scope').GetName]."
+ ministry_law_events.6.d:0 "A diplomatic incident with a foreign power has exposed the embarrassing inadequacy of our current foreign affairs apparatus. Communiqués were bungled, protocols were ignored, and the resulting misunderstanding nearly escalated into a crisis - lending fresh urgency to the case for [SCOPE.sLaw('current_law_scope').GetName]."
  ministry_law_events.6.f:0 "The ambassador, it transpires, greeted the foreign dignitary with the traditional salutation for a funeral rather than a state banquet. The dignitary was not amused. I am told relations have been set back by approximately a decade."
  ministry_law_events.6.a:0 "This debacle proves we need a proper ministry!"
  ministry_law_events.6.b:0 "Use the incident to build a careful consensus."
@@ -242,7 +242,7 @@ FILES = {
  ministry_law_events.7.t:0 "The Merchant's Petition"
  ministry_law_events.7.d:0 "A delegation of merchants and manufacturers, led by prominent members of the [SCOPE.gsInterestGroup('industrialists_ig').GetName], has presented a petition regarding [SCOPE.sLaw('current_law_scope').GetName]. They argue that the chaos of competing regulations and tariffs is strangling commerce, and that a coordinated ministry is essential."
  ministry_law_events.7.f:0 "I must apply to three different offices to export a single crate of textiles. The first grants me a permit, the second demands a different permit, and the third informs me that both permits expired yesterday. A Ministry of Commerce would, at the very least, reduce the permits to one."
- ministry_law_events.7.a:0 "Commerce demands coordination — push it through!"
+ ministry_law_events.7.a:0 "Commerce demands coordination - push it through!"
  ministry_law_events.7.b:0 "Design the ministry to address merchant concerns."
 
  # ===== 8 – The Artist's Subsidy (Ministry of Culture) =====
@@ -250,13 +250,13 @@ FILES = {
  ministry_law_events.8.d:0 "The debate over [SCOPE.sLaw('current_law_scope').GetName] has drawn the nation's artists and intellectuals into a furious argument. Some in the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] welcome state patronage as the foundation of a cultural renaissance, while others see it as the first step toward censorship and conformity."
  ministry_law_events.8.f:0 "The poet stood before the committee and declared that he would sooner burn his manuscripts than submit them for government approval. The painter beside him quietly noted that government approval came with a very generous stipend, and asked where one might apply."
  ministry_law_events.8.a:0 "A great nation deserves a Ministry of Culture."
- ministry_law_events.8.b:0 "Let the artists help design it — win their support."
+ ministry_law_events.8.b:0 "Let the artists help design it - win their support."
 
  # ===== 9 – Capital vs. Labor (Ministry of Labor – both variants) =====
  ministry_law_events.9.t:0 "Capital vs. Labor"
  ministry_law_events.9.d:0 "The proposed [SCOPE.sLaw('current_law_scope').GetName] has ignited the eternal struggle between capital and labor. Factory owners and workers' representatives have each mounted fierce campaigns, and the question of whose interests the new ministry will serve has become the dominant political issue of the season."
- ministry_law_events.9.f:0 "The factory owner slammed his fist on the table: 'A ministry that coddles workers will bankrupt us all!' The union leader replied without blinking: 'A ministry that coddles owners already exists — it is called the rest of the government.'"
- ministry_law_events.9.a:0 "The ministry will serve the national interest — press forward!"
+ ministry_law_events.9.f:0 "The factory owner slammed his fist on the table: 'A ministry that coddles workers will bankrupt us all!' The union leader replied without blinking: 'A ministry that coddles owners already exists - it is called the rest of the government.'"
+ ministry_law_events.9.a:0 "The ministry will serve the national interest - press forward!"
  ministry_law_events.9.b:0 "Proceed carefully to minimize opposition."
  ministry_law_events.9.c:0 "Invite the key stakeholders to shape the ministry."
 
@@ -264,14 +264,14 @@ FILES = {
  ministry_law_events.10.t:0 "The Smokestack Question"
  ministry_law_events.10.d:0 "The [SCOPE.gsInterestGroup('industrialists_ig').GetName] have mounted a vigorous campaign against [SCOPE.sLaw('current_law_scope').GetName], arguing that environmental regulation will cripple the nation's industry and cost thousands of jobs. Meanwhile, reports of poisoned rivers and blackened skies have galvanized public support."
  ministry_law_events.10.f:0 "The factory owner pointed at his smokestacks and declared them the engines of prosperity. The fisherman downstream pointed at his empty nets and called them the instruments of ruin. Both, I regret to say, were correct."
- ministry_law_events.10.a:0 "The environment cannot wait — industry must adapt!"
+ ministry_law_events.10.a:0 "The environment cannot wait - industry must adapt!"
  ministry_law_events.10.b:0 "Offer industry a seat at the table."
 
  # ===== 11 – The Shadow Files (Ministry of Intelligence and Security) =====
  ministry_law_events.11.t:0 "The Shadow Files"
- ministry_law_events.11.d:0 "Leaked documents have revealed the extraordinary capabilities that [SCOPE.sLaw('current_law_scope').GetName] would grant to the state — surveillance networks, informant systems, and the power to operate beyond ordinary legal oversight. The public is uneasy, though some argue such tools are the price of security."
+ ministry_law_events.11.d:0 "Leaked documents have revealed the extraordinary capabilities that [SCOPE.sLaw('current_law_scope').GetName] would grant to the state - surveillance networks, informant systems, and the power to operate beyond ordinary legal oversight. The public is uneasy, though some argue such tools are the price of security."
  ministry_law_events.11.f:0 "The leaked memorandum was clinical in its language: 'Full spectrum monitoring of communications, including private correspondence, shall be considered a standard operational capability.' The journalist who published it has since found it prudent to relocate abroad."
- ministry_law_events.11.a:0 "Security demands these tools — push forward."
+ ministry_law_events.11.a:0 "Security demands these tools - push forward."
  ministry_law_events.11.b:0 "Build in strict oversight to reassure the public."
 
  # ===== 12 – The Refugee Ship (Ministry of Refugee Affairs) =====
@@ -292,7 +292,7 @@ FILES = {
  ministry_law_events.14.t:0 "The Laboratory of the State"
  ministry_law_events.14.d:0 "A breakthrough at a university laboratory has reignited the debate over [SCOPE.sLaw('current_law_scope').GetName]. Members of the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] argue that only coordinated state investment can turn such discoveries into practical advances, while skeptics warn that bureaucrats make poor scientists."
  ministry_law_events.14.f:0 "The professor presented his findings with quiet pride. The parliamentarian beside me leaned over and whispered, 'Very impressive. Now, can it win a war?' I fear that is precisely the question the Ministry will be created to answer."
- ministry_law_events.14.a:0 "Science needs state coordination — push forward!"
+ ministry_law_events.14.a:0 "Science needs state coordination - push forward!"
  ministry_law_events.14.b:0 "Let the universities lead the design process."
 
  # ===== 15 – The Watchers (Ministry of Thought Control) =====
@@ -306,14 +306,14 @@ FILES = {
  ministry_law_events.16.t:0 "The Tainted Product"
  ministry_law_events.16.d:0 "A scandal has erupted after dozens of citizens fell ill from a contaminated product sold by a prominent manufacturer. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] protest that it was an isolated incident, but investigators found that the company had been cutting costs at the expense of safety for years."
  ministry_law_events.16.f:0 "The label promised 'Pure and Wholesome.' The chemist's analysis found sawdust, chalk, and a substance he diplomatically described as 'of uncertain animal origin.' When confronted, the manufacturer protested that his competitors used far worse."
- ministry_law_events.16.a:0 "Consumers deserve protection — act now!"
+ ministry_law_events.16.a:0 "Consumers deserve protection - act now!"
  ministry_law_events.16.b:0 "Let industry self-regulate within the new framework."
 
  # ===== 17 – The City Rises (Ministry of Urban Planning) =====
  ministry_law_events.17.t:0 "The City Rises"
- ministry_law_events.17.d:0 "The nation's cities are growing at a pace that alarms even their most enthusiastic boosters. Tenements spring up overnight, sewage systems overflow, and the air grows thick with soot. The case for [SCOPE.sLaw('current_law_scope').GetName] has never been more urgent — or more controversial."
+ ministry_law_events.17.d:0 "The nation's cities are growing at a pace that alarms even their most enthusiastic boosters. Tenements spring up overnight, sewage systems overflow, and the air grows thick with soot. The case for [SCOPE.sLaw('current_law_scope').GetName] has never been more urgent - or more controversial."
  ministry_law_events.17.f:0 "I walked through the new district this morning. In the space where a meadow stood last year, there are now fourteen tenement blocks, a factory, and precisely zero public parks. The developer assured me that a park was planned, but it kept being replaced by more profitable buildings."
- ministry_law_events.17.a:0 "Cities need plans, not chaos — establish the ministry!"
+ ministry_law_events.17.a:0 "Cities need plans, not chaos - establish the ministry!"
  ministry_law_events.17.b:0 "Consult with developers to smooth the transition."
 
  # ===== 18 – The Pulpit and the State (Ministry of Religion) =====

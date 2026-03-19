@@ -46,7 +46,7 @@ re_automation_layoffs = {
 }
 re_automation_retraining = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-    country_weekly_innovation_mult = 0.1
+    country_tech_research_speed_mult = 0.1
     country_loyalists_from_legitimacy_mult = 0.05
 }
 re_automation_copilot = {
@@ -95,16 +95,17 @@ re_cyber_standards = {
 # ======= Spectrum crunch
 re_spectrum_auction = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-    country_influence_mult = 0.05
+    tax_dividends_add = 0.01
     country_legitimacy_base_add = -5
 }
 re_spectrum_public_grid = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    country_bureaucracy_mult = -0.03
+    building_electrics_industry_radio_throughput_add = -0.1
     country_legitimacy_base_add = 5
 }
 re_spectrum_foreign_relays = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+    country_bureaucracy_mult = -0.05
     country_convoys_capacity_mult = 0.05
     country_improve_relations_speed_mult = 0.10
 }
@@ -134,7 +135,7 @@ re_quantum_subsidy = {
 }
 re_quantum_patent_pool = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-    country_weekly_innovation_mult = 0.08
+    country_tech_research_speed_mult = 0.08
     country_bureaucracy_mult = -0.03
 }
 re_quantum_rationing = {
@@ -163,14 +164,14 @@ re_sbsp_imports = {
 # ======= Compute cluster crunch
 re_compute_fasttrack = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    building_software_industry_throughput_add = 0.08
+    building_software_industry_throughput_add = 0.1
     building_electronic_components_and_semiconductor_industry_throughput_add = 0.05
-    country_bureaucracy_mult = -0.03
+    country_bureaucracy_mult = -0.05
 }
 re_compute_audit = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_legitimacy_base_add = 5
-    country_weekly_innovation_mult = 0.03
+    country_loyalists_from_legitimacy_mult = 0.05
 }
 re_compute_prioritization = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -186,13 +187,13 @@ re_compute_prioritization = {
 # ======= Second Wave Feminism
 ste_women_workforce = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    country_weekly_innovation_mult = 0.05
+    country_tech_research_speed_mult = 0.05
     building_university_throughput_add = 0.05
 }
 ste_women_workforce_blocked = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
     country_legitimacy_base_add = 5
-    country_weekly_innovation_mult = -0.03
+    country_tech_research_speed_mult = -0.03
 }
 ste_equal_pay_reform = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -207,7 +208,8 @@ ste_equal_pay_rejected = {
 # ======= Contraceptive Pills
 ste_pill_available = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    country_weekly_innovation_mult = 0.03
+    state_birth_rate_mult = -0.03
+    country_tech_research_speed_mult = 0.03
     country_loyalists_from_legitimacy_mult = 0.03
 }
 ste_pill_restricted = {
@@ -216,24 +218,26 @@ ste_pill_restricted = {
 }
 ste_pill_subsidized = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-    country_weekly_innovation_mult = 0.05
-    country_government_wages_mult = 0.02
+    state_birth_rate_mult = -0.05
+    country_tech_research_speed_mult = 0.05
+    country_bureaucracy_mult = -0.05
+    country_loyalists_from_legitimacy_mult = 0.1
 }
 
 # ======= Sexual Revolution
 ste_sexual_revolution_embraced = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_weekly_innovation_mult = 0.03
+    country_tech_research_speed_mult = 0.03
     country_legitimacy_base_add = -5
 }
 ste_sexual_revolution_backlash = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
     country_legitimacy_base_add = 5
-    country_weekly_innovation_mult = -0.03
+    country_tech_research_speed_mult = -0.03
 }
 ste_divorce_reform = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    country_loyalists_from_legitimacy_mult = 0.03
+    country_loyalists_from_legitimacy_mult = 0.05
 }
 ste_divorce_tradition = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -243,12 +247,12 @@ ste_divorce_tradition = {
 # ======= Video Games
 ste_gaming_industry_boom = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    building_art_academy_throughput_add = 0.08
+    building_art_academy_throughput_add = 0.1
     building_software_industry_throughput_add = 0.05
 }
 ste_gaming_industry_regulated = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-    building_art_academy_throughput_add = 0.03
+    building_art_academy_throughput_add = 0.05
     country_legitimacy_base_add = 5
 }
 
@@ -256,7 +260,7 @@ ste_gaming_industry_regulated = {
 ste_pride_celebrated = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
     country_loyalists_from_legitimacy_mult = 0.05
-    country_weekly_innovation_mult = 0.03
+    country_tech_research_speed_mult = 0.03
 }
 ste_pride_suppressed = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -265,11 +269,16 @@ ste_pride_suppressed = {
 }
 ste_marriage_equality = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_loyalists_from_legitimacy_mult = 0.08
+    country_loyalists_from_legitimacy_mult = 0.05
 }
 ste_marriage_traditional = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
     country_legitimacy_base_add = 5
+}
+ste_civil_unions = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+    country_legitimacy_base_add = 2
+    country_loyalists_from_legitimacy_mult = 0.04
 }
 
 # ======= Globalization
@@ -297,46 +306,51 @@ ste_antiglobal_crackdown = {
 # ======= Terrorism
 ste_terror_security_state = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
-    country_influence_mult = 0.10
     country_military_wages_mult = 0.05
     country_legitimacy_base_add = -5
+    country_institution_cost_institution_ministry_of_intelligence_and_security_mult = -0.1
+    country_institution_impact_institution_ministry_of_intelligence_and_security_mult = 0.1
 }
 ste_terror_unity_resilience = {
-    icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_loyalists_from_legitimacy_mult = 0.10
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+    country_radicals_from_legitimacy_mult = 0.25
     country_legitimacy_base_add = 10
+    political_movement_radicalism_add = -0.1
+    country_institution_cost_institution_ministry_of_intelligence_and_security_mult = 0.1
+    country_institution_impact_institution_ministry_of_intelligence_and_security_mult = -0.1
 }
 ste_terror_intelligence_reform = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-    country_influence_mult = 0.08
-    country_weekly_innovation_mult = 0.03
+    country_tech_research_speed_mult = 0.05
+    country_institution_impact_institution_ministry_of_intelligence_and_security_mult = 0.1
 }
 ste_mass_surveillance = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-    country_influence_mult = 0.15
     country_legitimacy_base_add = -10
+    country_institution_cost_institution_ministry_of_intelligence_and_security_mult = 0.1
+    country_institution_impact_institution_ministry_of_intelligence_and_security_mult = 0.1
 }
 ste_privacy_preserved = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
     country_loyalists_from_legitimacy_mult = 0.05
-    country_weekly_innovation_mult = 0.05
+    country_tech_research_speed_mult = 0.05
 }
 
 # ======= Social Media
 ste_misinfo_regulate = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-    country_bureaucracy_mult = -0.03
+    country_bureaucracy_mult = -0.05
     country_legitimacy_base_add = 5
 }
 ste_misinfo_free_speech = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_weekly_innovation_mult = 0.05
+    country_tech_research_speed_mult = 0.05
     country_legitimacy_base_add = -5
 }
 ste_misinfo_literacy = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-    country_weekly_innovation_mult = 0.05
-    country_loyalists_from_legitimacy_mult = 0.03
+    country_tech_research_speed_mult = 0.05
+    country_loyalists_from_legitimacy_mult = 0.05
 }
 ste_election_interference_counter = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -351,41 +365,41 @@ ste_election_interference_ignored = {
 # ======= Social Justice
 ste_campus_activism_support = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_weekly_innovation_mult = 0.05
-    building_university_throughput_add = 0.05
+    country_legitimacy_base_add = 5
+    country_academics_pol_str_mult = 0.05
 }
 ste_campus_activism_contain = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-    country_legitimacy_base_add = 5
-    building_university_throughput_add = -0.05
+    country_authority_add = 100
+    country_academics_pol_str_mult = -0.05
 }
 
 # ======= Brain-Computer Interfaces
 ste_bci_consumer_rollout = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    country_weekly_innovation_mult = 0.08
+    country_tech_research_speed_mult = 0.08
     building_software_industry_throughput_add = 0.05
 }
 ste_bci_regulated_access = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    country_weekly_innovation_mult = 0.03
+    country_tech_research_speed_mult = 0.03
     country_legitimacy_base_add = 5
 }
 ste_bci_banned = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-    country_weekly_innovation_mult = -0.05
+    country_tech_research_speed_mult = -0.05
     country_legitimacy_base_add = 5
 }
 
 # ======= Human Augmentation
 ste_augmented_sports_separate = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_loyalists_from_legitimacy_mult = 0.03
+    country_loyalists_from_legitimacy_mult = 0.05
     country_legitimacy_base_add = 5
 }
 ste_augmented_sports_embrace = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-    country_weekly_innovation_mult = 0.03
+    country_tech_research_speed_mult = 0.05
     country_legitimacy_base_add = -5
 }
 
@@ -393,13 +407,13 @@ ste_augmented_sports_embrace = {
 ste_space_colony_national = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
     country_prestige_mult = 0.10
-    country_weekly_innovation_mult = 0.05
+    country_tech_research_speed_mult = 0.05
     country_government_wages_mult = 0.03
 }
 ste_space_colony_international = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
     country_improve_relations_speed_mult = 0.15
-    country_weekly_innovation_mult = 0.05
+    country_tech_research_speed_mult = 0.05
 }
 ste_space_gov_direct = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -409,28 +423,28 @@ ste_space_gov_direct = {
 ste_space_gov_autonomy = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_loyalists_from_legitimacy_mult = 0.05
-    country_weekly_innovation_mult = 0.03
+    country_tech_research_speed_mult = 0.03
 }
 
 # ======= Telepathic Communities
 ste_hivemind_tolerate = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_weekly_innovation_mult = 0.03
+    country_tech_research_speed_mult = 0.03
 }
 ste_hivemind_integrate = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-    country_weekly_innovation_mult = 0.10
+    country_tech_research_speed_mult = 0.10
     country_bureaucracy_mult = 0.05
 }
 ste_hivemind_suppress = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
     country_legitimacy_base_add = 5
-    country_weekly_innovation_mult = -0.03
+    country_tech_research_speed_mult = -0.03
 }
 ste_telepathic_diplomacy = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
     country_improve_relations_speed_mult = 0.20
-    country_weekly_innovation_mult = 0.05
+    country_tech_research_speed_mult = 0.05
 }
 ste_telepathic_diplomacy_rejected = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -440,17 +454,17 @@ ste_telepathic_diplomacy_rejected = {
 # ======= Nuclear Power Meltdowns
 ste_reactor_leak_contained = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    country_legitimacy_base_add = 5
-    country_government_wages_mult = 0.02
+    building_nuclear_plant_throughput_add = -0.2
 }
 ste_reactor_leak_coverup = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
     country_legitimacy_base_add = -10
+    state_mortality_mult = 0.02
 }
 ste_reactor_leak_shutdown = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-    goods_output_electricity_mult = -0.10
-    country_legitimacy_base_add = -5
+    building_nuclear_plant_throughput_add = -0.8
+    country_legitimacy_base_add = 5
 }
 ste_meltdown_evacuate = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
@@ -469,28 +483,28 @@ ste_antinuclear_concede = {
 }
 ste_antinuclear_defend = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-    country_weekly_innovation_mult = 0.03
+    country_tech_research_speed_mult = 0.03
     country_legitimacy_base_add = -5
 }
 
 # ======= Artificial Intelligence
 ste_deepfake_regulate = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-    country_bureaucracy_mult = -0.03
+    country_tech_research_speed_mult = -0.05
     country_legitimacy_base_add = 5
 }
 ste_deepfake_authenticate = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-    country_weekly_innovation_mult = 0.05
     building_software_industry_throughput_add = 0.05
 }
 ste_deepfake_ignore = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
     country_legitimacy_base_add = -10
+    building_software_industry_throughput_add = 0.05
 }
 ste_ai_rights_granted = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_weekly_innovation_mult = 0.05
+    country_tech_research_speed_mult = 0.05
     country_bureaucracy_mult = -0.03
 }
 ste_ai_rights_denied = {
@@ -513,20 +527,20 @@ ste_algo_gov_reject = {
 ste_designer_baby_ban = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
     country_legitimacy_base_add = 5
-    country_weekly_innovation_mult = -0.03
+    country_tech_research_speed_mult = -0.03
 }
 ste_designer_baby_medical = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    country_weekly_innovation_mult = 0.05
+    country_tech_research_speed_mult = 0.05
 }
 ste_designer_baby_unrestricted = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-    country_weekly_innovation_mult = 0.08
+    country_tech_research_speed_mult = 0.08
     country_legitimacy_base_add = -10
 }
 ste_synthetic_crops_adopt = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    country_weekly_innovation_mult = 0.05
+    country_tech_research_speed_mult = 0.05
     building_food_industry_throughput_add = 0.08
 }
 ste_synthetic_crops_ban = {
@@ -537,18 +551,18 @@ ste_synthetic_crops_ban = {
 # ======= Autonomous Vehicles
 ste_av_full_adoption = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    building_motor_industry_throughput_add = 0.08
+    building_automotive_industry_throughput_add = 0.1
+    building_software_industry_throughput_add = 0.05
     state_infrastructure_mult = 0.05
 }
 ste_av_cautious_rollout = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    building_motor_industry_throughput_add = 0.03
-    state_infrastructure_mult = 0.03
+    building_automotive_industry_throughput_add = 0.05
     country_legitimacy_base_add = 5
 }
 ste_av_blocked = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-    building_motor_industry_throughput_add = -0.05
+    building_automotive_industry_throughput_add = -0.05
     country_legitimacy_base_add = 5
 }
 ste_av_crash_pause = {
@@ -564,14 +578,13 @@ ste_av_crash_continue = {
 
 # ======= Institution-Gated Options (new)
 
-# Nuclear — proactive safety audit catches issues early
+# Nuclear - proactive safety audit catches issues early
 ste_reactor_leak_audit = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    goods_output_electricity_mult = 0.03
     country_legitimacy_base_add = 5
 }
 
-# Nuclear — institutional emergency response (faster containment, moderate cost)
+# Nuclear - institutional emergency response (faster containment, moderate cost)
 ste_meltdown_institutional_response = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
     goods_output_electricity_mult = -0.05
@@ -579,21 +592,21 @@ ste_meltdown_institutional_response = {
     country_legitimacy_base_add = -5
 }
 
-# AV — ministry-led safety investigation (balanced resolution)
+# AV - ministry-led safety investigation (balanced resolution)
 ste_av_crash_investigation = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     building_motor_industry_throughput_add = -0.02
     country_legitimacy_base_add = 10
 }
 
-# Election interference — intelligence-backed cyber defense
+# Election interference - intelligence-backed cyber defense
 ste_election_interference_cyber_defense = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_authority_add = 50
     country_legitimacy_base_add = 10
 }
 
-# Cyber breach — intelligence-assisted forensics
+# Cyber breach - intelligence-assisted forensics
 re_cyber_intel_response = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_influence_mult = 0.05
@@ -601,7 +614,7 @@ re_cyber_intel_response = {
     country_legitimacy_base_add = 10
 }
 
-# Supply chain — ministry coordinates logistics
+# Supply chain - ministry coordinates logistics
 re_supply_ministry_coordination = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
     state_trade_capacity_mult = 0.15
@@ -609,7 +622,7 @@ re_supply_ministry_coordination = {
     country_legitimacy_base_add = 5
 }
 
-# Media panic — state media control (suppress panic at cost to freedom)
+# Media panic - state media control (suppress panic at cost to freedom)
 re_media_state_control = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
     country_authority_add = 50

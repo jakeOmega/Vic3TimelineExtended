@@ -13,9 +13,7 @@ extra_law_events.1 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -72,7 +70,7 @@ extra_law_events.1 = {
 		}
 		scope:opposing_ig = {
 			add_modifier = {
-				name = finreg_bankers_lobby_cautious
+				name = ig_approval_negative_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -103,9 +101,7 @@ extra_law_events.2 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_rich_and_poor"
-	}
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -174,9 +170,7 @@ extra_law_events.3 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -225,7 +219,7 @@ extra_law_events.3 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # The old ways must give way — press forward
+	option = { # The old ways must give way - press forward
 		name = extra_law_events.3.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -244,7 +238,7 @@ extra_law_events.3 = {
 		}
 		scope:opposing_ig = {
 			add_modifier = {
-				name = monpol_gold_hoarders_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -264,9 +258,7 @@ extra_law_events.4 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -300,6 +292,7 @@ extra_law_events.4 = {
 		trigger = {
 			enactment_phase < 2
 		}
+		custom_tooltip = ele_fiat_early_phase_tt
 		highlighted_option = yes
 		add_enactment_phase = 1
 		add_radicals = {
@@ -333,9 +326,7 @@ extra_law_events.5 = {
 
 	category = enactment
 
-	event_image = {
-		video = "middleeast_police_breaking_door"
-	}
+	event_image = { texture = "gfx/event_pictures/privacy_legislation.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -379,7 +370,7 @@ extra_law_events.5 = {
 		}
 	}
 
-	option = { # Proceed quietly — don’t overplay our hand
+	option = { # Proceed quietly - don’t overplay our hand
 		name = extra_law_events.5.b
 		add_enactment_modifier = {
 			name = privacy_surveillance_debate_cautious
@@ -397,6 +388,7 @@ extra_law_events.5 = {
 				has_law = law_type:law_ministry_of_intelligence_and_security
 			}
 		}
+		custom_tooltip = ele_has_secret_police_tt
 		highlighted_option = yes
 		add_enactment_modifier = {
 			name = privacy_surveillance_debate_advance
@@ -422,9 +414,7 @@ extra_law_events.6 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/privacy_legislation.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -473,7 +463,7 @@ extra_law_events.6 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Ride the wave — let the campaign build pressure
+	option = { # Ride the wave - let the campaign build pressure
 		name = extra_law_events.6.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -510,9 +500,7 @@ extra_law_events.7 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/law_enactment.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -548,7 +536,7 @@ extra_law_events.7 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Push forward — the science speaks for itself
+	option = { # Push forward - the science speaks for itself
 		name = extra_law_events.7.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -556,7 +544,7 @@ extra_law_events.7 = {
 		}
 		scope:devout_ig = {
 			add_modifier = {
-				name = genetics_ethics_debate_cautious
+				name = ig_approval_negative_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -569,7 +557,7 @@ extra_law_events.7 = {
 		}
 		scope:devout_ig = {
 			add_modifier = {
-				name = genetics_ethics_debate_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -589,9 +577,7 @@ extra_law_events.8 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/antitrust_legislation.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -629,7 +615,7 @@ extra_law_events.8 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # The monopolists have had their day — break them
+	option = { # The monopolists have had their day - break them
 		name = extra_law_events.8.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -637,7 +623,7 @@ extra_law_events.8 = {
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
-				name = antitrust_public_outrage_cautious
+				name = ig_approval_negative_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -650,7 +636,7 @@ extra_law_events.8 = {
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
-				name = antitrust_public_outrage_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -670,9 +656,7 @@ extra_law_events.9 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/legal_framework.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -707,7 +691,7 @@ extra_law_events.9 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # The reform is long overdue — pass it now
+	option = { # The reform is long overdue - pass it now
 		name = extra_law_events.9.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -726,7 +710,7 @@ extra_law_events.9 = {
 		}
 		scope:intelligentsia_ig = {
 			add_modifier = {
-				name = ip_piracy_debate_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -746,9 +730,7 @@ extra_law_events.10 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_before_the_battle"
-	}
+	event_image = { texture = "gfx/event_pictures/rules_of_war.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -780,7 +762,7 @@ extra_law_events.10 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # The civilized world demands restraint — act now
+	option = { # The civilized world demands restraint - act now
 		name = extra_law_events.10.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -816,9 +798,7 @@ extra_law_events.11 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_before_the_battle"
-	}
+	event_image = { texture = "gfx/event_pictures/military_reform.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -867,7 +847,7 @@ extra_law_events.11 = {
 		}
 		scope:armed_forces_ig = {
 			add_modifier = {
-				name = row_military_pushback_cautious
+				name = ig_approval_negative_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -880,7 +860,7 @@ extra_law_events.11 = {
 		}
 		scope:armed_forces_ig = {
 			add_modifier = {
-				name = row_military_pushback_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -900,9 +880,7 @@ extra_law_events.12 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_russian_serfs"
-	}
+	event_image = { texture = "gfx/event_pictures/criminal_justice.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -971,9 +949,7 @@ extra_law_events.13 = {
 
 	category = enactment
 
-	event_image = {
-		video = "southamerica_election"
-	}
+	event_image = { texture = "gfx/event_pictures/minority_rights.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1024,7 +1000,7 @@ extra_law_events.13 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # A unified tongue strengthens the nation — press on
+	option = { # A unified tongue strengthens the nation - press on
 		name = extra_law_events.13.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -1042,7 +1018,7 @@ extra_law_events.13 = {
 		}
 		scope:opposing_ig = {
 			add_modifier = {
-				name = langpol_cultural_resistance_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -1062,9 +1038,7 @@ extra_law_events.14 = {
 
 	category = enactment
 
-	event_image = {
-		video = "southamerica_election"
-	}
+	event_image = { texture = "gfx/event_pictures/electoral_reform.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1107,7 +1081,7 @@ extra_law_events.14 = {
 		}
 	}
 
-	option = { # Use this quietly as leverage — no need for spectacle
+	option = { # Use this quietly as leverage - no need for spectacle
 		name = extra_law_events.14.b
 		add_enactment_modifier = {
 			name = electfin_donor_scandal_cautious
@@ -1131,9 +1105,7 @@ extra_law_events.15 = {
 
 	category = enactment
 
-	event_image = {
-		video = "southamerica_election"
-	}
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1200,9 +1172,7 @@ extra_law_events.16 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/law_enactment.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1277,9 +1247,7 @@ extra_law_events.17 = {
 
 	category = enactment
 
-	event_image = {
-		video = "southamerica_aristocrats"
-	}
+	event_image = { texture = "gfx/event_pictures/inheritance_reform.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1316,7 +1284,7 @@ extra_law_events.17 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Equality before the law — push through
+	option = { # Equality before the law - push through
 		name = extra_law_events.17.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -1324,7 +1292,7 @@ extra_law_events.17 = {
 		}
 		scope:landowners_ig = {
 			add_modifier = {
-				name = inherit_succession_dispute_cautious
+				name = ig_approval_negative_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -1337,7 +1305,7 @@ extra_law_events.17 = {
 		}
 		scope:landowners_ig = {
 			add_modifier = {
-				name = inherit_succession_dispute_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -1357,9 +1325,7 @@ extra_law_events.18 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_rich_and_poor"
-	}
+	event_image = { texture = "gfx/event_pictures/lgbtq_rights.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1394,7 +1360,7 @@ extra_law_events.18 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Amplify their voices — justice is overdue
+	option = { # Amplify their voices - justice is overdue
 		name = extra_law_events.18.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -1412,7 +1378,7 @@ extra_law_events.18 = {
 		}
 		scope:devout_ig = {
 			add_modifier = {
-				name = lgbtq_public_petition_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -1432,9 +1398,7 @@ extra_law_events.19 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_rich_and_poor"
-	}
+	event_image = { texture = "gfx/event_pictures/law_enactment.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1502,9 +1466,7 @@ extra_law_events.20 = {
 
 	category = enactment
 
-	event_image = {
-		video = "middleeast_police_breaking_door"
-	}
+	event_image = { texture = "gfx/event_pictures/privacy_legislation.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1535,7 +1497,7 @@ extra_law_events.20 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # The people have a right to know — full steam ahead
+	option = { # The people have a right to know - full steam ahead
 		name = extra_law_events.20.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -1566,6 +1528,7 @@ extra_law_events.20 = {
 				has_law = law_type:law_ministry_of_intelligence_and_security
 			}
 		}
+		custom_tooltip = ele_has_secret_police_tt
 		highlighted_option = yes
 		add_enactment_modifier = {
 			name = rti_whistleblower_advance
@@ -1591,9 +1554,7 @@ extra_law_events.21 = {
 
 	category = enactment
 
-	event_image = {
-		video = "africa_public_protest"
-	}
+	event_image = { texture = "gfx/event_pictures/minority_rights.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1625,7 +1586,7 @@ extra_law_events.21 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # March with them — show the world we are changing
+	option = { # March with them - show the world we are changing
 		name = extra_law_events.21.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -1663,9 +1624,7 @@ extra_law_events.22 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_rich_and_poor"
-	}
+	event_image = { texture = "gfx/event_pictures/class_struggle.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1705,7 +1664,7 @@ extra_law_events.22 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # The machines free us — share the bounty now
+	option = { # The machines free us - share the bounty now
 		name = extra_law_events.22.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -1717,7 +1676,7 @@ extra_law_events.22 = {
 		}
 		scope:trade_unions_ig = {
 			add_modifier = {
-				name = welfare_automation_fears_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -1730,7 +1689,7 @@ extra_law_events.22 = {
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
-				name = welfare_automation_fears_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -1750,9 +1709,7 @@ extra_law_events.23 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_london_center"
-	}
+	event_image = { texture = "gfx/event_pictures/law_enactment.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1783,12 +1740,13 @@ extra_law_events.23 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # The demonstration speaks for itself — skip ahead
+	option = { # The demonstration speaks for itself - skip ahead
 		name = extra_law_events.23.a
 		default_option = yes
 		trigger = {
 			enactment_phase < 2
 		}
+		custom_tooltip = ele_algo_early_phase_tt
 		highlighted_option = yes
 		add_enactment_phase = 1
 		add_radicals = {
@@ -1820,9 +1778,7 @@ extra_law_events.24 = {
 
 	category = enactment
 
-	event_image = {
-		video = "southamerica_election"
-	}
+	event_image = { texture = "gfx/event_pictures/electoral_reform.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1867,7 +1823,7 @@ extra_law_events.24 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # Ride the popular wave — push the reform through
+	option = { # Ride the popular wave - push the reform through
 		name = extra_law_events.24.a
 		default_option = yes
 		add_enactment_modifier = {
@@ -1890,7 +1846,7 @@ extra_law_events.24 = {
 		}
 		scope:opposing_ig = {
 			add_modifier = {
-				name = govprin_popular_assembly_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
 			}
 		}
@@ -1898,7 +1854,7 @@ extra_law_events.24 = {
 }
 
 # ======================================================================
-# 25 – The Nature of the Reform  (State-Led Language Reform — Founding)
+# 25 – The Nature of the Reform  (State-Led Language Reform - Founding)
 #
 #   When the law is activated, the government must decide the
 #   fundamental character of the reform:
@@ -1949,9 +1905,7 @@ extra_law_events.25 = {
 	}
 	flavor = extra_law_events.25.f
 
-	event_image = {
-		video = "southamerica_election"
-	}
+	event_image = { texture = "gfx/event_pictures/law_enactment.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1961,7 +1915,11 @@ extra_law_events.25 = {
 
 	trigger = {
 		has_law = law_type:law_state_led_language_reform
-		NOT = { has_variable = language_reform_type }
+		NOR = {
+			has_modifier = langreform_revival
+			has_modifier = langreform_constructed
+			has_modifier = langreform_simplification
+		}
 	}
 
 	immediate = {
@@ -2037,9 +1995,7 @@ extra_law_events.26 = {
 	desc = extra_law_events.26.d
 	flavor = extra_law_events.26.f
 
-	event_image = {
-		video = "europenorthamerica_capitalists_meeting"
-	}
+	event_image = { texture = "gfx/event_pictures/legal_framework.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2116,9 +2072,7 @@ extra_law_events.27 = {
 	desc = extra_law_events.27.d
 	flavor = extra_law_events.27.f
 
-	event_image = {
-		video = "africa_public_protest"
-	}
+	event_image = { texture = "gfx/event_pictures/bilingual.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2150,7 +2104,7 @@ extra_law_events.27 = {
 		add_modifier = { name = langreform_minority_protection }
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		add_loyalists = {
 			value = very_small_radicals
@@ -2163,11 +2117,11 @@ extra_law_events.27 = {
 		add_modifier = { name = langreform_national_focus }
 		add_radicals = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 	}
 }
@@ -2193,9 +2147,7 @@ extra_law_events.28 = {
 
 	category = enactment
 
-	event_image = {
-		video = "unspecific_politicians_arguing"
-	}
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2242,6 +2194,7 @@ extra_law_events.28 = {
 				is_enacting_law = law_type:law_civic_monolingualism
 			}
 		}
+		custom_tooltip = ele_amend_minority_script_tt
 		currently_enacting_law = {
 			add_amendment = {
 				type = amendment_minority_script_preservation
@@ -2270,6 +2223,7 @@ extra_law_events.28 = {
 				is_enacting_law = law_type:law_multilingual_federalism
 			}
 		}
+		custom_tooltip = ele_amend_bilingualism_tt
 		currently_enacting_law = {
 			add_amendment = {
 				type = amendment_official_bilingualism
@@ -2312,9 +2266,7 @@ extra_law_events.29 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_capitalists_meeting"
-	}
+	event_image = { texture = "gfx/event_pictures/antitrust_legislation.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2425,9 +2377,7 @@ extra_law_events.30 = {
 
 	category = enactment
 
-	event_image = {
-		video = "votp_cops_march"
-	}
+	event_image = { texture = "gfx/event_pictures/criminal_justice.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2477,6 +2427,7 @@ extra_law_events.30 = {
 				is_enacting_law = law_type:law_rehabilitation_focused_criminal_justice
 			}
 		}
+		custom_tooltip = ele_amend_mandatory_minimums_tt
 		currently_enacting_law = {
 			add_amendment = {
 				type = amendment_mandatory_minimums
@@ -2502,6 +2453,7 @@ extra_law_events.30 = {
 		trigger = {
 			is_enacting_law = law_type:law_punishment_focused_criminal_justice
 		}
+		custom_tooltip = ele_amend_community_service_tt
 		currently_enacting_law = {
 			add_amendment = {
 				type = amendment_community_service
@@ -2544,9 +2496,7 @@ extra_law_events.31 = {
 
 	category = enactment
 
-	event_image = {
-		video = "unspecific_signed_contract"
-	}
+	event_image = { texture = "gfx/event_pictures/privacy_legislation.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2657,9 +2607,7 @@ extra_law_events.32 = {
 
 	category = enactment
 
-	event_image = {
-		video = "europenorthamerica_before_the_battle"
-	}
+	event_image = { texture = "gfx/event_pictures/rules_of_war.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2710,6 +2658,7 @@ extra_law_events.32 = {
 				is_enacting_law = law_type:law_limited_war
 			}
 		}
+		custom_tooltip = ele_amend_no_first_strike_tt
 		currently_enacting_law = {
 			add_amendment = {
 				type = amendment_no_first_strike
@@ -2738,6 +2687,7 @@ extra_law_events.32 = {
 				is_enacting_law = law_type:law_humanitarian_regulations
 			}
 		}
+		custom_tooltip = ele_amend_military_necessity_tt
 		currently_enacting_law = {
 			add_amendment = {
 				type = amendment_military_necessity_clause
@@ -2784,9 +2734,7 @@ extra_law_events.33 = {
 
 	category = enactment
 
-	event_image = {
-		video = "southamerica_election"
-	}
+	event_image = { texture = "gfx/event_pictures/electoral_reform.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2869,9 +2817,7 @@ extra_law_events.34 = {
 
 	category = enactment
 
-	event_image = {
-		video = "southamerica_christianity"
-	}
+	event_image = { texture = "gfx/event_pictures/lgbtq_rights.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

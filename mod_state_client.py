@@ -1,5 +1,5 @@
 """
-Mod State Client — CLI helper for querying the mod-state server.
+Mod State Client - CLI helper for querying the mod-state server.
 
 Usage:
     python mod_state_client.py status

@@ -9,7 +9,7 @@
 #   - Southern/Eastern Asia: India + East Asia + Southeast Asia
 #   - Americas (North, Central, South)
 #   - Africa
-#   - Unclassified (Oceania, Pacific — anything not in the above groups)
+#   - Unclassified (Oceania, Pacific - anything not in the above groups)
 # This means Russia → Central Asia is NOT overseas (same landmass),
 # but France → Vietnam IS overseas (different landmass).
 is_overseas_from_capital = {
@@ -89,19 +89,27 @@ is_overseas_from_capital = {
 }
 
 # A state that structurally qualifies as an overseas colony.
-# Does NOT include acceptance/integration checks — those are context-dependent.
+# Does NOT include acceptance/integration checks - those are context-dependent.
 # Scope: state
 is_overseas_colonial_state = {
 	# Not a homeland of the owner's primary/accepted cultures
 	NOT = { is_homeland_of_country_cultures = owner }
-	# Meaningful population — filters tiny outposts (Falklands, Wallis & Futuna, etc.)
+	# Meaningful population - filters tiny outposts (Falklands, Wallis & Futuna, etc.)
 	state_population >= 100000
-	# Has non-integrated population — proxy for "significant indigenous population
-	# and majority is NOT the owner's primary culture"
+	# Has non-integrated population - proxy for significant indigenous population
+	# and majority is NOT the owner's primary culture
 	# Places where everyone has been fully assimilated don't count.
-	any_scope_pop = {
-		pop_acceptance < 50
+	any_scope_culture = {
+		PREV = {
+            culture_percent_state = { target = PREV value > 0.10 }        # >10% of state
+            state_average_culture_pop_acceptance = { target = PREV value < 0.6 }  # low acceptance
+        }
 	}
+    NOT = {
+        any_primary_culture = {
+            culture_percent_state = { target = PREV value > 0.5 }
+        }
+    }
 	# On a different continent/landmass from the capital
 	is_overseas_from_capital = yes
 }

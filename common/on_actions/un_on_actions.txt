@@ -1,7 +1,7 @@
 ﻿# United Nations events - wired into monthly country pulse
 un_events_on_action = {
 	effect = {
-		# Formation event — fires once when tech is researched
+		# Formation event - fires once when tech is researched
 		if = {
 			limit = {
 				has_technology_researched = intergovernmental_organizations
@@ -12,7 +12,7 @@ un_events_on_action = {
 			trigger_event = { id = un_events.1 }
 		}
 
-		# Recurring events — only for members
+		# Recurring events - only for members
 		if = {
 			limit = {
 				has_modifier = un_member_modifier

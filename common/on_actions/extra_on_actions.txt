@@ -347,7 +347,7 @@ global_warming_update_on_action = {
 					name = greenhouse_gas_emissions
 					add = {
 						value = level
-						multiply = -0.06  # 300 oil Ã— 2 weight / 10000
+						multiply = -0.06  # 300 oil Ã- 2 weight / 10000
 					}
 				}
 			}
@@ -356,7 +356,7 @@ global_warming_update_on_action = {
 					name = greenhouse_gas_emissions
 					add = {
 						value = level
-						multiply = -0.036  # 180 oil Ã— 2 weight / 10000
+						multiply = -0.036  # 180 oil Ã- 2 weight / 10000
 					}
 				}
 			}
@@ -367,7 +367,7 @@ global_warming_update_on_action = {
 				name = greenhouse_gas_emissions
 				add = {
 					value = level
-					multiply = -0.168  # 840 coal Ã— 2 weight / 10000
+					multiply = -0.168  # 840 coal Ã- 2 weight / 10000
 				}
 			}
 		}
@@ -377,7 +377,7 @@ global_warming_update_on_action = {
 global_warming_events_on_action = {
 	effect = {
 		# Fire threshold events exactly once globally when temperature crosses each threshold.
-		# Runs in the global (world) scope of on_monthly_pulse — fires once per month,
+		# Runs in the global (world) scope of on_monthly_pulse - fires once per month,
 		# so every_country here reaches all countries without per-country duplication.
 		if = {
 			limit = {
@@ -642,23 +642,15 @@ excess_private_construction_on_action = {
 					has_modifier = too_much_private_construction
 				}
 			}
+			remove_modifier = too_much_private_construction
 			if = {
 				limit = {
-					OR = {
-						has_modifier = too_much_private_construction
-						too_much_private_construction_script_value > 0
-					}
+					too_much_private_construction_script_value > 0
 				}
-				remove_modifier = too_much_private_construction
-				if = {
-					limit = {
-						too_much_private_construction_script_value > 0
-					}
-					add_modifier = {
-						name = too_much_private_construction
-						multiplier = too_much_private_construction_script_value
-	
-					}
+				add_modifier = {
+					name = too_much_private_construction
+					multiplier = too_much_private_construction_script_value
+
 				}
 			}
 			set_variable = {
@@ -947,7 +939,7 @@ character_update_on_action = {
 }
 
 # ============================================================================
-# INTERNATIONAL RELATIONS EVENTS — monthly chance for eligible countries
+# INTERNATIONAL RELATIONS EVENTS - monthly chance for eligible countries
 # ============================================================================
 international_relations_events_on_action = {
 	effect = {
@@ -1031,7 +1023,7 @@ international_relations_events_on_action = {
 }
 
 # ============================================================================
-# DECOLONIZATION EVENTS — monthly chance for eligible countries
+# DECOLONIZATION EVENTS - monthly chance for eligible countries
 # ============================================================================
 decolonization_events_on_action = {
 	effect = {
@@ -1210,7 +1202,7 @@ decolonization_events_on_action = {
 }
 
 # ============================================================================
-# POLITICAL MOVEMENT EVENTS — monthly chance for eligible countries
+# POLITICAL MOVEMENT EVENTS - monthly chance for eligible countries
 # ============================================================================
 movement_events_te_on_action = {
 	effect = {
@@ -1354,7 +1346,7 @@ movement_events_te_on_action = {
 }
 
 # ============================================================================
-# SOCIETY & TECHNOLOGY EVENTS — monthly chance for eligible countries
+# SOCIETY & TECHNOLOGY EVENTS - monthly chance for eligible countries
 # ============================================================================
 society_technology_events_on_action = {
 	effect = {
@@ -1691,7 +1683,7 @@ te_modifier_update_on_investment_on_action = {
 }
 
 # ============================================================================
-# WORLD WAR EVENTS — monthly chance for great powers with ideological tension
+# WORLD WAR EVENTS - monthly chance for great powers with ideological tension
 # ============================================================================
 world_war_events_on_action = {
 	effect = {
@@ -1701,7 +1693,7 @@ world_war_events_on_action = {
 				country_rank >= rank_value:great_power
 				has_technology_researched = combined_arms
 			}
-			# WAR OUTBREAK — check if tension is critical and war should start
+			# WAR OUTBREAK - check if tension is critical and war should start
 			if = {
 				limit = {
 					NOT = { has_variable = ww_active_phase }
@@ -1719,7 +1711,7 @@ world_war_events_on_action = {
 					}
 				}
 			}
-			# WARTIME EVENTS — fire during active war
+			# WARTIME EVENTS - fire during active war
 			if = {
 				limit = {
 					has_variable = ww_active_phase
@@ -1754,7 +1746,7 @@ world_war_events_on_action = {
 					}
 				}
 			}
-			# POST-WAR EVENTS — fire after peace is concluded
+			# POST-WAR EVENTS - fire after peace is concluded
 			if = {
 				limit = {
 					has_variable = ww_peace_concluded

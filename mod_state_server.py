@@ -1,5 +1,5 @@
 """
-Mod State Server — persistent HTTP API for querying parsed mod/vanilla data.
+Mod State Server - persistent HTTP API for querying parsed mod/vanilla data.
 
 Start:  python mod_state_server.py
         (loads all data once, then listens on http://127.0.0.1:8189)
@@ -191,7 +191,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         }
 
     def _keys(self, parts, params):
-        """GET /keys/<EntityType>  — list entity IDs with localized names."""
+        """GET /keys/<EntityType>  - list entity IDs with localized names."""
         if not parts:
             return list(ms.mod_parsers.keys())
         etype = parts[0]
@@ -204,7 +204,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         ]
 
     def _raw(self, parts):
-        """GET /raw/<EntityType>[/<id>]  — raw parsed data."""
+        """GET /raw/<EntityType>[/<id>]  - raw parsed data."""
         if not parts:
             return list(ms.mod_parsers.keys())
         etype = parts[0]
@@ -219,7 +219,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         return serialize(data)
 
     def _localize(self, parts):
-        """GET /localize/<key>  — localize a game key to display text."""
+        """GET /localize/<key>  - localize a game key to display text."""
         if not parts:
             return {"error": "Provide a key, e.g. /localize/law_monarchy"}
         key = parts[0]
@@ -230,7 +230,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         return result
 
     def _unlocalize(self, parts):
-        """GET /unlocalize/<text>  — reverse-localize display text to keys."""
+        """GET /unlocalize/<text>  - reverse-localize display text to keys."""
         if not parts:
             return {"error": "Provide display text, e.g. /unlocalize/Monarchy"}
         text = parts[0]

@@ -6,13 +6,13 @@
 # 10 events covering UN formation, resolutions, crises, and reform
 # ============================================================================
 
-# Event 1: The United Nations Charter — Formation Event (fires once)
+# Event 1: The United Nations Charter - Formation Event (fires once)
 un_events.1 = {
 	type = country_event
 	placement = root
 
 	event_image = {
-		video = "unspecific_signed_contract"
+		texture = "gfx/event_pictures/un_charter.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -114,13 +114,13 @@ un_events.1 = {
 	}
 }
 
-# Event 2: General Assembly Crisis — A rival's aggression is condemned
+# Event 2: General Assembly Crisis - A rival's aggression is condemned
 un_events.2 = {
 	type = country_event
 	placement = root
 
 	event_image = {
-		video = "unspecific_politicians_arguing"
+		texture = "gfx/event_pictures/un_assembly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -137,9 +137,17 @@ un_events.2 = {
 
 	trigger = {
 		has_modifier = un_member_modifier
+		is_at_war = no
 		any_country = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
 			is_at_war = yes
+			is_diplomatic_play_initiator = yes
+			# Must be winning the war or at least not getting steamrolled
+			NOT = {
+				any_scope_state = {
+					enemy_occupation > 0
+				}
+			}
 		}
 		NOT = { has_modifier = un_ga_resolution_modifier }
 	}
@@ -149,8 +157,17 @@ un_events.2 = {
 			limit = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 				is_at_war = yes
+				is_diplomatic_play_initiator = yes
 			}
 			save_scope_as = condemned_country
+		}
+		random_country = {
+			limit = {
+				NOT = { this = ROOT }
+				has_war_with = scope:condemned_country
+				is_diplomatic_play_initiator = no
+			}
+			save_scope_as = defender_country
 		}
 	}
 
@@ -177,6 +194,22 @@ un_events.2 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		change_relations = { country = scope:condemned_country value = -20 }
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:condemned_country
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_decreased
+		}
+		change_relations = { country = scope:defender_country value = 10 }
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:defender_country
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_increased
+		}
 	}
 
 	# Option B: Vote in favor but don't lead
@@ -191,9 +224,25 @@ un_events.2 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 2 }
+		change_relations = { country = scope:condemned_country value = -5 }
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:condemned_country
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_decreased
+		}
+		change_relations = { country = scope:defender_country value = 5 }
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:defender_country
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_increased
+		}
 	}
 
-	# Option C: Abstain — avoid entanglements
+	# Option C: Abstain - avoid entanglements
 	option = {
 		name = un_events.2.c
 		ai_chance = {
@@ -221,7 +270,7 @@ un_events.3 = {
 	placement = root
 
 	event_image = {
-		video = "europenorthamerica_sufferage"
+		texture = "gfx/event_pictures/human_rights_declaration.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -349,7 +398,7 @@ un_events.4 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_military_parade"
+		texture = "gfx/event_pictures/un_peacekeepers.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -386,7 +435,7 @@ un_events.4 = {
 		}
 	}
 
-	# Option A: Deploy a full peacekeeping force — costly but effective
+	# Option A: Deploy a full peacekeeping force - costly but effective
 	option = {
 		name = un_events.4.a
 		default_option = yes
@@ -403,6 +452,7 @@ un_events.4 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 5 }
+		change_relations = { country = scope:peacekeeping_target value = 20 }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
 			add_modifier = {
@@ -416,9 +466,14 @@ un_events.4 = {
 			value = small_radicals
 			strata = upper
 		}
+		# Notify the target country
+		save_scope_as = peacekeeping_donor
+		scope:peacekeeping_target = {
+			trigger_event = { id = un_events.102 days = 14 }
+		}
 	}
 
-	# Option B: Send observers only — cheaper but less impactful
+	# Option B: Send observers only - cheaper but less impactful
 	option = {
 		name = un_events.4.b
 		ai_chance = {
@@ -430,9 +485,10 @@ un_events.4 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 2 }
+		change_relations = { country = scope:peacekeeping_target value = 5 }
 	}
 
-	# Option C: Decline to participate — save resources
+	# Option C: Decline to participate - save resources
 	option = {
 		name = un_events.4.c
 		ai_chance = {
@@ -450,13 +506,13 @@ un_events.4 = {
 	}
 }
 
-# Event 5: Sanctions Regime — Economic pressure on a pariah state
+# Event 5: Sanctions Regime - Economic pressure on a pariah state
 un_events.5 = {
 	type = country_event
 	placement = root
 
 	event_image = {
-		video = "unspecific_factory_closed"
+		texture = "gfx/event_pictures/economic_sanctions.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -486,7 +542,7 @@ un_events.5 = {
 		}
 	}
 
-	# Option A: Strictly enforce sanctions — hurts your own trade too
+	# Option A: Strictly enforce sanctions - hurts your own trade too
 	option = {
 		name = un_events.5.a
 		default_option = yes
@@ -503,6 +559,7 @@ un_events.5 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 5 }
+		change_relations = { country = scope:sanctioned_country value = -20 }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_industrialists }
 			add_modifier = {
@@ -513,7 +570,7 @@ un_events.5 = {
 		}
 	}
 
-	# Option B: Partial compliance — token effort
+	# Option B: Partial compliance - token effort
 	option = {
 		name = un_events.5.b
 		ai_chance = {
@@ -525,9 +582,10 @@ un_events.5 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 1 }
+		change_relations = { country = scope:sanctioned_country value = -5 }
 	}
 
-	# Option C: Quietly ignore sanctions — profit from the gap
+	# Option C: Quietly ignore sanctions - profit from the gap
 	option = {
 		name = un_events.5.c
 		ai_chance = {
@@ -543,6 +601,7 @@ un_events.5 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = -5 }
+		change_relations = { country = scope:sanctioned_country value = 10 }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_industrialists }
 			add_modifier = {
@@ -554,13 +613,13 @@ un_events.5 = {
 	}
 }
 
-# Event 6: UN Reform Debate — Security Council expansion or restructuring
+# Event 6: UN Reform Debate - Security Council expansion or restructuring
 un_events.6 = {
 	type = country_event
 	placement = root
 
 	event_image = {
-		video = "unspecific_politicians_arguing"
+		texture = "gfx/event_pictures/un_assembly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -610,7 +669,7 @@ un_events.6 = {
 		}
 	}
 
-	# Option A: Champion reform — expand representation
+	# Option A: Champion reform - expand representation
 	option = {
 		name = un_events.6.a
 		default_option = yes
@@ -635,14 +694,14 @@ un_events.6 = {
 				is_decaying = yes
 			}
 		}
-		# Costs prestige — giving up exclusive power
+		# Costs prestige - giving up exclusive power
 		add_radicals = {
 			value = very_small_radicals
 			strata = upper
 		}
 	}
 
-	# Option B: Defend the status quo — preserve GP veto power
+	# Option B: Defend the status quo - preserve GP veto power
 	option = {
 		name = un_events.6.b
 		ai_chance = {
@@ -679,13 +738,13 @@ un_events.6 = {
 	}
 }
 
-# Event 7: Humanitarian Crisis Response — famine, refugees, or disaster
+# Event 7: Humanitarian Crisis Response - famine, refugees, or disaster
 un_events.7 = {
 	type = country_event
 	placement = root
 
 	event_image = {
-		video = "unspecific_devastation"
+		texture = "gfx/event_pictures/humanitarian_crisis.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -725,7 +784,7 @@ un_events.7 = {
 		}
 	}
 
-	# Option A: Major humanitarian aid — expensive but builds authority
+	# Option A: Major humanitarian aid - expensive but builds authority
 	option = {
 		name = un_events.7.a
 		default_option = yes
@@ -742,6 +801,7 @@ un_events.7 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 5 }
+		change_relations = { country = scope:crisis_country value = 30 }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
 			add_modifier = {
@@ -758,6 +818,11 @@ un_events.7 = {
 				is_decaying = yes
 			}
 		}
+		# Notify the crisis country of incoming aid
+		save_scope_as = aid_donor
+		scope:crisis_country = {
+			trigger_event = { id = un_events.101 days = 14 }
+		}
 	}
 
 	# Option B: Token contribution
@@ -772,6 +837,15 @@ un_events.7 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 1 }
+		change_relations = { country = scope:crisis_country value = 10 }
+		scope:crisis_country = {
+			post_notification = un_humanitarian_token_received
+			add_modifier = {
+				name = un_humanitarian_token_received_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 	}
 
 	# Option C: It's not our problem
@@ -785,6 +859,7 @@ un_events.7 = {
 			}
 		}
 		change_variable = { name = un_authority add = -3 }
+		change_relations = { country = scope:crisis_country value = -10 }
 		add_loyalists = {
 			value = very_small_radicals
 			strata = upper
@@ -800,13 +875,13 @@ un_events.7 = {
 	}
 }
 
-# Event 8: International Court Ruling — Your country is accused
+# Event 8: International Court Ruling - Your country is accused
 un_events.8 = {
 	type = country_event
 	placement = root
 
 	event_image = {
-		video = "middleeast_courtroom_upheaval"
+		texture = "gfx/event_pictures/international_court.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -838,7 +913,7 @@ un_events.8 = {
 	immediate = {
 	}
 
-	# Option A: Accept the ruling — painful but legitimate
+	# Option A: Accept the ruling - painful but legitimate
 	option = {
 		name = un_events.8.a
 		default_option = yes
@@ -914,13 +989,13 @@ un_events.8 = {
 	}
 }
 
-# Event 9: Cultural Heritage & UNESCO — protecting world heritage
+# Event 9: Cultural Heritage & UNESCO - protecting world heritage
 un_events.9 = {
 	type = country_event
 	placement = root
 
 	event_image = {
-		video = "unspecific_world_fair"
+		texture = "gfx/event_pictures/un_summit.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1004,13 +1079,13 @@ un_events.9 = {
 	}
 }
 
-# Event 10: UN Authority Crisis — the institution faces a legitimacy collapse
+# Event 10: UN Authority Crisis - the institution faces a legitimacy collapse
 un_events.10 = {
 	type = country_event
 	placement = root
 
 	event_image = {
-		video = "unspecific_politicians_arguing"
+		texture = "gfx/event_pictures/un_assembly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1042,7 +1117,7 @@ un_events.10 = {
 	immediate = {
 	}
 
-	# Option A: Rally support — invest political capital to restore faith
+	# Option A: Rally support - invest political capital to restore faith
 	option = {
 		name = un_events.10.a
 		default_option = yes
@@ -1088,7 +1163,7 @@ un_events.10 = {
 		change_variable = { name = un_authority add = 5 }
 	}
 
-	# Option C: Let it collapse — the UN has failed
+	# Option C: Let it collapse - the UN has failed
 	option = {
 		name = un_events.10.c
 		ai_chance = {
@@ -1127,7 +1202,7 @@ un_events.11 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_politicians_arguing"
+		texture = "gfx/event_pictures/un_assembly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1190,6 +1265,7 @@ un_events.11 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = -3 }
+		change_relations = { country = scope:veto_power value = -15 }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
 			add_modifier = {
@@ -1229,6 +1305,7 @@ un_events.11 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 3 }
+		change_relations = { country = scope:veto_power value = -10 }
 		add_radicals = {
 			value = very_small_radicals
 			strata = upper
@@ -1243,7 +1320,7 @@ un_events.12 = {
 	placement = root
 
 	event_image = {
-		video = "africa_public_protest"
+		texture = "gfx/event_pictures/refugee_crisis.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1277,7 +1354,7 @@ un_events.12 = {
 	immediate = {
 	}
 
-	# Option A: Champion decolonization — support liberation movements
+	# Option A: Champion decolonization - support liberation movements
 	option = {
 		name = un_events.12.a
 		default_option = yes
@@ -1359,7 +1436,7 @@ un_events.13 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_politicians_arguing"
+		texture = "gfx/event_pictures/un_assembly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1444,6 +1521,7 @@ un_events.13 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = -3 }
+		change_relations = { country = scope:ideological_rival value = -20 }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -1474,6 +1552,7 @@ un_events.13 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 3 }
+		change_relations = { country = scope:ideological_rival value = 10 }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
 			add_modifier = {
@@ -1495,6 +1574,7 @@ un_events.13 = {
 			}
 		}
 		change_variable = { name = un_authority add = -5 }
+		change_relations = { country = scope:ideological_rival value = -15 }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -1517,7 +1597,7 @@ un_events.14 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_signed_contract"
+		texture = "gfx/event_pictures/un_charter.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1635,7 +1715,7 @@ un_events.15 = {
 	placement = root
 
 	event_image = {
-		video = "europenorthamerica_capitalists_meeting"
+		texture = "gfx/event_pictures/development_aid.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1696,6 +1776,7 @@ un_events.15 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 3 }
+		change_relations = { country = scope:trade_rival value = 5 }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_industrialists }
 			add_modifier = {
@@ -1713,6 +1794,15 @@ un_events.15 = {
 			base = 4
 		}
 		change_variable = { name = un_authority add = 1 }
+		change_relations = { country = scope:trade_rival value = 15 }
+		scope:trade_rival = {
+			post_notification = un_trade_deal_received
+			add_modifier = {
+				name = un_trade_deal_bilateral_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 	}
 
 	# Option C: Impose unilateral tariffs
@@ -1735,6 +1825,15 @@ un_events.15 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = -3 }
+		change_relations = { country = scope:trade_rival value = -15 }
+		scope:trade_rival = {
+			post_notification = un_tariff_retaliation_received
+			add_modifier = {
+				name = un_tariff_retaliation_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_industrialists }
 			add_modifier = {
@@ -1753,7 +1852,7 @@ un_events.16 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_sick_in_hospital"
+		texture = "gfx/event_pictures/pandemic_response.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1786,7 +1885,7 @@ un_events.16 = {
 	immediate = {
 	}
 
-	# Option A: Full international cooperation — share data and resources
+	# Option A: Full international cooperation - share data and resources
 	option = {
 		name = un_events.16.a
 		default_option = yes
@@ -1821,7 +1920,7 @@ un_events.16 = {
 		}
 	}
 
-	# Option B: Cooperate selectively — share what doesn't hurt us
+	# Option B: Cooperate selectively - share what doesn't hurt us
 	option = {
 		name = un_events.16.b
 		ai_chance = {
@@ -1860,7 +1959,7 @@ un_events.17 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_devastation"
+		texture = "gfx/event_pictures/humanitarian_crisis.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1927,7 +2026,7 @@ un_events.17 = {
 		}
 	}
 
-	# Option B: Pledge voluntary targets — no binding commitments
+	# Option B: Pledge voluntary targets - no binding commitments
 	option = {
 		name = un_events.17.b
 		ai_chance = {
@@ -1970,7 +2069,7 @@ un_events.18 = {
 	placement = root
 
 	event_image = {
-		video = "asia_poor_people_moving"
+		texture = "gfx/event_pictures/climate_refugees.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -2037,6 +2136,7 @@ un_events.18 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 5 }
+		change_relations = { country = scope:refugee_source value = 20 }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
 			add_modifier = {
@@ -2049,6 +2149,11 @@ un_events.18 = {
 			value = small_radicals
 			strata = lower
 		}
+		# Notify the refugee source of resettlement
+		save_scope_as = resettlement_host
+		scope:refugee_source = {
+			trigger_event = { id = un_events.103 days = 14 }
+		}
 	}
 
 	# Option B: Accept a managed resettlement quota
@@ -2058,9 +2163,10 @@ un_events.18 = {
 			base = 5
 		}
 		change_variable = { name = un_authority add = 2 }
+		change_relations = { country = scope:refugee_source value = 10 }
 	}
 
-	# Option C: Close our borders — we have our own problems
+	# Option C: Close our borders - we have our own problems
 	option = {
 		name = un_events.18.c
 		ai_chance = {
@@ -2076,6 +2182,7 @@ un_events.18 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = -3 }
+		change_relations = { country = scope:refugee_source value = -10 }
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
@@ -2098,7 +2205,7 @@ un_events.19 = {
 	placement = root
 
 	event_image = {
-		video = "event_space_station"
+		texture = "gfx/event_pictures/space_cooperation.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -2131,7 +2238,7 @@ un_events.19 = {
 	immediate = {
 	}
 
-	# Option A: Full partnership — share research and costs
+	# Option A: Full partnership - share research and costs
 	option = {
 		name = un_events.19.a
 		default_option = yes
@@ -2158,7 +2265,7 @@ un_events.19 = {
 		}
 	}
 
-	# Option B: Limited contribution — observe but don't lead
+	# Option B: Limited contribution - observe but don't lead
 	option = {
 		name = un_events.19.b
 		ai_chance = {
@@ -2201,7 +2308,7 @@ un_events.20 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_politicians_arguing"
+		texture = "gfx/event_pictures/un_assembly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -2285,6 +2392,7 @@ un_events.20 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 3 }
+		change_relations = { country = scope:walkout_leader value = -15 }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
 			add_modifier = {
@@ -2307,9 +2415,10 @@ un_events.20 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = 1 }
+		change_relations = { country = scope:walkout_leader value = 5 }
 	}
 
-	# Option C: Join the walkout — the Assembly doesn't serve us
+	# Option C: Join the walkout - the Assembly doesn't serve us
 	option = {
 		name = un_events.20.c
 		ai_chance = {
@@ -2325,6 +2434,7 @@ un_events.20 = {
 			is_decaying = yes
 		}
 		change_variable = { name = un_authority add = -5 }
+		change_relations = { country = scope:walkout_leader value = 15 }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -2336,6 +2446,241 @@ un_events.20 = {
 				days = short_modifier_time
 				is_decaying = yes
 			}
+		}
+	}
+}
+
+
+# ============================================================================
+# NOTIFICATION EVENTS (101-103)
+# Fired on receiving countries when bilateral UN actions affect them
+# ============================================================================
+
+# Event 101: Humanitarian Aid Received
+# Fired on crisis_country when a great power sends major humanitarian aid (from event 7, option A)
+un_events.101 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/humanitarian_crisis.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = un_events.101.t
+	desc = un_events.101.d
+	flavor = un_events.101.f
+
+	duration = 3
+
+	trigger = {
+		# always fires - triggered by event 7 option A
+	}
+
+	immediate = {
+	}
+
+	# Option A: Accept the aid with gratitude
+	option = {
+		name = un_events.101.a
+		default_option = yes
+		ai_chance = {
+			base = 8
+		}
+		add_modifier = {
+			name = un_humanitarian_aid_received_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	# Option B: Accept but assert our sovereignty
+	option = {
+		name = un_events.101.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_single_party_state }
+				add = 4
+			}
+		}
+		add_modifier = {
+			name = un_humanitarian_aid_received_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+}
+
+# Event 102: Peacekeeping Forces Deployed to Our Territory
+# Fired on peacekeeping_target when a great power deploys peacekeepers (from event 4, option A)
+un_events.102 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/un_peacekeepers.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = un_events.102.t
+	desc = un_events.102.d
+	flavor = un_events.102.f
+
+	duration = 3
+
+	trigger = {
+		# always fires - triggered by event 4 option A
+	}
+
+	immediate = {
+	}
+
+	# Option A: Welcome the peacekeepers - stability at the cost of pride
+	option = {
+		name = un_events.102.a
+		default_option = yes
+		ai_chance = {
+			base = 6
+			modifier = {
+				trigger = { has_law = law_type:law_humanitarian_regulations }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = un_peacekeeping_welcomed_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = { country = scope:peacekeeping_donor value = 10 }
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = short_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option B: Resent the intervention - this is an insult to our sovereignty
+	option = {
+		name = un_events.102.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_single_party_state }
+				add = 4
+			}
+			modifier = {
+				trigger = { has_law = law_type:law_total_war }
+				add = 5
+			}
+		}
+		add_modifier = {
+			name = un_peacekeeping_resented_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = { country = scope:peacekeeping_donor value = -15 }
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = short_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# Event 103: International Refugee Resettlement
+# Fired on refugee_source when a foreign power launches a major resettlement program (from event 18, option A)
+un_events.103 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/climate_refugees.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = un_events.103.t
+	desc = un_events.103.d
+	flavor = un_events.103.f
+
+	duration = 3
+
+	trigger = {
+		# always fires - triggered by event 18 option A
+	}
+
+	immediate = {
+	}
+
+	# Option A: Express gratitude - this eases our burden
+	option = {
+		name = un_events.103.a
+		default_option = yes
+		ai_chance = {
+			base = 7
+		}
+		add_modifier = {
+			name = un_refugee_source_relief_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = { country = scope:resettlement_host value = 10 }
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+	}
+
+	# Option B: This is a humiliation - our people should stay
+	option = {
+		name = un_events.103.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_closed_borders }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = un_refugee_source_brain_drain_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = { country = scope:resettlement_host value = -10 }
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
 		}
 	}
 }

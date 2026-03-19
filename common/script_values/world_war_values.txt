@@ -16,7 +16,7 @@ ww_opposing_great_powers = {
 	}
 }
 
-# Ideological tension â€” higher when more great powers have fundamentally opposed ideologies
+# Ideological tension - higher when more great powers have fundamentally opposed ideologies
 ww_ideological_tension = {
 	value = 0
 	# Base tension from having any opposing GP rival
@@ -75,7 +75,7 @@ ww_belligerent_count = {
 	}
 }
 
-# War exhaustion pressure â€” grows over time during the war
+# War exhaustion pressure - grows over time during the war
 ww_war_exhaustion_pressure = {
 	value = 0
 	if = {

@@ -1,7 +1,7 @@
 ﻿namespace = social_tensions_events
 
 # =============================================================
-# CATEGORY 1 â€” TERRORISM
+# CATEGORY 1 - TERRORISM
 # =============================================================
 
 # Event 1: Domestic Terror Attack
@@ -20,7 +20,7 @@ social_tensions_events.1 = {
 	}
 	flavor = social_tensions_events.1.f
 
-	event_image = { video = "unspecific_fire" }
+	event_image = { texture = "gfx/event_pictures/terrorist_attack.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -91,6 +91,7 @@ social_tensions_events.1 = {
 				has_technology_researched = automated_surveillance
 			}
 		}
+		custom_tooltip = social_tensions_surveillance_tech_tt
 		add_modifier = { name = terror_surveillance_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = very_small_radicals strata = lower }
 		add_loyalists = { value = small_radicals strata = upper }
@@ -100,11 +101,12 @@ social_tensions_events.1 = {
 		}
 	}
 
-	option = { # Intelligence-led preemption — best outcome, requires strong institutions
+	option = { # Intelligence-led preemption - best outcome, requires strong institutions
 		name = social_tensions_events.1.d
 		trigger = {
 			institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 }
 		}
+		custom_tooltip = social_tensions_intel_ministry_3_tt
 		add_modifier = { name = terror_preempted_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals }
 		ai_chance = {
@@ -123,7 +125,7 @@ social_tensions_events.2 = {
 	desc = social_tensions_events.2.d
 	flavor = social_tensions_events.2.f
 
-	event_image = { video = "unspecific_fire" }
+	event_image = { texture = "gfx/event_pictures/terrorist_attack.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -158,6 +160,13 @@ social_tensions_events.2 = {
 		default_option = yes
 		add_modifier = { name = foreign_terror_retaliation_modifier days = normal_modifier_time is_decaying = yes }
 		change_relations = { country = scope:terror_linked_country value = -30 }
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:terror_linked_country
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_decreased
+		}
 		add_loyalists = { value = small_radicals pop_type = officers }
 		ai_chance = {
 			base = 5
@@ -168,8 +177,16 @@ social_tensions_events.2 = {
 	option = { # Pursue quiet intelligence cooperation
 		name = social_tensions_events.2.b
 		trigger = { has_law = law_type:law_ministry_of_intelligence_and_security }
+		custom_tooltip = social_tensions_intel_law_tt
 		add_modifier = { name = foreign_terror_diplomacy_modifier days = long_modifier_time is_decaying = yes }
 		change_relations = { country = scope:terror_linked_country value = 10 }
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:terror_linked_country
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_increased
+		}
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_attitude = { who = scope:terror_linked_country attitude = cooperative } } add = 5 }
@@ -184,7 +201,7 @@ social_tensions_events.2 = {
 }
 
 # =============================================================
-# CATEGORY 2 â€” CORPORATE LOBBYING
+# CATEGORY 2 - CORPORATE LOBBYING
 # Tied to antitrust and economic system laws. Disadvantage to freedom of contract.
 # =============================================================
 
@@ -202,7 +219,7 @@ social_tensions_events.3 = {
 	}
 	flavor = social_tensions_events.3.f
 
-	event_image = { video = "southamerica_election" }
+	event_image = { texture = "gfx/event_pictures/corporate_lobbying.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -226,7 +243,7 @@ social_tensions_events.3 = {
 		}
 	}
 
-	option = { # Accept corporate input â€” benefits business, costs democracy
+	option = { # Accept corporate input - benefits business, costs democracy
 		name = social_tensions_events.3.a
 		default_option = yes
 		add_modifier = { name = corporate_lobbying_accepted_modifier days = long_modifier_time is_decaying = yes }
@@ -258,6 +275,7 @@ social_tensions_events.3 = {
 				has_technology_researched = social_media
 			}
 		}
+		custom_tooltip = social_tensions_media_tech_tt
 		add_modifier = { name = corporate_lobbying_exposed_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals strata = upper }
 		add_radicals = { value = very_small_radicals strata = lower }
@@ -268,7 +286,7 @@ social_tensions_events.3 = {
 	}
 }
 
-# Event 4: Monopoly Power â€” A corporate trust dominates an industry
+# Event 4: Monopoly Power - A corporate trust dominates an industry
 social_tensions_events.4 = {
 	type = country_event
 	placement = ROOT
@@ -277,7 +295,7 @@ social_tensions_events.4 = {
 	desc = social_tensions_events.4.d
 	flavor = social_tensions_events.4.f
 
-	event_image = { video = "unspecific_gears_pistons" }
+	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -303,7 +321,7 @@ social_tensions_events.4 = {
 		}
 	}
 
-	option = { # Tolerate the monopoly â€” throughput bonus but freedom_of_contract disadvantage
+	option = { # Tolerate the monopoly - throughput bonus but freedom_of_contract disadvantage
 		name = social_tensions_events.4.a
 		default_option = yes
 		add_modifier = { name = monopoly_tolerated_modifier days = long_modifier_time is_decaying = yes }
@@ -324,6 +342,7 @@ social_tensions_events.4 = {
 				has_law = law_type:law_interventionism
 			}
 		}
+		custom_tooltip = social_tensions_antitrust_law_tt
 		add_modifier = { name = monopoly_broken_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals strata = upper }
 		add_loyalists = { value = small_radicals strata = lower }
@@ -341,6 +360,7 @@ social_tensions_events.4 = {
 				has_law = law_type:law_dirigisme
 			}
 		}
+		custom_tooltip = social_tensions_command_economy_tt
 		add_modifier = { name = monopoly_nationalized_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = large_radicals strata = upper }
 		add_loyalists = { value = medium_radicals strata = lower }
@@ -352,7 +372,7 @@ social_tensions_events.4 = {
 }
 
 # =============================================================
-# CATEGORY 3 â€” CRIMINAL JUSTICE AND POLICING
+# CATEGORY 3 - CRIMINAL JUSTICE AND POLICING
 # George Floyd-style incidents, LA race riots, police brutality
 # =============================================================
 
@@ -372,7 +392,7 @@ social_tensions_events.5 = {
 	}
 	flavor = social_tensions_events.5.f
 
-	event_image = { video = "europenorthamerica_political_extremism" }
+	event_image = { texture = "gfx/event_pictures/police_brutality.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -422,7 +442,7 @@ social_tensions_events.5 = {
 		}
 	}
 
-	option = { # Defend the police â€” order is paramount
+	option = { # Defend the police - order is paramount
 		name = social_tensions_events.5.a
 		add_modifier = { name = police_defended_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = large_radicals strata = lower }
@@ -458,6 +478,7 @@ social_tensions_events.5 = {
 				has_technology_researched = social_justice_movements
 			}
 		}
+		custom_tooltip = social_tensions_civil_rights_tech_tt
 		add_modifier = { name = police_accountability_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals pop_type = officers }
 		add_loyalists = { value = medium_radicals strata = lower }
@@ -487,7 +508,7 @@ social_tensions_events.6 = {
 	}
 	flavor = social_tensions_events.6.f
 
-	event_image = { video = "europenorthamerica_political_extremism" }
+	event_image = { texture = "gfx/event_pictures/urban_riots.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -562,6 +583,7 @@ social_tensions_events.6 = {
 				has_technology_researched = behaviorism
 			}
 		}
+		custom_tooltip = social_tensions_civil_rights_tech_tt
 		add_modifier = { name = riot_commission_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		every_interest_group = {
@@ -576,7 +598,7 @@ social_tensions_events.6 = {
 }
 
 # =============================================================
-# CATEGORY 4 â€” WAR CRIMES
+# CATEGORY 4 - WAR CRIMES
 # My Lai-style massacres. Player responds, doesn't trigger them.
 # Tied to Rules of War laws.
 # =============================================================
@@ -595,7 +617,7 @@ social_tensions_events.7 = {
 	}
 	flavor = social_tensions_events.7.f
 
-	event_image = { video = "europenorthamerica_before_the_battle" }
+	event_image = { texture = "gfx/event_pictures/war_atrocity.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -664,6 +686,7 @@ social_tensions_events.7 = {
 				has_law = law_type:law_limited_war
 			}
 		}
+		custom_tooltip = social_tensions_war_law_tt
 		add_modifier = { name = war_crime_reform_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals pop_type = officers }
 		add_loyalists = { value = medium_radicals strata = lower }
@@ -687,7 +710,7 @@ social_tensions_events.8 = {
 	desc = social_tensions_events.8.d
 	flavor = social_tensions_events.8.f
 
-	event_image = { video = "europenorthamerica_before_the_battle" }
+	event_image = { texture = "gfx/event_pictures/war_atrocity.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -702,7 +725,7 @@ social_tensions_events.8 = {
 		}
 	}
 
-	option = { # Use it as propaganda â€” total war response
+	option = { # Use it as propaganda - total war response
 		name = social_tensions_events.8.a
 		default_option = yes
 		add_modifier = { name = enemy_war_crime_rage_modifier days = normal_modifier_time is_decaying = yes }
@@ -728,7 +751,7 @@ social_tensions_events.8 = {
 }
 
 # =============================================================
-# CATEGORY 5 â€” ELECTION CAMPAIGNS
+# CATEGORY 5 - ELECTION CAMPAIGNS
 # Tied to electoral finance laws.
 # =============================================================
 
@@ -746,7 +769,7 @@ social_tensions_events.9 = {
 	}
 	flavor = social_tensions_events.9.f
 
-	event_image = { video = "southamerica_election" }
+	event_image = { texture = "gfx/event_pictures/campaign_finance.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -775,7 +798,7 @@ social_tensions_events.9 = {
 
 	cancellation_trigger = { in_election_campaign = no }
 
-	option = { # Ignore it â€” business as usual
+	option = { # Ignore it - business as usual
 		name = social_tensions_events.9.a
 		add_modifier = { name = campaign_scandal_ignored_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals strata = lower }
@@ -809,6 +832,7 @@ social_tensions_events.9 = {
 				has_technology_researched = social_media
 			}
 		}
+		custom_tooltip = social_tensions_media_tech_tt
 		add_modifier = { name = campaign_scandal_reform_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = medium_radicals strata = lower }
 		add_radicals = { value = small_radicals strata = upper }
@@ -819,7 +843,7 @@ social_tensions_events.9 = {
 	}
 }
 
-# Event 10: Big-Money Election â€” Wealthy interests flood an election
+# Event 10: Big-Money Election - Wealthy interests flood an election
 social_tensions_events.10 = {
 	type = country_event
 	placement = ROOT
@@ -828,7 +852,7 @@ social_tensions_events.10 = {
 	desc = social_tensions_events.10.d
 	flavor = social_tensions_events.10.f
 
-	event_image = { video = "southamerica_election" }
+	event_image = { texture = "gfx/event_pictures/campaign_finance.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -853,7 +877,7 @@ social_tensions_events.10 = {
 
 	cancellation_trigger = { in_election_campaign = no }
 
-	option = { # Let the money flow â€” industrialists get their way
+	option = { # Let the money flow - industrialists get their way
 		name = social_tensions_events.10.a
 		default_option = yes
 		add_modifier = { name = big_money_election_modifier days = normal_modifier_time is_decaying = yes }
@@ -886,11 +910,11 @@ social_tensions_events.10 = {
 }
 
 # =============================================================
-# CATEGORY 6 â€” MIGRATION AND IMMIGRATION TENSIONS
+# CATEGORY 6 - MIGRATION AND IMMIGRATION TENSIONS
 # Non-accepted pops far from homelands cause tensions.
 # =============================================================
 
-# Event 11: Immigration Wave â€” Surge of newcomers strains public services
+# Event 11: Immigration Wave - Surge of newcomers strains public services
 social_tensions_events.11 = {
 	type = country_event
 	placement = ROOT
@@ -904,7 +928,7 @@ social_tensions_events.11 = {
 	}
 	flavor = social_tensions_events.11.f
 
-	event_image = { video = "asia_poor_people_moving" }
+	event_image = { texture = "gfx/event_pictures/immigration_wave.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
@@ -939,7 +963,7 @@ social_tensions_events.11 = {
 		}
 	}
 
-	option = { # Welcome the newcomers â€” economic growth but cultural friction
+	option = { # Welcome the newcomers - economic growth but cultural friction
 		name = social_tensions_events.11.a
 		default_option = yes
 		add_modifier = { name = immigration_welcome_modifier days = long_modifier_time is_decaying = yes }
@@ -975,6 +999,7 @@ social_tensions_events.11 = {
 				has_technology_researched = social_justice_movements
 			}
 		}
+		custom_tooltip = social_tensions_civil_rights_tech_tt
 		add_modifier = { name = immigration_integrate_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = medium_radicals strata = lower }
 		add_radicals = { value = small_radicals strata = upper }
@@ -1000,7 +1025,7 @@ social_tensions_events.12 = {
 	}
 	flavor = social_tensions_events.12.f
 
-	event_image = { video = "europenorthamerica_political_extremism" }
+	event_image = { texture = "gfx/event_pictures/nativist_backlash.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -1034,7 +1059,7 @@ social_tensions_events.12 = {
 		}
 	}
 
-	option = { # Appease the nativists â€” restrict immigration
+	option = { # Appease the nativists - restrict immigration
 		name = social_tensions_events.12.a
 		add_modifier = { name = nativist_appeased_modifier days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals pop_type = aristocrats }
@@ -1073,6 +1098,7 @@ social_tensions_events.12 = {
 				has_technology_researched = television_broadcasting
 			}
 		}
+		custom_tooltip = social_tensions_broadcast_tech_tt
 		add_modifier = { name = nativist_dialogue_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals }
 		ai_chance = { base = 3 }
@@ -1080,7 +1106,7 @@ social_tensions_events.12 = {
 }
 
 # =============================================================
-# CATEGORY 7 â€” RELIGIOUS REVIVALS
+# CATEGORY 7 - RELIGIOUS REVIVALS
 # Keep ig_devout relevant in later eras, at least intermittently.
 # =============================================================
 
@@ -1100,7 +1126,7 @@ social_tensions_events.13 = {
 	}
 	flavor = social_tensions_events.13.f
 
-	event_image = { video = "southamerica_christianity" }
+	event_image = { texture = "gfx/event_pictures/religious_revival.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1128,7 +1154,7 @@ social_tensions_events.13 = {
 		}
 	}
 
-	option = { # Embrace the revival â€” boost devout IG
+	option = { # Embrace the revival - boost devout IG
 		name = social_tensions_events.13.a
 		default_option = yes
 		add_modifier = { name = revival_embraced_modifier days = long_modifier_time is_decaying = yes }
@@ -1181,7 +1207,7 @@ social_tensions_events.14 = {
 	desc = social_tensions_events.14.d
 	flavor = social_tensions_events.14.f
 
-	event_image = { video = "southamerica_christianity" }
+	event_image = { texture = "gfx/event_pictures/religious_revival.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1252,8 +1278,8 @@ social_tensions_events.14 = {
 }
 
 # =============================================================
-# CATEGORY 8 â€” GLOBALIZATION TENSIONS
-# More trade leads to internal tensions â€” cultural backlash, job displacement.
+# CATEGORY 8 - GLOBALIZATION TENSIONS
+# More trade leads to internal tensions - cultural backlash, job displacement.
 # =============================================================
 
 # Event 15: Globalization Backlash
@@ -1271,7 +1297,7 @@ social_tensions_events.15 = {
 	}
 	flavor = social_tensions_events.15.f
 
-	event_image = { video = "unspecific_gears_pistons" }
+	event_image = { texture = "gfx/event_pictures/globalization_trade.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -1293,7 +1319,7 @@ social_tensions_events.15 = {
 		}
 	}
 
-	option = { # Embrace free trade â€” growth but displacement
+	option = { # Embrace free trade - growth but displacement
 		name = social_tensions_events.15.a
 		default_option = yes
 		add_modifier = { name = globalization_embrace_modifier days = long_modifier_time is_decaying = yes }
@@ -1328,6 +1354,7 @@ social_tensions_events.15 = {
 				has_law = law_type:law_interventionism
 			}
 		}
+		custom_tooltip = social_tensions_interventionist_tt
 		add_modifier = { name = globalization_retrain_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = {
@@ -1352,7 +1379,7 @@ social_tensions_events.16 = {
 	}
 	flavor = social_tensions_events.16.f
 
-	event_image = { video = "ep1_printing_press" }
+	event_image = { texture = "gfx/event_pictures/cultural_exchange.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1414,6 +1441,7 @@ social_tensions_events.16 = {
 				has_technology_researched = digital_entertainment
 			}
 		}
+		custom_tooltip = social_tensions_entertainment_tech_tt
 		add_modifier = { name = cultural_synthesis_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals }
 		ai_chance = { base = 3 }

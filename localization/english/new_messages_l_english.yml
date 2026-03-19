@@ -382,7 +382,7 @@
 # JADC2 - Modern Military Tone
  notification_headlines_tech_jadc2_tooltip:0 "#header $notification_headlines_tech_jadc2_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_jadc2_desc$"
  notification_headlines_tech_jadc2_name:0 "#b ALL FORCES CONNECTED IN NEW BATTLE NETWORK #!"
- notification_headlines_tech_jadc2_desc:1 "The military of [SCOPE.sCountry('headlines_jadc2_researcher').GetName] is implementing $HEADLINES_TECH_NAME$. #lore This military concept aims to connect all forces across every domain—air, land, sea, space, and cyber. It's designed to improve situational awareness and decision-making, creating a more effective fighting force... #!"
+ notification_headlines_tech_jadc2_desc:1 "The military of [SCOPE.sCountry('headlines_jadc2_researcher').GetName] is implementing $HEADLINES_TECH_NAME$. #lore This military concept aims to connect all forces across every domain-air, land, sea, space, and cyber. It's designed to improve situational awareness and decision-making, creating a more effective fighting force... #!"
 
 # Jet Engine Technology - Post-WWII Tone
  notification_headlines_tech_jet_engine_technology_tooltip:0 "#header $notification_headlines_tech_jet_engine_technology_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_jet_engine_technology_desc$"

@@ -11,7 +11,7 @@ decolonization_events.1 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/colonial_protest.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -45,6 +45,7 @@ decolonization_events.1 = {
 		}
 	}
 
+	# Option A: Negotiate for autonomy
 	option = {
 		name = decolonization_events.1.a
 		default_option = yes
@@ -59,7 +60,6 @@ decolonization_events.1 = {
 				add = 3
 			}
 		}
-		# Begin negotiations for autonomy — reduce liberty desire
 		add_modifier = {
 			name = decolonization_negotiations_modifier
 			days = normal_modifier_time
@@ -67,17 +67,26 @@ decolonization_events.1 = {
 		}
 		scope:restless_subject = {
 			add_liberty_desire = -15
+			post_notification = colonial_negotiations_started_notice
 		}
-		# Stability cost of concessions
-		add_modifier = { name = colonial_stability_negative_event months = 3 }
+		# Intelligentsia approve of diplomacy, landowners see weakness
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 90 }
 	}
 
+	# Option B: Crack down on the movement
 	option = {
 		name = decolonization_events.1.b
 		ai_chance = {
 			base = 2
 		}
-		# Crack down on the movement
 		add_modifier = {
 			name = colonial_crackdown_modifier
 			days = normal_modifier_time
@@ -85,12 +94,22 @@ decolonization_events.1 = {
 		}
 		scope:restless_subject = {
 			add_liberty_desire = 20
+			post_notification = colonial_crackdown_begun_notice
 		}
 		add_radicals = { value = medium_radicals pop_type = academics }
-		# Stability from showing strength
+		# Armed forces approve, intelligentsia horrified
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
 		add_modifier = { name = colonial_stability_positive_event months = 2 }
 	}
 
+	# Option C: Grant independence outright
 	option = {
 		name = decolonization_events.1.c
 		ai_chance = {
@@ -102,8 +121,8 @@ decolonization_events.1 = {
 				add = 3
 			}
 		}
-		# Grant them independence
 		scope:restless_subject = {
+			post_notification = colonial_independence_granted_notice
 			make_independent = yes
 		}
 		add_modifier = {
@@ -111,8 +130,69 @@ decolonization_events.1 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		# Stability from releasing pressure
-		add_modifier = { name = colonial_stability_positive_event months = 5 }
+		change_relations = {
+			country = scope:restless_subject
+			value = 30
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:restless_subject
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_increased
+		}
+		# Prestige boost from moral leadership, but landowners furious
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_very_negative_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 150 }
+	}
+
+	# Option D: Neocolonialism - release but extract economic concessions
+	option = {
+		name = decolonization_events.1.d_neo
+		trigger = {
+			has_law = law_type:law_neocolonialism
+		}
+		ai_chance = {
+			base = 4
+		}
+		scope:restless_subject = {
+			post_notification = colonial_neocolonial_terms_notice
+			make_independent = yes
+			add_modifier = {
+				name = neocolonial_dependency_imposed_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_modifier = {
+			name = neocolonial_economic_extraction_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:restless_subject
+			value = -10
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:restless_subject
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_relations_decreased
+		}
+		# Industrialists love this, intelligentsia see through it
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 90 }
 	}
 }
 
@@ -122,7 +202,7 @@ decolonization_events.2 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_signed_treaty"
+		texture = "gfx/event_pictures/diplomatic_meeting.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -153,8 +233,20 @@ decolonization_events.2 = {
 	}
 
 	immediate = {
+		random_subject_or_below = {
+			save_scope_as = pressured_subject
+		}
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				country_rank >= rank_value:great_power
+				has_technology_researched = decolonization
+			}
+			save_scope_as = pressuring_power
+		}
 	}
 
+	# Option A: Announce a decolonization plan
 	option = {
 		name = decolonization_events.2.a
 		default_option = yes
@@ -169,27 +261,103 @@ decolonization_events.2 = {
 				add = 3
 			}
 		}
-		# Announce a decolonization plan
 		add_modifier = {
 			name = decolonization_negotiations_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		# Announcing decolonization destabilizes the empire
+		change_relations = {
+			country = scope:pressuring_power
+			value = 15
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:pressuring_power
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_increased
+		}
+		scope:pressured_subject = {
+			add_liberty_desire = 10
+			post_notification = colonial_negotiations_started_notice
+		}
+		# Intelligentsia relieve, landowners dismayed
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
 		add_modifier = { name = colonial_stability_negative_event months = 3 }
 	}
 
+	# Option B: Reject external interference
 	option = {
 		name = decolonization_events.2.b
 		ai_chance = { base = 2 }
-		# Reject external interference
 		add_modifier = {
 			name = colonial_crackdown_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		change_relations = {
+			country = scope:pressuring_power
+			value = -20
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:pressuring_power
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_relations_decreased
+		}
 		add_radicals = { value = small_radicals pop_type = academics }
-		# Showing defiance rallies domestic support
+		# Landowners and armed forces rally, intelligentsia dismayed
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_positive_event months = 2 }
+	}
+
+	# Option C: Neocolonialism - announce transition with economic strings attached
+	option = {
+		name = decolonization_events.2.c
+		trigger = {
+			has_law = law_type:law_neocolonialism
+		}
+		ai_chance = { base = 3 }
+		add_modifier = {
+			name = neocolonial_economic_extraction_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:pressuring_power
+			value = 5
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:pressuring_power
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_increased
+		}
+		scope:pressured_subject = {
+			add_liberty_desire = -5
+			post_notification = colonial_neocolonial_terms_notice
+		}
+		# Industrialists approve, intelligentsia skeptical
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
 		add_modifier = { name = colonial_stability_positive_event months = 2 }
 	}
 }
@@ -200,7 +368,7 @@ decolonization_events.3 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_military_parade"
+		texture = "gfx/event_pictures/colonial_soldiers.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -233,6 +401,7 @@ decolonization_events.3 = {
 		}
 	}
 
+	# Option A: Negotiate ceasefire and grant independence
 	option = {
 		name = decolonization_events.3.a
 		default_option = yes
@@ -243,8 +412,8 @@ decolonization_events.3 = {
 				add = 3
 			}
 		}
-		# Negotiate a ceasefire and grant independence
 		scope:rebellious_subject = {
+			post_notification = colonial_ceasefire_granted_notice
 			make_independent = yes
 		}
 		add_modifier = {
@@ -252,14 +421,35 @@ decolonization_events.3 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		change_relations = {
+			country = scope:rebellious_subject
+			value = 10
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:rebellious_subject
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_increased
+		}
+		# Armed forces humiliated, intelligentsia relieved
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 90 }
 	}
 
+	# Option B: Fight to maintain the colony
 	option = {
 		name = decolonization_events.3.b
 		ai_chance = {
 			base = 2
 		}
-		# Fight to maintain the colony
 		add_modifier = {
 			name = colonial_crackdown_modifier
 			days = long_modifier_time
@@ -268,7 +458,60 @@ decolonization_events.3 = {
 		add_radicals = { value = large_radicals }
 		scope:rebellious_subject = {
 			add_liberty_desire = 25
+			post_notification = colonial_crackdown_begun_notice
 		}
+		# Armed forces approve, everyone else uneasy
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_very_negative_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 150 }
+	}
+
+	# Option C: Neocolonialism - ceasefire with economic strings
+	option = {
+		name = decolonization_events.3.c
+		trigger = {
+			has_law = law_type:law_neocolonialism
+		}
+		ai_chance = {
+			base = 3
+		}
+		scope:rebellious_subject = {
+			post_notification = colonial_neocolonial_terms_notice
+			make_independent = yes
+			add_modifier = {
+				name = neocolonial_dependency_imposed_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_modifier = {
+			name = neocolonial_economic_extraction_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:rebellious_subject
+			value = -15
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:rebellious_subject
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_relations_decreased
+		}
+		# Industrialists pleased, armed forces accept pragmatic solution
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 60 }
 	}
 }
 
@@ -278,7 +521,7 @@ decolonization_events.4 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/independence_celebration.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -297,7 +540,6 @@ decolonization_events.4 = {
 		NOT = { has_modifier = cultural_reclamation_modifier }
 		has_technology_researched = decolonization
 		is_subject = no
-		# Country has no homeland for its primary culture — likely a former colony
 		NOT = {
 			any_scope_state = {
 				is_homeland_of_country_cultures = ROOT
@@ -308,12 +550,11 @@ decolonization_events.4 = {
 	immediate = {
 	}
 
+	# Option A: Embrace indigenous culture
 	option = {
 		name = decolonization_events.4.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Embrace the local culture (ties to adopt_local_culture decision)
-		# Remove colonial cultures, adopt homeland culture
 		every_primary_culture = {
 			ROOT = {
 				remove_primary_culture = PREV
@@ -334,15 +575,20 @@ decolonization_events.4 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = medium_radicals }
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		# Upper strata who benefited from colonial culture resist
+		add_radicals = { value = small_radicals strata = upper }
 	}
 
+	# Option B: Maintain colonial-era identity
 	option = {
 		name = decolonization_events.4.b
 		ai_chance = { base = 1 }
-		# Maintain the colonial-era cultural identity
 		add_radicals = { value = medium_radicals strata = lower }
 		add_loyalists = { value = small_radicals strata = upper }
+		# Intelligentsia split - colonial education was their path to power
+		add_loyalists = { value = very_small_radicals pop_type = academics }
 	}
 }
 
@@ -352,7 +598,7 @@ decolonization_events.5 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_signed_treaty"
+		texture = "gfx/event_pictures/diplomatic_meeting.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -390,11 +636,11 @@ decolonization_events.5 = {
 		}
 	}
 
+	# Option A: Welcome closer ties
 	option = {
 		name = decolonization_events.5.a
 		default_option = yes
 		ai_chance = { base = 3 }
-		# Welcome closer ties — improve relations
 		change_relations = {
 			country = scope:former_colony
 			value = 30
@@ -404,13 +650,28 @@ decolonization_events.5 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = very_small_radicals strata = upper }
+		scope:former_colony = {
+			post_notification = former_colony_ties_welcomed_notice
+		}
+		# Some at home see imperial nostalgia
+		add_radicals = { value = very_small_radicals pop_type = academics }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
 	}
 
+	# Option B: Maintain distance
 	option = {
 		name = decolonization_events.5.b
 		ai_chance = { base = 1 }
-		# Maintain distance — the colonial era is over
+		change_relations = {
+			country = scope:former_colony
+			value = -10
+		}
+		scope:former_colony = {
+			post_notification = former_colony_ties_declined_notice
+		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals strata = lower }
 	}
@@ -422,7 +683,7 @@ decolonization_events.6 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/diplomatic_meeting.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -459,11 +720,11 @@ decolonization_events.6 = {
 		}
 	}
 
+	# Option A: Pay reparations
 	option = {
 		name = decolonization_events.6.a
 		default_option = yes
 		ai_chance = { base = 1 }
-		# Pay reparations — expensive but improves relations
 		add_modifier = {
 			name = colonial_reparations_modifier
 			days = long_modifier_time
@@ -473,19 +734,36 @@ decolonization_events.6 = {
 			country = scope:reparations_claimant
 			value = 40
 		}
+		scope:reparations_claimant = {
+			post_notification = colonial_reparations_paid_notice
+		}
 		add_loyalists = { value = small_radicals pop_type = academics }
+		# Industrialists and upper strata balk at the cost
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		add_radicals = { value = small_radicals strata = upper }
 	}
 
+	# Option B: Refuse
 	option = {
 		name = decolonization_events.6.b
 		ai_chance = { base = 3 }
-		# Refuse — the past is the past
 		change_relations = {
 			country = scope:reparations_claimant
 			value = -20
 		}
+		scope:reparations_claimant = {
+			post_notification = colonial_reparations_refused_notice
+		}
 		add_radicals = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals strata = upper }
+		# Industrialists approve of keeping the money
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
 	}
 }
 
@@ -495,7 +773,7 @@ decolonization_events.7 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/independence_celebration.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -522,36 +800,56 @@ decolonization_events.7 = {
 	}
 
 	immediate = {
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				root = { was_formed_from = PREV }
+			}
+			save_scope_as = former_overlord
+		}
 	}
 
+	# Option A: Focus on education and infrastructure
 	option = {
 		name = decolonization_events.7.a
 		default_option = yes
 		ai_chance = { base = 2 }
-		# Focus on education and infrastructure
 		add_modifier = {
 			name = nation_building_investment_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals strata = lower }
+		# Slow but popular - upper strata bear the cost
+		add_radicals = { value = very_small_radicals strata = upper }
 	}
 
+	# Option B: Seek foreign investment and aid
 	option = {
 		name = decolonization_events.7.b
 		ai_chance = { base = 2 }
-		# Seek foreign investment and aid
 		add_modifier = {
 			name = foreign_investment_dependency_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		# Upper strata benefit from foreign capital, lower strata wary
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals strata = lower }
+		if = {
+			limit = { exists = scope:former_overlord }
+			change_relations = {
+				country = scope:former_overlord
+				value = 15
+			}
+		}
 	}
 
+	# Option C: Self-reliance
 	option = {
 		name = decolonization_events.7.c
 		ai_chance = { base = 1 }
-		# Chart an independent path — self-reliance
 		add_modifier = {
 			name = post_colonial_self_reliance_modifier
 			days = long_modifier_time
@@ -559,6 +857,13 @@ decolonization_events.7 = {
 		}
 		add_radicals = { value = small_radicals strata = upper }
 		add_loyalists = { value = small_radicals strata = lower }
+		if = {
+			limit = { exists = scope:former_overlord }
+			change_relations = {
+				country = scope:former_overlord
+				value = -10
+			}
+		}
 	}
 }
 
@@ -568,7 +873,7 @@ decolonization_events.8 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/colonial_protest.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -596,34 +901,68 @@ decolonization_events.8 = {
 	}
 
 	immediate = {
+		random_subject_or_below = {
+			save_scope_as = closest_subject
+		}
 	}
 
+	# Option A: Embrace decolonization
 	option = {
 		name = decolonization_events.8.a
 		default_option = yes
 		ai_chance = {
 			base = 2
 		}
-		# Embrace the changing times — decolonization is inevitable
 		add_modifier = {
 			name = decolonization_negotiations_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
+		# All subjects gain hope
+		every_subject_or_below = {
+			add_liberty_desire = 10
+		}
+		# Intelligentsia delighted, landowners and armed forces dismayed
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
 	}
 
+	# Option B: Resist the movement
 	option = {
 		name = decolonization_events.8.b
 		ai_chance = { base = 2 }
-		# Resist the anti-colonial movement
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_modifier = {
 			name = colonial_crackdown_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_modifier = { name = colonial_stability_positive_event months = 2 }
+		add_modifier = {
+			name = anti_colonial_momentum_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		# Armed forces and landowners approve, intelligentsia radicalized
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_very_negative_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 60 }
 	}
 }
 
@@ -639,7 +978,7 @@ decolonization_events.9 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		texture = "gfx/event_pictures/colonial_protest.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -681,6 +1020,7 @@ decolonization_events.9 = {
 		}
 	}
 
+	# Option A: Invest in local development
 	option = {
 		name = decolonization_events.9.a
 		default_option = yes
@@ -691,15 +1031,24 @@ decolonization_events.9 = {
 				add = 2
 			}
 		}
-		# Invest in local development and try to address grievances
 		add_modifier = {
 			name = colonial_integration_progress_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_modifier = { name = colonial_stability_positive_event months = 3 }
+		# Costs bureaucracy but earns goodwill
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 90 }
 	}
 
+	# Option B: Military suppression
 	option = {
 		name = decolonization_events.9.b
 		ai_chance = {
@@ -709,7 +1058,6 @@ decolonization_events.9 = {
 				add = 3
 			}
 		}
-		# Send in the military to restore order
 		add_modifier = {
 			name = colonial_unrest_suppressed_modifier
 			days = normal_modifier_time
@@ -718,9 +1066,19 @@ decolonization_events.9 = {
 		scope:unrest_colony = {
 			add_radicals_in_state = { value = large_radicals }
 		}
-		add_modifier = { name = colonial_stability_negative_event months = 2 }
+		# Armed forces approve, intelligentsia appalled
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 60 }
 	}
 
+	# Option C: Release this territory
 	option = {
 		name = decolonization_events.9.c
 		ai_chance = {
@@ -730,7 +1088,6 @@ decolonization_events.9 = {
 				add = 3
 			}
 		}
-		# Release this territory — it's not worth the trouble
 		scope:unrest_colony = {
 			set_variable = decolonization_marker
 			form_decolonized_country = yes
@@ -740,7 +1097,38 @@ decolonization_events.9 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_modifier = { name = colonial_stability_positive_event months = 8 }
+		# Landowners furious at losing territory
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_very_negative_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 240 }
+	}
+
+	# Option D: Neocolonialism - release with economic strings
+	option = {
+		name = decolonization_events.9.d
+		trigger = {
+			has_law = law_type:law_neocolonialism
+		}
+		ai_chance = {
+			base = 3
+		}
+		scope:unrest_colony = {
+			set_variable = decolonization_marker
+			form_decolonized_country = yes
+		}
+		add_modifier = {
+			name = neocolonial_economic_extraction_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# Industrialists love the deal, intelligentsia see through it
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 150 }
 	}
 }
 
@@ -750,7 +1138,7 @@ decolonization_events.10 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_signed_treaty"
+		texture = "gfx/event_pictures/diplomatic_meeting.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -768,7 +1156,6 @@ decolonization_events.10 = {
 	trigger = {
 		NOT = { has_modifier = colonial_integration_progress_modifier }
 		has_technology_researched = decolonization
-		# Has at least one overseas colonial state with high acceptance (ready to integrate)
 		any_scope_state = {
 			NOT = { is_homeland_of_country_cultures = ROOT }
 			state_population >= 100000
@@ -797,11 +1184,11 @@ decolonization_events.10 = {
 		}
 	}
 
+	# Option A: Grant full homeland status
 	option = {
 		name = decolonization_events.10.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Celebrate the integration — grant full homeland status
 		scope:integrating_colony = {
 			state_region = {
 				save_scope_as = colony_state_region
@@ -817,18 +1204,31 @@ decolonization_events.10 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_modifier = { name = colonial_stability_positive_event months = 5 }
+		add_modifier = { name = colonial_stability_positive_event days = 150 }
 		add_loyalists = { value = medium_radicals }
-		# Integration process causes some domestic disruption
+		# Integration disrupts domestic politics - some resent diluting the homeland
 		add_radicals = { value = small_radicals strata = upper }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
 	}
 
+	# Option B: Maintain the current arrangement
 	option = {
 		name = decolonization_events.10.b
 		ai_chance = { base = 1 }
-		# Maintain the current arrangement — don't rush
 		add_loyalists = { value = small_radicals }
 		add_modifier = { name = colonial_stability_positive_event months = 2 }
+		# Devout and landowners prefer the status quo
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
 	}
 }
 
@@ -838,7 +1238,7 @@ decolonization_events.11 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_signed_treaty"
+		texture = "gfx/event_pictures/diplomatic_meeting.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -862,7 +1262,6 @@ decolonization_events.11 = {
 		any_scope_state = {
 			is_overseas_colonial_state = yes
 		}
-		# A GP has explicitly adopted an anti-colonial stance
 		any_country = {
 			NOT = { this = root }
 			country_rank >= rank_value:great_power
@@ -881,6 +1280,7 @@ decolonization_events.11 = {
 		}
 	}
 
+	# Option A: Acknowledge criticism and announce reforms
 	option = {
 		name = decolonization_events.11.a
 		default_option = yes
@@ -891,7 +1291,6 @@ decolonization_events.11 = {
 				add = 3
 			}
 		}
-		# Acknowledge the criticism and announce reforms
 		add_modifier = {
 			name = decolonization_negotiations_modifier
 			days = normal_modifier_time
@@ -901,9 +1300,26 @@ decolonization_events.11 = {
 			country = scope:condemning_power
 			value = 10
 		}
-		add_modifier = { name = colonial_stability_negative_event months = 5 }
+		scope:condemning_power = {
+			post_notification = gp_condemnation_reforms_announced_notice
+		}
+		# All subjects gain hope from announced reforms
+		every_subject_or_below = {
+			add_liberty_desire = 10
+		}
+		# Intelligentsia approve, landowners dismayed
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 150 }
 	}
 
+	# Option B: Reject the criticism
 	option = {
 		name = decolonization_events.11.b
 		ai_chance = {
@@ -913,7 +1329,6 @@ decolonization_events.11 = {
 				add = 2
 			}
 		}
-		# Reject the criticism — our internal affairs are our own
 		add_modifier = {
 			name = gp_condemns_colonialism_modifier
 			days = normal_modifier_time
@@ -923,7 +1338,23 @@ decolonization_events.11 = {
 			country = scope:condemning_power
 			value = -20
 		}
-		add_modifier = { name = colonial_stability_negative_event months = 2 }
+		scope:condemning_power = {
+			post_notification = gp_condemnation_rejected_notice
+		}
+		# Landowners and armed forces rally round the flag
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 60 }
 	}
 }
 
@@ -933,7 +1364,7 @@ decolonization_events.12 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_signed_treaty"
+		texture = "gfx/event_pictures/diplomatic_meeting.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -954,7 +1385,6 @@ decolonization_events.12 = {
 		any_scope_state = {
 			is_overseas_colonial_state = yes
 		}
-		# A GP has explicitly adopted a pro-colonial stance
 		any_country = {
 			NOT = { this = root }
 			country_rank >= rank_value:great_power
@@ -973,11 +1403,11 @@ decolonization_events.12 = {
 		}
 	}
 
+	# Option A: Accept their support
 	option = {
 		name = decolonization_events.12.a
 		default_option = yes
 		ai_chance = { base = 3 }
-		# Accept their support — strengthen the empire
 		add_modifier = {
 			name = gp_supports_colonialism_modifier
 			days = long_modifier_time
@@ -987,15 +1417,30 @@ decolonization_events.12 = {
 			country = scope:supporting_power
 			value = 20
 		}
-		add_modifier = { name = colonial_stability_positive_event months = 5 }
+		scope:supporting_power = {
+			post_notification = gp_support_accepted_notice
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 150 }
+		# Intelligentsia dismayed at accepting imperialist backing
 		add_radicals = { value = small_radicals pop_type = academics }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
 	}
 
+	# Option B: Decline - handle it ourselves
 	option = {
 		name = decolonization_events.12.b
 		ai_chance = { base = 1 }
-		# Decline — we can handle this ourselves
-		add_modifier = { name = colonial_stability_positive_event months = 1 }
+		change_relations = {
+			country = scope:supporting_power
+			value = -5
+		}
+		scope:supporting_power = {
+			post_notification = gp_support_declined_notice
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 30 }
 		add_loyalists = { value = small_radicals }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -1007,7 +1452,7 @@ decolonization_events.13 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_military_parade"
+		texture = "gfx/event_pictures/colonial_soldiers.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1028,7 +1473,6 @@ decolonization_events.13 = {
 			has_modifier = colonial_crackdown_modifier
 		}
 		has_technology_researched = decolonization
-		# Only fires when stability is low (many low-acceptance colonial states)
 		colonial_low_acceptance_count >= 2
 		any_scope_state = {
 			is_overseas_colonial_state = yes
@@ -1050,6 +1494,7 @@ decolonization_events.13 = {
 		}
 	}
 
+	# Option A: Negotiate and release
 	option = {
 		name = decolonization_events.13.a
 		default_option = yes
@@ -1060,7 +1505,6 @@ decolonization_events.13 = {
 				add = 3
 			}
 		}
-		# Negotiate and release the territory
 		scope:uprising_colony = {
 			set_variable = decolonization_marker
 			form_decolonized_country = yes
@@ -1070,15 +1514,24 @@ decolonization_events.13 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_modifier = { name = colonial_stability_positive_event months = 5 }
+		# Armed forces humiliated by retreat
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 150 }
 	}
 
+	# Option B: Suppress with military force
 	option = {
 		name = decolonization_events.13.b
 		ai_chance = {
 			base = 2
 		}
-		# Suppress the uprising with military force
 		add_modifier = {
 			name = colonial_crackdown_modifier
 			days = long_modifier_time
@@ -1088,7 +1541,42 @@ decolonization_events.13 = {
 			add_radicals_in_state = { value = large_radicals }
 		}
 		add_radicals = { value = medium_radicals pop_type = academics }
-		add_modifier = { name = colonial_stability_negative_event months = 5 }
+		# Armed forces relish the fight, everyone else suffers
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_very_negative_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 150 }
+	}
+
+	# Option C: Neocolonialism - release with economic extraction
+	option = {
+		name = decolonization_events.13.c
+		trigger = {
+			has_law = law_type:law_neocolonialism
+		}
+		ai_chance = {
+			base = 3
+		}
+		scope:uprising_colony = {
+			set_variable = decolonization_marker
+			form_decolonized_country = yes
+		}
+		add_modifier = {
+			name = neocolonial_economic_extraction_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# Industrialists profit, armed forces accept the pragmatic retreat
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		add_modifier = { name = colonial_stability_positive_event days = 90 }
 	}
 }
 
@@ -1104,7 +1592,7 @@ decolonization_events.14 = {
 	placement = root
 
 	event_image = {
-		video = "unspecific_signed_treaty"
+		texture = "gfx/event_pictures/diplomatic_meeting.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1120,11 +1608,9 @@ decolonization_events.14 = {
 	trigger = {
 		has_technology_researched = decolonization
 		country_rank >= rank_value:great_power
-		# Cooldown — don't fire if we already chose recently
 		NOR = {
 			has_variable = gp_colonial_policy_cooldown
 		}
-		# There exists at least one country with overseas colonies
 		any_country = {
 			NOT = { this = root }
 			any_scope_state = {
@@ -1137,12 +1623,12 @@ decolonization_events.14 = {
 		set_variable = { name = gp_colonial_policy_cooldown days = 1095 }
 	}
 
+	# Option A: Condemn colonialism
 	option = {
 		name = decolonization_events.14.a
 		default_option = yes
 		ai_chance = {
 			base = 3
-			# More likely if we have NO colonial holdings ourselves
 			modifier = {
 				trigger = {
 					NOT = {
@@ -1153,7 +1639,6 @@ decolonization_events.14 = {
 				}
 				add = 5
 			}
-			# Less likely if we have colonies of our own (hypocrisy)
 			modifier = {
 				trigger = {
 					any_scope_state = {
@@ -1163,7 +1648,6 @@ decolonization_events.14 = {
 				add = -5
 			}
 		}
-		# Condemn colonialism
 		set_variable = gp_anti_colonial_stance
 		if = {
 			limit = { has_variable = gp_pro_colonial_stance }
@@ -1174,14 +1658,32 @@ decolonization_events.14 = {
 			days = 1095
 			is_decaying = yes
 		}
+		# Intelligentsia and trade unions approve - progressive stance
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		# Landowners and industrialists lose colonial markets
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
 	}
 
+	# Option B: Remain neutral
 	option = {
 		name = decolonization_events.14.b
 		ai_chance = {
 			base = 2
 		}
-		# Remain neutral — no active stance
 		if = {
 			limit = { has_variable = gp_anti_colonial_stance }
 			remove_variable = gp_anti_colonial_stance
@@ -1190,13 +1692,15 @@ decolonization_events.14 = {
 			limit = { has_variable = gp_pro_colonial_stance }
 			remove_variable = gp_pro_colonial_stance
 		}
+		# Cautious approach - no strong reactions either way
+		add_loyalists = { value = very_small_radicals }
 	}
 
+	# Option C: Support colonial interests
 	option = {
 		name = decolonization_events.14.c
 		ai_chance = {
 			base = 1
-			# More likely if we have colonial holdings ourselves
 			modifier = {
 				trigger = {
 					any_scope_state = {
@@ -1205,7 +1709,6 @@ decolonization_events.14 = {
 				}
 				add = 5
 			}
-			# More likely if we're allied with a colonial power
 			modifier = {
 				trigger = {
 					any_country = {
@@ -1219,7 +1722,6 @@ decolonization_events.14 = {
 				add = 3
 			}
 		}
-		# Support colonial interests
 		set_variable = gp_pro_colonial_stance
 		if = {
 			limit = { has_variable = gp_anti_colonial_stance }
@@ -1230,5 +1732,24 @@ decolonization_events.14 = {
 			days = 1095
 			is_decaying = yes
 		}
+		# Landowners and industrialists approve - colonial markets
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time }
+		}
+		# Intelligentsia and trade unions dismayed
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time }
+		}
+		add_radicals = { value = small_radicals pop_type = academics }
 	}
 }

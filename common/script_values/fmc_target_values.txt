@@ -1,11 +1,4 @@
-﻿# fmc_private_construction_spending_target = {
-# 	value = investment_pool
-# 	divide = 52 #investment pool should reach equillibrium in a year
-# 	# multiply = fmc_investment_price_incentive
-# }
-
-
-fmc_private_construction_spending_target = {
+﻿fmc_private_construction_spending_target = {
 	value = investment_pool_gross_income
 	multiply = {
 		value = investment_pool
@@ -36,11 +29,6 @@ fmc_public_construction_use_target = {
 		value = 1
 	}
 }
-
-# fmc_private_construction_use_target = {
-# 	value = fmc_private_construction_spending_target
-# 	divide = 100 #fmc_construction_price
-# }
 
 fmc_investment_pool_size_target = {
 	if = {
@@ -98,12 +86,9 @@ fmc_private_public_construction_ratio_target = {
 fmc_price_stabiliser_next_value = {
 	if = {
 		limit = {
-		#	OR = {
-				NOT = {
-					has_variable = fmc_price_stabiliser
-				}
-		#		var:fmc_price_stabiliser < 32
-		#	}
+			NOT = {
+				has_variable = fmc_price_stabiliser
+			}
 		}
 		value = FMC_CONSTRUCTION_SERVICES_PRICE
 	}

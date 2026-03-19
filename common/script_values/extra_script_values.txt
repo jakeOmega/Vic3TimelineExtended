@@ -1188,16 +1188,20 @@ base_construction_per_week = {
 	subtract = var:too_much_private_construction_cached
 }
 
+private_construction_used = {
+	value = modifier:country_construction_add
+	multiply = modifier:country_private_construction_allocation_mult
+	max = {
+		value = modifier:country_max_weekly_construction_progress_add
+		multiply = construction_queue_num_queued_private_levels
+	}
+}
+
 curr_cost_per_construction_point = {
 	value = investment_pool_gross_income
 	subtract = investment_pool_net_income
-	divide = {
-		value = modifier:country_construction_add
-		multiply = modifier:country_private_construction_allocation_mult
-		divide = modifier:country_max_weekly_construction_progress_add
-		max = construction_queue_num_queued_private_levels
-	}
-	divide = modifier:country_max_weekly_construction_progress_add
+	divide = private_construction_used
+	min = 1
 }
 
 target_construction_per_week = {
@@ -1341,6 +1345,29 @@ city_size = {
 	}
 }
 
+# BANKING EVENT EXPENSE SCALING
+# Used with add_modifier = { name = X multiplier = banking_event_expense_Y }
+# where the modifier has country_expenses_add = 1. The multiplier scales expenses with GDP.
+banking_event_expense_small = {
+	value = gdp
+	multiply = 0.005
+}
+
+banking_event_expense_medium = {
+	value = gdp
+	multiply = 0.01
+}
+
+banking_event_expense_large = {
+	value = gdp
+	multiply = 0.02
+}
+
+banking_event_expense_huge = {
+	value = gdp
+	multiply = 0.03
+}
+
 # Base points provided by the currently active law (used for JE setup / display).
 banking_law_base_points_value = {
 	value = 0
@@ -1458,7 +1485,7 @@ construction_cost_ceiling_ratio = 100  # 100x reference = very rich late-game ec
 # Maximum construction cost multiplier at ceiling (10 = construction costs up to +1000%)
 construction_cost_max_mult = 10
 
-# Derived thresholds (do not edit — change the ratios above instead)
+# Derived thresholds (do not edit - change the ratios above instead)
 construction_cost_gdppc_floor = {
 	value = construction_cost_gdppc_reference
 	multiply = construction_cost_floor_ratio
@@ -1528,7 +1555,7 @@ migration_crowding_ceiling_ratio = 20  # 20x reference = extremely overcrowded
 # With base -0.1 migration pull mult, 20 = -200% pull at ceiling
 migration_crowding_max_mult = 20
 
-# Derived thresholds (do not edit — change the ratios above instead)
+# Derived thresholds (do not edit - change the ratios above instead)
 migration_crowding_density_floor = {
 	value = migration_crowding_density_reference
 	multiply = migration_crowding_floor_ratio

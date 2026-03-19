@@ -49,7 +49,7 @@
 
     ai = {
 		evaluation_chance = {
-            value = 0.05 # base 5% chance to evaluate — nuclear use is a grave decision
+            value = 0.05 # base 5% chance to evaluate - nuclear use is a grave decision
             if = {
                 limit = {
                     ruler = {
@@ -113,13 +113,13 @@
                 is_incorporated = yes
             }
             OR = {
-                # Case 1: Target is NOT nuclear-armed — normal first strike logic
+                # Case 1: Target is NOT nuclear-armed - normal first strike logic
                 NOT = {
                     scope:target_country = {
                         has_modifier = nuclear_power
                     }
                 }
-                # Case 2: Target IS nuclear-armed — requires BOTH losing core territory AND radical leader
+                # Case 2: Target IS nuclear-armed - requires BOTH losing core territory AND radical leader
                 AND = {
                     scope:target_country = { has_modifier = nuclear_power }
                     # Must have core territory actually occupied or nearly lost
@@ -142,7 +142,7 @@
                         }
                     }
                 }
-                # Case 3: Already been nuked — retaliation regardless of enemy's nuclear status
+                # Case 3: Already been nuked - retaliation regardless of enemy's nuclear status
                 any_scope_state = {
                     OR = {
                         has_modifier = nuclear_strike_aftermath
@@ -298,11 +298,11 @@ tactical_nuke_diplo_action = {
                 is_incorporated = yes
             }
             OR = {
-                # Case 1: Target is NOT nuclear-armed — use tactical nukes more freely
+                # Case 1: Target is NOT nuclear-armed - use tactical nukes more freely
                 NOT = {
                     scope:target_country = { has_modifier = nuclear_power }
                 }
-                # Case 2: Target IS nuclear-armed — require occupied core territory AND aggressive leader
+                # Case 2: Target IS nuclear-armed - require occupied core territory AND aggressive leader
                 AND = {
                     scope:target_country = { has_modifier = nuclear_power }
                     any_scope_state = {
@@ -322,7 +322,7 @@ tactical_nuke_diplo_action = {
                         ruler = { has_trait = ruthless NOT = { has_trait = cautious } }
                     }
                 }
-                # Case 3: Already been nuked — retaliation
+                # Case 3: Already been nuked - retaliation
                 any_scope_state = {
                     OR = {
                         has_modifier = nuclear_strike_aftermath

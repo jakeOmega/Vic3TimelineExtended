@@ -6,3 +6,4 @@ path_constants.py
 *__pycache__
 .github/
 *.exe
+/.vscode
