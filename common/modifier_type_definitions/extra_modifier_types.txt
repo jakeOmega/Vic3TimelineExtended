@@ -956,11 +956,45 @@ power_bloc_can_use_extend_influence_bool = {
 	script_only = yes
 }
 
-power_bloc_homelands_can_decay_bool = {
+# Country-level binary: enables homeland creation/removal independent of power bloc
+country_homelands_can_change_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
 		ai_value = 100
+	}
+	script_only = yes
+}
+
+# Pop % threshold for creating a new homeland (base 0.50 in base_values)
+# State-level: modified by laws (all states), decrees (per-state), buildings, etc.
+# Lower value = easier to form homelands; higher = harder
+state_homeland_creation_threshold_add = {
+	color = neutral
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+# Pop % threshold below which a homeland is removed (base 0.25 in base_values)
+# State-level: modified by laws (all states), decrees (per-state), buildings, etc.
+# Higher value = minority homelands erased sooner; lower = they persist longer
+state_homeland_removal_threshold_add = {
+	color = neutral
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+# Percentage multiplier on annual homeland change chance (base 10%)
+# State-level: laws apply to all states, decrees/buildings per-state
+# +1.0 = +100% speed (doubles chance); -0.5 = -50% speed (halves chance)
+state_homeland_change_speed_mult = {
+	color = neutral
+	game_data = {
+		ai_value = 0
 	}
 	script_only = yes
 }
@@ -1880,5 +1914,13 @@ state_migration_crowding_density_mult = {
 	percent = yes
 	game_data = {
 		ai_value = 50
+	}
+}
+
+state_resettlement_transfer_add = {
+	color = neutral
+	percent = no
+	game_data = {
+		ai_value = 0
 	}
 }

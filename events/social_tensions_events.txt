@@ -86,10 +86,7 @@ social_tensions_events.1 = {
 	option = { # Expand surveillance
 		name = social_tensions_events.1.c
 		trigger = {
-			OR = {
-				has_technology_researched = mass_surveillance
-				has_technology_researched = automated_surveillance
-			}
+			has_technology_researched = automated_surveillance
 		}
 		highlighted_option = yes
 		custom_tooltip = social_tensions_surveillance_tech_tt

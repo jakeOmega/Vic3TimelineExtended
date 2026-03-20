@@ -1,0 +1,38 @@
+﻿# Source building: Resettlement Camp
+pmg_resettlement_method = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+
+	production_methods = {
+		pm_homesteading_program
+		pm_organized_colonization
+		pm_forced_resettlement
+		pm_penal_transportation
+		pm_incentivized_relocation
+	}
+}
+
+# Destination building: Resettlement Colony
+pmg_resettlement_settlement = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+
+	production_methods = {
+		pm_settler_homesteads
+		pm_planned_settlement
+		pm_administered_territory
+		pm_development_zone
+	}
+}
+
+pmg_resettlement_transportation = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+
+	production_methods = {
+		pm_resettlement_overland
+		pm_resettlement_railway
+		pm_resettlement_steamship
+		pm_resettlement_airlift
+	}
+}

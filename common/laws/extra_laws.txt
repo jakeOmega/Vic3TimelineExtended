@@ -937,6 +937,10 @@ law_minority_rights_violent_hostility = {
 		country_acceptance_shared_religious_trait_group_add = -3
 		country_acceptance_no_shared_religious_trait_add = -5
 		state_violence_against_minorities_bool = yes
+
+		# Homeland system: violence drives minority populations below removal threshold
+		state_homeland_removal_threshold_add = 0.10
+		state_homeland_change_speed_mult = 0.25
 	}
 
 	acceptance_modifier = {
@@ -1129,6 +1133,10 @@ law_minority_rights_cultural_assimilation = {
 		country_acceptance_shared_religious_trait_add = -1
 		country_acceptance_shared_religious_trait_group_add = -3
 		country_acceptance_no_shared_religious_trait_add = -5
+
+		# Homeland system: forced assimilation erases minority homelands faster
+		state_homeland_removal_threshold_add = 0.05
+		state_homeland_change_speed_mult = 0.25
 	}	
 	
 	acceptance_modifier = {
@@ -1413,6 +1421,10 @@ law_minority_rights_protection = {
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 		state_min_cultural_acceptance_delta_add = 10
 		state_migration_pull_mult = 0.2
+
+		# Homeland system: legal protections help minority homelands persist
+		state_homeland_removal_threshold_add = -0.05
+		state_homeland_change_speed_mult = -0.15
 	}
 	
 	acceptance_modifier = {
@@ -1493,6 +1505,11 @@ law_minority_rights_affirmative_action = {
 		state_min_cultural_acceptance_delta_add = 20
 		country_assimilation_delta_threshold_add = -100
 		state_migration_pull_mult = 0.3
+
+		# Homeland system: affirmative action strongly protects minority homelands
+		state_homeland_creation_threshold_add = 0.05
+		state_homeland_removal_threshold_add = -0.10
+		state_homeland_change_speed_mult = -0.25
 	}
 	
 	acceptance_modifier = {
@@ -2058,6 +2075,12 @@ law_civic_monolingualism = {
 		country_acceptance_shared_language_trait_add = 5
         country_support_separatism_resistance_mult = -0.10
         country_support_separatism_strength_mult = 0.20
+
+		# Homeland system: monolingual education drives cultural homogenization
+		country_homelands_can_change_bool = yes
+		state_homeland_creation_threshold_add = -0.05
+		state_homeland_removal_threshold_add = 0.05
+		state_homeland_change_speed_mult = 0.25
     }
 }
 
@@ -2081,6 +2104,11 @@ law_multilingual_federalism = {
         country_acceptance_homeland_add = 20
         country_support_separatism_strength_mult = -0.1
         country_support_separatism_resistance_mult = 0.2
+
+		# Homeland system: federalism protects linguistic minority homelands
+		state_homeland_creation_threshold_add = 0.05
+		state_homeland_removal_threshold_add = -0.05
+		state_homeland_change_speed_mult = -0.15
     }
 }
 
@@ -2102,6 +2130,12 @@ law_linguistic_purity = {
 		country_radicalism_increases_cultural_erasure_mult = 0.3
 		country_radicalism_increases_open_prejudice_mult = 0.1
 		country_acceptance_no_shared_language_trait_add = -20
+
+		# Homeland system: coercive suppression aggressively reshapes demographics
+		country_homelands_can_change_bool = yes
+		state_homeland_creation_threshold_add = -0.10
+		state_homeland_removal_threshold_add = 0.10
+		state_homeland_change_speed_mult = 0.50
     }
 }
 
@@ -2144,6 +2178,11 @@ law_ubiquitous_translation = {
         country_bureaucracy_mult = -0.05
         goods_output_services_mult = 0.05
         country_influence_mult = 0.05
+
+		# Homeland system: universal translation reduces pressure on minority homelands
+		state_homeland_creation_threshold_add = 0.05
+		state_homeland_removal_threshold_add = -0.05
+		state_homeland_change_speed_mult = -0.25
     }
 }
 

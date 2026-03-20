@@ -161,6 +161,12 @@ REPLACE:law_ethnostate = {
 		country_primary_culture_fervor_from_laws_add = 20
 
 		country_bureaucracy_investment_cost_factor_mult = -0.25
+
+		# Homeland system: ethnostate aggressively reshapes cultural demographics
+		country_homelands_can_change_bool = yes
+		state_homeland_creation_threshold_add = -0.10
+		state_homeland_removal_threshold_add = 0.10
+		state_homeland_change_speed_mult = 0.50
 	}
 
 	can_impose = {
@@ -238,6 +244,12 @@ REPLACE:law_national_supremacy = {
 		country_primary_culture_fervor_from_laws_add = 15
 
 		country_bureaucracy_investment_cost_factor_mult = -0.15
+
+		# Homeland system: national supremacy promotes primary culture homelands
+		country_homelands_can_change_bool = yes
+		state_homeland_creation_threshold_add = -0.05
+		state_homeland_removal_threshold_add = 0.05
+		state_homeland_change_speed_mult = 0.25
 	}
 
 	can_impose = {
@@ -490,6 +502,11 @@ REPLACE:law_multicultural = {
 		country_primary_culture_fervor_from_laws_add = -10
 
 		country_bureaucracy_investment_cost_factor_mult = 0.25
+
+		# Homeland system: multiculturalism resists new exclusive homelands, protects existing minorities
+		state_homeland_creation_threshold_add = 0.10
+		state_homeland_removal_threshold_add = -0.05
+		state_homeland_change_speed_mult = -0.25
 	}
 
 	can_impose = {

@@ -74,7 +74,7 @@ banking_cycle_events.1 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 40
@@ -113,7 +113,7 @@ banking_cycle_events.1 = {
 		}
 		add_radicals = {
 			value = medium_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 25
@@ -201,7 +201,7 @@ banking_cycle_events.2 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 20
@@ -253,7 +253,7 @@ banking_cycle_events.3 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 55
@@ -266,7 +266,7 @@ banking_cycle_events.3 = {
 		name = banking_cycle_events.3.b
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 45
@@ -344,7 +344,7 @@ banking_cycle_events.4 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 60
@@ -375,11 +375,11 @@ banking_cycle_events.4 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 40
@@ -499,7 +499,7 @@ banking_cycle_events.6 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 50
@@ -519,11 +519,11 @@ banking_cycle_events.6 = {
 		}
 		add_radicals = {
 			value = medium_radicals
-			strata = poor
+			strata = lower
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 30
@@ -703,7 +703,7 @@ banking_cycle_events.8 = {
 		}
 		add_radicals = {
 			value = medium_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 25
@@ -752,7 +752,7 @@ banking_cycle_events.9 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 35
@@ -841,11 +841,11 @@ banking_cycle_events.10 = {
 		}
 		add_radicals = {
 			value = medium_radicals
-			strata = poor
+			strata = lower
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 45
@@ -887,7 +887,7 @@ banking_cycle_events.10 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 20
@@ -957,7 +957,7 @@ banking_cycle_events.11 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 40
@@ -978,7 +978,7 @@ banking_cycle_events.11 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 30
@@ -1028,11 +1028,11 @@ banking_cycle_events.12 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 45
@@ -1074,11 +1074,11 @@ banking_cycle_events.12 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 20
@@ -1123,7 +1123,7 @@ banking_cycle_events.13 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 35
@@ -1166,7 +1166,7 @@ banking_cycle_events.13 = {
 		}
 		add_radicals = {
 			value = medium_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 20
@@ -1270,7 +1270,7 @@ banking_cycle_events.14 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 25
@@ -1342,7 +1342,7 @@ banking_cycle_events.15 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 35
@@ -1440,7 +1440,7 @@ banking_cycle_events.16 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 30
@@ -1514,7 +1514,7 @@ banking_cycle_events.17 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 35
@@ -1556,7 +1556,7 @@ banking_cycle_events.17 = {
 		}
 		add_radicals = {
 			value = medium_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 15
@@ -1614,11 +1614,11 @@ banking_cycle_events.18 = {
 		}
 		add_radicals = {
 			value = medium_radicals
-			strata = rich
+			strata = upper
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 50
@@ -1711,7 +1711,7 @@ banking_cycle_events.19 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 50
@@ -1731,7 +1731,7 @@ banking_cycle_events.19 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 35
@@ -1751,7 +1751,7 @@ banking_cycle_events.19 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -1812,7 +1812,7 @@ banking_cycle_events.20 = {
 		}
 		add_radicals = {
 			value = large_radicals
-			strata = rich
+			strata = upper
 		}
 		ai_chance = {
 			base = 40

@@ -1597,6 +1597,10 @@ principle_cultural_unity_2 = {
 
 	member_modifier = {
 		state_assimilation_mult = 0.2
+		country_homelands_can_change_bool = yes
+		state_homeland_change_speed_mult = 0.05
+		state_homeland_creation_threshold_add = -0.05
+		state_homeland_removal_threshold_add = 0.05
 	}
 
 	leader_modifier = {
@@ -1607,7 +1611,6 @@ principle_cultural_unity_2 = {
 
 	power_bloc_modifier = {
 		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
-		power_bloc_homelands_can_decay_bool = yes
 	}
 	
 	ai_weight = {
@@ -1625,6 +1628,10 @@ principle_cultural_unity_3 = {
 		country_wage_cultural_erasure_mult = -0.2
 		country_wage_open_prejudice_mult = -0.2
 		state_assimilation_mult = 0.3
+		country_homelands_can_change_bool = yes
+		state_homeland_change_speed_mult = 0.10
+		state_homeland_creation_threshold_add = -0.1
+		state_homeland_removal_threshold_add = 0.1
 	}
 
 	leader_modifier = {
@@ -1635,7 +1642,6 @@ principle_cultural_unity_3 = {
 
 	power_bloc_modifier = {
 		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
-		power_bloc_homelands_can_decay_bool = yes
 	}
 
 	ai_weight = {
@@ -1659,6 +1665,10 @@ principle_cultural_unity_4 = {
 		state_assimilation_mult = 0.4
 
 		country_institution_cost_institution_ministry_of_culture_mult = -0.25
+		country_homelands_can_change_bool = yes
+		state_homeland_change_speed_mult = 0.20
+		state_homeland_creation_threshold_add = -0.15
+		state_homeland_removal_threshold_add = 0.15
 	}
 
 	leader_modifier = {
@@ -1669,7 +1679,6 @@ principle_cultural_unity_4 = {
 
 	power_bloc_modifier = {
 		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
-		power_bloc_homelands_can_decay_bool = yes
 	}
 
 	institution = institution_ministry_of_culture
@@ -1700,6 +1709,10 @@ principle_cultural_unity_5 = {
 		country_wage_open_prejudice_mult = -0.2
 		state_assimilation_mult = 0.5
 		country_institution_cost_institution_ministry_of_culture_mult = -0.25
+		country_homelands_can_change_bool = yes
+		state_homeland_change_speed_mult = 0.30
+		state_homeland_creation_threshold_add = -0.2
+		state_homeland_removal_threshold_add = 0.2
 	}
 
 	leader_modifier = {
@@ -1710,7 +1723,6 @@ principle_cultural_unity_5 = {
 
 	power_bloc_modifier = {
 		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
-		power_bloc_homelands_can_decay_bool = yes
 		power_bloc_leader_can_force_cultural_adoption_bool = yes
 	}
 

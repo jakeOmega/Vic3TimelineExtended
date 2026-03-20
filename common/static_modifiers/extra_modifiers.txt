@@ -3,6 +3,10 @@
 	country_bubble_pressure_monthly_add = -1
 	state_building_state_youth_centers_max_level_add = 1
 	state_building_un_headquarters_max_level_add = 1
+
+	# Homeland creation/removal base thresholds (state-level; modified by laws, techs, decrees, buildings)
+	state_homeland_creation_threshold_add = 0.95
+	state_homeland_removal_threshold_add = 0.0
 }
 
 space_elevator_progress = {
@@ -2537,3 +2541,5 @@ langreform_national_focus = {
 	country_acceptance_no_shared_language_trait_add = -10
 	country_acceptance_shared_language_trait_group_add = -5
 }
+
+

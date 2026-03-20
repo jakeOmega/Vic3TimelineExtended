@@ -39,3 +39,8 @@ REPLACE_OR_CREATE:bg_discoverable_mining = {
 
 	discoverable_resource = yes
 }
+
+REPLACE_OR_CREATE:bg_resettlement = {
+	parent_group = bg_bureaucracy
+	economy_of_scale = no
+}

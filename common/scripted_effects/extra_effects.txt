@@ -988,3 +988,66 @@ remove_all_langreform_modifiers = {
 	remove_modifier = langreform_national_focus
 	remove_variable = language_reform_type
 }
+
+# =================================================================
+# Resettlement Population Transfer
+# =================================================================
+# State scope (SOURCE state with a resettlement camp).
+# Finds the camp, identifies a destination state with a colony,
+# then moves pops employed at the camp to the destination.
+#
+# Uses ordered_scope_pop with order_by = total_size to prefer
+# moving large pops over tiny minorities.
+#
+# Transfer volumes per camp level per month:
+#   Homesteading:            ~100  (voluntary settler recruitment)
+#   Organized Colonization:  ~250  (government-organized program)
+#   Forced Resettlement:     ~400  (state-directed mass transfer)
+#   Penal Transportation:    ~150  (convict/undesirable deportation)
+# =================================================================
+resettlement_transfer_effect = {
+	# Find a destination state (another state owned by the same country
+	# that has a resettlement colony)
+	owner = {
+		random_scope_state = {
+			limit = {
+				NOT = { this = ROOT }
+				any_scope_building = {
+					is_building_type = building_resettlement_colony
+					level > 0
+				}
+			}
+			save_scope_as = resettlement_destination
+		}
+	}
+
+	# Only proceed if we have a valid destination and a nonzero transfer modifier
+	if = {
+		limit = {
+			exists = scope:resettlement_destination
+			modifier:state_resettlement_transfer_add > 0
+		}
+
+		# Move population from the largest movable pop employed at the camp.
+		# Only laborers, farmers, and peasants are settlers that get moved;
+		# bureaucrats, soldiers, officers, and clerks are administrative staff
+		# and remain in the source state.
+		ordered_scope_pop = {
+			limit = {
+				pop_employment_building = building_resettlement_camp
+				OR = {
+					is_pop_type = laborers
+					is_pop_type = farmers
+					is_pop_type = peasants
+				}
+			}
+			order_by = total_size
+			position = 0
+			check_range_bounds = no
+			move_partial_pop = {
+				state = scope:resettlement_destination
+				population = modifier:state_resettlement_transfer_add
+			}
+		}
+	}
+}

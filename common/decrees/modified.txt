@@ -1,0 +1,5 @@
+﻿INJECT:decree_promote_national_values = {
+	modifier = {
+		state_homeland_change_speed_mult = 3.0
+	}
+}

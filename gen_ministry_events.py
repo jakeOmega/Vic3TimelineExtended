@@ -234,7 +234,7 @@ ministry_law_events.2 = {{
 {T(2)}}}
 {T(2)}add_radicals = {{
 {T(3)}value = small_radicals
-{T(3)}strata = rich
+{T(3)}strata = upper
 {T(2)}}}
 {T(1)}}}
 
@@ -397,7 +397,7 @@ ministry_law_events.6 = {{
 {T(2)}}}
 {T(2)}add_radicals = {{
 {T(3)}value = small_radicals
-{T(3)}strata = rich
+{T(3)}strata = upper
 {T(2)}}}
 {T(1)}}}
 
@@ -467,7 +467,7 @@ ministry_law_events.7 = {{
 {T(2)}}}
 {T(2)}add_loyalists = {{
 {T(3)}value = small_radicals
-{T(3)}strata = rich
+{T(3)}strata = upper
 {T(2)}}}
 {T(1)}}}
 }}"""
@@ -756,7 +756,7 @@ ministry_law_events.12 = {{
 {T(2)}}}
 {T(2)}add_radicals = {{
 {T(3)}value = small_radicals
-{T(3)}strata = poor
+{T(3)}strata = lower
 {T(2)}}}
 {T(1)}}}
 
@@ -1030,7 +1030,7 @@ ministry_law_events.17 = {{
 {T(2)}}}
 {T(2)}add_radicals = {{
 {T(3)}value = small_radicals
-{T(3)}strata = rich
+{T(3)}strata = upper
 {T(2)}}}
 {T(1)}}}
 
@@ -1131,7 +1131,7 @@ ministry_law_events.19 = {{
 {T(2)}}}
 {T(2)}add_radicals = {{
 {T(3)}value = small_radicals
-{T(3)}strata = rich
+{T(3)}strata = upper
 {T(2)}}}
 {T(1)}}}
 

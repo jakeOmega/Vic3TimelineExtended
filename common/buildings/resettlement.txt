@@ -1,0 +1,159 @@
+﻿# =================================================================
+# Resettlement Camp (SOURCE)
+# =================================================================
+# Place in the state you want to take people FROM.
+# Employees of this building are the settlers/deportees being processed.
+# Monthly on-action moves them to a state with a Resettlement Colony.
+# =================================================================
+building_resettlement_camp = {
+	building_group = bg_resettlement
+
+	city_type = city
+	levels_per_mesh = 50
+
+	has_max_level = yes
+
+	unlocking_technologies = {
+		nationalism
+	}
+
+	production_method_groups = {
+		pmg_resettlement_method
+	}
+
+	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+
+	required_construction = construction_cost_low
+
+	# Cannot operate under closed borders
+	possible = {
+		owner = {
+			NOT = { has_law_or_variant = law_type:law_closed_borders }
+		}
+	}
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+
+	ai_value = {
+		value = 0
+
+		# Only build camps in populated states where the country also has a colony destination
+		if = {
+			limit = {
+				state_population > 250000
+				owner = {
+					any_scope_state = {
+						NOT = { this = ROOT }
+						has_building = building_resettlement_colony
+					}
+				}
+			}
+			add = 250
+		}
+
+		# More valuable in very populous states (more people to relocate)
+		if = {
+			limit = {
+				state_population > 500000
+			}
+			add = 250
+		}
+
+		# Ethnostates and national supremacists are keen on demographic engineering
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_law_or_variant = law_type:law_ethnostate
+						has_law_or_variant = law_type:law_national_supremacy
+					}
+				}
+			}
+			add = 500
+		}
+
+		# Authoritarian governments use camps more aggressively
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_law_or_variant = law_type:law_autocracy
+						has_law_or_variant = law_type:law_single_party_state
+					}
+				}
+			}
+			add = 250
+		}
+	}
+}
+
+# =================================================================
+# Resettlement Colony (DESTINATION)
+# =================================================================
+# Place in the state you want people to go TO.
+# Provides migration pull, colony growth, and settlement infrastructure.
+# Receives settlers transferred from states with Resettlement Camps.
+# =================================================================
+building_resettlement_colony = {
+	building_group = bg_resettlement
+
+	city_type = city
+	levels_per_mesh = 50
+
+	has_max_level = yes
+
+	unlocking_technologies = {
+		nationalism
+	}
+
+	production_method_groups = {
+		pmg_resettlement_settlement
+		pmg_resettlement_transportation
+	}
+
+	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+
+	required_construction = construction_cost_low
+
+	# Cannot operate under closed borders
+	possible = {
+		owner = {
+			NOT = { has_law_or_variant = law_type:law_closed_borders }
+		}
+	}
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+
+	ai_value = {
+		value = 250
+
+		# AI strongly values colonies for developing unincorporated territory
+		if = {
+			limit = {
+				is_incorporated = no
+			}
+			add = 500
+		}
+
+		# AI values it more if state has low population relative to arable land
+		if = {
+			limit = {
+				state_population < 100000
+			}
+			add = 250
+		}
+
+		# Ethnostates and national supremacists are keen on demographic engineering
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_law_or_variant = law_type:law_ethnostate
+						has_law_or_variant = law_type:law_national_supremacy
+					}
+				}
+			}
+			add = 500
+		}
+	}
+}

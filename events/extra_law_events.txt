@@ -83,7 +83,7 @@ extra_law_events.1 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 	}
 }
@@ -141,7 +141,7 @@ extra_law_events.2 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 	}
 
@@ -152,7 +152,7 @@ extra_law_events.2 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 	}
 }
@@ -227,7 +227,7 @@ extra_law_events.3 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 	}
 
@@ -297,7 +297,7 @@ extra_law_events.4 = {
 		add_enactment_phase = 1
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 	}
 
@@ -1077,7 +1077,7 @@ extra_law_events.14 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 	}
 
@@ -1505,7 +1505,7 @@ extra_law_events.20 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 	}
 
@@ -1672,7 +1672,7 @@ extra_law_events.22 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		scope:trade_unions_ig = {
 			add_modifier = {
@@ -1831,11 +1831,11 @@ extra_law_events.24 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 	}
 
@@ -1950,7 +1950,7 @@ extra_law_events.25 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		add_radicals = {
 			value = very_small_radicals
@@ -1964,7 +1964,7 @@ extra_law_events.25 = {
 		add_modifier = { name = langreform_simplification }
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		add_loyalists = {
 			value = very_small_radicals
@@ -2034,7 +2034,7 @@ extra_law_events.26 = {
 		}
 		add_radicals = {
 			value = very_small_radicals
-			strata = poor
+			strata = lower
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2051,7 +2051,7 @@ extra_law_events.26 = {
 		}
 		add_loyalists = {
 			value = very_small_radicals
-			strata = poor
+			strata = lower
 		}
 	}
 }
@@ -2207,11 +2207,11 @@ extra_law_events.28 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 	}
 
@@ -2440,11 +2440,11 @@ extra_law_events.30 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		add_radicals = {
 			value = very_small_radicals
-			strata = poor
+			strata = lower
 		}
 	}
 
@@ -2466,7 +2466,7 @@ extra_law_events.30 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 	}
 
@@ -2555,7 +2555,7 @@ extra_law_events.31 = {
 		}
 		add_radicals = {
 			value = very_small_radicals
-			strata = poor
+			strata = lower
 		}
 	}
 
@@ -2577,7 +2577,7 @@ extra_law_events.31 = {
 		}
 		add_radicals = {
 			value = very_small_radicals
-			strata = rich
+			strata = upper
 		}
 	}
 
@@ -2787,7 +2787,7 @@ extra_law_events.33 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 	}
 
@@ -2799,7 +2799,7 @@ extra_law_events.33 = {
 		}
 		add_loyalists = {
 			value = very_small_radicals
-			strata = rich
+			strata = upper
 		}
 	}
 }

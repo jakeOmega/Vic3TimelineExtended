@@ -230,7 +230,7 @@ minor_events_timelineextended.6 = {
         default_option = yes
 		add_radicals = {
 			value = medium_radicals
-			strata = rich
+			strata = upper
 		}
 		add_radicals = {
 			value = small_radicals
@@ -252,11 +252,11 @@ minor_events_timelineextended.6 = {
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 50
@@ -292,7 +292,7 @@ minor_events_timelineextended.7 = {
         default_option = yes
 		add_radicals = {
 			value = small_radicals
-			strata = rich
+			strata = upper
 		}
 		add_radicals = {
 			value = small_radicals
@@ -308,11 +308,11 @@ minor_events_timelineextended.7 = {
 		name = minor_events_timelineextended.7.b
 		add_radicals = {
 			value = medium_radicals
-			strata = rich
+			strata = upper
 		}
 		add_radicals = {
 			value = small_radicals
-			strata = poor
+			strata = lower
 		}
 		ai_chance = {
 			base = 50

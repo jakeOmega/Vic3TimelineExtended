@@ -5,6 +5,7 @@
 		war_propaganda_on_action
 		state_yearly_cultural_acceptance_add_on_action
 		tourism_on_action
+		resettlement_transfer_on_action
 	}
 }
 
@@ -231,38 +232,16 @@ remove_or_create_homelands_on_action = {
 					}
 				}
 				owner = {
-					power_bloc ?= {
-						modifier:power_bloc_homelands_can_decay_bool = yes
-					}
+					modifier:country_homelands_can_change_bool = yes
 				}
 			}
-			random_list = {
-				10 = {
-					modifier = {
-						if = {
-							limit = {
-								has_decree = decree_promote_national_values
-							}
-							add = 80
-						}
-					}
-					remove_homelands_effect = yes
-				}
-				90 = { }
+			random = {
+				chance = homeland_change_chance
+				remove_homelands_effect = yes
 			}
-			random_list = {
-				10 = {
-					modifier = {
-						if = {
-							limit = {
-								has_decree = decree_promote_national_values
-							}
-							add = 80
-						}
-					}
-					create_homelands_effect = yes
-				}
-				90 = { }
+			random = {
+				chance = homeland_change_chance
+				create_homelands_effect = yes
 			}
 		}
 	}
@@ -1740,6 +1719,24 @@ world_war_events_on_action = {
 					}
 				}
 			}
+		}
+	}
+}
+
+# ---- Resettlement Population Transfer (state scope, monthly) ----
+# SOURCE state with a resettlement camp. Moves pops employed at the camp
+# to a destination state with a resettlement colony using move_partial_pop.
+# The active PM on the camp determines transfer volume per level.
+resettlement_transfer_on_action = {
+	effect = {
+		if = {
+			limit = {
+				any_scope_building = {
+					is_building_type = building_resettlement_camp
+					level > 0
+				}
+			}
+			resettlement_transfer_effect = yes
 		}
 	}
 }

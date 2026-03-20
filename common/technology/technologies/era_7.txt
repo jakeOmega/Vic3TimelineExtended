@@ -118,6 +118,8 @@ civil_rights_movement = {
 		# less racist
 		country_acceptance_shared_heritage_trait_group_add = 5
 		country_acceptance_no_shared_heritage_trait_add = 10
+		state_building_resettlement_camp_max_level_add = 5
+		state_building_resettlement_colony_max_level_add = 5
 	}
 
 	on_researched = {
@@ -249,6 +251,11 @@ decolonization = {
 		country_add_anticolonial_ideology_to_igs_bool = yes
 		country_unrecognized_become_recognized_bool = yes
 		country_voting_power_mult = 0.1
+
+		# Homeland system: decolonization protects indigenous homelands from erasure
+		state_homeland_creation_threshold_add = 0.05
+		state_homeland_removal_threshold_add = -0.05
+		state_homeland_change_speed_mult = -0.25
 	}
 
 	on_researched = {
@@ -589,6 +596,7 @@ modern_urban_planning = {
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		state_building_highway_max_level_add = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 2
+		state_building_resettlement_colony_max_level_add = 5
 	}
 	
 	ai_weight = {

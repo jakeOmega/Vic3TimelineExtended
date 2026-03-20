@@ -182,8 +182,55 @@ investment_pool_banking_cycle_add = {
 	add = modifier:country_monthly_investment_pool_add
 }
 
-homeland_culture_disappear_threshold = 0.25
-homeland_culture_form_threshold = 0.50
+# Homeland thresholds: read from state modifier system (base values in INJECT:base_values)
+# Evaluated in state scope (via scripted effects called from on_yearly_pulse_state)
+# Laws/techs apply these to all states; decrees/buildings modify per-state
+homeland_culture_disappear_threshold = {
+	value = modifier:state_homeland_removal_threshold_add
+	min = 0.05
+	max = 0.50
+}
+homeland_culture_form_threshold = {
+	value = modifier:state_homeland_creation_threshold_add
+	min = 0.10
+	max = 0.90
+}
+
+# Annual chance (0-100) that homeland creation/removal fires in this state
+# Base 10%, scaled by state speed modifier, turmoil, and government legitimacy
+homeland_change_chance = {
+	value = 10
+
+	# Apply state-level speed modifier from laws, techs, decrees, buildings, power blocs
+	multiply = {
+		value = 1
+		add = modifier:state_homeland_change_speed_mult
+		min = 0.1
+	}
+
+	# High turmoil accelerates demographic shifts (instability disrupts cultural stability)
+	if = {
+		limit = { turmoil >= 0.50 }
+		multiply = 1.5
+	}
+	else_if = {
+		limit = { turmoil >= 0.25 }
+		multiply = 1.25
+	}
+
+	# Government legitimacy: strong governments enforce demographic policy more effectively
+	if = {
+		limit = { owner = { legitimacy < 25 } }
+		multiply = 0.5
+	}
+	else_if = {
+		limit = { owner = { legitimacy >= 75 } }
+		multiply = 1.25
+	}
+
+	min = 1
+	max = 95
+}
 
 primary_culture_state_count_threshold = 0.5
 

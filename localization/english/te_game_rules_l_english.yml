@@ -1,0 +1,9 @@
+﻿l_english:
+
+#
+# GAME_RULES
+#
+ setting_custom_religions_allowed:0 "Custom Religions Allowed"
+ setting_custom_religions_allowed_desc:0 "Custom religions are allowed in this game. You will recieve a journal entry allowing you to select the ideology and name of your religion."
+ setting_custom_religions_not_allowed:0 "Custom Religions Not Allowed"
+ setting_custom_religions_not_allowed_desc:0 "Custom religions are not allowed in this game."
