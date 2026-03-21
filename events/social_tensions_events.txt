@@ -411,7 +411,10 @@ social_tensions_events.5 = {
 		NOT = {
 			AND = {
 				has_law = law_type:law_guaranteed_liberties
-				has_law = law_type:law_rehabilitation_focused_criminal_justice
+				OR = {
+					has_law = law_type:law_restorative_justice
+					has_law = law_type:law_rehabilitation_focused_criminal_justice
+				}
 			}
 		}
 		NOR = {
@@ -432,6 +435,7 @@ social_tensions_events.5 = {
 				pop_acceptance < 0.5
 			}
 		}
+		has_technology_researched = civil_rights_movement
 	}
 
 	immediate = {

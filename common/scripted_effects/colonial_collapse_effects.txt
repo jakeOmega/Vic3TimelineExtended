@@ -21,9 +21,29 @@ colonial_collapse_effect = {
             # Not a subject (puppet states are managed by overlords)
             is_subject = no
             
-            # Population threshold: very small countries collapse
-            total_population < 100000
-            average_sol < 6
+            # Population threshold: very small, poor countries collapse
+            OR = {
+                AND = {
+                    total_population < 100000
+                    average_sol < 6
+                }
+                AND = {
+                    total_population < 200000
+                    average_sol < 5
+                }
+                AND = {
+                    total_population < 300000
+                    average_sol < 4
+                }
+                AND = {
+                    total_population < 500000
+                    average_sol < 3
+                }
+                AND = {
+                    total_population < 1000000
+                    average_sol < 2
+                }
+            }
                         
             # Safety: don't collapse countries currently in a diplomatic play or at war
             NOT = { is_in_diplomatic_play = yes }

@@ -464,3 +464,109 @@ un_withdraw_arms_control_button = {
 		}
 	}
 }
+
+# ---- 7. GREAT POWER INFLUENCE ON UN ----
+
+un_champion_order_button = {
+	name = "UN_CHAMPION_ORDER"
+	desc = "UN_CHAMPION_ORDER_DESC"
+
+	visible = {
+		has_modifier = un_member_modifier
+		country_rank >= rank_value:great_power
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+		country_rank >= rank_value:great_power
+		NOT = { has_modifier = un_influence_cooldown }
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 30 }
+		if = { limit = { has_law = law_type:law_limited_war } add = 20 }
+		if = { limit = { var:un_authority < 30 } add = 20 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_CHAMPION_ORDER_DESC"
+			# Base authority boost
+			change_variable = { name = un_authority add = 2 }
+			# Extra for high rank - stronger countries have more influence
+			if = {
+				limit = { global_country_ranking < 3 }
+				change_variable = { name = un_authority add = 1 }
+			}
+			if = {
+				limit = { global_country_ranking < 5 }
+				change_variable = { name = un_authority add = 1 }
+			}
+			if = {
+				limit = { global_country_ranking < 7 }
+				change_variable = { name = un_authority add = 1 }
+			}
+			# Cost: authority and influence (these don't scale with GDP, so flat values are fine)
+			add_authority = -50
+			add_influence = -100
+			add_modifier = {
+				name = un_influence_cooldown
+				days = 365
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+un_undermine_order_button = {
+	name = "UN_UNDERMINE_ORDER"
+	desc = "UN_UNDERMINE_ORDER_DESC"
+
+	visible = {
+		has_modifier = un_member_modifier
+		country_rank >= rank_value:great_power
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+		country_rank >= rank_value:great_power
+		NOT = { has_modifier = un_influence_cooldown }
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { has_law = law_type:law_total_war } add = 25 }
+		if = { limit = { has_law = law_type:law_isolationism } add = 20 }
+		if = { limit = { var:un_authority >= 60 } add = 15 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_UNDERMINE_ORDER_DESC"
+			# Base authority reduction
+			change_variable = { name = un_authority add = -2 }
+			# Extra for high rank - stronger countries have more influence
+			if = {
+				limit = { global_country_ranking < 3 }
+				change_variable = { name = un_authority add = -1 }
+			}
+			if = {
+				limit = { global_country_ranking < 5 }
+				change_variable = { name = un_authority add = -1 }
+			}
+			if = {
+				limit = { global_country_ranking < 7 }
+				change_variable = { name = un_authority add = -1 }
+			}
+			# Cost: authority and influence (less cost to tear down)
+			add_authority = -25
+			add_influence = -50
+			add_modifier = {
+				name = un_influence_cooldown
+				days = 365
+				is_decaying = yes
+			}
+		}
+	}
+}

@@ -1567,19 +1567,19 @@ monopoly_nationalized_modifier = {
 # --- Criminal Justice & Policing ---
 police_defended_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
-	country_authority_add = 75
+	country_authority_add = 200
 	state_radicals_from_discrimination_mult = 0.1
 }
 
 police_reform_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_authority_add = -50
+	country_authority_add = -100
 	state_radicals_from_discrimination_mult = -0.1
 }
 
 police_accountability_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_authority_add = -75
+	country_authority_add = -150
 	state_radicals_from_discrimination_mult = -0.15
 	country_bureaucracy_mult = -0.03
 }
@@ -1826,6 +1826,10 @@ un_withdrawal_penalty_modifier = {
 un_expelled_cooldown = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_diplomatic_reputation_add = -20
+}
+
+un_influence_cooldown = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 }
 
 # ---- Formation Event Modifiers ----

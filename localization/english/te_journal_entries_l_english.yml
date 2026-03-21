@@ -42,7 +42,7 @@
  je_un_agency_who_active:0 "  #G • WHO#! — World Health Organization\n"
  je_un_authority_collapsed:0 "#R UN Authority: Collapsed#! (below 10). The institution has lost all credibility. #bold No membership benefits.#!\n"
  je_un_authority_dominant:0 "#B UN Authority: Dominant#! (85+). The UN shapes global policy. #bold Benefits at 1.7×–2.0× base.#!\n"
- je_un_authority_drift:0 "#bold Monthly Drift:#! Toward 50 (±0.5).\n#G [SCOPE.GetRootScope.ScriptValue('un_gp_with_humanitarian_regs')|0] GPs with Humanitarian Regs: +0.2 ea.#!\n#R [SCOPE.GetRootScope.ScriptValue('un_member_wars_count')|0] members at war: −1 ea.#!\n"
+ je_un_authority_drift:0 "#bold Monthly Drift:#! Toward 50 (±0.5).\n#G [SCOPE.GetRootScope.ScriptValue('un_gp_with_humanitarian_regs')|0] GPs with Humanitarian Regs: +0.2 ea.#!\n #R [SCOPE.GetRootScope.ScriptValue('un_member_wars_count')|0] members at war: −1 ea.#!\n"
  je_un_authority_moderate:0 "#v UN Authority: Moderate#! (30–59). Major powers comply selectively. #bold Benefits at 0.6×–1.2× base.#!\n"
  je_un_authority_strong:0 "#G UN Authority: Strong#! (60–84). Resolutions carry real weight. #bold Benefits at 1.2×–1.7× base.#!\n"
  je_un_authority_weak:0 "#Y UN Authority: Weak#! (10–29). Resolutions routinely ignored. #bold No membership benefits#! (need 30+).\n"

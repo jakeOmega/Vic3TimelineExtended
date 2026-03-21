@@ -37,6 +37,10 @@
 	scripted_button = un_arms_control_button
 	scripted_button = un_withdraw_arms_control_button
 
+	# ---- Great Power influence buttons ----
+	scripted_button = un_champion_order_button
+	scripted_button = un_undermine_order_button
+
 	immediate = {
 		# Set initial UN authority to 50 (moderate legitimacy)
 		set_variable = { name = un_authority value = 50 }

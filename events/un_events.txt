@@ -137,6 +137,7 @@ un_events.2 = {
 			is_diplomatic_play_initiator = yes
 		}
 		NOT = { has_modifier = un_ga_resolution_modifier }
+		NOT = { has_global_variable = un_vote_active }
 	}
 
 	immediate = {
@@ -158,7 +159,7 @@ un_events.2 = {
 		}
 	}
 
-	# Option A: Lead the condemnation resolution
+	# Option A: Propose condemnation resolution to the General Assembly
 	option = {
 		name = un_events.2.a
 		default_option = yes
@@ -169,35 +170,33 @@ un_events.2 = {
 				add = 3
 			}
 		}
+		custom_tooltip = un_vote_initiated_tt
+		# Set up global vote
+		set_global_variable = un_vote_active
+		set_global_variable = un_vote_topic_condemn
+		set_global_variable = { name = un_vote_support value = 1 }
+		set_global_variable = { name = un_vote_oppose value = 0 }
+		set_global_variable = { name = un_vote_net value = 1 }
+		save_scope_as = un_vote_proposer
+		scope:condemned_country = { save_scope_as = un_vote_target }
+		set_global_variable = { name = un_vote_proposer_country value = ROOT }
+		set_global_variable = { name = un_vote_target_country value = scope:condemned_country }
+		# Proposer takes a personal stance
 		add_modifier = {
 			name = un_ga_resolution_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
-		# Diplomatic reputation boost for taking a stand
-		add_modifier = {
-			name = un_condemnation_leader_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		# Trigger vote for all other UN members
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				NOT = { this = ROOT }
+			}
+			trigger_event = { id = un_vote.1 days = 30 }
 		}
-		change_relations = { country = scope:condemned_country value = -20 }
-		add_lobby_appeasement_from_diplomacy_unidirectional = {
-			FIRST = root
-			SECOND = scope:condemned_country
-			PRO_AMOUNT = 1
-			ANTI_AMOUNT = -1
-			FACTOR = appeasement_relations_decreased
-		}
-		change_relations = { country = scope:defender_country value = 10 }
-		add_lobby_appeasement_from_diplomacy_unidirectional = {
-			FIRST = root
-			SECOND = scope:defender_country
-			PRO_AMOUNT = 1
-			ANTI_AMOUNT = -1
-			FACTOR = appeasement_relations_increased
-		}
+		# Schedule results event
+		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Vote in favor but don't lead
@@ -280,12 +279,13 @@ un_events.3 = {
 		NOT = { has_modifier = un_human_rights_declaration_modifier }
 		has_technology_researched = human_rights
 		var:un_authority >= 40
+		NOT = { has_global_variable = un_vote_active }
 	}
 
 	immediate = {
 	}
 
-	# Option A: Ratify the declaration fully
+	# Option A: Propose Universal Declaration to the General Assembly
 	option = {
 		name = un_events.3.a
 		default_option = yes
@@ -300,18 +300,30 @@ un_events.3 = {
 				add = 3
 			}
 		}
+		custom_tooltip = un_vote_initiated_tt
+		# Set up global vote
+		set_global_variable = un_vote_active
+		set_global_variable = un_vote_topic_human_rights
+		set_global_variable = { name = un_vote_support value = 1 }
+		set_global_variable = { name = un_vote_oppose value = 0 }
+		set_global_variable = { name = un_vote_net value = 1 }
+		save_scope_as = un_vote_proposer
+		set_global_variable = { name = un_vote_proposer_country value = ROOT }
+		# Proposer adopts immediately
 		add_modifier = { name = un_human_rights_declaration_modifier }
-		# Establish UN Human Rights Council
-		if = {
-			limit = { NOT = { has_global_variable = un_agency_unhrc } }
-			set_global_variable = un_agency_unhrc
-		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
 		# Progressives love it
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		# But it may radicalize traditionalists
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		# Trigger vote for all other UN members
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				NOT = { this = ROOT }
+			}
+			trigger_event = { id = un_vote.1 days = 30 }
+		}
+		# Schedule results event
+		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Sign with reservations
@@ -1494,12 +1506,13 @@ un_events.14 = {
 		has_technology_researched = nuclear_weapons
 		NOT = { has_modifier = un_nonproliferation_modifier }
 		NOT = { has_modifier = un_nonproliferation_refusal_modifier }
+		NOT = { has_global_variable = un_vote_active }
 	}
 
 	immediate = {
 	}
 
-	# Option A: Sign the Non-Proliferation Treaty
+	# Option A: Sign and propose the Non-Proliferation Treaty
 	option = {
 		name = un_events.14.a
 		default_option = yes
@@ -1510,16 +1523,29 @@ un_events.14 = {
 				add = 3
 			}
 		}
+		custom_tooltip = un_vote_initiated_tt
+		# Set up global vote
+		set_global_variable = un_vote_active
+		set_global_variable = un_vote_topic_npt
+		set_global_variable = { name = un_vote_support value = 1 }
+		set_global_variable = { name = un_vote_oppose value = 0 }
+		set_global_variable = { name = un_vote_net value = 1 }
+		save_scope_as = un_vote_proposer
+		set_global_variable = { name = un_vote_proposer_country value = ROOT }
+		# Proposer adopts immediately
 		add_modifier = { name = un_nonproliferation_modifier }
-		# Establish International Atomic Energy Agency
-		if = {
-			limit = { NOT = { has_global_variable = un_agency_iaea } }
-			set_global_variable = un_agency_iaea
-		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		# Trigger vote for all other UN members
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				NOT = { this = ROOT }
+			}
+			trigger_event = { id = un_vote.1 days = 30 }
+		}
+		# Schedule results event
+		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Sign with reservations on existing arsenals
@@ -1818,12 +1844,13 @@ un_events.17 = {
 		has_technology_researched = environmental_movement
 		NOT = { has_modifier = un_climate_binding_modifier }
 		NOT = { has_modifier = un_climate_refusal_modifier }
+		NOT = { has_global_variable = un_vote_active }
 	}
 
 	immediate = {
 	}
 
-	# Option A: Accept binding emissions targets
+	# Option A: Propose binding climate accord to the General Assembly
 	option = {
 		name = un_events.17.a
 		default_option = yes
@@ -1834,16 +1861,29 @@ un_events.17 = {
 				add = 3
 			}
 		}
+		custom_tooltip = un_vote_initiated_tt
+		# Set up global vote
+		set_global_variable = un_vote_active
+		set_global_variable = un_vote_topic_climate
+		set_global_variable = { name = un_vote_support value = 1 }
+		set_global_variable = { name = un_vote_oppose value = 0 }
+		set_global_variable = { name = un_vote_net value = 1 }
+		save_scope_as = un_vote_proposer
+		set_global_variable = { name = un_vote_proposer_country value = ROOT }
+		# Proposer adopts immediately
 		add_modifier = { name = un_climate_binding_modifier }
-		# Establish UN Environment Programme
-		if = {
-			limit = { NOT = { has_global_variable = un_agency_unep } }
-			set_global_variable = un_agency_unep
-		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		# Trigger vote for all other UN members
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				NOT = { this = ROOT }
+			}
+			trigger_event = { id = un_vote.1 days = 30 }
+		}
+		# Schedule results event
+		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Pledge voluntary targets - no binding commitments

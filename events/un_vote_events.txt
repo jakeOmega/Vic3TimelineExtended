@@ -1,0 +1,506 @@
+﻿namespace = un_vote
+
+# ============================================================================
+# UN GENERAL ASSEMBLY VOTING EVENTS
+# Generic two-phase vote system for UN resolutions.
+#
+# Phase 1: Proposer event (existing un_events) triggers un_vote.1 for all
+#          UN members via every_country. Global variables track votes.
+# Phase 2: After 90 days, un_vote.2 fires for the proposer with results.
+#
+# Vote topics (identified by global flag variables):
+#   un_vote_topic_condemn       - Condemn aggressor (event 2)
+#   un_vote_topic_human_rights  - Human Rights Declaration (event 3)
+#   un_vote_topic_npt           - Non-Proliferation Treaty (event 14)
+#   un_vote_topic_climate       - Climate Accord (event 17)
+#
+# Vote tracking global variables:
+#   un_vote_active              - flag: vote in progress
+#   un_vote_support             - count of yes votes
+#   un_vote_oppose              - count of no votes
+#   un_vote_net                 - net votes (support - oppose), starts at 1
+#   un_vote_proposer_country    - scope: country that proposed
+#   un_vote_target_country      - scope: target country (if applicable)
+# ============================================================================
+
+# ---- Phase 1: All UN members vote on the proposed resolution ----
+un_vote.1 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_vote.1.t_condemn
+				trigger = { has_global_variable = un_vote_topic_condemn }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_human_rights
+				trigger = { has_global_variable = un_vote_topic_human_rights }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_npt
+				trigger = { has_global_variable = un_vote_topic_npt }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_climate
+				trigger = { has_global_variable = un_vote_topic_climate }
+			}
+			desc = un_vote.1.t
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_vote.1.d_condemn
+				trigger = { has_global_variable = un_vote_topic_condemn }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_human_rights
+				trigger = { has_global_variable = un_vote_topic_human_rights }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_npt
+				trigger = { has_global_variable = un_vote_topic_npt }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_climate
+				trigger = { has_global_variable = un_vote_topic_climate }
+			}
+			desc = un_vote.1.d
+		}
+	}
+	flavor = un_vote.1.f
+
+	duration = 3
+
+	trigger = {
+		has_modifier = un_member_modifier
+	}
+
+	immediate = {
+	}
+
+	# Option A: Vote in favor
+	option = {
+		name = un_vote.1.a
+		default_option = yes
+
+		change_global_variable = { name = un_vote_support add = 1 }
+		change_global_variable = { name = un_vote_net add = 1 }
+
+		# Relations boost with proposer
+		if = {
+			limit = { exists = scope:un_vote_proposer }
+			change_relations = { country = scope:un_vote_proposer value = 5 }
+		}
+
+		# If supporting human rights, adopt the declaration
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_human_rights
+				NOT = { has_modifier = un_human_rights_declaration_modifier }
+			}
+			add_modifier = { name = un_human_rights_declaration_modifier }
+		}
+		# If supporting NPT, adopt the treaty
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_npt
+				NOT = { has_modifier = un_nonproliferation_modifier }
+			}
+			add_modifier = { name = un_nonproliferation_modifier }
+		}
+		# If supporting climate accord, adopt binding targets
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_climate
+				NOT = { has_modifier = un_climate_binding_modifier }
+			}
+			add_modifier = { name = un_climate_binding_modifier }
+		}
+
+		ai_chance = {
+			base = 50
+			# Allies of proposer lean support
+			if = {
+				limit = {
+					exists = scope:un_vote_proposer
+					has_diplomatic_pact = { who = scope:un_vote_proposer type = alliance }
+				}
+				add = 20
+			}
+			# Rivals of proposer lean oppose
+			if = {
+				limit = {
+					exists = scope:un_vote_proposer
+					has_diplomatic_pact = { who = scope:un_vote_proposer type = rivalry }
+				}
+				add = -30
+			}
+			# Great powers more opinionated
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 10
+			}
+			# ---- Topic: Condemn aggressor ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_condemn }
+				# Support if target is our rival
+				if = {
+					limit = {
+						exists = scope:un_vote_target
+						has_diplomatic_pact = { who = scope:un_vote_target type = rivalry }
+					}
+					add = 30
+				}
+				# Oppose if target is our ally
+				if = {
+					limit = {
+						exists = scope:un_vote_target
+						has_diplomatic_pact = { who = scope:un_vote_target type = alliance }
+					}
+					add = -40
+				}
+				# Peaceful nations support condemnation
+				if = {
+					limit = { has_law = law_type:law_humanitarian_regulations }
+					add = 15
+				}
+			}
+			# ---- Topic: Human Rights ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_human_rights }
+				if = {
+					limit = { has_law = law_type:law_multicultural }
+					add = 20
+				}
+				if = {
+					limit = { has_law = law_type:law_universal_suffrage }
+					add = 15
+				}
+				if = {
+					limit = { has_law = law_type:law_ethnostate }
+					add = -40
+				}
+				if = {
+					limit = { has_law = law_type:law_outlawed_dissent }
+					add = -30
+				}
+				if = {
+					limit = { has_law = law_type:law_guaranteed_liberties }
+					add = 15
+				}
+			}
+			# ---- Topic: Non-Proliferation ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_npt }
+				# Nations without nukes support disarmament
+				if = {
+					limit = { NOT = { has_variable = nuclear_weapon_stockpile } }
+					add = 20
+				}
+				# Nuclear powers resist
+				if = {
+					limit = {
+						has_variable = nuclear_weapon_stockpile
+						var:nuclear_weapon_stockpile >= 1
+					}
+					add = -30
+				}
+				# Those developing nukes strongly oppose
+				if = {
+					limit = { has_journal_entry = je_nuclear_program }
+					add = -25
+				}
+			}
+			# ---- Topic: Climate Accord ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_climate }
+				if = {
+					limit = { has_technology_researched = green_revolution }
+					add = 20
+				}
+				if = {
+					limit = { has_technology_researched = environmental_movement }
+					add = 10
+				}
+				if = {
+					limit = { has_law = law_type:law_laissez_faire }
+					add = -20
+				}
+				if = {
+					limit = { has_law = law_type:law_command_economy }
+					add = -10
+				}
+			}
+		}
+	}
+
+	# Option B: Vote against
+	option = {
+		name = un_vote.1.b
+
+		change_global_variable = { name = un_vote_oppose add = 1 }
+		change_global_variable = { name = un_vote_net add = -1 }
+
+		# Relations hit with proposer
+		if = {
+			limit = { exists = scope:un_vote_proposer }
+			change_relations = { country = scope:un_vote_proposer value = -5 }
+		}
+
+		ai_chance = {
+			base = 10
+			# Rivals of proposer
+			if = {
+				limit = {
+					exists = scope:un_vote_proposer
+					has_diplomatic_pact = { who = scope:un_vote_proposer type = rivalry }
+				}
+				add = 30
+			}
+			# ---- Topic: Condemn - allies of target oppose ----
+			if = {
+				limit = {
+					has_global_variable = un_vote_topic_condemn
+					exists = scope:un_vote_target
+					has_diplomatic_pact = { who = scope:un_vote_target type = alliance }
+				}
+				add = 40
+			}
+			# ---- Topic: HR - authoritarian regimes oppose ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_human_rights }
+				if = {
+					limit = { has_law = law_type:law_ethnostate }
+					add = 30
+				}
+				if = {
+					limit = { has_law = law_type:law_outlawed_dissent }
+					add = 25
+				}
+			}
+			# ---- Topic: NPT - nuclear powers oppose ----
+			if = {
+				limit = {
+					has_global_variable = un_vote_topic_npt
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile >= 1
+				}
+				add = 35
+			}
+			# ---- Topic: Climate - industrial economies oppose ----
+			if = {
+				limit = {
+					has_global_variable = un_vote_topic_climate
+					has_law = law_type:law_laissez_faire
+				}
+				add = 25
+			}
+		}
+	}
+
+	# Option C: Abstain
+	option = {
+		name = un_vote.1.c
+
+		ai_chance = {
+			base = 15
+			# Weak nations and isolationists abstain more
+			if = {
+				limit = { NOT = { country_rank >= rank_value:major_power } }
+				add = 15
+			}
+			if = {
+				limit = { has_law = law_type:law_isolationism }
+				add = 20
+			}
+		}
+	}
+}
+
+# ---- Phase 2: Vote results - fires for the proposer after 90 days ----
+un_vote.2 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = un_vote.2.t
+
+	desc = {
+		first_valid = {
+			# Condemn - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_condemn global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_condemn_passed
+			}
+			# Condemn - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_condemn }
+				desc = un_vote.2.d_condemn_failed
+			}
+			# Human Rights - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_human_rights global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_human_rights_passed
+			}
+			# Human Rights - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_human_rights }
+				desc = un_vote.2.d_human_rights_failed
+			}
+			# NPT - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_npt global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_npt_passed
+			}
+			# NPT - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_npt }
+				desc = un_vote.2.d_npt_failed
+			}
+			# Climate - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_climate global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_climate_passed
+			}
+			# Climate - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_climate }
+				desc = un_vote.2.d_climate_failed
+			}
+			# Generic fallback
+			triggered_desc = {
+				trigger = { global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_passed
+			}
+			desc = un_vote.2.d_failed
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_vote.2.f_passed
+				trigger = { global_var:un_vote_net >= 1 }
+			}
+			desc = un_vote.2.f_failed
+		}
+	}
+
+	duration = 3
+
+	trigger = {
+		has_modifier = un_member_modifier
+	}
+
+	immediate = {
+		# Save vote counts as country vars for loc display
+		set_variable = {
+			name = un_display_support
+			value = global_var:un_vote_support
+		}
+		set_variable = {
+			name = un_display_oppose
+			value = global_var:un_vote_oppose
+		}
+	}
+
+	# Single option: acknowledge the results
+	option = {
+		name = un_vote.2.a
+		default_option = yes
+
+		# ---- RESOLUTION PASSED ----
+		if = {
+			limit = { global_var:un_vote_net >= 1 }
+
+			# ---- Condemn: target gets condemnation, proposer gets prestige ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_condemn }
+				custom_tooltip = un_vote_condemn_passed_tt
+				change_variable = { name = un_authority add = 5 }
+				if = {
+					limit = { exists = scope:un_vote_target }
+					change_relations = { country = scope:un_vote_target value = -20 }
+				}
+				add_modifier = {
+					name = un_condemnation_leader_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+			}
+
+			# ---- Human Rights: UNHRC established ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_human_rights }
+				custom_tooltip = un_vote_human_rights_passed_tt
+				change_variable = { name = un_authority add = 10 }
+				if = {
+					limit = { NOT = { has_global_variable = un_agency_unhrc } }
+					set_global_variable = un_agency_unhrc
+				}
+			}
+
+			# ---- NPT: IAEA established ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_npt }
+				custom_tooltip = un_vote_npt_passed_tt
+				change_variable = { name = un_authority add = 10 }
+				if = {
+					limit = { NOT = { has_global_variable = un_agency_iaea } }
+					set_global_variable = un_agency_iaea
+				}
+			}
+
+			# ---- Climate: UNEP established ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_climate }
+				custom_tooltip = un_vote_climate_passed_tt
+				change_variable = { name = un_authority add = 10 }
+				if = {
+					limit = { NOT = { has_global_variable = un_agency_unep } }
+					set_global_variable = un_agency_unep
+				}
+			}
+
+			# Influence for leading a successful resolution
+			add_influence = 100
+		}
+
+		# ---- RESOLUTION FAILED ----
+		if = {
+			limit = { NOT = { global_var:un_vote_net >= 1 } }
+			custom_tooltip = un_vote_failed_tt
+			change_variable = { name = un_authority add = -3 }
+			add_influence = -50
+		}
+
+		# ---- Cleanup: clear all vote state ----
+		remove_global_variable = un_vote_active
+		if = { limit = { has_global_variable = un_vote_topic_condemn } remove_global_variable = un_vote_topic_condemn }
+		if = { limit = { has_global_variable = un_vote_topic_human_rights } remove_global_variable = un_vote_topic_human_rights }
+		if = { limit = { has_global_variable = un_vote_topic_npt } remove_global_variable = un_vote_topic_npt }
+		if = { limit = { has_global_variable = un_vote_topic_climate } remove_global_variable = un_vote_topic_climate }
+		if = { limit = { has_global_variable = un_vote_proposer_country } remove_global_variable = un_vote_proposer_country }
+		if = { limit = { has_global_variable = un_vote_target_country } remove_global_variable = un_vote_target_country }
+		if = { limit = { has_global_variable = un_vote_net } remove_global_variable = un_vote_net }
+
+		ai_chance = { base = 100 }
+	}
+}
