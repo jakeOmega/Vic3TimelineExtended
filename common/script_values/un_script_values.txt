@@ -1,0 +1,207 @@
+﻿# ============================================================================
+# UNITED NATIONS SCRIPT VALUES
+# Computes global statistics for UN journal entry display
+# ============================================================================
+
+# ---- Member Statistics ----
+
+un_member_count = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = un_member_modifier }
+		add = 1
+	}
+}
+
+un_independent_country_count = {
+	value = 0
+	every_country = {
+		limit = { is_subject = no }
+		add = 1
+	}
+}
+
+un_gp_member_count = {
+	value = 0
+	every_country = {
+		limit = {
+			has_modifier = un_member_modifier
+			country_rank >= rank_value:great_power
+		}
+		add = 1
+	}
+}
+
+un_total_gp_count = {
+	value = 0
+	every_country = {
+		limit = { country_rank >= rank_value:great_power }
+		add = 1
+	}
+}
+
+# ---- Economic & Population Share ----
+
+un_member_gdp_share = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = un_member_modifier }
+		add = gdp
+	}
+	multiply = 100
+	divide = {
+		value = global_gdp_script_value
+		min = 1
+	}
+}
+
+un_member_pop_share = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = un_member_modifier }
+		add = total_population
+	}
+	multiply = 100
+	divide = {
+		value = global_population
+		min = 1
+	}
+}
+
+# ---- Security Council ----
+
+un_security_council_count = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = un_security_council_modifier }
+		add = 1
+	}
+}
+
+# ---- Authority Drift Factors ----
+
+un_gp_with_humanitarian_regs = {
+	value = 0
+	every_country = {
+		limit = {
+			has_modifier = un_member_modifier
+			country_rank >= rank_value:great_power
+			has_law = law_type:law_humanitarian_regulations
+		}
+		add = 1
+	}
+}
+
+un_member_wars_count = {
+	value = 0
+	every_country = {
+		limit = {
+			has_modifier = un_member_modifier
+			is_at_war = yes
+			any_country = {
+				has_war_with = PREV
+				has_modifier = un_member_modifier
+			}
+		}
+		add = 1
+	}
+}
+
+# ---- Program Participation ----
+
+un_peacekeeping_count = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = un_peacekeeping_contributor_modifier }
+		add = 1
+	}
+}
+
+un_development_count = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = un_development_contributor_modifier }
+		add = 1
+	}
+}
+
+un_human_rights_champion_count = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = un_human_rights_champion_modifier }
+		add = 1
+	}
+}
+
+un_arms_control_count = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = un_arms_control_participant_modifier }
+		add = 1
+	}
+}
+
+un_sanctions_target_count = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = un_sanctions_target_modifier }
+		add = 1
+	}
+}
+
+# ---- Resolution Stance Counts ----
+
+un_nonproliferation_signatories = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = un_nonproliferation_modifier }
+		add = 1
+	}
+}
+
+un_climate_signatories = {
+	value = 0
+	every_country = {
+		limit = { has_modifier = un_climate_binding_modifier }
+		add = 1
+	}
+}
+
+un_human_rights_signatories = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = un_human_rights_declaration_modifier
+				has_modifier = un_human_rights_reservations_modifier
+			}
+		}
+		add = 1
+	}
+}
+
+un_heritage_participants = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = un_heritage_program_modifier
+				has_modifier = un_heritage_token_modifier
+			}
+		}
+		add = 1
+	}
+}
+
+# ---- Agency Count ----
+
+un_agency_count = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_who } add = 1 }
+	if = { limit = { has_global_variable = un_agency_unesco } add = 1 }
+	if = { limit = { has_global_variable = un_agency_icj } add = 1 }
+	if = { limit = { has_global_variable = un_agency_unhrc } add = 1 }
+	if = { limit = { has_global_variable = un_agency_iaea } add = 1 }
+	if = { limit = { has_global_variable = un_agency_unep } add = 1 }
+	if = { limit = { has_global_variable = un_agency_unhcr } add = 1 }
+}

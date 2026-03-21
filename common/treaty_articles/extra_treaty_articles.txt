@@ -1,4 +1,4 @@
-# TREATY ARTICLE: request_influence
+﻿# TREATY ARTICLE: request_influence
 request_influence = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
     kind = directed

@@ -125,7 +125,7 @@ pm_forced_resettlement = {
 			# 200 people moved per building level per month (~2400/year)
 			state_resettlement_transfer_add = 200
 			# Forced roundups cause social disruption in the source state
-			state_radicals_from_sol_change_mult = 0.25
+			state_radicals_from_political_movements_mult = 0.25
 			state_mortality_mult = 0.02
 		}
 	}

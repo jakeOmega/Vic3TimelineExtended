@@ -1,4 +1,4 @@
-# COPY-PASTED FOR NOW
+﻿# COPY-PASTED FOR NOW
 @panel_width_minus_20 = 520			# used to be 440
 @panel_width_minus_20_half = 260	# used to be 220
 @panel_width_minus_10 = 530			# used to be 450

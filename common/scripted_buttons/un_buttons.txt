@@ -15,8 +15,8 @@ un_join_button = {
 
 	possible = {
 		NOT = { has_modifier = un_member_modifier }
-		has_technology_researched = intergovernmental_organizations
-		is_sufficiently_independent = yes
+		modifier:country_can_join_united_nations_bool = yes
+		is_subject = no
 		NOT = { has_modifier = un_expelled_cooldown }
 		NOT = {
 			has_modifier = un_withdrawal_penalty_modifier
@@ -65,12 +65,37 @@ un_leave_button = {
 			text = "UN_LEAVE_DESC"
 			remove_modifier = un_member_modifier
 			remove_modifier = un_membership_benefits_modifier
+			remove_modifier = un_security_council_modifier
+			remove_modifier = un_founding_member_modifier
 			remove_modifier = un_sanctions_target_modifier
 			remove_modifier = un_sanctions_enforcer_modifier
 			remove_modifier = un_peacekeeping_contributor_modifier
 			remove_modifier = un_development_contributor_modifier
 			remove_modifier = un_human_rights_champion_modifier
 			remove_modifier = un_arms_control_participant_modifier
+			# Remove permanent treaty commitments
+			remove_modifier = un_human_rights_declaration_modifier
+			remove_modifier = un_human_rights_reservations_modifier
+			remove_modifier = un_nonproliferation_modifier
+			remove_modifier = un_climate_binding_modifier
+			remove_modifier = un_heritage_program_modifier
+			remove_modifier = un_pandemic_cooperation_modifier
+			remove_modifier = un_refugee_program_modifier
+			remove_modifier = un_space_partnership_modifier
+			# If we host the HQ, reassign it
+			if = {
+				limit = { has_modifier = un_headquarters_modifier }
+				remove_modifier = un_headquarters_modifier
+				random_country = {
+					limit = {
+						has_modifier = un_member_modifier
+						country_rank >= rank_value:great_power
+						NOT = { this = ROOT }
+					}
+					add_modifier = { name = un_headquarters_modifier }
+					set_global_variable = { name = un_hq_country value = THIS }
+				}
+			}
 			add_modifier = {
 				name = un_withdrawal_penalty_modifier
 				days = normal_modifier_time

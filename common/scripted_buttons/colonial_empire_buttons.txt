@@ -169,7 +169,7 @@ ce_cultural_assimilation = {
 				is_overseas_colonial_state = yes
 			}
 		}
-		has_technology_researched = decolonization
+		modifier:country_can_use_cultural_assimilation_bool = yes
 		NOT = { has_modifier = colonial_cultural_assimilation_modifier }
 	}
 

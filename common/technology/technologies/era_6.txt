@@ -82,6 +82,7 @@ rocketry = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 25
+		country_rocketry_pb_principles_bool = yes
 	}
 	
 	unlocking_technologies = {	
@@ -124,6 +125,7 @@ nuclear_weapons = {
 		country_weekly_innovation_max_add = 50
 		state_bureaucracy_population_base_cost_factor_mult = 0.5
 		country_nuclear_weapon_attack_success_add = 1
+		country_nuclear_weapons_pb_principles_bool = yes
 	}
 	
 	ai_weight = {
@@ -165,6 +167,10 @@ keynesian_economics = {
 		country_institution_ministry_of_labor_max_investment_add = 1
 		state_building_resettlement_camp_max_level_add = 5
 		state_building_resettlement_colony_max_level_add = 5
+		country_keynesian_pb_principles_bool = yes
+		country_can_use_open_market_ops_bool = yes
+		country_can_use_fx_devaluation_bool = yes
+		country_can_use_asset_relief_bool = yes
 	}
 	
 	unlocking_technologies = {	
@@ -190,6 +196,9 @@ combined_arms = {
 		country_institution_ministry_of_war_max_investment_add = 1
 		state_building_barrack_max_level_add = 50
 		country_combined_arms_bonus_enabled_bool = yes
+		country_combined_arms_pb_principles_bool = yes
+		country_can_use_rearmament_bool = yes
+		country_can_use_total_war_economy_bool = yes
 	}
 	
 	ai_weight = {
@@ -224,6 +233,10 @@ modern_tools = {
 	texture = "gfx/interface/icons/invention_icons/mechanical_tools.dds"
 	category = production
 	
+	modifier = {
+		country_modern_tools_pb_principles_bool = yes
+	}
+	
 	unlocking_technologies = {	
 		modern_materials
 	}
@@ -242,6 +255,7 @@ modern_skyscrapers = {
 	modifier = {
 		building_urban_center_throughput_add = 0.1
 		state_urbanization_per_level_add = -5
+		country_modern_skyscrapers_pb_principles_bool = yes
 	}
 	
 	unlocking_technologies = {	
@@ -262,6 +276,7 @@ advanced_agricultural_statistics = {
 		building_group_bg_plantations_throughput_add = 0.1
 		building_group_bg_ranching_throughput_add = 0.1
 		building_group_bg_agriculture_throughput_add = 0.1
+		country_advanced_agri_stats_pb_principles_bool = yes
 	}
 	
 	unlocking_technologies = {	
@@ -319,6 +334,7 @@ television = {
 	
 	modifier = {
 		country_institution_ministry_of_religion_max_investment_add = 1
+		country_television_pb_principles_bool = yes
 	}
 	
 	unlocking_technologies = {	
@@ -341,6 +357,7 @@ marketing_research = {
 		country_max_companies_add = 1
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_institution_ministry_of_religion_max_investment_add = 1
+		country_marketing_research_pb_principles_bool = yes
 	}
 	
 	unlocking_technologies = {	
@@ -357,6 +374,10 @@ motorized_artillery = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/artillery.dds"
 	category = military
+	
+	modifier = {
+		country_motorized_artillery_pb_principles_bool = yes
+	}
 	
 	unlocking_technologies = {	
 		mobile_armor
@@ -394,6 +415,7 @@ modern_vaccines = {
 	modifier = {
 		state_mortality_mult = -0.05
 		state_birth_rate_mult = 0.05
+		country_modern_vaccines_pb_principles_bool = yes
 	}
 	
 	ai_weight = {
@@ -417,6 +439,8 @@ mass_media = {
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_free_charters_add = 1
 		country_voting_power_mult = 0.1
+		country_mass_media_pb_principles_bool = yes
+		country_can_use_war_propaganda_bool = yes
 	}
 	
 	ai_weight = {
@@ -584,6 +608,7 @@ sonar = {
 	modifier = {
 		unit_convoy_raiding_interception_mult = 0.5
 		unit_convoy_defense_mult = 0.5
+		country_sonar_pb_principles_bool = yes
 	}
 	
 	unlocking_technologies = {	
@@ -648,6 +673,7 @@ public_works_programs = {
 		country_institution_schools_max_investment_add = 1
 		state_education_access_add = -0.1
 		state_building_barrack_max_level_add = 50
+		country_public_works_pb_principles_bool = yes
 	}
 	
 	unlocking_technologies = {	
@@ -688,6 +714,7 @@ consumer_credit = {
 	modifier = {
 		building_group_bg_service_throughput_add = 0.2
 		country_institution_national_bank_max_investment_add = 1
+		country_can_use_deposit_guarantee_bool = yes
 	}
 	
 	unlocking_technologies = {	
@@ -709,6 +736,8 @@ intergovernmental_organizations = {
 		country_institution_size_change_speed_mult = 0.25
 		country_leverage_threshold_change_add = -100
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
+		country_igo_pb_principles_bool = yes
+		country_can_join_united_nations_bool = yes
 	}
 	
 	unlocking_technologies = {	

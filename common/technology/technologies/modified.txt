@@ -64,3 +64,47 @@ INJECT:mass_propaganda = {
 		state_building_resettlement_colony_max_level_add = 5
 	}
 }
+
+INJECT:corporate_management = {
+	modifier = {
+		country_can_use_export_credit_bool = yes
+	}
+}
+
+
+INJECT:international_exchange_standards = {
+	modifier = {
+		country_can_use_countercyclical_buffer_bool = yes
+		country_can_use_fx_support_bool = yes
+		country_can_use_fx_swap_lines_bool = yes
+	}
+}
+
+
+INJECT:investment_banks = {
+	modifier = {
+		country_can_use_emergency_liquidity_bool = yes
+	}
+}
+
+
+INJECT:mass_surveillance = {
+	modifier = {
+		country_mass_surveillance_pb_principles_bool = yes
+	}
+}
+
+
+INJECT:pharmaceuticals = {
+	modifier = {
+		country_pharmaceuticals_pb_principles_bool = yes
+	}
+}
+
+
+INJECT:urbanization = {
+	modifier = {
+		country_urbanization_pb_principles_bool = yes
+	}
+}
+

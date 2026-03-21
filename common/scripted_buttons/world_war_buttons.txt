@@ -44,7 +44,7 @@ ww_rearm_button = {
 		ww_ideological_tension >= 30
 		custom_tooltip = {
 			text = WW_REARM_POSSIBLE_TT
-			has_technology_researched = combined_arms
+			modifier:country_can_use_rearmament_bool = yes
 		}
 	}
 
@@ -299,7 +299,7 @@ ww_total_war_economy_button = {
 		is_at_war = yes
 		custom_tooltip = {
 			text = WW_TOTAL_WAR_POSSIBLE_TT
-			has_technology_researched = combined_arms
+			modifier:country_can_use_total_war_economy_bool = yes
 		}
 	}
 
@@ -386,7 +386,7 @@ ww_war_propaganda_button = {
 		is_at_war = yes
 		custom_tooltip = {
 			text = WW_PROPAGANDA_POSSIBLE_TT
-			has_technology_researched = mass_media
+			modifier:country_can_use_war_propaganda_bool = yes
 		}
 	}
 

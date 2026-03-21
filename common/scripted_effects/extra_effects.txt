@@ -904,9 +904,16 @@ te_update_migration_crowding_modifier = {
 # Combined refresh — delegates to each individual effect above.
 # Every immediate trigger hook calls this so a new modifier only needs
 # to be added in one place.
+# NOTE: Tourism is NOT included here because its script values use
+# state_region comparisons that only work in genuine state scope.
+# The on_law / on_technology / on_investment hooks pass through
+# owner = { every_scope_state { } } but the engine still traces the
+# parent scope for script-value validation, producing hundreds of
+# "state_region did not get a matching scope type" errors.
+# Tourism is instead refreshed on the yearly state pulse, which is
+# always in state scope.  See extra_on_actions.txt.
 te_update_state_modifiers = {
 	te_update_pollution_modifier = yes
-	te_update_tourism_modifier = yes
 	te_update_migration_crowding_modifier = yes
 }
 

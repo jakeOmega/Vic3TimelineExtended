@@ -1,4 +1,4 @@
-
+﻿
 decolonize_diplo_action = {
     groups= {
 		general
@@ -201,6 +201,7 @@ colonial_culture_change = {
 			}
 			if = {
 				limit = {
+					exists = scope:target_country
 					has_attitude = { who = scope:target_country attitude = domineering }
 				}
 				add = 0.25

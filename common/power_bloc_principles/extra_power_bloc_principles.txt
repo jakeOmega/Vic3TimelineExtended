@@ -7,7 +7,7 @@ principle_construction_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = modern_tools
+		modifier:country_modern_tools_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -27,7 +27,7 @@ principle_construction_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = robotics
+		modifier:country_robotics_pb_principles_bool = yes
 	}
 
 	member_modifier = {	
@@ -50,7 +50,7 @@ principle_internal_trade_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = keynesian_economics
+		modifier:country_keynesian_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -78,7 +78,7 @@ principle_internal_trade_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = containerization
+		modifier:country_containerization_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -108,7 +108,7 @@ principle_market_unification_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = intergovernmental_organizations
+		modifier:country_igo_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -143,7 +143,7 @@ principle_market_unification_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = satellite_communications
+		modifier:country_satcom_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -182,7 +182,7 @@ principle_vassalization_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = rocketry
+		modifier:country_rocketry_pb_principles_bool = yes
 	}
 
 	power_bloc_modifier = {
@@ -206,7 +206,7 @@ principle_vassalization_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = tactical_nuclear_weapons
+		modifier:country_tactical_nukes_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -304,7 +304,7 @@ principle_advanced_research_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = nuclear_weapons
+		modifier:country_nuclear_weapons_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -345,7 +345,7 @@ principle_advanced_research_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = knowledge_economy
+		modifier:country_knowledge_economy_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -389,7 +389,7 @@ principle_defensive_cooperation_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = combined_arms
+		modifier:country_combined_arms_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -420,7 +420,7 @@ principle_defensive_cooperation_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = anti_war_movement
+		modifier:country_anti_war_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -456,7 +456,7 @@ principle_aggressive_coordination_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = combined_arms
+		modifier:country_combined_arms_pb_principles_bool = yes
 	}
 
 	power_bloc_modifier = {	
@@ -491,7 +491,7 @@ principle_aggressive_coordination_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = network_centric_warfare
+		modifier:country_ncw_pb_principles_bool = yes
 	}
 
 	power_bloc_modifier = {
@@ -535,7 +535,7 @@ principle_external_trade_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = television
+		modifier:country_television_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -561,7 +561,7 @@ principle_external_trade_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = cellular_networks
+		modifier:country_cellular_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -590,7 +590,7 @@ principle_food_standardization_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = modern_vaccines
+		modifier:country_modern_vaccines_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -618,7 +618,7 @@ principle_food_standardization_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = gene_splicing
+		modifier:country_gene_splicing_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -649,7 +649,7 @@ principle_police_coordination_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = mass_surveillance
+		modifier:country_mass_surveillance_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -685,7 +685,7 @@ principle_police_coordination_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = automated_surveillance
+		modifier:country_auto_surveillance_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -726,7 +726,7 @@ principle_transport_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = modern_skyscrapers
+		modifier:country_modern_skyscrapers_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -748,7 +748,7 @@ principle_transport_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = supply_chain_management
+		modifier:country_supply_chain_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -776,7 +776,7 @@ principle_military_industry_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = motorized_artillery
+		modifier:country_motorized_artillery_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -799,7 +799,7 @@ principle_military_industry_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = ICBMs
+		modifier:country_icbm_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -826,7 +826,7 @@ principle_colonial_offices_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = decolonization
+		modifier:country_decolonization_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -863,7 +863,7 @@ principle_colonial_offices_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = globalization
+		modifier:country_globalization_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -979,7 +979,7 @@ principle_foreign_investment_4 = {
 	allows_foreign_investment_in_lower_rank = yes
 
 	possible = {
-		has_technology_researched = keynesian_economics
+		modifier:country_keynesian_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -1015,7 +1015,7 @@ principle_foreign_investment_5 = {
 	allows_foreign_investment_in_lower_rank = yes
 
 	possible = {
-		has_technology_researched = globalization
+		modifier:country_globalization_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -1052,7 +1052,7 @@ principle_creative_legislature_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = mass_media
+		modifier:country_mass_media_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -1075,7 +1075,7 @@ principle_creative_legislature_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = world_wide_web
+		modifier:country_www_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -1103,7 +1103,7 @@ principle_freedom_of_movement_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = mass_media
+		modifier:country_mass_media_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -1128,7 +1128,7 @@ principle_freedom_of_movement_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = world_wide_web
+		modifier:country_www_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -1156,7 +1156,7 @@ principle_divine_economics_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = mass_media
+		modifier:country_mass_media_pb_principles_bool = yes
 	}
 	
 	power_bloc_modifier = {
@@ -1187,7 +1187,7 @@ principle_divine_economics_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = social_media
+		modifier:country_social_media_pb_principles_bool = yes
 	}
 	
 	power_bloc_modifier = {
@@ -1224,7 +1224,7 @@ principle_exploit_members_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = mass_media
+		modifier:country_mass_media_pb_principles_bool = yes
 	}
 	
 	leader_modifier = {
@@ -1264,7 +1264,7 @@ principle_exploit_members_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = social_media
+		modifier:country_social_media_pb_principles_bool = yes
 	}
 	
 	leader_modifier = {
@@ -1413,7 +1413,7 @@ principle_sacred_civics_4_mod = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = mass_media
+		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -1450,7 +1450,7 @@ principle_sacred_civics_5_mod = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = social_media
+		modifier:country_social_media_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -1490,7 +1490,7 @@ principle_ideological_truth_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = mass_media
+		modifier:country_mass_media_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -1519,7 +1519,7 @@ principle_ideological_truth_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = social_media
+		modifier:country_social_media_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -1654,7 +1654,7 @@ principle_cultural_unity_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = marketing_research
+		modifier:country_marketing_research_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -1698,7 +1698,7 @@ principle_cultural_unity_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = globalization
+		modifier:country_globalization_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -1840,7 +1840,7 @@ principle_cultural_plurality_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = civil_rights_movement
+		modifier:country_civil_rights_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -1874,7 +1874,7 @@ principle_cultural_plurality_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = globalization
+		modifier:country_globalization_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -2007,7 +2007,7 @@ principle_education_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 	
 	possible = {
-		has_technology_researched = mass_media
+		modifier:country_mass_media_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -2047,7 +2047,7 @@ principle_education_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 	
 	possible = {
-		has_technology_researched = world_wide_web
+		modifier:country_www_pb_principles_bool = yes
 	}
 	
 	member_modifier = {
@@ -2165,7 +2165,7 @@ principle_diplomacy_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 	
 	possible = {
-		has_technology_researched = mass_media
+		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -2204,7 +2204,7 @@ principle_diplomacy_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 	
 	possible = {
-		has_technology_researched = world_wide_web
+		modifier:country_www_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -2247,7 +2247,7 @@ principle_environmental_sustainability_1 = {
 	}
 
 	possible = {
-		has_technology_researched = environmental_movement
+		modifier:country_env_movement_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -2278,7 +2278,7 @@ principle_environmental_sustainability_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
-		has_technology_researched = environmental_movement
+		modifier:country_env_movement_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -2303,7 +2303,7 @@ principle_environmental_sustainability_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = environmental_movement
+		modifier:country_env_movement_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -2330,7 +2330,7 @@ principle_environmental_sustainability_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = clean_energy_technologies
+		modifier:country_clean_energy_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -2359,7 +2359,7 @@ principle_environmental_sustainability_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = clean_energy_technologies
+		modifier:country_clean_energy_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -2394,7 +2394,7 @@ principle_urban_planning_1 = {
 	}
 
 	possible = {
-		has_technology_researched = urbanization
+		modifier:country_urbanization_pb_principles_bool = yes
 		NOT = {
 			power_bloc = {
 				OR = {
@@ -2433,7 +2433,7 @@ principle_urban_planning_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
-		has_technology_researched = urbanization
+		modifier:country_urbanization_pb_principles_bool = yes
 		NOT = {
 			power_bloc = {
 				OR = {
@@ -2473,7 +2473,7 @@ principle_urban_planning_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = modern_urban_planning
+		modifier:country_modern_urban_planning_pb_principles_bool = yes
 		NOT = {
 			power_bloc = {
 				OR = {
@@ -2514,7 +2514,7 @@ principle_urban_planning_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = advanced_workflow_optimization
+		modifier:country_workflow_opt_pb_principles_bool = yes
 		NOT = {
 			power_bloc = {
 				OR = {
@@ -2554,7 +2554,7 @@ principle_urban_planning_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = digital_education
+		modifier:country_digital_ed_pb_principles_bool = yes
 		NOT = {
 			power_bloc = {
 				OR = {
@@ -2714,7 +2714,7 @@ principle_rural_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 	
 	possible = {
-		has_technology_researched = advanced_agricultural_statistics
+		modifier:country_advanced_agri_stats_pb_principles_bool = yes
 		NOT = {
 			power_bloc = {
 				OR = {
@@ -2750,7 +2750,7 @@ principle_rural_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 	
 	possible = {
-		has_technology_researched = green_revolution
+		modifier:country_green_revolution_pb_principles_bool = yes
 		NOT = {
 			power_bloc = {
 				OR = {
@@ -2789,7 +2789,7 @@ principle_global_security_1 = {
 	}
 
 	possible = {
-		has_technology_researched = nuclear_weapons
+		modifier:country_nuclear_weapons_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -2817,7 +2817,7 @@ principle_global_security_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
-		has_technology_researched = nuclear_weapons
+		modifier:country_nuclear_weapons_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -2851,7 +2851,7 @@ principle_global_security_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = nuclear_weapons
+		modifier:country_nuclear_weapons_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -2889,7 +2889,7 @@ principle_global_security_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = tactical_nuclear_weapons
+		modifier:country_tactical_nukes_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -2930,7 +2930,7 @@ principle_global_security_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = rapid_deployment_forces
+		modifier:country_rapid_deploy_pb_principles_bool = yes
 	}
 
 	leader_modifier = {
@@ -2977,7 +2977,7 @@ principle_healthcare_1 = {
 	}
 
 	possible = {
-		has_technology_researched = pharmaceuticals
+		modifier:country_pharmaceuticals_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3011,7 +3011,7 @@ principle_healthcare_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
-		has_technology_researched = pharmaceuticals
+		modifier:country_pharmaceuticals_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3034,7 +3034,7 @@ principle_healthcare_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = pharmaceuticals
+		modifier:country_pharmaceuticals_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3059,7 +3059,7 @@ principle_healthcare_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = modern_vaccines
+		modifier:country_modern_vaccines_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3089,7 +3089,7 @@ principle_healthcare_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = modern_pharmaceuticals
+		modifier:country_modern_pharma_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3209,7 +3209,7 @@ principle_welfare_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = public_works_programs
+		modifier:country_public_works_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3242,7 +3242,7 @@ principle_welfare_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = social_media
+		modifier:country_social_media_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3340,7 +3340,7 @@ principle_artistic_expression_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = mass_media
+		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3369,7 +3369,7 @@ principle_artistic_expression_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = social_media
+		modifier:country_social_media_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3483,7 +3483,7 @@ principle_military_training_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = combined_arms
+		modifier:country_combined_arms_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3508,7 +3508,7 @@ principle_military_training_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = rapid_deployment_forces
+		modifier:country_rapid_deploy_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3614,7 +3614,7 @@ principle_engineering_and_logistics_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = combined_arms
+		modifier:country_combined_arms_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3640,7 +3640,7 @@ principle_engineering_and_logistics_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = rapid_deployment_forces
+		modifier:country_rapid_deploy_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3788,7 +3788,7 @@ principle_navy_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = sonar
+		modifier:country_sonar_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3817,7 +3817,7 @@ principle_navy_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = missile_defense_systems
+		modifier:country_missile_defense_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3848,7 +3848,7 @@ principle_companies_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = modern_urban_planning
+		modifier:country_modern_urban_planning_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3873,7 +3873,7 @@ principle_companies_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = globalization
+		modifier:country_globalization_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3902,7 +3902,7 @@ principle_shared_canon_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = mass_media
+		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
 	member_modifier = {
@@ -3933,7 +3933,7 @@ principle_shared_canon_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		has_technology_researched = social_media
+		modifier:country_social_media_pb_principles_bool = yes
 	}
 
 	leader_modifier = {

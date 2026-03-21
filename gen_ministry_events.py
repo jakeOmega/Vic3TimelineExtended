@@ -245,8 +245,9 @@ ministry_law_events.2 = {{
 {T(2)}}}
 {T(2)}scope:opposing_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_budget_advance
+{T(4)}name = ig_approval_positive_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}
@@ -350,8 +351,9 @@ ministry_law_events.5 = {{
 {T(2)}}}
 {T(2)}scope:armed_forces_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_war_generals_cautious
+{T(4)}name = ig_approval_negative_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}
@@ -363,8 +365,9 @@ ministry_law_events.5 = {{
 {T(2)}}}
 {T(2)}scope:armed_forces_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_war_generals_advance
+{T(4)}name = ig_approval_positive_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}
@@ -454,8 +457,9 @@ ministry_law_events.7 = {{
 {T(2)}}}
 {T(2)}scope:industrialists_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_commerce_trade_advance
+{T(4)}name = ig_approval_positive_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}
@@ -525,8 +529,9 @@ ministry_law_events.8 = {{
 {T(2)}}}
 {T(2)}scope:intelligentsia_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_culture_patronage_advance
+{T(4)}name = ig_approval_positive_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}
@@ -616,14 +621,16 @@ ministry_law_events.9 = {{
 {T(3)}limit = {{ is_enacting_law = law_type:law_pro_labor_ministry_of_labor }}
 {T(3)}scope:trade_unions_ig = {{
 {T(4)}add_modifier = {{
-{T(5)}name = ministry_labor_struggle_advance
+{T(5)}name = ig_approval_positive_modifier
 {T(5)}days = normal_modifier_time
+{T(5)}is_decaying = yes
 {T(4)}}}
 {T(3)}}}
 {T(3)}scope:industrialists_ig = {{
 {T(4)}add_modifier = {{
-{T(5)}name = ministry_labor_struggle_cautious
+{T(5)}name = ig_approval_negative_modifier
 {T(5)}days = normal_modifier_time
+{T(5)}is_decaying = yes
 {T(4)}}}
 {T(3)}}}
 {T(2)}}}
@@ -631,14 +638,16 @@ ministry_law_events.9 = {{
 {T(3)}limit = {{ is_enacting_law = law_type:law_pro_capital_ministry_of_labor }}
 {T(3)}scope:industrialists_ig = {{
 {T(4)}add_modifier = {{
-{T(5)}name = ministry_labor_struggle_advance
+{T(5)}name = ig_approval_positive_modifier
 {T(5)}days = normal_modifier_time
+{T(5)}is_decaying = yes
 {T(4)}}}
 {T(3)}}}
 {T(3)}scope:trade_unions_ig = {{
 {T(4)}add_modifier = {{
-{T(5)}name = ministry_labor_struggle_cautious
+{T(5)}name = ig_approval_negative_modifier
 {T(5)}days = normal_modifier_time
+{T(5)}is_decaying = yes
 {T(4)}}}
 {T(3)}}}
 {T(2)}}}
@@ -687,8 +696,9 @@ ministry_law_events.10 = {{
 {T(2)}}}
 {T(2)}scope:industrialists_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_env_smokestacks_cautious
+{T(4)}name = ig_approval_negative_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}
@@ -700,8 +710,9 @@ ministry_law_events.10 = {{
 {T(2)}}}
 {T(2)}scope:industrialists_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_env_smokestacks_advance
+{T(4)}name = ig_approval_positive_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}
@@ -810,8 +821,9 @@ ministry_law_events.13 = {{
 {T(2)}}}
 {T(2)}scope:intelligentsia_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_prop_loudspeaker_cautious
+{T(4)}name = ig_approval_negative_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}
@@ -869,8 +881,9 @@ ministry_law_events.14 = {{
 {T(2)}}}
 {T(2)}scope:intelligentsia_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_sci_laboratory_advance
+{T(4)}name = ig_approval_positive_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}
@@ -983,8 +996,9 @@ ministry_law_events.16 = {{
 {T(2)}}}
 {T(2)}scope:industrialists_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_consumer_tainted_cautious
+{T(4)}name = ig_approval_negative_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}
@@ -996,8 +1010,9 @@ ministry_law_events.16 = {{
 {T(2)}}}
 {T(2)}scope:industrialists_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_consumer_tainted_advance
+{T(4)}name = ig_approval_positive_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}
@@ -1087,8 +1102,9 @@ ministry_law_events.18 = {{
 {T(2)}}}
 {T(2)}scope:devout_ig = {{
 {T(3)}add_modifier = {{
-{T(4)}name = ministry_religion_pulpit_advance
+{T(4)}name = ig_approval_positive_modifier
 {T(4)}days = normal_modifier_time
+{T(4)}is_decaying = yes
 {T(3)}}}
 {T(2)}}}
 {T(1)}}}

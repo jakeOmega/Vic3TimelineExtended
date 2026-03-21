@@ -53,6 +53,7 @@
 	progress_desc = un_authority_progress_desc
 
 	status_desc = {
+		# 1. Personal membership status
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_status_not_member
@@ -64,6 +65,7 @@
 			}
 		}
 
+		# 2. Authority tier
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_authority_collapsed
@@ -87,7 +89,101 @@
 			}
 		}
 
+		# 2b. Authority drift details (members only)
 		first_valid = {
+			triggered_desc = {
+				desc = je_un_authority_drift
+				trigger = { has_modifier = un_member_modifier }
+			}
+		}
+
+		# 3. UN Headquarters
+		first_valid = {
+			triggered_desc = {
+				desc = je_un_hq_host
+				trigger = { has_modifier = un_headquarters_modifier }
+			}
+			triggered_desc = {
+				desc = je_un_hq_established
+				trigger = { has_global_variable = un_hq_country }
+			}
+		}
+
+		# 4. General Assembly statistics
+		first_valid = {
+			triggered_desc = {
+				desc = je_un_statistics
+				trigger = {
+					any_country = {
+						has_modifier = un_member_modifier
+						count >= 1
+					}
+				}
+			}
+		}
+
+		# 5. Security Council
+		first_valid = {
+			triggered_desc = {
+				desc = je_un_security_council_member
+				trigger = { has_modifier = un_security_council_modifier }
+			}
+			triggered_desc = {
+				desc = je_un_security_council_nonmember
+				trigger = {
+					has_modifier = un_member_modifier
+					any_country = {
+						has_modifier = un_security_council_modifier
+						count >= 1
+					}
+				}
+			}
+		}
+
+		# 6. Specialized Agencies header
+		first_valid = {
+			triggered_desc = {
+				desc = je_un_agencies_header
+				trigger = { has_modifier = un_member_modifier }
+			}
+		}
+
+		# 6a-6g. Individual agency status (only shown when established)
+		triggered_desc = {
+			desc = je_un_agency_who_active
+			trigger = { has_global_variable = un_agency_who }
+		}
+		triggered_desc = {
+			desc = je_un_agency_unesco_active
+			trigger = { has_global_variable = un_agency_unesco }
+		}
+		triggered_desc = {
+			desc = je_un_agency_icj_active
+			trigger = { has_global_variable = un_agency_icj }
+		}
+		triggered_desc = {
+			desc = je_un_agency_unhrc_active
+			trigger = { has_global_variable = un_agency_unhrc }
+		}
+		triggered_desc = {
+			desc = je_un_agency_iaea_active
+			trigger = { has_global_variable = un_agency_iaea }
+		}
+		triggered_desc = {
+			desc = je_un_agency_unep_active
+			trigger = { has_global_variable = un_agency_unep }
+		}
+		triggered_desc = {
+			desc = je_un_agency_unhcr_active
+			trigger = { has_global_variable = un_agency_unhcr }
+		}
+
+		# 7. Active resolutions & program participation (members) / join prompt (non-members)
+		first_valid = {
+			triggered_desc = {
+				desc = je_un_active_programs
+				trigger = { has_modifier = un_member_modifier }
+			}
 			triggered_desc = {
 				desc = je_un_active_policies
 				trigger = { always = yes }
@@ -97,8 +193,19 @@
 
 	on_monthly_pulse = {
 		effect = {
-			# ---- Drift UN authority toward equilibrium based on member count ----
-			# Count GP members - more GPs = more authority
+			# ---- Security Council cleanup (all countries with JE) ----
+			if = {
+				limit = {
+					has_modifier = un_security_council_modifier
+					OR = {
+						NOT = { has_modifier = un_member_modifier }
+						NOT = { country_rank >= rank_value:great_power }
+					}
+				}
+				remove_modifier = un_security_council_modifier
+			}
+
+			# ---- Member-only logic ----
 			if = {
 				limit = { has_modifier = un_member_modifier }
 
@@ -126,7 +233,7 @@
 					limit = {
 						is_at_war = yes
 						any_country = {
-							has_diplomatic_pact = { who = ROOT type = war }
+							has_war_with = ROOT
 							has_modifier = un_member_modifier
 						}
 					}
@@ -162,6 +269,22 @@
 				}
 				else = {
 					remove_modifier = un_membership_benefits_modifier
+				}
+
+				# ---- Security Council seat award ----
+				# Great power members get SC seats if fewer than 5 exist
+				if = {
+					limit = {
+						country_rank >= rank_value:great_power
+						NOT = { has_modifier = un_security_council_modifier }
+						NOT = {
+							any_country = {
+								has_modifier = un_security_council_modifier
+								count >= 5
+							}
+						}
+					}
+					add_modifier = { name = un_security_council_modifier }
 				}
 			}
 		}

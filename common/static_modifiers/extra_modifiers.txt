@@ -1796,6 +1796,20 @@ un_member_modifier = {
 	country_leverage_generation_add = 5
 }
 
+un_headquarters_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_diplomatic_reputation_add = 10
+	country_prestige_add = 100
+	country_leverage_generation_add = 10
+}
+
+un_security_council_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_diplomatic_reputation_add = 10
+	country_leverage_generation_add = 20
+	country_authority_add = 25
+}
+
 un_membership_benefits_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_diplomatic_reputation_add = 5
@@ -2218,7 +2232,7 @@ un_peacekeeping_resented_modifier = {
 un_refugee_source_relief_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_standard_of_living_add = 0.5
-	state_migration_pull_mult = 0.05
+	state_migration_pull_mult = -0.25
 }
 
 un_refugee_source_brain_drain_modifier = {

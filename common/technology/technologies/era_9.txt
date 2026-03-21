@@ -96,6 +96,7 @@ world_wide_web = {
 		country_institution_ministry_of_labor_max_investment_add = 1
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
+		country_www_pb_principles_bool = yes
 	}
 	
 	ai_weight = {
@@ -139,6 +140,7 @@ clean_energy_technologies = {
 
 	modifier = {
 		country_institution_ministry_of_the_environment_max_investment_add = 1
+		country_clean_energy_pb_principles_bool = yes
 	}
 	
 	ai_weight = {
@@ -161,6 +163,7 @@ supply_chain_management = {
 	modifier = {
 		state_building_highway_max_level_add = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
+		country_supply_chain_pb_principles_bool = yes
 	}
 	
 	ai_weight = {
@@ -262,6 +265,7 @@ network_centric_warfare = {
 		country_weekly_innovation_max_add = 100
 		state_building_barrack_max_level_add = 50
 		state_building_naval_base_max_level_add = 20
+		country_ncw_pb_principles_bool = yes
 	}
 	
 	unlocking_technologies = {	
@@ -287,6 +291,7 @@ missile_defense_systems = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_nuclear_weapon_defense_chance_add = 0.5
+		country_missile_defense_pb_principles_bool = yes
 	}
 	
 	ai_weight = {
@@ -307,6 +312,7 @@ automated_surveillance = {
 	modifier = {
 		country_institution_home_affairs_max_investment_add = 1
 		country_institution_police_max_investment_add = 1
+		country_auto_surveillance_pb_principles_bool = yes
 	}
 	
 	ai_weight = {
@@ -347,6 +353,7 @@ rapid_deployment_forces = {
 	modifier = {
 		state_building_barrack_max_level_add = 50
 		state_building_naval_base_max_level_add = 20
+		country_rapid_deploy_pb_principles_bool = yes
 	}
 	
 	ai_weight = {
@@ -373,7 +380,8 @@ globalization = {
 		country_leverage_threshold_change_add = -50
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
-	 }
+		country_globalization_pb_principles_bool = yes
+	}
 	
 	ai_weight = {
 		value = 5 # This is a very important technology
@@ -397,6 +405,7 @@ social_media = {
 		country_institution_ministry_of_propaganda_max_investment_add = 1
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 		state_expected_sol_from_literacy = 1
+		country_social_media_pb_principles_bool = yes
 	}
 	
 	ai_weight = {
@@ -436,6 +445,7 @@ knowledge_economy = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_institution_national_bank_max_investment_add = 1
+		country_knowledge_economy_pb_principles_bool = yes
 	}
 	
 	ai_weight = {
@@ -479,6 +489,7 @@ digital_education = {
 		state_bureaucracy_population_base_cost_factor_mult = 1
 		country_institution_schools_max_investment_add = 1
 		state_education_access_add = -0.1
+		country_digital_ed_pb_principles_bool = yes
 	}
 	
 	ai_weight = {
@@ -588,6 +599,7 @@ advanced_workflow_optimization = {
 
 	modifier = {
 		country_max_weekly_construction_progress_add = 15
+		country_workflow_opt_pb_principles_bool = yes
 	}
 	
 	ai_weight = {

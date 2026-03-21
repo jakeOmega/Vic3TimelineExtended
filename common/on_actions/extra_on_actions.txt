@@ -38,6 +38,17 @@ on_yearly_pulse_state = {
 		remove_or_create_homelands_on_action
 		violent_hostility_on_action
 		migration_crowding_on_action
+		tourism_update_on_action
+	}
+}
+
+# TOURISM UPDATE - refreshes tourism output/throughput modifiers.
+# Runs on the yearly state pulse (guaranteed state scope) rather than
+# inside te_update_state_modifiers, because tourism script values use
+# state_region comparisons that fail in non-state scopes.
+tourism_update_on_action = {
+	effect = {
+		te_update_tourism_modifier = yes
 	}
 }
 
@@ -47,6 +58,14 @@ on_yearly_pulse_country = {
 		excess_private_construction_on_action
 		fix_incompatible_laws
 		construction_cost_scaling_on_action
+		colonial_collapse_on_action
+	}
+}
+
+# COLONIAL COLLAPSE - tiny non-player countries revert to decentralized or get absorbed
+colonial_collapse_on_action = {
+	effect = {
+		colonial_collapse_effect = yes
 	}
 }
 
@@ -377,7 +396,7 @@ global_warming_events_on_action = {
 				has_global_variable = greenhouse_gas_emissions
 			}
 			random_list = {
-				900 = { } # ~90% chance of nothing happening this month
+				1800 = { } # ~90% chance of nothing happening this month
 				# Crop failures (severe+ warming, farming country)
 				15 = {
 					trigger = {

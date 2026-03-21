@@ -1,0 +1,296 @@
+﻿# Auto-generated boolean modifiers for technology-gated features
+# These make technology requirements for scripted buttons and
+# power bloc principles visible in the tech tree.
+
+# Power bloc principle technology requirements
+country_icbm_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_advanced_agri_stats_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_workflow_opt_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_anti_war_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_auto_surveillance_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_cellular_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_civil_rights_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_clean_energy_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_combined_arms_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_containerization_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_decolonization_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_digital_ed_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_env_movement_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_gene_splicing_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_globalization_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_green_revolution_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_igo_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_keynesian_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_knowledge_economy_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_marketing_research_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_mass_media_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_mass_surveillance_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_missile_defense_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_modern_pharma_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_modern_skyscrapers_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_modern_tools_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_modern_urban_planning_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_modern_vaccines_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_motorized_artillery_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_ncw_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_nuclear_weapons_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_pharmaceuticals_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_public_works_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_rapid_deploy_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_robotics_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_rocketry_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_satcom_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_social_media_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_sonar_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_supply_chain_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_tactical_nukes_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_television_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_urbanization_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+country_www_pb_principles_bool = {
+	color = good
+	boolean = yes
+}
+
+# Scripted button technology requirements
+country_can_use_rearmament_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_total_war_economy_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_deposit_guarantee_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_export_credit_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_cultural_assimilation_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_join_united_nations_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_countercyclical_buffer_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_fx_support_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_fx_swap_lines_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_emergency_liquidity_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_open_market_ops_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_fx_devaluation_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_asset_relief_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_war_propaganda_bool = {
+	color = good
+	boolean = yes
+}
+

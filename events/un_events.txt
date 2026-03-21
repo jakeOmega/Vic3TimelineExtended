@@ -55,12 +55,19 @@ un_events.1 = {
 			}
 		}
 		set_variable = { name = can_build_un_hq value = 1 }
-		add_modifier = { name = un_member_modifier }
-		add_modifier = {
-			name = un_founding_member_modifier
-			days = long_modifier_time
-			is_decaying = yes
+		# First signatory hosts UN Headquarters
+		if = {
+			limit = { NOT = { has_global_variable = un_hq_country } }
+			set_global_variable = { name = un_hq_country value = ROOT }
+			add_modifier = { name = un_headquarters_modifier }
 		}
+		# Great powers get Security Council permanent seats
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			add_modifier = { name = un_security_council_modifier }
+		}
+		add_modifier = { name = un_member_modifier }
+		add_modifier = { name = un_founding_member_modifier }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
@@ -128,12 +135,6 @@ un_events.2 = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
 			is_at_war = yes
 			is_diplomatic_play_initiator = yes
-			# Must be winning the war or at least not getting steamrolled
-			NOT = {
-				any_scope_state = {
-					enemy_occupation > 0
-				}
-			}
 		}
 		NOT = { has_modifier = un_ga_resolution_modifier }
 	}
@@ -299,10 +300,11 @@ un_events.3 = {
 				add = 3
 			}
 		}
-		add_modifier = {
-			name = un_human_rights_declaration_modifier
-			days = long_modifier_time
-			is_decaying = yes
+		add_modifier = { name = un_human_rights_declaration_modifier }
+		# Establish UN Human Rights Council
+		if = {
+			limit = { NOT = { has_global_variable = un_agency_unhrc } }
+			set_global_variable = un_agency_unhrc
 		}
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
@@ -856,6 +858,11 @@ un_events.8 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		# Establish International Court of Justice
+		if = {
+			limit = { NOT = { has_global_variable = un_agency_icj } }
+			set_global_variable = un_agency_icj
+		}
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
 		add_radicals = {
@@ -947,10 +954,11 @@ un_events.9 = {
 				add = 2
 			}
 		}
-		add_modifier = {
-			name = un_heritage_program_modifier
-			days = long_modifier_time
-			is_decaying = yes
+		add_modifier = { name = un_heritage_program_modifier }
+		# Establish UNESCO
+		if = {
+			limit = { NOT = { has_global_variable = un_agency_unesco } }
+			set_global_variable = un_agency_unesco
 		}
 		custom_tooltip = un_authority_change_plus_3
 		change_variable = { name = un_authority add = 3 }
@@ -1240,6 +1248,7 @@ un_events.12 = {
 
 	trigger = {
 		has_modifier = un_member_modifier
+		has_technology_researched = decolonization
 		var:un_authority >= 30
 		NOT = { has_modifier = un_decolonization_champion_modifier }
 		NOT = { has_modifier = un_colonial_defender_modifier }
@@ -1501,10 +1510,11 @@ un_events.14 = {
 				add = 3
 			}
 		}
-		add_modifier = {
-			name = un_nonproliferation_modifier
-			days = long_modifier_time
-			is_decaying = yes
+		add_modifier = { name = un_nonproliferation_modifier }
+		# Establish International Atomic Energy Agency
+		if = {
+			limit = { NOT = { has_global_variable = un_agency_iaea } }
+			set_global_variable = un_agency_iaea
 		}
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
@@ -1728,10 +1738,11 @@ un_events.16 = {
 				add = 3
 			}
 		}
-		add_modifier = {
-			name = un_pandemic_cooperation_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		add_modifier = { name = un_pandemic_cooperation_modifier }
+		# Establish World Health Organization
+		if = {
+			limit = { NOT = { has_global_variable = un_agency_who } }
+			set_global_variable = un_agency_who
 		}
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
@@ -1823,10 +1834,11 @@ un_events.17 = {
 				add = 3
 			}
 		}
-		add_modifier = {
-			name = un_climate_binding_modifier
-			days = long_modifier_time
-			is_decaying = yes
+		add_modifier = { name = un_climate_binding_modifier }
+		# Establish UN Environment Programme
+		if = {
+			limit = { NOT = { has_global_variable = un_agency_unep } }
+			set_global_variable = un_agency_unep
 		}
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
@@ -1933,10 +1945,11 @@ un_events.18 = {
 				add = 4
 			}
 		}
-		add_modifier = {
-			name = un_refugee_program_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		add_modifier = { name = un_refugee_program_modifier }
+		# Establish UN Refugee Agency
+		if = {
+			limit = { NOT = { has_global_variable = un_agency_unhcr } }
+			set_global_variable = un_agency_unhcr
 		}
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
@@ -2041,11 +2054,7 @@ un_events.19 = {
 				add = 2
 			}
 		}
-		add_modifier = {
-			name = un_space_partnership_modifier
-			days = long_modifier_time
-			is_decaying = yes
-		}
+		add_modifier = { name = un_space_partnership_modifier }
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }

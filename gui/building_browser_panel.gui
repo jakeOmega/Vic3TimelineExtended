@@ -1,4 +1,4 @@
-# The spreadsheet cells are a fixed size in order to be optimized
+﻿# The spreadsheet cells are a fixed size in order to be optimized
 @spreadsheet_width = 1381
 @spreadsheet_width_minus_10 = 1371
 @spreadsheet_header_height = 80

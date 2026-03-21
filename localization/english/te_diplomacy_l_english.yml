@@ -47,7 +47,7 @@
  peace_rally_diplomatic_leverage_modifier:0 "Peace Rally Diplomatic Leverage"
  peace_rally_diplomatic_leverage_modifier_desc:0 "The massive peace rally has been leveraged as evidence of popular mandate for diplomacy, boosting our international influence."
  power_bloc_can_use_diplomatic_alignment_bool:0 "Leader Can Use Diplomatic Alignment Diplomatic Action"
- power_bloc_can_use_diplomatic_alignment_bool_desc:0 "Leader can use the Diplomatic Alignment diplomatic action to align the foreign policy of a country with the Power Bloc."
+ power_bloc_can_use_diplomatic_alignment_bool_desc:0 "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can use the Diplomatic Alignment diplomatic action to align the foreign policy of a [concept_country] with the [concept_power_bloc]."
  principle_diplomacy_1_desc:0 "The Power Bloc encourages diplomacy and peaceful resolution of conflicts."
  principle_diplomacy_2_desc:0 "The Power Bloc encourages diplomacy and peaceful resolution of conflicts."
  principle_diplomacy_3_desc:0 "The Power Bloc encourages diplomacy and peaceful resolution of conflicts."

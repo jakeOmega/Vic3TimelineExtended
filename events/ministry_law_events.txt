@@ -140,9 +140,12 @@ ministry_law_events.2 = {
 		add_enactment_modifier = {
 			name = ministry_budget_cautious
 		}
-		add_loyalists = {
-			value = medium_radicals
-			interest_group = scope:opposing_ig
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 	}
 }
@@ -332,8 +335,9 @@ ministry_law_events.5 = {
 		}
 		scope:armed_forces_ig = {
 			add_modifier = {
-				name = ministry_war_generals_cautious
+				name = ig_approval_negative_modifier
 				days = normal_modifier_time
+				is_decaying = yes
 			}
 		}
 	}
@@ -345,8 +349,9 @@ ministry_law_events.5 = {
 		}
 		scope:armed_forces_ig = {
 			add_modifier = {
-				name = ministry_war_generals_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
+				is_decaying = yes
 			}
 		}
 	}
@@ -471,8 +476,9 @@ ministry_law_events.7 = {
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
-				name = ministry_commerce_trade_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
+				is_decaying = yes
 			}
 		}
 	}
@@ -555,8 +561,9 @@ ministry_law_events.8 = {
 		}
 		scope:intelligentsia_ig = {
 			add_modifier = {
-				name = ministry_culture_patronage_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
+				is_decaying = yes
 			}
 		}
 	}
@@ -660,14 +667,16 @@ ministry_law_events.9 = {
 			limit = { is_enacting_law = law_type:law_pro_labor_ministry_of_labor }
 			scope:trade_unions_ig = {
 				add_modifier = {
-					name = ministry_labor_struggle_advance
+					name = ig_approval_positive_modifier
 					days = normal_modifier_time
+					is_decaying = yes
 				}
 			}
 			scope:industrialists_ig = {
 				add_modifier = {
-					name = ministry_labor_struggle_cautious
+					name = ig_approval_negative_modifier
 					days = normal_modifier_time
+					is_decaying = yes
 				}
 			}
 		}
@@ -675,14 +684,16 @@ ministry_law_events.9 = {
 			limit = { is_enacting_law = law_type:law_pro_capital_ministry_of_labor }
 			scope:industrialists_ig = {
 				add_modifier = {
-					name = ministry_labor_struggle_advance
+					name = ig_approval_positive_modifier
 					days = normal_modifier_time
+					is_decaying = yes
 				}
 			}
 			scope:trade_unions_ig = {
 				add_modifier = {
-					name = ministry_labor_struggle_cautious
+					name = ig_approval_negative_modifier
 					days = normal_modifier_time
+					is_decaying = yes
 				}
 			}
 		}
@@ -744,8 +755,9 @@ ministry_law_events.10 = {
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
-				name = ministry_env_smokestacks_cautious
+				name = ig_approval_negative_modifier
 				days = normal_modifier_time
+				is_decaying = yes
 			}
 		}
 	}
@@ -757,8 +769,9 @@ ministry_law_events.10 = {
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
-				name = ministry_env_smokestacks_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
+				is_decaying = yes
 			}
 		}
 	}
@@ -945,8 +958,9 @@ ministry_law_events.13 = {
 		}
 		scope:intelligentsia_ig = {
 			add_modifier = {
-				name = ministry_prop_loudspeaker_cautious
+				name = ig_approval_negative_modifier
 				days = normal_modifier_time
+				is_decaying = yes
 			}
 		}
 	}
@@ -1017,8 +1031,9 @@ ministry_law_events.14 = {
 		}
 		scope:intelligentsia_ig = {
 			add_modifier = {
-				name = ministry_sci_laboratory_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
+				is_decaying = yes
 			}
 		}
 	}
@@ -1157,8 +1172,9 @@ ministry_law_events.16 = {
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
-				name = ministry_consumer_tainted_cautious
+				name = ig_approval_negative_modifier
 				days = normal_modifier_time
+				is_decaying = yes
 			}
 		}
 	}
@@ -1170,8 +1186,9 @@ ministry_law_events.16 = {
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
-				name = ministry_consumer_tainted_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
+				is_decaying = yes
 			}
 		}
 	}
@@ -1296,8 +1313,9 @@ ministry_law_events.18 = {
 		}
 		scope:devout_ig = {
 			add_modifier = {
-				name = ministry_religion_pulpit_advance
+				name = ig_approval_positive_modifier
 				days = normal_modifier_time
+				is_decaying = yes
 			}
 		}
 	}

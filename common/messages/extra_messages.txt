@@ -1885,3 +1885,18 @@ headlines_tech_abyssal_plain_mining = {
     days = 28
     color = neutral
 }
+
+# Colonial Collapse notifications
+colonial_territory_absorbed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
+	notification_type = feed
+	color = neutral
+}
+
+colonial_territory_collapsed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
+	notification_type = feed
+	color = neutral
+}

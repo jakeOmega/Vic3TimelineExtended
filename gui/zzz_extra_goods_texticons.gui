@@ -1,4 +1,4 @@
-texticon = {
+﻿texticon = {
 	icon = digital_access
 	iconsize = {
 		texture = "gfx/interface/icons/goods_icons/digital_access.dds"

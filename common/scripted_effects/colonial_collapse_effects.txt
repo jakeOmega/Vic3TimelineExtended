@@ -1,0 +1,117 @@
+﻿# Colonial Collapse Effects
+# When the decolonization era arrives, tiny non-player countries
+# that lack population collapse — either reverting to decentralized
+# (uncolonized) land or being absorbed by a culturally similar neighbor.
+#
+# Fired from colonial_collapse_on_action (on_yearly_pulse_country).
+# Only one country (the first to fire) runs the global sweep per year.
+
+colonial_collapse_effect = {
+	# Gate: only run if at least one country in the world has decolonization tech
+	# and this country IS one of those (so only one pulse drives the check)
+	if = {
+        limit = {
+            # Must be alive and not player-controlled
+            is_country_alive = yes
+            is_player = no
+            
+            # Not already decentralized
+            NOT = { is_country_type = decentralized }
+            
+            # Not a subject (puppet states are managed by overlords)
+            is_subject = no
+            
+            # Population threshold: very small countries collapse
+            total_population < 100000
+            average_sol < 6
+                        
+            # Safety: don't collapse countries currently in a diplomatic play or at war
+            NOT = { is_in_diplomatic_play = yes }
+            NOT = { is_at_war = yes }
+        }
+			
+        save_scope_as = collapsing_country
+        
+        # Try to find a culturally similar non-decentralized neighbor to absorb this country
+        # Check if any of our states border a non-decentralized country that shares heritage
+        ordered_scope_state = {
+            limit = { always = yes }
+            order_by = state_population
+            max = 1
+            
+            save_scope_as = collapse_state
+            
+            # Look for neighboring state owned by a culturally similar country
+            random_neighbouring_state = {
+                limit = {
+                    owner = {
+                        is_country_alive = yes
+                        NOT = { is_country_type = decentralized }
+                        NOT = { this = scope:collapsing_country }
+                        any_primary_culture = {
+                            shares_heritage_trait_group_with_any_primary_culture = scope:collapsing_country
+                        }
+                    }
+                }
+                owner = {
+                    save_scope_as = absorbing_country
+                }
+            }
+        }
+        
+        if = {
+            limit = {
+                exists = scope:absorbing_country
+            }
+            # Culturally similar neighbor absorbs this country
+            scope:absorbing_country = {
+                annex = scope:collapsing_country
+            }
+            
+            # Notify countries with strategic interest
+            every_country = {
+                limit = {
+                    is_country_alive = yes
+                    is_player = yes
+                    NOT = { is_country_type = decentralized }
+                    OR = {
+                        # Countries in the same strategic region
+                        any_scope_state = {
+                            region = scope:collapse_state.region
+                        }
+                        # Great powers always care
+                        country_rank >= rank_value:great_power
+                    }
+                }
+                post_notification = colonial_territory_absorbed_notice
+            }
+        }
+        else = {
+            # No culturally similar neighbor — revert to decentralized (uncolonized)
+            set_country_type = decentralized
+            
+            # Notify countries with strategic interest
+            every_country = {
+                limit = {
+                    is_country_alive = yes
+                    is_player = yes
+                    NOT = { is_country_type = decentralized }
+                    OR = {
+                        # Countries in the same strategic region
+                        any_scope_state = {
+                            region = scope:collapse_state.region
+                        }
+                        # Great powers always care
+                        country_rank >= rank_value:great_power
+                    }
+                }
+                post_notification = colonial_territory_collapsed_notice
+            }
+        }
+        
+        # Clear scopes for next iteration
+        clear_saved_scope = absorbing_country
+        clear_saved_scope = collapse_state
+        clear_saved_scope = collapsing_country
+    }
+}
