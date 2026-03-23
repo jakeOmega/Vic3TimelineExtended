@@ -2554,21 +2554,147 @@ langreform_revival = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	state_assimilation_mult = 0.15
 	country_primary_culture_fervor_from_laws_add = 5
-	country_bureaucracy_investment_cost_factor_mult = 0.05
 	country_education_fervor_add = 3
 }
+
+# Event 25 – Sacred / Classical Tongue variants (replace generic revival)
+langreform_sacred_latin = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 3
+	country_influence_mult = 0.03
+}
+langreform_sacred_hebrew = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 8
+	country_education_fervor_add = 3
+}
+langreform_sacred_sanskrit = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 3
+	country_tech_research_speed_mult = 0.02
+}
+langreform_sacred_geez = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 5
+}
+langreform_sacred_slavonic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 3
+	country_acceptance_shared_language_trait_group_add = 5
+}
+langreform_sacred_pali = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 3
+}
+langreform_sacred_avestan = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 8
+	country_education_fervor_add = 3
+}
+langreform_sacred_arabic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.20
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 3
+}
+langreform_sacred_chinese = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 5
+}
+langreform_sacred_greek = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 3
+	country_tech_research_speed_mult = 0.02
+}
+langreform_sacred_irish = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 8
+	country_education_fervor_add = 3
+}
+langreform_sacred_coptic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 5
+}
+langreform_sacred_nahuatl = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.20
+	country_primary_culture_fervor_from_laws_add = 8
+	country_education_fervor_add = 3
+}
+langreform_sacred_norse = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 3
+	country_acceptance_shared_language_trait_group_add = 5
+}
+langreform_sacred_gothic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 3
+	country_acceptance_shared_language_trait_group_add = 5
+}
+langreform_sacred_mayan = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.20
+	country_primary_culture_fervor_from_laws_add = 8
+	country_education_fervor_add = 3
+}
+langreform_sacred_prussian = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 3
+}
+langreform_sacred_aramaic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_assimilation_mult = 0.15
+	country_primary_culture_fervor_from_laws_add = 5
+	country_education_fervor_add = 3
+}
+
 langreform_constructed = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	state_assimilation_mult = 0.10
 	country_tech_research_speed_mult = 0.03
-	country_bureaucracy_investment_cost_factor_mult = 0.03
 	country_primary_culture_fervor_from_laws_add = -3
 }
 langreform_simplification = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	state_assimilation_mult = 0.10
 	country_education_fervor_add = 5
-	country_bureaucracy_investment_cost_factor_mult = -0.03
+}
+
+# Event 35 – Transition cost modifiers (temporary, applied during language learning period)
+langreform_transition_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_bureaucracy_investment_cost_factor_mult = 0.10
+	country_institution_cost_institution_schools_mult = 0.15
+}
+langreform_intensive_transition_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_bureaucracy_investment_cost_factor_mult = 0.05
+	country_institution_cost_institution_schools_mult = 0.35
 }
 
 # Event 26 – The Language Academy (choose one)
@@ -2618,6 +2744,24 @@ construction_site_throughput = {
 construction_private_allocation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_private_construction_allocation_mult = 0.01
+}
+
+# Event 36 – Radical Law Backlash modifiers
+# Applied when a radical law is enacted under a non-exempt government type.
+
+# "Stand firm" – the regime pushes through despite massive backlash
+radical_law_backlash = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -10
+	country_authority_add = -100
+	state_radicals_from_political_movements_mult = 0.50
+}
+
+# "Reverse course" – the regime capitulates and reverses the radical law
+radical_law_retreat = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -50
+	country_authority_add = -50
 }
 
 

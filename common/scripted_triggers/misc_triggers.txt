@@ -6,12 +6,53 @@
 has_any_langreform_modifier = {
 	OR = {
 		has_modifier = langreform_revival
+		has_modifier = langreform_sacred_latin
+		has_modifier = langreform_sacred_hebrew
+		has_modifier = langreform_sacred_sanskrit
+		has_modifier = langreform_sacred_geez
+		has_modifier = langreform_sacred_slavonic
+		has_modifier = langreform_sacred_pali
+		has_modifier = langreform_sacred_avestan
+		has_modifier = langreform_sacred_arabic
+		has_modifier = langreform_sacred_chinese
+		has_modifier = langreform_sacred_greek
+		has_modifier = langreform_sacred_irish
+		has_modifier = langreform_sacred_coptic
+		has_modifier = langreform_sacred_nahuatl
+		has_modifier = langreform_sacred_norse
+		has_modifier = langreform_sacred_gothic
+		has_modifier = langreform_sacred_mayan
+		has_modifier = langreform_sacred_prussian
+		has_modifier = langreform_sacred_aramaic
 		has_modifier = langreform_constructed
 		has_modifier = langreform_simplification
 		has_modifier = langreform_powerful_academy
 		has_modifier = langreform_advisory_panel
 		has_modifier = langreform_minority_protection
 		has_modifier = langreform_national_focus
+		has_modifier = langreform_transition_cost
+		has_modifier = langreform_intensive_transition_cost
+	}
+}
+
+# True if the activated law (law scope) is a radical law that triggers backlash
+is_radical_law_activated = {
+	OR = {
+		this = law_type:law_communal_child_rearing
+		this = law_type:law_state_atheism
+		this = law_type:law_cooperative_ownership
+		this = law_type:law_command_economy
+		this = law_type:law_collectivized_agriculture
+	}
+}
+
+# True if the country (country scope) has a governance type that exempts it
+# from radical law backlash — revolutionary, authoritarian, or anarchist regimes
+is_exempt_from_radical_backlash = {
+	OR = {
+		has_law = law_type:law_council_republic
+		has_law = law_type:law_anarchy
+		has_law = law_type:law_single_party_state
 	}
 }
 

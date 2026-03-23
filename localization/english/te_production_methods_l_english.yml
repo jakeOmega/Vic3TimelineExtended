@@ -550,7 +550,6 @@
  pmg_base_building_fusion_power:0 "Fusion Power"
  pmg_base_building_highway:0 "Highway"
  pmg_base_building_hydro_power:0 "Hydro Power"
- pmg_base_building_migrant_camp:0 "Base"
  pmg_base_building_national_park:0 "National Park"
  pmg_base_building_network:0 "Base Building Network"
  pmg_base_building_nuclear_power:0 "Nuclear Power"

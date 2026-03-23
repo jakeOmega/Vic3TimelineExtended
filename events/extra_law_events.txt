@@ -1858,7 +1858,15 @@ extra_law_events.24 = {
 #
 #   When the law is activated, the government must decide the
 #   fundamental character of the reform:
-#     (a) Revive a classical or historical language
+#     (a) Revive a classical or historical language (generic, or a
+#         specific "Sacred Tongue" if the country's culture/religion
+#         qualifies – Latin, Hebrew, Sanskrit, Ge'ez, Old Church
+#         Slavonic, Pali, Avestan, Classical Arabic, Literary Chinese,
+#         Classical Greek, Classical Irish, Coptic, Nahuatl, Old Norse,
+#         Gothic, Classic Mayan, Old Prussian, Aramaic).
+#         Multiple sacred tongues can appear if the country has
+#         multiple qualifying cultures/religions.  The generic option
+#         is hidden when any sacred tongue qualifies.
 #     (b) Construct a new national language from scratch
 #     (c) Simplify and standardize the existing language
 #
@@ -1874,6 +1882,46 @@ extra_law_events.25 = {
 	desc = {
 		first_valid = {
 			triggered_desc = {
+				trigger = {
+					calc_true_if = {
+						amount >= 2
+						any_primary_culture = { has_discrimination_trait_group = language_group_romance }
+						OR = {
+							country_has_state_religion = rel:jewish
+							any_primary_culture = { has_discrimination_trait_group = language_group_semitic }
+						}
+						OR = {
+							any_primary_culture = { has_discrimination_trait_group = language_group_indo_aryan }
+							country_has_state_religion = rel:hindu
+						}
+						any_primary_culture = { OR = { has_discrimination_trait = language_amharic has_discrimination_trait = language_tigrinya } }
+						any_primary_culture = { has_discrimination_trait_group = language_group_slavic }
+						country_has_state_religion = rel:theravada
+						any_primary_culture = { has_discrimination_trait_group = language_group_iranic }
+						any_primary_culture = { has_discrimination_trait = language_arabic }
+						any_primary_culture = { OR = { has_discrimination_trait_group = language_group_sinitic has_discrimination_trait = language_japanese has_discrimination_trait = language_korean } }
+						any_primary_culture = { has_discrimination_trait_group = language_group_hellenic }
+						any_primary_culture = { has_discrimination_trait = language_gaelic }
+						country_has_state_religion = rel:oriental_orthodox
+						any_primary_culture = { has_discrimination_trait = language_nahuan }
+						any_primary_culture = { has_discrimination_trait = language_scandinavian }
+						any_primary_culture = { has_discrimination_trait_group = language_group_germanic }
+						any_primary_culture = { has_discrimination_trait = language_mayan }
+						any_primary_culture = { has_discrimination_trait_group = language_group_baltic }
+						any_primary_culture = { has_discrimination_trait = language_aramaic }
+					}
+				}
+				desc = extra_law_events.25.d_multi
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait = language_arabic } }
+				desc = extra_law_events.25.d_arabic
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { OR = { has_discrimination_trait = language_amharic has_discrimination_trait = language_tigrinya } } }
+				desc = extra_law_events.25.d_geez
+			}
+			triggered_desc = {
 				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_semitic } }
 				desc = extra_law_events.25.d_semitic
 			}
@@ -1885,7 +1933,7 @@ extra_law_events.25 = {
 				trigger = {
 					any_primary_culture = {
 						OR = {
-							has_discrimination_trait_group = language_group_sinic
+							has_discrimination_trait_group = language_group_sinitic
 							has_discrimination_trait = language_japanese
 							has_discrimination_trait = language_korean
 						}
@@ -1894,8 +1942,52 @@ extra_law_events.25 = {
 				desc = extra_law_events.25.d_east_asian
 			}
 			triggered_desc = {
-				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_indic } }
+				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_indo_aryan } }
 				desc = extra_law_events.25.d_indic
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_slavic } }
+				desc = extra_law_events.25.d_slavic
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_iranic } }
+				desc = extra_law_events.25.d_iranic
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_hellenic } }
+				desc = extra_law_events.25.d_hellenic
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait = language_gaelic } }
+				desc = extra_law_events.25.d_celtic
+			}
+			triggered_desc = {
+				trigger = { country_has_state_religion = rel:oriental_orthodox }
+				desc = extra_law_events.25.d_coptic
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait = language_nahuan } }
+				desc = extra_law_events.25.d_nahuatl
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait = language_scandinavian } }
+				desc = extra_law_events.25.d_norse
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_germanic } }
+				desc = extra_law_events.25.d_germanic
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait = language_mayan } }
+				desc = extra_law_events.25.d_mayan
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_baltic } }
+				desc = extra_law_events.25.d_baltic
+			}
+			triggered_desc = {
+				trigger = { any_primary_culture = { has_discrimination_trait = language_aramaic } }
+				desc = extra_law_events.25.d_aramaic
 			}
 			triggered_desc = {
 				trigger = { always = yes }
@@ -1918,6 +2010,24 @@ extra_law_events.25 = {
 		NOT = { has_variable = language_reform_type }
 		NOR = {
 			has_modifier = langreform_revival
+			has_modifier = langreform_sacred_latin
+			has_modifier = langreform_sacred_hebrew
+			has_modifier = langreform_sacred_sanskrit
+			has_modifier = langreform_sacred_geez
+			has_modifier = langreform_sacred_slavonic
+			has_modifier = langreform_sacred_pali
+			has_modifier = langreform_sacred_avestan
+			has_modifier = langreform_sacred_arabic
+			has_modifier = langreform_sacred_chinese
+			has_modifier = langreform_sacred_greek
+			has_modifier = langreform_sacred_irish
+			has_modifier = langreform_sacred_coptic
+			has_modifier = langreform_sacred_nahuatl
+			has_modifier = langreform_sacred_norse
+			has_modifier = langreform_sacred_gothic
+			has_modifier = langreform_sacred_mayan
+			has_modifier = langreform_sacred_prussian
+			has_modifier = langreform_sacred_aramaic
 			has_modifier = langreform_constructed
 			has_modifier = langreform_simplification
 		}
@@ -1926,6 +2036,24 @@ extra_law_events.25 = {
 	cancellation_trigger = {
 		OR = {
 			has_modifier = langreform_revival
+			has_modifier = langreform_sacred_latin
+			has_modifier = langreform_sacred_hebrew
+			has_modifier = langreform_sacred_sanskrit
+			has_modifier = langreform_sacred_geez
+			has_modifier = langreform_sacred_slavonic
+			has_modifier = langreform_sacred_pali
+			has_modifier = langreform_sacred_avestan
+			has_modifier = langreform_sacred_arabic
+			has_modifier = langreform_sacred_chinese
+			has_modifier = langreform_sacred_greek
+			has_modifier = langreform_sacred_irish
+			has_modifier = langreform_sacred_coptic
+			has_modifier = langreform_sacred_nahuatl
+			has_modifier = langreform_sacred_norse
+			has_modifier = langreform_sacred_gothic
+			has_modifier = langreform_sacred_mayan
+			has_modifier = langreform_sacred_prussian
+			has_modifier = langreform_sacred_aramaic
 			has_modifier = langreform_constructed
 			has_modifier = langreform_simplification
 		}
@@ -1936,9 +2064,424 @@ extra_law_events.25 = {
 		set_variable = { name = language_reform_type value = 0 }
 	}
 
-	option = { # Revive a classical or historical language
+	# --- Sacred / Classical Tongue options (replace generic revival) ---
+
+	option = { # Revive Latin
+		name = extra_law_events.25.a_latin
+		trigger = {
+			any_primary_culture = { has_discrimination_trait_group = language_group_romance }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_latin }
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Hebrew
+		name = extra_law_events.25.a_hebrew
+		trigger = {
+			OR = {
+				country_has_state_religion = rel:jewish
+				any_primary_culture = { has_discrimination_trait_group = language_group_semitic }
+			}
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_hebrew }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Sanskrit
+		name = extra_law_events.25.a_sanskrit
+		trigger = {
+			OR = {
+				any_primary_culture = { has_discrimination_trait_group = language_group_indo_aryan }
+				country_has_state_religion = rel:hindu
+			}
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_sanskrit }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Ge'ez
+		name = extra_law_events.25.a_geez
+		trigger = {
+			any_primary_culture = {
+				OR = {
+					has_discrimination_trait = language_amharic
+					has_discrimination_trait = language_tigrinya
+				}
+			}
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_geez }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Old Church Slavonic
+		name = extra_law_events.25.a_slavonic
+		trigger = {
+			any_primary_culture = { has_discrimination_trait_group = language_group_slavic }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_slavonic }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Pali
+		name = extra_law_events.25.a_pali
+		trigger = {
+			country_has_state_religion = rel:theravada
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_pali }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Avestan
+		name = extra_law_events.25.a_avestan
+		trigger = {
+			any_primary_culture = { has_discrimination_trait_group = language_group_iranic }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_avestan }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Classical Arabic
+		name = extra_law_events.25.a_arabic
+		trigger = {
+			any_primary_culture = { has_discrimination_trait = language_arabic }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_arabic }
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Literary Chinese
+		name = extra_law_events.25.a_chinese
+		trigger = {
+			any_primary_culture = {
+				OR = {
+					has_discrimination_trait_group = language_group_sinitic
+					has_discrimination_trait = language_japanese
+					has_discrimination_trait = language_korean
+				}
+			}
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_chinese }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = bureaucrats
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+	}
+
+	option = { # Revive Classical Greek
+		name = extra_law_events.25.a_greek
+		trigger = {
+			any_primary_culture = { has_discrimination_trait_group = language_group_hellenic }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_greek }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Classical Irish (Gaeilge)
+		name = extra_law_events.25.a_irish
+		trigger = {
+			any_primary_culture = { has_discrimination_trait = language_gaelic }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_irish }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Coptic
+		name = extra_law_events.25.a_coptic
+		trigger = {
+			country_has_state_religion = rel:oriental_orthodox
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_coptic }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Classical Nahuatl
+		name = extra_law_events.25.a_nahuatl
+		trigger = {
+			any_primary_culture = { has_discrimination_trait = language_nahuan }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_nahuatl }
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Old Norse
+		name = extra_law_events.25.a_norse
+		trigger = {
+			any_primary_culture = { has_discrimination_trait = language_scandinavian }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_norse }
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Gothic
+		name = extra_law_events.25.a_gothic
+		trigger = {
+			any_primary_culture = { has_discrimination_trait_group = language_group_germanic }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_gothic }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Classic Mayan
+		name = extra_law_events.25.a_mayan
+		trigger = {
+			any_primary_culture = { has_discrimination_trait = language_mayan }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_mayan }
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Old Prussian
+		name = extra_law_events.25.a_prussian
+		trigger = {
+			any_primary_culture = { has_discrimination_trait_group = language_group_baltic }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_prussian }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	option = { # Revive Aramaic
+		name = extra_law_events.25.a_aramaic
+		trigger = {
+			any_primary_culture = { has_discrimination_trait = language_aramaic }
+		}
+		set_variable = { name = language_reform_type value = 1 }
+		add_modifier = { name = langreform_sacred_aramaic }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+	}
+
+	# --- Generic revival (shown only if no sacred tongue qualifies) ---
+
+	option = { # Revive a classical or historical language (generic)
 		name = extra_law_events.25.a
 		default_option = yes
+		trigger = {
+			NOR = {
+				any_primary_culture = { has_discrimination_trait_group = language_group_romance }
+				country_has_state_religion = rel:jewish
+				any_primary_culture = { has_discrimination_trait_group = language_group_semitic }
+				any_primary_culture = { has_discrimination_trait_group = language_group_indo_aryan }
+				country_has_state_religion = rel:hindu
+				any_primary_culture = { OR = { has_discrimination_trait = language_amharic has_discrimination_trait = language_tigrinya } }
+				any_primary_culture = { has_discrimination_trait_group = language_group_slavic }
+				country_has_state_religion = rel:theravada
+				any_primary_culture = { has_discrimination_trait_group = language_group_iranic }
+				any_primary_culture = { has_discrimination_trait = language_arabic }
+				any_primary_culture = { OR = { has_discrimination_trait_group = language_group_sinitic has_discrimination_trait = language_japanese has_discrimination_trait = language_korean } }
+				any_primary_culture = { has_discrimination_trait_group = language_group_hellenic }
+				any_primary_culture = { has_discrimination_trait = language_gaelic }
+				country_has_state_religion = rel:oriental_orthodox
+				any_primary_culture = { has_discrimination_trait = language_nahuan }
+				any_primary_culture = { has_discrimination_trait = language_scandinavian }
+				any_primary_culture = { has_discrimination_trait_group = language_group_germanic }
+				any_primary_culture = { has_discrimination_trait = language_mayan }
+				any_primary_culture = { has_discrimination_trait_group = language_group_baltic }
+				any_primary_culture = { has_discrimination_trait = language_aramaic }
+			}
+		}
 		set_variable = { name = language_reform_type value = 1 }
 		add_modifier = { name = langreform_revival }
 		add_loyalists = {
@@ -2028,6 +2571,24 @@ extra_law_events.26 = {
 	cancellation_trigger = {
 		OR = {
 			has_modifier = langreform_revival
+			has_modifier = langreform_sacred_latin
+			has_modifier = langreform_sacred_hebrew
+			has_modifier = langreform_sacred_sanskrit
+			has_modifier = langreform_sacred_geez
+			has_modifier = langreform_sacred_slavonic
+			has_modifier = langreform_sacred_pali
+			has_modifier = langreform_sacred_avestan
+			has_modifier = langreform_sacred_arabic
+			has_modifier = langreform_sacred_chinese
+			has_modifier = langreform_sacred_greek
+			has_modifier = langreform_sacred_irish
+			has_modifier = langreform_sacred_coptic
+			has_modifier = langreform_sacred_nahuatl
+			has_modifier = langreform_sacred_norse
+			has_modifier = langreform_sacred_gothic
+			has_modifier = langreform_sacred_mayan
+			has_modifier = langreform_sacred_prussian
+			has_modifier = langreform_sacred_aramaic
 			has_modifier = langreform_constructed
 			has_modifier = langreform_simplification
 		}
@@ -2120,6 +2681,24 @@ extra_law_events.27 = {
 	cancellation_trigger = {
 		OR = {
 			has_modifier = langreform_revival
+			has_modifier = langreform_sacred_latin
+			has_modifier = langreform_sacred_hebrew
+			has_modifier = langreform_sacred_sanskrit
+			has_modifier = langreform_sacred_geez
+			has_modifier = langreform_sacred_slavonic
+			has_modifier = langreform_sacred_pali
+			has_modifier = langreform_sacred_avestan
+			has_modifier = langreform_sacred_arabic
+			has_modifier = langreform_sacred_chinese
+			has_modifier = langreform_sacred_greek
+			has_modifier = langreform_sacred_irish
+			has_modifier = langreform_sacred_coptic
+			has_modifier = langreform_sacred_nahuatl
+			has_modifier = langreform_sacred_norse
+			has_modifier = langreform_sacred_gothic
+			has_modifier = langreform_sacred_mayan
+			has_modifier = langreform_sacred_prussian
+			has_modifier = langreform_sacred_aramaic
 			has_modifier = langreform_constructed
 			has_modifier = langreform_simplification
 		}
@@ -2926,6 +3505,508 @@ extra_law_events.34 = {
 		add_loyalists = {
 			value = small_radicals
 			pop_type = academics
+		}
+	}
+}
+
+# ======================================================================
+# 35 – The Implementation Question  (State-Led Language Reform)
+#
+#   Fires ~4 months after event 25 (the founding choice).
+#   Asks how the transition to the reformed language will be
+#   administered: a gradual rollout over ~20 years or an
+#   intensive state-funded education campaign (~10 years) that
+#   demands public schools and a well-invested school system.
+#
+#   Applies a decaying transition-cost modifier representing the
+#   bureaucratic and educational overhead of teaching a population
+#   the new or reformed language.
+# ======================================================================
+extra_law_events.35 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.35.t
+	desc = extra_law_events.35.d
+	flavor = extra_law_events.35.f
+
+	event_image = { video = "europenorthamerica_capitalists_meeting" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	trigger = {
+		has_law = law_type:law_state_led_language_reform
+		has_any_langreform_modifier = yes
+		NOR = {
+			has_modifier = langreform_transition_cost
+			has_modifier = langreform_intensive_transition_cost
+		}
+	}
+
+	immediate = {
+	}
+
+	option = { # Gradual rollout (20 years)
+		name = extra_law_events.35.a
+		default_option = yes
+		add_modifier = {
+			name = langreform_transition_cost
+			is_decaying = yes
+			days = very_long_modifier_time
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+		ai_chance = {
+			base = 7
+		}
+	}
+
+	option = { # Intensive education campaign (10 years, gated)
+		name = extra_law_events.35.b
+		trigger = {
+			has_law = law_type:law_public_schools
+			institution_investment_level = {
+				institution = institution_schools
+				value >= 3
+			}
+		}
+		add_modifier = {
+			name = langreform_intensive_transition_cost
+			is_decaying = yes
+			days = long_modifier_time
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 5
+			if = {
+				limit = {
+					institution_investment_level = {
+						institution = institution_schools
+						value >= 4
+					}
+				}
+				add = 5
+			}
+		}
+	}
+}
+
+# ======================================================================
+# 36 – Societal Tremors  (Radical Law Backlash)
+#
+#   Fires when a radical law is enacted under a government that
+#   is not ideologically aligned (i.e. not council republic,
+#   anarchy, or single-party state).  Represents the massive
+#   societal upheaval caused by laws like communal child-rearing,
+#   state atheism, or collectivized agriculture in a non-
+#   revolutionary polity.
+#
+#   Severity scales with government type:
+#     Enhanced  (20yr) – conservative monarchy/theocracy with
+#                         autocratic or oligarchic representation
+#     Standard  (10yr) – most other governments
+#     Reduced   (5yr)  – technocracy (efficient top-down change)
+#
+#   Law-specific effects target the groups most affected:
+#     Collectivized agriculture → farmers, peasants (naturally
+#       scales with agrarian pop share — industrial countries
+#       with few farmers get proportionally less backlash)
+#     Command economy → capitalists, shopkeepers; lighter under
+#       technocracy
+#     State atheism → clergymen, devout IG
+#     Communal child rearing → broadest backlash across society
+#     Cooperative ownership → capitalists, shopkeepers
+#
+#   Option A: Stand firm — governance-scaled modifier + law-specific
+#             IG and pop type reactions
+#   Option B: Reverse course — law reverts to a moderate alternative
+# ======================================================================
+extra_law_events.36 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.36.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = extra_law_events.36.d_communal
+				trigger = { var:radical_law_backlash_type = 1 }
+			}
+			triggered_desc = {
+				desc = extra_law_events.36.d_atheism
+				trigger = { var:radical_law_backlash_type = 2 }
+			}
+			triggered_desc = {
+				desc = extra_law_events.36.d_cooperative
+				trigger = { var:radical_law_backlash_type = 3 }
+			}
+			triggered_desc = {
+				desc = extra_law_events.36.d_command
+				trigger = { var:radical_law_backlash_type = 4 }
+			}
+			triggered_desc = {
+				desc = extra_law_events.36.d_collectivized
+				trigger = { var:radical_law_backlash_type = 5 }
+			}
+			triggered_desc = {
+				desc = extra_law_events.36.d
+			}
+		}
+	}
+	flavor = extra_law_events.36.f
+
+	event_image = { video = "europenorthamerica_political_extremism" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = { # Stand firm
+		name = extra_law_events.36.a
+
+		# === GOVERNANCE-SCALED MODIFIER DURATION ===
+
+		# Enhanced: conservative monarchy/theocracy with autocratic representation
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_monarchy
+					has_law = law_type:law_theocracy
+				}
+				OR = {
+					has_law = law_type:law_autocracy
+					has_law = law_type:law_neo_absolutism
+					has_law = law_type:law_oligarchy
+				}
+			}
+			add_modifier = {
+				name = radical_law_backlash
+				is_decaying = yes
+				days = very_long_modifier_time
+			}
+		}
+		# Reduced: technocracy (efficient top-down implementation)
+		else_if = {
+			limit = {
+				has_law = law_type:law_technocracy
+			}
+			add_modifier = {
+				name = radical_law_backlash
+				is_decaying = yes
+				days = normal_modifier_time
+			}
+		}
+		# Standard: everything else
+		else = {
+			add_modifier = {
+				name = radical_law_backlash
+				is_decaying = yes
+				days = long_modifier_time
+			}
+		}
+
+		# === LAW-SPECIFIC IG AND POP-TYPE REACTIONS ===
+
+		# Communal child rearing (type 1) — broadest backlash
+		if = {
+			limit = { var:radical_law_backlash_type = 1 }
+			ig:ig_devout ?= {
+				add_modifier = {
+					name = ig_approval_very_negative_modifier
+					days = normal_modifier_time
+				}
+			}
+			ig:ig_landowners ?= {
+				add_modifier = {
+					name = ig_approval_very_negative_modifier
+					days = normal_modifier_time
+				}
+			}
+			ig:ig_petty_bourgeoisie ?= {
+				add_modifier = {
+					name = ig_approval_negative_modifier
+					days = normal_modifier_time
+				}
+			}
+			add_radicals = {
+				value = very_large_radicals
+				strata = upper
+			}
+			add_radicals = {
+				value = large_radicals
+				strata = middle
+			}
+			add_radicals = {
+				value = medium_radicals
+				pop_type = clergymen
+			}
+		}
+
+		# State atheism (type 2) — devout are primary opponents
+		if = {
+			limit = { var:radical_law_backlash_type = 2 }
+			ig:ig_devout ?= {
+				add_modifier = {
+					name = ig_approval_very_negative_modifier
+					days = long_modifier_time
+				}
+			}
+			ig:ig_landowners ?= {
+				add_modifier = {
+					name = ig_approval_negative_modifier
+					days = normal_modifier_time
+				}
+			}
+			add_radicals = {
+				value = very_large_radicals
+				pop_type = clergymen
+			}
+			add_radicals = {
+				value = large_radicals
+				strata = upper
+			}
+		}
+
+		# Cooperative ownership (type 3) — capitalists and shopkeepers
+		if = {
+			limit = { var:radical_law_backlash_type = 3 }
+			ig:ig_industrialists ?= {
+				add_modifier = {
+					name = ig_approval_very_negative_modifier
+					days = normal_modifier_time
+				}
+			}
+			ig:ig_petty_bourgeoisie ?= {
+				add_modifier = {
+					name = ig_approval_very_negative_modifier
+					days = normal_modifier_time
+				}
+			}
+			add_radicals = {
+				value = very_large_radicals
+				pop_type = capitalists
+			}
+			add_radicals = {
+				value = large_radicals
+				pop_type = shopkeepers
+			}
+			add_radicals = {
+				value = large_radicals
+				strata = upper
+			}
+		}
+
+		# Command economy (type 4) — industrialists; lighter under technocracy
+		if = {
+			limit = { var:radical_law_backlash_type = 4 }
+			ig:ig_industrialists ?= {
+				add_modifier = {
+					name = ig_approval_very_negative_modifier
+					days = normal_modifier_time
+				}
+			}
+			add_radicals = {
+				value = very_large_radicals
+				pop_type = capitalists
+			}
+			add_radicals = {
+				value = large_radicals
+				pop_type = shopkeepers
+			}
+			# Technocracy: lighter broad resistance (technocrats planned this)
+			if = {
+				limit = { has_law = law_type:law_technocracy }
+				add_radicals = {
+					value = large_radicals
+					strata = upper
+				}
+			}
+			else = {
+				add_radicals = {
+					value = very_large_radicals
+					strata = upper
+				}
+				ig:ig_petty_bourgeoisie ?= {
+					add_modifier = {
+						name = ig_approval_negative_modifier
+						days = normal_modifier_time
+					}
+				}
+			}
+		}
+
+		# Collectivized agriculture (type 5) — targets farmers & peasants directly
+		# Radicals naturally scale with how many of these pops exist, so
+		# industrialized countries with few farmers get proportionally less backlash.
+		if = {
+			limit = { var:radical_law_backlash_type = 5 }
+			ig:ig_landowners ?= {
+				add_modifier = {
+					name = ig_approval_very_negative_modifier
+					days = normal_modifier_time
+				}
+			}
+			ig:ig_rural_folk ?= {
+				add_modifier = {
+					name = ig_approval_very_negative_modifier
+					days = normal_modifier_time
+				}
+			}
+			add_radicals = {
+				value = very_large_radicals
+				pop_type = farmers
+			}
+			add_radicals = {
+				value = very_large_radicals
+				pop_type = peasants
+			}
+			add_radicals = {
+				value = large_radicals
+				pop_type = aristocrats
+			}
+		}
+
+		# === GOVERNANCE-SENSITIVE EXTRA EFFECTS ===
+
+		# Conservative monarchies/theocracies: extra middle-strata anxiety
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_monarchy
+					has_law = law_type:law_theocracy
+				}
+			}
+			add_radicals = {
+				value = medium_radicals
+				strata = middle
+			}
+		}
+
+		# === ALWAYS: SUPPORTERS EMBOLDENED ===
+		add_loyalists = {
+			value = medium_radicals
+			pop_type = academics
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+
+		ai_chance = {
+			base = 3
+			if = {
+				limit = {
+					ig:ig_trade_unions ?= { is_in_government = yes }
+				}
+				add = 5
+			}
+			if = {
+				limit = {
+					ig:ig_intelligentsia ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+			if = {
+				limit = { has_law = law_type:law_technocracy }
+				add = 3
+			}
+			if = {
+				limit = {
+					OR = {
+						has_law = law_type:law_monarchy
+						has_law = law_type:law_theocracy
+					}
+				}
+				add = -2
+			}
+		}
+	}
+
+	option = { # Reverse course — revert the radical law
+		name = extra_law_events.36.b
+		default_option = yes
+		# Revert the specific radical law to a moderate alternative
+		if = {
+			limit = { var:radical_law_backlash_type = 1 }
+			activate_law = law_type:law_traditional_family_structure
+		}
+		if = {
+			limit = { var:radical_law_backlash_type = 2 }
+			activate_law = law_type:law_freedom_of_conscience
+		}
+		if = {
+			limit = { var:radical_law_backlash_type = 3 }
+			activate_law = law_type:law_interventionism
+		}
+		if = {
+			limit = { var:radical_law_backlash_type = 4 }
+			activate_law = law_type:law_interventionism
+		}
+		if = {
+			limit = { var:radical_law_backlash_type = 5 }
+			activate_law = law_type:law_homesteading
+		}
+		add_modifier = {
+			name = radical_law_retreat
+			is_decaying = yes
+			days = normal_modifier_time
+		}
+		# Betrayed supporters
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		# Traditionalists relieved
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = clergymen
+		}
+		ai_chance = {
+			base = 7
+			if = {
+				limit = {
+					ig:ig_landowners ?= { is_in_government = yes }
+				}
+				add = 5
+			}
+			if = {
+				limit = {
+					OR = {
+						has_law = law_type:law_monarchy
+						has_law = law_type:law_theocracy
+					}
+				}
+				add = 3
+			}
+			if = {
+				limit = { has_law = law_type:law_technocracy }
+				add = -3
+			}
 		}
 	}
 }

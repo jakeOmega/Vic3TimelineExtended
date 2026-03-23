@@ -107,6 +107,7 @@
  pm_very_fast_ship_construction:0 "Very Fast Ship Construction"
  pm_very_slow_ship_construction:0 "Very Slow Ship Construction"
  pmg_automation_planes:0 "Automation Planes"
+ pmg_base_building_migrant_camp:0 "Base"
  pmg_naval_construction:0 "Naval Construction"
  principle_space_exploration_1_desc:0 "The Power Bloc encourages space exploration and the development of space technology."
  principle_space_exploration_2_desc:0 "The Power Bloc encourages space exploration and the development of space technology."
