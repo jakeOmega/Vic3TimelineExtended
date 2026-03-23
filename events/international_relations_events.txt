@@ -178,7 +178,7 @@ international_relations_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
+	event_image = { texture = "gfx/event_pictures/commando.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

@@ -1915,6 +1915,7 @@ extra_law_events.25 = {
 
 	trigger = {
 		has_law = law_type:law_state_led_language_reform
+		NOT = { has_variable = language_reform_type }
 		NOR = {
 			has_modifier = langreform_revival
 			has_modifier = langreform_constructed
@@ -1922,7 +1923,17 @@ extra_law_events.25 = {
 		}
 	}
 
+	cancellation_trigger = {
+		OR = {
+			has_modifier = langreform_revival
+			has_modifier = langreform_constructed
+			has_modifier = langreform_simplification
+		}
+	}
+
 	immediate = {
+		# Block re-fire while the player hasn't chosen yet
+		set_variable = { name = language_reform_type value = 0 }
 	}
 
 	option = { # Revive a classical or historical language
@@ -2007,13 +2018,23 @@ extra_law_events.26 = {
 
 	trigger = {
 		has_law = law_type:law_state_led_language_reform
+		NOT = { has_variable = langreform_academy_pending }
 		NOR = {
 			has_modifier = langreform_powerful_academy
 			has_modifier = langreform_advisory_panel
 		}
 	}
 
+	cancellation_trigger = {
+		OR = {
+			has_modifier = langreform_revival
+			has_modifier = langreform_constructed
+			has_modifier = langreform_simplification
+		}
+	}
+
 	immediate = {
+		set_variable = langreform_academy_pending
 		ig:ig_intelligentsia ?= {
 			save_scope_as = intelligentsia_ig
 		}
@@ -2084,6 +2105,7 @@ extra_law_events.27 = {
 
 	trigger = {
 		has_law = law_type:law_state_led_language_reform
+		NOT = { has_variable = langreform_minority_pending }
 		NOR = {
 			has_modifier = langreform_minority_protection
 			has_modifier = langreform_national_focus
@@ -2095,7 +2117,16 @@ extra_law_events.27 = {
 		}
 	}
 
+	cancellation_trigger = {
+		OR = {
+			has_modifier = langreform_revival
+			has_modifier = langreform_constructed
+			has_modifier = langreform_simplification
+		}
+	}
+
 	immediate = {
+		set_variable = langreform_minority_pending
 	}
 
 	option = { # Include minority language revival programmes

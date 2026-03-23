@@ -9,10 +9,16 @@
 # Phase 2: After 90 days, un_vote.2 fires for the proposer with results.
 #
 # Vote topics (identified by global flag variables):
-#   un_vote_topic_condemn       - Condemn aggressor (event 2)
-#   un_vote_topic_human_rights  - Human Rights Declaration (event 3)
-#   un_vote_topic_npt           - Non-Proliferation Treaty (event 14)
-#   un_vote_topic_climate       - Climate Accord (event 17)
+#   un_vote_topic_condemn          - Condemn aggressor (event 2)
+#   un_vote_topic_human_rights     - Human Rights Declaration (event 3)
+#   un_vote_topic_reform           - UN Institutional Reform (event 6)
+#   un_vote_topic_heritage         - Cultural Heritage Program (event 9)
+#   un_vote_topic_decolonization   - Decolonization Resolution (event 12)
+#   un_vote_topic_npt              - Non-Proliferation Treaty (event 14)
+#   un_vote_topic_pandemic         - Global Pandemic Response (event 16)
+#   un_vote_topic_climate          - Climate Accord (event 17)
+#   un_vote_topic_refugee          - International Refugee Crisis (event 18)
+#   un_vote_topic_space            - International Space Cooperation (event 19)
 #
 # Vote tracking global variables:
 #   un_vote_active              - flag: vote in progress
@@ -54,6 +60,30 @@ un_vote.1 = {
 				desc = un_vote.1.t_climate
 				trigger = { has_global_variable = un_vote_topic_climate }
 			}
+			triggered_desc = {
+				desc = un_vote.1.t_reform
+				trigger = { has_global_variable = un_vote_topic_reform }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_heritage
+				trigger = { has_global_variable = un_vote_topic_heritage }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_decolonization
+				trigger = { has_global_variable = un_vote_topic_decolonization }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_pandemic
+				trigger = { has_global_variable = un_vote_topic_pandemic }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_refugee
+				trigger = { has_global_variable = un_vote_topic_refugee }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_space
+				trigger = { has_global_variable = un_vote_topic_space }
+			}
 			desc = un_vote.1.t
 		}
 	}
@@ -75,6 +105,30 @@ un_vote.1 = {
 				desc = un_vote.1.d_climate
 				trigger = { has_global_variable = un_vote_topic_climate }
 			}
+			triggered_desc = {
+				desc = un_vote.1.d_reform
+				trigger = { has_global_variable = un_vote_topic_reform }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_heritage
+				trigger = { has_global_variable = un_vote_topic_heritage }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_decolonization
+				trigger = { has_global_variable = un_vote_topic_decolonization }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_pandemic
+				trigger = { has_global_variable = un_vote_topic_pandemic }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_refugee
+				trigger = { has_global_variable = un_vote_topic_refugee }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_space
+				trigger = { has_global_variable = un_vote_topic_space }
+			}
 			desc = un_vote.1.d
 		}
 	}
@@ -84,9 +138,11 @@ un_vote.1 = {
 
 	trigger = {
 		has_modifier = un_member_modifier
+		NOT = { has_variable = un_voted_this_round }
 	}
 
 	immediate = {
+		set_variable = un_voted_this_round
 	}
 
 	# Option A: Vote in favor
@@ -126,6 +182,62 @@ un_vote.1 = {
 				NOT = { has_modifier = un_climate_binding_modifier }
 			}
 			add_modifier = { name = un_climate_binding_modifier }
+		}
+		# If supporting reform, endorse institutional changes
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_reform
+				NOT = { has_modifier = un_reform_champion_modifier }
+			}
+			add_modifier = {
+				name = un_reform_champion_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		# If supporting heritage, adopt cultural conservation
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_heritage
+				NOT = { has_modifier = un_heritage_program_modifier }
+			}
+			add_modifier = { name = un_heritage_program_modifier }
+		}
+		# If supporting decolonization, adopt anti-colonial stance
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_decolonization
+				NOT = { has_modifier = un_decolonization_champion_modifier }
+			}
+			add_modifier = {
+				name = un_decolonization_champion_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		# If supporting pandemic response, adopt WHO cooperation
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_pandemic
+				NOT = { has_modifier = un_pandemic_cooperation_modifier }
+			}
+			add_modifier = { name = un_pandemic_cooperation_modifier }
+		}
+		# If supporting refugee resolution, accept resettlement
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_refugee
+				NOT = { has_modifier = un_refugee_program_modifier }
+			}
+			add_modifier = { name = un_refugee_program_modifier }
+		}
+		# If supporting space cooperation, join partnership
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_space
+				NOT = { has_modifier = un_space_partnership_modifier }
+			}
+			add_modifier = { name = un_space_partnership_modifier }
 		}
 
 		ai_chance = {
@@ -242,6 +354,87 @@ un_vote.1 = {
 					add = -10
 				}
 			}
+			# ---- Topic: UN Reform ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_reform }
+				# Countries frustrated with the current order support reform
+				if = {
+					limit = { var:un_authority < 40 }
+					add = 15
+				}
+				# SC members resist losing their privilege
+				if = {
+					limit = { country_rank >= rank_value:great_power has_modifier = un_security_council_modifier }
+					add = -20
+				}
+			}
+			# ---- Topic: Heritage ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_heritage }
+				if = {
+					limit = { has_law = law_type:law_multicultural }
+					add = 15
+				}
+				if = {
+					limit = { country_rank >= rank_value:major_power }
+					add = 10
+				}
+			}
+			# ---- Topic: Decolonization ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_decolonization }
+				# Colonial powers strongly oppose
+				if = {
+					limit = { any_subject_or_below = { is_direct_subject_of = ROOT } }
+					add = -40
+				}
+				# Anti-imperialist nations support
+				if = {
+					limit = { has_law = law_type:law_council_republic }
+					add = 20
+				}
+				# Non-colonial nations lean in favor
+				if = {
+					limit = { NOT = { any_subject_or_below = { count >= 1 } } }
+					add = 15
+				}
+			}
+			# ---- Topic: Pandemic ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_pandemic }
+				if = {
+					limit = { has_law = law_type:law_worker_protections }
+					add = 15
+				}
+				if = {
+					limit = { has_law = law_type:law_isolationism }
+					add = -20
+				}
+			}
+			# ---- Topic: Refugee ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_refugee }
+				if = {
+					limit = { has_law = law_type:law_no_migration_controls }
+					add = 20
+				}
+				if = {
+					limit = { has_law = law_type:law_closed_borders }
+					add = -30
+				}
+			}
+			# ---- Topic: Space ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_space }
+				if = {
+					limit = { has_technology_researched = space_exploration }
+					add = 20
+				}
+				if = {
+					limit = { has_law = law_type:law_single_party_state }
+					add = -15
+				}
+			}
 		}
 	}
 
@@ -305,6 +498,46 @@ un_vote.1 = {
 					has_law = law_type:law_laissez_faire
 				}
 				add = 25
+			}
+			# ---- Topic: Reform - SC privileged members oppose ----
+			if = {
+				limit = {
+					has_global_variable = un_vote_topic_reform
+					has_modifier = un_security_council_modifier
+				}
+				add = 25
+			}
+			# ---- Topic: Decolonization - colonial powers oppose ----
+			if = {
+				limit = {
+					has_global_variable = un_vote_topic_decolonization
+					any_subject_or_below = { is_direct_subject_of = ROOT }
+				}
+				add = 40
+			}
+			# ---- Topic: Pandemic - isolationists oppose ----
+			if = {
+				limit = {
+					has_global_variable = un_vote_topic_pandemic
+					has_law = law_type:law_isolationism
+				}
+				add = 25
+			}
+			# ---- Topic: Refugee - closed borders oppose ----
+			if = {
+				limit = {
+					has_global_variable = un_vote_topic_refugee
+					has_law = law_type:law_closed_borders
+				}
+				add = 30
+			}
+			# ---- Topic: Space - authoritarian regimes oppose sharing ----
+			if = {
+				limit = {
+					has_global_variable = un_vote_topic_space
+					has_law = law_type:law_single_party_state
+				}
+				add = 20
 			}
 		}
 	}
@@ -384,6 +617,66 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { has_global_variable = un_vote_topic_climate }
 				desc = un_vote.2.d_climate_failed
+			}
+			# Reform - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_reform global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_reform_passed
+			}
+			# Reform - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_reform }
+				desc = un_vote.2.d_reform_failed
+			}
+			# Heritage - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_heritage global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_heritage_passed
+			}
+			# Heritage - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_heritage }
+				desc = un_vote.2.d_heritage_failed
+			}
+			# Decolonization - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_decolonization global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_decolonization_passed
+			}
+			# Decolonization - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_decolonization }
+				desc = un_vote.2.d_decolonization_failed
+			}
+			# Pandemic - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_pandemic global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_pandemic_passed
+			}
+			# Pandemic - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_pandemic }
+				desc = un_vote.2.d_pandemic_failed
+			}
+			# Refugee - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_refugee global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_refugee_passed
+			}
+			# Refugee - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_refugee }
+				desc = un_vote.2.d_refugee_failed
+			}
+			# Space - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_space global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_space_passed
+			}
+			# Space - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_space }
+				desc = un_vote.2.d_space_failed
 			}
 			# Generic fallback
 			triggered_desc = {
@@ -479,8 +772,70 @@ un_vote.2 = {
 				}
 			}
 
-			# Influence for leading a successful resolution
-			add_influence = 100
+			# ---- Reform: Modernize UN institutions ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_reform }
+				custom_tooltip = un_vote_reform_passed_tt
+				change_variable = { name = un_authority add = 10 }
+			}
+
+			# ---- Heritage: UNESCO established ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_heritage }
+				custom_tooltip = un_vote_heritage_passed_tt
+				change_variable = { name = un_authority add = 5 }
+				if = {
+					limit = { NOT = { has_global_variable = un_agency_unesco } }
+					set_global_variable = un_agency_unesco
+				}
+			}
+
+			# ---- Decolonization: Anti-colonial declaration ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_decolonization }
+				custom_tooltip = un_vote_decolonization_passed_tt
+				change_variable = { name = un_authority add = 10 }
+			}
+
+			# ---- Pandemic: WHO established ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_pandemic }
+				custom_tooltip = un_vote_pandemic_passed_tt
+				change_variable = { name = un_authority add = 10 }
+				if = {
+					limit = { NOT = { has_global_variable = un_agency_who } }
+					set_global_variable = un_agency_who
+				}
+			}
+
+			# ---- Refugee: UNHCR established ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_refugee }
+				custom_tooltip = un_vote_refugee_passed_tt
+				change_variable = { name = un_authority add = 5 }
+				if = {
+					limit = { NOT = { has_global_variable = un_agency_unhcr } }
+					set_global_variable = un_agency_unhcr
+				}
+			}
+
+			# ---- Space: UNOOSA established ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_space }
+				custom_tooltip = un_vote_space_passed_tt
+				change_variable = { name = un_authority add = 5 }
+				if = {
+					limit = { NOT = { has_global_variable = un_agency_unoosa } }
+					set_global_variable = un_agency_unoosa
+				}
+			}
+
+			# Influence reward for leading a successful resolution
+			add_modifier = {
+				name = un_vote_success_reward
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 
 		# ---- RESOLUTION FAILED ----
@@ -488,7 +843,11 @@ un_vote.2 = {
 			limit = { NOT = { global_var:un_vote_net >= 1 } }
 			custom_tooltip = un_vote_failed_tt
 			change_variable = { name = un_authority add = -3 }
-			add_influence = -50
+			add_modifier = {
+				name = un_vote_failure_penalty
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 
 		# ---- Cleanup: clear all vote state ----
@@ -497,9 +856,20 @@ un_vote.2 = {
 		if = { limit = { has_global_variable = un_vote_topic_human_rights } remove_global_variable = un_vote_topic_human_rights }
 		if = { limit = { has_global_variable = un_vote_topic_npt } remove_global_variable = un_vote_topic_npt }
 		if = { limit = { has_global_variable = un_vote_topic_climate } remove_global_variable = un_vote_topic_climate }
+		if = { limit = { has_global_variable = un_vote_topic_reform } remove_global_variable = un_vote_topic_reform }
+		if = { limit = { has_global_variable = un_vote_topic_heritage } remove_global_variable = un_vote_topic_heritage }
+		if = { limit = { has_global_variable = un_vote_topic_decolonization } remove_global_variable = un_vote_topic_decolonization }
+		if = { limit = { has_global_variable = un_vote_topic_pandemic } remove_global_variable = un_vote_topic_pandemic }
+		if = { limit = { has_global_variable = un_vote_topic_refugee } remove_global_variable = un_vote_topic_refugee }
+		if = { limit = { has_global_variable = un_vote_topic_space } remove_global_variable = un_vote_topic_space }
 		if = { limit = { has_global_variable = un_vote_proposer_country } remove_global_variable = un_vote_proposer_country }
 		if = { limit = { has_global_variable = un_vote_target_country } remove_global_variable = un_vote_target_country }
 		if = { limit = { has_global_variable = un_vote_net } remove_global_variable = un_vote_net }
+		# Clear per-country voting flags
+		every_country = {
+			limit = { has_variable = un_voted_this_round }
+			remove_variable = un_voted_this_round
+		}
 
 		ai_chance = { base = 100 }
 	}

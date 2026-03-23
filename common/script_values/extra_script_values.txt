@@ -1174,9 +1174,15 @@ war_propaganda_support_script_value = {
 			}
 		}
 	}
-	add = {
-		value = ROOT.owner.modifier:country_war_support_monthly_add_religion
-		multiply = ROOT.ig:ig_devout.ig_clout
+	if = {
+		limit = {
+			ROOT.owner.modifier:country_war_support_monthly_add_religion > 0
+			exists = ROOT.owner.ig:ig_devout
+		}
+		add = {
+			value = ROOT.owner.modifier:country_war_support_monthly_add_religion
+			multiply = ROOT.owner.ig:ig_devout.ig_clout
+		}
 	}
 }
 
@@ -1397,22 +1403,22 @@ city_size = {
 # where the modifier has country_expenses_add = 1. The multiplier scales expenses with GDP.
 banking_event_expense_small = {
 	value = gdp
-	multiply = 0.005
+	multiply = 0.0001
 }
 
 banking_event_expense_medium = {
 	value = gdp
-	multiply = 0.01
+	multiply = 0.0002
 }
 
 banking_event_expense_large = {
 	value = gdp
-	multiply = 0.02
+	multiply = 0.0004
 }
 
 banking_event_expense_huge = {
 	value = gdp
-	multiply = 0.03
+	multiply = 0.0006
 }
 
 # Base points provided by the currently active law (used for JE setup / display).

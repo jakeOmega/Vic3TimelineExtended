@@ -221,7 +221,7 @@ social_tensions_events.3 = {
 
 	event_image = { texture = "gfx/event_pictures/corporate_lobbying.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+	icon = "gfx/interface/icons/event_icons/corp_office.dds"
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
@@ -270,16 +270,13 @@ social_tensions_events.3 = {
 	option = { # Investigative journalism exposes the corruption
 		name = social_tensions_events.3.c
 		trigger = {
-			OR = {
-				has_technology_researched = mass_media
-				has_technology_researched = social_media
-			}
+			has_technology_researched = social_media
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_media_tech_tt
 		add_modifier = { name = corporate_lobbying_exposed_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals strata = upper }
-		add_radicals = { value = very_small_radicals strata = lower }
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals strata = middle }
 		ai_chance = {
 			base = 2
 			modifier = { trigger = { has_law = law_type:law_open_government } add = 5 }
@@ -477,10 +474,7 @@ social_tensions_events.5 = {
 	option = { # Establish civilian oversight board
 		name = social_tensions_events.5.c
 		trigger = {
-			OR = {
-				has_technology_researched = civil_rights_movement
-				has_technology_researched = social_justice_movements
-			}
+			has_technology_researched = social_justice_movements
 		}
 		highlighted_option = yes
 		custom_tooltip = social_tensions_civil_rights_tech_tt

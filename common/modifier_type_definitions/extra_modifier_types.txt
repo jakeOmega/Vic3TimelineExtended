@@ -93,6 +93,21 @@ goods_input_services_add = {
 	percent = no
 }
 
+goods_input_construction_add = {
+	color = bad
+	percent = no
+}
+
+goods_output_construction_add = {
+	color = good
+	percent = no
+}
+
+building_group_fmc_bg_construction_site_employee_mult = {
+	color = bad
+	percent = yes
+}
+
 goods_input_luxury_clothes_add = {
 	color = bad
 	percent = no
@@ -1803,6 +1818,15 @@ state_building_generic_logistics_hub_max_level_add = {
 	percent = no
 }
 
+state_building_resettlement_camp_max_level_add = {
+	color = good
+	percent = no
+}
+state_building_resettlement_colony_max_level_add = {
+	color = good
+	percent = no
+}
+
 
 # ----- Global Warming -----
 country_greenhouse_gas_emissions_mult = {
@@ -1889,23 +1913,6 @@ country_combined_arms_bonus_enabled_bool = {
 	boolean = yes
 	game_data = {
 		ai_value = 5000
-	}
-}
-
-# Custom modifier types for mod-added mechanics
-country_trade_route_competitiveness_mult = {
-	color = good
-	percent = yes
-	game_data = {
-		ai_value = 50
-	}
-}
-
-state_radicals_from_discrimination_mult = {
-	color = bad
-	percent = yes
-	game_data = {
-		ai_value = 0
 	}
 }
 

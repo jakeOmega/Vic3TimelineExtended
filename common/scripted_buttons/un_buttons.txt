@@ -479,7 +479,8 @@ un_champion_order_button = {
 	possible = {
 		has_modifier = un_member_modifier
 		country_rank >= rank_value:great_power
-		NOT = { has_modifier = un_influence_cooldown }
+		NOT = { has_modifier = un_champion_order_cost }
+		NOT = { has_modifier = un_undermine_order_cost }
 	}
 
 	ai_chance = {
@@ -507,11 +508,9 @@ un_champion_order_button = {
 				limit = { global_country_ranking < 7 }
 				change_variable = { name = un_authority add = 1 }
 			}
-			# Cost: authority and influence (these don't scale with GDP, so flat values are fine)
-			add_authority = -50
-			add_influence = -100
+			# Cost: temporary authority and influence drain
 			add_modifier = {
-				name = un_influence_cooldown
+				name = un_champion_order_cost
 				days = 365
 				is_decaying = yes
 			}
@@ -531,7 +530,8 @@ un_undermine_order_button = {
 	possible = {
 		has_modifier = un_member_modifier
 		country_rank >= rank_value:great_power
-		NOT = { has_modifier = un_influence_cooldown }
+		NOT = { has_modifier = un_champion_order_cost }
+		NOT = { has_modifier = un_undermine_order_cost }
 	}
 
 	ai_chance = {
@@ -559,11 +559,9 @@ un_undermine_order_button = {
 				limit = { global_country_ranking < 7 }
 				change_variable = { name = un_authority add = -1 }
 			}
-			# Cost: authority and influence (less cost to tear down)
-			add_authority = -25
-			add_influence = -50
+			# Cost: temporary authority and influence drain (less cost to tear down)
 			add_modifier = {
-				name = un_influence_cooldown
+				name = un_undermine_order_cost
 				days = 365
 				is_decaying = yes
 			}

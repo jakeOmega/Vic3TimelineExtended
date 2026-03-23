@@ -20,6 +20,10 @@ colonial_collapse_effect = {
             
             # Not a subject (puppet states are managed by overlords)
             is_subject = no
+
+            any_civil_war = {
+                always = no
+            }
             
             # Population threshold: very small, poor countries collapse
             OR = {

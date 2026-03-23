@@ -347,6 +347,7 @@ decree_antiterrorism_campaign = {
 decree_promote_tourism = {
 	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
 	modifier = {
+		building_tourism_industry_throughput_add = 0.5
 	}
 	
 	cost = 100

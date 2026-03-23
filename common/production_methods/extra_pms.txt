@@ -9565,6 +9565,7 @@ pm_advanced_composite_armor = {
 
 	unlocking_production_methods = {
 		pm_mass_automobile_production
+		pm_modern_automobile_production
         pm_electric_cars
         pm_fusion_battery_vehicles
 	}
@@ -9597,6 +9598,7 @@ pm_active_protection_systems = {
 	}
 
 	unlocking_production_methods = {
+		pm_modern_automobile_production
 		pm_electric_cars
 		pm_fusion_battery_vehicles
 	}
@@ -9904,6 +9906,7 @@ pm_airport = {
 			building_economy_of_scale_level_cap_add = 5
 			state_infrastructure_add = 50
 			state_infrastructure_from_aeroplanes_consumption_add = 1
+			goods_output_tourism_mult = 0.15
 		}
 	}
 
@@ -9951,6 +9954,7 @@ pm_spaceport = {
 			building_economy_of_scale_level_cap_add = 10
 			state_infrastructure_add = 100
 			state_infrastructure_from_aeroplanes_consumption_add = 2
+			goods_output_tourism_mult = 0.15
 		}
 	}
 

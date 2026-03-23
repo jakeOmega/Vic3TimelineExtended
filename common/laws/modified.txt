@@ -162,6 +162,8 @@ REPLACE:law_ethnostate = {
 
 		country_bureaucracy_investment_cost_factor_mult = -0.25
 
+		goods_output_tourism_mult = -0.20
+
 		# Homeland system: ethnostate aggressively reshapes cultural demographics
 		country_homelands_can_change_bool = yes
 		state_homeland_creation_threshold_add = -0.10
@@ -329,6 +331,8 @@ REPLACE:law_racial_segregation = {
 
 		#Fervor
 		country_primary_culture_fervor_from_laws_add = 10
+
+		goods_output_tourism_mult = -0.05
 	}
 
 	can_impose = {
@@ -507,6 +511,8 @@ REPLACE:law_multicultural = {
 		state_homeland_creation_threshold_add = 0.10
 		state_homeland_removal_threshold_add = -0.05
 		state_homeland_change_speed_mult = -0.25
+
+		goods_output_tourism_mult = 0.15
 	}
 
 	can_impose = {
@@ -563,5 +569,24 @@ INJECT:law_total_separation = {
 INJECT:law_state_atheism = {
 	modifier = {
 		country_bureaucracy_investment_cost_factor_mult = -0.05
+	}
+}
+
+# Tourism impact from repressive/progressive laws
+INJECT:law_secret_police = {
+	modifier = {
+		goods_output_tourism_mult = -0.30
+	}
+}
+
+INJECT:law_outlawed_dissent = {
+	modifier = {
+		goods_output_tourism_mult = -0.30
+	}
+}
+
+INJECT:law_guaranteed_liberties = {
+	modifier = {
+		goods_output_tourism_mult = 0.10
 	}
 }

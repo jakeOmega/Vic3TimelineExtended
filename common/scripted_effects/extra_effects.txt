@@ -280,10 +280,6 @@ expand_building_private_construction = {
 		limit = { is_building_type = building_railway }
 		state = { start_privately_funded_building_construction = building_railway }
 	}
-	else_if = {
-		limit = { is_building_type = fmc_building_construction_site }
-		state = { start_privately_funded_building_construction = fmc_building_construction_site }
-	}
 }
 
 expand_random_building = {
@@ -994,6 +990,8 @@ remove_all_langreform_modifiers = {
 	remove_modifier = langreform_minority_protection
 	remove_modifier = langreform_national_focus
 	remove_variable = language_reform_type
+	remove_variable = langreform_academy_pending
+	remove_variable = langreform_minority_pending
 }
 
 # =================================================================
@@ -1013,6 +1011,8 @@ remove_all_langreform_modifiers = {
 #   Penal Transportation:    ~150  (convict/undesirable deportation)
 # =================================================================
 resettlement_transfer_effect = {
+	debug_log = "RESETTLE_DEBUG: effect entered"
+
 	# Find a destination state (another state owned by the same country
 	# that has a resettlement colony)
 	owner = {
@@ -1035,26 +1035,15 @@ resettlement_transfer_effect = {
 			modifier:state_resettlement_transfer_add > 0
 		}
 
-		# Move population from the largest movable pop employed at the camp.
-		# Only laborers, farmers, and peasants are settlers that get moved;
-		# bureaucrats, soldiers, officers, and clerks are administrative staff
-		# and remain in the source state.
-		ordered_scope_pop = {
+		every_scope_pop = {
 			limit = {
 				pop_employment_building = building_resettlement_camp
 				OR = {
 					is_pop_type = laborers
-					is_pop_type = farmers
-					is_pop_type = peasants
+					is_pop_type = slaves
 				}
 			}
-			order_by = total_size
-			position = 0
-			check_range_bounds = no
-			move_partial_pop = {
-				state = scope:resettlement_destination
-				population = modifier:state_resettlement_transfer_add
-			}
+			move_pop = scope:resettlement_destination
 		}
 	}
 }

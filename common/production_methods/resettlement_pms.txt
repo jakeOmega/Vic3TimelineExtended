@@ -51,8 +51,7 @@ pm_homesteading_program = {
 			# Administrative staff (not moved)
 			building_employment_bureaucrats_add = 100
 			# Settlers being processed (moved to destination)
-			building_employment_farmers_add = 200
-			building_employment_laborers_add = 200
+			building_employment_laborers_add = 50
 		}
 	}
 
@@ -92,8 +91,7 @@ pm_organized_colonization = {
 			building_employment_bureaucrats_add = 150
 			building_employment_clerks_add = 100
 			# Settlers being processed (moved to destination)
-			building_employment_farmers_add = 150
-			building_employment_laborers_add = 250
+			building_employment_laborers_add = 100
 		}
 	}
 
@@ -142,28 +140,13 @@ pm_forced_resettlement = {
 			building_employment_soldiers_add = 200
 			building_employment_officers_add = 50
 			# People being forcibly relocated (moved to destination)
-			building_employment_laborers_add = 300
-			building_employment_peasants_add = 100
+			building_employment_laborers_add = 200
 		}
 	}
 
-	ai_value = {
-		value = 0
-
-		# AI only uses forced methods with authoritarian laws
-		if = {
-			limit = {
-				owner = {
-					OR = {
-						has_law_or_variant = law_type:law_autocracy
-						has_law_or_variant = law_type:law_single_party_state
-						has_law_or_variant = law_type:law_ethnostate
-					}
-				}
-			}
-			add = 300
-		}
-	}
+	# ai_value blocks don't support script values in PMs - use flat number
+	# AI should rarely pick forced resettlement over peaceful alternatives
+	ai_value = 50
 }
 
 # Punitive: transportation of convicts and undesirables to remote territories
@@ -203,31 +186,11 @@ pm_penal_transportation = {
 			building_employment_soldiers_add = 200
 			building_employment_bureaucrats_add = 50
 			# Convicts being transported (moved to destination)
-			building_employment_laborers_add = 300
-			building_employment_peasants_add = 100
+			building_employment_laborers_add = 75
 		}
 	}
 
-	ai_value = {
-		value = 0
-
-		# AI uses penal transportation when it has colonial territory and authoritarian government
-		if = {
-			limit = {
-				owner = {
-					OR = {
-						has_law_or_variant = law_type:law_autocracy
-						has_law_or_variant = law_type:law_oligarchy
-						has_law_or_variant = law_type:law_monarchy
-					}
-					any_scope_state = {
-						is_incorporated = no
-					}
-				}
-			}
-			add = 150
-		}
-	}
+	ai_value = 25
 }
 
 # Modern: government-funded relocation with financial incentives and job placement
@@ -263,8 +226,7 @@ pm_incentivized_relocation = {
 			building_employment_bureaucrats_add = 200
 			building_employment_clerks_add = 100
 			# Volunteers being relocated (moved to destination)
-			building_employment_farmers_add = 150
-			building_employment_laborers_add = 200
+			building_employment_laborers_add = 150
 		}
 	}
 
@@ -384,30 +346,7 @@ pm_administered_territory = {
 		}
 	}
 
-	ai_value = {
-		value = 0
-
-		# AI uses administered territory for authoritarian settlement programs
-		if = {
-			limit = {
-				owner = {
-					OR = {
-						has_law_or_variant = law_type:law_autocracy
-						has_law_or_variant = law_type:law_single_party_state
-					}
-				}
-			}
-			add = 300
-		}
-
-		# Also good for unincorporated territory
-		if = {
-			limit = {
-				is_incorporated = no
-			}
-			add = 200
-		}
-	}
+	ai_value = 50
 }
 
 # Modern development zone with economic incentives and infrastructure investment

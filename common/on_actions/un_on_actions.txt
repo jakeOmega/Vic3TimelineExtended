@@ -1,15 +1,30 @@
 ﻿# United Nations events - wired into monthly country pulse
 un_events_on_action = {
 	effect = {
-		# Formation event - fires once when tech is researched
+		# Formation event - fires globally once when 3+ great powers have the tech
+		# Only one GP's monthly pulse triggers this; it then fires for all independent countries
 		if = {
 			limit = {
+				NOT = { has_global_variable = un_founded }
+				country_rank >= rank_value:great_power
 				has_technology_researched = intergovernmental_organizations
-				NOT = { has_variable = un_charter_signed }
-				NOT = { has_modifier = un_member_modifier }
-				country_rank >= rank_value:major_power
+				any_country = {
+					country_rank >= rank_value:great_power
+					has_technology_researched = intergovernmental_organizations
+					count >= 3
+				}
 			}
-			trigger_event = { id = un_events.1 }
+			set_global_variable = un_founded
+			# Fire formation event for ALL independent countries
+			every_country = {
+				limit = {
+					is_subject = no
+					NOT = { is_country_type = decentralized }
+					NOT = { has_variable = un_charter_signed }
+					NOT = { has_modifier = un_member_modifier }
+				}
+				trigger_event = { id = un_events.1 }
+			}
 		}
 
 		# Recurring events - only for members
@@ -21,6 +36,7 @@ un_events_on_action = {
 				75 = { } # Nothing happens most months
 				3 = {
 					trigger = {
+						NOT = { has_global_variable = un_vote_active }
 						any_country = {
 							has_diplomatic_pact = { who = ROOT type = rivalry }
 							is_at_war = yes
@@ -31,6 +47,7 @@ un_events_on_action = {
 				}
 				3 = {
 					trigger = {
+						NOT = { has_global_variable = un_vote_active }
 						has_technology_researched = human_rights
 						var:un_authority >= 40
 						NOT = { has_modifier = un_human_rights_declaration_modifier }
@@ -58,6 +75,7 @@ un_events_on_action = {
 				}
 				2 = {
 					trigger = {
+						NOT = { has_global_variable = un_vote_active }
 						country_rank >= rank_value:great_power
 						var:un_authority >= 30
 						NOT = { has_modifier = un_reform_champion_modifier }
@@ -93,6 +111,7 @@ un_events_on_action = {
 				}
 				2 = {
 					trigger = {
+						NOT = { has_global_variable = un_vote_active }
 						var:un_authority >= 40
 						NOT = { has_modifier = un_heritage_program_modifier }
 						NOT = { has_modifier = un_heritage_token_modifier }
@@ -125,6 +144,7 @@ un_events_on_action = {
 				}
 				2 = {
 					trigger = {
+						NOT = { has_global_variable = un_vote_active }
 						var:un_authority >= 30
 						NOT = { has_modifier = un_decolonization_champion_modifier }
 						NOT = { has_modifier = un_colonial_defender_modifier }
@@ -151,6 +171,7 @@ un_events_on_action = {
 				}
 				2 = {
 					trigger = {
+						NOT = { has_global_variable = un_vote_active }
 						var:un_authority >= 40
 						has_technology_researched = nuclear_weapons
 						NOT = { has_modifier = un_nonproliferation_modifier }
@@ -173,6 +194,7 @@ un_events_on_action = {
 				}
 				2 = {
 					trigger = {
+						NOT = { has_global_variable = un_vote_active }
 						country_rank >= rank_value:major_power
 						var:un_authority >= 20
 						has_technology_researched = antibiotics
@@ -183,6 +205,7 @@ un_events_on_action = {
 				}
 				2 = {
 					trigger = {
+						NOT = { has_global_variable = un_vote_active }
 						var:un_authority >= 30
 						has_technology_researched = environmental_movement
 						NOT = { has_modifier = un_climate_binding_modifier }
@@ -192,6 +215,7 @@ un_events_on_action = {
 				}
 				2 = {
 					trigger = {
+						NOT = { has_global_variable = un_vote_active }
 						var:un_authority >= 20
 						NOT = { has_modifier = un_refugee_program_modifier }
 						NOT = { has_modifier = un_refugee_closed_modifier }
@@ -207,6 +231,7 @@ un_events_on_action = {
 				}
 				2 = {
 					trigger = {
+						NOT = { has_global_variable = un_vote_active }
 						var:un_authority >= 40
 						has_technology_researched = space_exploration
 						country_rank >= rank_value:major_power

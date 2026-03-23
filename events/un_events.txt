@@ -33,10 +33,11 @@ un_events.1 = {
 	duration = 3
 
 	trigger = {
-		has_technology_researched = intergovernmental_organizations
+		# Fired globally by on_action when 3+ great powers have the tech
 		NOT = { has_variable = un_charter_signed }
 		NOT = { has_modifier = un_member_modifier }
-		country_rank >= rank_value:major_power
+		is_subject = no
+		NOT = { is_country_type = decentralized }
 	}
 
 	immediate = {
@@ -157,6 +158,8 @@ un_events.2 = {
 			}
 			save_scope_as = defender_country
 		}
+		# Reserve the vote slot immediately so no other country can start one
+		set_global_variable = un_vote_active
 	}
 
 	# Option A: Propose condemnation resolution to the General Assembly
@@ -172,7 +175,6 @@ un_events.2 = {
 		}
 		custom_tooltip = un_vote_initiated_tt
 		# Set up global vote
-		set_global_variable = un_vote_active
 		set_global_variable = un_vote_topic_condemn
 		set_global_variable = { name = un_vote_support value = 1 }
 		set_global_variable = { name = un_vote_oppose value = 0 }
@@ -228,6 +230,8 @@ un_events.2 = {
 			ANTI_AMOUNT = -1
 			FACTOR = appeasement_relations_increased
 		}
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 
 	# Option C: Abstain - avoid entanglements
@@ -243,6 +247,8 @@ un_events.2 = {
 		custom_tooltip = un_authority_change_minus_2
 		change_variable = { name = un_authority add = -2 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 }
 
@@ -283,6 +289,8 @@ un_events.3 = {
 	}
 
 	immediate = {
+		# Reserve the vote slot immediately so no other country can start one
+		set_global_variable = un_vote_active
 	}
 
 	# Option A: Propose Universal Declaration to the General Assembly
@@ -302,7 +310,6 @@ un_events.3 = {
 		}
 		custom_tooltip = un_vote_initiated_tt
 		# Set up global vote
-		set_global_variable = un_vote_active
 		set_global_variable = un_vote_topic_human_rights
 		set_global_variable = { name = un_vote_support value = 1 }
 		set_global_variable = { name = un_vote_oppose value = 0 }
@@ -343,6 +350,8 @@ un_events.3 = {
 		}
 		custom_tooltip = un_authority_change_plus_2
 		change_variable = { name = un_authority add = 2 }
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 
 	# Option C: Refuse to sign
@@ -367,6 +376,8 @@ un_events.3 = {
 			is_decaying = yes
 		}
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 }
 
@@ -613,9 +624,12 @@ un_events.6 = {
 		var:un_authority >= 30
 		NOT = { has_modifier = un_reform_champion_modifier }
 		NOT = { has_modifier = un_reform_opponent_modifier }
+		NOT = { has_global_variable = un_vote_active }
 	}
 
 	immediate = {
+		# Reserve the vote slot immediately so no other country can start one
+		set_global_variable = un_vote_active
 		if = {
 			limit = {
 				any_country = {
@@ -632,7 +646,7 @@ un_events.6 = {
 		}
 	}
 
-	# Option A: Champion reform - expand representation
+	# Option A: Propose reform resolution to the General Assembly
 	option = {
 		name = un_events.6.a
 		default_option = yes
@@ -643,19 +657,35 @@ un_events.6 = {
 				add = 3
 			}
 		}
+		custom_tooltip = un_vote_initiated_tt
+		# Set up global vote
+		set_global_variable = un_vote_topic_reform
+		set_global_variable = { name = un_vote_support value = 1 }
+		set_global_variable = { name = un_vote_oppose value = 0 }
+		set_global_variable = { name = un_vote_net value = 1 }
+		save_scope_as = un_vote_proposer
+		set_global_variable = { name = un_vote_proposer_country value = ROOT }
+		# Proposer champions reform
 		add_modifier = {
 			name = un_reform_champion_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-		# Costs prestige - giving up exclusive power
 		add_radicals = {
 			value = very_small_radicals
 			strata = upper
 		}
+		# Trigger vote for all other UN members
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				NOT = { this = ROOT }
+			}
+			trigger_event = { id = un_vote.1 days = 30 }
+		}
+		# Schedule results event
+		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Defend the status quo - preserve GP veto power
@@ -679,6 +709,8 @@ un_events.6 = {
 			value = small_radicals
 			strata = upper
 		}
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 
 	# Option C: Propose a compromise
@@ -694,6 +726,8 @@ un_events.6 = {
 		}
 		custom_tooltip = un_authority_change_plus_2
 		change_variable = { name = un_authority add = 2 }
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 }
 
@@ -950,12 +984,15 @@ un_events.9 = {
 		var:un_authority >= 40
 		NOT = { has_modifier = un_heritage_program_modifier }
 		NOT = { has_modifier = un_heritage_token_modifier }
+		NOT = { has_global_variable = un_vote_active }
 	}
 
 	immediate = {
+		# Reserve the vote slot immediately so no other country can start one
+		set_global_variable = un_vote_active
 	}
 
-	# Option A: Fund a full heritage preservation program
+	# Option A: Propose heritage preservation program to the General Assembly
 	option = {
 		name = un_events.9.a
 		default_option = yes
@@ -966,15 +1003,27 @@ un_events.9 = {
 				add = 2
 			}
 		}
+		custom_tooltip = un_vote_initiated_tt
+		# Set up global vote
+		set_global_variable = un_vote_topic_heritage
+		set_global_variable = { name = un_vote_support value = 1 }
+		set_global_variable = { name = un_vote_oppose value = 0 }
+		set_global_variable = { name = un_vote_net value = 1 }
+		save_scope_as = un_vote_proposer
+		set_global_variable = { name = un_vote_proposer_country value = ROOT }
+		# Proposer adopts immediately
 		add_modifier = { name = un_heritage_program_modifier }
-		# Establish UNESCO
-		if = {
-			limit = { NOT = { has_global_variable = un_agency_unesco } }
-			set_global_variable = un_agency_unesco
-		}
-		custom_tooltip = un_authority_change_plus_3
-		change_variable = { name = un_authority add = 3 }
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		# Trigger vote for all other UN members
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				NOT = { this = ROOT }
+			}
+			trigger_event = { id = un_vote.1 days = 30 }
+		}
+		# Schedule results event
+		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Contribute nominally
@@ -990,6 +1039,8 @@ un_events.9 = {
 		}
 		custom_tooltip = un_authority_change_plus_1
 		change_variable = { name = un_authority add = 1 }
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 
 	# Option C: Culture is a domestic matter
@@ -1008,6 +1059,8 @@ un_events.9 = {
 			value = very_small_radicals
 			strata = upper
 		}
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 }
 
@@ -1237,7 +1290,7 @@ un_events.12 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/refugee_crisis.dds"
+		texture = "gfx/event_pictures/colonial_protest.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1264,15 +1317,18 @@ un_events.12 = {
 		var:un_authority >= 30
 		NOT = { has_modifier = un_decolonization_champion_modifier }
 		NOT = { has_modifier = un_colonial_defender_modifier }
+		NOT = { has_global_variable = un_vote_active }
 		any_country = {
 			any_subject_or_below = { count >= 1 }
 		}
 	}
 
 	immediate = {
+		# Reserve the vote slot immediately so no other country can start one
+		set_global_variable = un_vote_active
 	}
 
-	# Option A: Champion decolonization - support liberation movements
+	# Option A: Propose decolonization resolution to the General Assembly
 	option = {
 		name = un_events.12.a
 		default_option = yes
@@ -1287,15 +1343,32 @@ un_events.12 = {
 				add = -6
 			}
 		}
+		custom_tooltip = un_vote_initiated_tt
+		# Set up global vote
+		set_global_variable = un_vote_topic_decolonization
+		set_global_variable = { name = un_vote_support value = 1 }
+		set_global_variable = { name = un_vote_oppose value = 0 }
+		set_global_variable = { name = un_vote_net value = 1 }
+		save_scope_as = un_vote_proposer
+		set_global_variable = { name = un_vote_proposer_country value = ROOT }
+		# Proposer champions decolonization
 		add_modifier = {
 			name = un_decolonization_champion_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		# Trigger vote for all other UN members
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				NOT = { this = ROOT }
+			}
+			trigger_event = { id = un_vote.1 days = 30 }
+		}
+		# Schedule results event
+		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Defend development programs in overseas territories
@@ -1316,6 +1389,8 @@ un_events.12 = {
 		custom_tooltip = un_authority_change_minus_3
 		change_variable = { name = un_authority add = -3 }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 
 	# Option C: Call for a gradual, orderly transition
@@ -1326,6 +1401,8 @@ un_events.12 = {
 		}
 		custom_tooltip = un_authority_change_plus_1
 		change_variable = { name = un_authority add = 1 }
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 }
 
@@ -1510,6 +1587,8 @@ un_events.14 = {
 	}
 
 	immediate = {
+		# Reserve the vote slot immediately so no other country can start one
+		set_global_variable = un_vote_active
 	}
 
 	# Option A: Sign and propose the Non-Proliferation Treaty
@@ -1525,7 +1604,6 @@ un_events.14 = {
 		}
 		custom_tooltip = un_vote_initiated_tt
 		# Set up global vote
-		set_global_variable = un_vote_active
 		set_global_variable = un_vote_topic_npt
 		set_global_variable = { name = un_vote_support value = 1 }
 		set_global_variable = { name = un_vote_oppose value = 0 }
@@ -1560,6 +1638,8 @@ un_events.14 = {
 		}
 		custom_tooltip = un_authority_change_plus_2
 		change_variable = { name = un_authority add = 2 }
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 
 	# Option C: We will not limit our deterrent
@@ -1584,6 +1664,8 @@ un_events.14 = {
 		custom_tooltip = un_authority_change_minus_5
 		change_variable = { name = un_authority add = -5 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 }
 
@@ -1594,7 +1676,7 @@ un_events.15 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/development_aid.dds"
+		texture = "gfx/event_pictures/development_protest.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1748,12 +1830,14 @@ un_events.16 = {
 		has_technology_researched = antibiotics
 		NOT = { has_modifier = un_pandemic_cooperation_modifier }
 		NOT = { has_modifier = un_pandemic_isolationist_modifier }
+		NOT = { has_global_variable = un_vote_active }
 	}
 
 	immediate = {
+		set_global_variable = un_vote_active
 	}
 
-	# Option A: Full international cooperation - share data and resources
+	# Option A: Propose global pandemic cooperation to the General Assembly
 	option = {
 		name = un_events.16.a
 		default_option = yes
@@ -1764,16 +1848,28 @@ un_events.16 = {
 				add = 3
 			}
 		}
+		custom_tooltip = un_vote_initiated_tt
+		# Set up global vote
+		set_global_variable = un_vote_topic_pandemic
+		set_global_variable = { name = un_vote_support value = 1 }
+		set_global_variable = { name = un_vote_oppose value = 0 }
+		set_global_variable = { name = un_vote_net value = 1 }
+		save_scope_as = un_vote_proposer
+		set_global_variable = { name = un_vote_proposer_country value = ROOT }
+		# Proposer cooperates immediately
 		add_modifier = { name = un_pandemic_cooperation_modifier }
-		# Establish World Health Organization
-		if = {
-			limit = { NOT = { has_global_variable = un_agency_who } }
-			set_global_variable = un_agency_who
-		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		# Trigger vote for all other UN members
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				NOT = { this = ROOT }
+			}
+			trigger_event = { id = un_vote.1 days = 30 }
+		}
+		# Schedule results event
+		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Cooperate selectively - share what doesn't hurt us
@@ -1784,6 +1880,7 @@ un_events.16 = {
 		}
 		custom_tooltip = un_authority_change_plus_2
 		change_variable = { name = un_authority add = 2 }
+		remove_global_variable = un_vote_active
 	}
 
 	# Option C: Prioritize our domestic response entirely
@@ -1807,6 +1904,7 @@ un_events.16 = {
 			value = very_small_radicals
 			strata = upper
 		}
+		remove_global_variable = un_vote_active
 	}
 }
 
@@ -1848,6 +1946,8 @@ un_events.17 = {
 	}
 
 	immediate = {
+		# Reserve the vote slot immediately so no other country can start one
+		set_global_variable = un_vote_active
 	}
 
 	# Option A: Propose binding climate accord to the General Assembly
@@ -1863,7 +1963,6 @@ un_events.17 = {
 		}
 		custom_tooltip = un_vote_initiated_tt
 		# Set up global vote
-		set_global_variable = un_vote_active
 		set_global_variable = un_vote_topic_climate
 		set_global_variable = { name = un_vote_support value = 1 }
 		set_global_variable = { name = un_vote_oppose value = 0 }
@@ -1894,6 +1993,8 @@ un_events.17 = {
 		}
 		custom_tooltip = un_authority_change_plus_2
 		change_variable = { name = un_authority add = 2 }
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 
 	# Option C: Economic growth must come first
@@ -1914,6 +2015,8 @@ un_events.17 = {
 		custom_tooltip = un_authority_change_minus_5
 		change_variable = { name = un_authority add = -5 }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		# Release the vote slot since we didn't start one
+		remove_global_variable = un_vote_active
 	}
 }
 
@@ -1950,6 +2053,7 @@ un_events.18 = {
 		var:un_authority >= 20
 		NOT = { has_modifier = un_refugee_program_modifier }
 		NOT = { has_modifier = un_refugee_closed_modifier }
+		NOT = { has_global_variable = un_vote_active }
 		any_country = {
 			NOT = { this = ROOT }
 			OR = {
@@ -1962,6 +2066,7 @@ un_events.18 = {
 	}
 
 	immediate = {
+		set_global_variable = un_vote_active
 		random_country = {
 			limit = {
 				NOT = { this = ROOT }
@@ -1974,7 +2079,7 @@ un_events.18 = {
 		}
 	}
 
-	# Option A: Launch a major resettlement program
+	# Option A: Propose international refugee resolution to the General Assembly
 	option = {
 		name = un_events.18.a
 		default_option = yes
@@ -1985,25 +2090,35 @@ un_events.18 = {
 				add = 4
 			}
 		}
-		add_modifier = { name = un_refugee_program_modifier }
-		# Establish UN Refugee Agency
+		custom_tooltip = un_vote_initiated_tt
+		# Set up global vote
+		set_global_variable = un_vote_topic_refugee
+		set_global_variable = { name = un_vote_support value = 1 }
+		set_global_variable = { name = un_vote_oppose value = 0 }
+		set_global_variable = { name = un_vote_net value = 1 }
+		save_scope_as = un_vote_proposer
+		set_global_variable = { name = un_vote_proposer_country value = ROOT }
 		if = {
-			limit = { NOT = { has_global_variable = un_agency_unhcr } }
-			set_global_variable = un_agency_unhcr
+			limit = { exists = scope:refugee_source }
+			set_global_variable = { name = un_vote_target_country value = scope:refugee_source }
 		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
-		change_relations = { country = scope:refugee_source value = 20 }
+		# Proposer commits to resettlement
+		add_modifier = { name = un_refugee_program_modifier }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = {
 			value = small_radicals
 			strata = lower
 		}
-		# Notify the refugee source of resettlement
-		save_scope_as = resettlement_host
-		scope:refugee_source = {
-			trigger_event = { id = un_events.103 days = 14 }
+		# Trigger vote for all other UN members
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				NOT = { this = ROOT }
+			}
+			trigger_event = { id = un_vote.1 days = 30 }
 		}
+		# Schedule results event
+		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Accept a managed resettlement quota
@@ -2014,7 +2129,11 @@ un_events.18 = {
 		}
 		custom_tooltip = un_authority_change_plus_2
 		change_variable = { name = un_authority add = 2 }
-		change_relations = { country = scope:refugee_source value = 10 }
+		if = {
+			limit = { exists = scope:refugee_source }
+			change_relations = { country = scope:refugee_source value = 10 }
+		}
+		remove_global_variable = un_vote_active
 	}
 
 	# Option C: Close our borders - we have our own problems
@@ -2034,12 +2153,16 @@ un_events.18 = {
 		}
 		custom_tooltip = un_authority_change_minus_3
 		change_variable = { name = un_authority add = -3 }
-		change_relations = { country = scope:refugee_source value = -10 }
+		if = {
+			limit = { exists = scope:refugee_source }
+			change_relations = { country = scope:refugee_source value = -10 }
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
 		}
 		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		remove_global_variable = un_vote_active
 	}
 }
 
@@ -2078,12 +2201,14 @@ un_events.19 = {
 		country_rank >= rank_value:major_power
 		NOT = { has_modifier = un_space_partnership_modifier }
 		NOT = { has_modifier = un_space_independent_modifier }
+		NOT = { has_global_variable = un_vote_active }
 	}
 
 	immediate = {
+		set_global_variable = un_vote_active
 	}
 
-	# Option A: Full partnership - share research and costs
+	# Option A: Propose international space cooperation to the General Assembly
 	option = {
 		name = un_events.19.a
 		default_option = yes
@@ -2094,10 +2219,27 @@ un_events.19 = {
 				add = 2
 			}
 		}
+		custom_tooltip = un_vote_initiated_tt
+		# Set up global vote
+		set_global_variable = un_vote_topic_space
+		set_global_variable = { name = un_vote_support value = 1 }
+		set_global_variable = { name = un_vote_oppose value = 0 }
+		set_global_variable = { name = un_vote_net value = 1 }
+		save_scope_as = un_vote_proposer
+		set_global_variable = { name = un_vote_proposer_country value = ROOT }
+		# Proposer commits to partnership immediately
 		add_modifier = { name = un_space_partnership_modifier }
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		# Trigger vote for all other UN members
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				NOT = { this = ROOT }
+			}
+			trigger_event = { id = un_vote.1 days = 30 }
+		}
+		# Schedule results event
+		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Limited contribution - observe but don't lead
@@ -2108,6 +2250,7 @@ un_events.19 = {
 		}
 		custom_tooltip = un_authority_change_plus_2
 		change_variable = { name = un_authority add = 2 }
+		remove_global_variable = un_vote_active
 	}
 
 	# Option C: Our space program serves national interests
@@ -2128,6 +2271,7 @@ un_events.19 = {
 		custom_tooltip = un_authority_change_minus_3
 		change_variable = { name = un_authority add = -3 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		remove_global_variable = un_vote_active
 	}
 }
 

@@ -2719,58 +2719,17 @@ tourism_bonus_from_urban_centers = {
 	}
 }
 
-# Large bonus from Airports (building has a max level, so no DR needed)
-tourism_bonus_from_airports = {
-	value = 0
-	if = {
-		limit = { has_building = building_airport }
-		add = {
-			value = b:building_airport.level
-			multiply = 15	# +15% per level
-		}
-	}
-	divide = 100	# Normalize to a 0-100 scale
-}
+# Large bonus from Airports — now applied via state_modifiers on pm_airport
+# tourism_bonus_from_airports: REMOVED (moved to goods_output_tourism_mult = 0.15 per level on airport/spaceport PMs)
 
-# Penalties from repressive laws
-tourism_penalty_from_laws = {
-	value = 0
-	if = { limit = { owner = { has_law = law_type:law_secret_police } } subtract = 30 }
-	if = { limit = { owner = { has_law = law_type:law_outlawed_dissent } } subtract = 30 }
-	if = { limit = { owner = { has_law = law_type:law_ethnostate } } subtract = 20 }
-	if = { limit = { owner = { has_law = law_type:law_racial_segregation } } subtract = 5 }
-	if = { limit = { owner = { has_law = law_type:law_intrusive_surveillance } } subtract = 25 }
-	if = { limit = { owner = { has_law = law_type:law_state_controlled_internet } } subtract = 5 }
-	divide = 100	# Normalize to a 0-100 scale
-}
+# Law bonuses/penalties — now applied via goods_output_tourism_mult on each law's modifier block
+# tourism_penalty_from_laws: REMOVED (moved to INJECT/REPLACE on individual laws)
+# tourism_bonus_from_laws: REMOVED (moved to INJECT/REPLACE on individual laws)
+# tourism_net_bonus_from_laws: REMOVED
 
-# Bonuses from progressive laws
-tourism_bonus_from_laws = {
-	value = 0
-	if = { limit = { owner = { has_law = law_type:law_guaranteed_liberties } } add = 10 }
-	if = { limit = { owner = { has_law = law_type:law_multicultural } } add = 15 }
-	if = { limit = { owner = { has_law = law_type:law_moderate_data_privacy } } add = 5 }
-	if = { limit = { owner = { has_law = law_type:law_strong_privacy_rights } } add = 10 }
-	divide = 100	# Normalize to a 0-100 scale
-}
-
-tourism_net_bonus_from_laws = {
-	value = tourism_bonus_from_laws
-	add = tourism_penalty_from_laws
-}
-
-# Penalty from instability
-tourism_penalty_from_turmoil = {
-	value = turmoil
-	multiply = -1
-}
-
-# Penalty from environmental damage
-tourism_penalty_from_pollution = {
-	value = state_region.pollution_amount
-	divide = 255
-	multiply = -2
-}
+# Turmoil, pollution, obstinance penalties — now applied via INJECT on code static modifiers
+# tourism_penalty_from_turmoil: REMOVED (moved to INJECT:state_turmoil)
+# tourism_penalty_from_pollution: REMOVED (moved to INJECT:state_region_pollution_general)
 
 
 # --- INDIVIDUAL TOURISM THROUGHPUT MODIFIERS ---
@@ -2912,25 +2871,15 @@ tourism_throughput_from_monuments = {
 	}
 }
 
-# Bonus from a promotional state decree
-tourism_throughput_from_decree = {
-	value = 0
-	if = {
-		limit = { has_decree = decree_promote_tourism } # Assuming this decree is created
-		add = 0.5
-	}
-}
+# Decree bonus — now applied via building_tourism_industry_throughput_add on decree_promote_tourism
+# tourism_throughput_from_decree: REMOVED (moved to decree modifier block)
 
 # --- TOTAL CALCULATIONS ---
 
 total_tourism_output_bonus_percent = {
 	value = tourism_bonus_from_base_appeal
 	add = tourism_bonus_from_urban_centers
-	add = tourism_bonus_from_airports
-	add = tourism_penalty_from_laws
-	add = tourism_bonus_from_laws
-	add = tourism_penalty_from_turmoil
-	add = tourism_penalty_from_pollution
+	# Airports, laws, turmoil, pollution, obstinance now handled via direct modifiers
 }
 
 total_tourism_throughput_bonus_percent = {
@@ -2939,5 +2888,5 @@ total_tourism_throughput_bonus_percent = {
 	add = tourism_throughput_from_art
 	add = tourism_throughput_from_parks
 	add = tourism_throughput_from_monuments
-	add = tourism_throughput_from_decree
+	# Decree now handled via decree modifier block
 }

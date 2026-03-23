@@ -75,6 +75,5 @@ is_privately_expandable_building_type = {
 		is_building_type = building_munition_plant
 		is_building_type = building_art_academy
 		is_building_type = building_railway
-		is_building_type = fmc_building_construction_site
 	}
 }

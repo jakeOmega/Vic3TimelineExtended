@@ -200,9 +200,12 @@ on_revolution_start = {
 
 fmc_on_revolution_start = {
     effect = {
-        scope:target = {
-            trigger_event = {
-                id = fmc_update_events.4
+        if = {
+            limit = { exists = scope:target }
+            scope:target = {
+                trigger_event = {
+                    id = fmc_update_events.4
+                }
             }
         }
         trigger_event = {
