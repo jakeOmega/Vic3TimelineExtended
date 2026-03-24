@@ -11,10 +11,15 @@ Usage:
     python mod_state_client.py technologies --era 5
     python mod_state_client.py raw Laws law_monarchy
     python mod_state_client.py keys Laws
+    python mod_state_client.py references law_anarchy
+    python mod_state_client.py tech-tree nuclear_energy
+    python mod_state_client.py modifier-search goods_output
+    python mod_state_client.py unlocked-by nuclear_energy
+    python mod_state_client.py filter Technologies era era_5
 
 Alternatively, query the server directly from PowerShell:
-    Invoke-RestMethod http://localhost:8189/laws
-    (Invoke-RestMethod http://localhost:8189/laws) | ConvertTo-Json -Depth 10
+    Invoke-RestMethod http://localhost:8765/laws
+    (Invoke-RestMethod http://localhost:8765/laws) | ConvertTo-Json -Depth 10
 """
 
 import json
@@ -63,6 +68,11 @@ Commands:
   goods                        All goods
   combat-units                 Combat units grouped
   ideologies [ideology_id]     Ideologies
+  references <key>             Find all entities referencing a key
+  tech-tree <tech_id>          Prerequisite chain + unlocks
+  modifier-search <pattern>    Find modifier fields matching pattern
+  unlocked-by <tech_id>        All entities unlocked by a tech
+  filter <Type> <field> [val]  Filter entities by field value
 
 Server: python mod_state_server.py  (start once, query many times)
 """
@@ -129,6 +139,36 @@ def main():
             endpoint += f"{sep}era={_encode(options['era'])}"
     elif cmd in ("goods", "combat-units"):
         endpoint = cmd
+    elif cmd == "references":
+        if not positional:
+            print("Usage: references <key>", file=sys.stderr)
+            sys.exit(1)
+        endpoint = f"references/{_encode(positional[0])}"
+    elif cmd == "tech-tree":
+        if not positional:
+            print("Usage: tech-tree <tech_id>", file=sys.stderr)
+            sys.exit(1)
+        endpoint = f"tech-tree/{_encode(positional[0])}"
+    elif cmd == "modifier-search":
+        if not positional:
+            print("Usage: modifier-search <pattern>", file=sys.stderr)
+            sys.exit(1)
+        endpoint = f"modifier-search?q={_encode(positional[0])}"
+    elif cmd == "unlocked-by":
+        if not positional:
+            print("Usage: unlocked-by <tech_id>", file=sys.stderr)
+            sys.exit(1)
+        endpoint = f"unlocked-by/{_encode(positional[0])}"
+    elif cmd == "filter":
+        if len(positional) < 2:
+            print("Usage: filter <EntityType> <field> [value]", file=sys.stderr)
+            sys.exit(1)
+        etype = _encode(positional[0])
+        field = _encode(positional[1])
+        if len(positional) >= 3:
+            endpoint = f"filter/{etype}?field={field}&value={_encode(positional[2])}"
+        else:
+            endpoint = f"filter/{etype}?field=has:{field}"
     else:
         print(f"Unknown command: {cmd}", file=sys.stderr)
         print(USAGE, file=sys.stderr)

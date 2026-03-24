@@ -2155,6 +2155,10 @@ law_state_led_language_reform = {
 		law_no_schools
 	}
 
+	on_enact = {
+		custom_tooltip = { text = LAW_STATE_LED_LANGUAGE_REFORM_EVENTS_EFFECT }
+	}
+
     modifier = {
         state_institution_impact_add = 0.10
         state_assimilation_mult = 0.25

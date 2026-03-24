@@ -117,9 +117,13 @@
 				}
 			}
 			state_region = {
+				save_scope_as = integration_state_region
 				ROOT = {
 					every_primary_culture = {
-						add_homeland = PREV
+						save_scope_as = current_culture
+						scope:integration_state_region = {
+							add_homeland = scope:current_culture
+						}
 					}
 				}
 			}

@@ -21,7 +21,9 @@ test_event.1 = {
                 owner = {
                     ordered_scope_pop = {
                         limit = {
-                            is_primary_culture_of = ROOT.owner
+                            culture = {
+                                is_primary_culture_of = ROOT.owner
+                            }
                         }
                         order_by = total_size
                         move_partial_pop = {

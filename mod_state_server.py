@@ -2,14 +2,15 @@
 Mod State Server - persistent HTTP API for querying parsed mod/vanilla data.
 
 Start:  python mod_state_server.py
-        (loads all data once, then listens on http://127.0.0.1:8189)
+        (loads all data once, then listens on http://127.0.0.1:8765)
 
-Query:  Invoke-RestMethod http://localhost:8189/status
-        Invoke-RestMethod http://localhost:8189/laws
+Query:  Invoke-RestMethod http://localhost:8765/status
+        Invoke-RestMethod http://localhost:8765/laws
         python mod_state_client.py laws
 """
 
 import json
+import re
 import sys
 import time
 from collections import defaultdict
@@ -127,6 +128,46 @@ def get_field(data, key, default=None):
     return val
 
 
+def _data_contains_string(obj, needle):
+    """Recursively check if *needle* appears as a string value anywhere in the data tree."""
+    if isinstance(obj, str):
+        return needle == obj
+    if isinstance(obj, (int, float, bool)) or obj is None:
+        return False
+    if isinstance(obj, tuple):
+        return any(_data_contains_string(item, needle) for item in obj)
+    if isinstance(obj, list):
+        return any(_data_contains_string(item, needle) for item in obj)
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if k == needle or _data_contains_string(v, needle):
+                return True
+    return False
+
+
+def _extract_modifier_fields(obj, prefix=""):
+    """Walk parsed data and collect field names that look like modifiers (contain _ + end with _add/_mult etc)."""
+    found = {}
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if isinstance(k, str) and "_" in k:
+                val = v
+                if isinstance(val, tuple) and len(val) >= 2:
+                    val = val[1]
+                if isinstance(val, (int, float, str)):
+                    try:
+                        fv = float(val)
+                        found[k] = fv
+                    except (ValueError, TypeError):
+                        pass
+            if isinstance(v, (dict, tuple, list)):
+                found.update(_extract_modifier_fields(v, prefix))
+    elif isinstance(obj, (tuple, list)):
+        for item in obj:
+            found.update(_extract_modifier_fields(item, prefix))
+    return found
+
+
 # ---------------------------------------------------------------------------
 # Request handler
 # ---------------------------------------------------------------------------
@@ -175,6 +216,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "goods": lambda: self._goods(),
             "combat-units": lambda: self._combat_units(),
             "ideologies": lambda: self._ideologies(rest),
+            # Analytical endpoints
+            "references": lambda: self._references(rest),
+            "tech-tree": lambda: self._tech_tree(rest),
+            "modifier-search": lambda: self._modifier_search(params),
+            "unlocked-by": lambda: self._unlocked_by(rest),
+            "filter": lambda: self._filter(rest, params),
         }
         handler = dispatch.get(ep)
         if handler is None:
@@ -463,6 +510,180 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 raise KeyError(iid)
             return {"id": iid, "name": ms.localize(iid), "raw": serialize(ideologies[iid])}
         return [{"id": iid, "name": ms.localize(iid)} for iid in ideologies]
+
+    # ---- analytical: references -------------------------------------------
+    def _references(self, parts):
+        """GET /references/<key>  - find all entities that reference a given key."""
+        if not parts:
+            return {"error": "Provide a key, e.g. /references/nuclear_fission"}
+        key = parts[0]
+        results = defaultdict(list)
+        for etype in ms.mod_parsers:
+            data = ms.get_data(etype)
+            if not data:
+                continue
+            for eid, raw in data.items():
+                if _data_contains_string(raw, key):
+                    results[etype].append({"id": eid, "name": ms.localize(eid)})
+        return dict(results) if results else {"message": f"No references found for '{key}'"}
+
+    # ---- analytical: tech tree --------------------------------------------
+    def _tech_tree(self, parts):
+        """GET /tech-tree/<tech_id>  - prerequisite chain + everything unlocked."""
+        if not parts:
+            return {"error": "Provide a tech ID, e.g. /tech-tree/nuclear_fission"}
+        tid = parts[0]
+        techs = ms.get_data("Technologies")
+        if not techs:
+            return {"error": "Technologies data not loaded"}
+        if tid not in techs:
+            raise KeyError(tid)
+
+        # Recursive prerequisites
+        prereqs = []
+        visited = set()
+        self._collect_prereqs(tid, techs, prereqs, visited)
+
+        # Everything unlocked by this tech
+        unlocked = self._find_unlocked_by_tech(tid)
+
+        td = get_entity_data(techs[tid])
+        era_str = get_field(td, "era", "era_0")
+        return {
+            "id": tid,
+            "name": ms.localize(tid),
+            "era": int(era_str.split("_")[-1]),
+            "prerequisites": prereqs,
+            "unlocks": unlocked,
+        }
+
+    def _collect_prereqs(self, tid, techs, prereqs, visited):
+        """Recursively collect all prerequisite technologies."""
+        if tid in visited:
+            return
+        visited.add(tid)
+        raw = techs.get(tid)
+        if not raw:
+            return
+        td = get_entity_data(raw)
+        parent_techs = get_field(td, "unlocking_technologies")
+        if parent_techs and isinstance(parent_techs, list):
+            for pt in parent_techs:
+                if pt not in visited:
+                    self._collect_prereqs(pt, techs, prereqs, visited)
+                    era_str = "era_0"
+                    pt_raw = techs.get(pt)
+                    if pt_raw:
+                        pt_td = get_entity_data(pt_raw)
+                        era_str = get_field(pt_td, "era", "era_0")
+                    prereqs.append({
+                        "id": pt,
+                        "name": ms.localize(pt),
+                        "era": int(era_str.split("_")[-1]),
+                    })
+
+    def _find_unlocked_by_tech(self, tid):
+        """Find all entities unlocked by a technology across all entity types."""
+        unlocked = defaultdict(list)
+        for etype in ms.mod_parsers:
+            data = ms.get_data(etype)
+            if not data:
+                continue
+            for eid, raw in data.items():
+                ed = get_entity_data(raw)
+                ut = get_field(ed, "unlocking_technologies")
+                if ut and isinstance(ut, list) and tid in ut:
+                    unlocked[etype].append({"id": eid, "name": ms.localize(eid)})
+        return dict(unlocked)
+
+    # ---- analytical: modifier search --------------------------------------
+    def _modifier_search(self, params):
+        """GET /modifier-search?q=<pattern>  - find modifier field names across entities."""
+        query = params.get("q", [""])[0].lower()
+        if not query:
+            return {"error": "Provide ?q=search_pattern"}
+        limit = int(params.get("limit", ["100"])[0])
+
+        results = []
+        seen = set()
+        for etype in ms.mod_parsers:
+            data = ms.get_data(etype)
+            if not data:
+                continue
+            for eid, raw in data.items():
+                modifiers = _extract_modifier_fields(raw)
+                matching = {k: v for k, v in modifiers.items() if query in k.lower()}
+                if matching:
+                    results.append({
+                        "type": etype,
+                        "id": eid,
+                        "name": ms.localize(eid),
+                        "modifiers": matching,
+                    })
+                    for k in matching:
+                        seen.add(k)
+                    if len(results) >= limit:
+                        break
+            if len(results) >= limit:
+                break
+        return {
+            "matching_modifier_names": sorted(seen),
+            "entity_count": len(results),
+            "entities": results,
+        }
+
+    # ---- analytical: unlocked-by ------------------------------------------
+    def _unlocked_by(self, parts):
+        """GET /unlocked-by/<tech_id>  - all entities unlocked by a technology."""
+        if not parts:
+            return {"error": "Provide a tech ID, e.g. /unlocked-by/nuclear_fission"}
+        tid = parts[0]
+        techs = ms.get_data("Technologies")
+        if techs and tid not in techs:
+            raise KeyError(tid)
+        return self._find_unlocked_by_tech(tid)
+
+    # ---- analytical: filter -----------------------------------------------
+    def _filter(self, parts, params):
+        """GET /filter/<EntityType>?field=<name>&value=<val>
+        Filter entities by field value. Supports:
+          field=<name>&value=<val>    substring match on field value
+          field=has:<name>            check field existence
+        """
+        if not parts:
+            return {"error": "Provide entity type, e.g. /filter/Technologies?field=era&value=era_5"}
+        etype = parts[0]
+        data = ms.get_data(etype)
+        if data is None:
+            raise KeyError(etype)
+
+        field = params.get("field", [""])[0]
+        value = params.get("value", [""])[0].lower()
+        limit = int(params.get("limit", ["200"])[0])
+
+        if not field:
+            return {"error": "Provide ?field=<name> (and optionally &value=<val>)"}
+
+        # has:<field> - existence check
+        check_exists = field.startswith("has:")
+        if check_exists:
+            field = field[4:]
+
+        results = []
+        for eid, raw in data.items():
+            ed = get_entity_data(raw)
+            fv = get_field(ed, field)
+            if check_exists:
+                if fv is not None:
+                    results.append({"id": eid, "name": ms.localize(eid)})
+            else:
+                if fv is not None:
+                    fv_str = str(fv).lower() if not isinstance(fv, list) else " ".join(str(x) for x in fv).lower()
+                    if value in fv_str:
+                        results.append({"id": eid, "name": ms.localize(eid), field: serialize(fv)})
+            if len(results) >= limit:
+                break
+        return {"type": etype, "field": field, "count": len(results), "results": results}
 
     # ---- response helpers -------------------------------------------------
     def _respond_json(self, data, status=200):

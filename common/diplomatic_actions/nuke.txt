@@ -119,7 +119,7 @@
                     # Must have core territory actually occupied or nearly lost
                     any_scope_state = {
                         is_incorporated = yes
-                        is_on_front = yes
+                        devastation > 0
                     }
                     # AND leader must be aggressive/unstable
                     OR = {
@@ -295,7 +295,7 @@ tactical_nuke_diplo_action = {
                     scope:target_country = { has_modifier = nuclear_power }
                     any_scope_state = {
                         is_incorporated = yes
-                        is_on_front = yes
+                        devastation > 0
                     }
                     OR = {
                         ruler = {

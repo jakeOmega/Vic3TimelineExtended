@@ -2529,6 +2529,10 @@ extra_law_events.25 = {
 			pop_type = clergymen
 		}
 	}
+
+	after = {
+		trigger_event = { id = extra_law_events.35 }
+	}
 }
 
 # ======================================================================
@@ -3589,8 +3593,8 @@ extra_law_events.35 = {
 		}
 		ai_chance = {
 			base = 5
-			if = {
-				limit = {
+			modifier = {
+				trigger = {
 					institution_investment_level = {
 						institution = institution_schools
 						value >= 4
@@ -3904,31 +3908,27 @@ extra_law_events.36 = {
 			value = medium_radicals
 			pop_type = academics
 		}
-		add_loyalists = {
-			value = small_radicals
-			strata = lower
-		}
 
 		ai_chance = {
 			base = 3
-			if = {
-				limit = {
+			modifier = {
+				trigger = {
 					ig:ig_trade_unions ?= { is_in_government = yes }
 				}
 				add = 5
 			}
-			if = {
-				limit = {
+			modifier = {
+				trigger = {
 					ig:ig_intelligentsia ?= { is_in_government = yes }
 				}
 				add = 3
 			}
-			if = {
-				limit = { has_law = law_type:law_technocracy }
+			modifier = {
+				trigger = { has_law = law_type:law_technocracy }
 				add = 3
 			}
-			if = {
-				limit = {
+			modifier = {
+				trigger = {
 					OR = {
 						has_law = law_type:law_monarchy
 						has_law = law_type:law_theocracy
@@ -3988,14 +3988,14 @@ extra_law_events.36 = {
 		}
 		ai_chance = {
 			base = 7
-			if = {
-				limit = {
+			modifier = {
+				trigger = {
 					ig:ig_landowners ?= { is_in_government = yes }
 				}
 				add = 5
 			}
-			if = {
-				limit = {
+			modifier = {
+				trigger = {
 					OR = {
 						has_law = law_type:law_monarchy
 						has_law = law_type:law_theocracy
@@ -4003,8 +4003,8 @@ extra_law_events.36 = {
 				}
 				add = 3
 			}
-			if = {
-				limit = { has_law = law_type:law_technocracy }
+			modifier = {
+				trigger = { has_law = law_type:law_technocracy }
 				add = -3
 			}
 		}

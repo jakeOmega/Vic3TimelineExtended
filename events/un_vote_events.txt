@@ -243,197 +243,266 @@ un_vote.1 = {
 		ai_chance = {
 			base = 50
 			# Allies of proposer lean support
-			if = {
-				limit = {
+			modifier = {
+				trigger = {
 					exists = scope:un_vote_proposer
-					has_diplomatic_pact = { who = scope:un_vote_proposer type = alliance }
+					has_diplomatic_pact = {
+						who = scope:un_vote_proposer
+						type = alliance
+					}
 				}
 				add = 20
 			}
 			# Rivals of proposer lean oppose
-			if = {
-				limit = {
+			modifier = {
+				trigger = {
 					exists = scope:un_vote_proposer
-					has_diplomatic_pact = { who = scope:un_vote_proposer type = rivalry }
+					has_diplomatic_pact = {
+						who = scope:un_vote_proposer
+						type = rivalry
+					}
 				}
 				add = -30
 			}
 			# Great powers more opinionated
-			if = {
-				limit = { country_rank >= rank_value:great_power }
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
 				add = 10
 			}
 			# ---- Topic: Condemn aggressor ----
-			if = {
-				limit = { has_global_variable = un_vote_topic_condemn }
-				# Support if target is our rival
-				if = {
-					limit = {
-						exists = scope:un_vote_target
-						has_diplomatic_pact = { who = scope:un_vote_target type = rivalry }
+			# Support if target is our rival
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_condemn
+					exists = scope:un_vote_target
+					has_diplomatic_pact = {
+						who = scope:un_vote_target
+						type = rivalry
 					}
-					add = 30
 				}
-				# Oppose if target is our ally
-				if = {
-					limit = {
-						exists = scope:un_vote_target
-						has_diplomatic_pact = { who = scope:un_vote_target type = alliance }
+				add = 30
+			}
+			# Oppose if target is our ally
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_condemn
+					exists = scope:un_vote_target
+					has_diplomatic_pact = {
+						who = scope:un_vote_target
+						type = alliance
 					}
-					add = -40
 				}
-				# Peaceful nations support condemnation
-				if = {
-					limit = { has_law = law_type:law_humanitarian_regulations }
-					add = 15
+				add = -40
+			}
+			# Peaceful nations support condemnation
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_condemn
+					has_law = law_type:law_humanitarian_regulations
 				}
+				add = 15
 			}
 			# ---- Topic: Human Rights ----
-			if = {
-				limit = { has_global_variable = un_vote_topic_human_rights }
-				if = {
-					limit = { has_law = law_type:law_multicultural }
-					add = 20
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_human_rights
+					has_law = law_type:law_multicultural
 				}
-				if = {
-					limit = { has_law = law_type:law_universal_suffrage }
-					add = 15
+				add = 20
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_human_rights
+					has_law = law_type:law_universal_suffrage
 				}
-				if = {
-					limit = { has_law = law_type:law_ethnostate }
-					add = -40
+				add = 15
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_human_rights
+					has_law = law_type:law_ethnostate
 				}
-				if = {
-					limit = { has_law = law_type:law_outlawed_dissent }
-					add = -30
+				add = -40
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_human_rights
+					has_law = law_type:law_outlawed_dissent
 				}
-				if = {
-					limit = { has_law = law_type:law_guaranteed_liberties }
-					add = 15
+				add = -30
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_human_rights
+					has_law = law_type:law_guaranteed_liberties
 				}
+				add = 15
 			}
 			# ---- Topic: Non-Proliferation ----
-			if = {
-				limit = { has_global_variable = un_vote_topic_npt }
-				# Nations without nukes support disarmament
-				if = {
-					limit = { NOT = { has_variable = nuclear_weapon_stockpile } }
-					add = 20
-				}
-				# Nuclear powers resist
-				if = {
-					limit = {
+			# Nations without nukes support disarmament
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_npt
+					NOT = {
 						has_variable = nuclear_weapon_stockpile
-						var:nuclear_weapon_stockpile >= 1
 					}
-					add = -30
 				}
-				# Those developing nukes strongly oppose
-				if = {
-					limit = { has_journal_entry = je_nuclear_program }
-					add = -25
+				add = 20
+			}
+			# Nuclear powers resist
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_npt
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile >= 1
 				}
+				add = -30
+			}
+			# Those developing nukes strongly oppose
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_npt
+					has_journal_entry = je_nuclear_program
+				}
+				add = -25
 			}
 			# ---- Topic: Climate Accord ----
-			if = {
-				limit = { has_global_variable = un_vote_topic_climate }
-				if = {
-					limit = { has_technology_researched = green_revolution }
-					add = 20
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_climate
+					has_technology_researched = green_revolution
 				}
-				if = {
-					limit = { has_technology_researched = environmental_movement }
-					add = 10
+				add = 20
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_climate
+					has_technology_researched = environmental_movement
 				}
-				if = {
-					limit = { has_law = law_type:law_laissez_faire }
-					add = -20
+				add = 10
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_climate
+					has_law = law_type:law_laissez_faire
 				}
-				if = {
-					limit = { has_law = law_type:law_command_economy }
-					add = -10
+				add = -20
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_climate
+					has_law = law_type:law_command_economy
 				}
+				add = -10
 			}
 			# ---- Topic: UN Reform ----
-			if = {
-				limit = { has_global_variable = un_vote_topic_reform }
-				# Countries frustrated with the current order support reform
-				if = {
-					limit = { var:un_authority < 40 }
-					add = 15
+			# Countries frustrated with the current order support reform
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_reform
+					var:un_authority < 40
 				}
-				# SC members resist losing their privilege
-				if = {
-					limit = { country_rank >= rank_value:great_power has_modifier = un_security_council_modifier }
-					add = -20
+				add = 15
+			}
+			# SC members resist losing their privilege
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_reform
+					country_rank >= rank_value:great_power
+					has_modifier = un_security_council_modifier
 				}
+				add = -20
 			}
 			# ---- Topic: Heritage ----
-			if = {
-				limit = { has_global_variable = un_vote_topic_heritage }
-				if = {
-					limit = { has_law = law_type:law_multicultural }
-					add = 15
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_heritage
+					has_law = law_type:law_multicultural
 				}
-				if = {
-					limit = { country_rank >= rank_value:major_power }
-					add = 10
+				add = 15
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_heritage
+					country_rank >= rank_value:major_power
 				}
+				add = 10
 			}
 			# ---- Topic: Decolonization ----
-			if = {
-				limit = { has_global_variable = un_vote_topic_decolonization }
-				# Colonial powers strongly oppose
-				if = {
-					limit = { any_subject_or_below = { is_direct_subject_of = ROOT } }
-					add = -40
+			# Colonial powers strongly oppose
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_decolonization
+					any_subject_or_below = {
+						is_direct_subject_of = ROOT
+					}
 				}
-				# Anti-imperialist nations support
-				if = {
-					limit = { has_law = law_type:law_council_republic }
-					add = 20
+				add = -40
+			}
+			# Anti-imperialist nations support
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_decolonization
+					has_law = law_type:law_council_republic
 				}
-				# Non-colonial nations lean in favor
-				if = {
-					limit = { NOT = { any_subject_or_below = { count >= 1 } } }
-					add = 15
+				add = 20
+			}
+			# Non-colonial nations lean in favor
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_decolonization
+					NOT = {
+						any_subject_or_below = {
+							count >= 1
+						}
+					}
 				}
+				add = 15
 			}
 			# ---- Topic: Pandemic ----
-			if = {
-				limit = { has_global_variable = un_vote_topic_pandemic }
-				if = {
-					limit = { has_law = law_type:law_worker_protections }
-					add = 15
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_pandemic
+					has_law = law_type:law_worker_protections
 				}
-				if = {
-					limit = { has_law = law_type:law_isolationism }
-					add = -20
+				add = 15
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_pandemic
+					has_law = law_type:law_isolationism
 				}
+				add = -20
 			}
 			# ---- Topic: Refugee ----
-			if = {
-				limit = { has_global_variable = un_vote_topic_refugee }
-				if = {
-					limit = { has_law = law_type:law_no_migration_controls }
-					add = 20
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_refugee
+					has_law = law_type:law_no_migration_controls
 				}
-				if = {
-					limit = { has_law = law_type:law_closed_borders }
-					add = -30
+				add = 20
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_refugee
+					has_law = law_type:law_closed_borders
 				}
+				add = -30
 			}
 			# ---- Topic: Space ----
-			if = {
-				limit = { has_global_variable = un_vote_topic_space }
-				if = {
-					limit = { has_technology_researched = space_exploration }
-					add = 20
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_space
+					has_technology_researched = space_exploration
 				}
-				if = {
-					limit = { has_law = law_type:law_single_party_state }
-					add = -15
+				add = 20
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_space
+					has_law = law_type:law_single_party_state
 				}
+				add = -15
 			}
 		}
 	}
@@ -454,89 +523,81 @@ un_vote.1 = {
 		ai_chance = {
 			base = 10
 			# Rivals of proposer
-			if = {
-				limit = {
+			modifier = {
+				trigger = {
 					exists = scope:un_vote_proposer
-					has_diplomatic_pact = { who = scope:un_vote_proposer type = rivalry }
+					has_diplomatic_pact = {
+						who = scope:un_vote_proposer
+						type = rivalry
+					}
 				}
 				add = 30
 			}
 			# ---- Topic: Condemn - allies of target oppose ----
-			if = {
-				limit = {
+			modifier = {
+				trigger = {
 					has_global_variable = un_vote_topic_condemn
 					exists = scope:un_vote_target
-					has_diplomatic_pact = { who = scope:un_vote_target type = alliance }
+					has_diplomatic_pact = {
+						who = scope:un_vote_target
+						type = alliance
+					}
 				}
 				add = 40
 			}
 			# ---- Topic: HR - authoritarian regimes oppose ----
-			if = {
-				limit = { has_global_variable = un_vote_topic_human_rights }
-				if = {
-					limit = { has_law = law_type:law_ethnostate }
-					add = 30
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_human_rights
+					has_law = law_type:law_ethnostate
 				}
-				if = {
-					limit = { has_law = law_type:law_outlawed_dissent }
-					add = 25
+				add = 30
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_human_rights
+					has_law = law_type:law_outlawed_dissent
 				}
+				add = 25
 			}
 			# ---- Topic: NPT - nuclear powers oppose ----
-			if = {
-				limit = {
-					has_global_variable = un_vote_topic_npt
-					has_variable = nuclear_weapon_stockpile
-					var:nuclear_weapon_stockpile >= 1
-				}
+			modifier = {
+				trigger = { has_global_variable = un_vote_topic_npt has_variable = nuclear_weapon_stockpile var:nuclear_weapon_stockpile >= 1 }
 				add = 35
 			}
 			# ---- Topic: Climate - industrial economies oppose ----
-			if = {
-				limit = {
-					has_global_variable = un_vote_topic_climate
-					has_law = law_type:law_laissez_faire
-				}
+			modifier = {
+				trigger = { has_global_variable = un_vote_topic_climate has_law = law_type:law_laissez_faire }
 				add = 25
 			}
 			# ---- Topic: Reform - SC privileged members oppose ----
-			if = {
-				limit = {
-					has_global_variable = un_vote_topic_reform
-					has_modifier = un_security_council_modifier
-				}
+			modifier = {
+				trigger = { has_global_variable = un_vote_topic_reform has_modifier = un_security_council_modifier }
 				add = 25
 			}
 			# ---- Topic: Decolonization - colonial powers oppose ----
-			if = {
-				limit = {
+			modifier = {
+				trigger = {
 					has_global_variable = un_vote_topic_decolonization
-					any_subject_or_below = { is_direct_subject_of = ROOT }
+					any_subject_or_below = {
+						is_direct_subject_of = ROOT
+					}
 				}
 				add = 40
 			}
 			# ---- Topic: Pandemic - isolationists oppose ----
-			if = {
-				limit = {
-					has_global_variable = un_vote_topic_pandemic
-					has_law = law_type:law_isolationism
-				}
+			modifier = {
+				trigger = { has_global_variable = un_vote_topic_pandemic has_law = law_type:law_isolationism }
 				add = 25
 			}
 			# ---- Topic: Refugee - closed borders oppose ----
-			if = {
-				limit = {
-					has_global_variable = un_vote_topic_refugee
-					has_law = law_type:law_closed_borders
-				}
+			modifier = {
+				trigger = { has_global_variable = un_vote_topic_refugee has_law = law_type:law_closed_borders }
 				add = 30
 			}
 			# ---- Topic: Space - authoritarian regimes oppose sharing ----
-			if = {
-				limit = {
-					has_global_variable = un_vote_topic_space
-					has_law = law_type:law_single_party_state
-				}
+			modifier = {
+				trigger = { has_global_variable = un_vote_topic_space has_law = law_type:law_single_party_state }
 				add = 20
 			}
 		}
@@ -549,12 +610,16 @@ un_vote.1 = {
 		ai_chance = {
 			base = 15
 			# Weak nations and isolationists abstain more
-			if = {
-				limit = { NOT = { country_rank >= rank_value:major_power } }
+			modifier = {
+				trigger = {
+					NOT = {
+						country_rank >= rank_value:major_power
+					}
+				}
 				add = 15
 			}
-			if = {
-				limit = { has_law = law_type:law_isolationism }
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
 				add = 20
 			}
 		}

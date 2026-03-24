@@ -11,7 +11,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -21,6 +20,7 @@
 				}
 				color = hsv360{ 0 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
@@ -31,7 +31,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -41,6 +40,7 @@
 				}
 				color = hsv360{ 30 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
@@ -51,7 +51,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -61,6 +60,7 @@
 				}
 				color = hsv360{ 60 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
@@ -71,7 +71,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -81,6 +80,7 @@
 				}
 				color = hsv360{ 90 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
@@ -91,7 +91,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -101,6 +100,7 @@
 				}
 				color = hsv360{ 120 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
@@ -111,7 +111,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -121,6 +120,7 @@
 				}
 				color = hsv360{ 150 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
@@ -131,7 +131,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -141,6 +140,7 @@
 				}
 				color = hsv360{ 180 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
@@ -151,7 +151,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -161,6 +160,7 @@
 				}
 				color = hsv360{ 210 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
@@ -171,7 +171,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -181,6 +180,7 @@
 				}
 				color = hsv360{ 240 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
@@ -191,7 +191,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -201,6 +200,7 @@
 				}
 				color = hsv360{ 270 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
@@ -211,7 +211,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -221,6 +220,7 @@
 				}
 				color = hsv360{ 300 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
@@ -231,7 +231,6 @@
 		1 = {
 			create_dynamic_country = {  
 				origin = owner
-				country_type = recognized
 				tier = principality  
 				culture = scope:new_country_culture  
 				religion = owner.religion 
@@ -241,6 +240,7 @@
 				}
 				color = hsv360{ 330 80 80 }
 				on_created = {
+					set_country_type = recognized
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}

@@ -109,8 +109,6 @@ language_reform_law_on_action = {
 					NOT = { has_variable = language_reform_type }
 				}
 				trigger_event = { id = extra_law_events.25 }
-				# Follow-up: ask about transition speed ~4 months later
-				trigger_event = { id = extra_law_events.35 days = 120 }
 			}
 			# Clean up all language reform modifiers when law changes away
 			if = {
@@ -139,23 +137,23 @@ radical_law_backlash_on_action = {
 			}
 			# Identify which radical law was activated (ROOT = law scope)
 			if = {
-				limit = { this = law_type:law_communal_child_rearing }
+				limit = { law_type = law_type:law_communal_child_rearing }
 				owner = { set_variable = { name = radical_law_backlash_type value = 1 } }
 			}
 			else_if = {
-				limit = { this = law_type:law_state_atheism }
+				limit = { law_type = law_type:law_state_atheism }
 				owner = { set_variable = { name = radical_law_backlash_type value = 2 } }
 			}
 			else_if = {
-				limit = { this = law_type:law_cooperative_ownership }
+				limit = { law_type = law_type:law_cooperative_ownership }
 				owner = { set_variable = { name = radical_law_backlash_type value = 3 } }
 			}
 			else_if = {
-				limit = { this = law_type:law_command_economy }
+				limit = { law_type = law_type:law_command_economy }
 				owner = { set_variable = { name = radical_law_backlash_type value = 4 } }
 			}
 			else_if = {
-				limit = { this = law_type:law_collectivized_agriculture }
+				limit = { law_type = law_type:law_collectivized_agriculture }
 				owner = { set_variable = { name = radical_law_backlash_type value = 5 } }
 			}
 			owner = {
