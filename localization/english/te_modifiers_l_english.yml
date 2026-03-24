@@ -10,6 +10,8 @@
  country_economic_dependence_leverage_gain_mult:0 "Leverage from Economic Dependence"
  country_economic_dependence_leverage_gain_mult_desc:0 "A multiplier for the [concept_power_bloc_leverage] gained from how much another [concept_country] relies on our [concept_market]."
  country_enactment_success_chance_law_compulsory_primary_school_add:0 "[concept_enactment_success] chance for [GetLawType('law_compulsory_primary_school').GetName]"
+ country_solar_receiver_max_level_add:0 "Available Solar Receiver Slots"
+ country_solar_receiver_max_level_add_desc:0 "The number of additional Solar Power Receivers that can be constructed. Each level of Orbital Solar Collector adds 10 slots, and each level of Solar Power Receiver uses 1 slot."
  country_enactment_success_chance_law_compulsory_primary_school_add_desc:0 "A flat percentage point increase to the likelihood of enacting this specific law"
  country_enactment_success_chance_law_free_trade_add:0 "[concept_enactment_success] chance for [GetLawType('law_free_trade').GetName]"
  country_enactment_success_chance_law_free_trade_add_desc:0 "A flat percentage point increase to the likelihood of enacting this specific law"

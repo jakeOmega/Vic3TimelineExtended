@@ -1,0 +1,10 @@
+﻿heir_education_progress_bar = {
+	name = "heir_education_progress_bar_name"
+	desc = "heir_education_progress_bar_desc"
+
+	default_green = yes
+
+	start_value = 0
+	min_value = 0
+	max_value = 10
+}

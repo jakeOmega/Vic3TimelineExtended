@@ -14,6 +14,11 @@ space_elevator_progress = {
 	building_total_space_elevator_progress = 1
 }
 
+solar_collector_progress = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_total_solar_collector_progress = 1
+}
+
 pollution_generation_mult_effect = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	state_pollution_generation_add = 1
@@ -433,13 +438,13 @@ banking_event_fx_defense = {
 
 banking_event_emergency_controls = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	building_group_bg_trade_throughput_add = -0.10
+	state_trade_capacity_mult = -0.10
 }
 
 banking_event_currency_collapse = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = -0.10
-	building_group_bg_trade_throughput_add = -0.05
+	state_trade_capacity_mult = -0.05
 }
 
 # --- Event 16: Central Bank Independence Debate ---
@@ -1390,6 +1395,13 @@ human_rights_reform_pledge_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_acceptance_not_homeland_add = 3
 	country_diplomatic_reputation_add = 3
+}
+
+civil_rights_triumph_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 100
+	country_acceptance_not_homeland_add = 15
+	country_acceptance_no_shared_heritage_trait_add = 10
 }
 
 # ============================================================================
@@ -2765,3 +2777,136 @@ radical_law_retreat = {
 }
 
 
+
+# --- New banking event modifiers (events 21-45) ---
+
+banking_event_merchant_prosperity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_services_mult = 0.03
+}
+
+banking_event_provincial_exchange = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_trade_capacity_mult = 0.03
+}
+
+banking_event_scandal_fallout = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	goods_output_services_mult = -0.03
+}
+
+banking_event_trade_bills = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_trade_capacity_mult = 0.03
+}
+
+banking_event_pension_stability = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_loan_interest_rate_mult = -0.03
+}
+
+banking_event_telegraph_settlement = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_services_mult = 0.03
+}
+
+banking_event_interbank_guarantee = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+banking_event_cooperative_growth = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_agriculture_throughput_add = 0.03
+}
+
+banking_event_bank_holiday = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	goods_output_services_mult = -0.05
+}
+
+banking_event_trust_collapse = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	goods_output_services_mult = -0.05
+	country_loan_interest_rate_mult = 0.05
+}
+
+banking_event_commercial_paper = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_manufacturing_throughput_add = 0.03
+}
+
+banking_event_deposit_insurance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_loan_interest_rate_mult = -0.03
+}
+
+banking_event_joint_stock_boom = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_manufacturing_throughput_add = 0.05
+}
+
+banking_event_fintech_growth = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_services_mult = 0.03
+	country_loan_interest_rate_mult = -0.03
+}
+
+banking_event_mbs_boom = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_group_bg_construction_throughput_add = 0.05
+	goods_output_services_mult = 0.05
+}
+
+banking_event_microfinance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_group_bg_agriculture_throughput_add = 0.03
+	goods_output_services_mult = 0.02
+}
+
+banking_event_qe_stimulus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_loan_interest_rate_mult = -0.05
+}
+
+banking_event_rating_crackdown = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	goods_output_services_mult = -0.05
+	country_loan_interest_rate_mult = 0.05
+}
+
+banking_event_student_debt_relief = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_prestige_mult = 0.03
+}
+
+banking_event_student_debt_relief_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+banking_event_green_bonds = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	building_group_bg_construction_throughput_add = 0.03
+	country_prestige_mult = 0.03
+}
+
+banking_event_venture_boom = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_manufacturing_throughput_add = 0.05
+}
+
+banking_event_predatory_crackdown = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	goods_output_services_mult = -0.03
+}
+
+banking_event_bailout_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+banking_event_bailout_goodwill = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.05
+}

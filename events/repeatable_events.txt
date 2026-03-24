@@ -341,6 +341,7 @@ repeatable_events.50 = {
         trigger = {
             has_intelligence_ministry_3 = yes
         }
+        highlighted_option = yes
         custom_tooltip = re_cyber_intel_tt
         # Intelligence-assisted forensics - faster resolution, better outcome
         add_modifier = { name = re_cyber_intel_response days = long_modifier_time }

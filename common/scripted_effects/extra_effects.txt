@@ -91,6 +91,89 @@
 	}
 }
 
+solar_collector_construction = {
+	if = {
+		limit = {
+			NOT = { has_variable = solar_collector_progress_var }
+		}
+		set_variable = {
+			name = solar_collector_progress_var
+			value = 0
+		}
+	}
+	if = {
+		limit = {
+			has_variable = solar_collector_progress_var
+			any_scope_building = {
+				is_building_type = building_solar_collector_construction_site
+				building_has_goods_shortage = no
+			}
+		}
+		change_variable = {
+			name = solar_collector_progress_var
+			add = {
+				value = b:building_solar_collector_construction_site.occupancy
+				divide = 12
+				if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_solar_collector_construction_slow }
+					}
+					multiply = 0.25
+				}
+				else_if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_solar_collector_construction_medium }
+					}
+					multiply = 0.5
+				}
+				else_if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_solar_collector_construction_fast }
+					}
+					multiply = 1
+				}
+				else = {
+					multiply = 0
+				}
+				multiply = 1000
+				ceiling = yes
+				divide = 1000
+			}
+		}
+	}
+	if = {
+		limit = {
+			var:solar_collector_progress_var >= 1
+		}
+		set_variable = {
+			name = solar_collector_progress_var
+			value = 0
+		}
+		remove_building = building_solar_collector_construction_site
+		if = {
+			limit = { has_building = building_solar_collector }
+			switch = {
+				trigger = b:building_solar_collector.level
+				1 = { create_building = { building = building_solar_collector level = 2 } }
+				2 = { create_building = { building = building_solar_collector level = 3 } }
+				3 = { create_building = { building = building_solar_collector level = 4 } }
+				4 = { create_building = { building = building_solar_collector level = 5 } }
+				5 = { create_building = { building = building_solar_collector level = 6 } }
+				6 = { create_building = { building = building_solar_collector level = 7 } }
+				7 = { create_building = { building = building_solar_collector level = 8 } }
+				8 = { create_building = { building = building_solar_collector level = 9 } }
+				9 = { create_building = { building = building_solar_collector level = 10 } }
+			}
+		}
+		else = {
+			create_building = {
+				building = building_solar_collector
+				level = 1
+			}
+		}
+	}
+}
+
 thought_control_loyalists_update = {
 	if = {
 		limit = {

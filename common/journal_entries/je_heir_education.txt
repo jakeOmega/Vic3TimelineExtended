@@ -1,0 +1,135 @@
+﻿### Heir Education Journal Entry
+### Allows monarchies to invest innovation into educating their heir
+### Influences the heir's traits, ideology, and interest group affiliation
+
+je_heir_education = {
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	group = je_group_internal_affairs
+
+	is_shown_when_inactive = {
+		has_law = law_type:law_monarchy
+	}
+
+	possible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		heir ?= {
+			NOT = { has_variable = received_education }
+		}
+	}
+
+	scripted_progress_bar = heir_education_progress_bar
+
+	# Investment buttons
+	scripted_button = he_invest_admin
+	scripted_button = he_invest_diplo
+	scripted_button = he_invest_military
+	scripted_button = he_progressive_tutors
+	scripted_button = he_conservative_tutors
+	scripted_button = he_establishment_mentors
+	scripted_button = he_reformist_mentors
+	scripted_button = he_conclude_education
+
+	immediate = {
+		set_variable = { name = heir_ed_admin value = 0 }
+		set_variable = { name = heir_ed_diplo value = 0 }
+		set_variable = { name = heir_ed_military value = 0 }
+		set_variable = { name = heir_ed_ideology value = 0 }
+		set_variable = { name = heir_ed_ig value = 0 }
+		set_variable = { name = heir_ed_total value = 0 }
+		heir ?= {
+			set_variable = being_educated
+		}
+	}
+
+	complete = {
+		has_variable = heir_education_concluded
+	}
+
+	on_complete = {
+		heir_education_cleanup_effect = yes
+	}
+
+	# If the heir changes (dies, replaced), detect and reset
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						NOT = { exists = heir }
+						heir ?= { NOT = { has_variable = being_educated } }
+					}
+					has_variable = heir_ed_total
+				}
+				# Heir changed - reset variables and mark new heir
+				set_variable = { name = heir_ed_admin value = 0 }
+				set_variable = { name = heir_ed_diplo value = 0 }
+				set_variable = { name = heir_ed_military value = 0 }
+				set_variable = { name = heir_ed_ideology value = 0 }
+				set_variable = { name = heir_ed_ig value = 0 }
+				set_variable = { name = heir_ed_total value = 0 }
+				scope:journal_entry = {
+					set_bar_progress = { name = heir_education_progress_bar value = 0 }
+				}
+				if = {
+					limit = { exists = heir }
+					heir ?= {
+						set_variable = being_educated
+					}
+				}
+			}
+		}
+	}
+
+	invalid = {
+		NOT = { has_law = law_type:law_monarchy }
+	}
+
+	progressbar = no
+	should_be_pinned_by_default = yes
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_heir_education_status_no_investment
+				trigger = {
+					OR = {
+						NOT = { has_variable = heir_ed_total }
+						var:heir_ed_total < 1
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_heir_education_status_early
+				trigger = { var:heir_ed_total < 4 }
+			}
+			triggered_desc = {
+				desc = je_heir_education_status_progressing
+				trigger = { var:heir_ed_total < 7 }
+			}
+			triggered_desc = {
+				desc = je_heir_education_status_advanced
+				trigger = { var:heir_ed_total < 10 }
+			}
+			triggered_desc = {
+				desc = je_heir_education_status_complete
+				trigger = { var:heir_ed_total >= 10 }
+			}
+		}
+	}
+
+	weight = 100
+
+	timeout = 7300 # 20 years - auto-resolve if player never concludes
+	on_timeout = {
+		heir_education_resolve_effect = yes
+	}
+
+	current_value = {
+		value = var:heir_ed_total
+	}
+
+	goal_add_term = {
+		value = 10
+	}
+}

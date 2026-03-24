@@ -1839,3 +1839,69 @@ INJECT:building_millet_farm = {
 		pmg_precision_environmental_management
 	}
 }
+
+REPLACE_OR_CREATE:building_solar_collector_construction_site = {
+	building_group = bg_government	
+	icon = "gfx/interface/icons/building_icons/space_elevator_construction_site.dds"
+	city_type = city
+	levels_per_mesh = -1
+	
+	unlocking_technologies = {
+		space_based_solar_power
+	}
+
+	production_method_groups = {
+		pmg_base_building_solar_collector_construction_site
+	}
+
+	required_construction = construction_cost_medium
+	
+	expandable = no
+	
+	ownership_type = no_ownership
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+REPLACE_OR_CREATE:building_solar_collector = {
+	building_group = bg_government	
+	icon = "gfx/interface/icons/building_icons/space_elevator.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	production_method_groups = {
+		pmg_base_building_solar_collector
+	}
+
+	required_construction = construction_cost_canal
+	
+	buildable = no
+	expandable = no
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+REPLACE_OR_CREATE:building_solar_receiver = {
+	building_group = bg_private_infrastructure	
+	icon = "gfx/interface/icons/building_icons/power_plant.dds"
+	city_type = city
+	levels_per_mesh = -1
+	
+	unlocking_technologies = {
+		space_based_solar_power
+	}
+
+	production_method_groups = {
+		pmg_base_building_solar_receiver
+	}
+
+	required_construction = construction_cost_medium
+	
+	possible = {
+		owner = {
+			modifier:country_solar_receiver_max_level_add > 0
+		}
+	}
+	
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}

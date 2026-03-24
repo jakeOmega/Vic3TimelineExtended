@@ -17587,3 +17587,148 @@ pm_glassworks_closed_loop_recycling = {
 
 	required_input_goods = electricity
 }
+
+# ===== SOLAR COLLECTOR ARRAY =====
+# Construction site PMs: paused / slow (~4yr) / medium (~2yr) / fast (~1yr)
+# Inputs scaled to plan: advanced_materials, launch_capacity, electronic_components, steel
+
+pm_solar_collector_construction_paused = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 5
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 500
+		}
+	}
+}
+
+pm_solar_collector_construction_slow = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 500              # Price: 4000, Total cost: 2000000.0 (18.58%)
+			goods_input_launch_capacity_add = 40000              # Price:  200, Total cost: 8000000.0 (74.32%)
+			goods_input_electronic_components_add = 5000         # Price:   80, Total cost: 400000.0 (3.72%)
+			goods_input_steel_add = 2000                         # Price:   50, Total cost: 100000.0 (0.93%)
+			goods_input_electricity_add = 5000                   # Price:   30, Total cost: 150000.0 (1.39%)
+			goods_input_digital_access_add = 2000                # Price:   60, Total cost: 120000.0 (1.11%)
+			# Total input cost: 10770000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 25000
+			building_employment_academics_add = 25000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_solar_collector_construction_medium = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 1000             # Price: 4000, Total cost: 4000000.0 (18.58%)
+			goods_input_launch_capacity_add = 80000              # Price:  200, Total cost: 16000000.0 (74.32%)
+			goods_input_electronic_components_add = 10000        # Price:   80, Total cost: 800000.0 (3.72%)
+			goods_input_steel_add = 4000                         # Price:   50, Total cost: 200000.0 (0.93%)
+			goods_input_electricity_add = 10000                  # Price:   30, Total cost: 300000.0 (1.39%)
+			goods_input_digital_access_add = 4000                # Price:   60, Total cost: 240000.0 (1.11%)
+			# Total input cost: 21540000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 25000
+			building_employment_academics_add = 25000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_solar_collector_construction_fast = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 2000             # Price: 4000, Total cost: 8000000.0 (18.58%)
+			goods_input_launch_capacity_add = 160000             # Price:  200, Total cost: 32000000.0 (74.32%)
+			goods_input_electronic_components_add = 20000        # Price:   80, Total cost: 1600000.0 (3.72%)
+			goods_input_steel_add = 8000                         # Price:   50, Total cost: 400000.0 (0.93%)
+			goods_input_electricity_add = 20000                  # Price:   30, Total cost: 600000.0 (1.39%)
+			goods_input_digital_access_add = 8000                # Price:   60, Total cost: 480000.0 (1.11%)
+			# Total input cost: 43080000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 25000
+			building_employment_academics_add = 25000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+# Solar collector hub - orbital maintenance, no electricity output
+pm_solar_collector = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	country_modifiers = {
+		level_scaled = {
+			country_solar_receiver_max_level_add = 10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 200              # Price: 4000, Total cost: 800000.0 (62.50%)
+			goods_input_electronic_components_add = 500          # Price:   80, Total cost: 40000.0 (3.13%)
+			goods_input_launch_capacity_add = 2000               # Price:  200, Total cost: 400000.0 (31.25%)
+			goods_input_steel_add = 200                          # Price:   50, Total cost: 10000.0 (0.78%)
+			goods_input_digital_access_add = 500                 # Price:   60, Total cost: 30000.0 (2.34%)
+			# Total input cost: 1280000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 2000
+			building_employment_academics_add = 2000
+		}
+	}
+}
+
+# Solar receiver - ground station converting beamed power to electricity
+pm_solar_receiver = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	country_modifiers = {
+		level_scaled = {
+			country_solar_receiver_max_level_add = -1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_electronic_components_add = 20           # Price:   80, Total cost: 1600.0 (76.19%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost: 500.0 (23.81%)
+			# Total input cost: 2100.0
+			goods_output_electricity_add = 200000                # Price:   30, Total cost: 6000000.0 (100.00%)
+			# Total output cost: 6000000.0
+			# Profit: 5997900.0
+			# Profit margin: 99.97%
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 500
+			building_employment_machinists_add = 500
+		}
+	}
+}

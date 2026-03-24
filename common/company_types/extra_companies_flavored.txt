@@ -2416,6 +2416,7 @@ company_fanuc = {
 	}
 	extension_building_types = {
 		building_software_industry
+		building_construction_sector
 	}
 	potential = {
 		always = yes

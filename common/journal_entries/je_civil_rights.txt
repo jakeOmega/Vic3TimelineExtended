@@ -1,0 +1,150 @@
+﻿je_civil_rights = {
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	group = je_group_internal_affairs
+
+	is_shown_when_inactive = {
+		has_technology_researched = civil_rights_movement
+		NOT = { is_country_type = decentralized }
+		any_scope_state = {
+			is_incorporated = yes
+			any_scope_pop = {
+				pop_acceptance < acceptance_status_4
+			}
+		}
+	}
+
+	possible = {
+		any_political_movement = {
+			is_political_movement_type = movement_civil_rights
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					any_political_movement = {
+						is_political_movement_type = movement_civil_rights
+					}
+				}
+			}
+			create_political_movement = { type = movement_civil_rights }
+		}
+	}
+
+	on_monthly_pulse = {
+		random_events = {
+			200 = 0
+			10 = movement_events_te.1
+			10 = movement_events_te.2
+			5 = movement_events_te.3
+			5 = movement_events_te.4
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_civil_rights_status_hostile
+				trigger = {
+					OR = {
+						has_law = law_type:law_minority_rights_violent_hostility
+						has_law = law_type:law_minority_rights_ghettoization
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_civil_rights_status_discriminatory
+				trigger = {
+					OR = {
+						has_law = law_type:law_minority_rights_discrimination
+						has_law = law_type:law_minority_rights_cultural_assimilation
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_civil_rights_status_indifferent
+				trigger = {
+					has_law = law_type:law_minority_rights_indifference
+				}
+			}
+			triggered_desc = {
+				desc = je_civil_rights_status_protective
+				trigger = {
+					has_law = law_type:law_minority_rights_protection
+				}
+			}
+		}
+	}
+
+	complete = {
+		OR = {
+			has_law = law_type:law_minority_rights_affirmative_action
+			AND = {
+				has_law = law_type:law_multicultural
+				has_law = law_type:law_minority_rights_protection
+			}
+		}
+	}
+
+	on_complete = {
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = civil_rights_triumph_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	invalid = {
+		OR = {
+			is_country_type = decentralized
+			NOT = {
+				any_scope_state = {
+					is_incorporated = yes
+					any_scope_pop = {
+						pop_acceptance < acceptance_status_4
+					}
+				}
+			}
+		}
+	}
+
+	fail = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_civil_rights
+			}
+		}
+	}
+
+	on_fail = {
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	timeout = 7300
+
+	on_timeout = {
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+}

@@ -1,6 +1,7 @@
 ﻿on_monthly_pulse_state = {
 	on_actions = {
 		space_elevator_on_action
+		solar_collector_on_action
 		pollution_on_action
 		war_propaganda_on_action
 		state_yearly_cultural_acceptance_add_on_action
@@ -202,6 +203,27 @@ space_elevator_on_action = {
 				add_modifier = {
 					name = space_elevator_progress
 					multiplier = this.var:space_elevator_progress_var
+				}
+			}
+		}
+	}
+}
+
+solar_collector_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_building = building_solar_collector_construction_site
+			}
+			solar_collector_construction = yes
+			every_scope_building = {
+				limit = {
+					is_building_type = building_solar_collector_construction_site
+				}
+				remove_modifier = solar_collector_progress
+				add_modifier = {
+					name = solar_collector_progress
+					multiplier = this.var:solar_collector_progress_var
 				}
 			}
 		}
@@ -1193,53 +1215,7 @@ movement_events_te_on_action = {
 			900 = { } # ~90% chance of nothing
 
 			# === CIVIL RIGHTS MOVEMENT ===
-
-			# Civil Rights March
-			10 = {
-				trigger = {
-					any_political_movement = { is_political_movement_type = movement_civil_rights }
-					has_technology_researched = civil_rights_movement
-					any_scope_state = {
-						is_incorporated = yes
-						any_scope_pop = { pop_acceptance < acceptance_status_4 }
-					}
-				}
-				trigger_event = { id = movement_events_te.1 }
-			}
-			# Segregation Incident
-			10 = {
-				trigger = {
-					any_political_movement = { is_political_movement_type = movement_civil_rights }
-					OR = {
-						has_law = law_type:law_minority_rights_violent_hostility
-						has_law = law_type:law_minority_rights_ghettoization
-						has_law = law_type:law_minority_rights_cultural_assimilation
-						has_law = law_type:law_minority_rights_discrimination
-					}
-				}
-				trigger_event = { id = movement_events_te.2 }
-			}
-			# Cultural Renaissance
-			5 = {
-				trigger = {
-					any_political_movement = { is_political_movement_type = movement_civil_rights }
-					literacy_rate >= 0.4
-				}
-				trigger_event = { id = movement_events_te.3 }
-			}
-			# International Human Rights Pressure
-			5 = {
-				trigger = {
-					any_political_movement = { is_political_movement_type = movement_civil_rights }
-					NOT = { has_law = law_type:law_multicultural }
-					any_country = {
-						NOT = { this = root }
-						country_rank >= rank_value:great_power
-						has_technology_researched = civil_rights_movement
-					}
-				}
-				trigger_event = { id = movement_events_te.4 }
-			}
+			# Civil rights events (1-4) have been moved to je_civil_rights journal entry monthly pulse.
 
 			# === ANTI-WAR MOVEMENT ===
 

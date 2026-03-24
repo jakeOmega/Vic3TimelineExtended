@@ -348,6 +348,8 @@ banking_cycle_events.4 = {
 		}
 		ai_chance = {
 			base = 60
+			modifier = { trigger = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
+			modifier = { trigger = { has_law = law_type:law_central_bank_independence } add = 10 }
 		}
 	}
 
@@ -603,9 +605,17 @@ banking_cycle_events.7 = {
 		}
 	}
 
-	# Option B: Require antitrust review - cautious
+	# Option B: Require antitrust review - cautious (requires antitrust law)
 	option = {
 		name = banking_cycle_events.7.b
+		trigger = {
+			OR = {
+				has_law = law_type:law_trust_busting
+				has_law = law_type:law_regulated_utilities
+				has_law = law_type:law_dirigisme
+				has_law = law_type:law_command_cooperative_economy
+			}
+		}
 		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_2_DESC"
 			change_variable = { name = bubble_pressure add = 2 }
@@ -1405,7 +1415,7 @@ banking_cycle_events.16 = {
 	immediate = {
 	}
 
-	# Option A: Affirm central bank independence - credibility boost
+	# Option A: Affirm central bank independence - credibility boost (stronger with CB independence law)
 	option = {
 		name = banking_cycle_events.16.a
 		default_option = yes
@@ -1418,12 +1428,20 @@ banking_cycle_events.16 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		if = {
+			limit = { has_law = law_type:law_central_bank_independence }
+			custom_tooltip = {
+				text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+				change_variable = { name = bubble_pressure add = -3 }
+			}
+		}
 		add_radicals = {
 			value = small_radicals
 			pop_type = capitalists
 		}
 		ai_chance = {
 			base = 50
+			modifier = { trigger = { has_law = law_type:law_central_bank_independence } add = 20 }
 		}
 	}
 
@@ -1445,6 +1463,7 @@ banking_cycle_events.16 = {
 		ai_chance = {
 			base = 30
 			modifier = { add = 15 banking_cycle_is_recession = yes }
+			modifier = { trigger = { has_law = law_type:law_central_bank_independence } add = -15 }
 		}
 	}
 
@@ -1817,6 +1836,8 @@ banking_cycle_events.20 = {
 		ai_chance = {
 			base = 40
 			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
+			modifier = { trigger = { has_law = law_type:law_prudential_narrow_banking } add = 20 }
+			modifier = { trigger = { has_law = law_type:law_central_bank_independence } add = 10 }
 		}
 	}
 
@@ -1846,6 +1867,2049 @@ banking_cycle_events.20 = {
 		}
 		ai_chance = {
 			base = 15
+		}
+	}
+}
+
+# ============================================================================
+# NEW BANKING CYCLE EVENTS 21-45
+# Added to increase variety across all cycle phases and tech eras.
+# ============================================================================
+
+
+# ==========================================================================
+# EARLY ERA ADDITIONS (no extra tech beyond stock_exchange)
+# ==========================================================================
+
+# --------------------------------------------------------------------------
+# 21. Merchant Bank Prosperity
+# Fires during stable/expansion. A respected merchant bank reports
+# record profits, boosting confidence in the financial sector.
+# POSITIVE, SIMPLE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.21 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+
+	title = banking_cycle_events.21.t
+	desc = banking_cycle_events.21.d
+	flavor = banking_cycle_events.21.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.21.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_3_DESC"
+			change_variable = { name = finance_cycle_value add = 3 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_2_DESC"
+			change_variable = { name = bubble_pressure add = 2 }
+		}
+		add_modifier = {
+			name = banking_event_merchant_prosperity
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 60
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.21.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_3_DESC"
+			change_variable = { name = finance_cycle_value add = 3 }
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 22. New Provincial Exchange
+# Fires during expansion+. A provincial city opens its own stock exchange.
+# POSITIVE, SIMPLE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.22 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+
+	title = banking_cycle_events.22.t
+	desc = banking_cycle_events.22.d
+	flavor = banking_cycle_events.22.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.22.a
+		default_option = yes
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_4_DESC"
+			change_variable = { name = bubble_pressure add = 4 }
+		}
+		add_modifier = {
+			name = banking_event_provincial_exchange
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 55
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.22.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_2_DESC"
+			change_variable = { name = bubble_pressure add = 2 }
+		}
+		ai_chance = {
+			base = 45
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 23. Banking Scandal
+# Fires in any phase. A prominent banker is caught embezzling.
+# NEGATIVE, SIMPLE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.23 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = banking_cycle_events.23.t
+	desc = banking_cycle_events.23.d
+	flavor = banking_cycle_events.23.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.23.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_value add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		add_modifier = {
+			name = banking_event_scandal_fallout
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 55
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.23.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_5_DESC"
+			change_variable = { name = finance_cycle_value add = -5 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 45
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 24. Warehouse Receipts Fraud
+# Fires during expansion/boom/frenzy with bubble >= 20.
+# Fraudulent warehouse receipts circulate in the lending market.
+# NEGATIVE, 3 options
+# --------------------------------------------------------------------------
+banking_cycle_events.24 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = banking_cycle_events.24.t
+	desc = banking_cycle_events.24.d
+	flavor = banking_cycle_events.24.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.24.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_5_DESC"
+			change_variable = { name = finance_cycle_value add = -5 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_8_DESC"
+			change_variable = { name = bubble_pressure add = -8 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = -2 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 45
+			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.24.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_value add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		ai_chance = {
+			base = 35
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.24.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_5_DESC"
+			change_variable = { name = bubble_pressure add = 5 }
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 25. Trade Bill Innovation
+# Fires during stable+, not at war. New instruments improve commerce.
+# POSITIVE, SIMPLE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.25 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+
+	title = banking_cycle_events.25.t
+	desc = banking_cycle_events.25.d
+	flavor = banking_cycle_events.25.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.25.a
+		default_option = yes
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		add_modifier = {
+			name = banking_event_trade_bills
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 60
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.25.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		add_modifier = {
+			name = banking_event_trade_bills
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+}
+
+
+# ==========================================================================
+# MID ERA ADDITIONS (central_banking / investment_banks / mutual_funds)
+# ==========================================================================
+
+# --------------------------------------------------------------------------
+# 26. Pension Fund Growth
+# Fires during expansion+. Requires mutual_funds.
+# Growing pension funds provide stable, long-term capital.
+# POSITIVE, SIMPLE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.26 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = banking_cycle_events.26.t
+	desc = banking_cycle_events.26.d
+	flavor = banking_cycle_events.26.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.26.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_3_DESC"
+			change_variable = { name = finance_cycle_value add = 3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
+			change_variable = { name = bubble_pressure add = -2 }
+		}
+		add_modifier = {
+			name = banking_event_pension_stability
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 55
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.26.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_5_DESC"
+			change_variable = { name = finance_cycle_value add = 5 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_4_DESC"
+			change_variable = { name = bubble_pressure add = 4 }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 45
+			modifier = { add = -15 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 27. Telegraph Banking Revolution
+# Fires during expansion+. Requires central_banking.
+# Telegraph enables faster interbank settlements and arbitrage.
+# POSITIVE, SIMPLE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.27 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+
+	title = banking_cycle_events.27.t
+	desc = banking_cycle_events.27.d
+	flavor = banking_cycle_events.27.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.27.a
+		default_option = yes
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		add_modifier = {
+			name = banking_event_telegraph_settlement
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 55
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.27.b
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		ai_chance = {
+			base = 45
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 28. Interbank Lending Freeze
+# Fires during stagnation/downturn. Requires central_banking.
+# Banks refuse to lend to each other, threatening a liquidity crisis.
+# NEGATIVE, COMPLEX (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.28 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = banking_cycle_events.28.t
+	desc = banking_cycle_events.28.d
+	flavor = banking_cycle_events.28.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.28.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_5_DESC"
+			change_variable = { name = finance_cycle_value add = -5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = -2 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 30
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.28.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_value add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
+			change_variable = { name = bubble_pressure add = -2 }
+		}
+		add_modifier = {
+			name = banking_event_interbank_guarantee
+			multiplier = banking_event_expense_medium
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 45
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.28.c
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_6_DESC"
+			change_variable = { name = bubble_pressure add = 6 }
+		}
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 29. Agricultural Cooperative Banking
+# Fires during stable+. Requires central_banking.
+# Rural cooperatives pool savings to form lending institutions.
+# POSITIVE, SIMPLE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.29 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = banking_cycle_events.29.t
+	desc = banking_cycle_events.29.d
+	flavor = banking_cycle_events.29.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.29.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_3_DESC"
+			change_variable = { name = finance_cycle_value add = 3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
+			change_variable = { name = bubble_pressure add = -2 }
+		}
+		add_modifier = {
+			name = banking_event_cooperative_growth
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { has_law = law_type:law_free_mutual_banking }
+			custom_tooltip = {
+				text = "CYCLE_VALUE_2_DESC"
+				change_variable = { name = finance_cycle_value add = 2 }
+			}
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 55
+			modifier = { trigger = { has_law = law_type:law_free_mutual_banking } add = 15 }
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.29.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_5_DESC"
+			change_variable = { name = finance_cycle_value add = 5 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 45
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 30. Foreign Debt Arbitrage
+# Fires during expansion+. Requires investment_banks.
+# Investors exploit interest rate differences between countries.
+# MIXED, COMPLEX (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.30 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = banking_cycle_events.30.t
+	desc = banking_cycle_events.30.d
+	flavor = banking_cycle_events.30.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.30.a
+		default_option = yes
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_8_DESC"
+			change_variable = { name = bubble_pressure add = 8 }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 35
+			modifier = { add = -25 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.30.b
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.30.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 25
+			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 31. Bank Holiday Proposal
+# Fires during downturn/panic. Requires central_banking.
+# Close all banks temporarily to halt a panic.
+# COMPLEX (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.31 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = banking_cycle_events.31.t
+	desc = banking_cycle_events.31.d
+	flavor = banking_cycle_events.31.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.31.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_5_DESC"
+			change_variable = { name = finance_cycle_value add = 5 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_10_DESC"
+			change_variable = { name = bubble_pressure add = -10 }
+		}
+		add_modifier = {
+			name = banking_event_bank_holiday
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.31.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_8_DESC"
+			change_variable = { name = finance_cycle_value add = -8 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_momentum add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 30
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.31.c
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_value add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		add_modifier = {
+			name = banking_event_interbank_guarantee
+			multiplier = banking_event_expense_small
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 35
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 32. Trust Company Failure
+# Fires during boom/frenzy. Requires mutual_funds. RARE.
+# A major trust company spectacularly collapses.
+# NEGATIVE, COMPLEX (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.32 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = banking_cycle_events.32.t
+	desc = banking_cycle_events.32.d
+	flavor = banking_cycle_events.32.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.32.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_8_DESC"
+			change_variable = { name = finance_cycle_value add = -8 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_momentum add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_10_DESC"
+			change_variable = { name = bubble_pressure add = -10 }
+		}
+		add_modifier = {
+			name = banking_event_trust_collapse
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.32.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_value add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		add_modifier = {
+			name = banking_event_interbank_guarantee
+			multiplier = banking_event_expense_large
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.32.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_8_DESC"
+			change_variable = { name = bubble_pressure add = 8 }
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 33. Commercial Paper Market
+# Fires during stable/expansion. Requires investment_banks.
+# Short-term business lending instruments become popular.
+# POSITIVE, SIMPLE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.33 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+
+	title = banking_cycle_events.33.t
+	desc = banking_cycle_events.33.d
+	flavor = banking_cycle_events.33.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.33.a
+		default_option = yes
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_2_DESC"
+			change_variable = { name = bubble_pressure add = 2 }
+		}
+		add_modifier = {
+			name = banking_event_commercial_paper
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 55
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.33.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_5_DESC"
+			change_variable = { name = bubble_pressure add = 5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		add_modifier = {
+			name = banking_event_commercial_paper
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 45
+			modifier = { add = -15 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 34. Deposit Insurance Debate
+# Fires during stagnation+. Requires central_banking.
+# Should the government guarantee ordinary deposits?
+# MIXED, COMPLEX (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.34 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = banking_cycle_events.34.t
+	desc = banking_cycle_events.34.d
+	flavor = banking_cycle_events.34.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.34.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_3_DESC"
+			change_variable = { name = finance_cycle_value add = 3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		add_modifier = {
+			name = banking_event_deposit_insurance
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 45
+			modifier = { trigger = { has_law = law_type:law_central_bank_independence } add = 15 }
+			modifier = { trigger = { has_law = law_type:law_prudential_narrow_banking } add = 10 }
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.34.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 35
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.34.c
+		custom_tooltip = {
+			text = "CYCLE_VALUE_3_DESC"
+			change_variable = { name = finance_cycle_value add = 3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		add_modifier = {
+			name = banking_event_deposit_insurance
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 35
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 35. Joint-Stock Company Boom
+# Fires during expansion+. Requires corporate_management.
+# Joint-stock companies multiply, fueling investment.
+# POSITIVE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.35 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+
+	title = banking_cycle_events.35.t
+	desc = banking_cycle_events.35.d
+	flavor = banking_cycle_events.35.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.35.a
+		default_option = yes
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_6_DESC"
+			change_variable = { name = bubble_pressure add = 6 }
+		}
+		add_modifier = {
+			name = banking_event_joint_stock_boom
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = { add = -20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.35.b
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_2_DESC"
+			change_variable = { name = bubble_pressure add = 2 }
+		}
+		ai_chance = {
+			base = 50
+			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
+		}
+	}
+}
+
+
+# ==========================================================================
+# LATE ERA ADDITIONS (keynesian / modern_financial / consumer_credit)
+# ==========================================================================
+
+# --------------------------------------------------------------------------
+# 36. Fintech Disruption
+# Fires during expansion+. Requires modern_financial_instruments.
+# New technology firms challenge traditional banking.
+# POSITIVE/MIXED (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.36 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = banking_cycle_events.36.t
+	desc = banking_cycle_events.36.d
+	flavor = banking_cycle_events.36.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.36.a
+		default_option = yes
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_6_DESC"
+			change_variable = { name = bubble_pressure add = 6 }
+		}
+		add_modifier = {
+			name = banking_event_fintech_growth
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 40
+			modifier = { add = -20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.36.b
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_2_DESC"
+			change_variable = { name = bubble_pressure add = 2 }
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.36.c
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 37. Mortgage-Backed Securities
+# Fires during boom/frenzy. Requires consumer_credit.
+# Banks bundle mortgages into tradeable securities.
+# MIXED/DANGEROUS (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.37 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = banking_cycle_events.37.t
+	desc = banking_cycle_events.37.d
+	flavor = banking_cycle_events.37.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.37.a
+		default_option = yes
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_12_DESC"
+			change_variable = { name = bubble_pressure add = 12 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		add_modifier = {
+			name = banking_event_mbs_boom
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 30
+			modifier = { add = -25 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.37.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_5_DESC"
+			change_variable = { name = bubble_pressure add = 5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		ai_chance = {
+			base = 45
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.37.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = -2 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 25
+			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 38. Microfinance Initiative
+# Fires during stable+. Requires keynesian_economics.
+# Small loans to entrepreneurs and the urban poor.
+# POSITIVE, SIMPLE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.38 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = banking_cycle_events.38.t
+	desc = banking_cycle_events.38.d
+	flavor = banking_cycle_events.38.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.38.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_3_DESC"
+			change_variable = { name = finance_cycle_value add = 3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
+			change_variable = { name = bubble_pressure add = -2 }
+		}
+		add_modifier = {
+			name = banking_event_microfinance
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 55
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.38.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_3_DESC"
+			change_variable = { name = finance_cycle_value add = 3 }
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 45
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 39. Quantitative Easing Debate
+# Fires during downturn/panic. Requires keynesian_economics.
+# The central bank proposes buying government bonds.
+# COMPLEX (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.39 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = banking_cycle_events.39.t
+	desc = banking_cycle_events.39.d
+	flavor = banking_cycle_events.39.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.39.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_5_DESC"
+			change_variable = { name = finance_cycle_value add = 5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_3_DESC"
+			change_variable = { name = finance_cycle_momentum add = 3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_8_DESC"
+			change_variable = { name = bubble_pressure add = 8 }
+		}
+		add_modifier = {
+			name = banking_event_qe_stimulus
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 45
+			modifier = { add = 15 banking_cycle_is_panic = yes }
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.39.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_3_DESC"
+			change_variable = { name = finance_cycle_value add = 3 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		ai_chance = {
+			base = 35
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.39.c
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 40. Credit Rating Agency Failure
+# Fires during boom/frenzy. Requires modern_financial_instruments.
+# Rating agencies gave top marks to worthless securities.
+# NEGATIVE, COMPLEX (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.40 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = banking_cycle_events.40.t
+	desc = banking_cycle_events.40.d
+	flavor = banking_cycle_events.40.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.40.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_5_DESC"
+			change_variable = { name = finance_cycle_value add = -5 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_8_DESC"
+			change_variable = { name = bubble_pressure add = -8 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = -2 }
+		}
+		add_modifier = {
+			name = banking_event_rating_crackdown
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 45
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.40.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_value add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		ai_chance = {
+			base = 35
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.40.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_5_DESC"
+			change_variable = { name = bubble_pressure add = 5 }
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 41. Student Loan Burden
+# Fires during expansion+. Requires consumer_credit.
+# Rising education costs create a generation of indebted graduates.
+# NEGATIVE (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.41 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = banking_cycle_events.41.t
+	desc = banking_cycle_events.41.d
+	flavor = banking_cycle_events.41.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.41.a
+		default_option = yes
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_4_DESC"
+			change_variable = { name = bubble_pressure add = 4 }
+		}
+		add_modifier = {
+			name = banking_event_student_debt_relief
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_event_student_debt_relief_cost
+			multiplier = banking_event_expense_small
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.41.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 35
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.41.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 42. Green Bond Initiative
+# Fires during stable+. Requires keynesian_economics.
+# Bonds financing environmental and infrastructure projects.
+# POSITIVE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.42 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = banking_cycle_events.42.t
+	desc = banking_cycle_events.42.d
+	flavor = banking_cycle_events.42.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.42.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_3_DESC"
+			change_variable = { name = finance_cycle_value add = 3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
+			change_variable = { name = bubble_pressure add = -2 }
+		}
+		add_modifier = {
+			name = banking_event_green_bonds
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 55
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.42.b
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_3_DESC"
+			change_variable = { name = bubble_pressure add = 3 }
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 45
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 43. Venture Capital Boom
+# Fires during expansion/boom. Requires modern_financial_instruments.
+# Venture capital funds pour money into innovative new firms.
+# POSITIVE (2 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.43 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = banking_cycle_events.43.t
+	desc = banking_cycle_events.43.d
+	flavor = banking_cycle_events.43.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.43.a
+		default_option = yes
+		custom_tooltip = {
+			text = "MOMENTUM_2_DESC"
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_6_DESC"
+			change_variable = { name = bubble_pressure add = 6 }
+		}
+		add_modifier = {
+			name = banking_event_venture_boom
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = { add = -20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.43.b
+		custom_tooltip = {
+			text = "MOMENTUM_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_2_DESC"
+			change_variable = { name = bubble_pressure add = 2 }
+		}
+		ai_chance = {
+			base = 50
+			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 44. Predatory Lending Scandal
+# Fires during boom/frenzy. Requires consumer_credit.
+# Abusive lending practices targeting the poor exposed.
+# NEGATIVE (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.44 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = banking_cycle_events.44.t
+	desc = banking_cycle_events.44.d
+	flavor = banking_cycle_events.44.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = banking_cycle_events.44.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_value add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
+			change_variable = { name = bubble_pressure add = -5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		add_modifier = {
+			name = banking_event_predatory_crackdown
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.44.b
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
+			change_variable = { name = bubble_pressure add = -2 }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 30
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.44.c
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_4_DESC"
+			change_variable = { name = bubble_pressure add = 4 }
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 15
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 45. International Bailout Request
+# Fires during downturn/panic. Requires keynesian_economics.
+# A trading partner asks for emergency financial assistance.
+# COMPLEX (3 options)
+# --------------------------------------------------------------------------
+banking_cycle_events.45 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = banking_cycle_events.45.t
+	desc = banking_cycle_events.45.d
+	flavor = banking_cycle_events.45.f
+
+	duration = 3
+	is_popup = yes
+
+	immediate = {
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				has_diplomatic_relevance = root
+			}
+			save_scope_as = bailout_country
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.45.a
+		default_option = yes
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_value add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
+			change_variable = { name = bubble_pressure add = -3 }
+		}
+		add_modifier = {
+			name = banking_event_bailout_cost
+			multiplier = banking_event_expense_large
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_event_bailout_goodwill
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:bailout_country }
+			change_relations = {
+				country = scope:bailout_country
+				value = 30
+			}
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.45.b
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_3_DESC"
+			change_variable = { name = finance_cycle_value add = -3 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
+			change_variable = { name = bubble_pressure add = -2 }
+		}
+		add_modifier = {
+			name = banking_event_bailout_cost
+			multiplier = banking_event_expense_small
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:bailout_country }
+			change_relations = {
+				country = scope:bailout_country
+				value = 10
+			}
+		}
+		ai_chance = {
+			base = 35
+		}
+	}
+
+	option = {
+		name = banking_cycle_events.45.c
+		custom_tooltip = {
+			text = "CYCLE_VALUE_MINUS_5_DESC"
+			change_variable = { name = finance_cycle_value add = -5 }
+		}
+		custom_tooltip = {
+			text = "MOMENTUM_MINUS_1_DESC"
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		if = {
+			limit = { exists = scope:bailout_country }
+			change_relations = {
+				country = scope:bailout_country
+				value = -20
+			}
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 25
 		}
 	}
 }

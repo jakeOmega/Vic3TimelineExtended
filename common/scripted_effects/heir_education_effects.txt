@@ -1,0 +1,430 @@
+﻿### Heir Education - Scripted Effects
+
+# ──────────────────────── MAIN RESOLUTION ────────────────────────
+# Called when the player concludes education. Applies traits, ideology, and IG to the heir.
+# Uses random_list with weights influenced by investment levels.
+
+heir_education_resolve_effect = {
+	# ─── Resolve Administrative Trait ───
+	if = {
+		limit = { var:heir_ed_admin >= 3 }
+		# High admin investment
+		heir ?= {
+			random_list = {
+				5 = { add_trait = ruler_poor_administrator }
+				15 = { }
+				45 = { add_trait = ruler_skilled_administrator }
+				35 = { add_trait = ruler_exceptional_administrator }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_admin >= 2 }
+		heir ?= {
+			random_list = {
+				10 = { add_trait = ruler_poor_administrator }
+				25 = { }
+				45 = { add_trait = ruler_skilled_administrator }
+				20 = { add_trait = ruler_exceptional_administrator }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_admin >= 1 }
+		heir ?= {
+			random_list = {
+				15 = { add_trait = ruler_poor_administrator }
+				35 = { }
+				35 = { add_trait = ruler_skilled_administrator }
+				15 = { add_trait = ruler_exceptional_administrator }
+			}
+		}
+	}
+	else = {
+		# No admin investment: weighted toward poor/average
+		heir ?= {
+			random_list = {
+				30 = { add_trait = ruler_poor_administrator }
+				45 = { }
+				20 = { add_trait = ruler_skilled_administrator }
+				5 = { add_trait = ruler_exceptional_administrator }
+			}
+		}
+	}
+
+	# ─── Resolve Diplomatic Trait ───
+	if = {
+		limit = { var:heir_ed_diplo >= 3 }
+		heir ?= {
+			random_list = {
+				5 = { add_trait = ruler_poor_diplomat }
+				15 = { }
+				45 = { add_trait = ruler_skilled_diplomat }
+				35 = { add_trait = ruler_exceptional_diplomat }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_diplo >= 2 }
+		heir ?= {
+			random_list = {
+				10 = { add_trait = ruler_poor_diplomat }
+				25 = { }
+				45 = { add_trait = ruler_skilled_diplomat }
+				20 = { add_trait = ruler_exceptional_diplomat }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_diplo >= 1 }
+		heir ?= {
+			random_list = {
+				15 = { add_trait = ruler_poor_diplomat }
+				35 = { }
+				35 = { add_trait = ruler_skilled_diplomat }
+				15 = { add_trait = ruler_exceptional_diplomat }
+			}
+		}
+	}
+	else = {
+		heir ?= {
+			random_list = {
+				30 = { add_trait = ruler_poor_diplomat }
+				45 = { }
+				20 = { add_trait = ruler_skilled_diplomat }
+				5 = { add_trait = ruler_exceptional_diplomat }
+			}
+		}
+	}
+
+	# ─── Resolve Military Trait ───
+	if = {
+		limit = { var:heir_ed_military >= 3 }
+		heir ?= {
+			random_list = {
+				5 = { add_trait = ruler_poor_commander }
+				15 = { }
+				45 = { add_trait = ruler_skilled_commander }
+				35 = { add_trait = ruler_exceptional_commander }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_military >= 2 }
+		heir ?= {
+			random_list = {
+				10 = { add_trait = ruler_poor_commander }
+				25 = { }
+				45 = { add_trait = ruler_skilled_commander }
+				20 = { add_trait = ruler_exceptional_commander }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_military >= 1 }
+		heir ?= {
+			random_list = {
+				15 = { add_trait = ruler_poor_commander }
+				35 = { }
+				35 = { add_trait = ruler_skilled_commander }
+				15 = { add_trait = ruler_exceptional_commander }
+			}
+		}
+	}
+	else = {
+		heir ?= {
+			random_list = {
+				30 = { add_trait = ruler_poor_commander }
+				45 = { }
+				20 = { add_trait = ruler_skilled_commander }
+				5 = { add_trait = ruler_exceptional_commander }
+			}
+		}
+	}
+
+	# ─── Resolve Ideology ───
+	# heir_ed_ideology: negative = conservative, positive = progressive, 0 = no push
+	if = {
+		limit = { var:heir_ed_ideology >= 2 }
+		# Strong progressive push
+		heir ?= {
+			random_list = {
+				35 = { set_ideology = ideology:ideology_reformer }
+				25 = { set_ideology = ideology:ideology_liberal_leader }
+				20 = { set_ideology = ideology:ideology_social_democrat }
+				10 = { set_ideology = ideology:ideology_humanitarian }
+				5 = { set_ideology = ideology:ideology_communist }
+				3 = { set_ideology = ideology:ideology_vanguardist }
+				2 = { } # No change
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_ideology >= 1 }
+		# Mild progressive push
+		heir ?= {
+			random_list = {
+				30 = { set_ideology = ideology:ideology_reformer }
+				20 = { set_ideology = ideology:ideology_liberal_leader }
+				15 = { set_ideology = ideology:ideology_humanitarian }
+				5 = { set_ideology = ideology:ideology_social_democrat }
+				30 = { } # No change - often keeps current ideology
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_ideology <= -2 }
+		# Strong conservative push
+		heir ?= {
+			random_list = {
+				35 = { set_ideology = ideology:ideology_royalist }
+				25 = { set_ideology = ideology:ideology_traditionalist }
+				15 = { set_ideology = ideology:ideology_authoritarian }
+				10 = { set_ideology = ideology:ideology_theocrat }
+				8 = { set_ideology = ideology:ideology_ethno_nationalist }
+				5 = { set_ideology = ideology:ideology_jingoist_leader }
+				2 = { } # No change
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_ideology <= -1 }
+		# Mild conservative push
+		heir ?= {
+			random_list = {
+				30 = { set_ideology = ideology:ideology_royalist }
+				20 = { set_ideology = ideology:ideology_traditionalist }
+				10 = { set_ideology = ideology:ideology_authoritarian }
+				5 = { set_ideology = ideology:ideology_theocrat }
+				35 = { } # No change
+			}
+		}
+	}
+	# else: no ideology investment, no change
+
+	# ─── Resolve Interest Group ───
+	# heir_ed_ig: negative = establishment, positive = reformist
+	if = {
+		limit = { var:heir_ed_ig >= 2 }
+		# Strong reformist push
+		heir ?= {
+			random_list = {
+				35 = { set_interest_group = owner.ig:ig_intelligentsia }
+				30 = { set_interest_group = owner.ig:ig_trade_unions }
+				20 = { set_interest_group = owner.ig:ig_rural_folk }
+				15 = { } # No change
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_ig >= 1 }
+		# Mild reformist push
+		heir ?= {
+			random_list = {
+				30 = { set_interest_group = owner.ig:ig_intelligentsia }
+				15 = { set_interest_group = owner.ig:ig_trade_unions }
+				15 = { set_interest_group = owner.ig:ig_rural_folk }
+				40 = { } # No change
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_ig <= -2 }
+		# Strong establishment push
+		heir ?= {
+			random_list = {
+				30 = { set_interest_group = owner.ig:ig_landowners }
+				25 = { set_interest_group = owner.ig:ig_industrialists }
+				20 = { set_interest_group = owner.ig:ig_devout }
+				10 = { set_interest_group = owner.ig:ig_armed_forces }
+				15 = { } # No change
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_ig <= -1 }
+		# Mild establishment push
+		heir ?= {
+			random_list = {
+				25 = { set_interest_group = owner.ig:ig_landowners }
+				15 = { set_interest_group = owner.ig:ig_industrialists }
+				10 = { set_interest_group = owner.ig:ig_devout }
+				50 = { } # No change
+			}
+		}
+	}
+	# else: no IG investment, implicit push from dominant education type
+	else = {
+		# If no explicit IG mentorship, education type influences IG weakly
+		if = {
+			limit = {
+				var:heir_ed_admin > var:heir_ed_diplo
+				var:heir_ed_admin > var:heir_ed_military
+			}
+			heir ?= {
+				random_list = {
+					25 = { set_interest_group = owner.ig:ig_industrialists }
+					15 = { set_interest_group = owner.ig:ig_petty_bourgeoisie }
+					60 = { } # No change
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				var:heir_ed_diplo > var:heir_ed_admin
+				var:heir_ed_diplo > var:heir_ed_military
+			}
+			heir ?= {
+				random_list = {
+					30 = { set_interest_group = owner.ig:ig_intelligentsia }
+					10 = { set_interest_group = owner.ig:ig_landowners }
+					60 = { } # No change
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				var:heir_ed_military > var:heir_ed_admin
+				var:heir_ed_military > var:heir_ed_diplo
+			}
+			heir ?= {
+				random_list = {
+					35 = { set_interest_group = owner.ig:ig_armed_forces }
+					65 = { } # No change
+				}
+			}
+		}
+	}
+
+	# ─── Mark heir as educated ───
+	heir ?= {
+		set_variable = received_education
+	}
+
+	# ─── Clean up country variables ───
+	set_variable = { name = heir_education_concluded value = yes }
+}
+
+# ──────────────────────── IG REACTION EFFECTS ────────────────────────
+# Called by investment buttons to generate IG approval/disapproval
+
+heir_education_admin_ig_reaction = {
+	# Industrialists and petty bourgeoisie approve administrative focus
+	ig:ig_industrialists = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	# Armed forces resent civilian focus
+	ig:ig_armed_forces = {
+		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+	}
+}
+
+heir_education_diplo_ig_reaction = {
+	# Intelligentsia approves diplomatic education
+	ig:ig_intelligentsia = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+}
+
+heir_education_military_ig_reaction = {
+	# Armed forces approve military focus
+	ig:ig_armed_forces = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	# Intelligentsia dislikes martial focus
+	ig:ig_intelligentsia = {
+		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+	}
+}
+
+heir_education_progressive_ig_reaction = {
+	# Progressives approve
+	ig:ig_intelligentsia = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	ig:ig_trade_unions = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	# Conservatives upset
+	ig:ig_devout = {
+		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+	}
+	ig:ig_landowners = {
+		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+	}
+}
+
+heir_education_conservative_ig_reaction = {
+	# Conservatives approve
+	ig:ig_devout = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	ig:ig_landowners = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	# Progressives upset
+	ig:ig_intelligentsia = {
+		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+	}
+	ig:ig_trade_unions = {
+		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+	}
+}
+
+heir_education_establishment_ig_reaction = {
+	# Establishment IGs approve
+	ig:ig_landowners = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	ig:ig_industrialists = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	# Reformists resent
+	ig:ig_trade_unions = {
+		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+	}
+	ig:ig_rural_folk = {
+		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+	}
+}
+
+heir_education_reformist_ig_reaction = {
+	# Reformist IGs approve
+	ig:ig_trade_unions = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	ig:ig_rural_folk = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	ig:ig_intelligentsia = {
+		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	# Establishment resents
+	ig:ig_landowners = {
+		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+	}
+	ig:ig_industrialists = {
+		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+	}
+}
+
+# ──────────────────────── CLEANUP ────────────────────────
+# Called on JE completion to reset all education variables
+
+heir_education_cleanup_effect = {
+	remove_variable = heir_ed_admin
+	remove_variable = heir_ed_diplo
+	remove_variable = heir_ed_military
+	remove_variable = heir_ed_ideology
+	remove_variable = heir_ed_ig
+	remove_variable = heir_ed_total
+	remove_variable = heir_education_concluded
+	if = {
+		limit = { has_modifier = heir_education_innovation_cost }
+		remove_modifier = heir_education_innovation_cost
+	}
+	if = {
+		limit = { has_modifier = heir_education_cooldown }
+		remove_modifier = heir_education_cooldown
+	}
+}

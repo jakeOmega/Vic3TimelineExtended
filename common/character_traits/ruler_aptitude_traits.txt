@@ -1,0 +1,556 @@
+﻿### Ruler Aptitude Traits - Education-based skill traits inspired by EU4/CK3 monarch skills
+### Applied primarily through the heir education JE, but also available via natural weight system
+
+# ──────────────────────── ADMINISTRATIVE ────────────────────────
+
+ruler_poor_administrator = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/political_appointee.dds"
+
+	character_modifier = {
+		character_popularity_add = -10
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+		country_bureaucracy_mult = -0.10
+		country_legitimacy_base_add = -5
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+		interest_group_pol_str_mult = -0.05
+	}
+
+	executive_modifier = {
+		building_throughput_add = -0.03
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+		if = {
+			limit = {
+				is_ruler = yes
+				NOR = {
+					has_trait = ruler_skilled_administrator
+					has_trait = ruler_exceptional_administrator
+				}
+			}
+			add = 1
+		}
+	}
+
+	replace = {
+		ruler_skilled_administrator
+		ruler_exceptional_administrator
+	}
+}
+
+ruler_skilled_administrator = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/experienced.dds"
+
+	character_modifier = {
+		character_popularity_add = 10
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+		country_bureaucracy_mult = 0.10
+		country_legitimacy_base_add = 5
+		country_authority_add = 25
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+		interest_group_pol_str_mult = 0.05
+	}
+
+	executive_modifier = {
+		building_throughput_add = 0.05
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+		if = {
+			limit = {
+				is_ruler = yes
+				age >= 35
+				NOR = {
+					has_trait = ruler_poor_administrator
+					has_trait = ruler_exceptional_administrator
+				}
+			}
+			add = 1
+		}
+	}
+
+	replace = {
+		ruler_poor_administrator
+		ruler_exceptional_administrator
+	}
+}
+
+ruler_exceptional_administrator = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/meticulous.dds"
+
+	character_modifier = {
+		character_popularity_add = 20
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+		country_bureaucracy_mult = 0.20
+		country_legitimacy_base_add = 10
+		country_authority_add = 50
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+		interest_group_pol_str_mult = 0.10
+	}
+
+	executive_modifier = {
+		building_throughput_add = 0.10
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+		if = {
+			limit = {
+				is_ruler = yes
+				age >= 40
+				NOR = {
+					has_trait = ruler_poor_administrator
+					has_trait = ruler_skilled_administrator
+				}
+				owner ?= {
+					country_rank >= rank_value:great_power
+				}
+			}
+			add = 1
+		}
+	}
+
+	replace = {
+		ruler_poor_administrator
+		ruler_skilled_administrator
+	}
+}
+
+# ──────────────────────── DIPLOMATIC ────────────────────────
+
+ruler_poor_diplomat = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/arrogant.dds"
+
+	character_modifier = {
+		character_popularity_add = -5
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+		country_prestige_mult = -0.10
+		country_diplomatic_reputation_add = -2
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+		interest_group_pop_attraction_mult = -0.05
+	}
+
+	executive_modifier = {
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+		if = {
+			limit = {
+				is_ruler = yes
+				NOR = {
+					has_trait = ruler_skilled_diplomat
+					has_trait = ruler_exceptional_diplomat
+				}
+			}
+			add = 1
+		}
+	}
+
+	replace = {
+		ruler_skilled_diplomat
+		ruler_exceptional_diplomat
+	}
+}
+
+ruler_skilled_diplomat = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/tactful.dds"
+
+	character_modifier = {
+		character_popularity_add = 10
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+		country_prestige_mult = 0.10
+		country_diplomatic_reputation_add = 2
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+		interest_group_pop_attraction_mult = 0.05
+	}
+
+	executive_modifier = {
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+		if = {
+			limit = {
+				is_ruler = yes
+				age >= 35
+				NOR = {
+					has_trait = ruler_poor_diplomat
+					has_trait = ruler_exceptional_diplomat
+				}
+			}
+			add = 1
+		}
+	}
+
+	replace = {
+		ruler_poor_diplomat
+		ruler_exceptional_diplomat
+	}
+}
+
+ruler_exceptional_diplomat = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/charismatic.dds"
+
+	character_modifier = {
+		character_popularity_add = 20
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+		country_prestige_mult = 0.20
+		country_diplomatic_reputation_add = 3
+		country_influence_add = 25
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+		interest_group_pop_attraction_mult = 0.10
+	}
+
+	executive_modifier = {
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+		if = {
+			limit = {
+				is_ruler = yes
+				age >= 40
+				NOR = {
+					has_trait = ruler_poor_diplomat
+					has_trait = ruler_skilled_diplomat
+				}
+				owner ?= {
+					country_rank >= rank_value:great_power
+				}
+			}
+			add = 1
+		}
+	}
+
+	replace = {
+		ruler_poor_diplomat
+		ruler_skilled_diplomat
+	}
+}
+
+# ──────────────────────── MILITARY ────────────────────────
+
+ruler_poor_commander = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/reckless.dds"
+
+	character_modifier = {
+		character_popularity_add = -5
+	}
+
+	command_modifier = {
+		unit_offense_mult = -0.10
+		unit_defense_mult = -0.10
+	}
+
+	country_modifier = {
+		country_war_exhaustion_casualties_mult = 0.10
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	executive_modifier = {
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			has_role = general
+			has_role = admiral
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					is_ruler = yes
+					has_role = general
+					has_role = admiral
+				}
+				NOR = {
+					has_trait = ruler_skilled_commander
+					has_trait = ruler_exceptional_commander
+				}
+			}
+			add = 1
+		}
+	}
+
+	replace = {
+		ruler_skilled_commander
+		ruler_exceptional_commander
+	}
+}
+
+ruler_skilled_commander = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/direct.dds"
+
+	character_modifier = {
+		character_popularity_add = 10
+	}
+
+	command_modifier = {
+		unit_offense_mult = 0.10
+		unit_defense_mult = 0.10
+		unit_morale_recovery_mult = 0.10
+	}
+
+	country_modifier = {
+		country_war_exhaustion_casualties_mult = -0.10
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+		interest_group_pol_str_mult = 0.05
+	}
+
+	executive_modifier = {
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			has_role = general
+			has_role = admiral
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					is_ruler = yes
+					has_role = general
+					has_role = admiral
+				}
+				age >= 35
+				NOR = {
+					has_trait = ruler_poor_commander
+					has_trait = ruler_exceptional_commander
+				}
+			}
+			add = 1
+		}
+	}
+
+	replace = {
+		ruler_poor_commander
+		ruler_exceptional_commander
+	}
+}
+
+ruler_exceptional_commander = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/expert_offensive_planner.dds"
+
+	character_modifier = {
+		character_popularity_add = 25
+	}
+
+	command_modifier = {
+		unit_offense_mult = 0.15
+		unit_defense_mult = 0.15
+		unit_morale_recovery_mult = 0.15
+		character_command_limit_mult = 0.20
+	}
+
+	country_modifier = {
+		country_war_exhaustion_casualties_mult = -0.15
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+		interest_group_pol_str_mult = 0.10
+	}
+
+	executive_modifier = {
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			has_role = general
+			has_role = admiral
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					is_ruler = yes
+					has_role = general
+					has_role = admiral
+				}
+				age >= 40
+				NOR = {
+					has_trait = ruler_poor_commander
+					has_trait = ruler_skilled_commander
+				}
+				owner ?= {
+					country_rank >= rank_value:great_power
+				}
+			}
+			add = 1
+		}
+	}
+
+	replace = {
+		ruler_poor_commander
+		ruler_skilled_commander
+	}
+}

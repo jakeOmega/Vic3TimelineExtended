@@ -2428,7 +2428,7 @@ society_technology_events.28 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals pop_type = clergymen }
+		add_loyalists = { value = small_radicals }
 		add_radicals = { value = very_small_radicals pop_type = academics }
 	}
 
@@ -2444,6 +2444,8 @@ society_technology_events.28 = {
 			is_decaying = yes
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals strata = upper }
+		add_loyalists = { value = very_small_radicals strata = middle }
 	}
 
 	option = {
@@ -2452,10 +2454,10 @@ society_technology_events.28 = {
 			OR = {
 				has_law = law_type:law_state_eugenics_program
 				has_law = law_type:law_open_source_genetics
+				has_law = law_type:law_corporate_genetic_licensing
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = ste_eugenics_law_tt
 		ai_chance = {
 			base = 2
 		}
@@ -2516,7 +2518,7 @@ society_technology_events.29 = {
 			is_decaying = yes
 		}
 		add_radicals = { value = small_radicals pop_type = farmers }
-		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals strata = middle }
 	}
 
 	option = {
@@ -2636,7 +2638,7 @@ society_technology_events.31 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/autonomous_vehicle_crash.dds" }
+	event_image = { texture = "gfx/event_pictures/self_driving.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 

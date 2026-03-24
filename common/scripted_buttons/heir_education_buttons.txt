@@ -1,0 +1,519 @@
+﻿### Heir Education - Scripted Buttons
+### 7 investment buttons + 1 conclude button
+
+# ─────────────────── TRAIT INVESTMENT BUTTONS ───────────────────
+
+he_invest_admin = {
+	name = "HE_INVEST_ADMIN"
+	desc = "HE_INVEST_ADMIN_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				ig:ig_industrialists = { is_in_government = yes }
+			}
+			add = 30
+		}
+		if = { limit = { NOT = { has_variable = heir_ed_admin } } add = 20 }
+		if = { limit = { has_variable = heir_ed_admin var:heir_ed_admin >= 2 } add = -10 }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = HE_INVESTMENT_CAP_TT
+			OR = {
+				NOT = { has_variable = heir_ed_total }
+				var:heir_ed_total < 10
+			}
+		}
+		custom_tooltip = {
+			text = HE_COOLDOWN_TT
+			NOT = { has_modifier = heir_education_cooldown }
+		}
+	}
+
+	effect = {
+		# Increment investment
+		if = {
+			limit = { has_variable = heir_ed_admin }
+			change_variable = { name = heir_ed_admin add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_admin value = 1 }
+		}
+		if = {
+			limit = { has_variable = heir_ed_total }
+			change_variable = { name = heir_ed_total add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_total value = 1 }
+		}
+
+		# Update progress bar
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+		}
+
+		# Cost: temporary innovation penalty
+		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
+		# Cooldown
+		add_modifier = { name = heir_education_cooldown days = 180 }
+
+		# IG reactions
+		heir_education_admin_ig_reaction = yes
+	}
+}
+
+he_invest_diplo = {
+	name = "HE_INVEST_DIPLO"
+	desc = "HE_INVEST_DIPLO_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				ig:ig_intelligentsia = { is_in_government = yes }
+			}
+			add = 25
+		}
+		if = { limit = { country_rank >= rank_value:major_power } add = 15 }
+		if = { limit = { NOT = { has_variable = heir_ed_diplo } } add = 20 }
+		if = { limit = { has_variable = heir_ed_diplo var:heir_ed_diplo >= 2 } add = -10 }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = HE_INVESTMENT_CAP_TT
+			OR = {
+				NOT = { has_variable = heir_ed_total }
+				var:heir_ed_total < 10
+			}
+		}
+		custom_tooltip = {
+			text = HE_COOLDOWN_TT
+			NOT = { has_modifier = heir_education_cooldown }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_diplo }
+			change_variable = { name = heir_ed_diplo add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_diplo value = 1 }
+		}
+		if = {
+			limit = { has_variable = heir_ed_total }
+			change_variable = { name = heir_ed_total add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_total value = 1 }
+		}
+
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+		}
+
+		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
+		add_modifier = { name = heir_education_cooldown days = 180 }
+
+		heir_education_diplo_ig_reaction = yes
+	}
+}
+
+he_invest_military = {
+	name = "HE_INVEST_MILITARY"
+	desc = "HE_INVEST_MILITARY_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				ig:ig_armed_forces = { is_in_government = yes }
+			}
+			add = 30
+		}
+		if = { limit = { is_at_war = yes } add = 25 }
+		if = { limit = { NOT = { has_variable = heir_ed_military } } add = 15 }
+		if = { limit = { has_variable = heir_ed_military var:heir_ed_military >= 2 } add = -10 }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = HE_INVESTMENT_CAP_TT
+			OR = {
+				NOT = { has_variable = heir_ed_total }
+				var:heir_ed_total < 10
+			}
+		}
+		custom_tooltip = {
+			text = HE_COOLDOWN_TT
+			NOT = { has_modifier = heir_education_cooldown }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_military }
+			change_variable = { name = heir_ed_military add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_military value = 1 }
+		}
+		if = {
+			limit = { has_variable = heir_ed_total }
+			change_variable = { name = heir_ed_total add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_total value = 1 }
+		}
+
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+		}
+
+		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
+		add_modifier = { name = heir_education_cooldown days = 180 }
+
+		heir_education_military_ig_reaction = yes
+	}
+}
+
+# ─────────────────── IDEOLOGY INVESTMENT BUTTONS ───────────────────
+
+he_progressive_tutors = {
+	name = "HE_PROGRESSIVE_TUTORS"
+	desc = "HE_PROGRESSIVE_TUTORS_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				ig:ig_intelligentsia = { is_in_government = yes }
+			}
+			add = 20
+		}
+		if = {
+			limit = {
+				ig:ig_trade_unions = { is_in_government = yes }
+			}
+			add = 15
+		}
+		# AI avoids this if devout/landowners are strong
+		if = {
+			limit = {
+				ig:ig_devout = { is_powerful = yes is_in_government = yes }
+			}
+			add = -30
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = HE_INVESTMENT_CAP_TT
+			OR = {
+				NOT = { has_variable = heir_ed_total }
+				var:heir_ed_total < 10
+			}
+		}
+		custom_tooltip = {
+			text = HE_COOLDOWN_TT
+			NOT = { has_modifier = heir_education_cooldown }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_ideology }
+			change_variable = { name = heir_ed_ideology add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_ideology value = 1 }
+		}
+		if = {
+			limit = { has_variable = heir_ed_total }
+			change_variable = { name = heir_ed_total add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_total value = 1 }
+		}
+
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+		}
+
+		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
+		add_modifier = { name = heir_education_cooldown days = 180 }
+
+		heir_education_progressive_ig_reaction = yes
+	}
+}
+
+he_conservative_tutors = {
+	name = "HE_CONSERVATIVE_TUTORS"
+	desc = "HE_CONSERVATIVE_TUTORS_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				ig:ig_devout = { is_in_government = yes }
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				ig:ig_landowners = { is_in_government = yes }
+			}
+			add = 20
+		}
+		# AI avoids this if intelligentsia is strong
+		if = {
+			limit = {
+				ig:ig_intelligentsia = { is_powerful = yes is_in_government = yes }
+			}
+			add = -25
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = HE_INVESTMENT_CAP_TT
+			OR = {
+				NOT = { has_variable = heir_ed_total }
+				var:heir_ed_total < 10
+			}
+		}
+		custom_tooltip = {
+			text = HE_COOLDOWN_TT
+			NOT = { has_modifier = heir_education_cooldown }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_ideology }
+			change_variable = { name = heir_ed_ideology add = -1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_ideology value = -1 }
+		}
+		if = {
+			limit = { has_variable = heir_ed_total }
+			change_variable = { name = heir_ed_total add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_total value = 1 }
+		}
+
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+		}
+
+		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
+		add_modifier = { name = heir_education_cooldown days = 180 }
+
+		heir_education_conservative_ig_reaction = yes
+	}
+}
+
+# ─────────────────── IG MENTORSHIP BUTTONS ───────────────────
+
+he_establishment_mentors = {
+	name = "HE_ESTABLISHMENT_MENTORS"
+	desc = "HE_ESTABLISHMENT_MENTORS_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				ig:ig_landowners = { is_in_government = yes }
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				ig:ig_industrialists = { is_in_government = yes }
+			}
+			add = 15
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = HE_INVESTMENT_CAP_TT
+			OR = {
+				NOT = { has_variable = heir_ed_total }
+				var:heir_ed_total < 10
+			}
+		}
+		custom_tooltip = {
+			text = HE_COOLDOWN_TT
+			NOT = { has_modifier = heir_education_cooldown }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_ig }
+			change_variable = { name = heir_ed_ig add = -1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_ig value = -1 }
+		}
+		if = {
+			limit = { has_variable = heir_ed_total }
+			change_variable = { name = heir_ed_total add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_total value = 1 }
+		}
+
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+		}
+
+		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
+		add_modifier = { name = heir_education_cooldown days = 180 }
+
+		heir_education_establishment_ig_reaction = yes
+	}
+}
+
+he_reformist_mentors = {
+	name = "HE_REFORMIST_MENTORS"
+	desc = "HE_REFORMIST_MENTORS_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				ig:ig_trade_unions = { is_in_government = yes }
+			}
+			add = 20
+		}
+		if = {
+			limit = {
+				ig:ig_intelligentsia = { is_in_government = yes }
+			}
+			add = 15
+		}
+		if = {
+			limit = {
+				ig:ig_rural_folk = { is_in_government = yes }
+			}
+			add = 10
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = HE_INVESTMENT_CAP_TT
+			OR = {
+				NOT = { has_variable = heir_ed_total }
+				var:heir_ed_total < 10
+			}
+		}
+		custom_tooltip = {
+			text = HE_COOLDOWN_TT
+			NOT = { has_modifier = heir_education_cooldown }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_ig }
+			change_variable = { name = heir_ed_ig add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_ig value = 1 }
+		}
+		if = {
+			limit = { has_variable = heir_ed_total }
+			change_variable = { name = heir_ed_total add = 1 }
+		}
+		else = {
+			set_variable = { name = heir_ed_total value = 1 }
+		}
+
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+		}
+
+		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
+		add_modifier = { name = heir_education_cooldown days = 180 }
+
+		heir_education_reformist_ig_reaction = yes
+	}
+}
+
+# ─────────────────── CONCLUDE EDUCATION BUTTON ───────────────────
+
+he_conclude_education = {
+	name = "HE_CONCLUDE_EDUCATION"
+	desc = "HE_CONCLUDE_EDUCATION_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		has_variable = heir_ed_total
+	}
+
+	ai_chance = {
+		value = 0
+		# AI concludes when they've invested enough or when cap is close
+		if = { limit = { has_variable = heir_ed_total var:heir_ed_total >= 5 } add = 40 }
+		if = { limit = { has_variable = heir_ed_total var:heir_ed_total >= 8 } add = 40 }
+		if = { limit = { has_variable = heir_ed_total var:heir_ed_total >= 10 } add = 100 }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = HE_MIN_INVESTMENT_TT
+			has_variable = heir_ed_total
+			var:heir_ed_total >= 1
+		}
+	}
+
+	effect = {
+		# Resolve education into actual character changes
+		heir_education_resolve_effect = yes
+	}
+}

@@ -187,11 +187,14 @@ banking_cycle_random_event_effect = {
 				trigger_event = { id = banking_cycle_events.11 }
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
-			# Event 12: Gold Standard Pressure (any phase, international_exchange_standards)
+			# Event 12: Gold Standard Pressure (any phase, international_exchange_standards, gold standard law)
 			0 = {
 				modifier = {
 					if = {
-						limit = { has_technology_researched = international_exchange_standards }
+						limit = {
+							has_technology_researched = international_exchange_standards
+							has_law = law_type:law_gold_standard
+						}
 						add = 4
 					}
 				}
@@ -249,12 +252,13 @@ banking_cycle_random_event_effect = {
 				trigger_event = { id = banking_cycle_events.15 }
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
-			# Event 16: CB Independence Debate (stable+, keynesian_economics)
+			# Event 16: CB Independence Debate (stable+, keynesian_economics, not unregulated banking)
 			0 = {
 				modifier = {
 					if = {
 						limit = {
 							has_technology_researched = keynesian_economics
+							NOT = { has_law = law_type:law_unregulated_banking }
 							OR = {
 								banking_cycle_is_stable = yes
 								banking_cycle_is_expansion = yes
@@ -262,6 +266,10 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 4
+					}
+					if = {
+						limit = { has_law = law_type:law_central_bank_independence }
+						add = 2
 					}
 				}
 				trigger_event = { id = banking_cycle_events.16 }
@@ -318,7 +326,7 @@ banking_cycle_random_event_effect = {
 				trigger_event = { id = banking_cycle_events.19 }
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
-			# Event 20: Shadow Banking Discovery (RARE, HIGH IMPACT, boom/frenzy, modern_financial_instruments)
+			# Event 20: Shadow Banking Discovery (RARE, HIGH IMPACT, boom/frenzy, modern_financial_instruments, favors weak regulation)
 			0 = {
 				modifier = {
 					if = {
@@ -329,8 +337,474 @@ banking_cycle_random_event_effect = {
 						}
 						add = 2
 					}
+					if = {
+						limit = {
+							OR = {
+								has_law = law_type:law_unregulated_banking
+								has_law = law_type:law_universal_banking_light_prudence
+							}
+						}
+						add = 1
+					}
 				}
 				trigger_event = { id = banking_cycle_events.20 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+
+			# ---- NEW EVENTS 21-45 ----
+
+			# Event 21: Merchant Bank Prosperity (stable/expansion, no extra tech)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								banking_cycle_is_stable = yes
+								banking_cycle_is_expansion = yes
+							}
+						}
+						add = 5
+					}
+				}
+				trigger_event = { id = banking_cycle_events.21 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 22: New Provincial Exchange (expansion+, no extra tech)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+								banking_cycle_is_frenzy = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.22 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 23: Banking Scandal (any phase, no extra tech)
+			0 = {
+				modifier = {
+					add = 4
+				}
+				trigger_event = { id = banking_cycle_events.23 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 24: Warehouse Receipts Fraud (expansion+, bubble >= 20)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							var:bubble_pressure >= 20
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+								banking_cycle_is_frenzy = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.24 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 25: Trade Bill Innovation (stable+, not at war)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							is_at_war = no
+							OR = {
+								banking_cycle_is_stable = yes
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.25 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+
+			# ---- MID ERA NEW EVENTS ----
+
+			# Event 26: Pension Fund Growth (expansion+, mutual_funds)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = mutual_funds
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+								banking_cycle_is_frenzy = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.26 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 27: Telegraph Banking Revolution (expansion+, central_banking)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = central_banking
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.27 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 28: Interbank Lending Freeze (stagnation/downturn, central_banking)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = central_banking
+							OR = {
+								banking_cycle_is_stagnation = yes
+								banking_cycle_is_downturn = yes
+							}
+						}
+						add = 5
+					}
+					if = { limit = { banking_cycle_is_downturn = yes } add = 3 }
+				}
+				trigger_event = { id = banking_cycle_events.28 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 29: Agricultural Cooperative Banking (stable+, central_banking, favors mutual banking law)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = central_banking
+							OR = {
+								banking_cycle_is_stable = yes
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 4
+					}
+					if = {
+						limit = { has_law = law_type:law_free_mutual_banking }
+						add = 3
+					}
+				}
+				trigger_event = { id = banking_cycle_events.29 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 30: Foreign Debt Arbitrage (expansion+, investment_banks)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = investment_banks
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+								banking_cycle_is_frenzy = yes
+							}
+						}
+						add = 4
+					}
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
+				}
+				trigger_event = { id = banking_cycle_events.30 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 31: Bank Holiday Proposal (downturn/panic, central_banking)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = central_banking
+							OR = {
+								banking_cycle_is_downturn = yes
+								banking_cycle_is_panic = yes
+							}
+						}
+						add = 4
+					}
+					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
+				}
+				trigger_event = { id = banking_cycle_events.31 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 32: Trust Company Failure (RARE, boom/frenzy, mutual_funds, bubble >= 30)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = mutual_funds
+							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
+							var:bubble_pressure >= 30
+						}
+						add = 2
+					}
+				}
+				trigger_event = { id = banking_cycle_events.32 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 33: Commercial Paper Market (stable/expansion, investment_banks)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = investment_banks
+							OR = {
+								banking_cycle_is_stable = yes
+								banking_cycle_is_expansion = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.33 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 34: Deposit Insurance Debate (stagnation+, central_banking)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = central_banking
+							OR = {
+								banking_cycle_is_stagnation = yes
+								banking_cycle_is_stable = yes
+								banking_cycle_is_expansion = yes
+							}
+						}
+						add = 3
+					}
+				}
+				trigger_event = { id = banking_cycle_events.34 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 35: Joint-Stock Company Boom (expansion+, corporate_management)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = corporate_management
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+								banking_cycle_is_frenzy = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.35 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+
+			# ---- LATE ERA NEW EVENTS ----
+
+			# Event 36: Fintech Disruption (expansion+, modern_financial_instruments)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = modern_financial_instruments
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+								banking_cycle_is_frenzy = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.36 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 37: Mortgage-Backed Securities (boom/frenzy, consumer_credit, favors weak regulation)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = consumer_credit
+							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
+						}
+						add = 3
+					}
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
+					if = {
+						limit = {
+							OR = {
+								has_law = law_type:law_unregulated_banking
+								has_law = law_type:law_universal_banking_light_prudence
+							}
+						}
+						add = 2
+					}
+				}
+				trigger_event = { id = banking_cycle_events.37 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 38: Microfinance Initiative (stable+, keynesian_economics)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = keynesian_economics
+							OR = {
+								banking_cycle_is_stable = yes
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.38 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 39: Quantitative Easing Debate (downturn/panic, keynesian_economics, requires fiat/digital currency + regulated banking)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = keynesian_economics
+							OR = {
+								has_law = law_type:law_fiat_currency
+								has_law = law_type:law_digital_currency
+							}
+							NOT = { has_law = law_type:law_unregulated_banking }
+							OR = {
+								banking_cycle_is_downturn = yes
+								banking_cycle_is_panic = yes
+							}
+						}
+						add = 5
+					}
+					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
+				}
+				trigger_event = { id = banking_cycle_events.39 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 40: Credit Rating Agency Failure (boom/frenzy, modern_financial_instruments)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = modern_financial_instruments
+							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
+						}
+						add = 3
+					}
+				}
+				trigger_event = { id = banking_cycle_events.40 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 41: Student Loan Burden (expansion+, consumer_credit)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = consumer_credit
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+								banking_cycle_is_frenzy = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.41 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 42: Green Bond Initiative (stable+, keynesian_economics)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = keynesian_economics
+							OR = {
+								banking_cycle_is_stable = yes
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 3
+					}
+				}
+				trigger_event = { id = banking_cycle_events.42 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 43: Venture Capital Boom (expansion/boom, modern_financial_instruments)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = modern_financial_instruments
+							OR = {
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 4
+					}
+				}
+				trigger_event = { id = banking_cycle_events.43 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 44: Predatory Lending Scandal (boom/frenzy, consumer_credit, blocked by prudential banking, favors weak regulation)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = consumer_credit
+							NOT = { has_law = law_type:law_prudential_narrow_banking }
+							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
+						}
+						add = 3
+					}
+					if = {
+						limit = {
+							OR = {
+								has_law = law_type:law_unregulated_banking
+								has_law = law_type:law_universal_banking_light_prudence
+							}
+						}
+						add = 2
+					}
+				}
+				trigger_event = { id = banking_cycle_events.44 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 45: International Bailout Request (downturn/panic, keynesian_economics)
+			0 = {
+				modifier = {
+					if = {
+						limit = {
+							has_technology_researched = keynesian_economics
+							OR = {
+								banking_cycle_is_downturn = yes
+								banking_cycle_is_panic = yes
+							}
+						}
+						add = 3
+					}
+				}
+				trigger_event = { id = banking_cycle_events.45 }
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
 		}

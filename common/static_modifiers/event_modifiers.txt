@@ -77,19 +77,25 @@ re_media_moderation = {
 
 # ======= Cyber / Quantum
 re_cyber_pay_patch = {
+    # Settle quietly: hide the breach, patch fast, take the hit to credibility
     icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
     country_bureaucracy_mult = -0.05
     country_legitimacy_base_add = -5
+    country_prestige_mult = -0.05
 }
 re_cyber_forensics = {
+    # Go public: name the attackers, gain legitimacy, but the disclosure rattles markets
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_influence_mult = 0.10
     country_legitimacy_base_add = 5
+    country_diplomatic_reputation_add = 1
+    building_group_bg_service_throughput_add = -0.05
 }
 re_cyber_standards = {
+    # Impose emergency standards: long-term security but bureaucratic burden and industry disruption
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    country_bureaucracy_mult = -0.05
-    country_convoy_damage_taken_mult = -0.15
+    country_bureaucracy_mult = -0.08
+    country_tech_research_speed_mult = 0.05
+    building_group_bg_heavy_industry_throughput_add = -0.03
 }
 
 # ======= Spectrum crunch
@@ -528,8 +534,8 @@ ste_algo_gov_reject = {
 # ======= Bioengineering
 ste_designer_baby_ban = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-    country_legitimacy_base_add = 5
-    country_tech_research_speed_mult = -0.03
+    country_legitimacy_base_add = 10
+    country_tech_research_speed_mult = -0.05
 }
 ste_designer_baby_medical = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -537,13 +543,13 @@ ste_designer_baby_medical = {
 }
 ste_designer_baby_unrestricted = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-    country_tech_research_speed_mult = 0.08
+    country_tech_research_speed_mult = 0.1
     country_legitimacy_base_add = -10
 }
 ste_synthetic_crops_adopt = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
     country_tech_research_speed_mult = 0.05
-    building_food_industry_throughput_add = 0.08
+    building_food_industry_throughput_add = 0.1
 }
 ste_synthetic_crops_ban = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -569,12 +575,15 @@ ste_av_blocked = {
 }
 ste_av_crash_pause = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+    building_automotive_industry_throughput_add = -0.1
     building_motor_industry_throughput_add = -0.05
+    building_software_industry_throughput_add = -0.05
     country_legitimacy_base_add = 5
 }
 ste_av_crash_continue = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    building_motor_industry_throughput_add = 0.03
+    building_automotive_industry_throughput_add = 0.1
+    building_software_industry_throughput_add = 0.05
     country_legitimacy_base_add = -5
 }
 
@@ -597,7 +606,7 @@ ste_meltdown_institutional_response = {
 # AV - ministry-led safety investigation (balanced resolution)
 ste_av_crash_investigation = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    building_motor_industry_throughput_add = -0.02
+    building_automotive_industry_throughput_add = -0.05
     country_legitimacy_base_add = 10
 }
 
@@ -608,12 +617,13 @@ ste_election_interference_cyber_defense = {
     country_legitimacy_base_add = 10
 }
 
-# Cyber breach - intelligence-assisted forensics
+# Cyber breach - intelligence-assisted forensics (requires intelligence ministry 3)
 re_cyber_intel_response = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_influence_mult = 0.05
     country_bureaucracy_mult = 0.03
-    country_legitimacy_base_add = 10
+    country_legitimacy_base_add = 5
+    country_tech_research_speed_mult = 0.03
 }
 
 # Supply chain - ministry coordinates logistics

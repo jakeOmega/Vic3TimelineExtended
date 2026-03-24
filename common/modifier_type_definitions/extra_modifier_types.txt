@@ -719,6 +719,28 @@ building_total_space_elevator_progress = {
 	script_only = yes
 }
 
+building_weekly_solar_collector_progress = {
+	color = good
+	percent = yes
+	script_only = yes
+
+	game_data = {
+		ai_value = 50000000
+	}
+}
+
+building_total_solar_collector_progress = {
+	color = good
+	percent = yes
+	script_only = yes
+}
+
+country_solar_receiver_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
 unit_combat_unit_type_jet_powered_fighters_offense_mult = {
 	color = good
 	percent = yes
@@ -1235,11 +1257,6 @@ building_group_bg_military_standard_of_living_add = {
 }
 
 building_group_bg_bureaucracy_throughput_add = {
-	color = good
-	percent = yes
-}
-
-building_group_bg_trade_throughput_add = {
 	color = good
 	percent = yes
 }
