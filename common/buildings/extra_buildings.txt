@@ -1905,3 +1905,186 @@ REPLACE_OR_CREATE:building_solar_receiver = {
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
+
+#==================================================
+# Orbital Battlestation
+#==================================================
+
+REPLACE_OR_CREATE:building_orbital_battlestation_construction_site = {
+	building_group = bg_government	
+	icon = "gfx/interface/icons/building_icons/space_base.dds"
+	city_type = city
+	levels_per_mesh = -1
+	
+	unlocking_technologies = {
+		orbital_weapon_platforms
+	}
+
+	production_method_groups = {
+		pmg_base_building_orbital_battlestation_construction_site
+	}
+
+	required_construction = construction_cost_medium
+	
+	expandable = no
+	
+	ownership_type = no_ownership
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+REPLACE_OR_CREATE:building_orbital_battlestation = {
+	building_group = bg_military	
+	icon = "gfx/interface/icons/building_icons/space_base.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	production_method_groups = {
+		pmg_base_building_orbital_battlestation
+	}
+
+	required_construction = construction_cost_canal
+	
+	buildable = no
+	expandable = no
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+#==================================================
+# Mind Upload Nexus
+#==================================================
+
+REPLACE_OR_CREATE:building_mind_upload_nexus_construction_site = {
+	building_group = bg_government	
+	icon = "gfx/interface/icons/building_icons/network.dds"
+	city_type = city
+	levels_per_mesh = -1
+	
+	unlocking_technologies = {
+		mind_backups
+	}
+
+	production_method_groups = {
+		pmg_base_building_mind_upload_nexus_construction_site
+	}
+
+	required_construction = construction_cost_medium
+	
+	expandable = no
+	
+	ownership_type = no_ownership
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+REPLACE_OR_CREATE:building_mind_upload_nexus = {
+	building_group = bg_private_infrastructure	
+	icon = "gfx/interface/icons/building_icons/network.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	production_method_groups = {
+		pmg_base_building_mind_upload_nexus
+	}
+
+	required_construction = construction_cost_canal
+	
+	buildable = no
+	expandable = no
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+#==================================================
+# Antimatter Facility Buildings
+#==================================================
+
+REPLACE_OR_CREATE:building_antimatter_facility_construction_site = {
+	building_group = bg_government
+	icon = "gfx/interface/icons/building_icons/space_elevator_construction_site.dds"
+	city_type = city
+	levels_per_mesh = -1
+	
+	unlocking_technologies = {
+		antimatter_production
+	}
+
+	production_method_groups = {
+		pmg_base_building_antimatter_facility_construction_site
+	}
+
+	required_construction = construction_cost_medium
+	
+	expandable = no
+	
+	ownership_type = no_ownership
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+REPLACE_OR_CREATE:building_antimatter_facility = {
+	building_group = bg_government
+	icon = "gfx/interface/icons/building_icons/power_plant.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	production_method_groups = {
+		pmg_base_building_antimatter_facility
+	}
+
+	required_construction = construction_cost_canal
+	
+	buildable = no
+	expandable = no
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+REPLACE_OR_CREATE:building_antimatter_engine = {
+	building_group = bg_private_infrastructure
+	icon = "gfx/interface/icons/building_icons/power_plant.dds"
+	city_type = city
+	levels_per_mesh = -1
+	
+	unlocking_technologies = {
+		antimatter_production
+	}
+
+	production_method_groups = {
+		pmg_base_building_antimatter_engine
+	}
+
+	required_construction = construction_cost_medium
+	
+	possible = {
+		owner = {
+			modifier:country_antimatter_facility_max_level_add > 0
+		}
+	}
+	
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+REPLACE_OR_CREATE:building_antimatter_warhead_plant = {
+	building_group = bg_military
+	icon = "gfx/interface/icons/building_icons/space_base.dds"
+	city_type = city
+	levels_per_mesh = -1
+	
+	unlocking_technologies = {
+		antimatter_production
+	}
+
+	production_method_groups = {
+		pmg_base_building_antimatter_warhead_plant
+	}
+
+	required_construction = construction_cost_medium
+	
+	possible = {
+		owner = {
+			modifier:country_antimatter_facility_max_level_add > 0
+		}
+	}
+	
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}

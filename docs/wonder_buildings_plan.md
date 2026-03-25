@@ -419,7 +419,7 @@ If we want it to be more than a one-shot:
 
 ---
 
-## Open Questions
+## FAQ
 
 1. **Should wonders be limited to one per country?** No. The cost is the limiting factor, not a hard cap. Only the Ark should be unique (one per world, first to complete wins).
 

@@ -60,26 +60,26 @@ request_influence = {
         treaty_categories = { power_bloc }
         article_ai_usage = { request }
         evaluation_chance = {
-            value = 5
+            value = 0.1
             if = {
                 limit = { is_in_power_bloc = no }
-                add = 10
+                add = 0.1
             }
             if = {
                 limit = { country_rank <= rank_value:minor_power }
-                add = 10
+                add = 0.05
             }
             if = {
                 limit = {
                     has_attitude = { who = scope:other_country attitude = cooperative }
                 }
-                add = 10
+                add = 0.05
             }
             if = {
                 limit = {
                     has_attitude = { who = scope:other_country attitude = conciliatory }
                 }
-                add = 5
+                add = 0.025
             }
         }
 
@@ -93,19 +93,31 @@ request_influence = {
 				add = -1000
 			}
 			else = {
-				add = 30
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = 30
+				}
 			}
             if = {
                 limit = { has_attitude = { who = scope:source_country attitude = protective } }
-                add = 20
+                add = {
+                    desc = "AI_PROTECTIVE_ATTITUDE"
+                    value = 20
+                }
             }
             if = {
                 limit = { has_attitude = { who = scope:source_country attitude = friendly } }
-                add = 10
+                add = {
+                    desc = "AI_FRIENDLY_ATTITUDE"
+                    value = 10
+                }
             }
             if = {
                 limit = { scope:source_country.relations:target_country >= relations_threshold:cordial }
-                add = 10
+                add = {
+                    desc = "AI_CORDIAL_RELATIONS"
+                    value = 10
+                }
             }
         }
     }
@@ -192,19 +204,42 @@ crisis_resolution = {
         # AI will propose if the target would accept, mirroring old logic.
         # Since it's unilateral, we assume acceptance is based on need.
         inherent_accept_score = {
-            value = 10
+            value = 0
+            # Don't help hostile countries
+            if = {
+                limit = {
+                    OR = {
+                        has_attitude = { who = scope:other_country attitude = hostile }
+                        has_attitude = { who = scope:other_country attitude = belligerent }
+                        has_attitude = { who = scope:other_country attitude = antagonistic }
+                    }
+                }
+                add = {
+                    desc = "AI_HOSTILE_ATTITUDE"
+                    value = -1000
+                }
+            }
             # AI is more likely to propose to countries with turmoil or low legitimacy.
             if = {
                 limit = { scope:other_country = { any_scope_state = { turmoil > 25 } } }
-                add = 20
+                add = {
+                    desc = "AI_TARGET_TURMOIL"
+                    value = 20
+                }
             }
             if = {
                 limit = { scope:other_country = { legitimacy < 50 } }
-                add = 15
+                add = {
+                    desc = "AI_LOW_LEGITIMACY"
+                    value = 15
+                }
             }
             if = {
                 limit = { scope:other_country = { has_revolution = yes } }
-                add = 30
+                add = {
+                    desc = "AI_REVOLUTION"
+                    value = 30
+                }
             }
         }
     }
@@ -251,7 +286,7 @@ extend_influence = {
 							}
 						}
 						any_scope_article = {
-							has_type = crisis_resolution
+							has_type = extend_influence
 							source_country = scope:source_country
 						}
 					}
@@ -282,17 +317,42 @@ extend_influence = {
         inherent_accept_score = {
             # Based on old 'propose_score' logic 
             value = -5
+            # Don't extend influence to hostile countries
+            if = {
+                limit = {
+                    root = {
+                        OR = {
+                            has_attitude = { who = scope:other_country attitude = hostile }
+                            has_attitude = { who = scope:other_country attitude = belligerent }
+                            has_attitude = { who = scope:other_country attitude = antagonistic }
+                        }
+                    }
+                }
+                add = {
+                    desc = "AI_HOSTILE_ATTITUDE"
+                    value = -1000
+                }
+            }
             if = {
                 limit = { root = { has_attitude = { who = scope:other_country attitude = protective } } }
-                add = 20
+                add = {
+                    desc = "AI_PROTECTIVE_ATTITUDE"
+                    value = 20
+                }
             }
             if = {
                 limit = { root = { has_attitude = { who = scope:other_country attitude = conciliatory } } }
-                add = 20
+                add = {
+                    desc = "AI_CONCILIATORY_ATTITUDE"
+                    value = 20
+                }
             }
             if = {
                 limit = { root = { has_attitude = { who = scope:other_country attitude = friendly } } }
-                add = 10
+                add = {
+                    desc = "AI_FRIENDLY_ATTITUDE"
+                    value = 10
+                }
             }
         }
     }
@@ -374,7 +434,7 @@ education_aid = {
 		treaty_categories = { other }
 		article_ai_usage = { offer }
 		evaluation_chance = {
-			value = 10.0
+			value = 0.1
 			if = {
 				limit = { country_rank >= rank_value:major_power } 
 				add = {
@@ -384,14 +444,44 @@ education_aid = {
 			}
 		}
 		inherent_accept_score = {
-            value = 10
+            value = 0
+            # Don't help hostile countries
+            if = {
+                limit = {
+                    OR = {
+                        has_attitude = { who = scope:other_country attitude = hostile }
+                        has_attitude = { who = scope:other_country attitude = belligerent }
+                        has_attitude = { who = scope:other_country attitude = antagonistic }
+                    }
+                }
+                add = {
+                    desc = "AI_HOSTILE_ATTITUDE"
+                    value = -1000
+                }
+            }
+            # Same power bloc bonus
+            if = {
+                limit = {
+                    is_in_same_power_bloc = scope:other_country
+                }
+                add = {
+                    desc = "AI_SAME_POWER_BLOC"
+                    value = 10
+                }
+            }
             if = {
                 limit = { scope:target_country = { literacy_rate < 0.2 } }
-                add = 20
+                add = {
+                    desc = "AI_LOW_LITERACY"
+                    value = 20
+                }
             }
             if = {
                 limit = { scope:target_country = { institution_investment_level = { institution = institution_schools value < 2 } } }
-                add = 15
+                add = {
+                    desc = "AI_LOW_EDUCATION_INVESTMENT"
+                    value = 15
+                }
             }
         }
 	}
@@ -460,7 +550,7 @@ healthcare_aid = {
 							}
 						}
 						any_scope_article = {
-							has_type = education_aid
+							has_type = healthcare_aid
 							source_country = scope:source_country
 						}
 					}
@@ -473,7 +563,7 @@ healthcare_aid = {
 		treaty_categories = { other }
 		article_ai_usage = { offer }
 		evaluation_chance = {
-			value = 10.0
+			value = 0.1
 			if = {
 				limit = { country_rank >= rank_value:major_power } 
 				add = {
@@ -483,14 +573,44 @@ healthcare_aid = {
 			}
 		}
 		inherent_accept_score = {
-            value = 10
+            value = 0
+            # Don't help hostile countries
+            if = {
+                limit = {
+                    OR = {
+                        has_attitude = { who = scope:other_country attitude = hostile }
+                        has_attitude = { who = scope:other_country attitude = belligerent }
+                        has_attitude = { who = scope:other_country attitude = antagonistic }
+                    }
+                }
+                add = {
+                    desc = "AI_HOSTILE_ATTITUDE"
+                    value = -1000
+                }
+            }
+            # Same power bloc bonus
+            if = {
+                limit = {
+                    is_in_same_power_bloc = scope:other_country
+                }
+                add = {
+                    desc = "AI_SAME_POWER_BLOC"
+                    value = 10
+                }
+            }
             if = {
                 limit = { scope:target_country = { average_sol_for_primary_cultures < 10 } }
-                add = 20
+                add = {
+                    desc = "AI_LOW_STANDARD_OF_LIVING"
+                    value = 20
+                }
             }
             if = {
                 limit = { scope:target_country = { institution_investment_level = { institution = institution_health_system value < 2 } } }
-                add = 15
+                add = {
+                    desc = "AI_LOW_HEALTH_INVESTMENT"
+                    value = 15
+                }
             }
         }
 	}
@@ -573,7 +693,7 @@ security_aid = {
 		treaty_categories = { other }
 		article_ai_usage = { offer }
 		evaluation_chance = {
-			value = 10.0
+			value = 0.1
 			if = {
 				limit = { country_rank >= rank_value:major_power } 
 				add = {
@@ -583,14 +703,44 @@ security_aid = {
 			}
 		}
 		inherent_accept_score = {
-            value = 10
+            value = 0
+            # Don't help hostile countries
+            if = {
+                limit = {
+                    OR = {
+                        has_attitude = { who = scope:other_country attitude = hostile }
+                        has_attitude = { who = scope:other_country attitude = belligerent }
+                        has_attitude = { who = scope:other_country attitude = antagonistic }
+                    }
+                }
+                add = {
+                    desc = "AI_HOSTILE_ATTITUDE"
+                    value = -1000
+                }
+            }
+            # Same power bloc bonus
+            if = {
+                limit = {
+                    is_in_same_power_bloc = scope:other_country
+                }
+                add = {
+                    desc = "AI_SAME_POWER_BLOC"
+                    value = 10
+                }
+            }
             if = {
                 limit = { scope:target_country = { any_scope_state = { turmoil > 25 } } }
-                add = 20
+                add = {
+                    desc = "AI_TARGET_TURMOIL"
+                    value = 20
+                }
             }
             if = {
                 limit = { scope:target_country = { has_revolution = yes } }
-                add = 30
+                add = {
+                    desc = "AI_REVOLUTION"
+                    value = 30
+                }
             }
         }
 	}
@@ -666,7 +816,7 @@ science_aid = {
         }
 
 		evaluation_chance = {
-			value = 10.0
+			value = 0.1
 			if = {
 				limit = { country_rank >= rank_value:major_power } 
 				add = {
@@ -676,14 +826,44 @@ science_aid = {
 			}
 		}
 		inherent_accept_score = {
-            value = 10
+            value = 0
+            # Don't help hostile countries
+            if = {
+                limit = {
+                    OR = {
+                        has_attitude = { who = scope:other_country attitude = hostile }
+                        has_attitude = { who = scope:other_country attitude = belligerent }
+                        has_attitude = { who = scope:other_country attitude = antagonistic }
+                    }
+                }
+                add = {
+                    desc = "AI_HOSTILE_ATTITUDE"
+                    value = -1000
+                }
+            }
+            # Same power bloc bonus
+            if = {
+                limit = {
+                    is_in_same_power_bloc = scope:other_country
+                }
+                add = {
+                    desc = "AI_SAME_POWER_BLOC"
+                    value = 10
+                }
+            }
             if = {
                 limit = { scope:target_country = { country_innovation < 100 } }
-                add = 20
+                add = {
+                    desc = "AI_LOW_INNOVATION"
+                    value = 20
+                }
             }
             if = {
                 limit = { scope:target_country = { modifier:country_tech_spread_add < 100 } }
-                add = 15
+                add = {
+                    desc = "AI_LOW_TECH_SPREAD"
+                    value = 15
+                }
             }
         }
 	}
@@ -768,7 +948,7 @@ science_aid_2 = {
 		treaty_categories = { other }
 		article_ai_usage = { offer }
 		evaluation_chance = {
-			value = 20.0
+			value = 0.1
 			if = {
 				limit = { country_rank >= rank_value:major_power } 
 				add = {
@@ -778,14 +958,44 @@ science_aid_2 = {
 			}
 		}
 		inherent_accept_score = {
-            value = 20
+            value = 0
+            # Don't help hostile countries
+            if = {
+                limit = {
+                    OR = {
+                        has_attitude = { who = scope:other_country attitude = hostile }
+                        has_attitude = { who = scope:other_country attitude = belligerent }
+                        has_attitude = { who = scope:other_country attitude = antagonistic }
+                    }
+                }
+                add = {
+                    desc = "AI_HOSTILE_ATTITUDE"
+                    value = -1000
+                }
+            }
+            # Same power bloc bonus
+            if = {
+                limit = {
+                    is_in_same_power_bloc = scope:other_country
+                }
+                add = {
+                    desc = "AI_SAME_POWER_BLOC"
+                    value = 10
+                }
+            }
             if = {
                 limit = { scope:target_country = { country_innovation < 400 } }
-                add = 30
+                add = {
+                    desc = "AI_LOW_INNOVATION"
+                    value = 30
+                }
             }
             if = {
                 limit = { scope:target_country = { modifier:country_tech_spread_add < 400 } }
-                add = 25
+                add = {
+                    desc = "AI_LOW_TECH_SPREAD"
+                    value = 25
+                }
             }
         }
 	}
@@ -823,35 +1033,53 @@ suppress_subject_liberty = {
 		treaty_categories = { power_bloc }
 		article_ai_usage = { offer request }
 		evaluation_chance = {
-			value = 10.0
+			value = 0.1
 			if = {
 				limit = { has_attitude = { who = scope:other_country attitude = domineering } }
-				add = 20
+				add = 0.15
 			}
 		}
 		inherent_accept_score = {
 			value = 0
 			if = {
 				limit = { scope:target_country = this } # Evaluator is the Overlord (source)
-				add = 50 # Overlords like this
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = 50
+				}
 				if = {
 					limit = { scope:target_country = { has_attitude = { who = root attitude = rebellious } } }
-					add = 25
+					add = {
+						desc = "AI_REBELLIOUS_SUBJECT"
+						value = 25
+					}
 				}
 			}
 			else = {
-				add = -50 # Subjects do not like this
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -50
+				}
 				if = {
 					limit = { scope:source_country.relations:target_country >= relations_threshold:cordial }
-					add = 10
+					add = {
+						desc = "AI_CORDIAL_RELATIONS"
+						value = 10
+					}
 				}
 				if = {
 					limit = { scope:source_country.relations:target_country >= relations_threshold:friendly }
-					add = 10
+					add = {
+						desc = "AI_FRIENDLY_RELATIONS"
+						value = 10
+					}
 				}
 				if = {
 					limit = { has_attitude = { who = scope:source_country attitude = loyal } }
-					add = 15
+					add = {
+						desc = "AI_LOYAL_ATTITUDE"
+						value = 15
+					}
 				}
 			}
 		}
@@ -917,15 +1145,15 @@ nuclear_disarmament = {
 			# Only consider demanding disarmament of hostile/rival countries
 			if = {
 				limit = { has_attitude = { who = scope:other_country attitude = hostile } }
-				add = 10
+				add = 0.1
 			}
 			if = {
 				limit = { has_attitude = { who = scope:other_country attitude = belligerent } }
-				add = 15
+				add = 0.15
 			}
 			if = {
 				limit = { any_rival_country = { THIS = scope:other_country } }
-				add = 25
+				add = 0.25
 			}
 			# Never try to disarm allies or friendly nations
 			if = {
@@ -936,7 +1164,7 @@ nuclear_disarmament = {
 						has_attitude = { who = scope:other_country attitude = protective }
 					}
 				}
-				add = -100
+				add = -1.0
 			}
 			# Don't try if we're in the same power bloc
 			if = {
@@ -945,7 +1173,7 @@ nuclear_disarmament = {
 						is_in_same_power_bloc = root
 					}
 				}
-				add = -50
+				add = -0.5
 			}
 		}
 		inherent_accept_score = {
@@ -956,24 +1184,39 @@ nuclear_disarmament = {
 				# Strongly want rivals/enemies to disarm
 				if = {
 					limit = { any_rival_country = { THIS = scope:target_country } }
-					add = 50
+					add = {
+						desc = "AI_IS_RIVAL"
+						value = 50
+					}
 				}
 				if = {
 					limit = { has_attitude = { who = scope:target_country attitude = hostile } }
-					add = 30
+					add = {
+						desc = "AI_HOSTILE_ATTITUDE"
+						value = 30
+					}
 				}
 				if = {
 					limit = { has_attitude = { who = scope:target_country attitude = belligerent } }
-					add = 40
+					add = {
+						desc = "AI_BELLIGERENT_ATTITUDE"
+						value = 40
+					}
 				}
 				if = {
 					limit = { has_attitude = { who = scope:target_country attitude = antagonistic } }
-					add = 20
+					add = {
+						desc = "AI_ANTAGONISTIC_ATTITUDE"
+						value = 20
+					}
 				}
 				# Wary countries still somewhat want rivals disarmed
 				if = {
 					limit = { has_attitude = { who = scope:target_country attitude = wary } }
-					add = 5
+					add = {
+						desc = "AI_WARY_ATTITUDE"
+						value = 5
+					}
 				}
 				# Do NOT want allies to disarm - their nukes help us
 				if = {
@@ -984,37 +1227,58 @@ nuclear_disarmament = {
 							has_attitude = { who = scope:target_country attitude = protective }
 						}
 					}
-					add = -100
+					add = {
+						desc = "AI_IS_ALLY"
+						value = -100
+					}
 				}
 				if = {
 					limit = {
 						scope:target_country = { is_in_same_power_bloc = root }
 					}
-					add = -75
+					add = {
+						desc = "AI_SAME_POWER_BLOC"
+						value = -75
+					}
 				}
 			}
 			else = {
 				# TARGET perspective: I'm being asked to give up my nukes
-				add = -100
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -100
+				}
 				# Great powers absolutely refuse
 				if = {
 					limit = { country_rank >= rank_value:great_power }
-					add = -100
+					add = {
+						desc = "AI_IS_GREAT_POWER"
+						value = -100
+					}
 				}
 				# Major powers strongly resist
 				if = {
 					limit = { country_rank >= rank_value:major_power }
-					add = -50
+					add = {
+						desc = "AI_IS_MAJOR_POWER"
+						value = -50
+					}
 				}
 				# Having rivals makes disarmament unthinkable
 				if = {
 					limit = { any_rival_country = { always = yes } }
-					add = -20
+					add = {
+						desc = "AI_HAS_RIVALS"
+						value = -20
+					}
 				}
 				# Bad relations with the one asking makes it worse
 				if = {
 					limit = { scope:source_country.relations:target_country < relations_threshold:neutral }
-					add = -50
+					add = {
+						desc = "AI_BAD_RELATIONS"
+						value = -50
+					}
 				}
 				# Very good relations with a powerful ally may slightly reduce resistance
 				if = {
@@ -1022,7 +1286,10 @@ nuclear_disarmament = {
 						scope:source_country.relations:target_country >= relations_threshold:amicable
 						scope:source_country = { country_rank >= rank_value:great_power }
 					}
-					add = 25
+					add = {
+						desc = "AI_GOOD_RELATIONS_WITH_GP"
+						value = 25
+					}
 				}
 			}
 		}
@@ -1092,38 +1359,67 @@ nuclear_program_aid = {
 		treaty_categories = { other }
 		article_ai_usage = { offer }
 		evaluation_chance = {
-			value = 5.0
+			value = 0.1
 			if = {
 				limit = { has_attitude = { who = scope:other_country attitude = friendly } }
-				add = 10
+				add = 0.1
 			}
 			if = {
 				limit = { is_in_same_power_bloc = scope:other_country }
-				add = 20
+				add = 0.15
 			}
 		}
 		inherent_accept_score = {
 			value = 0
 			if = {
 				limit = { NOT = { scope:target_country = this } } # Evaluator is the one offering aid (source)
-				add = -100
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -100
+				}
+				# Refuse to give nukes to hostile/antagonistic nations
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:target_country attitude = hostile }
+							has_attitude = { who = scope:target_country attitude = belligerent }
+							has_attitude = { who = scope:target_country attitude = antagonistic }
+						}
+					}
+					add = {
+						desc = "AI_HOSTILE_ATTITUDE"
+						value = -1000
+					}
+				}
 				if = {
 					limit = { is_in_same_power_bloc = scope:target_country }
-					add = 25
+					add = {
+						desc = "AI_SAME_POWER_BLOC"
+						value = 25
+					}
 				}
 				if = {
 					limit = { has_attitude = { who = scope:target_country attitude = friendly } }
-					add = 25
+					add = {
+						desc = "AI_FRIENDLY_ATTITUDE"
+						value = 25
+					}
 				}
 				if = {
 					limit = { scope:source_country.relations:target_country >= relations_threshold:cordial }
-					add = 25
+					add = {
+						desc = "AI_CORDIAL_RELATIONS"
+						value = 25
+					}
 				}
 				if = {
 					limit = {
 						"num_shared_rivals(scope:target_country)" > 0
 					}
-					add = 25
+					add = {
+						desc = "AI_SHARED_RIVALS"
+						value = 25
+					}
 				}
 				if = {
 					limit = {
@@ -1148,14 +1444,23 @@ nuclear_program_aid = {
 				}
 			}
 			else = { # Evaluator is the one being asked to accept aid (target)
-				add = 50
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = 50
+				}
 				if = {
 					limit = { country_rank >= rank_value:major_power }
-					add = 50
+					add = {
+						desc = "AI_IS_MAJOR_POWER"
+						value = 50
+					}
 				}
 				if = {
 					limit = { scope:source_country.relations:target_country > relations_threshold:cordial }
-					add = 25
+					add = {
+						desc = "AI_CORDIAL_RELATIONS"
+						value = 25
+					}
 				}
 			}
 		}
@@ -1267,27 +1572,54 @@ intelligence_sharing_pact = {
     ai = {
         treaty_categories = { military }
         article_ai_usage = { offer request }
-        evaluation_chance = { value = 15.0 }
+        evaluation_chance = { value = 0.15 }
 
         inherent_accept_score = {
             value = 0
             # AI is more willing if they have good relations or a common threat.
             if = {
                 limit = { has_attitude = { who = scope:other_country attitude = friendly } }
-                add = 25
+                add = {
+                    desc = "AI_FRIENDLY_ATTITUDE"
+                    value = 25
+                }
             }
             if = {
                 limit = { any_rival_country = { any_rival_country = {THIS = scope:other_country } } } # We have a rival in common
-                add = 40
+                add = {
+                    desc = "AI_COMMON_RIVAL"
+                    value = 40
+                }
+            }
+            # Same power bloc: natural allies
+            if = {
+                limit = { is_in_same_power_bloc = scope:other_country }
+                add = {
+                    desc = "AI_SAME_POWER_BLOC"
+                    value = 15
+                }
             }
             # AI is less willing if they have conflicting interests or are rivals.
             if = {
                 limit = { any_rival_country = { THIS = scope:other_country } }
-                add = -100
+                add = {
+                    desc = "AI_IS_RIVAL"
+                    value = -100
+                }
             }
             if = {
                 limit = { has_attitude = { who = scope:other_country attitude = hostile } }
-                add = -50
+                add = {
+                    desc = "AI_HOSTILE_ATTITUDE"
+                    value = -1000
+                }
+            }
+            if = {
+                limit = { has_attitude = { who = scope:other_country attitude = antagonistic } }
+                add = {
+                    desc = "AI_ANTAGONISTIC_ATTITUDE"
+                    value = -75
+                }
             }
         }
     }
@@ -1378,23 +1710,60 @@ joint_military_exercises = {
     ai = {
         treaty_categories = { military }
         article_ai_usage = { offer request }
-        evaluation_chance = { value = 20.0 } # AI should propose this fairly often to allies.
+        evaluation_chance = { value = 0.2 } # AI should propose this fairly often to allies.
 
         inherent_accept_score = {
-            value = 10
+            value = 0
             # AI is more willing if they have good relations or a common threat.
             if = {
                 limit = { has_attitude = { who = scope:other_country attitude = friendly } }
-                add = 30
+                add = {
+                    desc = "AI_FRIENDLY_ATTITUDE"
+                    value = 30
+                }
             }
             if = {
                 limit = { any_rival_country = { any_rival_country = {THIS = scope:other_country } } } # Common rival
-                add = 30
+                add = {
+                    desc = "AI_COMMON_RIVAL"
+                    value = 30
+                }
+            }
+            # Same power bloc: natural training partners
+            if = {
+                limit = { is_in_same_power_bloc = scope:other_country }
+                add = {
+                    desc = "AI_SAME_POWER_BLOC"
+                    value = 15
+                }
+            }
+            # AI refuses hostile nations
+            if = {
+                limit = {
+                    OR = {
+                        has_attitude = { who = scope:other_country attitude = hostile }
+                        has_attitude = { who = scope:other_country attitude = belligerent }
+                    }
+                }
+                add = {
+                    desc = "AI_HOSTILE_ATTITUDE"
+                    value = -1000
+                }
+            }
+            if = {
+                limit = { has_attitude = { who = scope:other_country attitude = antagonistic } }
+                add = {
+                    desc = "AI_ANTAGONISTIC_ATTITUDE"
+                    value = -50
+                }
             }
             # AI is less willing if they are rivals.
             if = {
                 limit = { any_rival_country = { THIS = scope:other_country } }
-                add = -75
+                add = {
+                    desc = "AI_IS_RIVAL"
+                    value = -75
+                }
             }
             # AI is more likely to accept if they have a Jingoist or militaristic leader/government.
             if = {
@@ -1409,7 +1778,10 @@ joint_military_exercises = {
 						}
                     }
                 }
-                add = 20
+                add = {
+                    desc = "AI_MILITARIST_GOVERNMENT"
+                    value = 20
+                }
             }
         }
     }

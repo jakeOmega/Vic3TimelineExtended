@@ -5,8 +5,6 @@
 #
  annex_subject_peaceful:0 "Peaceful Integration"
  annex_subject_peaceful_action_name:0 "Peaceful Integration"
- disband_company_article_short_desc:0 "[SOURCE_COUNTRY.GetNameNoFormatting] will disband a company"
- disband_company_effects_desc:0 "• Establishes an agreement between two [Concept('concept_country', '$concept_countries$')] where one dissolves a specified company."
  annex_subject_peaceful_action_notification_desc:0 "[SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] has peacefully integrated [TARGET_COUNTRY.GetName]."
  annex_subject_peaceful_action_notification_name:0 "Peaceful Integration"
  annex_subject_peaceful_action_propose_name:0 "Propose Peaceful Integration"

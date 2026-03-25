@@ -2,6 +2,9 @@
 	on_actions = {
 		space_elevator_on_action
 		solar_collector_on_action
+		orbital_battlestation_on_action
+		mind_upload_nexus_on_action
+		antimatter_facility_on_action
 		pollution_on_action
 		war_propaganda_on_action
 		state_yearly_cultural_acceptance_add_on_action
@@ -30,6 +33,7 @@ on_monthly_pulse_country = {
 		movement_events_te_on_action
 		society_technology_events_on_action
 		world_war_events_on_action
+		overbuild_protection_on_action
 	}
 }
 
@@ -40,6 +44,7 @@ on_yearly_pulse_state = {
 		violent_hostility_on_action
 		migration_crowding_on_action
 		tourism_update_on_action
+		religious_mission_conversion_on_action
 	}
 }
 
@@ -50,6 +55,26 @@ on_yearly_pulse_state = {
 tourism_update_on_action = {
 	effect = {
 		te_update_tourism_modifier = yes
+	}
+}
+
+# RELIGIOUS MISSION CONVERSION - converts population in states with
+# active religious mission rights treaties toward the missionary
+# power's religion. State scope from on_yearly_pulse_state.
+religious_mission_conversion_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_variable = religious_mission_country
+			}
+			var:religious_mission_country = {
+				save_scope_as = mission_country
+			}
+			convert_population = {
+				target = scope:mission_country.religion
+				value = 0.05
+			}
+		}
 	}
 }
 
@@ -329,16 +354,9 @@ global_warming_update_on_action = {
 			limit = {
 				owner.market_capital = THIS
 			}
-			market = {
-				# Apply market emissions scaled by the market leader's net emission multiplier.
-				# gw_emission_multiplier_script_value uses market_capital.owner to reach
-				# the market leader country, picking up carbon_tax_modifier (-20%),
-				# renewable_investment_modifier (-15%), emission_standards_modifier (-10%),
-				# and any future country_greenhouse_gas_emissions_mult modifiers automatically.
-				change_global_variable = {
-					name = greenhouse_gas_emissions
-					add = market_greenhouse_gas_emissions_script_value
-				}
+			change_global_variable = {
+				name = greenhouse_gas_emissions
+				add = market_greenhouse_gas_emissions_script_value
 			}
 		}
 		# Carbon capture: subtract synthetic oil/coal production (not fossil extraction)
@@ -1638,6 +1656,214 @@ resettlement_transfer_on_action = {
 				}
 			}
 			resettlement_transfer_effect = yes
+		}
+	}
+}
+orbital_battlestation_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_building = building_orbital_battlestation_construction_site
+			}
+			orbital_battlestation_construction = yes
+			every_scope_building = {
+				limit = {
+					is_building_type = building_orbital_battlestation_construction_site
+				}
+				remove_modifier = orbital_battlestation_progress
+				add_modifier = {
+					name = orbital_battlestation_progress
+					multiplier = this.var:orbital_battlestation_progress_var
+				}
+			}
+		}
+	}
+}
+
+mind_upload_nexus_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_building = building_mind_upload_nexus_construction_site
+			}
+			mind_upload_nexus_construction = yes
+			every_scope_building = {
+				limit = {
+					is_building_type = building_mind_upload_nexus_construction_site
+				}
+				remove_modifier = mind_upload_nexus_progress
+				add_modifier = {
+					name = mind_upload_nexus_progress
+					multiplier = this.var:mind_upload_nexus_progress_var
+				}
+			}
+		}
+	}
+}
+
+#==================================================
+# Antimatter Facility Construction On-Action
+#==================================================
+
+antimatter_facility_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_building = building_antimatter_facility_construction_site
+			}
+			antimatter_facility_construction = yes
+			every_scope_building = {
+				limit = {
+					is_building_type = building_antimatter_facility_construction_site
+				}
+				remove_modifier = antimatter_facility_progress
+				add_modifier = {
+					name = antimatter_facility_progress
+					multiplier = this.var:antimatter_facility_progress_var
+				}
+			}
+		}
+	}
+}
+
+#==================================================
+# Overbuild Protection - removes excess sub-buildings
+# when slot modifier goes negative (race condition fix)
+#==================================================
+
+overbuild_protection_on_action = {
+	effect = {
+		# Solar receivers - remove up to 5 excess per month
+		if = {
+			limit = { modifier:country_solar_receiver_max_level_add < 0 }
+			random_scope_state = {
+				limit = { has_building = building_solar_receiver }
+				remove_building = building_solar_receiver
+			}
+		}
+		if = {
+			limit = { modifier:country_solar_receiver_max_level_add < 0 }
+			random_scope_state = {
+				limit = { has_building = building_solar_receiver }
+				remove_building = building_solar_receiver
+			}
+		}
+		if = {
+			limit = { modifier:country_solar_receiver_max_level_add < 0 }
+			random_scope_state = {
+				limit = { has_building = building_solar_receiver }
+				remove_building = building_solar_receiver
+			}
+		}
+		if = {
+			limit = { modifier:country_solar_receiver_max_level_add < 0 }
+			random_scope_state = {
+				limit = { has_building = building_solar_receiver }
+				remove_building = building_solar_receiver
+			}
+		}
+		if = {
+			limit = { modifier:country_solar_receiver_max_level_add < 0 }
+			random_scope_state = {
+				limit = { has_building = building_solar_receiver }
+				remove_building = building_solar_receiver
+			}
+		}
+		# Antimatter sub-buildings - remove up to 5 excess per month
+		if = {
+			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
+			random_scope_state = {
+				limit = {
+					OR = {
+						has_building = building_antimatter_engine
+						has_building = building_antimatter_warhead_plant
+					}
+				}
+				if = {
+					limit = { has_building = building_antimatter_engine }
+					remove_building = building_antimatter_engine
+				}
+				else_if = {
+					limit = { has_building = building_antimatter_warhead_plant }
+					remove_building = building_antimatter_warhead_plant
+				}
+			}
+		}
+		if = {
+			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
+			random_scope_state = {
+				limit = {
+					OR = {
+						has_building = building_antimatter_engine
+						has_building = building_antimatter_warhead_plant
+					}
+				}
+				if = {
+					limit = { has_building = building_antimatter_engine }
+					remove_building = building_antimatter_engine
+				}
+				else_if = {
+					limit = { has_building = building_antimatter_warhead_plant }
+					remove_building = building_antimatter_warhead_plant
+				}
+			}
+		}
+		if = {
+			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
+			random_scope_state = {
+				limit = {
+					OR = {
+						has_building = building_antimatter_engine
+						has_building = building_antimatter_warhead_plant
+					}
+				}
+				if = {
+					limit = { has_building = building_antimatter_engine }
+					remove_building = building_antimatter_engine
+				}
+				else_if = {
+					limit = { has_building = building_antimatter_warhead_plant }
+					remove_building = building_antimatter_warhead_plant
+				}
+			}
+		}
+		if = {
+			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
+			random_scope_state = {
+				limit = {
+					OR = {
+						has_building = building_antimatter_engine
+						has_building = building_antimatter_warhead_plant
+					}
+				}
+				if = {
+					limit = { has_building = building_antimatter_engine }
+					remove_building = building_antimatter_engine
+				}
+				else_if = {
+					limit = { has_building = building_antimatter_warhead_plant }
+					remove_building = building_antimatter_warhead_plant
+				}
+			}
+		}
+		if = {
+			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
+			random_scope_state = {
+				limit = {
+					OR = {
+						has_building = building_antimatter_engine
+						has_building = building_antimatter_warhead_plant
+					}
+				}
+				if = {
+					limit = { has_building = building_antimatter_engine }
+					remove_building = building_antimatter_engine
+				}
+				else_if = {
+					limit = { has_building = building_antimatter_warhead_plant }
+					remove_building = building_antimatter_warhead_plant
+				}
+			}
 		}
 	}
 }

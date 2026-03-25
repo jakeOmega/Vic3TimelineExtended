@@ -1,0 +1,496 @@
+﻿# =================================================================
+# TREATY ARTICLE: demilitarized_zone
+# Forbids military buildings in a specific state, preventing
+# barracks and naval bases from being constructed or maintained.
+# Historical: Rhineland DMZ, Korean DMZ, Sinai after Camp David,
+# Åland Islands, Black Sea limitations (Treaty of Paris 1856).
+# =================================================================
+demilitarized_zone = {
+	icon = "gfx/interface/icons/law_icons/national_militia.dds"
+	kind = directed
+	cost = 75
+
+	relations_progress_per_day = -0.25
+	relations_improvement_min = 0
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		hostile
+	}
+
+	usage_limit = once_per_side_with_same_inputs
+
+	maintenance_paid_by = target_country
+
+	required_inputs = {
+		state
+	}
+
+	unlocked_by_technologies = {
+		international_relations
+	}
+
+	source_modifier = {
+		country_authority_add = -25
+		country_prestige_add = -5
+	}
+
+	visible = {
+		always = yes
+	}
+
+	possible = {
+		has_diplomatic_relevance = scope:other_country
+		NOT = { has_war_with = scope:other_country }
+		NOT = { is_country_type = decentralized }
+		scope:other_country = {
+			NOT = { is_country_type = decentralized }
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = demilitarized_zone
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
+	}
+
+	state_valid_trigger = {
+		scope:input = {
+			owner = root
+			is_capital = no
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			exists = scope:article.input_state
+		}
+	}
+
+	on_entry_into_force = {
+		scope:article_options = {
+			if = {
+				limit = { exists = input_state }
+				input_state = {
+					add_modifier = {
+						name = demilitarized_zone_state_modifier
+					}
+					set_variable = has_demilitarized_zone
+				}
+			}
+		}
+	}
+
+	on_break = {
+		scope:article_options.input_state ?= {
+			remove_modifier = demilitarized_zone_state_modifier
+			remove_variable = has_demilitarized_zone
+		}
+	}
+
+	on_withdrawal = {
+		scope:article_options.input_state ?= {
+			remove_modifier = demilitarized_zone_state_modifier
+			remove_variable = has_demilitarized_zone
+		}
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { request }
+
+		evaluation_chance = {
+			value = 0.05
+			if = {
+				limit = {
+					has_attitude = { who = scope:other_country attitude = antagonistic }
+				}
+				add = 0.15
+			}
+			if = {
+				limit = {
+					has_attitude = { who = scope:other_country attitude = domineering }
+				}
+				add = 0.1
+			}
+			if = {
+				limit = {
+					country_rank >= rank_value:major_power
+				}
+				add = 0.05
+			}
+		}
+
+		inherent_accept_score = {
+			value = 0
+
+			# Source (forced to demilitarize) is very reluctant
+			if = {
+				limit = {
+					scope:source_country = this
+				}
+				add = {
+					value = -240
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+				}
+				# Armed forces IG in government makes it worse
+				if = {
+					limit = {
+						ig:ig_armed_forces = {
+							is_in_government = yes
+						}
+					}
+					add = {
+						value = -100
+						text = BASE
+					}
+				}
+			}
+			# Target (imposing DMZ) wants this
+			else = {
+				# Friendly nations don't impose DMZ on allies
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:source_country attitude = friendly }
+							has_attitude = { who = scope:source_country attitude = cooperative }
+							has_attitude = { who = scope:source_country attitude = conciliatory }
+							has_attitude = { who = scope:source_country attitude = genial }
+							has_attitude = { who = scope:source_country attitude = protective }
+							has_attitude = { who = scope:source_country attitude = loyal }
+						}
+					}
+					add = {
+						desc = "AI_FRIENDLY_WONT_DISARM"
+						value = -1000
+					}
+				}
+				add = {
+					value = -60
+					divide = {
+						value = 0
+						scope:article.source_country = {
+							every_scope_state = {
+								add = 1
+							}
+						}
+						max = 12
+						min = 1
+					}
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL"
+				}
+				if = {
+					limit = {
+						scope:article.input_state = {
+							OR = {
+								has_building = building_barrack
+								has_building = building_naval_base
+							}
+						}
+					}
+					add = {
+						value = 60
+						divide = {
+							value = 0
+							scope:article.source_country = {
+								every_scope_state = {
+									add = 1
+								}
+							}
+							max = 12
+							min = 1
+						}
+						desc = "AI_WANTS_THIS_MORE_IF_MILITARIZED"
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:source_country attitude = hostile }
+							has_attitude = { who = scope:source_country attitude = belligerent }
+						}
+					}
+					add = {
+						value = 60
+						divide = {
+							value = 0
+							scope:article.source_country = {
+								every_scope_state = {
+									add = 1
+								}
+							}
+							max = 12
+							min = 1
+						}
+						desc = "AI_WANTS_THIS_MORE_IF_HOSTILE"
+					}
+				}
+				else_if = {
+					limit = {
+						has_attitude = { who = scope:source_country attitude = antagonistic }
+					}
+					add = {
+						value = 40
+						divide = {
+							value = 0
+							scope:article.source_country = {
+								every_scope_state = {
+									add = 1
+								}
+							}
+							max = 12
+							min = 1
+						}
+						desc = "AI_WANTS_THIS_MORE_IF_ANTAGONISTIC"
+					}
+				}
+				else_if = {
+					limit = {
+						has_attitude = { who = scope:source_country attitude = wary }
+					}
+					add = {
+						value = 20
+						divide = {
+							value = 0
+							scope:article.source_country = {
+								every_scope_state = {
+									add = 1
+								}
+							}
+							max = 12
+							min = 1
+						}
+						desc = "AI_WANTS_THIS_MORE_IF_WARY"
+					}
+				}
+			}
+		}
+	}
+}
+
+# =================================================================
+# TREATY ARTICLE: forced_disarmament
+# Country-wide military reduction. Forces the source country to
+# reduce military wages and conscription rates.
+# Historical: Treaty of Versailles military limitations on Germany,
+# Japanese post-WWII demilitarization.
+# =================================================================
+forced_disarmament = {
+	icon = "gfx/interface/icons/law_icons/peasant_levies.dds"
+	kind = directed
+	cost = 150
+
+	relations_progress_per_day = -0.5
+	relations_improvement_min = 0
+
+	flags = {
+		can_be_enforced
+		hostile
+	}
+
+	usage_limit = once_per_side
+
+	maintenance_paid_by = target_country
+
+	unlocked_by_technologies = {
+		intergovernmental_organizations
+	}
+
+	source_modifier = {
+		country_military_wages_mult = -0.25
+		state_conscription_rate_mult = -0.5
+		country_prestige_add = -10
+		building_group_bg_military_industry_throughput_add = -0.25
+	}
+
+	visible = {
+		always = yes
+	}
+
+	possible = {
+		has_diplomatic_relevance = scope:other_country
+		NOT = { has_war_with = scope:other_country }
+		NOT = { is_country_type = decentralized }
+		scope:other_country = {
+			NOT = { is_country_type = decentralized }
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = forced_disarmament
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { request }
+
+		evaluation_chance = {
+			value = 0.05
+			if = {
+				limit = {
+					has_attitude = { who = scope:other_country attitude = antagonistic }
+				}
+				add = 0.15
+			}
+			if = {
+				limit = {
+					has_attitude = { who = scope:other_country attitude = domineering }
+				}
+				add = 0.1
+			}
+			if = {
+				limit = {
+					country_rank >= rank_value:great_power
+				}
+				add = 0.1
+			}
+		}
+
+		inherent_accept_score = {
+			value = 0
+
+			# Source (disarming) is extremely reluctant
+			if = {
+				limit = {
+					scope:source_country = this
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -80
+				}
+				# Armed forces IG in government makes it worse
+				if = {
+					limit = {
+						ig:ig_armed_forces = {
+							is_in_government = yes
+						}
+					}
+					add = {
+						desc = "AI_ARMED_FORCES_IN_GOVERNMENT"
+						value = -30
+					}
+				}
+				# Already peaceful countries less reluctant
+				if = {
+					limit = {
+						has_law = law_type:law_national_militia
+					}
+					add = {
+						desc = "AI_NATIONAL_MILITIA"
+						value = 15
+					}
+				}
+				# Hostile to the one demanding disarmament: absolutely refuses
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:target_country attitude = hostile }
+							has_attitude = { who = scope:target_country attitude = belligerent }
+						}
+					}
+					add = {
+						desc = "AI_HOSTILE_REFUSES_DISARMAMENT"
+						value = -50
+					}
+				}
+			}
+			# Target (imposing disarmament) wants this
+			else = {
+				# Friendly nations don't disarm allies
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:source_country attitude = friendly }
+							has_attitude = { who = scope:source_country attitude = cooperative }
+							has_attitude = { who = scope:source_country attitude = conciliatory }
+							has_attitude = { who = scope:source_country attitude = genial }
+							has_attitude = { who = scope:source_country attitude = protective }
+							has_attitude = { who = scope:source_country attitude = loyal }
+						}
+					}
+					add = {
+						desc = "AI_FRIENDLY_WONT_DISARM"
+						value = -1000
+					}
+				}
+				else = {
+					add = {
+						desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+						value = -10
+					}
+					if = {
+						limit = {
+							OR = {
+								has_attitude = { who = scope:source_country attitude = hostile }
+								has_attitude = { who = scope:source_country attitude = belligerent }
+							}
+						}
+						add = {
+							desc = "AI_HOSTILE_OR_BELLIGERENT"
+							value = 25
+						}
+					}
+					else_if = {
+						limit = {
+							has_attitude = { who = scope:source_country attitude = antagonistic }
+						}
+						add = {
+							desc = "AI_ANTAGONISTIC_ATTITUDE"
+							value = 20
+						}
+					}
+					else_if = {
+						limit = {
+							has_attitude = { who = scope:source_country attitude = wary }
+						}
+						add = {
+							desc = "AI_WARY_ATTITUDE"
+							value = 15
+						}
+					}
+				}
+			}
+		}
+	}
+}

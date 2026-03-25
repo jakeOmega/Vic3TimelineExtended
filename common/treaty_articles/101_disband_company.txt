@@ -84,7 +84,7 @@ disband_company = {
 			value = 0
 			if = {
 				limit = { country_rank > scope:other_country.country_rank }
-				add = 10
+				add = 0.1
 			}
 		}
 

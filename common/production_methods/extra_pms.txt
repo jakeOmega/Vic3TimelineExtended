@@ -17732,3 +17732,406 @@ pm_solar_receiver = {
 		}
 	}
 }
+
+#==================================================
+# Orbital Battlestation PMs
+#==================================================
+
+pm_orbital_battlestation_construction_paused = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 5
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 500
+		}
+	}
+}
+
+pm_orbital_battlestation_construction_slow = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 3000              # Price: 4000, Total cost: 12000000.0 (64.55%)
+			goods_input_launch_capacity_add = 30000                # Price:  200, Total cost: 6000000.0 (32.28%)
+			goods_input_electronic_components_add = 3000           # Price:   80, Total cost: 240000.0 (1.29%)
+			goods_input_steel_add = 5000                           # Price:   50, Total cost: 250000.0 (1.34%)
+			goods_input_explosives_add = 2000                      # Price:   50, Total cost: 100000.0 (0.54%)
+			# Total input cost: 18590000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 20000
+			building_employment_officers_add = 20000
+			building_employment_academics_add = 10000
+		}
+	}
+}
+
+pm_orbital_battlestation_construction_medium = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 6000              # Price: 4000, Total cost: 24000000.0 (64.55%)
+			goods_input_launch_capacity_add = 60000                # Price:  200, Total cost: 12000000.0 (32.28%)
+			goods_input_electronic_components_add = 6000           # Price:   80, Total cost: 480000.0 (1.29%)
+			goods_input_steel_add = 10000                          # Price:   50, Total cost: 500000.0 (1.34%)
+			goods_input_explosives_add = 4000                      # Price:   50, Total cost: 200000.0 (0.54%)
+			# Total input cost: 37180000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 20000
+			building_employment_officers_add = 20000
+			building_employment_academics_add = 10000
+		}
+	}
+}
+
+pm_orbital_battlestation_construction_fast = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 12000             # Price: 4000, Total cost: 48000000.0 (64.55%)
+			goods_input_launch_capacity_add = 120000               # Price:  200, Total cost: 24000000.0 (32.28%)
+			goods_input_electronic_components_add = 12000          # Price:   80, Total cost: 960000.0 (1.29%)
+			goods_input_steel_add = 20000                          # Price:   50, Total cost: 1000000.0 (1.34%)
+			goods_input_explosives_add = 8000                      # Price:   50, Total cost: 400000.0 (0.54%)
+			# Total input cost: 74360000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 20000
+			building_employment_officers_add = 20000
+			building_employment_academics_add = 10000
+		}
+	}
+}
+
+pm_orbital_battlestation = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	country_modifiers = {
+		level_scaled = {
+			unit_offense_mult = 0.05
+			unit_defense_mult = 0.05
+			unit_morale_recovery_mult = 0.05
+			country_nuclear_weapon_defense_chance_add = 0.10
+			unit_blockade_mult = 0.10
+			unit_morale_damage_mult = 0.05
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 300               # Price: 4000, Total cost: 1200000.0 (52.63%)
+			goods_input_electronic_components_add = 500            # Price:   80, Total cost: 40000.0 (1.75%)
+			goods_input_launch_capacity_add = 5000                 # Price:  200, Total cost: 1000000.0 (43.86%)
+			goods_input_explosives_add = 500                       # Price:   50, Total cost: 25000.0 (1.10%)
+			goods_input_steel_add = 300                            # Price:   50, Total cost: 15000.0 (0.66%)
+			# Total input cost: 2280000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 2000
+			building_employment_officers_add = 3000
+			building_employment_academics_add = 1000
+		}
+	}
+}
+
+#==================================================
+# Mind Upload Nexus PMs
+#==================================================
+
+pm_mind_upload_nexus_construction_paused = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 5
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 500
+		}
+	}
+}
+
+pm_mind_upload_nexus_construction_slow = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 3000              # Price: 4000, Total cost: 12000000.0 (87.59%)
+			goods_input_electronic_components_add = 10000          # Price:   80, Total cost: 800000.0 (5.84%)
+			goods_input_digital_access_add = 5000                  # Price:   60, Total cost: 300000.0 (2.19%)
+			goods_input_electricity_add = 20000                    # Price:   30, Total cost: 600000.0 (4.38%)
+			# Total input cost: 13700000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 30000
+			building_employment_academics_add = 30000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_mind_upload_nexus_construction_medium = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 6000              # Price: 4000, Total cost: 24000000.0 (87.59%)
+			goods_input_electronic_components_add = 20000          # Price:   80, Total cost: 1600000.0 (5.84%)
+			goods_input_digital_access_add = 10000                 # Price:   60, Total cost: 600000.0 (2.19%)
+			goods_input_electricity_add = 40000                    # Price:   30, Total cost: 1200000.0 (4.38%)
+			# Total input cost: 27400000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 30000
+			building_employment_academics_add = 30000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_mind_upload_nexus_construction_fast = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 12000             # Price: 4000, Total cost: 48000000.0 (87.59%)
+			goods_input_electronic_components_add = 40000          # Price:   80, Total cost: 3200000.0 (5.84%)
+			goods_input_digital_access_add = 20000                 # Price:   60, Total cost: 1200000.0 (2.19%)
+			goods_input_electricity_add = 80000                    # Price:   30, Total cost: 2400000.0 (4.38%)
+			# Total input cost: 54800000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 30000
+			building_employment_academics_add = 30000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_mind_upload_nexus = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	country_modifiers = {
+		level_scaled = {
+			country_tech_research_speed_mult = 0.05
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 30000                    # Price:   30, Total cost: 900000.0 (60.00%)
+			goods_input_electronic_components_add = 1000           # Price:   80, Total cost: 80000.0 (5.33%)
+			goods_input_digital_access_add = 2000                  # Price:   60, Total cost: 120000.0 (8.00%)
+			goods_input_advanced_materials_add = 100               # Price: 4000, Total cost: 400000.0 (26.67%)
+			# Total input cost: 1500000.0
+			# Output goods
+			goods_output_digital_assets_add = 5000                 # Price:   80, Total cost: 400000.0 (66.67%)
+			goods_output_services_add = 5000                       # Price:   40, Total cost: 200000.0 (33.33%)
+			# Total output cost: 600000.0
+			# Profit: -900000.0
+			# Profit margin: -60.00%
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 3000
+			building_employment_academics_add = 5000
+			building_employment_clerks_add = 2000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+#==================================================
+# Antimatter Facility PMs
+#==================================================
+
+pm_antimatter_facility_construction_paused = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 5
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 500
+		}
+	}
+}
+
+pm_antimatter_facility_construction_slow = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 5000              # Price: 4000, Total cost: 20000000.0 (88.69%)
+			goods_input_electronic_components_add = 10000          # Price:   80, Total cost: 800000.0 (3.55%)
+			goods_input_electricity_add = 50000                    # Price:   30, Total cost: 1500000.0 (6.65%)
+			goods_input_steel_add = 5000                           # Price:   50, Total cost: 250000.0 (1.11%)
+			# Total input cost: 22550000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 25000
+			building_employment_academics_add = 25000
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_antimatter_facility_construction_medium = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 10000             # Price: 4000, Total cost: 40000000.0 (88.69%)
+			goods_input_electronic_components_add = 20000          # Price:   80, Total cost: 1600000.0 (3.55%)
+			goods_input_electricity_add = 100000                   # Price:   30, Total cost: 3000000.0 (6.65%)
+			goods_input_steel_add = 10000                          # Price:   50, Total cost: 500000.0 (1.11%)
+			# Total input cost: 45100000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 25000
+			building_employment_academics_add = 25000
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_antimatter_facility_construction_fast = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_advanced_materials_add = 20000             # Price: 4000, Total cost: 80000000.0 (88.69%)
+			goods_input_electronic_components_add = 40000          # Price:   80, Total cost: 3200000.0 (3.55%)
+			goods_input_electricity_add = 200000                   # Price:   30, Total cost: 6000000.0 (6.65%)
+			goods_input_steel_add = 20000                          # Price:   50, Total cost: 1000000.0 (1.11%)
+			# Total input cost: 90200000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 25000
+			building_employment_academics_add = 25000
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# Antimatter facility hub - enables antimatter sub-building slots
+pm_antimatter_facility = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	country_modifiers = {
+		level_scaled = {
+			country_antimatter_facility_max_level_add = 5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_electricity_add = 50000                    # Price:   30, Total cost: 1500000.0 (64.26%)
+			goods_input_advanced_materials_add = 200               # Price: 4000, Total cost: 800000.0 (34.28%)
+			goods_input_electronic_components_add = 300            # Price:   80, Total cost: 24000.0 (1.03%)
+			goods_input_steel_add = 200                            # Price:   50, Total cost: 10000.0 (0.43%)
+			# Total input cost: 2334000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 3000
+			building_employment_academics_add = 3000
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# Antimatter engine - propulsion applications
+pm_antimatter_engine = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	country_modifiers = {
+		level_scaled = {
+			country_antimatter_facility_max_level_add = -1
+			military_formation_movement_speed_mult = 0.02
+			country_convoys_capacity_mult = 0.01
+			goods_output_launch_capacity_mult = 0.01
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_electricity_add = 5000                     # Price:   30, Total cost: 150000.0 (64.10%)
+			goods_input_advanced_materials_add = 20                # Price: 4000, Total cost: 80000.0 (34.19%)
+			goods_input_electronic_components_add = 50             # Price:   80, Total cost: 4000.0 (1.71%)
+			# Total input cost: 234000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 500
+			building_employment_officers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# Antimatter warhead plant - weapons applications
+pm_antimatter_warhead_plant = {
+	texture = "gfx/interface/icons/production_method_icons/base3.dds"
+
+	country_modifiers = {
+		level_scaled = {
+			country_antimatter_facility_max_level_add = -1
+			country_nuclear_weapon_attack_success_add = 0.03
+			unit_offense_mult = 0.02
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_electricity_add = 5000                     # Price:   30, Total cost: 150000.0 (62.76%)
+			goods_input_advanced_materials_add = 20                # Price: 4000, Total cost: 80000.0 (33.47%)
+			goods_input_explosives_add = 100                       # Price:   50, Total cost: 5000.0 (2.09%)
+			goods_input_electronic_components_add = 50             # Price:   80, Total cost: 4000.0 (1.67%)
+			# Total input cost: 239000.0
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 500
+			building_employment_officers_add = 500
+			building_employment_academics_add = 250
+		}
+	}
+
+	required_input_goods = electricity
+}

@@ -174,6 +174,162 @@ solar_collector_construction = {
 	}
 }
 
+orbital_battlestation_construction = {
+	if = {
+		limit = {
+			NOT = { has_variable = orbital_battlestation_progress_var }
+		}
+		set_variable = {
+			name = orbital_battlestation_progress_var
+			value = 0
+		}
+	}
+	if = {
+		limit = {
+			has_variable = orbital_battlestation_progress_var
+			any_scope_building = {
+				is_building_type = building_orbital_battlestation_construction_site
+				building_has_goods_shortage = no
+			}
+		}
+		change_variable = {
+			name = orbital_battlestation_progress_var
+			add = {
+				value = b:building_orbital_battlestation_construction_site.occupancy
+				divide = 12
+				if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_orbital_battlestation_construction_slow }
+					}
+					multiply = 0.25
+				}
+				else_if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_orbital_battlestation_construction_medium }
+					}
+					multiply = 0.5
+				}
+				else_if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_orbital_battlestation_construction_fast }
+					}
+					multiply = 1
+				}
+				else = {
+					multiply = 0
+				}
+				multiply = 1000
+				ceiling = yes
+				divide = 1000
+			}
+		}
+	}
+	if = {
+		limit = {
+			var:orbital_battlestation_progress_var >= 1
+		}
+		set_variable = {
+			name = orbital_battlestation_progress_var
+			value = 0
+		}
+		remove_building = building_orbital_battlestation_construction_site
+		if = {
+			limit = { has_building = building_orbital_battlestation }
+			switch = {
+				trigger = b:building_orbital_battlestation.level
+				1 = { create_building = { building = building_orbital_battlestation level = 2 } }
+				2 = { create_building = { building = building_orbital_battlestation level = 3 } }
+				3 = { create_building = { building = building_orbital_battlestation level = 4 } }
+				4 = { create_building = { building = building_orbital_battlestation level = 5 } }
+			}
+		}
+		else = {
+			create_building = {
+				building = building_orbital_battlestation
+				level = 1
+			}
+		}
+	}
+}
+
+mind_upload_nexus_construction = {
+	if = {
+		limit = {
+			NOT = { has_variable = mind_upload_nexus_progress_var }
+		}
+		set_variable = {
+			name = mind_upload_nexus_progress_var
+			value = 0
+		}
+	}
+	if = {
+		limit = {
+			has_variable = mind_upload_nexus_progress_var
+			any_scope_building = {
+				is_building_type = building_mind_upload_nexus_construction_site
+				building_has_goods_shortage = no
+			}
+		}
+		change_variable = {
+			name = mind_upload_nexus_progress_var
+			add = {
+				value = b:building_mind_upload_nexus_construction_site.occupancy
+				divide = 12
+				if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_mind_upload_nexus_construction_slow }
+					}
+					multiply = 0.25
+				}
+				else_if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_mind_upload_nexus_construction_medium }
+					}
+					multiply = 0.5
+				}
+				else_if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_mind_upload_nexus_construction_fast }
+					}
+					multiply = 1
+				}
+				else = {
+					multiply = 0
+				}
+				multiply = 1000
+				ceiling = yes
+				divide = 1000
+			}
+		}
+	}
+	if = {
+		limit = {
+			var:mind_upload_nexus_progress_var >= 1
+		}
+		set_variable = {
+			name = mind_upload_nexus_progress_var
+			value = 0
+		}
+		remove_building = building_mind_upload_nexus_construction_site
+		if = {
+			limit = { has_building = building_mind_upload_nexus }
+			switch = {
+				trigger = b:building_mind_upload_nexus.level
+				1 = { create_building = { building = building_mind_upload_nexus level = 2 } }
+				2 = { create_building = { building = building_mind_upload_nexus level = 3 } }
+				3 = { create_building = { building = building_mind_upload_nexus level = 4 } }
+				4 = { create_building = { building = building_mind_upload_nexus level = 5 } }
+			}
+		}
+		else = {
+			create_building = {
+				building = building_mind_upload_nexus
+				level = 1
+			}
+		}
+	}
+}
+
 thought_control_loyalists_update = {
 	if = {
 		limit = {
@@ -1147,6 +1303,93 @@ resettlement_transfer_effect = {
 				}
 			}
 			move_pop = scope:resettlement_destination
+		}
+	}
+}
+
+#==================================================
+# Antimatter Facility Construction Effect
+#==================================================
+
+antimatter_facility_construction = {
+	if = {
+		limit = {
+			NOT = { has_variable = antimatter_facility_progress_var }
+		}
+		set_variable = {
+			name = antimatter_facility_progress_var
+			value = 0
+		}
+	}
+	if = {
+		limit = {
+			has_variable = antimatter_facility_progress_var
+			any_scope_building = {
+				is_building_type = building_antimatter_facility_construction_site
+				building_has_goods_shortage = no
+			}
+		}
+		change_variable = {
+			name = antimatter_facility_progress_var
+			add = {
+				value = b:building_antimatter_facility_construction_site.occupancy
+				divide = 12
+				if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_antimatter_facility_construction_slow }
+					}
+					multiply = 0.25
+				}
+				else_if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_antimatter_facility_construction_medium }
+					}
+					multiply = 0.5
+				}
+				else_if = {
+					limit = {
+						any_scope_building = { has_active_production_method = pm_antimatter_facility_construction_fast }
+					}
+					multiply = 1
+				}
+				else = {
+					multiply = 0
+				}
+				multiply = 1000
+				ceiling = yes
+				divide = 1000
+			}
+		}
+	}
+	if = {
+		limit = {
+			var:antimatter_facility_progress_var >= 1
+		}
+		set_variable = {
+			name = antimatter_facility_progress_var
+			value = 0
+		}
+		remove_building = building_antimatter_facility_construction_site
+		if = {
+			limit = { has_building = building_antimatter_facility }
+			switch = {
+				trigger = b:building_antimatter_facility.level
+				1 = { create_building = { building = building_antimatter_facility level = 2 } }
+				2 = { create_building = { building = building_antimatter_facility level = 3 } }
+				3 = { create_building = { building = building_antimatter_facility level = 4 } }
+				4 = { create_building = { building = building_antimatter_facility level = 5 } }
+				5 = { create_building = { building = building_antimatter_facility level = 6 } }
+				6 = { create_building = { building = building_antimatter_facility level = 7 } }
+				7 = { create_building = { building = building_antimatter_facility level = 8 } }
+				8 = { create_building = { building = building_antimatter_facility level = 9 } }
+				9 = { create_building = { building = building_antimatter_facility level = 10 } }
+			}
+		}
+		else = {
+			create_building = {
+				building = building_antimatter_facility
+				level = 1
+			}
 		}
 	}
 }

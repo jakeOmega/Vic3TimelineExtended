@@ -1,0 +1,356 @@
+﻿# =================================================================
+# TREATY ARTICLE: minority_protection
+# A Great Power forces a weaker nation to guarantee rights of a
+# cultural or religious minority in a specific state, reducing
+# assimilation and conversion pressure.
+# Historical: Russia protecting Orthodox in Ottoman Empire,
+# League of Nations minority treaties after WWI.
+# =================================================================
+minority_protection = {
+	icon = "gfx/interface/icons/law_icons/multicultural.dds"
+	kind = directed
+	cost = 100
+
+	relations_progress_per_day = -0.25
+	relations_improvement_min = 0
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		hostile
+	}
+
+	usage_limit = once_per_side_with_same_inputs
+
+	maintenance_paid_by = target_country
+
+	required_inputs = {
+		state
+	}
+
+	unlocked_by_technologies = {
+		international_relations
+	}
+
+	source_modifier = {
+		country_legitimacy_base_add = -10
+		country_authority_add = -200
+	}
+
+	target_modifier = {
+		country_prestige_mult = 0.05
+	}
+
+	visible = {
+		always = yes
+	}
+
+	possible = {
+		has_diplomatic_relevance = scope:other_country
+		NOT = { has_war_with = scope:other_country }
+		NOT = { is_country_type = decentralized }
+		scope:other_country = {
+			NOT = { is_country_type = decentralized }
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = minority_protection
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
+	}
+
+	state_valid_trigger = {
+		scope:input = {
+			owner = root
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			exists = scope:article.input_state
+		}
+	}
+
+	on_entry_into_force = {
+		scope:article_options = {
+			if = {
+				limit = { exists = input_state }
+				input_state = {
+					add_modifier = {
+						name = minority_protection_state_modifier
+					}
+					set_variable = has_minority_protection
+				}
+			}
+		}
+	}
+
+	on_break = {
+		scope:article_options.input_state ?= {
+			remove_modifier = minority_protection_state_modifier
+			remove_variable = has_minority_protection
+		}
+	}
+
+	on_withdrawal = {
+		scope:article_options.input_state ?= {
+			remove_modifier = minority_protection_state_modifier
+			remove_variable = has_minority_protection
+		}
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { request }
+
+		evaluation_chance = {
+			value = 0.05
+			if = {
+				limit = {
+					has_attitude = { who = scope:other_country attitude = protective }
+				}
+				add = 0.15
+			}
+			if = {
+				limit = {
+					has_attitude = { who = scope:other_country attitude = domineering }
+				}
+				add = 0.1
+			}
+			if = {
+				limit = {
+					country_rank >= rank_value:great_power
+				}
+				add = 0.1
+			}
+		}
+
+		inherent_accept_score = {
+			value = 0
+
+			# Source (forced to protect minorities) is reluctant
+			if = {
+				limit = {
+					scope:source_country = this
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -50
+				}
+				# More reluctant if they have discriminatory laws
+				if = {
+					limit = {
+						OR = {
+							has_law = law_type:law_ethnostate
+							has_law = law_type:law_national_supremacy
+						}
+					}
+					add = {
+						desc = "AI_DISCRIMINATORY_LAWS"
+						value = -30
+					}
+				}
+				# Less reluctant if already multicultural
+				if = {
+					limit = {
+						has_law = law_type:law_multicultural
+					}
+					add = {
+						desc = "AI_ALREADY_MULTICULTURAL"
+						value = 30
+					}
+				}
+			}
+			# Target (protector) wants this if their culture/religion is discriminated there
+			else = {
+				# --- Culture protection ---
+				# Base: protector's primary culture is discriminated (acceptance < 80) and present (>= 5%)
+				if = {
+					limit = {
+						scope:article.input_state = {
+							any_scope_culture = {
+								is_primary_culture_of = scope:target_country
+								PREV = {
+									state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_5 }
+									culture_percent_state = { target = prev value >= 0.05 }
+								}
+							}
+						}
+					}
+					add = {
+						desc = "AI_CULTURE_DISCRIMINATED"
+						value = 10
+					}
+				}
+				# Bonus: significant cultural minority (>= 15%)
+				if = {
+					limit = {
+						scope:article.input_state = {
+							any_scope_culture = {
+								is_primary_culture_of = scope:target_country
+								PREV = {
+									state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_5 }
+									culture_percent_state = { target = prev value >= 0.15 }
+								}
+							}
+						}
+					}
+					add = {
+						desc = "AI_SIGNIFICANT_CULTURAL_MINORITY"
+						value = 10
+					}
+				}
+				# Bonus: major cultural minority (>= 30%)
+				if = {
+					limit = {
+						scope:article.input_state = {
+							any_scope_culture = {
+								is_primary_culture_of = scope:target_country
+								PREV = {
+									state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_5 }
+									culture_percent_state = { target = prev value >= 0.30 }
+								}
+							}
+						}
+					}
+					add = {
+						desc = "AI_MAJOR_CULTURAL_MINORITY"
+						value = 10
+					}
+				}
+				# Bonus: heavily discriminated culture (acceptance < 40)
+				if = {
+					limit = {
+						scope:article.input_state = {
+							any_scope_culture = {
+								is_primary_culture_of = scope:target_country
+								PREV = {
+									state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_3 }
+									culture_percent_state = { target = prev value >= 0.05 }
+								}
+							}
+						}
+					}
+					add = {
+						desc = "AI_HEAVILY_DISCRIMINATED_CULTURE"
+						value = 10
+					}
+				}
+
+				# --- Religion protection ---
+				# Base: protector's state religion is discriminated (acceptance < 15) and present (>= 10%)
+				if = {
+					limit = {
+						scope:article.input_state = {
+							state_average_religion_pop_acceptance = {
+								religion = scope:target_country.religion
+								value < religious_acceptance_medium
+							}
+							religion_percent_state = {
+								target = scope:target_country.religion
+								value >= 0.1
+							}
+						}
+					}
+					add = {
+						desc = "AI_RELIGION_DISCRIMINATED"
+						value = 10
+					}
+				}
+				# Bonus: significant religious minority (>= 25%)
+				if = {
+					limit = {
+						scope:article.input_state = {
+							state_average_religion_pop_acceptance = {
+								religion = scope:target_country.religion
+								value < religious_acceptance_medium
+							}
+							religion_percent_state = {
+								target = scope:target_country.religion
+								value >= 0.25
+							}
+						}
+					}
+					add = {
+						desc = "AI_SIGNIFICANT_RELIGIOUS_MINORITY"
+						value = 10
+					}
+				}
+				# Bonus: heavily discriminated religion (acceptance < 10)
+				if = {
+					limit = {
+						scope:article.input_state = {
+							state_average_religion_pop_acceptance = {
+								religion = scope:target_country.religion
+								value < religious_acceptance_low
+							}
+							religion_percent_state = {
+								target = scope:target_country.religion
+								value >= 0.1
+							}
+						}
+					}
+					add = {
+						desc = "AI_HEAVILY_DISCRIMINATED_RELIGION"
+						value = 10
+					}
+				}
+
+				# --- Small state penalty ---
+				if = {
+					limit = {
+						scope:article.input_state = {
+							state_population < 100000
+						}
+					}
+					add = {
+						desc = "AI_SMALL_STATE_POPULATION"
+						value = -20
+					}
+				}
+				if = {
+					limit = {
+						scope:article.input_state = {
+							state_population < 50000
+						}
+					}
+					add = {
+						desc = "AI_SMALL_STATE_POPULATION"
+						value = -30
+					}
+				}
+				if = {
+					limit = {
+						scope:article.input_state = {
+							state_population < 10000
+						}
+					}
+					add = {
+						desc = "AI_SMALL_STATE_POPULATION"
+						value = -50
+					}
+				}
+			}
+		}
+	}
+}

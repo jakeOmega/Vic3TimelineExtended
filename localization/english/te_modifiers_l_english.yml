@@ -3,6 +3,8 @@
 #
 # MODIFIERS
 #
+ country_antimatter_facility_max_level_add:0 "Antimatter Facility Slots"
+ country_antimatter_facility_max_level_add_desc:0 "Available capacity for antimatter-powered sub-buildings. Each Antimatter Containment Facility level provides 5 slots. Each Antimatter Engine or Warhead Plant level consumes 1 slot."
  country_banking_intervention_max_add:0 "Maximum Banking Intervention Points"
  country_banking_intervention_max_add_desc:0 "The maximum number of points that can be applied to regulate the financial system at once."
  country_bubble_pressure_monthly_add:0 "Monthly Bubble Pressure"

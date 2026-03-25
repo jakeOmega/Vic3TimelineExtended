@@ -827,15 +827,15 @@ environmentalist_momentum_modifier = {
 
 coastal_flooding_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	building_port_throughput_add = -0.15
+	building_port_throughput_add = -0.3
 	building_group_bg_fishing_throughput_add = -0.10
 	state_standard_of_living_add = -1
 }
 
 coastal_flood_defense_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	building_port_throughput_add = -0.05
-	state_infrastructure_add = 3
+	building_port_throughput_add = -0.1
+	building_group_bg_fishing_throughput_add = -0.05
 	country_legitimacy_base_add = 5
 }
 
@@ -924,8 +924,9 @@ arctic_melting_modifier = {
 coastal_relocation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	state_standard_of_living_add = -2
-	state_migration_pull_mult = 0.15
-	building_port_throughput_add = -0.05
+	state_migration_quota_mult = 0.15
+	building_port_throughput_add = -0.15
+	building_group_bg_fishing_throughput_add = -0.1
 }
 
 green_tech_market_modifier = {
@@ -2927,4 +2928,57 @@ banking_event_bailout_cost = {
 banking_event_bailout_goodwill = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.05
+}
+orbital_battlestation_progress = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_total_orbital_battlestation_progress = 1
+}
+
+mind_upload_nexus_progress = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_total_mind_upload_nexus_progress = 1
+}
+
+#==================================================
+# Antimatter Facility Progress Modifier
+#==================================================
+
+antimatter_facility_progress = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds"
+
+	building_total_antimatter_facility_progress = 1
+}
+
+#==================================================
+# Treaty Article State Modifiers
+#==================================================
+
+minority_protection_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_assimilation_mult = -0.5
+	state_conversion_mult = -0.5
+	state_migration_pull_mult = 0.1
+}
+
+free_port_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_trade_capacity_mult = 0.5
+	state_migration_pull_add = 10
+	state_trade_advantage_mult = 0.25
+	state_tariff_export_add = -10
+	state_tariff_import_add = -10
+	state_tax_collection_mult = -0.5
+	state_assimilation_mult = -0.25
+}
+
+religious_mission_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_migration_pull_add = 5
+}
+
+demilitarized_zone_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	state_conscription_rate_mult = -1.0
+	state_building_barrack_max_level_add = -1000
+	state_building_naval_base_max_level_add = -1000
 }

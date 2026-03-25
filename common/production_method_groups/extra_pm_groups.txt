@@ -1417,3 +1417,74 @@ REPLACE_OR_CREATE:pmg_base_building_solar_receiver = {
         pm_solar_receiver
     }
 }
+
+#==================================================
+# Orbital Battlestation PMGs
+#==================================================
+
+REPLACE_OR_CREATE:pmg_base_building_orbital_battlestation_construction_site = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_orbital_battlestation_construction_paused
+		pm_orbital_battlestation_construction_slow
+		pm_orbital_battlestation_construction_medium
+		pm_orbital_battlestation_construction_fast
+	}
+}
+REPLACE_OR_CREATE:pmg_base_building_orbital_battlestation = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_orbital_battlestation
+	}
+}
+
+#==================================================
+# Mind Upload Nexus PMGs
+#==================================================
+
+REPLACE_OR_CREATE:pmg_base_building_mind_upload_nexus_construction_site = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_mind_upload_nexus_construction_paused
+		pm_mind_upload_nexus_construction_slow
+		pm_mind_upload_nexus_construction_medium
+		pm_mind_upload_nexus_construction_fast
+	}
+}
+REPLACE_OR_CREATE:pmg_base_building_mind_upload_nexus = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_mind_upload_nexus
+	}
+}
+
+#==================================================
+# Antimatter Facility PMGs
+#==================================================
+
+pmg_base_building_antimatter_facility_construction_site = {
+	production_methods = {
+		pm_antimatter_facility_construction_paused
+		pm_antimatter_facility_construction_slow
+		pm_antimatter_facility_construction_medium
+		pm_antimatter_facility_construction_fast
+	}
+}
+
+pmg_base_building_antimatter_facility = {
+	production_methods = {
+		pm_antimatter_facility
+	}
+}
+
+pmg_base_building_antimatter_engine = {
+	production_methods = {
+		pm_antimatter_engine
+	}
+}
+
+pmg_base_building_antimatter_warhead_plant = {
+	production_methods = {
+		pm_antimatter_warhead_plant
+	}
+}

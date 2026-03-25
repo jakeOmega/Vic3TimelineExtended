@@ -518,17 +518,20 @@ migration_attraction_script_value = {
 }
 
 market_greenhouse_gas_emissions_script_value = {
+	# Evaluated in the country scope
 	value = 0
-	mg:oil = {
-		add = {
-			value = market_goods_consumption
-			multiply = 2
+	market = {
+		mg:oil = {
+			add = {
+				value = market_goods_consumption
+				multiply = 2
+			}
 		}
-	}
-	mg:coal = {
-		add = {
-			value = market_goods_consumption
-			multiply = 2
+		mg:coal = {
+			add = {
+				value = market_goods_consumption
+				multiply = 2
+			}
 		}
 	}
 	divide = 10000
@@ -536,9 +539,8 @@ market_greenhouse_gas_emissions_script_value = {
 }
 
 market_greenhouse_gas_emissions_script_value_display = {
-	market = {
-		value = market_greenhouse_gas_emissions_script_value
-	}
+	# Evaluated in the country scope
+	value = market_greenhouse_gas_emissions_script_value
 	round = yes
 }
 
@@ -563,7 +565,7 @@ temperature_anomaly_display = {
 }
 
 gw_emission_multiplier_script_value = {
-	# Evaluated in MARKET scope (called from market_greenhouse_gas_emissions_script_value).
+	# Evaluated in country scope
 	# Returns the net emission multiplier for this market's leader (1.0 = full, 0.8 = 20% reduction, etc.).
 	# Uses market_capital.owner to reach the market leader country where the modifier lives.
 	value = 1

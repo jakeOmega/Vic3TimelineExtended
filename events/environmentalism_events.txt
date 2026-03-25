@@ -635,7 +635,7 @@ environmentalism_events.9 = {
 			days = short_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = small_radicals }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
@@ -647,7 +647,7 @@ environmentalism_events.9 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals }
+		add_radicals = { value = small_radicals }
 	}
 
 	option = {
@@ -656,7 +656,6 @@ environmentalism_events.9 = {
 			has_environment_ministry_3 = yes
 		}
 		highlighted_option = yes
-		custom_tooltip = environmentalism_events_ministry_environment_3_tt
 		ai_chance = { base = 8 }
 		# Engineered flood defense - ministry coordinates large-scale infrastructure
 		add_modifier = {

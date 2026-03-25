@@ -39,7 +39,9 @@
 
 	# ---- Great Power influence buttons ----
 	scripted_button = un_champion_order_button
+	scripted_button = un_stop_championing_button
 	scripted_button = un_undermine_order_button
+	scripted_button = un_stop_undermining_button
 
 	immediate = {
 		# Set initial UN authority to 50 (moderate legitimacy)
