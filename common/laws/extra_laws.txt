@@ -298,7 +298,7 @@ law_war_crimes_forbidden = {
 		unit_kill_rate_add = -0.05
 		country_institution_ministry_of_war_max_investment_add = -1
 		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.1
-		country_diplomatic_reputation_add = 10
+		country_diplomatic_reputation_add = 2
 	}
 }
 
@@ -318,7 +318,7 @@ law_humanitarian_regulations = {
 		unit_kill_rate_add = -0.1
 		country_institution_ministry_of_war_max_investment_add = -2
 		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.25
-		country_diplomatic_reputation_add = 20
+		country_diplomatic_reputation_add = 4
 	}
 	
 }
@@ -339,7 +339,7 @@ law_limited_war = {
 		unit_kill_rate_add = -0.15
 		country_institution_ministry_of_war_max_investment_add = -3
 		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.5
-		country_diplomatic_reputation_add = 30
+		country_diplomatic_reputation_add = 6
 	}	
 }
 

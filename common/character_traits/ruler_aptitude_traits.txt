@@ -55,6 +55,49 @@ ruler_poor_administrator = {
 	}
 
 	replace = {
+		ruler_average_administrator
+		ruler_skilled_administrator
+		ruler_exceptional_administrator
+	}
+}
+ruler_average_administrator = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/ambitious.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	executive_modifier = {
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+	}
+
+	replace = {
+		ruler_poor_administrator
 		ruler_skilled_administrator
 		ruler_exceptional_administrator
 	}
@@ -115,6 +158,7 @@ ruler_skilled_administrator = {
 
 	replace = {
 		ruler_poor_administrator
+		ruler_average_administrator
 		ruler_exceptional_administrator
 	}
 }
@@ -177,6 +221,7 @@ ruler_exceptional_administrator = {
 
 	replace = {
 		ruler_poor_administrator
+		ruler_average_administrator
 		ruler_skilled_administrator
 	}
 }
@@ -234,6 +279,49 @@ ruler_poor_diplomat = {
 	}
 
 	replace = {
+		ruler_average_diplomat
+		ruler_skilled_diplomat
+		ruler_exceptional_diplomat
+	}
+}
+ruler_average_diplomat = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/cautious.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	executive_modifier = {
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+	}
+
+	replace = {
+		ruler_poor_diplomat
 		ruler_skilled_diplomat
 		ruler_exceptional_diplomat
 	}
@@ -292,6 +380,7 @@ ruler_skilled_diplomat = {
 
 	replace = {
 		ruler_poor_diplomat
+		ruler_average_diplomat
 		ruler_exceptional_diplomat
 	}
 }
@@ -353,6 +442,7 @@ ruler_exceptional_diplomat = {
 
 	replace = {
 		ruler_poor_diplomat
+		ruler_average_diplomat
 		ruler_skilled_diplomat
 	}
 }
@@ -416,6 +506,51 @@ ruler_poor_commander = {
 	}
 
 	replace = {
+		ruler_average_commander
+		ruler_skilled_commander
+		ruler_exceptional_commander
+	}
+}
+ruler_average_commander = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/brave.dds"
+
+	character_modifier = {
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	executive_modifier = {
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			has_role = general
+			has_role = admiral
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+	}
+
+	replace = {
+		ruler_poor_commander
 		ruler_skilled_commander
 		ruler_exceptional_commander
 	}
@@ -482,6 +617,7 @@ ruler_skilled_commander = {
 
 	replace = {
 		ruler_poor_commander
+		ruler_average_commander
 		ruler_exceptional_commander
 	}
 }
@@ -551,6 +687,7 @@ ruler_exceptional_commander = {
 
 	replace = {
 		ruler_poor_commander
+		ruler_average_commander
 		ruler_skilled_commander
 	}
 }

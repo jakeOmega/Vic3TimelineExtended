@@ -1,519 +1,599 @@
-﻿### Heir Education - Scripted Buttons
-### 7 investment buttons + 1 conclude button
+﻿### Heir Education - Toggle Buttons
+### 7 focus categories with enable/disable toggle pairs
+### Trait Focus (admin/diplo/military) - mutually exclusive
+### Ideology Focus (progressive/conservative) - mutually exclusive
+### IG Focus (establishment/reformist) - mutually exclusive
 
-# ─────────────────── TRAIT INVESTMENT BUTTONS ───────────────────
+# ─────────── ADMINISTRATIVE FOCUS ───────────
 
-he_invest_admin = {
-	name = "HE_INVEST_ADMIN"
-	desc = "HE_INVEST_ADMIN_DESC"
+he_enable_admin_focus = {
+	name = "HE_ENABLE_ADMIN_FOCUS"
+	desc = "HE_ENABLE_ADMIN_FOCUS_DESC"
 
 	visible = {
 		has_law = law_type:law_monarchy
 		exists = heir
+		NOT = { has_variable = heir_ed_focus_admin }
 	}
 
 	ai_chance = {
 		value = 0
 		if = {
 			limit = {
-				ig:ig_industrialists = { is_in_government = yes }
-			}
-			add = 30
-		}
-		if = { limit = { NOT = { has_variable = heir_ed_admin } } add = 20 }
-		if = { limit = { has_variable = heir_ed_admin var:heir_ed_admin >= 2 } add = -10 }
-	}
-
-	possible = {
-		custom_tooltip = {
-			text = HE_INVESTMENT_CAP_TT
-			OR = {
-				NOT = { has_variable = heir_ed_total }
-				var:heir_ed_total < 10
-			}
-		}
-		custom_tooltip = {
-			text = HE_COOLDOWN_TT
-			NOT = { has_modifier = heir_education_cooldown }
-		}
-	}
-
-	effect = {
-		# Increment investment
-		if = {
-			limit = { has_variable = heir_ed_admin }
-			change_variable = { name = heir_ed_admin add = 1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_admin value = 1 }
-		}
-		if = {
-			limit = { has_variable = heir_ed_total }
-			change_variable = { name = heir_ed_total add = 1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_total value = 1 }
-		}
-
-		# Update progress bar
-		scope:journal_entry = {
-			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-		}
-
-		# Cost: temporary innovation penalty
-		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
-		# Cooldown
-		add_modifier = { name = heir_education_cooldown days = 180 }
-
-		# IG reactions
-		heir_education_admin_ig_reaction = yes
-	}
-}
-
-he_invest_diplo = {
-	name = "HE_INVEST_DIPLO"
-	desc = "HE_INVEST_DIPLO_DESC"
-
-	visible = {
-		has_law = law_type:law_monarchy
-		exists = heir
-	}
-
-	ai_chance = {
-		value = 0
-		if = {
-			limit = {
-				ig:ig_intelligentsia = { is_in_government = yes }
-			}
-			add = 25
-		}
-		if = { limit = { country_rank >= rank_value:major_power } add = 15 }
-		if = { limit = { NOT = { has_variable = heir_ed_diplo } } add = 20 }
-		if = { limit = { has_variable = heir_ed_diplo var:heir_ed_diplo >= 2 } add = -10 }
-	}
-
-	possible = {
-		custom_tooltip = {
-			text = HE_INVESTMENT_CAP_TT
-			OR = {
-				NOT = { has_variable = heir_ed_total }
-				var:heir_ed_total < 10
-			}
-		}
-		custom_tooltip = {
-			text = HE_COOLDOWN_TT
-			NOT = { has_modifier = heir_education_cooldown }
-		}
-	}
-
-	effect = {
-		if = {
-			limit = { has_variable = heir_ed_diplo }
-			change_variable = { name = heir_ed_diplo add = 1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_diplo value = 1 }
-		}
-		if = {
-			limit = { has_variable = heir_ed_total }
-			change_variable = { name = heir_ed_total add = 1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_total value = 1 }
-		}
-
-		scope:journal_entry = {
-			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-		}
-
-		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
-		add_modifier = { name = heir_education_cooldown days = 180 }
-
-		heir_education_diplo_ig_reaction = yes
-	}
-}
-
-he_invest_military = {
-	name = "HE_INVEST_MILITARY"
-	desc = "HE_INVEST_MILITARY_DESC"
-
-	visible = {
-		has_law = law_type:law_monarchy
-		exists = heir
-	}
-
-	ai_chance = {
-		value = 0
-		if = {
-			limit = {
-				ig:ig_armed_forces = { is_in_government = yes }
-			}
-			add = 30
-		}
-		if = { limit = { is_at_war = yes } add = 25 }
-		if = { limit = { NOT = { has_variable = heir_ed_military } } add = 15 }
-		if = { limit = { has_variable = heir_ed_military var:heir_ed_military >= 2 } add = -10 }
-	}
-
-	possible = {
-		custom_tooltip = {
-			text = HE_INVESTMENT_CAP_TT
-			OR = {
-				NOT = { has_variable = heir_ed_total }
-				var:heir_ed_total < 10
-			}
-		}
-		custom_tooltip = {
-			text = HE_COOLDOWN_TT
-			NOT = { has_modifier = heir_education_cooldown }
-		}
-	}
-
-	effect = {
-		if = {
-			limit = { has_variable = heir_ed_military }
-			change_variable = { name = heir_ed_military add = 1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_military value = 1 }
-		}
-		if = {
-			limit = { has_variable = heir_ed_total }
-			change_variable = { name = heir_ed_total add = 1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_total value = 1 }
-		}
-
-		scope:journal_entry = {
-			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-		}
-
-		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
-		add_modifier = { name = heir_education_cooldown days = 180 }
-
-		heir_education_military_ig_reaction = yes
-	}
-}
-
-# ─────────────────── IDEOLOGY INVESTMENT BUTTONS ───────────────────
-
-he_progressive_tutors = {
-	name = "HE_PROGRESSIVE_TUTORS"
-	desc = "HE_PROGRESSIVE_TUTORS_DESC"
-
-	visible = {
-		has_law = law_type:law_monarchy
-		exists = heir
-	}
-
-	ai_chance = {
-		value = 0
-		if = {
-			limit = {
-				ig:ig_intelligentsia = { is_in_government = yes }
+				NOR = {
+					has_variable = heir_ed_focus_admin
+					has_variable = heir_ed_focus_diplo
+					has_variable = heir_ed_focus_military
+				}
 			}
 			add = 20
 		}
 		if = {
-			limit = {
-				ig:ig_trade_unions = { is_in_government = yes }
-			}
-			add = 15
-		}
-		# AI avoids this if devout/landowners are strong
-		if = {
-			limit = {
-				ig:ig_devout = { is_powerful = yes is_in_government = yes }
-			}
-			add = -30
-		}
-	}
-
-	possible = {
-		custom_tooltip = {
-			text = HE_INVESTMENT_CAP_TT
-			OR = {
-				NOT = { has_variable = heir_ed_total }
-				var:heir_ed_total < 10
-			}
-		}
-		custom_tooltip = {
-			text = HE_COOLDOWN_TT
-			NOT = { has_modifier = heir_education_cooldown }
-		}
-	}
-
-	effect = {
-		if = {
-			limit = { has_variable = heir_ed_ideology }
-			change_variable = { name = heir_ed_ideology add = 1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_ideology value = 1 }
-		}
-		if = {
-			limit = { has_variable = heir_ed_total }
-			change_variable = { name = heir_ed_total add = 1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_total value = 1 }
-		}
-
-		scope:journal_entry = {
-			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-		}
-
-		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
-		add_modifier = { name = heir_education_cooldown days = 180 }
-
-		heir_education_progressive_ig_reaction = yes
-	}
-}
-
-he_conservative_tutors = {
-	name = "HE_CONSERVATIVE_TUTORS"
-	desc = "HE_CONSERVATIVE_TUTORS_DESC"
-
-	visible = {
-		has_law = law_type:law_monarchy
-		exists = heir
-	}
-
-	ai_chance = {
-		value = 0
-		if = {
-			limit = {
-				ig:ig_devout = { is_in_government = yes }
-			}
-			add = 25
-		}
-		if = {
-			limit = {
-				ig:ig_landowners = { is_in_government = yes }
-			}
-			add = 20
-		}
-		# AI avoids this if intelligentsia is strong
-		if = {
-			limit = {
-				ig:ig_intelligentsia = { is_powerful = yes is_in_government = yes }
-			}
-			add = -25
-		}
-	}
-
-	possible = {
-		custom_tooltip = {
-			text = HE_INVESTMENT_CAP_TT
-			OR = {
-				NOT = { has_variable = heir_ed_total }
-				var:heir_ed_total < 10
-			}
-		}
-		custom_tooltip = {
-			text = HE_COOLDOWN_TT
-			NOT = { has_modifier = heir_education_cooldown }
-		}
-	}
-
-	effect = {
-		if = {
-			limit = { has_variable = heir_ed_ideology }
-			change_variable = { name = heir_ed_ideology add = -1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_ideology value = -1 }
-		}
-		if = {
-			limit = { has_variable = heir_ed_total }
-			change_variable = { name = heir_ed_total add = 1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_total value = 1 }
-		}
-
-		scope:journal_entry = {
-			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-		}
-
-		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
-		add_modifier = { name = heir_education_cooldown days = 180 }
-
-		heir_education_conservative_ig_reaction = yes
-	}
-}
-
-# ─────────────────── IG MENTORSHIP BUTTONS ───────────────────
-
-he_establishment_mentors = {
-	name = "HE_ESTABLISHMENT_MENTORS"
-	desc = "HE_ESTABLISHMENT_MENTORS_DESC"
-
-	visible = {
-		has_law = law_type:law_monarchy
-		exists = heir
-	}
-
-	ai_chance = {
-		value = 0
-		if = {
-			limit = {
-				ig:ig_landowners = { is_in_government = yes }
-			}
-			add = 25
-		}
-		if = {
-			limit = {
-				ig:ig_industrialists = { is_in_government = yes }
-			}
-			add = 15
-		}
-	}
-
-	possible = {
-		custom_tooltip = {
-			text = HE_INVESTMENT_CAP_TT
-			OR = {
-				NOT = { has_variable = heir_ed_total }
-				var:heir_ed_total < 10
-			}
-		}
-		custom_tooltip = {
-			text = HE_COOLDOWN_TT
-			NOT = { has_modifier = heir_education_cooldown }
-		}
-	}
-
-	effect = {
-		if = {
-			limit = { has_variable = heir_ed_ig }
-			change_variable = { name = heir_ed_ig add = -1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_ig value = -1 }
-		}
-		if = {
-			limit = { has_variable = heir_ed_total }
-			change_variable = { name = heir_ed_total add = 1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_total value = 1 }
-		}
-
-		scope:journal_entry = {
-			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-		}
-
-		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
-		add_modifier = { name = heir_education_cooldown days = 180 }
-
-		heir_education_establishment_ig_reaction = yes
-	}
-}
-
-he_reformist_mentors = {
-	name = "HE_REFORMIST_MENTORS"
-	desc = "HE_REFORMIST_MENTORS_DESC"
-
-	visible = {
-		has_law = law_type:law_monarchy
-		exists = heir
-	}
-
-	ai_chance = {
-		value = 0
-		if = {
-			limit = {
-				ig:ig_trade_unions = { is_in_government = yes }
-			}
-			add = 20
-		}
-		if = {
-			limit = {
-				ig:ig_intelligentsia = { is_in_government = yes }
-			}
-			add = 15
-		}
-		if = {
-			limit = {
-				ig:ig_rural_folk = { is_in_government = yes }
-			}
+			limit = { ig:ig_industrialists = { is_in_government = yes } }
 			add = 10
 		}
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = HE_INVESTMENT_CAP_TT
-			OR = {
-				NOT = { has_variable = heir_ed_total }
-				var:heir_ed_total < 10
-			}
-		}
-		custom_tooltip = {
-			text = HE_COOLDOWN_TT
-			NOT = { has_modifier = heir_education_cooldown }
-		}
+		always = yes
 	}
 
 	effect = {
 		if = {
-			limit = { has_variable = heir_ed_ig }
-			change_variable = { name = heir_ed_ig add = 1 }
-		}
-		else = {
-			set_variable = { name = heir_ed_ig value = 1 }
+			limit = { has_variable = heir_ed_focus_diplo }
+			remove_variable = heir_ed_focus_diplo
 		}
 		if = {
-			limit = { has_variable = heir_ed_total }
-			change_variable = { name = heir_ed_total add = 1 }
+			limit = { has_variable = heir_ed_focus_military }
+			remove_variable = heir_ed_focus_military
 		}
-		else = {
-			set_variable = { name = heir_ed_total value = 1 }
-		}
-
-		scope:journal_entry = {
-			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-		}
-
-		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
-		add_modifier = { name = heir_education_cooldown days = 180 }
-
-		heir_education_reformist_ig_reaction = yes
+		set_variable = heir_ed_focus_admin
 	}
 }
 
-# ─────────────────── CONCLUDE EDUCATION BUTTON ───────────────────
-
-he_conclude_education = {
-	name = "HE_CONCLUDE_EDUCATION"
-	desc = "HE_CONCLUDE_EDUCATION_DESC"
+he_disable_admin_focus = {
+	name = "HE_DISABLE_ADMIN_FOCUS"
+	desc = "HE_DISABLE_ADMIN_FOCUS_DESC"
 
 	visible = {
 		has_law = law_type:law_monarchy
 		exists = heir
-		has_variable = heir_ed_total
+		has_variable = heir_ed_focus_admin
 	}
 
 	ai_chance = {
 		value = 0
-		# AI concludes when they've invested enough or when cap is close
-		if = { limit = { has_variable = heir_ed_total var:heir_ed_total >= 5 } add = 40 }
-		if = { limit = { has_variable = heir_ed_total var:heir_ed_total >= 8 } add = 40 }
-		if = { limit = { has_variable = heir_ed_total var:heir_ed_total >= 10 } add = 100 }
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = HE_MIN_INVESTMENT_TT
-			has_variable = heir_ed_total
-			var:heir_ed_total >= 1
-		}
+		always = yes
 	}
 
 	effect = {
-		# Resolve education into actual character changes
-		heir_education_resolve_effect = yes
+		remove_variable = heir_ed_focus_admin
+	}
+}
+
+# ─────────── DIPLOMATIC FOCUS ───────────
+
+he_enable_diplo_focus = {
+	name = "HE_ENABLE_DIPLO_FOCUS"
+	desc = "HE_ENABLE_DIPLO_FOCUS_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		NOT = { has_variable = heir_ed_focus_diplo }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				NOR = {
+					has_variable = heir_ed_focus_admin
+					has_variable = heir_ed_focus_diplo
+					has_variable = heir_ed_focus_military
+				}
+			}
+			add = 15
+		}
+		if = {
+			limit = { ig:ig_intelligentsia = { is_in_government = yes } }
+			add = 10
+		}
+		if = {
+			limit = { country_rank >= rank_value:major_power }
+			add = 5
+		}
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_focus_admin }
+			remove_variable = heir_ed_focus_admin
+		}
+		if = {
+			limit = { has_variable = heir_ed_focus_military }
+			remove_variable = heir_ed_focus_military
+		}
+		set_variable = heir_ed_focus_diplo
+	}
+}
+
+he_disable_diplo_focus = {
+	name = "HE_DISABLE_DIPLO_FOCUS"
+	desc = "HE_DISABLE_DIPLO_FOCUS_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		has_variable = heir_ed_focus_diplo
+	}
+
+	ai_chance = {
+		value = 0
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		remove_variable = heir_ed_focus_diplo
+	}
+}
+
+# ─────────── MILITARY FOCUS ───────────
+
+he_enable_military_focus = {
+	name = "HE_ENABLE_MILITARY_FOCUS"
+	desc = "HE_ENABLE_MILITARY_FOCUS_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		NOT = { has_variable = heir_ed_focus_military }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				NOR = {
+					has_variable = heir_ed_focus_admin
+					has_variable = heir_ed_focus_diplo
+					has_variable = heir_ed_focus_military
+				}
+			}
+			add = 15
+		}
+		if = {
+			limit = { ig:ig_armed_forces = { is_in_government = yes } }
+			add = 15
+		}
+		if = {
+			limit = { is_at_war = yes }
+			add = 10
+		}
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_focus_admin }
+			remove_variable = heir_ed_focus_admin
+		}
+		if = {
+			limit = { has_variable = heir_ed_focus_diplo }
+			remove_variable = heir_ed_focus_diplo
+		}
+		set_variable = heir_ed_focus_military
+	}
+}
+
+he_disable_military_focus = {
+	name = "HE_DISABLE_MILITARY_FOCUS"
+	desc = "HE_DISABLE_MILITARY_FOCUS_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		has_variable = heir_ed_focus_military
+	}
+
+	ai_chance = {
+		value = 0
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		remove_variable = heir_ed_focus_military
+	}
+}
+
+# ─────────── PROGRESSIVE TUTORS ───────────
+
+he_enable_progressive = {
+	name = "HE_ENABLE_PROGRESSIVE"
+	desc = "HE_ENABLE_PROGRESSIVE_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		NOT = { has_variable = heir_ed_focus_progressive }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				NOR = {
+					has_variable = heir_ed_focus_progressive
+					has_variable = heir_ed_focus_conservative
+				}
+			}
+			add = 10
+		}
+		if = {
+			limit = { ig:ig_intelligentsia = { is_in_government = yes } }
+			add = 10
+		}
+		if = {
+			limit = { ig:ig_trade_unions = { is_in_government = yes } }
+			add = 8
+		}
+		if = {
+			limit = { ig:ig_devout = { is_powerful = yes is_in_government = yes } }
+			add = -20
+		}
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_focus_conservative }
+			remove_variable = heir_ed_focus_conservative
+		}
+		set_variable = heir_ed_focus_progressive
+	}
+}
+
+he_disable_progressive = {
+	name = "HE_DISABLE_PROGRESSIVE"
+	desc = "HE_DISABLE_PROGRESSIVE_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		has_variable = heir_ed_focus_progressive
+	}
+
+	ai_chance = {
+		value = 0
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		remove_variable = heir_ed_focus_progressive
+	}
+}
+
+# ─────────── CONSERVATIVE TUTORS ───────────
+
+he_enable_conservative = {
+	name = "HE_ENABLE_CONSERVATIVE"
+	desc = "HE_ENABLE_CONSERVATIVE_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		NOT = { has_variable = heir_ed_focus_conservative }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				NOR = {
+					has_variable = heir_ed_focus_progressive
+					has_variable = heir_ed_focus_conservative
+				}
+			}
+			add = 10
+		}
+		if = {
+			limit = { ig:ig_devout = { is_in_government = yes } }
+			add = 12
+		}
+		if = {
+			limit = { ig:ig_landowners = { is_in_government = yes } }
+			add = 10
+		}
+		if = {
+			limit = { ig:ig_intelligentsia = { is_powerful = yes is_in_government = yes } }
+			add = -15
+		}
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_focus_progressive }
+			remove_variable = heir_ed_focus_progressive
+		}
+		set_variable = heir_ed_focus_conservative
+	}
+}
+
+he_disable_conservative = {
+	name = "HE_DISABLE_CONSERVATIVE"
+	desc = "HE_DISABLE_CONSERVATIVE_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		has_variable = heir_ed_focus_conservative
+	}
+
+	ai_chance = {
+		value = 0
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		remove_variable = heir_ed_focus_conservative
+	}
+}
+
+# ─────────── RADICAL MENTORS ───────────
+
+he_enable_radical = {
+	name = "HE_ENABLE_RADICAL"
+	desc = "HE_ENABLE_RADICAL_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		NOT = { has_variable = heir_ed_focus_radical }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				NOR = {
+					has_variable = heir_ed_focus_radical
+					has_variable = heir_ed_focus_moderate
+					has_variable = heir_ed_focus_regressive
+				}
+			}
+			add = 10
+		}
+		if = {
+			limit = { ig:ig_intelligentsia = { is_in_government = yes } }
+			add = 10
+		}
+		if = {
+			limit = { ig:ig_rural_folk = { is_in_government = yes } }
+			add = 8
+		}
+		if = {
+			limit = { ig:ig_trade_unions = { is_in_government = yes } }
+			add = 5
+		}
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_focus_moderate }
+			remove_variable = heir_ed_focus_moderate
+		}
+		if = {
+			limit = { has_variable = heir_ed_focus_regressive }
+			remove_variable = heir_ed_focus_regressive
+		}
+		set_variable = heir_ed_focus_radical
+	}
+}
+
+he_disable_radical = {
+	name = "HE_DISABLE_RADICAL"
+	desc = "HE_DISABLE_RADICAL_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		has_variable = heir_ed_focus_radical
+	}
+
+	ai_chance = {
+		value = 0
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		remove_variable = heir_ed_focus_radical
+	}
+}
+
+# ─────────── MODERATE MENTORS ───────────
+
+he_enable_moderate = {
+	name = "HE_ENABLE_MODERATE"
+	desc = "HE_ENABLE_MODERATE_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		NOT = { has_variable = heir_ed_focus_moderate }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				NOR = {
+					has_variable = heir_ed_focus_radical
+					has_variable = heir_ed_focus_moderate
+					has_variable = heir_ed_focus_regressive
+				}
+			}
+			add = 15
+		}
+		if = {
+			limit = { ig:ig_industrialists = { is_in_government = yes } }
+			add = 10
+		}
+		if = {
+			limit = { ig:ig_petty_bourgeoisie = { is_in_government = yes } }
+			add = 8
+		}
+		if = {
+			limit = { ig:ig_armed_forces = { is_in_government = yes } }
+			add = 5
+		}
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_focus_radical }
+			remove_variable = heir_ed_focus_radical
+		}
+		if = {
+			limit = { has_variable = heir_ed_focus_regressive }
+			remove_variable = heir_ed_focus_regressive
+		}
+		set_variable = heir_ed_focus_moderate
+	}
+}
+
+he_disable_moderate = {
+	name = "HE_DISABLE_MODERATE"
+	desc = "HE_DISABLE_MODERATE_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		has_variable = heir_ed_focus_moderate
+	}
+
+	ai_chance = {
+		value = 0
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		remove_variable = heir_ed_focus_moderate
+	}
+}
+
+# ─────────── REGRESSIVE MENTORS ───────────
+
+he_enable_regressive = {
+	name = "HE_ENABLE_REGRESSIVE"
+	desc = "HE_ENABLE_REGRESSIVE_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		NOT = { has_variable = heir_ed_focus_regressive }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				NOR = {
+					has_variable = heir_ed_focus_radical
+					has_variable = heir_ed_focus_moderate
+					has_variable = heir_ed_focus_regressive
+				}
+			}
+			add = 10
+		}
+		if = {
+			limit = { ig:ig_landowners = { is_in_government = yes } }
+			add = 12
+		}
+		if = {
+			limit = { ig:ig_devout = { is_in_government = yes } }
+			add = 10
+		}
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = heir_ed_focus_radical }
+			remove_variable = heir_ed_focus_radical
+		}
+		if = {
+			limit = { has_variable = heir_ed_focus_moderate }
+			remove_variable = heir_ed_focus_moderate
+		}
+		set_variable = heir_ed_focus_regressive
+	}
+}
+
+he_disable_regressive = {
+	name = "HE_DISABLE_REGRESSIVE"
+	desc = "HE_DISABLE_REGRESSIVE_DESC"
+
+	visible = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		has_variable = heir_ed_focus_regressive
+	}
+
+	ai_chance = {
+		value = 0
+	}
+
+	possible = {
+		always = yes
+	}
+
+	effect = {
+		remove_variable = heir_ed_focus_regressive
 	}
 }

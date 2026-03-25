@@ -1,6 +1,7 @@
 ﻿### Heir Education Journal Entry
-### Allows monarchies to invest innovation into educating their heir
-### Influences the heir's traits, ideology, and interest group affiliation
+### Allows monarchies to shape their heir's education through focus toggles
+### Monthly pulse applies investments probabilistically based on active focuses
+### Completes when the heir reaches adulthood (or after 5 years for adult heirs)
 
 je_heir_education = {
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
@@ -20,39 +21,58 @@ je_heir_education = {
 
 	scripted_progress_bar = heir_education_progress_bar
 
-	# Investment buttons
-	scripted_button = he_invest_admin
-	scripted_button = he_invest_diplo
-	scripted_button = he_invest_military
-	scripted_button = he_progressive_tutors
-	scripted_button = he_conservative_tutors
-	scripted_button = he_establishment_mentors
-	scripted_button = he_reformist_mentors
-	scripted_button = he_conclude_education
+	# Toggle buttons - enable/disable pairs (only one of each pair visible at a time)
+	scripted_button = he_enable_admin_focus
+	scripted_button = he_disable_admin_focus
+	scripted_button = he_enable_diplo_focus
+	scripted_button = he_disable_diplo_focus
+	scripted_button = he_enable_military_focus
+	scripted_button = he_disable_military_focus
+	scripted_button = he_enable_progressive
+	scripted_button = he_disable_progressive
+	scripted_button = he_enable_conservative
+	scripted_button = he_disable_conservative
+	scripted_button = he_enable_radical
+	scripted_button = he_disable_radical
+	scripted_button = he_enable_moderate
+	scripted_button = he_disable_moderate
+	scripted_button = he_enable_regressive
+	scripted_button = he_disable_regressive
 
 	immediate = {
 		set_variable = { name = heir_ed_admin value = 0 }
 		set_variable = { name = heir_ed_diplo value = 0 }
 		set_variable = { name = heir_ed_military value = 0 }
 		set_variable = { name = heir_ed_ideology value = 0 }
-		set_variable = { name = heir_ed_ig value = 0 }
+		set_variable = { name = heir_ed_ig_radical value = 0 }
+		set_variable = { name = heir_ed_ig_moderate value = 0 }
+		set_variable = { name = heir_ed_ig_regressive value = 0 }
 		set_variable = { name = heir_ed_total value = 0 }
 		heir ?= {
 			set_variable = being_educated
 		}
+		# Grace period prevents instant completion for adult heirs
+		add_modifier = { name = heir_education_grace_period days = 365 }
 	}
 
 	complete = {
-		has_variable = heir_education_concluded
+		exists = heir
+		heir ?= {
+			has_variable = being_educated
+			NOT = { age < define:NCharacters|ADULT_AGE }
+		}
+		NOT = { has_modifier = heir_education_grace_period }
 	}
 
 	on_complete = {
+		heir_education_resolve_effect = yes
 		heir_education_cleanup_effect = yes
 	}
 
 	# If the heir changes (dies, replaced), detect and reset
 	on_monthly_pulse = {
 		effect = {
+			# ─── Heir change detection ───
 			if = {
 				limit = {
 					OR = {
@@ -61,13 +81,23 @@ je_heir_education = {
 					}
 					has_variable = heir_ed_total
 				}
-				# Heir changed - reset variables and mark new heir
 				set_variable = { name = heir_ed_admin value = 0 }
 				set_variable = { name = heir_ed_diplo value = 0 }
 				set_variable = { name = heir_ed_military value = 0 }
 				set_variable = { name = heir_ed_ideology value = 0 }
-				set_variable = { name = heir_ed_ig value = 0 }
+				set_variable = { name = heir_ed_ig_radical value = 0 }
+				set_variable = { name = heir_ed_ig_moderate value = 0 }
+				set_variable = { name = heir_ed_ig_regressive value = 0 }
 				set_variable = { name = heir_ed_total value = 0 }
+				# Clear focus variables
+				if = { limit = { has_variable = heir_ed_focus_admin } remove_variable = heir_ed_focus_admin }
+				if = { limit = { has_variable = heir_ed_focus_diplo } remove_variable = heir_ed_focus_diplo }
+				if = { limit = { has_variable = heir_ed_focus_military } remove_variable = heir_ed_focus_military }
+				if = { limit = { has_variable = heir_ed_focus_progressive } remove_variable = heir_ed_focus_progressive }
+				if = { limit = { has_variable = heir_ed_focus_conservative } remove_variable = heir_ed_focus_conservative }
+				if = { limit = { has_variable = heir_ed_focus_radical } remove_variable = heir_ed_focus_radical }
+				if = { limit = { has_variable = heir_ed_focus_moderate } remove_variable = heir_ed_focus_moderate }
+				if = { limit = { has_variable = heir_ed_focus_regressive } remove_variable = heir_ed_focus_regressive }
 				scope:journal_entry = {
 					set_bar_progress = { name = heir_education_progress_bar value = 0 }
 				}
@@ -77,6 +107,167 @@ je_heir_education = {
 						set_variable = being_educated
 					}
 				}
+			}
+
+			# ─── Monthly investment processing ───
+			# Each active focus has a 5% chance per month to advance
+			# Administrative focus
+			if = {
+				limit = { has_variable = heir_ed_focus_admin }
+				random_list = {
+					5 = {
+						change_variable = { name = heir_ed_admin add = 1 }
+						change_variable = { name = heir_ed_total add = 1 }
+						scope:journal_entry = {
+							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+						}
+						add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
+						heir_education_admin_ig_reaction = yes
+					}
+					95 = { }
+				}
+			}
+			# Diplomatic focus
+			if = {
+				limit = { has_variable = heir_ed_focus_diplo }
+				random_list = {
+					5 = {
+						change_variable = { name = heir_ed_diplo add = 1 }
+						change_variable = { name = heir_ed_total add = 1 }
+						scope:journal_entry = {
+							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+						}
+						add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
+						heir_education_diplo_ig_reaction = yes
+					}
+					95 = { }
+				}
+			}
+			# Military focus
+			if = {
+				limit = { has_variable = heir_ed_focus_military }
+				random_list = {
+					5 = {
+						change_variable = { name = heir_ed_military add = 1 }
+						change_variable = { name = heir_ed_total add = 1 }
+						scope:journal_entry = {
+							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+						}
+						add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
+						heir_education_military_ig_reaction = yes
+					}
+					95 = { }
+				}
+			}
+			# Progressive ideology focus
+			if = {
+				limit = { has_variable = heir_ed_focus_progressive }
+				random_list = {
+					5 = {
+						change_variable = { name = heir_ed_ideology add = 1 }
+						change_variable = { name = heir_ed_total add = 1 }
+						scope:journal_entry = {
+							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+						}
+						heir_education_progressive_ig_reaction = yes
+					}
+					95 = { }
+				}
+			}
+			# Conservative ideology focus
+			if = {
+				limit = { has_variable = heir_ed_focus_conservative }
+				random_list = {
+					5 = {
+						change_variable = { name = heir_ed_ideology add = -1 }
+						change_variable = { name = heir_ed_total add = 1 }
+						scope:journal_entry = {
+							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+						}
+						heir_education_conservative_ig_reaction = yes
+					}
+					95 = { }
+				}
+			}
+			# Radical IG focus
+			if = {
+				limit = { has_variable = heir_ed_focus_radical }
+				random_list = {
+					5 = {
+						change_variable = { name = heir_ed_ig_radical add = 1 }
+						change_variable = { name = heir_ed_total add = 1 }
+						scope:journal_entry = {
+							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+						}
+						heir_education_radical_ig_reaction = yes
+					}
+					95 = { }
+				}
+			}
+			# Moderate IG focus
+			if = {
+				limit = { has_variable = heir_ed_focus_moderate }
+				random_list = {
+					5 = {
+						change_variable = { name = heir_ed_ig_moderate add = 1 }
+						change_variable = { name = heir_ed_total add = 1 }
+						scope:journal_entry = {
+							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+						}
+						heir_education_moderate_ig_reaction = yes
+					}
+					95 = { }
+				}
+			}
+			# Regressive IG focus
+			if = {
+				limit = { has_variable = heir_ed_focus_regressive }
+				random_list = {
+					5 = {
+						change_variable = { name = heir_ed_ig_regressive add = 1 }
+						change_variable = { name = heir_ed_total add = 1 }
+						scope:journal_entry = {
+							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+						}
+						heir_education_regressive_ig_reaction = yes
+					}
+					95 = { }
+				}
+			}
+
+			# ─── Random education events ───
+			random_list = {
+				2 = {
+					trigger = {
+						NOT = { has_modifier = heir_education_event_cooldown }
+						has_variable = heir_ed_total
+						var:heir_ed_total >= 2
+					}
+					trigger_event = { id = heir_education_events.1 }
+					add_modifier = { name = heir_education_event_cooldown days = 365 }
+				}
+				2 = {
+					trigger = {
+						NOT = { has_modifier = heir_education_event_cooldown }
+						has_variable = heir_ed_total
+						var:heir_ed_total >= 1
+					}
+					trigger_event = { id = heir_education_events.2 }
+					add_modifier = { name = heir_education_event_cooldown days = 365 }
+				}
+				2 = {
+					trigger = {
+						NOT = { has_modifier = heir_education_event_cooldown }
+						has_variable = heir_ed_total
+						var:heir_ed_total >= 3
+						any_country = {
+							has_diplomatic_pact = { who = ROOT type = alliance }
+						}
+					}
+					trigger_event = { id = heir_education_events.3 }
+					add_modifier = { name = heir_education_event_cooldown days = 365 }
+				}
+				94 = { }
 			}
 		}
 	}
@@ -91,38 +282,33 @@ je_heir_education = {
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = je_heir_education_status_no_investment
+				desc = je_heir_education_status_no_focus
 				trigger = {
-					OR = {
-						NOT = { has_variable = heir_ed_total }
-						var:heir_ed_total < 1
+					NOR = {
+						has_variable = heir_ed_focus_admin
+						has_variable = heir_ed_focus_diplo
+						has_variable = heir_ed_focus_military
+						has_variable = heir_ed_focus_progressive
+						has_variable = heir_ed_focus_conservative
+						has_variable = heir_ed_focus_radical
+						has_variable = heir_ed_focus_moderate
+						has_variable = heir_ed_focus_regressive
 					}
 				}
 			}
 			triggered_desc = {
-				desc = je_heir_education_status_early
-				trigger = { var:heir_ed_total < 4 }
-			}
-			triggered_desc = {
-				desc = je_heir_education_status_progressing
-				trigger = { var:heir_ed_total < 7 }
-			}
-			triggered_desc = {
-				desc = je_heir_education_status_advanced
-				trigger = { var:heir_ed_total < 10 }
-			}
-			triggered_desc = {
-				desc = je_heir_education_status_complete
-				trigger = { var:heir_ed_total >= 10 }
+				desc = je_heir_education_status_active
+				trigger = { always = yes }
 			}
 		}
 	}
 
 	weight = 100
 
-	timeout = 7300 # 20 years - auto-resolve if player never concludes
+	timeout = 5475 # 15 years - safety fallback
 	on_timeout = {
 		heir_education_resolve_effect = yes
+		heir_education_cleanup_effect = yes
 	}
 
 	current_value = {
@@ -130,6 +316,6 @@ je_heir_education = {
 	}
 
 	goal_add_term = {
-		value = 10
+		value = 15
 	}
 }

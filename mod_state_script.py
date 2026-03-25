@@ -72,217 +72,186 @@ mod_paths = {
     "Subject Types": mod_path + r"\common\subject_types",
 }
 
-mod_state = ModState(base_game_paths, mod_paths)
-mod_state.add_localization(base_game_path + r"\game\localization\english")
-mod_state.add_localization(mod_path + r"\localization\english")
-mod_state.add_localization(mod_path + r"\localization\english\replace")
+def generate_docs(mod_state):
+    """Generate text reference docs (laws, technologies, buildings, goods, combat units) from parsed mod state.
+
+    Called by mod_state_server.py on startup and reload, and by this script standalone.
+    """
+    _generate_laws(mod_state)
+    _generate_technologies(mod_state)
+    _generate_buildings(mod_state)
+    _generate_goods(mod_state)
+    _generate_combat_units(mod_state)
+    print("Doc generation complete.")
 
 
-laws_path = doc_path + r"\laws.txt"
-laws_output = ""
-laws = mod_state.get_data("Laws")
-laws_dict = {}
-law_effects_dict = defaultdict(list)
-law_variant_dict = {}
-for law_id, (_, law_data) in laws.items():
-    law_group = law_data["group"][1]
-    if law_group not in laws_dict.keys():
-        laws_dict[law_group] = []
-    laws_dict[law_group].append(law_id)
-    modifiers = law_data.get("modifier", ['', {}])[1]
-    if modifiers:
-        modifier_list = [key + modifiers[key][0] + modifiers[key][1] for key in modifiers.keys()]
-        law_effects_dict[law_id] += modifier_list
-    parent = law_data.get("parent", None)
-    if parent:
-        parent_id = parent[1]
-        law_variant_dict[law_id] = parent_id
+def _generate_laws(mod_state):
+    laws_path = doc_path + r"\laws.txt"
+    laws_output = ""
+    laws = mod_state.get_data("Laws")
+    laws_dict = {}
+    law_effects_dict = defaultdict(list)
+    law_variant_dict = {}
+    for law_id, (_, law_data) in laws.items():
+        law_group = law_data["group"][1]
+        if law_group not in laws_dict.keys():
+            laws_dict[law_group] = []
+        laws_dict[law_group].append(law_id)
+        modifiers = law_data.get("modifier", ['', {}])[1]
+        if modifiers:
+            modifier_list = [key + modifiers[key][0] + modifiers[key][1] for key in modifiers.keys()]
+            law_effects_dict[law_id] += modifier_list
+        parent = law_data.get("parent", None)
+        if parent:
+            parent_id = parent[1]
+            law_variant_dict[law_id] = parent_id
 
-for law_group in laws_dict.keys():
-    laws_output += f"{mod_state.localize(law_group)}:\n"
-    for law_id in laws_dict[law_group]:
-        laws_output += f"\t{mod_state.localize(law_id)}"
-        variant_of = laws[law_id][1].get("parent", None)
-        if variant_of:
-            laws_output += f" (Variant of {mod_state.localize(variant_of[1])})"
-        unlocking_tech_ids = laws[law_id][1].get("unlocking_technologies", None)
-        if unlocking_tech_ids:
-            if unlocking_tech_ids[1]:
-                tech_name = mod_state.localize(unlocking_tech_ids[1][0])
-                laws_output += f" - Unlocking Technology: {tech_name}"
-        laws_output += "\n"
+    for law_group in laws_dict.keys():
+        laws_output += f"{mod_state.localize(law_group)}:\n"
+        for law_id in laws_dict[law_group]:
+            laws_output += f"\t{mod_state.localize(law_id)}"
+            variant_of = laws[law_id][1].get("parent", None)
+            if variant_of:
+                laws_output += f" (Variant of {mod_state.localize(variant_of[1])})"
+            unlocking_tech_ids = laws[law_id][1].get("unlocking_technologies", None)
+            if unlocking_tech_ids:
+                if unlocking_tech_ids[1]:
+                    tech_name = mod_state.localize(unlocking_tech_ids[1][0])
+                    laws_output += f" - Unlocking Technology: {tech_name}"
+            laws_output += "\n"
 
-with open(laws_path, "w", encoding="utf-8") as f:
-    f.write(laws_output)
-
-"""
-mod_state.save_changes_to_json(r"F:\Libraries\Documents\testing")
-
-loaded_mod_state = ModState(base_game_path, r"F:\Libraries\Documents\testing", diff=True)
-for type, loc in mod_path.items():
-    os.makedirs(r"F:\Libraries\Documents\testing\loaded_mod\\" + type, exist_ok=True)
-    new_loc = r"F:\Libraries\Documents\testing\loaded_mod\\" + type + r"\modded.txt"
-    loaded_mod_state.update_and_write_file(type, new_loc)
-"""
-
-"""
-ideologies = mod_state.get_data("Ideologies")
-for ideology_id, (_, ideology_data) in ideologies.items():
-    if "lawgroup_rights_of_women" in ideology_data.keys():
-        laws = ideology_data["lawgroup_rights_of_women"][1].keys()
-        if "law_protected_class" not in laws:
-            print(ideology_id, laws)
-"""
-
-# mod_state.update_and_write_file("PM Groups", "F:\Libraries\Documents\pmg_ownership.txt")
-
-# mod_state.save_changes_to_json(r"F:\Libraries\Documents\testing")
-# mod_state_from_json = ModState(
-#    base_game_path, r"F:\Libraries\Documents\testing", diff=True
-# )
+    with open(laws_path, "w", encoding="utf-8") as f:
+        f.write(laws_output)
 
 
-bonuses = {}
-counts = {}
-cat_counts = {}
-eras = [
-    "era_1",
-    "era_2",
-    "era_3",
-    "era_4",
-    "era_5",
-    "era_6",
-    "era_7",
-    "era_8",
-    "era_9",
-    "era_10",
-    "era_11",
-    "era_12",
-]
+def _generate_technologies(mod_state):
+    tech_path = doc_path + r"\technologies.txt"
+    tech_output = ""
+    tech = mod_state.get_data("Technologies")
+    tech_dict = defaultdict(list)
+    for tech_id, (_, tech_data) in tech.items():
+        era = tech_data.get("era", ["", "era_0"])[1]
+        era_int = int(era.split("_")[-1])
+        tech_dict[era_int].append(tech_id)
 
-tech_path = doc_path + r"\technologies.txt"
-tech_output = ""
-tech = mod_state.get_data("Technologies")
-tech_dict = defaultdict(list)
-for tech_id, (_, tech_data) in tech.items():
-    era = tech_data.get("era", ["", "era_0"])[1]
-    era_int = int(era.split("_")[-1])
-    tech_dict[era_int].append(tech_id)
-
-for era in range(1, 13):
-    tech_output += f"{era}: {len(tech_dict[era])} technologies\n"
-    for tech_id in tech_dict[era]:
-        tech_output += f"\t{mod_state.localize(tech_id)}"
-        description = mod_state.get_description(tech_id)
-        if description is not None:
-            tech_output += f" - {description}"
-        tech_output += "\n"
-        tech_requirement = tech[tech_id][1].get("unlocking_technologies", None)
-        if tech_requirement:
-            tech_requirement_ids = tech_requirement[1]
-            if tech_requirement_ids:
-                tech_output += "\t\tUnlocking Technologies:\n"
-                for unlocking_tech_ids in tech_requirement_ids:
-                    tech_output += f"\t\t\t{mod_state.localize(unlocking_tech_ids)}\n"
-
-with open(tech_path, "w", encoding="utf-8") as f:
-    f.write(tech_output)
-
-building_path = doc_path + r"\buildings.txt"
-building_output = ""
-buildings_data = mod_state.get_data("Buildings")
-pmg_groups = mod_state.get_data("PM Groups")
-production_methods = mod_state.get_data("PMs")
-for building_id, data in buildings_data.items():
-    pm_groups = data[1].get("production_method_groups", ["", []])[1]
-    building_output += f"{mod_state.localize(building_id)}:\n"
-    tech_requirement = data[1].get("unlocking_technologies", None)
-    if tech_requirement:
-        if tech_requirement[1]:
-            tech_name = mod_state.localize(tech_requirement[1][0])
-            building_output += f"\tUnlocking Technology: {tech_name}\n"
-    for pmg in pm_groups:
-        if pmg not in pmg_groups.keys():
-            building_output += f"Building {mod_state.localize(building_id)} references missing PM Group {mod_state.localize(pmg)}\n"
-            continue
-        building_output += f"\t{mod_state.localize(pmg)}:\n"
-        pms = pmg_groups[pmg][1].get("production_methods", ["", []])[1]
-        for pm in pms:
-            if pm not in production_methods.keys():
-                building_output += f"Building {mod_state.localize(building_id)} references missing PM {mod_state.localize(pm)}\n"
-                continue
-            building_output += f"\t\t{mod_state.localize(pm)}\n"
-            pm_data = production_methods[pm][1]
-            # TODO: Why is it sometimes a list??
-            if isinstance(pm_data, list):
-                pm_data_flat = {}
-                for e in pm_data:
-                    pm_data_flat.update(e)
-                pm_data = pm_data_flat
-            tech_requirement = pm_data.get("unlocking_technologies", None)
-            pollution = None
-            state_modifiers = pm_data.get("state_modifiers", None)
-            if state_modifiers:
-                workforce_scaled = state_modifiers[1].get("workforce_scaled", None)
-                if workforce_scaled:
-                    pollution = workforce_scaled[1].get("state_pollution_generation_add", None)
+    for era in range(1, 13):
+        tech_output += f"{era}: {len(tech_dict[era])} technologies\n"
+        for tech_id in tech_dict[era]:
+            tech_output += f"\t{mod_state.localize(tech_id)}"
+            description = mod_state.get_description(tech_id)
+            if description is not None:
+                tech_output += f" - {description}"
+            tech_output += "\n"
+            tech_requirement = tech[tech_id][1].get("unlocking_technologies", None)
             if tech_requirement:
-                if tech_requirement[1]:
-                    tech_name = mod_state.localize(tech_requirement[1][0])
-                    # building_output += f"\t\t\tUnlocking Technology: {tech_name}\n"
-            if pollution is not None:
-                building_output += f"\t\t\tMonthly Pollution: {pollution[1]}\n"
-    building_output += "\n"
+                tech_requirement_ids = tech_requirement[1]
+                if tech_requirement_ids:
+                    tech_output += "\t\tUnlocking Technologies:\n"
+                    for unlocking_tech_ids in tech_requirement_ids:
+                        tech_output += f"\t\t\t{mod_state.localize(unlocking_tech_ids)}\n"
 
-with open(building_path, "w", encoding="utf-8") as f:
-    f.write(building_output)
-
-goods_path = doc_path + r"\goods.txt"
-goods_output = ""
-goods = mod_state.get_data("Goods")
-for good_id, _ in goods.items():
-    goods_output += f"{mod_state.localize(good_id)}\n"
-
-with open(goods_path, "w", encoding="utf-8") as f:
-    f.write(goods_output)
+    with open(tech_path, "w", encoding="utf-8") as f:
+        f.write(tech_output)
 
 
-combat_units_path = doc_path + r"\combat_units.txt"
-combat_units_output = ""
-combat_unit_groups = mod_state.get_data("Combat Unit Groups")
-combat_unit_types = mod_state.get_data("Combat Unit Types")
-
-combat_unit_dict = defaultdict(list)
-for type, data in combat_unit_types.items():
-    group_data = data[1]
-    if isinstance(group_data, list):
-        group_data_flat = {}
-        for e in group_data:
-            group_data_flat.update(e)
-        group_data = group_data_flat
-    group = group_data.get("group")[1]
-    combat_unit_dict[group] += [type]
-
-for group in combat_unit_groups.keys():
-    combat_units_output += f"{mod_state.localize(group)}:\n"
-    for type in combat_unit_dict[group]:
-        combat_units_output += f"\t{mod_state.localize(type)}\n"
-        unit_data = combat_unit_types[type][1]
-        if isinstance(unit_data, list):
-            unit_data_flat = {}
-            for e in unit_data:
-                unit_data_flat.update(e)
-            unit_data = unit_data_flat
-        tech_requirement = unit_data.get("unlocking_technologies", None)
+def _generate_buildings(mod_state):
+    building_path = doc_path + r"\buildings.txt"
+    building_output = ""
+    buildings_data = mod_state.get_data("Buildings")
+    pmg_groups = mod_state.get_data("PM Groups")
+    production_methods = mod_state.get_data("PMs")
+    for building_id, data in buildings_data.items():
+        pm_groups = data[1].get("production_method_groups", ["", []])[1]
+        building_output += f"{mod_state.localize(building_id)}:\n"
+        tech_requirement = data[1].get("unlocking_technologies", None)
         if tech_requirement:
             if tech_requirement[1]:
                 tech_name = mod_state.localize(tech_requirement[1][0])
-                combat_units_output += f"\t\tUnlocking Technology: {tech_name}\n"
+                building_output += f"\tUnlocking Technology: {tech_name}\n"
+        for pmg in pm_groups:
+            if pmg not in pmg_groups.keys():
+                building_output += f"Building {mod_state.localize(building_id)} references missing PM Group {mod_state.localize(pmg)}\n"
+                continue
+            building_output += f"\t{mod_state.localize(pmg)}:\n"
+            pms = pmg_groups[pmg][1].get("production_methods", ["", []])[1]
+            for pm in pms:
+                if pm not in production_methods.keys():
+                    building_output += f"Building {mod_state.localize(building_id)} references missing PM {mod_state.localize(pm)}\n"
+                    continue
+                building_output += f"\t\t{mod_state.localize(pm)}\n"
+                pm_data = production_methods[pm][1]
+                if isinstance(pm_data, list):
+                    pm_data_flat = {}
+                    for e in pm_data:
+                        pm_data_flat.update(e)
+                    pm_data = pm_data_flat
+                tech_requirement = pm_data.get("unlocking_technologies", None)
+                pollution = None
+                state_modifiers = pm_data.get("state_modifiers", None)
+                if state_modifiers:
+                    workforce_scaled = state_modifiers[1].get("workforce_scaled", None)
+                    if workforce_scaled:
+                        pollution = workforce_scaled[1].get("state_pollution_generation_add", None)
+                if pollution is not None:
+                    building_output += f"\t\t\tMonthly Pollution: {pollution[1]}\n"
+        building_output += "\n"
 
-with open(combat_units_path, "w", encoding="utf-8") as f:
-    f.write(combat_units_output)
+    with open(building_path, "w", encoding="utf-8") as f:
+        f.write(building_output)
 
-# Updating and writing back to a file
-# buildings_data['new_building'] = {...}
-# mod_state.update_and_write_file("Buildings", "/path/to/mod/buildings/updated_building.txt")
-print("Done!")
+
+def _generate_goods(mod_state):
+    goods_path = doc_path + r"\goods.txt"
+    goods_output = ""
+    goods = mod_state.get_data("Goods")
+    for good_id, _ in goods.items():
+        goods_output += f"{mod_state.localize(good_id)}\n"
+
+    with open(goods_path, "w", encoding="utf-8") as f:
+        f.write(goods_output)
+
+
+def _generate_combat_units(mod_state):
+    combat_units_path = doc_path + r"\combat_units.txt"
+    combat_units_output = ""
+    combat_unit_groups = mod_state.get_data("Combat Unit Groups")
+    combat_unit_types = mod_state.get_data("Combat Unit Types")
+
+    combat_unit_dict = defaultdict(list)
+    for type, data in combat_unit_types.items():
+        group_data = data[1]
+        if isinstance(group_data, list):
+            group_data_flat = {}
+            for e in group_data:
+                group_data_flat.update(e)
+            group_data = group_data_flat
+        group = group_data.get("group")[1]
+        combat_unit_dict[group] += [type]
+
+    for group in combat_unit_groups.keys():
+        combat_units_output += f"{mod_state.localize(group)}:\n"
+        for type in combat_unit_dict[group]:
+            combat_units_output += f"\t{mod_state.localize(type)}\n"
+            unit_data = combat_unit_types[type][1]
+            if isinstance(unit_data, list):
+                unit_data_flat = {}
+                for e in unit_data:
+                    unit_data_flat.update(e)
+                unit_data = unit_data_flat
+            tech_requirement = unit_data.get("unlocking_technologies", None)
+            if tech_requirement:
+                if tech_requirement[1]:
+                    tech_name = mod_state.localize(tech_requirement[1][0])
+                    combat_units_output += f"\t\tUnlocking Technology: {tech_name}\n"
+
+    with open(combat_units_path, "w", encoding="utf-8") as f:
+        f.write(combat_units_output)
+
+
+if __name__ == "__main__":
+    ms = ModState(base_game_paths, mod_paths)
+    ms.add_localization(base_game_path + r"\game\localization\english")
+    ms.add_localization(mod_path + r"\localization\english")
+    ms.add_localization(mod_path + r"\localization\english\replace")
+    generate_docs(ms)
+    print("Done!")

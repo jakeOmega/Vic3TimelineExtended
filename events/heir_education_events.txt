@@ -1,0 +1,187 @@
+﻿namespace = heir_education_events
+
+# ─── Event 1: A Promising Pupil ───
+# Fires when the heir shows notable talent. Gives a bonus investment point.
+heir_education_events.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = heir_education_events.1.t
+	desc = heir_education_events.1.d
+	flavor = heir_education_events.1.f
+
+	event_image = { video = "europenorthamerica_capitalists_meeting" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	trigger = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		has_variable = heir_ed_total
+		var:heir_ed_total >= 2
+	}
+
+	immediate = {
+	}
+
+	# Option A: "Remarkable progress!"
+	# Grants a bonus point in whichever trait focus is active (or admin by default)
+	option = {
+		name = heir_education_events.1.a
+		default_option = yes
+		if = {
+			limit = { has_variable = heir_ed_focus_military }
+			change_variable = { name = heir_ed_military add = 1 }
+		}
+		else_if = {
+			limit = { has_variable = heir_ed_focus_diplo }
+			change_variable = { name = heir_ed_diplo add = 1 }
+		}
+		else = {
+			change_variable = { name = heir_ed_admin add = 1 }
+		}
+		change_variable = { name = heir_ed_total add = 1 }
+		ai_chance = { base = 10 }
+	}
+
+	# Option B: "We should broaden the curriculum."
+	# Grants a point in each trait category
+	option = {
+		name = heir_education_events.1.b
+		change_variable = { name = heir_ed_admin add = 1 }
+		change_variable = { name = heir_ed_diplo add = 1 }
+		change_variable = { name = heir_ed_military add = 1 }
+		change_variable = { name = heir_ed_total add = 3 }
+		add_modifier = { name = heir_education_innovation_cost days = 90 is_decaying = yes }
+		ai_chance = { base = 5 }
+	}
+}
+
+# ─── Event 2: A Difficult Student ───
+# The heir resists their education. Player chooses response.
+heir_education_events.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = heir_education_events.2.t
+	desc = heir_education_events.2.d
+	flavor = heir_education_events.2.f
+
+	event_image = { video = "votp_conspiring" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	trigger = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		has_variable = heir_ed_total
+		var:heir_ed_total >= 1
+	}
+
+	immediate = {
+	}
+
+	# Option A: "Discipline builds character."
+	# Persevere with current education but generate radicals among lower strata
+	option = {
+		name = heir_education_events.2.a
+		default_option = yes
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = { base = 8 }
+	}
+
+	# Option B: "Perhaps a lighter touch."
+	# Reduce total investment by 1 but gain loyalists
+	option = {
+		name = heir_education_events.2.b
+		if = {
+			limit = { has_variable = heir_ed_total var:heir_ed_total >= 1 }
+			change_variable = { name = heir_ed_total add = -1 }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = { base = 5 }
+	}
+
+	# Option C: "Let the child find their own path."
+	# Random bonus in an unexpected area
+	option = {
+		name = heir_education_events.2.c
+		random_list = {
+			33 = { change_variable = { name = heir_ed_admin add = 1 } }
+			33 = { change_variable = { name = heir_ed_diplo add = 1 } }
+			34 = { change_variable = { name = heir_ed_military add = 1 } }
+		}
+		change_variable = { name = heir_ed_total add = 1 }
+		ai_chance = { base = 3 }
+	}
+}
+
+# ─── Event 3: Foreign Correspondence ───
+# An allied nation offers educational exchange. Requires an alliance.
+heir_education_events.3 = {
+	type = country_event
+	placement = ROOT
+
+	title = heir_education_events.3.t
+	desc = heir_education_events.3.d
+	flavor = heir_education_events.3.f
+
+	event_image = { video = "unspecific_signed_contract" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	duration = 3
+
+	trigger = {
+		has_law = law_type:law_monarchy
+		exists = heir
+		has_variable = heir_ed_total
+		var:heir_ed_total >= 3
+		any_country = {
+			has_diplomatic_pact = { who = ROOT type = alliance }
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = alliance }
+			}
+			save_scope_as = ally_country
+		}
+	}
+
+	# Option A: "Send the heir abroad."
+	# Big diplo bonus + possible ideology shift toward progressive
+	option = {
+		name = heir_education_events.3.a
+		default_option = yes
+		change_variable = { name = heir_ed_diplo add = 2 }
+		change_variable = { name = heir_ed_total add = 2 }
+		# Exposure to foreign ideas pushes slightly progressive
+		change_variable = { name = heir_ed_ideology add = 1 }
+		add_modifier = { name = heir_education_innovation_cost days = 60 is_decaying = yes }
+		ai_chance = { base = 8 }
+	}
+
+	# Option B: "The heir should remain here."
+	# Safe choice, small prestige gain for showing independence
+	option = {
+		name = heir_education_events.3.b
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = { base = 5 }
+	}
+}

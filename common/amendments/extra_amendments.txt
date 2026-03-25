@@ -464,7 +464,7 @@ amendment_no_first_strike = {
 	}
 
 	modifier = {
-		country_diplomatic_reputation_add = 10
+		country_diplomatic_reputation_add = 5
 	}
 
 	possible = {

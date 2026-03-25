@@ -1,13 +1,17 @@
 ﻿### Heir Education - Static Modifiers
 
-# Applied each time the player makes an education investment
-# Represents diverting national intellectual resources to heir preparation
+# Applied when monthly education investment advances
 heir_education_innovation_cost = {
 	icon = "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds"
 	country_weekly_innovation_mult = -0.10
 }
 
-# Cooldown marker - prevents rapid-fire investments
-heir_education_cooldown = {
+# Grace period preventing instant JE completion for adult heirs
+heir_education_grace_period = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds"
+}
+
+# Cooldown between education events
+heir_education_event_cooldown = {
 	icon = "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds"
 }

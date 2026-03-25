@@ -18084,7 +18084,12 @@ pm_antimatter_engine = {
 			country_antimatter_facility_max_level_add = -1
 			military_formation_movement_speed_mult = 0.02
 			country_convoys_capacity_mult = 0.01
-			goods_output_launch_capacity_mult = 0.01
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			goods_output_launch_capacity_mult = 0.05
 		}
 	}
 

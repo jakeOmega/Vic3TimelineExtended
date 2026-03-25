@@ -18,8 +18,8 @@ Usage:
     python mod_state_client.py filter Technologies era era_5
 
 Alternatively, query the server directly from PowerShell:
-    Invoke-RestMethod http://localhost:8765/laws
-    (Invoke-RestMethod http://localhost:8765/laws) | ConvertTo-Json -Depth 10
+    Invoke-RestMethod http://localhost:8950/laws
+    (Invoke-RestMethod http://localhost:8950/laws) | ConvertTo-Json -Depth 10
 """
 
 import json
@@ -28,7 +28,7 @@ from urllib.error import URLError
 from urllib.parse import quote
 from urllib.request import urlopen
 
-SERVER = "http://127.0.0.1:8765"
+SERVER = "http://127.0.0.1:8950"
 
 
 def query(endpoint: str):

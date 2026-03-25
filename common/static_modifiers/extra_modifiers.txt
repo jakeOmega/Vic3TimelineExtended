@@ -728,6 +728,7 @@ reforestation_subsidies_modifier = {
 public_transit_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	goods_output_transportation_mult = 0.10
+	goods_input_oil_mult = -0.05
 	building_group_bg_infrastructure_construction_efficiency_add = 0.1
 	state_infrastructure_from_automobiles_consumption_add = -0.25
 	country_authority_add = -150
@@ -744,8 +745,8 @@ fossil_fuel_divestment_modifier = {
 
 green_building_codes_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	state_construction_mult = -0.05
-	building_group_bg_power_throughput_add = 0.05
+	goods_input_construction_mult = 0.05
+	goods_input_electricity_mult = -0.025
 	country_authority_add = -100
 }
 
@@ -1400,7 +1401,7 @@ cultural_cooptation_modifier = {
 human_rights_reform_pledge_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_acceptance_not_homeland_add = 3
-	country_diplomatic_reputation_add = 3
+	country_improve_relations_speed_mult = 0.05
 }
 
 civil_rights_triumph_modifier = {
@@ -1444,7 +1445,7 @@ peace_rally_suppressed_modifier = {
 peace_rally_diplomatic_leverage_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_influence_add = 50
-	country_diplomatic_reputation_add = 3
+	country_leverage_generation_mult = 0.05
 }
 
 war_profiteering_investigation_modifier = {
@@ -1827,7 +1828,7 @@ cultural_synthesis_modifier = {
 
 un_member_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 5
+	country_improve_relations_speed_mult = 0.10
 	country_leverage_generation_add = 5
 	country_prestige_mult = 0.03
 	country_influence_mult = 0.03
@@ -1835,36 +1836,36 @@ un_member_modifier = {
 
 un_headquarters_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_leverage_generation_mult = 0.10
 	country_prestige_mult = 0.10
 	country_leverage_generation_add = 10
 }
 
 un_security_council_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_leverage_generation_mult = 0.15
 	country_leverage_generation_add = 20
-	country_authority_add = 25
+	country_authority_add = 250
 	country_prestige_mult = 0.10
 	country_influence_mult = 0.10
 }
 
 un_membership_benefits_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 5
+	country_improve_relations_speed_mult = 0.10
 	country_tech_research_speed_mult = 0.01
 	country_prestige_mult = 0.03
 }
 
 un_withdrawal_penalty_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -15
+	country_improve_relations_speed_mult = -0.25
 	country_prestige_mult = -0.05
 }
 
 un_expelled_cooldown = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -20
+	country_improve_relations_speed_mult = -0.30
 }
 
 un_champion_order_cost = {
@@ -1893,19 +1894,19 @@ un_vote_failure_penalty = {
 
 un_founding_member_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_leverage_generation_mult = 0.10
 	country_prestige_mult = 0.10
 	country_leverage_generation_add = 10
 }
 
 un_observer_status_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 3
+	country_improve_relations_speed_mult = 0.05
 }
 
 un_rejectionist_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -5
+	country_improve_relations_speed_mult = -0.10
 	country_authority_add = 50
 }
 
@@ -1919,7 +1920,7 @@ un_ga_resolution_modifier = {
 
 un_condemnation_leader_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_infamy_decay_mult = 0.15
 	country_prestige_mult = 0.05
 	# Looks bad if you're aggressive too
 	country_infamy_generation_mult = 0.2
@@ -1929,27 +1930,28 @@ un_condemnation_leader_modifier = {
 
 un_human_rights_declaration_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_acceptance_no_shared_language_trait_add = 10
+	country_acceptance_shared_language_trait_group_add = 5
 	country_prestige_mult = 0.05
 	country_institution_size_change_speed_mult = 0.1
 }
 
 un_human_rights_reservations_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 3
+	country_acceptance_no_shared_language_trait_add = 5
 	country_prestige_mult = 0.02
 }
 
 un_human_rights_refusal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -10
-	country_authority_add = 50
+	country_acceptance_no_shared_language_trait_add = -5
+	country_authority_add = 100
 }
 
 un_human_rights_champion_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 5
-	country_prestige_mult = 0.03
+	country_institution_impact_institution_ministry_of_refugee_affairs_mult = 0.05
+	country_prestige_mult = 0.05
 	country_institution_size_change_speed_mult = 0.05
 }
 
@@ -1957,21 +1959,21 @@ un_human_rights_champion_modifier = {
 
 un_peacekeeping_contributor_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
-	country_diplomatic_reputation_add = 5
-	country_prestige_mult = 0.03
-	country_military_goods_cost_mult = 0.03
+	country_leverage_generation_mult = 0.05
+	country_prestige_mult = 0.05
+	country_military_goods_cost_mult = 0.05
 }
 
 un_peacekeeping_deployed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
-	country_diplomatic_reputation_add = 10
+	country_leverage_generation_mult = 0.10
 	country_prestige_mult = 0.05
 	country_military_goods_cost_mult = 0.05
 }
 
 un_observer_mission_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 5
+	country_improve_relations_speed_mult = 0.10
 	country_prestige_mult = 0.02
 }
 
@@ -1983,12 +1985,12 @@ un_peacekeeping_cooldown = {
 
 un_sanctions_enforcer_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 5
+	country_leverage_generation_mult = 0.05
 }
 
 un_sanctions_target_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_diplomatic_reputation_add = -15
+	country_influence_mult = -0.10
 	country_prestige_mult = -0.05
 	state_trade_advantage_mult = -0.15
 }
@@ -1999,19 +2001,19 @@ un_sanctions_cooldown = {
 
 un_sanctions_enforcement_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_diplomatic_reputation_add = 5
+	country_leverage_generation_mult = 0.05
 	state_trade_advantage_mult = -0.05
 }
 
 un_sanctions_partial_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 2
+	country_leverage_generation_mult = 0.02
 	state_trade_advantage_mult = -0.02
 }
 
 un_sanctions_busting_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_diplomatic_reputation_add = -10
+	country_infamy_decay_mult = -0.15
 	state_trade_advantage_mult = 0.05
 }
 
@@ -2019,16 +2021,15 @@ un_sanctions_busting_modifier = {
 
 un_development_contributor_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_diplomatic_reputation_add = 5
-	country_prestige_mult = 0.03
-	country_bureaucracy_add = -50
+	country_institution_impact_institution_ministry_of_commerce_mult = 0.05
+	country_bureaucracy_mult = -0.01
 }
 
 # ---- Arms Control Modifiers ----
 
 un_arms_control_participant_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
-	country_diplomatic_reputation_add = 5
+	country_infamy_decay_mult = 0.10
 	unit_kill_rate_add = -0.05
 	unit_devastation_mult = -0.15
 	country_military_goods_cost_mult = -0.05
@@ -2038,19 +2039,19 @@ un_arms_control_participant_modifier = {
 
 un_reform_champion_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.10
 	country_prestige_mult = 0.05
 }
 
 un_reform_opponent_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -5
+	country_improve_relations_speed_mult = -0.10
 	country_authority_add = 25
 }
 
 un_reform_compromise_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 5
+	country_improve_relations_speed_mult = 0.10
 	country_prestige_mult = 0.03
 }
 
@@ -2058,14 +2059,14 @@ un_reform_compromise_modifier = {
 
 un_humanitarian_aid_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_diplomatic_reputation_add = 10
+	country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.10
 	country_prestige_mult = 0.15
 	country_bureaucracy_add = -5000
 }
 
 un_humanitarian_token_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 3
+	country_improve_relations_speed_mult = 0.05
 	country_prestige_mult = 0.01
 }
 
@@ -2073,18 +2074,18 @@ un_humanitarian_token_modifier = {
 
 un_court_compliance_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_infamy_decay_mult = 0.15
 	unit_devastation_mult = -0.25
 }
 
 un_court_contested_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -5
+	country_improve_relations_speed_mult = -0.10
 }
 
 un_court_defiance_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -15
+	country_infamy_decay_mult = -0.25
 	country_prestige_mult = -0.05
 }
 
@@ -2105,13 +2106,13 @@ un_heritage_token_modifier = {
 
 un_authority_restored_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_leverage_generation_mult = 0.10
 	country_prestige_mult = 0.05
 }
 
 un_authority_crisis_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -5
+	country_influence_mult = -0.05
 }
 
 
@@ -2119,13 +2120,13 @@ un_authority_crisis_modifier = {
 
 un_veto_crisis_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = 5
+	country_leverage_generation_mult = 0.05
 	country_prestige_mult = 0.03
 }
 
 un_veto_abolition_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_leverage_generation_mult = 0.10
 	country_prestige_mult = 0.05
 }
 
@@ -2133,13 +2134,13 @@ un_veto_abolition_modifier = {
 
 un_decolonization_champion_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_infamy_decay_mult = 0.15
 	country_prestige_mult = 0.05
 }
 
 un_colonial_defender_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -5
+	country_infamy_decay_mult = -0.10
 	country_authority_add = 25
 }
 
@@ -2153,7 +2154,7 @@ un_ideological_champion_modifier = {
 
 un_coexistence_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_improve_relations_speed_mult = 0.15
 	country_prestige_mult = 0.03
 }
 
@@ -2161,14 +2162,14 @@ un_coexistence_modifier = {
 
 un_nonproliferation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_infamy_decay_mult = 0.15
 	country_prestige_mult = 0.05
 	unit_kill_rate_add = -0.03
 }
 
 un_nonproliferation_refusal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -10
+	country_infamy_decay_mult = -0.15
 	country_prestige_mult = -0.03
 }
 
@@ -2176,13 +2177,13 @@ un_nonproliferation_refusal_modifier = {
 
 un_trade_arbitration_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 5
+	country_improve_relations_speed_mult = 0.10
 	state_trade_advantage_mult = -0.03
 }
 
 un_unilateral_tariffs_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_diplomatic_reputation_add = -5
+	country_improve_relations_speed_mult = -0.10
 	state_trade_advantage_mult = 0.05
 }
 
@@ -2190,43 +2191,41 @@ un_unilateral_tariffs_modifier = {
 
 un_pandemic_cooperation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_institution_cost_institution_health_system_mult = -0.10
 	country_prestige_mult = 0.05
-	country_bureaucracy_add = -25
 }
 
 un_pandemic_isolationist_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -5
-	country_authority_add = 25
+	country_authority_add = 100
 }
 
 # ---- Climate Resolution Modifiers ----
 
 un_climate_binding_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_institution_impact_institution_ministry_of_the_environment_mult = 0.05
 	country_prestige_mult = 0.05
-	country_bureaucracy_add = -25
+	country_bureaucracy_mult = -0.05
 }
 
 un_climate_refusal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -10
+	country_institution_impact_institution_ministry_of_the_environment_mult = -0.15
 }
 
 # ---- Refugee Crisis Modifiers ----
 
 un_refugee_program_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_institution_impact_institution_ministry_of_refugee_affairs_mult = 0.15
 	country_prestige_mult = 0.05
 	state_migration_pull_mult = 0.1
 }
 
 un_refugee_closed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -5
+	country_institution_impact_institution_ministry_of_refugee_affairs_mult = -0.10
 	state_migration_pull_mult = -0.1
 }
 
@@ -2234,32 +2233,32 @@ un_refugee_closed_modifier = {
 
 un_space_partnership_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_tech_research_speed_mult = 0.03
-	country_prestige_mult = 0.07
+	country_institution_impact_institution_ministry_of_science_mult = 0.05
+	country_prestige_mult = 0.05
 }
 
 un_space_independent_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -5
-	country_prestige_mult = 0.03
+	country_institution_impact_institution_ministry_of_science_mult = -0.10
+	country_prestige_mult = 0.1
 }
 
 # ---- Assembly Walkout Modifiers ----
 
 un_walkout_condemn_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 5
+	country_leverage_generation_mult = 0.05
 	country_prestige_mult = 0.03
 }
 
 un_walkout_mediator_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 10
+	country_improve_relations_speed_mult = 0.10
 }
 
 un_walkout_join_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_diplomatic_reputation_add = -10
+	country_improve_relations_speed_mult = -0.15
 	country_authority_add = 25
 }
 
@@ -2281,13 +2280,12 @@ un_humanitarian_token_received_modifier = {
 un_peacekeeping_welcomed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_devastation_decay_mult = 0.5
-	country_prestige_mult = -0.03
+	country_prestige_mult = -0.05
 }
 
 un_peacekeeping_resented_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_add = 100
-	country_diplomatic_reputation_add = -5
 }
 
 un_refugee_source_relief_modifier = {
@@ -2305,13 +2303,13 @@ un_refugee_source_brain_drain_modifier = {
 un_trade_deal_bilateral_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	state_trade_advantage_mult = 0.02
-	country_diplomatic_reputation_add = 3
+	country_institution_impact_institution_ministry_of_commerce_mult = 0.05
 }
 
 un_tariff_retaliation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	state_trade_advantage_mult = -0.03
-	country_diplomatic_reputation_add = -3
+	country_improve_relations_speed_mult = -0.05
 }
 
 # ============================================================================
@@ -2340,7 +2338,7 @@ ww_rearmament_modifier = {
 # Diplomatic efforts to prevent war
 ww_appeasement_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_diplomatic_reputation_add = 5
+	country_improve_relations_speed_mult = 0.10
 	country_influence_add = 50
 	country_military_goods_cost_mult = -0.05
 }
@@ -2441,7 +2439,7 @@ ww_victors_peace_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 500
 	country_influence_add = 200
-	country_diplomatic_reputation_add = 10
+	country_leverage_generation_mult = 0.10
 	country_authority_add = 50
 }
 
@@ -2450,7 +2448,7 @@ ww_defeated_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_add = -500
 	country_influence_add = -200
-	country_diplomatic_reputation_add = -15
+	country_influence_mult = -0.15
 	state_standard_of_living_add = -3
 	unit_army_offense_mult = -0.25
 	unit_army_defense_mult = -0.25
@@ -2484,7 +2482,7 @@ ww_occupation_duties_modifier = {
 ww_war_crimes_exposed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_add = -300
-	country_diplomatic_reputation_add = -20
+	country_infamy_decay_mult = -0.30
 	state_radicals_from_political_movements_mult = 0.5
 }
 
@@ -2492,7 +2490,7 @@ ww_war_crimes_exposed_modifier = {
 ww_liberation_hero_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 100
-	country_diplomatic_reputation_add = 5
+	country_improve_relations_speed_mult = 0.10
 	political_movement_radicalism_add = -0.25
 }
 

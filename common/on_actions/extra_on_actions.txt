@@ -85,6 +85,7 @@ on_yearly_pulse_country = {
 		fix_incompatible_laws
 		construction_cost_scaling_on_action
 		colonial_collapse_on_action
+		assign_aptitude_traits_on_action
 	}
 }
 
@@ -92,6 +93,13 @@ on_yearly_pulse_country = {
 colonial_collapse_on_action = {
 	effect = {
 		colonial_collapse_effect = yes
+	}
+}
+
+# APTITUDE TRAITS - assign admin/diplo/military traits to characters who lack them
+assign_aptitude_traits_on_action = {
+	effect = {
+		assign_aptitude_traits_effect = yes
 	}
 }
 

@@ -3,6 +3,7 @@
 #
 # UNUSED
 #
+ AI_CULTURAL_CITIZENSHIP_LAWS:0 "from cultural citizenship laws"
  COUNTRY_FOREIGN_INVESTMENT_ACCEPTANCE_ADD:0 "Foreign Investment Acceptance"
  COUNTRY_HUMILIATED:0 "Our country has been humiliated"
  CULTURE_MANUALLY_ACCEPTED:0 "Culture Manually Accepted"
@@ -74,6 +75,7 @@
  free_port_concession_article_short_desc:0 "[SOURCE_COUNTRY.GetNameNoFormatting] will open [SCOPE.sArticleOption('article_option').GetInputState.GetName] as a free port"
  free_port_concession_effects_desc:0 "• Massively increases trade capacity and migration pull in the target state.\n• Reduces cultural assimilation in the cosmopolitan port.\n• Source country loses authority.\n• Target country gains prestige."
  government_service_need:0 "Government Service Need: [State.MakeScope.ScriptValue('government_service_net')|D+=] ([State.MakeScope.ScriptValue('government_service_have')]/[State.MakeScope.ScriptValue('government_service_need')|0])"
+ heir_education_progress_bar_name:0 "Education Progress"
  je_banking_cycle_reason:"Financial conditions ebb and flow. Laws determine your stabilization toolkit and how forcefully you can lean against the cycle."
  je_civil_rights_reason:0 "Discriminated communities are demanding equal treatment under the law."
  je_colonial_empire_reason:0 "Our nation controls overseas territories that are not part of our cultural homeland. The era of decolonization is upon us - will we integrate these lands fully into our nation, or release them to self-governance?"

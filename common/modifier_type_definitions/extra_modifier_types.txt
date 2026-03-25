@@ -1556,6 +1556,26 @@ country_institution_impact_institution_ministry_of_war_mult = {
 	percent = yes
 }
 
+country_institution_impact_institution_ministry_of_refugee_affairs_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_commerce_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_the_environment_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_science_mult = {
+	color = good
+	percent = yes
+}
+
 country_institution_impact_institution_national_bank_mult = {
 	color = good
 	percent = yes

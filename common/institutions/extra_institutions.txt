@@ -175,10 +175,8 @@ institution_ministry_of_international_aid = {
 	background_texture = "gfx/interface/illustrations/institutions/social_security.dds"
 
 	modifier = {
-		country_infamy_decay_mult = 0.05
-		country_leverage_generation_mult = 0.05
-		country_minting_mult = -0.05
-		country_diplomatic_reputation_add = 10
+		country_institution_cost_institution_ministry_of_foreign_affairs_mult = 0.2
+		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.05
 	}
 }
 

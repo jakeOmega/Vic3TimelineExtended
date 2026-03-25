@@ -7,3 +7,4 @@ path_constants.py
 .github/
 *.exe
 /.vscode
+/docs

@@ -2,87 +2,327 @@
 # COLONIAL EMPIRE SCRIPTED TRIGGERS
 # ============================================================================
 
-# Checks if a state is on a different continent/landmass from the owner's capital.
+# Macro-region helpers for colonial distance checks.
 # Scope: state
-# Landmass groupings:
-#   - Western Eurasia: Europe + Central Asia + Middle East (contiguous by land)
-#   - Southern/Eastern Asia: India + East Asia + Southeast Asia
-#   - Americas (North, Central, South)
-#   - Africa
-#   - Unclassified (Oceania, Pacific - anything not in the above groups)
-# This means Russia → Central Asia is NOT overseas (same landmass),
-# but France → Vietnam IS overseas (different landmass).
-is_overseas_from_capital = {
+
+is_in_colonial_macroregion_north_america = {
 	OR = {
-		# Capital in Western Eurasia, state NOT in Western Eurasia
-		AND = {
-			owner = {
-				capital = {
-					OR = {
-						is_in_geographic_region = geographic_region_europe
-						is_in_geographic_region = geographic_region_central_asia
-						is_in_geographic_region = geographic_region_middle_east
-					}
-				}
+		region = sr:region_canada
+		region = sr:region_new_england
+		region = sr:region_pacific_coast
+		region = sr:region_great_plains
+		region = sr:region_the_midwest
+		region = sr:region_dixie
+		region = sr:region_mexico
+		region = sr:region_central_america
+		region = sr:region_caribbean
+	}
+}
+
+is_in_colonial_macroregion_south_america = {
+	OR = {
+		region = sr:region_brazil
+		region = sr:region_andes
+		region = sr:region_la_plata
+		region = sr:region_gran_colombia
+	}
+}
+
+is_in_colonial_macroregion_western_europe = {
+	OR = {
+		region = sr:region_england
+		region = sr:region_north_sea_coast
+		region = sr:region_iberia
+		region = sr:region_france
+		region = sr:region_occitania
+		region = sr:region_rhine
+		region = sr:region_italy
+		region = sr:region_north_germany
+		region = sr:region_south_germany
+		region = sr:region_baltic
+	}
+}
+
+is_in_colonial_macroregion_eastern_europe = {
+	OR = {
+		region = sr:region_balkans
+		region = sr:region_danubia
+		region = sr:region_poland
+		region = sr:region_russia
+		region = sr:region_dnieper
+		region = sr:region_belarus
+		region = sr:region_baltic_states
+		region = sr:region_finland
+		region = sr:region_arctic_russia
+	}
+}
+
+is_in_colonial_macroregion_siberia_central_asia = {
+	OR = {
+		region = sr:region_urals
+		region = sr:region_west_siberia
+		region = sr:region_east_siberia
+		region = sr:region_central_asia
+	}
+}
+
+is_in_colonial_macroregion_middle_east = {
+	OR = {
+		region = sr:region_anatolia
+		region = sr:region_arabic
+		region = sr:region_persia
+		region = sr:region_caucasus
+	}
+}
+
+is_in_colonial_macroregion_north_africa = {
+	OR = {
+		region = sr:region_north_africa
+		region = sr:region_nile_basin
+	}
+}
+
+is_in_colonial_macroregion_western_africa = {
+	OR = {
+		region = sr:region_senegal
+		region = sr:region_niger
+	}
+}
+
+is_in_colonial_macroregion_eastern_africa = {
+	OR = {
+		region = sr:region_ethiopia
+		region = sr:region_zanj
+	}
+}
+
+is_in_colonial_macroregion_southern_africa = {
+	OR = {
+		region = sr:region_congo
+		region = sr:region_southern_africa
+	}
+}
+
+is_in_colonial_macroregion_india = {
+	OR = {
+		region = sr:region_madras
+		region = sr:region_bengal
+		region = sr:region_bombay
+		region = sr:region_punjab
+		region = sr:region_himalayas
+		region = sr:region_central_india
+	}
+}
+
+is_in_colonial_macroregion_southeast_asia_indonesia = {
+	OR = {
+		region = sr:region_indochina
+		region = sr:region_indonesia
+	}
+}
+
+is_in_colonial_macroregion_east_asia = {
+	OR = {
+		region = sr:region_south_china
+		region = sr:region_north_china
+		region = sr:region_manchuria
+		region = sr:region_japan
+	}
+}
+
+is_in_colonial_macroregion_australia_oceania = {
+	region = sr:region_oceania
+}
+
+# Same-region or neighboring-region helpers.
+# Scope: state
+
+is_in_or_adjacent_colonial_macroregion_north_america = {
+	OR = {
+		is_in_colonial_macroregion_north_america = yes
+		is_in_colonial_macroregion_south_america = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_south_america = {
+	OR = {
+		is_in_colonial_macroregion_south_america = yes
+		is_in_colonial_macroregion_north_america = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_western_europe = {
+	OR = {
+		is_in_colonial_macroregion_western_europe = yes
+		is_in_colonial_macroregion_eastern_europe = yes
+		is_in_colonial_macroregion_north_africa = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_eastern_europe = {
+	OR = {
+		is_in_colonial_macroregion_eastern_europe = yes
+		is_in_colonial_macroregion_western_europe = yes
+		is_in_colonial_macroregion_siberia_central_asia = yes
+		is_in_colonial_macroregion_middle_east = yes
+		is_in_colonial_macroregion_north_africa = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_siberia_central_asia = {
+	OR = {
+		is_in_colonial_macroregion_siberia_central_asia = yes
+		is_in_colonial_macroregion_eastern_europe = yes
+		is_in_colonial_macroregion_middle_east = yes
+		is_in_colonial_macroregion_india = yes
+		is_in_colonial_macroregion_east_asia = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_middle_east = {
+	OR = {
+		is_in_colonial_macroregion_middle_east = yes
+		is_in_colonial_macroregion_eastern_europe = yes
+		is_in_colonial_macroregion_siberia_central_asia = yes
+		is_in_colonial_macroregion_north_africa = yes
+		is_in_colonial_macroregion_india = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_north_africa = {
+	OR = {
+		is_in_colonial_macroregion_north_africa = yes
+		is_in_colonial_macroregion_western_europe = yes
+		is_in_colonial_macroregion_eastern_europe = yes
+		is_in_colonial_macroregion_middle_east = yes
+		is_in_colonial_macroregion_western_africa = yes
+		is_in_colonial_macroregion_eastern_africa = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_western_africa = {
+	OR = {
+		is_in_colonial_macroregion_western_africa = yes
+		is_in_colonial_macroregion_north_africa = yes
+		is_in_colonial_macroregion_southern_africa = yes
+		is_in_colonial_macroregion_eastern_africa = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_eastern_africa = {
+	OR = {
+		is_in_colonial_macroregion_eastern_africa = yes
+		is_in_colonial_macroregion_north_africa = yes
+		is_in_colonial_macroregion_southern_africa = yes
+		is_in_colonial_macroregion_western_africa = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_southern_africa = {
+	OR = {
+		is_in_colonial_macroregion_southern_africa = yes
+		is_in_colonial_macroregion_western_africa = yes
+		is_in_colonial_macroregion_eastern_africa = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_india = {
+	OR = {
+		is_in_colonial_macroregion_india = yes
+		is_in_colonial_macroregion_middle_east = yes
+		is_in_colonial_macroregion_siberia_central_asia = yes
+		is_in_colonial_macroregion_southeast_asia_indonesia = yes
+		is_in_colonial_macroregion_east_asia = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_southeast_asia_indonesia = {
+	OR = {
+		is_in_colonial_macroregion_southeast_asia_indonesia = yes
+		is_in_colonial_macroregion_india = yes
+		is_in_colonial_macroregion_east_asia = yes
+		is_in_colonial_macroregion_australia_oceania = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_east_asia = {
+	OR = {
+		is_in_colonial_macroregion_east_asia = yes
+		is_in_colonial_macroregion_siberia_central_asia = yes
+		is_in_colonial_macroregion_india = yes
+		is_in_colonial_macroregion_southeast_asia_indonesia = yes
+	}
+}
+
+is_in_or_adjacent_colonial_macroregion_australia_oceania = {
+	OR = {
+		is_in_colonial_macroregion_australia_oceania = yes
+		is_in_colonial_macroregion_southeast_asia_indonesia = yes
+	}
+}
+
+# Checks if a state lies outside both the capital's macro-region and all directly
+# neighboring macro-regions.
+# Scope: state
+is_overseas_from_capital = {
+	custom_tooltip = {
+		text = IS_OVERSEAS_FROM_CAPITAL_TT
+		OR = {
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_north_america = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_north_america = yes }
 			}
-			NOR = {
-				is_in_geographic_region = geographic_region_europe
-				is_in_geographic_region = geographic_region_central_asia
-				is_in_geographic_region = geographic_region_middle_east
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_south_america = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_south_america = yes }
 			}
-		}
-		# Capital in Americas, state NOT in Americas
-		AND = {
-			owner = { capital = { is_in_geographic_region = geographic_region_americas } }
-			NOT = { is_in_geographic_region = geographic_region_americas }
-		}
-		# Capital in Africa, state NOT in Africa
-		AND = {
-			owner = { capital = { is_in_geographic_region = geographic_region_africa } }
-			NOT = { is_in_geographic_region = geographic_region_africa }
-		}
-		# Capital in Southern/Eastern Asia, state NOT in that group
-		AND = {
-			owner = {
-				capital = {
-					OR = {
-						is_in_geographic_region = geographic_region_india
-						is_in_geographic_region = geographic_region_east_asia
-						is_in_geographic_region = geographic_region_south_east_asia
-					}
-				}
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_western_europe = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_western_europe = yes }
 			}
-			NOR = {
-				is_in_geographic_region = geographic_region_india
-				is_in_geographic_region = geographic_region_east_asia
-				is_in_geographic_region = geographic_region_south_east_asia
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_eastern_europe = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_eastern_europe = yes }
 			}
-		}
-		# Capital in unclassified region (Oceania etc.), state in any classified region
-		AND = {
-			owner = {
-				capital = {
-					NOR = {
-						is_in_geographic_region = geographic_region_europe
-						is_in_geographic_region = geographic_region_central_asia
-						is_in_geographic_region = geographic_region_middle_east
-						is_in_geographic_region = geographic_region_americas
-						is_in_geographic_region = geographic_region_africa
-						is_in_geographic_region = geographic_region_india
-						is_in_geographic_region = geographic_region_east_asia
-						is_in_geographic_region = geographic_region_south_east_asia
-					}
-				}
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_siberia_central_asia = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_siberia_central_asia = yes }
 			}
-			OR = {
-				is_in_geographic_region = geographic_region_europe
-				is_in_geographic_region = geographic_region_central_asia
-				is_in_geographic_region = geographic_region_middle_east
-				is_in_geographic_region = geographic_region_americas
-				is_in_geographic_region = geographic_region_africa
-				is_in_geographic_region = geographic_region_india
-				is_in_geographic_region = geographic_region_east_asia
-				is_in_geographic_region = geographic_region_south_east_asia
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_middle_east = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_middle_east = yes }
+			}
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_north_africa = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_north_africa = yes }
+			}
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_western_africa = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_western_africa = yes }
+			}
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_eastern_africa = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_eastern_africa = yes }
+			}
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_southern_africa = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_southern_africa = yes }
+			}
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_india = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_india = yes }
+			}
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_southeast_asia_indonesia = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_southeast_asia_indonesia = yes }
+			}
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_east_asia = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_east_asia = yes }
+			}
+			AND = {
+				owner = { capital = { is_in_colonial_macroregion_australia_oceania = yes } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_australia_oceania = yes }
 			}
 		}
 	}
@@ -92,17 +332,20 @@ is_overseas_from_capital = {
 # Does NOT include acceptance/integration checks - those are context-dependent.
 # Scope: state
 is_overseas_colonial_state = {
-	# Not a homeland of the owner's primary/accepted cultures
-	NOT = { is_homeland_of_country_cultures = owner }
-	# Meaningful population - filters tiny outposts (Falklands, Wallis & Futuna, etc.)
-	state_population >= 100000
-	# Has a non-primary culture with low acceptance (proxy for significant indigenous population)
-	any_scope_culture = {
-		NOT = { is_primary_culture_of = owner }
-		prev = {
-			state_average_culture_pop_acceptance = { culture = prev value < 0.6 }
+	custom_tooltip = {
+		text = IS_OVERSEAS_COLONIAL_STATE_TT
+		# Not a homeland of the owner's primary/accepted cultures
+		NOT = { is_homeland_of_country_cultures = owner }
+		# Meaningful population - filters tiny outposts (Falklands, Wallis & Futuna, etc.)
+		state_population >= 100000
+		# Has a non-primary culture with low acceptance (proxy for significant indigenous population)
+		any_scope_culture = {
+			NOT = { is_primary_culture_of = owner }
+			prev = {
+				state_average_culture_pop_acceptance = { culture = prev value < 0.6 }
+			}
 		}
+		# Outside the capital's macro-region and all neighboring macro-regions
+		is_overseas_from_capital = yes
 	}
-	# On a different continent/landmass from the capital
-	is_overseas_from_capital = yes
 }

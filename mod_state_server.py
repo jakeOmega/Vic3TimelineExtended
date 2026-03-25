@@ -2,10 +2,10 @@
 Mod State Server - persistent HTTP API for querying parsed mod/vanilla data.
 
 Start:  python mod_state_server.py
-        (loads all data once, then listens on http://127.0.0.1:8765)
+        (loads all data once, then listens on http://127.0.0.1:8950)
 
-Query:  Invoke-RestMethod http://localhost:8765/status
-        Invoke-RestMethod http://localhost:8765/laws
+Query:  Invoke-RestMethod http://localhost:8950/status
+        Invoke-RestMethod http://localhost:8950/laws
         python mod_state_client.py laws
 """
 
@@ -20,7 +20,7 @@ from urllib.parse import urlparse, parse_qs, unquote
 from mod_state import ModState
 from path_constants import base_game_path, doc_path, mod_path
 
-PORT = 8765
+PORT = 8950
 
 # ---------------------------------------------------------------------------
 # Path configuration (mirrors mod_state_script.py)
@@ -713,6 +713,9 @@ def _load_mod_state():
     startup_elapsed = time.time() - t0
     print(f"Loaded in {startup_elapsed:.1f}s  "
           f"({len(ms.mod_parsers)} entity types, {len(ms.localization)} loc keys)")
+    # Regenerate docs/ text files from the freshly parsed data
+    from mod_state_script import generate_docs
+    generate_docs(ms)
 
 
 def main():

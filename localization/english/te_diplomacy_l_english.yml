@@ -53,6 +53,8 @@
  principle_diplomacy_3_desc:0 "The Power Bloc encourages diplomacy and peaceful resolution of conflicts."
  principle_group_diplomacy:0 "Diplomacy"
  principle_group_diplomacy_desc:0 "The Power Bloc encourages diplomacy and peaceful resolution of conflicts."
+ ruler_average_diplomat:0 "Average Diplomat"
+ ruler_average_diplomat_desc:0 "A ruler of unremarkable diplomatic skill. They manage foreign affairs competently but without particular distinction."
  ruler_exceptional_diplomat:0 "Master Diplomat"
  ruler_exceptional_diplomat_desc:0 "A diplomat of legendary skill whose charm and cunning elevate the nation's standing on the world stage. Foreign courts hang upon their every word."
  ruler_poor_diplomat:0 "Inept Diplomat"
