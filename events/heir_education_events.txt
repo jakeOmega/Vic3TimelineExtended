@@ -138,7 +138,7 @@ heir_education_events.3 = {
 
 	event_image = { video = "unspecific_signed_contract" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	duration = 3
 
@@ -148,14 +148,14 @@ heir_education_events.3 = {
 		has_variable = heir_ed_total
 		var:heir_ed_total >= 3
 		any_country = {
-			has_diplomatic_pact = { who = ROOT type = alliance }
+			has_treaty_alliance_with = { TARGET = ROOT }
 		}
 	}
 
 	immediate = {
 		random_country = {
 			limit = {
-				has_diplomatic_pact = { who = ROOT type = alliance }
+				has_treaty_alliance_with = { TARGET = ROOT }
 			}
 			save_scope_as = ally_country
 		}

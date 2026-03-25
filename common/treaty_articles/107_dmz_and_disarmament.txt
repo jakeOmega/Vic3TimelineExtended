@@ -162,7 +162,7 @@ demilitarized_zone = {
 					}
 					add = {
 						value = -100
-						text = BASE
+						desc = "BASE"
 					}
 				}
 			}

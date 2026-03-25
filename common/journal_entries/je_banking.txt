@@ -245,10 +245,6 @@
                         }
                         is_market_reachable_for_trade = scope:banking_crash_origin_country.market
                         OR = {
-                            has_diplomatic_pact = {
-                                who = scope:banking_crash_origin_country
-                                type = trade_agreement
-                            }
                             is_in_customs_union_with = scope:banking_crash_origin_country
                             is_adjacent_to_country = scope:banking_crash_origin_country
                             economic_dependence = {
@@ -285,16 +281,40 @@
                     random = {
                         chance = 1.5
                         modifier = {
-                            if = { limit = { has_diplomatic_pact = { who = scope:banking_crash_origin_country type = trade_agreement } } add = 1.5 }
-                            if = { limit = { is_in_customs_union_with = scope:banking_crash_origin_country } add = 2 }
-                            if = { limit = { is_adjacent_to_country = scope:banking_crash_origin_country } add = 0.75 }
-                            if = { limit = { economic_dependence = { target = scope:banking_crash_origin_country value > 1.25 } } add = 1.25 }
-                            if = { limit = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.08 } } } add = 1 }
-                            if = { limit = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.15 } } } add = 2 }
-                            if = { limit = { market = { market_trade = { target = scope:banking_crash_origin_country.market value > 1500 } } } add = 0.75 }
-                            if = { limit = { market = { market_trade = { target = scope:banking_crash_origin_country.market value > 4000 } } } add = 1.5 }
-                            if = { limit = { scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial } add = 0.75 }
-                            if = { limit = { has_law_or_variant = law_type:law_free_trade } add = 0.75 }
+                            trigger = { is_in_customs_union_with = scope:banking_crash_origin_country }
+                            add = 2
+                        }
+                        modifier = {
+                            trigger = { is_adjacent_to_country = scope:banking_crash_origin_country }
+                            add = 0.75
+                        }
+                        modifier = {
+                            trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 1.25 } }
+                            add = 1.25
+                        }
+                        modifier = {
+                            trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.08 } } }
+                            add = 1
+                        }
+                        modifier = {
+                            trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.15 } } }
+                            add = 2
+                        }
+                        modifier = {
+                            trigger = { market = { market_trade = { target = scope:banking_crash_origin_country.market value > 1500 } } }
+                            add = 0.75
+                        }
+                        modifier = {
+                            trigger = { market = { market_trade = { target = scope:banking_crash_origin_country.market value > 4000 } } }
+                            add = 1.5
+                        }
+                        modifier = {
+                            trigger = { scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial }
+                            add = 0.75
+                        }
+                        modifier = {
+                            trigger = { has_law_or_variant = law_type:law_free_trade }
+                            add = 0.75
                         }
 
                         scope:banking_crash_origin_country = {

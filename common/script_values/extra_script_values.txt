@@ -536,11 +536,59 @@ market_greenhouse_gas_emissions_script_value = {
 	}
 	divide = 10000
 	multiply = gw_emission_multiplier_script_value
+
+	add = {
+		value = market_carbon_capture_script_value
+	}
+}
+
+market_carbon_capture_script_value = {
+	# Evaluated in the country scope
+	# Returns a negative value representing carbon captured by synthetic fuel plants
+	# Uses base output values only (throughput bonuses are country-scoped, not readable from building scope in script values)
+	value = 0
+	market = {
+		every_scope_country = {
+			# Carbon capture: subtract synthetic oil/coal production (not fossil extraction)
+			every_scope_building = {
+				limit = { is_building_type = building_synthetics_plant_oil }
+				if = {
+					limit = { has_active_production_method = pm_synthetic_oil_2 }
+					add = {
+						value = level
+						multiply = occupancy
+						multiply = -0.06  # 300 oil * 2 weight / 10000
+					}
+				}
+				else = {
+					add = {
+						value = level
+						multiply = occupancy
+						multiply = -0.036  # 180 oil * 2 weight / 10000
+					}
+				}
+			}
+			every_scope_building = {
+				limit = { is_building_type = building_synthetics_plant_coal }
+				add = {
+					value = level
+					multiply = occupancy
+					multiply = -0.168  # 840 coal * 2 weight / 10000
+				}
+			}
+		}
+	}
 }
 
 market_greenhouse_gas_emissions_script_value_display = {
 	# Evaluated in the country scope
 	value = market_greenhouse_gas_emissions_script_value
+	round = yes
+}
+
+market_carbon_capture_script_value_display = {
+	# Evaluated in the country scope
+	value = market_carbon_capture_script_value
 	round = yes
 }
 
@@ -552,7 +600,14 @@ greenhouse_gas_emissions_display = {
 global_greenhouse_gas_emissions_script_value_display = {
 	value = 0
 	every_market = {
-		add = market_greenhouse_gas_emissions_script_value
+		# Scope into the first country in each market so
+		# market_greenhouse_gas_emissions_script_value evaluates in country scope
+		ordered_scope_country = {
+			order_by = gdp
+			position = 0
+			max = 1
+			add = market_greenhouse_gas_emissions_script_value
+		}
 	}
 	round = yes
 }

@@ -261,7 +261,7 @@ je_heir_education = {
 						has_variable = heir_ed_total
 						var:heir_ed_total >= 3
 						any_country = {
-							has_diplomatic_pact = { who = ROOT type = alliance }
+							has_treaty_alliance_with = { TARGET = ROOT }
 						}
 					}
 					trigger_event = { id = heir_education_events.3 }
@@ -315,7 +315,7 @@ je_heir_education = {
 		value = var:heir_ed_total
 	}
 
-	goal_add_term = {
+	goal_add_value = {
 		value = 15
 	}
 }

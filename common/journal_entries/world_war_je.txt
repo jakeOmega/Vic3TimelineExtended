@@ -101,32 +101,6 @@ je_world_war = {
 		}
 	}
 
-	# Second status block: current ideology classification
-	status_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = je_world_war_ideology_democratic
-				trigger = { country_is_democratic = yes }
-			}
-			triggered_desc = {
-				desc = je_world_war_ideology_communist
-				trigger = { country_is_communist = yes }
-			}
-			triggered_desc = {
-				desc = je_world_war_ideology_fascist
-				trigger = { country_is_fascist = yes }
-			}
-			triggered_desc = {
-				desc = je_world_war_ideology_authoritarian
-				trigger = { country_is_authoritarian = yes }
-			}
-			triggered_desc = {
-				desc = je_world_war_ideology_nonaligned
-				trigger = { always = yes }
-			}
-		}
-	}
-
 	progressbar = no
 
 	# --- Leadup Phase Buttons ---
@@ -164,7 +138,6 @@ je_world_war = {
 		remove_variable = ww_peace_concluded
 		remove_variable = ww_peace_months
 		remove_variable = ww_fully_resolved
-		remove_variable = ww_peace_event_fired
 		# Clean up any lingering modifiers
 		if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
 		if = { limit = { has_modifier = ww_home_front_strain_modifier } remove_modifier = ww_home_front_strain_modifier }
@@ -185,7 +158,6 @@ je_world_war = {
 		remove_variable = ww_peace_concluded
 		remove_variable = ww_peace_months
 		remove_variable = ww_fully_resolved
-		remove_variable = ww_peace_event_fired
 	}
 
 	on_monthly_pulse = {

@@ -311,9 +311,9 @@ social_tensions_events.4 = {
 		# Need significant industrial base
 		any_scope_building = {
 			OR = {
-				is_building_type = building_steel_mills
+				is_building_type = building_steel_mill
 				is_building_type = building_motor_industry
-				is_building_type = building_chemical_plants
+				is_building_type = building_chemical_plant
 			}
 			level >= 8
 		}

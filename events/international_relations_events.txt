@@ -278,7 +278,7 @@ international_relations_events.3 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = international_relations_events.3.t
 	desc = international_relations_events.3.d

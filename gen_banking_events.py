@@ -48,7 +48,7 @@ banking_cycle_events.21 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.21.t
 	desc = banking_cycle_events.21.d
@@ -115,7 +115,7 @@ banking_cycle_events.22 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.22.t
 	desc = banking_cycle_events.22.d
@@ -320,7 +320,7 @@ banking_cycle_events.25 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.25.t
 	desc = banking_cycle_events.25.d
@@ -463,7 +463,7 @@ banking_cycle_events.27 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.27.t
 	desc = banking_cycle_events.27.d
@@ -961,7 +961,7 @@ banking_cycle_events.33 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.33.t
 	desc = banking_cycle_events.33.d
@@ -1127,7 +1127,7 @@ banking_cycle_events.35 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/stock_bag.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.35.t
 	desc = banking_cycle_events.35.d
@@ -1944,7 +1944,7 @@ banking_cycle_events.45 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = banking_cycle_events.45.t
 	desc = banking_cycle_events.45.d

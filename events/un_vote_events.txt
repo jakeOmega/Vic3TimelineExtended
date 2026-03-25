@@ -40,7 +40,7 @@ un_vote.1 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = {
 		first_valid = {
@@ -246,10 +246,7 @@ un_vote.1 = {
 			modifier = {
 				trigger = {
 					exists = scope:un_vote_proposer
-					has_diplomatic_pact = {
-						who = scope:un_vote_proposer
-						type = alliance
-					}
+					has_treaty_alliance_with = { TARGET = scope:un_vote_proposer }
 				}
 				add = 20
 			}
@@ -287,10 +284,7 @@ un_vote.1 = {
 				trigger = {
 					has_global_variable = un_vote_topic_condemn
 					exists = scope:un_vote_target
-					has_diplomatic_pact = {
-						who = scope:un_vote_target
-						type = alliance
-					}
+					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
 				}
 				add = -40
 			}
@@ -538,10 +532,7 @@ un_vote.1 = {
 				trigger = {
 					has_global_variable = un_vote_topic_condemn
 					exists = scope:un_vote_target
-					has_diplomatic_pact = {
-						who = scope:un_vote_target
-						type = alliance
-					}
+					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
 				}
 				add = 40
 			}
@@ -637,7 +628,7 @@ un_vote.2 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = un_vote.2.t
 

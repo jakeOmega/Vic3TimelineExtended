@@ -1270,7 +1270,7 @@ select_ideology_imperial_cult_economy = {
 
     possible = {
         var:selected_idelogies < 3
-        NOT = { has_variable = ideology_custom_religion_socialist_economy_selected }
+        NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
         NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
         NOT = { has_variable = custom_religion_ideology_theocratic_economy_selected }
         NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
@@ -3406,7 +3406,8 @@ select_trait_totalitarian_unhappy = {
     possible = {
         var:selected_traits < 3
         OR = {
-            has_variable = custom_religion_ideology_social
+            has_variable = custom_religion_ideology_socialist_economy_selected
+            has_variable = custom_religion_ideology_social_democratic_economy_selected
             has_variable = custom_religion_ideology_totalitarian_society_selected
             has_variable = custom_religion_ideology_technocratic_governance_selected
             has_variable = custom_religion_ideology_militarist_outlook_selected

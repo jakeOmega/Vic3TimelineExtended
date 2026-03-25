@@ -71,7 +71,7 @@
 			if = {
 				limit = {
 					any_political_movement = {
-						is_political_movement_type = movement_environmentalist
+						is_political_movement_type = movement_environmental
 						political_movement_radicalism > 0.1
 					}
 				}
@@ -80,7 +80,7 @@
 			if = {
 				limit = {
 					any_political_movement = {
-						is_political_movement_type = movement_environmentalist
+						is_political_movement_type = movement_environmental
 						political_movement_radicalism > 0.25
 					}
 				}
@@ -89,7 +89,7 @@
 			if = {
 				limit = {
 					any_political_movement = {
-						is_political_movement_type = movement_environmentalist
+						is_political_movement_type = movement_environmental
 						political_movement_radicalism > 0.5
 					}
 				}

@@ -187,7 +187,7 @@ decolonization_events.2 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = decolonization_events.2.t
 	desc = decolonization_events.2.d
@@ -555,7 +555,7 @@ decolonization_events.5 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = decolonization_events.5.t
 	desc = decolonization_events.5.d
@@ -637,7 +637,7 @@ decolonization_events.6 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = decolonization_events.6.t
 	desc = decolonization_events.6.d
@@ -1054,7 +1054,7 @@ decolonization_events.10 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = decolonization_events.10.t
 	desc = decolonization_events.10.d
@@ -1148,7 +1148,7 @@ decolonization_events.11 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = decolonization_events.11.t
 	desc = decolonization_events.11.d
@@ -1259,7 +1259,7 @@ decolonization_events.12 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = decolonization_events.12.t
 	desc = decolonization_events.12.d
@@ -1470,7 +1470,7 @@ decolonization_events.14 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = decolonization_events.14.t
 	desc = decolonization_events.14.d

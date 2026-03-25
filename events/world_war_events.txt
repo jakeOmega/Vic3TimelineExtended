@@ -11,7 +11,7 @@ world_war_events.1 = {
 
 	event_image = { texture = "gfx/event_pictures/fascist_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = world_war_events.1.t
 	desc = world_war_events.1.d
@@ -281,7 +281,7 @@ world_war_events.3 = {
 
 	event_image = { texture = "gfx/event_pictures/war_debate.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = world_war_events.3.t
 	desc = world_war_events.3.d
@@ -992,7 +992,7 @@ world_war_events.100 = {
 
 	event_image = { texture = "gfx/event_pictures/peace_treaty.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = world_war_events.100.t
 	desc = world_war_events.100.d
@@ -1376,7 +1376,7 @@ world_war_events.104 = {
 
 	event_image = { texture = "gfx/event_pictures/post_war_reconstruction.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = world_war_events.104.t
 	desc = world_war_events.104.d
@@ -1469,7 +1469,7 @@ world_war_events.105 = {
 
 	event_image = { texture = "gfx/event_pictures/war_debate.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = world_war_events.105.t
 	desc = world_war_events.105.d

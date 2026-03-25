@@ -17,7 +17,7 @@ un_events.1 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = un_events.1.t
 	desc = {
@@ -119,7 +119,7 @@ un_events.2 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = un_events.2.t
 	desc = un_events.2.d
@@ -598,7 +598,7 @@ un_events.6 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = un_events.6.t
 	desc = {
@@ -1075,7 +1075,7 @@ un_events.10 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = un_events.10.t
 	desc = {
@@ -1181,7 +1181,7 @@ un_events.11 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = un_events.11.t
 	desc = {
@@ -1295,7 +1295,7 @@ un_events.12 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = un_events.12.t
 	desc = {
@@ -1418,7 +1418,7 @@ un_events.13 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = un_events.13.t
 	desc = {
@@ -2119,6 +2119,13 @@ un_events.18 = {
 		}
 		# Schedule results event
 		trigger_event = { id = un_vote.2 days = 90 }
+		# Notify refugee source country
+		if = {
+			limit = { exists = scope:refugee_source }
+			scope:refugee_source = {
+				trigger_event = { id = un_events.103 days = 14 }
+			}
+		}
 	}
 
 	# Option B: Accept a managed resettlement quota
@@ -2287,7 +2294,7 @@ un_events.20 = {
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = un_events.20.t
 	desc = {
@@ -2590,9 +2597,14 @@ un_events.103 = {
 	}
 
 	immediate = {
+		random_country = {
+			limit = {
+				has_modifier = un_refugee_program_modifier
+				NOT = { this = ROOT }
+			}
+			save_scope_as = resettlement_host
+		}
 	}
-
-	# Option A: Express gratitude - this eases our burden
 	option = {
 		name = un_events.103.a
 		default_option = yes

@@ -2,5 +2,5 @@
 	start_value = 0
 	min_value = 0
 	max_value = 15
-	color = default_green
+	default_green = yes
 }
