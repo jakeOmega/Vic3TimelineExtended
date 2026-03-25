@@ -46,6 +46,9 @@ TEXCONV_URL = (
 SCRIPT_DIR = Path(__file__).resolve().parent
 TEXCONV_LOCAL = SCRIPT_DIR / "texconv.exe"
 
+# Set to True/False in `main()` based on CLI flag
+VERBOSE = True
+
 
 # ── helpers ──────────────────────────────────────────────────────────────
 
@@ -63,18 +66,21 @@ def find_texconv() -> Path | None:
 
 def download_texconv() -> Path:
     """Download texconv.exe from Microsoft DirectXTex releases."""
-    print(f"Downloading texconv.exe from {TEXCONV_URL} ...")
+    if VERBOSE:
+        print(f"Downloading texconv.exe from {TEXCONV_URL} ...")
     try:
         with urlopen(TEXCONV_URL) as resp:
             data = resp.read()
         TEXCONV_LOCAL.write_bytes(data)
-        print(f"  Saved to {TEXCONV_LOCAL}")
+        if VERBOSE:
+            print(f"  Saved to {TEXCONV_LOCAL}")
         return TEXCONV_LOCAL
     except Exception:
         # The latest release may ship a .zip instead of a bare .exe.
         # Try the zip URL as fallback.
         zip_url = TEXCONV_URL.replace("texconv.exe", "texconv.zip")
-        print(f"  Direct download failed, trying {zip_url} ...")
+        if VERBOSE:
+            print(f"  Direct download failed, trying {zip_url} ...")
         with urlopen(zip_url) as resp:
             data = resp.read()
         with zipfile.ZipFile(io.BytesIO(data)) as zf:
@@ -82,7 +88,8 @@ def download_texconv() -> Path:
                 if name.lower().endswith("texconv.exe"):
                     with zf.open(name) as src:
                         TEXCONV_LOCAL.write_bytes(src.read())
-                    print(f"  Extracted to {TEXCONV_LOCAL}")
+                    if VERBOSE:
+                        print(f"  Extracted to {TEXCONV_LOCAL}")
                     return TEXCONV_LOCAL
         raise RuntimeError("Could not find texconv.exe in downloaded archive.")
 
@@ -137,7 +144,8 @@ def convert_image(
 
     if do_resize:
         img = resize_and_crop(img)
-        print(f"  Resized to {img.size[0]}×{img.size[1]}")
+        if VERBOSE:
+            print(f"  Resized to {img.size[0]}×{img.size[1]}")
 
     # Write intermediate PNG to a temp dir (texconv reads it)
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -159,7 +167,8 @@ def convert_image(
             "-o", str(out_dir),
             str(tmp_png),
         ]
-        print(f"  Running: {' '.join(cmd)}")
+        if VERBOSE:
+            print(f"  Running: {' '.join(cmd)}")
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode != 0:
             print(f"  texconv stderr: {result.stderr}")
@@ -182,7 +191,8 @@ def convert_image(
                     pass
             produced.rename(output_path)
 
-    print(f"  ✓ {output_path}  ({output_path.stat().st_size:,} bytes)")
+    if VERBOSE:
+        print(f"  ✓ {output_path}  ({output_path.stat().st_size:,} bytes)")
     return output_path
 
 
@@ -220,11 +230,25 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Skip resize/crop - use input dimensions as-is.",
     )
+    p.add_argument(
+        "--force",
+        action="store_true",
+        help="Overwrite existing output files instead of skipping them.",
+    )
+    p.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Enable verbose output.",
+    )
     return p.parse_args()
 
 
 def main() -> None:
     args = parse_args()
+
+    # Set global verbosity according to CLI
+    global VERBOSE
+    VERBOSE = bool(args.verbose)
 
     # Expand globs on Windows (cmd.exe doesn't expand them)
     # Expand globs on Windows (cmd.exe doesn't expand them). Also support
@@ -268,9 +292,11 @@ def main() -> None:
 
     for f in files:
         if not f.is_file():
-            print(f"Warning: {f} not found, skipping.")
+            if VERBOSE:
+                print(f"Warning: {f} not found, skipping.")
             continue
-        print(f"Converting {f} ...")
+        if VERBOSE:
+            print(f"Converting {f} ...")
 
         # Determine per-file output. If a single explicit output was passed
         # it was already validated above. Otherwise place outputs into a
@@ -281,6 +307,12 @@ def main() -> None:
             out_dir = f.parent / "converted"
             out_dir.mkdir(parents=True, exist_ok=True)
             out = out_dir / f.with_suffix('.dds').name
+
+        # Skip if output already exists unless --force was passed
+        if out.exists() and not args.force:
+            if VERBOSE:
+                print(f"Skipping {f} -> {out} (already exists). Use --force to overwrite.")
+            continue
 
         convert_image(f, out, texconv, fmt=fmt, do_resize=not args.no_resize)
 

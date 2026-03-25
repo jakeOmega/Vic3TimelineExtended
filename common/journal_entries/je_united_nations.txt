@@ -232,6 +232,26 @@
 					change_variable = { name = un_authority add = 0.2 }
 				}
 
+				# Great Power toggle: championing adds authority monthly, scaled by rank
+				if = {
+					limit = { has_modifier = un_champion_order_cost }
+					change_variable = { name = un_authority add = 0.3 }
+					if = {
+						limit = { global_country_ranking < 3 }
+						change_variable = { name = un_authority add = 0.2 }
+					}
+				}
+
+				# Great Power toggle: undermining reduces authority monthly, scaled by rank
+				if = {
+					limit = { has_modifier = un_undermine_order_cost }
+					change_variable = { name = un_authority add = -0.3 }
+					if = {
+						limit = { global_country_ranking < 3 }
+						change_variable = { name = un_authority add = -0.2 }
+					}
+				}
+
 				# Wars involving members hurt authority
 				if = {
 					limit = {

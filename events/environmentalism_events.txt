@@ -66,7 +66,7 @@ environmentalism_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/climate_disaster.dds" }
+	event_image = { texture = "gfx/event_pictures/heatwave.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -116,7 +116,7 @@ environmentalism_events.2 = {
 			is_decaying = yes
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_radicals = { value = very_small_radicals strata = upper }
+		add_radicals = { value = medium_radicals strata = upper }
 	}
 
 	option = {
@@ -908,7 +908,7 @@ environmentalism_events.13 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/climate_summit.dds" }
+	event_image = { texture = "gfx/event_pictures/un_assembly.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

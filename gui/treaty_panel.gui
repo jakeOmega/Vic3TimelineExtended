@@ -1,0 +1,1352 @@
+﻿# COPY-PASTED FOR NOW
+@panel_width_minus_10 = 530			# used to be 450
+@panel_width = 540  				# used to be 460
+@panel_width_half = 270				# used to be 230
+@panel_width_plus_10 = 550  		# used to be 470
+@panel_width_plus_14 = 554			# used to be 474
+@panel_width_plus_14_half = 277		# used to be 237
+@panel_width_plus_20 = 560			# used to be 480
+@panel_width_plus_30 = 570			# used to be 490
+@panel_width_plus_70 = 610			# used to be 530
+
+types treaty_panel_types
+{
+	type treaty_panel = default_block_window_two_lines
+	{
+		name = "treaty_panel"
+		datacontext = "[TreatyPanel.GetTreaty]"
+
+		blockoverride "animation_state_block" {
+			state = {
+				name = _show
+
+				start_sound = {
+					soundeffect = "event:/SFX/UI/DiplomaticTreaties/diplomatic_treaties_active_panel_open" #todo robert - QC
+				}
+			}
+
+			state = {
+				name = _hide
+
+				start_sound = {
+					soundeffect = "event:/SFX/UI/DiplomaticTreaties/diplomatic_treaties_active_panel_stop" #todo robert - QC
+				}
+			}
+		}
+
+		blockoverride "window_header_name" {
+			text = "[LabelingHelper.CapitalizeOnlyFirst(Treaty.GetNameNoFormatting)]"
+		}
+
+		blockoverride "window_header_name_line_two" {
+			text = "TREATY_START_DATE_HEADER"
+		}
+
+		blockoverride "pin_visibility" {
+			visible = yes
+		}
+
+		blockoverride "pin_properties" {
+			visible = "[Treaty.IsPinnedInOutliner]"
+			onclick = "[Treaty.TogglePinInOutliner]"
+			tooltip = "UNPIN_TREATY"
+		}
+
+		blockoverride "unpin_properties" {
+			visible = "[Not(Treaty.IsPinnedInOutliner)]"
+			onclick = "[Treaty.TogglePinInOutliner]"
+			tooltip = "PIN_TREATY"
+		}
+
+		blockoverride "scrollarea_content_vbox" {
+
+			vbox = {
+				using = default_list_position
+				maximumsize = { 540 -1 }
+				margin_top = 5
+
+				treaty = {
+					name = "content_container"
+
+					background = {
+						using = paper_bg_light
+					}
+
+					blockoverride "signed_seal_visibility" {
+						visible = yes
+					}
+				}
+			}
+		}
+
+		blockoverride "fixed_bottom" {
+
+			flowcontainer = {
+				visible = "[Treaty.Binds(GetPlayer.Self)]"
+				direction = vertical
+
+				divider_clean = {
+					size = { @panel_width_plus_14 4 }
+				}
+
+				background = {
+					using = dark_area
+				}
+
+				widget = {
+					size = { 10 10 }
+				}
+
+				flowcontainer = {
+					parentanchor = hcenter
+					spacing = 10
+
+					button = {
+						parentanchor = vcenter
+						size = { 260 50 }
+						using = default_button_action
+						using = tooltip_ne
+						tooltip = "TREATY_WITHDRAW_TOOLTIP"
+						enabled = "[IsValid(Treaty.WithdrawFromTreaty)]"
+						onclick = "[PopupManager.AskConfirmationWithSound(Treaty.WithdrawFromTreaty, 'event:/SFX/UI/DiplomaticTreaties/diplomatic_treaties_revoke_neutral_button')]"
+
+						textbox = {
+							parentanchor = center
+							autoresize = yes
+							align = nobaseline
+							using = fontsize_large
+							text = "WITHDRAW_FROM_TREATY"
+						}
+					}
+
+					button = {
+						parentanchor = vcenter
+						size = { 260 50 }
+						using = default_button_primary
+						using = tooltip_ne
+						tooltip = "TREATY_RENEGOTIATE_TOOLTIP"
+						onclick = "[InformationPanelBar.OpenTreatyDraftPanel(Treaty.Self)]"
+						enabled = "[Not(Treaty.IsEnforced)]"
+
+						textbox = {
+							parentanchor = center
+							autoresize = yes
+							align = nobaseline
+							using = fontsize_large
+							text = "RENEGOTIATE_TREATY"
+						}
+					}
+				}
+
+				widget = {
+					size = { 10 10 }
+				}
+			}
+		}
+
+		blockoverride "bottom_spacing" {}
+	}
+
+	type treaty = vbox {
+		layoutpolicy_horizontal = expanding
+		layoutpolicy_vertical = expanding
+		spacing = 10
+		margin = { 5 20 }
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			spacing = 5
+
+			widget = {
+				size = { 15 15 }
+			}
+
+			### Using a container here to make sure the influence cost background goes behind the flag.
+			container = {
+				datacontext = "[Treaty.GetLeftCountry]"
+
+				widget = {
+					parentanchor = vcenter
+					position = { 53 0 }
+					size = { 68 29 }
+
+					total_influence_cost = {
+						blockoverride "horizontal_margins" {
+							margin_left = 2
+							margin_right = 9
+						}
+					}
+				}
+
+				small_flag = {
+					parentanchor = vcenter
+
+					blockoverride "additional_flag_properties" {
+						button = {
+							visible = "[Treaty.IsEnforcedOn(Country.Self)]"
+							parentanchor = vcenter|right
+							size = { 40 40 }
+							position = { 20 0 }
+							alwaystransparent = yes
+							texture = "gfx/interface/icons/generic_icons/capitulate.dds"
+						}
+					}
+				}
+			}
+
+			expand = {}
+
+			widget = {
+				size = { 200 40 }
+				tooltip = "concept_binding_period_desc"
+				using = tooltip_ne
+
+				background = {
+					using = frame_decorative_light_bg
+				}
+
+				hbox = {
+					layoutpolicy_horizontal = expanding
+					spacing = 5
+
+					expand = {}
+
+					icon = {
+						visible = "[Treaty.IsEnforced]"
+						size = { 45 40 }
+						texture = "gfx/interface/outliner/war_button_icon.dds"
+					}
+
+					block "binding_period_textboxes" {
+						### BINDING PERIOD
+						treaty_textbox = {
+							visible = "[NotZero(Treaty.GetBindingDaysLeft)]"
+							align = nobaseline
+							autoresize = yes
+							max_width = 230
+							using = elide_fontsize_min
+							text = "TREATY_BINDING_PERIOD_REMAINING_NO_CONCEPT"
+						}
+
+						### BINDING PERIOD HAS ENDED
+						treaty_textbox = {
+							visible = "[And(IsZero(Treaty.GetBindingDaysLeft), NotZero(Treaty.GetBindingDays))]"
+							align = nobaseline
+							autoresize = yes
+							max_width = 230
+							using = elide_fontsize_min
+							text = "TREATY_BINDING_PERIOD_HAS_ENDED_SHORT_NO_CONCEPT"
+						}
+
+						### NO BINDING PERIOD SET TO BEGIN WITH
+						treaty_textbox = {
+							visible = "[And(IsZero(Treaty.GetBindingDaysLeft), IsZero(Treaty.GetBindingDays))]"
+							align = nobaseline
+							autoresize = yes
+							max_width = 230
+							using = elide_fontsize_min
+							text = "TREATY_NO_BINDING_PERIOD_NO_CONCEPT"
+						}
+					}
+
+					expand = {}
+				}
+			}
+
+			expand = {}
+
+			total_influence_cost = {
+				datacontext = "[Treaty.GetRightCountry]"
+
+				blockoverride "expand_before" {
+					expand = {}
+				}
+
+				blockoverride "expand_after" {}
+
+				blockoverride "horizontal_margins" {
+					margin_left = 5
+					margin_right = 2
+				}
+
+				blockoverride "text_minimumsize" {
+					minimumsize = { 20 -1 }
+				}
+
+				blockoverride "background_margin" {
+					margin_right = 10
+				}
+			}
+
+			small_flag = {
+				datacontext = "[Treaty.GetRightCountry]"
+
+				blockoverride "additional_flag_properties" {
+					button = {
+						visible = "[Treaty.IsEnforcedOn(Country.Self)]"
+						parentanchor = vcenter|right
+						size = { 40 40 }
+						position = { 20 0 }
+						alwaystransparent = yes
+						texture = "gfx/interface/icons/generic_icons/capitulate.dds"
+					}
+				}
+			}
+
+			widget = {
+				size = { 15 15 }
+			}
+		}
+
+		divider_dark_decorative = {
+			blockoverride "size" {
+				layoutpolicy_horizontal = expanding
+				size = { 0 6 }
+			}
+		}
+
+		### MUTUAL AGREEMENTS
+		vbox = {
+			layoutpolicy_horizontal = preferred
+			spacing = 5
+			maximumsize = { 500 -1 }
+			datamodel = "[Treaty.GetMutualAgreements]"
+			alpha = "[TransparentIfTrue(Treaty.IsFrozenForBothCountries)]"
+
+			item = {
+				article = {
+					datacontext = "[Treaty.GetLeftCountry]"
+
+					blockoverride "article_number_max_width" {
+						max_width = 100
+					}
+				}
+			}
+		}
+
+		### DIRECTIONAL ARTICLES
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = expanding
+			maximumsize = { 500 -1 }
+			spacing = 10
+
+			### LEFT SIDE ARTICLES
+			vbox = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+				layoutstretchfactor_horizontal = 1
+				datacontext = "[Treaty.GetLeftCountry]"
+
+				### FROZEN STATUS - LEFT SIDE
+				treaty_textbox = {
+					visible = "[And(And(Not(IsDataModelEmpty(Treaty.GetOffers)), Treaty.IsFrozenFor(Country.Self)), Not(Country.IsAtWarWith(Treaty.GetOtherCountry(Country.Self).Self)))]"
+					autoresize = yes
+					multiline = yes
+					align = hcenter|nobaseline
+					using = elide_fontsize_min
+					minimumsize = { 240 -1 }
+					max_width = 240
+					margin = { 10 10 }
+					using = tooltip_ne
+					tooltip = "TREATY_NOT_FULFILLED_FROZEN_STATUS_TOOLTIP"
+					text = "TREATY_NOT_FULFILLED_FROZEN_STATUS_NO_FORMATTING"
+
+					background = {
+						using = entry_bg_simple
+					}
+
+					background = {
+						using = frame_decorative_light_bg
+					}
+				}
+
+				treaty_textbox = {
+					visible = "[And(And(Not(IsDataModelEmpty(Treaty.GetOffers)), Treaty.IsFrozenFor(Country.Self)), Country.IsAtWarWith(Treaty.GetOtherCountry(Country.Self).Self))]"
+					autoresize = yes
+					multiline = yes
+					align = hcenter|nobaseline
+					using = elide_fontsize_min
+					minimumsize = { 240 -1 }
+					max_width = 240
+					margin = { 10 10 }
+					using = tooltip_ne
+					tooltip = "TREATY_FROZEN_DUE_TO_WAR"
+					text = "TREATY_NOT_FULFILLED_FROZEN_STATUS_NO_FORMATTING"
+
+					background = {
+						using = entry_bg_simple
+					}
+
+					background = {
+						using = frame_decorative_light_bg
+					}
+				}
+
+				vbox = {
+					visible = "[Not(IsDataModelEmpty(Treaty.GetOffers))]"
+					layoutpolicy_horizontal = expanding
+					spacing = 5
+					datamodel = "[Treaty.GetOffers]"
+					alpha = "[TransparentIfTrue(Treaty.IsFrozenFor(Country.Self))]"
+
+					item = {
+						article = {
+							using = tooltip_ws
+						}
+					}
+				}
+
+				### EMPTY STATE - LEFT SIDE
+				treaty_textbox = {
+					visible = "[IsDataModelEmpty(Treaty.GetOffers)]"
+					layoutpolicy_horizontal = expanding
+					size = { 0 50 }
+					align = hcenter|nobaseline
+					using = elide_fontsize_min
+					using = empty_state_text_properties
+					text = "NO_LEFT_SIDE_ARTICLES"
+				}
+
+				expand = {}
+			}
+
+			vertical_divider_dark_stronger_full = {
+				blockoverride "size" {
+					layoutpolicy_vertical = expanding
+				}
+			}
+
+			### RIGHT SIDE ARTICLES
+			vbox = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+				layoutstretchfactor_horizontal = 1
+				spacing = 5
+				datacontext = "[Treaty.GetRightCountry]"
+
+				### FROZEN STATUS - RIGHT SIDE
+				treaty_textbox = {
+					visible = "[And(And(Not(IsDataModelEmpty(Treaty.GetDemands)), Treaty.IsFrozenFor(Country.Self)), Not(Country.IsAtWarWith(Treaty.GetOtherCountry(Country.Self).Self)))]"
+					autoresize = yes
+					multiline = yes
+					align = hcenter|nobaseline
+					using = elide_fontsize_min
+					minimumsize = { 240 -1 }
+					max_width = 240
+					margin = { 10 10 }
+					using = tooltip_ne
+					tooltip = "TREATY_NOT_FULFILLED_FROZEN_STATUS_TOOLTIP"
+					text = "TREATY_NOT_FULFILLED_FROZEN_STATUS_NO_FORMATTING"
+
+					background = {
+						using = entry_bg_simple
+					}
+
+					background = {
+						using = frame_decorative_light_bg
+					}
+				}
+
+				treaty_textbox = {
+					visible = "[And(And(Not(IsDataModelEmpty(Treaty.GetDemands)), Treaty.IsFrozenFor(Country.Self)), Country.IsAtWarWith(Treaty.GetOtherCountry(Country.Self).Self))]"
+					autoresize = yes
+					multiline = yes
+					align = hcenter|nobaseline
+					using = elide_fontsize_min
+					minimumsize = { 240 -1 }
+					max_width = 240
+					margin = { 10 10 }
+					using = tooltip_ne
+					tooltip = "TREATY_FROZEN_DUE_TO_WAR"
+					text = "TREATY_NOT_FULFILLED_FROZEN_STATUS_NO_FORMATTING"
+
+					background = {
+						using = entry_bg_simple
+					}
+
+					background = {
+						using = frame_decorative_light_bg
+					}
+				}
+
+				vbox = {
+					visible = "[Not(IsDataModelEmpty(Treaty.GetDemands))]"
+					layoutpolicy_horizontal = expanding
+					spacing = 5
+					datamodel = "[Treaty.GetDemands]"
+					alpha = "[TransparentIfTrue(Treaty.IsFrozenFor(Country.Self))]"
+
+					item = {
+						article = {}
+					}
+				}
+
+				### EMPTY STATE - RIGHT SIDE
+				treaty_textbox = {
+					visible = "[IsDataModelEmpty(Treaty.GetDemands)]"
+					layoutpolicy_horizontal = expanding
+					size = { 0 50 }
+					align = hcenter|nobaseline
+					using = elide_fontsize_min
+					using = empty_state_text_properties
+					text = "NO_RIGHT_SIDE_ARTICLES"
+				}
+
+				expand = {}
+			}
+		}
+
+		expand = {}
+
+		vbox = {
+			layoutpolicy_horizontal = preferred
+			block "seal_visibility" {}
+
+			divider_dark_decorative = {
+				blockoverride "size" {
+					layoutpolicy_horizontal = expanding
+					size = { 0 6 }
+				}
+			}
+
+			vbox = {
+				layoutpolicy_horizontal = expanding
+
+				vbox = {
+					visible = "[Or(Or(Or(Treaty.DoesCallInObligation(Treaty.GetRightCountry.Self), Treaty.DoesOweObligation(Treaty.GetRightCountry.Self)), Treaty.DoesCallInObligation(Treaty.GetLeftCountry.Self)), Treaty.DoesOweObligation(Treaty.GetLeftCountry.Self))]"
+					layoutpolicy_horizontal = expanding
+
+					### OBLIGATIONS USED OR OWED
+					vbox = {
+						visible = "[Treaty.AreObligationsEffectuated]"
+						layoutpolicy_horizontal = expanding
+						margin = { 0 10 }
+
+						treaty_textbox = {
+							visible = "[Treaty.DoesCallInObligation(Treaty.GetRightCountry.Self)]"
+							datacontext = "[Treaty.GetRightCountry]"
+							autoresize = yes
+							max_width = 520
+							margin = { 20 0 }
+							using = elide_fontsize_min
+							multiline = yes
+							align = nobaseline
+							using = tooltip_ne
+							tooltip = "OBLIGATION_DELAY_EXPLANATION"
+							text = "TREATY_COUNTRY_HAS_CALLED_IN_OBLIGATION"
+						}
+
+						treaty_textbox = {
+							visible = "[Treaty.DoesOweObligation(Treaty.GetRightCountry.Self)]"
+							datacontext = "[Treaty.GetRightCountry]"
+							autoresize = yes
+							max_width = 520
+							margin = { 20 0 }
+							using = elide_fontsize_min
+							multiline = yes
+							align = nobaseline
+							using = tooltip_ne
+							tooltip = "OBLIGATION_DELAY_EXPLANATION"
+							text = "TREATY_COUNTRY_HAS_OWED_OBLIGATION"
+						}
+
+						treaty_textbox = {
+							visible = "[Treaty.DoesCallInObligation(Treaty.GetLeftCountry.Self)]"
+							datacontext = "[Treaty.GetLeftCountry]"
+							autoresize = yes
+							max_width = 520
+							margin = { 20 0 }
+							using = elide_fontsize_min
+							multiline = yes
+							align = nobaseline
+							using = tooltip_ne
+							tooltip = "OBLIGATION_DELAY_EXPLANATION"
+							text = "TREATY_COUNTRY_HAS_CALLED_IN_OBLIGATION"
+						}
+
+						treaty_textbox = {
+							visible = "[Treaty.DoesOweObligation(Treaty.GetLeftCountry.Self)]"
+							datacontext = "[Treaty.GetLeftCountry]"
+							autoresize = yes
+							max_width = 520
+							margin = { 20 0 }
+							using = elide_fontsize_min
+							multiline = yes
+							align = nobaseline
+							using = tooltip_ne
+							tooltip = "OBLIGATION_DELAY_EXPLANATION"
+							text = "TREATY_COUNTRY_HAS_OWED_OBLIGATION"
+						}
+					}
+
+					vbox = {
+						visible = "[Not(Treaty.AreObligationsEffectuated)]"
+						layoutpolicy_horizontal = expanding
+						margin = { 0 10 }
+
+						treaty_textbox = {
+							visible = "[Treaty.DoesCallInObligation(Treaty.GetRightCountry.Self)]"
+							datacontext = "[Treaty.GetRightCountry]"
+							autoresize = yes
+							max_width = 520
+							margin = { 10 0 }
+							using = elide_fontsize_min
+							multiline = yes
+							align = nobaseline
+							using = tooltip_ne
+							tooltip = "OBLIGATION_DELAY_EXPLANATION"
+							text = "TREATY_COUNTRY_WILL_CALL_IN_OBLIGATION"
+						}
+
+						treaty_textbox = {
+							visible = "[Treaty.DoesOweObligation(Treaty.GetRightCountry.Self)]"
+							datacontext = "[Treaty.GetRightCountry]"
+							autoresize = yes
+							max_width = 520
+							margin = { 10 0 }
+							using = elide_fontsize_min
+							multiline = yes
+							align = nobaseline
+							using = tooltip_ne
+							tooltip = "OBLIGATION_DELAY_EXPLANATION"
+							text = "TREATY_COUNTRY_WILL_OWE_OBLIGATION"
+						}
+
+						treaty_textbox = {
+							visible = "[Treaty.DoesCallInObligation(Treaty.GetLeftCountry.Self)]"
+							datacontext = "[Treaty.GetLeftCountry]"
+							autoresize = yes
+							max_width = 520
+							margin = { 10 0 }
+							using = elide_fontsize_min
+							multiline = yes
+							align = nobaseline
+							using = tooltip_ne
+							tooltip = "OBLIGATION_DELAY_EXPLANATION"
+							text = "TREATY_COUNTRY_WILL_CALL_IN_OBLIGATION"
+						}
+
+						treaty_textbox = {
+							visible = "[Treaty.DoesOweObligation(Treaty.GetLeftCountry.Self)]"
+							datacontext = "[Treaty.GetLeftCountry]"
+							autoresize = yes
+							margin = { 10 0 }
+							using = elide_fontsize_min
+							multiline = yes
+							align = nobaseline
+							using = tooltip_ne
+							tooltip = "OBLIGATION_DELAY_EXPLANATION"
+							text = "TREATY_COUNTRY_WILL_OWE_OBLIGATION"
+						}
+					}
+				}
+
+				background = {
+					visible = "[Not(Treaty.IsEnforced)]"
+					texture = "gfx/interface/diplomatic_treaties/diplomatic_treaties_bg.dds"
+					fittype = centercrop
+					alpha = 0.7
+				}
+
+				background = {
+					visible = "[Treaty.IsEnforced]"
+					texture = "gfx/interface/diplomatic_treaties/diplomatic_treaties_war_rep_bg.dds"
+					fittype = centercrop
+					alpha = 0.7
+				}
+
+				hbox = {
+					layoutpolicy_horizontal = preferred
+					layoutpolicy_vertical = expanding
+					margin = { 5 0 }
+
+					#LEFT SIGNATURE
+					seal_and_signature ={
+						datacontext = "[Treaty.GetLeftCountry]"
+
+						block "signed_seal_visibility" {
+							visible = no
+						}
+					}
+
+					#LEFT UNSIGNED SIGNATURE
+					seal_and_signature_unsigned = {
+						datacontext = "[Treaty.GetLeftCountry]"
+
+						block "unsigned_seal_visibility" {
+							visible = no
+						}
+					}
+
+					expand = {}
+
+					#RIGHT SIGNATURE
+					seal_and_signature ={
+						datacontext = "[Treaty.GetRightCountry]"
+
+						blockoverride " signature_texture" {
+							texture = "gfx/interface/diplomatic_treaties/diplomatic_treaties_seal_and_signature_2.dds"
+						}
+
+						blockoverride "signature_icon_position" {
+							parentanchor = right
+							position = { -10 0 }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	type article_influence_cost = hbox {
+		layoutpolicy_horizontal = expanding
+
+		block "maximumsize" {
+			maximumsize = { 50 -1 }
+		}
+
+		block "influence_cost_alpha" {
+			alpha = "[TransparentIfZero(Article.GetCostFor(Country.Self))]"
+		}
+
+		background = {
+			using = entry_bg_simple_solid
+			alpha = 0.4
+			margin_left = 10
+		}
+
+		### INFLUENCE ICON
+		widget = {
+			size = { 10 20 }
+
+			icon = {
+				parentanchor = center
+				size = { 25 25 }
+				texture = "gfx/interface/icons/topbar/influence_icon.dds"
+				position = { -15 0 }
+			}
+		}
+
+		### FLAG
+		widget = {
+			size = { 10 10 }
+
+			miniature_flag_no_interact = {
+				parentanchor = center
+				position = { -2 0 }
+				blockoverride "tooltip" {}
+			}
+		}
+
+		### INFLUENCE COST
+		textbox = {
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = expanding
+			align = right|nobaseline
+			margin_right = 5
+			using = elide_fontsize_min
+
+			block "influence_cost_text" {
+				raw_text = "#v [Article.GetCostFor(Country.Self)|0]#!"
+			}
+		}
+	}
+
+	type total_influence_cost = hbox {
+		minimumsize = { 64 -1 }
+		using = tooltip_ne
+		tooltip = "TREATY_TOTAL_INFLUENCE_COST"
+
+		block "expand_before" {}
+
+		hbox = {
+			margin = { 0 2 }
+			spacing = 2
+
+			block "horizontal_margins" {
+				margin_left = 2
+				margin_right = 5
+			}
+
+			background = {
+				using = entry_bg_simple_solid
+
+				block "background_alpha" {
+					alpha = 0.4
+				}
+
+				block "background_margin" {
+					margin_left = 10
+				}
+			}
+
+			### INFLUENCE ICON
+			icon = {
+				size = { 25 25 }
+				texture = "gfx/interface/icons/topbar/influence_icon.dds"
+			}
+
+			### INFLUENCE COST
+			textbox = {
+				autoresize = yes
+				align = nobaseline
+				using = elide_fontsize_min
+				max_width = 35
+
+				block "text_minimumsize" {}
+
+				block "influence_number" {
+					raw_text = "#v [Treaty.GetCost(Country.Self)|0]#!"
+				}
+			}
+		}
+
+		block "expand_after" {
+			expand = {}
+		}
+	}
+
+	type article = vbox {
+		layoutpolicy_horizontal = expanding
+
+		state = {
+			name = 1
+			next = 2
+			alpha = 0.5
+			duration = 1.4
+			using = Animation_Curve_Default
+			trigger_when = "[Article.ExceedsMaxContraventions(Country.Self)]"
+		}
+
+		state = {
+			name = 2
+			next = 1
+			alpha = 1
+			duration = 1.4
+			using = Animation_Curve_Default
+		}
+
+		block "article_tooltip" {
+			tooltipwidget = {
+				FancyTooltip_ArticleWithCountryContext = {}
+			}
+		}
+
+		vbox = {
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = expanding
+			margin_bottom = 5
+
+			background = {
+				using = frame_decorative_light_bg
+			}
+
+			background = {
+				visible = "[Article.ExceedsMaxContraventions(Country.Self)]"
+				using = fade_horizontal_center_inverted_colored_red
+			}
+
+			background = {
+				visible = "[Article.ExceedsMaxContraventions(Country.Self)]"
+				using = fade_vertical_center_inverted_colored_red
+			}
+
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				minimumsize = { -1 30 }
+				spacing = 5
+				margin = { 2 0 }
+
+				background = {
+					using = fade_right_simple
+				}
+
+				### TYPE ICON
+				icon = {
+					size = { 30 30 }
+
+					icon = {
+						parentanchor = center
+						size = { 100% 100% }
+						texture = "[Article.GetIcon]"
+					}
+				}
+
+				### NAME
+				textbox = {
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+					align = nobaseline
+					using = elide_fontsize_min
+					default_format = "#white"
+					text = "[Article.GetNameNoFormatting]"
+				}
+
+				### LIST NUMBER
+				treaty_textbox = {
+					align = nobaseline
+					autoresize = yes
+					margin_right = 10
+					text = "ARTICLE_NUMBER"
+
+					block "article_number_max_width" {
+						max_width = 60
+					}
+				}
+			}
+
+			### INFORMATION AREA
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+				margin = { 10 5 }
+
+				### MUTUAL AGREEMENT
+				treaty_textbox = {
+					visible = "[Article.HasKind('mutual')]"
+					text = "[Article.GetShortDesc]"
+					autoresize = yes
+					maximumsize = { 310 60 }
+					align = nobaseline
+					using = elide_fontsize_min
+					multiline = yes
+				}
+
+				### NO INPUT DIRECTED ARTICLES
+				treaty_textbox = {
+					visible = "[And(Not(Article.HasKind('mutual')), Not(Article.GetArticleType.RequiresAnyInput))]"
+					text = "[Article.GetShortDesc]"
+					autoresize = yes
+					maximumsize = { 150 60 }
+					align = nobaseline
+					using = elide_fontsize_min
+					multiline = yes
+				}
+
+				### MONEY TRANSFER
+				money_transfer_article = {}
+
+				### STATE INPUT
+				state_input_article = {}
+
+				### COUNTRY INPUT
+				country_input_article = {}
+
+				### STRATEGIC REGION INPUT
+				strategic_region_input_article = {}
+
+				### GOODS TRANSFER
+				goods_transfer_article = {}
+
+				### GENERAL GOODS INPUT
+				goods_input_article = {}
+
+				### COMPANY MONOPOLY
+				company_monopoly_article = {}
+
+				### COMPANY (GENERIC)
+				company_generic_article = {}
+
+				### LAW COMMITMENT
+				law_commitment_article = {}
+
+				### TEXT INPUT ARTICLE
+				text_input_article = {}
+
+				expand = {}
+
+				### INFLUENCE COST AND ICONS - DIRECTED
+				hbox = {
+					layoutpolicy_horizontal = expanding
+					visible = "[And( Article.HasKind('directed'), Not(Article.HasType('free_text')))]"
+
+					expand = {}
+
+					article_influence_cost = {
+						datacontext = "[Article.GetMaintenancePayer]"
+					}
+				}
+
+				### INFLUENCE COSTS AND ICONS - MUTUAL
+				hbox = {
+					layoutpolicy_horizontal = expanding
+					visible = "[And( Article.HasKind('mutual'), Not(Article.HasType('free_text')))]"
+					spacing = 25
+
+					expand = {}
+
+					article_influence_cost = {
+						datacontext = "[Article.GetFirstOrSourceCountry]"
+
+						blockoverride "maximumsize" {
+							maximumsize = { 60 -1 }
+							minimumsize = { 60 -1 }
+						}
+					}
+
+					article_influence_cost = {
+						datacontext = "[Article.GetSecondOrTargetCountry]"
+
+						blockoverride "maximumsize" {
+							maximumsize = { 60 -1 }
+							minimumsize = { 60 -1 }
+						}
+					}
+				}
+			}
+
+			hbox = {
+				visible = "[Article.ExceedsMaxContraventions(Country.Self)]"
+				layoutpolicy_horizontal = expanding
+				margin = { 10 5 }
+				spacing = 5
+
+				icon = {
+					size = { 30 30 }
+					texture = "gfx/interface/icons/generic_icons/warning.dds"
+				}
+
+				textbox = {
+					autoresize = yes
+					align = nobaseline
+					max_width = 185
+					using = elide_fontsize_min
+					default_format = "#bold_black"
+					text = "NON_FULFILLED_ARTICLE_STATUS"
+				}
+
+				expand = {}
+			}
+		}
+	}
+
+	type money_transfer_article = widget {
+		visible = "[Article.HasType('money_transfer')]"
+		size = { 145 30 }
+
+		flowcontainer = {
+			parentanchor = vcenter
+
+			icon = {
+				parentanchor = vcenter
+				size = { 18 18 }
+				texture = "gfx/interface/icons/topbar/income_power_icon.dds"
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 110
+				using = elide_fontsize_min
+				raw_text = "TREATY_SELECTED_ARTICLE_AMOUNT"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	type state_input_article = widget {
+		visible = "[Article.RequiresInput('state')]"
+		size = { 145 40 }
+		datacontext = "[Article.GetState]"
+
+		flowcontainer = {
+			parentanchor = vcenter
+			spacing = 2
+
+			widget = {
+				parentanchor = vcenter
+				size = { 30 30 }
+
+				tiny_flag_no_interact = {
+					parentanchor = center
+					datacontext = "[State.GetCountry]"
+				}
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 110
+				using = elide_fontsize_min
+				text = "[State.GetNameNoFormatting]"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	type country_input_article = widget {
+		visible = "[Article.RequiresInput('country')]"
+		size = { 145 40 }
+		# Do not add Article.GetCountry as a datacontext here as it might conflict with other Country contexts
+
+		flowcontainer = {
+			parentanchor = vcenter
+			spacing = 2
+
+			widget = {
+				parentanchor = vcenter
+				size = { 30 30 }
+
+				tiny_flag_no_interact = {
+					parentanchor = center
+				}
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 110
+				using = elide_fontsize_min
+				text = "[Article.GetCountry.GetNameNoFormatting]"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	type strategic_region_input_article = widget {
+		visible = "[Article.RequiresInput('strategic_region')]"
+		size = { 145 40 }
+		datacontext = "[Article.GetStrategicRegion]"
+
+		flowcontainer = {
+			parentanchor = vcenter
+			spacing = 2
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 110
+				using = elide_fontsize_min
+				text = "[StrategicRegion.GetNameNoFormatting]"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	type goods_transfer_article = widget {
+		visible = "[Article.HasType('goods_transfer')]"
+		size = { 145 40 }
+		datacontext = "[Article.GetGoods]"
+
+		flowcontainer = {
+			parentanchor = vcenter
+			spacing = 2
+
+			icon = {
+				parentanchor = vcenter
+				size = { 30 30 }
+				texture = "[Goods.GetTexture]"
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 130
+				using = elide_fontsize_min
+				text = "TREATY_SELECTED_ARTICLE_AMOUNT"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	type goods_input_article = widget {
+		visible = "[And(Article.RequiresInput('goods'), Not(Article.HasType('goods_transfer')))]"
+		size = { 145 40 }
+		datacontext = "[Article.GetGoods]"
+
+		flowcontainer = {
+			parentanchor = vcenter
+			spacing = 2
+
+			icon = {
+				parentanchor = vcenter
+				size = { 30 30 }
+				texture = "[Goods.GetTexture]"
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 130
+				using = elide_fontsize_min
+				text = "[Goods.GetNameNoFormatting]"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	type company_monopoly_article = flowcontainer {
+		visible = "[Article.HasType('acquire_monopoly_for_company')]"
+		direction = vertical
+		spacing = 2
+
+		flowcontainer = {
+			datacontext = "[Article.GetCompany]"
+			spacing = 2
+
+			icon = {
+				parentanchor = vcenter
+				size = { 30 30 }
+				texture = "[Company.GetCompanyType.GetIcon]"
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 110
+				using = elide_fontsize_min
+				text = "[Company.GetNameNoFormatting]"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+
+		flowcontainer = {
+			datacontext = "[Article.GetBuildingType]"
+			spacing = 2
+
+			icon = {
+				parentanchor = vcenter
+				size = { 30 30 }
+				texture = "[BuildingType.GetIcon]"
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 110
+				using = elide_fontsize_min
+				text = "[BuildingType.GetNameNoFormatting]"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	### COMPANY (GENERIC - NON-MONOPOLY)
+	type company_generic_article = flowcontainer {
+		visible = "[And(Article.RequiresInput('company'), Not(Article.HasType('acquire_monopoly_for_company')))]"
+		direction = vertical
+		spacing = 2
+
+		flowcontainer = {
+			datacontext = "[Article.GetCompany]"
+			spacing = 2
+
+			icon = {
+				parentanchor = vcenter
+				size = { 30 30 }
+				texture = "[Company.GetCompanyType.GetIcon]"
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 110
+				using = elide_fontsize_min
+				text = "[Company.GetNameNoFormatting]"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	type law_commitment_article = widget {
+		visible = "[Article.HasType('law_commitment')]"
+		size = { 150 60 }
+		datacontext = "[Article.GetLaw]"
+
+		flowcontainer = {
+			parentanchor = vcenter
+			spacing = 2
+
+			icon = {
+				texture = "gfx/interface/backgrounds/round_button_bg.dds"
+				parentanchor = vcenter
+
+				block "law_icon_background_size" {
+					size = { 60 60 }
+				}
+
+				icon = {
+					texture = "[LawType.GetTexture]"
+					parentanchor = center
+					size = { 70% 70% }
+				}
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				using = elide_fontsize_min
+				multiline = yes
+				text = "[LawType.GetNameNoFormatting]"
+
+				block "law_name_text_maximumsize" {
+					maximumsize = { 90 50 }
+				}
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	type text_input_article = widget {
+		visible = "[Article.RequiresInput('text')]"
+		size = { 220 100 }
+
+		flowcontainer = {
+
+			textbox = {
+				autoresize = yes
+				align = nobaseline
+				multiline = yes
+				max_width = 220
+				using = elide_fontsize_min
+				default_format = "#lore"
+				raw_text = "TREATY_FREE_TEXT"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+}

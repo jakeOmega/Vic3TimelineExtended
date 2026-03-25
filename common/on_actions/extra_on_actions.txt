@@ -330,16 +330,14 @@ global_warming_update_on_action = {
 				owner.market_capital = THIS
 			}
 			market = {
-				# Apply market emissions scaled by the market owner's net emission multiplier.
-				# owner gets the market leader country, where gw_emission_multiplier_script_value
-				# picks up carbon_tax_modifier (-20%), renewable_investment_modifier (-15%),
+				# Apply market emissions scaled by the market leader's net emission multiplier.
+				# gw_emission_multiplier_script_value uses market_capital.owner to reach
+				# the market leader country, picking up carbon_tax_modifier (-20%),
+				# renewable_investment_modifier (-15%), emission_standards_modifier (-10%),
 				# and any future country_greenhouse_gas_emissions_mult modifiers automatically.
 				change_global_variable = {
 					name = greenhouse_gas_emissions
-					add = {
-						value = market_greenhouse_gas_emissions_script_value
-						multiply = owner.gw_emission_multiplier_script_value
-					}
+					add = market_greenhouse_gas_emissions_script_value
 				}
 			}
 		}
@@ -1618,104 +1616,12 @@ te_modifier_update_on_law_on_action = {
 # Institution changes are picked up by the yearly state pulse.
 
 # ============================================================================
-# WORLD WAR EVENTS - monthly chance for great powers with ideological tension
+# WORLD WAR EVENTS - DEPRECATED: All events now fire from je_world_war
+# monthly pulse. This on_action is kept as an empty stub to avoid breaking
+# the on_monthly_pulse_country reference.
 # ============================================================================
 world_war_events_on_action = {
-	effect = {
-		if = {
-			limit = {
-				NOT = { is_country_type = decentralized }
-				country_rank >= rank_value:great_power
-				has_technology_researched = combined_arms
-			}
-			# WAR OUTBREAK - check if tension is critical and war should start
-			if = {
-				limit = {
-					NOT = { has_variable = ww_active_phase }
-					NOT = { has_variable = ww_peace_concluded }
-					ww_ideological_tension >= 70
-					any_rival_country = {
-						country_rank >= rank_value:great_power
-						ROOT = { country_has_opposed_ideology = { TARGET = prev } }
-					}
-				}
-				random_list = {
-					950 = { } # ~95% chance of nothing per month at critical tension
-					50 = {
-						trigger_event = { id = world_war_events.5 }
-					}
-				}
-			}
-			# WARTIME EVENTS - fire during active war
-			if = {
-				limit = {
-					has_variable = ww_active_phase
-					is_at_war = yes
-				}
-				random_list = {
-					850 = { } # ~85% chance of nothing
-					# Home Front Rally
-					25 = {
-						trigger_event = { id = world_war_events.10 }
-					}
-					# Strategic Bombing
-					25 = {
-						trigger = { has_technology_researched = bombing_aircraft }
-						trigger_event = { id = world_war_events.11 }
-					}
-					# Resistance Movement
-					25 = {
-						trigger = {
-							has_variable = ww_years_elapsed
-							var:ww_years_elapsed >= 1
-						}
-						trigger_event = { id = world_war_events.12 }
-					}
-					# War Weariness
-					25 = {
-						trigger = {
-							has_variable = ww_years_elapsed
-							var:ww_years_elapsed >= 2
-						}
-						trigger_event = { id = world_war_events.30 }
-					}
-				}
-			}
-			# POST-WAR EVENTS - fire after peace is concluded
-			if = {
-				limit = {
-					has_variable = ww_peace_concluded
-					is_at_war = no
-				}
-				random_list = {
-					900 = { }
-					# War Crimes Tribunal
-					25 = {
-						trigger = {
-							NOT = { has_modifier = ww_war_crimes_exposed_modifier }
-							NOT = { has_modifier = ww_liberation_hero_modifier }
-						}
-						trigger_event = { id = world_war_events.103 }
-					}
-					# Post-War Order
-					25 = {
-						trigger_event = { id = world_war_events.104 }
-					}
-					# The New Rivalry
-					25 = {
-						trigger = {
-							any_country = {
-								country_rank >= rank_value:great_power
-								NOT = { this = root }
-								ROOT = { country_has_opposed_ideology = { TARGET = prev } }
-							}
-						}
-						trigger_event = { id = world_war_events.105 }
-					}
-				}
-			}
-		}
-	}
+	effect = { }
 }
 
 # ---- Resettlement Population Transfer (state scope, monthly) ----

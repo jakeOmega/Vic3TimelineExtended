@@ -2,7 +2,11 @@
 # ============================================================================
 # WORLD WAR JOURNAL ENTRY
 # Tracks ideological polarization building toward a global conflict
-# Two phases: Leadup (rising tensions) â†’ Active War â†’ Peace Conference
+# Phases: Leadup (rising tensions) > Active War > Peace Conference > Post-War
+#
+# This JE is the SOLE driver of all world war events. The on_action is empty.
+# The JE activates for any great power when opposing ideology GPs exist,
+# and remains active through war and post-war phases.
 # ============================================================================
 
 je_world_war = {
@@ -12,41 +16,70 @@ je_world_war = {
 	is_shown_when_inactive = {
 		has_technology_researched = combined_arms
 		country_rank >= rank_value:great_power
-		NOT = { has_variable = ww_peace_concluded }
+		NOT = { has_variable = ww_fully_resolved }
 	}
 
 	possible = {
 		has_technology_researched = combined_arms
 		country_rank >= rank_value:great_power
-		# Must have opposing ideology great powers
-		any_rival_country = {
-			country_rank >= rank_value:great_power
-			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+		OR = {
+			# Leadup: opposing ideology great powers exist anywhere
+			any_country = {
+				country_rank >= rank_value:great_power
+				NOT = { this = ROOT }
+				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+			# Active participant in world war
+			has_variable = ww_active_phase
+			# Post-war phase (not yet fully resolved)
+			AND = {
+				has_variable = ww_peace_concluded
+				NOT = { has_variable = ww_fully_resolved }
+			}
 		}
 	}
 
 	status_desc = {
 		first_valid = {
-			# Active war phase descriptions
+			# Post-war phase
+			triggered_desc = {
+				desc = je_world_war_status_post_war
+				trigger = { has_variable = ww_peace_concluded }
+			}
+			# Active war: total war (3+ years, combatant)
 			triggered_desc = {
 				desc = je_world_war_status_total_war
 				trigger = {
-					has_variable = ww_active_phase
+					country_is_ww_belligerent = yes
 					is_at_war = yes
 					has_variable = ww_years_elapsed
 					var:ww_years_elapsed >= 3
 				}
 			}
+			# Active war: combatant
 			triggered_desc = {
 				desc = je_world_war_status_active_war
 				trigger = {
-					has_variable = ww_active_phase
+					country_is_ww_belligerent = yes
 					is_at_war = yes
 				}
 			}
+			# Active war: non-combatant observer (a world war is happening but we're not in it)
+			triggered_desc = {
+				desc = je_world_war_status_observing
+				trigger = {
+					any_country = {
+						country_is_ww_belligerent = yes
+						is_at_war = yes
+					}
+				}
+			}
+			# War declared but no one fighting yet (brief transitional state)
 			triggered_desc = {
 				desc = je_world_war_status_war_declared
-				trigger = { has_variable = ww_active_phase }
+				trigger = {
+					any_country = { country_is_ww_belligerent = yes }
+				}
 			}
 			# Leadup phase descriptions
 			triggered_desc = {
@@ -118,16 +151,24 @@ je_world_war = {
 	immediate = { }
 
 	complete = {
-		has_variable = ww_peace_concluded
+		has_variable = ww_fully_resolved
 	}
 
 	on_complete = {
-		# Fire peace conference event
-		trigger_event = { id = world_war_events.100 }
+		# Clean up all world war variables
 		remove_variable = ww_active_phase
 		remove_variable = ww_aggressor_side
 		remove_variable = ww_defender_side
 		remove_variable = ww_years_elapsed
+		remove_variable = ww_months_counter
+		remove_variable = ww_peace_concluded
+		remove_variable = ww_peace_months
+		remove_variable = ww_fully_resolved
+		remove_variable = ww_peace_event_fired
+		# Clean up any lingering modifiers
+		if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
+		if = { limit = { has_modifier = ww_home_front_strain_modifier } remove_modifier = ww_home_front_strain_modifier }
+		if = { limit = { has_modifier = ww_prolonged_war_exhaustion_modifier } remove_modifier = ww_prolonged_war_exhaustion_modifier }
 	}
 
 	fail = {
@@ -140,15 +181,20 @@ je_world_war = {
 		remove_variable = ww_aggressor_side
 		remove_variable = ww_defender_side
 		remove_variable = ww_years_elapsed
+		remove_variable = ww_months_counter
+		remove_variable = ww_peace_concluded
+		remove_variable = ww_peace_months
+		remove_variable = ww_fully_resolved
+		remove_variable = ww_peace_event_fired
 	}
 
 	on_monthly_pulse = {
-		# Track war duration
 		effect = {
-			# Apply rising tensions during leadup
+			# ---- LEADUP PHASE: Apply/remove rising tensions modifier ----
 			if = {
 				limit = {
-					NOT = { has_variable = ww_active_phase }
+					NOT = { has_variable = ww_peace_concluded }
+					NOT = { country_is_ww_belligerent = yes }
 					NOT = { has_modifier = ww_rising_tensions_modifier }
 					ww_ideological_tension >= 30
 				}
@@ -156,17 +202,21 @@ je_world_war = {
 			}
 			if = {
 				limit = {
-					NOT = { has_variable = ww_active_phase }
 					has_modifier = ww_rising_tensions_modifier
-					ww_ideological_tension < 30
+					OR = {
+						ww_ideological_tension < 30
+						country_is_ww_belligerent = yes
+						has_variable = ww_peace_concluded
+					}
 				}
 				remove_modifier = ww_rising_tensions_modifier
 			}
-			# Track years during active war
+			# ---- ACTIVE WAR PHASE: Track war duration for belligerents ----
 			if = {
 				limit = {
-					has_variable = ww_active_phase
+					country_is_ww_belligerent = yes
 					is_at_war = yes
+					NOT = { has_variable = ww_peace_concluded }
 				}
 				if = {
 					limit = { NOT = { has_variable = ww_months_counter } }
@@ -187,10 +237,10 @@ je_world_war = {
 					}
 				}
 			}
-			# Home front strain after 2+ years of war
+			# Home front strain after 2+ years
 			if = {
 				limit = {
-					has_variable = ww_active_phase
+					country_is_ww_belligerent = yes
 					is_at_war = yes
 					has_variable = ww_years_elapsed
 					var:ww_years_elapsed >= 2
@@ -201,7 +251,7 @@ je_world_war = {
 			# Prolonged war exhaustion after 4+ years
 			if = {
 				limit = {
-					has_variable = ww_active_phase
+					country_is_ww_belligerent = yes
 					is_at_war = yes
 					has_variable = ww_years_elapsed
 					var:ww_years_elapsed >= 4
@@ -209,30 +259,88 @@ je_world_war = {
 				}
 				add_modifier = { name = ww_prolonged_war_exhaustion_modifier }
 			}
-			# Clean up modifiers when war ends
+			# ---- PEACE DETECTION ----
+			# Belligerents: war is over when they stop fighting
 			if = {
 				limit = {
-					has_variable = ww_active_phase
+					country_is_ww_belligerent = yes
 					is_at_war = no
+					NOT = { has_variable = ww_peace_concluded }
 				}
 				set_variable = ww_peace_concluded
+				# Clean up war-phase modifiers
+				if = { limit = { has_modifier = ww_total_war_economy_modifier } remove_modifier = ww_total_war_economy_modifier }
+				if = { limit = { has_modifier = ww_war_propaganda_modifier } remove_modifier = ww_war_propaganda_modifier }
+				if = { limit = { has_modifier = ww_wartime_rationing_modifier } remove_modifier = ww_wartime_rationing_modifier }
+				if = { limit = { has_modifier = ww_home_front_strain_modifier } remove_modifier = ww_home_front_strain_modifier }
+				if = { limit = { has_modifier = ww_prolonged_war_exhaustion_modifier } remove_modifier = ww_prolonged_war_exhaustion_modifier }
+				if = { limit = { has_modifier = ww_fresh_forces_modifier } remove_modifier = ww_fresh_forces_modifier }
+				if = { limit = { has_modifier = ww_arsenal_of_democracy_modifier } remove_modifier = ww_arsenal_of_democracy_modifier }
+				# Fire the peace conference event directly for belligerents
+				trigger_event = { id = world_war_events.100 }
+			}
+			# Non-combatant observers: peace when no belligerent is still fighting
+			if = {
+				limit = {
+					NOT = { country_is_ww_belligerent = yes }
+					NOT = { has_variable = ww_peace_concluded }
+					# At least one country was in the war (it happened)
+					any_country = { has_variable = ww_peace_concluded }
+					# No belligerents still fighting
+					NOT = {
+						any_country = {
+							country_is_ww_belligerent = yes
+							is_at_war = yes
+						}
+					}
+				}
+				set_variable = ww_peace_concluded
+				# Clean up leadup modifiers for observers
+				if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
+				if = { limit = { has_modifier = ww_rearmament_modifier } remove_modifier = ww_rearmament_modifier }
+				if = { limit = { has_modifier = ww_appeasement_modifier } remove_modifier = ww_appeasement_modifier }
+				if = { limit = { has_modifier = ww_lend_lease_modifier } remove_modifier = ww_lend_lease_modifier }
+			}
+			# ---- POST-WAR TIMER ----
+			# After peace, count months. Resolve after 3 years (36 months).
+			if = {
+				limit = {
+					has_variable = ww_peace_concluded
+					NOT = { has_variable = ww_fully_resolved }
+				}
+				if = {
+					limit = { NOT = { has_variable = ww_peace_months } }
+					set_variable = { name = ww_peace_months value = 0 }
+				}
+				change_variable = { name = ww_peace_months add = 1 }
+				if = {
+					limit = { var:ww_peace_months >= 36 }
+					set_variable = ww_fully_resolved
+				}
 			}
 		}
-		# Fire random wartime events
+		# ---- RANDOM EVENTS ----
+		# All world war events fire from here. Each event has its own trigger block.
 		random_events = {
 			200 = 0 # mostly nothing
-			# Leadup events
+			# Leadup events (fire when not yet at war, tension rising)
 			10 = world_war_events.1   # ideological confrontation
 			10 = world_war_events.2   # border incident
 			10 = world_war_events.3   # diplomatic crisis
-			# Active war events
+			# War outbreak (fire when tension is critical)
+			5 = world_war_events.5    # war breaks out
+			# Active war events (fire during the war for belligerents)
 			10 = world_war_events.10  # home front rally
 			10 = world_war_events.11  # strategic bombing
 			10 = world_war_events.12  # resistance movement
-			# Late entry prompt
-			5 = world_war_events.20   # opportunity to join
-			# Peace-related
+			# Late entry prompt (non-combatants during war)
+			10 = world_war_events.20  # opportunity to join
+			# War weariness (prolonged war)
 			5 = world_war_events.30   # war weariness grows
+			# Post-war events
+			5 = world_war_events.103  # war crimes tribunal
+			5 = world_war_events.104  # post-war order
+			5 = world_war_events.105  # the new rivalry
 		}
 	}
 

@@ -7,6 +7,8 @@
 	# Homeland creation/removal base thresholds (state-level; modified by laws, techs, decrees, buildings)
 	state_homeland_creation_threshold_add = 0.95
 	state_homeland_removal_threshold_add = 0.0
+
+	state_building_resettlement_colony_max_level_add = 1
 }
 
 space_elevator_progress = {
@@ -757,14 +759,15 @@ climate_awareness_modifier = {
 emergency_climate_spending_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_bureaucracy_mult = -0.05
-	state_mortality_mult = -0.03
-	state_standard_of_living_add = 0.5
+	state_mortality_mult = -0.05
+	state_standard_of_living_add = 1
 }
 
 green_tech_stimulus_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	building_renewable_energy_plant_throughput_add = 0.15
 	country_institution_size_change_speed_institution_ministry_of_the_environment_mult = 0.50
+	country_bureaucracy_mult = -0.05
 }
 
 climate_crisis_emergency_modifier = {
@@ -860,6 +863,7 @@ water_crisis_ministry_modifier = {
 green_tech_boom_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	building_renewable_energy_plant_throughput_add = 0.20
+	building_power_plant_throughput_add = -0.20
 	country_tech_research_speed_mult = 0.05
 	country_prestige_add = 100
 }
@@ -927,6 +931,7 @@ coastal_relocation_modifier = {
 green_tech_market_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	building_renewable_energy_plant_throughput_add = 0.10
+	building_power_plant_throughput_add = 0.05
 	country_prestige_add = 50
 }
 
@@ -2372,10 +2377,7 @@ ww_wartime_rationing_modifier = {
 # Home front strain - war drags on too long
 ww_home_front_strain_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	state_standard_of_living_add = -2
-	state_radicals_from_political_movements_mult = 0.5
-	state_mortality_mult = 0.02
-	state_birth_rate_mult = -0.1
+	country_bureaucracy_mult = -0.1
 }
 
 # ---- Late Entry Modifiers ----
@@ -2491,6 +2493,17 @@ ww_liberation_hero_modifier = {
 	country_prestige_add = 100
 	country_diplomatic_reputation_add = 5
 	political_movement_radicalism_add = -0.25
+}
+
+# Ground offensive focus - committed all resources to the decisive front
+ww_ground_offensive_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	unit_army_offense_mult = 0.15
+	unit_army_defense_mult = 0.05
+	country_war_exhaustion_casualties_mult = -0.1
+	state_mortality_mult = 0.02
+	state_standard_of_living_add = -1
+	state_radicals_from_political_movements_mult = 0.25
 }
 
 # ---- Dynamic Scaling Modifiers ----
@@ -2862,6 +2875,11 @@ banking_event_microfinance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_group_bg_agriculture_throughput_add = 0.03
 	goods_output_services_mult = 0.02
+}
+
+banking_event_microfinance_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
 }
 
 banking_event_qe_stimulus = {

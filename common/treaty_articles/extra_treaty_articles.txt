@@ -867,7 +867,7 @@ nuclear_disarmament = {
 	kind = directed
 	cost = 200
 
-	target_modifier = {
+	source_modifier = {
 		nuclear_disarmament = yes
 	}
 

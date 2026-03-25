@@ -385,18 +385,17 @@ ste_campus_activism_contain = {
 # ======= Brain-Computer Interfaces
 ste_bci_consumer_rollout = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    country_tech_research_speed_mult = 0.08
+    country_tech_research_speed_mult = 0.1
     building_software_industry_throughput_add = 0.05
 }
 ste_bci_regulated_access = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-    country_tech_research_speed_mult = 0.03
+    country_tech_research_speed_mult = 0.05
     country_legitimacy_base_add = 5
 }
 ste_bci_banned = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-    country_tech_research_speed_mult = -0.05
-    country_legitimacy_base_add = 5
+    country_legitimacy_base_add = 10
 }
 
 # ======= Human Augmentation

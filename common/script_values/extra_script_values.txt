@@ -532,6 +532,7 @@ market_greenhouse_gas_emissions_script_value = {
 		}
 	}
 	divide = 10000
+	multiply = gw_emission_multiplier_script_value
 }
 
 market_greenhouse_gas_emissions_script_value_display = {
@@ -556,17 +557,21 @@ global_greenhouse_gas_emissions_script_value_display = {
 
 temperature_anomaly_display = {
 	value = global_var:greenhouse_gas_emissions
-	divide = 500
+	divide = 100
 	round = yes
 	divide = 100
 }
 
 gw_emission_multiplier_script_value = {
-	# Evaluated in country scope.
-	# Returns the net emission multiplier for this country (1.0 = full, 0.8 = 20% reduction, etc.)
-	# Automatically picks up any modifiers that add country_greenhouse_gas_emissions_mult.
+	# Evaluated in MARKET scope (called from market_greenhouse_gas_emissions_script_value).
+	# Returns the net emission multiplier for this market's leader (1.0 = full, 0.8 = 20% reduction, etc.).
+	# Uses market_capital.owner to reach the market leader country where the modifier lives.
 	value = 1
-	add = modifier:country_greenhouse_gas_emissions_mult
+	market_capital = {
+		owner = {
+			add = modifier:country_greenhouse_gas_emissions_mult
+		}
+	}
 }
 
 gw_countries_with_carbon_tax_script_value = {

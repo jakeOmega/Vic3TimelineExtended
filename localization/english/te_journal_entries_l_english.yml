@@ -78,6 +78,8 @@
  je_world_war_status_active_war:0 "#bold THE WORLD IS AT WAR.#! Our forces are engaged in total combat against the enemy bloc. Every factory, every citizen, every resource is committed to victory."
  je_world_war_status_crisis:0 "#R CRISIS:#! War is imminent. The great powers have drawn their lines. Any incident could ignite the powder keg."
  je_world_war_status_high_tension:0 "#Y HIGH TENSION:#! The ideological divide deepens. Military buildups accelerate. Diplomatic channels are strained to breaking point."
+ je_world_war_status_observing:0 "The great powers are at war. We remain outside the conflict — for now. Pressure mounts to choose a side."
+ je_world_war_status_post_war:0 "The guns have fallen silent. The world holds its breath as the victors and vanquished negotiate the shape of the post-war order."
  je_world_war_status_rising_tension:0 "Tensions are rising between the ideological blocs. Arms races have begun, and border incidents grow more frequent."
  je_world_war_status_simmering:0 "The great powers watch each other warily. Ideological differences simmer beneath the surface of diplomacy."
  je_world_war_status_total_war:0 "#bold TOTAL WAR.#! #R The conflict has raged for years. Cities lie in ruins. Entire generations are being consumed by the furnace of war.#!"

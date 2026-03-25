@@ -1,6 +1,9 @@
 ﻿# =================================================================
 # TREATY ARTICLE: disband_company
 # A punitive article that forces a country to dissolve one of its major companies.
+# The source country (the side whose column the article appears in) is the one
+# whose company will be disbanded. The target country uses "request" to demand
+# the source disband it.
 # =================================================================
 disband_company = {
 	icon = "gfx/interface/icons/law_icons/command_economy.dds" # Placeholder Icon
@@ -47,10 +50,18 @@ disband_company = {
 		}
 	}
 
-	# This is the core effect that fires when the treaty is ratified.
+	# The source country's company is disbanded.
 	on_entry_into_force = {
-		scope:target_country = {
-			remove_company = scope:article.input_company.type
+		scope:article_options = {
+			if = {
+				limit = { exists = input_company }
+				input_company = {
+					save_scope_as = target_company
+				}
+				source_country = {
+					remove_company = scope:target_company.type
+				}
+			}
 		}
 	}
 
@@ -64,10 +75,11 @@ disband_company = {
 	# This section governs AI behavior regarding the treaty article.
 	ai = {
 		treaty_categories = { economy }
-		# The AI will only ever demand this from others, never offer to do it to themselves.
+		# The AI will demand this from others via "request" - the other side becomes
+		# source_country and must disband their own company.
 		article_ai_usage = { request }
 
-		# AI will only consider demanding this if they are significantly more powerful.
+		# AI will only consider this when significantly more powerful.
 		evaluation_chance = {
 			value = 0
 			if = {
@@ -76,43 +88,121 @@ disband_company = {
 			}
 		}
 
-		# The AI's decision-making on whether to ACCEPT the demand.
+		# AI decision-making on whether to ACCEPT the article.
+		# When evaluated, "this" is the country deciding. The article forces
+		# source_country to disband their company.
 		inherent_accept_score = {
-			value = 0 # Start from a neutral position
+			value = 0
 
-			# The AI receiving the demand (the target) will evaluate it.
+			# --- SOURCE COUNTRY EVALUATION (I must disband my company) ---
 			if = {
-				limit = { scope:target_country = this }
-				
-				# Base reluctance is extremely high. This is a core part of their economy.
-				add = -200
-
-				# Add a massive penalty based on the company's contribution to the national economy.
-				# A custom script value would calculate: (Company's building GDP / National GDP) * a large negative number.
-				# For now, we can proxy this by checking the level of buildings associated with the company.
-				add = {
-					value = 0
-					scope:article.input_company = {
-						add = company_employed_levels
-					}
-					multiply = -10 # A very high penalty per building level.
-					desc = "AI_REJECTS_DISBANDING_SIGNIFICANT_COMPANY"
+				limit = {
+					exists = scope:article.input_company
+					scope:source_country = this
 				}
 
-				# Very powerful nations will refuse out of pride.
+				# We are doing this to be able to reuse loc across treaties and diplomatic actions
+				scope:source_country = {
+					save_temporary_scope_as = target
+				}
+				scope:target_country = {
+					save_temporary_scope_as = actor
+				}
+
+				# Base reluctance: nobody wants to lose a company.
+				add = {
+					desc = "DISBAND_COMPANY_BASE_RELUCTANCE"
+					value = -100
+				}
+
+				# Penalty scales with the company's economic contribution.
+				# Count the levels of buildings owned by the targeted company.
+				subtract = {
+					desc = "DISBAND_COMPANY_ECONOMIC_SIGNIFICANCE"
+					every_scope_building = {
+						limit = {
+							exists = owning_company
+							owning_company = scope:article.input_company
+						}
+						add = level
+						multiply = {
+							value = weekly_profit
+							divide = 250
+							add = 1
+							max = 2
+						}
+					}
+					max = 200
+					min = 25
+				}
+
+				# Great powers are extremely reluctant to surrender companies via treaty.
 				if = {
 					limit = { country_rank >= rank_value:great_power }
-					add = -100
+					add = {
+						desc = "great_power"
+						value = -200
+					}
 				}
-				
-				# Less likely to accept if they are rivals or have poor relations.
-				if = {
-					limit = { any_rival_country = { THIS = scope:source_country } }
-					add = -100
+				# Major powers are also quite reluctant.
+				else_if = {
+					limit = { country_rank >= rank_value:major_power }
+					add = {
+						desc = "major_power"
+						value = -100
+					}
 				}
+
+				# Relative rank: stronger countries resist more.
 				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = hostile } }
-					add = -50
+					limit = { country_rank >= scope:target_country.country_rank }
+					add = {
+						desc = "DIPLOMATIC_ACCEPTANCE_RANK"
+						value = scope:target_country.country_rank
+						subtract = 2
+						subtract = country_rank
+						multiply = 10
+					}
+				}
+			}
+
+			# --- TARGET COUNTRY EVALUATION (the other side disbands a company) ---
+			else_if = {
+				limit = {
+					exists = scope:article.input_company
+					scope:target_country = this
+				}
+
+				# We are doing this to be able to reuse loc across treaties and diplomatic actions
+				scope:target_country = {
+					save_temporary_scope_as = target
+				}
+				scope:source_country = {
+					save_temporary_scope_as = actor
+				}
+
+				# Benefit from the source losing economic capacity.
+				# The more profitable the company's buildings, the more we gain.
+				add = {
+					desc = "DISBAND_COMPANY_COMPETITIVE_BENEFIT"
+					scope:source_country ?= {
+						every_scope_building = {
+							limit = {
+								exists = owning_company
+								owning_company = scope:article.input_company
+								weekly_profit > 5
+							}
+							add = level
+							multiply = {
+								value = weekly_profit
+								divide = 250
+								add = 1
+								max = 2
+							}
+						}
+					}
+					max = 50
+					min = 0
 				}
 			}
 		}

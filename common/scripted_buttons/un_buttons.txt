@@ -73,6 +73,8 @@ un_leave_button = {
 			remove_modifier = un_development_contributor_modifier
 			remove_modifier = un_human_rights_champion_modifier
 			remove_modifier = un_arms_control_participant_modifier
+			remove_modifier = un_champion_order_cost
+			remove_modifier = un_undermine_order_cost
 			# Remove permanent treaty commitments
 			remove_modifier = un_human_rights_declaration_modifier
 			remove_modifier = un_human_rights_reservations_modifier
@@ -465,7 +467,10 @@ un_withdraw_arms_control_button = {
 	}
 }
 
-# ---- 7. GREAT POWER INFLUENCE ON UN ----
+# ---- 7. GREAT POWER INFLUENCE ON UN (TOGGLES) ----
+# These are strategic-orientation toggles: champion or undermine.
+# While active the ongoing cost modifier persists and authority drifts
+# each month in the JE on_monthly_pulse (see je_united_nations.txt).
 
 un_champion_order_button = {
 	name = "UN_CHAMPION_ORDER"
@@ -474,6 +479,7 @@ un_champion_order_button = {
 	visible = {
 		has_modifier = un_member_modifier
 		country_rank >= rank_value:great_power
+		NOT = { has_modifier = un_champion_order_cost }
 	}
 
 	possible = {
@@ -493,27 +499,34 @@ un_champion_order_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_CHAMPION_ORDER_DESC"
-			# Base authority boost
-			change_variable = { name = un_authority add = 2 }
-			# Extra for high rank - stronger countries have more influence
-			if = {
-				limit = { global_country_ranking < 3 }
-				change_variable = { name = un_authority add = 1 }
-			}
-			if = {
-				limit = { global_country_ranking < 5 }
-				change_variable = { name = un_authority add = 1 }
-			}
-			if = {
-				limit = { global_country_ranking < 7 }
-				change_variable = { name = un_authority add = 1 }
-			}
-			# Cost: temporary authority and influence drain
-			add_modifier = {
-				name = un_champion_order_cost
-				days = 365
-				is_decaying = yes
-			}
+			add_modifier = { name = un_champion_order_cost }
+		}
+	}
+}
+
+un_stop_championing_button = {
+	name = "UN_STOP_CHAMPIONING"
+	desc = "UN_STOP_CHAMPIONING_DESC"
+
+	visible = {
+		has_modifier = un_champion_order_cost
+	}
+
+	possible = {
+		has_modifier = un_champion_order_cost
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { has_law = law_type:law_total_war } add = 15 }
+		if = { limit = { has_law = law_type:law_isolationism } add = 15 }
+		if = { limit = { var:un_authority >= 80 } add = 10 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_STOP_CHAMPIONING_DESC"
+			remove_modifier = un_champion_order_cost
 		}
 	}
 }
@@ -525,13 +538,14 @@ un_undermine_order_button = {
 	visible = {
 		has_modifier = un_member_modifier
 		country_rank >= rank_value:great_power
+		NOT = { has_modifier = un_undermine_order_cost }
 	}
 
 	possible = {
 		has_modifier = un_member_modifier
 		country_rank >= rank_value:great_power
-		NOT = { has_modifier = un_champion_order_cost }
 		NOT = { has_modifier = un_undermine_order_cost }
+		NOT = { has_modifier = un_champion_order_cost }
 	}
 
 	ai_chance = {
@@ -544,27 +558,34 @@ un_undermine_order_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_UNDERMINE_ORDER_DESC"
-			# Base authority reduction
-			change_variable = { name = un_authority add = -2 }
-			# Extra for high rank - stronger countries have more influence
-			if = {
-				limit = { global_country_ranking < 3 }
-				change_variable = { name = un_authority add = -1 }
-			}
-			if = {
-				limit = { global_country_ranking < 5 }
-				change_variable = { name = un_authority add = -1 }
-			}
-			if = {
-				limit = { global_country_ranking < 7 }
-				change_variable = { name = un_authority add = -1 }
-			}
-			# Cost: temporary authority and influence drain (less cost to tear down)
-			add_modifier = {
-				name = un_undermine_order_cost
-				days = 365
-				is_decaying = yes
-			}
+			add_modifier = { name = un_undermine_order_cost }
+		}
+	}
+}
+
+un_stop_undermining_button = {
+	name = "UN_STOP_UNDERMINING"
+	desc = "UN_STOP_UNDERMINING_DESC"
+
+	visible = {
+		has_modifier = un_undermine_order_cost
+	}
+
+	possible = {
+		has_modifier = un_undermine_order_cost
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 15 }
+		if = { limit = { has_law = law_type:law_limited_war } add = 15 }
+		if = { limit = { var:un_authority < 20 } add = 10 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_STOP_UNDERMINING_DESC"
+			remove_modifier = un_undermine_order_cost
 		}
 	}
 }

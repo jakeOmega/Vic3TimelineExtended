@@ -1259,7 +1259,7 @@ social_tensions_events.15 = {
 	}
 	flavor = social_tensions_events.15.f
 
-	event_image = { texture = "gfx/event_pictures/globalization_trade.dds" }
+	event_image = { texture = "gfx/event_pictures/globalization_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -1295,6 +1295,11 @@ social_tensions_events.15 = {
 
 	option = { # Impose protective tariffs
 		name = social_tensions_events.15.b
+		trigger = {
+			NOT = {
+				has_law = law_type:law_free_trade
+			}
+		}
 		add_modifier = { name = globalization_protect_modifier days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		add_radicals = { value = small_radicals strata = upper }
@@ -1308,13 +1313,11 @@ social_tensions_events.15 = {
 	option = { # Fund worker retraining
 		name = social_tensions_events.15.c
 		trigger = {
-			OR = {
-				has_technology_researched = keynesian_economics
-				has_law = law_type:law_interventionism
+			NOT = {
+				has_law = law_type:law_laissez_faire
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_interventionist_tt
 		add_modifier = { name = globalization_retrain_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = {

@@ -103,7 +103,8 @@ world_war_conditions_met = {
 	# Must have era 6 military technology
 	has_technology_researched = combined_arms
 	# Not already in a world war
-	NOT = { has_variable = world_war_active }
+	NOT = { has_variable = ww_active_phase }
+	NOT = { has_variable = ww_peace_concluded }
 	# Must have at least one great power rival with opposed ideology
 	any_rival_country = {
 		country_rank >= rank_value:great_power
@@ -126,13 +127,21 @@ world_war_conditions_met = {
 can_join_world_war = {
 	country_rank >= rank_value:major_power
 	is_at_war = no
-	has_variable = world_war_active
+	NOT = { has_variable = ww_aggressor_side }
+	NOT = { has_variable = ww_defender_side }
 	NOT = { has_modifier = ww_late_entry_cooldown }
-	# Must have relations < -20 with one of the belligerents on the aggressor side
+	# A world war must be happening
 	any_country = {
 		has_variable = ww_aggressor_side
 		is_at_war = yes
-		relations:root < -20
+	}
+}
+
+# --- True if country is an active belligerent (has a side assignment) ---
+country_is_ww_belligerent = {
+	OR = {
+		has_variable = ww_aggressor_side
+		has_variable = ww_defender_side
 	}
 }
 

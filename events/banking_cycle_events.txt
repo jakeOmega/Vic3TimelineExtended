@@ -3253,6 +3253,12 @@ banking_cycle_events.38 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		add_modifier = {
+			name = banking_event_microfinance_cost
+			multiplier = banking_event_expense_small
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = lower

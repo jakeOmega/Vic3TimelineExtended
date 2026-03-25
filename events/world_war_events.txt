@@ -446,7 +446,7 @@ world_war_events.5 = {
 			}
 			save_scope_as = war_target
 		}
-		# Mark both sides
+		# Mark only the two primary belligerents
 		set_variable = ww_active_phase
 		set_variable = ww_aggressor_side
 		set_variable = { name = ww_years_elapsed value = 0 }
@@ -457,28 +457,9 @@ world_war_events.5 = {
 			set_variable = { name = ww_years_elapsed value = 0 }
 			set_variable = { name = ww_months_counter value = 0 }
 		}
-		# Mark ideologically aligned great powers
-		every_country = {
-			limit = {
-				country_rank >= rank_value:great_power
-				NOT = { this = root }
-				NOT = { this = scope:war_target }
-				root = { country_has_opposed_ideology = { TARGET = prev } }
-			}
-			set_variable = ww_active_phase
-			set_variable = ww_defender_side
-		}
-		every_country = {
-			limit = {
-				country_rank >= rank_value:great_power
-				NOT = { this = root }
-				NOT = { this = scope:war_target }
-				NOT = { has_variable = ww_defender_side }
-				scope:war_target = { country_has_opposed_ideology = { TARGET = prev } }
-			}
-			set_variable = ww_active_phase
-			set_variable = ww_aggressor_side
-		}
+		# Other great powers are NOT auto-marked as participants.
+		# They will see the war via the JE and can choose to join
+		# through event 20 (late entry) or the join_war button.
 	}
 
 	# Only option: war has begun
@@ -533,7 +514,7 @@ world_war_events.10 = {
 	duration = 3
 
 	trigger = {
-		has_variable = ww_active_phase
+		country_is_ww_belligerent = yes
 		is_at_war = yes
 	}
 
@@ -597,7 +578,7 @@ world_war_events.11 = {
 	duration = 3
 
 	trigger = {
-		has_variable = ww_active_phase
+		country_is_ww_belligerent = yes
 		is_at_war = yes
 		has_technology_researched = bombing_aircraft
 	}
@@ -652,12 +633,30 @@ world_war_events.11 = {
 	# Option C: Accept the losses and focus on ground offensive
 	option = {
 		name = world_war_events.11.c
-		ai_chance = { base = 2 }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					has_variable = ww_years_elapsed
+					var:ww_years_elapsed >= 2
+				}
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = ww_ground_offensive_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_radicals = {
-			value = medium_radicals
+			value = small_radicals
 			strata = lower
 		}
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = soldiers
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -677,7 +676,7 @@ world_war_events.12 = {
 	duration = 3
 
 	trigger = {
-		has_variable = ww_active_phase
+		country_is_ww_belligerent = yes
 		is_at_war = yes
 		has_variable = ww_years_elapsed
 		var:ww_years_elapsed >= 1
@@ -720,9 +719,10 @@ world_war_events.12 = {
 			strata = lower
 		}
 		add_loyalists = {
-			value = small_radicals
+			value = medium_radicals
 			pop_type = soldiers
 		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
 	}
 }
@@ -746,10 +746,14 @@ world_war_events.20 = {
 	duration = 3
 
 	trigger = {
-		has_variable = ww_active_phase
 		is_at_war = no
 		country_rank >= rank_value:major_power
 		NOT = { has_modifier = ww_late_entry_cooldown }
+		NOT = { has_variable = ww_peace_concluded }
+		# Not already committed to a side
+		NOT = { has_variable = ww_aggressor_side }
+		NOT = { has_variable = ww_defender_side }
+		# A world war must be happening
 		any_country = {
 			has_variable = ww_aggressor_side
 			is_at_war = yes
@@ -783,6 +787,10 @@ world_war_events.20 = {
 	option = {
 		name = world_war_events.20.a
 		default_option = yes
+		trigger = {
+			exists = scope:ww_main_defender
+			exists = scope:ww_main_aggressor
+		}
 		ai_chance = {
 			base = 2
 			modifier = {
@@ -816,7 +824,10 @@ world_war_events.20 = {
 				}
 			}
 		}
+		set_variable = ww_active_phase
 		set_variable = ww_defender_side
+		set_variable = { name = ww_years_elapsed value = 0 }
+		set_variable = { name = ww_months_counter value = 0 }
 		add_modifier = {
 			name = ww_fresh_forces_modifier
 			days = normal_modifier_time
@@ -874,6 +885,10 @@ world_war_events.20 = {
 				add = 5
 			}
 		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
 		add_radicals = {
 			value = small_radicals
 			pop_type = soldiers
@@ -906,7 +921,7 @@ world_war_events.30 = {
 	duration = 3
 
 	trigger = {
-		has_variable = ww_active_phase
+		country_is_ww_belligerent = yes
 		is_at_war = yes
 		has_variable = ww_years_elapsed
 		var:ww_years_elapsed >= 2
@@ -970,6 +985,7 @@ world_war_events.30 = {
 # ============================================================================
 
 # Event 100: Victory - the war is over, you won (or survived)
+# Fired directly by JE monthly pulse when peace is detected for belligerents.
 world_war_events.100 = {
 	type = country_event
 	placement = root
@@ -985,7 +1001,7 @@ world_war_events.100 = {
 	duration = 3
 
 	trigger = {
-		has_variable = ww_peace_concluded
+		always = no # Only fired directly by JE monthly pulse
 	}
 
 	immediate = {
@@ -1030,10 +1046,7 @@ world_war_events.100 = {
 		# Trigger regime change event on defeated powers
 		every_country = {
 			limit = {
-				OR = {
-					has_variable = ww_aggressor_side
-					has_variable = ww_defender_side
-				}
+				country_is_ww_belligerent = yes
 				NOT = { this = root }
 				is_at_war = no
 				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
@@ -1070,10 +1083,7 @@ world_war_events.100 = {
 		# Trigger reconstruction event on defeated powers
 		every_country = {
 			limit = {
-				OR = {
-					has_variable = ww_aggressor_side
-					has_variable = ww_defender_side
-				}
+				country_is_ww_belligerent = yes
 				NOT = { this = root }
 				is_at_war = no
 				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
@@ -1097,6 +1107,11 @@ world_war_events.100 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		add_modifier = {
+			name = ww_liberation_hero_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = {
 			value = medium_radicals
 			strata = lower
@@ -1105,6 +1120,7 @@ world_war_events.100 = {
 			value = medium_radicals
 			strata = middle
 		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 }
 
@@ -1277,6 +1293,7 @@ world_war_events.103 = {
 
 	trigger = {
 		has_variable = ww_peace_concluded
+		NOT = { has_variable = ww_fully_resolved }
 		country_rank >= rank_value:great_power
 		NOT = { has_modifier = ww_war_crimes_exposed_modifier }
 		NOT = { has_modifier = ww_liberation_hero_modifier }
@@ -1369,6 +1386,7 @@ world_war_events.104 = {
 
 	trigger = {
 		has_variable = ww_peace_concluded
+		NOT = { has_variable = ww_fully_resolved }
 		country_rank >= rank_value:great_power
 	}
 
@@ -1461,6 +1479,7 @@ world_war_events.105 = {
 
 	trigger = {
 		has_variable = ww_peace_concluded
+		NOT = { has_variable = ww_fully_resolved }
 		country_rank >= rank_value:great_power
 		# Must have a former ally who's now ideologically different
 		any_country = {
@@ -1498,8 +1517,8 @@ world_war_events.105 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		# Final cleanup of all WW variables
-		remove_variable = ww_peace_concluded
+		# Mark the world war fully resolved
+		set_variable = ww_fully_resolved
 	}
 
 	# Option B: Seek coexistence - attempt peaceful relations
@@ -1520,7 +1539,7 @@ world_war_events.105 = {
 			value = small_radicals
 			strata = middle
 		}
-		# Final cleanup of all WW variables
-		remove_variable = ww_peace_concluded
+		# Mark the world war fully resolved
+		set_variable = ww_fully_resolved
 	}
 }
