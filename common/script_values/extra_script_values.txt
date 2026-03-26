@@ -1712,3 +1712,40 @@ migration_crowding_mult = {
 	min = 0
 	max = migration_crowding_max_mult
 }
+
+#==================================================
+# Wonder Sub-Building Slot Availability
+#==================================================
+# These script values compute remaining slots accounting for queued constructions.
+# The country modifier already tracks max - built; these additionally subtract queued levels.
+# Used in building possible blocks. Evaluated in country scope.
+
+# Solar Receiver: slots from Orbital Solar Collector levels (10 per level), consumed by receivers (-1 per level)
+solar_receiver_slots_remaining = {
+	value = modifier:country_solar_receiver_max_level_add
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_solar_receiver }
+			subtract = level_after_queued_constructions
+			add = level
+		}
+	}
+}
+
+# Antimatter sub-buildings: slots from Antimatter Facility levels (5 per level),
+# consumed by both Antimatter Engines and Warhead Plants (-1 per level each)
+antimatter_sub_building_slots_remaining = {
+	value = modifier:country_antimatter_facility_max_level_add
+	every_scope_state = {
+		every_scope_building = {
+			limit = {
+				OR = {
+					is_building_type = building_antimatter_engine
+					is_building_type = building_antimatter_warhead_plant
+				}
+			}
+			subtract = level_after_queued_constructions
+			add = level
+		}
+	}
+}

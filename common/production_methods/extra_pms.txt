@@ -13896,6 +13896,7 @@ pm_space_elevator_construction_slow = {
 			# employment
 			building_employment_engineers_add = 50000
 			building_employment_academics_add = 50000
+			building_weekly_space_elevator_progress = 0.25
 		}
 	}
 
@@ -13935,6 +13936,7 @@ pm_space_elevator_construction_medium = {
 			# employment
 			building_employment_engineers_add = 50000
 			building_employment_academics_add = 50000
+			building_weekly_space_elevator_progress = 0.5
 		}
 	}
 
@@ -13974,6 +13976,7 @@ pm_space_elevator_construction_fast = {
 			# employment
 			building_employment_engineers_add = 50000
 			building_employment_academics_add = 50000
+			building_weekly_space_elevator_progress = 1
 		}
 	}
 
@@ -17623,6 +17626,7 @@ pm_solar_collector_construction_slow = {
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
+			building_weekly_solar_collector_progress = 0.25
 		}
 	}
 
@@ -17647,6 +17651,7 @@ pm_solar_collector_construction_medium = {
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
+			building_weekly_solar_collector_progress = 0.5
 		}
 	}
 
@@ -17671,6 +17676,7 @@ pm_solar_collector_construction_fast = {
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
+			building_weekly_solar_collector_progress = 1
 		}
 	}
 
@@ -17768,6 +17774,7 @@ pm_orbital_battlestation_construction_slow = {
 			building_employment_engineers_add = 20000
 			building_employment_officers_add = 20000
 			building_employment_academics_add = 10000
+			building_weekly_orbital_battlestation_progress = 0.25
 		}
 	}
 }
@@ -17789,6 +17796,7 @@ pm_orbital_battlestation_construction_medium = {
 			building_employment_engineers_add = 20000
 			building_employment_officers_add = 20000
 			building_employment_academics_add = 10000
+			building_weekly_orbital_battlestation_progress = 0.5
 		}
 	}
 }
@@ -17810,6 +17818,7 @@ pm_orbital_battlestation_construction_fast = {
 			building_employment_engineers_add = 20000
 			building_employment_officers_add = 20000
 			building_employment_academics_add = 10000
+			building_weekly_orbital_battlestation_progress = 1
 		}
 	}
 }
@@ -17825,6 +17834,7 @@ pm_orbital_battlestation = {
 			country_nuclear_weapon_defense_chance_add = 0.10
 			unit_blockade_mult = 0.10
 			unit_morale_damage_mult = 0.05
+			tcountry_nuclear_weapon_defense_chance_add = 0.05
 		}
 	}
 
@@ -17879,6 +17889,7 @@ pm_mind_upload_nexus_construction_slow = {
 		level_scaled = {
 			building_employment_engineers_add = 30000
 			building_employment_academics_add = 30000
+			building_weekly_mind_upload_nexus_progress = 0.25
 		}
 	}
 
@@ -17901,6 +17912,7 @@ pm_mind_upload_nexus_construction_medium = {
 		level_scaled = {
 			building_employment_engineers_add = 30000
 			building_employment_academics_add = 30000
+			building_weekly_mind_upload_nexus_progress = 0.5
 		}
 	}
 
@@ -17923,6 +17935,7 @@ pm_mind_upload_nexus_construction_fast = {
 		level_scaled = {
 			building_employment_engineers_add = 30000
 			building_employment_academics_add = 30000
+			building_weekly_mind_upload_nexus_progress = 1
 		}
 	}
 
@@ -17999,6 +18012,7 @@ pm_antimatter_facility_construction_slow = {
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
+			building_weekly_antimatter_facility_progress = 0.25
 		}
 	}
 
@@ -18020,6 +18034,7 @@ pm_antimatter_facility_construction_medium = {
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
+			building_weekly_antimatter_facility_progress = 0.5
 		}
 	}
 
@@ -18041,6 +18056,7 @@ pm_antimatter_facility_construction_fast = {
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
+			building_weekly_antimatter_facility_progress = 1
 		}
 	}
 
@@ -18117,8 +18133,9 @@ pm_antimatter_warhead_plant = {
 	country_modifiers = {
 		level_scaled = {
 			country_antimatter_facility_max_level_add = -1
-			country_nuclear_weapon_attack_success_add = 0.03
+			country_nuclear_weapon_attack_success_add = 0.05
 			unit_offense_mult = 0.02
+			unit_morale_damage_mult = 0.02
 		}
 	}
 

@@ -706,11 +706,10 @@ building_tourism_industry_throughput_add = {
 building_weekly_space_elevator_progress = {
 	color = good
 	percent = yes
-	script_only = yes
 
 	game_data = {
-	ai_value = 50000000
-}
+		ai_value = 50000000
+	}
 }
 
 building_total_space_elevator_progress = {
@@ -722,7 +721,6 @@ building_total_space_elevator_progress = {
 building_weekly_solar_collector_progress = {
 	color = good
 	percent = yes
-	script_only = yes
 
 	game_data = {
 		ai_value = 50000000
@@ -1972,7 +1970,6 @@ state_resettlement_transfer_add = {
 building_weekly_orbital_battlestation_progress = {
 	color = good
 	percent = yes
-	script_only = yes
 
 	game_data = {
 		ai_value = 50000000
@@ -1988,7 +1985,6 @@ building_total_orbital_battlestation_progress = {
 building_weekly_mind_upload_nexus_progress = {
 	color = good
 	percent = yes
-	script_only = yes
 
 	game_data = {
 		ai_value = 50000000

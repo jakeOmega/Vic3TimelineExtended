@@ -21,27 +21,7 @@
 			add = {
 				value = b:building_space_elevator_construction_site.occupancy
 				divide = 12
-				if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_space_elevator_construction_slow }
-					}
-					multiply = 0.25
-				}
-				else_if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_space_elevator_construction_medium }
-					}
-					multiply = 0.5
-				}
-				else_if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_space_elevator_construction_fast }
-					}
-					multiply = 1
-				}
-				else = {
-					multiply = 0
-				}
+				multiply = b:building_space_elevator_construction_site.modifier:building_weekly_space_elevator_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000
@@ -114,27 +94,7 @@ solar_collector_construction = {
 			add = {
 				value = b:building_solar_collector_construction_site.occupancy
 				divide = 12
-				if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_solar_collector_construction_slow }
-					}
-					multiply = 0.25
-				}
-				else_if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_solar_collector_construction_medium }
-					}
-					multiply = 0.5
-				}
-				else_if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_solar_collector_construction_fast }
-					}
-					multiply = 1
-				}
-				else = {
-					multiply = 0
-				}
+				multiply = b:building_solar_collector_construction_site.modifier:building_weekly_solar_collector_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000
@@ -197,27 +157,7 @@ orbital_battlestation_construction = {
 			add = {
 				value = b:building_orbital_battlestation_construction_site.occupancy
 				divide = 12
-				if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_orbital_battlestation_construction_slow }
-					}
-					multiply = 0.25
-				}
-				else_if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_orbital_battlestation_construction_medium }
-					}
-					multiply = 0.5
-				}
-				else_if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_orbital_battlestation_construction_fast }
-					}
-					multiply = 1
-				}
-				else = {
-					multiply = 0
-				}
+				multiply = b:building_orbital_battlestation_construction_site.modifier:building_weekly_orbital_battlestation_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000
@@ -275,27 +215,7 @@ mind_upload_nexus_construction = {
 			add = {
 				value = b:building_mind_upload_nexus_construction_site.occupancy
 				divide = 12
-				if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_mind_upload_nexus_construction_slow }
-					}
-					multiply = 0.25
-				}
-				else_if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_mind_upload_nexus_construction_medium }
-					}
-					multiply = 0.5
-				}
-				else_if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_mind_upload_nexus_construction_fast }
-					}
-					multiply = 1
-				}
-				else = {
-					multiply = 0
-				}
+				multiply = b:building_mind_upload_nexus_construction_site.modifier:building_weekly_mind_upload_nexus_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000
@@ -1334,27 +1254,7 @@ antimatter_facility_construction = {
 			add = {
 				value = b:building_antimatter_facility_construction_site.occupancy
 				divide = 12
-				if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_antimatter_facility_construction_slow }
-					}
-					multiply = 0.25
-				}
-				else_if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_antimatter_facility_construction_medium }
-					}
-					multiply = 0.5
-				}
-				else_if = {
-					limit = {
-						any_scope_building = { has_active_production_method = pm_antimatter_facility_construction_fast }
-					}
-					multiply = 1
-				}
-				else = {
-					multiply = 0
-				}
+				multiply = b:building_antimatter_facility_construction_site.modifier:building_weekly_antimatter_facility_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000

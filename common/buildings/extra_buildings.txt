@@ -1895,10 +1895,13 @@ REPLACE_OR_CREATE:building_solar_receiver = {
 	}
 
 	required_construction = construction_cost_medium
-	
+
 	possible = {
 		owner = {
-			modifier:country_solar_receiver_max_level_add > 0
+			custom_tooltip = {
+				text = building_solar_receiver_slots_tt
+				solar_receiver_slots_remaining > 0
+			}
 		}
 	}
 	
@@ -2055,7 +2058,10 @@ REPLACE_OR_CREATE:building_antimatter_engine = {
 	
 	possible = {
 		owner = {
-			modifier:country_antimatter_facility_max_level_add > 0
+			custom_tooltip = {
+				text = building_antimatter_sub_slots_tt
+				antimatter_sub_building_slots_remaining > 0
+			}
 		}
 	}
 	
@@ -2081,7 +2087,10 @@ REPLACE_OR_CREATE:building_antimatter_warhead_plant = {
 	
 	possible = {
 		owner = {
-			modifier:country_antimatter_facility_max_level_add > 0
+			custom_tooltip = {
+				text = building_antimatter_sub_slots_tt
+				antimatter_sub_building_slots_remaining > 0
+			}
 		}
 	}
 	
