@@ -1,0 +1,265 @@
+﻿on_monthly_pulse_country = {
+	on_actions = {
+		wonder_events_on_action
+	}
+}
+
+# ============================================================================
+# WONDER BUILDING EVENTS - monthly chance for countries with wonder buildings
+# ============================================================================
+wonder_events_on_action = {
+	effect = {
+		random_list = {
+			600 = { } # ~majority chance of nothing
+
+			# === SPACE ELEVATOR - CONSTRUCTION ===
+			8 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_space_elevator_construction_site
+					}
+				}
+				trigger_event = { id = wonder_events.1 }
+			}
+			6 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_space_elevator_construction_site
+					}
+				}
+				trigger_event = { id = wonder_events.2 }
+			}
+
+			# === SPACE ELEVATOR - COMPLETED ===
+			8 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_space_elevator
+						level >= 1
+					}
+				}
+				trigger_event = { id = wonder_events.3 }
+			}
+			6 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_space_elevator
+						level >= 5
+					}
+				}
+				trigger_event = { id = wonder_events.4 }
+			}
+			5 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_space_elevator
+						level >= 1
+					}
+				}
+				trigger_event = { id = wonder_events.5 }
+			}
+			8 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_space_elevator
+						level >= 3
+					}
+				}
+				trigger_event = { id = wonder_events.6 }
+			}
+			6 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_space_elevator
+						level >= 1
+					}
+				}
+				trigger_event = { id = wonder_events.7 }
+			}
+
+			# === SOLAR COLLECTOR ARRAY - CONSTRUCTION ===
+			8 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_solar_collector_construction_site
+					}
+				}
+				trigger_event = { id = wonder_events.10 }
+			}
+			6 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_solar_collector_construction_site
+					}
+				}
+				trigger_event = { id = wonder_events.11 }
+			}
+
+			# === SOLAR COLLECTOR ARRAY - COMPLETED ===
+			8 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_solar_collector
+						level >= 1
+					}
+				}
+				trigger_event = { id = wonder_events.12 }
+			}
+			6 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_solar_collector
+						level >= 5
+					}
+				}
+				trigger_event = { id = wonder_events.13 }
+			}
+			5 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_solar_collector
+						level >= 1
+					}
+				}
+				trigger_event = { id = wonder_events.14 }
+			}
+			6 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_solar_collector
+						level >= 3
+					}
+				}
+				trigger_event = { id = wonder_events.15 }
+			}
+
+			# === ORBITAL BATTLESTATION - CONSTRUCTION ===
+			8 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_orbital_battlestation_construction_site
+					}
+				}
+				trigger_event = { id = wonder_events.20 }
+			}
+
+			# === ORBITAL BATTLESTATION - COMPLETED ===
+			8 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_orbital_battlestation
+						level >= 1
+					}
+				}
+				trigger_event = { id = wonder_events.21 }
+			}
+			6 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_orbital_battlestation
+						level >= 2
+					}
+				}
+				trigger_event = { id = wonder_events.22 }
+			}
+			5 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_orbital_battlestation
+						level >= 1
+					}
+				}
+				trigger_event = { id = wonder_events.23 }
+			}
+			5 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_orbital_battlestation
+						level >= 1
+					}
+					any_country = {
+						NOT = { this = root }
+						country_rank >= rank_value:major_power
+						has_technology_researched = space_militarization
+					}
+				}
+				trigger_event = { id = wonder_events.24 }
+			}
+			6 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_orbital_battlestation
+						level >= 3
+					}
+				}
+				trigger_event = { id = wonder_events.25 }
+			}
+			2 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_orbital_battlestation
+						level >= 3
+					}
+					NOT = { has_variable = wonder_asteroid_deflected }
+				}
+				trigger_event = { id = wonder_events.26 }
+			}
+
+			# === ANTIMATTER FACILITY - CONSTRUCTION ===
+			8 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_antimatter_facility_construction_site
+					}
+				}
+				trigger_event = { id = wonder_events.30 }
+			}
+			6 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_antimatter_facility_construction_site
+					}
+				}
+				trigger_event = { id = wonder_events.31 }
+			}
+
+			# === ANTIMATTER FACILITY - COMPLETED ===
+			8 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_antimatter_facility
+						level >= 1
+					}
+				}
+				trigger_event = { id = wonder_events.32 }
+			}
+			6 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_antimatter_facility
+						level >= 3
+					}
+				}
+				trigger_event = { id = wonder_events.33 }
+			}
+			5 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_antimatter_facility
+						level >= 1
+					}
+				}
+				trigger_event = { id = wonder_events.34 }
+			}
+			6 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_antimatter_facility
+						level >= 5
+					}
+				}
+				trigger_event = { id = wonder_events.35 }
+			}
+		}
+	}
+}

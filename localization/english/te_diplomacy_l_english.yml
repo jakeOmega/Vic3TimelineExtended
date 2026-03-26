@@ -73,3 +73,7 @@
  tactical_nuke_diplo_action_desc:0 "Launch a tactical nuclear strike on a military target."
  trade_diplomacy_modifier:0 "Trade Diplomacy"
  trade_diplomacy_modifier_desc:0 "We chose diplomacy over sanctions, maintaining trade flows but appearing unwilling to confront our rival."
+ we_am_diplomacy_arsenal:0 "Antimatter Arsenal Prestige"
+ we_am_diplomacy_arsenal_desc:0 "The antimatter arsenal commands deference from rival nations and strengthens sovereign authority."
+ we_am_diplomacy_olive:0 "Antimatter Diplomacy"
+ we_am_diplomacy_olive_desc:0 "Diplomatic outreach balances antimatter capability with international cooperation."

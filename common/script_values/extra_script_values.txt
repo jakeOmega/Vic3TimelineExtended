@@ -599,14 +599,14 @@ greenhouse_gas_emissions_display = {
 
 global_greenhouse_gas_emissions_script_value_display = {
 	value = 0
-	every_market = {
-		# Scope into the first country in each market so
-		# market_greenhouse_gas_emissions_script_value evaluates in country scope
-		ordered_scope_country = {
-			order_by = gdp
-			position = 0
-			max = 1
-			add = market_greenhouse_gas_emissions_script_value
+	every_state = {
+		if = {
+			limit = {
+				owner.market_capital = THIS
+			}
+			owner = {
+				add = market_greenhouse_gas_emissions_script_value
+			}
 		}
 	}
 	round = yes

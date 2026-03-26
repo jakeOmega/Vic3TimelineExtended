@@ -639,3 +639,257 @@ re_media_state_control = {
     country_authority_add = 100
     interest_group_ig_intelligentsia_approval_add = -3
 }
+
+# =============================================================================
+# WONDER BUILDING EVENT MODIFIERS
+# =============================================================================
+
+# ======= Space Elevator
+we_se_milestone_celebrate = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+    country_prestige_add = 50
+}
+we_se_milestone_focus = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+    country_tech_research_speed_mult = 0.05
+}
+we_se_structural_halt = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+    country_prestige_add = -25
+    country_max_weekly_construction_progress_add = 10
+}
+we_se_structural_reinforce = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+    country_prestige_add = 25
+    country_max_weekly_construction_progress_add = -15
+}
+we_se_gateway_open = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+    country_prestige_add = 50
+    country_mass_migration_attraction_mult = 0.25
+}
+we_se_gateway_restricted = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+    country_influence_add = 50
+    country_authority_add = 50
+}
+we_se_trade_auction = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+    country_prestige_add = 25
+    state_trade_capacity_mult = 0.15
+}
+we_se_trade_national = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+    building_group_bg_heavy_industry_throughput_add = 0.05
+}
+we_se_debris_clearance = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+    country_prestige_add = -25
+    country_convoys_capacity_mult = 0.05
+}
+we_se_debris_defense = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+    country_tech_research_speed_mult = 0.03
+    country_prestige_add = 25
+}
+we_se_astronaut_education = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+    country_tech_research_speed_mult = 0.05
+    country_weekly_innovation_mult = 0.1
+}
+we_se_astronaut_industry = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+    building_construction_sector_throughput_add = 0.1
+}
+we_se_sovereignty = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+    country_prestige_add = 75
+    country_authority_add = 50
+}
+we_se_shared_access = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+    country_influence_add = 100
+    country_prestige_add = 25
+}
+
+# ======= Solar Collector Array
+we_sc_first_light_pride = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+    country_prestige_add = 50
+}
+we_sc_first_light_focus = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+    country_tech_research_speed_mult = 0.05
+}
+we_sc_beam_compensate = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+    country_prestige_add = -25
+    country_legitimacy_base_add = 10
+}
+we_sc_beam_minimize = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+    country_prestige_add = -50
+}
+we_sc_surplus_invest = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+    building_group_bg_heavy_industry_throughput_add = 0.05
+    building_group_bg_manufacturing_throughput_add = 0.05
+}
+we_sc_surplus_export = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+    state_trade_capacity_mult = 0.1
+    country_prestige_add = 25
+}
+we_sc_postscarcity_subsidize = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+    country_government_wages_mult = 0.05
+    country_loyalists_from_legitimacy_mult = 0.1
+}
+we_sc_postscarcity_research = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+    country_tech_research_speed_mult = 0.1
+}
+we_sc_storm_shutdown = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+    goods_output_electricity_mult = -0.1
+    country_legitimacy_base_add = 10
+}
+we_sc_storm_rideout = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+    country_prestige_add = 25
+}
+we_sc_monopoly_assert = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+    country_prestige_add = 75
+}
+we_sc_monopoly_share = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+    country_influence_add = 100
+    country_tech_research_speed_mult = 0.03
+}
+
+# ======= Orbital Battlestation
+we_ob_highground_accelerate = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+    country_prestige_add = 50
+    unit_offense_mult = 0.05
+}
+we_ob_highground_assure = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+    country_influence_add = 75
+}
+we_ob_surveillance_dominance = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+    unit_offense_mult = 0.05
+    unit_defense_mult = 0.05
+}
+we_ob_surveillance_share = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+    country_influence_add = 100
+    country_legitimacy_base_add = 10
+}
+we_ob_deterrence_strength = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+    country_prestige_add = 75
+    unit_defense_mult = 0.1
+}
+we_ob_deterrence_negotiate = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+    country_influence_add = 100
+    country_prestige_add = 25
+}
+we_ob_weapons_test_relief = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+    country_prestige_add = -50
+    country_legitimacy_base_add = 15
+}
+we_ob_weapons_test_classify = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+    country_authority_add = 100
+    country_prestige_add = -25
+}
+we_ob_arms_race_maintain = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+    country_military_goods_cost_mult = 0.05
+    unit_offense_mult = 0.05
+    unit_defense_mult = 0.05
+}
+we_ob_arms_race_treaty = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+    country_influence_add = 100
+    country_prestige_add = 50
+}
+we_ob_strike_project = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+    unit_offense_mult = 0.1
+    country_prestige_add = 50
+}
+we_ob_strike_defensive = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+    unit_defense_mult = 0.1
+    country_prestige_add = 25
+}
+we_ob_shield = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+    country_prestige_add = 150
+}
+
+# ======= Antimatter Containment Facility
+we_am_breakthrough_research = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+    country_tech_research_speed_mult = 0.08
+    country_weekly_innovation_mult = 0.1
+}
+we_am_breakthrough_military = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+    country_military_tech_research_speed_mult = 0.1
+}
+we_am_breach_rebuild = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+    country_max_weekly_construction_progress_add = -20
+    country_legitimacy_base_add = 10
+}
+we_am_breach_press_ahead = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+    building_engineers_mortality_mult = 0.05
+}
+we_am_annihilation_military = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+    unit_offense_mult = 0.05
+    unit_morale_damage_mult = 0.05
+}
+we_am_annihilation_propulsion = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+    military_formation_movement_speed_mult = 0.1
+    country_convoys_capacity_mult = 0.05
+}
+we_am_diplomacy_arsenal = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+    country_prestige_add = 75
+    country_authority_add = 75
+}
+we_am_diplomacy_olive = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+    country_influence_add = 100
+    country_prestige_add = 25
+}
+we_am_incident_transparent = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+    country_legitimacy_base_add = 15
+    country_prestige_add = -25
+}
+we_am_incident_suppress = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+    country_authority_add = 100
+    country_prestige_add = -50
+}
+we_am_propulsion_military = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+    military_formation_movement_speed_mult = 0.15
+    country_convoys_capacity_mult = 0.1
+}
+we_am_propulsion_civilian = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+    state_trade_capacity_mult = 0.15
+    building_group_bg_heavy_industry_throughput_add = 0.05
+}
