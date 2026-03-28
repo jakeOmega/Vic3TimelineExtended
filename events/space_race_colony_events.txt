@@ -1,0 +1,1191 @@
+﻿############################################
+# Space Race Colony Events
+# Staged solar system colonization events
+# Stage 1: Mars & Asteroids (.1-.10)
+# Stage 2: Jupiter System & Venus (.11-.17)
+# Stage 3: Mercury & Saturn System (.18-.23)
+# Stage 4: Uranus & Neptune Systems (.24-.29)
+# Stage 5: Kuiper Belt & Beyond (.30-.34)
+############################################
+
+namespace = space_race_colony_events
+
+##############################################
+# STAGE 1: MARS & ASTEROIDS
+##############################################
+
+# Colony 1: Mars - Valles Marineris
+space_race_colony_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.1.t
+	desc = space_race_colony_events.1.d
+	flavor = space_race_colony_events.1.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.1.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Geological research base in the canyon
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.1.b
+		ai_chance = { base = 5 }
+		# Industrial mining of canyon wall minerals
+		add_loyalists = { value = small_radicals }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+	}
+}
+
+# Colony 2: Mars - Olympus Mons
+space_race_colony_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.2.t
+	desc = space_race_colony_events.2.d
+	flavor = space_race_colony_events.2.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.2.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# High-altitude atmospheric research station
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.2.b
+		ai_chance = { base = 5 }
+		# Caldera settlement with geothermal potential
+		add_loyalists = { value = small_radicals }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+}
+
+# Colony 3: Mars - Hellas Planitia
+space_race_colony_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.3.t
+	desc = space_race_colony_events.3.d
+	flavor = space_race_colony_events.3.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.3.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Pressurized settlement exploiting the denser atmosphere
+		add_loyalists = { value = medium_radicals }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.3.b
+		ai_chance = { base = 4 }
+		# Astrobiology laboratory searching for ancient microbial life
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 4: Mars - Utopia Planitia
+space_race_colony_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.4.t
+	desc = space_race_colony_events.4.d
+	flavor = space_race_colony_events.4.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.4.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Ice extraction and water processing facility
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.4.b
+		ai_chance = { base = 5 }
+		# Agricultural domes - first Martian farmland
+		add_loyalists = { value = medium_radicals }
+		add_loyalists = { value = small_radicals pop_type = farmers }
+	}
+}
+
+# Colony 5: Mars - Arcadia Planitia
+space_race_colony_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.5.t
+	desc = space_race_colony_events.5.d
+	flavor = space_race_colony_events.5.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.5.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Residential colony - first permanent civilian settlement
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = space_race_colony_events.5.b
+		ai_chance = { base = 4 }
+		# Military-grade outpost securing the northern approach
+		add_loyalists = { value = small_radicals pop_type = officers }
+		add_loyalists = { value = small_radicals pop_type = soldiers }
+	}
+}
+
+# Colony 6: Ceres
+space_race_colony_events.6 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.6.t
+	desc = space_race_colony_events.6.d
+	flavor = space_race_colony_events.6.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.6.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Deep-space waystation and refueling depot
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+	}
+
+	option = {
+		name = space_race_colony_events.6.b
+		ai_chance = { base = 5 }
+		# Scientific observatory studying the outer solar system
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 7: 4 Vesta
+space_race_colony_events.7 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.7.t
+	desc = space_race_colony_events.7.d
+	flavor = space_race_colony_events.7.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.7.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Metal extraction from the exposed mantle
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.7.b
+		ai_chance = { base = 5 }
+		# Planetary science lab studying differentiated body geology
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 8: 16 Psyche
+space_race_colony_events.8 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.8.t
+	desc = space_race_colony_events.8.d
+	flavor = space_race_colony_events.8.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.8.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Full-scale industrial mining of iron and nickel
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals pop_type = machinists }
+	}
+
+	option = {
+		name = space_race_colony_events.8.b
+		ai_chance = { base = 4 }
+		# Careful extraction to preserve scientific value
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 9: 2 Pallas
+space_race_colony_events.9 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.9.t
+	desc = space_race_colony_events.9.d
+	flavor = space_race_colony_events.9.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.9.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Carbon-rich material processing for composite manufacturing
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+	}
+
+	option = {
+		name = space_race_colony_events.9.b
+		ai_chance = { base = 5 }
+		# Astronomical observatory platform on the tilted surface
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 10: 10 Hygiea
+space_race_colony_events.10 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.10.t
+	desc = space_race_colony_events.10.d
+	flavor = space_race_colony_events.10.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.10.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Volatile extraction - water and organic compounds
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
+	}
+
+	option = {
+		name = space_race_colony_events.10.b
+		ai_chance = { base = 5 }
+		# Automated processing hub supplying the inner system
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals pop_type = machinists }
+	}
+}
+
+##############################################
+# STAGE 2: JUPITER SYSTEM & VENUS
+##############################################
+
+# Colony 11: Io
+space_race_colony_events.11 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.11.t
+	desc = space_race_colony_events.11.d
+	flavor = space_race_colony_events.11.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.11.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Sulfur mining and tidal energy harvesting
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+	}
+
+	option = {
+		name = space_race_colony_events.11.b
+		ai_chance = { base = 5 }
+		# Volcanological research station behind radiation shielding
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 12: Europa
+space_race_colony_events.12 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.12.t
+	desc = space_race_colony_events.12.d
+	flavor = space_race_colony_events.12.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.12.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Subsurface ocean drilling and astrobiology lab
+		add_loyalists = { value = large_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.12.b
+		ai_chance = { base = 4 }
+		# Surface-only habitat to minimize contamination risk
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
+	}
+}
+
+# Colony 13: Ganymede
+space_race_colony_events.13 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.13.t
+	desc = space_race_colony_events.13.d
+	flavor = space_race_colony_events.13.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.13.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Major settlement exploiting the magnetosphere for radiation protection
+		add_loyalists = { value = medium_radicals }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.13.b
+		ai_chance = { base = 5 }
+		# Jovian system command center and logistics hub
+		add_loyalists = { value = medium_radicals pop_type = officers }
+		add_loyalists = { value = small_radicals pop_type = bureaucrats }
+	}
+}
+
+# Colony 14: Callisto
+space_race_colony_events.14 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.14.t
+	desc = space_race_colony_events.14.d
+	flavor = space_race_colony_events.14.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.14.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Gateway colony - departure point for outer system missions
+		add_loyalists = { value = medium_radicals }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+	}
+
+	option = {
+		name = space_race_colony_events.14.b
+		ai_chance = { base = 5 }
+		# Self-sustaining agricultural settlement on ancient cratered surface
+		add_loyalists = { value = medium_radicals }
+		add_loyalists = { value = small_radicals pop_type = farmers }
+	}
+}
+
+# Colony 15: Himalia
+space_race_colony_events.15 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.15.t
+	desc = space_race_colony_events.15.d
+	flavor = space_race_colony_events.15.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.15.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Remote telescope array beyond Jupiter's radiation belts
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.15.b
+		ai_chance = { base = 5 }
+		# Fuel depot for trans-Jovian missions
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+	}
+}
+
+# Colony 16: Amalthea
+space_race_colony_events.16 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.16.t
+	desc = space_race_colony_events.16.d
+	flavor = space_race_colony_events.16.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.16.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# High-energy physics platform studying Jupiter's magnetosphere
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.16.b
+		ai_chance = { base = 4 }
+		# Ring material collection and analysis
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+}
+
+# Colony 17: Venus Cloud Colony
+space_race_colony_events.17 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.17.t
+	desc = space_race_colony_events.17.d
+	flavor = space_race_colony_events.17.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.17.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Aerostatic research habitat studying Venus's atmosphere
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.17.b
+		ai_chance = { base = 5 }
+		# Atmospheric gas extraction and chemical processing
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+	}
+}
+
+##############################################
+# STAGE 3: MERCURY & SATURN SYSTEM
+##############################################
+
+# Colony 18: Mercury
+space_race_colony_events.18 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.18.t
+	desc = space_race_colony_events.18.d
+	flavor = space_race_colony_events.18.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.18.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Solar power megastation beaming energy across the system
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+	}
+
+	option = {
+		name = space_race_colony_events.18.b
+		ai_chance = { base = 5 }
+		# Permanently shadowed crater base with ice mining
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 19: Titan
+space_race_colony_events.19 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.19.t
+	desc = space_race_colony_events.19.d
+	flavor = space_race_colony_events.19.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.19.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Hydrocarbon harvesting from methane lakes
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.19.b
+		ai_chance = { base = 5 }
+		# Prebiotic chemistry research near Kraken Mare
+		add_loyalists = { value = large_radicals pop_type = academics }
+	}
+}
+
+# Colony 20: Enceladus
+space_race_colony_events.20 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.20.t
+	desc = space_race_colony_events.20.d
+	flavor = space_race_colony_events.20.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.20.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Geyser-adjacent astrobiology lab probing the subsurface ocean
+		add_loyalists = { value = large_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.20.b
+		ai_chance = { base = 4 }
+		# Clean water extraction and export depot
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+	}
+}
+
+# Colony 21: Rhea
+space_race_colony_events.21 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.21.t
+	desc = space_race_colony_events.21.d
+	flavor = space_race_colony_events.21.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.21.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Ice mining and propellant refinery
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+	}
+
+	option = {
+		name = space_race_colony_events.21.b
+		ai_chance = { base = 5 }
+		# Saturnian ring observation platform
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 22: Mimas
+space_race_colony_events.22 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.22.t
+	desc = space_race_colony_events.22.d
+	flavor = space_race_colony_events.22.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.22.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Deep installation inside Herschel Crater
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.22.b
+		ai_chance = { base = 5 }
+		# Gravity research facility on the low-mass body
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 23: Iapetus
+space_race_colony_events.23 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.23.t
+	desc = space_race_colony_events.23.d
+	flavor = space_race_colony_events.23.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.23.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Equatorial ridge survey expedition
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.23.b
+		ai_chance = { base = 5 }
+		# Dark-side material analysis for organic compound study
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+}
+
+##############################################
+# STAGE 4: URANUS & NEPTUNE SYSTEMS
+##############################################
+
+# Colony 24: Titania
+space_race_colony_events.24 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.24.t
+	desc = space_race_colony_events.24.d
+	flavor = space_race_colony_events.24.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.24.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Settlement in the great canyon system, mining exposed rock
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.24.b
+		ai_chance = { base = 5 }
+		# Geophysical station studying past tectonic activity
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 25: Oberon
+space_race_colony_events.25 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.25.t
+	desc = space_race_colony_events.25.d
+	flavor = space_race_colony_events.25.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.25.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Deep-space communications relay for outer system
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.25.b
+		ai_chance = { base = 5 }
+		# Isolated research station embracing the solitude
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 26: Miranda
+space_race_colony_events.26 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.26.t
+	desc = space_race_colony_events.26.d
+	flavor = space_race_colony_events.26.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.26.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Verona Rupes base camp - studying the tallest cliff in the solar system
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.26.b
+		ai_chance = { base = 5 }
+		# Subsurface drilling exploring the chaotic internal structure
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Colony 27: Ariel
+space_race_colony_events.27 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.27.t
+	desc = space_race_colony_events.27.d
+	flavor = space_race_colony_events.27.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.27.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Cryovolcanic sampling station
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.27.b
+		ai_chance = { base = 5 }
+		# Ice quarrying operation for trans-Uranian fuel supply
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+	}
+}
+
+# Colony 28: Triton
+space_race_colony_events.28 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.28.t
+	desc = space_race_colony_events.28.d
+	flavor = space_race_colony_events.28.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.28.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Nitrogen geyser energy capture and research
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.28.b
+		ai_chance = { base = 4 }
+		# Kuiper Belt gateway staging base
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+	}
+}
+
+# Colony 29: Proteus
+space_race_colony_events.29 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.29.t
+	desc = space_race_colony_events.29.d
+	flavor = space_race_colony_events.29.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.29.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Neptune atmospheric probe relay station
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.29.b
+		ai_chance = { base = 5 }
+		# Automated resource extraction outpost
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals pop_type = machinists }
+	}
+}
+
+##############################################
+# STAGE 5: KUIPER BELT & BEYOND
+##############################################
+
+# Colony 30: Pluto-Charon
+space_race_colony_events.30 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.30.t
+	desc = space_race_colony_events.30.d
+	flavor = space_race_colony_events.30.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.30.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Dual-body research complex spanning Pluto and Charon
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.30.b
+		ai_chance = { base = 5 }
+		# Nitrogen ice harvesting on Sputnik Planitia
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+	}
+}
+
+# Colony 31: Eris
+space_race_colony_events.31 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.31.t
+	desc = space_race_colony_events.31.d
+	flavor = space_race_colony_events.31.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.31.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Extreme-distance logistics test - proving self-sufficiency
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.31.b
+		ai_chance = { base = 4 }
+		# Oort Cloud approach monitoring station
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Colony 32: Makemake
+space_race_colony_events.32 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.32.t
+	desc = space_race_colony_events.32.d
+	flavor = space_race_colony_events.32.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.32.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Methane ice chemistry laboratory
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.32.b
+		ai_chance = { base = 5 }
+		# Solar wind research at the heliopause approach
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+}
+
+# Colony 33: Haumea
+space_race_colony_events.33 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.33.t
+	desc = space_race_colony_events.33.d
+	flavor = space_race_colony_events.33.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.33.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Rotational dynamics laboratory on the egg-shaped body
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_colony_events.33.b
+		ai_chance = { base = 5 }
+		# Ring and moon system study from orbital platform
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+}
+
+# Colony 34: Sedna
+space_race_colony_events.34 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.34.t
+	desc = space_race_colony_events.34.d
+	flavor = space_race_colony_events.34.f
+
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_colony_events.34.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Humanity's most distant permanent outpost - a monument to ambition
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = space_race_colony_events.34.b
+		ai_chance = { base = 4 }
+		# Interstellar medium research station at the edge of the heliosphere
+		add_loyalists = { value = large_radicals pop_type = academics }
+	}
+}

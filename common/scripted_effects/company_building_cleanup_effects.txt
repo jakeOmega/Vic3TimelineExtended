@@ -1,0 +1,265 @@
+﻿# ============================================================================
+# COMPANY BUILDING CLEANUP
+# Called from on_company_disbanded to remove company-unique buildings.
+# Scope: state | scope:company = the disbanded company
+# ============================================================================
+remove_disbanded_company_buildings_effect = {
+	# --- Named company buildings ---
+	if = {
+		limit = { scope:company.type = company_type:company_volkswagen }
+		remove_building = building_volkswagen_autostadt
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_toyota }
+		remove_building = building_toyota_kaikan_plant
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_samsung }
+		remove_building = building_samsung_digital_city
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_hp }
+		remove_building = building_hp_labs
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_sony }
+		remove_building = building_sony_pictures_studios
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_ikea }
+		remove_building = building_ikea_almhult_campus
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_intel }
+		remove_building = building_intel_ronler_acres
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_microsoft }
+		remove_building = building_microsoft_redmond_campus
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_apple }
+		remove_building = building_apple_park
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_tsmc }
+		remove_building = building_tsmc_fab_18
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_huawei }
+		remove_building = building_huawei_ox_horn_campus
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_amazon }
+		remove_building = building_amazon_fulfillment_center
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_nvidia }
+		remove_building = building_nvidia_endeavor_campus
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_google }
+		remove_building = building_googleplex
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_netflix }
+		remove_building = building_netflix_animation_studios
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_spacex }
+		remove_building = building_spacex_starbase
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_bytedance }
+		remove_building = building_bytedance_data_fortress
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_openai }
+		remove_building = building_openai_research_lab
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_catl }
+		remove_building = building_catl_gigafactory
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_boston_dynamics }
+		remove_building = building_boston_dynamics_ai_institute
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_asml }
+		remove_building = building_asml_veldhoven_campus
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_lockheed_martin }
+		remove_building = building_lockheed_skunk_works
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_bae_systems }
+		remove_building = building_bae_samlesbury_aerodrome
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_roscosmos }
+		remove_building = building_roscosmos_vostochny_cosmodrome
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_airbus }
+		remove_building = building_airbus_lagardere_plant
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_dassault_aviation }
+		remove_building = building_dassault_merignac_plant
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_hyundai }
+		remove_building = building_hyundai_ulsan_factory
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_sap }
+		remove_building = building_sap_headquarters
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_tencent }
+		remove_building = building_tencent_seafront_towers
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_alibaba }
+		remove_building = building_alibaba_cainiao_park
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_nintendo }
+		remove_building = building_nintendo_development_center
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_gazprom }
+		remove_building = building_gazprom_lakhta_center
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_saudi_aramco }
+		remove_building = building_saudi_aramco_abqaiq_plant
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_petrobras }
+		remove_building = building_petrobras_cenpes_center
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_rosatom }
+		remove_building = building_rosatom_mayak_association
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_oracle }
+		remove_building = building_oracle_cloud_data_center
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_softbank }
+		remove_building = building_softbank_vision_fund_hq
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_roche }
+		remove_building = building_roche_tower
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_pfizer }
+		remove_building = building_pfizer_rd_campus
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_vale }
+		remove_building = building_vale_carajas_mine
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_disney }
+		remove_building = building_disney_world
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_universal }
+		remove_building = building_universal_studios_hollywood
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_verizon }
+		remove_building = building_verizon_building
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_reliance }
+		remove_building = building_reliance_jamnagar_refinery
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_fanuc }
+		remove_building = building_fanuc_forest
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_eni }
+		remove_building = building_eni_palazzo
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_ferrari }
+		remove_building = building_ferrari_maranello_factory
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_blackberry }
+		remove_building = building_blackberry_rim_campus
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_shopify }
+		remove_building = building_shopify_fulfillment_hub
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_bhp_group }
+		remove_building = building_bhp_mount_whaleback_mine
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_cochlear }
+		remove_building = building_cochlear_global_hq
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_infosys }
+		remove_building = building_infosys_mysore_campus
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_jsw_steel }
+		remove_building = building_jsw_vijayanagar_works
+	}
+	# --- Generic company buildings ---
+	else_if = {
+		limit = { scope:company.type = company_type:company_basic_biotechnology }
+		remove_building = building_generic_rd_complex
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_infrastructure }
+		remove_building = building_generic_logistics_hub
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_basic_electrics }
+		remove_building = building_generic_hq_skyscraper
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_construction_power_bloc }
+		remove_building = building_generic_industrial_zone
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_basic_advanced_materials }
+		remove_building = building_generic_materials_lab
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_basic_electronics }
+		remove_building = building_generic_robotics_institute
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_basic_software }
+		remove_building = building_generic_data_fortress
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_basic_entertainment }
+		remove_building = building_generic_media_hq
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_basic_power }
+		remove_building = building_generic_power_hub
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_basic_aerospace }
+		remove_building = building_generic_proving_grounds
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_basic_autarky }
+		remove_building = building_generic_resource_depository
+	}
+}

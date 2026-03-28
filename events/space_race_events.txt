@@ -1,0 +1,2161 @@
+﻿namespace = space_race_events
+
+##############################################
+# MILESTONE COMPLETION EVENTS
+##############################################
+
+# Event 1: Suborbital Flight Achievement
+space_race_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.1.t
+	desc = space_race_events.1.d
+	flavor = space_race_events.1.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.1.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Celebrate the achievement - loyalists
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
+	}
+
+	option = {
+		name = space_race_events.1.b
+		ai_chance = { base = 3 }
+		# Channel momentum into next milestone - innovation boost
+		add_modifier = {
+			name = sr_suborbital
+			days = short_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Event 2: Orbital Flight Achievement
+space_race_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.2.t
+	desc = space_race_events.2.d
+	flavor = space_race_events.2.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.2.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = space_race_events.2.b
+		ai_chance = { base = 4 }
+		# Invest in satellite infrastructure
+		add_modifier = {
+			name = sr_orbital
+			days = short_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	option = {
+		name = space_race_events.2.c
+		ai_chance = { base = 2 }
+		# Military applications - satellite surveillance
+		add_modifier = {
+			name = sr_orbital
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals strata = lower }
+	}
+}
+
+# Event 3: Moon Landing Achievement
+space_race_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.3.t
+	desc = space_race_events.3.d
+	flavor = space_race_events.3.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	# Different options depending on landing site choice
+	option = {
+		name = space_race_events.3.a
+		default_option = yes
+		trigger = { has_variable = sr_moon_site_shackleton }
+		ai_chance = { base = 5 }
+		# Shackleton Crater - scientific windfall
+		add_modifier = {
+			name = sr_shackleton_crater
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = large_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.3.b
+		trigger = { has_variable = sr_moon_site_equatorial }
+		ai_chance = { base = 5 }
+		# Equatorial Plain - stable foundation
+		add_modifier = {
+			name = sr_equatorial_plain
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = space_race_events.3.c
+		trigger = {
+			NOT = { has_variable = sr_moon_site_shackleton }
+			NOT = { has_variable = sr_moon_site_equatorial }
+		}
+		default_option = yes
+		ai_chance = { base = 5 }
+		# No site chosen (shouldn't normally happen) - generic reward
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
+	}
+}
+
+# Event 4: Outer Solar System Probe Achievement
+space_race_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.4.t
+	desc = space_race_events.4.d
+	flavor = space_race_events.4.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.4.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Share data with international community
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		every_country = {
+			limit = {
+				has_technology_researched = space_exploration
+				NOT = { THIS = ROOT }
+				has_diplomatic_relevance = ROOT
+			}
+			change_relations = { country = ROOT value = 20 }
+		}
+	}
+
+	option = {
+		name = space_race_events.4.b
+		ai_chance = { base = 3 }
+		# Classify findings for national advantage
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_modifier = {
+			name = sr_probe
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Event 5: Moon Landing Site Choice (fires at start of Moon Landing JE)
+space_race_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.5.t
+	desc = space_race_events.5.d
+	flavor = space_race_events.5.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.5.a
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_variable = sr_approach_ambitious }
+				add = 5
+			}
+		}
+		# Shackleton Crater - high risk, scientific windfall
+		set_variable = { name = sr_moon_site_shackleton value = yes }
+		custom_tooltip = {
+			text = "SR_SHACKLETON_CHOSEN_TT"
+		}
+	}
+
+	option = {
+		name = space_race_events.5.b
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_variable = sr_approach_safe }
+				add = 3
+			}
+		}
+		# Equatorial Plain - low risk, modest rewards
+		set_variable = { name = sr_moon_site_equatorial value = yes }
+		custom_tooltip = {
+			text = "SR_EQUATORIAL_CHOSEN_TT"
+		}
+	}
+
+	option = {
+		name = space_race_events.5.c
+		ai_chance = { base = 2 }
+		# Let the scientists decide - random assignment
+		random_list = {
+			50 = {
+				set_variable = { name = sr_moon_site_shackleton value = yes }
+				custom_tooltip = {
+					text = "SR_SHACKLETON_CHOSEN_TT"
+				}
+			}
+			50 = {
+				set_variable = { name = sr_moon_site_equatorial value = yes }
+				custom_tooltip = {
+					text = "SR_EQUATORIAL_CHOSEN_TT"
+				}
+			}
+		}
+	}
+}
+
+# Event 6: Moon Base Established
+space_race_events.6 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.6.t
+	desc = space_race_events.6.d
+	flavor = space_race_events.6.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.6.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Lunar mining operations
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = space_race_events.6.b
+		ai_chance = { base = 4 }
+		# International lunar research hub
+		every_country = {
+			limit = {
+				has_technology_researched = space_exploration
+				NOT = { THIS = ROOT }
+				has_diplomatic_relevance = ROOT
+			}
+			change_relations = { country = ROOT value = 15 }
+		}
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.6.c
+		ai_chance = { base = 2 }
+		# Military lunar installation
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals strata = lower }
+	}
+}
+
+# Event 7: Mars Landing Achievement
+space_race_events.7 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.7.t
+	desc = space_race_events.7.d
+	flavor = space_race_events.7.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.7.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Establish permanent research station
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+	}
+
+	option = {
+		name = space_race_events.7.b
+		ai_chance = { base = 3 }
+		# Begin resource extraction surveys
+		add_modifier = {
+			name = sr_mars_resource_extraction
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.7.c
+		ai_chance = { base = 2 }
+		# Broadcast the landing globally - maximum prestige play
+		add_loyalists = { value = medium_radicals }
+		add_loyalists = { value = large_radicals pop_type = academics }
+	}
+}
+
+# Event 8: Interstellar Probe Launch
+space_race_events.8 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.8.t
+	desc = space_race_events.8.d
+	flavor = space_race_events.8.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.8.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Fusion torch drive - proven technology, reliable thrust
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+	}
+
+	option = {
+		name = space_race_events.8.b
+		ai_chance = { base = 3 }
+		# Antimatter catalyzed drive - experimental but faster
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_events.8.c
+		ai_chance = { base = 2 }
+		# International probe - share costs and data with all spacefaring nations
+		every_country = {
+			limit = {
+				has_technology_researched = space_colonization
+				NOT = { THIS = ROOT }
+				has_diplomatic_relevance = ROOT
+			}
+			change_relations = { country = ROOT value = 25 }
+		}
+		add_loyalists = { value = medium_radicals }
+	}
+}
+
+# Event 9: Colony Established (generic completion event for solar colonization stages)
+space_race_events.9 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.9.t
+	desc = space_race_events.9.d
+	flavor = space_race_events.9.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.9.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Celebrate the expansion of our civilization
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
+	}
+}
+
+##############################################
+# FAILURE EVENTS
+##############################################
+
+# Event 10: Mission Failure (Ambitious Approach)
+space_race_events.10 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.10.t
+	desc = space_race_events.10.d
+	flavor = space_race_events.10.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.10.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Investigate and rebuild - moderate setback
+		sr_mission_failure_effect = yes
+	}
+
+	option = {
+		name = space_race_events.10.b
+		ai_chance = { base = 3 }
+		# Switch to safe approach
+		sr_mission_failure_effect = yes
+		if = {
+			limit = { has_variable = sr_approach_ambitious }
+			remove_variable = sr_approach_ambitious
+		}
+		set_variable = { name = sr_approach_safe value = yes }
+		if = {
+			limit = { has_modifier = sr_ambitious_approach }
+			remove_modifier = sr_ambitious_approach
+		}
+		add_modifier = { name = sr_safe_approach }
+	}
+
+	option = {
+		name = space_race_events.10.c
+		ai_chance = { base = 1 }
+		# Double down - accept the loss, push harder
+		# Only minor setback but adds radicals
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.75
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		add_radicals = { value = large_radicals pop_type = academics }
+		add_radicals = { value = medium_radicals }
+	}
+}
+
+# Event 11: Minor Setback (Safe Approach)
+space_race_events.11 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.11.t
+	desc = space_race_events.11.d
+	flavor = space_race_events.11.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.11.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Careful review - small progress loss
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.85
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.11.b
+		ai_chance = { base = 3 }
+		# Redirect resources - lose more progress but gain innovation
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.7
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+	}
+}
+
+##############################################
+# NOTIFICATION EVENTS
+##############################################
+
+# Event 20: Another Nation Achieves a Milestone (notification to rivals)
+space_race_events.20 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = space_race_events.20.t
+	desc = space_race_events.20.d
+	flavor = space_race_events.20.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.20.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# We must accelerate our own program
+		if = {
+			limit = { has_variable = sr_active_milestone }
+			change_variable = {
+				name = sr_milestone_progress
+				add = 3
+			}
+		}
+	}
+
+	option = {
+		name = space_race_events.20.b
+		ai_chance = { base = 3 }
+		# Congratulate them publicly
+		if = {
+			limit = { exists = scope:sr_achiever }
+			change_relations = { country = scope:sr_achiever value = 10 }
+		}
+	}
+}
+
+##############################################
+# IN-PROGRESS COLOR EVENTS (milestone-specific)
+##############################################
+
+# Event 30: Suborbital Test Flight Success (mid-progress positive)
+space_race_events.30 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.30.t
+	desc = space_race_events.30.d
+	flavor = space_race_events.30.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_suborbital
+		var:sr_milestone_progress >= 20
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.30.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Use test data to accelerate program
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.30.b
+		ai_chance = { base = 3 }
+		# Publicize the test - prestige play
+		add_loyalists = { value = small_radicals }
+	}
+}
+
+# Event 31: Orbital Debris Concerns (mid-progress choice)
+space_race_events.31 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.31.t
+	desc = space_race_events.31.d
+	flavor = space_race_events.31.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_orbital
+		var:sr_milestone_progress >= 30
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.31.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Invest in debris tracking and cleanup
+		change_variable = {
+			name = sr_milestone_progress
+			add = 3
+		}
+	}
+
+	option = {
+		name = space_race_events.31.b
+		ai_chance = { base = 2 }
+		# Ignore the problem, full speed ahead
+		change_variable = {
+			name = sr_milestone_progress
+			add = 8
+		}
+		# But increased failure chance next time
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.31.c
+		ai_chance = { base = 3 }
+		# Propose international debris management treaty
+		every_country = {
+			limit = {
+				has_technology_researched = space_exploration
+				NOT = { THIS = ROOT }
+				has_diplomatic_relevance = ROOT
+			}
+			change_relations = { country = ROOT value = 10 }
+		}
+	}
+}
+
+# Event 32: Volunteer Astronaut Program (Moon Landing in-progress)
+space_race_events.32 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = space_race_events.32.t
+	desc = space_race_events.32.d
+	flavor = space_race_events.32.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_moon_landing
+		var:sr_milestone_progress >= 40
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.32.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Select from military pilots - disciplined, experienced
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+	}
+
+	option = {
+		name = space_race_events.32.b
+		ai_chance = { base = 3 }
+		# Open civilian program - inspiring but slower
+		change_variable = {
+			name = sr_milestone_progress
+			add = 2
+		}
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = space_race_events.32.c
+		ai_chance = { base = 2 }
+		# International crew selection
+		change_variable = {
+			name = sr_milestone_progress
+			add = 3
+		}
+		every_country = {
+			limit = {
+				has_technology_researched = space_exploration
+				NOT = { THIS = ROOT }
+				has_diplomatic_relevance = ROOT
+			}
+			change_relations = { country = ROOT value = 10 }
+		}
+	}
+}
+
+# Event 33: Mars Landing - Signs of Water (in-progress)
+space_race_events.33 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.33.t
+	desc = space_race_events.33.d
+	flavor = space_race_events.33.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_mars_landing
+		var:sr_milestone_progress >= 80
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.33.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Redirect to water-rich landing site - progress boost
+		change_variable = {
+			name = sr_milestone_progress
+			add = 10
+		}
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.33.b
+		ai_chance = { base = 3 }
+		# Stick to the plan - conservative but safe
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+	}
+}
+
+# Event 34: Interstellar Probe Design Debate
+space_race_events.34 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = space_race_events.34.t
+	desc = space_race_events.34.d
+	flavor = space_race_events.34.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_interstellar_probe
+		var:sr_milestone_progress >= 80
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.34.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Maximize instrument payload - more data, slower trip
+		change_variable = {
+			name = sr_milestone_progress
+			add = 15
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.34.b
+		ai_chance = { base = 4 }
+		# Strip to essentials - faster transit, camera and spectrometer only
+		change_variable = {
+			name = sr_milestone_progress
+			add = 20
+		}
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.34.c
+		ai_chance = { base = 2 }
+		# International instrument consortium - shared design, shared data
+		change_variable = {
+			name = sr_milestone_progress
+			add = 12
+		}
+		every_country = {
+			limit = {
+				has_technology_researched = space_colonization
+				NOT = { THIS = ROOT }
+				has_diplomatic_relevance = ROOT
+			}
+			change_relations = { country = ROOT value = 15 }
+		}
+	}
+}
+
+# Event 35: Solar System Colonization - Supply Chain Logistics
+space_race_events.35 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.35.t
+	desc = space_race_events.35.d
+	flavor = space_race_events.35.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_solar_colonization
+		var:sr_milestone_progress >= 30
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.35.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# National colony ship - sovereignty in the stars
+		change_variable = {
+			name = sr_milestone_progress
+			add = 20
+		}
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = space_race_events.35.b
+		ai_chance = { base = 4 }
+		# Multi-national vessel - shared costs, shared glory
+		change_variable = {
+			name = sr_milestone_progress
+			add = 25
+		}
+		every_country = {
+			limit = {
+				has_technology_researched = space_colonization
+				NOT = { THIS = ROOT }
+				has_diplomatic_relevance = ROOT
+			}
+			change_relations = { country = ROOT value = 20 }
+		}
+	}
+
+	option = {
+		name = space_race_events.35.c
+		ai_chance = { base = 2 }
+		# Private enterprise leads - faster but controversial
+		change_variable = {
+			name = sr_milestone_progress
+			add = 30
+		}
+		add_radicals = { value = medium_radicals strata = lower }
+		add_loyalists = { value = medium_radicals strata = upper }
+	}
+}
+
+# Event 36: Moon Base - Helium-3 Discovery
+space_race_events.36 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.36.t
+	desc = space_race_events.36.d
+	flavor = space_race_events.36.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_moon_base
+		var:sr_milestone_progress >= 60
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.36.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Begin extraction operations immediately
+		change_variable = {
+			name = sr_milestone_progress
+			add = 10
+		}
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.36.b
+		ai_chance = { base = 3 }
+		# Study deposits first - ensure sustainable extraction
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.36.c
+		ai_chance = { base = 2 }
+		# License extraction rights to private industry
+		change_variable = {
+			name = sr_milestone_progress
+			add = 8
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+}
+
+# Event 37: Probe - First Images of Outer Planets (mid-progress flavor)
+space_race_events.37 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.37.t
+	desc = space_race_events.37.d
+	flavor = space_race_events.37.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_probe
+		var:sr_milestone_progress >= 50
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.37.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Release images to a captivated public
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = space_race_events.37.b
+		ai_chance = { base = 3 }
+		# Prioritize scientific analysis over publicity
+		change_variable = {
+			name = sr_milestone_progress
+			add = 8
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+}
+
+##############################################
+# EXPANDED IN-PROGRESS EVENTS (Hard Sci-Fi)
+##############################################
+
+# Event 40: Radiation Shielding Problem (orbital or moon)
+# The Van Allen belts and solar particle events are a real engineering constraint
+space_race_events.40 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.40.t
+	desc = space_race_events.40.d
+	flavor = space_race_events.40.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_variable = sr_active_orbital
+			has_variable = sr_active_moon_landing
+			has_variable = sr_active_moon_base
+		}
+		var:sr_milestone_progress >= 25
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.40.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Active magnetic shielding - heavier but more effective
+		change_variable = {
+			name = sr_milestone_progress
+			add = 4
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.40.b
+		ai_chance = { base = 4 }
+		# Passive water shielding - proven physics, adds mass budget
+		change_variable = {
+			name = sr_milestone_progress
+			add = 6
+		}
+	}
+
+	option = {
+		name = space_race_events.40.c
+		ai_chance = { base = 2 }
+		# Accept higher dose limits - faster but crew health risk
+		change_variable = {
+			name = sr_milestone_progress
+			add = 10
+		}
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 41: Gravity Well Economics (moon base/mars)
+# Delta-v budgets and launch costs: real hard sf concerns
+space_race_events.41 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.41.t
+	desc = space_race_events.41.d
+	flavor = space_race_events.41.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_variable = sr_active_moon_base
+			has_variable = sr_active_mars_landing
+		}
+		var:sr_milestone_progress >= 40
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.41.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Invest in electromagnetic launch catapult
+		change_variable = {
+			name = sr_milestone_progress
+			add = 8
+		}
+	}
+
+	option = {
+		name = space_race_events.41.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_space_elevator
+					}
+				}
+				add = 5
+			}
+		}
+		# Leverage space elevator if available
+		if = {
+			limit = {
+				any_scope_building = {
+					is_building_type = building_space_elevator
+				}
+			}
+			change_variable = {
+				name = sr_milestone_progress
+				add = 15
+			}
+			custom_tooltip = {
+				text = "SR_ELEVATOR_BOOST_TT"
+			}
+		}
+		else = {
+			change_variable = {
+				name = sr_milestone_progress
+				add = 4
+			}
+			custom_tooltip = {
+				text = "SR_NO_ELEVATOR_TT"
+			}
+		}
+	}
+
+	option = {
+		name = space_race_events.41.c
+		ai_chance = { base = 3 }
+		# Conventional chemical rockets — reliable but expensive per kg
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+		add_modifier = {
+			name = sr_space_program_funding
+			multiplier = 1
+		}
+	}
+}
+
+# Event 42: Communication Delay (Mars missions)
+# 4-24 minute signal delay means autonomous operations
+space_race_events.42 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.42.t
+	desc = space_race_events.42.d
+	flavor = space_race_events.42.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_mars_landing
+		var:sr_milestone_progress >= 50
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.42.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Invest in autonomous AI systems for crew operations
+		change_variable = {
+			name = sr_milestone_progress
+			add = 8
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.42.b
+		ai_chance = { base = 3 }
+		# Laser relay network - reduce delay with expensive infrastructure
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+	}
+
+	option = {
+		name = space_race_events.42.c
+		ai_chance = { base = 2 }
+		# Train crew for complete operational independence
+		change_variable = {
+			name = sr_milestone_progress
+			add = 6
+		}
+		add_loyalists = { value = small_radicals }
+	}
+}
+
+# Event 43: Closed-Loop Life Support Challenge (moon base/mars)
+# Bioregenerative ECLSS — growing air and water instead of importing it
+space_race_events.43 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.43.t
+	desc = space_race_events.43.d
+	flavor = space_race_events.43.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_variable = sr_active_moon_base
+			has_variable = sr_active_mars_landing
+		}
+		var:sr_milestone_progress >= 35
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.43.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Full bioregenerative system - algae reactors and plant bays
+		change_variable = {
+			name = sr_milestone_progress
+			add = 7
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.43.b
+		ai_chance = { base = 4 }
+		# Hybrid chemical-biological - proven fallback for each subsystem
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+	}
+
+	option = {
+		name = space_race_events.43.c
+		ai_chance = { base = 2 }
+		# Import everything from Earth - simpler but supply-chain dependent
+		change_variable = {
+			name = sr_milestone_progress
+			add = 3
+		}
+	}
+}
+
+# Event 44: Solar Flare Warning (any active mission)
+# Coronal mass ejections — a real hazard for astronauts and electronics
+space_race_events.44 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.44.t
+	desc = space_race_events.44.d
+	flavor = space_race_events.44.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_milestone
+		var:sr_milestone_progress >= 15
+		NOT = { has_modifier = sr_mission_failure }
+		# More likely during later milestones (more exposure)
+		OR = {
+			has_variable = sr_active_moon_landing
+			has_variable = sr_active_moon_base
+			has_variable = sr_active_mars_landing
+			has_variable = sr_active_solar_colonization
+		}
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.44.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Emergency shelter protocols - lose time but protect crew
+		change_variable = {
+			name = sr_milestone_progress
+			subtract = 3
+		}
+	}
+
+	option = {
+		name = space_race_events.44.b
+		ai_chance = { base = 2 }
+		# Ride it out with existing shielding - risky
+		random_list = {
+			60 = {
+				# Shielding holds
+				change_variable = {
+					name = sr_milestone_progress
+					add = 2
+				}
+				custom_tooltip = {
+					text = "SR_FLARE_SURVIVED_TT"
+				}
+			}
+			40 = {
+				# Equipment damage from particle flux
+				change_variable = {
+					name = sr_milestone_progress
+					subtract = 8
+				}
+				add_radicals = { value = small_radicals pop_type = academics }
+				custom_tooltip = {
+					text = "SR_FLARE_DAMAGE_TT"
+				}
+			}
+		}
+	}
+}
+
+# Event 45: Gravitational Slingshot Calculation (probe)
+# Using planetary gravity assists to reach the outer system — real orbital mechanics
+space_race_events.45 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.45.t
+	desc = space_race_events.45.d
+	flavor = space_race_events.45.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_probe
+		var:sr_milestone_progress >= 30
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.45.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Jupiter slingshot — fastest trajectory, narrow launch window
+		change_variable = {
+			name = sr_milestone_progress
+			add = 10
+		}
+	}
+
+	option = {
+		name = space_race_events.45.b
+		ai_chance = { base = 4 }
+		# Venus-Earth-Jupiter triple gravity assist — slower but more data
+		change_variable = {
+			name = sr_milestone_progress
+			add = 6
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.45.c
+		ai_chance = { base = 2 }
+		# Direct trajectory with ion drive — expensive, no gravity assists
+		change_variable = {
+			name = sr_milestone_progress
+			add = 8
+		}
+	}
+}
+
+# Event 46: In-Situ Resource Utilization Test (Moon/Mars)
+# Manufacturing propellant and building materials from local regolith
+space_race_events.46 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.46.t
+	desc = space_race_events.46.d
+	flavor = space_race_events.46.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_variable = sr_active_moon_base
+			has_variable = sr_active_mars_landing
+		}
+		var:sr_milestone_progress >= 60
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.46.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Extract oxygen and water from regolith — proven chemistry
+		change_variable = {
+			name = sr_milestone_progress
+			add = 8
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.46.b
+		ai_chance = { base = 3 }
+		# Attempt metal smelting from local ores — high reward if it works
+		random_list = {
+			70 = {
+				change_variable = {
+					name = sr_milestone_progress
+					add = 15
+				}
+				custom_tooltip = {
+					text = "SR_ISRU_SMELTING_SUCCESS_TT"
+				}
+			}
+			30 = {
+				change_variable = {
+					name = sr_milestone_progress
+					add = 3
+				}
+				custom_tooltip = {
+					text = "SR_ISRU_SMELTING_FAIL_TT"
+				}
+			}
+		}
+	}
+}
+
+# Event 47: Micrometeorite Impact (orbital/probe)
+# Random debris strikes are a constant hazard in space operations
+space_race_events.47 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.47.t
+	desc = space_race_events.47.d
+	flavor = space_race_events.47.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_variable = sr_active_orbital
+			has_variable = sr_active_probe
+			has_variable = sr_active_moon_base
+		}
+		var:sr_milestone_progress >= 20
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.47.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Deploy repair crew / remote patch — standard procedure
+		change_variable = {
+			name = sr_milestone_progress
+			subtract = 4
+		}
+	}
+
+	option = {
+		name = space_race_events.47.b
+		ai_chance = { base = 3 }
+		# Redesign with Whipple shielding — prevents future impacts but costs time
+		change_variable = {
+			name = sr_milestone_progress
+			subtract = 8
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 48: Crew Psychology Report (Mars/colonization)
+# Long-duration spaceflight isolation — a realistic hard sf concern
+space_race_events.48 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = space_race_events.48.t
+	desc = space_race_events.48.d
+	flavor = space_race_events.48.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_variable = sr_active_mars_landing
+			has_variable = sr_active_solar_colonization
+		}
+		var:sr_milestone_progress >= 30
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.48.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Mandatory psychological screening and rotating crews
+		change_variable = {
+			name = sr_milestone_progress
+			add = 4
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.48.b
+		ai_chance = { base = 3 }
+		# VR communication suites and family leave rotations
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+		add_loyalists = { value = small_radicals }
+	}
+
+	option = {
+		name = space_race_events.48.c
+		ai_chance = { base = 2 }
+		# Select only psychologically screened loners — smaller crew pool
+		change_variable = {
+			name = sr_milestone_progress
+			add = 7
+		}
+		add_radicals = { value = very_small_radicals pop_type = academics }
+	}
+}
+
+# Event 49: Orbital Fuel Depot Proposal (any active milestone, mid-late)
+# Propellant storage in orbit drastically changes mission architecture
+space_race_events.49 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.49.t
+	desc = space_race_events.49.d
+	flavor = space_race_events.49.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_milestone
+		has_variable = sr_completed_orbital
+		var:sr_milestone_progress >= 20
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.49.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Build the depot — reduces delta-v requirements for all future missions
+		change_variable = {
+			name = sr_milestone_progress
+			add = 8
+		}
+	}
+
+	option = {
+		name = space_race_events.49.b
+		ai_chance = { base = 3 }
+		# Fund research into in-orbit propellant manufacturing
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+}
+
+##############################################
+# CROSS-SYSTEM CONNECTION EVENTS
+##############################################
+
+# Event 50: Private Space Company Breakthrough
+# Fires when country has SpaceX (or could be expanded for other companies)
+space_race_events.50 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.50.t
+	desc = space_race_events.50.d
+	flavor = space_race_events.50.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_milestone
+		has_company = company_type:company_spacex
+		var:sr_milestone_progress >= 15
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.50.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Public-private partnership — combine government resources and private innovation
+		change_variable = {
+			name = sr_milestone_progress
+			add = 10
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = space_race_events.50.b
+		ai_chance = { base = 3 }
+		# Let the company take the lead — faster, but they get the credit
+		change_variable = {
+			name = sr_milestone_progress
+			add = 15
+		}
+		add_radicals = { value = small_radicals strata = lower }
+		add_loyalists = { value = medium_radicals strata = upper }
+	}
+
+	option = {
+		name = space_race_events.50.c
+		ai_chance = { base = 2 }
+		# Keep the program fully state-run — slower but sovereign
+		change_variable = {
+			name = sr_milestone_progress
+			add = 3
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+}
+
+# Event 51: Space Tourism Potential (after orbital achievement)
+# Connection to tourism industry building
+space_race_events.51 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.51.t
+	desc = space_race_events.51.d
+	flavor = space_race_events.51.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_completed_orbital
+		any_scope_building = {
+			is_building_type = building_tourism_industry
+		}
+		NOT = { has_modifier = sr_space_tourism_boost }
+		NOT = { has_modifier = sr_space_tourism_rejected }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.51.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Develop space tourism - wealthy civilians pay for orbital flights
+		add_modifier = {
+			name = sr_space_tourism_boost
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = space_race_events.51.b
+		ai_chance = { base = 3 }
+		# Space is for science and defense, not entertainment
+		add_modifier = {
+			name = sr_space_tourism_rejected
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.51.c
+		ai_chance = { base = 2 }
+		# Regulated tourism — limited flights, safety first
+		add_modifier = {
+			name = sr_space_tourism_boost
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Event 52: International Space Station Proposal (UN connection)
+# Fires when both pursuing space and part of UN
+space_race_events.52 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = space_race_events.52.t
+	desc = space_race_events.52.d
+	flavor = space_race_events.52.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_milestone
+		has_modifier = un_member_modifier
+		has_variable = sr_completed_orbital
+		NOT = { has_variable = sr_completed_moon_landing }
+		NOT = { has_modifier = sr_iss_cooperation }
+		NOT = { has_modifier = sr_iss_independence }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.52.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_modifier = un_space_partnership_modifier }
+				add = 3
+			}
+		}
+		# Join the international station project — shared costs, shared science
+		add_modifier = {
+			name = sr_iss_cooperation
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				has_technology_researched = space_exploration
+				NOT = { THIS = ROOT }
+				has_diplomatic_relevance = ROOT
+			}
+			change_relations = { country = ROOT value = 15 }
+		}
+	}
+
+	option = {
+		name = space_race_events.52.b
+		ai_chance = { base = 3 }
+		# Build our own station — national sovereignty, no sharing
+		add_modifier = {
+			name = sr_iss_independence
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		change_variable = {
+			name = sr_milestone_progress
+			add = 3
+		}
+	}
+}
+
+# Event 53: Extraplanetary Base Connection (after moon base or mars landing)
+# Links space_mine building to space race progress
+space_race_events.53 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.53.t
+	desc = space_race_events.53.d
+	flavor = space_race_events.53.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_solar_colonization
+		any_scope_building = {
+			is_building_type = building_space_mine
+		}
+		var:sr_milestone_progress >= 50
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.53.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Integrate extraplanetary base operations with the space program
+		change_variable = {
+			name = sr_milestone_progress
+			add = 15
+		}
+		add_modifier = {
+			name = sr_extraplanetary_integration
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.53.b
+		ai_chance = { base = 3 }
+		# Keep mining operations and the space program separate
+		change_variable = {
+			name = sr_milestone_progress
+			add = 5
+		}
+	}
+}
+
+# Event 54: Heat Shield Re-entry Problem (suborbital/orbital)
+# Ablative vs reusable heat shield — real engineering tradeoff
+space_race_events.54 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.54.t
+	desc = space_race_events.54.d
+	flavor = space_race_events.54.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_variable = sr_active_suborbital
+			has_variable = sr_active_orbital
+		}
+		var:sr_milestone_progress >= 30
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.54.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Ablative heat shield — proven, single-use, lighter
+		change_variable = {
+			name = sr_milestone_progress
+			add = 6
+		}
+	}
+
+	option = {
+		name = space_race_events.54.b
+		ai_chance = { base = 3 }
+		# Ceramic tile system — reusable but complex, saves money long-term
+		change_variable = {
+			name = sr_milestone_progress
+			add = 4
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.54.c
+		ai_chance = { base = 2 }
+		# Experimental transpiration cooling — cutting-edge, unproven
+		random_list = {
+			60 = {
+				change_variable = {
+					name = sr_milestone_progress
+					add = 12
+				}
+				custom_tooltip = {
+					text = "SR_TRANSPIRATION_SUCCESS_TT"
+				}
+			}
+			40 = {
+				change_variable = {
+					name = sr_milestone_progress
+					add = 2
+				}
+				custom_tooltip = {
+					text = "SR_TRANSPIRATION_FAIL_TT"
+				}
+			}
+		}
+	}
+}
+
+# Event 55: Space Elevator Synergy (for countries with elevator during later milestones)
+space_race_events.55 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.55.t
+	desc = space_race_events.55.d
+	flavor = space_race_events.55.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_variable = sr_active_milestone
+		any_scope_building = {
+			is_building_type = building_space_elevator
+		}
+		OR = {
+			has_variable = sr_active_moon_base
+			has_variable = sr_active_mars_landing
+			has_variable = sr_active_solar_colonization
+		}
+		var:sr_milestone_progress >= 30
+		NOT = { has_modifier = sr_mission_failure }
+	}
+
+	immediate = { }
+
+	option = {
+		name = space_race_events.55.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Route all mission cargo through the elevator - massive cost reduction
+		change_variable = {
+			name = sr_milestone_progress
+			add = 12
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.55.b
+		ai_chance = { base = 3 }
+		# Use elevator for bulk cargo, rockets for time-critical payloads
+		change_variable = {
+			name = sr_milestone_progress
+			add = 8
+		}
+	}
+}
+
+##############################################
+# INTERSTELLAR PROBE RESULTS EVENT
+##############################################
+
+# Event 60: Alpha Centauri Data Received
+# Fires ~11 years after probe launch via the interstellar results JE
+space_race_events.60 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.60.t
+	desc = space_race_events.60.d
+	flavor = space_race_events.60.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Share the data freely - advance all of humanity's knowledge
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		every_country = {
+			limit = {
+				has_technology_researched = space_colonization
+				NOT = { THIS = ROOT }
+				has_diplomatic_relevance = ROOT
+			}
+			change_relations = { country = ROOT value = 30 }
+		}
+	}
+
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		# Classify key findings - national strategic advantage
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		# Sell data access to other nations - recoup the investment
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}

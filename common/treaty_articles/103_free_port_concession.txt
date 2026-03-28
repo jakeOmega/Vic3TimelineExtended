@@ -135,7 +135,7 @@ free_port_concession = {
 		article_ai_usage = { request offer }
 
 		evaluation_chance = {
-			value = 0.05
+			value = 0
 			if = {
 				limit = {
 					OR = {
@@ -143,7 +143,7 @@ free_port_concession = {
 						has_law = law_type:law_free_trade
 					}
 				}
-				add = 0.15
+				add = 0.05
 			}
 			if = {
 				limit = {
@@ -287,6 +287,23 @@ free_port_concession = {
 						desc = "AI_FRIENDLY_ATTITUDE"
 						value = -20
 					}
+				}
+			}
+		}
+	}
+
+	wargoal = {
+		execution_priority = 40
+		contestion_type = control_target_state
+
+		infamy = {
+			value = 5
+			scope:target_country = {
+				multiply = {
+					value = total_population
+					divide = 20000000
+					add = 1
+					max = 2.0
 				}
 			}
 		}

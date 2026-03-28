@@ -1,0 +1,25 @@
+﻿# Space Race Scripted Triggers
+
+sr_has_space_program = {
+	any_scope_building = {
+		is_building_type = building_space_program
+	}
+}
+
+sr_is_pursuing_milestone = {
+	has_variable = sr_active_milestone
+}
+
+sr_can_start_space_race = {
+	has_technology_researched = rocketry
+	OR = {
+		country_rank = rank_value:great_power
+		country_rank = rank_value:major_power
+	}
+	NOT = { has_variable = sr_active_milestone }
+}
+
+sr_has_failure_cooldown = {
+	has_variable = sr_failure_cooldown
+	var:sr_failure_cooldown > 0
+}

@@ -212,7 +212,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "search": lambda: self._search(params),
             "laws": lambda: self._laws(rest),
             "technologies": lambda: self._technologies(rest, params),
-            "buildings": lambda: self._buildings(rest),
+            "buildings": lambda: self._buildings(rest, params),
             "goods": lambda: self._goods(),
             "combat-units": lambda: self._combat_units(),
             "ideologies": lambda: self._ideologies(rest),
@@ -413,22 +413,63 @@ class ModStateHandler(BaseHTTPRequestHandler):
         return info
 
     # ---- structured: buildings --------------------------------------------
-    def _buildings(self, parts):
-        """GET /buildings[/<building_id>]"""
+    def _buildings(self, parts, params=None):
+        """GET /buildings[/<building_id>][?detail=true]
+
+        /buildings              - summary list (id, name, pm_group_count)
+        /buildings?detail=true  - full detail for ALL buildings (includes PM groups & PMs)
+        /buildings/<id>         - full detail for one building
+        /buildings/pm-map       - compact building→PM mapping for code generators
+        """
         buildings = ms.get_data("Buildings")
         if not buildings:
             return {"error": "Buildings data not loaded"}
 
         if parts:
+            if parts[0] == "pm-map":
+                return self._buildings_pm_map(buildings)
             bid = parts[0]
             if bid not in buildings:
                 raise KeyError(bid)
             return self._format_building_detail(bid, buildings[bid])
 
+        params = params or {}
+        if params.get("detail", ["false"])[0].lower() in ("true", "1", "yes"):
+            return [
+                self._format_building_detail(bid, raw)
+                for bid, raw in buildings.items()
+            ]
+
         return [
             self._format_building_summary(bid, raw)
             for bid, raw in buildings.items()
         ]
+
+    def _buildings_pm_map(self, buildings):
+        """GET /buildings/pm-map - compact building→PM group→PM mapping.
+
+        Returns {building_id: [[pm_id, ...], [pm_id, ...], ...], ...}
+        where each inner list is the PMs for one PM group, in order.
+        Useful for code generators that need the full mapping without per-building calls.
+        """
+        pmg_data = ms.get_data("PM Groups") or {}
+        result = {}
+        for bid, raw in buildings.items():
+            bd = get_entity_data(raw)
+            pmg_ids = get_field(bd, "production_method_groups")
+            if not pmg_ids or not isinstance(pmg_ids, list):
+                result[bid] = []
+                continue
+            groups = []
+            for pmg_id in pmg_ids:
+                if pmg_id not in pmg_data:
+                    groups.append([])
+                    continue
+                pmg_inner = get_entity_data(pmg_data[pmg_id])
+                pm_ids = get_field(pmg_inner, "production_methods")
+                groups.append(pm_ids if pm_ids and isinstance(pm_ids, list) else [])
+            result[bid] = groups
+        return result
 
     def _format_building_summary(self, bid, raw):
         bd = get_entity_data(raw)

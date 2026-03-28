@@ -293,56 +293,105 @@
 				if = {
 					limit = { exists = scope:article.input_quantity }
 					# GDP-relative acceptance with diminishing returns
-					# Tier 1: Full rate (up to 50 acceptance)
 					add = {
+						value = 0
+						# Tier 1: Full rate (up to 50 acceptance)
+						add = {
+							value = scope:article.input_quantity
+							divide = gdp
+							multiply = 100000
+							max = 50
+						}
+						# Tier 2: Half rate (up to 50 more acceptance)
+						add = {
+							value = scope:article.input_quantity
+							divide = gdp
+							multiply = 100000
+							subtract = 50
+							min = 0
+							multiply = 0.5
+							max = 50
+						}
+						# Tier 3: Quarter rate (up to 50 more acceptance)
+						add = {
+							value = scope:article.input_quantity
+							divide = gdp
+							multiply = 100000
+							subtract = 100
+							min = 0
+							multiply = 0.25
+							max = 50
+						}
+						# Tier 4: 10% rate (up to 50 more acceptance)
+						add = {
+							value = scope:article.input_quantity
+							divide = gdp
+							multiply = 100000
+							subtract = 150
+							min = 0
+							multiply = 0.1
+							max = 50
+						}
+						# Tier 5: 5% rate (up to 50 more acceptance)
+						add = {
+							value = scope:article.input_quantity
+							divide = gdp
+							multiply = 100000
+							subtract = 200
+							min = 0
+							multiply = 0.05
+							max = 50
+						}
+						# Tier 6: 2.5% rate (up to 50 more acceptance)
+						add = {
+							value = scope:article.input_quantity
+							divide = gdp
+							multiply = 100000
+							subtract = 250
+							min = 0
+							multiply = 0.025
+							max = 50
+						}
+						# Tier 7: 1% rate (up to 50 more acceptance)
+						add = {
+							value = scope:article.input_quantity
+							divide = gdp
+							multiply = 100000
+							subtract = 300
+							min = 0
+							multiply = 0.01
+							max = 50
+						}
+						# Tier 8: 0.5% rate (up to 50 more acceptance)
+						add = {
+							value = scope:article.input_quantity
+							divide = gdp
+							multiply = 100000
+							subtract = 350
+							min = 0
+							multiply = 0.005
+							max = 50
+						}
+						# Tier 9: 0.25% rate (up to 50 more acceptance)
+						add = {
+							value = scope:article.input_quantity
+							divide = gdp
+							multiply = 100000
+							subtract = 400
+							min = 0
+							multiply = 0.0025
+							max = 50
+						}
+						# Tier 10: 0.1% rate (no cap)
+						add = {
+							value = scope:article.input_quantity
+							divide = gdp
+							multiply = 100000
+							subtract = 450
+							min = 0
+							multiply = 0.001
+						}
 						desc = "DIPLOMATIC_ACCEPTANCE_INPUT_QUANTITY"
-						value = scope:article.input_quantity
-						divide = gdp
-						multiply = 100000
-						max = 50
-					}
-					# Tier 2: Half rate (up to 50 more acceptance)
-					add = {
-						desc = "DIPLOMATIC_ACCEPTANCE_INPUT_QUANTITY"
-						value = scope:article.input_quantity
-						divide = gdp
-						multiply = 100000
-						subtract = 50
-						min = 0
-						multiply = 0.5
-						max = 50
-					}
-					# Tier 3: Quarter rate (up to 50 more acceptance)
-					add = {
-						desc = "DIPLOMATIC_ACCEPTANCE_INPUT_QUANTITY"
-						value = scope:article.input_quantity
-						divide = gdp
-						multiply = 100000
-						subtract = 150
-						min = 0
-						multiply = 0.25
-						max = 50
-					}
-					# Tier 4: 10% rate (up to 50 more acceptance)
-					add = {
-						desc = "DIPLOMATIC_ACCEPTANCE_INPUT_QUANTITY"
-						value = scope:article.input_quantity
-						divide = gdp
-						multiply = 100000
-						subtract = 200
-						min = 0
-						multiply = 0.1
-						max = 50
-					}
-					# Tier 5: 5% rate (no cap)
-					add = {
-						desc = "DIPLOMATIC_ACCEPTANCE_INPUT_QUANTITY"
-						value = scope:article.input_quantity
-						divide = gdp
-						multiply = 100000
-						subtract = 250
-						min = 0
-						multiply = 0.05
 					}
 				}
 

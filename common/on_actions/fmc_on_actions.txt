@@ -139,14 +139,19 @@ fmc_on_country_released_as_overlord_subject = {
 
 # Root = Country
 on_country_formed = {
+    on_actions = {
+        fmc_on_country_formed
+    }
+    events = {
+        fmc_update_events.4
+    }
+}
+fmc_on_country_formed = {
     effect = {
         set_variable = {
             name = recently_formed_country
             days = 7300 # ~20 years
         }
-    }
-    events = {
-        fmc_update_events.4
     }
 }
 

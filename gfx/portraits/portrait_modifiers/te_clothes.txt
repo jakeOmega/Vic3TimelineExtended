@@ -1,0 +1,93 @@
+﻿clothes = {
+	usage = game
+	selection_behavior = weighted_random
+
+	# Late-game female suits for European politician/ruler characters
+	# When women_in_the_workplace is researched, female rulers and politicians
+	# get a suit-jacket look instead of the standard dress.
+	# Uses the female military coat asset (closest to a suit jacket) + European legwear.
+	# NOTE: Test thoroughly for clipping issues with these assets on non-military females.
+
+	te_european_female_ruler_suit = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = coats
+				template = female_coat_european_military_01
+				range = { 0 1 }
+			}
+			accessory = {
+				mode = add
+				gene = legwear
+				template = european_late_military_female_legwear
+				range = { 0 1 }
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 15000
+				OR = {
+					european_clothes_trigger = yes
+					african_diaspora_clothes_trigger = yes
+				}
+				scope:character = {
+					is_female = yes
+					age >= define:NCharacters|ADULT_AGE
+					exists = owner
+					owner ?= {
+						has_technology_researched = second_wave_feminism
+					}
+					OR = {
+						AND = {
+							ruler_clothes_trigger = yes
+							republic_clothes_trigger = yes
+						}
+						AND = {
+							has_role = politician
+							is_ruler = no
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# Same for monarchy rulers (queens in late game get the suit too)
+	te_european_female_monarch_suit = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = coats
+				template = female_coat_european_military_01
+				range = { 0 1 }
+			}
+			accessory = {
+				mode = add
+				gene = legwear
+				template = european_late_military_female_legwear
+				range = { 0 1 }
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 12000
+				OR = {
+					european_clothes_trigger = yes
+					african_diaspora_clothes_trigger = yes
+				}
+				scope:character = {
+					is_female = yes
+					age >= define:NCharacters|ADULT_AGE
+					is_ruler = yes
+					exists = owner
+					owner ?= {
+						has_technology_researched = second_wave_feminism
+						has_law_or_variant = law_type:law_monarchy
+					}
+				}
+			}
+		}
+	}
+}

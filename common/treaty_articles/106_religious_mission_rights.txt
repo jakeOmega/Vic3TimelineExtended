@@ -335,4 +335,21 @@ religious_mission_rights = {
 			}
 		}
 	}
+
+	wargoal = {
+		execution_priority = 40
+		contestion_type = control_target_state
+
+		infamy = {
+			value = 5
+			scope:target_country = {
+				multiply = {
+					value = total_population
+					divide = 20000000
+					add = 1
+					max = 2.0
+				}
+			}
+		}
+	}
 }

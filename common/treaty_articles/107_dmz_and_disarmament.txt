@@ -286,6 +286,23 @@ demilitarized_zone = {
 			}
 		}
 	}
+
+	wargoal = {
+		execution_priority = 50
+		contestion_type = control_target_state
+
+		infamy = {
+			value = 5
+			scope:target_country = {
+				multiply = {
+					value = total_population
+					divide = 20000000
+					add = 1
+					max = 2.0
+				}
+			}
+		}
+	}
 }
 
 # =================================================================
@@ -489,6 +506,23 @@ forced_disarmament = {
 							value = 15
 						}
 					}
+				}
+			}
+		}
+	}
+
+	wargoal = {
+		execution_priority = 80
+		contestion_type = control_target_country_capital
+
+		infamy = {
+			value = 15
+			scope:target_country = {
+				multiply = {
+					value = gdp
+					divide = 10000000
+					add = 1
+					max = 2.5
 				}
 			}
 		}

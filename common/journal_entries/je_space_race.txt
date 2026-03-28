@@ -1,0 +1,1191 @@
+﻿############################################
+# Space Race Journal Entries
+# Semi-parallel milestone competition system
+############################################
+
+# ===========================================
+# 1. SUBORBITAL FLIGHT
+# Prereq: rocketry tech, GP/MP rank
+# ===========================================
+je_space_race_suborbital = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_technology_researched = rocketry
+		OR = {
+			country_rank = rank_value:great_power
+			country_rank = rank_value:major_power
+		}
+	}
+
+	possible = {
+		has_technology_researched = rocketry
+		OR = {
+			country_rank = rank_value:great_power
+			country_rank = rank_value:major_power
+		}
+		NOT = { has_variable = sr_completed_suborbital }
+		NOT = { has_variable = sr_active_suborbital }
+	}
+
+	immediate = {
+		set_variable = { name = sr_active_suborbital value = yes }
+		set_variable = { name = sr_active_milestone value = yes }
+		set_variable = { name = sr_milestone_progress value = 0 }
+		set_variable = { name = sr_funding_level value = 1 }
+		add_modifier = {
+			name = sr_space_program_funding
+			multiplier = 1
+		}
+	}
+
+	scripted_button = sr_select_safe_approach
+	scripted_button = sr_select_ambitious_approach
+	scripted_button = sr_increase_funding
+	scripted_button = sr_decrease_funding
+
+	current_value = {
+		value = sr_current_milestone_progress
+	}
+
+	goal_add_value = {
+		value = sr_suborbital_goal
+	}
+
+	progressbar = yes
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_suborbital_status_ambitious
+				trigger = { has_variable = sr_approach_ambitious }
+			}
+			triggered_desc = {
+				desc = je_space_race_suborbital_status_safe
+				trigger = { has_variable = sr_approach_safe }
+			}
+			triggered_desc = {
+				desc = je_space_race_suborbital_status_default
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	complete = {
+		var:sr_milestone_progress >= sr_suborbital_goal
+	}
+
+	on_complete = {
+		trigger_event = { id = space_race_events.1 }
+		sr_complete_suborbital_effect = yes
+		remove_variable = sr_active_suborbital
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			# Tick down failure cooldown
+			if = {
+				limit = { sr_has_failure_cooldown = yes }
+				change_variable = { name = sr_failure_cooldown subtract = 1 }
+			}
+			# Progress based on approach
+			if = {
+				limit = { has_variable = sr_approach_ambitious }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_ambitious_progress
+				}
+				# Failure check for ambitious approach
+				if = {
+					limit = {
+						NOT = { sr_has_failure_cooldown = yes }
+					}
+					random_list = {
+						90 = { }
+						10 = {
+							trigger_event = { id = space_race_events.10 }
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { has_variable = sr_approach_safe }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_safe_progress
+				}
+				# Very small failure chance even for safe
+				if = {
+					limit = {
+						NOT = { sr_has_failure_cooldown = yes }
+					}
+					random_list = {
+						98 = { }
+						2 = {
+							trigger_event = { id = space_race_events.11 }
+						}
+					}
+				}
+			}
+			else = {
+				# Default (no approach selected) - minimal progress
+				change_variable = {
+					name = sr_milestone_progress
+					add = 0.5
+				}
+			}
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = yes
+}
+
+# ===========================================
+# 2. ORBITAL FLIGHT
+# Prereq: Suborbital complete
+# ===========================================
+je_space_race_orbital = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_variable = sr_completed_suborbital
+	}
+
+	possible = {
+		has_variable = sr_completed_suborbital
+		NOT = { has_variable = sr_completed_orbital }
+		NOT = { has_variable = sr_active_orbital }
+		OR = {
+			country_rank = rank_value:great_power
+			country_rank = rank_value:major_power
+		}
+	}
+
+	immediate = {
+		set_variable = { name = sr_active_orbital value = yes }
+		set_variable = { name = sr_active_milestone value = yes }
+		set_variable = { name = sr_milestone_progress value = 0 }
+		if = {
+			limit = { NOT = { has_variable = sr_funding_level } }
+			set_variable = { name = sr_funding_level value = 1 }
+		}
+	}
+
+	scripted_button = sr_select_safe_approach
+	scripted_button = sr_select_ambitious_approach
+	scripted_button = sr_increase_funding
+	scripted_button = sr_decrease_funding
+
+	current_value = {
+		value = sr_current_milestone_progress
+	}
+
+	goal_add_value = {
+		value = sr_orbital_goal
+	}
+
+	progressbar = yes
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_orbital_status_ambitious
+				trigger = { has_variable = sr_approach_ambitious }
+			}
+			triggered_desc = {
+				desc = je_space_race_orbital_status_safe
+				trigger = { has_variable = sr_approach_safe }
+			}
+			triggered_desc = {
+				desc = je_space_race_orbital_status_default
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	complete = {
+		var:sr_milestone_progress >= sr_orbital_goal
+	}
+
+	on_complete = {
+		trigger_event = { id = space_race_events.2 }
+		sr_complete_orbital_effect = yes
+		remove_variable = sr_active_orbital
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = { sr_has_failure_cooldown = yes }
+				change_variable = { name = sr_failure_cooldown subtract = 1 }
+			}
+			if = {
+				limit = { has_variable = sr_approach_ambitious }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_ambitious_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						88 = { }
+						12 = {
+							trigger_event = { id = space_race_events.10 }
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { has_variable = sr_approach_safe }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_safe_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						97 = { }
+						3 = {
+							trigger_event = { id = space_race_events.11 }
+						}
+					}
+				}
+			}
+			else = {
+				change_variable = {
+					name = sr_milestone_progress
+					add = 0.5
+				}
+			}
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = yes
+}
+
+# ===========================================
+# 3. MOON LANDING
+# Prereq: space_exploration tech + Orbital complete
+# Special: Landing site choice event
+# ===========================================
+je_space_race_moon_landing = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_variable = sr_completed_orbital
+		has_technology_researched = space_exploration
+	}
+
+	possible = {
+		has_variable = sr_completed_orbital
+		has_technology_researched = space_exploration
+		NOT = { has_variable = sr_completed_moon_landing }
+		NOT = { has_variable = sr_active_moon_landing }
+		OR = {
+			country_rank = rank_value:great_power
+			country_rank = rank_value:major_power
+		}
+	}
+
+	immediate = {
+		set_variable = { name = sr_active_moon_landing value = yes }
+		set_variable = { name = sr_active_milestone value = yes }
+		set_variable = { name = sr_milestone_progress value = 0 }
+		if = {
+			limit = { NOT = { has_variable = sr_funding_level } }
+			set_variable = { name = sr_funding_level value = 1 }
+		}
+		# Fire landing site choice event
+		trigger_event = { id = space_race_events.5 days = 30 }
+	}
+
+	scripted_button = sr_select_safe_approach
+	scripted_button = sr_select_ambitious_approach
+	scripted_button = sr_increase_funding
+	scripted_button = sr_decrease_funding
+
+	current_value = {
+		value = sr_current_milestone_progress
+	}
+
+	goal_add_value = {
+		value = sr_moon_landing_goal
+	}
+
+	progressbar = yes
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_moon_landing_status_shackleton
+				trigger = { has_variable = sr_moon_site_shackleton }
+			}
+			triggered_desc = {
+				desc = je_space_race_moon_landing_status_equatorial
+				trigger = { has_variable = sr_moon_site_equatorial }
+			}
+			triggered_desc = {
+				desc = je_space_race_moon_landing_status_ambitious
+				trigger = { has_variable = sr_approach_ambitious }
+			}
+			triggered_desc = {
+				desc = je_space_race_moon_landing_status_safe
+				trigger = { has_variable = sr_approach_safe }
+			}
+			triggered_desc = {
+				desc = je_space_race_moon_landing_status_default
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	complete = {
+		var:sr_milestone_progress >= sr_moon_landing_goal
+	}
+
+	on_complete = {
+		trigger_event = { id = space_race_events.3 }
+		sr_complete_moon_landing_effect = yes
+		remove_variable = sr_active_moon_landing
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = { sr_has_failure_cooldown = yes }
+				change_variable = { name = sr_failure_cooldown subtract = 1 }
+			}
+			if = {
+				limit = { has_variable = sr_approach_ambitious }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_ambitious_progress
+				}
+				# Shackleton is riskier
+				if = {
+					limit = {
+						NOT = { sr_has_failure_cooldown = yes }
+						has_variable = sr_moon_site_shackleton
+					}
+					random_list = {
+						82 = { }
+						18 = {
+							trigger_event = { id = space_race_events.10 }
+						}
+					}
+				}
+				else_if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						88 = { }
+						12 = {
+							trigger_event = { id = space_race_events.10 }
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { has_variable = sr_approach_safe }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_safe_progress
+				}
+				if = {
+					limit = {
+						NOT = { sr_has_failure_cooldown = yes }
+						has_variable = sr_moon_site_shackleton
+					}
+					random_list = {
+						94 = { }
+						6 = {
+							trigger_event = { id = space_race_events.11 }
+						}
+					}
+				}
+				else_if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						97 = { }
+						3 = {
+							trigger_event = { id = space_race_events.11 }
+						}
+					}
+				}
+			}
+			else = {
+				change_variable = {
+					name = sr_milestone_progress
+					add = 0.5
+				}
+			}
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = yes
+}
+
+# ===========================================
+# 4. OUTER SOLAR SYSTEM PROBE
+# Prereq: space_exploration tech + Orbital complete
+# Parallel with Moon Landing
+# ===========================================
+je_space_race_probe = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_variable = sr_completed_orbital
+		has_technology_researched = space_exploration
+	}
+
+	possible = {
+		has_variable = sr_completed_orbital
+		has_technology_researched = space_exploration
+		NOT = { has_variable = sr_completed_probe }
+		NOT = { has_variable = sr_active_probe }
+		OR = {
+			country_rank = rank_value:great_power
+			country_rank = rank_value:major_power
+		}
+	}
+
+	immediate = {
+		set_variable = { name = sr_active_probe value = yes }
+		set_variable = { name = sr_active_milestone value = yes }
+		set_variable = { name = sr_milestone_progress value = 0 }
+		if = {
+			limit = { NOT = { has_variable = sr_funding_level } }
+			set_variable = { name = sr_funding_level value = 1 }
+		}
+	}
+
+	scripted_button = sr_select_safe_approach
+	scripted_button = sr_select_ambitious_approach
+	scripted_button = sr_increase_funding
+	scripted_button = sr_decrease_funding
+
+	current_value = {
+		value = sr_current_milestone_progress
+	}
+
+	goal_add_value = {
+		value = sr_probe_goal
+	}
+
+	progressbar = yes
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_probe_status_ambitious
+				trigger = { has_variable = sr_approach_ambitious }
+			}
+			triggered_desc = {
+				desc = je_space_race_probe_status_safe
+				trigger = { has_variable = sr_approach_safe }
+			}
+			triggered_desc = {
+				desc = je_space_race_probe_status_default
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	complete = {
+		var:sr_milestone_progress >= sr_probe_goal
+	}
+
+	on_complete = {
+		trigger_event = { id = space_race_events.4 }
+		sr_complete_probe_effect = yes
+		remove_variable = sr_active_probe
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = { sr_has_failure_cooldown = yes }
+				change_variable = { name = sr_failure_cooldown subtract = 1 }
+			}
+			if = {
+				limit = { has_variable = sr_approach_ambitious }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_ambitious_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						88 = { }
+						12 = {
+							trigger_event = { id = space_race_events.10 }
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { has_variable = sr_approach_safe }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_safe_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						97 = { }
+						3 = {
+							trigger_event = { id = space_race_events.11 }
+						}
+					}
+				}
+			}
+			else = {
+				change_variable = {
+					name = sr_milestone_progress
+					add = 0.5
+				}
+			}
+		}
+	}
+
+	weight = 90
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = yes
+}
+
+# ===========================================
+# 5. MOON BASE
+# Prereq: Moon Landing complete + reusable_rocketry tech
+# ===========================================
+je_space_race_moon_base = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_variable = sr_completed_moon_landing
+		has_technology_researched = reusable_rocketry
+	}
+
+	possible = {
+		has_variable = sr_completed_moon_landing
+		has_technology_researched = reusable_rocketry
+		NOT = { has_variable = sr_completed_moon_base }
+		NOT = { has_variable = sr_active_moon_base }
+		OR = {
+			country_rank = rank_value:great_power
+			country_rank = rank_value:major_power
+		}
+	}
+
+	immediate = {
+		set_variable = { name = sr_active_moon_base value = yes }
+		set_variable = { name = sr_active_milestone value = yes }
+		set_variable = { name = sr_milestone_progress value = 0 }
+		if = {
+			limit = { NOT = { has_variable = sr_funding_level } }
+			set_variable = { name = sr_funding_level value = 1 }
+		}
+	}
+
+	scripted_button = sr_select_safe_approach
+	scripted_button = sr_select_ambitious_approach
+	scripted_button = sr_increase_funding
+	scripted_button = sr_decrease_funding
+
+	current_value = {
+		value = sr_current_milestone_progress
+	}
+
+	goal_add_value = {
+		value = sr_moon_base_goal
+	}
+
+	progressbar = yes
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_moon_base_status_ambitious
+				trigger = { has_variable = sr_approach_ambitious }
+			}
+			triggered_desc = {
+				desc = je_space_race_moon_base_status_safe
+				trigger = { has_variable = sr_approach_safe }
+			}
+			triggered_desc = {
+				desc = je_space_race_moon_base_status_default
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	complete = {
+		var:sr_milestone_progress >= sr_moon_base_goal
+	}
+
+	on_complete = {
+		trigger_event = { id = space_race_events.6 }
+		sr_complete_moon_base_effect = yes
+		remove_variable = sr_active_moon_base
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = { sr_has_failure_cooldown = yes }
+				change_variable = { name = sr_failure_cooldown subtract = 1 }
+			}
+			if = {
+				limit = { has_variable = sr_approach_ambitious }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_ambitious_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						85 = { }
+						15 = {
+							trigger_event = { id = space_race_events.10 }
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { has_variable = sr_approach_safe }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_safe_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						96 = { }
+						4 = {
+							trigger_event = { id = space_race_events.11 }
+						}
+					}
+				}
+			}
+			else = {
+				change_variable = {
+					name = sr_milestone_progress
+					add = 0.5
+				}
+			}
+		}
+	}
+
+	weight = 95
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = yes
+}
+
+# ===========================================
+# 6. MARS LANDING
+# Prereq: reusable_rocketry tech + Orbital complete
+# Parallel with Moon Base
+# ===========================================
+je_space_race_mars_landing = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_variable = sr_completed_orbital
+		has_technology_researched = reusable_rocketry
+	}
+
+	possible = {
+		has_variable = sr_completed_orbital
+		has_technology_researched = reusable_rocketry
+		NOT = { has_variable = sr_completed_mars_landing }
+		NOT = { has_variable = sr_active_mars_landing }
+		OR = {
+			country_rank = rank_value:great_power
+			country_rank = rank_value:major_power
+		}
+	}
+
+	immediate = {
+		set_variable = { name = sr_active_mars_landing value = yes }
+		set_variable = { name = sr_active_milestone value = yes }
+		set_variable = { name = sr_milestone_progress value = 0 }
+		if = {
+			limit = { NOT = { has_variable = sr_funding_level } }
+			set_variable = { name = sr_funding_level value = 1 }
+		}
+	}
+
+	scripted_button = sr_select_safe_approach
+	scripted_button = sr_select_ambitious_approach
+	scripted_button = sr_increase_funding
+	scripted_button = sr_decrease_funding
+
+	current_value = {
+		value = sr_current_milestone_progress
+	}
+
+	goal_add_value = {
+		value = sr_mars_landing_goal
+	}
+
+	progressbar = yes
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_mars_landing_status_ambitious
+				trigger = { has_variable = sr_approach_ambitious }
+			}
+			triggered_desc = {
+				desc = je_space_race_mars_landing_status_safe
+				trigger = { has_variable = sr_approach_safe }
+			}
+			triggered_desc = {
+				desc = je_space_race_mars_landing_status_default
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	complete = {
+		var:sr_milestone_progress >= sr_mars_landing_goal
+	}
+
+	on_complete = {
+		trigger_event = { id = space_race_events.7 }
+		sr_complete_mars_landing_effect = yes
+		remove_variable = sr_active_mars_landing
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = { sr_has_failure_cooldown = yes }
+				change_variable = { name = sr_failure_cooldown subtract = 1 }
+			}
+			if = {
+				limit = { has_variable = sr_approach_ambitious }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_ambitious_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						83 = { }
+						17 = {
+							trigger_event = { id = space_race_events.10 }
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { has_variable = sr_approach_safe }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_safe_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						95 = { }
+						5 = {
+							trigger_event = { id = space_race_events.11 }
+						}
+					}
+				}
+			}
+			else = {
+				change_variable = {
+					name = sr_milestone_progress
+					add = 0.5
+				}
+			}
+		}
+	}
+
+	weight = 95
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = yes
+}
+
+# ===========================================
+# 7. INTERSTELLAR PROBE
+# Prereq: Outer System Probe + Mars Landing + space_colonization tech
+# Parallel with Solar System Colonization
+# ===========================================
+je_space_race_interstellar_probe = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_variable = sr_completed_probe
+		has_variable = sr_completed_mars_landing
+		has_technology_researched = space_colonization
+	}
+
+	possible = {
+		has_variable = sr_completed_probe
+		has_variable = sr_completed_mars_landing
+		has_technology_researched = space_colonization
+		NOT = { has_variable = sr_completed_interstellar_probe }
+		NOT = { has_variable = sr_active_interstellar_probe }
+		OR = {
+			country_rank = rank_value:great_power
+			country_rank = rank_value:major_power
+		}
+	}
+
+	immediate = {
+		set_variable = { name = sr_active_interstellar_probe value = yes }
+		set_variable = { name = sr_active_milestone value = yes }
+		set_variable = { name = sr_milestone_progress value = 0 }
+		if = {
+			limit = { NOT = { has_variable = sr_funding_level } }
+			set_variable = { name = sr_funding_level value = 1 }
+		}
+	}
+
+	scripted_button = sr_select_safe_approach
+	scripted_button = sr_select_ambitious_approach
+	scripted_button = sr_increase_funding
+	scripted_button = sr_decrease_funding
+
+	current_value = {
+		value = sr_current_milestone_progress
+	}
+
+	goal_add_value = {
+		value = sr_interstellar_probe_goal
+	}
+
+	progressbar = yes
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_interstellar_probe_status_ambitious
+				trigger = { has_variable = sr_approach_ambitious }
+			}
+			triggered_desc = {
+				desc = je_space_race_interstellar_probe_status_safe
+				trigger = { has_variable = sr_approach_safe }
+			}
+			triggered_desc = {
+				desc = je_space_race_interstellar_probe_status_default
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	complete = {
+		var:sr_milestone_progress >= sr_interstellar_probe_goal
+	}
+
+	on_complete = {
+		trigger_event = { id = space_race_events.8 }
+		sr_complete_interstellar_probe_effect = yes
+		remove_variable = sr_active_interstellar_probe
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = { sr_has_failure_cooldown = yes }
+				change_variable = { name = sr_failure_cooldown subtract = 1 }
+			}
+			if = {
+				limit = { has_variable = sr_approach_ambitious }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_ambitious_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						82 = { }
+						18 = {
+							trigger_event = { id = space_race_events.10 }
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { has_variable = sr_approach_safe }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_safe_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						94 = { }
+						6 = {
+							trigger_event = { id = space_race_events.11 }
+						}
+					}
+				}
+			}
+			else = {
+				change_variable = {
+					name = sr_milestone_progress
+					add = 0.5
+				}
+			}
+		}
+	}
+
+	weight = 90
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = yes
+}
+
+# ===========================================
+# 7b. INTERSTELLAR PROBE - AWAITING RESULTS
+# Passive JE tracking probe transit to Alpha Centauri
+# ~11 years (132 months) transit + return signal
+# ===========================================
+je_space_race_interstellar_results = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_variable = sr_probe_launched
+	}
+
+	possible = {
+		has_variable = sr_probe_launched
+		NOT = { has_variable = sr_interstellar_results_received }
+		NOT = { has_variable = sr_active_interstellar_results }
+	}
+
+	immediate = {
+		set_variable = { name = sr_active_interstellar_results value = yes }
+		set_variable = { name = sr_interstellar_transit_progress value = 0 }
+	}
+
+	current_value = {
+		value = sr_interstellar_transit_value
+	}
+
+	goal_add_value = {
+		value = 132
+	}
+
+	progressbar = yes
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_interstellar_results_status
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	complete = {
+		var:sr_interstellar_transit_progress >= 132
+	}
+
+	on_complete = {
+		trigger_event = { id = space_race_events.60 }
+		set_variable = { name = sr_interstellar_results_received value = yes }
+		remove_variable = sr_active_interstellar_results
+		add_modifier = { name = sr_interstellar_data }
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			change_variable = { name = sr_interstellar_transit_progress add = 1 }
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = yes
+}
+
+# ===========================================
+# 8. SOLAR SYSTEM COLONIZATION (Staged, Repeatable)
+# Prereq: Moon Base + Mars Landing + space_colonization tech
+# 5 stages of colony establishment across the solar system
+# Stage 1: Mars & Asteroids
+# Stage 2: Jupiter System & Venus
+# Stage 3: Mercury & Saturn System
+# Stage 4: Uranus & Neptune Systems
+# Stage 5: Kuiper Belt & Beyond
+# ===========================================
+je_space_race_solar_colonization = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_variable = sr_completed_moon_base
+		has_variable = sr_completed_mars_landing
+		has_technology_researched = space_colonization
+	}
+
+	possible = {
+		has_variable = sr_completed_moon_base
+		has_variable = sr_completed_mars_landing
+		has_technology_researched = space_colonization
+		NOT = { has_variable = sr_active_solar_colonization }
+		NOT = { has_global_variable = sr_all_colonies_complete }
+		OR = {
+			country_rank = rank_value:great_power
+			country_rank = rank_value:major_power
+		}
+	}
+
+	immediate = {
+		set_variable = { name = sr_active_solar_colonization value = yes }
+		set_variable = { name = sr_active_milestone value = yes }
+		set_variable = { name = sr_milestone_progress value = 0 }
+		if = {
+			limit = { NOT = { has_global_variable = sr_colonization_stage } }
+			set_global_variable = { name = sr_colonization_stage value = 1 }
+		}
+		if = {
+			limit = { NOT = { has_variable = sr_colony_count } }
+			set_variable = { name = sr_colony_count value = 0 }
+		}
+		if = {
+			limit = { NOT = { has_variable = sr_funding_level } }
+			set_variable = { name = sr_funding_level value = 1 }
+		}
+	}
+
+	scripted_button = sr_select_safe_approach
+	scripted_button = sr_select_ambitious_approach
+	scripted_button = sr_increase_funding
+	scripted_button = sr_decrease_funding
+
+	current_value = {
+		value = sr_current_milestone_progress
+	}
+
+	goal_add_value = {
+		value = sr_solar_colonization_goal
+	}
+
+	progressbar = yes
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_solar_colonization_status_stage1
+				trigger = {
+					OR = {
+						NOT = { has_global_variable = sr_colonization_stage }
+						global_var:sr_colonization_stage = 1
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_space_race_solar_colonization_status_stage2
+				trigger = { global_var:sr_colonization_stage = 2 }
+			}
+			triggered_desc = {
+				desc = je_space_race_solar_colonization_status_stage3
+				trigger = { global_var:sr_colonization_stage = 3 }
+			}
+			triggered_desc = {
+				desc = je_space_race_solar_colonization_status_stage4
+				trigger = { global_var:sr_colonization_stage = 4 }
+			}
+			triggered_desc = {
+				desc = je_space_race_solar_colonization_status_stage5
+				trigger = { global_var:sr_colonization_stage = 5 }
+			}
+		}
+	}
+
+	complete = {
+		var:sr_milestone_progress >= sr_solar_colonization_goal
+	}
+
+	on_complete = {
+		# Establish a colony at a random unclaimed location in the current stage
+		sr_establish_colony_effect = yes
+		remove_variable = sr_active_solar_colonization
+		sr_complete_milestone_effect = yes
+		# Notify with generic completion event
+		trigger_event = { id = space_race_events.9 }
+		# If all 5 stages exhausted, mark fully complete
+		if = {
+			limit = { has_global_variable = sr_all_colonies_complete }
+			set_variable = { name = sr_completed_solar_colonization value = yes }
+			add_modifier = { name = sr_solar_system_trade }
+		}
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = { sr_has_failure_cooldown = yes }
+				change_variable = { name = sr_failure_cooldown subtract = 1 }
+			}
+			if = {
+				limit = { has_variable = sr_approach_ambitious }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_ambitious_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						80 = { }
+						20 = {
+							trigger_event = { id = space_race_events.10 }
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { has_variable = sr_approach_safe }
+				change_variable = {
+					name = sr_milestone_progress
+					add = sr_safe_progress
+				}
+				if = {
+					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					random_list = {
+						94 = { }
+						6 = {
+							trigger_event = { id = space_race_events.11 }
+						}
+					}
+				}
+			}
+			else = {
+				change_variable = {
+					name = sr_milestone_progress
+					add = 0.5
+				}
+			}
+		}
+	}
+
+	weight = 85
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = yes
+}

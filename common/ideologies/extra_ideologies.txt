@@ -339,7 +339,7 @@ ideology_optimist_transhumanist = {
 		owner = { has_technology_researched = brain_computer_interfaces }
 	}
 	
-	leader_weight = {
+	interest_group_leader_weight = {
 		value = {
 			value = 50
 		}
@@ -455,7 +455,7 @@ ideology_corporate = {
 		owner = { has_technology_researched = mutual_funds }
 	}
 
-	leader_weight = {
+	interest_group_leader_weight = {
 		value = {
 			value = 25
 		}

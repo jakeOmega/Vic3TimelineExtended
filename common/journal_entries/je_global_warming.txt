@@ -11,14 +11,6 @@
 		temperature_anomaly_display > 0.1
 	}
 
-	should_be_involved = {
-		always = yes
-	}
-
-	should_show_when_not_involved = {
-		always = yes
-	}
-
 	status_desc = {
 		first_valid = {
 			triggered_desc = {

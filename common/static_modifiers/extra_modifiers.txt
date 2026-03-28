@@ -1235,6 +1235,28 @@ post_colonial_self_reliance_modifier = {
 	country_tech_research_speed_mult = 0.02
 }
 
+# --- Independence Nationalization Event Modifiers ---
+
+independence_nationalization_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_prestige_add = 50
+	country_authority_add = -100
+	building_throughput_add = -0.05
+}
+
+selective_nationalization_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_prestige_add = 25
+	country_authority_add = -50
+}
+
+foreign_property_protected_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_prestige_add = -25
+	state_standard_of_living_add = 2
+	country_influence_add = 10
+}
+
 # ============================================================================
 # COLONIAL EMPIRE JOURNAL ENTRY MODIFIERS
 # ============================================================================

@@ -330,7 +330,6 @@ environmentalism_events.5 = {
 			has_environment_ministry_3 = yes
 		}
 		highlighted_option = yes
-		custom_tooltip = environmentalism_events_ministry_environment_3_tt
 		ai_chance = { base = 8 }
 		# Ministry-coordinated drought response - faster, less radical
 		add_modifier = {
@@ -740,7 +739,6 @@ environmentalism_events.10 = {
 			has_environment_ministry_3 = yes
 		}
 		highlighted_option = yes
-		custom_tooltip = environmentalism_events_ministry_environment_3_tt
 		ai_chance = { base = 8 }
 		# Ministry-coordinated desalination and water recycling
 		add_modifier = {
@@ -1058,7 +1056,6 @@ environmentalism_events.14 = {
 			has_consumer_protection_ministry_3 = yes
 		}
 		highlighted_option = yes
-		custom_tooltip = environmentalism_events_ministry_consumer_3_tt
 		ai_chance = { base = 8 }
 		# Mobilize public health infrastructure - rapid containment
 		add_modifier = {
@@ -1235,5 +1232,213 @@ environmentalism_events.16 = {
 		}
 		add_radicals = { value = large_radicals }
 		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+}
+
+# ============================================================================
+# COOLING / REVERSAL THRESHOLD EVENTS (fire once globally on decline)
+# ============================================================================
+
+# Event 17: Retreat from Catastrophic Warming (< 3.0 C after exceeding it)
+environmentalism_events.17 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/climate_awareness.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.17.t
+	desc = environmentalism_events.17.d
+	flavor = environmentalism_events.17.f
+
+	duration = 3
+
+	trigger = {
+		# triggered by global warming on_action when dropping below 3.0 C
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.17.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		# Keep emergency structures in place while conditions improve
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = environmentalism_events.17.b
+		ai_chance = { base = 2 }
+		# Scale back emergency spending and normalize governance
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = very_small_radicals pop_type = academics }
+	}
+}
+
+# Event 18: Severe Warming Recedes (< 2.0 C)
+environmentalism_events.18 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/green_technology.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.18.t
+	desc = environmentalism_events.18.d
+	flavor = environmentalism_events.18.f
+
+	duration = 3
+
+	trigger = {
+		# triggered by global warming on_action when dropping below 2.0 C
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.18.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		# Lock in emissions reductions and keep mitigation active
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = environmentalism_events.18.b
+		ai_chance = { base = 2 }
+		# Ease restrictions now that severe risks are easing
+		add_loyalists = { value = very_small_radicals strata = upper }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 19: Return to Moderate Warming (< 1.0 C)
+environmentalism_events.19 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/environmental_movement.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.19.t
+	desc = environmentalism_events.19.d
+	flavor = environmentalism_events.19.f
+
+	duration = 3
+
+	trigger = {
+		# triggered by global warming on_action when dropping below 1.0 C
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.19.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		# Maintain green investments for long-term stability
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = environmentalism_events.19.b
+		ai_chance = { base = 2 }
+		# Pivot resources to conventional growth priorities
+		add_loyalists = { value = very_small_radicals strata = upper }
+		add_radicals = { value = very_small_radicals pop_type = academics }
+	}
+}
+
+# Event 20: Warming Falls Below Initial Crisis Level (< 0.5 C)
+environmentalism_events.20 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/climate_awareness.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.20.t
+	desc = environmentalism_events.20.d
+	flavor = environmentalism_events.20.f
+
+	duration = 3
+
+	trigger = {
+		# triggered by global warming on_action when dropping below 0.5 C
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.20.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		# Keep a baseline mitigation framework in place
+		add_loyalists = { value = small_radicals }
+	}
+
+	option = {
+		name = environmentalism_events.20.b
+		ai_chance = { base = 2 }
+		# Sunset emergency-era climate measures
+		add_loyalists = { value = very_small_radicals strata = upper }
+	}
+}
+
+# Event 21: Near-Baseline Climate Recovery (< 0.1 C)
+environmentalism_events.21 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/green_technology.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.21.t
+	desc = environmentalism_events.21.d
+	flavor = environmentalism_events.21.f
+
+	duration = 3
+
+	trigger = {
+		# triggered by global warming on_action when dropping below 0.1 C
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.21.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		# Institutionalize decarbonized growth
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = environmentalism_events.21.b
+		ai_chance = { base = 2 }
+		# Declare victory and reduce policy intensity
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = very_small_radicals pop_type = academics }
 	}
 }

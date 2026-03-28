@@ -446,7 +446,7 @@ pm_resettlement_steamship = {
 	texture = "gfx/interface/icons/production_method_icons/reinforced_steam_ships.dds"
 
 	unlocking_technologies = {
-		steel_steamers
+		paddle_steamer
 	}
 
 	state_modifiers = {

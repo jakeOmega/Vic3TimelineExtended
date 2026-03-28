@@ -1,0 +1,524 @@
+﻿# Space Race Scripted Effects
+
+# Called when a milestone is completed - handles first/subsequent rewards and cleanup
+sr_complete_milestone_effect = {
+	# Remove approach modifiers
+	if = {
+		limit = { has_modifier = sr_safe_approach }
+		remove_modifier = sr_safe_approach
+	}
+	if = {
+		limit = { has_modifier = sr_ambitious_approach }
+		remove_modifier = sr_ambitious_approach
+	}
+	# Remove approach variables
+	if = {
+		limit = { has_variable = sr_approach_safe }
+		remove_variable = sr_approach_safe
+	}
+	if = {
+		limit = { has_variable = sr_approach_ambitious }
+		remove_variable = sr_approach_ambitious
+	}
+	# Reset milestone progress
+	set_variable = { name = sr_milestone_progress value = 0 }
+	# Remove active milestone flag
+	if = {
+		limit = { has_variable = sr_active_milestone }
+		remove_variable = sr_active_milestone
+	}
+}
+
+# Suborbital completion
+sr_complete_suborbital_effect = {
+	set_variable = { name = sr_completed_suborbital value = yes }
+	if = {
+		limit = { NOT = { has_global_variable = sr_global_first_suborbital } }
+		set_global_variable = { name = sr_global_first_suborbital value = yes }
+		set_variable = { name = sr_was_first_suborbital value = yes }
+		add_modifier = { name = sr_first_suborbital }
+		# Notify other countries
+		save_scope_as = sr_achiever
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:sr_achiever }
+				has_technology_researched = rocketry
+			}
+			trigger_event = { id = space_race_events.20 days = 14 }
+		}
+	}
+	else = {
+		add_modifier = { name = sr_suborbital }
+	}
+	sr_complete_milestone_effect = yes
+	add_loyalists = { value = small_radicals pop_type = academics }
+}
+
+# Orbital completion
+sr_complete_orbital_effect = {
+	set_variable = { name = sr_completed_orbital value = yes }
+	if = {
+		limit = { NOT = { has_global_variable = sr_global_first_orbital } }
+		set_global_variable = { name = sr_global_first_orbital value = yes }
+		set_variable = { name = sr_was_first_orbital value = yes }
+		add_modifier = { name = sr_first_orbital }
+		save_scope_as = sr_achiever
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:sr_achiever }
+				has_technology_researched = rocketry
+			}
+			trigger_event = { id = space_race_events.20 days = 14 }
+		}
+	}
+	else = {
+		add_modifier = { name = sr_orbital }
+	}
+	sr_complete_milestone_effect = yes
+	add_loyalists = { value = medium_radicals pop_type = academics }
+}
+
+# Moon Landing completion
+sr_complete_moon_landing_effect = {
+	set_variable = { name = sr_completed_moon_landing value = yes }
+	if = {
+		limit = { NOT = { has_global_variable = sr_global_first_moon_landing } }
+		set_global_variable = { name = sr_global_first_moon_landing value = yes }
+		set_variable = { name = sr_was_first_moon_landing value = yes }
+		add_modifier = { name = sr_first_moon_landing }
+		save_scope_as = sr_achiever
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:sr_achiever }
+				has_technology_researched = space_exploration
+			}
+			trigger_event = { id = space_race_events.20 days = 14 }
+		}
+	}
+	else = {
+		add_modifier = { name = sr_moon_landing }
+	}
+	sr_complete_milestone_effect = yes
+	add_loyalists = { value = large_radicals pop_type = academics }
+	add_loyalists = { value = medium_radicals }
+}
+
+# Probe completion
+sr_complete_probe_effect = {
+	set_variable = { name = sr_completed_probe value = yes }
+	if = {
+		limit = { NOT = { has_global_variable = sr_global_first_probe } }
+		set_global_variable = { name = sr_global_first_probe value = yes }
+		set_variable = { name = sr_was_first_probe value = yes }
+		add_modifier = { name = sr_first_probe }
+		save_scope_as = sr_achiever
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:sr_achiever }
+				has_technology_researched = space_exploration
+			}
+			trigger_event = { id = space_race_events.20 days = 14 }
+		}
+	}
+	else = {
+		add_modifier = { name = sr_probe }
+	}
+	sr_complete_milestone_effect = yes
+	add_loyalists = { value = medium_radicals pop_type = academics }
+}
+
+# Moon Base completion
+sr_complete_moon_base_effect = {
+	set_variable = { name = sr_completed_moon_base value = yes }
+	if = {
+		limit = { NOT = { has_global_variable = sr_global_first_moon_base } }
+		set_global_variable = { name = sr_global_first_moon_base value = yes }
+		set_variable = { name = sr_was_first_moon_base value = yes }
+		add_modifier = { name = sr_first_moon_base }
+		save_scope_as = sr_achiever
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:sr_achiever }
+				has_technology_researched = reusable_rocketry
+			}
+			trigger_event = { id = space_race_events.20 days = 14 }
+		}
+	}
+	else = {
+		add_modifier = { name = sr_moon_base }
+	}
+	sr_complete_milestone_effect = yes
+	add_loyalists = { value = large_radicals pop_type = academics }
+	add_loyalists = { value = medium_radicals }
+}
+
+# Mars Landing completion
+sr_complete_mars_landing_effect = {
+	set_variable = { name = sr_completed_mars_landing value = yes }
+	if = {
+		limit = { NOT = { has_global_variable = sr_global_first_mars_landing } }
+		set_global_variable = { name = sr_global_first_mars_landing value = yes }
+		set_variable = { name = sr_was_first_mars_landing value = yes }
+		add_modifier = { name = sr_first_mars_landing }
+		save_scope_as = sr_achiever
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:sr_achiever }
+				has_technology_researched = reusable_rocketry
+			}
+			trigger_event = { id = space_race_events.20 days = 14 }
+		}
+	}
+	else = {
+		add_modifier = { name = sr_mars_landing }
+	}
+	sr_complete_milestone_effect = yes
+	add_loyalists = { value = large_radicals pop_type = academics }
+	add_loyalists = { value = large_radicals }
+}
+
+# Interstellar Probe completion
+sr_complete_interstellar_probe_effect = {
+	set_variable = { name = sr_completed_interstellar_probe value = yes }
+	set_variable = { name = sr_probe_launched value = yes }
+	if = {
+		limit = { NOT = { has_global_variable = sr_global_first_interstellar_probe } }
+		set_global_variable = { name = sr_global_first_interstellar_probe value = yes }
+		set_variable = { name = sr_was_first_interstellar_probe value = yes }
+		add_modifier = { name = sr_first_interstellar_probe }
+		save_scope_as = sr_achiever
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:sr_achiever }
+				has_technology_researched = space_colonization
+			}
+			trigger_event = { id = space_race_events.20 days = 14 }
+		}
+	}
+	else = {
+		add_modifier = { name = sr_interstellar_probe }
+	}
+	sr_complete_milestone_effect = yes
+	add_loyalists = { value = large_radicals pop_type = academics }
+	add_loyalists = { value = large_radicals }
+}
+
+# Solar System Colonization - establish a colony at a random unclaimed location
+sr_establish_colony_effect = {
+	# Initialize stage if needed
+	if = {
+		limit = { NOT = { has_global_variable = sr_colonization_stage } }
+		set_global_variable = { name = sr_colonization_stage value = 1 }
+	}
+	# Increment colony count for this country
+	change_variable = { name = sr_colony_count add = 1 }
+
+	# ===== STAGE 1: Mars & Asteroids =====
+	if = {
+		limit = { global_var:sr_colonization_stage = 1 }
+		random_list = {
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_valles_marineris } }
+				set_global_variable = { name = sr_colony_valles_marineris value = yes }
+				trigger_event = { id = space_race_colony_events.1 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_olympus_mons } }
+				set_global_variable = { name = sr_colony_olympus_mons value = yes }
+				trigger_event = { id = space_race_colony_events.2 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_hellas_planitia } }
+				set_global_variable = { name = sr_colony_hellas_planitia value = yes }
+				trigger_event = { id = space_race_colony_events.3 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_utopia_planitia } }
+				set_global_variable = { name = sr_colony_utopia_planitia value = yes }
+				trigger_event = { id = space_race_colony_events.4 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_arcadia_planitia } }
+				set_global_variable = { name = sr_colony_arcadia_planitia value = yes }
+				trigger_event = { id = space_race_colony_events.5 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_ceres } }
+				set_global_variable = { name = sr_colony_ceres value = yes }
+				trigger_event = { id = space_race_colony_events.6 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_vesta } }
+				set_global_variable = { name = sr_colony_vesta value = yes }
+				trigger_event = { id = space_race_colony_events.7 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_psyche } }
+				set_global_variable = { name = sr_colony_psyche value = yes }
+				trigger_event = { id = space_race_colony_events.8 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_pallas } }
+				set_global_variable = { name = sr_colony_pallas value = yes }
+				trigger_event = { id = space_race_colony_events.9 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_hygiea } }
+				set_global_variable = { name = sr_colony_hygiea value = yes }
+				trigger_event = { id = space_race_colony_events.10 }
+			}
+		}
+	}
+	# ===== STAGE 2: Jupiter System & Venus =====
+	else_if = {
+		limit = { global_var:sr_colonization_stage = 2 }
+		random_list = {
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_io } }
+				set_global_variable = { name = sr_colony_io value = yes }
+				trigger_event = { id = space_race_colony_events.11 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_europa } }
+				set_global_variable = { name = sr_colony_europa value = yes }
+				trigger_event = { id = space_race_colony_events.12 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_ganymede } }
+				set_global_variable = { name = sr_colony_ganymede value = yes }
+				trigger_event = { id = space_race_colony_events.13 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_callisto } }
+				set_global_variable = { name = sr_colony_callisto value = yes }
+				trigger_event = { id = space_race_colony_events.14 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_himalia } }
+				set_global_variable = { name = sr_colony_himalia value = yes }
+				trigger_event = { id = space_race_colony_events.15 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_amalthea } }
+				set_global_variable = { name = sr_colony_amalthea value = yes }
+				trigger_event = { id = space_race_colony_events.16 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_venus } }
+				set_global_variable = { name = sr_colony_venus value = yes }
+				trigger_event = { id = space_race_colony_events.17 }
+			}
+		}
+	}
+	# ===== STAGE 3: Mercury & Saturn System =====
+	else_if = {
+		limit = { global_var:sr_colonization_stage = 3 }
+		random_list = {
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_mercury } }
+				set_global_variable = { name = sr_colony_mercury value = yes }
+				trigger_event = { id = space_race_colony_events.18 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_titan } }
+				set_global_variable = { name = sr_colony_titan value = yes }
+				trigger_event = { id = space_race_colony_events.19 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_enceladus } }
+				set_global_variable = { name = sr_colony_enceladus value = yes }
+				trigger_event = { id = space_race_colony_events.20 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_rhea } }
+				set_global_variable = { name = sr_colony_rhea value = yes }
+				trigger_event = { id = space_race_colony_events.21 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_mimas } }
+				set_global_variable = { name = sr_colony_mimas value = yes }
+				trigger_event = { id = space_race_colony_events.22 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_iapetus } }
+				set_global_variable = { name = sr_colony_iapetus value = yes }
+				trigger_event = { id = space_race_colony_events.23 }
+			}
+		}
+	}
+	# ===== STAGE 4: Uranus & Neptune Systems =====
+	else_if = {
+		limit = { global_var:sr_colonization_stage = 4 }
+		random_list = {
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_titania } }
+				set_global_variable = { name = sr_colony_titania value = yes }
+				trigger_event = { id = space_race_colony_events.24 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_oberon } }
+				set_global_variable = { name = sr_colony_oberon value = yes }
+				trigger_event = { id = space_race_colony_events.25 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_miranda } }
+				set_global_variable = { name = sr_colony_miranda value = yes }
+				trigger_event = { id = space_race_colony_events.26 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_ariel } }
+				set_global_variable = { name = sr_colony_ariel value = yes }
+				trigger_event = { id = space_race_colony_events.27 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_triton } }
+				set_global_variable = { name = sr_colony_triton value = yes }
+				trigger_event = { id = space_race_colony_events.28 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_proteus } }
+				set_global_variable = { name = sr_colony_proteus value = yes }
+				trigger_event = { id = space_race_colony_events.29 }
+			}
+		}
+	}
+	# ===== STAGE 5: Kuiper Belt & Beyond =====
+	else_if = {
+		limit = { global_var:sr_colonization_stage = 5 }
+		random_list = {
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_pluto } }
+				set_global_variable = { name = sr_colony_pluto value = yes }
+				trigger_event = { id = space_race_colony_events.30 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_eris } }
+				set_global_variable = { name = sr_colony_eris value = yes }
+				trigger_event = { id = space_race_colony_events.31 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_makemake } }
+				set_global_variable = { name = sr_colony_makemake value = yes }
+				trigger_event = { id = space_race_colony_events.32 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_haumea } }
+				set_global_variable = { name = sr_colony_haumea value = yes }
+				trigger_event = { id = space_race_colony_events.33 }
+			}
+			10 = {
+				trigger = { NOT = { has_global_variable = sr_colony_sedna } }
+				set_global_variable = { name = sr_colony_sedna value = yes }
+				trigger_event = { id = space_race_colony_events.34 }
+			}
+		}
+	}
+
+	# Check stage advancement after establishing colony
+	sr_check_colony_stage_effect = yes
+}
+
+# Check if current colonization stage is complete and advance
+sr_check_colony_stage_effect = {
+	# Stage 1 complete → Stage 2
+	if = {
+		limit = {
+			global_var:sr_colonization_stage = 1
+			has_global_variable = sr_colony_valles_marineris
+			has_global_variable = sr_colony_olympus_mons
+			has_global_variable = sr_colony_hellas_planitia
+			has_global_variable = sr_colony_utopia_planitia
+			has_global_variable = sr_colony_arcadia_planitia
+			has_global_variable = sr_colony_ceres
+			has_global_variable = sr_colony_vesta
+			has_global_variable = sr_colony_psyche
+			has_global_variable = sr_colony_pallas
+			has_global_variable = sr_colony_hygiea
+		}
+		set_global_variable = { name = sr_colonization_stage value = 2 }
+	}
+	# Stage 2 complete → Stage 3
+	else_if = {
+		limit = {
+			global_var:sr_colonization_stage = 2
+			has_global_variable = sr_colony_io
+			has_global_variable = sr_colony_europa
+			has_global_variable = sr_colony_ganymede
+			has_global_variable = sr_colony_callisto
+			has_global_variable = sr_colony_himalia
+			has_global_variable = sr_colony_amalthea
+			has_global_variable = sr_colony_venus
+		}
+		set_global_variable = { name = sr_colonization_stage value = 3 }
+	}
+	# Stage 3 complete → Stage 4
+	else_if = {
+		limit = {
+			global_var:sr_colonization_stage = 3
+			has_global_variable = sr_colony_mercury
+			has_global_variable = sr_colony_titan
+			has_global_variable = sr_colony_enceladus
+			has_global_variable = sr_colony_rhea
+			has_global_variable = sr_colony_mimas
+			has_global_variable = sr_colony_iapetus
+		}
+		set_global_variable = { name = sr_colonization_stage value = 4 }
+	}
+	# Stage 4 complete → Stage 5
+	else_if = {
+		limit = {
+			global_var:sr_colonization_stage = 4
+			has_global_variable = sr_colony_titania
+			has_global_variable = sr_colony_oberon
+			has_global_variable = sr_colony_miranda
+			has_global_variable = sr_colony_ariel
+			has_global_variable = sr_colony_triton
+			has_global_variable = sr_colony_proteus
+		}
+		set_global_variable = { name = sr_colonization_stage value = 5 }
+	}
+	# Stage 5 complete → All done
+	else_if = {
+		limit = {
+			global_var:sr_colonization_stage = 5
+			has_global_variable = sr_colony_pluto
+			has_global_variable = sr_colony_eris
+			has_global_variable = sr_colony_makemake
+			has_global_variable = sr_colony_haumea
+			has_global_variable = sr_colony_sedna
+		}
+		set_global_variable = { name = sr_all_colonies_complete value = yes }
+	}
+}
+
+# Mission failure effect - sets back progress
+sr_mission_failure_effect = {
+	# Lose a chunk of progress but don't reset entirely
+	change_variable = {
+		name = sr_milestone_progress
+		multiply = 0.5
+	}
+	set_variable = { name = sr_failure_cooldown value = 12 }
+	add_modifier = {
+		name = sr_mission_failure
+		days = normal_modifier_time
+		is_decaying = yes
+	}
+	add_radicals = { value = medium_radicals pop_type = academics }
+}
+
+# Catastrophic failure effect - major setback
+sr_mission_catastrophic_failure_effect = {
+	change_variable = {
+		name = sr_milestone_progress
+		multiply = 0.25
+	}
+	set_variable = { name = sr_failure_cooldown value = 24 }
+	add_modifier = {
+		name = sr_mission_failure_catastrophic
+		days = long_modifier_time
+		is_decaying = yes
+	}
+	add_radicals = { value = large_radicals pop_type = academics }
+	add_radicals = { value = medium_radicals }
+}

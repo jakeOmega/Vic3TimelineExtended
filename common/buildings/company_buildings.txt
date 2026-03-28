@@ -2482,3 +2482,182 @@ building_generic_spaceport = {
         always = no
     }
 }
+
+#==================================================
+# Phase 1: Vanilla Company Buildings
+#==================================================
+
+# --- Krupp (Germany) ---
+building_krupp_essen_works = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/german_krupp.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_krupp_essen_works
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_krupp
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_krupp_essen_works
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_krupp_essen_works
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Standard Oil (USA) ---
+building_standard_oil_refinery = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/american_standard_oil.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_standard_oil_refinery
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_standard_oil
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_standard_oil_refinery
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_standard_oil_refinery
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- US Steel / Carnegie (USA) ---
+building_carnegie_homestead_mill = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/american_us_steel.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_carnegie_homestead_mill
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_us_steel
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_carnegie_homestead_mill
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_carnegie_homestead_mill
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Ford Motor (USA) ---
+building_ford_rouge_plant = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/american_ford.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_ford_rouge_plant
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_ford_motor
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_ford_rouge_plant
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_ford_rouge_plant
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- East India Company (GBR) ---
+building_eic_trading_house = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/british_eic.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_eic_trading_house
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_east_india_company
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_eic_trading_house
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_eic_trading_house
+                    }
+                }
+            }
+        }
+    }
+}

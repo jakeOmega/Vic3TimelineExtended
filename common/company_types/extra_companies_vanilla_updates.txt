@@ -1,0 +1,895 @@
+﻿# Vanilla Company Updates
+# Adds mod-exclusive buildings to vanilla flavored and generic companies via INJECT
+# INJECT appends new entries to existing fields without replacing the entire definition
+
+#============================================================
+# Phase 1: Flavored Company Buildings
+#============================================================
+
+# Krupp (Germany) - Adds: Essen Works building, aerospace extension
+INJECT:company_krupp = {
+	building_types = {
+		building_krupp_essen_works
+	}
+	extension_building_types = {
+		building_aerospace_industry
+	}
+	prosperity_modifier = {
+		state_building_krupp_essen_works_max_level_add = 1
+	}
+}
+
+# Standard Oil (USA) - Adds: refinery building, synthetics + highway extensions
+INJECT:company_standard_oil = {
+	building_types = {
+		building_standard_oil_refinery
+	}
+	extension_building_types = {
+		building_synthetics_plant_oil
+		building_highway
+	}
+	prosperity_modifier = {
+		state_building_standard_oil_refinery_max_level_add = 1
+	}
+}
+
+# US Steel / Carnegie Steel (USA) - Adds: Homestead Mill, advanced materials extension
+INJECT:company_us_steel = {
+	building_types = {
+		building_carnegie_homestead_mill
+	}
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+	prosperity_modifier = {
+		state_building_carnegie_homestead_mill_max_level_add = 1
+	}
+}
+
+# Ford Motor (USA) - Adds: Rouge Plant building, highway extension
+INJECT:company_ford_motor = {
+	building_types = {
+		building_ford_rouge_plant
+	}
+	extension_building_types = {
+		building_highway
+	}
+	prosperity_modifier = {
+		state_building_ford_rouge_plant_max_level_add = 1
+	}
+}
+
+# East India Company (GBR) - Adds: Trading House building
+INJECT:company_east_india_company = {
+	building_types = {
+		building_eic_trading_house
+	}
+	prosperity_modifier = {
+		state_building_eic_trading_house_max_level_add = 1
+	}
+}
+
+#============================================================
+# Flavored Companies: Mod-Exclusive Building Extensions
+#============================================================
+
+# Rheinmetall (Germany) - artillery/munitions → aerospace extension
+INJECT:company_rheinmetall = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Schichau (Germany) - shipbuilding/motors → aerospace extension
+INJECT:company_schichau = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Siemens (Germany) - electrics pioneer → appliances, semiconductors, software, network infra
+INJECT:company_siemens_and_halske = {
+	building_types = {
+		building_electrics_industry_appliances
+	}
+	extension_building_types = {
+		building_electronic_components_and_semiconductor_industry
+		building_software_industry
+		building_network_infrastructure
+	}
+}
+
+# Prussian State Railways (Germany) - railways → highway extension
+INJECT:company_prussian_state_railways = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# BASF (Germany) - chemicals → bio-synthetics, advanced materials
+INJECT:company_basf = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+		building_advanced_material_fabricator
+	}
+}
+
+# J&P Coats (GBR) - textiles → synthetic silk extension
+INJECT:company_j_p_coats = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Armstrong Whitworth (GBR) - military shipyard/munitions → aerospace
+INJECT:company_armstrong_whitworth = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Bolckow Vaughan (GBR) - steel → advanced materials extension
+INJECT:company_bolckow_vaughan = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Great Western Railway (GBR) - railways → highway extension
+INJECT:company_gwr = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# General Electric (USA) - electrics/power → appliances, semiconductors, renewables, software
+INJECT:company_general_electric = {
+	building_types = {
+		building_electrics_industry_appliances
+	}
+	extension_building_types = {
+		building_electronic_components_and_semiconductor_industry
+		building_renewable_energy_plant
+		building_software_industry
+	}
+}
+
+# United Fruit (USA) - sugar plantations → synthetic sugar extension
+INJECT:company_united_fruit = {
+	extension_building_types = {
+		building_synthetics_plant_sugar
+	}
+}
+
+# William Cramp & Sons (USA) - military shipyard → aerospace extension
+INJECT:company_william_cramp = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Colt Firearms (USA) - arms → aerospace extension
+INJECT:company_colt_firearms = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Schneider-Creusot (France) - steel/artillery/motor → aerospace, highway
+INJECT:company_schneider_creusot = {
+	extension_building_types = {
+		building_aerospace_industry
+		building_highway
+	}
+}
+
+# Saint-Etienne (France) - arms/artillery → aerospace extension
+INJECT:company_saint_etienne = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# FCM (France) - shipyard/automotive → aerospace extension
+INJECT:company_fcm = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# DMC (France) - textiles → synthetic silk extension
+INJECT:company_dmc = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# CGV (France) - vineyard/food → tourism extension
+INJECT:company_cgv = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Putilov (Russia) - motor/military → aerospace, highway
+INJECT:company_putilov_company = {
+	extension_building_types = {
+		building_aerospace_industry
+		building_highway
+	}
+}
+
+# Nobel Brothers (Russia) - oil → synthetic oil extension
+INJECT:company_branobel = {
+	extension_building_types = {
+		building_synthetics_plant_oil
+	}
+}
+
+# Izhevsk Arms Plant (Russia) - arms/munitions → aerospace extension
+INJECT:company_izhevsk_arms_plant = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Savva Morozov (Russia) - textiles → synthetic silk extension
+INJECT:company_savva_morozov = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# John Hughes (Russia) - steel/coal → advanced materials extension
+INJECT:company_john_hughes = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# FIAT (Italy) - motor/automotive → highway, aerospace
+INJECT:company_fiat = {
+	extension_building_types = {
+		building_highway
+		building_aerospace_industry
+	}
+}
+
+# ILVA (Italy) - steel → advanced materials extension
+INJECT:company_ilva = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Ansaldo (Italy) - artillery/steel/military shipyard → aerospace extension
+INJECT:company_ansaldo = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Ricordi (Italy) - art/culture → tourism extension
+INJECT:company_ricordi = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Mitsubishi (Japan) - heavy industry → aerospace, semiconductors
+INJECT:company_mitsubishi = {
+	extension_building_types = {
+		building_aerospace_industry
+		building_electronic_components_and_semiconductor_industry
+	}
+}
+
+# Mitsui (Japan) - trading conglomerate → software extension
+INJECT:company_mitsui = {
+	extension_building_types = {
+		building_software_industry
+	}
+}
+
+# Mantetsu (Japan) - railways → highway extension
+INJECT:company_mantetsu = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Skoda (Austria-Hungary) - steel/motor/artillery → aerospace, highway
+INJECT:company_skoda = {
+	extension_building_types = {
+		building_aerospace_industry
+		building_highway
+	}
+}
+
+# MAV (Austria-Hungary) - motor/tooling → highway extension
+INJECT:company_mav = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Manfred Weiss (Austria-Hungary) - steel/munitions → aerospace extension
+INJECT:company_manfred_weiss = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Galician Carpathian Oil (Austria-Hungary) - oil → synthetic oil extension
+INJECT:company_galician_carpathian_oil = {
+	extension_building_types = {
+		building_synthetics_plant_oil
+	}
+}
+
+# OEVG (Austria-Hungary) - arms/artillery → aerospace extension
+INJECT:company_oevg = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Oesterreichisch-Alpine (Austria-Hungary) - steel → advanced materials
+INJECT:company_oesterreichisch_alpine_montangesellschaft = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Kaiping Mining (China) - coal/railway → highway extension
+INJECT:company_kaiping_mining = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Hanyang Arsenal (China) - arms/munitions → aerospace extension
+INJECT:company_hanyang_arsenal = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Foochow Arsenal (China) - shipyard/military → aerospace extension
+INJECT:company_foochow_arsenal = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Tata (India) - steel/textiles → automotive, software, advanced materials
+INJECT:company_tata = {
+	extension_building_types = {
+		building_automotive_industry
+		building_software_industry
+		building_advanced_material_fabricator
+	}
+}
+
+# Great Indian Railway (India) - railways → highway extension
+INJECT:company_great_indian_railway = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Wadia Shipbuilders (India) - shipyard → aerospace extension
+INJECT:company_wadia_shipbuilders = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Calcutta Electric (India) - power → renewables extension
+INJECT:company_calcutta_electric = {
+	extension_building_types = {
+		building_renewable_energy_plant
+	}
+}
+
+# Bombay Dyeing (India) - textiles → synthetic silk extension
+INJECT:company_bombay_dyeing_company = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Bombay Burmah (India) - rubber/logging → synthetic rubber extension
+INJECT:company_bombay_burmah_trading_corporation = {
+	extension_building_types = {
+		building_synthetics_plant_rubber
+	}
+}
+
+# Ericsson (Sweden) - electrics → semiconductors, software, network infra
+INJECT:company_ericsson = {
+	extension_building_types = {
+		building_electronic_components_and_semiconductor_industry
+		building_software_industry
+		building_network_infrastructure
+	}
+}
+
+# Nokia (Finland) - paper/electrics → software, semiconductors, network infra
+INJECT:company_nokia = {
+	building_types = {
+		building_software_industry
+	}
+	extension_building_types = {
+		building_electronic_components_and_semiconductor_industry
+		building_network_infrastructure
+	}
+}
+
+# Norsk Hydro (Norway) - chemicals/power → renewables, bio-synthetics
+INJECT:company_norsk_hydro = {
+	extension_building_types = {
+		building_renewable_energy_plant
+		building_synthetics_plant_biomass
+	}
+}
+
+# Gotaverken (Sweden) - shipyard/motor → aerospace extension
+INJECT:company_gotaverken = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Philips (Netherlands) - electrics → appliances, semiconductors, software
+INJECT:company_philips = {
+	building_types = {
+		building_electrics_industry_appliances
+	}
+	extension_building_types = {
+		building_electronic_components_and_semiconductor_industry
+		building_software_industry
+	}
+}
+
+# Franco-Belge (Belgium) - motor/railway → highway, automotive
+INJECT:company_franco_belge = {
+	extension_building_types = {
+		building_highway
+		building_automotive_industry
+	}
+}
+
+# John Cockerill (Belgium) - steel/tooling → advanced materials
+INJECT:company_john_cockerill = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Nederlandse Petroleum (Netherlands) - oil → synthetic oil extension
+INJECT:company_nederlandse_petroleum = {
+	extension_building_types = {
+		building_synthetics_plant_oil
+	}
+}
+
+# Ursus (Poland) - motor/automotive → highway extension
+INJECT:company_ursus = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Lilpop (Poland) - steel/iron/tooling → advanced materials
+INJECT:company_lilpop = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Altos Hornos (Spain) - steel → advanced materials extension
+INJECT:company_altos_hornos_de_vizcaya = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Trubia (Spain) - arms/artillery → aerospace extension
+INJECT:company_trubia = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Zastava (Serbia) - arms/munitions → aerospace extension
+INJECT:company_zastava = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Espana Industrial (Spain) - textiles → synthetic silk extension
+INJECT:company_espana_industrial = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Chr. Hansen (Denmark) - food/chemicals → bio-synthetics extension
+INJECT:company_chr_hansens = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# CFR (Romania) - railways → highway extension
+INJECT:company_cfr = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Romanian Star (Romania) - oil → synthetic oil extension
+INJECT:company_romanian_star = {
+	extension_building_types = {
+		building_synthetics_plant_oil
+	}
+}
+
+# SECN (Spain) - military shipyard → aerospace extension
+INJECT:company_secn = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Hispano-Suiza (Spain) - automotive → highway, aerospace
+INJECT:company_hispano_suiza = {
+	extension_building_types = {
+		building_highway
+		building_aerospace_industry
+	}
+}
+
+# Douro Wine (Portugal) - vineyard → tourism extension
+INJECT:company_douro_wine_company = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Pedro Domecq (Spain) - vineyard → tourism extension
+INJECT:company_pedro_domecq = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Bacardi (Cuba/Spain) - food/drinks → tourism extension
+INJECT:company_bacardi = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Gran Azucarera (Spain) - sugar → synthetic sugar extension
+INJECT:company_gran_azucarera = {
+	extension_building_types = {
+		building_synthetics_plant_sugar
+	}
+}
+
+# OCP (Morocco) - sulfur/chemical → bio-synthetics extension
+INJECT:company_office_cherifien_des_phosphates = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# Uniao Fabril (Portugal) - chemicals → bio-synthetics extension
+INJECT:company_uniao_fabril = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# Misr (Egypt) - textiles → synthetic silk extension
+INJECT:company_misr = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Egyptian Rail (Egypt) - railways → highway extension
+INJECT:company_egyptian_rail = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Suez Company (Egypt) - trade/port → tourism extension
+INJECT:company_suez_company = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Fundidora Monterrey (Mexico) - steel → advanced materials extension
+INJECT:company_fundidora_monterrey = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# El Aguila (Mexico) - oil → synthetic oil, highway
+INJECT:company_el_aguila = {
+	extension_building_types = {
+		building_synthetics_plant_oil
+		building_highway
+	}
+}
+
+# Caribbean Petroleum (Venezuela) - oil → synthetic oil extension
+INJECT:company_caribbean_petroleum = {
+	extension_building_types = {
+		building_synthetics_plant_oil
+	}
+}
+
+# La Rosada (Argentina) - steel/arms → aerospace extension
+INJECT:company_la_rosada = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# FAMAE (Chile) - arms/munitions → aerospace extension
+INJECT:company_famae = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Peruvian Amazon (Peru) - rubber → synthetic rubber extension
+INJECT:company_peruvian_amazon = {
+	extension_building_types = {
+		building_synthetics_plant_rubber
+	}
+}
+
+# Sao Paulo Railway (Brazil) - railways → highway extension
+INJECT:company_sao_paulo_railway = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Fundicao Ipanema (Brazil) - steel → advanced materials extension
+INJECT:company_fundicao_ipanema = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Cordoba Railway (Argentina) - railways → highway extension
+INJECT:company_cordoba_railway = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Electricidad de Caracas (Venezuela) - power → renewables extension
+INJECT:company_electricidad_de_caracas = {
+	extension_building_types = {
+		building_renewable_energy_plant
+	}
+}
+
+# EEA (Argentina) - power → renewables extension
+INJECT:company_eea = {
+	extension_building_types = {
+		building_renewable_energy_plant
+	}
+}
+
+# Panama Company (Panama) - trade/port → tourism extension
+INJECT:company_panama_company = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Afghan Nassaji (Afghanistan) - textiles → synthetic silk extension
+INJECT:company_da_afghan_nassaji_sherkat = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Iranian State Railway (Iran) - railways → highway extension
+INJECT:company_iranian_state_railway = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Tashkent Railroad (Central Asia) - railways → highway extension
+INJECT:company_tashkent_railroad = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# West Ural Petroleum (Russia/CA) - oil → synthetic oil extension
+INJECT:company_west_ural_petroleum = {
+	extension_building_types = {
+		building_synthetics_plant_oil
+	}
+}
+
+# Anglo-Persian Oil (Iran) - oil → synthetic oil extension
+INJECT:company_anglo_persian_oil = {
+	extension_building_types = {
+		building_synthetics_plant_oil
+	}
+}
+
+# Turkish Petroleum (Ottoman) - oil → synthetic oil extension
+INJECT:company_turkish_petroleum = {
+	extension_building_types = {
+		building_synthetics_plant_oil
+	}
+}
+
+# Pernambuco Textiles (Brazil) - textiles → synthetic silk extension
+INJECT:company_pernambuco_textiles = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# CCCI (Belgium/Congo) - rubber → synthetic rubber extension
+INJECT:company_ccci = {
+	extension_building_types = {
+		building_synthetics_plant_rubber
+	}
+}
+
+# Stabilimento Tecnico (Fiume) - motor/military_shipyard → aerospace extension
+INJECT:company_stabilimento_tecnico_di_fiume = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Getzner Mutter (Austria) - textiles → synthetic silk extension
+INJECT:company_getzner_mutter = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Orient Express (Ottoman) - railways → highway, tourism
+INJECT:company_orient_express = {
+	extension_building_types = {
+		building_highway
+		building_tourism_industry
+	}
+}
+
+# Massey-Harris (Canada) - motor/tooling → highway extension
+INJECT:company_massey_harris = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+#============================================================
+# Generic Companies: Mod-Exclusive Building Extensions
+#============================================================
+
+# Generic Oil - adds synthetic oil production, highway extension
+INJECT:company_basic_oil = {
+	building_types = {
+		building_synthetics_plant_oil
+	}
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Generic Steel - adds advanced materials extension
+INJECT:company_basic_steel = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Generic Chemicals - adds bio-synthetics production, synthetic rubber extension
+INJECT:company_basic_chemicals = {
+	building_types = {
+		building_synthetics_plant_biomass
+	}
+	extension_building_types = {
+		building_synthetics_plant_rubber
+	}
+}
+
+# Generic Motors - adds highway extension
+INJECT:company_basic_motors = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Generic Munitions - adds aerospace extension
+INJECT:company_basic_munitions = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Generic Weapons - adds aerospace extension
+INJECT:company_basic_weapons = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Generic Textiles - adds synthetic silk extension
+INJECT:company_basic_textiles = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Generic Fabrics - adds synthetic silk extension
+INJECT:company_basic_fabrics = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Generic Food - adds synthetic meat/sugar extensions
+INJECT:company_basic_food = {
+	extension_building_types = {
+		building_synthetics_plant_meat
+		building_synthetics_plant_sugar
+	}
+}
+
+# Generic Paper - adds software industry extension
+INJECT:company_basic_paper = {
+	extension_building_types = {
+		building_software_industry
+	}
+}
+
+# Generic Home Goods - adds appliances extension
+INJECT:company_basic_home_goods = {
+	extension_building_types = {
+		building_electrics_industry_appliances
+	}
+}
+
+# Generic Forestry - adds synthetic wood extension
+INJECT:company_basic_forestry = {
+	extension_building_types = {
+		building_synthetics_plant_wood
+	}
+}
+
+# Generic Fishing - adds tourism extension
+INJECT:company_basic_fishing = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Generic Shipyards - adds aerospace extension
+INJECT:company_basic_shipyards = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}

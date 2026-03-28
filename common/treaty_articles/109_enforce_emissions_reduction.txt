@@ -1,0 +1,333 @@
+﻿# =================================================================
+# TREATY ARTICLE: enforce_emissions_reduction
+# Forces a market leader to adopt all greenhouse gas reduction
+# policies (carbon tax, renewable investment, emission standards,
+# reforestation, public transit, fossil fuel divestment, green
+# building codes) and imposes additional fossil fuel restrictions.
+# Can be enforced via war or offered as a paid deal (giftable).
+# Historical: Paris Agreement enforcement mechanisms, climate
+# sanctions, carbon border adjustment mechanisms, green conditionality
+# in trade deals and international lending.
+# =================================================================
+enforce_emissions_reduction = {
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	kind = directed
+	cost = 200
+
+	relations_progress_per_day = -0.15
+	relations_improvement_min = 0
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	usage_limit = once_per_side
+
+	maintenance_paid_by = target_country
+
+	unlocked_by_technologies = {
+		intergovernmental_organizations
+	}
+
+	# Source = the market leader being forced to reduce emissions
+	# Additional penalties on top of the forced policy modifiers
+	source_modifier = {
+		building_power_plant_throughput_add = -0.20
+		building_group_bg_coal_mining_throughput_add = -0.10
+		building_group_bg_oil_extraction_throughput_add = -0.10
+		country_authority_add = -300
+	}
+
+	# Target = the country demanding emissions reduction (gains prestige)
+	target_modifier = {
+		country_prestige_mult = 0.02
+	}
+
+	visible = {
+		# Only visible once global warming is active
+		temperature_anomaly_display > 0.1
+		# Only target market leaders
+		scope:other_country = {
+			market_capital.owner = scope:other_country
+		}
+	}
+
+	possible = {
+		has_diplomatic_relevance = scope:other_country
+		NOT = { has_war_with = scope:other_country }
+		NOT = { is_country_type = decentralized }
+		temperature_anomaly_display >= 0.5
+		scope:other_country = {
+			NOT = { is_country_type = decentralized }
+			# Must be a market leader
+			market_capital.owner = scope:other_country
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = enforce_emissions_reduction
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_entry_into_force = {
+		scope:article_options = {
+			source_country = {
+				# Set treaty flag so remove buttons are blocked
+				set_variable = has_emissions_reduction_treaty
+
+				# Apply all market-wide GW mitigation modifiers
+				if = {
+					limit = { NOT = { has_modifier = carbon_tax_modifier } }
+					every_country = {
+						limit = {
+							market_capital = ROOT.market_capital
+							NOT = { has_modifier = carbon_tax_modifier }
+						}
+						add_modifier = { name = carbon_tax_modifier }
+					}
+				}
+				if = {
+					limit = { NOT = { has_modifier = renewable_investment_modifier } }
+					every_country = {
+						limit = {
+							market_capital = ROOT.market_capital
+							NOT = { has_modifier = renewable_investment_modifier }
+						}
+						add_modifier = { name = renewable_investment_modifier }
+					}
+				}
+				if = {
+					limit = { NOT = { has_modifier = emission_standards_modifier } }
+					every_country = {
+						limit = {
+							market_capital = ROOT.market_capital
+							NOT = { has_modifier = emission_standards_modifier }
+						}
+						add_modifier = { name = emission_standards_modifier }
+					}
+				}
+
+				# Apply country-only modifiers
+				if = {
+					limit = { NOT = { has_modifier = reforestation_subsidies_modifier } }
+					add_modifier = { name = reforestation_subsidies_modifier }
+				}
+				if = {
+					limit = { NOT = { has_modifier = public_transit_modifier } }
+					add_modifier = { name = public_transit_modifier }
+				}
+				if = {
+					limit = { NOT = { has_modifier = fossil_fuel_divestment_modifier } }
+					add_modifier = { name = fossil_fuel_divestment_modifier }
+				}
+				if = {
+					limit = { NOT = { has_modifier = green_building_codes_modifier } }
+					add_modifier = { name = green_building_codes_modifier }
+				}
+			}
+		}
+	}
+
+	on_break = {
+		scope:article.source_country ?= {
+			remove_variable = has_emissions_reduction_treaty
+		}
+	}
+
+	on_withdrawal = {
+		scope:article.source_country ?= {
+			remove_variable = has_emissions_reduction_treaty
+		}
+	}
+
+	# Non-fulfillment: if the source removes any emission policy, treaty freezes
+	non_fulfillment = {
+		consequences = freeze
+		conditions = {
+			monthly = {
+				scope:article = {
+					source_country = {
+						OR = {
+							NOT = { has_modifier = carbon_tax_modifier }
+							NOT = { has_modifier = renewable_investment_modifier }
+							NOT = { has_modifier = emission_standards_modifier }
+							NOT = { has_modifier = reforestation_subsidies_modifier }
+							NOT = { has_modifier = fossil_fuel_divestment_modifier }
+							NOT = { has_modifier = green_building_codes_modifier }
+							NOT = { has_modifier = public_transit_modifier }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { request offer }
+
+		evaluation_chance = {
+			value = 0.02
+			if = {
+				limit = { temperature_anomaly_display >= 1.5 }
+				add = 0.08
+			}
+			if = {
+				limit = { temperature_anomaly_display >= 2.5 }
+				add = 0.10
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_ministry_of_the_environment
+				}
+				add = 0.10
+			}
+			if = {
+				limit = {
+					country_rank >= rank_value:great_power
+				}
+				add = 0.05
+			}
+		}
+
+		inherent_accept_score = {
+			value = 0
+
+			# Source (forced to adopt policies) is reluctant
+			if = {
+				limit = {
+					scope:source_country = this
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -60
+				}
+				if = {
+					limit = {
+						has_law = law_type:law_laissez_faire
+					}
+					add = {
+						desc = "AI_LAISSEZ_FAIRE_ECONOMY"
+						value = -40
+					}
+				}
+				if = {
+					limit = {
+						has_modifier = carbon_tax_modifier
+						has_modifier = emission_standards_modifier
+					}
+					add = {
+						desc = "AI_ALREADY_GREEN_POLICIES"
+						value = 30
+					}
+				}
+				if = {
+					limit = {
+						temperature_anomaly_display >= 2.0
+					}
+					add = {
+						desc = "AI_HIGH_WARMING"
+						value = 20
+					}
+				}
+				if = {
+					limit = {
+						ig:ig_industrialists = {
+							is_in_government = yes
+						}
+					}
+					add = {
+						desc = "AI_INDUSTRIALISTS_IN_GOVERNMENT"
+						value = -20
+					}
+				}
+			}
+			# Target (demanding emissions reduction)
+			else = {
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -10
+				}
+				if = {
+					limit = {
+						temperature_anomaly_display >= 1.5
+					}
+					add = {
+						desc = "AI_HIGH_WARMING_DEMAND"
+						value = 20
+					}
+				}
+				if = {
+					limit = {
+						temperature_anomaly_display >= 2.5
+					}
+					add = {
+						desc = "AI_SEVERE_WARMING_DEMAND"
+						value = 30
+					}
+				}
+				if = {
+					limit = {
+						has_law = law_type:law_ministry_of_the_environment
+					}
+					add = {
+						desc = "AI_HAS_ENVIRONMENT_MINISTRY"
+						value = 15
+					}
+				}
+				if = {
+					limit = {
+						scope:source_country = {
+							has_modifier = carbon_tax_modifier
+							has_modifier = emission_standards_modifier
+							has_modifier = renewable_investment_modifier
+						}
+					}
+					add = {
+						desc = "AI_SOURCE_ALREADY_GREEN"
+						value = -50
+					}
+				}
+			}
+		}
+	}
+
+	wargoal = {
+		execution_priority = 50
+		contestion_type = control_target_country_capital
+
+		infamy = {
+			value = 10
+			scope:target_country = {
+				multiply = {
+					value = gdp
+					divide = 10000000
+					add = 1
+					max = 2.5
+				}
+			}
+		}
+	}
+}

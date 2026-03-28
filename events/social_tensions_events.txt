@@ -89,7 +89,6 @@ social_tensions_events.1 = {
 			has_technology_researched = automated_surveillance
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_surveillance_tech_tt
 		add_modifier = { name = terror_surveillance_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = very_small_radicals strata = lower }
 		add_loyalists = { value = small_radicals strata = upper }
@@ -105,7 +104,6 @@ social_tensions_events.1 = {
 			has_intelligence_ministry_3 = yes
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_intel_ministry_3_tt
 		add_modifier = { name = terror_preempted_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals }
 		ai_chance = {
@@ -177,7 +175,6 @@ social_tensions_events.2 = {
 		name = social_tensions_events.2.b
 		trigger = { has_law = law_type:law_ministry_of_intelligence_and_security }
 		highlighted_option = yes
-		custom_tooltip = social_tensions_intel_law_tt
 		add_modifier = { name = foreign_terror_diplomacy_modifier days = long_modifier_time is_decaying = yes }
 		change_relations = { country = scope:terror_linked_country value = 10 }
 		add_lobby_appeasement_from_diplomacy_unidirectional = {
@@ -341,7 +338,6 @@ social_tensions_events.4 = {
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_antitrust_law_tt
 		add_modifier = { name = monopoly_broken_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals strata = upper }
 		add_loyalists = { value = small_radicals strata = lower }
@@ -360,7 +356,6 @@ social_tensions_events.4 = {
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_command_economy_tt
 		add_modifier = { name = monopoly_nationalized_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = large_radicals strata = upper }
 		add_loyalists = { value = medium_radicals strata = lower }
@@ -477,7 +472,6 @@ social_tensions_events.5 = {
 			has_technology_researched = social_justice_movements
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_civil_rights_tech_tt
 		add_modifier = { name = police_accountability_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals pop_type = officers }
 		add_loyalists = { value = medium_radicals strata = lower }
@@ -580,7 +574,6 @@ social_tensions_events.6 = {
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_civil_rights_tech_tt
 		add_modifier = { name = riot_commission_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
@@ -678,7 +671,6 @@ social_tensions_events.7 = {
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_war_law_tt
 		add_modifier = { name = war_crime_reform_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals pop_type = officers }
 		add_loyalists = { value = medium_radicals strata = lower }
@@ -819,7 +811,6 @@ social_tensions_events.9 = {
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_media_tech_tt
 		add_modifier = { name = campaign_scandal_reform_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = medium_radicals strata = lower }
 		add_radicals = { value = small_radicals strata = upper }
@@ -978,7 +969,6 @@ social_tensions_events.11 = {
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_civil_rights_tech_tt
 		add_modifier = { name = immigration_integrate_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = medium_radicals strata = lower }
 		add_radicals = { value = small_radicals strata = upper }
@@ -1072,7 +1062,6 @@ social_tensions_events.12 = {
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_broadcast_tech_tt
 		add_modifier = { name = nativist_dialogue_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals }
 		ai_chance = { base = 3 }
@@ -1396,7 +1385,6 @@ social_tensions_events.16 = {
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = social_tensions_entertainment_tech_tt
 		add_modifier = { name = cultural_synthesis_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals }
 		ai_chance = { base = 3 }

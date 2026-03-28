@@ -237,7 +237,6 @@ society_technology_events.3 = {
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = ste_family_planning_law_tt
 		ai_chance = {
 			base = 4
 		}
@@ -1059,7 +1058,6 @@ society_technology_events.11 = {
 			}
 		}
 		highlighted_option = yes
-		custom_tooltip = ste_intelligence_tech_tt
 		ai_chance = {
 			base = 4
 			modifier = {
@@ -1232,7 +1230,6 @@ society_technology_events.13 = {
 		name = society_technology_events.13.c
 		trigger = { literacy_rate >= 0.9 }
 		highlighted_option = yes
-		custom_tooltip = ste_high_literacy_tt
 		ai_chance = {
 			base = 4
 		}
@@ -1345,7 +1342,6 @@ society_technology_events.14 = {
 			has_intelligence_ministry_3 = yes
 		}
 		highlighted_option = yes
-		custom_tooltip = ste_intel_ministry_3_tt
 		ai_chance = { base = 8 }
 		# Deploy intelligence-backed cyber defense - neutralize the interference
 		add_modifier = {
@@ -1515,7 +1511,6 @@ society_technology_events.16 = {
 		name = society_technology_events.16.c
 		trigger = { has_law = law_type:law_human_purity }
 		highlighted_option = yes
-		custom_tooltip = ste_human_purity_law_tt
 		ai_chance = {
 			base = 5
 		}
@@ -1624,7 +1619,7 @@ society_technology_events.18 = {
 		NOT = { has_modifier = ste_space_colony_national }
 		NOT = { has_modifier = ste_space_colony_international }
 		any_scope_building = {
-			is_building_type = building_space_program
+			is_building_type = building_aerospace_industry
 			level >= 3
 		}
 	}
@@ -1995,7 +1990,6 @@ society_technology_events.22 = {
 			has_consumer_protection_ministry_3 = yes
 		}
 		highlighted_option = yes
-		custom_tooltip = ste_consumer_ministry_3_tt
 		ai_chance = {
 			base = 10
 			modifier = {
@@ -2096,7 +2090,6 @@ society_technology_events.23 = {
 			has_consumer_protection_ministry_3 = yes
 		}
 		highlighted_option = yes
-		custom_tooltip = ste_consumer_ministry_3_tt
 		ai_chance = {
 			base = 5
 		}
@@ -2239,7 +2232,6 @@ society_technology_events.25 = {
 			has_technology_researched = military_grade_cybersecurity
 		}
 		highlighted_option = yes
-		custom_tooltip = ste_cyber_ml_tech_tt
 		ai_chance = {
 			base = 4
 		}
@@ -2699,7 +2691,6 @@ society_technology_events.31 = {
 			has_consumer_protection_ministry_3 = yes
 		}
 		highlighted_option = yes
-		custom_tooltip = ste_consumer_ministry_3_tt
 		ai_chance = { base = 8 }
 		# Ministry-led safety investigation - balanced resolution
 		add_modifier = {

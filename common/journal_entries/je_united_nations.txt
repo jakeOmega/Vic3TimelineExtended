@@ -11,14 +11,6 @@
 		has_technology_researched = intergovernmental_organizations
 	}
 
-	should_be_involved = {
-		has_modifier = un_member_modifier
-	}
-
-	should_show_when_not_involved = {
-		always = yes
-	}
-
 	scripted_progress_bar = un_authority_bar
 
 	# ---- Membership buttons ----

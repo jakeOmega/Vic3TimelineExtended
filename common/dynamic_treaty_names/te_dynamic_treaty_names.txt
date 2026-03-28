@@ -1,0 +1,333 @@
+﻿
+# ============================================================================
+# DYNAMIC TREATY NAMES - Timeline Extended
+# Provides thematic names for treaties containing mod-specific articles
+# ============================================================================
+
+### Corporate/Economic Treaties
+
+# Treaties with company seizure/disbandment articles
+treaty_name_nationalization_accord = {
+	trigger = {
+		any_scope_article_option = {
+			OR = {
+				has_type = seize_company
+				has_type = disband_company
+			}
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+treaty_name_city_nationalization_agreement = {
+	trigger = {
+		any_scope_article_option = {
+			OR = {
+				has_type = seize_company
+				has_type = disband_company
+			}
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+treaty_name_corporate_restructuring_protocol = {
+	trigger = {
+		any_scope_article_option = {
+			OR = {
+				has_type = seize_company
+				has_type = disband_company
+				has_type = enforce_privatization
+			}
+		}
+	}
+	weight = {
+		value = 80
+	}
+}
+
+# Concessions and trade articles
+treaty_name_country_adj_concession_agreement = {
+	trigger = {
+		any_scope_article_option = {
+			OR = {
+				has_type = corporate_concessions
+				has_type = free_port_concession
+			}
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+treaty_name_city_commercial_concession = {
+	trigger = {
+		any_scope_article_option = {
+			OR = {
+				has_type = corporate_concessions
+				has_type = free_port_concession
+			}
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+treaty_name_open_door_agreement = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = free_port_concession
+		}
+	}
+	weight = {
+		value = 120
+	}
+}
+
+# Privatization
+treaty_name_privatization_mandate = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = enforce_privatization
+		}
+	}
+	weight = {
+		value = 120
+	}
+}
+
+treaty_name_city_free_enterprise_accord = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = enforce_privatization
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+# Financial articles
+treaty_name_city_financial_arrangement = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = money_transfer
+		}
+	}
+	weight = {
+		value = 80
+	}
+}
+
+### Humanitarian and Cultural Treaties
+
+treaty_name_minority_rights_convention = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = minority_protection
+		}
+	}
+	weight = {
+		value = 120
+	}
+}
+
+treaty_name_city_declaration_on_minority_rights = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = minority_protection
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+treaty_name_cultural_exchange_treaty = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = cultural_exchange
+		}
+	}
+	weight = {
+		value = 120
+	}
+}
+
+treaty_name_country_adj_country_adj_cultural_accord = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = cultural_exchange
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+treaty_name_religious_mission_concordat = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = religious_mission_rights
+		}
+	}
+	weight = {
+		value = 120
+	}
+}
+
+treaty_name_city_missionary_accord = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = religious_mission_rights
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+### Military and Security Treaties
+
+treaty_name_demilitarization_agreement = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = dmz_and_disarmament
+		}
+	}
+	weight = {
+		value = 120
+	}
+}
+
+treaty_name_city_disarmament_protocol = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = dmz_and_disarmament
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+treaty_name_country_adj_country_adj_peace_and_disarmament_treaty = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = dmz_and_disarmament
+		}
+	}
+	weight = {
+		value = 80
+	}
+}
+
+### Diplomatic Aid and Influence Treaties
+
+treaty_name_cooperation_and_development_accord = {
+	trigger = {
+		any_scope_article_option = {
+			OR = {
+				has_type = education_aid
+				has_type = healthcare_aid
+			}
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+treaty_name_city_development_assistance_agreement = {
+	trigger = {
+		any_scope_article_option = {
+			OR = {
+				has_type = education_aid
+				has_type = healthcare_aid
+			}
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+treaty_name_education_and_training_pact = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = education_aid
+		}
+	}
+	weight = {
+		value = 120
+	}
+}
+
+treaty_name_public_health_cooperation_agreement = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = healthcare_aid
+		}
+	}
+	weight = {
+		value = 120
+	}
+}
+
+# Influence/sphere articles
+treaty_name_sphere_of_cooperation_accord = {
+	trigger = {
+		any_scope_article_option = {
+			OR = {
+				has_type = request_influence
+				has_type = extend_influence
+			}
+		}
+	}
+	weight = {
+		value = 80
+	}
+}
+
+treaty_name_country_adj_partnership_agreement = {
+	trigger = {
+		any_scope_article_option = {
+			OR = {
+				has_type = request_influence
+				has_type = extend_influence
+			}
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
+# Crisis resolution
+treaty_name_city_crisis_settlement = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = crisis_resolution
+		}
+	}
+	weight = {
+		value = 120
+	}
+}
+
+treaty_name_crisis_resolution_protocol = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = crisis_resolution
+		}
+	}
+	weight = {
+		value = 100
+	}
+}

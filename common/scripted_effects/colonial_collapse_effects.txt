@@ -50,7 +50,10 @@ colonial_collapse_effect = {
             }
                         
             # Safety: don't collapse countries currently in a diplomatic play or at war
-            NOT = { is_in_diplomatic_play = yes }
+            NOR = {
+                is_diplomatic_play_committed_participant = yes
+                is_diplomatic_play_undecided_participant = yes
+            }
             NOT = { is_at_war = yes }
         }
 			

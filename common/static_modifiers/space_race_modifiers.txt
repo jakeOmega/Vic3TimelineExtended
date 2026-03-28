@@ -1,0 +1,179 @@
+﻿# ======= Space Race - Approach Modifiers (applied while approach is active)
+sr_safe_approach = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_weekly_innovation_max_add = -15
+}
+sr_ambitious_approach = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_weekly_innovation_max_add = -30
+}
+
+# ======= Space Race - Milestone Achievement Modifiers (First Nation)
+sr_first_suborbital = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 100
+	country_weekly_innovation_max_add = 25
+}
+sr_first_orbital = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 150
+	country_weekly_innovation_max_add = 50
+}
+sr_first_moon_landing = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 300
+	country_weekly_innovation_max_add = 75
+	country_tech_research_speed_mult = 0.05
+}
+sr_first_probe = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_prestige_add = 200
+	country_weekly_innovation_max_add = 50
+	country_tech_research_speed_mult = 0.03
+}
+sr_first_moon_base = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 250
+	country_weekly_innovation_max_add = 75
+	country_tech_research_speed_mult = 0.05
+	country_influence_mult = 0.05
+}
+sr_first_mars_landing = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 400
+	country_weekly_innovation_max_add = 100
+	country_tech_research_speed_mult = 0.05
+	country_prestige_mult = 0.05
+}
+sr_first_interstellar_probe = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 500
+	country_weekly_innovation_max_add = 100
+	country_tech_research_speed_mult = 0.10
+	country_prestige_mult = 0.10
+	country_influence_mult = 0.10
+}
+# Solar colonization no longer has first/subsequent since it's repeatable
+
+# ======= Space Race - Milestone Achievement Modifiers (Subsequent Nations)
+sr_suborbital = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	country_weekly_innovation_max_add = 10
+}
+sr_orbital = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 75
+	country_weekly_innovation_max_add = 25
+}
+sr_moon_landing = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 150
+	country_weekly_innovation_max_add = 35
+	country_tech_research_speed_mult = 0.02
+}
+sr_probe = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_prestige_add = 100
+	country_weekly_innovation_max_add = 25
+	country_tech_research_speed_mult = 0.01
+}
+sr_moon_base = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 125
+	country_weekly_innovation_max_add = 35
+	country_tech_research_speed_mult = 0.02
+	country_influence_mult = 0.02
+}
+sr_mars_landing = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 200
+	country_weekly_innovation_max_add = 50
+	country_tech_research_speed_mult = 0.02
+	country_prestige_mult = 0.02
+}
+sr_mars_resource_extraction = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.03
+	country_weekly_innovation_max_add = 25
+}
+sr_interstellar_probe = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 250
+	country_weekly_innovation_max_add = 50
+	country_tech_research_speed_mult = 0.05
+	country_prestige_mult = 0.05
+	country_influence_mult = 0.05
+}
+# Solar colonization reward is sr_solar_system_trade applied after all stages complete
+
+# ======= Space Race - Moon Landing Site Modifiers
+sr_shackleton_crater = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.05
+	country_weekly_innovation_max_add = 50
+}
+sr_equatorial_plain = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_prestige_add = 75
+	country_tech_research_speed_mult = 0.02
+}
+
+# ======= Space Race - Failure Modifiers
+sr_mission_failure = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -100
+	country_weekly_innovation_max_add = -25
+}
+sr_mission_failure_catastrophic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -200
+	country_weekly_innovation_max_add = -50
+}
+
+# ======= Space Race - Late-Game Economic Modifiers
+sr_interstellar_data = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_prestige_add = 500
+	country_tech_research_speed_mult = 0.10
+	country_weekly_innovation_max_add = 100
+}
+sr_solar_system_trade = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_prestige_mult = 0.10
+	country_tech_research_speed_mult = 0.05
+	country_influence_mult = 0.10
+}
+
+# ======= Space Race - Funding Cost
+sr_space_program_funding = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_weekly_innovation_max_add = -15
+}
+
+# ======= Space Race - Cross-System Connection Modifiers
+sr_space_tourism_boost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_prestige_add = 50
+	goods_output_tourism_mult = 0.05
+}
+sr_space_tourism_rejected = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_tech_research_speed_mult = 0.02
+}
+sr_iss_cooperation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_tech_research_speed_mult = 0.03
+	country_prestige_add = 50
+	country_influence_mult = 0.03
+}
+sr_iss_independence = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_tech_research_speed_mult = 0.02
+	country_prestige_add = 75
+}
+sr_extraplanetary_integration = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_tech_research_speed_mult = 0.03
+	country_prestige_mult = 0.03
+}

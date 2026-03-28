@@ -263,6 +263,7 @@ wonder_events.5 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		add_radicals = { value = small_radicals pop_type = academics }
 	}
 }
 
@@ -474,7 +475,7 @@ wonder_events.11 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = medium_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = lower }
 	}
 }
 
@@ -1156,7 +1157,7 @@ wonder_events.31 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = medium_radicals pop_type = engineers }
+		add_radicals = { value = small_radicals pop_type = engineers }
 		add_radicals = { value = small_radicals strata = lower }
 	}
 }

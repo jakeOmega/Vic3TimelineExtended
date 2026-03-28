@@ -1,0 +1,182 @@
+﻿# Space Race Scripted Buttons
+# Approach selection buttons - used by all space race JEs
+
+sr_select_safe_approach = {
+	name = "SR_SAFE_APPROACH"
+	desc = "SR_SAFE_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_milestone
+	}
+
+	ai_chance = {
+		value = 50
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = -20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_SAFE"
+			NOT = { has_variable = sr_approach_safe }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_SAFE_APPROACH_EFFECT"
+			set_variable = { name = sr_approach_safe value = yes }
+			if = {
+				limit = { has_variable = sr_approach_ambitious }
+				remove_variable = sr_approach_ambitious
+			}
+			if = {
+				limit = { has_modifier = sr_ambitious_approach }
+				remove_modifier = sr_ambitious_approach
+			}
+			add_modifier = { name = sr_safe_approach }
+		}
+	}
+}
+
+sr_select_ambitious_approach = {
+	name = "SR_AMBITIOUS_APPROACH"
+	desc = "SR_AMBITIOUS_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_milestone
+	}
+
+	ai_chance = {
+		value = 30
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = 30
+		}
+		if = {
+			limit = {
+				any_country = {
+					NOT = { THIS = ROOT }
+					has_variable = sr_active_milestone
+				}
+			}
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_AMBITIOUS"
+			NOT = { has_variable = sr_approach_ambitious }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_AMBITIOUS_APPROACH_EFFECT"
+			set_variable = { name = sr_approach_ambitious value = yes }
+			if = {
+				limit = { has_variable = sr_approach_safe }
+				remove_variable = sr_approach_safe
+			}
+			if = {
+				limit = { has_modifier = sr_safe_approach }
+				remove_modifier = sr_safe_approach
+			}
+			add_modifier = { name = sr_ambitious_approach }
+		}
+	}
+}
+
+sr_increase_funding = {
+	name = "SR_INCREASE_FUNDING"
+	desc = "SR_INCREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_milestone
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation > 50 }
+			add = 30
+		}
+		if = {
+			limit = { var:sr_funding_level < 2 }
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MAX_FUNDING_NOT_REACHED"
+			var:sr_funding_level < 3
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_INCREASE_FUNDING_EFFECT"
+			change_variable = {
+				name = sr_funding_level
+				add = 1
+			}
+			if = {
+				limit = { has_modifier = sr_space_program_funding }
+				remove_modifier = sr_space_program_funding
+			}
+			add_modifier = {
+				name = sr_space_program_funding
+				multiplier = var:sr_funding_level
+			}
+		}
+	}
+}
+
+sr_decrease_funding = {
+	name = "SR_DECREASE_FUNDING"
+	desc = "SR_DECREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_milestone
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation < 25 }
+			add = 30
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MIN_FUNDING_NOT_REACHED"
+			var:sr_funding_level > 0
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_DECREASE_FUNDING_EFFECT"
+			change_variable = {
+				name = sr_funding_level
+				subtract = 1
+			}
+			if = {
+				limit = { has_modifier = sr_space_program_funding }
+				remove_modifier = sr_space_program_funding
+			}
+			if = {
+				limit = { var:sr_funding_level > 0 }
+				add_modifier = {
+					name = sr_space_program_funding
+					multiplier = var:sr_funding_level
+				}
+			}
+		}
+	}
+}

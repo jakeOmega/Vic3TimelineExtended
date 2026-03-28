@@ -98,7 +98,6 @@ minor_events_timelineextended.2 = {
         }
         highlighted_option = yes
         name = minor_events_timelineextended.2.c
-        custom_tooltip = minor_events_force_law_medium_tt
 
         add_modifier = {
             name = forced_law_through_event
@@ -126,7 +125,6 @@ minor_events_timelineextended.2 = {
         }
         highlighted_option = yes
         name = minor_events_timelineextended.2.e
-        custom_tooltip = minor_events_force_law_large_tt
 
         add_modifier = {
             name = forced_law_through_event

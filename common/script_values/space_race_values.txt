@@ -1,0 +1,275 @@
+﻿# Space Race Script Values
+# Progress goals for each milestone (higher = takes longer)
+sr_suborbital_goal = {
+	value = 50
+}
+sr_orbital_goal = {
+	value = 75
+}
+sr_moon_landing_goal = {
+	value = 120
+}
+sr_probe_goal = {
+	value = 100
+}
+sr_moon_base_goal = {
+	value = 150
+}
+sr_mars_landing_goal = {
+	value = 200
+}
+sr_interstellar_probe_goal = {
+	value = 250
+}
+sr_solar_colonization_goal = {
+	# Base goal scales with stage - further out = harder
+	value = 100
+	if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 2
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 3
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 4
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 5
+		}
+		add = 40
+	}
+}
+
+# Script value for interstellar transit progress display
+sr_interstellar_transit_value = {
+	value = var:sr_interstellar_transit_progress
+}
+
+# Monthly progress values based on approach
+# Safe approach: slower but reliable
+sr_safe_progress = {
+	value = 1
+	# Aerospace industry levels boost progress
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_aerospace_industry
+				level >= 3
+			}
+		}
+		add = 0.3
+	}
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_aerospace_industry
+				level >= 5
+			}
+		}
+		add = 0.3
+	}
+	# Space elevator significantly boosts later milestones
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_space_elevator
+			}
+		}
+		add = 0.4
+	}
+	# Extraplanetary base boosts colonization milestones
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_space_mine
+			}
+		}
+		add = 0.2
+	}
+	# UN space cooperation partnership
+	if = {
+		limit = { has_modifier = un_space_partnership_modifier }
+		add = 0.3
+	}
+	# SpaceX or other space company bonus
+	if = {
+		limit = {
+			has_company = company_type:company_spacex
+		}
+		add = 0.3
+	}
+	# Higher funding level = faster
+	if = {
+		limit = { var:sr_funding_level >= 2 }
+		add = 0.5
+	}
+	if = {
+		limit = { var:sr_funding_level >= 3 }
+		add = 0.5
+	}
+	# Tech bonuses for later milestones
+	if = {
+		limit = { has_technology_researched = reusable_rocketry }
+		add = 0.3
+	}
+	if = {
+		limit = { has_technology_researched = space_colonization }
+		add = 0.5
+	}
+}
+
+# Ambitious approach: faster but risky
+sr_ambitious_progress = {
+	value = 2
+	# Aerospace industry levels boost progress
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_aerospace_industry
+				level >= 3
+			}
+		}
+		add = 0.5
+	}
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_aerospace_industry
+				level >= 5
+			}
+		}
+		add = 0.5
+	}
+	# Space elevator significantly boosts later milestones
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_space_elevator
+			}
+		}
+		add = 0.6
+	}
+	# Extraplanetary base boosts colonization milestones
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_space_mine
+			}
+		}
+		add = 0.3
+	}
+	# UN space cooperation partnership
+	if = {
+		limit = { has_modifier = un_space_partnership_modifier }
+		add = 0.4
+	}
+	# SpaceX or other space company bonus
+	if = {
+		limit = {
+			has_company = company_type:company_spacex
+		}
+		add = 0.4
+	}
+	# Higher funding level = faster
+	if = {
+		limit = { var:sr_funding_level >= 2 }
+		add = 0.75
+	}
+	if = {
+		limit = { var:sr_funding_level >= 3 }
+		add = 0.75
+	}
+	# Tech bonuses
+	if = {
+		limit = { has_technology_researched = reusable_rocketry }
+		add = 0.5
+	}
+	if = {
+		limit = { has_technology_researched = space_colonization }
+		add = 0.75
+	}
+}
+
+# Failure chance (per month) for ambitious approach - returns 1 if failure this month
+# We use a random_list in the effect instead, so this is used as the weight base
+sr_ambitious_failure_weight = {
+	value = 10
+	# Early milestones are less dangerous
+	if = {
+		limit = {
+			OR = {
+				has_variable = sr_active_suborbital
+				has_variable = sr_active_orbital
+			}
+		}
+		add = -3
+	}
+	# Late milestones are more dangerous
+	if = {
+		limit = {
+			has_variable = sr_active_solar_colonization
+		}
+		add = 5
+	}
+	# Reusable rocketry makes things safer
+	if = {
+		limit = { has_technology_researched = reusable_rocketry }
+		add = -3
+	}
+	# Existing achievements make you more experienced
+	if = {
+		limit = { has_variable = sr_completed_moon_landing }
+		add = -2
+	}
+	# UN space cooperation reduces risk
+	if = {
+		limit = { has_modifier = un_space_partnership_modifier }
+		add = -2
+	}
+	# SpaceX company bonus reduces risk
+	if = {
+		limit = { has_company = company_type:company_spacex }
+		add = -2
+	}
+	# Space elevator infrastructure helps
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_space_elevator
+			}
+		}
+		add = -2
+	}
+	min = 2
+	max = 20
+}
+
+sr_funding_cost = {
+	value = 0
+	add = {
+		value = var:sr_funding_level
+		multiply = 15
+	}
+}
+
+sr_current_milestone_progress = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_milestone_progress }
+		add = var:sr_milestone_progress
+	}
+}

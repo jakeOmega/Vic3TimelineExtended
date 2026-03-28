@@ -1,4 +1,32 @@
-﻿on_monthly_pulse_state = {
+﻿# ============================================================================
+# COMPANY DISBANDED - immediately remove company-unique buildings
+# Root = Country (in which the company was disbanded)
+# scope:company = The company that was disbanded
+# ============================================================================
+on_company_disbanded = {
+	on_actions = {
+		te_on_company_disbanded
+	}
+}
+te_on_company_disbanded = {
+	effect = {
+		every_scope_state = {
+			remove_disbanded_company_buildings_effect = yes
+		}
+	}
+}
+
+# ============================================================================
+# BECOME INDEPENDENT - fires for newly independent countries
+# Root = newly independent country
+# ============================================================================
+on_become_independent = {
+	events = {
+		decolonization_events.15
+	}
+}
+
+on_monthly_pulse_state = {
 	on_actions = {
 		space_elevator_on_action
 		solar_collector_on_action
@@ -132,6 +160,99 @@ on_law_activated = {
 # through the parent scope chain. Building and institution scopes don't support
 # variables/modifiers, causing cascading errors. The yearly state pulse and
 # law/technology hooks are sufficient for these slow-changing modifiers.
+
+# ============================================================================
+# BUILDING BUILT (Root = Building)
+# When a barracks is built, a new combat unit type enters a formation.
+# Recalculate combined arms bonuses immediately for the owning country.
+# ============================================================================
+on_building_built = {
+	on_actions = {
+		te_on_building_built
+	}
+}
+te_on_building_built = {
+	effect = {
+		if = {
+			limit = {
+				is_building_type = building_barrack
+				exists = owner
+				owner = { modifier:country_combined_arms_bonus_enabled_bool = yes }
+			}
+			owner = {
+				apply_combined_arms_bonuses = yes
+			}
+		}
+	}
+}
+
+# ============================================================================
+# CHARACTER RECRUITMENT (Root = Character)
+# When a character is recruited:
+# 1. Apply tech-based traits immediately (immortality, logistics)
+# 2. If a general/admiral, recalculate combined arms (new commander)
+# ============================================================================
+on_character_recruitment = {
+	on_actions = {
+		te_on_character_recruitment
+	}
+}
+te_on_character_recruitment = {
+	effect = {
+		owner = {
+			update_characters = yes
+			if = {
+				limit = { modifier:country_combined_arms_bonus_enabled_bool = yes }
+				apply_combined_arms_bonuses = yes
+			}
+		}
+	}
+}
+
+# ============================================================================
+# MILITARY FORMATION CREATED (Root = Military Formation)
+# When a new formation is created, recalculate combined arms bonuses.
+# ============================================================================
+on_military_formation_created = {
+	on_actions = {
+		te_on_military_formation_created
+	}
+}
+te_on_military_formation_created = {
+	effect = {
+		if = {
+			limit = {
+				exists = country
+				country = { modifier:country_combined_arms_bonus_enabled_bool = yes }
+			}
+			country = {
+				apply_combined_arms_bonuses = yes
+			}
+		}
+	}
+}
+
+# ============================================================================
+# STATE OWNER CHANGE (Root = state)
+# When a state changes hands (e.g. conquest), remove building_space_program
+# if it exists and this state is not the new owner's market capital.
+# ============================================================================
+on_state_owner_change = {
+	on_actions = {
+		te_on_state_owner_change
+	}
+}
+te_on_state_owner_change = {
+	effect = {
+		if = {
+			limit = {
+				has_building = building_space_program
+				NOT = { owner.market_capital = THIS }
+			}
+			remove_building = building_space_program
+		}
+	}
+}
 
 language_reform_law_on_action = {
 	effect = {
@@ -419,6 +540,69 @@ global_warming_events_on_action = {
 			every_country = {
 				limit = { NOT = { is_country_type = decentralized } }
 				trigger_event = { id = environmentalism_events.4 }
+			}
+		}
+
+		# Cooling / reversal threshold events.
+		# These fire once globally when temperatures move back below major thresholds.
+		if = {
+			limit = {
+				temperature_anomaly_display < 3.0
+				has_global_variable = gw_catastrophic_event_fired
+				NOT = { has_global_variable = gw_cooling_below_3_event_fired }
+			}
+			set_global_variable = gw_cooling_below_3_event_fired
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = environmentalism_events.17 }
+			}
+		}
+		if = {
+			limit = {
+				temperature_anomaly_display < 2.0
+				has_global_variable = gw_severe_event_fired
+				NOT = { has_global_variable = gw_cooling_below_2_event_fired }
+			}
+			set_global_variable = gw_cooling_below_2_event_fired
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = environmentalism_events.18 }
+			}
+		}
+		if = {
+			limit = {
+				temperature_anomaly_display < 1.0
+				has_global_variable = gw_moderate_event_fired
+				NOT = { has_global_variable = gw_cooling_below_1_event_fired }
+			}
+			set_global_variable = gw_cooling_below_1_event_fired
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = environmentalism_events.19 }
+			}
+		}
+		if = {
+			limit = {
+				temperature_anomaly_display < 0.5
+				has_global_variable = gw_mild_event_fired
+				NOT = { has_global_variable = gw_cooling_below_0_5_event_fired }
+			}
+			set_global_variable = gw_cooling_below_0_5_event_fired
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = environmentalism_events.20 }
+			}
+		}
+		if = {
+			limit = {
+				temperature_anomaly_display < 0.1
+				has_global_variable = gw_mild_event_fired
+				NOT = { has_global_variable = gw_cooling_near_baseline_event_fired }
+			}
+			set_global_variable = gw_cooling_near_baseline_event_fired
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = environmentalism_events.21 }
 			}
 		}
 

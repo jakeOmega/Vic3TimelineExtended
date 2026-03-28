@@ -2589,3 +2589,189 @@ pm_wonder_burj_khalifa = {
 		}
 	}
 }
+
+#==================================================
+# Phase 1: Vanilla Company PMs
+#==================================================
+
+# --- Krupp Essen Works ---
+# Theme: Steel/arms industrial complex - the "arsenal of the Empire"
+pm_krupp_essen_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			unit_kill_rate_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (100.00%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 30                     # Price:   60, Total cost:  1800.0
+			goods_output_artillery_add = 10                      # Price:  100, Total cost:  1000.0
+			goods_output_ammunition_add = 20                     # Price:   60, Total cost:  1200.0
+			# Total input cost: 1400.0
+			# Total output cost: 4000.0
+			# Profit: 2600.0
+			# Profit margin: 185.71%
+			# Zero profit price multiplier: 0.35
+			# Employment: 2000
+			# Wage breakeven: 1.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Standard Oil Refinery ---
+# Theme: Oil monopoly refinery complex
+pm_standard_oil_refinery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.15
+			state_infrastructure_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 30                             # Price:   30, Total cost:   900.0 (100.00%)
+			# Output goods
+			goods_output_explosives_add = 30                      # Price:   50, Total cost:  1500.0
+			goods_output_fertilizer_add = 20                     # Price:   30, Total cost:   600.0
+			goods_output_tools_add = 20                          # Price:   40, Total cost:   800.0
+			# Total input cost: 900.0
+			# Total output cost: 2900.0
+			# Profit: 2000.0
+			# Profit margin: 222.22%
+			# Zero profit price multiplier: 0.31
+			# Employment: 2000
+			# Wage breakeven: 1.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 500
+			building_employment_clerks_add = 300
+		}
+	}
+}
+
+# --- Carnegie Homestead Mill ---
+# Theme: Birthplace of American steel
+pm_carnegie_homestead_mill = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.15
+			building_railway_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 30                            # Price:   20, Total cost:   600.0
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_steel_add = 40                          # Price:   50, Total cost:  2000.0
+			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0
+			# Total input cost: 900.0
+			# Total output cost: 2600.0
+			# Profit: 1700.0
+			# Profit margin: 188.89%
+			# Zero profit price multiplier: 0.35
+			# Employment: 2000
+			# Wage breakeven: 0.85
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Ford Rouge Plant ---
+# Theme: The world's largest integrated factory
+pm_ford_rouge_plant = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.1
+			building_automotive_industry_throughput_add = 0.1
+			state_infrastructure_from_population_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0
+			goods_input_engines_add = 10                         # Price:   50, Total cost:   500.0
+			# Output goods
+			goods_output_automobiles_add = 20                    # Price:  100, Total cost:  2000.0
+			goods_output_tools_add = 20                          # Price:   40, Total cost:   800.0
+			# Total input cost: 1000.0
+			# Total output cost: 2800.0
+			# Profit: 1800.0
+			# Profit margin: 180.00%
+			# Zero profit price multiplier: 0.36
+			# Employment: 2000
+			# Wage breakeven: 0.90
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- East India Company Trading House ---
+# Theme: Colonial commerce hub
+pm_eic_trading_house = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.15
+			state_trade_capacity_add = 5
+			building_port_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tea_add = 10                             # Price:   37.5, Total cost: 375.0
+			goods_input_opium_add = 10                           # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_merchant_marine_add = 50                # Price:   50, Total cost:  2500.0
+			# Total input cost: 975.0
+			# Total output cost: 2500.0
+			# Profit: 1525.0
+			# Profit margin: 156.41%
+			# Zero profit price multiplier: 0.39
+			# Employment: 2000
+			# Wage breakeven: 0.76
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}

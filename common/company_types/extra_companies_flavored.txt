@@ -1625,7 +1625,7 @@ company_alibaba = {
 				level >= 5
 			}
 		}
-		"goods_production_rank(g:logistics)" <= 5
+		"goods_production_rank(g:digital_assets)" <= 5
 		has_law = law_type:law_free_trade
 		gdp_ranking <= 10
 	}

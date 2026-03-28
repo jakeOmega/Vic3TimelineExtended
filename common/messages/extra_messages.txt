@@ -1900,3 +1900,10 @@ colonial_territory_collapsed_notice = {
 	notification_type = feed
 	color = neutral
 }
+
+nationalization_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}

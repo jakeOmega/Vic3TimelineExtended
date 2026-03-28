@@ -2,6 +2,7 @@
 request_influence = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
     kind = directed
+    maintenance_paid_by = source_country
     cost = 500
 
     flags = {
@@ -127,6 +128,7 @@ request_influence = {
 crisis_resolution = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
     kind = directed
+    maintenance_paid_by = source_country
     cost = 400
     relations_progress_per_day = 3 
 	relations_improvement_max = 80 
@@ -249,6 +251,7 @@ crisis_resolution = {
 extend_influence = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
     kind = directed
+    maintenance_paid_by = source_country
     cost = 500 
 
     target_modifier = {
@@ -366,6 +369,7 @@ extend_influence = {
 education_aid = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
+	maintenance_paid_by = source_country
 	cost = 100 
 	relations_progress_per_day = 3 
 	relations_improvement_max = 30 
@@ -495,6 +499,7 @@ education_aid = {
 healthcare_aid = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
+	maintenance_paid_by = source_country
 	cost = 100 
 	relations_progress_per_day = 3 
 	relations_improvement_max = 30 
@@ -625,6 +630,7 @@ healthcare_aid = {
 security_aid = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
+	maintenance_paid_by = source_country
 	cost = 100 
 	relations_progress_per_day = 3 
 	relations_improvement_max = 30 
@@ -755,6 +761,7 @@ security_aid = {
 science_aid = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
+	maintenance_paid_by = source_country
 	cost = 100 
 	relations_progress_per_day = 3 
 	relations_improvement_max = 30 
@@ -877,6 +884,7 @@ science_aid = {
 science_aid_2 = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
+	maintenance_paid_by = source_country
 	cost = 100 
 	relations_progress_per_day = 6 
 	relations_improvement_max = 30 
@@ -1008,6 +1016,7 @@ science_aid_2 = {
 suppress_subject_liberty = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
+	maintenance_paid_by = source_country
 	cost = 100
 
 	source_modifier = {
@@ -1093,6 +1102,7 @@ suppress_subject_liberty = {
 nuclear_disarmament = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
+	maintenance_paid_by = source_country
 	cost = 200
 
 	source_modifier = {
@@ -1280,7 +1290,6 @@ nuclear_disarmament = {
 						value = -50
 					}
 				}
-				# Very good relations with a powerful ally may slightly reduce resistance
 				if = {
 					limit = {
 						scope:source_country.relations:target_country >= relations_threshold:amicable
@@ -1290,6 +1299,23 @@ nuclear_disarmament = {
 						desc = "AI_GOOD_RELATIONS_WITH_GP"
 						value = 25
 					}
+				}
+			}
+		}
+	}
+
+	wargoal = {
+		execution_priority = 85
+		contestion_type = control_target_country_capital
+
+		infamy = {
+			value = 20
+			scope:target_country = {
+				multiply = {
+					value = gdp
+					divide = 10000000
+					add = 1
+					max = 2.5
 				}
 			}
 		}
@@ -1304,6 +1330,7 @@ nuclear_disarmament = {
 nuclear_program_aid = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
+	maintenance_paid_by = source_country
 	cost = 500
 
 	target_modifier = {

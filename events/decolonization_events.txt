@@ -1602,3 +1602,215 @@ decolonization_events.14 = {
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
 }
+
+# ============================================================================
+# Event 15: Nationalization Question (fires on independence)
+# Root = newly independent country
+# Triggered from on_become_independent on_action
+# ============================================================================
+decolonization_events.15 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/colonial_protest.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = decolonization_events.15.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_at_war = yes }
+				desc = decolonization_events.15.d_violent
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.15.d_peaceful
+			}
+		}
+	}
+	flavor = decolonization_events.15.f
+
+	duration = 3
+
+	trigger = {
+		# Ensure there is meaningful foreign ownership to nationalize
+		any_country = {
+			NOT = { this = root }
+			country_rank >= rank_value:minor_power
+			root = {
+				gdp_ownership_ratio = {
+					target = prev
+					value > 0.05
+				}
+			}
+		}
+	}
+
+	immediate = {
+		# Save the biggest foreign owner for description/effects
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				country_rank >= rank_value:minor_power
+				root = {
+					gdp_ownership_ratio = {
+						target = prev
+						value > 0.05
+					}
+				}
+			}
+			save_scope_as = biggest_foreign_owner
+		}
+	}
+
+	# Option A: Full nationalization — seize all foreign assets
+	option = {
+		name = decolonization_events.15.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 5
+			}
+			modifier = {
+				trigger = {
+					has_law = law_type:law_command_economy
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					has_law = law_type:law_council_republic
+				}
+				add = 3
+			}
+		}
+
+		add_modifier = {
+			name = independence_nationalization_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+
+		# Hit relations with every foreign owner
+		every_country = {
+			limit = {
+				NOT = { this = root }
+				root = {
+					gdp_ownership_ratio = {
+						target = prev
+						value > 0.05
+					}
+				}
+			}
+			root = {
+				change_relations = {
+					country = prev
+					value = -60
+				}
+			}
+			post_notification = nationalization_notice
+		}
+
+		# Infamy from seizing property
+		change_infamy = 10
+
+		# Domestic reaction
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
+	}
+
+	# Option B: Selective nationalization — strategic sectors only
+	option = {
+		name = decolonization_events.15.b
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					has_law = law_type:law_interventionism
+				}
+				add = 3
+			}
+		}
+
+		add_modifier = {
+			name = selective_nationalization_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+
+		every_country = {
+			limit = {
+				NOT = { this = root }
+				root = {
+					gdp_ownership_ratio = {
+						target = prev
+						value > 0.05
+					}
+				}
+			}
+			root = {
+				change_relations = {
+					country = prev
+					value = -30
+				}
+			}
+		}
+
+		change_infamy = 5
+
+		add_loyalists = { value = small_radicals strata = lower }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+
+	# Option C: Protect foreign property rights
+	option = {
+		name = decolonization_events.15.c
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					has_law = law_type:law_laissez_faire
+				}
+				add = 5
+			}
+		}
+
+		add_modifier = {
+			name = foreign_property_protected_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+
+		every_country = {
+			limit = {
+				NOT = { this = root }
+				root = {
+					gdp_ownership_ratio = {
+						target = prev
+						value > 0.05
+					}
+				}
+			}
+			root = {
+				change_relations = {
+					country = prev
+					value = 20
+				}
+			}
+		}
+
+		add_radicals = { value = medium_radicals strata = lower }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
+	}
+}

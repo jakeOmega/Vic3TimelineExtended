@@ -17834,7 +17834,7 @@ pm_orbital_battlestation = {
 			country_nuclear_weapon_defense_chance_add = 0.10
 			unit_blockade_mult = 0.10
 			unit_morale_damage_mult = 0.05
-			tcountry_nuclear_weapon_defense_chance_add = 0.05
+			country_nuclear_weapon_defense_chance_add = 0.05
 		}
 	}
 

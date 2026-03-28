@@ -38,6 +38,11 @@ goods_input_electronic_components_add = {
 	percent = no
 }
 
+goods_input_tea_add = {
+	color = bad
+	percent = no
+}
+
 goods_input_tech_metals_add = {
 	color = bad
 	percent = no
@@ -2004,7 +2009,6 @@ building_total_mind_upload_nexus_progress = {
 building_weekly_antimatter_facility_progress = {
 	color = good
 	percent = yes
-	ai_value = 50000000
 }
 
 building_total_antimatter_facility_progress = {
@@ -2013,6 +2017,33 @@ building_total_antimatter_facility_progress = {
 }
 
 country_antimatter_facility_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Phase 1 vanilla company building max levels
+state_building_krupp_essen_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_standard_oil_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_carnegie_homestead_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ford_rouge_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_eic_trading_house_max_level_add = {
 	color = good
 	percent = no
 	decimals = 0

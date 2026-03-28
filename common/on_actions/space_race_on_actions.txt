@@ -1,0 +1,83 @@
+﻿# Space Race On-Actions
+# Wire up in-progress and cross-system events as yearly random events
+
+on_yearly_events = {
+	random_events = {
+		chance_to_happen = 50
+
+		# === Original in-progress events ===
+		# Suborbital test flight
+		10 = space_race_events.30
+
+		# Orbital debris concerns
+		10 = space_race_events.31
+
+		# Moon landing volunteer astronauts
+		8 = space_race_events.32
+
+		# Mars landing signs of water
+		8 = space_race_events.33
+
+		# Interstellar probe design debate
+		7 = space_race_events.34
+
+		# Solar colonization supply chain logistics
+		7 = space_race_events.35
+
+		# Moon base helium-3
+		8 = space_race_events.36
+
+		# Probe outer planet images
+		10 = space_race_events.37
+
+		# === Expanded hard sci-fi events ===
+		# Radiation shielding challenge
+		8 = space_race_events.40
+
+		# Gravity well economics
+		7 = space_race_events.41
+
+		# Communication delay (Mars)
+		7 = space_race_events.42
+
+		# Closed-loop life support
+		7 = space_race_events.43
+
+		# Solar flare warning
+		8 = space_race_events.44
+
+		# Gravitational slingshot (probe)
+		8 = space_race_events.45
+
+		# In-situ resource utilization
+		7 = space_race_events.46
+
+		# Micrometeorite impact
+		8 = space_race_events.47
+
+		# Crew psychology report
+		6 = space_race_events.48
+
+		# Orbital fuel depot
+		7 = space_race_events.49
+
+		# === Cross-system connection events ===
+		# Private space company (SpaceX)
+		8 = space_race_events.50
+
+		# Space tourism potential
+		6 = space_race_events.51
+
+		# International space station (UN)
+		7 = space_race_events.52
+
+		# Extraplanetary base integration
+		6 = space_race_events.53
+
+		# Heat shield re-entry
+		8 = space_race_events.54
+
+		# Space elevator synergy
+		7 = space_race_events.55
+	}
+}

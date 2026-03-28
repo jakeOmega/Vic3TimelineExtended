@@ -143,7 +143,9 @@ cultural_exchange_program = {
 			# Countries sharing heritage group have less need for exchange
 			if = {
 				limit = {
-					shares_heritage_trait_group_with_any_primary_culture = scope:other_country
+					any_primary_culture = {
+						shares_heritage_trait_group_with_any_primary_culture = scope:other_country
+					}
 				}
 				add = {
 					desc = "AI_SHARED_HERITAGE"
