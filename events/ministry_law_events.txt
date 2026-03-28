@@ -1343,7 +1343,7 @@ ministry_law_events.19 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/humanitarian_aid.dds" }
+	event_image = { texture = "gfx/event_pictures/humanitarian_crisis.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

@@ -13890,13 +13890,13 @@ pm_space_elevator_construction_slow = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 100000
 			# Wage breakeven: -724.85
+			building_annual_space_elevator_progress = 0.25
 		}
 
 		level_scaled = {
 			# employment
 			building_employment_engineers_add = 50000
 			building_employment_academics_add = 50000
-			building_weekly_space_elevator_progress = 0.25
 		}
 	}
 
@@ -13930,13 +13930,13 @@ pm_space_elevator_construction_medium = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 100000
 			# Wage breakeven: -1449.70
+			building_annual_space_elevator_progress = 0.5
 		}
 
 		level_scaled = {
 			# employment
 			building_employment_engineers_add = 50000
 			building_employment_academics_add = 50000
-			building_weekly_space_elevator_progress = 0.5
 		}
 	}
 
@@ -13970,13 +13970,13 @@ pm_space_elevator_construction_fast = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 100000
 			# Wage breakeven: -2899.40
+			building_annual_space_elevator_progress = 1
 		}
 
 		level_scaled = {
 			# employment
 			building_employment_engineers_add = 50000
 			building_employment_academics_add = 50000
-			building_weekly_space_elevator_progress = 1
 		}
 	}
 
@@ -17621,12 +17621,12 @@ pm_solar_collector_construction_slow = {
 			goods_input_electricity_add = 5000                   # Price:   30, Total cost: 150000.0 (1.39%)
 			goods_input_digital_access_add = 2000                # Price:   60, Total cost: 120000.0 (1.11%)
 			# Total input cost: 10770000.0
+			building_annual_solar_collector_progress = 0.25
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
-			building_weekly_solar_collector_progress = 0.25
 		}
 	}
 
@@ -17646,12 +17646,12 @@ pm_solar_collector_construction_medium = {
 			goods_input_electricity_add = 10000                  # Price:   30, Total cost: 300000.0 (1.39%)
 			goods_input_digital_access_add = 4000                # Price:   60, Total cost: 240000.0 (1.11%)
 			# Total input cost: 21540000.0
+			building_annual_solar_collector_progress = 0.5
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
-			building_weekly_solar_collector_progress = 0.5
 		}
 	}
 
@@ -17671,12 +17671,12 @@ pm_solar_collector_construction_fast = {
 			goods_input_electricity_add = 20000                  # Price:   30, Total cost: 600000.0 (1.39%)
 			goods_input_digital_access_add = 8000                # Price:   60, Total cost: 480000.0 (1.11%)
 			# Total input cost: 43080000.0
+			building_annual_solar_collector_progress = 1
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
-			building_weekly_solar_collector_progress = 1
 		}
 	}
 
@@ -17689,7 +17689,7 @@ pm_solar_collector = {
 	texture = "gfx/interface/icons/production_method_icons/base3.dds"
 
 	country_modifiers = {
-		level_scaled = {
+		workforce_scaled = {
 			country_solar_receiver_max_level_add = 10
 		}
 	}
@@ -17716,7 +17716,7 @@ pm_solar_receiver = {
 	texture = "gfx/interface/icons/production_method_icons/base3.dds"
 
 	country_modifiers = {
-		level_scaled = {
+		workforce_scaled = {
 			country_solar_receiver_max_level_add = -1
 		}
 	}
@@ -17768,13 +17768,13 @@ pm_orbital_battlestation_construction_slow = {
 			goods_input_steel_add = 5000                           # Price:   50, Total cost: 250000.0 (1.34%)
 			goods_input_explosives_add = 2000                      # Price:   50, Total cost: 100000.0 (0.54%)
 			# Total input cost: 18590000.0
+			building_annual_orbital_battlestation_progress = 0.25
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 20000
 			building_employment_officers_add = 20000
 			building_employment_academics_add = 10000
-			building_weekly_orbital_battlestation_progress = 0.25
 		}
 	}
 }
@@ -17790,13 +17790,13 @@ pm_orbital_battlestation_construction_medium = {
 			goods_input_steel_add = 10000                          # Price:   50, Total cost: 500000.0 (1.34%)
 			goods_input_explosives_add = 4000                      # Price:   50, Total cost: 200000.0 (0.54%)
 			# Total input cost: 37180000.0
+			building_annual_orbital_battlestation_progress = 0.5
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 20000
 			building_employment_officers_add = 20000
 			building_employment_academics_add = 10000
-			building_weekly_orbital_battlestation_progress = 0.5
 		}
 	}
 }
@@ -17812,13 +17812,13 @@ pm_orbital_battlestation_construction_fast = {
 			goods_input_steel_add = 20000                          # Price:   50, Total cost: 1000000.0 (1.34%)
 			goods_input_explosives_add = 8000                      # Price:   50, Total cost: 400000.0 (0.54%)
 			# Total input cost: 74360000.0
+			building_annual_orbital_battlestation_progress = 1
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 20000
 			building_employment_officers_add = 20000
 			building_employment_academics_add = 10000
-			building_weekly_orbital_battlestation_progress = 1
 		}
 	}
 }
@@ -17827,7 +17827,7 @@ pm_orbital_battlestation = {
 	texture = "gfx/interface/icons/production_method_icons/base3.dds"
 
 	country_modifiers = {
-		level_scaled = {
+		workforce_scaled = {
 			unit_offense_mult = 0.05
 			unit_defense_mult = 0.05
 			unit_morale_recovery_mult = 0.05
@@ -17884,12 +17884,12 @@ pm_mind_upload_nexus_construction_slow = {
 			goods_input_digital_access_add = 5000                  # Price:   60, Total cost: 300000.0 (2.19%)
 			goods_input_electricity_add = 20000                    # Price:   30, Total cost: 600000.0 (4.38%)
 			# Total input cost: 13700000.0
+			building_annual_mind_upload_nexus_progress = 0.25
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 30000
 			building_employment_academics_add = 30000
-			building_weekly_mind_upload_nexus_progress = 0.25
 		}
 	}
 
@@ -17907,12 +17907,12 @@ pm_mind_upload_nexus_construction_medium = {
 			goods_input_digital_access_add = 10000                 # Price:   60, Total cost: 600000.0 (2.19%)
 			goods_input_electricity_add = 40000                    # Price:   30, Total cost: 1200000.0 (4.38%)
 			# Total input cost: 27400000.0
+			building_annual_mind_upload_nexus_progress = 0.5
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 30000
 			building_employment_academics_add = 30000
-			building_weekly_mind_upload_nexus_progress = 0.5
 		}
 	}
 
@@ -17930,12 +17930,12 @@ pm_mind_upload_nexus_construction_fast = {
 			goods_input_digital_access_add = 20000                 # Price:   60, Total cost: 1200000.0 (2.19%)
 			goods_input_electricity_add = 80000                    # Price:   30, Total cost: 2400000.0 (4.38%)
 			# Total input cost: 54800000.0
+			building_annual_mind_upload_nexus_progress = 1
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 30000
 			building_employment_academics_add = 30000
-			building_weekly_mind_upload_nexus_progress = 1
 		}
 	}
 
@@ -17947,7 +17947,7 @@ pm_mind_upload_nexus = {
 	texture = "gfx/interface/icons/production_method_icons/base3.dds"
 
 	country_modifiers = {
-		level_scaled = {
+		workforce_scaled = {
 			country_tech_research_speed_mult = 0.05
 		}
 	}
@@ -18007,12 +18007,12 @@ pm_antimatter_facility_construction_slow = {
 			goods_input_electricity_add = 50000                    # Price:   30, Total cost: 1500000.0 (6.65%)
 			goods_input_steel_add = 5000                           # Price:   50, Total cost: 250000.0 (1.11%)
 			# Total input cost: 22550000.0
+			building_annual_antimatter_facility_progress = 0.25
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
-			building_weekly_antimatter_facility_progress = 0.25
 		}
 	}
 
@@ -18029,12 +18029,12 @@ pm_antimatter_facility_construction_medium = {
 			goods_input_electricity_add = 100000                   # Price:   30, Total cost: 3000000.0 (6.65%)
 			goods_input_steel_add = 10000                          # Price:   50, Total cost: 500000.0 (1.11%)
 			# Total input cost: 45100000.0
+			building_annual_antimatter_facility_progress = 0.5
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
-			building_weekly_antimatter_facility_progress = 0.5
 		}
 	}
 
@@ -18051,12 +18051,12 @@ pm_antimatter_facility_construction_fast = {
 			goods_input_electricity_add = 200000                   # Price:   30, Total cost: 6000000.0 (6.65%)
 			goods_input_steel_add = 20000                          # Price:   50, Total cost: 1000000.0 (1.11%)
 			# Total input cost: 90200000.0
+			building_annual_antimatter_facility_progress = 1
 		}
 
 		level_scaled = {
 			building_employment_engineers_add = 25000
 			building_employment_academics_add = 25000
-			building_weekly_antimatter_facility_progress = 1
 		}
 	}
 
@@ -18068,7 +18068,7 @@ pm_antimatter_facility = {
 	texture = "gfx/interface/icons/production_method_icons/base3.dds"
 
 	country_modifiers = {
-		level_scaled = {
+		workforce_scaled = {
 			country_antimatter_facility_max_level_add = 5
 		}
 	}
@@ -18096,7 +18096,7 @@ pm_antimatter_engine = {
 	texture = "gfx/interface/icons/production_method_icons/base3.dds"
 
 	country_modifiers = {
-		level_scaled = {
+		workforce_scaled = {
 			country_antimatter_facility_max_level_add = -1
 			military_formation_movement_speed_mult = 0.02
 			country_convoys_capacity_mult = 0.01
@@ -18131,7 +18131,7 @@ pm_antimatter_warhead_plant = {
 	texture = "gfx/interface/icons/production_method_icons/base3.dds"
 
 	country_modifiers = {
-		level_scaled = {
+		workforce_scaled = {
 			country_antimatter_facility_max_level_add = -1
 			country_nuclear_weapon_attack_success_add = 0.05
 			unit_offense_mult = 0.02

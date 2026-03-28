@@ -230,7 +230,7 @@ free_port_concession = {
 			else = {
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
-					value = -5
+					value = -15
 				}
 				# Mutual trade value makes this more worthwhile (vanilla GDP-normalized pattern)
 				add = {

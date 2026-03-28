@@ -21,7 +21,7 @@
 			add = {
 				value = b:building_space_elevator_construction_site.occupancy
 				divide = 12
-				multiply = b:building_space_elevator_construction_site.modifier:building_weekly_space_elevator_progress
+				multiply = b:building_space_elevator_construction_site.modifier:building_annual_space_elevator_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000
@@ -94,7 +94,7 @@ solar_collector_construction = {
 			add = {
 				value = b:building_solar_collector_construction_site.occupancy
 				divide = 12
-				multiply = b:building_solar_collector_construction_site.modifier:building_weekly_solar_collector_progress
+				multiply = b:building_solar_collector_construction_site.modifier:building_annual_solar_collector_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000
@@ -157,7 +157,7 @@ orbital_battlestation_construction = {
 			add = {
 				value = b:building_orbital_battlestation_construction_site.occupancy
 				divide = 12
-				multiply = b:building_orbital_battlestation_construction_site.modifier:building_weekly_orbital_battlestation_progress
+				multiply = b:building_orbital_battlestation_construction_site.modifier:building_annual_orbital_battlestation_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000
@@ -215,7 +215,7 @@ mind_upload_nexus_construction = {
 			add = {
 				value = b:building_mind_upload_nexus_construction_site.occupancy
 				divide = 12
-				multiply = b:building_mind_upload_nexus_construction_site.modifier:building_weekly_mind_upload_nexus_progress
+				multiply = b:building_mind_upload_nexus_construction_site.modifier:building_annual_mind_upload_nexus_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000
@@ -955,12 +955,12 @@ fix_incompatible_laws = {
 update_characters = {
 	every_scope_character = {
 		if = {
-			limit = { ROOT = { has_technology_researched = mind_backups }}
+			limit = { owner = { has_technology_researched = mind_backups }}
 			remove_trait = biological_immortality
 			add_trait = mind_backups
 		}
 		else_if = {
-			limit = { ROOT = { has_technology_researched = biological_immortality }}
+			limit = { owner = { has_technology_researched = biological_immortality }}
 			remove_trait = mind_backups
 			add_trait = biological_immortality
 		}
@@ -970,28 +970,28 @@ update_characters = {
 		}
 
 		if = {
-			limit = { ROOT = { has_technology_researched = swarm_technology }}
+			limit = { owner = { has_technology_researched = swarm_technology }}
 			remove_trait = trait_predictive_logistics
 			remove_trait = trait_military_grade_cybersecurity
 			remove_trait = trait_jadc2
 			add_trait = trait_swarm_technology
 		}
 		else_if = {
-			limit = { ROOT = { has_technology_researched = jadc2 }}
+			limit = { owner = { has_technology_researched = jadc2 }}
 			remove_trait = trait_predictive_logistics
 			remove_trait = trait_military_grade_cybersecurity
 			remove_trait = trait_swarm_technology
 			add_trait = trait_jadc2
 		}
 		else_if = {
-			limit = { ROOT = { has_technology_researched = military_grade_cybersecurity }}
+			limit = { owner = { has_technology_researched = military_grade_cybersecurity }}
 			remove_trait = trait_predictive_logistics
 			remove_trait = trait_jadc2
 			remove_trait = trait_swarm_technology
 			add_trait = trait_military_grade_cybersecurity
 		}
 		else_if = {
-			limit = { ROOT = { has_technology_researched = predictive_logistics }}
+			limit = { owner = { has_technology_researched = predictive_logistics }}
 			remove_trait = trait_military_grade_cybersecurity
 			remove_trait = trait_jadc2
 			remove_trait = trait_swarm_technology
@@ -1254,7 +1254,7 @@ antimatter_facility_construction = {
 			add = {
 				value = b:building_antimatter_facility_construction_site.occupancy
 				divide = 12
-				multiply = b:building_antimatter_facility_construction_site.modifier:building_weekly_antimatter_facility_progress
+				multiply = b:building_antimatter_facility_construction_site.modifier:building_annual_antimatter_facility_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000

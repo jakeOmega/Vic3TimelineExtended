@@ -1943,7 +1943,7 @@ REPLACE_OR_CREATE:building_orbital_battlestation_construction_site = {
 }
 
 REPLACE_OR_CREATE:building_orbital_battlestation = {
-	building_group = bg_military	
+	building_group = bg_government	
 	icon = "gfx/interface/icons/building_icons/space_base.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2082,7 +2082,7 @@ REPLACE_OR_CREATE:building_antimatter_engine = {
 }
 
 REPLACE_OR_CREATE:building_antimatter_warhead_plant = {
-	building_group = bg_military
+	building_group = bg_government
 	icon = "gfx/interface/icons/building_icons/space_base.dds"
 	city_type = city
 	levels_per_mesh = -1

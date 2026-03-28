@@ -1,1 +1,37 @@
-﻿
+﻿te_yearly_temp_change_color = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			global_greenhouse_gas_emissions_script_value_display < 0
+		}
+		localization_key = te_yearly_temp_change_down_blue
+	}
+
+	text = {
+		trigger = {
+			always = yes
+		}
+		localization_key = te_yearly_temp_change_up_red
+	}
+}
+
+te_yearly_temp_change_prefix = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			global_greenhouse_gas_emissions_script_value_display < 0
+		}
+		localization_key = te_yearly_temp_change_prefix_down_blue
+	}
+
+	text = {
+		trigger = {
+			always = yes
+		}
+		localization_key = te_yearly_temp_change_prefix_up_red
+	}
+}

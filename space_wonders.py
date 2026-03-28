@@ -633,7 +633,7 @@ mind_upload_nexus_on_action = {
 # MODIFIER TYPE DEFINITIONS
 # ============================================================
 modifier_types_content = """
-building_weekly_orbital_battlestation_progress = {
+building_annual_orbital_battlestation_progress = {
 \tcolor = good
 \tpercent = yes
 \tscript_only = yes
@@ -649,7 +649,7 @@ building_total_orbital_battlestation_progress = {
 \tscript_only = yes
 }
 
-building_weekly_mind_upload_nexus_progress = {
+building_annual_mind_upload_nexus_progress = {
 \tcolor = good
 \tpercent = yes
 \tscript_only = yes

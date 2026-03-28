@@ -708,7 +708,7 @@ building_tourism_industry_throughput_add = {
 	decimals = 0
 }
 
-building_weekly_space_elevator_progress = {
+building_annual_space_elevator_progress = {
 	color = good
 	percent = yes
 
@@ -723,7 +723,7 @@ building_total_space_elevator_progress = {
 	script_only = yes
 }
 
-building_weekly_solar_collector_progress = {
+building_annual_solar_collector_progress = {
 	color = good
 	percent = yes
 
@@ -1972,7 +1972,7 @@ state_resettlement_transfer_add = {
 	}
 }
 
-building_weekly_orbital_battlestation_progress = {
+building_annual_orbital_battlestation_progress = {
 	color = good
 	percent = yes
 
@@ -1987,7 +1987,7 @@ building_total_orbital_battlestation_progress = {
 	script_only = yes
 }
 
-building_weekly_mind_upload_nexus_progress = {
+building_annual_mind_upload_nexus_progress = {
 	color = good
 	percent = yes
 
@@ -2006,7 +2006,7 @@ building_total_mind_upload_nexus_progress = {
 # Antimatter Facility Modifier Types
 #==================================================
 
-building_weekly_antimatter_facility_progress = {
+building_annual_antimatter_facility_progress = {
 	color = good
 	percent = yes
 }

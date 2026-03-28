@@ -538,7 +538,7 @@ modifier_types_content = """\
 # Antimatter Facility Modifier Types
 #==================================================
 
-building_weekly_antimatter_facility_progress = {
+building_annual_antimatter_facility_progress = {
 \tcolor = good
 \tpercent = yes
 \tai_value = 50000000

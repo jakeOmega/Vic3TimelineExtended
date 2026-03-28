@@ -74,8 +74,9 @@ institution_ministry_of_the_environment = {
 		building_logging_camp_throughput_add = -0.01
 		building_group_bg_oil_extraction_throughput_add = -0.02
 		goods_input_construction_mult = 0.05
-		state_pollution_generation_mult = -0.1
+		state_pollution_generation_mult = -0.05
 		state_building_national_park_max_level_add = 1
+		country_greenhouse_gas_emissions_mult = -0.05
 	}
 }
 
