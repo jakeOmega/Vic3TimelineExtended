@@ -2956,15 +2956,15 @@ pm_siemens_erlangen_campus = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0
 			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0
 			# Output goods
-			goods_output_electrics_add = 30                      # Price:   60, Total cost:  1800.0
+			goods_output_electronic_components_add = 30           # Price:   80, Total cost:  2400.0
 			goods_output_telephones_add = 15                     # Price:   60, Total cost:   900.0
 			# Total input cost: 1150.0
-			# Total output cost: 2700.0
-			# Profit: 1550.0
-			# Profit margin: 134.78%
-			# Zero profit price multiplier: 0.43
+			# Total output cost: 3300.0
+			# Profit: 2150.0
+			# Profit margin: 186.96%
+			# Zero profit price multiplier: 0.35
 			# Employment: 2000
-			# Wage breakeven: 0.78
+			# Wage breakeven: 1.08
 		}
 		level_scaled = {
 			building_employment_engineers_add = 800
@@ -2983,9 +2983,13 @@ pm_siemens_erlangen_campus = {
 # Theme: Diamond sorting, grading, and global trading center
 pm_de_beers_sorting_office = {
 	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.05
+		}
+	}
 	state_modifiers = {
 		workforce_scaled = {
-			state_prestige_mult = 0.05
 			state_migration_pull_mult = 0.1
 		}
 	}
@@ -3069,15 +3073,15 @@ pm_ge_schenectady_works = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0
 			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0
 			# Output goods
-			goods_output_electrics_add = 30                      # Price:   60, Total cost:  1800.0
+			goods_output_electronic_components_add = 30           # Price:   80, Total cost:  2400.0
 			goods_output_engines_add = 10                        # Price:   60, Total cost:   600.0
 			# Total input cost: 1150.0
-			# Total output cost: 2400.0
-			# Profit: 1250.0
-			# Profit margin: 108.70%
-			# Zero profit price multiplier: 0.48
+			# Total output cost: 3000.0
+			# Profit: 1850.0
+			# Profit margin: 160.87%
+			# Zero profit price multiplier: 0.38
 			# Employment: 2000
-			# Wage breakeven: 0.63
+			# Wage breakeven: 0.93
 		}
 		level_scaled = {
 			building_employment_machinists_add = 800

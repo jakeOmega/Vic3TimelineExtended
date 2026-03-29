@@ -32,11 +32,11 @@ banking_cycle_random_event_effect = {
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
-					trigger_event = { id = banking_cycle_events.1_command }
+					trigger_event = { id = banking_cycle_events.101 }
 				}
 				else_if = {
 					limit = { has_law = law_type:law_cooperative_ownership }
-					trigger_event = { id = banking_cycle_events.1_coop }
+					trigger_event = { id = banking_cycle_events.151 }
 				}
 				else = {
 					trigger_event = { id = banking_cycle_events.1 }
@@ -81,11 +81,11 @@ banking_cycle_random_event_effect = {
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
-					trigger_event = { id = banking_cycle_events.4_command }
+					trigger_event = { id = banking_cycle_events.104 }
 				}
 				else_if = {
 					limit = { has_law = law_type:law_cooperative_ownership }
-					trigger_event = { id = banking_cycle_events.4_coop }
+					trigger_event = { id = banking_cycle_events.154 }
 				}
 				else = {
 					trigger_event = { id = banking_cycle_events.4 }
@@ -118,11 +118,11 @@ banking_cycle_random_event_effect = {
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
-					trigger_event = { id = banking_cycle_events.6_command }
+					trigger_event = { id = banking_cycle_events.106 }
 				}
 				else_if = {
 					limit = { has_law = law_type:law_cooperative_ownership }
-					trigger_event = { id = banking_cycle_events.6_coop }
+					trigger_event = { id = banking_cycle_events.156 }
 				}
 				else = {
 					trigger_event = { id = banking_cycle_events.6 }
@@ -204,11 +204,11 @@ banking_cycle_random_event_effect = {
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
-					trigger_event = { id = banking_cycle_events.10_command }
+					trigger_event = { id = banking_cycle_events.110 }
 				}
 				else_if = {
 					limit = { has_law = law_type:law_cooperative_ownership }
-					trigger_event = { id = banking_cycle_events.10_coop }
+					trigger_event = { id = banking_cycle_events.160 }
 				}
 				else = {
 					trigger_event = { id = banking_cycle_events.10 }
@@ -301,11 +301,11 @@ banking_cycle_random_event_effect = {
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
-					trigger_event = { id = banking_cycle_events.15_command }
+					trigger_event = { id = banking_cycle_events.115 }
 				}
 				else_if = {
 					limit = { has_law = law_type:law_cooperative_ownership }
-					trigger_event = { id = banking_cycle_events.15_coop }
+					trigger_event = { id = banking_cycle_events.165 }
 				}
 				else = {
 					trigger_event = { id = banking_cycle_events.15 }
@@ -334,11 +334,11 @@ banking_cycle_random_event_effect = {
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
-					trigger_event = { id = banking_cycle_events.16_command }
+					trigger_event = { id = banking_cycle_events.116 }
 				}
 				else_if = {
 					limit = { has_law = law_type:law_cooperative_ownership }
-					trigger_event = { id = banking_cycle_events.16_coop }
+					trigger_event = { id = banking_cycle_events.166 }
 				}
 				else = {
 					trigger_event = { id = banking_cycle_events.16 }
@@ -362,11 +362,11 @@ banking_cycle_random_event_effect = {
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
-					trigger_event = { id = banking_cycle_events.17_command }
+					trigger_event = { id = banking_cycle_events.117 }
 				}
 				else_if = {
 					limit = { has_law = law_type:law_cooperative_ownership }
-					trigger_event = { id = banking_cycle_events.17_coop }
+					trigger_event = { id = banking_cycle_events.167 }
 				}
 				else = {
 					trigger_event = { id = banking_cycle_events.17 }
@@ -430,11 +430,11 @@ banking_cycle_random_event_effect = {
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
-					trigger_event = { id = banking_cycle_events.20_command }
+					trigger_event = { id = banking_cycle_events.120 }
 				}
 				else_if = {
 					limit = { has_law = law_type:law_cooperative_ownership }
-					trigger_event = { id = banking_cycle_events.20_coop }
+					trigger_event = { id = banking_cycle_events.170 }
 				}
 				else = {
 					trigger_event = { id = banking_cycle_events.20 }

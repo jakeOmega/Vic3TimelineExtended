@@ -128,7 +128,7 @@ banking_cycle_events.1 = {
 # These provide alternate framing and custom tooltips tailored to non-market economies.
 # --------------------------------------------------------------------------
 
-banking_cycle_events.1_command = {
+banking_cycle_events.101 = {
 	type = country_event
 	placement = root
 
@@ -137,9 +137,9 @@ banking_cycle_events.1_command = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
-	title = banking_cycle_events.1_command.t
-	desc = banking_cycle_events.1_command.d
-	flavor = banking_cycle_events.1_command.f
+	title = banking_cycle_events.101.t
+	desc = banking_cycle_events.101.d
+	flavor = banking_cycle_events.101.f
 
 	duration = 3
 	is_popup = yes
@@ -148,7 +148,7 @@ banking_cycle_events.1_command = {
 
 	# Option A: Let the overambitious directive stand — ambition drives productivity
 	option = {
-		name = banking_cycle_events.1_command.a
+		name = banking_cycle_events.101.a
 		default_option = yes
 		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_8_DESC"
@@ -171,7 +171,7 @@ banking_cycle_events.1_command = {
 
 	# Option B: Issue a corrective addendum — scale targets to proven capacity
 	option = {
-		name = banking_cycle_events.1_command.b
+		name = banking_cycle_events.101.b
 		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_3_DESC"
 			change_variable = { name = bubble_pressure add = 3 }
@@ -188,7 +188,7 @@ banking_cycle_events.1_command = {
 
 	# Option C: Suspend the directive and enforce emergency production ceilings
 	option = {
-		name = banking_cycle_events.1_command.c
+		name = banking_cycle_events.101.c
 		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
 			change_variable = { name = bubble_pressure add = -5 }
@@ -209,7 +209,7 @@ banking_cycle_events.1_command = {
 	}
 }
 
-banking_cycle_events.1_coop = {
+banking_cycle_events.151 = {
 	type = country_event
 	placement = root
 
@@ -218,9 +218,9 @@ banking_cycle_events.1_coop = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
-	title = banking_cycle_events.1_coop.t
-	desc = banking_cycle_events.1_coop.d
-	flavor = banking_cycle_events.1_coop.f
+	title = banking_cycle_events.151.t
+	desc = banking_cycle_events.151.d
+	flavor = banking_cycle_events.151.f
 
 	duration = 3
 	is_popup = yes
@@ -229,7 +229,7 @@ banking_cycle_events.1_coop = {
 
 	# Option A: Permit the advance distributions — member confidence is an asset
 	option = {
-		name = banking_cycle_events.1_coop.a
+		name = banking_cycle_events.151.a
 		default_option = yes
 		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_8_DESC"
@@ -252,7 +252,7 @@ banking_cycle_events.1_coop = {
 
 	# Option B: Issue advisory guidance — call on cooperatives to align distributions with realised profits
 	option = {
-		name = banking_cycle_events.1_coop.b
+		name = banking_cycle_events.151.b
 		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_3_DESC"
 			change_variable = { name = bubble_pressure add = 3 }
@@ -269,7 +269,7 @@ banking_cycle_events.1_coop = {
 
 	# Option C: Mandate surplus reserves before distributions are permitted
 	option = {
-		name = banking_cycle_events.1_coop.c
+		name = banking_cycle_events.151.c
 		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
 			change_variable = { name = bubble_pressure add = -5 }
@@ -290,7 +290,7 @@ banking_cycle_events.1_coop = {
 	}
 }
 
-banking_cycle_events.4_command = {
+banking_cycle_events.104 = {
 	type = country_event
 	placement = root
 
@@ -298,9 +298,9 @@ banking_cycle_events.4_command = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-	title = banking_cycle_events.4_command.t
-	desc = banking_cycle_events.4_command.d
-	flavor = banking_cycle_events.4_command.f
+	title = banking_cycle_events.104.t
+	desc = banking_cycle_events.104.d
+	flavor = banking_cycle_events.104.f
 
 	duration = 3
 	is_popup = yes
@@ -309,7 +309,7 @@ banking_cycle_events.4_command = {
 
 	# Option A: Absorb the crisis — full emergency mobilisation, reorganise from scratch
 	option = {
-		name = banking_cycle_events.4_command.a
+		name = banking_cycle_events.104.a
 		default_option = yes
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_15_DESC" change_variable = { name = finance_cycle_value add = -15 } }
 		custom_tooltip = { text = "MOMENTUM_MINUS_4_DESC" change_variable = { name = finance_cycle_momentum add = -4 } }
@@ -320,7 +320,7 @@ banking_cycle_events.4_command = {
 
 	# Option B: Emergency stockpile release — tap strategic reserves to bridge the gap
 	option = {
-		name = banking_cycle_events.4_command.b
+		name = banking_cycle_events.104.b
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_5_DESC" change_variable = { name = finance_cycle_value add = -5 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_10_DESC" change_variable = { name = bubble_pressure add = -10 } }
 		add_modifier = { name = banking_event_deposit_guarantee_emergency multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
@@ -330,7 +330,7 @@ banking_cycle_events.4_command = {
 
 	# Option C: Priority triage — fully fund the most critical sectors, abandon the rest
 	option = {
-		name = banking_cycle_events.4_command.c
+		name = banking_cycle_events.104.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
 		add_modifier = { name = banking_event_selective_bailout days = normal_modifier_time is_decaying = yes }
@@ -341,7 +341,7 @@ banking_cycle_events.4_command = {
 	}
 }
 
-banking_cycle_events.4_coop = {
+banking_cycle_events.154 = {
 	type = country_event
 	placement = root
 
@@ -349,9 +349,9 @@ banking_cycle_events.4_coop = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-	title = banking_cycle_events.4_coop.t
-	desc = banking_cycle_events.4_coop.d
-	flavor = banking_cycle_events.4_coop.f
+	title = banking_cycle_events.154.t
+	desc = banking_cycle_events.154.d
+	flavor = banking_cycle_events.154.f
 
 	duration = 3
 	is_popup = yes
@@ -360,7 +360,7 @@ banking_cycle_events.4_coop = {
 
 	# Option A: No special intervention — let insolvent cooperatives liquidate
 	option = {
-		name = banking_cycle_events.4_coop.a
+		name = banking_cycle_events.154.a
 		default_option = yes
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_15_DESC" change_variable = { name = finance_cycle_value add = -15 } }
 		custom_tooltip = { text = "MOMENTUM_MINUS_4_DESC" change_variable = { name = finance_cycle_momentum add = -4 } }
@@ -371,7 +371,7 @@ banking_cycle_events.4_coop = {
 
 	# Option B: Activate the Federation Emergency Relief Fund — deploy collective reserves
 	option = {
-		name = banking_cycle_events.4_coop.b
+		name = banking_cycle_events.154.b
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_5_DESC" change_variable = { name = finance_cycle_value add = -5 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_10_DESC" change_variable = { name = bubble_pressure add = -10 } }
 		add_modifier = { name = banking_event_deposit_guarantee_emergency multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
@@ -381,7 +381,7 @@ banking_cycle_events.4_coop = {
 
 	# Option C: Facilitate forced mergers — weaker cooperatives absorbed by larger members
 	option = {
-		name = banking_cycle_events.4_coop.c
+		name = banking_cycle_events.154.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
 		add_modifier = { name = banking_event_selective_bailout days = normal_modifier_time is_decaying = yes }
@@ -392,7 +392,7 @@ banking_cycle_events.4_coop = {
 	}
 }
 
-banking_cycle_events.6_command = {
+banking_cycle_events.106 = {
 	type = country_event
 	placement = root
 
@@ -400,9 +400,9 @@ banking_cycle_events.6_command = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
-	title = banking_cycle_events.6_command.t
-	desc = banking_cycle_events.6_command.d
-	flavor = banking_cycle_events.6_command.f
+	title = banking_cycle_events.106.t
+	desc = banking_cycle_events.106.d
+	flavor = banking_cycle_events.106.f
 
 	duration = 3
 	is_popup = yes
@@ -411,7 +411,7 @@ banking_cycle_events.6_command = {
 
 	# Option A: Extend emergency production credit to agricultural production units
 	option = {
-		name = banking_cycle_events.6_command.a
+		name = banking_cycle_events.106.a
 		default_option = yes
 		custom_tooltip = { text = "BUBBLE_PRESSURE_4_DESC" change_variable = { name = bubble_pressure add = 4 } }
 		add_modifier = { name = banking_event_rural_credit days = short_modifier_time is_decaying = yes }
@@ -421,20 +421,20 @@ banking_cycle_events.6_command = {
 
 	# Option B: Accept the shortfall without intervention — adjust next year's quotas
 	option = {
-		name = banking_cycle_events.6_command.b
+		name = banking_cycle_events.106.b
 		add_modifier = { name = banking_event_default_rural_impact days = short_modifier_time is_decaying = yes }
 		ai_chance = { base = 25 }
 	}
 
 	# Option C: Import grain and reallocate industrial resources to cover the deficit
 	option = {
-		name = banking_cycle_events.6_command.c
+		name = banking_cycle_events.106.c
 		add_modifier = { name = banking_event_import_and_subsidy days = short_modifier_time is_decaying = yes }
 		ai_chance = { base = 25 }
 	}
 }
 
-banking_cycle_events.6_coop = {
+banking_cycle_events.156 = {
 	type = country_event
 	placement = root
 
@@ -442,9 +442,9 @@ banking_cycle_events.6_coop = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
-	title = banking_cycle_events.6_coop.t
-	desc = banking_cycle_events.6_coop.d
-	flavor = banking_cycle_events.6_coop.f
+	title = banking_cycle_events.156.t
+	desc = banking_cycle_events.156.d
+	flavor = banking_cycle_events.156.f
 
 	duration = 3
 	is_popup = yes
@@ -453,7 +453,7 @@ banking_cycle_events.6_coop = {
 
 	# Option A: Activate cooperative mutual aid — urban cooperatives supplement rural members
 	option = {
-		name = banking_cycle_events.6_coop.a
+		name = banking_cycle_events.156.a
 		default_option = yes
 		custom_tooltip = { text = "BUBBLE_PRESSURE_4_DESC" change_variable = { name = bubble_pressure add = 4 } }
 		add_modifier = { name = banking_event_rural_credit days = short_modifier_time is_decaying = yes }
@@ -463,14 +463,14 @@ banking_cycle_events.6_coop = {
 
 	# Option B: Accept the shortfall — adjust contribution assessments for affected cooperatives
 	option = {
-		name = banking_cycle_events.6_coop.b
+		name = banking_cycle_events.156.b
 		add_modifier = { name = banking_event_default_rural_impact days = short_modifier_time is_decaying = yes }
 		ai_chance = { base = 25 }
 	}
 
 	# Option C: Import to cover the gap and bill costs to the affected cooperatives
 	option = {
-		name = banking_cycle_events.6_coop.c
+		name = banking_cycle_events.156.c
 		add_modifier = { name = banking_event_import_and_subsidy days = short_modifier_time is_decaying = yes }
 		ai_chance = { base = 25 }
 	}
@@ -1260,7 +1260,7 @@ banking_cycle_events.10 = {
 }
 
 # Command / Cooperative variants for Sovereign Debt Scare
-banking_cycle_events.10_command = {
+banking_cycle_events.110 = {
 	type = country_event
 	placement = root
 
@@ -1268,9 +1268,9 @@ banking_cycle_events.10_command = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_money.dds"
 
-	title = banking_cycle_events.10_command.t
-	desc = banking_cycle_events.10_command.d
-	flavor = banking_cycle_events.10_command.f
+	title = banking_cycle_events.110.t
+	desc = banking_cycle_events.110.d
+	flavor = banking_cycle_events.110.f
 
 	duration = 3
 	is_popup = yes
@@ -1279,7 +1279,7 @@ banking_cycle_events.10_command = {
 
 	# Option A: Impose austerity on lower-priority sectors — fiscal discipline
 	option = {
-		name = banking_cycle_events.10_command.a
+		name = banking_cycle_events.110.a
 		default_option = yes
 		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
@@ -1291,7 +1291,7 @@ banking_cycle_events.10_command = {
 
 	# Option B: Seek emergency external financing to recapitalise the planning reserve
 	option = {
-		name = banking_cycle_events.10_command.b
+		name = banking_cycle_events.110.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
 		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
@@ -1299,7 +1299,7 @@ banking_cycle_events.10_command = {
 
 	# Option C: Formally cancel some commitments — partial plan default
 	option = {
-		name = banking_cycle_events.10_command.c
+		name = banking_cycle_events.110.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_10_DESC" change_variable = { name = finance_cycle_value add = -10 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
 		add_modifier = { name = banking_event_partial_default days = long_modifier_time is_decaying = yes }
@@ -1308,7 +1308,7 @@ banking_cycle_events.10_command = {
 	}
 }
 
-banking_cycle_events.10_coop = {
+banking_cycle_events.160 = {
 	type = country_event
 	placement = root
 
@@ -1316,9 +1316,9 @@ banking_cycle_events.10_coop = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_money.dds"
 
-	title = banking_cycle_events.10_coop.t
-	desc = banking_cycle_events.10_coop.d
-	flavor = banking_cycle_events.10_coop.f
+	title = banking_cycle_events.160.t
+	desc = banking_cycle_events.160.d
+	flavor = banking_cycle_events.160.f
 
 	duration = 3
 	is_popup = yes
@@ -1327,7 +1327,7 @@ banking_cycle_events.10_coop = {
 
 	# Option A: Impose emergency levy on dividends to rebuild the reserve fund
 	option = {
-		name = banking_cycle_events.10_coop.a
+		name = banking_cycle_events.160.a
 		default_option = yes
 		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
@@ -1339,7 +1339,7 @@ banking_cycle_events.10_coop = {
 
 	# Option B: Seek new cooperative credit from allied institutions
 	option = {
-		name = banking_cycle_events.10_coop.b
+		name = banking_cycle_events.160.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
 		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
@@ -1347,7 +1347,7 @@ banking_cycle_events.10_coop = {
 
 	# Option C: Dissolve some inter-cooperative agreements — partial defaults on shared obligations
 	option = {
-		name = banking_cycle_events.10_coop.c
+		name = banking_cycle_events.160.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_10_DESC" change_variable = { name = finance_cycle_value add = -10 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
 		add_modifier = { name = banking_event_partial_default days = long_modifier_time is_decaying = yes }
@@ -1840,7 +1840,7 @@ banking_cycle_events.15 = {
 }
 
 # Command / Cooperative variants for Currency Crisis
-banking_cycle_events.15_command = {
+banking_cycle_events.115 = {
 	type = country_event
 	placement = root
 
@@ -1848,9 +1848,9 @@ banking_cycle_events.15_command = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_money.dds"
 
-	title = banking_cycle_events.15_command.t
-	desc = banking_cycle_events.15_command.d
-	flavor = banking_cycle_events.15_command.f
+	title = banking_cycle_events.115.t
+	desc = banking_cycle_events.115.d
+	flavor = banking_cycle_events.115.f
 
 	duration = 3
 	is_popup = yes
@@ -1859,7 +1859,7 @@ banking_cycle_events.15_command = {
 
 	# Option A: Defend hard currency allocations by burning remaining reserves
 	option = {
-		name = banking_cycle_events.15_command.a
+		name = banking_cycle_events.115.a
 		default_option = yes
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
 		add_modifier = { name = banking_event_fx_defense multiplier = banking_event_expense_large days = normal_modifier_time is_decaying = yes }
@@ -1868,7 +1868,7 @@ banking_cycle_events.15_command = {
 
 	# Option B: Impose strict import licensing — restrict inputs to critical sectors only
 	option = {
-		name = banking_cycle_events.15_command.b
+		name = banking_cycle_events.115.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
 		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
 		add_modifier = { name = banking_event_emergency_controls days = normal_modifier_time is_decaying = yes }
@@ -1878,7 +1878,7 @@ banking_cycle_events.15_command = {
 
 	# Option C: Permit factor prices to adjust — accept production disruption as the cost of rebalancing
 	option = {
-		name = banking_cycle_events.15_command.c
+		name = banking_cycle_events.115.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
 		custom_tooltip = { text = "MOMENTUM_MINUS_3_DESC" change_variable = { name = finance_cycle_momentum add = -3 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
@@ -1888,7 +1888,7 @@ banking_cycle_events.15_command = {
 	}
 }
 
-banking_cycle_events.15_coop = {
+banking_cycle_events.165 = {
 	type = country_event
 	placement = root
 
@@ -1896,9 +1896,9 @@ banking_cycle_events.15_coop = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_money.dds"
 
-	title = banking_cycle_events.15_coop.t
-	desc = banking_cycle_events.15_coop.d
-	flavor = banking_cycle_events.15_coop.f
+	title = banking_cycle_events.165.t
+	desc = banking_cycle_events.165.d
+	flavor = banking_cycle_events.165.f
 
 	duration = 3
 	is_popup = yes
@@ -1907,7 +1907,7 @@ banking_cycle_events.15_coop = {
 
 	# Option A: Deploy federation currency reserves to stabilise internal pricing
 	option = {
-		name = banking_cycle_events.15_coop.a
+		name = banking_cycle_events.165.a
 		default_option = yes
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
 		add_modifier = { name = banking_event_fx_defense multiplier = banking_event_expense_large days = normal_modifier_time is_decaying = yes }
@@ -1916,7 +1916,7 @@ banking_cycle_events.15_coop = {
 
 	# Option B: Mandate cooperative import substitution — source domestically wherever possible
 	option = {
-		name = banking_cycle_events.15_coop.b
+		name = banking_cycle_events.165.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
 		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
 		add_modifier = { name = banking_event_emergency_controls days = normal_modifier_time is_decaying = yes }
@@ -1926,7 +1926,7 @@ banking_cycle_events.15_coop = {
 
 	# Option C: Let the adjustment flow through — accept hardship, rebuild structural independence
 	option = {
-		name = banking_cycle_events.15_coop.c
+		name = banking_cycle_events.165.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
 		custom_tooltip = { text = "MOMENTUM_MINUS_3_DESC" change_variable = { name = finance_cycle_momentum add = -3 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
@@ -2037,7 +2037,7 @@ banking_cycle_events.16 = {
 }
 
 # Command / Cooperative variants for CB Independence Debate
-banking_cycle_events.16_command = {
+banking_cycle_events.116 = {
 	type = country_event
 	placement = root
 
@@ -2045,9 +2045,9 @@ banking_cycle_events.16_command = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
-	title = banking_cycle_events.16_command.t
-	desc = banking_cycle_events.16_command.d
-	flavor = banking_cycle_events.16_command.f
+	title = banking_cycle_events.116.t
+	desc = banking_cycle_events.116.d
+	flavor = banking_cycle_events.116.f
 
 	duration = 3
 	is_popup = yes
@@ -2056,7 +2056,7 @@ banking_cycle_events.16_command = {
 
 	# Option A: Back the Gosplan technocrats — rational planning must be insulated from politics
 	option = {
-		name = banking_cycle_events.16_command.a
+		name = banking_cycle_events.116.a
 		default_option = yes
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
 		add_modifier = { name = banking_event_cb_independence days = long_modifier_time is_decaying = yes }
@@ -2066,7 +2066,7 @@ banking_cycle_events.16_command = {
 
 	# Option B: Side with Party leadership — political goals take precedence over technocratic limits
 	option = {
-		name = banking_cycle_events.16_command.b
+		name = banking_cycle_events.116.b
 		custom_tooltip = { text = "MOMENTUM_3_DESC" change_variable = { name = finance_cycle_momentum add = 3 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_8_DESC" change_variable = { name = bubble_pressure add = 8 } }
 		add_loyalists = { value = small_radicals strata = lower }
@@ -2075,7 +2075,7 @@ banking_cycle_events.16_command = {
 
 	# Option C: Form a joint Planning-Party review committee — balance technical and political goals
 	option = {
-		name = banking_cycle_events.16_command.c
+		name = banking_cycle_events.116.c
 		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_2_DESC" change_variable = { name = bubble_pressure add = 2 } }
 		add_modifier = { name = banking_event_dual_mandate days = normal_modifier_time is_decaying = yes }
@@ -2083,7 +2083,7 @@ banking_cycle_events.16_command = {
 	}
 }
 
-banking_cycle_events.16_coop = {
+banking_cycle_events.166 = {
 	type = country_event
 	placement = root
 
@@ -2091,9 +2091,9 @@ banking_cycle_events.16_coop = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
-	title = banking_cycle_events.16_coop.t
-	desc = banking_cycle_events.16_coop.d
-	flavor = banking_cycle_events.16_coop.f
+	title = banking_cycle_events.166.t
+	desc = banking_cycle_events.166.d
+	flavor = banking_cycle_events.166.f
 
 	duration = 3
 	is_popup = yes
@@ -2102,7 +2102,7 @@ banking_cycle_events.16_coop = {
 
 	# Option A: Uphold the traditionalist platform — democratic cooperative values prevail
 	option = {
-		name = banking_cycle_events.16_coop.a
+		name = banking_cycle_events.166.a
 		default_option = yes
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
 		add_modifier = { name = banking_event_cb_independence days = long_modifier_time is_decaying = yes }
@@ -2112,7 +2112,7 @@ banking_cycle_events.16_coop = {
 
 	# Option B: Allow the reformers to succeed — efficiency over orthodoxy
 	option = {
-		name = banking_cycle_events.16_coop.b
+		name = banking_cycle_events.166.b
 		custom_tooltip = { text = "MOMENTUM_3_DESC" change_variable = { name = finance_cycle_momentum add = 3 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_8_DESC" change_variable = { name = bubble_pressure add = 8 } }
 		add_loyalists = { value = small_radicals strata = lower }
@@ -2121,7 +2121,7 @@ banking_cycle_events.16_coop = {
 
 	# Option C: Form a mixed-mandate council — balance cooperative values with practical flexibility
 	option = {
-		name = banking_cycle_events.16_coop.c
+		name = banking_cycle_events.166.c
 		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_2_DESC" change_variable = { name = bubble_pressure add = 2 } }
 		add_modifier = { name = banking_event_dual_mandate days = normal_modifier_time is_decaying = yes }
@@ -2225,7 +2225,7 @@ banking_cycle_events.17 = {
 }
 
 # Command / Cooperative variants for Consumer Credit Boom
-banking_cycle_events.17_command = {
+banking_cycle_events.117 = {
 	type = country_event
 	placement = root
 
@@ -2233,9 +2233,9 @@ banking_cycle_events.17_command = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
-	title = banking_cycle_events.17_command.t
-	desc = banking_cycle_events.17_command.d
-	flavor = banking_cycle_events.17_command.f
+	title = banking_cycle_events.117.t
+	desc = banking_cycle_events.117.d
+	flavor = banking_cycle_events.117.f
 
 	duration = 3
 	is_popup = yes
@@ -2244,7 +2244,7 @@ banking_cycle_events.17_command = {
 
 	# Option A: Tolerate the blat economy — it fills the supply chain gaps
 	option = {
-		name = banking_cycle_events.17_command.a
+		name = banking_cycle_events.117.a
 		default_option = yes
 		custom_tooltip = { text = "BUBBLE_PRESSURE_10_DESC" change_variable = { name = bubble_pressure add = 10 } }
 		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
@@ -2255,7 +2255,7 @@ banking_cycle_events.17_command = {
 
 	# Option B: Formalise and regulate informal production — bring it under state oversight
 	option = {
-		name = banking_cycle_events.17_command.b
+		name = banking_cycle_events.117.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
 		add_radicals = { value = small_radicals strata = middle }
 		ai_chance = { base = 40 modifier = { add = 10 banking_cycle_bubble_risk_rising = yes } }
@@ -2263,7 +2263,7 @@ banking_cycle_events.17_command = {
 
 	# Option C: Suppress the informal economy — enforce plan discipline
 	option = {
-		name = banking_cycle_events.17_command.c
+		name = banking_cycle_events.117.c
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
 		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
 		add_radicals = { value = medium_radicals strata = middle }
@@ -2272,7 +2272,7 @@ banking_cycle_events.17_command = {
 	}
 }
 
-banking_cycle_events.17_coop = {
+banking_cycle_events.167 = {
 	type = country_event
 	placement = root
 
@@ -2280,9 +2280,9 @@ banking_cycle_events.17_coop = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
-	title = banking_cycle_events.17_coop.t
-	desc = banking_cycle_events.17_coop.d
-	flavor = banking_cycle_events.17_coop.f
+	title = banking_cycle_events.167.t
+	desc = banking_cycle_events.167.d
+	flavor = banking_cycle_events.167.f
 
 	duration = 3
 	is_popup = yes
@@ -2291,7 +2291,7 @@ banking_cycle_events.17_coop = {
 
 	# Option A: Permit the loan expansion — member financial autonomy is a cooperative value
 	option = {
-		name = banking_cycle_events.17_coop.a
+		name = banking_cycle_events.167.a
 		default_option = yes
 		custom_tooltip = { text = "BUBBLE_PRESSURE_10_DESC" change_variable = { name = bubble_pressure add = 10 } }
 		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
@@ -2302,7 +2302,7 @@ banking_cycle_events.17_coop = {
 
 	# Option B: Introduce per-member borrowing caps to moderate the expansion
 	option = {
-		name = banking_cycle_events.17_coop.b
+		name = banking_cycle_events.167.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
 		add_radicals = { value = small_radicals strata = middle }
 		ai_chance = { base = 40 modifier = { add = 10 banking_cycle_bubble_risk_rising = yes } }
@@ -2310,7 +2310,7 @@ banking_cycle_events.17_coop = {
 
 	# Option C: Restrict all personal lending against dividends — enforce mandatory savings
 	option = {
-		name = banking_cycle_events.17_coop.c
+		name = banking_cycle_events.167.c
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
 		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
 		add_radicals = { value = medium_radicals strata = middle }
@@ -2607,7 +2607,7 @@ banking_cycle_events.20 = {
 }
 
 # Command / Cooperative variants for Shadow Banking Discovery
-banking_cycle_events.20_command = {
+banking_cycle_events.120 = {
 	type = country_event
 	placement = root
 
@@ -2615,9 +2615,9 @@ banking_cycle_events.20_command = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-	title = banking_cycle_events.20_command.t
-	desc = banking_cycle_events.20_command.d
-	flavor = banking_cycle_events.20_command.f
+	title = banking_cycle_events.120.t
+	desc = banking_cycle_events.120.d
+	flavor = banking_cycle_events.120.f
 
 	duration = 3
 	is_popup = yes
@@ -2626,7 +2626,7 @@ banking_cycle_events.20_command = {
 
 	# Option A: Expose and prosecute the entire network — full regulatory crackdown
 	option = {
-		name = banking_cycle_events.20_command.a
+		name = banking_cycle_events.120.a
 		default_option = yes
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_15_DESC" change_variable = { name = finance_cycle_value add = -15 } }
 		custom_tooltip = { text = "MOMENTUM_MINUS_4_DESC" change_variable = { name = finance_cycle_momentum add = -4 } }
@@ -2638,7 +2638,7 @@ banking_cycle_events.20_command = {
 
 	# Option B: Tacitly accept the blat network — unofficial coordination is filling real gaps in the plan
 	option = {
-		name = banking_cycle_events.20_command.b
+		name = banking_cycle_events.120.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_15_DESC" change_variable = { name = bubble_pressure add = 15 } }
 		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
 		ai_chance = { base = 30 modifier = { add = -20 banking_cycle_bubble_risk_high = yes } }
@@ -2646,13 +2646,13 @@ banking_cycle_events.20_command = {
 
 	# Option C: Quietly regularise the network through new coordination regulations
 	option = {
-		name = banking_cycle_events.20_command.c
+		name = banking_cycle_events.120.c
 		custom_tooltip = { text = "BUBBLE_PRESSURE_20_DESC" change_variable = { name = bubble_pressure add = 20 } }
 		ai_chance = { base = 15 }
 	}
 }
 
-banking_cycle_events.20_coop = {
+banking_cycle_events.170 = {
 	type = country_event
 	placement = root
 
@@ -2660,9 +2660,9 @@ banking_cycle_events.20_coop = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-	title = banking_cycle_events.20_coop.t
-	desc = banking_cycle_events.20_coop.d
-	flavor = banking_cycle_events.20_coop.f
+	title = banking_cycle_events.170.t
+	desc = banking_cycle_events.170.d
+	flavor = banking_cycle_events.170.f
 
 	duration = 3
 	is_popup = yes
@@ -2671,7 +2671,7 @@ banking_cycle_events.20_coop = {
 
 	# Option A: Full transparency investigation — prosecute and publish findings
 	option = {
-		name = banking_cycle_events.20_coop.a
+		name = banking_cycle_events.170.a
 		default_option = yes
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_15_DESC" change_variable = { name = finance_cycle_value add = -15 } }
 		custom_tooltip = { text = "MOMENTUM_MINUS_4_DESC" change_variable = { name = finance_cycle_momentum add = -4 } }
@@ -2683,7 +2683,7 @@ banking_cycle_events.20_coop = {
 
 	# Option B: Conduct a quiet internal audit — acknowledge but minimise public exposure
 	option = {
-		name = banking_cycle_events.20_coop.b
+		name = banking_cycle_events.170.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_15_DESC" change_variable = { name = bubble_pressure add = 15 } }
 		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
 		ai_chance = { base = 30 modifier = { add = -20 banking_cycle_bubble_risk_high = yes } }
@@ -2691,7 +2691,7 @@ banking_cycle_events.20_coop = {
 
 	# Option C: Ignore the allegation — it falls within cooperative internal autonomy
 	option = {
-		name = banking_cycle_events.20_coop.c
+		name = banking_cycle_events.170.c
 		custom_tooltip = { text = "BUBBLE_PRESSURE_20_DESC" change_variable = { name = bubble_pressure add = 20 } }
 		ai_chance = { base = 15 }
 	}

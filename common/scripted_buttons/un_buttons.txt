@@ -1,7 +1,69 @@
 ﻿# ============================================================================
 # UNITED NATIONS SCRIPTED BUTTONS
-# 6 toggle pairs = 12 buttons for UN policy actions
+# Founding, membership, request, policy, and GP influence buttons
 # ============================================================================
+
+# ---- 0. FOUND THE UNITED NATIONS ----
+# A Great Power with intergovernmental_organizations tech creates the UN.
+# Any recognized independent country can then join.
+
+un_found_button = {
+	name = "UN_FOUND"
+	desc = "UN_FOUND_DESC"
+
+	visible = {
+		NOT = { has_global_variable = un_founded }
+		has_technology_researched = intergovernmental_organizations
+	}
+
+	possible = {
+		NOT = { has_global_variable = un_founded }
+		has_technology_researched = intergovernmental_organizations
+		country_rank >= rank_value:great_power
+		is_subject = no
+	}
+
+	ai_chance = {
+		value = 20
+		if = { limit = { has_law = law_type:law_isolationism } add = -60 }
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 20 }
+		if = { limit = { has_law = law_type:law_limited_war } add = 40 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_FOUND_DESC"
+			# Cost: prestige and bureaucracy
+			add_modifier = {
+				name = un_founding_cost_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+			# Establish the UN
+			set_global_variable = un_founded
+			# Founder becomes first member, HQ host, and founding member
+			add_modifier = { name = un_member_modifier }
+			add_modifier = { name = un_founding_member_modifier }
+			add_modifier = { name = un_headquarters_modifier }
+			set_global_variable = { name = un_hq_country value = ROOT }
+			# GP founder gets Security Council seat
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add_modifier = { name = un_security_council_modifier }
+			}
+			set_variable = { name = can_build_un_hq value = 1 }
+			# Fire charter event for all other recognized independent countries
+			every_country = {
+				limit = {
+					NOT = { this = ROOT }
+					is_subject = no
+					NOT = { is_country_type = decentralized }
+				}
+				trigger_event = { id = un_events.1 }
+			}
+		}
+	}
+}
 
 # ---- 1. JOIN / LEAVE UN ----
 
@@ -10,17 +72,17 @@ un_join_button = {
 	desc = "UN_JOIN_DESC"
 
 	visible = {
+		has_global_variable = un_founded
 		NOT = { has_modifier = un_member_modifier }
 	}
 
 	possible = {
+		has_global_variable = un_founded
 		NOT = { has_modifier = un_member_modifier }
-		modifier:country_can_join_united_nations_bool = yes
 		is_subject = no
+		NOT = { is_country_type = decentralized }
 		NOT = { has_modifier = un_expelled_cooldown }
-		NOT = {
-			has_modifier = un_withdrawal_penalty_modifier
-		}
+		NOT = { has_modifier = un_withdrawal_penalty_modifier }
 	}
 
 	ai_chance = {
@@ -37,6 +99,237 @@ un_join_button = {
 		custom_tooltip = {
 			text = "UN_JOIN_DESC"
 			add_modifier = { name = un_member_modifier }
+			# Great powers auto-get SC seats if fewer than 5 exist
+			if = {
+				limit = {
+					country_rank >= rank_value:great_power
+					NOT = {
+						any_country = {
+							has_modifier = un_security_council_modifier
+							count >= 5
+						}
+					}
+				}
+				add_modifier = { name = un_security_council_modifier }
+			}
+		}
+	}
+}
+
+# ---- 1b. REQUEST BUTTONS (ask UN for help) ----
+
+un_request_peacekeepers_button = {
+	name = "UN_REQUEST_PEACEKEEPERS"
+	desc = "UN_REQUEST_PEACEKEEPERS_DESC"
+
+	visible = {
+		has_modifier = un_member_modifier
+		NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
+		OR = {
+			is_at_war = yes
+			any_scope_state = { devastation > 5 }
+		}
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+		NOT = { has_global_variable = un_vote_active }
+		NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
+		NOT = { has_modifier = un_request_cooldown }
+		OR = {
+			is_at_war = yes
+			any_scope_state = { devastation > 5 }
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { is_at_war = yes } add = 30 }
+		if = {
+			limit = { any_scope_state = { devastation > 10 } }
+			add = 20
+		}
+		if = {
+			limit = { NOT = { country_rank >= rank_value:major_power } }
+			add = 15
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_REQUEST_PEACEKEEPERS_TT"
+			# Set up vote
+			set_global_variable = un_vote_active
+			set_global_variable = un_vote_topic_peacekeeping_request
+			set_global_variable = { name = un_vote_support value = 1 }
+			set_global_variable = { name = un_vote_oppose value = 0 }
+			set_global_variable = { name = un_vote_net value = 1 }
+			set_global_variable = { name = un_vote_proposer_country value = ROOT }
+			set_global_variable = { name = un_vote_target_country value = ROOT }
+			add_modifier = {
+				name = un_request_cooldown
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			# Trigger vote for all other members
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
+			}
+			# Schedule results
+			trigger_event = { id = un_vote.2 days = 90 }
+		}
+	}
+}
+
+un_request_humanitarian_aid_button = {
+	name = "UN_REQUEST_AID"
+	desc = "UN_REQUEST_AID_DESC"
+
+	visible = {
+		has_modifier = un_member_modifier
+		NOT = { has_modifier = un_humanitarian_aid_received_modifier }
+		any_scope_state = {
+			OR = {
+				average_sol < 8
+				devastation > 5
+			}
+		}
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+		NOT = { has_global_variable = un_vote_active }
+		NOT = { has_modifier = un_humanitarian_aid_received_modifier }
+		NOT = { has_modifier = un_request_cooldown }
+		any_scope_state = {
+			OR = {
+				average_sol < 8
+				devastation > 5
+			}
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { any_scope_state = { average_sol < 6 } }
+			add = 30
+		}
+		if = {
+			limit = { any_scope_state = { devastation > 10 } }
+			add = 20
+		}
+		if = {
+			limit = { NOT = { country_rank >= rank_value:major_power } }
+			add = 20
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_REQUEST_AID_TT"
+			# Set up vote
+			set_global_variable = un_vote_active
+			set_global_variable = un_vote_topic_aid_request
+			set_global_variable = { name = un_vote_support value = 1 }
+			set_global_variable = { name = un_vote_oppose value = 0 }
+			set_global_variable = { name = un_vote_net value = 1 }
+			set_global_variable = { name = un_vote_proposer_country value = ROOT }
+			set_global_variable = { name = un_vote_target_country value = ROOT }
+			add_modifier = {
+				name = un_request_cooldown
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			# Trigger vote for all other members
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
+			}
+			# Schedule results
+			trigger_event = { id = un_vote.2 days = 90 }
+		}
+	}
+}
+
+un_propose_condemn_button = {
+	name = "UN_PROPOSE_CONDEMN"
+	desc = "UN_PROPOSE_CONDEMN_DESC"
+
+	visible = {
+		has_modifier = un_member_modifier
+		any_country = {
+			has_diplomatic_pact = { who = ROOT type = rivalry }
+			is_at_war = yes
+			is_diplomatic_play_initiator = yes
+		}
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+		NOT = { has_global_variable = un_vote_active }
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		NOT = { has_modifier = un_request_cooldown }
+		any_country = {
+			has_diplomatic_pact = { who = ROOT type = rivalry }
+			is_at_war = yes
+			is_diplomatic_play_initiator = yes
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = { limit = { country_rank >= rank_value:great_power } add = 20 }
+		if = { limit = { var:un_authority >= 40 } add = 10 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_PROPOSE_CONDEMN_TT"
+			# Find the condemned country
+			random_country = {
+				limit = {
+					has_diplomatic_pact = { who = ROOT type = rivalry }
+					is_at_war = yes
+					is_diplomatic_play_initiator = yes
+				}
+				save_scope_as = un_vote_target
+				set_global_variable = { name = un_vote_target_country value = THIS }
+			}
+			# Set up vote
+			set_global_variable = un_vote_active
+			set_global_variable = un_vote_topic_condemn
+			set_global_variable = { name = un_vote_support value = 1 }
+			set_global_variable = { name = un_vote_oppose value = 0 }
+			set_global_variable = { name = un_vote_net value = 1 }
+			set_global_variable = { name = un_vote_proposer_country value = ROOT }
+			add_modifier = {
+				name = un_ga_resolution_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+			add_modifier = {
+				name = un_request_cooldown
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			# Trigger vote for all other members
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
+			}
+			# Schedule results
+			trigger_event = { id = un_vote.2 days = 90 }
 		}
 	}
 }
@@ -70,7 +363,10 @@ un_leave_button = {
 			remove_modifier = un_sanctions_target_modifier
 			remove_modifier = un_sanctions_enforcer_modifier
 			remove_modifier = un_peacekeeping_contributor_modifier
+			remove_modifier = un_peacekeeping_contributor_cost
 			remove_modifier = un_development_contributor_modifier
+			remove_modifier = un_development_contributor_cost
+			remove_modifier = un_humanitarian_aid_cost
 			remove_modifier = un_human_rights_champion_modifier
 			remove_modifier = un_arms_control_participant_modifier
 			remove_modifier = un_champion_order_cost
@@ -121,11 +417,13 @@ un_propose_sanctions_button = {
 	possible = {
 		has_modifier = un_member_modifier
 		country_rank >= rank_value:major_power
+		NOT = { has_global_variable = un_vote_active }
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		NOT = { has_modifier = un_request_cooldown }
 		any_country = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
 			NOT = { has_modifier = un_sanctions_target_modifier }
 		}
-		NOT = { has_modifier = un_sanctions_cooldown }
 	}
 
 	ai_chance = {
@@ -145,21 +443,43 @@ un_propose_sanctions_button = {
 
 	effect = {
 		custom_tooltip = {
-			text = "UN_PROPOSE_SANCTIONS_DESC"
-			add_modifier = { name = un_sanctions_enforcer_modifier }
-			add_modifier = {
-				name = un_sanctions_cooldown
-				days = long_modifier_time
-				is_decaying = yes
-			}
+			text = "UN_PROPOSE_SANCTIONS_TT"
+			# Find the sanctions target
 			random_country = {
 				limit = {
 					has_diplomatic_pact = { who = ROOT type = rivalry }
 					NOT = { has_modifier = un_sanctions_target_modifier }
 				}
-				add_modifier = { name = un_sanctions_target_modifier }
+				save_scope_as = un_vote_target
+				set_global_variable = { name = un_vote_target_country value = THIS }
 			}
-			change_variable = { name = un_authority add = 5 }
+			# Set up vote
+			set_global_variable = un_vote_active
+			set_global_variable = un_vote_topic_sanctions
+			set_global_variable = { name = un_vote_support value = 1 }
+			set_global_variable = { name = un_vote_oppose value = 0 }
+			set_global_variable = { name = un_vote_net value = 1 }
+			set_global_variable = { name = un_vote_proposer_country value = ROOT }
+			add_modifier = {
+				name = un_ga_resolution_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+			add_modifier = {
+				name = un_request_cooldown
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			# Trigger vote for all other members
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
+			}
+			# Schedule results
+			trigger_event = { id = un_vote.2 days = 90 }
 		}
 	}
 }
@@ -225,6 +545,10 @@ un_peacekeeping_mission_button = {
 			text = "UN_PEACEKEEPING_DESC"
 			add_modifier = { name = un_peacekeeping_contributor_modifier }
 			add_modifier = {
+				name = un_peacekeeping_contributor_cost
+				multiplier = un_program_expense_value
+			}
+			add_modifier = {
 				name = un_peacekeeping_cooldown
 				days = long_modifier_time
 				is_decaying = yes
@@ -256,6 +580,7 @@ un_end_peacekeeping_button = {
 		custom_tooltip = {
 			text = "UN_END_PEACEKEEPING_DESC"
 			remove_modifier = un_peacekeeping_contributor_modifier
+			remove_modifier = un_peacekeeping_contributor_cost
 			change_variable = { name = un_authority add = -2 }
 		}
 	}
@@ -297,6 +622,10 @@ un_fund_development_button = {
 		custom_tooltip = {
 			text = "UN_FUND_DEVELOPMENT_DESC"
 			add_modifier = { name = un_development_contributor_modifier }
+			add_modifier = {
+				name = un_development_contributor_cost
+				multiplier = un_program_expense_value
+			}
 			change_variable = { name = un_authority add = 2 }
 		}
 	}
@@ -324,6 +653,7 @@ un_defund_development_button = {
 		custom_tooltip = {
 			text = "UN_DEFUND_DEVELOPMENT_DESC"
 			remove_modifier = un_development_contributor_modifier
+			remove_modifier = un_development_contributor_cost
 			change_variable = { name = un_authority add = -2 }
 		}
 	}

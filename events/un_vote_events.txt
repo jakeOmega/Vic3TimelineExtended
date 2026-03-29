@@ -9,16 +9,19 @@
 # Phase 2: After 90 days, un_vote.2 fires for the proposer with results.
 #
 # Vote topics (identified by global flag variables):
-#   un_vote_topic_condemn          - Condemn aggressor (event 2)
-#   un_vote_topic_human_rights     - Human Rights Declaration (event 3)
-#   un_vote_topic_reform           - UN Institutional Reform (event 6)
-#   un_vote_topic_heritage         - Cultural Heritage Program (event 9)
-#   un_vote_topic_decolonization   - Decolonization Resolution (event 12)
-#   un_vote_topic_npt              - Non-Proliferation Treaty (event 14)
-#   un_vote_topic_pandemic         - Global Pandemic Response (event 16)
-#   un_vote_topic_climate          - Climate Accord (event 17)
-#   un_vote_topic_refugee          - International Refugee Crisis (event 18)
-#   un_vote_topic_space            - International Space Cooperation (event 19)
+#   un_vote_topic_condemn                - Condemn aggressor (event 2)
+#   un_vote_topic_human_rights           - Human Rights Declaration (event 3)
+#   un_vote_topic_reform                 - UN Institutional Reform (event 6)
+#   un_vote_topic_heritage               - Cultural Heritage Program (event 9)
+#   un_vote_topic_decolonization         - Decolonization Resolution (event 12)
+#   un_vote_topic_npt                    - Non-Proliferation Treaty (event 14)
+#   un_vote_topic_pandemic               - Global Pandemic Response (event 16)
+#   un_vote_topic_climate                - Climate Accord (event 17)
+#   un_vote_topic_refugee                - International Refugee Crisis (event 18)
+#   un_vote_topic_space                  - International Space Cooperation (event 19)
+#   un_vote_topic_peacekeeping_request   - Peacekeeping deployment (request button)
+#   un_vote_topic_aid_request            - Humanitarian aid (request button)
+#   un_vote_topic_sanctions              - International sanctions (sanctions button)
 #
 # Vote tracking global variables:
 #   un_vote_active              - flag: vote in progress
@@ -84,6 +87,18 @@ un_vote.1 = {
 				desc = un_vote.1.t_space
 				trigger = { has_global_variable = un_vote_topic_space }
 			}
+			triggered_desc = {
+				desc = un_vote.1.t_peacekeeping_request
+				trigger = { has_global_variable = un_vote_topic_peacekeeping_request }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_aid_request
+				trigger = { has_global_variable = un_vote_topic_aid_request }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_sanctions
+				trigger = { has_global_variable = un_vote_topic_sanctions }
+			}
 			desc = un_vote.1.t
 		}
 	}
@@ -129,6 +144,18 @@ un_vote.1 = {
 				desc = un_vote.1.d_space
 				trigger = { has_global_variable = un_vote_topic_space }
 			}
+			triggered_desc = {
+				desc = un_vote.1.d_peacekeeping_request
+				trigger = { has_global_variable = un_vote_topic_peacekeeping_request }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_aid_request
+				trigger = { has_global_variable = un_vote_topic_aid_request }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_sanctions
+				trigger = { has_global_variable = un_vote_topic_sanctions }
+			}
 			desc = un_vote.1.d
 		}
 	}
@@ -143,6 +170,22 @@ un_vote.1 = {
 
 	immediate = {
 		set_variable = un_voted_this_round
+		# Resolve proposer/target from global vars if not already in scope chain
+		# (needed when vote is triggered from scripted buttons rather than events)
+		if = {
+			limit = {
+				NOT = { exists = scope:un_vote_proposer }
+				exists = global_var:un_vote_proposer_country
+			}
+			global_var:un_vote_proposer_country = { save_scope_as = un_vote_proposer }
+		}
+		if = {
+			limit = {
+				NOT = { exists = scope:un_vote_target }
+				exists = global_var:un_vote_target_country
+			}
+			global_var:un_vote_target_country = { save_scope_as = un_vote_target }
+		}
 	}
 
 	# Option A: Vote in favor
@@ -238,6 +281,38 @@ un_vote.1 = {
 				NOT = { has_modifier = un_space_partnership_modifier }
 			}
 			add_modifier = { name = un_space_partnership_modifier }
+		}
+		# If supporting peacekeeping request, pledge contribution
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_peacekeeping_request
+				NOT = { has_modifier = un_peacekeeping_contributor_modifier }
+				country_rank >= rank_value:major_power
+			}
+			add_modifier = { name = un_peacekeeping_contributor_modifier }
+			add_modifier = {
+				name = un_peacekeeping_contributor_cost
+				multiplier = un_program_expense_value
+			}
+		}
+		# If supporting humanitarian aid request, pledge aid
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_aid_request
+				NOT = { has_modifier = un_humanitarian_aid_modifier }
+				country_rank >= rank_value:major_power
+			}
+			add_modifier = {
+				name = un_humanitarian_aid_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			add_modifier = {
+				name = un_humanitarian_aid_cost
+				multiplier = un_program_expense_value
+				days = long_modifier_time
+				is_decaying = yes
+			}
 		}
 
 		ai_chance = {
@@ -498,6 +573,89 @@ un_vote.1 = {
 				}
 				add = -15
 			}
+			# ---- Topic: Peacekeeping Request ----
+			# Humanitarian nations support
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_peacekeeping_request
+					has_law = law_type:law_humanitarian_regulations
+				}
+				add = 25
+			}
+			# GPs want to project power
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_peacekeeping_request
+					country_rank >= rank_value:great_power
+				}
+				add = 15
+			}
+			# Isolationists resist
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_peacekeeping_request
+					has_law = law_type:law_isolationism
+				}
+				add = -20
+			}
+			# ---- Topic: Humanitarian Aid Request ----
+			# Wealthy nations more likely to support
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_aid_request
+					country_rank >= rank_value:great_power
+				}
+				add = 20
+			}
+			# Interventionist/humanitarian support
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_aid_request
+					has_law = law_type:law_humanitarian_regulations
+				}
+				add = 20
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_aid_request
+					has_law = law_type:law_isolationism
+				}
+				add = -25
+			}
+			# ---- Topic: Sanctions ----
+			# Rivals of the target support sanctions
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_sanctions
+					exists = scope:un_vote_target
+					has_diplomatic_pact = { who = scope:un_vote_target type = rivalry }
+				}
+				add = 30
+			}
+			# Great powers want to project authority
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_sanctions
+					country_rank >= rank_value:great_power
+				}
+				add = 15
+			}
+			# Humanitarian nations support sanctions against aggressors
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_sanctions
+					has_law = law_type:law_humanitarian_regulations
+				}
+				add = 15
+			}
+			# Isolationists resist involvement
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_sanctions
+					has_law = law_type:law_isolationism
+				}
+				add = -20
+			}
 		}
 	}
 
@@ -589,6 +747,37 @@ un_vote.1 = {
 			# ---- Topic: Space - authoritarian regimes oppose sharing ----
 			modifier = {
 				trigger = { has_global_variable = un_vote_topic_space has_law = law_type:law_single_party_state }
+				add = 20
+			}
+			# ---- Topic: Peacekeeping Request - isolationists/warmongers oppose ----
+			modifier = {
+				trigger = { has_global_variable = un_vote_topic_peacekeeping_request has_law = law_type:law_isolationism }
+				add = 25
+			}
+			modifier = {
+				trigger = { has_global_variable = un_vote_topic_peacekeeping_request has_law = law_type:law_total_war }
+				add = 15
+			}
+			# ---- Topic: Aid Request - laissez-faire/isolationists oppose ----
+			modifier = {
+				trigger = { has_global_variable = un_vote_topic_aid_request has_law = law_type:law_isolationism }
+				add = 25
+			}
+			modifier = {
+				trigger = { has_global_variable = un_vote_topic_aid_request has_law = law_type:law_laissez_faire }
+				add = 15
+			}
+			# ---- Topic: Sanctions - allies of target oppose ----
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_sanctions
+					exists = scope:un_vote_target
+					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
+				}
+				add = 40
+			}
+			modifier = {
+				trigger = { has_global_variable = un_vote_topic_sanctions has_law = law_type:law_isolationism }
 				add = 20
 			}
 		}
@@ -734,6 +923,36 @@ un_vote.2 = {
 				trigger = { has_global_variable = un_vote_topic_space }
 				desc = un_vote.2.d_space_failed
 			}
+			# Peacekeeping Request - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_peacekeeping_request global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_peacekeeping_request_passed
+			}
+			# Peacekeeping Request - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_peacekeeping_request }
+				desc = un_vote.2.d_peacekeeping_request_failed
+			}
+			# Aid Request - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_aid_request global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_aid_request_passed
+			}
+			# Aid Request - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_aid_request }
+				desc = un_vote.2.d_aid_request_failed
+			}
+			# Sanctions - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_sanctions global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_sanctions_passed
+			}
+			# Sanctions - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_sanctions }
+				desc = un_vote.2.d_sanctions_failed
+			}
 			# Generic fallback
 			triggered_desc = {
 				trigger = { global_var:un_vote_net >= 1 }
@@ -767,6 +986,15 @@ un_vote.2 = {
 		set_variable = {
 			name = un_display_oppose
 			value = global_var:un_vote_oppose
+		}
+		# Resolve proposer/target scopes from global vars
+		if = {
+			limit = { exists = global_var:un_vote_proposer_country }
+			global_var:un_vote_proposer_country = { save_scope_as = un_vote_proposer }
+		}
+		if = {
+			limit = { exists = global_var:un_vote_target_country }
+			global_var:un_vote_target_country = { save_scope_as = un_vote_target }
 		}
 	}
 
@@ -886,6 +1114,61 @@ un_vote.2 = {
 				}
 			}
 
+			# ---- Peacekeeping Request: Deploy peacekeepers to requesting country ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_peacekeeping_request }
+				custom_tooltip = un_vote_peacekeeping_request_passed_tt
+				change_variable = { name = un_authority add = 5 }
+				# Apply scaled peacekeeping benefit to the requesting country
+				if = {
+					limit = { exists = global_var:un_vote_proposer_country }
+					global_var:un_vote_proposer_country = {
+						add_modifier = {
+							name = un_peacekeeping_received_modifier
+							multiplier = un_peacekeeping_benefit_scale
+							days = long_modifier_time
+							is_decaying = yes
+						}
+					}
+				}
+			}
+
+			# ---- Aid Request: Deliver humanitarian aid to requesting country ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_aid_request }
+				custom_tooltip = un_vote_aid_request_passed_tt
+				change_variable = { name = un_authority add = 5 }
+				# Apply scaled aid benefit to the requesting country
+				if = {
+					limit = { exists = global_var:un_vote_proposer_country }
+					global_var:un_vote_proposer_country = {
+						add_modifier = {
+							name = un_aid_received_modifier
+							multiplier = un_aid_benefit_scale
+							days = long_modifier_time
+							is_decaying = yes
+						}
+					}
+				}
+			}
+
+			# ---- Sanctions: Apply sanctions to the target country ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_sanctions }
+				custom_tooltip = un_vote_sanctions_passed_tt
+				change_variable = { name = un_authority add = 5 }
+				# Proposer becomes sanctions enforcer
+				add_modifier = { name = un_sanctions_enforcer_modifier }
+				# Apply sanctions to target
+				if = {
+					limit = { exists = scope:un_vote_target }
+					scope:un_vote_target = {
+						add_modifier = { name = un_sanctions_target_modifier }
+					}
+					change_relations = { country = scope:un_vote_target value = -20 }
+				}
+			}
+
 			# Influence reward for leading a successful resolution
 			add_modifier = {
 				name = un_vote_success_reward
@@ -906,6 +1189,15 @@ un_vote.2 = {
 			}
 		}
 
+		# ---- Notify all other UN members of the result ----
+		every_country = {
+			limit = {
+				has_modifier = un_member_modifier
+				NOT = { THIS = ROOT }
+			}
+			trigger_event = { id = un_vote.3 }
+		}
+
 		# ---- Cleanup: clear all vote state ----
 		remove_global_variable = un_vote_active
 		if = { limit = { has_global_variable = un_vote_topic_condemn } remove_global_variable = un_vote_topic_condemn }
@@ -918,6 +1210,9 @@ un_vote.2 = {
 		if = { limit = { has_global_variable = un_vote_topic_pandemic } remove_global_variable = un_vote_topic_pandemic }
 		if = { limit = { has_global_variable = un_vote_topic_refugee } remove_global_variable = un_vote_topic_refugee }
 		if = { limit = { has_global_variable = un_vote_topic_space } remove_global_variable = un_vote_topic_space }
+		if = { limit = { has_global_variable = un_vote_topic_peacekeeping_request } remove_global_variable = un_vote_topic_peacekeeping_request }
+		if = { limit = { has_global_variable = un_vote_topic_aid_request } remove_global_variable = un_vote_topic_aid_request }
+		if = { limit = { has_global_variable = un_vote_topic_sanctions } remove_global_variable = un_vote_topic_sanctions }
 		if = { limit = { has_global_variable = un_vote_proposer_country } remove_global_variable = un_vote_proposer_country }
 		if = { limit = { has_global_variable = un_vote_target_country } remove_global_variable = un_vote_target_country }
 		if = { limit = { has_global_variable = un_vote_net } remove_global_variable = un_vote_net }
@@ -927,6 +1222,182 @@ un_vote.2 = {
 			remove_variable = un_voted_this_round
 		}
 
+		ai_chance = { base = 100 }
+	}
+}
+
+# ---- Phase 3: Notification to all other UN members ----
+un_vote.3 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = un_vote.3.t
+
+	desc = {
+		first_valid = {
+			# Condemn
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_condemn global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_condemn }
+				desc = un_vote.3.d_failed
+			}
+			# Human Rights
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_human_rights global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_human_rights }
+				desc = un_vote.3.d_failed
+			}
+			# NPT
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_npt global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_npt }
+				desc = un_vote.3.d_failed
+			}
+			# Climate
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_climate global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_climate }
+				desc = un_vote.3.d_failed
+			}
+			# Reform
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_reform global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_reform }
+				desc = un_vote.3.d_failed
+			}
+			# Heritage
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_heritage global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_heritage }
+				desc = un_vote.3.d_failed
+			}
+			# Decolonization
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_decolonization global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_decolonization }
+				desc = un_vote.3.d_failed
+			}
+			# Pandemic
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_pandemic global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_pandemic }
+				desc = un_vote.3.d_failed
+			}
+			# Refugee
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_refugee global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_refugee }
+				desc = un_vote.3.d_failed
+			}
+			# Space
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_space global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_space }
+				desc = un_vote.3.d_failed
+			}
+			# Peacekeeping Request
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_peacekeeping_request global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_peacekeeping_request }
+				desc = un_vote.3.d_failed
+			}
+			# Aid Request
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_aid_request global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_aid_request }
+				desc = un_vote.3.d_failed
+			}
+			# Sanctions
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_sanctions global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_sanctions }
+				desc = un_vote.3.d_failed
+			}
+			# Generic fallback
+			triggered_desc = {
+				trigger = { global_var:un_vote_net >= 1 }
+				desc = un_vote.3.d_passed
+			}
+			desc = un_vote.3.d_failed
+		}
+	}
+
+	duration = 3
+
+	trigger = {
+		has_modifier = un_member_modifier
+	}
+
+	immediate = {
+		set_variable = {
+			name = un_display_support
+			value = global_var:un_vote_support
+		}
+		set_variable = {
+			name = un_display_oppose
+			value = global_var:un_vote_oppose
+		}
+		# Resolve proposer/target scopes from global vars
+		if = {
+			limit = { exists = global_var:un_vote_proposer_country }
+			global_var:un_vote_proposer_country = { save_scope_as = un_vote_proposer }
+		}
+		if = {
+			limit = { exists = global_var:un_vote_target_country }
+			global_var:un_vote_target_country = { save_scope_as = un_vote_target }
+		}
+	}
+
+	option = {
+		name = un_vote.3.a
+		default_option = yes
 		ai_chance = { base = 100 }
 	}
 }

@@ -4,18 +4,32 @@
 	group = je_group_foreign_affairs
 
 	is_shown_when_inactive = {
-		has_technology_researched = intergovernmental_organizations
+		OR = {
+			has_technology_researched = intergovernmental_organizations
+			has_global_variable = un_founded
+		}
 	}
 
 	possible = {
-		has_technology_researched = intergovernmental_organizations
+		OR = {
+			has_technology_researched = intergovernmental_organizations
+			has_global_variable = un_founded
+		}
 	}
 
 	scripted_progress_bar = un_authority_bar
 
+	# ---- Founding button (GP with tech, before UN exists) ----
+	scripted_button = un_found_button
+
 	# ---- Membership buttons ----
 	scripted_button = un_join_button
 	scripted_button = un_leave_button
+
+	# ---- Request buttons (ask UN for help) ----
+	scripted_button = un_request_peacekeepers_button
+	scripted_button = un_request_humanitarian_aid_button
+	scripted_button = un_propose_condemn_button
 
 	# ---- Policy buttons (members only) ----
 	scripted_button = un_propose_sanctions_button
@@ -203,18 +217,39 @@
 				remove_modifier = un_security_council_modifier
 			}
 
+			# ---- Treaty obligation auto-enrollment ----
+			if = {
+				limit = {
+					NOT = { has_modifier = un_member_modifier }
+					modifier:un_membership_obligation = yes
+				}
+				add_modifier = { name = un_member_modifier }
+				if = {
+					limit = {
+						country_rank >= rank_value:great_power
+						NOT = {
+							any_country = {
+								has_modifier = un_security_council_modifier
+								count >= 5
+							}
+						}
+					}
+					add_modifier = { name = un_security_council_modifier }
+				}
+			}
+
 			# ---- Member-only logic ----
 			if = {
 				limit = { has_modifier = un_member_modifier }
 
-				# Base monthly drift: toward 50
+				# Base monthly drift: toward 50 (slow)
 				if = {
 					limit = { var:un_authority > 55 }
-					change_variable = { name = un_authority add = -0.5 }
+					change_variable = { name = un_authority add = -0.25 }
 				}
 				else_if = {
 					limit = { var:un_authority < 45 }
-					change_variable = { name = un_authority add = 0.5 }
+					change_variable = { name = un_authority add = 0.25 }
 				}
 
 				# Boost authority if country has strong diplomacy
@@ -289,8 +324,48 @@
 					remove_modifier = un_membership_benefits_modifier
 				}
 
+				# ---- High authority: infamy generation scales for everyone ----
+				if = {
+					limit = { var:un_authority >= 50 }
+					remove_modifier = un_high_authority_infamy_modifier
+					add_modifier = {
+						name = un_high_authority_infamy_modifier
+						multiplier = {
+							value = var:un_authority
+							subtract = 40
+							divide = 30
+						}
+					}
+				}
+				else = {
+					remove_modifier = un_high_authority_infamy_modifier
+				}
+
+				# ---- NPT enforcement tiers (requires IAEA agency) ----
+				# Authority 80+: Non-nuclear member powers face disarmament pressure
+				if = {
+					limit = {
+						has_global_variable = un_agency_iaea
+						var:un_authority >= 80
+						NOT = { has_modifier = nuclear_power }
+						NOT = { has_modifier = un_npt_disarmament_modifier }
+					}
+					add_modifier = { name = un_npt_disarmament_modifier }
+				}
+				# Remove if authority drops or they become nuclear
+				if = {
+					limit = {
+						has_modifier = un_npt_disarmament_modifier
+						OR = {
+							var:un_authority < 75
+							has_modifier = nuclear_power
+							NOT = { has_global_variable = un_agency_iaea }
+						}
+					}
+					remove_modifier = un_npt_disarmament_modifier
+				}
+
 				# ---- Security Council seat award ----
-				# Great power members get SC seats if fewer than 5 exist
 				if = {
 					limit = {
 						country_rank >= rank_value:great_power
@@ -304,6 +379,41 @@
 					}
 					add_modifier = { name = un_security_council_modifier }
 				}
+			}
+
+			# ---- Non-member penalties at high authority (all countries with JE) ----
+			if = {
+				limit = {
+					NOT = { has_modifier = un_member_modifier }
+					has_global_variable = un_founded
+					# Check authority from any member (use global estimate)
+					any_country = {
+						has_modifier = un_member_modifier
+						var:un_authority >= 60
+					}
+				}
+				# Apply pariah status — non-members face diplomatic pressure
+				if = {
+					limit = { NOT = { has_modifier = un_nonmember_pariah_modifier } }
+					add_modifier = { name = un_nonmember_pariah_modifier }
+				}
+			}
+			# Remove if authority drops or UN not founded or they join
+			if = {
+				limit = {
+					has_modifier = un_nonmember_pariah_modifier
+					OR = {
+						has_modifier = un_member_modifier
+						NOT = { has_global_variable = un_founded }
+						NOT = {
+							any_country = {
+								has_modifier = un_member_modifier
+								var:un_authority >= 55
+							}
+						}
+					}
+				}
+				remove_modifier = un_nonmember_pariah_modifier
 			}
 		}
 	}

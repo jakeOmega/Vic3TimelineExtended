@@ -1,32 +1,6 @@
 ﻿# United Nations events - wired into monthly country pulse
 un_events_on_action = {
 	effect = {
-		# Formation event - fires globally once when 3+ great powers have the tech
-		# Only one GP's monthly pulse triggers this; it then fires for all independent countries
-		if = {
-			limit = {
-				NOT = { has_global_variable = un_founded }
-				country_rank >= rank_value:great_power
-				has_technology_researched = intergovernmental_organizations
-				any_country = {
-					country_rank >= rank_value:great_power
-					has_technology_researched = intergovernmental_organizations
-					count >= 3
-				}
-			}
-			set_global_variable = un_founded
-			# Fire formation event for ALL independent countries
-			every_country = {
-				limit = {
-					is_subject = no
-					NOT = { is_country_type = decentralized }
-					NOT = { has_variable = un_charter_signed }
-					NOT = { has_modifier = un_member_modifier }
-				}
-				trigger_event = { id = un_events.1 }
-			}
-		}
-
 		# Recurring events - only for members
 		if = {
 			limit = {

@@ -78,6 +78,7 @@
  trade_diplomacy_modifier:0 "Trade Diplomacy"
  trade_diplomacy_modifier_desc:0 "We chose diplomacy over sanctions, maintaining trade flows but appearing unwilling to confront our rival."
  treaty_name_education_and_training_pact:0 "Education and Training Pact"
+ un_refuse_aid_diplomatic_penalty_tt:0 "As a #bold major power#! refusing aid with UN Authority above 40, we will suffer #R diplomatic penalties#! (prestige and relations)."
  we_am_diplomacy_arsenal:0 "Antimatter Arsenal Prestige"
  we_am_diplomacy_arsenal_desc:0 "The antimatter arsenal commands deference from rival nations and strengthens sovereign authority."
  we_am_diplomacy_olive:0 "Antimatter Diplomacy"

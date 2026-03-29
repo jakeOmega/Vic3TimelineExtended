@@ -1356,6 +1356,19 @@ nuclear_program_aid = {
 				}
 			}
 		}
+		# NPT enforcement: At high UN authority with IAEA, nuclear aid is forbidden
+		custom_tooltip = {
+			text = nuclear_aid_blocked_by_npt_tt
+			NOT = {
+				AND = {
+					has_global_variable = un_agency_iaea
+					any_country = {
+						has_modifier = un_member_modifier
+						var:un_authority >= 60
+					}
+				}
+			}
+		}
 	}
 
 	can_ratify = {
@@ -1812,4 +1825,136 @@ joint_military_exercises = {
             }
         }
     }
+}
+
+# TREATY ARTICLE: join_united_nations
+# ---------------------------------
+# A member country can include this article to require the target
+# to join the United Nations. While the treaty is in force, the target
+# has obligation status and will be auto-enrolled by the JE monthly pulse.
+join_united_nations = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
+	kind = directed
+	cost = 200
+
+	target_modifier = {
+		un_membership_obligation = yes
+	}
+
+	usage_limit = once_per_side
+
+	visible = {
+		has_global_variable = un_founded
+		has_modifier = un_member_modifier
+	}
+
+	possible = {
+		has_modifier = un_member_modifier
+		scope:other_country = {
+			NOT = { has_modifier = un_member_modifier }
+			has_technology_researched = intergovernmental_organizations
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = join_united_nations
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { offer demand }
+		evaluation_chance = {
+			value = 0.1
+			if = {
+				limit = { has_attitude = { who = scope:other_country attitude = friendly } }
+				add = 0.1
+			}
+			if = {
+				limit = { is_in_same_power_bloc = scope:other_country }
+				add = 0.15
+			}
+		}
+		inherent_accept_score = {
+			value = 0
+			if = {
+				limit = { NOT = { scope:target_country = this } }
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -50
+				}
+			}
+			if = {
+				limit = { scope:target_country = this }
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -25
+				}
+				# More willing if friendly with source
+				if = {
+					limit = { has_attitude = { who = scope:source_country attitude = friendly } }
+					add = {
+						desc = "AI_FRIENDLY_ATTITUDE"
+						value = 30
+					}
+				}
+				# More willing if in same power bloc
+				if = {
+					limit = { is_in_same_power_bloc = scope:source_country }
+					add = {
+						desc = "AI_SAME_POWER_BLOC"
+						value = 20
+					}
+				}
+				# Isolationists resist
+				if = {
+					limit = { has_law = law_type:law_isolationism }
+					add = {
+						desc = "AI_ISOLATIONIST"
+						value = -50
+					}
+				}
+				# Total war countries refuse
+				if = {
+					limit = { has_law = law_type:law_total_war }
+					add = {
+						desc = "AI_TOTAL_WAR"
+						value = -100
+					}
+				}
+				# Hostile nations refuse
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:source_country attitude = hostile }
+							has_attitude = { who = scope:source_country attitude = belligerent }
+						}
+					}
+					add = {
+						desc = "AI_HOSTILE_ATTITUDE"
+						value = -1000
+					}
+				}
+			}
+		}
+	}
 }

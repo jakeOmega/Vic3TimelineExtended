@@ -1972,6 +1972,19 @@ un_member_modifier = {
 	country_influence_mult = 0.03
 }
 
+# Cost of founding the UN (decaying, applied to the founding GP)
+un_founding_cost_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_prestige_mult = -0.10
+	country_bureaucracy_add = -100
+	country_expenses_add = 1
+}
+
+# Cooldown after requesting UN action
+un_request_cooldown = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+}
+
 un_headquarters_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_leverage_generation_mult = 0.10
@@ -1993,6 +2006,36 @@ un_membership_benefits_modifier = {
 	country_improve_relations_speed_mult = 0.10
 	country_tech_research_speed_mult = 0.01
 	country_prestige_mult = 0.03
+}
+
+# Applied to all UN members when authority >= 50 (scaled by authority)
+# Makes infamy generation worse for everyone, discouraging aggression
+un_high_authority_infamy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_infamy_generation_mult = 0.10
+}
+
+# Applied to non-members when UN authority is >= 60
+# Represents diplomatic isolation of countries outside the international order
+un_nonmember_pariah_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_improve_relations_speed_mult = -0.15
+	country_prestige_mult = -0.05
+	country_influence_mult = -0.05
+}
+
+# Applied to non-nuclear member powers when authority >= 80 + IAEA exists
+# Represents NPT enforcement pressure — blocks nuclear program
+un_npt_disarmament_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	nuclear_disarmament = yes
+}
+
+# Applied to major/great powers that refuse humanitarian aid at authority >= 40
+un_refused_aid_penalty_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.10
+	country_improve_relations_speed_mult = -0.10
 }
 
 un_withdrawal_penalty_modifier = {
@@ -2091,6 +2134,7 @@ un_human_rights_champion_modifier = {
 	country_institution_impact_institution_ministry_of_refugee_affairs_mult = 0.05
 	country_prestige_mult = 0.05
 	country_institution_size_change_speed_mult = 0.05
+	country_bureaucracy_add = -25
 }
 
 # ---- Peacekeeping Modifiers ----
@@ -2100,6 +2144,7 @@ un_peacekeeping_contributor_modifier = {
 	country_leverage_generation_mult = 0.05
 	country_prestige_mult = 0.05
 	country_military_goods_cost_mult = 0.05
+	country_bureaucracy_add = -25
 }
 
 un_peacekeeping_deployed_modifier = {
@@ -2160,7 +2205,7 @@ un_sanctions_busting_modifier = {
 un_development_contributor_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_institution_impact_institution_ministry_of_commerce_mult = 0.05
-	country_bureaucracy_mult = -0.01
+	country_bureaucracy_add = -25
 }
 
 # ---- Arms Control Modifiers ----
@@ -2171,6 +2216,7 @@ un_arms_control_participant_modifier = {
 	unit_kill_rate_add = -0.05
 	unit_devastation_mult = -0.15
 	country_military_goods_cost_mult = -0.05
+	country_bureaucracy_add = -25
 }
 
 # ---- Reform Modifiers ----
@@ -2199,7 +2245,7 @@ un_humanitarian_aid_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.10
 	country_prestige_mult = 0.15
-	country_bureaucracy_add = -5000
+	country_bureaucracy_add = -50
 }
 
 un_humanitarian_token_modifier = {
@@ -2448,6 +2494,42 @@ un_tariff_retaliation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	state_trade_advantage_mult = -0.03
 	country_improve_relations_speed_mult = -0.05
+}
+
+# ---- UN Program Financial Cost Modifiers ----
+# Applied with GDP-based multiplier: add_modifier = { name = X multiplier = un_program_expense_value }
+# country_expenses_add = 1 means the multiplier directly sets the weekly expense
+
+un_peacekeeping_contributor_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+un_development_contributor_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+un_humanitarian_aid_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+# ---- UN Scaled Benefit Modifiers (for receiving countries) ----
+# Applied with multiplier based on donor count / recipient size
+
+un_peacekeeping_received_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_devastation_decay_mult = 0.25
+	state_turmoil_effects_mult = -0.15
+	country_prestige_mult = -0.03
+}
+
+un_aid_received_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_standard_of_living_add = 1
+	state_food_security_add = 0.2
+	state_mortality_mult = -0.03
 }
 
 # ============================================================================
@@ -2718,7 +2800,7 @@ langreform_revival = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 }
 
 # Event 25 – Sacred / Classical Tongue variants (replace generic revival)
@@ -2728,7 +2810,7 @@ langreform_revived_latin = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_influence_mult = 0.25
 }
 langreform_revived_hebrew = {
@@ -2737,7 +2819,7 @@ langreform_revived_hebrew = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	state_conversion_mult = 0.1
 }
 langreform_revived_sanskrit = {
@@ -2746,7 +2828,7 @@ langreform_revived_sanskrit = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_tech_research_speed_mult = 0.05
 }
 langreform_revived_geez = {
@@ -2755,7 +2837,7 @@ langreform_revived_geez = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	state_conversion_mult = 0.1
 }
 langreform_revived_slavonic = {
@@ -2764,7 +2846,7 @@ langreform_revived_slavonic = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_acceptance_shared_language_trait_group_add = 5
 	country_acceptance_shared_language_trait_add = 5
 }
@@ -2774,7 +2856,7 @@ langreform_revived_pali = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	state_education_access_add = 0.05
 }
 langreform_revived_avestan = {
@@ -2783,7 +2865,7 @@ langreform_revived_avestan = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_acceptance_shared_heritage_trait_add = 0.1
 }
 langreform_revived_arabic = {
@@ -2792,7 +2874,7 @@ langreform_revived_arabic = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_influence_mult = 0.25
 }
 langreform_revived_chinese = {
@@ -2801,7 +2883,7 @@ langreform_revived_chinese = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_bureaucracy_mult = 0.05
 }
 langreform_revived_greek = {
@@ -2810,7 +2892,7 @@ langreform_revived_greek = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_tech_research_speed_mult = 0.05
 }
 langreform_revived_irish = {
@@ -2819,7 +2901,7 @@ langreform_revived_irish = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	state_education_access_add = 0.05
 }
 langreform_revived_coptic = {
@@ -2828,7 +2910,7 @@ langreform_revived_coptic = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	state_conversion_mult = 0.1
 }
 langreform_revived_nahuatl = {
@@ -2837,7 +2919,7 @@ langreform_revived_nahuatl = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_acceptance_shared_heritage_trait_group_add = 5
 }
 langreform_revived_norse = {
@@ -2846,7 +2928,7 @@ langreform_revived_norse = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_war_exhaustion_casualties_mult = -0.1
 }
 langreform_revived_gothic = {
@@ -2855,7 +2937,7 @@ langreform_revived_gothic = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_acceptance_shared_language_trait_group_add = 5
 }
 langreform_revived_mayan = {
@@ -2864,7 +2946,7 @@ langreform_revived_mayan = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_acceptance_shared_heritage_trait_group_add = 5
 }
 langreform_revived_prussian = {
@@ -2873,7 +2955,7 @@ langreform_revived_prussian = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	country_legitimacy_base_add = 5
 }
 langreform_revived_aramaic = {
@@ -2882,7 +2964,7 @@ langreform_revived_aramaic = {
 	country_primary_culture_fervor_from_laws_add = 10
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = 0.1
-	state_homeland_removal_threshold_mult = 0.1
+	state_homeland_removal_threshold_add = 0.1
 	state_trade_advantage_mult = 0.1
 }
 

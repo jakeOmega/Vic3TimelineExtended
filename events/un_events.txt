@@ -793,11 +793,35 @@ un_events.7 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		# GDP-scaled expense
+		add_modifier = {
+			name = un_humanitarian_aid_cost
+			multiplier = un_program_expense_value
+		}
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
 		change_relations = { country = scope:crisis_country value = 30 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		# GDP-scaled benefit to crisis country: min(giver, receiver) / receiver * 2
+		set_variable = { name = temp_giver_gdp value = gdp }
+		scope:crisis_country = {
+			add_modifier = {
+				name = un_humanitarian_aid_received_modifier
+				multiplier = {
+					value = prev.var:temp_giver_gdp
+					divide = {
+						value = gdp
+						min = 100000
+					}
+					multiply = 2
+					min = 0.5
+					max = 3.0
+				}
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 		# Notify the crisis country of incoming aid
 		save_scope_as = aid_donor
 		scope:crisis_country = {
@@ -819,10 +843,21 @@ un_events.7 = {
 		custom_tooltip = un_authority_change_plus_1
 		change_variable = { name = un_authority add = 1 }
 		change_relations = { country = scope:crisis_country value = 10 }
+		# GDP-scaled token benefit to crisis country
+		set_variable = { name = temp_giver_gdp value = gdp }
 		scope:crisis_country = {
 			post_notification = un_humanitarian_token_received
 			add_modifier = {
 				name = un_humanitarian_token_received_modifier
+				multiplier = {
+					value = prev.var:temp_giver_gdp
+					divide = {
+						value = gdp
+						min = 100000
+					}
+					min = 0.3
+					max = 1.0
+				}
 				days = normal_modifier_time
 				is_decaying = yes
 			}
@@ -838,6 +873,11 @@ un_events.7 = {
 				trigger = { has_law = law_type:law_isolationism }
 				add = 4
 			}
+			# AI less likely to refuse at high authority (consequences are worse)
+			modifier = {
+				trigger = { var:un_authority >= 60 country_rank >= rank_value:great_power }
+				add = -3
+			}
 		}
 		custom_tooltip = un_authority_change_minus_3
 		change_variable = { name = un_authority add = -3 }
@@ -847,6 +887,33 @@ un_events.7 = {
 			strata = upper
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		# At moderate authority, GPs refusing aid face diplomatic consequences
+		if = {
+			limit = {
+				var:un_authority >= 40
+				country_rank >= rank_value:major_power
+			}
+			custom_tooltip = un_refuse_aid_diplomatic_penalty_tt
+			add_modifier = {
+				name = un_refused_aid_penalty_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		# At high authority, GPs refusing aid face severe diplomatic and domestic penalties
+		if = {
+			limit = {
+				var:un_authority >= 70
+				country_rank >= rank_value:great_power
+			}
+			custom_tooltip = un_refuse_aid_severe_penalty_tt
+			change_variable = { name = un_authority add = -5 }
+			add_radicals = {
+				value = small_radicals
+				strata = lower
+			}
+			ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		}
 	}
 }
 
@@ -2460,11 +2527,7 @@ un_events.101 = {
 		ai_chance = {
 			base = 8
 		}
-		add_modifier = {
-			name = un_humanitarian_aid_received_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
+		# Benefits already applied by giver event with GDP scaling
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
@@ -2481,11 +2544,7 @@ un_events.101 = {
 				add = 4
 			}
 		}
-		add_modifier = {
-			name = un_humanitarian_aid_received_modifier
-			days = short_modifier_time
-			is_decaying = yes
-		}
+		# Benefits already applied by giver event with GDP scaling
 		add_loyalists = {
 			value = very_small_radicals
 			strata = upper

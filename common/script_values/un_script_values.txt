@@ -107,6 +107,77 @@ un_member_wars_count = {
 	}
 }
 
+# ---- Per-Country Drift Component Script Values (for loc display) ----
+
+un_authority_drift_base = {
+	value = 0
+	if = {
+		limit = { var:un_authority > 55 }
+		add = -0.25
+	}
+	else_if = {
+		limit = { var:un_authority < 45 }
+		add = 0.25
+	}
+}
+
+un_authority_drift_democracy = {
+	value = 0
+	if = {
+		limit = {
+			country_rank >= rank_value:great_power
+			has_law = law_type:law_humanitarian_regulations
+		}
+		add = 0.2
+	}
+}
+
+un_authority_drift_champion = {
+	value = 0
+	if = {
+		limit = { has_modifier = un_champion_order_cost }
+		add = 0.3
+		if = {
+			limit = { global_country_ranking < 3 }
+			add = 0.2
+		}
+	}
+}
+
+un_authority_drift_undermine = {
+	value = 0
+	if = {
+		limit = { has_modifier = un_undermine_order_cost }
+		add = -0.3
+		if = {
+			limit = { global_country_ranking < 3 }
+			add = -0.2
+		}
+	}
+}
+
+un_authority_drift_wars = {
+	value = 0
+	if = {
+		limit = {
+			is_at_war = yes
+			any_country = {
+				has_war_with = ROOT
+				has_modifier = un_member_modifier
+			}
+		}
+		add = -1
+	}
+}
+
+un_authority_drift_total = {
+	value = un_authority_drift_base
+	add = un_authority_drift_democracy
+	add = un_authority_drift_champion
+	add = un_authority_drift_undermine
+	add = un_authority_drift_wars
+}
+
 # ---- Program Participation ----
 
 un_peacekeeping_count = {
@@ -191,6 +262,87 @@ un_heritage_participants = {
 		}
 		add = 1
 	}
+}
+
+# ---- Financial Cost / Benefit Scaling ----
+
+# Expense for contributing to a UN program (~0.5% of GDP)
+un_program_expense_value = {
+	value = gdp
+	multiply = 0.005
+}
+
+# How many countries are currently contributing to peacekeeping
+un_peacekeeping_donor_count = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = un_peacekeeping_contributor_modifier
+				has_modifier = un_peacekeeping_deployed_modifier
+			}
+		}
+		add = 1
+	}
+}
+
+# How many countries are currently contributing humanitarian/development aid
+un_aid_donor_count = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = un_development_contributor_modifier
+				has_modifier = un_humanitarian_aid_modifier
+			}
+		}
+		add = 1
+	}
+}
+
+# GDP-weighted peacekeeping benefit scale
+# Total contributor GDP / recipient GDP, normalised
+# Evaluated in the recipient country's scope
+un_peacekeeping_benefit_scale = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = un_peacekeeping_contributor_modifier
+				has_modifier = un_peacekeeping_deployed_modifier
+			}
+		}
+		add = gdp
+	}
+	divide = {
+		value = gdp
+		min = 100000
+	}
+	multiply = 0.5
+	min = 0.5
+	max = 5.0
+}
+
+# GDP-weighted humanitarian/development aid benefit scale
+# Evaluated in the recipient country's scope
+un_aid_benefit_scale = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = un_development_contributor_modifier
+				has_modifier = un_humanitarian_aid_modifier
+			}
+		}
+		add = gdp
+	}
+	divide = {
+		value = gdp
+		min = 100000
+	}
+	multiply = 0.5
+	min = 0.5
+	max = 5.0
 }
 
 # ---- Agency Count ----

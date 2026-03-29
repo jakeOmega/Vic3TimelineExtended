@@ -1102,6 +1102,15 @@ nuclear_disarmament = {
 	script_only = yes
 }
 
+un_membership_obligation = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 50
+	}
+	script_only = yes
+}
+
 power_bloc_can_give_healthcare_aid_bool = {
 	color = neutral
 	boolean = yes

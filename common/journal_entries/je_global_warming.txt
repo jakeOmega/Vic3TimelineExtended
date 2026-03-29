@@ -46,7 +46,10 @@
 	}
 
 	goal_add_value = {
-		value = 4
+		value = {
+			value = 4
+			subtract = temperature_anomaly_display
+		}
 	}
 
 	progressbar = yes
