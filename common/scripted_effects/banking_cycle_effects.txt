@@ -64,6 +64,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 3: Credit Crunch Fears (stagnation/downturn)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = { limit = { banking_cycle_is_stagnation = yes } add = 6 }
 					if = { limit = { banking_cycle_is_downturn = yes } add = 9 }
@@ -235,6 +236,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 12: Gold Standard Pressure (any phase, international_exchange_standards, gold standard law)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -249,6 +251,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 13: Industrial Overinvestment (boom/frenzy, corporate_management)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -267,6 +270,7 @@ banking_cycle_random_event_effect = {
 
 			# Event 14: Housing Price Spiral (HIGH IMPACT, boom/frenzy, consumer_credit)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -546,6 +550,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 27: Telegraph Banking Revolution (expansion+, central_banking)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -582,6 +587,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 29: Agricultural Cooperative Banking (stable+, central_banking, favors mutual banking law)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -677,6 +683,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 34: Deposit Insurance Debate (stagnation+, central_banking)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -761,6 +768,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 38: Microfinance Initiative (stable+, keynesian_economics)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -779,6 +787,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 39: Quantitative Easing Debate (downturn/panic, keynesian_economics, requires fiat/digital currency + regulated banking)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -913,6 +922,210 @@ banking_cycle_random_event_effect = {
 				trigger_event = { id = banking_cycle_events.45 }
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
+
+			# ---- COMMAND ECONOMY EXCLUSIVE EVENTS ----
+
+			# Event 50: Five-Year Plan Shortfall (stagnation/downturn)
+			0 = {
+				trigger = { has_law = law_type:law_command_economy }
+				modifier = {
+					if = { limit = { banking_cycle_is_stagnation = yes } add = 6 }
+					if = { limit = { banking_cycle_is_downturn = yes } add = 9 }
+				}
+				trigger_event = { id = banking_cycle_events.50 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 51: Factory Director Corruption (expansion+)
+			0 = {
+				trigger = { has_law = law_type:law_command_economy }
+				modifier = {
+					if = { limit = { banking_cycle_is_expansion = yes } add = 5 }
+					if = { limit = { banking_cycle_is_boom = yes } add = 5 }
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 5 }
+				}
+				trigger_event = { id = banking_cycle_events.51 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 52: Resource Hoarding Crisis (boom/frenzy)
+			0 = {
+				trigger = { has_law = law_type:law_command_economy }
+				modifier = {
+					if = { limit = { banking_cycle_is_boom = yes } add = 5 }
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 8 }
+				}
+				trigger_event = { id = banking_cycle_events.52 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 53: Black Market Emergence (downturn/panic)
+			0 = {
+				trigger = { has_law = law_type:law_command_economy }
+				modifier = {
+					if = { limit = { banking_cycle_is_downturn = yes } add = 6 }
+					if = { limit = { banking_cycle_is_panic = yes } add = 9 }
+				}
+				trigger_event = { id = banking_cycle_events.53 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 54: Worker Motivation Campaign (stable+)
+			0 = {
+				trigger = { has_law = law_type:law_command_economy }
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								banking_cycle_is_stable = yes
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 5
+					}
+				}
+				trigger_event = { id = banking_cycle_events.54 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 55: Socialist Fraternal Aid (downturn/panic, keynesian)
+			0 = {
+				trigger = {
+					has_law = law_type:law_command_economy
+					has_technology_researched = keynesian_economics
+				}
+				modifier = {
+					if = { limit = { banking_cycle_is_downturn = yes } add = 4 }
+					if = { limit = { banking_cycle_is_panic = yes } add = 6 }
+				}
+				trigger_event = { id = banking_cycle_events.55 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 56: Industrial Sabotage Investigation (expansion+, central_banking)
+			0 = {
+				trigger = {
+					has_law = law_type:law_command_economy
+					has_technology_researched = central_banking
+				}
+				modifier = {
+					if = { limit = { banking_cycle_is_expansion = yes } add = 4 }
+					if = { limit = { banking_cycle_is_boom = yes } add = 4 }
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 4 }
+				}
+				trigger_event = { id = banking_cycle_events.56 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 57: Collectivization Efficiency Drive (boom/frenzy, corporate_management)
+			0 = {
+				trigger = {
+					has_law = law_type:law_command_economy
+					has_technology_researched = corporate_management
+				}
+				modifier = {
+					if = { limit = { banking_cycle_is_boom = yes } add = 4 }
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 6 }
+				}
+				trigger_event = { id = banking_cycle_events.57 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+
+			# ---- COOPERATIVE OWNERSHIP EXCLUSIVE EVENTS ----
+
+			# Event 60: Federation Governance Dispute (stagnation/downturn)
+			0 = {
+				trigger = { has_law = law_type:law_cooperative_ownership }
+				modifier = {
+					if = { limit = { banking_cycle_is_stagnation = yes } add = 6 }
+					if = { limit = { banking_cycle_is_downturn = yes } add = 9 }
+				}
+				trigger_event = { id = banking_cycle_events.60 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 61: Free Rider Problem (expansion+)
+			0 = {
+				trigger = { has_law = law_type:law_cooperative_ownership }
+				modifier = {
+					if = { limit = { banking_cycle_is_expansion = yes } add = 5 }
+					if = { limit = { banking_cycle_is_boom = yes } add = 5 }
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 5 }
+				}
+				trigger_event = { id = banking_cycle_events.61 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 62: Democratic Investment Gridlock (boom/frenzy)
+			0 = {
+				trigger = { has_law = law_type:law_cooperative_ownership }
+				modifier = {
+					if = { limit = { banking_cycle_is_boom = yes } add = 5 }
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 8 }
+				}
+				trigger_event = { id = banking_cycle_events.62 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 63: Worker-Owner Burnout (downturn/panic)
+			0 = {
+				trigger = { has_law = law_type:law_cooperative_ownership }
+				modifier = {
+					if = { limit = { banking_cycle_is_downturn = yes } add = 6 }
+					if = { limit = { banking_cycle_is_panic = yes } add = 9 }
+				}
+				trigger_event = { id = banking_cycle_events.63 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 64: Cooperative Export Success (stable+)
+			0 = {
+				trigger = { has_law = law_type:law_cooperative_ownership }
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								banking_cycle_is_stable = yes
+								banking_cycle_is_expansion = yes
+								banking_cycle_is_boom = yes
+							}
+						}
+						add = 5
+					}
+				}
+				trigger_event = { id = banking_cycle_events.64 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 65: Mutual Insurance Fund Strain (downturn/panic, keynesian)
+			0 = {
+				trigger = {
+					has_law = law_type:law_cooperative_ownership
+					has_technology_researched = keynesian_economics
+				}
+				modifier = {
+					if = { limit = { banking_cycle_is_downturn = yes } add = 4 }
+					if = { limit = { banking_cycle_is_panic = yes } add = 6 }
+				}
+				trigger_event = { id = banking_cycle_events.65 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 66: Innovation Through Collaboration (expansion+, central_banking)
+			0 = {
+				trigger = {
+					has_law = law_type:law_cooperative_ownership
+					has_technology_researched = central_banking
+				}
+				modifier = {
+					if = { limit = { banking_cycle_is_expansion = yes } add = 4 }
+					if = { limit = { banking_cycle_is_boom = yes } add = 4 }
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 4 }
+				}
+				trigger_event = { id = banking_cycle_events.66 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
+			# Event 67: Generational Leadership Transition (boom/frenzy, corporate_management)
+			0 = {
+				trigger = {
+					has_law = law_type:law_cooperative_ownership
+					has_technology_researched = corporate_management
+				}
+				modifier = {
+					if = { limit = { banking_cycle_is_boom = yes } add = 4 }
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 6 }
+				}
+				trigger_event = { id = banking_cycle_events.67 }
+				set_variable = { name = banking_event_cooldown value = 12 }
+			}
 		}
 	}
 }
@@ -920,10 +1133,25 @@ banking_cycle_random_event_effect = {
 # Remove all financial cycle phase modifiers.
 # Called before applying the current phase modifier each month.
 remove_all_banking_phase_modifiers = {
+	# Market variants
 	remove_modifier = financial_cycle_phase_panic
 	remove_modifier = financial_cycle_phase_downturn
 	remove_modifier = financial_cycle_phase_stagnation
 	remove_modifier = financial_cycle_phase_expansion
 	remove_modifier = financial_cycle_phase_boom
 	remove_modifier = financial_cycle_phase_frenzy
+	# Command Economy variants
+	remove_modifier = financial_cycle_phase_panic_cmd
+	remove_modifier = financial_cycle_phase_downturn_cmd
+	remove_modifier = financial_cycle_phase_stagnation_cmd
+	remove_modifier = financial_cycle_phase_expansion_cmd
+	remove_modifier = financial_cycle_phase_boom_cmd
+	remove_modifier = financial_cycle_phase_frenzy_cmd
+	# Cooperative Ownership variants
+	remove_modifier = financial_cycle_phase_panic_coop
+	remove_modifier = financial_cycle_phase_downturn_coop
+	remove_modifier = financial_cycle_phase_stagnation_coop
+	remove_modifier = financial_cycle_phase_expansion_coop
+	remove_modifier = financial_cycle_phase_boom_coop
+	remove_modifier = financial_cycle_phase_frenzy_coop
 }

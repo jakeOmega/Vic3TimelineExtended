@@ -444,13 +444,35 @@
             # --- Phase modifiers (remove previous; add current) ---
             remove_all_banking_phase_modifiers = yes
 
-            if = { limit = { var:finance_cycle_value < 10 }  add_modifier = { name = financial_cycle_phase_panic } }
-            else_if = { limit = { var:finance_cycle_value < 25 } add_modifier = { name = financial_cycle_phase_downturn } }
-            else_if = { limit = { var:finance_cycle_value < 40 } add_modifier = { name = financial_cycle_phase_stagnation } }
-            else_if = { limit = { var:finance_cycle_value < 60 } } # Stable = no national mod
-            else_if = { limit = { var:finance_cycle_value < 75 } add_modifier = { name = financial_cycle_phase_expansion } }
-            else_if = { limit = { var:finance_cycle_value < 88 } add_modifier = { name = financial_cycle_phase_boom } }
-            else = { add_modifier = { name = financial_cycle_phase_frenzy } }
+            if = {
+                limit = { has_law = law_type:law_command_economy }
+                if = { limit = { var:finance_cycle_value < 10 }  add_modifier = { name = financial_cycle_phase_panic_cmd } }
+                else_if = { limit = { var:finance_cycle_value < 25 } add_modifier = { name = financial_cycle_phase_downturn_cmd } }
+                else_if = { limit = { var:finance_cycle_value < 40 } add_modifier = { name = financial_cycle_phase_stagnation_cmd } }
+                else_if = { limit = { var:finance_cycle_value < 60 } } # Stable = no national mod
+                else_if = { limit = { var:finance_cycle_value < 75 } add_modifier = { name = financial_cycle_phase_expansion_cmd } }
+                else_if = { limit = { var:finance_cycle_value < 88 } add_modifier = { name = financial_cycle_phase_boom_cmd } }
+                else = { add_modifier = { name = financial_cycle_phase_frenzy_cmd } }
+            }
+            else_if = {
+                limit = { has_law = law_type:law_cooperative_ownership }
+                if = { limit = { var:finance_cycle_value < 10 }  add_modifier = { name = financial_cycle_phase_panic_coop } }
+                else_if = { limit = { var:finance_cycle_value < 25 } add_modifier = { name = financial_cycle_phase_downturn_coop } }
+                else_if = { limit = { var:finance_cycle_value < 40 } add_modifier = { name = financial_cycle_phase_stagnation_coop } }
+                else_if = { limit = { var:finance_cycle_value < 60 } } # Stable = no national mod
+                else_if = { limit = { var:finance_cycle_value < 75 } add_modifier = { name = financial_cycle_phase_expansion_coop } }
+                else_if = { limit = { var:finance_cycle_value < 88 } add_modifier = { name = financial_cycle_phase_boom_coop } }
+                else = { add_modifier = { name = financial_cycle_phase_frenzy_coop } }
+            }
+            else = {
+                if = { limit = { var:finance_cycle_value < 10 }  add_modifier = { name = financial_cycle_phase_panic } }
+                else_if = { limit = { var:finance_cycle_value < 25 } add_modifier = { name = financial_cycle_phase_downturn } }
+                else_if = { limit = { var:finance_cycle_value < 40 } add_modifier = { name = financial_cycle_phase_stagnation } }
+                else_if = { limit = { var:finance_cycle_value < 60 } } # Stable = no national mod
+                else_if = { limit = { var:finance_cycle_value < 75 } add_modifier = { name = financial_cycle_phase_expansion } }
+                else_if = { limit = { var:finance_cycle_value < 88 } add_modifier = { name = financial_cycle_phase_boom } }
+                else = { add_modifier = { name = financial_cycle_phase_frenzy } }
+            }
 
             scope:journal_entry = {
                 set_bar_progress = { name = banking_cycle_value_bar value = ROOT.var:finance_cycle_value }

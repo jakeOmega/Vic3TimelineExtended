@@ -90,6 +90,8 @@ space_race_events.2 = {
 			is_decaying = yes
 		}
 		add_radicals = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = soldiers }
+		add_loyalists = { value = small_radicals pop_type = officers }
 	}
 }
 
@@ -2157,5 +2159,778 @@ space_race_events.60 = {
 		# Sell data access to other nations - recoup the investment
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+##############################################
+# AMBITIOUS FAILURE EVENT VARIANTS (12-19)
+# Milestone-themed alternatives to generic event 10
+##############################################
+
+# Event 12: Launchpad Explosion (suborbital/orbital)
+space_race_events.12 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.12.t
+	desc = space_race_events.12.d
+	flavor = space_race_events.12.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.12.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Rebuild the pad and investigate root cause
+		sr_mission_failure_effect = yes
+	}
+
+	option = {
+		name = space_race_events.12.b
+		ai_chance = { base = 3 }
+		# Redesign the fuel system entirely — slower but safer
+		sr_mission_failure_effect = yes
+		if = {
+			limit = { has_variable = sr_approach_ambitious }
+			remove_variable = sr_approach_ambitious
+		}
+		set_variable = { name = sr_approach_safe value = yes }
+		if = {
+			limit = { has_modifier = sr_ambitious_approach }
+			remove_modifier = sr_ambitious_approach
+		}
+		add_modifier = { name = sr_safe_approach }
+	}
+
+	option = {
+		name = space_race_events.12.c
+		ai_chance = { base = 1 }
+		# Rush a replacement vehicle — accept the risk
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.75
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		add_radicals = { value = large_radicals pop_type = academics }
+		add_radicals = { value = medium_radicals }
+	}
+}
+
+# Event 13: Deep Space Signal Lost (probe/interstellar)
+space_race_events.13 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.13.t
+	desc = space_race_events.13.d
+	flavor = space_race_events.13.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.13.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Attempt signal recovery — reorient deep-space antenna network
+		sr_mission_failure_effect = yes
+	}
+
+	option = {
+		name = space_race_events.13.b
+		ai_chance = { base = 3 }
+		# Build a redundant backup probe — expensive but insurance against total loss
+		sr_mission_failure_effect = yes
+		if = {
+			limit = { has_variable = sr_approach_ambitious }
+			remove_variable = sr_approach_ambitious
+		}
+		set_variable = { name = sr_approach_safe value = yes }
+		if = {
+			limit = { has_modifier = sr_ambitious_approach }
+			remove_modifier = sr_ambitious_approach
+		}
+		add_modifier = { name = sr_safe_approach }
+	}
+
+	option = {
+		name = space_race_events.13.c
+		ai_chance = { base = 1 }
+		# Assume the probe is still on course — wait and hope
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.75
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		add_radicals = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Event 14: Habitat Depressurization Emergency (moon base/mars/colonization)
+space_race_events.14 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.14.t
+	desc = space_race_events.14.d
+	flavor = space_race_events.14.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.14.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Emergency seal and full structural review
+		sr_mission_failure_effect = yes
+	}
+
+	option = {
+		name = space_race_events.14.b
+		ai_chance = { base = 3 }
+		# Evacuate to backup shelter — redesign the habitat module
+		sr_mission_catastrophic_failure_effect = yes
+	}
+
+	option = {
+		name = space_race_events.14.c
+		ai_chance = { base = 2 }
+		# Patch and continue — the crew is brave
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.7
+		}
+		set_variable = { name = sr_failure_cooldown value = 8 }
+		add_radicals = { value = large_radicals pop_type = academics }
+	}
+}
+
+# Event 15: Guidance System Malfunction (moon landing)
+space_race_events.15 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.15.t
+	desc = space_race_events.15.d
+	flavor = space_race_events.15.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.15.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Abort the landing attempt — bring the crew home safely
+		sr_mission_failure_effect = yes
+	}
+
+	option = {
+		name = space_race_events.15.b
+		ai_chance = { base = 2 }
+		# Manual override — let the pilot take control
+		random_list = {
+			50 = {
+				# Pilot succeeds!
+				change_variable = {
+					name = sr_milestone_progress
+					add = 10
+				}
+				add_loyalists = { value = large_radicals }
+				custom_tooltip = {
+					text = "SR_MANUAL_OVERRIDE_SUCCESS_TT"
+				}
+			}
+			50 = {
+				# Hard landing — damage but survival
+				sr_mission_failure_effect = yes
+				custom_tooltip = {
+					text = "SR_MANUAL_OVERRIDE_FAIL_TT"
+				}
+			}
+		}
+	}
+
+	option = {
+		name = space_race_events.15.c
+		ai_chance = { base = 3 }
+		# Switch to safe approach — recalibrate everything
+		sr_mission_failure_effect = yes
+		if = {
+			limit = { has_variable = sr_approach_ambitious }
+			remove_variable = sr_approach_ambitious
+		}
+		set_variable = { name = sr_approach_safe value = yes }
+		if = {
+			limit = { has_modifier = sr_ambitious_approach }
+			remove_modifier = sr_ambitious_approach
+		}
+		add_modifier = { name = sr_safe_approach }
+	}
+}
+
+# Event 16: Booster Separation Failure (orbital)
+space_race_events.16 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.16.t
+	desc = space_race_events.16.d
+	flavor = space_race_events.16.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.16.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Activate emergency separation bolts — jettison the stage
+		sr_mission_failure_effect = yes
+	}
+
+	option = {
+		name = space_race_events.16.b
+		ai_chance = { base = 3 }
+		# Redesign the interstage mechanism
+		sr_mission_failure_effect = yes
+		if = {
+			limit = { has_variable = sr_approach_ambitious }
+			remove_variable = sr_approach_ambitious
+		}
+		set_variable = { name = sr_approach_safe value = yes }
+		if = {
+			limit = { has_modifier = sr_ambitious_approach }
+			remove_modifier = sr_ambitious_approach
+		}
+		add_modifier = { name = sr_safe_approach }
+	}
+
+	option = {
+		name = space_race_events.16.c
+		ai_chance = { base = 1 }
+		# Fly the next mission with the same design — anomaly, not systemic
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.75
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		add_radicals = { value = large_radicals pop_type = academics }
+	}
+}
+
+# Event 17: Crew Medical Emergency (moon base/mars/colonization)
+space_race_events.17 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = space_race_events.17.t
+	desc = space_race_events.17.d
+	flavor = space_race_events.17.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.17.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Emergency medical evacuation — bring the crew member home
+		sr_mission_failure_effect = yes
+	}
+
+	option = {
+		name = space_race_events.17.b
+		ai_chance = { base = 3 }
+		# Treat in place with telemedicine — risky but keeps the mission alive
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.8
+		}
+		set_variable = { name = sr_failure_cooldown value = 8 }
+		add_radicals = { value = medium_radicals pop_type = academics }
+		add_radicals = { value = small_radicals }
+	}
+
+	option = {
+		name = space_race_events.17.c
+		ai_chance = { base = 2 }
+		# Invest in advanced space medicine — learn from this crisis
+		sr_mission_failure_effect = yes
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 18: Program Mismanagement Exposed (any)
+space_race_events.18 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = space_race_events.18.t
+	desc = space_race_events.18.d
+	flavor = space_race_events.18.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.18.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Launch a public inquiry — restore confidence through transparency
+		sr_mission_failure_effect = yes
+		add_loyalists = { value = small_radicals }
+	}
+
+	option = {
+		name = space_race_events.18.b
+		ai_chance = { base = 3 }
+		# Quietly restructure management — minimize political damage
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.7
+		}
+		set_variable = { name = sr_failure_cooldown value = 10 }
+		add_radicals = { value = small_radicals strata = lower }
+	}
+
+	option = {
+		name = space_race_events.18.c
+		ai_chance = { base = 1 }
+		# Blame foreign agents — deflect and accelerate
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.8
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		add_radicals = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
+	}
+}
+
+# Event 19: Suspected Sabotage (any)
+space_race_events.19 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.19.t
+	desc = space_race_events.19.d
+	flavor = space_race_events.19.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.19.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Full security review — sweep every system
+		sr_mission_failure_effect = yes
+	}
+
+	option = {
+		name = space_race_events.19.b
+		ai_chance = { base = 3 }
+		# Counterintelligence investigation — find the mole
+		sr_mission_failure_effect = yes
+		add_radicals = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = officers }
+	}
+
+	option = {
+		name = space_race_events.19.c
+		ai_chance = { base = 2 }
+		# Harden systems and press on — waste no time on paranoia
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.75
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		add_radicals = { value = large_radicals pop_type = academics }
+	}
+}
+
+##############################################
+# SAFE SETBACK EVENT VARIANTS (21-26)
+# Themed alternatives to generic event 11
+##############################################
+
+# Event 21: Component Supply Shortage (any)
+space_race_events.21 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.21.t
+	desc = space_race_events.21.d
+	flavor = space_race_events.21.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.21.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Wait for the parts — accept the delay
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.85
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+	}
+
+	option = {
+		name = space_race_events.21.b
+		ai_chance = { base = 3 }
+		# Source from alternative suppliers — faster but untested quality
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.9
+		}
+		set_variable = { name = sr_failure_cooldown value = 4 }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.21.c
+		ai_chance = { base = 2 }
+		# Develop domestic manufacturing capability — long-term investment
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.75
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 22: Weather Scrubs Launch Window (suborbital/orbital/moon)
+space_race_events.22 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.22.t
+	desc = space_race_events.22.d
+	flavor = space_race_events.22.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.22.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Wait for the next window — run more simulations in the meantime
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.9
+		}
+		set_variable = { name = sr_failure_cooldown value = 4 }
+	}
+
+	option = {
+		name = space_race_events.22.b
+		ai_chance = { base = 2 }
+		# Launch in marginal conditions — the schedule demands it
+		random_list = {
+			70 = {
+				# Successful launch despite weather
+				custom_tooltip = {
+					text = "SR_WEATHER_LAUNCH_SUCCESS_TT"
+				}
+			}
+			30 = {
+				# Scrubbed anyway after aborted countdown
+				change_variable = {
+					name = sr_milestone_progress
+					multiply = 0.8
+				}
+				set_variable = { name = sr_failure_cooldown value = 6 }
+				add_radicals = { value = small_radicals pop_type = academics }
+				custom_tooltip = {
+					text = "SR_WEATHER_LAUNCH_ABORT_TT"
+				}
+			}
+		}
+	}
+}
+
+# Event 23: Software Bug in Flight Systems (any)
+space_race_events.23 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.23.t
+	desc = space_race_events.23.d
+	flavor = space_race_events.23.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.23.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Full code audit — find and fix every instance
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.85
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+	}
+
+	option = {
+		name = space_race_events.23.b
+		ai_chance = { base = 3 }
+		# Patch the specific bug and continue testing
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.9
+		}
+		set_variable = { name = sr_failure_cooldown value = 4 }
+		add_radicals = { value = very_small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.23.c
+		ai_chance = { base = 2 }
+		# Rewrite the flight software from scratch — radical but thorough
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.7
+		}
+		set_variable = { name = sr_failure_cooldown value = 8 }
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 24: Budget Committee Review (any)
+space_race_events.24 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = space_race_events.24.t
+	desc = space_race_events.24.d
+	flavor = space_race_events.24.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.24.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Defend the program before the committee — accept some delays
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.85
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		add_loyalists = { value = small_radicals }
+	}
+
+	option = {
+		name = space_race_events.24.b
+		ai_chance = { base = 3 }
+		# Propose cost-cutting measures to appease the budget hawks
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.8
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+	}
+
+	option = {
+		name = space_race_events.24.c
+		ai_chance = { base = 2 }
+		# Appeal directly to the public — generate grassroots support
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.9
+		}
+		set_variable = { name = sr_failure_cooldown value = 4 }
+		add_loyalists = { value = medium_radicals }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+}
+
+# Event 25: Contractor Quality Failure (any)
+space_race_events.25 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.25.t
+	desc = space_race_events.25.d
+	flavor = space_race_events.25.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.25.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Return the defective parts — demand replacements
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.85
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.25.b
+		ai_chance = { base = 3 }
+		# Bring manufacturing in-house — control quality directly
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.75
+		}
+		set_variable = { name = sr_failure_cooldown value = 8 }
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 26: Diplomatic Incident Disrupts Schedule (any)
+space_race_events.26 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	title = space_race_events.26.t
+	desc = space_race_events.26.d
+	flavor = space_race_events.26.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.26.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Absorb the disruption — space transcends politics
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.85
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+	}
+
+	option = {
+		name = space_race_events.26.b
+		ai_chance = { base = 3 }
+		# Leverage the crisis — rally national pride around the space program
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.9
+		}
+		set_variable = { name = sr_failure_cooldown value = 4 }
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = space_race_events.26.c
+		ai_chance = { base = 2 }
+		# Use the space program as a diplomatic olive branch
+		change_variable = {
+			name = sr_milestone_progress
+			multiply = 0.8
+		}
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		every_country = {
+			limit = {
+				has_technology_researched = rocketry
+				NOT = { THIS = ROOT }
+				has_diplomatic_relevance = ROOT
+			}
+			change_relations = { country = ROOT value = 10 }
+		}
 	}
 }

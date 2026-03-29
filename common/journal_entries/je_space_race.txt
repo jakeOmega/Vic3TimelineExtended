@@ -26,7 +26,6 @@ je_space_race_suborbital = {
 			country_rank = rank_value:major_power
 		}
 		NOT = { has_variable = sr_completed_suborbital }
-		NOT = { has_variable = sr_active_suborbital }
 	}
 
 	immediate = {
@@ -104,7 +103,7 @@ je_space_race_suborbital = {
 					random_list = {
 						90 = { }
 						10 = {
-							trigger_event = { id = space_race_events.10 }
+							sr_fire_ambitious_failure_event = yes
 						}
 					}
 				}
@@ -123,7 +122,7 @@ je_space_race_suborbital = {
 					random_list = {
 						98 = { }
 						2 = {
-							trigger_event = { id = space_race_events.11 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -159,7 +158,6 @@ je_space_race_orbital = {
 	possible = {
 		has_variable = sr_completed_suborbital
 		NOT = { has_variable = sr_completed_orbital }
-		NOT = { has_variable = sr_active_orbital }
 		OR = {
 			country_rank = rank_value:great_power
 			country_rank = rank_value:major_power
@@ -235,7 +233,7 @@ je_space_race_orbital = {
 					random_list = {
 						88 = { }
 						12 = {
-							trigger_event = { id = space_race_events.10 }
+							sr_fire_ambitious_failure_event = yes
 						}
 					}
 				}
@@ -251,7 +249,7 @@ je_space_race_orbital = {
 					random_list = {
 						97 = { }
 						3 = {
-							trigger_event = { id = space_race_events.11 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -289,7 +287,6 @@ je_space_race_moon_landing = {
 		has_variable = sr_completed_orbital
 		has_technology_researched = space_exploration
 		NOT = { has_variable = sr_completed_moon_landing }
-		NOT = { has_variable = sr_active_moon_landing }
 		OR = {
 			country_rank = rank_value:great_power
 			country_rank = rank_value:major_power
@@ -379,7 +376,7 @@ je_space_race_moon_landing = {
 					random_list = {
 						82 = { }
 						18 = {
-							trigger_event = { id = space_race_events.10 }
+							sr_fire_ambitious_failure_event = yes
 						}
 					}
 				}
@@ -388,7 +385,7 @@ je_space_race_moon_landing = {
 					random_list = {
 						88 = { }
 						12 = {
-							trigger_event = { id = space_race_events.10 }
+							sr_fire_ambitious_failure_event = yes
 						}
 					}
 				}
@@ -407,7 +404,7 @@ je_space_race_moon_landing = {
 					random_list = {
 						94 = { }
 						6 = {
-							trigger_event = { id = space_race_events.11 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -416,7 +413,7 @@ je_space_race_moon_landing = {
 					random_list = {
 						97 = { }
 						3 = {
-							trigger_event = { id = space_race_events.11 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -454,7 +451,6 @@ je_space_race_probe = {
 		has_variable = sr_completed_orbital
 		has_technology_researched = space_exploration
 		NOT = { has_variable = sr_completed_probe }
-		NOT = { has_variable = sr_active_probe }
 		OR = {
 			country_rank = rank_value:great_power
 			country_rank = rank_value:major_power
@@ -530,7 +526,7 @@ je_space_race_probe = {
 					random_list = {
 						88 = { }
 						12 = {
-							trigger_event = { id = space_race_events.10 }
+							sr_fire_ambitious_failure_event = yes
 						}
 					}
 				}
@@ -546,7 +542,7 @@ je_space_race_probe = {
 					random_list = {
 						97 = { }
 						3 = {
-							trigger_event = { id = space_race_events.11 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -583,7 +579,6 @@ je_space_race_moon_base = {
 		has_variable = sr_completed_moon_landing
 		has_technology_researched = reusable_rocketry
 		NOT = { has_variable = sr_completed_moon_base }
-		NOT = { has_variable = sr_active_moon_base }
 		OR = {
 			country_rank = rank_value:great_power
 			country_rank = rank_value:major_power
@@ -659,7 +654,7 @@ je_space_race_moon_base = {
 					random_list = {
 						85 = { }
 						15 = {
-							trigger_event = { id = space_race_events.10 }
+							sr_fire_ambitious_failure_event = yes
 						}
 					}
 				}
@@ -675,7 +670,7 @@ je_space_race_moon_base = {
 					random_list = {
 						96 = { }
 						4 = {
-							trigger_event = { id = space_race_events.11 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -713,7 +708,6 @@ je_space_race_mars_landing = {
 		has_variable = sr_completed_orbital
 		has_technology_researched = reusable_rocketry
 		NOT = { has_variable = sr_completed_mars_landing }
-		NOT = { has_variable = sr_active_mars_landing }
 		OR = {
 			country_rank = rank_value:great_power
 			country_rank = rank_value:major_power
@@ -789,7 +783,7 @@ je_space_race_mars_landing = {
 					random_list = {
 						83 = { }
 						17 = {
-							trigger_event = { id = space_race_events.10 }
+							sr_fire_ambitious_failure_event = yes
 						}
 					}
 				}
@@ -805,7 +799,7 @@ je_space_race_mars_landing = {
 					random_list = {
 						95 = { }
 						5 = {
-							trigger_event = { id = space_race_events.11 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -845,7 +839,6 @@ je_space_race_interstellar_probe = {
 		has_variable = sr_completed_mars_landing
 		has_technology_researched = space_colonization
 		NOT = { has_variable = sr_completed_interstellar_probe }
-		NOT = { has_variable = sr_active_interstellar_probe }
 		OR = {
 			country_rank = rank_value:great_power
 			country_rank = rank_value:major_power
@@ -921,7 +914,7 @@ je_space_race_interstellar_probe = {
 					random_list = {
 						82 = { }
 						18 = {
-							trigger_event = { id = space_race_events.10 }
+							sr_fire_ambitious_failure_event = yes
 						}
 					}
 				}
@@ -937,7 +930,7 @@ je_space_race_interstellar_probe = {
 					random_list = {
 						94 = { }
 						6 = {
-							trigger_event = { id = space_race_events.11 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -973,7 +966,6 @@ je_space_race_interstellar_results = {
 	possible = {
 		has_variable = sr_probe_launched
 		NOT = { has_variable = sr_interstellar_results_received }
-		NOT = { has_variable = sr_active_interstellar_results }
 	}
 
 	immediate = {
@@ -1047,7 +1039,6 @@ je_space_race_solar_colonization = {
 		has_variable = sr_completed_moon_base
 		has_variable = sr_completed_mars_landing
 		has_technology_researched = space_colonization
-		NOT = { has_variable = sr_active_solar_colonization }
 		NOT = { has_global_variable = sr_all_colonies_complete }
 		OR = {
 			country_rank = rank_value:great_power
@@ -1154,7 +1145,7 @@ je_space_race_solar_colonization = {
 					random_list = {
 						80 = { }
 						20 = {
-							trigger_event = { id = space_race_events.10 }
+							sr_fire_ambitious_failure_event = yes
 						}
 					}
 				}
@@ -1170,7 +1161,7 @@ je_space_race_solar_colonization = {
 					random_list = {
 						94 = { }
 						6 = {
-							trigger_event = { id = space_race_events.11 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
