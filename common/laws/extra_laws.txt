@@ -1646,6 +1646,7 @@ law_no_campaign_finance_laws = {
 		law_wealth_voting
 		law_census_voting
 		law_universal_suffrage
+		law_anarchy
 	}
 }
 
@@ -1659,6 +1660,7 @@ law_unregulated_donations = {
 		law_wealth_voting
 		law_census_voting
 		law_universal_suffrage
+		law_anarchy
 	 }
 	
 	modifier = {
@@ -1679,6 +1681,7 @@ law_donation_limits = {
 		law_wealth_voting
 		law_census_voting
 		law_universal_suffrage
+		law_anarchy
 	 }
 	
 	modifier = {
@@ -1704,6 +1707,7 @@ law_publicly_funded_elections = {
 		law_wealth_voting
 		law_census_voting
 		law_universal_suffrage
+		law_anarchy
 	 }
 	
 	modifier = {
@@ -2160,13 +2164,7 @@ law_state_led_language_reform = {
 	}
 
     modifier = {
-        state_institution_impact_add = 0.10
-        state_assimilation_mult = 0.25
-        country_bureaucracy_investment_cost_factor_mult = 0.05
-		country_primary_culture_fervor_from_laws_add = 15
-		country_support_separatism_strength_mult = 0.1
 		country_acceptance_shared_language_trait_add = 5
-		country_education_fervor_add = 5
     }
 }
 

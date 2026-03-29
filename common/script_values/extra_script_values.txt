@@ -1505,17 +1505,15 @@ banking_event_expense_huge = {
 # Base points provided by the currently active law (used for JE setup / display).
 banking_law_base_points_value = {
 	value = 0
-	if = { limit = { has_law = law_type:law_unregulated_banking }                              add = 1 }    # default
-	if = { limit = { has_law = law_type:law_free_mutual_banking }                              add = 3 }
-	if = { limit = { has_law = law_type:law_universal_banking_light_prudence }                 add = 4 }
-	if = { limit = { has_law = law_type:law_prudential_narrow_banking }                        add = 7 }
-	if = { limit = { has_law = law_type:law_directed_credit_development_banks }                add = 7 }
+	if = { limit = { has_law = law_type:law_unregulated_banking }              add = 1 }    # default
+	if = { limit = { has_law = law_type:law_free_mutual_banking }              add = 3 }
+	if = { limit = { has_law = law_type:law_universal_banking_light_prudence } add = 4 }
+	if = { limit = { has_law = law_type:law_prudential_narrow_banking }        add = 7 }
+	if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 7 }
 	if = {
 		limit = { has_law = law_type:law_central_bank_independence }
 		add = 7
-		institution:institution_national_bank = {
-			add = investment
-		}
+		institution:institution_national_bank = { add = investment }
 	}
 }
 

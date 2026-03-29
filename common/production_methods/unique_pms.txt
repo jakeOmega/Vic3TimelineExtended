@@ -2775,3 +2775,1000 @@ pm_eic_trading_house = {
 		}
 	}
 }
+
+#============================================================
+# Phase 2: National Champions
+#============================================================
+
+# --- Schneider Le Creusot ---
+# Theme: France's premier arms and steel industrial complex
+pm_schneider_le_creusot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.15
+			building_steel_mill_throughput_add = 0.05
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			unit_defense_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                            # Price:   20, Total cost:   400.0
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0
+			# Output goods
+			goods_output_small_arms_add = 30                     # Price:   60, Total cost:  1800.0
+			goods_output_artillery_add = 15                      # Price:  100, Total cost:  1500.0
+			# Total input cost: 1350.0
+			# Total output cost: 3300.0
+			# Profit: 1950.0
+			# Profit margin: 144.44%
+			# Zero profit price multiplier: 0.41
+			# Employment: 2000
+			# Wage breakeven: 0.98
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Putilov Works ---
+# Theme: Russia's heavy machinery and railway factory
+pm_putilov_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_railway_throughput_add = 0.1
+			building_motor_industry_throughput_add = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			unit_morale_damage_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                            # Price:   20, Total cost:   400.0
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0
+			# Output goods
+			goods_output_engines_add = 25                        # Price:   60, Total cost:  1500.0
+			goods_output_tools_add = 20                          # Price:   40, Total cost:   800.0
+			# Total input cost: 900.0
+			# Total output cost: 2300.0
+			# Profit: 1400.0
+			# Profit margin: 155.56%
+			# Zero profit price multiplier: 0.39
+			# Employment: 2000
+			# Wage breakeven: 0.70
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Mitsubishi Nagasaki Shipyard ---
+# Theme: Japan's premier shipbuilding and heavy industry complex
+pm_mitsubishi_nagasaki_shipyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_shipyard_throughput_add = 0.15
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			unit_navy_defense_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_merchant_marine_add = 60                # Price:   50, Total cost:  3000.0
+			# Total input cost: 1600.0
+			# Total output cost: 3000.0
+			# Profit: 1400.0
+			# Profit margin: 87.50%
+			# Zero profit price multiplier: 0.53
+			# Employment: 2000
+			# Wage breakeven: 0.70
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Tata Jamshedpur Works ---
+# Theme: India's pioneering steel and industrial conglomerate
+pm_tata_jamshedpur_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.15
+			building_iron_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 30                            # Price:   20, Total cost:   600.0
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_steel_add = 40                          # Price:   50, Total cost:  2000.0
+			goods_output_tools_add = 10                          # Price:   40, Total cost:   400.0
+			# Total input cost: 900.0
+			# Total output cost: 2400.0
+			# Profit: 1500.0
+			# Profit margin: 166.67%
+			# Zero profit price multiplier: 0.38
+			# Employment: 2000
+			# Wage breakeven: 0.75
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Siemens Erlangen Campus ---
+# Theme: Electrical engineering R&D and manufacturing pioneer
+pm_siemens_erlangen_campus = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_electrics_industry_throughput_add = 0.15
+			state_infrastructure_mult = 0.05
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_tech_research_speed_mult = 0.02
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_electrics_add = 30                      # Price:   60, Total cost:  1800.0
+			goods_output_telephones_add = 15                     # Price:   60, Total cost:   900.0
+			# Total input cost: 1150.0
+			# Total output cost: 2700.0
+			# Profit: 1550.0
+			# Profit margin: 134.78%
+			# Zero profit price multiplier: 0.43
+			# Employment: 2000
+			# Wage breakeven: 0.78
+		}
+		level_scaled = {
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 600
+			building_employment_clerks_add = 400
+			building_employment_laborers_add = 200
+		}
+	}
+}
+
+#============================================================
+# Phase 3: Specialized Industries
+#============================================================
+
+# --- De Beers Sorting Office ---
+# Theme: Diamond sorting, grading, and global trading center
+pm_de_beers_sorting_office = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_prestige_mult = 0.05
+			state_migration_pull_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_gold_add = 10                            # Price:  100, Total cost:  1000.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_luxury_clothes_add = 15                 # Price:  130, Total cost:  1950.0
+			goods_output_glass_add = 15                          # Price:   40, Total cost:   600.0
+			# Total input cost: 1400.0
+			# Total output cost: 2550.0
+			# Profit: 1150.0
+			# Profit margin: 82.14%
+			# Zero profit price multiplier: 0.55
+			# Employment: 2000
+			# Wage breakeven: 0.58
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- Nobel Baku Refinery ---
+# Theme: Nobel Brothers' pioneering Baku oil extraction and refining operations
+pm_nobel_baku_refinery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.15
+			state_infrastructure_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 30                             # Price:   30, Total cost:   900.0
+			# Output goods
+			goods_output_explosives_add = 30                     # Price:   50, Total cost:  1500.0
+			goods_output_fertilizer_add = 20                     # Price:   30, Total cost:   600.0
+			# Total input cost: 900.0
+			# Total output cost: 2100.0
+			# Profit: 1200.0
+			# Profit margin: 133.33%
+			# Zero profit price multiplier: 0.43
+			# Employment: 2000
+			# Wage breakeven: 0.60
+		}
+		level_scaled = {
+			building_employment_machinists_add = 700
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 300
+		}
+	}
+}
+
+# --- GE Schenectady Works ---
+# Theme: General Electric's electrical manufacturing and innovation center
+pm_ge_schenectady_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_electrics_industry_throughput_add = 0.1
+			building_power_plant_throughput_add = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_tech_research_speed_mult = 0.01
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_electrics_add = 30                      # Price:   60, Total cost:  1800.0
+			goods_output_engines_add = 10                        # Price:   60, Total cost:   600.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.63
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_laborers_add = 200
+		}
+	}
+}
+
+#============================================================
+# Phase 5: Remaining Flavored Companies
+#============================================================
+
+# --- Mitsui Trading House ---
+# Theme: Japan's premier trading and banking conglomerate
+pm_mitsui_trading_house = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+			state_migration_pull_mult = 0.1
+			building_trade_center_throughput_add = 0.15
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 20                           # Price:   20, Total cost:   400.0
+			goods_input_fabric_add = 10                          # Price:   20, Total cost:   200.0
+			# Output goods
+			goods_output_merchant_marine_add = 40                # Price:   50, Total cost:  2000.0
+			# Total input cost: 600.0
+			# Total output cost: 2000.0
+			# Profit: 1400.0
+			# Profit margin: 233.33%
+			# Zero profit price multiplier: 0.30
+			# Employment: 2000
+			# Wage breakeven: 0.70
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- FIAT Lingotto Factory ---
+# Theme: Italy's iconic automobile manufacturing complex with rooftop test track
+pm_fiat_lingotto_factory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.1
+			building_automotive_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_automobiles_add = 25                    # Price:  100, Total cost:  2500.0
+			# Total input cost: 1350.0
+			# Total output cost: 2500.0
+			# Profit: 1150.0
+			# Profit margin: 85.19%
+			# Zero profit price multiplier: 0.54
+			# Employment: 2000
+			# Wage breakeven: 0.58
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+#============================================================
+# Phase 4: Generic Company Buildings
+#============================================================
+
+# --- Generic Granary Complex ---
+# Theme: Grain storage and distribution hub for agricultural companies
+pm_generic_granary_complex = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 30                           # Price:   20, Total cost:   600.0
+			# Output goods
+			goods_output_groceries_add = 80                      # Price:   30, Total cost:  2400.0
+			# Total input cost: 600.0
+			# Total output cost: 2400.0
+			# Profit: 1800.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_farmers_add = 3000
+			building_employment_clerks_add = 2000
+			building_employment_shopkeepers_add = 1000
+		}
+	}
+}
+
+# --- Generic Textile Depot ---
+# Theme: Fabric warehousing and dyeing facility
+pm_generic_textile_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 40                          # Price:   20, Total cost:   800.0
+			goods_input_dye_add = 10                             # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 80                        # Price:   30, Total cost:  2400.0
+			# Total input cost: 1200.0
+			# Total output cost: 2400.0
+			# Profit: 1200.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_machinists_add = 3000
+			building_employment_clerks_add = 2000
+			building_employment_shopkeepers_add = 1000
+		}
+	}
+}
+
+# --- Generic Cold Storage ---
+# Theme: Food preservation and distribution center
+pm_generic_cold_storage = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_birth_rate_mult = 0.03
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_meat_add = 20                            # Price:   30, Total cost:   600.0
+			goods_input_fish_add = 20                            # Price:   20, Total cost:   400.0
+			# Output goods
+			goods_output_groceries_add = 80                      # Price:   30, Total cost:  2400.0
+			# Total input cost: 1000.0
+			# Total output cost: 2400.0
+			# Profit: 1400.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_machinists_add = 2000
+			building_employment_clerks_add = 2000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+# --- Generic Foundry Complex ---
+# Theme: Steel and iron smelting campus
+pm_generic_foundry_complex = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 40                            # Price:   20, Total cost:   800.0
+			goods_input_coal_add = 20                            # Price:   30, Total cost:   600.0
+			# Output goods
+			goods_output_steel_add = 60                          # Price:   50, Total cost:  3000.0
+			# Total input cost: 1400.0
+			# Total output cost: 3000.0
+			# Profit: 1600.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_machinists_add = 3000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 1000
+		}
+	}
+}
+
+# --- Generic Machine Shop ---
+# Theme: Precision tools and engineering workshop
+pm_generic_machine_shop = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0
+			goods_input_iron_add = 20                            # Price:   20, Total cost:   400.0
+			# Output goods
+			goods_output_tools_add = 80                          # Price:   40, Total cost:  3200.0
+			# Total input cost: 1400.0
+			# Total output cost: 3200.0
+			# Profit: 1800.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_machinists_add = 4000
+			building_employment_laborers_add = 3000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 1000
+		}
+	}
+}
+
+# --- Generic Chemical Works ---
+# Theme: Chemical processing campus
+pm_generic_chem_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_chemical_plant_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sulfur_add = 20                          # Price:   50, Total cost:  1000.0
+			# Output goods
+			goods_output_fertilizer_add = 50                     # Price:   30, Total cost:  1500.0
+			goods_output_explosives_add = 20                     # Price:   50, Total cost:  1000.0
+			# Total input cost: 1000.0
+			# Total output cost: 2500.0
+			# Profit: 1500.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_machinists_add = 3000
+			building_employment_laborers_add = 3000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 2000
+		}
+	}
+}
+
+# --- Generic Tank Farm ---
+# Theme: Oil storage and refining depot
+pm_generic_tank_farm = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 40                             # Price:   30, Total cost:  1200.0
+			# Output goods
+			goods_output_explosives_add = 40                     # Price:   50, Total cost:  2000.0
+			goods_output_fertilizer_add = 30                     # Price:   30, Total cost:   900.0
+			# Total input cost: 1200.0
+			# Total output cost: 2900.0
+			# Profit: 1700.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_machinists_add = 3000
+			building_employment_laborers_add = 4000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 1000
+		}
+	}
+}
+
+# --- Generic Ordnance Depot ---
+# Theme: Munitions storage and testing facility
+pm_generic_ordnance_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_munition_plant_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0
+			goods_input_explosives_add = 10                      # Price:   50, Total cost:   500.0
+			# Output goods
+			goods_output_ammunition_add = 50                     # Price:   60, Total cost:  3000.0
+			# Total input cost: 1500.0
+			# Total output cost: 3000.0
+			# Profit: 1500.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_machinists_add = 4000
+			building_employment_laborers_add = 3000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 1000
+		}
+	}
+}
+
+# --- Generic Motor Works ---
+# Theme: Engine and vehicle assembly plant
+pm_generic_motor_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_engines_add = 40                        # Price:   60, Total cost:  2400.0
+			# Total input cost: 1400.0
+			# Total output cost: 2400.0
+			# Profit: 1000.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_machinists_add = 4000
+			building_employment_laborers_add = 3000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 1000
+		}
+	}
+}
+
+# --- Generic Dry Dock ---
+# Theme: Ship repair and construction facility
+pm_generic_dry_dock = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_merchant_marine_add = 60                # Price:   50, Total cost:  3000.0
+			# Total input cost: 1350.0
+			# Total output cost: 3000.0
+			# Profit: 1650.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_machinists_add = 4000
+			building_employment_laborers_add = 3000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 1000
+		}
+	}
+}
+
+# --- Generic Arsenal ---
+# Theme: Arms depot and proving ground
+pm_generic_arsenal = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 40                     # Price:   60, Total cost:  2400.0
+			# Total input cost: 1400.0
+			# Total output cost: 2400.0
+			# Profit: 1000.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_machinists_add = 4000
+			building_employment_laborers_add = 3000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 1000
+		}
+	}
+}
+
+# --- Generic Fish Market ---
+# Theme: Wholesale fish market and distribution center
+pm_generic_fish_market = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fish_add = 40                            # Price:   20, Total cost:   800.0
+			# Output goods
+			goods_output_groceries_add = 70                      # Price:   30, Total cost:  2100.0
+			# Total input cost: 800.0
+			# Total output cost: 2100.0
+			# Profit: 1300.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_shopkeepers_add = 3000
+			building_employment_clerks_add = 2000
+			building_employment_farmers_add = 1000
+		}
+	}
+}
+
+#============================================================
+# Phase 6: Remaining Generic PMs
+#============================================================
+
+# --- Colonial Depot ---
+# Theme: A central depot for consolidating and distributing colonial commodities such as tea and opium.
+pm_generic_colonial_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_opium_plantation_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tea_add = 10                # Price:   50, Total cost:   500.0
+			goods_input_opium_add = 5               # Price:   50, Total cost:   250.0
+			# Output goods
+			goods_output_groceries_add = 50         # Price:   30, Total cost:  1500.0
+			# Total input cost: 750.0
+			# Total output cost: 1500.0
+			# Profit: 750.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_shopkeepers_add = 3000
+			building_employment_clerks_add = 2000
+			building_employment_farmers_add = 1000
+		}
+	}
+}
+
+# --- Export Warehouse ---
+# Theme: A bonded warehouse for sorting, grading, and re-exporting colonial cash crops.
+pm_generic_export_warehouse = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_coffee_plantation_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coffee_add = 8              # Price:   50, Total cost:   400.0
+			goods_input_tobacco_add = 5             # Price:   40, Total cost:   200.0
+			# Output goods
+			goods_output_groceries_add = 30         # Price:   30, Total cost:   900.0
+			goods_output_liquor_add = 10            # Price:   30, Total cost:   300.0
+			# Total input cost: 600.0
+			# Total output cost: 1200.0
+			# Profit: 600.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_shopkeepers_add = 3000
+			building_employment_clerks_add = 2000
+			building_employment_farmers_add = 1000
+		}
+	}
+}
+
+# --- Electronics Laboratory ---
+# Theme: A research and testing laboratory for electrical components and consumer electronics.
+pm_generic_electronics_lab = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_electrics_industry_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 15        # Price:   30, Total cost:   450.0
+			goods_input_glass_add = 10              # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_radios_add = 10            # Price:   80, Total cost:   800.0
+			goods_output_telephones_add = 10        # Price:   70, Total cost:   700.0
+			# Total input cost: 850.0
+			# Total output cost: 1500.0
+			# Profit: 650.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_machinists_add = 3000
+			building_employment_engineers_add = 3000
+			building_employment_clerks_add = 2000
+			building_employment_laborers_add = 2000
+		}
+	}
+}
+
+# --- Assay Office ---
+# Theme: A facility for testing precious metal purity and facilitating bullion trade.
+pm_generic_assay_office = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_gold_mine_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_gold_add = 5                # Price:  100, Total cost:   500.0
+			goods_input_tools_add = 5               # Price:   40, Total cost:   200.0
+			# Output goods
+			goods_output_luxury_clothes_add = 15    # Price:   60, Total cost:   900.0
+			goods_output_services_add = 10          # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1200.0
+			# Profit: 500.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 3000
+			building_employment_clerks_add = 3000
+			building_employment_shopkeepers_add = 2000
+			building_employment_machinists_add = 2000
+		}
+	}
+}
+
+# --- Ore Processing Plant ---
+# Theme: A central facility for crushing, smelting, and refining metallic ores.
+pm_generic_ore_processing = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_iron_mine_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 15               # Price:   40, Total cost:   600.0
+			goods_input_lead_add = 10               # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_steel_add = 25             # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 5              # Price:   40, Total cost:   200.0
+			# Total input cost: 1000.0
+			# Total output cost: 1450.0
+			# Profit: 450.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_machinists_add = 3000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 1000
+		}
+	}
+}
+
+# --- Mineral Refinery ---
+# Theme: A refinery converting raw minerals into industrial chemicals and fertilizers.
+pm_generic_mineral_refinery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_coal_mine_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coal_add = 15               # Price:   30, Total cost:   450.0
+			goods_input_sulfur_add = 5              # Price:   50, Total cost:   250.0
+			# Output goods
+			goods_output_fertilizer_add = 25        # Price:   30, Total cost:   750.0
+			goods_output_explosives_add = 8         # Price:   50, Total cost:   400.0
+			# Total input cost: 700.0
+			# Total output cost: 1150.0
+			# Profit: 450.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_machinists_add = 3000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 1000
+		}
+	}
+}
+
+# --- Silk Exchange ---
+# Theme: A trading house for sorting, grading, and auctioning raw silk and dyed textiles.
+pm_generic_silk_exchange = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_silk_plantation_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_silk_add = 15               # Price:   40, Total cost:   600.0
+			goods_input_dye_add = 10                # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_luxury_clothes_add = 25    # Price:   60, Total cost:  1500.0
+			# Total input cost: 1000.0
+			# Total output cost: 1500.0
+			# Profit: 500.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 3000
+			building_employment_shopkeepers_add = 3000
+			building_employment_clerks_add = 2000
+			building_employment_machinists_add = 2000
+		}
+	}
+}
+
+# --- Vintner's Hall ---
+# Theme: A facility for aging, blending, and bottling wine and processing fruit into preserves.
+pm_generic_vintner_hall = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_vineyard_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_wine_add = 10               # Price:   50, Total cost:   500.0
+			goods_input_fruit_add = 15              # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_liquor_add = 30            # Price:   30, Total cost:   900.0
+			goods_output_groceries_add = 20         # Price:   30, Total cost:   600.0
+			# Total input cost: 950.0
+			# Total output cost: 1500.0
+			# Profit: 550.0
+			# Employment: 10000
+		}
+		level_scaled = {
+			building_employment_laborers_add = 3000
+			building_employment_shopkeepers_add = 3000
+			building_employment_farmers_add = 2000
+			building_employment_clerks_add = 2000
+		}
+	}
+}

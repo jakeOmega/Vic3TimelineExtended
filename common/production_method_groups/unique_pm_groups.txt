@@ -591,3 +591,163 @@ pmg_eic_trading_house = {
     ai_selection = most_productive
     production_methods = { pm_eic_trading_house }
 }
+
+# Phase 2: National Champions
+pmg_schneider_le_creusot = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_schneider_le_creusot }
+}
+pmg_putilov_works = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_putilov_works }
+}
+pmg_mitsubishi_nagasaki_shipyard = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_mitsubishi_nagasaki_shipyard }
+}
+pmg_tata_jamshedpur_works = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_tata_jamshedpur_works }
+}
+pmg_siemens_erlangen_campus = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_siemens_erlangen_campus }
+}
+
+# Phase 3: Specialized Industries
+pmg_de_beers_sorting_office = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_de_beers_sorting_office }
+}
+pmg_nobel_baku_refinery = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_nobel_baku_refinery }
+}
+pmg_ge_schenectady_works = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_ge_schenectady_works }
+}
+
+# Phase 5: Remaining Flavored
+pmg_mitsui_trading_house = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_mitsui_trading_house }
+}
+pmg_fiat_lingotto_factory = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_fiat_lingotto_factory }
+}
+
+# Phase 4: Generic Company Buildings
+pmg_generic_granary_complex = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_granary_complex }
+}
+pmg_generic_textile_depot = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_textile_depot }
+}
+pmg_generic_cold_storage = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_cold_storage }
+}
+pmg_generic_foundry_complex = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_foundry_complex }
+}
+pmg_generic_machine_shop = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_machine_shop }
+}
+pmg_generic_chem_works = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_chem_works }
+}
+pmg_generic_tank_farm = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_tank_farm }
+}
+pmg_generic_ordnance_depot = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_ordnance_depot }
+}
+pmg_generic_motor_works = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_motor_works }
+}
+pmg_generic_dry_dock = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_dry_dock }
+}
+pmg_generic_arsenal = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_arsenal }
+}
+pmg_generic_fish_market = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_generic_fish_market }
+}
+
+# --- Phase 6: Remaining Generic PMGs ---
+pmg_generic_colonial_depot = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_generic_colonial_depot }
+}
+pmg_generic_export_warehouse = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_generic_export_warehouse }
+}
+pmg_generic_electronics_lab = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_generic_electronics_lab }
+}
+pmg_generic_assay_office = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_generic_assay_office }
+}
+pmg_generic_ore_processing = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_generic_ore_processing }
+}
+pmg_generic_mineral_refinery = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_generic_mineral_refinery }
+}
+pmg_generic_silk_exchange = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_generic_silk_exchange }
+}
+pmg_generic_vintner_hall = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_generic_vintner_hall }
+}

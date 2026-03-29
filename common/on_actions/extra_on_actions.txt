@@ -1,4 +1,72 @@
 ﻿# ============================================================================
+# LAW ENACTMENT PASS — banking cycle modifier cleanup
+# When an economy-type law changes, remove modifiers that belonged to the old
+# economy type so stale planning/council/CB-tool modifiers don't linger.
+# Root = country that enacted the law. Scope is country.
+# ============================================================================
+on_law_enactment_pass = {
+	on_actions = {
+		te_banking_law_change_cleanup
+	}
+}
+
+te_banking_law_change_cleanup = {
+	effect = {
+		# Only run if the banking cycle JE is active
+		if = {
+			limit = { has_journal_entry = je_banking_cycle }
+			# Switched AWAY from command economy → remove all planning_* modifiers
+			if = {
+				limit = { NOT = { has_law = law_type:law_command_economy } }
+				remove_modifier = planning_plan_revision
+				remove_modifier = planning_emergency_allocation
+				remove_modifier = planning_target_reduction
+				remove_modifier = planning_strategic_stockpile
+				remove_modifier = planning_distribution_upgrade
+				remove_modifier = planning_admin_campaign
+				remove_modifier = planning_coordination_protocol
+				remove_modifier = planning_consolidation_order
+			}
+			# Switched AWAY from cooperative ownership → remove all cooperative_* modifiers
+			if = {
+				limit = { NOT = { has_law = law_type:law_cooperative_ownership } }
+				remove_modifier = cooperative_dividend_restraint
+				remove_modifier = cooperative_mutual_aid
+				remove_modifier = cooperative_capital_plan
+				remove_modifier = cooperative_solidarity_campaign
+				remove_modifier = cooperative_credit_expansion
+				remove_modifier = cooperative_consumption_ceiling
+				remove_modifier = cooperative_council_directive
+				remove_modifier = cooperative_worker_buyout
+			}
+			# Switched TO command economy or cooperative → remove all market CB-tool modifiers
+			if = {
+				limit = {
+					OR = {
+						has_law = law_type:law_command_economy
+						has_law = law_type:law_cooperative_ownership
+					}
+				}
+				remove_modifier = banking_policy_rate_hike
+				remove_modifier = banking_open_market_ops
+				remove_modifier = banking_countercyclical_capital_buffer
+				remove_modifier = banking_expand_deposit_guarantee
+				remove_modifier = banking_directed_credit_infrastructure
+				remove_modifier = banking_emergency_liquidity_program
+				remove_modifier = banking_moral_suasion
+				remove_modifier = banking_raise_margin_requirements
+				remove_modifier = banking_fx_devaluation
+				remove_modifier = banking_fx_support
+				remove_modifier = banking_capital_controls_out
+				remove_modifier = banking_fx_swap_lines
+				remove_modifier = banking_export_credit_facility
+				remove_modifier = banking_asset_relief_program
+			}
+		}
+	}
+}
+
+# ============================================================================
 # COMPANY DISBANDED - immediately remove company-unique buildings
 # Root = Country (in which the company was disbanded)
 # scope:company = The company that was disbanded

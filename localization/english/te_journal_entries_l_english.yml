@@ -3,7 +3,10 @@
 #
 # JOURNAL_ENTRIES
 #
- je_banking_cycle:"Boom & Bust Cycle"
+ je_banking_cycle:0 "[GetPlayer.GetCustom('te_banking_cycle_title')]"
+ je_banking_cycle_reason:0 "Your economic laws determine your available stabilisation tools and how forcefully you can lean against the cycle."
+ je_banking_cycle_reason_command_economy:0 "In a Command Economy the cycle should be read as a logistics coordination gauge — momentum and bubble pressure track supply-chain synchronization and administrative strain rather than investor confidence. Use directed credit, plan revisions, and allocation orders to resolve bottlenecks."
+ je_banking_cycle_reason_cooperative_ownership:0 "Under Cooperative Ownership the cycle tracks the balance between worker consumption and capital availability. High bubble pressure reflects excessive payouts and low reinvestment; interventions include mutual aid funds and council moral suasion to prioritize long-term viability."
  je_civil_rights:0 "Civil Rights Movement"
  je_civil_rights_desc:0 "A political movement demanding equal rights for discriminated communities has taken root. How we respond will shape our nation's character."
  je_civil_rights_status_discriminatory:0 "Our current laws perpetuate #N discrimination#! against minority communities. The movement demands systemic reform."

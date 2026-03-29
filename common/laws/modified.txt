@@ -485,6 +485,9 @@ REPLACE:law_multicultural = {
 	modifier = {
 		#From this block, we only apply the highest value a Pop qualifies for
 
+		#If primary culture, only apply this value
+		country_acceptance_primary_culture_add = 100
+
 		#Heritage
 		#From this block, we only apply the highest value a Pop qualifies for
 		country_acceptance_shared_heritage_trait_add = 20

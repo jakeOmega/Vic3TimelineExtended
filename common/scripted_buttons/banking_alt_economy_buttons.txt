@@ -1,0 +1,761 @@
+﻿
+# ============================================================
+# BANKING CYCLE — COMMAND ECONOMY PLANNING TOOLS
+# Visible only under law_command_economy.
+# These replace market-economy CB tools with planning/allocation equivalents.
+# Budget is still tracked via country_banking_intervention_max_add.
+# ============================================================
+
+# ------ 1. Emergency Plan Revision ------
+# Clear bottlenecks by forcing an emergency revision of industrial targets.
+ce_plan_revision = {
+	name = "CE_PLAN_REVISION"
+	desc = "CE_PLAN_REVISION_DESC"
+	visible = {
+		banking_is_command_economy = yes
+		NOT = { has_modifier = planning_plan_revision }
+	}
+	ai_chance = {
+		value = 0
+		# Core: high friction (bubble) calls for revision
+		if = { limit = { var:bubble_pressure >= 50 } add = 30 }
+		if = { limit = { var:bubble_pressure >= 70 } add = 25 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 20 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 15 }
+		# Avoid when already in supply-chain crisis (panic → emergency allocation instead)
+		if = { limit = { banking_cycle_is_panic = yes } add = -30 }
+		# Points awareness
+		if = { limit = { banking_points_high = yes } add = 10 }
+		if = { limit = { banking_points_low = yes } add = -10 }
+		# Conflicting tools
+		if = { limit = { banking_tool_ce_target_cut_active = yes } add = -20 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = PLANNING_POINTS_3
+			modifier:country_banking_intervention_max_add >= 3
+		}
+	}
+	effect = {
+		add_modifier = { name = planning_plan_revision }
+	}
+}
+
+ce_disable_plan_revision = {
+	name = "CE_DISABLE_PLAN_REVISION"
+	desc = "CE_DISABLE_PLAN_REVISION_DESC"
+	visible = { has_modifier = planning_plan_revision }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 55 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 30 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 20 }
+		if = { limit = { banking_tool_ce_allocation_active = yes } add = 25 }
+	}
+	possible = { has_modifier = planning_plan_revision }
+	effect = { remove_modifier = planning_plan_revision }
+}
+
+# ------ 2. Emergency Resource Allocation ------
+# Redirect materials to a priority sector; accelerates coordination but builds imbalances.
+ce_emergency_allocation = {
+	name = "CE_EMERGENCY_ALLOCATION"
+	desc = "CE_EMERGENCY_ALLOCATION_DESC"
+	visible = {
+		banking_is_command_economy = yes
+		NOT = { has_modifier = planning_emergency_allocation }
+	}
+	ai_chance = {
+		value = 0
+		# Core: use in panic/downturn to restore coordination flow
+		if = { limit = { banking_cycle_is_panic = yes } add = 70 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 45 }
+		if = { limit = { banking_cycle_is_stagnation = yes } add = 20 }
+		# Avoid when bubble is already high (further imbalance dangerous)
+		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -40 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = -50 }
+		# After plan revision, push allocation to accelerate recovery
+		if = { limit = { banking_tool_ce_plan_revision_active = yes } add = 20 }
+		if = { limit = { banking_points_low = yes } add = 10 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = PLANNING_POINTS_3
+			modifier:country_banking_intervention_max_add >= 3
+		}
+	}
+	effect = {
+		add_modifier = { name = planning_emergency_allocation }
+	}
+}
+
+ce_disable_emergency_allocation = {
+	name = "CE_DISABLE_EMERGENCY_ALLOCATION"
+	desc = "CE_DISABLE_EMERGENCY_ALLOCATION_DESC"
+	visible = { has_modifier = planning_emergency_allocation }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_expansion = yes } add = 20 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 40 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 60 }
+		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 30 }
+		if = { limit = { var:finance_cycle_momentum > -2 banking_cycle_is_panic = no } add = 15 }
+	}
+	possible = { has_modifier = planning_emergency_allocation }
+	effect = { remove_modifier = planning_emergency_allocation }
+}
+
+# ------ 3. Production Target Reduction ------
+# Formally scale back overambitious plan targets; reduces systemic friction.
+ce_target_reduction = {
+	name = "CE_TARGET_REDUCTION"
+	desc = "CE_TARGET_REDUCTION_DESC"
+	visible = {
+		banking_is_command_economy = yes
+		NOT = { has_modifier = planning_target_reduction }
+	}
+	ai_chance = {
+		value = 0
+		# Core: boom/frenzy to prevent cascade
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 45 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 25 }
+		if = { limit = { var:bubble_pressure >= 60 } add = 20 }
+		if = { limit = { banking_cycle_bubble_risk_high = yes } add = 15 }
+		# Cheap; prefer when points scarce
+		if = { limit = { banking_points_low = yes } add = 15 }
+		# Don't reduce targets during recovery (demoralising)
+		if = { limit = { banking_cycle_is_downturn = yes } add = -20 }
+		if = { limit = { banking_cycle_is_panic = yes } add = -30 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = PLANNING_POINTS_2
+			modifier:country_banking_intervention_max_add >= 2
+		}
+	}
+	effect = {
+		add_modifier = { name = planning_target_reduction }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+}
+
+ce_disable_target_reduction = {
+	name = "CE_DISABLE_TARGET_REDUCTION"
+	desc = "CE_DISABLE_TARGET_REDUCTION_DESC"
+	visible = { has_modifier = planning_target_reduction }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 40 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 30 }
+		if = { limit = { banking_cycle_is_stable = yes } add = 20 }
+		if = { limit = { banking_tool_ce_allocation_active = yes } add = 20 }
+	}
+	possible = { has_modifier = planning_target_reduction }
+	effect = {
+		remove_modifier = planning_target_reduction
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+}
+
+# ------ 4. Strategic Material Stockpile ------
+# Build national reserves to buffer against sudden input shortages.
+ce_strategic_stockpile = {
+	name = "CE_STRATEGIC_STOCKPILE"
+	desc = "CE_STRATEGIC_STOCKPILE_DESC"
+	visible = {
+		banking_is_command_economy = yes
+		NOT = { has_modifier = planning_strategic_stockpile }
+	}
+	ai_chance = {
+		value = 0
+		# Core: mid-range friction; defensive posture
+		if = { limit = { var:bubble_pressure >= 35 var:bubble_pressure < 70 } add = 20 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
+		if = { limit = { banking_cycle_is_stable = yes } add = 15 }
+		# Less effective in deep crisis
+		if = { limit = { banking_cycle_is_panic = yes } add = -25 }
+		# Cheap tool, prefer when most points spent
+		if = { limit = { banking_points_low = yes } add = 20 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = PLANNING_POINTS_2
+			modifier:country_banking_intervention_max_add >= 2
+		}
+	}
+	effect = { add_modifier = { name = planning_strategic_stockpile } }
+}
+
+ce_disable_strategic_stockpile = {
+	name = "CE_DISABLE_STRATEGIC_STOCKPILE"
+	desc = "CE_DISABLE_STRATEGIC_STOCKPILE_DESC"
+	visible = { has_modifier = planning_strategic_stockpile }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 40 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 20 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 35 }
+		if = { limit = { banking_tool_ce_allocation_active = yes } add = 15 }
+	}
+	possible = { has_modifier = planning_strategic_stockpile }
+	effect = { remove_modifier = planning_strategic_stockpile }
+}
+
+# ------ 5. Central Distribution Upgrade ------
+# Invest in logistics to improve input throughput; strong but creates friction.
+ce_distribution_upgrade = {
+	name = "CE_DISTRIBUTION_UPGRADE"
+	desc = "CE_DISTRIBUTION_UPGRADE_DESC"
+	visible = {
+		banking_is_command_economy = yes
+		NOT = { has_modifier = planning_distribution_upgrade }
+	}
+	ai_chance = {
+		value = 0
+		# Core: stagnation/downturn after stabilisation
+		if = { limit = { banking_cycle_is_downturn = yes } add = 30 }
+		if = { limit = { banking_cycle_is_stagnation = yes } add = 35 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = yes } add = 15 }
+		# Expensive, avoid in crisis
+		if = { limit = { banking_cycle_is_panic = yes } add = -40 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = -30 }
+		# Avoid if bubble is building (would accelerate friction accumulation)
+		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
+		if = { limit = { banking_points_med = yes } add = 10 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = PLANNING_POINTS_4
+			modifier:country_banking_intervention_max_add >= 4
+		}
+	}
+	effect = { add_modifier = { name = planning_distribution_upgrade } }
+}
+
+ce_disable_distribution_upgrade = {
+	name = "CE_DISABLE_DISTRIBUTION_UPGRADE"
+	desc = "CE_DISABLE_DISTRIBUTION_UPGRADE_DESC"
+	visible = { has_modifier = planning_distribution_upgrade }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 50 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 30 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 45 }
+		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 25 }
+	}
+	possible = { has_modifier = planning_distribution_upgrade }
+	effect = { remove_modifier = planning_distribution_upgrade }
+}
+
+# ------ 6. Administrative Performance Campaign ------
+# Shake out inefficient planners; hurts political relations but clears systemic friction.
+ce_admin_campaign = {
+	name = "CE_ADMIN_CAMPAIGN"
+	desc = "CE_ADMIN_CAMPAIGN_DESC"
+	visible = {
+		banking_is_command_economy = yes
+		NOT = { has_modifier = planning_admin_campaign }
+	}
+	ai_chance = {
+		value = 0
+		# Core: very high bubble; drastic action needed
+		if = { limit = { var:bubble_pressure >= 70 } add = 35 }
+		if = { limit = { var:bubble_pressure >= 85 } add = 25 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 20 }
+		# Avoid in panic (disrupts recovery management)
+		if = { limit = { banking_cycle_is_panic = yes } add = -45 }
+		if = { limit = { banking_cycle_is_recession = yes } add = -20 }
+		if = { limit = { banking_points_high = yes } add = 10 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = PLANNING_POINTS_3
+			modifier:country_banking_intervention_max_add >= 3
+		}
+	}
+	effect = {
+		add_modifier = { name = planning_admin_campaign }
+		add_radicals = { value = medium_radicals strata = upper }
+	}
+}
+
+ce_disable_admin_campaign = {
+	name = "CE_DISABLE_ADMIN_CAMPAIGN"
+	desc = "CE_DISABLE_ADMIN_CAMPAIGN_DESC"
+	visible = { has_modifier = planning_admin_campaign }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 60 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
+		if = { limit = { var:bubble_pressure < 40 banking_cycle_is_panic = no } add = 25 }
+	}
+	possible = { has_modifier = planning_admin_campaign }
+	effect = {
+		remove_modifier = planning_admin_campaign
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+}
+
+# ------ 7. Inter-Sectoral Coordination Protocol ------
+# Create a permanent multi-ministry joint committee; cheap and steady.
+ce_coordination_protocol = {
+	name = "CE_COORDINATION_PROTOCOL"
+	desc = "CE_COORDINATION_PROTOCOL_DESC"
+	visible = {
+		banking_is_command_economy = yes
+		NOT = { has_modifier = planning_coordination_protocol }
+	}
+	ai_chance = {
+		value = 0
+		# General-purpose: use in mild to moderate friction
+		if = { limit = { var:bubble_pressure >= 20 var:bubble_pressure < 65 } add = 25 }
+		if = { limit = { banking_cycle_is_stable = yes } add = 10 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
+		# Very cheap — always consider when points scarce
+		if = { limit = { banking_points_low = yes } add = 30 }
+		# Not useful in deep crisis
+		if = { limit = { banking_cycle_is_panic = yes } add = -15 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = PLANNING_POINTS_1
+			modifier:country_banking_intervention_max_add >= 1
+		}
+	}
+	effect = { add_modifier = { name = planning_coordination_protocol } }
+}
+
+ce_disable_coordination_protocol = {
+	name = "CE_DISABLE_COORDINATION_PROTOCOL"
+	desc = "CE_DISABLE_COORDINATION_PROTOCOL_DESC"
+	visible = { has_modifier = planning_coordination_protocol }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 30 }
+		if = { limit = { var:bubble_pressure < 15 banking_points_low = yes } add = 20 }
+		if = { limit = { banking_cycle_is_frenzy = yes banking_tool_ce_target_cut_active = yes } add = 15 }
+	}
+	possible = { has_modifier = planning_coordination_protocol }
+	effect = { remove_modifier = planning_coordination_protocol }
+}
+
+# ------ 8. Plant Consolidation Order ------
+# Merge redundant parallel production units; requires investment but delivers lasting gains.
+ce_consolidation_order = {
+	name = "CE_CONSOLIDATION_ORDER"
+	desc = "CE_CONSOLIDATION_ORDER_DESC"
+	visible = {
+		banking_is_command_economy = yes
+		NOT = { has_modifier = planning_consolidation_order }
+	}
+	ai_chance = {
+		value = 0
+		# Core: stable or mild expansion; long-term structural tool
+		if = { limit = { banking_cycle_is_stable = yes } add = 25 }
+		if = { limit = { banking_cycle_is_stagnation = yes } add = 20 }
+		if = { limit = { banking_cycle_is_downturn = yes banking_cycle_bubble_risk_high = no } add = 10 }
+		# Avoid in extremes
+		if = { limit = { banking_cycle_is_panic = yes } add = -50 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = -20 }
+		if = { limit = { banking_points_med = yes } add = 10 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = PLANNING_POINTS_2
+			modifier:country_banking_intervention_max_add >= 2
+		}
+	}
+	effect = { add_modifier = { name = planning_consolidation_order } }
+}
+
+ce_disable_consolidation_order = {
+	name = "CE_DISABLE_CONSOLIDATION_ORDER"
+	desc = "CE_DISABLE_CONSOLIDATION_ORDER_DESC"
+	visible = { has_modifier = planning_consolidation_order }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 55 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 20 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 30 }
+		if = { limit = { banking_tool_ce_allocation_active = yes } add = 15 }
+	}
+	possible = { has_modifier = planning_consolidation_order }
+	effect = { remove_modifier = planning_consolidation_order }
+}
+
+
+# ============================================================
+# BANKING CYCLE — COOPERATIVE OWNERSHIP COUNCIL TOOLS
+# Visible only under law_cooperative_ownership.
+# ============================================================
+
+# ------ 1. Dividend Restraint Resolution ------
+# Council votes to cap payout ratios and redirect surplus to reinvestment funds.
+cw_dividend_restraint = {
+	name = "CW_DIVIDEND_RESTRAINT"
+	desc = "CW_DIVIDEND_RESTRAINT_DESC"
+	visible = {
+		banking_is_cooperative_economy = yes
+		NOT = { has_modifier = cooperative_dividend_restraint }
+	}
+	ai_chance = {
+		value = 0
+		# Core: high consumption pressure (bubble)
+		if = { limit = { var:bubble_pressure >= 40 } add = 30 }
+		if = { limit = { var:bubble_pressure >= 60 } add = 25 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 20 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 30 }
+		# Avoid in downturn (workers need payouts to sustain cooperatives)
+		if = { limit = { banking_cycle_is_recession = yes } add = -20 }
+		if = { limit = { banking_points_low = yes } add = 10 }
+		# Conflicts with credit expansion (can't restrain and loosen at once)
+		if = { limit = { banking_tool_cw_credit_active = yes } add = -25 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = COUNCIL_POINTS_2
+			modifier:country_banking_intervention_max_add >= 2
+		}
+	}
+	effect = { add_modifier = { name = cooperative_dividend_restraint } }
+}
+
+cw_disable_dividend_restraint = {
+	name = "CW_DISABLE_DIVIDEND_RESTRAINT"
+	desc = "CW_DISABLE_DIVIDEND_RESTRAINT_DESC"
+	visible = { has_modifier = cooperative_dividend_restraint }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 50 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+		if = { limit = { var:bubble_pressure < 25 banking_cycle_is_panic = no } add = 20 }
+		if = { limit = { banking_tool_cw_ceiling_active = yes } add = 25 }
+	}
+	possible = { has_modifier = cooperative_dividend_restraint }
+	effect = {
+		remove_modifier = cooperative_dividend_restraint
+		add_loyalists = { value = small_radicals strata = middle }
+	}
+}
+
+# ------ 2. Mutual Aid Fund Deployment ------
+# Tap the federation emergency fund to bail out cooperatives near insolvency.
+cw_mutual_aid_fund = {
+	name = "CW_MUTUAL_AID_FUND"
+	desc = "CW_MUTUAL_AID_FUND_DESC"
+	visible = {
+		banking_is_cooperative_economy = yes
+		NOT = { has_modifier = cooperative_mutual_aid }
+	}
+	ai_chance = {
+		value = 0
+		# Core: panic and deep downturn
+		if = { limit = { banking_cycle_is_panic = yes } add = 80 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
+		if = { limit = { banking_cycle_is_stagnation = yes var:finance_cycle_momentum <= -3 } add = 20 }
+		# Avoid when strong (creates moral hazard)
+		if = { limit = { banking_cycle_is_boom = yes } add = -40 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = -55 }
+		if = { limit = { banking_points_low = yes } add = 10 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = COUNCIL_POINTS_4
+			modifier:country_banking_intervention_max_add >= 4
+		}
+	}
+	effect = {
+		add_modifier = { name = cooperative_mutual_aid }
+		add_loyalists = { value = small_radicals strata = lower }
+	}
+}
+
+cw_disable_mutual_aid_fund = {
+	name = "CW_DISABLE_MUTUAL_AID_FUND"
+	desc = "CW_DISABLE_MUTUAL_AID_FUND_DESC"
+	visible = { has_modifier = cooperative_mutual_aid }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_stable = yes } add = 25 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 40 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 50 }
+		if = { limit = { var:finance_cycle_momentum > -2 banking_cycle_is_panic = no } add = 15 }
+	}
+	possible = { has_modifier = cooperative_mutual_aid }
+	effect = { remove_modifier = cooperative_mutual_aid }
+}
+
+# ------ 3. Collective Capital Investment Plan ------
+# Member cooperatives vote on pooling surplus for coordinated capacity investment.
+cw_capital_plan = {
+	name = "CW_CAPITAL_PLAN"
+	desc = "CW_CAPITAL_PLAN_DESC"
+	visible = {
+		banking_is_cooperative_economy = yes
+		NOT = { has_modifier = cooperative_capital_plan }
+	}
+	ai_chance = {
+		value = 0
+		# Core: stagnation/downturn — invest out of the dip
+		if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+		if = { limit = { banking_cycle_is_stagnation = yes } add = 30 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = yes } add = 15 }
+		# Avoid when bubble building (investment acceleration dangerous)
+		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -35 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = -45 }
+		if = { limit = { banking_cycle_is_panic = yes } add = -40 }
+		if = { limit = { banking_points_med = yes } add = 10 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = COUNCIL_POINTS_4
+			modifier:country_banking_intervention_max_add >= 4
+		}
+	}
+	effect = { add_modifier = { name = cooperative_capital_plan } }
+}
+
+cw_disable_capital_plan = {
+	name = "CW_DISABLE_CAPITAL_PLAN"
+	desc = "CW_DISABLE_CAPITAL_PLAN_DESC"
+	visible = { has_modifier = cooperative_capital_plan }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 50 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 50 }
+		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 25 }
+	}
+	possible = { has_modifier = cooperative_capital_plan }
+	effect = { remove_modifier = cooperative_capital_plan }
+}
+
+# ------ 4. Worker Solidarity Campaign ------
+# Public media campaign urging worker-owners to voluntarily moderate consumption.
+cw_solidarity_campaign = {
+	name = "CW_SOLIDARITY_CAMPAIGN"
+	desc = "CW_SOLIDARITY_CAMPAIGN_DESC"
+	visible = {
+		banking_is_cooperative_economy = yes
+		NOT = { has_modifier = cooperative_solidarity_campaign }
+	}
+	ai_chance = {
+		value = 0
+		# General-purpose; use when bubble is rising but not critical
+		if = { limit = { var:bubble_pressure >= 25 var:bubble_pressure < 60 } add = 25 }
+		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 20 }
+		# Very cheap — always consider when points scarce
+		if = { limit = { banking_points_low = yes } add = 30 }
+		if = { limit = { banking_points_none = yes } add = -30 }
+		# Not strong enough for deep crisis
+		if = { limit = { banking_cycle_is_panic = yes } add = -20 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = -10 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = COUNCIL_POINTS_1
+			modifier:country_banking_intervention_max_add >= 1
+		}
+	}
+	effect = { add_modifier = { name = cooperative_solidarity_campaign } }
+}
+
+cw_disable_solidarity_campaign = {
+	name = "CW_DISABLE_SOLIDARITY_CAMPAIGN"
+	desc = "CW_DISABLE_SOLIDARITY_CAMPAIGN_DESC"
+	visible = { has_modifier = cooperative_solidarity_campaign }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 30 }
+		if = { limit = { var:bubble_pressure < 20 banking_points_low = yes } add = 20 }
+	}
+	possible = { has_modifier = cooperative_solidarity_campaign }
+	effect = { remove_modifier = cooperative_solidarity_campaign }
+}
+
+# ------ 5. Cooperative Credit Union Expansion ------
+# Federation authorises credit unions to expand lending to member cooperatives.
+cw_credit_expansion = {
+	name = "CW_CREDIT_EXPANSION"
+	desc = "CW_CREDIT_EXPANSION_DESC"
+	visible = {
+		banking_is_cooperative_economy = yes
+		NOT = { has_modifier = cooperative_credit_expansion }
+	}
+	ai_chance = {
+		value = 0
+		# Core: panic/downturn — provide liquidity
+		if = { limit = { banking_cycle_is_panic = yes } add = 55 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+		if = { limit = { banking_cycle_is_stagnation = yes } add = 20 }
+		# Avoid when bubble already building (fuels overconsumption)
+		if = { limit = { banking_cycle_is_frenzy = yes } add = -50 }
+		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -30 }
+		# Synergy: after mutual aid to prevent same collapse recurring
+		if = { limit = { banking_tool_cw_mutual_aid_active = yes } add = 15 }
+		if = { limit = { banking_points_med = yes } add = 10 }
+		# Conflicts: don't expand credit while also restraining dividends
+		if = { limit = { banking_tool_cw_dividend_active = yes } add = -20 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = COUNCIL_POINTS_3
+			modifier:country_banking_intervention_max_add >= 3
+		}
+	}
+	effect = { add_modifier = { name = cooperative_credit_expansion } }
+}
+
+cw_disable_credit_expansion = {
+	name = "CW_DISABLE_CREDIT_EXPANSION"
+	desc = "CW_DISABLE_CREDIT_EXPANSION_DESC"
+	visible = { has_modifier = cooperative_credit_expansion }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_stable = yes } add = 15 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 25 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 40 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 20 }
+	}
+	possible = { has_modifier = cooperative_credit_expansion }
+	effect = { remove_modifier = cooperative_credit_expansion }
+}
+
+# ------ 6. Consumption Ceiling Resolution ------
+# Hard democratic cap on per-member consumption allowances; very effective but costly politically.
+cw_consumption_ceiling = {
+	name = "CW_CONSUMPTION_CEILING"
+	desc = "CW_CONSUMPTION_CEILING_DESC"
+	visible = {
+		banking_is_cooperative_economy = yes
+		NOT = { has_modifier = cooperative_consumption_ceiling }
+	}
+	ai_chance = {
+		value = 0
+		# Core: very high bubble; drastic action
+		if = { limit = { var:bubble_pressure >= 70 } add = 40 }
+		if = { limit = { var:bubble_pressure >= 85 } add = 30 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 25 }
+		# Avoid in downturn/panic (worsens hardship)
+		if = { limit = { banking_cycle_is_recession = yes } add = -50 }
+		if = { limit = { banking_points_high = yes } add = 10 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = COUNCIL_POINTS_2
+			modifier:country_banking_intervention_max_add >= 2
+		}
+	}
+	effect = {
+		add_modifier = { name = cooperative_consumption_ceiling }
+		add_radicals = { value = medium_radicals strata = lower }
+	}
+}
+
+cw_disable_consumption_ceiling = {
+	name = "CW_DISABLE_CONSUMPTION_CEILING"
+	desc = "CW_DISABLE_CONSUMPTION_CEILING_DESC"
+	visible = { has_modifier = cooperative_consumption_ceiling }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 30 }
+		if = { limit = { var:bubble_pressure < 35 banking_cycle_is_panic = no } add = 25 }
+		if = { limit = { banking_tool_cw_dividend_active = yes } add = 20 }
+	}
+	possible = { has_modifier = cooperative_consumption_ceiling }
+	effect = {
+		remove_modifier = cooperative_consumption_ceiling
+		add_loyalists = { value = small_radicals strata = lower }
+	}
+}
+
+# ------ 7. Federation Council Advisory Directive ------
+# Formal written guidance from the federation council to member cooperative boards.
+cw_council_directive = {
+	name = "CW_COUNCIL_DIRECTIVE"
+	desc = "CW_COUNCIL_DIRECTIVE_DESC"
+	visible = {
+		banking_is_cooperative_economy = yes
+		NOT = { has_modifier = cooperative_council_directive }
+	}
+	ai_chance = {
+		value = 0
+		# General-purpose; slight preference for mild heat
+		if = { limit = { var:bubble_pressure >= 20 var:bubble_pressure < 55 } add = 20 }
+		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 15 }
+		# Very cheap — use when points nearly exhausted
+		if = { limit = { banking_points_low = yes } add = 35 }
+		if = { limit = { banking_points_none = yes } add = -20 }
+		# Weak in extremes
+		if = { limit = { banking_cycle_is_frenzy = yes } add = -20 }
+		if = { limit = { banking_cycle_is_panic = yes } add = -20 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = COUNCIL_POINTS_1
+			modifier:country_banking_intervention_max_add >= 1
+		}
+	}
+	effect = { add_modifier = { name = cooperative_council_directive } }
+}
+
+cw_disable_council_directive = {
+	name = "CW_DISABLE_COUNCIL_DIRECTIVE"
+	desc = "CW_DISABLE_COUNCIL_DIRECTIVE_DESC"
+	visible = { has_modifier = cooperative_council_directive }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 30 }
+		if = { limit = { var:bubble_pressure < 15 banking_points_low = yes } add = 20 }
+	}
+	possible = { has_modifier = cooperative_council_directive }
+	effect = { remove_modifier = cooperative_council_directive }
+}
+
+# ------ 8. Worker Buyout Facilitation ------
+# Enable workers to take over failing enterprises before liquidation cascades.
+cw_worker_buyout = {
+	name = "CW_WORKER_BUYOUT"
+	desc = "CW_WORKER_BUYOUT_DESC"
+	visible = {
+		banking_is_cooperative_economy = yes
+		NOT = { has_modifier = cooperative_worker_buyout }
+	}
+	ai_chance = {
+		value = 0
+		# Core: downturn/panic to prevent insolvency cascade
+		if = { limit = { banking_cycle_is_panic = yes } add = 65 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
+		if = { limit = { banking_cycle_is_stagnation = yes var:finance_cycle_momentum <= -2 } add = 20 }
+		# Not needed when healthy
+		if = { limit = { banking_cycle_is_boom = yes } add = -30 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
+		# Synergy: pair with mutual aid fund for double recovery
+		if = { limit = { banking_tool_cw_mutual_aid_active = yes } add = 20 }
+		if = { limit = { banking_points_med = yes } add = 10 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = COUNCIL_POINTS_3
+			modifier:country_banking_intervention_max_add >= 3
+		}
+	}
+	effect = { add_modifier = { name = cooperative_worker_buyout } }
+}
+
+cw_disable_worker_buyout = {
+	name = "CW_DISABLE_WORKER_BUYOUT"
+	desc = "CW_DISABLE_WORKER_BUYOUT_DESC"
+	visible = { has_modifier = cooperative_worker_buyout }
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_stable = yes } add = 25 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 35 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 45 }
+		if = { limit = { var:finance_cycle_momentum > -1 banking_cycle_is_panic = no banking_cycle_is_downturn = no } add = 15 }
+	}
+	possible = { has_modifier = cooperative_worker_buyout }
+	effect = { remove_modifier = cooperative_worker_buyout }
+}

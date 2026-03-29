@@ -2395,14 +2395,17 @@ principle_urban_planning_1 = {
 
 	possible = {
 		modifier:country_urbanization_pb_principles_bool = yes
-		NOT = {
-			power_bloc = {
-				OR = {
-					has_principle = principle:principle_rural_1
-					has_principle = principle:principle_rural_2
-					has_principle = principle:principle_rural_3
-					has_principle = principle:principle_rural_4
-					has_principle = principle:principle_rural_5
+		trigger_if = {
+			limit = { exists = power_bloc }
+			NOT = {
+				power_bloc = {
+					OR = {
+						has_principle = principle:principle_rural_1
+						has_principle = principle:principle_rural_2
+						has_principle = principle:principle_rural_3
+						has_principle = principle:principle_rural_4
+						has_principle = principle:principle_rural_5
+					}
 				}
 			}
 		}
@@ -2434,14 +2437,17 @@ principle_urban_planning_2 = {
 
 	possible = {
 		modifier:country_urbanization_pb_principles_bool = yes
-		NOT = {
-			power_bloc = {
-				OR = {
-					has_principle = principle:principle_rural_1
-					has_principle = principle:principle_rural_2
-					has_principle = principle:principle_rural_3
-					has_principle = principle:principle_rural_4
-					has_principle = principle:principle_rural_5
+		trigger_if = {
+			limit = { exists = power_bloc }
+			NOT = {
+				power_bloc = {
+					OR = {
+						has_principle = principle:principle_rural_1
+						has_principle = principle:principle_rural_2
+						has_principle = principle:principle_rural_3
+						has_principle = principle:principle_rural_4
+						has_principle = principle:principle_rural_5
+					}
 				}
 			}
 		}
@@ -2474,14 +2480,17 @@ principle_urban_planning_3 = {
 
 	possible = {
 		modifier:country_modern_urban_planning_pb_principles_bool = yes
-		NOT = {
-			power_bloc = {
-				OR = {
-					has_principle = principle:principle_rural_1
-					has_principle = principle:principle_rural_2
-					has_principle = principle:principle_rural_3
-					has_principle = principle:principle_rural_4
-					has_principle = principle:principle_rural_5
+		trigger_if = {
+			limit = { exists = power_bloc }
+			NOT = {
+				power_bloc = {
+					OR = {
+						has_principle = principle:principle_rural_1
+						has_principle = principle:principle_rural_2
+						has_principle = principle:principle_rural_3
+						has_principle = principle:principle_rural_4
+						has_principle = principle:principle_rural_5
+					}
 				}
 			}
 		}
@@ -2515,14 +2524,17 @@ principle_urban_planning_4 = {
 
 	possible = {
 		modifier:country_workflow_opt_pb_principles_bool = yes
-		NOT = {
-			power_bloc = {
-				OR = {
-					has_principle = principle:principle_rural_1
-					has_principle = principle:principle_rural_2
-					has_principle = principle:principle_rural_3
-					has_principle = principle:principle_rural_4
-					has_principle = principle:principle_rural_5
+		trigger_if = {
+			limit = { exists = power_bloc }
+			NOT = {
+				power_bloc = {
+					OR = {
+						has_principle = principle:principle_rural_1
+						has_principle = principle:principle_rural_2
+						has_principle = principle:principle_rural_3
+						has_principle = principle:principle_rural_4
+						has_principle = principle:principle_rural_5
+					}
 				}
 			}
 		}
@@ -2555,14 +2567,17 @@ principle_urban_planning_5 = {
 
 	possible = {
 		modifier:country_digital_ed_pb_principles_bool = yes
-		NOT = {
-			power_bloc = {
-				OR = {
-					has_principle = principle:principle_rural_1
-					has_principle = principle:principle_rural_2
-					has_principle = principle:principle_rural_3
-					has_principle = principle:principle_rural_4
-					has_principle = principle:principle_rural_5
+		trigger_if = {
+			limit = { exists = power_bloc }
+			NOT = {
+				power_bloc = {
+					OR = {
+						has_principle = principle:principle_rural_1
+						has_principle = principle:principle_rural_2
+						has_principle = principle:principle_rural_3
+						has_principle = principle:principle_rural_4
+						has_principle = principle:principle_rural_5
+					}
 				}
 			}
 		}
@@ -2599,14 +2614,17 @@ principle_rural_1 = {
 	}
 
 	possible = {
-		NOT = {
-			power_bloc = {
-				OR = {
-					has_principle = principle:principle_urban_planning_1
-					has_principle = principle:principle_urban_planning_2
-					has_principle = principle:principle_urban_planning_3
-					has_principle = principle:principle_urban_planning_4
-					has_principle = principle:principle_urban_planning_5
+		trigger_if = {
+			limit = { exists = power_bloc }
+			NOT = {
+				power_bloc = {
+					OR = {
+						has_principle = principle:principle_urban_planning_1
+						has_principle = principle:principle_urban_planning_2
+						has_principle = principle:principle_urban_planning_3
+						has_principle = principle:principle_urban_planning_4
+						has_principle = principle:principle_urban_planning_5
+					}
 				}
 			}
 		}
@@ -2651,14 +2669,17 @@ principle_rural_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
-		NOT = {
-			power_bloc = {
-				OR = {
-					has_principle = principle:principle_urban_planning_1
-					has_principle = principle:principle_urban_planning_2
-					has_principle = principle:principle_urban_planning_3
-					has_principle = principle:principle_urban_planning_4
-					has_principle = principle:principle_urban_planning_5
+		trigger_if = {
+			limit = { exists = power_bloc }
+			NOT = {
+				power_bloc = {
+					OR = {
+						has_principle = principle:principle_urban_planning_1
+						has_principle = principle:principle_urban_planning_2
+						has_principle = principle:principle_urban_planning_3
+						has_principle = principle:principle_urban_planning_4
+						has_principle = principle:principle_urban_planning_5
+					}
 				}
 			}
 		}
@@ -2680,14 +2701,17 @@ principle_rural_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
-		NOT = {
-			power_bloc = {
-				OR = {
-					has_principle = principle:principle_urban_planning_1
-					has_principle = principle:principle_urban_planning_2
-					has_principle = principle:principle_urban_planning_3
-					has_principle = principle:principle_urban_planning_4
-					has_principle = principle:principle_urban_planning_5
+		trigger_if = {
+			limit = { exists = power_bloc }
+			NOT = {
+				power_bloc = {
+					OR = {
+						has_principle = principle:principle_urban_planning_1
+						has_principle = principle:principle_urban_planning_2
+						has_principle = principle:principle_urban_planning_3
+						has_principle = principle:principle_urban_planning_4
+						has_principle = principle:principle_urban_planning_5
+					}
 				}
 			}
 		}
@@ -2715,14 +2739,17 @@ principle_rural_4 = {
 	
 	possible = {
 		modifier:country_advanced_agri_stats_pb_principles_bool = yes
-		NOT = {
-			power_bloc = {
-				OR = {
-					has_principle = principle:principle_urban_planning_1
-					has_principle = principle:principle_urban_planning_2
-					has_principle = principle:principle_urban_planning_3
-					has_principle = principle:principle_urban_planning_4
-					has_principle = principle:principle_urban_planning_5
+		trigger_if = {
+			limit = { exists = power_bloc }
+			NOT = {
+				power_bloc = {
+					OR = {
+						has_principle = principle:principle_urban_planning_1
+						has_principle = principle:principle_urban_planning_2
+						has_principle = principle:principle_urban_planning_3
+						has_principle = principle:principle_urban_planning_4
+						has_principle = principle:principle_urban_planning_5
+					}
 				}
 			}
 		}
@@ -2751,14 +2778,17 @@ principle_rural_5 = {
 	
 	possible = {
 		modifier:country_green_revolution_pb_principles_bool = yes
-		NOT = {
-			power_bloc = {
-				OR = {
-					has_principle = principle:principle_urban_planning_1
-					has_principle = principle:principle_urban_planning_2
-					has_principle = principle:principle_urban_planning_3
-					has_principle = principle:principle_urban_planning_4
-					has_principle = principle:principle_urban_planning_5
+		trigger_if = {
+			limit = { exists = power_bloc }
+			NOT = {
+				power_bloc = {
+					OR = {
+						has_principle = principle:principle_urban_planning_1
+						has_principle = principle:principle_urban_planning_2
+						has_principle = principle:principle_urban_planning_3
+						has_principle = principle:principle_urban_planning_4
+						has_principle = principle:principle_urban_planning_5
+					}
 				}
 			}
 		}

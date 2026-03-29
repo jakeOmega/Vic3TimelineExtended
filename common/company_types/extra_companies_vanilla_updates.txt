@@ -893,3 +893,968 @@ INJECT:company_basic_shipyards = {
 		building_aerospace_industry
 	}
 }
+
+#============================================================
+# Phase 2-5: Unique Company Building Unlocks + Prosperity
+#============================================================
+
+# Schneider-Creusot (France) - Unique: Le Creusot arms/steel complex
+INJECT:company_schneider_creusot = {
+	building_types = {
+		building_schneider_le_creusot
+	}
+	prosperity_modifier = {
+		state_building_schneider_le_creusot_max_level_add = 1
+	}
+}
+
+# Putilov (Russia) - Unique: Putilov heavy machinery works
+INJECT:company_putilov_company = {
+	building_types = {
+		building_putilov_works
+	}
+	prosperity_modifier = {
+		state_building_putilov_works_max_level_add = 1
+	}
+}
+
+# Mitsubishi (Japan) - Unique: Nagasaki Shipyard
+INJECT:company_mitsubishi = {
+	building_types = {
+		building_mitsubishi_nagasaki_shipyard
+	}
+	prosperity_modifier = {
+		state_building_mitsubishi_nagasaki_shipyard_max_level_add = 1
+	}
+}
+
+# Tata (India) - Unique: Jamshedpur Works
+INJECT:company_tata = {
+	building_types = {
+		building_tata_jamshedpur_works
+	}
+	prosperity_modifier = {
+		state_building_tata_jamshedpur_works_max_level_add = 1
+	}
+}
+
+# Siemens & Halske (Germany) - Unique: Erlangen Campus
+INJECT:company_siemens_and_halske = {
+	building_types = {
+		building_siemens_erlangen_campus
+	}
+	prosperity_modifier = {
+		state_building_siemens_erlangen_campus_max_level_add = 1
+	}
+}
+
+# De Beers (South Africa/GBR) - Unique: Diamond Sorting Office
+INJECT:company_de_beers = {
+	building_types = {
+		building_de_beers_sorting_office
+	}
+	prosperity_modifier = {
+		state_building_de_beers_sorting_office_max_level_add = 1
+	}
+}
+
+# Nobel Brothers / Branobel (Russia) - Unique: Baku Refinery
+INJECT:company_branobel = {
+	building_types = {
+		building_nobel_baku_refinery
+	}
+	prosperity_modifier = {
+		state_building_nobel_baku_refinery_max_level_add = 1
+	}
+}
+
+# General Electric (USA) - Unique: Schenectady Works
+INJECT:company_general_electric = {
+	building_types = {
+		building_ge_schenectady_works
+	}
+	prosperity_modifier = {
+		state_building_ge_schenectady_works_max_level_add = 1
+	}
+}
+
+# Mitsui (Japan) - Unique: Trading House
+INJECT:company_mitsui = {
+	building_types = {
+		building_mitsui_trading_house
+	}
+	prosperity_modifier = {
+		state_building_mitsui_trading_house_max_level_add = 1
+	}
+}
+
+# FIAT (Italy) - Unique: Lingotto Factory
+INJECT:company_fiat = {
+	building_types = {
+		building_fiat_lingotto_factory
+	}
+	prosperity_modifier = {
+		state_building_fiat_lingotto_factory_max_level_add = 1
+	}
+}
+
+#============================================================
+# Phase 4: Generic Company Building Unlocks + Prosperity
+#============================================================
+
+# Generic Agriculture 1 - Unique: Granary Complex
+INJECT:company_basic_agriculture_1 = {
+	building_types = {
+		building_generic_granary_complex
+	}
+	prosperity_modifier = {
+		state_building_generic_granary_complex_max_level_add = 1
+	}
+}
+
+# Generic Agriculture 2 - Unique: Granary Complex (shared)
+INJECT:company_basic_agriculture_2 = {
+	building_types = {
+		building_generic_granary_complex
+	}
+	prosperity_modifier = {
+		state_building_generic_granary_complex_max_level_add = 1
+	}
+}
+
+# Generic Fabrics - Unique: Textile Depot
+INJECT:company_basic_fabrics = {
+	building_types = {
+		building_generic_textile_depot
+	}
+	prosperity_modifier = {
+		state_building_generic_textile_depot_max_level_add = 1
+	}
+}
+
+# Generic Textiles - Unique: Textile Depot (shared)
+INJECT:company_basic_textiles = {
+	building_types = {
+		building_generic_textile_depot
+	}
+	prosperity_modifier = {
+		state_building_generic_textile_depot_max_level_add = 1
+	}
+}
+
+# Generic Food - Unique: Cold Storage
+INJECT:company_basic_food = {
+	building_types = {
+		building_generic_cold_storage
+	}
+	prosperity_modifier = {
+		state_building_generic_cold_storage_max_level_add = 1
+	}
+}
+
+# Generic Steel - Unique: Foundry Complex
+INJECT:company_basic_steel = {
+	building_types = {
+		building_generic_foundry_complex
+	}
+	prosperity_modifier = {
+		state_building_generic_foundry_complex_max_level_add = 1
+	}
+}
+
+# Generic Metalworks - Unique: Machine Shop
+INJECT:company_basic_metalworks = {
+	building_types = {
+		building_generic_machine_shop
+	}
+	prosperity_modifier = {
+		state_building_generic_machine_shop_max_level_add = 1
+	}
+}
+
+# Generic Chemicals - Unique: Chemical Works
+INJECT:company_basic_chemicals = {
+	building_types = {
+		building_generic_chem_works
+	}
+	prosperity_modifier = {
+		state_building_generic_chem_works_max_level_add = 1
+	}
+}
+
+# Generic Oil - Unique: Tank Farm
+INJECT:company_basic_oil = {
+	building_types = {
+		building_generic_tank_farm
+	}
+	prosperity_modifier = {
+		state_building_generic_tank_farm_max_level_add = 1
+	}
+}
+
+# Generic Munitions - Unique: Ordnance Depot
+INJECT:company_basic_munitions = {
+	building_types = {
+		building_generic_ordnance_depot
+	}
+	prosperity_modifier = {
+		state_building_generic_ordnance_depot_max_level_add = 1
+	}
+}
+
+# Generic Motors - Unique: Motor Works
+INJECT:company_basic_motors = {
+	building_types = {
+		building_generic_motor_works
+	}
+	prosperity_modifier = {
+		state_building_generic_motor_works_max_level_add = 1
+	}
+}
+
+# Generic Shipyards - Unique: Dry Dock
+INJECT:company_basic_shipyards = {
+	building_types = {
+		building_generic_dry_dock
+	}
+	prosperity_modifier = {
+		state_building_generic_dry_dock_max_level_add = 1
+	}
+}
+
+# Generic Weapons - Unique: Arsenal
+INJECT:company_basic_weapons = {
+	building_types = {
+		building_generic_arsenal
+	}
+	prosperity_modifier = {
+		state_building_generic_arsenal_max_level_add = 1
+	}
+}
+
+# Generic Fishing - Unique: Fish Market
+INJECT:company_basic_fishing = {
+	building_types = {
+		building_generic_fish_market
+	}
+	prosperity_modifier = {
+		state_building_generic_fish_market_max_level_add = 1
+	}
+}
+
+
+#============================================================
+# Phase 6: Extensions for Remaining Vanilla Companies
+#============================================================
+
+# --- Generic Company Extensions ---
+# Generic Colonial Plantations 1 (Tea/Opium) - Extensions
+INJECT:company_basic_colonial_plantations_1 = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+		building_tourism_industry
+	}
+}
+
+# Generic Colonial Plantations 2 (Coffee/Sugar/Tobacco) - Extensions
+INJECT:company_basic_colonial_plantations_2 = {
+	extension_building_types = {
+		building_synthetics_plant_sugar
+		building_synthetics_plant_biomass
+		building_tourism_industry
+	}
+}
+
+# Generic Electrics - Extensions
+INJECT:company_basic_electrics = {
+	extension_building_types = {
+		building_electronic_components_and_semiconductor_industry
+		building_software_industry
+		building_network_infrastructure
+		building_renewable_energy_plant
+	}
+}
+
+# Generic Gold Mining - Extensions
+INJECT:company_basic_gold_mining = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Generic Metal Mining (Iron/Lead) - Extensions
+INJECT:company_basic_metal_mining = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Generic Mineral Mining (Sulfur/Coal) - Extensions
+INJECT:company_basic_mineral_mining = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+		building_renewable_energy_plant
+	}
+}
+
+# Generic Silk and Dye - Extensions
+INJECT:company_basic_silk_and_dye = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Generic Wine and Fruit - Extensions
+INJECT:company_basic_wine_and_fruit = {
+	extension_building_types = {
+		building_tourism_industry
+		building_synthetics_plant_sugar
+	}
+}
+
+# --- Flavored Company Extensions ---
+# Aker Mek. Verksted (Norway) - shipbuilding & motors
+INJECT:company_aker_mek = {
+	extension_building_types = {
+		building_aerospace_industry
+		building_highway
+	}
+}
+
+# Allatini Mills (Greece) - grain milling
+INJECT:company_allatini_mills = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# A.P. Moller (Denmark) - shipping
+INJECT:company_ap_moller = {
+	extension_building_types = {
+		building_tourism_industry
+		building_highway
+	}
+}
+
+# Argentine Wine - vineyards
+INJECT:company_argentinian_wine = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Assam Company (India) - tea
+INJECT:company_assam_company = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# B. Grimm (Thailand) - rice
+INJECT:company_b_grimm = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# Basileiades (Greece) - motors & shipbuilding
+INJECT:company_basileiades = {
+	extension_building_types = {
+		building_aerospace_industry
+		building_highway
+	}
+}
+
+# Bengal Coal Company (India) - coal mining
+INJECT:company_bengal_coal_company = {
+	extension_building_types = {
+		building_renewable_energy_plant
+	}
+}
+
+# Bunge & Born (Argentina) - grain & food
+INJECT:company_bunge_born = {
+	extension_building_types = {
+		building_synthetics_plant_meat
+	}
+}
+
+# Sansinena (Argentina) - meat & food
+INJECT:company_compania_sansinena_de_carnes_congeladas = {
+	extension_building_types = {
+		building_synthetics_plant_meat
+	}
+}
+
+# Construction Power Bloc - steel & tooling
+INJECT:company_construction_power_bloc = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# CSFA (Italy) - sulfur mining & railway
+INJECT:company_csfa = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+		building_highway
+	}
+}
+
+# David Sassoon (India) - opium & cotton
+INJECT:company_david_sassoon = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+		building_synthetics_plant_biomass
+	}
+}
+
+# Duro y Compania (Spain) - mining & steel
+INJECT:company_duro_y_compania = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Elso Budapesti (Hungary) - grain milling & food
+INJECT:company_elso_budapesti_gozmalom = {
+	extension_building_types = {
+		building_synthetics_plant_meat
+	}
+}
+
+# Erste Brunner (Austria) - motors & tooling
+INJECT:company_erste_brunner = {
+	extension_building_types = {
+		building_highway
+		building_aerospace_industry
+		building_advanced_material_fabricator
+	}
+}
+
+# Estaleiro Maua (Brazil) - shipbuilding
+INJECT:company_estaleiro_maua = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Estanifera Llallagua (Bolivia) - tin/lead mining
+INJECT:company_estanifera_llallagua = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Gebruder Thonet (Austria) - furniture
+INJECT:company_gebruder_thonet = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Guinness (Ireland) - brewing
+INJECT:company_guinness = {
+	extension_building_types = {
+		building_tourism_industry
+		building_synthetics_plant_meat
+	}
+}
+
+# Hanseong Electric (Korea) - power
+INJECT:company_hanseong_jeongi_hoesa = {
+	extension_building_types = {
+		building_renewable_energy_plant
+		building_electronic_components_and_semiconductor_industry
+	}
+}
+
+# Hudson's Bay Company (Canada) - fur trade & logging
+INJECT:company_hbc = {
+	extension_building_types = {
+		building_tourism_industry
+		building_synthetics_plant_wood
+	}
+}
+
+# Imperial Arsenal (Ottoman) - military shipyard
+INJECT:company_imperial_arsenal = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Imperial Ethiopian Railways - railways
+INJECT:company_imperial_ethiopian_railways = {
+	extension_building_types = {
+		building_highway
+	}
+}
+
+# Imperial Tobacco (UK) - tobacco
+INJECT:company_imperial_tobacco = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# Ingolstadt Electrical (Germany) - power
+INJECT:company_ingolstadt_electrical_company = {
+	extension_building_types = {
+		building_renewable_energy_plant
+		building_electronic_components_and_semiconductor_industry
+	}
+}
+
+# Jakub Klein (Galicia) - paper & logging
+INJECT:company_jakub_klein = {
+	extension_building_types = {
+		building_synthetics_plant_wood
+		building_software_industry
+	}
+}
+
+# Jiangnan Weaving Bureaus (China) - silk & textiles
+INJECT:company_jiangnan_weaving_bureaus = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Jingdezhen (China) - porcelain
+INJECT:company_jingdezhen = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# John Brown & Co (UK) - shipbuilding & steel
+INJECT:company_john_brown = {
+	extension_building_types = {
+		building_aerospace_industry
+		building_advanced_material_fabricator
+	}
+}
+
+# John Holt (Nigeria) - rubber, timber, port
+INJECT:company_john_holt = {
+	extension_building_types = {
+		building_synthetics_plant_rubber
+		building_synthetics_plant_wood
+		building_tourism_industry
+	}
+}
+
+# Kablin (Argentina) - paper & logging
+INJECT:company_kablin = {
+	extension_building_types = {
+		building_software_industry
+		building_synthetics_plant_wood
+	}
+}
+
+# Kinkozan Sobei (Japan) - ceramics
+INJECT:company_kinkozan_sobei = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Kirgizian Mining Company (Russia) - coal mining
+INJECT:company_kirgizian_mining_company = {
+	extension_building_types = {
+		building_renewable_energy_plant
+	}
+}
+
+# Klanicko Drustvo (Serbia) - food & livestock
+INJECT:company_klanicko_drustvo = {
+	extension_building_types = {
+		building_synthetics_plant_meat
+	}
+}
+
+# Meissen Porcelain (Germany) - porcelain
+INJECT:company_konigliche_porzellan_manufaktur_meissen = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Kouppas (Greece) - motors & tooling
+INJECT:company_kouppas = {
+	extension_building_types = {
+		building_highway
+		building_aerospace_industry
+		building_advanced_material_fabricator
+	}
+}
+
+# Lanfang Kongsi (Borneo) - gold mining & port
+INJECT:company_lanfang_kongsi = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+		building_tourism_industry
+	}
+}
+
+# Lee Wilson (USA) - cotton & logging
+INJECT:company_lee_wilson = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+		building_synthetics_plant_wood
+	}
+}
+
+# LKAB (Sweden) - iron mining
+INJECT:company_lkab = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Ludwig Moser (Bohemia) - glassware
+INJECT:company_ludwig_moser_and_sons = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Madura Mills (India) - textiles
+INJECT:company_madura_mills = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Maison Worth (France) - haute couture
+INJECT:company_maison_worth = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Mantero Seta (Italy) - silk & textiles
+INJECT:company_mantero_seta = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Maple & Co (UK) - furniture
+INJECT:company_maple_and_co = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Gavrilovic (Croatia) - food processing
+INJECT:company_mate_gavrilovic = {
+	extension_building_types = {
+		building_synthetics_plant_meat
+	}
+}
+
+# Mines d'Anzin (France) - coal mining
+INJECT:company_mines_anzin = {
+	extension_building_types = {
+		building_renewable_energy_plant
+	}
+}
+
+# Moscow Irrigation (Russia) - cotton
+INJECT:company_moscow_irrigation_company = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Mozambique Company - cotton & tea
+INJECT:company_mozambique_company = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+		building_tourism_industry
+	}
+}
+
+# Nam Dinh (Vietnam) - textiles
+INJECT:company_nam_dinh = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# National Iranian Oil (Persia) - oil
+INJECT:company_national_iranian_oil = {
+	extension_building_types = {
+		building_synthetics_plant_oil
+	}
+}
+
+# Nicolas Portalis (France) - silk
+INJECT:company_nicolas_portalis = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Ong Lung Sheng (China) - tea
+INJECT:company_ong_lung_sheng_tea_company = {
+	extension_building_types = {
+		building_tourism_industry
+	}
+}
+
+# Opium Export Monopoly (India) - opium
+INJECT:company_opium_export_monopoly = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# Oriental Development (Korea) - agriculture
+INJECT:company_oriental_development_company = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# Ottoman Tobacco Regie - tobacco
+INJECT:company_ottoman_tobacco_regie = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# Paradox Interactive - gaming & electronics
+INJECT:company_paradox = {
+	extension_building_types = {
+		building_software_industry
+		building_electronic_components_and_semiconductor_industry
+	}
+}
+
+# Perskhlopok (Russia) - cotton
+INJECT:company_perskhlopok = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Persshelk (Russia) - silk
+INJECT:company_persshelk = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Ralli Brothers (Greece/India) - grain trade
+INJECT:company_ralli_brothers = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# Rodriguez Arguelles (Cuba) - tobacco
+INJECT:company_rodriguez_arguelles_y_cia = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# Rossi (Brazil) - arms & munitions
+INJECT:company_rossi = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Russian-American Company (Russia) - logging, whaling, port
+INJECT:company_russian_american_company = {
+	extension_building_types = {
+		building_synthetics_plant_wood
+		building_tourism_industry
+	}
+}
+
+# San Miguel (Philippines) - food & brewing
+INJECT:company_san_miguel = {
+	extension_building_types = {
+		building_tourism_industry
+		building_synthetics_plant_meat
+	}
+}
+
+# Sherkat Shemali (Persia) - cotton
+INJECT:company_sherkat_shemali = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Sherkate Eslamiya (Persia) - textiles
+INJECT:company_sherkate_eslamiya = {
+	extension_building_types = {
+		building_synthetics_plant_silk
+	}
+}
+
+# Mokta el Hadid (Algeria) - iron & sulfur mining
+INJECT:company_societe_mokta_el_hadid = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+		building_synthetics_plant_biomass
+	}
+}
+
+# Steel Brothers (Burma) - oil & rice
+INJECT:company_steel_brothers = {
+	extension_building_types = {
+		building_synthetics_plant_oil
+	}
+}
+
+# STT (Ottoman) - shipbuilding
+INJECT:company_stt = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Sudamericana de Vapores (Chile) - shipping
+INJECT:company_sudamericana_de_vapores = {
+	extension_building_types = {
+		building_tourism_industry
+		building_highway
+	}
+}
+
+# Sunhwaguk (Korea) - tobacco & rice
+INJECT:company_sunhwaguk = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# United Tobacco Factories (Russia) - tobacco
+INJECT:company_united_tobacco_factories = {
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+}
+
+# Vodka Monopoly (Russia) - distilling
+INJECT:company_vodka_monopoly = {
+	extension_building_types = {
+		building_tourism_industry
+		building_synthetics_plant_meat
+	}
+}
+
+# William Sandford (Natal) - steel
+INJECT:company_william_sandford = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+	}
+}
+
+# Witkowitzer (Austria) - coal & iron
+INJECT:company_witkowitzer_bergbau_und_huttengewerkschaft = {
+	extension_building_types = {
+		building_advanced_material_fabricator
+		building_renewable_energy_plant
+	}
+}
+
+# Ynchausti y Compania (Philippines) - food & sugar
+INJECT:company_ynchausti_y_compania = {
+	extension_building_types = {
+		building_synthetics_plant_sugar
+		building_tourism_industry
+	}
+}
+
+#============================================================
+# Phase 6: Generic Unique Buildings + Prosperity
+#============================================================
+
+# Generic Colonial Plantations 1 (Tea/Opium) - Unique: Colonial Depot
+INJECT:company_basic_colonial_plantations_1 = {
+	building_types = {
+		building_generic_colonial_depot
+	}
+	prosperity_modifier = {
+		state_building_generic_colonial_depot_max_level_add = 1
+	}
+}
+
+# Generic Colonial Plantations 2 (Coffee/Sugar/Tobacco) - Unique: Export Warehouse
+INJECT:company_basic_colonial_plantations_2 = {
+	building_types = {
+		building_generic_export_warehouse
+	}
+	prosperity_modifier = {
+		state_building_generic_export_warehouse_max_level_add = 1
+	}
+}
+
+# Generic Electrics - Unique: Electronics Laboratory
+INJECT:company_basic_electrics = {
+	building_types = {
+		building_generic_electronics_lab
+	}
+	prosperity_modifier = {
+		state_building_generic_electronics_lab_max_level_add = 1
+	}
+}
+
+# Generic Gold Mining - Unique: Assay Office
+INJECT:company_basic_gold_mining = {
+	building_types = {
+		building_generic_assay_office
+	}
+	prosperity_modifier = {
+		state_building_generic_assay_office_max_level_add = 1
+	}
+}
+
+# Generic Metal Mining (Iron/Lead) - Unique: Ore Processing Plant
+INJECT:company_basic_metal_mining = {
+	building_types = {
+		building_generic_ore_processing
+	}
+	prosperity_modifier = {
+		state_building_generic_ore_processing_max_level_add = 1
+	}
+}
+
+# Generic Mineral Mining (Sulfur/Coal) - Unique: Mineral Refinery
+INJECT:company_basic_mineral_mining = {
+	building_types = {
+		building_generic_mineral_refinery
+	}
+	prosperity_modifier = {
+		state_building_generic_mineral_refinery_max_level_add = 1
+	}
+}
+
+# Generic Silk and Dye - Unique: Silk Exchange
+INJECT:company_basic_silk_and_dye = {
+	building_types = {
+		building_generic_silk_exchange
+	}
+	prosperity_modifier = {
+		state_building_generic_silk_exchange_max_level_add = 1
+	}
+}
+
+# Generic Wine and Fruit - Unique: Vintner's Hall
+INJECT:company_basic_wine_and_fruit = {
+	building_types = {
+		building_generic_vintner_hall
+	}
+	prosperity_modifier = {
+		state_building_generic_vintner_hall_max_level_add = 1
+	}
+}
+

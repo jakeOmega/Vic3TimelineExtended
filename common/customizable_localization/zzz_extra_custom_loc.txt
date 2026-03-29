@@ -1,4 +1,22 @@
-﻿te_yearly_temp_change_color = {
+﻿te_banking_cycle_title = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_law = law_type:law_command_economy }
+		localization_key = je_banking_cycle_command_economy
+	}
+	text = {
+		trigger = { has_law = law_type:law_cooperative_ownership }
+		localization_key = je_banking_cycle_cooperative_ownership
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = je_banking_cycle_title_market
+	}
+}
+
+te_yearly_temp_change_color = {
 	type = country
 	random_valid = no
 

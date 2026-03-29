@@ -2661,3 +2661,1108 @@ building_eic_trading_house = {
         }
     }
 }
+
+#============================================================
+# Phase 2: National Champions
+#============================================================
+
+# --- Schneider-Creusot (France) ---
+building_schneider_le_creusot = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/france_schneider_et_cie.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_schneider_le_creusot
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_schneider_creusot
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_schneider_le_creusot
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_schneider_le_creusot
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Putilov (Russia) ---
+building_putilov_works = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_putilov.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_putilov_works
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_putilov_company
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_putilov_works
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_putilov_works
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Mitsubishi (Japan) ---
+building_mitsubishi_nagasaki_shipyard = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_mitsubishi.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_mitsubishi_nagasaki_shipyard
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_mitsubishi
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_mitsubishi_nagasaki_shipyard
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_mitsubishi_nagasaki_shipyard
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Tata (India) ---
+building_tata_jamshedpur_works = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/india_tata.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_tata_jamshedpur_works
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_tata
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_tata_jamshedpur_works
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_tata_jamshedpur_works
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Siemens (Germany) ---
+building_siemens_erlangen_campus = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/german_siemens_halske.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_siemens_erlangen_campus
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_siemens_and_halske
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_siemens_erlangen_campus
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_siemens_erlangen_campus
+                    }
+                }
+            }
+        }
+    }
+}
+
+#============================================================
+# Phase 3: Specialized Industries
+#============================================================
+
+# --- De Beers (South Africa) ---
+building_de_beers_sorting_office = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/company_de_beers.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_de_beers_sorting_office
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_de_beers
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_de_beers_sorting_office
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_de_beers_sorting_office
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Nobel Brothers (Russia) ---
+building_nobel_baku_refinery = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_branobel.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_nobel_baku_refinery
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_branobel
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_nobel_baku_refinery
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_nobel_baku_refinery
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- General Electric (USA) ---
+building_ge_schenectady_works = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/american_general_electric.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_ge_schenectady_works
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_general_electric
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_ge_schenectady_works
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_ge_schenectady_works
+                    }
+                }
+            }
+        }
+    }
+}
+
+#============================================================
+# Phase 5: Remaining Flavored Companies
+#============================================================
+
+# --- Mitsui (Japan) ---
+building_mitsui_trading_house = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_mitsui.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_mitsui_trading_house
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_mitsui
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_mitsui_trading_house
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_mitsui_trading_house
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- FIAT (Italy) ---
+building_fiat_lingotto_factory = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/fiat.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_fiat_lingotto_factory
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_fiat
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_fiat_lingotto_factory
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_fiat_lingotto_factory
+                    }
+                }
+            }
+        }
+    }
+}
+
+#============================================================
+# Phase 4: Generic Company Buildings
+#============================================================
+
+# --- Generic Granary Complex (Agriculture) ---
+building_generic_granary_complex = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_granary_complex
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_agriculture_1
+                has_company = company_type:company_basic_agriculture_2
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_granary_complex
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_granary_complex
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Generic Textile Depot (Fabrics/Textiles) ---
+building_generic_textile_depot = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_textile_depot
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_fabrics
+                has_company = company_type:company_basic_textiles
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_textile_depot
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_textile_depot
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Generic Cold Storage (Food) ---
+building_generic_cold_storage = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_cold_storage
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_food
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_cold_storage
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_cold_storage
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Generic Foundry Complex (Steel) ---
+building_generic_foundry_complex = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_foundry_complex
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_steel
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_foundry_complex
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_foundry_complex
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Generic Machine Shop (Metalworks) ---
+building_generic_machine_shop = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_machine_shop
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_metalworks
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_machine_shop
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_machine_shop
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Generic Chemical Works (Chemicals) ---
+building_generic_chem_works = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_chem_works
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_chemicals
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_chem_works
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_chem_works
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Generic Tank Farm (Oil) ---
+building_generic_tank_farm = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_tank_farm
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_oil
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_tank_farm
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_tank_farm
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Generic Ordnance Depot (Munitions) ---
+building_generic_ordnance_depot = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_ordnance_depot
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_munitions
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_ordnance_depot
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_ordnance_depot
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Generic Motor Works (Motors) ---
+building_generic_motor_works = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_motor_works
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_motors
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_motor_works
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_motor_works
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Generic Dry Dock (Shipyards) ---
+building_generic_dry_dock = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_dry_dock
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_shipyards
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_dry_dock
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_dry_dock
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Generic Arsenal (Weapons) ---
+building_generic_arsenal = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_arsenal
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_weapons
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_arsenal
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_arsenal
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Generic Fish Market (Fishing) ---
+building_generic_fish_market = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_generic_fish_market
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            OR = {
+                has_company = company_type:company_basic_fishing
+            }
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_generic_fish_market
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_generic_fish_market
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+#============================================================
+# Phase 6: Generic Unique Buildings (Remaining Generics)
+#============================================================
+
+building_generic_colonial_depot = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_colonial_depot
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_colonial_plantations_1
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_colonial_depot
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_colonial_depot
+					}
+				}
+			}
+		}
+	}
+}
+
+building_generic_export_warehouse = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_export_warehouse
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_colonial_plantations_2
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_export_warehouse
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_export_warehouse
+					}
+				}
+			}
+		}
+	}
+}
+
+building_generic_electronics_lab = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_electronics_lab
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_electrics
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_electronics_lab
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_electronics_lab
+					}
+				}
+			}
+		}
+	}
+}
+
+building_generic_assay_office = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_assay_office
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_gold_mining
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_assay_office
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_assay_office
+					}
+				}
+			}
+		}
+	}
+}
+
+building_generic_ore_processing = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_ore_processing
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_metal_mining
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_ore_processing
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_ore_processing
+					}
+				}
+			}
+		}
+	}
+}
+
+building_generic_mineral_refinery = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_mineral_refinery
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_mineral_mining
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_mineral_refinery
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_mineral_refinery
+					}
+				}
+			}
+		}
+	}
+}
+
+building_generic_silk_exchange = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_silk_exchange
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_silk_and_dye
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_silk_exchange
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_silk_exchange
+					}
+				}
+			}
+		}
+	}
+}
+
+building_generic_vintner_hall = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_vintner_hall
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_wine_and_fruit
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_vintner_hall
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_vintner_hall
+					}
+				}
+			}
+		}
+	}
+}

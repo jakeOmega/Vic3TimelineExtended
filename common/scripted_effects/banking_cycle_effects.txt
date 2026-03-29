@@ -30,11 +30,22 @@ banking_cycle_random_event_effect = {
 					if = { limit = { var:bubble_pressure >= 15 banking_cycle_is_frenzy = yes } add = 5 }
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 3 }
 				}
-				trigger_event = { id = banking_cycle_events.1 }
+				if = {
+					limit = { has_law = law_type:law_command_economy }
+					trigger_event = { id = banking_cycle_events.1_command }
+				}
+				else_if = {
+					limit = { has_law = law_type:law_cooperative_ownership }
+					trigger_event = { id = banking_cycle_events.1_coop }
+				}
+				else = {
+					trigger_event = { id = banking_cycle_events.1 }
+				}
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
 			# Event 2: Foreign Capital Inflow (stable+, not at war)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -67,11 +78,22 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_panic = yes } add = 2 }
 					if = { limit = { var:bubble_pressure >= 50 } add = 1 }
 				}
-				trigger_event = { id = banking_cycle_events.4 }
+				if = {
+					limit = { has_law = law_type:law_command_economy }
+					trigger_event = { id = banking_cycle_events.4_command }
+				}
+				else_if = {
+					limit = { has_law = law_type:law_cooperative_ownership }
+					trigger_event = { id = banking_cycle_events.4_coop }
+				}
+				else = {
+					trigger_event = { id = banking_cycle_events.4 }
+				}
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
 			# Event 5: Railway Bond Fever (expansion+, railroads tech)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -93,7 +115,17 @@ banking_cycle_random_event_effect = {
 				modifier = {
 					add = 4
 				}
-				trigger_event = { id = banking_cycle_events.6 }
+				if = {
+					limit = { has_law = law_type:law_command_economy }
+					trigger_event = { id = banking_cycle_events.6_command }
+				}
+				else_if = {
+					limit = { has_law = law_type:law_cooperative_ownership }
+					trigger_event = { id = banking_cycle_events.6_coop }
+				}
+				else = {
+					trigger_event = { id = banking_cycle_events.6 }
+				}
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
 
@@ -101,6 +133,7 @@ banking_cycle_random_event_effect = {
 
 			# Event 7: Bank Consolidation Wave (boom/frenzy, central_banking)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -115,6 +148,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 8: Novel Financial Instrument (expansion+, investment_banks)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -134,6 +168,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 9: Asset Price Uncertainty (expansion/boom, bubble>=30, central_banking)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -166,11 +201,22 @@ banking_cycle_random_event_effect = {
 					}
 					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
-				trigger_event = { id = banking_cycle_events.10 }
+				if = {
+					limit = { has_law = law_type:law_command_economy }
+					trigger_event = { id = banking_cycle_events.10_command }
+				}
+				else_if = {
+					limit = { has_law = law_type:law_cooperative_ownership }
+					trigger_event = { id = banking_cycle_events.10_coop }
+				}
+				else = {
+					trigger_event = { id = banking_cycle_events.10 }
+				}
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
 			# Event 11: Insurance Sector Wobble (expansion+, mutual_funds)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -249,7 +295,17 @@ banking_cycle_random_event_effect = {
 					}
 					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
-				trigger_event = { id = banking_cycle_events.15 }
+				if = {
+					limit = { has_law = law_type:law_command_economy }
+					trigger_event = { id = banking_cycle_events.15_command }
+				}
+				else_if = {
+					limit = { has_law = law_type:law_cooperative_ownership }
+					trigger_event = { id = banking_cycle_events.15_coop }
+				}
+				else = {
+					trigger_event = { id = banking_cycle_events.15 }
+				}
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
 			# Event 16: CB Independence Debate (stable+, keynesian_economics, not unregulated banking)
@@ -272,7 +328,17 @@ banking_cycle_random_event_effect = {
 						add = 2
 					}
 				}
-				trigger_event = { id = banking_cycle_events.16 }
+				if = {
+					limit = { has_law = law_type:law_command_economy }
+					trigger_event = { id = banking_cycle_events.16_command }
+				}
+				else_if = {
+					limit = { has_law = law_type:law_cooperative_ownership }
+					trigger_event = { id = banking_cycle_events.16_coop }
+				}
+				else = {
+					trigger_event = { id = banking_cycle_events.16 }
+				}
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
 			# Event 17: Consumer Credit Boom (expansion+, consumer_credit)
@@ -290,11 +356,22 @@ banking_cycle_random_event_effect = {
 						add = 4
 					}
 				}
-				trigger_event = { id = banking_cycle_events.17 }
+				if = {
+					limit = { has_law = law_type:law_command_economy }
+					trigger_event = { id = banking_cycle_events.17_command }
+				}
+				else_if = {
+					limit = { has_law = law_type:law_cooperative_ownership }
+					trigger_event = { id = banking_cycle_events.17_coop }
+				}
+				else = {
+					trigger_event = { id = banking_cycle_events.17 }
+				}
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
 			# Event 18: Derivatives Scandal (RARE, boom/frenzy, modern_financial_instruments)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -347,7 +424,17 @@ banking_cycle_random_event_effect = {
 						add = 1
 					}
 				}
-				trigger_event = { id = banking_cycle_events.20 }
+				if = {
+					limit = { has_law = law_type:law_command_economy }
+					trigger_event = { id = banking_cycle_events.20_command }
+				}
+				else_if = {
+					limit = { has_law = law_type:law_cooperative_ownership }
+					trigger_event = { id = banking_cycle_events.20_coop }
+				}
+				else = {
+					trigger_event = { id = banking_cycle_events.20 }
+				}
 				set_variable = { name = banking_event_cooldown value = 12 }
 			}
 
@@ -355,6 +442,7 @@ banking_cycle_random_event_effect = {
 
 			# Event 21: Merchant Bank Prosperity (stable/expansion, no extra tech)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -371,6 +459,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 22: New Provincial Exchange (expansion+, no extra tech)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -388,6 +477,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 23: Banking Scandal (any phase, no extra tech)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					add = 4
 				}
@@ -396,6 +486,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 24: Warehouse Receipts Fraud (expansion+, bubble >= 20)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -414,6 +505,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 25: Trade Bill Innovation (stable+, not at war)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -435,6 +527,7 @@ banking_cycle_random_event_effect = {
 
 			# Event 26: Pension Fund Growth (expansion+, mutual_funds)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -470,6 +563,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 28: Interbank Lending Freeze (stagnation/downturn, central_banking)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -510,6 +604,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 30: Foreign Debt Arbitrage (expansion+, investment_banks)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -529,6 +624,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 31: Bank Holiday Proposal (downturn/panic, central_banking)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -547,6 +643,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 32: Trust Company Failure (RARE, boom/frenzy, mutual_funds, bubble >= 30)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -562,6 +659,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 33: Commercial Paper Market (stable/expansion, investment_banks)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -597,6 +695,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 35: Joint-Stock Company Boom (expansion+, corporate_management)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -618,6 +717,7 @@ banking_cycle_random_event_effect = {
 
 			# Event 36: Fintech Disruption (expansion+, modern_financial_instruments)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -636,6 +736,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 37: Mortgage-Backed Securities (boom/frenzy, consumer_credit, favors weak regulation)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -701,6 +802,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 40: Credit Rating Agency Failure (boom/frenzy, modern_financial_instruments)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -715,6 +817,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 41: Student Loan Burden (expansion+, consumer_credit)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -733,6 +836,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 42: Green Bond Initiative (stable+, keynesian_economics)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -751,6 +855,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 43: Venture Capital Boom (expansion/boom, modern_financial_instruments)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -768,6 +873,7 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 44: Predatory Lending Scandal (boom/frenzy, consumer_credit, blocked by prudential banking, favors weak regulation)
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {

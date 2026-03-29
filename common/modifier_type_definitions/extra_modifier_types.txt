@@ -2048,3 +2048,164 @@ state_building_eic_trading_house_max_level_add = {
 	percent = no
 	decimals = 0
 }
+
+# Phase 2: National Champions
+state_building_schneider_le_creusot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_putilov_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_mitsubishi_nagasaki_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_tata_jamshedpur_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_siemens_erlangen_campus_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Phase 3: Specialized Industries
+state_building_de_beers_sorting_office_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_nobel_baku_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ge_schenectady_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Phase 5: Remaining Flavored
+state_building_mitsui_trading_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_fiat_lingotto_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Phase 4: Generic Company Buildings
+state_building_generic_granary_complex_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_textile_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_cold_storage_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_foundry_complex_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_machine_shop_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_chem_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_tank_farm_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_ordnance_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_motor_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_dry_dock_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_arsenal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_fish_market_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+
+# Phase 6: Remaining Generic Building Modifiers
+state_building_generic_colonial_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_export_warehouse_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_electronics_lab_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_assay_office_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_ore_processing_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_mineral_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_silk_exchange_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_vintner_hall_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
