@@ -381,10 +381,6 @@ globalization = {
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
 		country_globalization_pb_principles_bool = yes
-		# Homeland system: cosmopolitan mixing resists ethnic exclusion
-		state_homeland_creation_threshold_add = 0.05
-		state_homeland_removal_threshold_add = -0.03
-		state_homeland_change_speed_mult = -0.15
 	}
 	
 	ai_weight = {
@@ -522,8 +518,6 @@ social_justice_movements = {
 		country_acceptance_shared_heritage_trait_group_add = 5
 		country_acceptance_no_shared_heritage_trait_add = 10
 		# Homeland system: protects minority homelands
-		state_homeland_creation_threshold_add = 0.05
-		state_homeland_removal_threshold_add = -0.05
 		state_homeland_change_speed_mult = -0.15
 	}
 	

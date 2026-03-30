@@ -284,14 +284,18 @@ ce_planned_decolonization = {
 
 	ai_chance = {
 		value = 0
-		# AI only does this under extreme pressure
+		# AI does this under moderate pressure now (lowered thresholds)
 		if = {
-			limit = { colonial_gp_condemners_count >= 4 }
-			add = 20
+			limit = { colonial_gp_condemners_count >= 3 }
+			add = 30
 		}
 		if = {
-			limit = { colonial_low_acceptance_count >= 5 }
-			add = 20
+			limit = { colonial_low_acceptance_count >= 3 }
+			add = 30
+		}
+		if = {
+			limit = { NOT = { country_rank >= rank_value:great_power } }
+			add = 30
 		}
 		# Never if things are going well
 		if = {

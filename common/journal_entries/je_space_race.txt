@@ -69,6 +69,7 @@ je_space_race_suborbital = {
 	}
 
 	complete = {
+		has_variable = sr_progress_suborbital
 		var:sr_progress_suborbital >= sr_suborbital_goal
 	}
 
@@ -82,11 +83,6 @@ je_space_race_suborbital = {
 		effect = {
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_suborbital }
-			# Tick down failure cooldown
-			if = {
-				limit = { sr_has_failure_cooldown = yes }
-				change_variable = { name = sr_failure_cooldown subtract = 1 }
-			}
 			# Progress based on approach
 			if = {
 				limit = { has_variable = sr_ambitious_suborbital }
@@ -103,7 +99,7 @@ je_space_race_suborbital = {
 						90 = { }
 						10 = {
 							change_variable = { name = sr_progress_suborbital multiply = 0.5 }
-							set_variable = { name = sr_last_failed_milestone value = 1 }
+							set_variable = { name = sr_failed_suborbital value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
 					}
@@ -124,7 +120,7 @@ je_space_race_suborbital = {
 						98 = { }
 						2 = {
 							change_variable = { name = sr_progress_suborbital multiply = 0.85 }
-							set_variable = { name = sr_last_failed_milestone value = 1 }
+							set_variable = { name = sr_failed_suborbital value = yes }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -208,6 +204,7 @@ je_space_race_orbital = {
 	}
 
 	complete = {
+		has_variable = sr_progress_orbital
 		var:sr_progress_orbital >= sr_orbital_goal
 	}
 
@@ -222,10 +219,6 @@ je_space_race_orbital = {
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_orbital }
 			if = {
-				limit = { sr_has_failure_cooldown = yes }
-				change_variable = { name = sr_failure_cooldown subtract = 1 }
-			}
-			if = {
 				limit = { has_variable = sr_ambitious_orbital }
 				change_variable = {
 					name = sr_progress_orbital
@@ -237,7 +230,7 @@ je_space_race_orbital = {
 						88 = { }
 						12 = {
 							change_variable = { name = sr_progress_orbital multiply = 0.5 }
-							set_variable = { name = sr_last_failed_milestone value = 2 }
+							set_variable = { name = sr_failed_orbital value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
 					}
@@ -255,7 +248,7 @@ je_space_race_orbital = {
 						97 = { }
 						3 = {
 							change_variable = { name = sr_progress_orbital multiply = 0.85 }
-							set_variable = { name = sr_last_failed_milestone value = 2 }
+							set_variable = { name = sr_failed_orbital value = yes }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -351,6 +344,7 @@ je_space_race_moon_landing = {
 	}
 
 	complete = {
+		has_variable = sr_progress_moon_landing
 		var:sr_progress_moon_landing >= sr_moon_landing_goal
 	}
 
@@ -364,10 +358,6 @@ je_space_race_moon_landing = {
 		effect = {
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_moon_landing }
-			if = {
-				limit = { sr_has_failure_cooldown = yes }
-				change_variable = { name = sr_failure_cooldown subtract = 1 }
-			}
 			if = {
 				limit = { has_variable = sr_ambitious_moon_landing }
 				change_variable = {
@@ -384,7 +374,7 @@ je_space_race_moon_landing = {
 						82 = { }
 						18 = {
 							change_variable = { name = sr_progress_moon_landing multiply = 0.5 }
-							set_variable = { name = sr_last_failed_milestone value = 3 }
+							set_variable = { name = sr_failed_moon_landing value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
 					}
@@ -395,7 +385,7 @@ je_space_race_moon_landing = {
 						88 = { }
 						12 = {
 							change_variable = { name = sr_progress_moon_landing multiply = 0.5 }
-							set_variable = { name = sr_last_failed_milestone value = 3 }
+							set_variable = { name = sr_failed_moon_landing value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
 					}
@@ -416,7 +406,7 @@ je_space_race_moon_landing = {
 						94 = { }
 						6 = {
 							change_variable = { name = sr_progress_moon_landing multiply = 0.85 }
-							set_variable = { name = sr_last_failed_milestone value = 3 }
+							set_variable = { name = sr_failed_moon_landing value = yes }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -427,7 +417,7 @@ je_space_race_moon_landing = {
 						97 = { }
 						3 = {
 							change_variable = { name = sr_progress_moon_landing multiply = 0.85 }
-							set_variable = { name = sr_last_failed_milestone value = 3 }
+							set_variable = { name = sr_failed_moon_landing value = yes }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -513,6 +503,7 @@ je_space_race_probe = {
 	}
 
 	complete = {
+		has_variable = sr_progress_probe
 		var:sr_progress_probe >= sr_probe_goal
 	}
 
@@ -527,10 +518,6 @@ je_space_race_probe = {
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_probe }
 			if = {
-				limit = { sr_has_failure_cooldown = yes }
-				change_variable = { name = sr_failure_cooldown subtract = 1 }
-			}
-			if = {
 				limit = { has_variable = sr_ambitious_probe }
 				change_variable = {
 					name = sr_progress_probe
@@ -542,7 +529,7 @@ je_space_race_probe = {
 						88 = { }
 						12 = {
 							change_variable = { name = sr_progress_probe multiply = 0.5 }
-							set_variable = { name = sr_last_failed_milestone value = 4 }
+							set_variable = { name = sr_failed_probe value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
 					}
@@ -560,7 +547,7 @@ je_space_race_probe = {
 						97 = { }
 						3 = {
 							change_variable = { name = sr_progress_probe multiply = 0.85 }
-							set_variable = { name = sr_last_failed_milestone value = 4 }
+							set_variable = { name = sr_failed_probe value = yes }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -645,6 +632,7 @@ je_space_race_moon_base = {
 	}
 
 	complete = {
+		has_variable = sr_progress_moon_base
 		var:sr_progress_moon_base >= sr_moon_base_goal
 	}
 
@@ -659,10 +647,6 @@ je_space_race_moon_base = {
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_moon_base }
 			if = {
-				limit = { sr_has_failure_cooldown = yes }
-				change_variable = { name = sr_failure_cooldown subtract = 1 }
-			}
-			if = {
 				limit = { has_variable = sr_ambitious_moon_base }
 				change_variable = {
 					name = sr_progress_moon_base
@@ -674,7 +658,7 @@ je_space_race_moon_base = {
 						85 = { }
 						15 = {
 							change_variable = { name = sr_progress_moon_base multiply = 0.5 }
-							set_variable = { name = sr_last_failed_milestone value = 5 }
+							set_variable = { name = sr_failed_moon_base value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
 					}
@@ -692,7 +676,7 @@ je_space_race_moon_base = {
 						96 = { }
 						4 = {
 							change_variable = { name = sr_progress_moon_base multiply = 0.85 }
-							set_variable = { name = sr_last_failed_milestone value = 5 }
+							set_variable = { name = sr_failed_moon_base value = yes }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -778,6 +762,7 @@ je_space_race_mars_landing = {
 	}
 
 	complete = {
+		has_variable = sr_progress_mars_landing
 		var:sr_progress_mars_landing >= sr_mars_landing_goal
 	}
 
@@ -792,10 +777,6 @@ je_space_race_mars_landing = {
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_mars_landing }
 			if = {
-				limit = { sr_has_failure_cooldown = yes }
-				change_variable = { name = sr_failure_cooldown subtract = 1 }
-			}
-			if = {
 				limit = { has_variable = sr_ambitious_mars_landing }
 				change_variable = {
 					name = sr_progress_mars_landing
@@ -807,7 +788,7 @@ je_space_race_mars_landing = {
 						83 = { }
 						17 = {
 							change_variable = { name = sr_progress_mars_landing multiply = 0.5 }
-							set_variable = { name = sr_last_failed_milestone value = 6 }
+							set_variable = { name = sr_failed_mars_landing value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
 					}
@@ -825,7 +806,7 @@ je_space_race_mars_landing = {
 						95 = { }
 						5 = {
 							change_variable = { name = sr_progress_mars_landing multiply = 0.85 }
-							set_variable = { name = sr_last_failed_milestone value = 6 }
+							set_variable = { name = sr_failed_mars_landing value = yes }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -913,6 +894,7 @@ je_space_race_interstellar_probe = {
 	}
 
 	complete = {
+		has_variable = sr_progress_interstellar_probe
 		var:sr_progress_interstellar_probe >= sr_interstellar_probe_goal
 	}
 
@@ -927,10 +909,6 @@ je_space_race_interstellar_probe = {
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_interstellar_probe }
 			if = {
-				limit = { sr_has_failure_cooldown = yes }
-				change_variable = { name = sr_failure_cooldown subtract = 1 }
-			}
-			if = {
 				limit = { has_variable = sr_ambitious_interstellar_probe }
 				change_variable = {
 					name = sr_progress_interstellar_probe
@@ -942,7 +920,7 @@ je_space_race_interstellar_probe = {
 						82 = { }
 						18 = {
 							change_variable = { name = sr_progress_interstellar_probe multiply = 0.5 }
-							set_variable = { name = sr_last_failed_milestone value = 7 }
+							set_variable = { name = sr_failed_interstellar_probe value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
 					}
@@ -960,7 +938,7 @@ je_space_race_interstellar_probe = {
 						94 = { }
 						6 = {
 							change_variable = { name = sr_progress_interstellar_probe multiply = 0.85 }
-							set_variable = { name = sr_last_failed_milestone value = 7 }
+							set_variable = { name = sr_failed_interstellar_probe value = yes }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -1024,6 +1002,7 @@ je_space_race_interstellar_results = {
 	}
 
 	complete = {
+		has_variable = sr_interstellar_transit_progress
 		var:sr_interstellar_transit_progress >= 132
 	}
 
@@ -1139,6 +1118,7 @@ je_space_race_solar_colonization = {
 	}
 
 	complete = {
+		has_variable = sr_progress_solar_colonization
 		var:sr_progress_solar_colonization >= sr_solar_colonization_goal
 	}
 
@@ -1167,10 +1147,6 @@ je_space_race_solar_colonization = {
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_solar_colonization }
 			if = {
-				limit = { sr_has_failure_cooldown = yes }
-				change_variable = { name = sr_failure_cooldown subtract = 1 }
-			}
-			if = {
 				limit = { has_variable = sr_ambitious_solar_colonization }
 				change_variable = {
 					name = sr_progress_solar_colonization
@@ -1182,7 +1158,7 @@ je_space_race_solar_colonization = {
 						80 = { }
 						20 = {
 							change_variable = { name = sr_progress_solar_colonization multiply = 0.5 }
-							set_variable = { name = sr_last_failed_milestone value = 8 }
+							set_variable = { name = sr_failed_solar_colonization value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
 					}
@@ -1200,7 +1176,7 @@ je_space_race_solar_colonization = {
 						94 = { }
 						6 = {
 							change_variable = { name = sr_progress_solar_colonization multiply = 0.85 }
-							set_variable = { name = sr_last_failed_milestone value = 8 }
+							set_variable = { name = sr_failed_solar_colonization value = yes }
 							sr_fire_safe_setback_event = yes
 						}
 					}

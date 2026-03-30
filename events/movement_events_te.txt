@@ -512,7 +512,7 @@ movement_events_te.5 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/political_mobilization.dds"
+		texture = "gfx/event_pictures/political_rally.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -817,7 +817,7 @@ movement_events_te.8 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/labor_movement.dds"
+		texture = "gfx/event_pictures/labor_dispute.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -923,7 +923,7 @@ movement_events_te.9 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/labor_movement.dds"
+		texture = "gfx/event_pictures/labor_dispute.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1025,7 +1025,7 @@ movement_events_te.10 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/labor_movement.dds"
+		texture = "gfx/event_pictures/labor_dispute.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1118,7 +1118,7 @@ movement_events_te.11 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/labor_movement.dds"
+		texture = "gfx/event_pictures/labor_dispute.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"

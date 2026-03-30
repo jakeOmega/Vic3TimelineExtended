@@ -36,7 +36,7 @@ minor_events_timelineextended.2 = {
     placement = root
 
     event_image = {
- 		texture = "gfx/event_pictures/government_building.dds"
+ 		texture = "gfx/event_pictures/ministry_building.dds"
  	}
 
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -154,7 +154,7 @@ minor_events_timelineextended.3 = {
     placement = root
 
     event_image = {
- 		texture = "gfx/event_pictures/independence_celebration.dds"
+ 		texture = "gfx/event_pictures/political_rally.dds"
  	}
 
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"

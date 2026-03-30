@@ -1,4 +1,15 @@
 ﻿# Space Race On-Actions
+
+# Global cooldown tick - once per month per country (not per-JE)
+on_monthly_pulse_country = {
+	effect = {
+		if = {
+			limit = { sr_has_failure_cooldown = yes }
+			change_variable = { name = sr_failure_cooldown subtract = 1 }
+		}
+	}
+}
+
 # Wire up in-progress and cross-system events as yearly random events
 
 on_yearly_events = {

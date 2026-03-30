@@ -773,7 +773,7 @@ international_relations_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_standoff.dds" }
+	event_image = { texture = "gfx/event_pictures/mushroom_cloud_distant.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -976,7 +976,7 @@ international_relations_events.104 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_standoff.dds" }
+	event_image = { texture = "gfx/event_pictures/mushroom_cloud_distant.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

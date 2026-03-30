@@ -216,9 +216,9 @@ social_tensions_events.3 = {
 	}
 	flavor = social_tensions_events.3.f
 
-	event_image = { texture = "gfx/event_pictures/corporate_lobbying.dds" }
+	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/corp_office.dds"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
@@ -498,7 +498,7 @@ social_tensions_events.6 = {
 	}
 	flavor = social_tensions_events.6.f
 
-	event_image = { texture = "gfx/event_pictures/urban_riots.dds" }
+	event_image = { texture = "gfx/event_pictures/police_brutality.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -604,7 +604,7 @@ social_tensions_events.7 = {
 	}
 	flavor = social_tensions_events.7.f
 
-	event_image = { texture = "gfx/event_pictures/war_atrocity.dds" }
+	event_image = { texture = "gfx/event_pictures/war_devastation.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -691,7 +691,7 @@ social_tensions_events.8 = {
 	desc = social_tensions_events.8.d
 	flavor = social_tensions_events.8.f
 
-	event_image = { texture = "gfx/event_pictures/war_atrocity.dds" }
+	event_image = { texture = "gfx/event_pictures/war_devastation.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -747,7 +747,7 @@ social_tensions_events.9 = {
 	}
 	flavor = social_tensions_events.9.f
 
-	event_image = { texture = "gfx/event_pictures/campaign_finance.dds" }
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -830,7 +830,7 @@ social_tensions_events.10 = {
 	desc = social_tensions_events.10.d
 	flavor = social_tensions_events.10.f
 
-	event_image = { texture = "gfx/event_pictures/campaign_finance.dds" }
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -900,7 +900,7 @@ social_tensions_events.11 = {
 	}
 	flavor = social_tensions_events.11.f
 
-	event_image = { texture = "gfx/event_pictures/immigration_wave.dds" }
+	event_image = { texture = "gfx/event_pictures/climate_refugees.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
@@ -994,7 +994,7 @@ social_tensions_events.12 = {
 	}
 	flavor = social_tensions_events.12.f
 
-	event_image = { texture = "gfx/event_pictures/nativist_backlash.dds" }
+	event_image = { texture = "gfx/event_pictures/globalization_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -1089,7 +1089,7 @@ social_tensions_events.13 = {
 	}
 	flavor = social_tensions_events.13.f
 
-	event_image = { texture = "gfx/event_pictures/religious_revival.dds" }
+	event_image = { texture = "gfx/event_pictures/cultural_renaissance.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1164,7 +1164,7 @@ social_tensions_events.14 = {
 	desc = social_tensions_events.14.d
 	flavor = social_tensions_events.14.f
 
-	event_image = { texture = "gfx/event_pictures/religious_revival.dds" }
+	event_image = { texture = "gfx/event_pictures/cultural_renaissance.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 

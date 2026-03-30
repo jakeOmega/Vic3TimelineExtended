@@ -293,7 +293,7 @@ ministry_law_events.5 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/war_room.dds" }
+	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -434,7 +434,7 @@ ministry_law_events.7 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/trade_agreement.dds" }
+	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -508,7 +508,7 @@ ministry_law_events.8 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/cultural_patronage.dds" }
+	event_image = { texture = "gfx/event_pictures/cultural_renaissance.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -789,7 +789,7 @@ ministry_law_events.11 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/intelligence_office.dds" }
+	event_image = { texture = "gfx/event_pictures/espionage.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -854,7 +854,7 @@ ministry_law_events.12 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/refugee_crisis.dds" }
+	event_image = { texture = "gfx/event_pictures/humanitarian_crisis.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -918,7 +918,7 @@ ministry_law_events.13 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/propaganda_office.dds" }
+	event_image = { texture = "gfx/event_pictures/propaganda_broadcast.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -988,7 +988,7 @@ ministry_law_events.14 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/scientific_laboratory.dds" }
+	event_image = { texture = "gfx/event_pictures/medical_breakthrough.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1062,7 +1062,7 @@ ministry_law_events.15 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/surveillance_state.dds" }
+	event_image = { texture = "gfx/event_pictures/surveillance_debate.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1129,7 +1129,7 @@ ministry_law_events.16 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/consumer_safety.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1206,7 +1206,7 @@ ministry_law_events.17 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/urban_planning.dds" }
+	event_image = { texture = "gfx/event_pictures/development_protest.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1270,7 +1270,7 @@ ministry_law_events.18 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/religious_institution.dds" }
+	event_image = { texture = "gfx/event_pictures/cultural_renaissance.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

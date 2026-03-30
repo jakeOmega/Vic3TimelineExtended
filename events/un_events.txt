@@ -260,7 +260,7 @@ un_events.3 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/human_rights_declaration.dds"
+		texture = "gfx/event_pictures/human_rights.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -501,7 +501,7 @@ un_events.5 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/economic_sanctions.dds"
+		texture = "gfx/event_pictures/trade_embargo.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1037,7 +1037,7 @@ un_events.9 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/un_summit.dds"
+		texture = "gfx/event_pictures/un_assembly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1881,7 +1881,7 @@ un_events.16 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/pandemic_response.dds"
+		texture = "gfx/event_pictures/medical_breakthrough.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -2265,7 +2265,7 @@ un_events.19 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/space_cooperation.dds"
+		texture = "gfx/event_pictures/space_race.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"

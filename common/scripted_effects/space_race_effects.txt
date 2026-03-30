@@ -33,59 +33,98 @@ sr_recalculate_cost = {
 
 # Switch the last-failed milestone to safe approach
 # Uses sr_last_failed_milestone marker set before firing failure events
+# Switch failed milestone(s) to safe approach using per-JE flags
+# Each flag sr_failed_<m> is set in the monthly pulse before firing failure events
+# Uses if (not else_if) so multiple simultaneous failures are all processed
 sr_switch_to_safe_effect = {
 	if = {
-		limit = { has_variable = sr_last_failed_milestone }
-		# Suborbital (1)
-		if = {
-			limit = { var:sr_last_failed_milestone = 1 }
-			if = { limit = { has_variable = sr_ambitious_suborbital } remove_variable = sr_ambitious_suborbital }
-			set_variable = { name = sr_safe_suborbital value = yes }
-		}
-		# Orbital (2)
-		if = {
-			limit = { var:sr_last_failed_milestone = 2 }
-			if = { limit = { has_variable = sr_ambitious_orbital } remove_variable = sr_ambitious_orbital }
-			set_variable = { name = sr_safe_orbital value = yes }
-		}
-		# Moon Landing (3)
-		if = {
-			limit = { var:sr_last_failed_milestone = 3 }
-			if = { limit = { has_variable = sr_ambitious_moon_landing } remove_variable = sr_ambitious_moon_landing }
-			set_variable = { name = sr_safe_moon_landing value = yes }
-		}
-		# Probe (4)
-		if = {
-			limit = { var:sr_last_failed_milestone = 4 }
-			if = { limit = { has_variable = sr_ambitious_probe } remove_variable = sr_ambitious_probe }
-			set_variable = { name = sr_safe_probe value = yes }
-		}
-		# Moon Base (5)
-		if = {
-			limit = { var:sr_last_failed_milestone = 5 }
-			if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
-			set_variable = { name = sr_safe_moon_base value = yes }
-		}
-		# Mars Landing (6)
-		if = {
-			limit = { var:sr_last_failed_milestone = 6 }
-			if = { limit = { has_variable = sr_ambitious_mars_landing } remove_variable = sr_ambitious_mars_landing }
-			set_variable = { name = sr_safe_mars_landing value = yes }
-		}
-		# Interstellar Probe (7)
-		if = {
-			limit = { var:sr_last_failed_milestone = 7 }
-			if = { limit = { has_variable = sr_ambitious_interstellar_probe } remove_variable = sr_ambitious_interstellar_probe }
-			set_variable = { name = sr_safe_interstellar_probe value = yes }
-		}
-		# Solar Colonization (8)
-		if = {
-			limit = { var:sr_last_failed_milestone = 8 }
-			if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
-			set_variable = { name = sr_safe_solar_colonization value = yes }
-		}
-		sr_recalculate_cost = yes
+		limit = { has_variable = sr_failed_suborbital }
+		if = { limit = { has_variable = sr_ambitious_suborbital } remove_variable = sr_ambitious_suborbital }
+		set_variable = { name = sr_safe_suborbital value = yes }
+		remove_variable = sr_failed_suborbital
 	}
+	if = {
+		limit = { has_variable = sr_failed_orbital }
+		if = { limit = { has_variable = sr_ambitious_orbital } remove_variable = sr_ambitious_orbital }
+		set_variable = { name = sr_safe_orbital value = yes }
+		remove_variable = sr_failed_orbital
+	}
+	if = {
+		limit = { has_variable = sr_failed_moon_landing }
+		if = { limit = { has_variable = sr_ambitious_moon_landing } remove_variable = sr_ambitious_moon_landing }
+		set_variable = { name = sr_safe_moon_landing value = yes }
+		remove_variable = sr_failed_moon_landing
+	}
+	if = {
+		limit = { has_variable = sr_failed_probe }
+		if = { limit = { has_variable = sr_ambitious_probe } remove_variable = sr_ambitious_probe }
+		set_variable = { name = sr_safe_probe value = yes }
+		remove_variable = sr_failed_probe
+	}
+	if = {
+		limit = { has_variable = sr_failed_moon_base }
+		if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
+		set_variable = { name = sr_safe_moon_base value = yes }
+		remove_variable = sr_failed_moon_base
+	}
+	if = {
+		limit = { has_variable = sr_failed_mars_landing }
+		if = { limit = { has_variable = sr_ambitious_mars_landing } remove_variable = sr_ambitious_mars_landing }
+		set_variable = { name = sr_safe_mars_landing value = yes }
+		remove_variable = sr_failed_mars_landing
+	}
+	if = {
+		limit = { has_variable = sr_failed_interstellar_probe }
+		if = { limit = { has_variable = sr_ambitious_interstellar_probe } remove_variable = sr_ambitious_interstellar_probe }
+		set_variable = { name = sr_safe_interstellar_probe value = yes }
+		remove_variable = sr_failed_interstellar_probe
+	}
+	if = {
+		limit = { has_variable = sr_failed_solar_colonization }
+		if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
+		set_variable = { name = sr_safe_solar_colonization value = yes }
+		remove_variable = sr_failed_solar_colonization
+	}
+	sr_recalculate_cost = yes
+}
+
+
+# Boost progress for all active milestones
+# Set sr_progress_boost before calling (can be negative for penalties)
+sr_boost_active_milestones = {
+	if = {
+		limit = { has_variable = sr_active_suborbital }
+		change_variable = { name = sr_progress_suborbital add = var:sr_progress_boost }
+	}
+	if = {
+		limit = { has_variable = sr_active_orbital }
+		change_variable = { name = sr_progress_orbital add = var:sr_progress_boost }
+	}
+	if = {
+		limit = { has_variable = sr_active_moon_landing }
+		change_variable = { name = sr_progress_moon_landing add = var:sr_progress_boost }
+	}
+	if = {
+		limit = { has_variable = sr_active_probe }
+		change_variable = { name = sr_progress_probe add = var:sr_progress_boost }
+	}
+	if = {
+		limit = { has_variable = sr_active_moon_base }
+		change_variable = { name = sr_progress_moon_base add = var:sr_progress_boost }
+	}
+	if = {
+		limit = { has_variable = sr_active_mars_landing }
+		change_variable = { name = sr_progress_mars_landing add = var:sr_progress_boost }
+	}
+	if = {
+		limit = { has_variable = sr_active_interstellar_probe }
+		change_variable = { name = sr_progress_interstellar_probe add = var:sr_progress_boost }
+	}
+	if = {
+		limit = { has_variable = sr_active_solar_colonization }
+		change_variable = { name = sr_progress_solar_colonization add = var:sr_progress_boost }
+	}
+	remove_variable = sr_progress_boost
 }
 
 # Called when a milestone is completed - handles first/subsequent rewards and cleanup

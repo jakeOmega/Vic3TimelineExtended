@@ -1175,7 +1175,7 @@ banking_cycle_events.10 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.10.t
 	desc = banking_cycle_events.10.d
@@ -1268,7 +1268,7 @@ banking_cycle_events.110 = {
 
 	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.110.t
 	desc = banking_cycle_events.110.d
@@ -1316,7 +1316,7 @@ banking_cycle_events.160 = {
 
 	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.160.t
 	desc = banking_cycle_events.160.d
@@ -1372,7 +1372,7 @@ banking_cycle_events.11 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.11.t
 	desc = banking_cycle_events.11.d
@@ -1463,7 +1463,7 @@ banking_cycle_events.12 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.12.t
 	desc = banking_cycle_events.12.d
@@ -1655,7 +1655,7 @@ banking_cycle_events.14 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.14.t
 	desc = banking_cycle_events.14.d
@@ -1755,7 +1755,7 @@ banking_cycle_events.15 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.15.t
 	desc = banking_cycle_events.15.d
@@ -1848,7 +1848,7 @@ banking_cycle_events.115 = {
 
 	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.115.t
 	desc = banking_cycle_events.115.d
@@ -1896,7 +1896,7 @@ banking_cycle_events.165 = {
 
 	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.165.t
 	desc = banking_cycle_events.165.d
@@ -3070,7 +3070,7 @@ banking_cycle_events.26 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.26.t
 	desc = banking_cycle_events.26.d
@@ -3287,7 +3287,7 @@ banking_cycle_events.29 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.29.t
 	desc = banking_cycle_events.29.d
@@ -3371,7 +3371,7 @@ banking_cycle_events.30 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.30.t
 	desc = banking_cycle_events.30.d
@@ -3968,7 +3968,7 @@ banking_cycle_events.37 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.37.t
 	desc = banking_cycle_events.37.d
@@ -4053,7 +4053,7 @@ banking_cycle_events.38 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.38.t
 	desc = banking_cycle_events.38.d
@@ -4310,7 +4310,7 @@ banking_cycle_events.41 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.41.t
 	desc = banking_cycle_events.41.d
@@ -4919,7 +4919,7 @@ banking_cycle_events.53 = {
 
 	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.53.t
 	desc = banking_cycle_events.53.d
@@ -5289,7 +5289,7 @@ banking_cycle_events.62 = {
 
 	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.62.t
 	desc = banking_cycle_events.62.d
@@ -5446,7 +5446,7 @@ banking_cycle_events.65 = {
 
 	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = banking_cycle_events.65.t
 	desc = banking_cycle_events.65.d

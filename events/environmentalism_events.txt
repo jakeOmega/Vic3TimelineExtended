@@ -139,7 +139,7 @@ environmentalism_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/climate_disaster.dds" }
+	event_image = { texture = "gfx/event_pictures/coastal_flooding.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -204,7 +204,7 @@ environmentalism_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/climate_disaster.dds" }
+	event_image = { texture = "gfx/event_pictures/coastal_flooding.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -257,7 +257,7 @@ environmentalism_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/crop_failure.dds" }
+	event_image = { texture = "gfx/event_pictures/heatwave.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -672,7 +672,7 @@ environmentalism_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/water_crisis.dds" }
+	event_image = { texture = "gfx/event_pictures/coastal_flooding.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -828,7 +828,7 @@ environmentalism_events.12 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/fossil_fuel_lobby.dds" }
+	event_image = { texture = "gfx/event_pictures/industrial_pollution.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -985,7 +985,7 @@ environmentalism_events.14 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/tropical_disease.dds" }
+	event_image = { texture = "gfx/event_pictures/humanitarian_crisis.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1177,7 +1177,7 @@ environmentalism_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/melting_ice_caps.dds" }
+	event_image = { texture = "gfx/event_pictures/melting_iceburg.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

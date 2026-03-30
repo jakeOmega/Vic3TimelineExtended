@@ -496,10 +496,6 @@ space_race_events.10 = {
 		ai_chance = { base = 1 }
 		# Double down - accept the loss, push harder
 		# Only minor setback but adds radicals
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.75
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = large_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals }
@@ -529,10 +525,6 @@ space_race_events.11 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Careful review - small progress loss
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.85
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
@@ -541,10 +533,6 @@ space_race_events.11 = {
 		name = space_race_events.11.b
 		ai_chance = { base = 3 }
 		# Redirect resources - lose more progress but gain innovation
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.7
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 	}
 }
@@ -560,7 +548,7 @@ space_race_events.20 = {
 
 	event_image = { video = "event_space_station" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = space_race_events.20.t
 	desc = space_race_events.20.d
@@ -578,10 +566,6 @@ space_race_events.20 = {
 		# We must accelerate our own program
 		if = {
 			limit = { has_variable = sr_active_milestone }
-			change_variable = {
-				name = sr_milestone_progress
-				add = 3
-			}
 		}
 	}
 
@@ -618,7 +602,7 @@ space_race_events.30 = {
 
 	trigger = {
 		has_variable = sr_active_suborbital
-		var:sr_milestone_progress >= 20
+		var:sr_progress_suborbital >= 20
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -630,7 +614,7 @@ space_race_events.30 = {
 		ai_chance = { base = 5 }
 		# Use test data to accelerate program
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_suborbital
 			add = 5
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -662,7 +646,7 @@ space_race_events.31 = {
 
 	trigger = {
 		has_variable = sr_active_orbital
-		var:sr_milestone_progress >= 30
+		var:sr_progress_orbital >= 30
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -674,7 +658,7 @@ space_race_events.31 = {
 		ai_chance = { base = 5 }
 		# Invest in debris tracking and cleanup
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_orbital
 			add = 3
 		}
 	}
@@ -684,7 +668,7 @@ space_race_events.31 = {
 		ai_chance = { base = 2 }
 		# Ignore the problem, full speed ahead
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_orbital
 			add = 8
 		}
 		# But increased failure chance next time
@@ -724,7 +708,7 @@ space_race_events.32 = {
 
 	trigger = {
 		has_variable = sr_active_moon_landing
-		var:sr_milestone_progress >= 40
+		var:sr_progress_moon_landing >= 40
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -736,7 +720,7 @@ space_race_events.32 = {
 		ai_chance = { base = 5 }
 		# Select from military pilots - disciplined, experienced
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_moon_landing
 			add = 5
 		}
 	}
@@ -746,7 +730,7 @@ space_race_events.32 = {
 		ai_chance = { base = 3 }
 		# Open civilian program - inspiring but slower
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_moon_landing
 			add = 2
 		}
 		add_loyalists = { value = medium_radicals }
@@ -757,7 +741,7 @@ space_race_events.32 = {
 		ai_chance = { base = 2 }
 		# International crew selection
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_moon_landing
 			add = 3
 		}
 		every_country = {
@@ -789,7 +773,7 @@ space_race_events.33 = {
 
 	trigger = {
 		has_variable = sr_active_mars_landing
-		var:sr_milestone_progress >= 80
+		var:sr_progress_mars_landing >= 80
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -801,7 +785,7 @@ space_race_events.33 = {
 		ai_chance = { base = 5 }
 		# Redirect to water-rich landing site - progress boost
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_mars_landing
 			add = 10
 		}
 		add_loyalists = { value = medium_radicals pop_type = academics }
@@ -812,7 +796,7 @@ space_race_events.33 = {
 		ai_chance = { base = 3 }
 		# Stick to the plan - conservative but safe
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_mars_landing
 			add = 5
 		}
 	}
@@ -836,7 +820,7 @@ space_race_events.34 = {
 
 	trigger = {
 		has_variable = sr_active_interstellar_probe
-		var:sr_milestone_progress >= 80
+		var:sr_progress_interstellar_probe >= 80
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -848,7 +832,7 @@ space_race_events.34 = {
 		ai_chance = { base = 5 }
 		# Maximize instrument payload - more data, slower trip
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_interstellar_probe
 			add = 15
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -859,7 +843,7 @@ space_race_events.34 = {
 		ai_chance = { base = 4 }
 		# Strip to essentials - faster transit, camera and spectrometer only
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_interstellar_probe
 			add = 20
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
@@ -870,7 +854,7 @@ space_race_events.34 = {
 		ai_chance = { base = 2 }
 		# International instrument consortium - shared design, shared data
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_interstellar_probe
 			add = 12
 		}
 		every_country = {
@@ -902,7 +886,7 @@ space_race_events.35 = {
 
 	trigger = {
 		has_variable = sr_active_solar_colonization
-		var:sr_milestone_progress >= 30
+		var:sr_progress_solar_colonization >= 30
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -914,7 +898,7 @@ space_race_events.35 = {
 		ai_chance = { base = 5 }
 		# National colony ship - sovereignty in the stars
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_solar_colonization
 			add = 20
 		}
 		add_loyalists = { value = medium_radicals }
@@ -925,7 +909,7 @@ space_race_events.35 = {
 		ai_chance = { base = 4 }
 		# Multi-national vessel - shared costs, shared glory
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_solar_colonization
 			add = 25
 		}
 		every_country = {
@@ -943,7 +927,7 @@ space_race_events.35 = {
 		ai_chance = { base = 2 }
 		# Private enterprise leads - faster but controversial
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_solar_colonization
 			add = 30
 		}
 		add_radicals = { value = medium_radicals strata = lower }
@@ -969,7 +953,7 @@ space_race_events.36 = {
 
 	trigger = {
 		has_variable = sr_active_moon_base
-		var:sr_milestone_progress >= 60
+		var:sr_progress_moon_base >= 60
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -981,7 +965,7 @@ space_race_events.36 = {
 		ai_chance = { base = 5 }
 		# Begin extraction operations immediately
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_moon_base
 			add = 10
 		}
 		add_loyalists = { value = medium_radicals pop_type = academics }
@@ -992,7 +976,7 @@ space_race_events.36 = {
 		ai_chance = { base = 3 }
 		# Study deposits first - ensure sustainable extraction
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_moon_base
 			add = 5
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -1003,7 +987,7 @@ space_race_events.36 = {
 		ai_chance = { base = 2 }
 		# License extraction rights to private industry
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_moon_base
 			add = 8
 		}
 		add_loyalists = { value = small_radicals strata = upper }
@@ -1028,7 +1012,7 @@ space_race_events.37 = {
 
 	trigger = {
 		has_variable = sr_active_probe
-		var:sr_milestone_progress >= 50
+		var:sr_progress_probe >= 50
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1040,7 +1024,7 @@ space_race_events.37 = {
 		ai_chance = { base = 5 }
 		# Release images to a captivated public
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_probe
 			add = 5
 		}
 		add_loyalists = { value = medium_radicals }
@@ -1051,7 +1035,7 @@ space_race_events.37 = {
 		ai_chance = { base = 3 }
 		# Prioritize scientific analysis over publicity
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_probe
 			add = 8
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -1085,7 +1069,20 @@ space_race_events.40 = {
 			has_variable = sr_active_moon_landing
 			has_variable = sr_active_moon_base
 		}
-		var:sr_milestone_progress >= 25
+		OR = {
+			AND = {
+				has_variable = sr_active_orbital
+				var:sr_progress_orbital >= 25
+			}
+			AND = {
+				has_variable = sr_active_moon_landing
+				var:sr_progress_moon_landing >= 25
+			}
+			AND = {
+				has_variable = sr_active_moon_base
+				var:sr_progress_moon_base >= 25
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1096,9 +1093,17 @@ space_race_events.40 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Active magnetic shielding - heavier but more effective
-		change_variable = {
-			name = sr_milestone_progress
-			add = 4
+		if = {
+			limit = { has_variable = sr_active_orbital }
+			change_variable = { name = sr_progress_orbital add = 4 }
+		}
+		if = {
+			limit = { has_variable = sr_active_moon_landing }
+			change_variable = { name = sr_progress_moon_landing add = 4 }
+		}
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base add = 4 }
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -1107,9 +1112,17 @@ space_race_events.40 = {
 		name = space_race_events.40.b
 		ai_chance = { base = 4 }
 		# Passive water shielding - proven physics, adds mass budget
-		change_variable = {
-			name = sr_milestone_progress
-			add = 6
+		if = {
+			limit = { has_variable = sr_active_orbital }
+			change_variable = { name = sr_progress_orbital add = 6 }
+		}
+		if = {
+			limit = { has_variable = sr_active_moon_landing }
+			change_variable = { name = sr_progress_moon_landing add = 6 }
+		}
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base add = 6 }
 		}
 	}
 
@@ -1117,9 +1130,17 @@ space_race_events.40 = {
 		name = space_race_events.40.c
 		ai_chance = { base = 2 }
 		# Accept higher dose limits - faster but crew health risk
-		change_variable = {
-			name = sr_milestone_progress
-			add = 10
+		if = {
+			limit = { has_variable = sr_active_orbital }
+			change_variable = { name = sr_progress_orbital add = 10 }
+		}
+		if = {
+			limit = { has_variable = sr_active_moon_landing }
+			change_variable = { name = sr_progress_moon_landing add = 10 }
+		}
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base add = 10 }
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
@@ -1147,7 +1168,16 @@ space_race_events.41 = {
 			has_variable = sr_active_moon_base
 			has_variable = sr_active_mars_landing
 		}
-		var:sr_milestone_progress >= 40
+		OR = {
+			AND = {
+				has_variable = sr_active_moon_base
+				var:sr_progress_moon_base >= 40
+			}
+			AND = {
+				has_variable = sr_active_mars_landing
+				var:sr_progress_mars_landing >= 40
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1158,9 +1188,13 @@ space_race_events.41 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Invest in electromagnetic launch catapult
-		change_variable = {
-			name = sr_milestone_progress
-			add = 8
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base add = 8 }
+		}
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing add = 8 }
 		}
 	}
 
@@ -1184,18 +1218,26 @@ space_race_events.41 = {
 					is_building_type = building_space_elevator
 				}
 			}
-			change_variable = {
-				name = sr_milestone_progress
-				add = 15
+			if = {
+				limit = { has_variable = sr_active_moon_base }
+				change_variable = { name = sr_progress_moon_base add = 15 }
+			}
+			if = {
+				limit = { has_variable = sr_active_mars_landing }
+				change_variable = { name = sr_progress_mars_landing add = 15 }
 			}
 			custom_tooltip = {
 				text = "SR_ELEVATOR_BOOST_TT"
 			}
 		}
 		else = {
-			change_variable = {
-				name = sr_milestone_progress
-				add = 4
+			if = {
+				limit = { has_variable = sr_active_moon_base }
+				change_variable = { name = sr_progress_moon_base add = 4 }
+			}
+			if = {
+				limit = { has_variable = sr_active_mars_landing }
+				change_variable = { name = sr_progress_mars_landing add = 4 }
 			}
 			custom_tooltip = {
 				text = "SR_NO_ELEVATOR_TT"
@@ -1207,9 +1249,13 @@ space_race_events.41 = {
 		name = space_race_events.41.c
 		ai_chance = { base = 3 }
 		# Conventional chemical rockets — reliable but expensive per kg
-		change_variable = {
-			name = sr_milestone_progress
-			add = 5
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base add = 5 }
+		}
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing add = 5 }
 		}
 		add_modifier = {
 			name = sr_space_program_funding
@@ -1237,7 +1283,7 @@ space_race_events.42 = {
 
 	trigger = {
 		has_variable = sr_active_mars_landing
-		var:sr_milestone_progress >= 50
+		var:sr_progress_mars_landing >= 50
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1249,7 +1295,7 @@ space_race_events.42 = {
 		ai_chance = { base = 5 }
 		# Invest in autonomous AI systems for crew operations
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_mars_landing
 			add = 8
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -1260,7 +1306,7 @@ space_race_events.42 = {
 		ai_chance = { base = 3 }
 		# Laser relay network - reduce delay with expensive infrastructure
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_mars_landing
 			add = 5
 		}
 	}
@@ -1270,7 +1316,7 @@ space_race_events.42 = {
 		ai_chance = { base = 2 }
 		# Train crew for complete operational independence
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_mars_landing
 			add = 6
 		}
 		add_loyalists = { value = small_radicals }
@@ -1299,7 +1345,16 @@ space_race_events.43 = {
 			has_variable = sr_active_moon_base
 			has_variable = sr_active_mars_landing
 		}
-		var:sr_milestone_progress >= 35
+		OR = {
+			AND = {
+				has_variable = sr_active_moon_base
+				var:sr_progress_moon_base >= 35
+			}
+			AND = {
+				has_variable = sr_active_mars_landing
+				var:sr_progress_mars_landing >= 35
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1310,9 +1365,13 @@ space_race_events.43 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Full bioregenerative system - algae reactors and plant bays
-		change_variable = {
-			name = sr_milestone_progress
-			add = 7
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base add = 7 }
+		}
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing add = 7 }
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -1321,9 +1380,13 @@ space_race_events.43 = {
 		name = space_race_events.43.b
 		ai_chance = { base = 4 }
 		# Hybrid chemical-biological - proven fallback for each subsystem
-		change_variable = {
-			name = sr_milestone_progress
-			add = 5
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base add = 5 }
+		}
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing add = 5 }
 		}
 	}
 
@@ -1331,9 +1394,13 @@ space_race_events.43 = {
 		name = space_race_events.43.c
 		ai_chance = { base = 2 }
 		# Import everything from Earth - simpler but supply-chain dependent
-		change_variable = {
-			name = sr_milestone_progress
-			add = 3
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base add = 3 }
+		}
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing add = 3 }
 		}
 	}
 }
@@ -1357,7 +1424,24 @@ space_race_events.44 = {
 
 	trigger = {
 		has_variable = sr_active_milestone
-		var:sr_milestone_progress >= 15
+		OR = {
+			AND = {
+				has_variable = sr_active_moon_landing
+				var:sr_progress_moon_landing >= 15
+			}
+			AND = {
+				has_variable = sr_active_moon_base
+				var:sr_progress_moon_base >= 15
+			}
+			AND = {
+				has_variable = sr_active_mars_landing
+				var:sr_progress_mars_landing >= 15
+			}
+			AND = {
+				has_variable = sr_active_solar_colonization
+				var:sr_progress_solar_colonization >= 15
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 		# More likely during later milestones (more exposure)
 		OR = {
@@ -1375,9 +1459,21 @@ space_race_events.44 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Emergency shelter protocols - lose time but protect crew
-		change_variable = {
-			name = sr_milestone_progress
-			subtract = 3
+		if = {
+			limit = { has_variable = sr_active_moon_landing }
+			change_variable = { name = sr_progress_moon_landing subtract = 3 }
+		}
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base subtract = 3 }
+		}
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing subtract = 3 }
+		}
+		if = {
+			limit = { has_variable = sr_active_solar_colonization }
+			change_variable = { name = sr_progress_solar_colonization subtract = 3 }
 		}
 	}
 
@@ -1388,9 +1484,21 @@ space_race_events.44 = {
 		random_list = {
 			60 = {
 				# Shielding holds
-				change_variable = {
-					name = sr_milestone_progress
-					add = 2
+				if = {
+					limit = { has_variable = sr_active_moon_landing }
+					change_variable = { name = sr_progress_moon_landing add = 2 }
+				}
+				if = {
+					limit = { has_variable = sr_active_moon_base }
+					change_variable = { name = sr_progress_moon_base add = 2 }
+				}
+				if = {
+					limit = { has_variable = sr_active_mars_landing }
+					change_variable = { name = sr_progress_mars_landing add = 2 }
+				}
+				if = {
+					limit = { has_variable = sr_active_solar_colonization }
+					change_variable = { name = sr_progress_solar_colonization add = 2 }
 				}
 				custom_tooltip = {
 					text = "SR_FLARE_SURVIVED_TT"
@@ -1398,9 +1506,21 @@ space_race_events.44 = {
 			}
 			40 = {
 				# Equipment damage from particle flux
-				change_variable = {
-					name = sr_milestone_progress
-					subtract = 8
+				if = {
+					limit = { has_variable = sr_active_moon_landing }
+					change_variable = { name = sr_progress_moon_landing subtract = 8 }
+				}
+				if = {
+					limit = { has_variable = sr_active_moon_base }
+					change_variable = { name = sr_progress_moon_base subtract = 8 }
+				}
+				if = {
+					limit = { has_variable = sr_active_mars_landing }
+					change_variable = { name = sr_progress_mars_landing subtract = 8 }
+				}
+				if = {
+					limit = { has_variable = sr_active_solar_colonization }
+					change_variable = { name = sr_progress_solar_colonization subtract = 8 }
 				}
 				add_radicals = { value = small_radicals pop_type = academics }
 				custom_tooltip = {
@@ -1430,7 +1550,7 @@ space_race_events.45 = {
 
 	trigger = {
 		has_variable = sr_active_probe
-		var:sr_milestone_progress >= 30
+		var:sr_progress_probe >= 30
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1442,7 +1562,7 @@ space_race_events.45 = {
 		ai_chance = { base = 5 }
 		# Jupiter slingshot — fastest trajectory, narrow launch window
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_probe
 			add = 10
 		}
 	}
@@ -1452,7 +1572,7 @@ space_race_events.45 = {
 		ai_chance = { base = 4 }
 		# Venus-Earth-Jupiter triple gravity assist — slower but more data
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_probe
 			add = 6
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -1463,7 +1583,7 @@ space_race_events.45 = {
 		ai_chance = { base = 2 }
 		# Direct trajectory with ion drive — expensive, no gravity assists
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_probe
 			add = 8
 		}
 	}
@@ -1491,7 +1611,16 @@ space_race_events.46 = {
 			has_variable = sr_active_moon_base
 			has_variable = sr_active_mars_landing
 		}
-		var:sr_milestone_progress >= 60
+		OR = {
+			AND = {
+				has_variable = sr_active_moon_base
+				var:sr_progress_moon_base >= 60
+			}
+			AND = {
+				has_variable = sr_active_mars_landing
+				var:sr_progress_mars_landing >= 60
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1502,9 +1631,13 @@ space_race_events.46 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Extract oxygen and water from regolith — proven chemistry
-		change_variable = {
-			name = sr_milestone_progress
-			add = 8
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base add = 8 }
+		}
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing add = 8 }
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -1515,18 +1648,26 @@ space_race_events.46 = {
 		# Attempt metal smelting from local ores — high reward if it works
 		random_list = {
 			70 = {
-				change_variable = {
-					name = sr_milestone_progress
-					add = 15
+				if = {
+					limit = { has_variable = sr_active_moon_base }
+					change_variable = { name = sr_progress_moon_base add = 15 }
+				}
+				if = {
+					limit = { has_variable = sr_active_mars_landing }
+					change_variable = { name = sr_progress_mars_landing add = 15 }
 				}
 				custom_tooltip = {
 					text = "SR_ISRU_SMELTING_SUCCESS_TT"
 				}
 			}
 			30 = {
-				change_variable = {
-					name = sr_milestone_progress
-					add = 3
+				if = {
+					limit = { has_variable = sr_active_moon_base }
+					change_variable = { name = sr_progress_moon_base add = 3 }
+				}
+				if = {
+					limit = { has_variable = sr_active_mars_landing }
+					change_variable = { name = sr_progress_mars_landing add = 3 }
 				}
 				custom_tooltip = {
 					text = "SR_ISRU_SMELTING_FAIL_TT"
@@ -1559,7 +1700,20 @@ space_race_events.47 = {
 			has_variable = sr_active_probe
 			has_variable = sr_active_moon_base
 		}
-		var:sr_milestone_progress >= 20
+		OR = {
+			AND = {
+				has_variable = sr_active_orbital
+				var:sr_progress_orbital >= 20
+			}
+			AND = {
+				has_variable = sr_active_probe
+				var:sr_progress_probe >= 20
+			}
+			AND = {
+				has_variable = sr_active_moon_base
+				var:sr_progress_moon_base >= 20
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1570,9 +1724,17 @@ space_race_events.47 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Deploy repair crew / remote patch — standard procedure
-		change_variable = {
-			name = sr_milestone_progress
-			subtract = 4
+		if = {
+			limit = { has_variable = sr_active_orbital }
+			change_variable = { name = sr_progress_orbital subtract = 4 }
+		}
+		if = {
+			limit = { has_variable = sr_active_probe }
+			change_variable = { name = sr_progress_probe subtract = 4 }
+		}
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base subtract = 4 }
 		}
 	}
 
@@ -1580,9 +1742,17 @@ space_race_events.47 = {
 		name = space_race_events.47.b
 		ai_chance = { base = 3 }
 		# Redesign with Whipple shielding — prevents future impacts but costs time
-		change_variable = {
-			name = sr_milestone_progress
-			subtract = 8
+		if = {
+			limit = { has_variable = sr_active_orbital }
+			change_variable = { name = sr_progress_orbital subtract = 8 }
+		}
+		if = {
+			limit = { has_variable = sr_active_probe }
+			change_variable = { name = sr_progress_probe subtract = 8 }
+		}
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base subtract = 8 }
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -1610,7 +1780,16 @@ space_race_events.48 = {
 			has_variable = sr_active_mars_landing
 			has_variable = sr_active_solar_colonization
 		}
-		var:sr_milestone_progress >= 30
+		OR = {
+			AND = {
+				has_variable = sr_active_mars_landing
+				var:sr_progress_mars_landing >= 30
+			}
+			AND = {
+				has_variable = sr_active_solar_colonization
+				var:sr_progress_solar_colonization >= 30
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1621,9 +1800,13 @@ space_race_events.48 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Mandatory psychological screening and rotating crews
-		change_variable = {
-			name = sr_milestone_progress
-			add = 4
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing add = 4 }
+		}
+		if = {
+			limit = { has_variable = sr_active_solar_colonization }
+			change_variable = { name = sr_progress_solar_colonization add = 4 }
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -1632,9 +1815,13 @@ space_race_events.48 = {
 		name = space_race_events.48.b
 		ai_chance = { base = 3 }
 		# VR communication suites and family leave rotations
-		change_variable = {
-			name = sr_milestone_progress
-			add = 5
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing add = 5 }
+		}
+		if = {
+			limit = { has_variable = sr_active_solar_colonization }
+			change_variable = { name = sr_progress_solar_colonization add = 5 }
 		}
 		add_loyalists = { value = small_radicals }
 	}
@@ -1643,9 +1830,13 @@ space_race_events.48 = {
 		name = space_race_events.48.c
 		ai_chance = { base = 2 }
 		# Select only psychologically screened loners — smaller crew pool
-		change_variable = {
-			name = sr_milestone_progress
-			add = 7
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing add = 7 }
+		}
+		if = {
+			limit = { has_variable = sr_active_solar_colonization }
+			change_variable = { name = sr_progress_solar_colonization add = 7 }
 		}
 		add_radicals = { value = very_small_radicals pop_type = academics }
 	}
@@ -1671,7 +1862,40 @@ space_race_events.49 = {
 	trigger = {
 		has_variable = sr_active_milestone
 		has_variable = sr_completed_orbital
-		var:sr_milestone_progress >= 20
+		OR = {
+			AND = {
+				has_variable = sr_active_suborbital
+				var:sr_progress_suborbital >= 20
+			}
+			AND = {
+				has_variable = sr_active_orbital
+				var:sr_progress_orbital >= 20
+			}
+			AND = {
+				has_variable = sr_active_moon_landing
+				var:sr_progress_moon_landing >= 20
+			}
+			AND = {
+				has_variable = sr_active_probe
+				var:sr_progress_probe >= 20
+			}
+			AND = {
+				has_variable = sr_active_moon_base
+				var:sr_progress_moon_base >= 20
+			}
+			AND = {
+				has_variable = sr_active_mars_landing
+				var:sr_progress_mars_landing >= 20
+			}
+			AND = {
+				has_variable = sr_active_interstellar_probe
+				var:sr_progress_interstellar_probe >= 20
+			}
+			AND = {
+				has_variable = sr_active_solar_colonization
+				var:sr_progress_solar_colonization >= 20
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1682,20 +1906,16 @@ space_race_events.49 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Build the depot — reduces delta-v requirements for all future missions
-		change_variable = {
-			name = sr_milestone_progress
-			add = 8
-		}
+		set_variable = { name = sr_progress_boost value = 8 }
+		sr_boost_active_milestones = yes
 	}
 
 	option = {
 		name = space_race_events.49.b
 		ai_chance = { base = 3 }
 		# Fund research into in-orbit propellant manufacturing
-		change_variable = {
-			name = sr_milestone_progress
-			add = 5
-		}
+		set_variable = { name = sr_progress_boost value = 5 }
+		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
 }
@@ -1724,7 +1944,40 @@ space_race_events.50 = {
 	trigger = {
 		has_variable = sr_active_milestone
 		has_company = company_type:company_spacex
-		var:sr_milestone_progress >= 15
+		OR = {
+			AND = {
+				has_variable = sr_active_suborbital
+				var:sr_progress_suborbital >= 15
+			}
+			AND = {
+				has_variable = sr_active_orbital
+				var:sr_progress_orbital >= 15
+			}
+			AND = {
+				has_variable = sr_active_moon_landing
+				var:sr_progress_moon_landing >= 15
+			}
+			AND = {
+				has_variable = sr_active_probe
+				var:sr_progress_probe >= 15
+			}
+			AND = {
+				has_variable = sr_active_moon_base
+				var:sr_progress_moon_base >= 15
+			}
+			AND = {
+				has_variable = sr_active_mars_landing
+				var:sr_progress_mars_landing >= 15
+			}
+			AND = {
+				has_variable = sr_active_interstellar_probe
+				var:sr_progress_interstellar_probe >= 15
+			}
+			AND = {
+				has_variable = sr_active_solar_colonization
+				var:sr_progress_solar_colonization >= 15
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1735,10 +1988,8 @@ space_race_events.50 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Public-private partnership — combine government resources and private innovation
-		change_variable = {
-			name = sr_milestone_progress
-			add = 10
-		}
+		set_variable = { name = sr_progress_boost value = 10 }
+		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals strata = upper }
 	}
@@ -1747,10 +1998,8 @@ space_race_events.50 = {
 		name = space_race_events.50.b
 		ai_chance = { base = 3 }
 		# Let the company take the lead — faster, but they get the credit
-		change_variable = {
-			name = sr_milestone_progress
-			add = 15
-		}
+		set_variable = { name = sr_progress_boost value = 15 }
+		sr_boost_active_milestones = yes
 		add_radicals = { value = small_radicals strata = lower }
 		add_loyalists = { value = medium_radicals strata = upper }
 	}
@@ -1759,10 +2008,8 @@ space_race_events.50 = {
 		name = space_race_events.50.c
 		ai_chance = { base = 2 }
 		# Keep the program fully state-run — slower but sovereign
-		change_variable = {
-			name = sr_milestone_progress
-			add = 3
-		}
+		set_variable = { name = sr_progress_boost value = 3 }
+		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals strata = lower }
 		add_radicals = { value = small_radicals strata = upper }
 	}
@@ -1841,7 +2088,7 @@ space_race_events.52 = {
 
 	event_image = { video = "event_space_station" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = space_race_events.52.t
 	desc = space_race_events.52.d
@@ -1877,10 +2124,8 @@ space_race_events.52 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		change_variable = {
-			name = sr_milestone_progress
-			add = 5
-		}
+		set_variable = { name = sr_progress_boost value = 5 }
+		sr_boost_active_milestones = yes
 		every_country = {
 			limit = {
 				has_modifier = un_member_modifier
@@ -1901,10 +2146,8 @@ space_race_events.52 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		change_variable = {
-			name = sr_milestone_progress
-			add = 3
-		}
+		set_variable = { name = sr_progress_boost value = 3 }
+		sr_boost_active_milestones = yes
 	}
 }
 
@@ -1930,7 +2173,7 @@ space_race_events.53 = {
 		any_scope_building = {
 			is_building_type = building_space_mine
 		}
-		var:sr_milestone_progress >= 50
+		var:sr_progress_solar_colonization >= 50
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1942,7 +2185,7 @@ space_race_events.53 = {
 		ai_chance = { base = 5 }
 		# Integrate extraplanetary base operations with the space program
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_solar_colonization
 			add = 15
 		}
 		add_modifier = {
@@ -1958,7 +2201,7 @@ space_race_events.53 = {
 		ai_chance = { base = 3 }
 		# Keep mining operations and the space program separate
 		change_variable = {
-			name = sr_milestone_progress
+			name = sr_progress_solar_colonization
 			add = 5
 		}
 	}
@@ -1986,7 +2229,16 @@ space_race_events.54 = {
 			has_variable = sr_active_suborbital
 			has_variable = sr_active_orbital
 		}
-		var:sr_milestone_progress >= 30
+		OR = {
+			AND = {
+				has_variable = sr_active_suborbital
+				var:sr_progress_suborbital >= 30
+			}
+			AND = {
+				has_variable = sr_active_orbital
+				var:sr_progress_orbital >= 30
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1997,9 +2249,13 @@ space_race_events.54 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Ablative heat shield — proven, single-use, lighter
-		change_variable = {
-			name = sr_milestone_progress
-			add = 6
+		if = {
+			limit = { has_variable = sr_active_suborbital }
+			change_variable = { name = sr_progress_suborbital add = 6 }
+		}
+		if = {
+			limit = { has_variable = sr_active_orbital }
+			change_variable = { name = sr_progress_orbital add = 6 }
 		}
 	}
 
@@ -2007,9 +2263,13 @@ space_race_events.54 = {
 		name = space_race_events.54.b
 		ai_chance = { base = 3 }
 		# Ceramic tile system — reusable but complex, saves money long-term
-		change_variable = {
-			name = sr_milestone_progress
-			add = 4
+		if = {
+			limit = { has_variable = sr_active_suborbital }
+			change_variable = { name = sr_progress_suborbital add = 4 }
+		}
+		if = {
+			limit = { has_variable = sr_active_orbital }
+			change_variable = { name = sr_progress_orbital add = 4 }
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -2020,18 +2280,26 @@ space_race_events.54 = {
 		# Experimental transpiration cooling — cutting-edge, unproven
 		random_list = {
 			60 = {
-				change_variable = {
-					name = sr_milestone_progress
-					add = 12
+				if = {
+					limit = { has_variable = sr_active_suborbital }
+					change_variable = { name = sr_progress_suborbital add = 12 }
+				}
+				if = {
+					limit = { has_variable = sr_active_orbital }
+					change_variable = { name = sr_progress_orbital add = 12 }
 				}
 				custom_tooltip = {
 					text = "SR_TRANSPIRATION_SUCCESS_TT"
 				}
 			}
 			40 = {
-				change_variable = {
-					name = sr_milestone_progress
-					add = 2
+				if = {
+					limit = { has_variable = sr_active_suborbital }
+					change_variable = { name = sr_progress_suborbital add = 2 }
+				}
+				if = {
+					limit = { has_variable = sr_active_orbital }
+					change_variable = { name = sr_progress_orbital add = 2 }
 				}
 				custom_tooltip = {
 					text = "SR_TRANSPIRATION_FAIL_TT"
@@ -2067,7 +2335,20 @@ space_race_events.55 = {
 			has_variable = sr_active_mars_landing
 			has_variable = sr_active_solar_colonization
 		}
-		var:sr_milestone_progress >= 30
+		OR = {
+			AND = {
+				has_variable = sr_active_moon_base
+				var:sr_progress_moon_base >= 30
+			}
+			AND = {
+				has_variable = sr_active_mars_landing
+				var:sr_progress_mars_landing >= 30
+			}
+			AND = {
+				has_variable = sr_active_solar_colonization
+				var:sr_progress_solar_colonization >= 30
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -2078,9 +2359,17 @@ space_race_events.55 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Route all mission cargo through the elevator - massive cost reduction
-		change_variable = {
-			name = sr_milestone_progress
-			add = 12
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base add = 12 }
+		}
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing add = 12 }
+		}
+		if = {
+			limit = { has_variable = sr_active_solar_colonization }
+			change_variable = { name = sr_progress_solar_colonization add = 12 }
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -2089,9 +2378,17 @@ space_race_events.55 = {
 		name = space_race_events.55.b
 		ai_chance = { base = 3 }
 		# Use elevator for bulk cargo, rockets for time-critical payloads
-		change_variable = {
-			name = sr_milestone_progress
-			add = 8
+		if = {
+			limit = { has_variable = sr_active_moon_base }
+			change_variable = { name = sr_progress_moon_base add = 8 }
+		}
+		if = {
+			limit = { has_variable = sr_active_mars_landing }
+			change_variable = { name = sr_progress_mars_landing add = 8 }
+		}
+		if = {
+			limit = { has_variable = sr_active_solar_colonization }
+			change_variable = { name = sr_progress_solar_colonization add = 8 }
 		}
 	}
 }
@@ -2196,10 +2493,6 @@ space_race_events.12 = {
 		name = space_race_events.12.c
 		ai_chance = { base = 1 }
 		# Rush a replacement vehicle — accept the risk
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.75
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = large_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals }
@@ -2244,10 +2537,6 @@ space_race_events.13 = {
 		name = space_race_events.13.c
 		ai_chance = { base = 1 }
 		# Assume the probe is still on course — wait and hope
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.75
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = medium_radicals pop_type = academics }
 	}
@@ -2290,10 +2579,6 @@ space_race_events.14 = {
 		name = space_race_events.14.c
 		ai_chance = { base = 2 }
 		# Patch and continue — the crew is brave
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.7
-		}
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_radicals = { value = large_radicals pop_type = academics }
 	}
@@ -2332,10 +2617,6 @@ space_race_events.15 = {
 		random_list = {
 			50 = {
 				# Pilot succeeds!
-				change_variable = {
-					name = sr_milestone_progress
-					add = 10
-				}
 				add_loyalists = { value = large_radicals }
 				custom_tooltip = {
 					text = "SR_MANUAL_OVERRIDE_SUCCESS_TT"
@@ -2398,10 +2679,6 @@ space_race_events.16 = {
 		name = space_race_events.16.c
 		ai_chance = { base = 1 }
 		# Fly the next mission with the same design — anomaly, not systemic
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.75
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = large_radicals pop_type = academics }
 	}
@@ -2437,10 +2714,6 @@ space_race_events.17 = {
 		name = space_race_events.17.b
 		ai_chance = { base = 3 }
 		# Treat in place with telemedicine — risky but keeps the mission alive
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.8
-		}
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_radicals = { value = small_radicals }
@@ -2486,10 +2759,6 @@ space_race_events.18 = {
 		name = space_race_events.18.b
 		ai_chance = { base = 3 }
 		# Quietly restructure management — minimize political damage
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.7
-		}
 		set_variable = { name = sr_failure_cooldown value = 10 }
 		add_radicals = { value = small_radicals strata = lower }
 	}
@@ -2498,10 +2767,6 @@ space_race_events.18 = {
 		name = space_race_events.18.c
 		ai_chance = { base = 1 }
 		# Blame foreign agents — deflect and accelerate
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.8
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
@@ -2547,10 +2812,6 @@ space_race_events.19 = {
 		name = space_race_events.19.c
 		ai_chance = { base = 2 }
 		# Harden systems and press on — waste no time on paranoia
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.75
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = large_radicals pop_type = academics }
 	}
@@ -2584,10 +2845,6 @@ space_race_events.21 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Wait for the parts — accept the delay
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.85
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 	}
 
@@ -2595,10 +2852,6 @@ space_race_events.21 = {
 		name = space_race_events.21.b
 		ai_chance = { base = 3 }
 		# Source from alternative suppliers — faster but untested quality
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.9
-		}
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
@@ -2607,10 +2860,6 @@ space_race_events.21 = {
 		name = space_race_events.21.c
 		ai_chance = { base = 2 }
 		# Develop domestic manufacturing capability — long-term investment
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.75
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -2639,10 +2888,6 @@ space_race_events.22 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Wait for the next window — run more simulations in the meantime
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.9
-		}
 		set_variable = { name = sr_failure_cooldown value = 4 }
 	}
 
@@ -2659,10 +2904,6 @@ space_race_events.22 = {
 			}
 			30 = {
 				# Scrubbed anyway after aborted countdown
-				change_variable = {
-					name = sr_milestone_progress
-					multiply = 0.8
-				}
 				set_variable = { name = sr_failure_cooldown value = 6 }
 				add_radicals = { value = small_radicals pop_type = academics }
 				custom_tooltip = {
@@ -2696,10 +2937,6 @@ space_race_events.23 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Full code audit — find and fix every instance
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.85
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 	}
 
@@ -2707,10 +2944,6 @@ space_race_events.23 = {
 		name = space_race_events.23.b
 		ai_chance = { base = 3 }
 		# Patch the specific bug and continue testing
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.9
-		}
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_radicals = { value = very_small_radicals pop_type = academics }
 	}
@@ -2719,10 +2952,6 @@ space_race_events.23 = {
 		name = space_race_events.23.c
 		ai_chance = { base = 2 }
 		# Rewrite the flight software from scratch — radical but thorough
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.7
-		}
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -2751,10 +2980,6 @@ space_race_events.24 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Defend the program before the committee — accept some delays
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.85
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_loyalists = { value = small_radicals }
 	}
@@ -2763,10 +2988,6 @@ space_race_events.24 = {
 		name = space_race_events.24.b
 		ai_chance = { base = 3 }
 		# Propose cost-cutting measures to appease the budget hawks
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.8
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 	}
 
@@ -2774,10 +2995,6 @@ space_race_events.24 = {
 		name = space_race_events.24.c
 		ai_chance = { base = 2 }
 		# Appeal directly to the public — generate grassroots support
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.9
-		}
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_loyalists = { value = medium_radicals }
 		add_radicals = { value = small_radicals strata = upper }
@@ -2807,10 +3024,6 @@ space_race_events.25 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Return the defective parts — demand replacements
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.85
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
@@ -2819,10 +3032,6 @@ space_race_events.25 = {
 		name = space_race_events.25.b
 		ai_chance = { base = 3 }
 		# Bring manufacturing in-house — control quality directly
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.75
-		}
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -2835,7 +3044,7 @@ space_race_events.26 = {
 
 	event_image = { video = "event_space_station" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = space_race_events.26.t
 	desc = space_race_events.26.d
@@ -2851,10 +3060,6 @@ space_race_events.26 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Absorb the disruption — space transcends politics
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.85
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 	}
 
@@ -2862,10 +3067,6 @@ space_race_events.26 = {
 		name = space_race_events.26.b
 		ai_chance = { base = 3 }
 		# Leverage the crisis — rally national pride around the space program
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.9
-		}
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_loyalists = { value = medium_radicals }
 	}
@@ -2874,10 +3075,6 @@ space_race_events.26 = {
 		name = space_race_events.26.c
 		ai_chance = { base = 2 }
 		# Use the space program as a diplomatic olive branch
-		change_variable = {
-			name = sr_milestone_progress
-			multiply = 0.8
-		}
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		every_country = {
 			limit = {

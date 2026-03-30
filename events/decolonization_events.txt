@@ -50,13 +50,17 @@ decolonization_events.1 = {
 		name = decolonization_events.1.a
 		default_option = yes
 		ai_chance = {
-			base = 1
+			base = 3
 			modifier = {
 				trigger = {
 					ig:ig_intelligentsia ?= {
 						leader = { has_ideology = ideology:ideology_anti_colonialist }
 					}
 				}
+				add = 3
+			}
+			modifier = {
+				trigger = { colonial_gp_condemners_count >= 2 }
 				add = 3
 			}
 		}
@@ -79,7 +83,11 @@ decolonization_events.1 = {
 	option = {
 		name = decolonization_events.1.b
 		ai_chance = {
-			base = 2
+			base = 1
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 1
+			}
 		}
 		add_modifier = {
 			name = colonial_crackdown_modifier
@@ -101,12 +109,20 @@ decolonization_events.1 = {
 	option = {
 		name = decolonization_events.1.c
 		ai_chance = {
-			base = 1
+			base = 2
 			modifier = {
 				trigger = {
 					scope:restless_subject = { liberty_desire >= 75 }
 				}
-				add = 3
+				add = 5
+			}
+			modifier = {
+				trigger = { NOT = { country_rank >= rank_value:great_power } }
+				add = 5
+			}
+			modifier = {
+				trigger = { colonial_gp_condemners_count >= 3 }
+				add = 5
 			}
 		}
 		scope:restless_subject = {
@@ -334,7 +350,7 @@ decolonization_events.3 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/colonial_soldiers.dds"
+		texture = "gfx/event_pictures/military_parade.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -372,10 +388,14 @@ decolonization_events.3 = {
 		name = decolonization_events.3.a
 		default_option = yes
 		ai_chance = {
-			base = 2
+			base = 4
 			modifier = {
 				trigger = { is_at_war = yes }
-				add = 3
+				add = 5
+			}
+			modifier = {
+				trigger = { NOT = { country_rank >= rank_value:great_power } }
+				add = 5
 			}
 		}
 		scope:rebellious_subject = {
@@ -408,7 +428,7 @@ decolonization_events.3 = {
 	option = {
 		name = decolonization_events.3.b
 		ai_chance = {
-			base = 2
+			base = 1
 		}
 		add_modifier = {
 			name = colonial_crackdown_modifier
@@ -473,7 +493,7 @@ decolonization_events.4 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/independence_celebration.dds"
+		texture = "gfx/event_pictures/political_rally.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -716,7 +736,7 @@ decolonization_events.7 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/independence_celebration.dds"
+		texture = "gfx/event_pictures/political_rally.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -998,10 +1018,18 @@ decolonization_events.9 = {
 	option = {
 		name = decolonization_events.9.c
 		ai_chance = {
-			base = 1
+			base = 3
 			modifier = {
-				trigger = { colonial_gp_condemners_count >= 3 }
+				trigger = { colonial_gp_condemners_count >= 2 }
 				add = 3
+			}
+			modifier = {
+				trigger = { NOT = { country_rank >= rank_value:great_power } }
+				add = 5
+			}
+			modifier = {
+				trigger = { colonial_low_acceptance_count >= 3 }
+				add = 5
 			}
 		}
 		scope:unrest_colony = {
@@ -1339,7 +1367,7 @@ decolonization_events.13 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/colonial_soldiers.dds"
+		texture = "gfx/event_pictures/military_parade.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1386,10 +1414,14 @@ decolonization_events.13 = {
 		name = decolonization_events.13.a
 		default_option = yes
 		ai_chance = {
-			base = 2
+			base = 4
 			modifier = {
 				trigger = { colonial_gp_condemners_count >= 2 }
-				add = 3
+				add = 5
+			}
+			modifier = {
+				trigger = { NOT = { country_rank >= rank_value:great_power } }
+				add = 5
 			}
 		}
 		scope:uprising_colony = {
@@ -1411,7 +1443,7 @@ decolonization_events.13 = {
 	option = {
 		name = decolonization_events.13.b
 		ai_chance = {
-			base = 2
+			base = 1
 		}
 		add_modifier = {
 			name = colonial_crackdown_modifier
@@ -1501,7 +1533,7 @@ decolonization_events.14 = {
 		name = decolonization_events.14.a
 		default_option = yes
 		ai_chance = {
-			base = 3
+			base = 5
 			modifier = {
 				trigger = {
 					NOT = {
@@ -1510,7 +1542,7 @@ decolonization_events.14 = {
 						}
 					}
 				}
-				add = 5
+				add = 10
 			}
 			modifier = {
 				trigger = {
@@ -1519,6 +1551,12 @@ decolonization_events.14 = {
 					}
 				}
 				add = -5
+			}
+			modifier = {
+				trigger = {
+					has_technology_researched = knowledge_economy
+				}
+				add = 5
 			}
 		}
 		set_variable = gp_anti_colonial_stance
@@ -1543,7 +1581,7 @@ decolonization_events.14 = {
 	option = {
 		name = decolonization_events.14.b
 		ai_chance = {
-			base = 2
+			base = 1
 		}
 		if = {
 			limit = { has_variable = gp_anti_colonial_stance }
@@ -1557,11 +1595,11 @@ decolonization_events.14 = {
 		add_loyalists = { value = very_small_radicals }
 	}
 
-	# Option C: Support colonial interests
+	# Option C: Support colonial interests - increasingly unpopular
 	option = {
 		name = decolonization_events.14.c
 		ai_chance = {
-			base = 1
+			base = 0
 			modifier = {
 				trigger = {
 					any_scope_state = {
@@ -1812,5 +1850,920 @@ decolonization_events.15 = {
 		add_radicals = { value = medium_radicals strata = lower }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# ============================================================================
+# EVENTS 16-21: POST-INDEPENDENCE & GREAT POWER INTERVENTION
+# New events for country mergers/splits, border disputes, GP intervention
+# ============================================================================
+
+# Event 16: The Partition Question
+# Fires for newly independent countries that border states still under colonial rule
+# or other new nations with shared cultural heritage. Models India/Pakistan scenarios.
+decolonization_events.16 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/colonial_protest.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = decolonization_events.16.t
+	desc = decolonization_events.16.d
+	flavor = decolonization_events.16.f
+
+	duration = 3
+
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decolonization
+		has_variable = recently_formed_country
+		is_subject = no
+		NOT = { has_modifier = partition_territorial_claims_modifier }
+		NOT = { has_modifier = partition_accepted_borders_modifier }
+		# Must border another country that shares cultural heritage
+		any_scope_state = {
+			any_neighbouring_state = {
+				owner = {
+					NOT = { this = root }
+					is_country_alive = yes
+					NOT = { is_country_type = decentralized }
+					OR = {
+						# Another newly formed country with shared heritage
+						AND = {
+							has_variable = recently_formed_country
+							any_primary_culture = {
+								shares_heritage_trait_group_with_any_primary_culture = root
+							}
+						}
+						# Or colonial state with our culture's homeland
+						AND = {
+							any_scope_state = {
+								is_overseas_colonial_state = yes
+								any_scope_culture = {
+									shares_heritage_trait_group_with_any_primary_culture = root
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		# Find a neighboring country with shared heritage
+		random_scope_state = {
+			limit = {
+				any_neighbouring_state = {
+					owner = {
+						NOT = { this = root }
+						is_country_alive = yes
+						NOT = { is_country_type = decentralized }
+						OR = {
+							AND = {
+								has_variable = recently_formed_country
+								any_primary_culture = {
+									shares_heritage_trait_group_with_any_primary_culture = root
+								}
+							}
+							AND = {
+								any_scope_state = {
+									is_overseas_colonial_state = yes
+									any_scope_culture = {
+										shares_heritage_trait_group_with_any_primary_culture = root
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			random_neighbouring_state = {
+				limit = {
+					owner = {
+						NOT = { this = root }
+						is_country_alive = yes
+						NOT = { is_country_type = decentralized }
+					}
+				}
+				owner = {
+					save_scope_as = partition_neighbor
+				}
+			}
+		}
+	}
+
+	# Option A: Demand unification — press for incorporating neighboring peoples
+	option = {
+		name = decolonization_events.16.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					exists = scope:partition_neighbor
+					scope:partition_neighbor = { has_variable = recently_formed_country }
+				}
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = partition_territorial_claims_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:partition_neighbor }
+			change_relations = {
+				country = scope:partition_neighbor
+				value = -40
+			}
+		}
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = upper }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: Propose federation with our neighbor
+	option = {
+		name = decolonization_events.16.b
+		trigger = {
+			exists = scope:partition_neighbor
+			scope:partition_neighbor = {
+				has_variable = recently_formed_country
+				any_primary_culture = {
+					shares_heritage_trait_group_with_any_primary_culture = root
+				}
+			}
+		}
+		ai_chance = {
+			base = 2
+		}
+		if = {
+			limit = { exists = scope:partition_neighbor }
+			change_relations = {
+				country = scope:partition_neighbor
+				value = 30
+			}
+			create_truce = {
+				country = scope:partition_neighbor
+				months = 60
+			}
+		}
+		add_modifier = {
+			name = partition_accepted_borders_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+
+	# Option C: Accept the borders drawn by the departing powers
+	option = {
+		name = decolonization_events.16.c
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = partition_accepted_borders_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals strata = lower }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# Event 17: Border Disputes Between New Nations
+# Fires for newly independent countries bordering another new nation — inherited
+# colonial boundaries rarely respect ethnic, linguistic, or geographic realities.
+decolonization_events.17 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/military_parade.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = decolonization_events.17.t
+	desc = decolonization_events.17.d
+	flavor = decolonization_events.17.f
+
+	duration = 3
+
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decolonization
+		has_variable = recently_formed_country
+		is_subject = no
+		NOT = { has_modifier = border_dispute_active_modifier }
+		NOT = { has_modifier = border_dispute_resolved_modifier }
+		# Must border another newly formed country
+		any_scope_state = {
+			any_neighbouring_state = {
+				owner = {
+					NOT = { this = root }
+					has_variable = recently_formed_country
+					is_subject = no
+					NOT = { is_country_type = decentralized }
+				}
+			}
+		}
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				any_neighbouring_state = {
+					owner = {
+						NOT = { this = root }
+						has_variable = recently_formed_country
+						is_subject = no
+					}
+				}
+			}
+			save_scope_as = disputed_state
+			random_neighbouring_state = {
+				limit = {
+					owner = {
+						NOT = { this = root }
+						has_variable = recently_formed_country
+						is_subject = no
+					}
+				}
+				owner = {
+					save_scope_as = border_rival
+				}
+			}
+		}
+	}
+
+	# Option A: Press our claims — the borders must be redrawn
+	option = {
+		name = decolonization_events.17.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					ig:ig_armed_forces ?= {
+						is_in_government = yes
+					}
+				}
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = border_dispute_active_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:border_rival }
+			change_relations = {
+				country = scope:border_rival
+				value = -40
+			}
+		}
+		change_infamy = 3
+		add_radicals = { value = small_radicals }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: Seek international mediation
+	option = {
+		name = decolonization_events.17.b
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = border_dispute_resolved_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:border_rival }
+			change_relations = {
+				country = scope:border_rival
+				value = 10
+			}
+		}
+		add_loyalists = { value = small_radicals }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+
+	# Option C: Accept the borders and build from within
+	option = {
+		name = decolonization_events.17.c
+		ai_chance = { base = 3 }
+		add_modifier = {
+			name = border_dispute_resolved_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:border_rival }
+			change_relations = {
+				country = scope:border_rival
+				value = 25
+			}
+			create_truce = {
+				country = scope:border_rival
+				months = 60
+			}
+		}
+		add_loyalists = { value = medium_radicals }
+		# Nationalists see this as capitulation
+		add_radicals = { value = small_radicals strata = lower }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# Event 18: The Strongman's Promise
+# Fires for newly independent countries with political instability — the temptation
+# of authoritarian consolidation in a fragile state.
+decolonization_events.18 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/military_parade.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = decolonization_events.18.t
+	desc = decolonization_events.18.d
+	flavor = decolonization_events.18.f
+
+	duration = 3
+
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decolonization
+		has_variable = recently_formed_country
+		is_subject = no
+		NOR = {
+			has_modifier = military_strongman_modifier
+			has_modifier = democratic_transition_modifier
+			has_modifier = one_party_consolidation_modifier
+		}
+		# Must have political instability
+		OR = {
+			any_political_movement = {
+				is_revolutionary = yes
+			}
+			country_has_primary_culture = no
+			any_scope_pop = {
+				is_pop_type = soldiers
+				pop_radical_fraction >= 0.3
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	# Option A: Military takeover — the general promises order
+	option = {
+		name = decolonization_events.18.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					ig:ig_armed_forces ?= {
+						is_in_government = yes
+					}
+				}
+				add = 5
+			}
+		}
+		add_modifier = {
+			name = military_strongman_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = medium_radicals pop_type = academics }
+		# Military consolidation
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: Democratic transition — messy but legitimate
+	option = {
+		name = decolonization_events.18.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					ig:ig_intelligentsia ?= {
+						is_in_government = yes
+					}
+				}
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = democratic_transition_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = upper }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+
+	# Option C: One-party state — the revolutionary vanguard
+	option = {
+		name = decolonization_events.18.c
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = one_party_consolidation_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals pop_type = academics }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# ============================================================================
+# Event 19: The [Region] Crisis — Suez Crisis Model
+# Fires for great powers when a recently-independent former colony
+# nationalizes assets. The GP can intervene militarily, apply sanctions,
+# or accept the new status quo. Other GPs then react.
+# ============================================================================
+decolonization_events.19 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/military_parade.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = decolonization_events.19.t
+	desc = decolonization_events.19.d
+	flavor = decolonization_events.19.f
+
+	duration = 3
+
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decolonization
+		country_rank >= rank_value:great_power
+		NOR = {
+			has_modifier = gp_military_intervention_modifier
+			has_modifier = gp_economic_sanctions_modifier
+			has_variable = gp_accepted_nationalization
+		}
+		# A former colony has nationalized assets
+		any_country = {
+			NOT = { this = root }
+			was_formed_from = ROOT
+			is_subject = no
+			has_modifier = independence_nationalization_modifier
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				was_formed_from = ROOT
+				is_subject = no
+				has_modifier = independence_nationalization_modifier
+			}
+			save_scope_as = nationalizing_country
+		}
+	}
+
+	# Option A: Military intervention — send in the troops
+	option = {
+		name = decolonization_events.19.a
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_armed_forces ?= {
+						is_in_government = yes
+					}
+				}
+				add = 2
+			}
+			# Less likely if many GPs condemn colonialism
+			modifier = {
+				trigger = { colonial_gp_condemners_count >= 3 }
+				add = -5
+			}
+		}
+		add_modifier = {
+			name = gp_military_intervention_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# The target suffers
+		scope:nationalizing_country = {
+			add_modifier = {
+				name = gp_intervention_target_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
+		change_relations = {
+			country = scope:nationalizing_country
+			value = -100
+		}
+		change_infamy = 15
+		# Domestic reaction to imperial adventure
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
+		add_radicals = { value = large_radicals pop_type = academics }
+		# Trigger GP response event for all other great powers
+		every_country = {
+			limit = {
+				NOT = { this = root }
+				country_rank >= rank_value:great_power
+				has_technology_researched = decolonization
+			}
+			trigger_event = { id = decolonization_events.20 }
+		}
+	}
+
+	# Option B: Economic sanctions — punish without war
+	option = {
+		name = decolonization_events.19.b
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_variable = gp_pro_colonial_stance }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = gp_economic_sanctions_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:nationalizing_country
+			value = -40
+		}
+		change_infamy = 5
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+
+	# Option C: Accept the new order — swallow the humiliation
+	option = {
+		name = decolonization_events.19.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_variable = gp_anti_colonial_stance }
+				add = 5
+			}
+			modifier = {
+				trigger = { colonial_gp_condemners_count >= 3 }
+				add = 5
+			}
+		}
+		set_variable = { name = gp_accepted_nationalization days = long_modifier_time }
+		add_modifier = {
+			name = peaceful_decolonization_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:nationalizing_country
+			value = 20
+		}
+		add_radicals = { value = small_radicals strata = upper }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+}
+
+# Event 20: International Condemnation of Intervention
+# Fires for other GPs when a great power intervenes militarily in a former colony.
+# Models the international reaction to the Suez Crisis / similar interventions.
+decolonization_events.20 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/diplomatic_meeting.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = decolonization_events.20.t
+	desc = decolonization_events.20.d
+	flavor = decolonization_events.20.f
+
+	duration = 3
+
+	trigger = {
+		# Always fires when triggered directly by event 19
+		always = yes
+	}
+
+	immediate = {
+		# The intervening power is whoever triggered this via event 19
+		# We need to find them
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				country_rank >= rank_value:great_power
+				has_modifier = gp_military_intervention_modifier
+			}
+			save_scope_as = intervening_power
+		}
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				has_modifier = gp_intervention_target_modifier
+			}
+			save_scope_as = intervention_victim
+		}
+	}
+
+	# Option A: Condemn the intervention — demand withdrawal
+	option = {
+		name = decolonization_events.20.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_variable = gp_anti_colonial_stance }
+				add = 10
+			}
+			modifier = {
+				trigger = {
+					exists = scope:intervening_power
+					scope:intervening_power = {
+						relations:root < relations_threshold:amicable
+					}
+				}
+				add = 5
+			}
+		}
+		if = {
+			limit = { exists = scope:intervening_power }
+			change_relations = {
+				country = scope:intervening_power
+				value = -40
+			}
+			# The condemning power's moral authority
+			scope:intervening_power = {
+				add_modifier = {
+					name = gp_intervention_condemned_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+			}
+		}
+		if = {
+			limit = { exists = scope:intervention_victim }
+			change_relations = {
+				country = scope:intervention_victim
+				value = 30
+			}
+		}
+		add_modifier = {
+			name = gp_moral_authority_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: Support the intervention — old empires must be defended
+	option = {
+		name = decolonization_events.20.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_variable = gp_pro_colonial_stance }
+				add = 5
+			}
+			modifier = {
+				trigger = {
+					exists = scope:intervening_power
+					scope:intervening_power = {
+						relations:root >= relations_threshold:amicable
+					}
+				}
+				add = 5
+			}
+		}
+		if = {
+			limit = { exists = scope:intervening_power }
+			change_relations = {
+				country = scope:intervening_power
+				value = 30
+			}
+		}
+		if = {
+			limit = { exists = scope:intervention_victim }
+			change_relations = {
+				country = scope:intervention_victim
+				value = -30
+			}
+		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	# Option C: Remain neutral — this is not our affair
+	option = {
+		name = decolonization_events.20.c
+		ai_chance = {
+			base = 2
+		}
+		add_loyalists = { value = very_small_radicals }
+	}
+}
+
+# Event 21: The Non-Aligned Path
+# Fires for newly independent countries when competing great powers
+# seek to pull them into their orbit. Models the Non-Aligned Movement.
+decolonization_events.21 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/diplomatic_meeting.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = decolonization_events.21.t
+	desc = decolonization_events.21.d
+	flavor = decolonization_events.21.f
+
+	duration = 3
+
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decolonization
+		has_variable = recently_formed_country
+		is_subject = no
+		NOR = {
+			has_modifier = non_aligned_movement_modifier
+			has_modifier = superpower_aligned_modifier
+		}
+		# Must be at least 2 GPs with opposing colonial stances
+		any_country = {
+			NOT = { this = root }
+			country_rank >= rank_value:great_power
+			has_variable = gp_anti_colonial_stance
+		}
+		any_country = {
+			NOT = { this = root }
+			country_rank >= rank_value:great_power
+			has_variable = gp_pro_colonial_stance
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				country_rank >= rank_value:great_power
+				has_variable = gp_anti_colonial_stance
+			}
+			save_scope_as = anti_colonial_gp
+		}
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				country_rank >= rank_value:great_power
+				has_variable = gp_pro_colonial_stance
+			}
+			save_scope_as = pro_colonial_gp
+		}
+	}
+
+	# Option A: Chart our own course — the non-aligned movement
+	option = {
+		name = decolonization_events.21.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+		}
+		add_modifier = {
+			name = non_aligned_movement_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: Align with the anti-colonial power
+	option = {
+		name = decolonization_events.21.b
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = superpower_aligned_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:anti_colonial_gp }
+			change_relations = {
+				country = scope:anti_colonial_gp
+				value = 40
+			}
+		}
+		if = {
+			limit = { exists = scope:pro_colonial_gp }
+			change_relations = {
+				country = scope:pro_colonial_gp
+				value = -20
+			}
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+
+	# Option C: Align with the pro-colonial power — pragmatic economics
+	option = {
+		name = decolonization_events.21.c
+		ai_chance = {
+			base = 1
+		}
+		add_modifier = {
+			name = superpower_aligned_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:pro_colonial_gp }
+			change_relations = {
+				country = scope:pro_colonial_gp
+				value = 40
+			}
+		}
+		if = {
+			limit = { exists = scope:anti_colonial_gp }
+			change_relations = {
+				country = scope:anti_colonial_gp
+				value = -20
+			}
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals strata = lower }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }

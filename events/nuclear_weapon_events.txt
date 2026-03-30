@@ -129,7 +129,7 @@ nuclear_weapon_events.3 = {
     placement = root
 
     event_image = {
- 		texture = "gfx/event_pictures/missile_defense.dds"
+ 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -161,7 +161,7 @@ nuclear_weapon_events.4 = {
     placement = root
 
     event_image = {
- 		texture = "gfx/event_pictures/missile_defense.dds"
+ 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -193,7 +193,7 @@ nuclear_weapon_events.5 = {
     placement = root
 
     event_image = {
- 		texture = "gfx/event_pictures/tactical_nuclear_strike.dds"
+ 		texture = "gfx/event_pictures/mushroom_cloud.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -225,7 +225,7 @@ nuclear_weapon_events.6 = {
     placement = root
 
     event_image = {
- 		texture = "gfx/event_pictures/tactical_nuclear_strike.dds"
+ 		texture = "gfx/event_pictures/mushroom_cloud.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -257,7 +257,7 @@ nuclear_weapon_events.7 = {
     placement = root
 
     event_image = {
- 		texture = "gfx/event_pictures/missile_defense.dds"
+ 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -289,7 +289,7 @@ nuclear_weapon_events.8 = {
     placement = root
 
     event_image = {
- 		texture = "gfx/event_pictures/missile_defense.dds"
+ 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -604,7 +604,7 @@ nuclear_weapon_events.13 = {
     placement = root
 
     event_image = {
- 		texture = "gfx/event_pictures/missile_defense.dds"
+ 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -636,7 +636,7 @@ nuclear_weapon_events.14 = {
     placement = root
 
     event_image = {
- 		texture = "gfx/event_pictures/missile_defense.dds"
+ 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
  	}
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"

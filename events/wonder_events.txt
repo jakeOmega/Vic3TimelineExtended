@@ -325,7 +325,7 @@ wonder_events.7 = {
 
 	event_image = { video = "unspecific_politicians_arguing" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = wonder_events.7.t
 	desc = wonder_events.7.d
@@ -639,7 +639,7 @@ wonder_events.15 = {
 
 	event_image = { video = "unspecific_politicians_arguing" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = wonder_events.15.t
 	desc = wonder_events.15.d
@@ -804,7 +804,7 @@ wonder_events.22 = {
 
 	event_image = { video = "unspecific_signed_contract" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = wonder_events.22.t
 	desc = wonder_events.22.d
@@ -1221,7 +1221,7 @@ wonder_events.33 = {
 
 	event_image = { video = "europenorthamerica_capitalists_meeting" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = wonder_events.33.t
 	desc = wonder_events.33.d

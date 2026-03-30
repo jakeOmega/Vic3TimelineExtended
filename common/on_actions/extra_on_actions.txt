@@ -1446,6 +1446,91 @@ decolonization_events_on_action = {
 					}
 					trigger_event = { id = decolonization_events.14 }
 				}
+				# Post-Independence: Partition Question (new nations near neighbors)
+				10 = {
+					trigger = {
+						has_variable = recently_formed_country
+						is_subject = no
+						any_scope_state = {
+							any_neighbouring_state = {
+								owner = {
+									NOT = { this = root }
+									is_country_alive = yes
+									NOT = { is_country_type = decentralized }
+									OR = {
+										has_variable = recently_formed_country
+										any_scope_state = {
+											is_overseas_colonial_state = yes
+										}
+									}
+								}
+							}
+						}
+					}
+					trigger_event = { id = decolonization_events.16 }
+				}
+				# Post-Independence: Border Disputes (new nations vs new nations)
+				10 = {
+					trigger = {
+						has_variable = recently_formed_country
+						is_subject = no
+						any_scope_state = {
+							any_neighbouring_state = {
+								owner = {
+									NOT = { this = root }
+									has_variable = recently_formed_country
+									is_subject = no
+								}
+							}
+						}
+					}
+					trigger_event = { id = decolonization_events.17 }
+				}
+				# Post-Independence: Strongman's Promise (political instability)
+				10 = {
+					trigger = {
+						has_variable = recently_formed_country
+						is_subject = no
+						OR = {
+							any_political_movement = {
+								is_revolutionary = yes
+							}
+							country_has_primary_culture = no
+						}
+					}
+					trigger_event = { id = decolonization_events.18 }
+				}
+				# GP Intervention Crisis: Suez Crisis model (GP vs nationalizing colony)
+				15 = {
+					trigger = {
+						country_rank >= rank_value:great_power
+						any_country = {
+							NOT = { this = root }
+							was_formed_from = ROOT
+							is_subject = no
+							has_modifier = independence_nationalization_modifier
+						}
+					}
+					trigger_event = { id = decolonization_events.19 }
+				}
+				# Post-Independence: Non-Aligned Movement (Cold War alignment)
+				10 = {
+					trigger = {
+						has_variable = recently_formed_country
+						is_subject = no
+						any_country = {
+							NOT = { this = root }
+							country_rank >= rank_value:great_power
+							has_variable = gp_anti_colonial_stance
+						}
+						any_country = {
+							NOT = { this = root }
+							country_rank >= rank_value:great_power
+							has_variable = gp_pro_colonial_stance
+						}
+					}
+					trigger_event = { id = decolonization_events.21 }
+				}
 			}
 		}
 	}

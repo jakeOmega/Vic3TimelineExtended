@@ -1,5 +1,5 @@
 ﻿je_united_nations = {
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	group = je_group_foreign_affairs
 

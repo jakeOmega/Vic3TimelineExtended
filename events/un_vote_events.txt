@@ -329,7 +329,7 @@ un_vote.1 = {
 			# Great powers more opinionated
 			modifier = {
 				trigger = { country_rank >= rank_value:great_power }
-				multiply = 1.5
+				factor = 1.5
 			}
 			# ---- Topic: Condemn aggressor ----
 			# Support if target is our rival

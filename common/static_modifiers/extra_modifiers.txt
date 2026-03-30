@@ -1508,6 +1508,121 @@ anti_colonial_momentum_modifier = {
 }
 
 # ============================================================================
+# POST-INDEPENDENCE & GP INTERVENTION EVENT MODIFIERS
+# ============================================================================
+
+# Event 16: Partition
+partition_territorial_claims_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = 25
+	country_influence_add = -15
+}
+
+partition_accepted_borders_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 40
+	country_influence_add = 15
+}
+
+# Event 17: Border Dispute
+border_dispute_active_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -25
+	country_influence_add = -10
+}
+
+border_dispute_resolved_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 25
+	country_influence_add = 10
+}
+
+# Event 18: Post-Colonial Coup
+military_strongman_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	country_prestige_add = -50
+	country_authority_add = 200
+	state_standard_of_living_add = -1
+}
+
+democratic_transition_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	country_legitimacy_govt_total_votes_add = 50
+}
+
+one_party_consolidation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_authority_add = 100
+	country_tech_research_speed_mult = 0.03
+}
+
+# Event 19: Suez Crisis-style GP Intervention
+gp_military_intervention_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	country_prestige_add = -150
+	country_influence_add = -75
+	country_bureaucracy_mult = -0.05
+}
+
+gp_economic_sanctions_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_prestige_add = -50
+	country_influence_add = -25
+}
+
+gp_intervention_target_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -75
+	state_standard_of_living_add = -2
+}
+
+gp_intervention_condemned_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -100
+	country_influence_add = -50
+}
+
+gp_moral_authority_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 100
+	country_influence_add = 50
+}
+
+# Event 20: Non-Aligned Movement
+non_aligned_movement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	country_influence_add = 25
+}
+
+superpower_aligned_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 25
+	state_standard_of_living_add = 1
+	country_influence_add = -15
+}
+
+# Event 21: Resource Nationalism
+resource_nationalism_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_prestige_add = 50
+	building_throughput_add = -0.05
+}
+
+resource_partnership_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_standard_of_living_add = 2
+	country_influence_add = -20
+}
+
+resource_diversification_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.05
+	country_prestige_add = 25
+}
+
+# ============================================================================
 # CIVIL RIGHTS MOVEMENT EVENT MODIFIERS
 # ============================================================================
 

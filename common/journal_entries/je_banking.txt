@@ -1,8 +1,6 @@
 ﻿je_banking_cycle = {
-    icon    = "gfx/interface/icons/event_icons/stock_bag.dds"
+    icon    = "gfx/interface/icons/event_icons/event_trade.dds"
     group = je_group_internal_affairs
-
-    title = je_banking_cycle
 
     is_shown_when_inactive = {
         has_technology_researched = stock_exchange
