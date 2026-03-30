@@ -266,10 +266,11 @@ un_heritage_participants = {
 
 # ---- Financial Cost / Benefit Scaling ----
 
-# Expense for contributing to a UN program (~0.5% of GDP)
+# Expense for contributing to a UN program (~0.1% of GDP)
 un_program_expense_value = {
 	value = gdp
-	multiply = 0.005
+	multiply = 0.001
+	divide = 52 # weekly cost
 }
 
 # How many countries are currently contributing to peacekeeping
@@ -356,4 +357,5 @@ un_agency_count = {
 	if = { limit = { has_global_variable = un_agency_iaea } add = 1 }
 	if = { limit = { has_global_variable = un_agency_unep } add = 1 }
 	if = { limit = { has_global_variable = un_agency_unhcr } add = 1 }
+	if = { limit = { has_global_variable = un_agency_unoosa } add = 1 }
 }

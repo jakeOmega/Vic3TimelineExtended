@@ -187,13 +187,13 @@ investment_pool_banking_cycle_add = {
 # Laws/techs apply these to all states; decrees/buildings modify per-state
 homeland_culture_disappear_threshold = {
 	value = modifier:state_homeland_removal_threshold_add
-	min = 0.05
-	max = 0.50
+	min = 0.0
+	max = 1.0
 }
 homeland_culture_form_threshold = {
 	value = modifier:state_homeland_creation_threshold_add
-	min = 0.10
-	max = 0.90
+	min = 0.0
+	max = 1.0
 }
 
 # Annual chance (0-100) that homeland creation/removal fires in this state

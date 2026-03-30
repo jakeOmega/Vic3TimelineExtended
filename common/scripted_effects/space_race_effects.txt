@@ -1,8 +1,18 @@
 ﻿# Space Race Scripted Effects
 
-# Called when a milestone is completed - handles first/subsequent rewards and cleanup
-sr_complete_milestone_effect = {
-	# Remove approach modifiers
+# Recalculate consolidated space program cost modifier
+# Called whenever funding/approach changes or a milestone completes
+sr_recalculate_cost = {
+	# Remove old consolidated modifier
+	if = {
+		limit = { has_modifier = sr_space_program_cost }
+		remove_modifier = sr_space_program_cost
+	}
+	# Remove legacy per-modifier costs (migration from shared system)
+	if = {
+		limit = { has_modifier = sr_space_program_funding }
+		remove_modifier = sr_space_program_funding
+	}
 	if = {
 		limit = { has_modifier = sr_safe_approach }
 		remove_modifier = sr_safe_approach
@@ -11,7 +21,85 @@ sr_complete_milestone_effect = {
 		limit = { has_modifier = sr_ambitious_approach }
 		remove_modifier = sr_ambitious_approach
 	}
-	# Remove approach variables
+	# Apply consolidated cost if any
+	if = {
+		limit = { sr_total_space_cost > 0 }
+		add_modifier = {
+			name = sr_space_program_cost
+			multiplier = sr_total_space_cost
+		}
+	}
+}
+
+# Switch the last-failed milestone to safe approach
+# Uses sr_last_failed_milestone marker set before firing failure events
+sr_switch_to_safe_effect = {
+	if = {
+		limit = { has_variable = sr_last_failed_milestone }
+		# Suborbital (1)
+		if = {
+			limit = { var:sr_last_failed_milestone = 1 }
+			if = { limit = { has_variable = sr_ambitious_suborbital } remove_variable = sr_ambitious_suborbital }
+			set_variable = { name = sr_safe_suborbital value = yes }
+		}
+		# Orbital (2)
+		if = {
+			limit = { var:sr_last_failed_milestone = 2 }
+			if = { limit = { has_variable = sr_ambitious_orbital } remove_variable = sr_ambitious_orbital }
+			set_variable = { name = sr_safe_orbital value = yes }
+		}
+		# Moon Landing (3)
+		if = {
+			limit = { var:sr_last_failed_milestone = 3 }
+			if = { limit = { has_variable = sr_ambitious_moon_landing } remove_variable = sr_ambitious_moon_landing }
+			set_variable = { name = sr_safe_moon_landing value = yes }
+		}
+		# Probe (4)
+		if = {
+			limit = { var:sr_last_failed_milestone = 4 }
+			if = { limit = { has_variable = sr_ambitious_probe } remove_variable = sr_ambitious_probe }
+			set_variable = { name = sr_safe_probe value = yes }
+		}
+		# Moon Base (5)
+		if = {
+			limit = { var:sr_last_failed_milestone = 5 }
+			if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
+			set_variable = { name = sr_safe_moon_base value = yes }
+		}
+		# Mars Landing (6)
+		if = {
+			limit = { var:sr_last_failed_milestone = 6 }
+			if = { limit = { has_variable = sr_ambitious_mars_landing } remove_variable = sr_ambitious_mars_landing }
+			set_variable = { name = sr_safe_mars_landing value = yes }
+		}
+		# Interstellar Probe (7)
+		if = {
+			limit = { var:sr_last_failed_milestone = 7 }
+			if = { limit = { has_variable = sr_ambitious_interstellar_probe } remove_variable = sr_ambitious_interstellar_probe }
+			set_variable = { name = sr_safe_interstellar_probe value = yes }
+		}
+		# Solar Colonization (8)
+		if = {
+			limit = { var:sr_last_failed_milestone = 8 }
+			if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
+			set_variable = { name = sr_safe_solar_colonization value = yes }
+		}
+		sr_recalculate_cost = yes
+	}
+}
+
+# Called when a milestone is completed - handles first/subsequent rewards and cleanup
+sr_complete_milestone_effect = {
+	# Remove legacy shared approach modifiers (migration from old system)
+	if = {
+		limit = { has_modifier = sr_safe_approach }
+		remove_modifier = sr_safe_approach
+	}
+	if = {
+		limit = { has_modifier = sr_ambitious_approach }
+		remove_modifier = sr_ambitious_approach
+	}
+	# Remove legacy shared approach variables
 	if = {
 		limit = { has_variable = sr_approach_safe }
 		remove_variable = sr_approach_safe
@@ -20,13 +108,15 @@ sr_complete_milestone_effect = {
 		limit = { has_variable = sr_approach_ambitious }
 		remove_variable = sr_approach_ambitious
 	}
-	# Reset milestone progress
+	# Reset shared milestone progress (legacy compat)
 	set_variable = { name = sr_milestone_progress value = 0 }
 	# Remove active milestone flag
 	if = {
 		limit = { has_variable = sr_active_milestone }
 		remove_variable = sr_active_milestone
 	}
+	# Recalculate consolidated cost (per-JE vars cleaned in per-milestone effect)
+	sr_recalculate_cost = yes
 }
 
 # Suborbital completion
@@ -54,6 +144,11 @@ sr_complete_suborbital_effect = {
 	else = {
 		add_modifier = { name = sr_suborbital }
 	}
+	# Clean up per-JE variables
+	if = { limit = { has_variable = sr_funding_suborbital } remove_variable = sr_funding_suborbital }
+	if = { limit = { has_variable = sr_safe_suborbital } remove_variable = sr_safe_suborbital }
+	if = { limit = { has_variable = sr_ambitious_suborbital } remove_variable = sr_ambitious_suborbital }
+	if = { limit = { has_variable = sr_progress_suborbital } remove_variable = sr_progress_suborbital }
 	sr_complete_milestone_effect = yes
 	add_loyalists = { value = small_radicals pop_type = academics }
 }
@@ -82,6 +177,11 @@ sr_complete_orbital_effect = {
 	else = {
 		add_modifier = { name = sr_orbital }
 	}
+	# Clean up per-JE variables
+	if = { limit = { has_variable = sr_funding_orbital } remove_variable = sr_funding_orbital }
+	if = { limit = { has_variable = sr_safe_orbital } remove_variable = sr_safe_orbital }
+	if = { limit = { has_variable = sr_ambitious_orbital } remove_variable = sr_ambitious_orbital }
+	if = { limit = { has_variable = sr_progress_orbital } remove_variable = sr_progress_orbital }
 	sr_complete_milestone_effect = yes
 	add_loyalists = { value = medium_radicals pop_type = academics }
 }
@@ -110,6 +210,11 @@ sr_complete_moon_landing_effect = {
 	else = {
 		add_modifier = { name = sr_moon_landing }
 	}
+	# Clean up per-JE variables
+	if = { limit = { has_variable = sr_funding_moon_landing } remove_variable = sr_funding_moon_landing }
+	if = { limit = { has_variable = sr_safe_moon_landing } remove_variable = sr_safe_moon_landing }
+	if = { limit = { has_variable = sr_ambitious_moon_landing } remove_variable = sr_ambitious_moon_landing }
+	if = { limit = { has_variable = sr_progress_moon_landing } remove_variable = sr_progress_moon_landing }
 	sr_complete_milestone_effect = yes
 	add_loyalists = { value = large_radicals pop_type = academics }
 	add_loyalists = { value = medium_radicals }
@@ -140,6 +245,11 @@ sr_complete_probe_effect = {
 	else = {
 		add_modifier = { name = sr_probe }
 	}
+	# Clean up per-JE variables
+	if = { limit = { has_variable = sr_funding_probe } remove_variable = sr_funding_probe }
+	if = { limit = { has_variable = sr_safe_probe } remove_variable = sr_safe_probe }
+	if = { limit = { has_variable = sr_ambitious_probe } remove_variable = sr_ambitious_probe }
+	if = { limit = { has_variable = sr_progress_probe } remove_variable = sr_progress_probe }
 	sr_complete_milestone_effect = yes
 	add_loyalists = { value = medium_radicals pop_type = academics }
 }
@@ -169,6 +279,11 @@ sr_complete_moon_base_effect = {
 	else = {
 		add_modifier = { name = sr_moon_base }
 	}
+	# Clean up per-JE variables
+	if = { limit = { has_variable = sr_funding_moon_base } remove_variable = sr_funding_moon_base }
+	if = { limit = { has_variable = sr_safe_moon_base } remove_variable = sr_safe_moon_base }
+	if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
+	if = { limit = { has_variable = sr_progress_moon_base } remove_variable = sr_progress_moon_base }
 	sr_complete_milestone_effect = yes
 	add_loyalists = { value = large_radicals pop_type = academics }
 	add_loyalists = { value = medium_radicals }
@@ -199,6 +314,11 @@ sr_complete_mars_landing_effect = {
 	else = {
 		add_modifier = { name = sr_mars_landing }
 	}
+	# Clean up per-JE variables
+	if = { limit = { has_variable = sr_funding_mars_landing } remove_variable = sr_funding_mars_landing }
+	if = { limit = { has_variable = sr_safe_mars_landing } remove_variable = sr_safe_mars_landing }
+	if = { limit = { has_variable = sr_ambitious_mars_landing } remove_variable = sr_ambitious_mars_landing }
+	if = { limit = { has_variable = sr_progress_mars_landing } remove_variable = sr_progress_mars_landing }
 	sr_complete_milestone_effect = yes
 	add_loyalists = { value = large_radicals pop_type = academics }
 	add_loyalists = { value = large_radicals }
@@ -230,6 +350,11 @@ sr_complete_interstellar_probe_effect = {
 	else = {
 		add_modifier = { name = sr_interstellar_probe }
 	}
+	# Clean up per-JE variables
+	if = { limit = { has_variable = sr_funding_interstellar_probe } remove_variable = sr_funding_interstellar_probe }
+	if = { limit = { has_variable = sr_safe_interstellar_probe } remove_variable = sr_safe_interstellar_probe }
+	if = { limit = { has_variable = sr_ambitious_interstellar_probe } remove_variable = sr_ambitious_interstellar_probe }
+	if = { limit = { has_variable = sr_progress_interstellar_probe } remove_variable = sr_progress_interstellar_probe }
 	sr_complete_milestone_effect = yes
 	add_loyalists = { value = large_radicals pop_type = academics }
 	add_loyalists = { value = large_radicals }
@@ -525,11 +650,7 @@ sr_check_colony_stage_effect = {
 
 # Mission failure effect - sets back progress
 sr_mission_failure_effect = {
-	# Lose a chunk of progress but don't reset entirely
-	change_variable = {
-		name = sr_milestone_progress
-		multiply = 0.5
-	}
+	# Progress reduction now handled inline in monthly pulse (per-JE)
 	set_variable = { name = sr_failure_cooldown value = 12 }
 	add_modifier = {
 		name = sr_mission_failure
@@ -541,10 +662,7 @@ sr_mission_failure_effect = {
 
 # Catastrophic failure effect - major setback
 sr_mission_catastrophic_failure_effect = {
-	change_variable = {
-		name = sr_milestone_progress
-		multiply = 0.25
-	}
+	# Progress reduction now handled inline in monthly pulse (per-JE)
 	set_variable = { name = sr_failure_cooldown value = 24 }
 	add_modifier = {
 		name = sr_mission_failure_catastrophic

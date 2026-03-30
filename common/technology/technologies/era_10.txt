@@ -86,6 +86,10 @@ reusable_rocketry = {
 	unlocking_technologies = {	
 		satellite_communications
 	}
+
+	modifier = {
+		country_space_race_max_funding_add = 1
+	}
 	
 	ai_weight = {
 		value = 1
@@ -211,6 +215,9 @@ decline_of_organized_religion = {
 		country_loan_interest_rate_add = -0.02
 		country_institution_ministry_of_religion_max_investment_add = 1
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
+		# Homeland system: weakens tradition-based territorial claims
+		state_homeland_creation_threshold_add = -0.05
+		state_homeland_removal_threshold_add = 0.05
 	}
 	
 	ai_weight = {

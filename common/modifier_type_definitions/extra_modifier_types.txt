@@ -998,7 +998,7 @@ power_bloc_can_use_extend_influence_bool = {
 
 # Country-level binary: enables homeland creation/removal independent of power bloc
 country_homelands_can_change_bool = {
-	color = neutral
+	color = good
 	boolean = yes
 	game_data = {
 		ai_value = 100
@@ -1006,22 +1006,32 @@ country_homelands_can_change_bool = {
 	script_only = yes
 }
 
-# Pop % threshold for creating a new homeland (base 0.50 in base_values)
+# Maximum space race funding level (base 3, increased by technologies)
+country_space_race_max_funding_add = {
+	color = good
+	percent = no
+	decimals = 0
+	game_data = {
+		ai_value = 50
+	}
+}
+
+# Pop % threshold for creating a new homeland (base 1.0 in base_values)
 # State-level: modified by laws (all states), decrees (per-state), buildings, etc.
 # Lower value = easier to form homelands; higher = harder
 state_homeland_creation_threshold_add = {
-	color = neutral
+	color = bad
 	game_data = {
 		ai_value = 0
 	}
 	script_only = yes
 }
 
-# Pop % threshold below which a homeland is removed (base 0.25 in base_values)
+# Pop % threshold below which a homeland is removed (base 0.00 in base_values)
 # State-level: modified by laws (all states), decrees (per-state), buildings, etc.
 # Higher value = minority homelands erased sooner; lower = they persist longer
 state_homeland_removal_threshold_add = {
-	color = neutral
+	color = good
 	game_data = {
 		ai_value = 0
 	}
@@ -1032,7 +1042,7 @@ state_homeland_removal_threshold_add = {
 # State-level: laws apply to all states, decrees/buildings per-state
 # +1.0 = +100% speed (doubles chance); -0.5 = -50% speed (halves chance)
 state_homeland_change_speed_mult = {
-	color = neutral
+	color = good
 	game_data = {
 		ai_value = 0
 	}

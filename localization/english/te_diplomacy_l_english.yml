@@ -16,6 +16,8 @@
  annex_subject_peaceful_proposal_notification_desc:0 "[SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] wishes to peacefully integrate with us."
  annex_subject_peaceful_proposal_notification_effects_desc:0 "$annex_subject_peaceful_desc$"
  annex_subject_peaceful_proposal_notification_name:0 "Proposal for Peaceful Integration"
+ banking_event_default_rural_impact:0 "Rural Credit Impact"
+ banking_event_default_rural_impact_desc:0 "Temporary negative impact on agricultural throughput due to cooperative shortfall adjustments."
  decolonize_diplo_action:0 "Decolonize"
  decolonize_diplo_action_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] has initiated decolonization of [TARGET_COUNTRY.GetName]."
  decolonize_diplo_action_action_notification_name:0 "Decolonization"

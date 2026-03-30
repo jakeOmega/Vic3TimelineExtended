@@ -279,6 +279,7 @@ space_colonization = {
 	}
 
 	modifier = {
+		country_space_race_max_funding_add = 2
 	}
 	
 	ai_weight = {

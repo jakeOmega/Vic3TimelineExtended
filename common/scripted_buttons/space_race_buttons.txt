@@ -1,12 +1,15 @@
-﻿# Space Race Scripted Buttons
-# Approach selection buttons - used by all space race JEs
+﻿# Space Race Per-JE Scripted Buttons
+# 4 buttons per milestone x 8 milestones = 32 buttons
+# Each milestone has independent funding level and approach selection
 
-sr_select_safe_approach = {
+# ======= SUBORBITAL Buttons =======
+
+sr_btn_safe_suborbital = {
 	name = "SR_SAFE_APPROACH"
 	desc = "SR_SAFE_APPROACH_DESC"
 
 	visible = {
-		has_variable = sr_active_milestone
+		has_variable = sr_active_suborbital
 	}
 
 	ai_chance = {
@@ -20,33 +23,29 @@ sr_select_safe_approach = {
 	possible = {
 		custom_tooltip = {
 			text = "SR_NOT_ALREADY_SAFE"
-			NOT = { has_variable = sr_approach_safe }
+			NOT = { has_variable = sr_safe_suborbital }
 		}
 	}
 
 	effect = {
 		custom_tooltip = {
 			text = "SR_SAFE_APPROACH_EFFECT"
-			set_variable = { name = sr_approach_safe value = yes }
+			set_variable = { name = sr_safe_suborbital value = yes }
 			if = {
-				limit = { has_variable = sr_approach_ambitious }
-				remove_variable = sr_approach_ambitious
+				limit = { has_variable = sr_ambitious_suborbital }
+				remove_variable = sr_ambitious_suborbital
 			}
-			if = {
-				limit = { has_modifier = sr_ambitious_approach }
-				remove_modifier = sr_ambitious_approach
-			}
-			add_modifier = { name = sr_safe_approach }
+			sr_recalculate_cost = yes
 		}
 	}
 }
 
-sr_select_ambitious_approach = {
+sr_btn_ambitious_suborbital = {
 	name = "SR_AMBITIOUS_APPROACH"
 	desc = "SR_AMBITIOUS_APPROACH_DESC"
 
 	visible = {
-		has_variable = sr_active_milestone
+		has_variable = sr_active_suborbital
 	}
 
 	ai_chance = {
@@ -59,7 +58,7 @@ sr_select_ambitious_approach = {
 			limit = {
 				any_country = {
 					NOT = { THIS = ROOT }
-					has_variable = sr_active_milestone
+					has_variable = sr_active_suborbital
 				}
 			}
 			add = 20
@@ -69,33 +68,29 @@ sr_select_ambitious_approach = {
 	possible = {
 		custom_tooltip = {
 			text = "SR_NOT_ALREADY_AMBITIOUS"
-			NOT = { has_variable = sr_approach_ambitious }
+			NOT = { has_variable = sr_ambitious_suborbital }
 		}
 	}
 
 	effect = {
 		custom_tooltip = {
 			text = "SR_AMBITIOUS_APPROACH_EFFECT"
-			set_variable = { name = sr_approach_ambitious value = yes }
+			set_variable = { name = sr_ambitious_suborbital value = yes }
 			if = {
-				limit = { has_variable = sr_approach_safe }
-				remove_variable = sr_approach_safe
+				limit = { has_variable = sr_safe_suborbital }
+				remove_variable = sr_safe_suborbital
 			}
-			if = {
-				limit = { has_modifier = sr_safe_approach }
-				remove_modifier = sr_safe_approach
-			}
-			add_modifier = { name = sr_ambitious_approach }
+			sr_recalculate_cost = yes
 		}
 	}
 }
 
-sr_increase_funding = {
+sr_btn_fund_up_suborbital = {
 	name = "SR_INCREASE_FUNDING"
 	desc = "SR_INCREASE_FUNDING_DESC"
 
 	visible = {
-		has_variable = sr_active_milestone
+		has_variable = sr_active_suborbital
 	}
 
 	ai_chance = {
@@ -105,7 +100,7 @@ sr_increase_funding = {
 			add = 30
 		}
 		if = {
-			limit = { var:sr_funding_level < 2 }
+			limit = { var:sr_funding_suborbital < 2 }
 			add = 20
 		}
 	}
@@ -113,35 +108,25 @@ sr_increase_funding = {
 	possible = {
 		custom_tooltip = {
 			text = "SR_MAX_FUNDING_NOT_REACHED"
-			var:sr_funding_level < 3
+			var:sr_funding_suborbital < sr_max_funding_level
 		}
 	}
 
 	effect = {
 		custom_tooltip = {
 			text = "SR_INCREASE_FUNDING_EFFECT"
-			change_variable = {
-				name = sr_funding_level
-				add = 1
-			}
-			if = {
-				limit = { has_modifier = sr_space_program_funding }
-				remove_modifier = sr_space_program_funding
-			}
-			add_modifier = {
-				name = sr_space_program_funding
-				multiplier = var:sr_funding_level
-			}
+			change_variable = { name = sr_funding_suborbital add = 1 }
+			sr_recalculate_cost = yes
 		}
 	}
 }
 
-sr_decrease_funding = {
+sr_btn_fund_down_suborbital = {
 	name = "SR_DECREASE_FUNDING"
 	desc = "SR_DECREASE_FUNDING_DESC"
 
 	visible = {
-		has_variable = sr_active_milestone
+		has_variable = sr_active_suborbital
 	}
 
 	ai_chance = {
@@ -155,28 +140,1073 @@ sr_decrease_funding = {
 	possible = {
 		custom_tooltip = {
 			text = "SR_MIN_FUNDING_NOT_REACHED"
-			var:sr_funding_level > 0
+			var:sr_funding_suborbital > 0
 		}
 	}
 
 	effect = {
 		custom_tooltip = {
 			text = "SR_DECREASE_FUNDING_EFFECT"
-			change_variable = {
-				name = sr_funding_level
-				subtract = 1
-			}
-			if = {
-				limit = { has_modifier = sr_space_program_funding }
-				remove_modifier = sr_space_program_funding
-			}
-			if = {
-				limit = { var:sr_funding_level > 0 }
-				add_modifier = {
-					name = sr_space_program_funding
-					multiplier = var:sr_funding_level
-				}
-			}
+			change_variable = { name = sr_funding_suborbital subtract = 1 }
+			sr_recalculate_cost = yes
 		}
 	}
 }
+
+# ======= ORBITAL Buttons =======
+
+sr_btn_safe_orbital = {
+	name = "SR_SAFE_APPROACH"
+	desc = "SR_SAFE_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_orbital
+	}
+
+	ai_chance = {
+		value = 50
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = -20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_SAFE"
+			NOT = { has_variable = sr_safe_orbital }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_SAFE_APPROACH_EFFECT"
+			set_variable = { name = sr_safe_orbital value = yes }
+			if = {
+				limit = { has_variable = sr_ambitious_orbital }
+				remove_variable = sr_ambitious_orbital
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_ambitious_orbital = {
+	name = "SR_AMBITIOUS_APPROACH"
+	desc = "SR_AMBITIOUS_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_orbital
+	}
+
+	ai_chance = {
+		value = 30
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = 30
+		}
+		if = {
+			limit = {
+				any_country = {
+					NOT = { THIS = ROOT }
+					has_variable = sr_active_orbital
+				}
+			}
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_AMBITIOUS"
+			NOT = { has_variable = sr_ambitious_orbital }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_AMBITIOUS_APPROACH_EFFECT"
+			set_variable = { name = sr_ambitious_orbital value = yes }
+			if = {
+				limit = { has_variable = sr_safe_orbital }
+				remove_variable = sr_safe_orbital
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_up_orbital = {
+	name = "SR_INCREASE_FUNDING"
+	desc = "SR_INCREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_orbital
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation > 50 }
+			add = 30
+		}
+		if = {
+			limit = { var:sr_funding_orbital < 2 }
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MAX_FUNDING_NOT_REACHED"
+			var:sr_funding_orbital < sr_max_funding_level
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_INCREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_orbital add = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_down_orbital = {
+	name = "SR_DECREASE_FUNDING"
+	desc = "SR_DECREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_orbital
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation < 25 }
+			add = 30
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MIN_FUNDING_NOT_REACHED"
+			var:sr_funding_orbital > 0
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_DECREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_orbital subtract = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+# ======= MOON LANDING Buttons =======
+
+sr_btn_safe_moon_landing = {
+	name = "SR_SAFE_APPROACH"
+	desc = "SR_SAFE_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_moon_landing
+	}
+
+	ai_chance = {
+		value = 50
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = -20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_SAFE"
+			NOT = { has_variable = sr_safe_moon_landing }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_SAFE_APPROACH_EFFECT"
+			set_variable = { name = sr_safe_moon_landing value = yes }
+			if = {
+				limit = { has_variable = sr_ambitious_moon_landing }
+				remove_variable = sr_ambitious_moon_landing
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_ambitious_moon_landing = {
+	name = "SR_AMBITIOUS_APPROACH"
+	desc = "SR_AMBITIOUS_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_moon_landing
+	}
+
+	ai_chance = {
+		value = 30
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = 30
+		}
+		if = {
+			limit = {
+				any_country = {
+					NOT = { THIS = ROOT }
+					has_variable = sr_active_moon_landing
+				}
+			}
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_AMBITIOUS"
+			NOT = { has_variable = sr_ambitious_moon_landing }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_AMBITIOUS_APPROACH_EFFECT"
+			set_variable = { name = sr_ambitious_moon_landing value = yes }
+			if = {
+				limit = { has_variable = sr_safe_moon_landing }
+				remove_variable = sr_safe_moon_landing
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_up_moon_landing = {
+	name = "SR_INCREASE_FUNDING"
+	desc = "SR_INCREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_moon_landing
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation > 50 }
+			add = 30
+		}
+		if = {
+			limit = { var:sr_funding_moon_landing < 2 }
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MAX_FUNDING_NOT_REACHED"
+			var:sr_funding_moon_landing < sr_max_funding_level
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_INCREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_moon_landing add = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_down_moon_landing = {
+	name = "SR_DECREASE_FUNDING"
+	desc = "SR_DECREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_moon_landing
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation < 25 }
+			add = 30
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MIN_FUNDING_NOT_REACHED"
+			var:sr_funding_moon_landing > 0
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_DECREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_moon_landing subtract = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+# ======= PROBE Buttons =======
+
+sr_btn_safe_probe = {
+	name = "SR_SAFE_APPROACH"
+	desc = "SR_SAFE_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_probe
+	}
+
+	ai_chance = {
+		value = 50
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = -20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_SAFE"
+			NOT = { has_variable = sr_safe_probe }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_SAFE_APPROACH_EFFECT"
+			set_variable = { name = sr_safe_probe value = yes }
+			if = {
+				limit = { has_variable = sr_ambitious_probe }
+				remove_variable = sr_ambitious_probe
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_ambitious_probe = {
+	name = "SR_AMBITIOUS_APPROACH"
+	desc = "SR_AMBITIOUS_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_probe
+	}
+
+	ai_chance = {
+		value = 30
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = 30
+		}
+		if = {
+			limit = {
+				any_country = {
+					NOT = { THIS = ROOT }
+					has_variable = sr_active_probe
+				}
+			}
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_AMBITIOUS"
+			NOT = { has_variable = sr_ambitious_probe }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_AMBITIOUS_APPROACH_EFFECT"
+			set_variable = { name = sr_ambitious_probe value = yes }
+			if = {
+				limit = { has_variable = sr_safe_probe }
+				remove_variable = sr_safe_probe
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_up_probe = {
+	name = "SR_INCREASE_FUNDING"
+	desc = "SR_INCREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_probe
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation > 50 }
+			add = 30
+		}
+		if = {
+			limit = { var:sr_funding_probe < 2 }
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MAX_FUNDING_NOT_REACHED"
+			var:sr_funding_probe < sr_max_funding_level
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_INCREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_probe add = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_down_probe = {
+	name = "SR_DECREASE_FUNDING"
+	desc = "SR_DECREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_probe
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation < 25 }
+			add = 30
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MIN_FUNDING_NOT_REACHED"
+			var:sr_funding_probe > 0
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_DECREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_probe subtract = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+# ======= MOON BASE Buttons =======
+
+sr_btn_safe_moon_base = {
+	name = "SR_SAFE_APPROACH"
+	desc = "SR_SAFE_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_moon_base
+	}
+
+	ai_chance = {
+		value = 50
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = -20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_SAFE"
+			NOT = { has_variable = sr_safe_moon_base }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_SAFE_APPROACH_EFFECT"
+			set_variable = { name = sr_safe_moon_base value = yes }
+			if = {
+				limit = { has_variable = sr_ambitious_moon_base }
+				remove_variable = sr_ambitious_moon_base
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_ambitious_moon_base = {
+	name = "SR_AMBITIOUS_APPROACH"
+	desc = "SR_AMBITIOUS_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_moon_base
+	}
+
+	ai_chance = {
+		value = 30
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = 30
+		}
+		if = {
+			limit = {
+				any_country = {
+					NOT = { THIS = ROOT }
+					has_variable = sr_active_moon_base
+				}
+			}
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_AMBITIOUS"
+			NOT = { has_variable = sr_ambitious_moon_base }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_AMBITIOUS_APPROACH_EFFECT"
+			set_variable = { name = sr_ambitious_moon_base value = yes }
+			if = {
+				limit = { has_variable = sr_safe_moon_base }
+				remove_variable = sr_safe_moon_base
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_up_moon_base = {
+	name = "SR_INCREASE_FUNDING"
+	desc = "SR_INCREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_moon_base
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation > 50 }
+			add = 30
+		}
+		if = {
+			limit = { var:sr_funding_moon_base < 2 }
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MAX_FUNDING_NOT_REACHED"
+			var:sr_funding_moon_base < sr_max_funding_level
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_INCREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_moon_base add = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_down_moon_base = {
+	name = "SR_DECREASE_FUNDING"
+	desc = "SR_DECREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_moon_base
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation < 25 }
+			add = 30
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MIN_FUNDING_NOT_REACHED"
+			var:sr_funding_moon_base > 0
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_DECREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_moon_base subtract = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+# ======= MARS LANDING Buttons =======
+
+sr_btn_safe_mars_landing = {
+	name = "SR_SAFE_APPROACH"
+	desc = "SR_SAFE_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_mars_landing
+	}
+
+	ai_chance = {
+		value = 50
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = -20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_SAFE"
+			NOT = { has_variable = sr_safe_mars_landing }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_SAFE_APPROACH_EFFECT"
+			set_variable = { name = sr_safe_mars_landing value = yes }
+			if = {
+				limit = { has_variable = sr_ambitious_mars_landing }
+				remove_variable = sr_ambitious_mars_landing
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_ambitious_mars_landing = {
+	name = "SR_AMBITIOUS_APPROACH"
+	desc = "SR_AMBITIOUS_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_mars_landing
+	}
+
+	ai_chance = {
+		value = 30
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = 30
+		}
+		if = {
+			limit = {
+				any_country = {
+					NOT = { THIS = ROOT }
+					has_variable = sr_active_mars_landing
+				}
+			}
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_AMBITIOUS"
+			NOT = { has_variable = sr_ambitious_mars_landing }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_AMBITIOUS_APPROACH_EFFECT"
+			set_variable = { name = sr_ambitious_mars_landing value = yes }
+			if = {
+				limit = { has_variable = sr_safe_mars_landing }
+				remove_variable = sr_safe_mars_landing
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_up_mars_landing = {
+	name = "SR_INCREASE_FUNDING"
+	desc = "SR_INCREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_mars_landing
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation > 50 }
+			add = 30
+		}
+		if = {
+			limit = { var:sr_funding_mars_landing < 2 }
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MAX_FUNDING_NOT_REACHED"
+			var:sr_funding_mars_landing < sr_max_funding_level
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_INCREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_mars_landing add = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_down_mars_landing = {
+	name = "SR_DECREASE_FUNDING"
+	desc = "SR_DECREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_mars_landing
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation < 25 }
+			add = 30
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MIN_FUNDING_NOT_REACHED"
+			var:sr_funding_mars_landing > 0
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_DECREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_mars_landing subtract = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+# ======= INTERSTELLAR PROBE Buttons =======
+
+sr_btn_safe_interstellar_probe = {
+	name = "SR_SAFE_APPROACH"
+	desc = "SR_SAFE_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_interstellar_probe
+	}
+
+	ai_chance = {
+		value = 50
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = -20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_SAFE"
+			NOT = { has_variable = sr_safe_interstellar_probe }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_SAFE_APPROACH_EFFECT"
+			set_variable = { name = sr_safe_interstellar_probe value = yes }
+			if = {
+				limit = { has_variable = sr_ambitious_interstellar_probe }
+				remove_variable = sr_ambitious_interstellar_probe
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_ambitious_interstellar_probe = {
+	name = "SR_AMBITIOUS_APPROACH"
+	desc = "SR_AMBITIOUS_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_interstellar_probe
+	}
+
+	ai_chance = {
+		value = 30
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = 30
+		}
+		if = {
+			limit = {
+				any_country = {
+					NOT = { THIS = ROOT }
+					has_variable = sr_active_interstellar_probe
+				}
+			}
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_AMBITIOUS"
+			NOT = { has_variable = sr_ambitious_interstellar_probe }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_AMBITIOUS_APPROACH_EFFECT"
+			set_variable = { name = sr_ambitious_interstellar_probe value = yes }
+			if = {
+				limit = { has_variable = sr_safe_interstellar_probe }
+				remove_variable = sr_safe_interstellar_probe
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_up_interstellar_probe = {
+	name = "SR_INCREASE_FUNDING"
+	desc = "SR_INCREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_interstellar_probe
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation > 50 }
+			add = 30
+		}
+		if = {
+			limit = { var:sr_funding_interstellar_probe < 2 }
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MAX_FUNDING_NOT_REACHED"
+			var:sr_funding_interstellar_probe < sr_max_funding_level
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_INCREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_interstellar_probe add = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_down_interstellar_probe = {
+	name = "SR_DECREASE_FUNDING"
+	desc = "SR_DECREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_interstellar_probe
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation < 25 }
+			add = 30
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MIN_FUNDING_NOT_REACHED"
+			var:sr_funding_interstellar_probe > 0
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_DECREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_interstellar_probe subtract = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+# ======= SOLAR COLONIZATION Buttons =======
+
+sr_btn_safe_solar_colonization = {
+	name = "SR_SAFE_APPROACH"
+	desc = "SR_SAFE_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_solar_colonization
+	}
+
+	ai_chance = {
+		value = 50
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = -20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_SAFE"
+			NOT = { has_variable = sr_safe_solar_colonization }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_SAFE_APPROACH_EFFECT"
+			set_variable = { name = sr_safe_solar_colonization value = yes }
+			if = {
+				limit = { has_variable = sr_ambitious_solar_colonization }
+				remove_variable = sr_ambitious_solar_colonization
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_ambitious_solar_colonization = {
+	name = "SR_AMBITIOUS_APPROACH"
+	desc = "SR_AMBITIOUS_APPROACH_DESC"
+
+	visible = {
+		has_variable = sr_active_solar_colonization
+	}
+
+	ai_chance = {
+		value = 30
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			add = 30
+		}
+		if = {
+			limit = {
+				any_country = {
+					NOT = { THIS = ROOT }
+					has_variable = sr_active_solar_colonization
+				}
+			}
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_NOT_ALREADY_AMBITIOUS"
+			NOT = { has_variable = sr_ambitious_solar_colonization }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_AMBITIOUS_APPROACH_EFFECT"
+			set_variable = { name = sr_ambitious_solar_colonization value = yes }
+			if = {
+				limit = { has_variable = sr_safe_solar_colonization }
+				remove_variable = sr_safe_solar_colonization
+			}
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_up_solar_colonization = {
+	name = "SR_INCREASE_FUNDING"
+	desc = "SR_INCREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_solar_colonization
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation > 50 }
+			add = 30
+		}
+		if = {
+			limit = { var:sr_funding_solar_colonization < 2 }
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MAX_FUNDING_NOT_REACHED"
+			var:sr_funding_solar_colonization < sr_max_funding_level
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_INCREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_solar_colonization add = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+
+sr_btn_fund_down_solar_colonization = {
+	name = "SR_DECREASE_FUNDING"
+	desc = "SR_DECREASE_FUNDING_DESC"
+
+	visible = {
+		has_variable = sr_active_solar_colonization
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation < 25 }
+			add = 30
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = "SR_MIN_FUNDING_NOT_REACHED"
+			var:sr_funding_solar_colonization > 0
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "SR_DECREASE_FUNDING_EFFECT"
+			change_variable = { name = sr_funding_solar_colonization subtract = 1 }
+			sr_recalculate_cost = yes
+		}
+	}
+}
+

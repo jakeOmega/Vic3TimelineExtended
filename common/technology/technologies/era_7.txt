@@ -482,6 +482,9 @@ television_broadcasting = {
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_institution_ministry_of_propaganda_max_investment_add = 1
 		country_institution_home_affairs_max_investment_add = 1
+		state_homeland_change_speed_mult = 0.05
+		state_homeland_creation_threshold_add = -0.05
+		state_homeland_removal_threshold_add = 0.05
 	}
 	
 	unlocking_technologies = {	

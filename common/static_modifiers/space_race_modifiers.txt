@@ -1,11 +1,11 @@
 ﻿# ======= Space Race - Approach Modifiers (applied while approach is active)
 sr_safe_approach = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_weekly_innovation_max_add = -15
+	country_weekly_innovation_add = -15
 }
 sr_ambitious_approach = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_weekly_innovation_max_add = -30
+	country_weekly_innovation_add = -30
 }
 
 # ======= Space Race - Milestone Achievement Modifiers (First Nation)
@@ -145,10 +145,16 @@ sr_solar_system_trade = {
 	country_influence_mult = 0.10
 }
 
-# ======= Space Race - Funding Cost
+# ======= Space Race - Funding Cost (legacy, kept for migration)
 sr_space_program_funding = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_weekly_innovation_max_add = -15
+	country_weekly_innovation_add = -15
+}
+
+# ======= Space Race - Consolidated Program Cost (per-milestone system)
+sr_space_program_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_weekly_innovation_add = -15
 }
 
 # ======= Space Race - Cross-System Connection Modifiers

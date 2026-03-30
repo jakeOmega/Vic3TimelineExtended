@@ -440,6 +440,8 @@ mass_media = {
 		country_voting_power_mult = 0.1
 		country_mass_media_pb_principles_bool = yes
 		country_can_use_war_propaganda_bool = yes
+		country_homelands_can_change_bool = yes
+		state_homeland_change_speed_mult = 0.10
 	}
 	
 	ai_weight = {

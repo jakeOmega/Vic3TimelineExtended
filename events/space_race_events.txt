@@ -226,7 +226,7 @@ space_race_events.5 = {
 		ai_chance = {
 			base = 3
 			modifier = {
-				trigger = { has_variable = sr_approach_ambitious }
+				trigger = { has_variable = sr_ambitious_moon_landing }
 				add = 5
 			}
 		}
@@ -243,7 +243,7 @@ space_race_events.5 = {
 		ai_chance = {
 			base = 5
 			modifier = {
-				trigger = { has_variable = sr_approach_safe }
+				trigger = { has_variable = sr_safe_moon_landing }
 				add = 3
 			}
 		}
@@ -488,16 +488,7 @@ space_race_events.10 = {
 		ai_chance = { base = 3 }
 		# Switch to safe approach
 		sr_mission_failure_effect = yes
-		if = {
-			limit = { has_variable = sr_approach_ambitious }
-			remove_variable = sr_approach_ambitious
-		}
-		set_variable = { name = sr_approach_safe value = yes }
-		if = {
-			limit = { has_modifier = sr_ambitious_approach }
-			remove_modifier = sr_ambitious_approach
-		}
-		add_modifier = { name = sr_safe_approach }
+		sr_switch_to_safe_effect = yes
 	}
 
 	option = {
@@ -2198,16 +2189,7 @@ space_race_events.12 = {
 		ai_chance = { base = 3 }
 		# Redesign the fuel system entirely — slower but safer
 		sr_mission_failure_effect = yes
-		if = {
-			limit = { has_variable = sr_approach_ambitious }
-			remove_variable = sr_approach_ambitious
-		}
-		set_variable = { name = sr_approach_safe value = yes }
-		if = {
-			limit = { has_modifier = sr_ambitious_approach }
-			remove_modifier = sr_ambitious_approach
-		}
-		add_modifier = { name = sr_safe_approach }
+		sr_switch_to_safe_effect = yes
 	}
 
 	option = {
@@ -2255,16 +2237,7 @@ space_race_events.13 = {
 		ai_chance = { base = 3 }
 		# Build a redundant backup probe — expensive but insurance against total loss
 		sr_mission_failure_effect = yes
-		if = {
-			limit = { has_variable = sr_approach_ambitious }
-			remove_variable = sr_approach_ambitious
-		}
-		set_variable = { name = sr_approach_safe value = yes }
-		if = {
-			limit = { has_modifier = sr_ambitious_approach }
-			remove_modifier = sr_ambitious_approach
-		}
-		add_modifier = { name = sr_safe_approach }
+		sr_switch_to_safe_effect = yes
 	}
 
 	option = {
@@ -2383,16 +2356,7 @@ space_race_events.15 = {
 		ai_chance = { base = 3 }
 		# Switch to safe approach — recalibrate everything
 		sr_mission_failure_effect = yes
-		if = {
-			limit = { has_variable = sr_approach_ambitious }
-			remove_variable = sr_approach_ambitious
-		}
-		set_variable = { name = sr_approach_safe value = yes }
-		if = {
-			limit = { has_modifier = sr_ambitious_approach }
-			remove_modifier = sr_ambitious_approach
-		}
-		add_modifier = { name = sr_safe_approach }
+		sr_switch_to_safe_effect = yes
 	}
 }
 
@@ -2427,16 +2391,7 @@ space_race_events.16 = {
 		ai_chance = { base = 3 }
 		# Redesign the interstage mechanism
 		sr_mission_failure_effect = yes
-		if = {
-			limit = { has_variable = sr_approach_ambitious }
-			remove_variable = sr_approach_ambitious
-		}
-		set_variable = { name = sr_approach_safe value = yes }
-		if = {
-			limit = { has_modifier = sr_ambitious_approach }
-			remove_modifier = sr_ambitious_approach
-		}
-		add_modifier = { name = sr_safe_approach }
+		sr_switch_to_safe_effect = yes
 	}
 
 	option = {

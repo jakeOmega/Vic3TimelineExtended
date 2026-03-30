@@ -31,16 +31,7 @@ INJECT:nitrogen_fixation = {
 
 INJECT:nationalism = {
 	modifier = {
-		state_homeland_creation_threshold_add = -0.05
-		state_homeland_change_speed_mult = 0.25
 		state_building_resettlement_camp_max_level_add = 5
-	}
-}
-
-# Pan-nationalism further eases homeland formation for core cultures
-INJECT:pan-nationalism = {
-	modifier = {
-		state_homeland_creation_threshold_add = -0.05
 	}
 }
 
@@ -54,10 +45,6 @@ INJECT:civilizing_mission = {
 # Mass propaganda is effective at both creating and erasing homeland claims
 INJECT:mass_propaganda = {
 	modifier = {
-		country_homelands_can_change_bool = yes
-		state_homeland_creation_threshold_add = -0.05
-		state_homeland_removal_threshold_add = 0.05
-		state_homeland_change_speed_mult = 0.25
 		state_building_resettlement_camp_max_level_add = 5
 	}
 }

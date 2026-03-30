@@ -550,7 +550,12 @@ nuclear_industrial_strike = {
 		days = short_modifier_time
 		is_decaying = yes
 	}
+	# Track who nuked the state's owner (for AI retaliation targeting)
 	owner = {
+		if = {
+			limit = { exists = scope:attacking_country }
+			set_variable = { name = nuked_by_country value = scope:attacking_country }
+		}
 		every_scope_war = {
 			limit = {
 				has_war_support = { target = PREV value > -65 } # cannot drop below -90
@@ -759,6 +764,13 @@ nuclear_tactical_strike = {
 		name = tactical_nuke_aftermath
 		days = short_modifier_time
 		is_decaying = yes
+	}
+	# Track who nuked the state's owner (for AI retaliation targeting)
+	owner = {
+		if = {
+			limit = { exists = scope:attacking_country }
+			set_variable = { name = nuked_by_country value = scope:attacking_country }
+		}
 	}
 
 	trigger_event = { id = nuclear_weapon_events.5 popup = yes }

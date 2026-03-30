@@ -190,15 +190,17 @@ un_events.2 = {
 			is_decaying = yes
 		}
 		# Trigger vote for all other UN members
-		every_country = {
-			limit = {
-				has_modifier = un_member_modifier
-				NOT = { this = ROOT }
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
 			}
-			trigger_event = { id = un_vote.1 days = 30 }
+			# Schedule results event
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
-		# Schedule results event
-		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Vote in favor but don't lead
@@ -322,15 +324,17 @@ un_events.3 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Trigger vote for all other UN members
-		every_country = {
-			limit = {
-				has_modifier = un_member_modifier
-				NOT = { this = ROOT }
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
 			}
-			trigger_event = { id = un_vote.1 days = 30 }
+			# Schedule results event
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
-		# Schedule results event
-		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Sign with reservations
@@ -677,15 +681,17 @@ un_events.6 = {
 			strata = upper
 		}
 		# Trigger vote for all other UN members
-		every_country = {
-			limit = {
-				has_modifier = un_member_modifier
-				NOT = { this = ROOT }
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
 			}
-			trigger_event = { id = un_vote.1 days = 30 }
+			# Schedule results event
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
-		# Schedule results event
-		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Defend the status quo - preserve GP veto power
@@ -1082,15 +1088,17 @@ un_events.9 = {
 		add_modifier = { name = un_heritage_program_modifier }
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Trigger vote for all other UN members
-		every_country = {
-			limit = {
-				has_modifier = un_member_modifier
-				NOT = { this = ROOT }
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
 			}
-			trigger_event = { id = un_vote.1 days = 30 }
+			# Schedule results event
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
-		# Schedule results event
-		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Contribute nominally
@@ -1427,15 +1435,17 @@ un_events.12 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Trigger vote for all other UN members
-		every_country = {
-			limit = {
-				has_modifier = un_member_modifier
-				NOT = { this = ROOT }
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
 			}
-			trigger_event = { id = un_vote.1 days = 30 }
+			# Schedule results event
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
-		# Schedule results event
-		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Defend development programs in overseas territories
@@ -1682,15 +1692,17 @@ un_events.14 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Trigger vote for all other UN members
-		every_country = {
-			limit = {
-				has_modifier = un_member_modifier
-				NOT = { this = ROOT }
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
 			}
-			trigger_event = { id = un_vote.1 days = 30 }
+			# Schedule results event
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
-		# Schedule results event
-		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Sign with reservations on existing arsenals
@@ -1928,15 +1940,17 @@ un_events.16 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Trigger vote for all other UN members
-		every_country = {
-			limit = {
-				has_modifier = un_member_modifier
-				NOT = { this = ROOT }
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
 			}
-			trigger_event = { id = un_vote.1 days = 30 }
+			# Schedule results event
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
-		# Schedule results event
-		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Cooperate selectively - share what doesn't hurt us
@@ -2041,15 +2055,17 @@ un_events.17 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		# Trigger vote for all other UN members
-		every_country = {
-			limit = {
-				has_modifier = un_member_modifier
-				NOT = { this = ROOT }
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
 			}
-			trigger_event = { id = un_vote.1 days = 30 }
+			# Schedule results event
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
-		# Schedule results event
-		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Pledge voluntary targets - no binding commitments
@@ -2177,15 +2193,17 @@ un_events.18 = {
 			strata = lower
 		}
 		# Trigger vote for all other UN members
-		every_country = {
-			limit = {
-				has_modifier = un_member_modifier
-				NOT = { this = ROOT }
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
 			}
-			trigger_event = { id = un_vote.1 days = 30 }
+			# Schedule results event
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
-		# Schedule results event
-		trigger_event = { id = un_vote.2 days = 90 }
 		# Notify refugee source country
 		if = {
 			limit = { exists = scope:refugee_source }
@@ -2305,15 +2323,17 @@ un_events.19 = {
 		add_modifier = { name = un_space_partnership_modifier }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Trigger vote for all other UN members
-		every_country = {
-			limit = {
-				has_modifier = un_member_modifier
-				NOT = { this = ROOT }
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_modifier = un_member_modifier
+					NOT = { this = ROOT }
+				}
+				trigger_event = { id = un_vote.1 days = 30 }
 			}
-			trigger_event = { id = un_vote.1 days = 30 }
+			# Schedule results event
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
-		# Schedule results event
-		trigger_event = { id = un_vote.2 days = 90 }
 	}
 
 	# Option B: Limited contribution - observe but don't lead

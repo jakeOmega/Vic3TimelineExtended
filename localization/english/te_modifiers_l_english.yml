@@ -118,6 +118,7 @@
  country_nuclear_weapon_defense_chance_add_desc:0 "The chance of successfully defending against a nuclear attack."
  country_solar_receiver_max_level_add:0 "Available Solar Receiver Slots"
  country_solar_receiver_max_level_add_desc:0 "The number of additional Solar Power Receivers that can be constructed. Each level of Orbital Solar Collector adds 10 slots, and each level of Solar Power Receiver uses 1 slot."
+ country_space_race_max_funding_add:0 "Space Program Maximum Funding Level"
  goods_input_advanced_materials_add:0 "@advanced_materials! Advanced Materials Input"
  goods_input_advanced_materials_add_desc:0 "The amount of @advanced_materials! Advanced Materials consumed by buildings"
  goods_input_coal_mult:0 "@coal! Coal Input"

@@ -273,3 +273,77 @@ sr_current_milestone_progress = {
 		add = var:sr_milestone_progress
 	}
 }
+
+# ======= Per-JE System Values =======
+
+# Maximum funding level (base 3, increased by technology)
+sr_max_funding_level = {
+	value = 3
+	add = modifier:country_space_race_max_funding_add
+}
+
+# Total space program cost (sum of all active per-JE funding + approach overhead)
+# Each unit = -15 innovation/week via sr_space_program_cost modifier
+sr_total_space_cost = {
+	value = 0
+	# Per-JE funding levels
+	if = { limit = { has_variable = sr_funding_suborbital } add = var:sr_funding_suborbital }
+	if = { limit = { has_variable = sr_funding_orbital } add = var:sr_funding_orbital }
+	if = { limit = { has_variable = sr_funding_moon_landing } add = var:sr_funding_moon_landing }
+	if = { limit = { has_variable = sr_funding_probe } add = var:sr_funding_probe }
+	if = { limit = { has_variable = sr_funding_moon_base } add = var:sr_funding_moon_base }
+	if = { limit = { has_variable = sr_funding_mars_landing } add = var:sr_funding_mars_landing }
+	if = { limit = { has_variable = sr_funding_interstellar_probe } add = var:sr_funding_interstellar_probe }
+	if = { limit = { has_variable = sr_funding_solar_colonization } add = var:sr_funding_solar_colonization }
+	# Per-JE approach overhead (safe = 1 unit, ambitious = 2 units)
+	if = { limit = { has_variable = sr_safe_suborbital } add = 1 }
+	if = { limit = { has_variable = sr_ambitious_suborbital } add = 2 }
+	if = { limit = { has_variable = sr_safe_orbital } add = 1 }
+	if = { limit = { has_variable = sr_ambitious_orbital } add = 2 }
+	if = { limit = { has_variable = sr_safe_moon_landing } add = 1 }
+	if = { limit = { has_variable = sr_ambitious_moon_landing } add = 2 }
+	if = { limit = { has_variable = sr_safe_probe } add = 1 }
+	if = { limit = { has_variable = sr_ambitious_probe } add = 2 }
+	if = { limit = { has_variable = sr_safe_moon_base } add = 1 }
+	if = { limit = { has_variable = sr_ambitious_moon_base } add = 2 }
+	if = { limit = { has_variable = sr_safe_mars_landing } add = 1 }
+	if = { limit = { has_variable = sr_ambitious_mars_landing } add = 2 }
+	if = { limit = { has_variable = sr_safe_interstellar_probe } add = 1 }
+	if = { limit = { has_variable = sr_ambitious_interstellar_probe } add = 2 }
+	if = { limit = { has_variable = sr_safe_solar_colonization } add = 1 }
+	if = { limit = { has_variable = sr_ambitious_solar_colonization } add = 2 }
+}
+
+# Per-JE progress display values (for current_value in each JE)
+sr_progress_suborbital_value = {
+	value = 0
+	if = { limit = { has_variable = sr_progress_suborbital } add = var:sr_progress_suborbital }
+}
+sr_progress_orbital_value = {
+	value = 0
+	if = { limit = { has_variable = sr_progress_orbital } add = var:sr_progress_orbital }
+}
+sr_progress_moon_landing_value = {
+	value = 0
+	if = { limit = { has_variable = sr_progress_moon_landing } add = var:sr_progress_moon_landing }
+}
+sr_progress_probe_value = {
+	value = 0
+	if = { limit = { has_variable = sr_progress_probe } add = var:sr_progress_probe }
+}
+sr_progress_moon_base_value = {
+	value = 0
+	if = { limit = { has_variable = sr_progress_moon_base } add = var:sr_progress_moon_base }
+}
+sr_progress_mars_landing_value = {
+	value = 0
+	if = { limit = { has_variable = sr_progress_mars_landing } add = var:sr_progress_mars_landing }
+}
+sr_progress_interstellar_probe_value = {
+	value = 0
+	if = { limit = { has_variable = sr_progress_interstellar_probe } add = var:sr_progress_interstellar_probe }
+}
+sr_progress_solar_colonization_value = {
+	value = 0
+	if = { limit = { has_variable = sr_progress_solar_colonization } add = var:sr_progress_solar_colonization }
+}

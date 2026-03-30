@@ -106,13 +106,13 @@
                 }
                 multiply = 0.25 # very reluctant but not impossible in existential situations
             }
+            # Retaliation: only if THIS specific enemy nuked us
             if = {
                 limit = {
-                    any_scope_state = {
-                        has_modifier = nuclear_strike_aftermath
-                    }
+                    has_variable = nuked_by_country
+                    var:nuked_by_country = scope:target_country
                 }
-                multiply = 5 # retaliation after being nuked is strongly favored
+                multiply = 5 # retaliation after being nuked by this enemy is strongly favored
             }
         }
 
@@ -124,7 +124,7 @@
             # Must be at war with the target
             has_war_with = scope:target_country
 
-            # Must face a sufficiently severe threat
+            # Must face a sufficiently severe threat - no nuking over minor disputes
             OR = {
                 # Existential threat: enemy wants to subjugate or annex us
                 scope:target_country = {
@@ -135,28 +135,20 @@
                         war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
                     }
                 }
-                # Losing core incorporated territory to enemy war goals
+                # Losing core incorporated territory AND the war is going badly
                 AND = {
                     any_scope_state = {
                         is_target_of_wargoal = scope:target_country
                         is_incorporated = yes
                     }
-                    OR = {
-                        any_scope_war = {
-                            has_war_exhaustion = { target = ROOT value > 25 }
-                        }
-                        any_scope_state = {
-                            is_incorporated = yes
-                            devastation > 25
-                        }
+                    any_scope_war = {
+                        has_war_exhaustion = { target = ROOT value > 40 }
                     }
                 }
-                # Retaliation: already been nuked
-                any_scope_state = {
-                    OR = {
-                        has_modifier = nuclear_strike_aftermath
-                        has_modifier = tactical_nuke_aftermath
-                    }
+                # Retaliation: this specific enemy nuked us
+                AND = {
+                    has_variable = nuked_by_country
+                    var:nuked_by_country = scope:target_country
                 }
             }
 
@@ -170,12 +162,10 @@
                         }
                     }
                 }
-                # Retaliation overrides personality
-                any_scope_state = {
-                    OR = {
-                        has_modifier = nuclear_strike_aftermath
-                        has_modifier = tactical_nuke_aftermath
-                    }
+                # Retaliation against the country that nuked us overrides personality
+                AND = {
+                    has_variable = nuked_by_country
+                    var:nuked_by_country = scope:target_country
                 }
                 # Facing complete annexation overrides personality
                 scope:target_country = {
@@ -186,12 +176,10 @@
             # If target is nuclear-armed, require more desperate circumstances
             OR = {
                 NOT = { scope:target_country = { has_modifier = nuclear_power } }
-                # Against nuclear powers: need retaliation, existential threat, or aggressive leader
-                any_scope_state = {
-                    OR = {
-                        has_modifier = nuclear_strike_aftermath
-                        has_modifier = tactical_nuke_aftermath
-                    }
+                # Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
+                AND = {
+                    has_variable = nuked_by_country
+                    var:nuked_by_country = scope:target_country
                 }
                 scope:target_country = {
                     OR = {
@@ -355,8 +343,10 @@ tactical_nuke_diplo_action = {
                             has_modifier = tactical_nuke_aftermath
                         }
                     }
+                    has_variable = nuked_by_country
+                    var:nuked_by_country = scope:target_country
                 }
-                multiply = 3 # retaliation after being nuked
+                multiply = 3 # retaliation after being nuked by this enemy
             }
         }
 
@@ -372,7 +362,7 @@ tactical_nuke_diplo_action = {
             # Must be at war with the target
             has_war_with = scope:target_country
 
-            # Must face a sufficiently severe threat
+            # Must face a sufficiently severe threat - no tactical nukes over minor disputes
             OR = {
                 # Existential threat: enemy wants to subjugate or annex us
                 scope:target_country = {
@@ -383,28 +373,20 @@ tactical_nuke_diplo_action = {
                         war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
                     }
                 }
-                # Losing core incorporated territory (lower thresholds than strategic)
+                # Losing core incorporated territory AND the war is going badly
                 AND = {
                     any_scope_state = {
                         is_target_of_wargoal = scope:target_country
                         is_incorporated = yes
                     }
-                    OR = {
-                        any_scope_war = {
-                            has_war_exhaustion = { target = ROOT value > 15 }
-                        }
-                        any_scope_state = {
-                            is_incorporated = yes
-                            devastation > 15
-                        }
+                    any_scope_war = {
+                        has_war_exhaustion = { target = ROOT value > 25 }
                     }
                 }
-                # Retaliation: already been nuked
-                any_scope_state = {
-                    OR = {
-                        has_modifier = nuclear_strike_aftermath
-                        has_modifier = tactical_nuke_aftermath
-                    }
+                # Retaliation: this specific enemy nuked us
+                AND = {
+                    has_variable = nuked_by_country
+                    var:nuked_by_country = scope:target_country
                 }
             }
 
@@ -418,12 +400,10 @@ tactical_nuke_diplo_action = {
                         }
                     }
                 }
-                # Retaliation overrides personality
-                any_scope_state = {
-                    OR = {
-                        has_modifier = nuclear_strike_aftermath
-                        has_modifier = tactical_nuke_aftermath
-                    }
+                # Retaliation against the country that nuked us overrides personality
+                AND = {
+                    has_variable = nuked_by_country
+                    var:nuked_by_country = scope:target_country
                 }
                 # Facing annexation overrides personality
                 scope:target_country = {
@@ -434,12 +414,10 @@ tactical_nuke_diplo_action = {
             # If target is nuclear-armed, require more desperate circumstances
             OR = {
                 NOT = { scope:target_country = { has_modifier = nuclear_power } }
-                # Against nuclear powers: need retaliation, existential threat, or aggressive leader
-                any_scope_state = {
-                    OR = {
-                        has_modifier = nuclear_strike_aftermath
-                        has_modifier = tactical_nuke_aftermath
-                    }
+                # Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
+                AND = {
+                    has_variable = nuked_by_country
+                    var:nuked_by_country = scope:target_country
                 }
                 scope:target_country = {
                     OR = {

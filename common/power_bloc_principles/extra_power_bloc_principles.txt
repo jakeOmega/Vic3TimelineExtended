@@ -1599,7 +1599,7 @@ principle_cultural_unity_2 = {
 		state_assimilation_mult = 0.2
 		country_homelands_can_change_bool = yes
 		state_homeland_change_speed_mult = 0.05
-		state_homeland_creation_threshold_add = -0.05
+		state_homeland_creation_threshold_add = -0.1
 		state_homeland_removal_threshold_add = 0.05
 	}
 
@@ -1630,7 +1630,7 @@ principle_cultural_unity_3 = {
 		state_assimilation_mult = 0.3
 		country_homelands_can_change_bool = yes
 		state_homeland_change_speed_mult = 0.10
-		state_homeland_creation_threshold_add = -0.1
+		state_homeland_creation_threshold_add = -0.2
 		state_homeland_removal_threshold_add = 0.1
 	}
 
@@ -1667,8 +1667,8 @@ principle_cultural_unity_4 = {
 		country_institution_cost_institution_ministry_of_culture_mult = -0.25
 		country_homelands_can_change_bool = yes
 		state_homeland_change_speed_mult = 0.20
-		state_homeland_creation_threshold_add = -0.15
-		state_homeland_removal_threshold_add = 0.15
+		state_homeland_creation_threshold_add = 0.4
+		state_homeland_removal_threshold_add = 0.2
 	}
 
 	leader_modifier = {
@@ -1711,8 +1711,8 @@ principle_cultural_unity_5 = {
 		country_institution_cost_institution_ministry_of_culture_mult = -0.25
 		country_homelands_can_change_bool = yes
 		state_homeland_change_speed_mult = 0.30
-		state_homeland_creation_threshold_add = -0.2
-		state_homeland_removal_threshold_add = 0.2
+		state_homeland_creation_threshold_add = -0.5
+		state_homeland_removal_threshold_add = 0.4
 	}
 
 	leader_modifier = {

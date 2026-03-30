@@ -430,6 +430,7 @@ banking_cycle_events.106 = {
 	option = {
 		name = banking_cycle_events.106.c
 		add_modifier = { name = banking_event_import_and_subsidy days = short_modifier_time is_decaying = yes }
+		add_modifier = { name = banking_event_import_and_subsidy_cost multiplier = banking_event_expense_small days = short_modifier_time is_decaying = yes }
 		ai_chance = { base = 25 }
 	}
 }
@@ -472,6 +473,7 @@ banking_cycle_events.156 = {
 	option = {
 		name = banking_cycle_events.156.c
 		add_modifier = { name = banking_event_import_and_subsidy days = short_modifier_time is_decaying = yes }
+		add_modifier = { name = banking_event_import_and_subsidy_cost multiplier = banking_event_expense_small days = short_modifier_time is_decaying = yes }
 		ai_chance = { base = 25 }
 	}
 }

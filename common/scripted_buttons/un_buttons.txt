@@ -180,7 +180,7 @@ un_request_peacekeepers_button = {
 				trigger_event = { id = un_vote.1 days = 30 }
 			}
 			# Schedule results
-			trigger_event = { id = un_vote.2 days = 90 }
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
 	}
 }
@@ -254,7 +254,7 @@ un_request_humanitarian_aid_button = {
 				trigger_event = { id = un_vote.1 days = 30 }
 			}
 			# Schedule results
-			trigger_event = { id = un_vote.2 days = 90 }
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
 	}
 }
@@ -329,7 +329,7 @@ un_propose_condemn_button = {
 				trigger_event = { id = un_vote.1 days = 30 }
 			}
 			# Schedule results
-			trigger_event = { id = un_vote.2 days = 90 }
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
 	}
 }
@@ -479,7 +479,7 @@ un_propose_sanctions_button = {
 				trigger_event = { id = un_vote.1 days = 30 }
 			}
 			# Schedule results
-			trigger_event = { id = un_vote.2 days = 90 }
+			trigger_event = { id = un_vote.2 days = 365 }
 		}
 	}
 }
@@ -568,6 +568,10 @@ un_end_peacekeeping_button = {
 
 	possible = {
 		has_modifier = un_peacekeeping_contributor_modifier
+		custom_tooltip = {
+			text = un_end_peacekeeping_cooldown_tt
+			NOT = { has_modifier = un_peacekeeping_cooldown }
+		}
 	}
 
 	ai_chance = {

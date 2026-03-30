@@ -5,7 +5,7 @@
 	state_building_un_headquarters_max_level_add = 1
 
 	# Homeland creation/removal base thresholds (state-level; modified by laws, techs, decrees, buildings)
-	state_homeland_creation_threshold_add = 0.95
+	state_homeland_creation_threshold_add = 1.0
 	state_homeland_removal_threshold_add = 0.0
 
 	state_building_resettlement_colony_max_level_add = 1
@@ -502,6 +502,21 @@ banking_event_rural_credit = {
 banking_event_harvest_subsidy = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	building_group_bg_agriculture_throughput_add = 0.08
+}
+
+banking_event_default_rural_impact = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.1
+}
+
+banking_event_import_and_subsidy = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.02
+}
+
+banking_event_import_and_subsidy_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
 }
 
 # --- Event 10: Sovereign Debt Scare ---
@@ -2103,8 +2118,13 @@ un_condemnation_leader_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_infamy_decay_mult = 0.15
 	country_prestige_mult = 0.05
-	# Looks bad if you're aggressive too
-	country_infamy_generation_mult = 0.2
+}
+
+un_condemned_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.15
+	country_improve_relations_speed_mult = -0.25
+	country_infamy_decay_mult = -0.2
 }
 
 # ---- Human Rights Modifiers ----

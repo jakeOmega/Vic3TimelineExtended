@@ -507,6 +507,7 @@ pop_culture = {
 		political_movement_radicalism_from_enactment_disapproval_mult = 0.1
 		country_institution_ministry_of_culture_max_investment_add = 2
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
+		state_homeland_change_speed_mult = 0.10
 	}
 	
 	ai_weight = {

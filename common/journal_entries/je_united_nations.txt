@@ -189,6 +189,10 @@
 			desc = je_un_agency_unhcr_active
 			trigger = { has_global_variable = un_agency_unhcr }
 		}
+		triggered_desc = {
+			desc = je_un_agency_unoosa_active
+			trigger = { has_global_variable = un_agency_unoosa }
+		}
 
 		# 7. Active resolutions & program participation (members) / join prompt (non-members)
 		first_valid = {
