@@ -260,9 +260,16 @@
 				if = {
 					limit = {
 						country_rank >= rank_value:great_power
-						has_law = law_type:law_humanitarian_regulations
+						has_law = law_type:law_limited_war
 					}
 					change_variable = { name = un_authority add = 0.2 }
+				}
+				if = {
+					limit = {
+						country_rank >= rank_value:great_power
+						has_law = law_type:law_humanitarian_regulations
+					}
+					change_variable = { name = un_authority add = 0.1 }
 				}
 
 				# Great Power toggle: championing adds authority monthly, scaled by rank
