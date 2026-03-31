@@ -1674,8 +1674,9 @@ construction_cost_scaling_mult = {
 # ====================================================================================
 
 # Reference density: population per unit of arable_land for a "normally developed" state.
-# E.g., 5M people / 100 arable_land = 50000. Adjust based on observed in-game values.
-migration_crowding_density_reference = 50000
+# E.g., 2.5M people / 100 arable_land = 25000. Lower base to encourage spread;
+# techs and Urban Planning institution scale it up over time.
+migration_crowding_density_reference = 25000
 
 # No migration penalty below this multiple of reference density
 migration_crowding_floor_ratio = 1  # 1x reference = normal density
@@ -1704,7 +1705,10 @@ migration_crowding_density_ceiling = {
 state_population_density = {
 	value = state_population
 	divide = {
-		value = arable_land
+		value = {
+			value = arable_land
+			subtract = var:arable_land_added # exclude arable land added by tech, as that effectively double-counts the effect
+		}
 		min = 1  # prevent division by zero for states with 0 arable land
 	}
 	divide = {
@@ -1763,6 +1767,26 @@ antimatter_sub_building_slots_remaining = {
 			}
 			subtract = level_after_queued_constructions
 			add = level
+		}
+	}
+}
+
+population_transfer_number = {
+	value = 0
+	scope:target_country = {
+		every_primary_culture = {
+			scope:source_country = {
+				every_scope_state = {
+					every_scope_pop = {
+						limit = {
+							culture = { this = scope:transfer_culture }
+							# Don't count pops whose culture is also primary in the source country
+							NOT = { culture = { is_primary_culture_of = scope:source_country } }
+						}
+						add = size
+					}
+				}
+			}
 		}
 	}
 }

@@ -351,6 +351,7 @@ post-scarcity_economy = {
 		state_middle_strata_expected_sol_add = 1
 		country_max_weekly_construction_progress_add = 50
 		country_loan_interest_rate_add = -0.01
+		state_migration_crowding_density_mult = 0.15
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
 		state_building_national_park_max_level_add = 1

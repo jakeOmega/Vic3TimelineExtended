@@ -87,6 +87,19 @@
                 }
                 remove_modifier = nuclear_power
             }
+            if = {
+                limit = {
+                    modifier:nuclear_program_pause = yes
+                }
+                set_variable = {
+                    name = nuclear_weapons_program_funding
+                    value = 0
+                }
+                if = {
+                    limit = { has_modifier = nuclear_weapon_program_funding }
+                    remove_modifier = nuclear_weapon_program_funding
+                }
+            }
 			change_variable = {
 				name = nuclear_weapon_program_progress
 				add = {

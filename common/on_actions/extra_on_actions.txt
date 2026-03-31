@@ -1327,7 +1327,7 @@ decolonization_events_on_action = {
 						NOT = { any_subject_or_below = { always = yes } }
 						any_country = {
 							NOT = { this = root }
-							was_formed_from = ROOT
+							has_variable = recently_formed_country
 							is_subject = no
 						}
 					}
@@ -1339,7 +1339,7 @@ decolonization_events_on_action = {
 						country_rank >= rank_value:major_power
 						any_country = {
 							NOT = { this = root }
-							was_formed_from = ROOT
+							has_variable = recently_formed_country
 							is_subject = no
 						}
 					}
@@ -1495,7 +1495,9 @@ decolonization_events_on_action = {
 							any_political_movement = {
 								is_revolutionary = yes
 							}
-							country_has_primary_culture = no
+							any_scope_state = {
+								turmoil >= 0.25
+							}
 						}
 					}
 					trigger_event = { id = decolonization_events.18 }
@@ -1506,7 +1508,7 @@ decolonization_events_on_action = {
 						country_rank >= rank_value:great_power
 						any_country = {
 							NOT = { this = root }
-							was_formed_from = ROOT
+							has_variable = recently_formed_country
 							is_subject = no
 							has_modifier = independence_nationalization_modifier
 						}

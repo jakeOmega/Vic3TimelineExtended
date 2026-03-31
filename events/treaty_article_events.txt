@@ -1,0 +1,798 @@
+﻿namespace = treaty_article_events
+
+# =================================================================
+# TREATY ARTICLE EVENTS
+# Events that fire for countries with active treaty articles.
+# Most fire via on_yearly_events; some fire shortly after signing
+# via on_treaty_entered_into_force.
+# =================================================================
+
+# =================================================================
+# Event 1: Intelligence Tip-Off (Intelligence Sharing Pact - Positive)
+# An ally's intelligence prevents a terrorist attack or espionage ring.
+# =================================================================
+treaty_article_events.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.1.t
+	desc = treaty_article_events.1.d
+	flavor = treaty_article_events.1.f
+
+	event_image = { video = "middleeast_police_breaking_door" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { months = normal_modifier_time }
+
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = intelligence_sharing_pact
+			}
+		}
+		has_law = law_type:law_ministry_of_intelligence_and_security
+		NOT = { has_modifier = intelligence_tip_off_modifier }
+	}
+
+	immediate = {
+		random_scope_treaty = {
+			limit = {
+				any_scope_article = {
+					has_type = intelligence_sharing_pact
+				}
+			}
+			random_scope_article = {
+				limit = { has_type = intelligence_sharing_pact }
+				if = {
+					limit = { exists = source_country }
+					source_country = {
+						if = {
+							limit = { NOT = { this = ROOT } }
+							save_scope_as = intel_partner
+						}
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { exists = scope:intel_partner } }
+				first_country = {
+					if = {
+						limit = { NOT = { this = ROOT } }
+						save_scope_as = intel_partner
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { exists = scope:intel_partner } }
+				second_country = {
+					save_scope_as = intel_partner
+				}
+			}
+		}
+	}
+
+	option = {
+		name = treaty_article_events.1.a
+		default_option = yes
+		add_modifier = {
+			name = intelligence_tip_off_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:intel_partner
+			value = 10
+		}
+		ai_chance = { base = 10 }
+	}
+
+	option = {
+		name = treaty_article_events.1.b
+		# Publicize the success for prestige
+		add_prestige = 50
+		add_modifier = {
+			name = intelligence_tip_off_modifier
+			months = short_modifier_time
+			is_decaying = yes
+		}
+		# But publicizing strains the intelligence relationship
+		scope:intel_partner = {
+			change_relations = {
+				country = ROOT
+				value = -5
+			}
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 2
+			}
+		}
+	}
+}
+
+# =================================================================
+# Event 2: Intelligence Failure (Intelligence Sharing Pact - Negative)
+# A critical piece of intelligence failed to reach you in time.
+# =================================================================
+treaty_article_events.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.2.t
+	desc = treaty_article_events.2.d
+	flavor = treaty_article_events.2.f
+
+	event_image = { video = "middleeast_courtroom_upheaval" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { months = normal_modifier_time }
+
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = intelligence_sharing_pact
+			}
+		}
+		has_law = law_type:law_ministry_of_intelligence_and_security
+		NOT = { has_modifier = intelligence_failure_modifier }
+	}
+
+	immediate = {
+		random_scope_treaty = {
+			limit = {
+				any_scope_article = {
+					has_type = intelligence_sharing_pact
+				}
+			}
+			random_scope_article = {
+				limit = { has_type = intelligence_sharing_pact }
+				if = {
+					limit = { exists = source_country }
+					source_country = {
+						if = {
+							limit = { NOT = { this = ROOT } }
+							save_scope_as = intel_partner
+						}
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { exists = scope:intel_partner } }
+				first_country = {
+					if = {
+						limit = { NOT = { this = ROOT } }
+						save_scope_as = intel_partner
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { exists = scope:intel_partner } }
+				second_country = {
+					save_scope_as = intel_partner
+				}
+			}
+		}
+	}
+
+	option = {
+		name = treaty_article_events.2.a
+		default_option = yes
+		# Demand answers from our partner
+		add_modifier = {
+			name = intelligence_failure_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:intel_partner
+			value = -10
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = {
+		name = treaty_article_events.2.b
+		# Accept the failure quietly, preserve the relationship
+		add_modifier = {
+			name = intelligence_failure_modifier
+			months = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+		}
+		ai_chance = { base = 5 }
+	}
+}
+
+# =================================================================
+# Event 3: Cultural Flowering (Minority Protection - Positive)
+# Protected minority populations produce a cultural renaissance.
+# =================================================================
+treaty_article_events.3 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.3.t
+	desc = treaty_article_events.3.d
+	flavor = treaty_article_events.3.f
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { months = normal_modifier_time }
+
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = minority_protection
+			}
+		}
+		any_scope_state = {
+			has_variable = has_minority_protection
+		}
+		NOT = { has_modifier = cultural_flowering_modifier }
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				has_variable = has_minority_protection
+			}
+			save_scope_as = protected_state
+		}
+	}
+
+	option = {
+		name = treaty_article_events.3.a
+		default_option = yes
+		# Celebrate the cultural renaissance
+		add_prestige = 25
+		add_modifier = {
+			name = cultural_flowering_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = { base = 10 }
+	}
+
+	option = {
+		name = treaty_article_events.3.b
+		# Channel it into national identity
+		add_modifier = {
+			name = cultural_flowering_modifier
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = { base = 5 }
+	}
+}
+
+# =================================================================
+# Event 4: Rising Nationalism (Minority Protection - Negative)
+# Protection of minorities provokes nationalist backlash.
+# =================================================================
+treaty_article_events.4 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.4.t
+	desc = treaty_article_events.4.d
+	flavor = treaty_article_events.4.f
+
+	event_image = { video = "europenorthamerica_political_extremism" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+	cooldown = { months = normal_modifier_time }
+
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = minority_protection
+			}
+		}
+		any_scope_state = {
+			has_variable = has_minority_protection
+		}
+		NOT = { has_modifier = nationalist_backlash_modifier }
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				has_variable = has_minority_protection
+			}
+			save_scope_as = protected_state
+		}
+	}
+
+	option = {
+		name = treaty_article_events.4.a
+		default_option = yes
+		# Crack down on nationalist agitators
+		add_modifier = {
+			name = nationalist_backlash_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = {
+		name = treaty_article_events.4.b
+		# Try to address legitimate concerns
+		add_modifier = {
+			name = nationalist_backlash_modifier
+			months = short_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		add_prestige = -10
+		ai_chance = { base = 5 }
+	}
+}
+
+# =================================================================
+# Event 5: Armed Forces Discontent (Nuclear Disarmament - Negative)
+# Military leaders are furious about forced nuclear disarmament.
+# Fires shortly after treaty signing or at any time.
+# =================================================================
+treaty_article_events.5 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.5.t
+	desc = treaty_article_events.5.d
+	flavor = treaty_article_events.5.f
+
+	event_image = { video = "unspecific_military_parade" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+	cooldown = { months = long_modifier_time }
+
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_disarmament
+				source_country = ROOT
+			}
+		}
+		NOT = { has_modifier = military_disarmament_anger_modifier }
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = treaty_article_events.5.a
+		default_option = yes
+		# Reassure the generals: conventional forces remain strong
+		add_modifier = {
+			name = military_disarmament_anger_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
+		ai_chance = { base = 5 }
+	}
+
+	option = {
+		name = treaty_article_events.5.b
+		# Purge the dissenters
+		add_modifier = {
+			name = military_disarmament_purge_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = long_modifier_time }
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					ig:ig_armed_forces = {
+						is_in_government = no
+					}
+				}
+				add = 3
+			}
+		}
+	}
+
+	option = {
+		name = treaty_article_events.5.c
+		# Promise to rebuild: covertly restart preparations
+		add_modifier = {
+			name = military_disarmament_anger_modifier
+			months = short_modifier_time
+			is_decaying = yes
+		}
+		change_infamy = 5
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					ig:ig_armed_forces = {
+						is_in_government = yes
+					}
+				}
+				add = 3
+			}
+		}
+	}
+}
+
+# =================================================================
+# Event 6: Joint Exercises Success (Joint Military Exercises - Positive)
+# Combined military exercises reveal new tactical insights.
+# =================================================================
+treaty_article_events.6 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.6.t
+	desc = treaty_article_events.6.d
+	flavor = treaty_article_events.6.f
+
+	event_image = { video = "europenorthamerica_before_the_battle" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+	cooldown = { months = normal_modifier_time }
+
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = joint_military_exercises
+			}
+		}
+		NOT = { has_modifier = joint_exercises_success_modifier }
+	}
+
+	immediate = {
+		random_scope_treaty = {
+			limit = {
+				any_scope_article = {
+					has_type = joint_military_exercises
+				}
+			}
+			first_country = {
+				if = {
+					limit = { NOT = { this = ROOT } }
+					save_scope_as = exercise_partner
+				}
+			}
+			if = {
+				limit = { NOT = { exists = scope:exercise_partner } }
+				second_country = {
+					save_scope_as = exercise_partner
+				}
+			}
+		}
+	}
+
+	option = {
+		name = treaty_article_events.6.a
+		default_option = yes
+		# Adopt the new doctrine
+		add_modifier = {
+			name = joint_exercises_success_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:exercise_partner
+			value = 10
+		}
+		ai_chance = { base = 10 }
+	}
+
+	option = {
+		name = treaty_article_events.6.b
+		# Focus on our own methods
+		add_prestige = 25
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ai_chance = { base = 5 }
+	}
+}
+
+# =================================================================
+# Event 7: Education Breakthrough (Education Aid - Positive)
+# Foreign-funded schools produce remarkable results.
+# =================================================================
+treaty_article_events.7 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.7.t
+	desc = treaty_article_events.7.d
+	flavor = treaty_article_events.7.f
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { months = normal_modifier_time }
+
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = education_aid
+				target_country = ROOT
+			}
+		}
+		NOT = { has_modifier = education_breakthrough_modifier }
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = treaty_article_events.7.a
+		default_option = yes
+		add_modifier = {
+			name = education_breakthrough_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = { base = 10 }
+	}
+
+	option = {
+		name = treaty_article_events.7.b
+		# Redirect toward technical education
+		add_modifier = {
+			name = education_technical_focus_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = { base = 5 }
+	}
+}
+
+# =================================================================
+# Event 8: Nuclear Freeze Tensions (Nuclear Program Pause - Negative)
+# A frozen nuclear program creates political tensions.
+# =================================================================
+treaty_article_events.8 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.8.t
+	desc = treaty_article_events.8.d
+	flavor = treaty_article_events.8.f
+
+	event_image = { video = "unspecific_politicians_arguing" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { months = long_modifier_time }
+
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_program_pause
+				source_country = ROOT
+			}
+		}
+		has_variable = nuclear_weapons_program_funding
+		NOT = { has_modifier = nuclear_freeze_tension_modifier }
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = treaty_article_events.8.a
+		default_option = yes
+		# Accept the freeze as the price of peace
+		add_modifier = {
+			name = nuclear_freeze_tension_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = {
+		name = treaty_article_events.8.b
+		# Promise the hawks that this is only temporary
+		add_modifier = {
+			name = nuclear_freeze_tension_modifier
+			months = short_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ai_chance = { base = 5 }
+	}
+}
+
+# =================================================================
+# Event 9: Security Aid Dependency (Security Aid - Negative)
+# The country receiving security aid becomes dependent on foreign support.
+# =================================================================
+treaty_article_events.9 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.9.t
+	desc = treaty_article_events.9.d
+	flavor = treaty_article_events.9.f
+
+	event_image = { video = "unspecific_signed_contract" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { months = normal_modifier_time }
+
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = security_aid
+				target_country = ROOT
+			}
+		}
+		NOT = { has_modifier = security_dependency_modifier }
+	}
+
+	immediate = {
+		random_scope_treaty = {
+			limit = {
+				any_scope_article = {
+					has_type = security_aid
+					target_country = ROOT
+				}
+			}
+			random_scope_article = {
+				limit = {
+					has_type = security_aid
+					target_country = ROOT
+				}
+				source_country = {
+					save_scope_as = security_provider
+				}
+			}
+		}
+	}
+
+	option = {
+		name = treaty_article_events.9.a
+		default_option = yes
+		# Accept the dependency for now
+		add_modifier = {
+			name = security_dependency_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:security_provider
+			value = 5
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = {
+		name = treaty_article_events.9.b
+		# Assert our own capabilities
+		add_modifier = {
+			name = security_independence_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:security_provider
+			value = -10
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ai_chance = { base = 5 }
+	}
+}
+
+# =================================================================
+# Event 10: Population Transfer Aftermath (Population Transfer - Negative)
+# The human cost of forced population transfers becomes apparent.
+# =================================================================
+treaty_article_events.10 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.10.t
+	desc = treaty_article_events.10.d
+	flavor = treaty_article_events.10.f
+
+	event_image = { video = "asia_poor_people_moving" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { months = long_modifier_time }
+
+	trigger = {
+		has_modifier = population_transfer_disruption
+		NOT = { has_modifier = population_transfer_aftermath_modifier }
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = treaty_article_events.10.a
+		default_option = yes
+		# Resettle the displaced with government support
+		add_modifier = {
+			name = population_transfer_aftermath_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = {
+		name = treaty_article_events.10.b
+		# Let them fend for themselves
+		add_modifier = {
+			name = population_transfer_neglect_modifier
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		ai_chance = { base = 3 }
+	}
+
+	option = {
+		name = treaty_article_events.10.c
+		# Use this as an opportunity for nation-building
+		add_prestige = -25
+		add_modifier = {
+			name = population_transfer_aftermath_modifier
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ai_chance = { base = 3 }
+	}
+}

@@ -54,7 +54,7 @@ colonial_stability_bar = {
 			add = {
 				desc = "colonial_overstretch_tt"
 				value = owner.colonial_state_count
-				multiply = -0.15
+				multiply = -0.01
 			}
 		}
 

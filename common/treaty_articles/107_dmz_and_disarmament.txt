@@ -378,6 +378,19 @@ forced_disarmament = {
 		}
 	}
 
+	on_entry_into_force = {
+		scope:article_options = {
+			source_country = {
+				every_scope_state = {
+					if = { limit = { has_building = building_arms_industry } remove_building = building_arms_industry }
+					if = { limit = { has_building = building_artillery_foundry } remove_building = building_artillery_foundry }
+					if = { limit = { has_building = building_munition_plant } remove_building = building_munition_plant }
+					if = { limit = { has_building = building_military_shipyard } remove_building = building_military_shipyard }
+				}
+			}
+		}
+	}
+
 	ai = {
 		treaty_categories = { other }
 		article_ai_usage = { request }
@@ -426,6 +439,57 @@ forced_disarmament = {
 					add = {
 						desc = "AI_ARMED_FORCES_IN_GOVERNMENT"
 						value = -30
+					}
+				}
+				# Countries with military industry are more reluctant (it will be destroyed)
+				if = {
+					limit = {
+						any_scope_state = {
+							OR = {
+								has_building = building_arms_industry
+								has_building = building_artillery_foundry
+								has_building = building_munition_plant
+								has_building = building_military_shipyard
+							}
+						}
+					}
+					add = {
+						desc = "AI_HAS_MILITARY_INDUSTRY"
+						value = -10
+					}
+				}
+				if = {
+					limit = {
+						any_scope_state = {
+							count >= 5
+							OR = {
+								has_building = building_arms_industry
+								has_building = building_artillery_foundry
+								has_building = building_munition_plant
+								has_building = building_military_shipyard
+							}
+						}
+					}
+					add = {
+						desc = "AI_SIGNIFICANT_MILITARY_INDUSTRY"
+						value = -15
+					}
+				}
+				if = {
+					limit = {
+						any_scope_state = {
+							count >= 10
+							OR = {
+								has_building = building_arms_industry
+								has_building = building_artillery_foundry
+								has_building = building_munition_plant
+								has_building = building_military_shipyard
+							}
+						}
+					}
+					add = {
+						desc = "AI_LARGE_MILITARY_INDUSTRY"
+						value = -15
 					}
 				}
 				# Already peaceful countries less reluctant

@@ -254,6 +254,7 @@ modern_skyscrapers = {
 	modifier = {
 		building_urban_center_throughput_add = 0.1
 		state_urbanization_per_level_add = -5
+		state_migration_crowding_density_mult = 0.15
 		country_modern_skyscrapers_pb_principles_bool = yes
 	}
 	

@@ -604,6 +604,7 @@ modern_urban_planning = {
 		country_max_weekly_construction_progress_add = 10
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 		state_building_highway_max_level_add = 1
+		state_migration_crowding_density_mult = 0.2
 		country_institution_ministry_of_urban_planning_max_investment_add = 2
 		country_modern_urban_planning_pb_principles_bool = yes
 	}

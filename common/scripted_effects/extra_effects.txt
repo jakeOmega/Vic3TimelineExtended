@@ -1305,3 +1305,124 @@ antimatter_facility_construction = {
 		}
 	}
 }
+
+# Population Transfer: Moves primary culture pops of target_country from source_country to target_country
+# Scope: country (either source or target, called from treaty on_entry_into_force)
+# Expected saved scopes: scope:source_country, scope:target_country
+population_transfer_effect = {
+	# Initialize transfer tracking
+	scope:source_country = {
+		set_variable = { name = pop_transfer_count value = 0 }
+	}
+	scope:target_country = {
+		set_variable = { name = pop_transfer_count value = 0 }
+	}
+
+	# For each primary culture of the receiving country (target), move matching pops from source
+	scope:target_country = {
+		every_primary_culture = {
+			save_scope_as = transfer_culture
+			scope:source_country = {
+				every_scope_state = {
+					every_scope_pop = {
+						limit = {
+							culture = { this = scope:transfer_culture }
+							# Don't transfer pops whose culture is also primary in the source country
+							NOT = { culture = { is_primary_culture_of = scope:source_country } }
+						}
+						save_scope_as = moving_pop
+						# Track how many people are moving
+						scope:source_country = {
+							change_variable = {
+								name = pop_transfer_count
+								add = scope:moving_pop.total_population
+							}
+						}
+						scope:target_country = {
+							change_variable = {
+								name = pop_transfer_count
+								add = scope:moving_pop.total_population
+							}
+						}
+						# Move to a random state in target, weighted by population
+						scope:target_country = {
+							random_scope_state = {
+								weight = {
+									base = 1
+									modifier = {
+										add = 10
+										state_population >= 100000
+									}
+									modifier = {
+										add = 50
+										state_population >= 500000
+									}
+									modifier = {
+										add = 200
+										state_population >= 1000000
+									}
+									modifier = {
+										add = 500
+										state_population >= 5000000
+									}
+								}
+								save_scope_as = destination_state
+							}
+						}
+						move_pop = scope:destination_state
+					}
+				}
+			}
+		}
+	}
+
+	# Apply disruption to source_country (losing pops)
+	scope:source_country = {
+		if = {
+			limit = {
+				has_variable = pop_transfer_count
+				var:pop_transfer_count > 0
+			}
+			add_modifier = {
+				name = population_transfer_disruption
+				years = 5
+				is_decaying = yes
+				multiplier = {
+					value = var:pop_transfer_count
+					divide = cached_ai_total_population
+					min = 0.25
+					max = 2
+				}
+			}
+		}
+		if = {
+			limit = { has_variable = pop_transfer_count }
+			remove_variable = pop_transfer_count
+		}
+	}
+
+	# Apply disruption to target_country (receiving pops)
+	scope:target_country = {
+		if = {
+			limit = {
+				has_variable = pop_transfer_count
+				var:pop_transfer_count > 0
+			}
+			add_modifier = {
+				name = population_transfer_disruption
+				years = 5
+				is_decaying = yes
+				multiplier = {
+					value = var:pop_transfer_count
+					divide = cached_ai_total_population
+					min = 0.25
+					max = 2
+				}
+			}
+		}
+		if = {
+			limit = { has_variable = pop_transfer_count }
+			remove_variable = pop_transfer_count
+		}
+	}
+}

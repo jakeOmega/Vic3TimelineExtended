@@ -2,6 +2,29 @@
 # These make technology requirements for scripted buttons and
 # power bloc principles visible in the tech tree.
 
+# Space Program building PM unlock modifiers
+# These appear in PM tooltips so players know which journal entries each PM unlocks
+country_sr_earth_orbit_program_bool = {
+	color = good
+	boolean = yes
+}
+country_sr_moon_mission_program_bool = {
+	color = good
+	boolean = yes
+}
+country_sr_mars_mission_program_bool = {
+	color = good
+	boolean = yes
+}
+country_sr_solar_exploration_program_bool = {
+	color = good
+	boolean = yes
+}
+country_sr_interstellar_mission_program_bool = {
+	color = good
+	boolean = yes
+}
+
 # Power bloc principle technology requirements
 country_icbm_pb_principles_bool = {
 	color = good

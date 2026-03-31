@@ -208,6 +208,7 @@ wireless_internet = {
 
 	modifier = {
 		state_urbanization_per_level_add = -5
+		state_migration_crowding_density_mult = 0.15
 	}
 	
 	ai_weight = {

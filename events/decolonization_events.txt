@@ -2012,7 +2012,7 @@ decolonization_events.16 = {
 				country = scope:partition_neighbor
 				value = 30
 			}
-			create_truce = {
+			create_bidirectional_truce = {
 				country = scope:partition_neighbor
 				months = 60
 			}
@@ -2183,7 +2183,7 @@ decolonization_events.17 = {
 				country = scope:border_rival
 				value = 25
 			}
-			create_truce = {
+			create_bidirectional_truce = {
 				country = scope:border_rival
 				months = 60
 			}

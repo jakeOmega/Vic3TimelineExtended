@@ -3086,3 +3086,338 @@ space_race_events.26 = {
 		}
 	}
 }
+
+
+##############################################
+# SPACE PROGRAM BUILDING ACCIDENT EVENTS (70-75)
+# These events directly affect the space program building
+# with throughput modifiers, worker casualties, or breakthroughs.
+##############################################
+
+# Event 70: Launch Pad Explosion
+# Ambitious failure — catastrophic explosion kills workers and damages facility
+space_race_events.70 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.70.t
+	desc = space_race_events.70.d
+	flavor = space_race_events.70.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.70.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Rebuild the pad — full safety overhaul before resuming
+		sr_mission_catastrophic_failure_effect = yes
+		random_scope_state = {
+			limit = {
+				any_scope_building = { is_building_type = building_space_program }
+			}
+			random_scope_building = {
+				limit = { is_building_type = building_space_program }
+				add_modifier = { name = sr_launch_pad_damage months = 12 }
+			}
+			kill_population_in_state = { value = 500 pop_type = engineers }
+		}
+	}
+
+	option = {
+		name = space_race_events.70.b
+		ai_chance = { base = 2 }
+		# Rush repairs — we can't afford to fall behind
+		sr_mission_failure_effect = yes
+		random_scope_state = {
+			limit = {
+				any_scope_building = { is_building_type = building_space_program }
+			}
+			random_scope_building = {
+				limit = { is_building_type = building_space_program }
+				add_modifier = { name = sr_launch_pad_damage months = 6 }
+			}
+			kill_population_in_state = { value = 500 pop_type = engineers }
+		}
+		add_radicals = { value = large_radicals pop_type = engineers }
+	}
+}
+
+# Event 71: Capsule Depressurization
+# Ambitious failure — loss of pressure kills crew during testing
+space_race_events.71 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.71.t
+	desc = space_race_events.71.d
+	flavor = space_race_events.71.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.71.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Ground all capsules — redesign the pressure system
+		sr_mission_catastrophic_failure_effect = yes
+		random_scope_state = {
+			limit = {
+				any_scope_building = { is_building_type = building_space_program }
+			}
+			kill_population_in_state = { value = 200 pop_type = academics }
+		}
+	}
+
+	option = {
+		name = space_race_events.71.b
+		ai_chance = { base = 3 }
+		# Implement the fix and switch to a cautious approach
+		sr_mission_failure_effect = yes
+		sr_switch_to_safe_effect = yes
+		random_scope_state = {
+			limit = {
+				any_scope_building = { is_building_type = building_space_program }
+			}
+			kill_population_in_state = { value = 200 pop_type = academics }
+		}
+	}
+}
+
+# Event 72: Facility Fire
+# Safe setback — fire damages equipment but no fatalities
+space_race_events.72 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = space_race_events.72.t
+	desc = space_race_events.72.d
+	flavor = space_race_events.72.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.72.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Replace the damaged equipment and improve fire suppression
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		random_scope_state = {
+			limit = {
+				any_scope_building = { is_building_type = building_space_program }
+			}
+			random_scope_building = {
+				limit = { is_building_type = building_space_program }
+				add_modifier = { name = sr_facility_fire_damage months = 6 }
+			}
+		}
+	}
+
+	option = {
+		name = space_race_events.72.b
+		ai_chance = { base = 3 }
+		# Use insurance payout — invest in better safety systems
+		set_variable = { name = sr_failure_cooldown value = 8 }
+		random_scope_state = {
+			limit = {
+				any_scope_building = { is_building_type = building_space_program }
+			}
+			random_scope_building = {
+				limit = { is_building_type = building_space_program }
+				add_modifier = { name = sr_facility_fire_damage months = 3 }
+				add_modifier = { name = sr_improved_safety_protocols months = 36 }
+			}
+		}
+	}
+}
+
+# Event 73: Budget Scandal
+# Political fallout — cost overruns and mismanagement exposed
+space_race_events.73 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+	title = space_race_events.73.t
+	desc = space_race_events.73.d
+	flavor = space_race_events.73.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.73.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Launch a public inquiry — restore trust through transparency
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		add_radicals = { value = medium_radicals pop_type = academics }
+		add_radicals = { value = medium_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_events.73.b
+		ai_chance = { base = 3 }
+		# Suppress the story — national security demands secrecy
+		set_variable = { name = sr_failure_cooldown value = 4 }
+		add_radicals = { value = large_radicals }
+	}
+
+	option = {
+		name = space_race_events.73.c
+		ai_chance = { base = 2 }
+		# Restructure the program — bring in new leadership
+		set_variable = { name = sr_failure_cooldown value = 8 }
+		random_scope_state = {
+			limit = {
+				any_scope_building = { is_building_type = building_space_program }
+			}
+			random_scope_building = {
+				limit = { is_building_type = building_space_program }
+				add_modifier = { name = sr_supply_chain_disruption months = 6 }
+			}
+		}
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 74: Engineering Breakthrough
+# Positive event — major technical innovation boosts the program
+space_race_events.74 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.74.t
+	desc = space_race_events.74.d
+	flavor = space_race_events.74.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.74.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Apply the breakthrough — integrate it into the current program
+		random_scope_state = {
+			limit = {
+				any_scope_building = { is_building_type = building_space_program }
+			}
+			random_scope_building = {
+				limit = { is_building_type = building_space_program }
+				add_modifier = { name = sr_engineering_breakthrough months = 24 }
+			}
+		}
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	option = {
+		name = space_race_events.74.b
+		ai_chance = { base = 3 }
+		# Patent and commercialize the technology
+		random_scope_state = {
+			limit = {
+				any_scope_building = { is_building_type = building_space_program }
+			}
+			random_scope_building = {
+				limit = { is_building_type = building_space_program }
+				add_modifier = { name = sr_engineering_breakthrough months = 12 }
+			}
+		}
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+	}
+}
+
+# Event 75: Supply Chain Disruption
+# Safe setback — critical component delays from suppliers
+space_race_events.75 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "event_space_station" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = space_race_events.75.t
+	desc = space_race_events.75.d
+	flavor = space_race_events.75.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.75.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Wait for the original suppliers — quality matters
+		set_variable = { name = sr_failure_cooldown value = 6 }
+		random_scope_state = {
+			limit = {
+				any_scope_building = { is_building_type = building_space_program }
+			}
+			random_scope_building = {
+				limit = { is_building_type = building_space_program }
+				add_modifier = { name = sr_supply_chain_disruption months = 6 }
+			}
+		}
+	}
+
+	option = {
+		name = space_race_events.75.b
+		ai_chance = { base = 3 }
+		# Source alternative suppliers — accept slightly lower quality
+		set_variable = { name = sr_failure_cooldown value = 4 }
+		random_scope_state = {
+			limit = {
+				any_scope_building = { is_building_type = building_space_program }
+			}
+			random_scope_building = {
+				limit = { is_building_type = building_space_program }
+				add_modifier = { name = sr_supply_chain_disruption months = 3 }
+			}
+		}
+	}
+
+	option = {
+		name = space_race_events.75.c
+		ai_chance = { base = 2 }
+		# Develop domestic production capacity
+		set_variable = { name = sr_failure_cooldown value = 8 }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+}

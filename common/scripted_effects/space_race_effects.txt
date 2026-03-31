@@ -784,6 +784,25 @@ sr_fire_ambitious_failure_event = {
 		10 = {
 			trigger_event = { id = space_race_events.19 }
 		}
+		# Launch Pad Explosion (always — targets building)
+		10 = {
+			trigger_event = { id = space_race_events.70 }
+		}
+		# Capsule Depressurization (moon base/mars/colonization)
+		10 = {
+			trigger = {
+				OR = {
+					has_variable = sr_active_moon_base
+					has_variable = sr_active_mars_landing
+					has_variable = sr_active_solar_colonization
+				}
+			}
+			trigger_event = { id = space_race_events.71 }
+		}
+		# Engineering Breakthrough (always — silver lining from failure)
+		5 = {
+			trigger_event = { id = space_race_events.74 }
+		}
 	}
 }
 
@@ -825,6 +844,18 @@ sr_fire_safe_setback_event = {
 		# Diplomatic Incident (always available)
 		10 = {
 			trigger_event = { id = space_race_events.26 }
+		}
+		# Facility Fire (always — targets building)
+		10 = {
+			trigger_event = { id = space_race_events.72 }
+		}
+		# Supply Chain Disruption (always — targets building)
+		10 = {
+			trigger_event = { id = space_race_events.75 }
+		}
+		# Budget Scandal (always — political fallout)
+		10 = {
+			trigger_event = { id = space_race_events.73 }
 		}
 	}
 }

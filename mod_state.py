@@ -49,20 +49,37 @@ class ModState:
                         entity_type, mod_dir[entity_type], base_game=False
                     )
 
+        # Load mod-only entity types (not in base game)
+        if not diff and isinstance(mod_dir, dict):
+            for entity_type, dir_path in mod_dir.items():
+                if entity_type not in base_game_dir:
+                    self.base_parsers[entity_type] = ParadoxFileParser()
+                    self.mod_parsers[entity_type] = ParadoxFileParser()
+                    if os.path.isdir(dir_path):
+                        self.load_files_from_directory(
+                            entity_type, dir_path, base_game=False
+                        )
+
     def load_files_from_directory(self, entity_type, dir_path, base_game=True):
         for file_name in os.listdir(dir_path):
             if file_name.startswith("_") or (file_name[-3:] == ".md"):
                 print("skipping file:", file_name)
                 continue
             file_path = os.path.join(dir_path, file_name)
-            if os.path.isfile(file_path):
+            if os.path.isdir(file_path):
+                # Recurse into subdirectories (e.g. events/)
+                self.load_files_from_directory(entity_type, file_path, base_game)
+            elif os.path.isfile(file_path) and file_name.endswith(".txt"):
                 print("reading file:", file_path)
-                if base_game:
-                    self.base_parsers[entity_type].parse_file(file_path)
-                    self.mod_parsers[entity_type].parse_file(file_path)
-                else:
-                    mod_data = self.parse_mod_file(file_path)
-                    self.mod_parsers[entity_type].merge_data(mod_data)
+                try:
+                    if base_game:
+                        self.base_parsers[entity_type].parse_file(file_path)
+                        self.mod_parsers[entity_type].parse_file(file_path)
+                    else:
+                        mod_data = self.parse_mod_file(file_path)
+                        self.mod_parsers[entity_type].merge_data(mod_data)
+                except Exception as e:
+                    print(f"WARNING: skipping file due to parse error: {file_path}: {e}")
 
     def parse_mod_file(self, file_path):
         parser = ParadoxFileParser()

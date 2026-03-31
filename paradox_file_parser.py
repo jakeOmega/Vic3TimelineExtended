@@ -142,7 +142,13 @@ class ParadoxFileParser:
             if apply_directives:
                 self.merge_data(parsed)
             else:
-                self.data.update(parsed)
+                # parsed may be a list of single-key dicts when the file has
+                # duplicate top-level keys (valid in Paradox script, last wins).
+                if isinstance(parsed, list):
+                    for item in parsed:
+                        self.data.update(item)
+                else:
+                    self.data.update(parsed)
                 self.data = self._normalize_data(self.data)
         except Exception as e:
             print(f"Error parsing file: {file_path}")

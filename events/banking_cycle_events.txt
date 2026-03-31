@@ -55,7 +55,6 @@ banking_cycle_events.1 = {
 	flavor = banking_cycle_events.1.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -142,7 +141,6 @@ banking_cycle_events.101 = {
 	flavor = banking_cycle_events.101.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -223,7 +221,6 @@ banking_cycle_events.151 = {
 	flavor = banking_cycle_events.151.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -294,7 +291,7 @@ banking_cycle_events.104 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/corp_office.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -303,7 +300,6 @@ banking_cycle_events.104 = {
 	flavor = banking_cycle_events.104.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -345,7 +341,7 @@ banking_cycle_events.154 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/corp_office.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -354,7 +350,6 @@ banking_cycle_events.154 = {
 	flavor = banking_cycle_events.154.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -396,7 +391,7 @@ banking_cycle_events.106 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_chain.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -405,7 +400,6 @@ banking_cycle_events.106 = {
 	flavor = banking_cycle_events.106.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -439,7 +433,7 @@ banking_cycle_events.156 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_chain.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -448,7 +442,6 @@ banking_cycle_events.156 = {
 	flavor = banking_cycle_events.156.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -487,7 +480,7 @@ banking_cycle_events.2 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/trade_embargo.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -498,7 +491,6 @@ banking_cycle_events.2 = {
 	flavor = banking_cycle_events.2.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -574,7 +566,7 @@ banking_cycle_events.3 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/supply_chain.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -585,7 +577,6 @@ banking_cycle_events.3 = {
 	flavor = banking_cycle_events.3.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -640,7 +631,7 @@ banking_cycle_events.4 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/corp_office.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -651,7 +642,6 @@ banking_cycle_events.4 = {
 	flavor = banking_cycle_events.4.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -764,7 +754,6 @@ banking_cycle_events.5 = {
 	flavor = banking_cycle_events.5.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -819,7 +808,7 @@ banking_cycle_events.6 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/supply_chain.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -830,7 +819,6 @@ banking_cycle_events.6 = {
 	flavor = banking_cycle_events.6.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -925,7 +913,7 @@ banking_cycle_events.7 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/corp_office.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -936,7 +924,6 @@ banking_cycle_events.7 = {
 	flavor = banking_cycle_events.7.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -998,7 +985,7 @@ banking_cycle_events.8 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/monetary_policy.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1009,7 +996,6 @@ banking_cycle_events.8 = {
 	flavor = banking_cycle_events.8.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -1098,7 +1084,6 @@ banking_cycle_events.9 = {
 	flavor = banking_cycle_events.9.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -1171,7 +1156,7 @@ banking_cycle_events.10 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/monetary_policy.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1182,7 +1167,6 @@ banking_cycle_events.10 = {
 	flavor = banking_cycle_events.10.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -1266,7 +1250,7 @@ banking_cycle_events.110 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -1275,7 +1259,6 @@ banking_cycle_events.110 = {
 	flavor = banking_cycle_events.110.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -1314,7 +1297,7 @@ banking_cycle_events.160 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -1323,7 +1306,6 @@ banking_cycle_events.160 = {
 	flavor = banking_cycle_events.160.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -1368,7 +1350,7 @@ banking_cycle_events.11 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/supply_chain.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1379,7 +1361,6 @@ banking_cycle_events.11 = {
 	flavor = banking_cycle_events.11.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -1459,7 +1440,7 @@ banking_cycle_events.12 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/monetary_policy.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1470,7 +1451,6 @@ banking_cycle_events.12 = {
 	flavor = banking_cycle_events.12.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -1559,7 +1539,7 @@ banking_cycle_events.13 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/industrial_monopoly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1570,7 +1550,6 @@ banking_cycle_events.13 = {
 	flavor = banking_cycle_events.13.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -1662,7 +1641,6 @@ banking_cycle_events.14 = {
 	flavor = banking_cycle_events.14.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -1751,7 +1729,7 @@ banking_cycle_events.15 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/monetary_policy.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1762,7 +1740,6 @@ banking_cycle_events.15 = {
 	flavor = banking_cycle_events.15.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -1846,7 +1823,7 @@ banking_cycle_events.115 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -1855,7 +1832,6 @@ banking_cycle_events.115 = {
 	flavor = banking_cycle_events.115.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -1894,7 +1870,7 @@ banking_cycle_events.165 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -1903,7 +1879,6 @@ banking_cycle_events.165 = {
 	flavor = banking_cycle_events.165.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -1948,7 +1923,7 @@ banking_cycle_events.16 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/monetary_policy.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1959,7 +1934,6 @@ banking_cycle_events.16 = {
 	flavor = banking_cycle_events.16.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -2043,7 +2017,7 @@ banking_cycle_events.116 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -2052,7 +2026,6 @@ banking_cycle_events.116 = {
 	flavor = banking_cycle_events.116.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -2089,7 +2062,7 @@ banking_cycle_events.166 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -2098,7 +2071,6 @@ banking_cycle_events.166 = {
 	flavor = banking_cycle_events.166.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -2152,7 +2124,6 @@ banking_cycle_events.17 = {
 	flavor = banking_cycle_events.17.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -2240,7 +2211,6 @@ banking_cycle_events.117 = {
 	flavor = banking_cycle_events.117.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -2287,7 +2257,6 @@ banking_cycle_events.167 = {
 	flavor = banking_cycle_events.167.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -2331,7 +2300,7 @@ banking_cycle_events.18 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/industrial_monopoly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -2342,7 +2311,6 @@ banking_cycle_events.18 = {
 	flavor = banking_cycle_events.18.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -2426,7 +2394,7 @@ banking_cycle_events.19 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/monetary_policy.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -2437,7 +2405,6 @@ banking_cycle_events.19 = {
 	flavor = banking_cycle_events.19.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -2529,7 +2496,7 @@ banking_cycle_events.20 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/industrial_monopoly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -2540,7 +2507,6 @@ banking_cycle_events.20 = {
 	flavor = banking_cycle_events.20.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -2613,7 +2579,7 @@ banking_cycle_events.120 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -2622,7 +2588,6 @@ banking_cycle_events.120 = {
 	flavor = banking_cycle_events.120.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -2658,7 +2623,7 @@ banking_cycle_events.170 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -2667,7 +2632,6 @@ banking_cycle_events.170 = {
 	flavor = banking_cycle_events.170.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -2720,7 +2684,7 @@ banking_cycle_events.21 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/corp_office.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -2731,7 +2695,6 @@ banking_cycle_events.21 = {
 	flavor = banking_cycle_events.21.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -2798,7 +2761,6 @@ banking_cycle_events.22 = {
 	flavor = banking_cycle_events.22.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -2846,7 +2808,7 @@ banking_cycle_events.23 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/corp_office.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -2857,7 +2819,6 @@ banking_cycle_events.23 = {
 	flavor = banking_cycle_events.23.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -2914,7 +2875,7 @@ banking_cycle_events.24 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/industrial_monopoly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -2925,7 +2886,6 @@ banking_cycle_events.24 = {
 	flavor = banking_cycle_events.24.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -2992,7 +2952,7 @@ banking_cycle_events.25 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/monetary_policy.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -3003,7 +2963,6 @@ banking_cycle_events.25 = {
 	flavor = banking_cycle_events.25.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3066,7 +3025,7 @@ banking_cycle_events.26 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/corp_office.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -3077,7 +3036,6 @@ banking_cycle_events.26 = {
 	flavor = banking_cycle_events.26.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3135,7 +3093,7 @@ banking_cycle_events.27 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/trade_embargo.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -3146,7 +3104,6 @@ banking_cycle_events.27 = {
 	flavor = banking_cycle_events.27.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3195,7 +3152,7 @@ banking_cycle_events.28 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/supply_chain.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -3206,7 +3163,6 @@ banking_cycle_events.28 = {
 	flavor = banking_cycle_events.28.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3283,7 +3239,7 @@ banking_cycle_events.29 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/trade_embargo.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -3294,7 +3250,6 @@ banking_cycle_events.29 = {
 	flavor = banking_cycle_events.29.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3367,7 +3322,7 @@ banking_cycle_events.30 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/monetary_policy.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -3378,7 +3333,6 @@ banking_cycle_events.30 = {
 	flavor = banking_cycle_events.30.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3451,7 +3405,7 @@ banking_cycle_events.31 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/corp_office.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -3462,7 +3416,6 @@ banking_cycle_events.31 = {
 	flavor = banking_cycle_events.31.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3548,7 +3501,7 @@ banking_cycle_events.32 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/industrial_monopoly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -3559,7 +3512,6 @@ banking_cycle_events.32 = {
 	flavor = banking_cycle_events.32.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3652,7 +3604,6 @@ banking_cycle_events.33 = {
 	flavor = banking_cycle_events.33.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3715,7 +3666,7 @@ banking_cycle_events.34 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/monetary_policy.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -3726,7 +3677,6 @@ banking_cycle_events.34 = {
 	flavor = banking_cycle_events.34.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3820,7 +3770,6 @@ banking_cycle_events.35 = {
 	flavor = banking_cycle_events.35.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3880,7 +3829,7 @@ banking_cycle_events.36 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/corp_office.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -3891,7 +3840,6 @@ banking_cycle_events.36 = {
 	flavor = banking_cycle_events.36.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -3964,7 +3912,7 @@ banking_cycle_events.37 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/supply_chain.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -3975,7 +3923,6 @@ banking_cycle_events.37 = {
 	flavor = banking_cycle_events.37.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -4049,7 +3996,7 @@ banking_cycle_events.38 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/trade_embargo.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -4060,7 +4007,6 @@ banking_cycle_events.38 = {
 	flavor = banking_cycle_events.38.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -4123,7 +4069,7 @@ banking_cycle_events.39 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/monetary_policy.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -4134,7 +4080,6 @@ banking_cycle_events.39 = {
 	flavor = banking_cycle_events.39.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -4223,7 +4168,7 @@ banking_cycle_events.40 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/corp_office.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -4234,7 +4179,6 @@ banking_cycle_events.40 = {
 	flavor = banking_cycle_events.40.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -4306,7 +4250,7 @@ banking_cycle_events.41 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/supply_chain.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -4317,7 +4261,6 @@ banking_cycle_events.41 = {
 	flavor = banking_cycle_events.41.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -4399,7 +4342,7 @@ banking_cycle_events.42 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/trade_embargo.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -4410,7 +4353,6 @@ banking_cycle_events.42 = {
 	flavor = banking_cycle_events.42.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -4486,7 +4428,6 @@ banking_cycle_events.43 = {
 	flavor = banking_cycle_events.43.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -4541,7 +4482,7 @@ banking_cycle_events.44 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/industrial_monopoly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -4552,7 +4493,6 @@ banking_cycle_events.44 = {
 	flavor = banking_cycle_events.44.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 	}
@@ -4636,7 +4576,7 @@ banking_cycle_events.45 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
+		texture = "gfx/event_pictures/monetary_policy.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -4647,7 +4587,6 @@ banking_cycle_events.45 = {
 	flavor = banking_cycle_events.45.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {
 		random_country = {
@@ -4757,7 +4696,7 @@ banking_cycle_events.50 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_chain.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -4766,7 +4705,6 @@ banking_cycle_events.50 = {
 	flavor = banking_cycle_events.50.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -4810,7 +4748,7 @@ banking_cycle_events.51 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -4819,7 +4757,6 @@ banking_cycle_events.51 = {
 	flavor = banking_cycle_events.51.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -4863,7 +4800,7 @@ banking_cycle_events.52 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_chain.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -4872,7 +4809,6 @@ banking_cycle_events.52 = {
 	flavor = banking_cycle_events.52.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -4917,7 +4853,7 @@ banking_cycle_events.53 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/trade_embargo.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -4926,7 +4862,6 @@ banking_cycle_events.53 = {
 	flavor = banking_cycle_events.53.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -4972,7 +4907,7 @@ banking_cycle_events.54 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -4981,7 +4916,6 @@ banking_cycle_events.54 = {
 	flavor = banking_cycle_events.54.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -5023,7 +4957,7 @@ banking_cycle_events.55 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
@@ -5032,7 +4966,6 @@ banking_cycle_events.55 = {
 	flavor = banking_cycle_events.55.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -5074,7 +5007,7 @@ banking_cycle_events.56 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -5083,7 +5016,6 @@ banking_cycle_events.56 = {
 	flavor = banking_cycle_events.56.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -5126,7 +5058,7 @@ banking_cycle_events.57 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_chain.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -5135,7 +5067,6 @@ banking_cycle_events.57 = {
 	flavor = banking_cycle_events.57.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -5183,7 +5114,7 @@ banking_cycle_events.60 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/corp_office.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -5192,7 +5123,6 @@ banking_cycle_events.60 = {
 	flavor = banking_cycle_events.60.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -5234,7 +5164,7 @@ banking_cycle_events.61 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/trade_embargo.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -5243,7 +5173,6 @@ banking_cycle_events.61 = {
 	flavor = banking_cycle_events.61.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -5287,7 +5216,7 @@ banking_cycle_events.62 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -5296,7 +5225,6 @@ banking_cycle_events.62 = {
 	flavor = banking_cycle_events.62.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -5340,7 +5268,7 @@ banking_cycle_events.63 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_chain.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -5349,7 +5277,6 @@ banking_cycle_events.63 = {
 	flavor = banking_cycle_events.63.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -5392,7 +5319,7 @@ banking_cycle_events.64 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/trade_embargo.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -5401,7 +5328,6 @@ banking_cycle_events.64 = {
 	flavor = banking_cycle_events.64.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -5444,7 +5370,7 @@ banking_cycle_events.65 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_chain.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -5453,7 +5379,6 @@ banking_cycle_events.65 = {
 	flavor = banking_cycle_events.65.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -5497,7 +5422,7 @@ banking_cycle_events.66 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/corp_office.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -5506,7 +5431,6 @@ banking_cycle_events.66 = {
 	flavor = banking_cycle_events.66.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 
@@ -5549,7 +5473,7 @@ banking_cycle_events.67 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/corp_office.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -5558,7 +5482,6 @@ banking_cycle_events.67 = {
 	flavor = banking_cycle_events.67.f
 
 	duration = 3
-	is_popup = yes
 
 	immediate = {}
 

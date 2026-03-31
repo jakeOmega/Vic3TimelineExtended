@@ -3572,3 +3572,115 @@ cooperative_worker_buyout = {
 	country_finance_value_monthly_add    = 0.10
 	country_finance_momentum_monthly_add = 0.10
 }
+
+# Applied when a population transfer treaty takes effect
+# Scaled by multiplier = transferred_pop / country_pop
+population_transfer_disruption = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_bureaucracy_mult = -0.5
+	country_legitimacy_base_add = -10
+	country_radicals_from_conquest_mult = 0.5
+}
+
+# =============================================
+# TREATY ARTICLE EVENT MODIFIERS
+# =============================================
+
+# Intelligence Sharing Pact - tip-off success
+intelligence_tip_off_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_authority_add = 50
+	country_prestige_add = 10
+}
+
+# Intelligence Sharing Pact - failure
+intelligence_failure_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = -50
+	country_prestige_add = -10
+}
+
+# Minority Protection - cultural flowering
+cultural_flowering_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 15
+	country_tech_spread_add = 10
+}
+
+# Minority Protection - nationalist backlash
+nationalist_backlash_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_turmoil_effects_mult = 0.15
+	country_legitimacy_base_add = -5
+}
+
+# Nuclear Disarmament - military anger
+military_disarmament_anger_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = -75
+	country_prestige_add = -5
+}
+
+# Nuclear Disarmament - purge aftermath
+military_disarmament_purge_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = -50
+	unit_morale_loss_mult = 0.1
+}
+
+# Joint Military Exercises - success
+joint_exercises_success_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	unit_morale_loss_mult = -0.1
+	unit_offense_mult = 0.05
+	unit_defense_mult = 0.05
+}
+
+# Education Aid - breakthrough
+education_breakthrough_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_tech_spread_add = 15
+	state_education_access_add = 0.05
+}
+
+# Education Aid - technical focus
+education_technical_focus_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_tech_spread_add = 10
+	building_throughput_add = 0.02
+}
+
+# Nuclear Freeze - domestic tensions
+nuclear_freeze_tension_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = -50
+	country_legitimacy_base_add = -5
+}
+
+# Security Aid - dependency
+security_dependency_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = -25
+	country_prestige_add = -10
+}
+
+# Security Aid - assert independence
+security_independence_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_authority_add = 25
+	unit_morale_loss_mult = 0.05
+}
+
+# Population Transfer - resettlement support
+population_transfer_aftermath_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_bureaucracy_mult = -0.1
+	country_prestige_add = -5
+}
+
+# Population Transfer - neglect
+population_transfer_neglect_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_turmoil_effects_mult = 0.1
+	country_prestige_add = -15
+}

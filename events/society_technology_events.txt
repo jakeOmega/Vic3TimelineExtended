@@ -35,6 +35,7 @@ society_technology_events.1 = {
 		has_technology_researched = second_wave_feminism
 		NOT = { has_modifier = ste_women_workforce }
 		NOT = { has_modifier = ste_women_workforce_blocked }
+		NOT = { has_variable = ste_event_1_fired }
 		OR = {
 			has_law = law_type:law_women_in_the_workplace
 			has_law = law_type:law_women_own_property
@@ -42,6 +43,7 @@ society_technology_events.1 = {
 	}
 
 	immediate = {
+		set_variable = ste_event_1_fired
 	}
 
 	option = {
@@ -110,10 +112,12 @@ society_technology_events.2 = {
 		has_technology_researched = second_wave_feminism
 		NOT = { has_modifier = ste_equal_pay_reform }
 		NOT = { has_modifier = ste_equal_pay_rejected }
+		NOT = { has_variable = ste_event_2_fired }
 		has_law = law_type:law_women_in_the_workplace
 	}
 
 	immediate = {
+		set_variable = ste_event_2_fired
 	}
 
 	option = {
@@ -179,9 +183,11 @@ society_technology_events.3 = {
 		NOT = { has_modifier = ste_pill_available }
 		NOT = { has_modifier = ste_pill_restricted }
 		NOT = { has_modifier = ste_pill_subsidized }
+		NOT = { has_variable = ste_event_3_fired }
 	}
 
 	immediate = {
+		set_variable = ste_event_3_fired
 	}
 
 	option = {
@@ -277,9 +283,11 @@ society_technology_events.4 = {
 		has_technology_researched = sexual_revolution
 		NOT = { has_modifier = ste_sexual_revolution_embraced }
 		NOT = { has_modifier = ste_sexual_revolution_backlash }
+		NOT = { has_variable = ste_event_4_fired }
 	}
 
 	immediate = {
+		set_variable = ste_event_4_fired
 	}
 
 	option = {
@@ -348,9 +356,11 @@ society_technology_events.5 = {
 		has_technology_researched = sexual_revolution
 		NOT = { has_modifier = ste_divorce_reform }
 		NOT = { has_modifier = ste_divorce_tradition }
+		NOT = { has_variable = ste_event_5_fired }
 	}
 
 	immediate = {
+		set_variable = ste_event_5_fired
 	}
 
 	option = {
@@ -415,6 +425,7 @@ society_technology_events.6 = {
 		has_technology_researched = video_games
 		NOT = { has_modifier = ste_gaming_industry_boom }
 		NOT = { has_modifier = ste_gaming_industry_regulated }
+		NOT = { has_variable = ste_event_6_fired }
 		any_scope_building = {
 			OR = {
 				is_building_type = building_art_academy
@@ -425,6 +436,7 @@ society_technology_events.6 = {
 	}
 
 	immediate = {
+		set_variable = ste_event_6_fired
 	}
 
 	option = {
@@ -716,6 +728,7 @@ society_technology_events.8 = {
 		NOT = { has_modifier = ste_marriage_equality }
 		NOT = { has_modifier = ste_marriage_traditional }
 		NOT = { has_modifier = ste_civil_unions }
+		NOT = { has_variable = ste_event_8_fired }
 		OR = {
 			has_law = law_type:law_basic_protections
 			has_law = law_type:law_comprehensive_rights
@@ -723,6 +736,7 @@ society_technology_events.8 = {
 	}
 
 	immediate = {
+		set_variable = ste_event_8_fired
 	}
 
 	# --- BASIC PROTECTIONS OPTIONS ---
@@ -877,10 +891,12 @@ society_technology_events.9 = {
 		has_technology_researched = globalization
 		NOT = { has_modifier = ste_outsourcing_embrace }
 		NOT = { has_modifier = ste_outsourcing_protect }
+		NOT = { has_variable = ste_event_9_fired }
 		country_rank >= rank_value:major_power
 	}
 
 	immediate = {
+		set_variable = ste_event_9_fired
 	}
 
 	option = {
@@ -1099,6 +1115,7 @@ society_technology_events.12 = {
 		has_technology_researched = terrorism_and_anti_terrorism
 		NOT = { has_modifier = ste_mass_surveillance }
 		NOT = { has_modifier = ste_privacy_preserved }
+		NOT = { has_variable = ste_event_12_fired }
 		OR = {
 			has_technology_researched = cybersecurity
 			has_technology_researched = social_media
@@ -1106,6 +1123,7 @@ society_technology_events.12 = {
 	}
 
 	immediate = {
+		set_variable = ste_event_12_fired
 	}
 
 	option = {
@@ -1186,9 +1204,11 @@ society_technology_events.13 = {
 		NOT = { has_modifier = ste_misinfo_regulate }
 		NOT = { has_modifier = ste_misinfo_free_speech }
 		NOT = { has_modifier = ste_misinfo_literacy }
+		NOT = { has_variable = ste_event_13_fired }
 	}
 
 	immediate = {
+		set_variable = ste_event_13_fired
 	}
 
 	option = {
@@ -1462,9 +1482,11 @@ society_technology_events.16 = {
 		NOT = { has_modifier = ste_bci_consumer_rollout }
 		NOT = { has_modifier = ste_bci_regulated_access }
 		NOT = { has_modifier = ste_bci_banned }
+		NOT = { has_variable = ste_event_16_fired }
 	}
 
 	immediate = {
+		set_variable = ste_event_16_fired
 	}
 
 	option = {
@@ -1551,10 +1573,12 @@ society_technology_events.17 = {
 		has_technology_researched = biohacking_and_human_augmentation
 		NOT = { has_modifier = ste_augmented_sports_separate }
 		NOT = { has_modifier = ste_augmented_sports_embrace }
+		NOT = { has_variable = ste_event_17_fired }
 		NOT = { has_law = law_type:law_human_purity }
 	}
 
 	immediate = {
+		set_variable = ste_event_17_fired
 	}
 
 	option = {
@@ -1618,6 +1642,7 @@ society_technology_events.18 = {
 		has_technology_researched = space_colonization
 		NOT = { has_modifier = ste_space_colony_national }
 		NOT = { has_modifier = ste_space_colony_international }
+		NOT = { has_variable = ste_event_18_fired }
 		any_scope_building = {
 			is_building_type = building_aerospace_industry
 			level >= 3
@@ -1625,6 +1650,7 @@ society_technology_events.18 = {
 	}
 
 	immediate = {
+		set_variable = ste_event_18_fired
 	}
 
 	option = {
@@ -1683,6 +1709,7 @@ society_technology_events.19 = {
 		has_technology_researched = space_colonization
 		NOT = { has_modifier = ste_space_gov_direct }
 		NOT = { has_modifier = ste_space_gov_autonomy }
+		NOT = { has_variable = ste_event_19_fired }
 		any_scope_building = {
 			is_building_type = building_space_elevator
 			level >= 1
@@ -1690,6 +1717,7 @@ society_technology_events.19 = {
 	}
 
 	immediate = {
+		set_variable = ste_event_19_fired
 	}
 
 	option = {
@@ -1751,9 +1779,11 @@ society_technology_events.20 = {
 		NOT = { has_modifier = ste_hivemind_tolerate }
 		NOT = { has_modifier = ste_hivemind_integrate }
 		NOT = { has_modifier = ste_hivemind_suppress }
+		NOT = { has_variable = ste_event_20_fired }
 	}
 
 	immediate = {
+		set_variable = ste_event_20_fired
 	}
 
 	option = {
@@ -1835,6 +1865,7 @@ society_technology_events.21 = {
 		has_technology_researched = telepathic_communities
 		NOT = { has_modifier = ste_telepathic_diplomacy }
 		NOT = { has_modifier = ste_telepathic_diplomacy_rejected }
+		NOT = { has_variable = ste_event_21_fired }
 		any_country = {
 			NOT = { this = root }
 			has_technology_researched = telepathic_communities
@@ -1842,6 +1873,7 @@ society_technology_events.21 = {
 	}
 
 	immediate = {
+		set_variable = ste_event_21_fired
 		random_country = {
 			limit = {
 				NOT = { this = root }
@@ -2205,9 +2237,11 @@ society_technology_events.25 = {
 		NOT = { has_modifier = ste_deepfake_regulate }
 		NOT = { has_modifier = ste_deepfake_authenticate }
 		NOT = { has_modifier = ste_deepfake_ignore }
+		NOT = { has_variable = ste_event_25_fired }
 	}
 
 	immediate = {
+		set_variable = ste_event_25_fired
 	}
 
 	option = {
@@ -2280,9 +2314,11 @@ society_technology_events.26 = {
 		has_technology_researched = artificial_intelligence
 		NOT = { has_modifier = ste_ai_rights_granted }
 		NOT = { has_modifier = ste_ai_rights_denied }
+		NOT = { has_variable = ste_event_26_fired }
 	}
 
 	immediate = {
+		set_variable = ste_event_26_fired
 	}
 
 	option = {
@@ -2338,10 +2374,12 @@ society_technology_events.27 = {
 		has_technology_researched = artificial_intelligence
 		NOT = { has_modifier = ste_algo_gov_adopt }
 		NOT = { has_modifier = ste_algo_gov_reject }
+		NOT = { has_variable = ste_event_27_fired }
 		NOT = { has_law = law_type:law_algorithmic_governance }
 	}
 
 	immediate = {
+		set_variable = ste_event_27_fired
 	}
 
 	option = {
@@ -2403,9 +2441,11 @@ society_technology_events.28 = {
 		NOT = { has_modifier = ste_designer_baby_ban }
 		NOT = { has_modifier = ste_designer_baby_medical }
 		NOT = { has_modifier = ste_designer_baby_unrestricted }
+		NOT = { has_variable = ste_event_28_fired }
 	}
 
 	immediate = {
+		set_variable = ste_event_28_fired
 	}
 
 	option = {
@@ -2485,6 +2525,7 @@ society_technology_events.29 = {
 		has_technology_researched = synthetic_biology
 		NOT = { has_modifier = ste_synthetic_crops_adopt }
 		NOT = { has_modifier = ste_synthetic_crops_ban }
+		NOT = { has_variable = ste_event_29_fired }
 		any_scope_building = {
 			OR = {
 				is_building_group = bg_agriculture
@@ -2495,6 +2536,7 @@ society_technology_events.29 = {
 	}
 
 	immediate = {
+		set_variable = ste_event_29_fired
 	}
 
 	option = {
@@ -2556,9 +2598,11 @@ society_technology_events.30 = {
 		NOT = { has_modifier = ste_av_full_adoption }
 		NOT = { has_modifier = ste_av_cautious_rollout }
 		NOT = { has_modifier = ste_av_blocked }
+		NOT = { has_variable = ste_event_30_fired }
 	}
 
 	immediate = {
+		set_variable = ste_event_30_fired
 	}
 
 	option = {
@@ -2645,6 +2689,7 @@ society_technology_events.31 = {
 		has_technology_researched = autonomous_vehicles
 		NOT = { has_modifier = ste_av_crash_pause }
 		NOT = { has_modifier = ste_av_crash_continue }
+		NOT = { has_variable = ste_event_31_fired }
 		OR = {
 			has_modifier = ste_av_full_adoption
 			has_modifier = ste_av_cautious_rollout
@@ -2652,6 +2697,7 @@ society_technology_events.31 = {
 	}
 
 	immediate = {
+		set_variable = ste_event_31_fired
 	}
 
 	option = {

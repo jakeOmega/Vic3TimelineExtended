@@ -21,6 +21,7 @@ je_space_race_suborbital = {
 
 	possible = {
 		has_technology_researched = rocketry
+		modifier:country_sr_earth_orbit_program_bool = yes
 		OR = {
 			country_rank = rank_value:great_power
 			country_rank = rank_value:major_power
@@ -77,6 +78,22 @@ je_space_race_suborbital = {
 		trigger_event = { id = space_race_events.1 }
 		sr_complete_suborbital_effect = yes
 		remove_variable = sr_active_suborbital
+	}
+
+	fail = {
+		custom_tooltip = {
+			text = sr_space_program_incompatible_tt
+			NOT = { modifier:country_sr_earth_orbit_program_bool = yes }
+		}
+	}
+
+	on_fail = {
+		if = { limit = { has_variable = sr_active_suborbital } remove_variable = sr_active_suborbital }
+		if = { limit = { has_variable = sr_progress_suborbital } remove_variable = sr_progress_suborbital }
+		if = { limit = { has_variable = sr_funding_suborbital } remove_variable = sr_funding_suborbital }
+		if = { limit = { has_variable = sr_safe_suborbital } remove_variable = sr_safe_suborbital }
+		if = { limit = { has_variable = sr_ambitious_suborbital } remove_variable = sr_ambitious_suborbital }
+		sr_recalculate_cost = yes
 	}
 
 	on_monthly_pulse = {
@@ -156,6 +173,7 @@ je_space_race_orbital = {
 
 	possible = {
 		has_variable = sr_completed_suborbital
+		modifier:country_sr_earth_orbit_program_bool = yes
 		NOT = { has_variable = sr_completed_orbital }
 		OR = {
 			country_rank = rank_value:great_power
@@ -212,6 +230,22 @@ je_space_race_orbital = {
 		trigger_event = { id = space_race_events.2 }
 		sr_complete_orbital_effect = yes
 		remove_variable = sr_active_orbital
+	}
+
+	fail = {
+		custom_tooltip = {
+			text = sr_space_program_incompatible_tt
+			NOT = { modifier:country_sr_earth_orbit_program_bool = yes }
+		}
+	}
+
+	on_fail = {
+		if = { limit = { has_variable = sr_active_orbital } remove_variable = sr_active_orbital }
+		if = { limit = { has_variable = sr_progress_orbital } remove_variable = sr_progress_orbital }
+		if = { limit = { has_variable = sr_funding_orbital } remove_variable = sr_funding_orbital }
+		if = { limit = { has_variable = sr_safe_orbital } remove_variable = sr_safe_orbital }
+		if = { limit = { has_variable = sr_ambitious_orbital } remove_variable = sr_ambitious_orbital }
+		sr_recalculate_cost = yes
 	}
 
 	on_monthly_pulse = {
@@ -286,6 +320,7 @@ je_space_race_moon_landing = {
 	possible = {
 		has_variable = sr_completed_orbital
 		has_technology_researched = space_exploration
+		modifier:country_sr_moon_mission_program_bool = yes
 		NOT = { has_variable = sr_completed_moon_landing }
 		OR = {
 			country_rank = rank_value:great_power
@@ -352,6 +387,22 @@ je_space_race_moon_landing = {
 		trigger_event = { id = space_race_events.3 }
 		sr_complete_moon_landing_effect = yes
 		remove_variable = sr_active_moon_landing
+	}
+
+	fail = {
+		custom_tooltip = {
+			text = sr_space_program_incompatible_tt
+			NOT = { modifier:country_sr_moon_mission_program_bool = yes }
+		}
+	}
+
+	on_fail = {
+		if = { limit = { has_variable = sr_active_moon_landing } remove_variable = sr_active_moon_landing }
+		if = { limit = { has_variable = sr_progress_moon_landing } remove_variable = sr_progress_moon_landing }
+		if = { limit = { has_variable = sr_funding_moon_landing } remove_variable = sr_funding_moon_landing }
+		if = { limit = { has_variable = sr_safe_moon_landing } remove_variable = sr_safe_moon_landing }
+		if = { limit = { has_variable = sr_ambitious_moon_landing } remove_variable = sr_ambitious_moon_landing }
+		sr_recalculate_cost = yes
 	}
 
 	on_monthly_pulse = {
@@ -455,6 +506,7 @@ je_space_race_probe = {
 	possible = {
 		has_variable = sr_completed_orbital
 		has_technology_researched = space_exploration
+		modifier:country_sr_moon_mission_program_bool = yes
 		NOT = { has_variable = sr_completed_probe }
 		OR = {
 			country_rank = rank_value:great_power
@@ -511,6 +563,22 @@ je_space_race_probe = {
 		trigger_event = { id = space_race_events.4 }
 		sr_complete_probe_effect = yes
 		remove_variable = sr_active_probe
+	}
+
+	fail = {
+		custom_tooltip = {
+			text = sr_space_program_incompatible_tt
+			NOT = { modifier:country_sr_moon_mission_program_bool = yes }
+		}
+	}
+
+	on_fail = {
+		if = { limit = { has_variable = sr_active_probe } remove_variable = sr_active_probe }
+		if = { limit = { has_variable = sr_progress_probe } remove_variable = sr_progress_probe }
+		if = { limit = { has_variable = sr_funding_probe } remove_variable = sr_funding_probe }
+		if = { limit = { has_variable = sr_safe_probe } remove_variable = sr_safe_probe }
+		if = { limit = { has_variable = sr_ambitious_probe } remove_variable = sr_ambitious_probe }
+		sr_recalculate_cost = yes
 	}
 
 	on_monthly_pulse = {
@@ -584,6 +652,7 @@ je_space_race_moon_base = {
 	possible = {
 		has_variable = sr_completed_moon_landing
 		has_technology_researched = reusable_rocketry
+		modifier:country_sr_mars_mission_program_bool = yes
 		NOT = { has_variable = sr_completed_moon_base }
 		OR = {
 			country_rank = rank_value:great_power
@@ -640,6 +709,22 @@ je_space_race_moon_base = {
 		trigger_event = { id = space_race_events.6 }
 		sr_complete_moon_base_effect = yes
 		remove_variable = sr_active_moon_base
+	}
+
+	fail = {
+		custom_tooltip = {
+			text = sr_space_program_incompatible_tt
+			NOT = { modifier:country_sr_mars_mission_program_bool = yes }
+		}
+	}
+
+	on_fail = {
+		if = { limit = { has_variable = sr_active_moon_base } remove_variable = sr_active_moon_base }
+		if = { limit = { has_variable = sr_progress_moon_base } remove_variable = sr_progress_moon_base }
+		if = { limit = { has_variable = sr_funding_moon_base } remove_variable = sr_funding_moon_base }
+		if = { limit = { has_variable = sr_safe_moon_base } remove_variable = sr_safe_moon_base }
+		if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
+		sr_recalculate_cost = yes
 	}
 
 	on_monthly_pulse = {
@@ -714,6 +799,7 @@ je_space_race_mars_landing = {
 	possible = {
 		has_variable = sr_completed_orbital
 		has_technology_researched = reusable_rocketry
+		modifier:country_sr_mars_mission_program_bool = yes
 		NOT = { has_variable = sr_completed_mars_landing }
 		OR = {
 			country_rank = rank_value:great_power
@@ -770,6 +856,22 @@ je_space_race_mars_landing = {
 		trigger_event = { id = space_race_events.7 }
 		sr_complete_mars_landing_effect = yes
 		remove_variable = sr_active_mars_landing
+	}
+
+	fail = {
+		custom_tooltip = {
+			text = sr_space_program_incompatible_tt
+			NOT = { modifier:country_sr_mars_mission_program_bool = yes }
+		}
+	}
+
+	on_fail = {
+		if = { limit = { has_variable = sr_active_mars_landing } remove_variable = sr_active_mars_landing }
+		if = { limit = { has_variable = sr_progress_mars_landing } remove_variable = sr_progress_mars_landing }
+		if = { limit = { has_variable = sr_funding_mars_landing } remove_variable = sr_funding_mars_landing }
+		if = { limit = { has_variable = sr_safe_mars_landing } remove_variable = sr_safe_mars_landing }
+		if = { limit = { has_variable = sr_ambitious_mars_landing } remove_variable = sr_ambitious_mars_landing }
+		sr_recalculate_cost = yes
 	}
 
 	on_monthly_pulse = {
@@ -846,6 +948,7 @@ je_space_race_interstellar_probe = {
 		has_variable = sr_completed_probe
 		has_variable = sr_completed_mars_landing
 		has_technology_researched = space_colonization
+		modifier:country_sr_solar_exploration_program_bool = yes
 		NOT = { has_variable = sr_completed_interstellar_probe }
 		OR = {
 			country_rank = rank_value:great_power
@@ -902,6 +1005,22 @@ je_space_race_interstellar_probe = {
 		trigger_event = { id = space_race_events.8 }
 		sr_complete_interstellar_probe_effect = yes
 		remove_variable = sr_active_interstellar_probe
+	}
+
+	fail = {
+		custom_tooltip = {
+			text = sr_space_program_incompatible_tt
+			NOT = { modifier:country_sr_solar_exploration_program_bool = yes }
+		}
+	}
+
+	on_fail = {
+		if = { limit = { has_variable = sr_active_interstellar_probe } remove_variable = sr_active_interstellar_probe }
+		if = { limit = { has_variable = sr_progress_interstellar_probe } remove_variable = sr_progress_interstellar_probe }
+		if = { limit = { has_variable = sr_funding_interstellar_probe } remove_variable = sr_funding_interstellar_probe }
+		if = { limit = { has_variable = sr_safe_interstellar_probe } remove_variable = sr_safe_interstellar_probe }
+		if = { limit = { has_variable = sr_ambitious_interstellar_probe } remove_variable = sr_ambitious_interstellar_probe }
+		sr_recalculate_cost = yes
 	}
 
 	on_monthly_pulse = {
@@ -1049,6 +1168,7 @@ je_space_race_solar_colonization = {
 		has_variable = sr_completed_moon_base
 		has_variable = sr_completed_mars_landing
 		has_technology_researched = space_colonization
+		modifier:country_sr_interstellar_mission_program_bool = yes
 		NOT = { has_global_variable = sr_all_colonies_complete }
 		OR = {
 			country_rank = rank_value:great_power
@@ -1140,6 +1260,22 @@ je_space_race_solar_colonization = {
 			set_variable = { name = sr_completed_solar_colonization value = yes }
 			add_modifier = { name = sr_solar_system_trade }
 		}
+	}
+
+	fail = {
+		custom_tooltip = {
+			text = sr_space_program_incompatible_tt
+			NOT = { modifier:country_sr_interstellar_mission_program_bool = yes }
+		}
+	}
+
+	on_fail = {
+		if = { limit = { has_variable = sr_active_solar_colonization } remove_variable = sr_active_solar_colonization }
+		if = { limit = { has_variable = sr_progress_solar_colonization } remove_variable = sr_progress_solar_colonization }
+		if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
+		if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
+		if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
+		sr_recalculate_cost = yes
 	}
 
 	on_monthly_pulse = {

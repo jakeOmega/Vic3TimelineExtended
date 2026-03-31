@@ -131,6 +131,28 @@ sr_mission_failure_catastrophic = {
 	country_weekly_innovation_max_add = -50
 }
 
+# ======= Space Race - Building-Level Accident Modifiers (applied to building_space_program)
+sr_launch_pad_damage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	building_throughput_add = -0.25
+}
+sr_facility_fire_damage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	building_throughput_add = -0.15
+}
+sr_supply_chain_disruption = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	building_throughput_add = -0.10
+}
+sr_engineering_breakthrough = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	building_throughput_add = 0.15
+}
+sr_improved_safety_protocols = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	building_throughput_add = 0.10
+}
+
 # ======= Space Race - Late-Game Economic Modifiers
 sr_interstellar_data = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds

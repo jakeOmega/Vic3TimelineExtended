@@ -28,6 +28,9 @@ increase_funding_nuclear_program = {
         NOT = {
             modifier:nuclear_disarmament = yes
         }
+        NOT = {
+            modifier:nuclear_program_pause = yes
+        }
 	}
 
 	effect = {

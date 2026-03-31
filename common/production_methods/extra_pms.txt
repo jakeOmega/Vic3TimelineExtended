@@ -15560,31 +15560,24 @@ pm_earth_orbit = {
 	
 	building_modifiers = {
 		workforce_scaled = {
-			# Input goods
-			goods_input_launch_capacity_add = 1000               # Price:  200, Total cost: 200000.0 (100.00%)
-			# Output goods
-			# Total input cost: 200000.0
-			# Total output cost: 0
-			# Profit: -200000.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: 40000
-			# Wage breakeven: -5.00
+			goods_input_launch_capacity_add = 1000
 		}
 
 		level_scaled = {
-			# employment
 			building_employment_engineers_add = 10000
 			building_employment_academics_add = 10000
 			building_employment_clerks_add = 20000
 		}
 	}
 	country_modifiers = {
-		workforce_scaled = { 
+		workforce_scaled = {
 			country_weekly_innovation_add = 100
 			country_weekly_innovation_max_add = 100
 			country_prestige_add = 500
 			goods_output_launch_capacity_mult = 0.1
+		}
+		unscaled = {
+			country_sr_earth_orbit_program_bool = yes
 		}
 	}
 }
@@ -15598,31 +15591,25 @@ pm_moon_mission = {
 	
 	building_modifiers = {
 		workforce_scaled = {
-			# Input goods
-			goods_input_launch_capacity_add = 3000               # Price:  200, Total cost: 600000.0 (100.00%)
-			# Output goods
-			# Total input cost: 600000.0
-			# Total output cost: 0
-			# Profit: -600000.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: 40000
-			# Wage breakeven: -15.00
+			goods_input_launch_capacity_add = 3000
 		}
 
 		level_scaled = {
-			# employment
 			building_employment_engineers_add = 10000
 			building_employment_academics_add = 10000
 			building_employment_clerks_add = 20000
 		}
 	}
 	country_modifiers = {
-		workforce_scaled = { 
+		workforce_scaled = {
 			country_weekly_innovation_add = 150
 			country_weekly_innovation_max_add = 150
 			country_prestige_add = 1000
 			goods_output_launch_capacity_mult = 0.2
+		}
+		unscaled = {
+			country_sr_earth_orbit_program_bool = yes
+			country_sr_moon_mission_program_bool = yes
 		}
 	}
 }
@@ -15636,31 +15623,27 @@ pm_mars_mission = {
 	
 	building_modifiers = {
 		workforce_scaled = {
-			# Input goods
-			goods_input_launch_capacity_add = 10000              # Price:  200, Total cost: 2000000.0 (100.00%)
-			# Output goods
-			# Total input cost: 2000000.0
-			# Total output cost: 0
-			# Profit: -2000000.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: 40000
-			# Wage breakeven: -50.00
+			goods_input_launch_capacity_add = 10000
+			goods_output_tech_metals_add = 5
 		}
 
 		level_scaled = {
-			# employment
 			building_employment_engineers_add = 10000
 			building_employment_academics_add = 10000
 			building_employment_clerks_add = 20000
 		}
 	}
 	country_modifiers = {
-		workforce_scaled = { 
+		workforce_scaled = {
 			country_weekly_innovation_add = 200
 			country_weekly_innovation_max_add = 200
 			country_prestige_add = 2000
 			goods_output_launch_capacity_mult = 0.3
+		}
+		unscaled = {
+			country_sr_earth_orbit_program_bool = yes
+			country_sr_moon_mission_program_bool = yes
+			country_sr_mars_mission_program_bool = yes
 		}
 	}
 }
@@ -15674,31 +15657,29 @@ pm_solar_exploration = {
 	
 	building_modifiers = {
 		workforce_scaled = {
-			# Input goods
-			goods_input_launch_capacity_add = 50000              # Price:  200, Total cost: 10000000.0 (100.00%)
-			# Output goods
-			# Total input cost: 10000000.0
-			# Total output cost: 0
-			# Profit: -10000000.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: 40000
-			# Wage breakeven: -250.00
+			goods_input_launch_capacity_add = 50000
+			goods_output_tech_metals_add = 15
+			goods_output_advanced_materials_add = 5
 		}
 
 		level_scaled = {
-			# employment
 			building_employment_engineers_add = 10000
 			building_employment_academics_add = 10000
 			building_employment_clerks_add = 20000
 		}
 	}
 	country_modifiers = {
-		workforce_scaled = { 
+		workforce_scaled = {
 			country_weekly_innovation_add = 400
 			country_weekly_innovation_max_add = 400
 			country_prestige_add = 5000
 			goods_output_launch_capacity_mult = 0.4
+		}
+		unscaled = {
+			country_sr_earth_orbit_program_bool = yes
+			country_sr_moon_mission_program_bool = yes
+			country_sr_mars_mission_program_bool = yes
+			country_sr_solar_exploration_program_bool = yes
 		}
 	}
 }
@@ -15712,31 +15693,30 @@ pm_interstellar_mission = {
 	
 	building_modifiers = {
 		workforce_scaled = {
-			# Input goods
-			goods_input_launch_capacity_add = 100000             # Price:  200, Total cost: 20000000.0 (100.00%)
-			# Output goods
-			# Total input cost: 20000000.0
-			# Total output cost: 0
-			# Profit: -20000000.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: 40000
-			# Wage breakeven: -500.00
+			goods_input_launch_capacity_add = 100000
+			goods_output_tech_metals_add = 25
+			goods_output_advanced_materials_add = 10
 		}
 
 		level_scaled = {
-			# employment
 			building_employment_engineers_add = 10000
 			building_employment_academics_add = 10000
 			building_employment_clerks_add = 20000
 		}
 	}
 	country_modifiers = {
-		workforce_scaled = { 
+		workforce_scaled = {
 			country_weekly_innovation_add = 800
 			country_weekly_innovation_max_add = 800
 			country_prestige_add = 10000
 			goods_output_launch_capacity_mult = 0.5
+		}
+		unscaled = {
+			country_sr_earth_orbit_program_bool = yes
+			country_sr_moon_mission_program_bool = yes
+			country_sr_mars_mission_program_bool = yes
+			country_sr_solar_exploration_program_bool = yes
+			country_sr_interstellar_mission_program_bool = yes
 		}
 	}
 }

@@ -52,6 +52,14 @@ base_game_paths = {
     "Modifiers": base_game_path + r"\game\common\static_modifiers",
     "Pop Needs": base_game_path + r"\game\common\pop_needs",
     "Subject Types": base_game_path + r"\game\common\subject_types",
+    "Script Values": base_game_path + r"\game\common\script_values",
+    "Scripted Buttons": base_game_path + r"\game\common\scripted_buttons",
+    "Journal Entries": base_game_path + r"\game\common\journal_entries",
+    "Journal Entry Groups": base_game_path + r"\game\common\journal_entry_groups",
+    "Decisions": base_game_path + r"\game\common\decisions",
+    "Treaty Articles": base_game_path + r"\game\common\treaty_articles",
+    "Religions": base_game_path + r"\game\common\religions",
+    "Decrees": base_game_path + r"\game\common\decrees",
 }
 
 mod_paths = {
@@ -80,6 +88,18 @@ mod_paths = {
     "Modifiers": mod_path + r"\common\static_modifiers",
     "Pop Needs": mod_path + r"\common\pop_needs",
     "Subject Types": mod_path + r"\common\subject_types",
+    "Script Values": mod_path + r"\common\script_values",
+    "Scripted Effects": mod_path + r"\common\scripted_effects",
+    "Scripted Triggers": mod_path + r"\common\scripted_triggers",
+    "Scripted Buttons": mod_path + r"\common\scripted_buttons",
+    "Journal Entries": mod_path + r"\common\journal_entries",
+    "Journal Entry Groups": mod_path + r"\common\journal_entry_groups",
+    "Decisions": mod_path + r"\common\decisions",
+    "On Actions": mod_path + r"\common\on_actions",
+    "Treaty Articles": mod_path + r"\common\treaty_articles",
+    "Religions": mod_path + r"\common\religions",
+    "Decrees": mod_path + r"\common\decrees",
+    "Events": mod_path + r"\events",
 }
 
 # ---------------------------------------------------------------------------
@@ -222,6 +242,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "modifier-search": lambda: self._modifier_search(params),
             "unlocked-by": lambda: self._unlocked_by(rest),
             "filter": lambda: self._filter(rest, params),
+            # New structured endpoints
+            "events": lambda: self._events(rest, params),
+            "institutions": lambda: self._institutions(rest),
+            "production-methods": lambda: self._production_methods(rest, params),
+            "journal-entries": lambda: self._journal_entries(rest),
+            "decisions": lambda: self._decisions(rest),
+            "script-values": lambda: self._script_values(rest),
+            "decrees": lambda: self._decrees(rest),
+            "on-actions": lambda: self._on_actions(rest),
         }
         handler = dispatch.get(ep)
         if handler is None:
@@ -726,6 +755,322 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 break
         return {"type": etype, "field": field, "count": len(results), "results": results}
 
+    # ---- structured: events -----------------------------------------------
+    def _events(self, parts, params):
+        """GET /events              - list all events with type and image
+        GET /events/<event_id>   - detail for one event
+        GET /events?image=<name> - filter events by image/video
+        GET /events?type=<type>  - filter by event type (country_event, etc.)
+        """
+        events = ms.get_data("Events")
+        if not events:
+            return {"error": "Events data not loaded"}
+
+        if parts:
+            eid = parts[0]
+            if eid not in events:
+                raise KeyError(eid)
+            return self._format_event_detail(eid, events[eid])
+
+        image_filter = params.get("image", [None])[0]
+        type_filter = params.get("type", [None])[0]
+        limit = int(params.get("limit", ["500"])[0])
+
+        results = []
+        for eid, raw in events.items():
+            if eid == "namespace":
+                continue
+            ed = get_entity_data(raw)
+            info = self._format_event_summary(eid, ed)
+            if type_filter and info.get("type") != type_filter:
+                continue
+            if image_filter:
+                img = info.get("image", "")
+                vid = info.get("video", "")
+                if image_filter.lower() not in img.lower() and image_filter.lower() not in vid.lower():
+                    continue
+            results.append(info)
+            if len(results) >= limit:
+                break
+        return {"count": len(results), "events": results}
+
+    def _format_event_summary(self, eid, ed):
+        info = {"id": eid, "name": ms.localize(eid + ".t")}
+        etype = get_field(ed, "type")
+        if etype:
+            info["type"] = etype
+        event_image = get_field(ed, "event_image")
+        if event_image and isinstance(event_image, dict):
+            video = get_field(event_image, "video")
+            if video:
+                info["video"] = video.strip('"')
+            texture = get_field(event_image, "texture")
+            if texture:
+                info["image"] = texture.strip('"')
+        icon = get_field(ed, "icon")
+        if icon:
+            info["icon"] = icon.strip('"')
+        return info
+
+    def _format_event_detail(self, eid, raw):
+        ed = get_entity_data(raw)
+        info = self._format_event_summary(eid, ed)
+        info["title_key"] = eid + ".t"
+        info["desc_key"] = eid + ".d"
+        # Collect option keys
+        options = []
+        if isinstance(ed, dict):
+            for key in ed:
+                if key == "option":
+                    opt_data = get_field(ed, "option")
+                    if isinstance(opt_data, dict):
+                        name = get_field(opt_data, "name")
+                        if name:
+                            options.append(name)
+                    elif isinstance(opt_data, list):
+                        for opt in opt_data:
+                            if isinstance(opt, dict):
+                                name = get_field(opt, "name")
+                                if name:
+                                    options.append(name)
+        info["options"] = options
+        info["raw"] = serialize(raw)
+        return info
+
+    # ---- structured: institutions -----------------------------------------
+    def _institutions(self, parts):
+        """GET /institutions[/<institution_id>]  - institution data with modifiers per level."""
+        institutions = ms.get_data("Institutions")
+        if not institutions:
+            return {"error": "Institutions data not loaded"}
+
+        if parts:
+            iid = parts[0]
+            if iid not in institutions:
+                raise KeyError(iid)
+            return self._format_institution_detail(iid, institutions[iid])
+
+        return [
+            self._format_institution_summary(iid, institutions[iid])
+            for iid in institutions
+        ]
+
+    def _format_institution_summary(self, iid, raw):
+        ed = get_entity_data(raw)
+        info = {"id": iid, "name": ms.localize(iid)}
+        tech = get_field(ed, "unlocking_technologies")
+        if tech and isinstance(tech, list) and tech:
+            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+        return info
+
+    def _format_institution_detail(self, iid, raw):
+        ed = get_entity_data(raw)
+        info = {"id": iid, "name": ms.localize(iid)}
+        tech = get_field(ed, "unlocking_technologies")
+        if tech and isinstance(tech, list) and tech:
+            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+        # Extract modifier data
+        modifier = get_field(ed, "modifier")
+        if modifier and isinstance(modifier, dict):
+            info["modifier"] = {}
+            for k, v in modifier.items():
+                info["modifier"][k] = v[1] if isinstance(v, tuple) else v
+        info["raw"] = serialize(raw)
+        return info
+
+    # ---- structured: production methods -----------------------------------
+    def _production_methods(self, parts, params):
+        """GET /production-methods                    - list all PMs
+        GET /production-methods/<pm_id>           - PM detail with modifiers
+        GET /production-methods?building=<bid>    - PMs for a specific building
+        """
+        pms = ms.get_data("PMs")
+        if not pms:
+            return {"error": "PMs data not loaded"}
+
+        if parts:
+            pid = parts[0]
+            if pid not in pms:
+                raise KeyError(pid)
+            return self._format_pm_detail(pid, pms[pid])
+
+        building_filter = params.get("building", [None])[0]
+        if building_filter:
+            return self._pms_for_building(building_filter)
+
+        return [
+            self._format_pm_summary(pid, pms[pid])
+            for pid in pms
+        ]
+
+    def _format_pm_summary(self, pid, raw):
+        ed = get_entity_data(raw)
+        info = {"id": pid, "name": ms.localize(pid)}
+        tech = get_field(ed, "unlocking_technologies")
+        if tech and isinstance(tech, list) and tech:
+            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+        return info
+
+    def _format_pm_detail(self, pid, raw):
+        ed = get_entity_data(raw)
+        info = {"id": pid, "name": ms.localize(pid)}
+        tech = get_field(ed, "unlocking_technologies")
+        if tech and isinstance(tech, list) and tech:
+            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+        # Building modifiers
+        for mod_key in ("building_modifiers", "country_modifiers", "state_modifiers"):
+            mod_data = get_field(ed, mod_key)
+            if mod_data and isinstance(mod_data, dict):
+                info[mod_key] = {}
+                for section, section_data in mod_data.items():
+                    if isinstance(section_data, tuple) and len(section_data) >= 2:
+                        section_data = section_data[1]
+                    if isinstance(section_data, dict):
+                        info[mod_key][section] = {
+                            k: v[1] if isinstance(v, tuple) else v
+                            for k, v in section_data.items()
+                        }
+        info["raw"] = serialize(raw)
+        return info
+
+    def _pms_for_building(self, building_id):
+        """Return all PMs for a specific building, grouped by PM group."""
+        buildings = ms.get_data("Buildings")
+        pmg_data = ms.get_data("PM Groups")
+        pm_data = ms.get_data("PMs")
+        if not buildings or not pmg_data or not pm_data:
+            return {"error": "Required data not loaded"}
+        if building_id not in buildings:
+            raise KeyError(building_id)
+
+        bd = get_entity_data(buildings[building_id])
+        pmg_ids = get_field(bd, "production_method_groups")
+        if not pmg_ids or not isinstance(pmg_ids, list):
+            return {"building": building_id, "pm_groups": []}
+
+        result_groups = []
+        for pmg_id in pmg_ids:
+            group = {"id": pmg_id, "name": ms.localize(pmg_id), "pms": []}
+            if pmg_id in pmg_data:
+                pmg_inner = get_entity_data(pmg_data[pmg_id])
+                pm_ids = get_field(pmg_inner, "production_methods")
+                if pm_ids and isinstance(pm_ids, list):
+                    for pid in pm_ids:
+                        if pid in pm_data:
+                            group["pms"].append(self._format_pm_detail(pid, pm_data[pid]))
+                        else:
+                            group["pms"].append({"id": pid, "name": ms.localize(pid)})
+            result_groups.append(group)
+        return {"building": building_id, "name": ms.localize(building_id), "pm_groups": result_groups}
+
+    # ---- structured: journal entries --------------------------------------
+    def _journal_entries(self, parts):
+        """GET /journal-entries[/<je_id>]  - journal entry listing or detail."""
+        jes = ms.get_data("Journal Entries")
+        if not jes:
+            return {"error": "Journal Entries data not loaded"}
+
+        if parts:
+            jeid = parts[0]
+            if jeid not in jes:
+                raise KeyError(jeid)
+            return self._format_je_detail(jeid, jes[jeid])
+
+        return [
+            self._format_je_summary(jeid, jes[jeid])
+            for jeid in jes
+        ]
+
+    def _format_je_summary(self, jeid, raw):
+        ed = get_entity_data(raw)
+        info = {"id": jeid, "name": ms.localize(jeid)}
+        group = get_field(ed, "group")
+        if group:
+            info["group"] = group
+        return info
+
+    def _format_je_detail(self, jeid, raw):
+        ed = get_entity_data(raw)
+        info = {"id": jeid, "name": ms.localize(jeid)}
+        group = get_field(ed, "group")
+        if group:
+            info["group"] = group
+        icon = get_field(ed, "icon")
+        if icon:
+            info["icon"] = icon
+        info["raw"] = serialize(raw)
+        return info
+
+    # ---- structured: decisions --------------------------------------------
+    def _decisions(self, parts):
+        """GET /decisions[/<decision_id>]"""
+        decisions = ms.get_data("Decisions")
+        if not decisions:
+            return {"error": "Decisions data not loaded"}
+
+        if parts:
+            did = parts[0]
+            if did not in decisions:
+                raise KeyError(did)
+            ed = get_entity_data(decisions[did])
+            return {"id": did, "name": ms.localize(did), "raw": serialize(decisions[did])}
+
+        return [{"id": did, "name": ms.localize(did)} for did in decisions]
+
+    # ---- structured: script values ----------------------------------------
+    def _script_values(self, parts):
+        """GET /script-values[/<sv_id>]"""
+        svs = ms.get_data("Script Values")
+        if not svs:
+            return {"error": "Script Values data not loaded"}
+
+        if parts:
+            svid = parts[0]
+            if svid not in svs:
+                raise KeyError(svid)
+            return {"id": svid, "raw": serialize(svs[svid])}
+
+        return [{"id": svid} for svid in svs]
+
+    # ---- structured: decrees ----------------------------------------------
+    def _decrees(self, parts):
+        """GET /decrees[/<decree_id>]"""
+        decrees = ms.get_data("Decrees")
+        if not decrees:
+            return {"error": "Decrees data not loaded"}
+
+        if parts:
+            did = parts[0]
+            if did not in decrees:
+                raise KeyError(did)
+            ed = get_entity_data(decrees[did])
+            info = {"id": did, "name": ms.localize(did)}
+            modifier = get_field(ed, "modifier")
+            if modifier and isinstance(modifier, dict):
+                info["modifier"] = {
+                    k: v[1] if isinstance(v, tuple) else v
+                    for k, v in modifier.items()
+                }
+            info["raw"] = serialize(decrees[did])
+            return info
+
+        return [{"id": did, "name": ms.localize(did)} for did in decrees]
+
+    # ---- structured: on-actions -------------------------------------------
+    def _on_actions(self, parts):
+        """GET /on-actions[/<on_action_id>]"""
+        oas = ms.get_data("On Actions")
+        if not oas:
+            return {"error": "On Actions data not loaded"}
+
+        if parts:
+            oaid = parts[0]
+            if oaid not in oas:
+                raise KeyError(oaid)
+            return {"id": oaid, "raw": serialize(oas[oaid])}
+
+        return [{"id": oaid} for oaid in oas]
+
     # ---- response helpers -------------------------------------------------
     def _respond_json(self, data, status=200):
         body = json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
@@ -766,6 +1111,10 @@ def main():
     print("Endpoints: /status  /laws  /technologies  /buildings  /goods")
     print("           /combat-units  /ideologies  /keys/<type>  /raw/<type>")
     print("           /localize/<key>  /unlocalize/<text>  /search?q=...")
+    print("           /events  /institutions  /production-methods  /journal-entries")
+    print("           /decisions  /script-values  /decrees  /on-actions")
+    print("           /references/<key>  /tech-tree/<id>  /modifier-search?q=...")
+    print("           /unlocked-by/<tech>  /filter/<type>?field=&value=")
     print("           POST /reload")
     print("Press Ctrl+C to stop.\n")
     try:

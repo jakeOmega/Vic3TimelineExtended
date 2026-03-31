@@ -1112,6 +1112,15 @@ nuclear_disarmament = {
 	script_only = yes
 }
 
+nuclear_program_pause = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = -50
+	}
+	script_only = yes
+}
+
 un_membership_obligation = {
 	color = neutral
 	boolean = yes
