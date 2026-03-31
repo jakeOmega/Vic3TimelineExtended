@@ -65,7 +65,7 @@
             # Existential threats dramatically increase evaluation
             if = {
                 limit = {
-                    scope:target_country = {
+                    scope:country = {
                         OR = {
                             war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
                             war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
@@ -110,7 +110,7 @@
             if = {
                 limit = {
                     has_variable = nuked_by_country
-                    var:nuked_by_country = scope:target_country
+                    var:nuked_by_country = scope:country
                 }
                 multiply = 5 # retaliation after being nuked by this enemy is strongly favored
             }
@@ -122,12 +122,12 @@
 	
 		will_propose = {
             # Must be at war with the target
-            has_war_with = scope:target_country
+            has_war_with = scope:country
 
             # Must face a sufficiently severe threat - no nuking over minor disputes
             OR = {
                 # Existential threat: enemy wants to subjugate or annex us
-                scope:target_country = {
+                scope:country = {
                     OR = {
                         war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
                         war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
@@ -138,7 +138,7 @@
                 # Losing core incorporated territory AND the war is going badly
                 AND = {
                     any_scope_state = {
-                        is_target_of_wargoal = scope:target_country
+                        is_target_of_wargoal = scope:country
                         is_incorporated = yes
                     }
                     any_scope_war = {
@@ -148,7 +148,7 @@
                 # Retaliation: this specific enemy nuked us
                 AND = {
                     has_variable = nuked_by_country
-                    var:nuked_by_country = scope:target_country
+                    var:nuked_by_country = scope:country
                 }
             }
 
@@ -165,23 +165,23 @@
                 # Retaliation against the country that nuked us overrides personality
                 AND = {
                     has_variable = nuked_by_country
-                    var:nuked_by_country = scope:target_country
+                    var:nuked_by_country = scope:country
                 }
                 # Facing complete annexation overrides personality
-                scope:target_country = {
+                scope:country = {
                     war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
                 }
             }
 
             # If target is nuclear-armed, require more desperate circumstances
             OR = {
-                NOT = { scope:target_country = { has_modifier = nuclear_power } }
+                NOT = { scope:country = { has_modifier = nuclear_power } }
                 # Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
                 AND = {
                     has_variable = nuked_by_country
-                    var:nuked_by_country = scope:target_country
+                    var:nuked_by_country = scope:country
                 }
-                scope:target_country = {
+                scope:country = {
                     OR = {
                         war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
                         war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
@@ -281,7 +281,7 @@ tactical_nuke_diplo_action = {
             }
             0 = {
                 modifier = nuclear_strike_fail_chance
-                scope:target_country = {
+                scope:country = {
                     trigger_event = {id = nuclear_weapon_events.7 popup = yes }
                     change_relations = {
                         country = ROOT
@@ -301,7 +301,7 @@ tactical_nuke_diplo_action = {
             # Existential threats increase evaluation
             if = {
                 limit = {
-                    scope:target_country = {
+                    scope:country = {
                         OR = {
                             war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
                             war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
@@ -344,7 +344,7 @@ tactical_nuke_diplo_action = {
                         }
                     }
                     has_variable = nuked_by_country
-                    var:nuked_by_country = scope:target_country
+                    var:nuked_by_country = scope:country
                 }
                 multiply = 3 # retaliation after being nuked by this enemy
             }
@@ -360,12 +360,12 @@ tactical_nuke_diplo_action = {
 
         will_propose = {
             # Must be at war with the target
-            has_war_with = scope:target_country
+            has_war_with = scope:country
 
             # Must face a sufficiently severe threat - no tactical nukes over minor disputes
             OR = {
                 # Existential threat: enemy wants to subjugate or annex us
-                scope:target_country = {
+                scope:country = {
                     OR = {
                         war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
                         war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
@@ -376,7 +376,7 @@ tactical_nuke_diplo_action = {
                 # Losing core incorporated territory AND the war is going badly
                 AND = {
                     any_scope_state = {
-                        is_target_of_wargoal = scope:target_country
+                        is_target_of_wargoal = scope:country
                         is_incorporated = yes
                     }
                     any_scope_war = {
@@ -386,7 +386,7 @@ tactical_nuke_diplo_action = {
                 # Retaliation: this specific enemy nuked us
                 AND = {
                     has_variable = nuked_by_country
-                    var:nuked_by_country = scope:target_country
+                    var:nuked_by_country = scope:country
                 }
             }
 
@@ -403,23 +403,23 @@ tactical_nuke_diplo_action = {
                 # Retaliation against the country that nuked us overrides personality
                 AND = {
                     has_variable = nuked_by_country
-                    var:nuked_by_country = scope:target_country
+                    var:nuked_by_country = scope:country
                 }
                 # Facing annexation overrides personality
-                scope:target_country = {
+                scope:country = {
                     war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
                 }
             }
 
             # If target is nuclear-armed, require more desperate circumstances
             OR = {
-                NOT = { scope:target_country = { has_modifier = nuclear_power } }
+                NOT = { scope:country = { has_modifier = nuclear_power } }
                 # Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
                 AND = {
                     has_variable = nuked_by_country
-                    var:nuked_by_country = scope:target_country
+                    var:nuked_by_country = scope:country
                 }
-                scope:target_country = {
+                scope:country = {
                     OR = {
                         war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
                         war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }

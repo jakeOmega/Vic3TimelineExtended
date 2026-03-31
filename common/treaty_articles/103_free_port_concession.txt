@@ -111,6 +111,7 @@ free_port_concession = {
 						name = free_port_state_modifier
 					}
 					set_variable = has_free_port
+					te_update_free_port_tariff = yes
 				}
 			}
 		}
@@ -119,6 +120,8 @@ free_port_concession = {
 	on_break = {
 		scope:article_options.input_state ?= {
 			remove_modifier = free_port_state_modifier
+			remove_modifier = free_port_tariff_import_modifier
+			remove_modifier = free_port_tariff_export_modifier
 			remove_variable = has_free_port
 		}
 	}
@@ -126,6 +129,8 @@ free_port_concession = {
 	on_withdrawal = {
 		scope:article_options.input_state ?= {
 			remove_modifier = free_port_state_modifier
+			remove_modifier = free_port_tariff_import_modifier
+			remove_modifier = free_port_tariff_export_modifier
 			remove_variable = has_free_port
 		}
 	}

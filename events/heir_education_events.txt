@@ -33,28 +33,56 @@ heir_education_events.1 = {
 		default_option = yes
 		if = {
 			limit = { has_variable = heir_ed_focus_military }
-			change_variable = { name = heir_ed_military add = 1 }
+			custom_tooltip = {
+				text = HEIR_ED_MILITARY_PLUS_1
+				change_variable = { name = heir_ed_military add = 1 }
+			}
 		}
 		else_if = {
 			limit = { has_variable = heir_ed_focus_diplo }
-			change_variable = { name = heir_ed_diplo add = 1 }
+			custom_tooltip = {
+				text = HEIR_ED_DIPLO_PLUS_1
+				change_variable = { name = heir_ed_diplo add = 1 }
+			}
 		}
 		else = {
-			change_variable = { name = heir_ed_admin add = 1 }
+			custom_tooltip = {
+				text = HEIR_ED_ADMIN_PLUS_1
+				change_variable = { name = heir_ed_admin add = 1 }
+			}
 		}
-		change_variable = { name = heir_ed_total add = 1 }
+		custom_tooltip = {
+			text = HEIR_ED_TOTAL_PLUS_1
+			change_variable = { name = heir_ed_total add = 1 }
+		}
 		ai_chance = { base = 10 }
 	}
 
 	# Option B: "We should broaden the curriculum."
-	# Grants a point in each trait category
+	# Grants a point in each trait category but costs innovation and authority
 	option = {
 		name = heir_education_events.1.b
-		change_variable = { name = heir_ed_admin add = 1 }
-		change_variable = { name = heir_ed_diplo add = 1 }
-		change_variable = { name = heir_ed_military add = 1 }
-		change_variable = { name = heir_ed_total add = 3 }
-		add_modifier = { name = heir_education_innovation_cost days = 90 is_decaying = yes }
+		custom_tooltip = {
+			text = HEIR_ED_ADMIN_PLUS_1
+			change_variable = { name = heir_ed_admin add = 1 }
+		}
+		custom_tooltip = {
+			text = HEIR_ED_DIPLO_PLUS_1
+			change_variable = { name = heir_ed_diplo add = 1 }
+		}
+		custom_tooltip = {
+			text = HEIR_ED_MILITARY_PLUS_1
+			change_variable = { name = heir_ed_military add = 1 }
+		}
+		custom_tooltip = {
+			text = HEIR_ED_TOTAL_PLUS_3
+			change_variable = { name = heir_ed_total add = 3 }
+		}
+		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
 		ai_chance = { base = 5 }
 	}
 }
@@ -86,10 +114,35 @@ heir_education_events.2 = {
 	}
 
 	# Option A: "Discipline builds character."
-	# Persevere with current education but generate radicals among lower strata
+	# Persevere with current education — keeps progress but creates unrest
 	option = {
 		name = heir_education_events.2.a
 		default_option = yes
+		custom_tooltip = {
+			text = HEIR_ED_TOTAL_PLUS_1
+			change_variable = { name = heir_ed_total add = 1 }
+		}
+		if = {
+			limit = { has_variable = heir_ed_focus_military }
+			custom_tooltip = {
+				text = HEIR_ED_MILITARY_PLUS_1
+				change_variable = { name = heir_ed_military add = 1 }
+			}
+		}
+		else_if = {
+			limit = { has_variable = heir_ed_focus_diplo }
+			custom_tooltip = {
+				text = HEIR_ED_DIPLO_PLUS_1
+				change_variable = { name = heir_ed_diplo add = 1 }
+			}
+		}
+		else_if = {
+			limit = { has_variable = heir_ed_focus_admin }
+			custom_tooltip = {
+				text = HEIR_ED_ADMIN_PLUS_1
+				change_variable = { name = heir_ed_admin add = 1 }
+			}
+		}
 		add_radicals = {
 			value = small_radicals
 			strata = lower
@@ -98,12 +151,15 @@ heir_education_events.2 = {
 	}
 
 	# Option B: "Perhaps a lighter touch."
-	# Reduce total investment by 1 but gain loyalists
+	# Ease off — lose progress but gain stability
 	option = {
 		name = heir_education_events.2.b
-		if = {
-			limit = { has_variable = heir_ed_total var:heir_ed_total >= 1 }
-			change_variable = { name = heir_ed_total add = -1 }
+		custom_tooltip = {
+			text = HEIR_ED_TOTAL_MINUS_1
+			if = {
+				limit = { has_variable = heir_ed_total var:heir_ed_total >= 1 }
+				change_variable = { name = heir_ed_total add = -1 }
+			}
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -113,15 +169,22 @@ heir_education_events.2 = {
 	}
 
 	# Option C: "Let the child find their own path."
-	# Random bonus in an unexpected area
+	# Random bonus in an unexpected area, but the lack of structure costs innovation
 	option = {
 		name = heir_education_events.2.c
-		random_list = {
-			33 = { change_variable = { name = heir_ed_admin add = 1 } }
-			33 = { change_variable = { name = heir_ed_diplo add = 1 } }
-			34 = { change_variable = { name = heir_ed_military add = 1 } }
+		custom_tooltip = {
+			text = HEIR_ED_RANDOM_PLUS_1
+			random_list = {
+				33 = { change_variable = { name = heir_ed_admin add = 1 } }
+				33 = { change_variable = { name = heir_ed_diplo add = 1 } }
+				34 = { change_variable = { name = heir_ed_military add = 1 } }
+			}
 		}
-		change_variable = { name = heir_ed_total add = 1 }
+		custom_tooltip = {
+			text = HEIR_ED_TOTAL_PLUS_1
+			change_variable = { name = heir_ed_total add = 1 }
+		}
+		add_modifier = { name = heir_education_innovation_cost days = 60 is_decaying = yes }
 		ai_chance = { base = 3 }
 	}
 }
@@ -162,24 +225,65 @@ heir_education_events.3 = {
 	}
 
 	# Option A: "Send the heir abroad."
-	# Big diplo bonus + possible ideology shift toward progressive
+	# Big diplo bonus + progressive shift, but costs relations and innovation
 	option = {
 		name = heir_education_events.3.a
 		default_option = yes
-		change_variable = { name = heir_ed_diplo add = 2 }
-		change_variable = { name = heir_ed_total add = 2 }
+		custom_tooltip = {
+			text = HEIR_ED_DIPLO_PLUS_2
+			change_variable = { name = heir_ed_diplo add = 2 }
+		}
+		custom_tooltip = {
+			text = HEIR_ED_TOTAL_PLUS_2
+			change_variable = { name = heir_ed_total add = 2 }
+		}
 		# Exposure to foreign ideas pushes slightly progressive
-		change_variable = { name = heir_ed_ideology add = 1 }
-		add_modifier = { name = heir_education_innovation_cost days = 60 is_decaying = yes }
+		custom_tooltip = {
+			text = HEIR_ED_IDEOLOGY_PROGRESSIVE
+			change_variable = { name = heir_ed_ideology add = 1 }
+		}
+		add_modifier = { name = heir_education_innovation_cost days = 120 is_decaying = yes }
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
 		ai_chance = { base = 8 }
 	}
 
 	# Option B: "The heir should remain here."
-	# Safe choice, small prestige gain for showing independence
+	# No diplo bonus, but gains a point in current focus and conservative stability
 	option = {
 		name = heir_education_events.3.b
+		if = {
+			limit = { has_variable = heir_ed_focus_military }
+			custom_tooltip = {
+				text = HEIR_ED_MILITARY_PLUS_1
+				change_variable = { name = heir_ed_military add = 1 }
+			}
+		}
+		else_if = {
+			limit = { has_variable = heir_ed_focus_admin }
+			custom_tooltip = {
+				text = HEIR_ED_ADMIN_PLUS_1
+				change_variable = { name = heir_ed_admin add = 1 }
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = HEIR_ED_ADMIN_PLUS_1
+				change_variable = { name = heir_ed_admin add = 1 }
+			}
+		}
+		custom_tooltip = {
+			text = HEIR_ED_TOTAL_PLUS_1
+			change_variable = { name = heir_ed_total add = 1 }
+		}
+		custom_tooltip = {
+			text = HEIR_ED_IDEOLOGY_CONSERVATIVE
+			change_variable = { name = heir_ed_ideology add = -1 }
+		}
 		add_loyalists = {
-			value = very_small_radicals
+			value = small_radicals
 			strata = upper
 		}
 		ai_chance = { base = 5 }

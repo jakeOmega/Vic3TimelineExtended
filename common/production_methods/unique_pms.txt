@@ -3776,3 +3776,5607 @@ pm_generic_vintner_hall = {
 		}
 	}
 }
+
+#============================================================
+# Phase 7: Remaining Vanilla Flavored Company PMs
+#============================================================
+
+# --- Aker Oslo Shipyard ---
+# Theme: Norway's premier shipbuilding and engineering works
+pm_aker_oslo_shipyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Allatini Thessaloniki Flour Mill ---
+# Theme: Ottoman-era flour mill complex in Thessaloniki
+pm_allatini_thessaloniki_flour_mill = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 20                   # Price:   20, Total cost:   400.0
+			goods_input_sugar_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_groceries_add = 30              # Price:   30, Total cost:   900.0
+			goods_output_meat_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1200.0
+			# Profit: 500.0
+			# Profit margin: 71.43%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.25
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 200
+		}
+	}
+}
+
+# --- Altos Hornos Baracaldo Furnaces ---
+# Theme: Basque Country blast furnaces dominating Spanish steel production
+pm_altos_hornos_baracaldo_furnaces = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Anglo-Persian Abadan Refinery ---
+# Theme: The world's largest oil refinery at the head of the Persian Gulf
+pm_anglo_persian_abadan_refinery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 25                     # Price:   30, Total cost:   750.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 750.0
+			# Total output cost: 1450.0
+			# Profit: 700.0
+			# Profit margin: 93.33%
+			# Zero profit price multiplier: 0.52
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Anglo-Sicilian Licata Wharf ---
+# Theme: Sulfur export wharf and calcining kilns at Licata
+pm_anglo_sicilian_licata_wharf = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_sulfur_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 15                   # Price:   40, Total cost:   600.0
+			# Output goods
+			goods_output_sulfur_add = 30                 # Price:   50, Total cost:  1500.0
+			goods_output_coal_add = 5                    # Price:   30, Total cost:   150.0
+			# Total input cost: 600.0
+			# Total output cost: 1650.0
+			# Profit: 1050.0
+			# Profit margin: 175.00%
+			# Zero profit price multiplier: 0.36
+			# Employment: 2000
+			# Wage breakeven: 0.53
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Ansaldo Sestri Ponente Works ---
+# Theme: Genoese heavy industry complex producing warships, locomotives, and artillery
+pm_ansaldo_sestri_ponente_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- A.P. Møller Copenhagen Wharf ---
+# Theme: Maersk shipping line headquarters and dockyard
+pm_ap_moller_copenhagen_wharf = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                  # Price:   20, Total cost:   200.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_merchant_marine_add = 30        # Price:   50, Total cost:  1500.0
+			# Total input cost: 500.0
+			# Total output cost: 1500.0
+			# Profit: 1000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 0.50
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- Argentine Wine Mendoza Bodega ---
+# Theme: Malbec winemaking estate in the Andean foothills
+pm_argentinian_wine_mendoza_bodega = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.03
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fruit_add = 15                   # Price:   30, Total cost:   450.0
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_wine_add = 25                   # Price:   30, Total cost:   750.0
+			goods_output_liquor_add = 10                 # Price:   30, Total cost:   300.0
+			# Total input cost: 850.0
+			# Total output cost: 1050.0
+			# Profit: 200.0
+			# Profit margin: 23.53%
+			# Zero profit price multiplier: 0.81
+			# Employment: 2000
+			# Wage breakeven: 0.10
+		}
+		level_scaled = {
+			building_employment_farmers_add = 800
+			building_employment_shopkeepers_add = 400
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- Armstrong Elswick Works ---
+# Theme: Massive armaments complex on the Tyne producing warships and artillery
+pm_armstrong_elswick_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Assam Company Nazira Tea Estate ---
+# Theme: India's first commercial tea garden in upper Assam
+pm_assam_company_nazira_tea_estate = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_tea_add = 15                    # Price:   50, Total cost:   750.0
+			goods_output_sugar_add = 15                  # Price:   30, Total cost:   450.0
+			goods_output_fruit_add = 10                  # Price:   30, Total cost:   300.0
+			# Total input cost: 400.0
+			# Total output cost: 1500.0
+			# Profit: 1100.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
+			# Employment: 2000
+			# Wage breakeven: 0.55
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 600
+			building_employment_clerks_add = 200
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- B. Grimm Bangkok Warehouse ---
+# Theme: Siamese general trading and rice export house
+pm_b_grimm_bangkok_warehouse = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                  # Price:   20, Total cost:   200.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_merchant_marine_add = 30        # Price:   50, Total cost:  1500.0
+			# Total input cost: 500.0
+			# Total output cost: 1500.0
+			# Profit: 1000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 0.50
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- Bacardí Santiago Distillery ---
+# Theme: Legendary rum distillery founded in Santiago de Cuba
+pm_bacardi_santiago_distillery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 15                   # Price:   20, Total cost:   300.0
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_liquor_add = 25                 # Price:   30, Total cost:   750.0
+			goods_output_services_add = 10               # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1050.0
+			# Profit: 350.0
+			# Profit margin: 50.00%
+			# Zero profit price multiplier: 0.67
+			# Employment: 2000
+			# Wage breakeven: 0.17
+		}
+		level_scaled = {
+			building_employment_laborers_add = 600
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 400
+		}
+	}
+}
+
+# --- BASF Ludwigshafen Works ---
+# Theme: Pioneering chemical synthesis complex on the Rhine
+pm_basf_ludwigshafen_plant = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_chemical_plant_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sulfur_add = 15                  # Price:   50, Total cost:   750.0
+			goods_input_coal_add = 10                    # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 1050.0
+			# Total output cost: 1450.0
+			# Profit: 400.0
+			# Profit margin: 38.10%
+			# Zero profit price multiplier: 0.72
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Basileiades Piraeus Works ---
+# Theme: Greek engineering and motor workshop near Athens port
+pm_basileiades_piraeus_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_engines_add = 20                # Price:   60, Total cost:  1200.0
+			goods_output_automobiles_add = 5             # Price:  100, Total cost:   500.0
+			# Total input cost: 1150.0
+			# Total output cost: 1700.0
+			# Profit: 550.0
+			# Profit margin: 47.83%
+			# Zero profit price multiplier: 0.68
+			# Employment: 2000
+			# Wage breakeven: 0.28
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Bengal Coal Raniganj Mine ---
+# Theme: India's first commercial coal mine in West Bengal
+pm_bengal_coal_raniganj_mine = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_coal_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 15                   # Price:   40, Total cost:   600.0
+			# Output goods
+			goods_output_coal_add = 30                   # Price:   30, Total cost:   900.0
+			goods_output_iron_add = 10                   # Price:   40, Total cost:   400.0
+			# Total input cost: 600.0
+			# Total output cost: 1300.0
+			# Profit: 700.0
+			# Profit margin: 116.67%
+			# Zero profit price multiplier: 0.46
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Bolckow Vaughan Eston Ironworks ---
+# Theme: Cleveland ironworks that pioneered basic Bessemer steelmaking
+pm_bolckow_eston_ironworks = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Bombay Burmah Rangoon Timber Depot ---
+# Theme: Teak extraction and rubber plantation operations in Burma
+pm_bombay_burmah_rangoon_timber_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_tea_add = 15                    # Price:   50, Total cost:   750.0
+			goods_output_sugar_add = 15                  # Price:   30, Total cost:   450.0
+			goods_output_fruit_add = 10                  # Price:   30, Total cost:   300.0
+			# Total input cost: 400.0
+			# Total output cost: 1500.0
+			# Profit: 1100.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
+			# Employment: 2000
+			# Wage breakeven: 0.55
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 600
+			building_employment_clerks_add = 200
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Bombay Dyeing Spring Mills ---
+# Theme: Mumbai cotton textile spinning and dyeing complex
+pm_bombay_dyeing_spring_mills = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Bunge & Born Buenos Aires Grain Silo ---
+# Theme: Massive grain elevators at Buenos Aires port
+pm_bunge_born_buenos_aires_grain_silo = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 20                   # Price:   20, Total cost:   400.0
+			goods_input_sugar_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_groceries_add = 30              # Price:   30, Total cost:   900.0
+			goods_output_meat_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1200.0
+			# Profit: 500.0
+			# Profit margin: 71.43%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.25
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 200
+		}
+	}
+}
+
+# --- Calcutta Electric Victoria House ---
+# Theme: India's first electric power station on the Hooghly
+pm_calcutta_electric_victoria_house = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_power_plant_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_electricity_add = 30            # Price:   30, Total cost:   900.0
+			# Total input cost: 1050.0
+			# Total output cost: 900.0
+			# Profit: -150.0
+			# Profit margin: -14.29%
+			# Zero profit price multiplier: 1.17
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Caribbean Petroleum Maracaibo Depot ---
+# Theme: Venezuelan oil storage and lake drilling operations
+pm_caribbean_petroleum_maracaibo_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 25                     # Price:   30, Total cost:   750.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 750.0
+			# Total output cost: 1450.0
+			# Profit: 700.0
+			# Profit margin: 93.33%
+			# Zero profit price multiplier: 0.52
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- CCCI Léopoldville Rubber Depot ---
+# Theme: Congo rubber collection and export warehouse
+pm_ccci_leopoldville_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_tea_add = 15                    # Price:   50, Total cost:   750.0
+			goods_output_sugar_add = 15                  # Price:   30, Total cost:   450.0
+			goods_output_fruit_add = 10                  # Price:   30, Total cost:   300.0
+			# Total input cost: 400.0
+			# Total output cost: 1500.0
+			# Profit: 1100.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
+			# Employment: 2000
+			# Wage breakeven: 0.55
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 600
+			building_employment_clerks_add = 200
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- CFR Bucharest Railway Works ---
+# Theme: Romanian state railway locomotive repair shops
+pm_cfr_bucharest_railway_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- CGV Haut-Brion Estate ---
+# Theme: Premier cru Bordeaux winemaking estate and cellars
+pm_cgv_haut_brion_estate = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.03
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fruit_add = 15                   # Price:   30, Total cost:   450.0
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_wine_add = 25                   # Price:   30, Total cost:   750.0
+			goods_output_liquor_add = 10                 # Price:   30, Total cost:   300.0
+			# Total input cost: 850.0
+			# Total output cost: 1050.0
+			# Profit: 200.0
+			# Profit margin: 23.53%
+			# Zero profit price multiplier: 0.81
+			# Employment: 2000
+			# Wage breakeven: 0.10
+		}
+		level_scaled = {
+			building_employment_farmers_add = 800
+			building_employment_shopkeepers_add = 400
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- Chr. Hansen Copenhagen Laboratory ---
+# Theme: Pioneering microbiology and food enzyme research lab
+pm_chr_hansen_copenhagen_laboratory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_chemical_plant_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sulfur_add = 15                  # Price:   50, Total cost:   750.0
+			goods_input_coal_add = 10                    # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 1050.0
+			# Total output cost: 1450.0
+			# Profit: 400.0
+			# Profit margin: 38.10%
+			# Zero profit price multiplier: 0.72
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Colt Hartford Armory ---
+# Theme: Samuel Colt's famous blue-onion-domed arms factory in Connecticut
+pm_colt_hartford_armory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Sansinena Avellaneda Frigorífico ---
+# Theme: Pioneer refrigerated meat packing plant south of Buenos Aires
+pm_sansinena_avellaneda_frigorífico = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 20                   # Price:   20, Total cost:   400.0
+			goods_input_sugar_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_groceries_add = 30              # Price:   30, Total cost:   900.0
+			goods_output_meat_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1200.0
+			# Profit: 500.0
+			# Profit margin: 71.43%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.25
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 200
+		}
+	}
+}
+
+# --- Córdoba Railway Alta Gracia Works ---
+# Theme: Argentine railway repair and maintenance shops
+pm_cordoba_railway_alta_gracia_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- CSFA Sicilian Sulfur Depot ---
+# Theme: Sulfur mining concession and railway in Sicily
+pm_csfa_sicilian_sulfur_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_sulfur_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 15                   # Price:   40, Total cost:   600.0
+			# Output goods
+			goods_output_sulfur_add = 30                 # Price:   50, Total cost:  1500.0
+			goods_output_coal_add = 5                    # Price:   30, Total cost:   150.0
+			# Total input cost: 600.0
+			# Total output cost: 1650.0
+			# Profit: 1050.0
+			# Profit margin: 175.00%
+			# Zero profit price multiplier: 0.36
+			# Employment: 2000
+			# Wage breakeven: 0.53
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Afghan Nassaji Kabul Mills ---
+# Theme: Afghanistan's first modern textile factory
+pm_afghan_nassaji_kabul_mills = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Sassoon Bombay Docks ---
+# Theme: Sassoon family trading house and cotton warehouse in Bombay
+pm_sassoon_bombay_docks = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                  # Price:   20, Total cost:   200.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_merchant_marine_add = 30        # Price:   50, Total cost:  1500.0
+			# Total input cost: 500.0
+			# Total output cost: 1500.0
+			# Profit: 1000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 0.50
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- DMC Mulhouse Thread Mills ---
+# Theme: Dollfus-Mieg cotton and embroidery thread works in Alsace
+pm_dmc_mulhouse_mills = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Douro Wine Lodge ---
+# Theme: Port wine aging cellars in Vila Nova de Gaia
+pm_douro_wine_lodge = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.03
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fruit_add = 15                   # Price:   30, Total cost:   450.0
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_wine_add = 25                   # Price:   30, Total cost:   750.0
+			goods_output_liquor_add = 10                 # Price:   30, Total cost:   300.0
+			# Total input cost: 850.0
+			# Total output cost: 1050.0
+			# Profit: 200.0
+			# Profit margin: 23.53%
+			# Zero profit price multiplier: 0.81
+			# Employment: 2000
+			# Wage breakeven: 0.10
+		}
+		level_scaled = {
+			building_employment_farmers_add = 800
+			building_employment_shopkeepers_add = 400
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- Duro La Felguera Steelworks ---
+# Theme: Asturian coal and iron complex at La Felguera
+pm_duro_la_felguera_steelworks = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- EEA Dock Sud Power Station ---
+# Theme: Buenos Aires metropolitan electricity generating station
+pm_eea_dock_sud_power_station = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_power_plant_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_electricity_add = 30            # Price:   30, Total cost:   900.0
+			# Total input cost: 1050.0
+			# Total output cost: 900.0
+			# Profit: -150.0
+			# Profit margin: -14.29%
+			# Zero profit price multiplier: 1.17
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Egyptian Railway Cairo Central Station ---
+# Theme: Egypt's railway hub connecting the Nile Delta
+pm_egyptian_rail_cairo_central = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- El Águila Tampico Refinery ---
+# Theme: Mexican Eagle Petroleum's massive Gulf Coast refinery
+pm_el_aguila_tampico_refinery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 25                     # Price:   30, Total cost:   750.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 750.0
+			# Total output cost: 1450.0
+			# Profit: 700.0
+			# Profit margin: 93.33%
+			# Zero profit price multiplier: 0.52
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Electricidad de Caracas Power House ---
+# Theme: Venezuela's first and largest electric utility
+pm_electricidad_caracas_power_house = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_power_plant_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_electricity_add = 30            # Price:   30, Total cost:   900.0
+			# Total input cost: 1050.0
+			# Total output cost: 900.0
+			# Profit: -150.0
+			# Profit margin: -14.29%
+			# Zero profit price multiplier: 1.17
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Első Budapesti Steam Mill ---
+# Theme: Budapest's premier flour milling complex on the Danube
+pm_elso_budapesti_steam_mill = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 20                   # Price:   20, Total cost:   400.0
+			goods_input_sugar_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_groceries_add = 30              # Price:   30, Total cost:   900.0
+			goods_output_meat_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1200.0
+			# Profit: 500.0
+			# Profit margin: 71.43%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.25
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 200
+		}
+	}
+}
+
+# --- Ericsson Telefonplan ---
+# Theme: Stockholm telephone manufacturing campus
+pm_ericsson_telefonplan = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_electrics_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 10                   # Price:   50, Total cost:   500.0
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_telephones_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_radios_add = 10                 # Price:   40, Total cost:   400.0
+			# Total input cost: 900.0
+			# Total output cost: 1600.0
+			# Profit: 700.0
+			# Profit margin: 77.78%
+			# Zero profit price multiplier: 0.56
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_laborers_add = 400
+		}
+	}
+}
+
+# --- Erste Brünner Maschinenwerk ---
+# Theme: Moravia's leading machine tool and locomotive manufacturer
+pm_erste_brunner_maschinenwerk = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_engines_add = 20                # Price:   60, Total cost:  1200.0
+			goods_output_automobiles_add = 5             # Price:  100, Total cost:   500.0
+			# Total input cost: 1150.0
+			# Total output cost: 1700.0
+			# Profit: 550.0
+			# Profit margin: 47.83%
+			# Zero profit price multiplier: 0.68
+			# Employment: 2000
+			# Wage breakeven: 0.28
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- España Industrial Sants Mills ---
+# Theme: Barcelona cotton spinning and weaving complex
+pm_espana_industrial_sants_mills = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Estaleiro Mauá Niterói Dockyard ---
+# Theme: Brazil's first steamship building and repair yard
+pm_estaleiro_maua_niteroi_dockyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Estannífera Llallagua Tin Concentrator ---
+# Theme: Bolivia's richest tin mine and concentrating plant
+pm_estanifera_llallagua_tin_concentrator = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_iron_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 15                   # Price:   40, Total cost:   600.0
+			# Output goods
+			goods_output_iron_add = 30                   # Price:   40, Total cost:  1200.0
+			goods_output_coal_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 600.0
+			# Total output cost: 1500.0
+			# Profit: 900.0
+			# Profit margin: 150.00%
+			# Zero profit price multiplier: 0.40
+			# Employment: 2000
+			# Wage breakeven: 0.45
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- FAMAE Santiago Arsenal ---
+# Theme: Chilean state arms and munitions factory
+pm_famae_santiago_arsenal = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- FCM La Seyne Shipyard ---
+# Theme: Forges et Chantiers de la Méditerranée naval construction yard
+pm_fcm_la_seyne_shipyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Foochow Mawei Dockyard ---
+# Theme: Fujian naval dockyard and China's first modern shipyard
+pm_foochow_mawei_dockyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Franco-Belge Raismes Works ---
+# Theme: Railway locomotive and rolling stock factory near Valenciennes
+pm_franco_belge_raismes_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_engines_add = 20                # Price:   60, Total cost:  1200.0
+			goods_output_automobiles_add = 5             # Price:  100, Total cost:   500.0
+			# Total input cost: 1150.0
+			# Total output cost: 1700.0
+			# Profit: 550.0
+			# Profit margin: 47.83%
+			# Zero profit price multiplier: 0.68
+			# Employment: 2000
+			# Wage breakeven: 0.28
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Fundição Ipanema Sorocaba Foundry ---
+# Theme: Brazil's pioneering royal ironworks near São Paulo
+pm_fundicao_ipanema_sorocaba_foundry = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Fundidora Monterrey Blast Furnace ---
+# Theme: Latin America's first integrated steel mill
+pm_fundidora_monterrey_blast_furnace = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Galician Borysław Oil Field ---
+# Theme: Pioneering petroleum extraction in the Carpathian foothills
+pm_galician_boryslaw_oil_field = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 25                     # Price:   30, Total cost:   750.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 750.0
+			# Total output cost: 1450.0
+			# Profit: 700.0
+			# Profit margin: 93.33%
+			# Zero profit price multiplier: 0.52
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Thonet Bystřice Bentwood Factory ---
+# Theme: Mass production of the iconic bentwood chair No. 14
+pm_thonet_bystrice_bentwood_factory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			goods_input_hardwood_add = 10                # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_furniture_add = 15       # Price:  110, Total cost:  1650.0
+			goods_output_porcelain_add = 10              # Price:   70, Total cost:   700.0
+			# Total input cost: 700.0
+			# Total output cost: 2350.0
+			# Profit: 1650.0
+			# Profit margin: 235.71%
+			# Zero profit price multiplier: 0.30
+			# Employment: 2000
+			# Wage breakeven: 0.82
+		}
+		level_scaled = {
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 600
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- Getzner Bludenz Textile Works ---
+# Theme: Vorarlberg cotton and linen weaving mill
+pm_getzner_bludenz_textile_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Götaverken Gothenburg Shipyard ---
+# Theme: Sweden's largest shipbuilding yard on the Göta älv
+pm_gotaverken_gothenburg_shipyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Gran Azucarera Aranjuez Refinery ---
+# Theme: Spain's consolidated sugar refining complex
+pm_gran_azucarera_aranjuez_refinery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 20                   # Price:   20, Total cost:   400.0
+			goods_input_sugar_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_groceries_add = 30              # Price:   30, Total cost:   900.0
+			goods_output_meat_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1200.0
+			# Profit: 500.0
+			# Profit margin: 71.43%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.25
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 200
+		}
+	}
+}
+
+# --- Great Indian Railway Jamalpur Works ---
+# Theme: India's first railway locomotive workshop in Bihar
+pm_great_indian_railway_jamalpur_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Guinness St. James's Gate Brewery ---
+# Theme: World-famous Dublin brewery producing iconic stout since 1759
+pm_guinness_st_james_gate_brewery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 15                   # Price:   20, Total cost:   300.0
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_liquor_add = 25                 # Price:   30, Total cost:   750.0
+			goods_output_services_add = 10               # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1050.0
+			# Profit: 350.0
+			# Profit margin: 50.00%
+			# Zero profit price multiplier: 0.67
+			# Employment: 2000
+			# Wage breakeven: 0.17
+		}
+		level_scaled = {
+			building_employment_laborers_add = 600
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 400
+		}
+	}
+}
+
+# --- GWR Swindon Works ---
+# Theme: Great Western Railway's locomotive manufacturing headquarters
+pm_gwr_swindon_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Hanseong Electric Gwanghwamun Station ---
+# Theme: Korea's first electric power and streetcar company
+pm_hanseong_jeongi_gwanghwamun_station = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_power_plant_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_electricity_add = 30            # Price:   30, Total cost:   900.0
+			# Total input cost: 1050.0
+			# Total output cost: 900.0
+			# Profit: -150.0
+			# Profit margin: -14.29%
+			# Zero profit price multiplier: 1.17
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Hanyang Arsenal Iron Works ---
+# Theme: Hubei arsenal and steelworks, China's Self-Strengthening centerpiece
+pm_hanyang_arsenal_iron_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Hudson's Bay York Factory ---
+# Theme: Historic fur trade depot and administrative center on Hudson Bay
+pm_hbc_york_factory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                  # Price:   20, Total cost:   200.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_merchant_marine_add = 30        # Price:   50, Total cost:  1500.0
+			# Total input cost: 500.0
+			# Total output cost: 1500.0
+			# Profit: 1000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 0.50
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- Hispano-Suiza Barcelona Factory ---
+# Theme: Luxury automobile and aero-engine manufacturer
+pm_hispano_suiza_barcelona_factory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_engines_add = 20                # Price:   60, Total cost:  1200.0
+			goods_output_automobiles_add = 5             # Price:  100, Total cost:   500.0
+			# Total input cost: 1150.0
+			# Total output cost: 1700.0
+			# Profit: 550.0
+			# Profit margin: 47.83%
+			# Zero profit price multiplier: 0.68
+			# Employment: 2000
+			# Wage breakeven: 0.28
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- ILVA Bagnoli Steelworks ---
+# Theme: Italy's premier steelworks overlooking the Bay of Naples
+pm_ilva_bagnoli_steelworks = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Imperial Arsenal Golden Horn ---
+# Theme: Ottoman naval arsenal on Istanbul's Golden Horn
+pm_imperial_arsenal_golden_horn = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Ethiopian Railway Dire Dawa Depot ---
+# Theme: Addis Ababa-Djibouti railway maintenance depot
+pm_ethiopian_railway_dire_dawa_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Imperial Tobacco Wills Factory ---
+# Theme: Massive cigarette factory complex in Bristol
+pm_imperial_tobacco_wills_factory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_tobacco_plantation_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tobacco_add = 20                 # Price:   40, Total cost:   800.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_clothes_add = 10         # Price:  130, Total cost:  1300.0
+			goods_output_services_add = 20               # Price:   30, Total cost:   600.0
+			# Total input cost: 1100.0
+			# Total output cost: 1900.0
+			# Profit: 800.0
+			# Profit margin: 72.73%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.40
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 400
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 400
+		}
+	}
+}
+
+# --- Ingolstadt Power Station ---
+# Theme: Municipal electricity generating station
+pm_ingolstadt_power_station = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_power_plant_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_electricity_add = 30            # Price:   30, Total cost:   900.0
+			# Total input cost: 1050.0
+			# Total output cost: 900.0
+			# Profit: -150.0
+			# Profit margin: -14.29%
+			# Zero profit price multiplier: 1.17
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Iranian State Railway Veresk Station ---
+# Theme: Engineering marvel on the Trans-Iranian railway across the Alborz
+pm_iranian_state_railway_veresk_station = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Izhevsk Arms Factory ---
+# Theme: Imperial arms works in the Urals producing infantry weapons
+pm_izhevsk_arms_factory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- J&P Coats Ferguslie Thread Mills ---
+# Theme: The world's largest thread manufacturing complex in Paisley
+pm_coats_ferguslie_mills = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Klein Galician Paper Mill ---
+# Theme: Paper and timber processing in eastern Galicia
+pm_klein_galician_paper_mill = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_paper_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 20                    # Price:   20, Total cost:   400.0
+			goods_input_tools_add = 5                    # Price:   40, Total cost:   200.0
+			# Output goods
+			goods_output_paper_add = 25                  # Price:   30, Total cost:   750.0
+			goods_output_services_add = 10               # Price:   30, Total cost:   300.0
+			# Total input cost: 600.0
+			# Total output cost: 1050.0
+			# Profit: 450.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_machinists_add = 600
+			building_employment_clerks_add = 400
+			building_employment_engineers_add = 200
+		}
+	}
+}
+
+# --- Jiangnan Nanjing Brocade Hall ---
+# Theme: Imperial silk weaving bureau producing cloud brocade
+pm_jiangnan_nanjing_brocade_hall = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Jingdezhen Imperial Kiln ---
+# Theme: Porcelain capital of the world, supplier to the Imperial court
+pm_jingdezhen_imperial_kiln = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			goods_input_hardwood_add = 10                # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_furniture_add = 15       # Price:  110, Total cost:  1650.0
+			goods_output_porcelain_add = 10              # Price:   70, Total cost:   700.0
+			# Total input cost: 700.0
+			# Total output cost: 2350.0
+			# Profit: 1650.0
+			# Profit margin: 235.71%
+			# Zero profit price multiplier: 0.30
+			# Employment: 2000
+			# Wage breakeven: 0.82
+		}
+		level_scaled = {
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 600
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- John Brown Clydebank Shipyard ---
+# Theme: Legendary Clyde shipyard that built the Queen Mary and HMS Hood
+pm_john_brown_clydebank_yard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Cockerill Seraing Works ---
+# Theme: Integrated steelworks on the Meuse, Belgium's industrial cradle
+pm_cockerill_seraing_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- John Holt Lagos Trading House ---
+# Theme: West African trading post and palm oil export depot
+pm_john_holt_lagos_trading_house = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                  # Price:   20, Total cost:   200.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_merchant_marine_add = 30        # Price:   50, Total cost:  1500.0
+			# Total input cost: 500.0
+			# Total output cost: 1500.0
+			# Profit: 1000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 0.50
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- Hughes Yuzovka Steelworks ---
+# Theme: Foundational steelworks of the Donbas industrial region
+pm_hughes_yuzovka_steelworks = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Kablín Zárate Paper Mill ---
+# Theme: Argentine pulp and paper manufacturing plant
+pm_kablin_zarate_paper_mill = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_paper_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 20                    # Price:   20, Total cost:   400.0
+			goods_input_tools_add = 5                    # Price:   40, Total cost:   200.0
+			# Output goods
+			goods_output_paper_add = 25                  # Price:   30, Total cost:   750.0
+			goods_output_services_add = 10               # Price:   30, Total cost:   300.0
+			# Total input cost: 600.0
+			# Total output cost: 1050.0
+			# Profit: 450.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_machinists_add = 600
+			building_employment_clerks_add = 400
+			building_employment_engineers_add = 200
+		}
+	}
+}
+
+# --- Kaiping Tangshan Colliery ---
+# Theme: China's first modern coal mine with railway connection
+pm_kaiping_tangshan_colliery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_coal_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 15                   # Price:   40, Total cost:   600.0
+			# Output goods
+			goods_output_coal_add = 30                   # Price:   30, Total cost:   900.0
+			goods_output_iron_add = 10                   # Price:   40, Total cost:   400.0
+			# Total input cost: 600.0
+			# Total output cost: 1300.0
+			# Profit: 700.0
+			# Profit margin: 116.67%
+			# Zero profit price multiplier: 0.46
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Kinkozan Kiyomizu Kiln ---
+# Theme: Renowned Kyoto ceramics workshop producing Satsuma ware
+pm_kinkozan_kiyomizu_kiln = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			goods_input_hardwood_add = 10                # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_furniture_add = 15       # Price:  110, Total cost:  1650.0
+			goods_output_porcelain_add = 10              # Price:   70, Total cost:   700.0
+			# Total input cost: 700.0
+			# Total output cost: 2350.0
+			# Profit: 1650.0
+			# Profit margin: 235.71%
+			# Zero profit price multiplier: 0.30
+			# Employment: 2000
+			# Wage breakeven: 0.82
+		}
+		level_scaled = {
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 600
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- Kirgizian Copper Smelter ---
+# Theme: Ore smelting works in the Kyrgyz steppe
+pm_kirgizian_copper_smelter = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_iron_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 15                   # Price:   40, Total cost:   600.0
+			# Output goods
+			goods_output_iron_add = 30                   # Price:   40, Total cost:  1200.0
+			goods_output_coal_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 600.0
+			# Total output cost: 1500.0
+			# Profit: 900.0
+			# Profit margin: 150.00%
+			# Zero profit price multiplier: 0.40
+			# Employment: 2000
+			# Wage breakeven: 0.45
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Klanično Belgrade Slaughterhouse ---
+# Theme: Belgrade municipal meat processing and cold storage
+pm_klanicko_belgrade_slaughterhouse = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 20                   # Price:   20, Total cost:   400.0
+			goods_input_sugar_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_groceries_add = 30              # Price:   30, Total cost:   900.0
+			goods_output_meat_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1200.0
+			# Profit: 500.0
+			# Profit margin: 71.43%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.25
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 200
+		}
+	}
+}
+
+# --- Meissen Porcelain Manufactory ---
+# Theme: Europe's oldest porcelain factory, famed for crossed swords mark
+pm_meissen_porcelain_manufactory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			goods_input_hardwood_add = 10                # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_furniture_add = 15       # Price:  110, Total cost:  1650.0
+			goods_output_porcelain_add = 10              # Price:   70, Total cost:   700.0
+			# Total input cost: 700.0
+			# Total output cost: 2350.0
+			# Profit: 1650.0
+			# Profit margin: 235.71%
+			# Zero profit price multiplier: 0.30
+			# Employment: 2000
+			# Wage breakeven: 0.82
+		}
+		level_scaled = {
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 600
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- Kouppas Piraeus Foundry ---
+# Theme: Greek metalworking and machinery foundry
+pm_kouppas_piraeus_foundry = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_engines_add = 20                # Price:   60, Total cost:  1200.0
+			goods_output_automobiles_add = 5             # Price:  100, Total cost:   500.0
+			# Total input cost: 1150.0
+			# Total output cost: 1700.0
+			# Profit: 550.0
+			# Profit margin: 47.83%
+			# Zero profit price multiplier: 0.68
+			# Employment: 2000
+			# Wage breakeven: 0.28
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- La Rosada Buenos Aires Arsenal ---
+# Theme: Argentine state arms factory and munitions depot
+pm_la_rosada_buenos_aires_arsenal = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Lanfang Pontianak Kongsi House ---
+# Theme: Chinese kongsi gold mining and administrative center in Borneo
+pm_lanfang_pontianak_kongsi_house = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_gold_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 15                   # Price:   40, Total cost:   600.0
+			# Output goods
+			goods_output_gold_add = 5                    # Price:  100, Total cost:   500.0
+			goods_output_iron_add = 15                   # Price:   40, Total cost:   600.0
+			# Total input cost: 600.0
+			# Total output cost: 1100.0
+			# Profit: 500.0
+			# Profit margin: 83.33%
+			# Zero profit price multiplier: 0.55
+			# Employment: 2000
+			# Wage breakeven: 0.25
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Lee Wilson Plantation Depot ---
+# Theme: Arkansas Delta cotton plantation and timber operation
+pm_lee_wilson_plantation_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_tea_add = 15                    # Price:   50, Total cost:   750.0
+			goods_output_sugar_add = 15                  # Price:   30, Total cost:   450.0
+			goods_output_fruit_add = 10                  # Price:   30, Total cost:   300.0
+			# Total input cost: 400.0
+			# Total output cost: 1500.0
+			# Profit: 1100.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
+			# Employment: 2000
+			# Wage breakeven: 0.55
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 600
+			building_employment_clerks_add = 200
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Lilpop Warsaw Metalworks ---
+# Theme: Rolling stock and steel fabrication in the Polish capital
+pm_lilpop_warsaw_metalworks = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- LKAB Kiruna Iron Mine ---
+# Theme: The world's largest underground iron ore mine
+pm_lkab_kiruna_mine = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_iron_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 15                   # Price:   40, Total cost:   600.0
+			# Output goods
+			goods_output_iron_add = 30                   # Price:   40, Total cost:  1200.0
+			goods_output_coal_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 600.0
+			# Total output cost: 1500.0
+			# Profit: 900.0
+			# Profit margin: 150.00%
+			# Zero profit price multiplier: 0.40
+			# Employment: 2000
+			# Wage breakeven: 0.45
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Moser Karlsbad Glass Works ---
+# Theme: Crystal glassworks patronized by European royal courts
+pm_moser_karlsbad_glass_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			goods_input_hardwood_add = 10                # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_furniture_add = 15       # Price:  110, Total cost:  1650.0
+			goods_output_porcelain_add = 10              # Price:   70, Total cost:   700.0
+			# Total input cost: 700.0
+			# Total output cost: 2350.0
+			# Profit: 1650.0
+			# Profit margin: 235.71%
+			# Zero profit price multiplier: 0.30
+			# Employment: 2000
+			# Wage breakeven: 0.82
+		}
+		level_scaled = {
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 600
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- Madura Mills Madurai Complex ---
+# Theme: South Indian textile spinning and weaving complex
+pm_madura_mills_madurai_complex = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Worth Rue de la Paix Atelier ---
+# Theme: The birthplace of Parisian haute couture
+pm_worth_rue_de_la_paix_atelier = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			goods_input_hardwood_add = 10                # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_furniture_add = 15       # Price:  110, Total cost:  1650.0
+			goods_output_porcelain_add = 10              # Price:   70, Total cost:   700.0
+			# Total input cost: 700.0
+			# Total output cost: 2350.0
+			# Profit: 1650.0
+			# Profit margin: 235.71%
+			# Zero profit price multiplier: 0.30
+			# Employment: 2000
+			# Wage breakeven: 0.82
+		}
+		level_scaled = {
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 600
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- Manfred Weiss Csepel Works ---
+# Theme: Budapest munitions and metalworking complex on Csepel Island
+pm_manfred_weiss_csepel_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Mantero Como Silk Mill ---
+# Theme: Lake Como silk weaving and dyeing workshops
+pm_mantero_como_silk_mill = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Mantetsu Dalian Railway Hub ---
+# Theme: South Manchuria Railway headquarters and rail junction
+pm_mantetsu_dalian_railway_hub = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Maple & Co Tottenham Court Road ---
+# Theme: London's premier furniture showroom and workshop
+pm_maple_tottenham_court_showroom = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			goods_input_hardwood_add = 10                # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_furniture_add = 15       # Price:  110, Total cost:  1650.0
+			goods_output_porcelain_add = 10              # Price:   70, Total cost:   700.0
+			# Total input cost: 700.0
+			# Total output cost: 2350.0
+			# Profit: 1650.0
+			# Profit margin: 235.71%
+			# Zero profit price multiplier: 0.30
+			# Employment: 2000
+			# Wage breakeven: 0.82
+		}
+		level_scaled = {
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 600
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- Massey-Harris Toronto Implement Works ---
+# Theme: Agricultural machinery manufacturer in Toronto
+pm_massey_harris_toronto_implement_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_engines_add = 20                # Price:   60, Total cost:  1200.0
+			goods_output_automobiles_add = 5             # Price:  100, Total cost:   500.0
+			# Total input cost: 1150.0
+			# Total output cost: 1700.0
+			# Profit: 550.0
+			# Profit margin: 47.83%
+			# Zero profit price multiplier: 0.68
+			# Employment: 2000
+			# Wage breakeven: 0.28
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Gavrilović Petrinja Meatworks ---
+# Theme: Croatian salami and preserved meat factory
+pm_gavrilovic_petrinja_meatworks = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 20                   # Price:   20, Total cost:   400.0
+			goods_input_sugar_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_groceries_add = 30              # Price:   30, Total cost:   900.0
+			goods_output_meat_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1200.0
+			# Profit: 500.0
+			# Profit margin: 71.43%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.25
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 200
+		}
+	}
+}
+
+# --- MÁV Budapest Locomotive Works ---
+# Theme: Hungarian state railway locomotive manufacturing plant
+pm_mav_budapest_locomotive_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Mines d'Anzin Colliery ---
+# Theme: France's largest and oldest coal mining company in the Nord
+pm_anzin_colliery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_coal_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 15                   # Price:   40, Total cost:   600.0
+			# Output goods
+			goods_output_coal_add = 30                   # Price:   30, Total cost:   900.0
+			goods_output_iron_add = 10                   # Price:   40, Total cost:   400.0
+			# Total input cost: 600.0
+			# Total output cost: 1300.0
+			# Profit: 700.0
+			# Profit margin: 116.67%
+			# Zero profit price multiplier: 0.46
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Misr Mahalla Textile Complex ---
+# Theme: Egypt's largest textile factory in the Nile Delta
+pm_misr_mahalla_textile_complex = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Moscow Irrigation Cotton Depot ---
+# Theme: Central Asian cotton ginning and distribution center
+pm_moscow_irrigation_cotton_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Mozambique Company Beira Concession ---
+# Theme: Charter company headquarters and port in Beira
+pm_mozambique_company_beira_concession = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_tea_add = 15                    # Price:   50, Total cost:   750.0
+			goods_output_sugar_add = 15                  # Price:   30, Total cost:   450.0
+			goods_output_fruit_add = 10                  # Price:   30, Total cost:   300.0
+			# Total input cost: 400.0
+			# Total output cost: 1500.0
+			# Profit: 1100.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
+			# Employment: 2000
+			# Wage breakeven: 0.55
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 600
+			building_employment_clerks_add = 200
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Nam Định Textile Plant ---
+# Theme: French Indochina cotton spinning factory
+pm_nam_dinh_textile_plant = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- NIOC Masjed Soleyman Oil Field ---
+# Theme: Site of the Middle East's first commercial oil discovery
+pm_nioc_masjed_soleyman_field = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 25                     # Price:   30, Total cost:   750.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 750.0
+			# Total output cost: 1450.0
+			# Profit: 700.0
+			# Profit margin: 93.33%
+			# Zero profit price multiplier: 0.52
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- NedPetroleum Pangkalan Brandan Depot ---
+# Theme: Oil storage and shipping facility in the Dutch East Indies
+pm_nederlandse_petroleum_pangkalan_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 25                     # Price:   30, Total cost:   750.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 750.0
+			# Total output cost: 1450.0
+			# Profit: 700.0
+			# Profit margin: 93.33%
+			# Zero profit price multiplier: 0.52
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Portalis Lyon Silk House ---
+# Theme: Lyon silk weaving and finishing workshops
+pm_portalis_lyon_silk_house = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Nokia Cable Works ---
+# Theme: Finnish cable and rubber factory transitioning to electronics
+pm_nokia_cable_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_electrics_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 10                   # Price:   50, Total cost:   500.0
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_telephones_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_radios_add = 10                 # Price:   40, Total cost:   400.0
+			# Total input cost: 900.0
+			# Total output cost: 1600.0
+			# Profit: 700.0
+			# Profit margin: 77.78%
+			# Zero profit price multiplier: 0.56
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_laborers_add = 400
+		}
+	}
+}
+
+# --- Norsk Hydro Rjukan Plant ---
+# Theme: Hydroelectric-powered fertilizer and heavy water plant
+pm_norsk_hydro_rjukan_plant = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_chemical_plant_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sulfur_add = 15                  # Price:   50, Total cost:   750.0
+			goods_input_coal_add = 10                    # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 1050.0
+			# Total output cost: 1450.0
+			# Profit: 400.0
+			# Profit margin: 38.10%
+			# Zero profit price multiplier: 0.72
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Alpine Donawitz Steelworks ---
+# Theme: Styrian steelworks using the revolutionary LD process
+pm_alpine_donawitz_steelworks = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- OEVG Steyr Arms Works ---
+# Theme: Austrian state arms factory in Upper Austria
+pm_oevg_steyr_arms_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- OCP Khouribga Phosphate Mine ---
+# Theme: Morocco's vast open-pit phosphate mining operation
+pm_ocp_khouribga_mine = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_sulfur_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 15                   # Price:   40, Total cost:   600.0
+			# Output goods
+			goods_output_sulfur_add = 30                 # Price:   50, Total cost:  1500.0
+			goods_output_coal_add = 5                    # Price:   30, Total cost:   150.0
+			# Total input cost: 600.0
+			# Total output cost: 1650.0
+			# Profit: 1050.0
+			# Profit margin: 175.00%
+			# Zero profit price multiplier: 0.36
+			# Employment: 2000
+			# Wage breakeven: 0.53
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Ong Lung Sheng Tea Warehouse ---
+# Theme: Fujianese tea processing and export warehouse
+pm_ong_lung_sheng_tea_warehouse = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_tea_add = 15                    # Price:   50, Total cost:   750.0
+			goods_output_sugar_add = 15                  # Price:   30, Total cost:   450.0
+			goods_output_fruit_add = 10                  # Price:   30, Total cost:   300.0
+			# Total input cost: 400.0
+			# Total output cost: 1500.0
+			# Profit: 1100.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
+			# Employment: 2000
+			# Wage breakeven: 0.55
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 600
+			building_employment_clerks_add = 200
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Opium Ghazipur Factory ---
+# Theme: East India Company's opium processing center on the Ganges
+pm_opium_ghazipur_factory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_tea_add = 15                    # Price:   50, Total cost:   750.0
+			goods_output_sugar_add = 15                  # Price:   30, Total cost:   450.0
+			goods_output_fruit_add = 10                  # Price:   30, Total cost:   300.0
+			# Total input cost: 400.0
+			# Total output cost: 1500.0
+			# Profit: 1100.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
+			# Employment: 2000
+			# Wage breakeven: 0.55
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 600
+			building_employment_clerks_add = 200
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Orient Express Sirkeci Terminal ---
+# Theme: Legendary terminus of the Orient Express in Constantinople
+pm_orient_express_sirkeci_terminal = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Oriental Development Kunsan Granary ---
+# Theme: Japanese colonial agricultural exploitation depot
+pm_oriental_dev_kunsan_granary = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_tea_add = 15                    # Price:   50, Total cost:   750.0
+			goods_output_sugar_add = 15                  # Price:   30, Total cost:   450.0
+			goods_output_fruit_add = 10                  # Price:   30, Total cost:   300.0
+			# Total input cost: 400.0
+			# Total output cost: 1500.0
+			# Profit: 1100.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
+			# Employment: 2000
+			# Wage breakeven: 0.55
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 600
+			building_employment_clerks_add = 200
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Tobacco Régie Cibali Factory ---
+# Theme: Ottoman state tobacco monopoly factory in Istanbul
+pm_tobacco_regie_cibali_factory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_tobacco_plantation_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tobacco_add = 20                 # Price:   40, Total cost:   800.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_clothes_add = 10         # Price:  130, Total cost:  1300.0
+			goods_output_services_add = 20               # Price:   30, Total cost:   600.0
+			# Total input cost: 1100.0
+			# Total output cost: 1900.0
+			# Profit: 800.0
+			# Profit margin: 72.73%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.40
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 400
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 400
+		}
+	}
+}
+
+# --- Panama Company Culebra Cut ---
+# Theme: Canal zone construction headquarters and transit facilities
+pm_panama_company_culebra_cut = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                  # Price:   20, Total cost:   200.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_merchant_marine_add = 30        # Price:   50, Total cost:  1500.0
+			# Total input cost: 500.0
+			# Total output cost: 1500.0
+			# Profit: 1000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 0.50
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- Paradox Kvarnholmen Studio ---
+# Theme: Grand strategy game development studio on the Stockholm archipelago
+pm_paradox_kvarnholmen_studio = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_electrics_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 10                   # Price:   50, Total cost:   500.0
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_telephones_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_radios_add = 10                 # Price:   40, Total cost:   400.0
+			# Total input cost: 900.0
+			# Total output cost: 1600.0
+			# Profit: 700.0
+			# Profit margin: 77.78%
+			# Zero profit price multiplier: 0.56
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_laborers_add = 400
+		}
+	}
+}
+
+# --- Pedro Domecq Jerez Bodega ---
+# Theme: Sherry aging cellars in Jerez de la Frontera
+pm_pedro_domecq_jerez_bodega = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.03
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fruit_add = 15                   # Price:   30, Total cost:   450.0
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_wine_add = 25                   # Price:   30, Total cost:   750.0
+			goods_output_liquor_add = 10                 # Price:   30, Total cost:   300.0
+			# Total input cost: 850.0
+			# Total output cost: 1050.0
+			# Profit: 200.0
+			# Profit margin: 23.53%
+			# Zero profit price multiplier: 0.81
+			# Employment: 2000
+			# Wage breakeven: 0.10
+		}
+		level_scaled = {
+			building_employment_farmers_add = 800
+			building_employment_shopkeepers_add = 400
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- Pernambuco Recife Cotton Mill ---
+# Theme: Northeastern Brazilian cotton spinning complex
+pm_pernambuco_recife_cotton_mill = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Perskhlopok Cotton Combines ---
+# Theme: Persian cotton processing and spinning mills
+pm_perskhlopok_cotton_combines = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Persshelk Silk Reeling House ---
+# Theme: Caucasian silk reeling and weaving facility
+pm_persshelk_silk_reeling_house = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Peruvian Amazon Iquitos Rubber Depot ---
+# Theme: Rubber collection and shipping in the Amazon basin
+pm_peruvian_amazon_iquitos_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_tea_add = 15                    # Price:   50, Total cost:   750.0
+			goods_output_sugar_add = 15                  # Price:   30, Total cost:   450.0
+			goods_output_fruit_add = 10                  # Price:   30, Total cost:   300.0
+			# Total input cost: 400.0
+			# Total output cost: 1500.0
+			# Profit: 1100.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
+			# Employment: 2000
+			# Wage breakeven: 0.55
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 600
+			building_employment_clerks_add = 200
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Philips Eindhoven NatLab ---
+# Theme: Philips Physics Laboratory where revolutionary lighting and electronics were developed
+pm_philips_eindhoven_natlab = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_electrics_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 10                   # Price:   50, Total cost:   500.0
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_telephones_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_radios_add = 10                 # Price:   40, Total cost:   400.0
+			# Total input cost: 900.0
+			# Total output cost: 1600.0
+			# Profit: 700.0
+			# Profit margin: 77.78%
+			# Zero profit price multiplier: 0.56
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_laborers_add = 400
+		}
+	}
+}
+
+# --- Prussian Railway Directorate ---
+# Theme: Central administration for the largest state railway network in Europe
+pm_prussian_railway_directorate = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Ralli Odessa Grain Elevator ---
+# Theme: Greek diaspora grain trading and export warehouse
+pm_ralli_odessa_grain_elevator = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                  # Price:   20, Total cost:   200.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_merchant_marine_add = 30        # Price:   50, Total cost:  1500.0
+			# Total input cost: 500.0
+			# Total output cost: 1500.0
+			# Profit: 1000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 0.50
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- Rheinmetall Unterlüss Proving Ground ---
+# Theme: Artillery and weapons testing range in the Lüneburg Heath
+pm_rheinmetall_unterluss_proving_ground = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Ricordi Galleria Publishing House ---
+# Theme: Music publisher at the heart of Milan's cultural life
+pm_ricordi_galleria_vittorio_emanuele = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			goods_input_hardwood_add = 10                # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_furniture_add = 15       # Price:  110, Total cost:  1650.0
+			goods_output_porcelain_add = 10              # Price:   70, Total cost:   700.0
+			# Total input cost: 700.0
+			# Total output cost: 2350.0
+			# Profit: 1650.0
+			# Profit margin: 235.71%
+			# Zero profit price multiplier: 0.30
+			# Employment: 2000
+			# Wage breakeven: 0.82
+		}
+		level_scaled = {
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 600
+			building_employment_laborers_add = 400
+			building_employment_aristocrats_add = 400
+		}
+	}
+}
+
+# --- Rodríguez Argüelles Havana Tobacco House ---
+# Theme: Cuban cigar manufacturing and tobacco curing operation
+pm_rodriguez_arguelles_havana_tobacco_house = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_tobacco_plantation_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tobacco_add = 20                 # Price:   40, Total cost:   800.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_clothes_add = 10         # Price:  130, Total cost:  1300.0
+			goods_output_services_add = 20               # Price:   30, Total cost:   600.0
+			# Total input cost: 1100.0
+			# Total output cost: 1900.0
+			# Profit: 800.0
+			# Profit margin: 72.73%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.40
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 400
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 400
+		}
+	}
+}
+
+# --- Romanian Star Ploiești Refinery ---
+# Theme: Petroleum refinery in the heart of Romania's oil country
+pm_romanian_star_ploiesti_refinery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 25                     # Price:   30, Total cost:   750.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 750.0
+			# Total output cost: 1450.0
+			# Profit: 700.0
+			# Profit margin: 93.33%
+			# Zero profit price multiplier: 0.52
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Rossi São Leopoldo Arms Factory ---
+# Theme: Brazilian firearms manufacturer in Rio Grande do Sul
+pm_rossi_sao_leopoldo_arms_factory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Russian-American Company Sitka Trading Post ---
+# Theme: Fur trade headquarters and supply depot in Russian Alaska
+pm_rac_sitka_trading_post = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                  # Price:   20, Total cost:   200.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_merchant_marine_add = 30        # Price:   50, Total cost:  1500.0
+			# Total input cost: 500.0
+			# Total output cost: 1500.0
+			# Profit: 1000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 0.50
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- Saint-Étienne Arms Manufactory ---
+# Theme: State arms factory in France's industrial heartland
+pm_saint_etienne_arms_manufactory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- San Miguel Manila Brewery ---
+# Theme: Southeast Asia's oldest brewery and food conglomerate
+pm_san_miguel_manila_brewery = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 20                   # Price:   20, Total cost:   400.0
+			goods_input_sugar_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_groceries_add = 30              # Price:   30, Total cost:   900.0
+			goods_output_meat_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1200.0
+			# Profit: 500.0
+			# Profit margin: 71.43%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.25
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 200
+		}
+	}
+}
+
+# --- São Paulo Railway Paranapiacaba Workshop ---
+# Theme: Railway workshops at the Serra do Mar cable incline
+pm_sao_paulo_railway_paranapiacaba_workshop = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Morozov Orekhovo-Zuevo Mills ---
+# Theme: Russia's largest cotton textile complex near Moscow
+pm_morozov_orekhovo_zuevo_mills = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Schichau-Werke Elbing ---
+# Theme: Shipbuilding and locomotive works on the Baltic
+pm_schichau_elbing_shipyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- SECN Ferrol Shipyard ---
+# Theme: Naval construction yard in Galicia building warships for Spain
+pm_secn_ferrol_shipyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Sherkat-e Shemali Cotton Gin ---
+# Theme: Northern Iranian cotton ginning and processing works
+pm_sherkat_shemali_cotton_gin = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Sherkat-e Eslāmiyyeh Isfahan Mill ---
+# Theme: Isfahan textile weaving and carpet manufacturing complex
+pm_sherkate_eslamiya_isfahan_mill = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_textile_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 20                  # Price:   20, Total cost:   400.0
+			goods_input_dye_add = 10                     # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_clothes_add = 25                # Price:   30, Total cost:   750.0
+			goods_output_luxury_clothes_add = 5          # Price:  130, Total cost:   650.0
+			# Total input cost: 800.0
+			# Total output cost: 1400.0
+			# Profit: 600.0
+			# Profit margin: 75.00%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- Škoda Pilsen Works ---
+# Theme: Bohemian heavy engineering and armaments colossus
+pm_skoda_pilsen_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Mokta el Hadid Beni Saf Mine ---
+# Theme: Algerian iron ore mining and export operation
+pm_mokta_el_hadid_beni_saf_mine = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_iron_mine_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 15                   # Price:   40, Total cost:   600.0
+			# Output goods
+			goods_output_iron_add = 30                   # Price:   40, Total cost:  1200.0
+			goods_output_coal_add = 10                   # Price:   30, Total cost:   300.0
+			# Total input cost: 600.0
+			# Total output cost: 1500.0
+			# Profit: 900.0
+			# Profit margin: 150.00%
+			# Zero profit price multiplier: 0.40
+			# Employment: 2000
+			# Wage breakeven: 0.45
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- STF Fiume Torpedo Works ---
+# Theme: Birthplace of the modern self-propelled torpedo
+pm_stf_fiume_torpedo_works = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Steel Brothers Syriam Depot ---
+# Theme: Burmese oil and rice export center near Rangoon
+pm_steel_brothers_syriam_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 25                     # Price:   30, Total cost:   750.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 750.0
+			# Total output cost: 1450.0
+			# Profit: 700.0
+			# Profit margin: 93.33%
+			# Zero profit price multiplier: 0.52
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- STT Hasköy Shipyard ---
+# Theme: Ottoman commercial shipbuilding yard on the Bosphorus
+pm_stt_haskoy_shipyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Sudamericana Valparaíso Pier ---
+# Theme: Chilean shipping line's main Pacific coast terminal
+pm_sudamericana_valparaiso_pier = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                  # Price:   20, Total cost:   200.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_merchant_marine_add = 30        # Price:   50, Total cost:  1500.0
+			# Total input cost: 500.0
+			# Total output cost: 1500.0
+			# Profit: 1000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 0.50
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- Suez Company Ismailia Headquarters ---
+# Theme: Administrative center of the Suez Canal Company at Ismailia
+pm_suez_company_ismailia_hq = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                  # Price:   20, Total cost:   200.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_merchant_marine_add = 30        # Price:   50, Total cost:  1500.0
+			# Total input cost: 500.0
+			# Total output cost: 1500.0
+			# Profit: 1000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 0.50
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- Sunhwaguk Seoul Tobacco Factory ---
+# Theme: Korean tobacco and agricultural processing works
+pm_sunhwaguk_seoul_tobacco_factory = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_tobacco_plantation_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tobacco_add = 20                 # Price:   40, Total cost:   800.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_clothes_add = 10         # Price:  130, Total cost:  1300.0
+			goods_output_services_add = 20               # Price:   30, Total cost:   600.0
+			# Total input cost: 1100.0
+			# Total output cost: 1900.0
+			# Profit: 800.0
+			# Profit margin: 72.73%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.40
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 400
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 400
+		}
+	}
+}
+
+# --- Tashkent Railroad Workshops ---
+# Theme: Central Asian railway maintenance and locomotive depot
+pm_tashkent_railroad_workshops = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_transportation_add = 30         # Price:   20, Total cost:   600.0
+			goods_output_tools_add = 5                   # Price:   40, Total cost:   200.0
+			# Total input cost: 1350.0
+			# Total output cost: 800.0
+			# Profit: -550.0
+			# Profit margin: -40.74%
+			# Zero profit price multiplier: 1.69
+			# Employment: 2000
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Trubia Cannon Foundry ---
+# Theme: Royal artillery foundry in Asturias
+pm_trubia_cannon_foundry = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Turkish Petroleum Kirkuk Depot ---
+# Theme: Oil extraction and pipeline works at Kirkuk
+pm_turkish_petroleum_kirkuk_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 25                     # Price:   30, Total cost:   750.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 750.0
+			# Total output cost: 1450.0
+			# Profit: 700.0
+			# Profit margin: 93.33%
+			# Zero profit price multiplier: 0.52
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- União Fabril Barreiro Plant ---
+# Theme: Portuguese chemical and cement works across the Tagus from Lisbon
+pm_uniao_fabril_barreiro_plant = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_chemical_plant_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sulfur_add = 15                  # Price:   50, Total cost:   750.0
+			goods_input_coal_add = 10                    # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 1050.0
+			# Total output cost: 1450.0
+			# Profit: 400.0
+			# Profit margin: 38.10%
+			# Zero profit price multiplier: 0.72
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- United Fruit Terminal ---
+# Theme: Banana importing and cold storage terminal on the Gulf Coast
+pm_united_fruit_great_white_fleet_terminal = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_tea_add = 15                    # Price:   50, Total cost:   750.0
+			goods_output_sugar_add = 15                  # Price:   30, Total cost:   450.0
+			goods_output_fruit_add = 10                  # Price:   30, Total cost:   300.0
+			# Total input cost: 400.0
+			# Total output cost: 1500.0
+			# Profit: 1100.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
+			# Employment: 2000
+			# Wage breakeven: 0.55
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_farmers_add = 600
+			building_employment_clerks_add = 200
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- United Tobacco Moscow Plant ---
+# Theme: Russia's consolidated cigarette manufacturing complex
+pm_united_tobacco_moscow_plant = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_tobacco_plantation_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tobacco_add = 20                 # Price:   40, Total cost:   800.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_luxury_clothes_add = 10         # Price:  130, Total cost:  1300.0
+			goods_output_services_add = 20               # Price:   30, Total cost:   600.0
+			# Total input cost: 1100.0
+			# Total output cost: 1900.0
+			# Profit: 800.0
+			# Profit margin: 72.73%
+			# Zero profit price multiplier: 0.58
+			# Employment: 2000
+			# Wage breakeven: 0.40
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 400
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 400
+		}
+	}
+}
+
+# --- Ursus Warsaw Tractor Plant ---
+# Theme: Poland's premier agricultural and military vehicle manufacturer
+pm_ursus_warsaw_tractor_plant = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_engines_add = 20                # Price:   60, Total cost:  1200.0
+			goods_output_automobiles_add = 5             # Price:  100, Total cost:   500.0
+			# Total input cost: 1150.0
+			# Total output cost: 1700.0
+			# Profit: 550.0
+			# Profit margin: 47.83%
+			# Zero profit price multiplier: 0.68
+			# Employment: 2000
+			# Wage breakeven: 0.28
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- State Vodka Monopoly Warehouse ---
+# Theme: Central state liquor storage and distribution facility
+pm_vodka_monopoly_warehouse = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_migration_pull_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 15                   # Price:   20, Total cost:   300.0
+			goods_input_glass_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_liquor_add = 25                 # Price:   30, Total cost:   750.0
+			goods_output_services_add = 10               # Price:   30, Total cost:   300.0
+			# Total input cost: 700.0
+			# Total output cost: 1050.0
+			# Profit: 350.0
+			# Profit margin: 50.00%
+			# Zero profit price multiplier: 0.67
+			# Employment: 2000
+			# Wage breakeven: 0.17
+		}
+		level_scaled = {
+			building_employment_laborers_add = 600
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 400
+		}
+	}
+}
+
+# --- Wadia Bombay Dockyard ---
+# Theme: Parsi-owned shipyard that built vessels for the Royal Navy
+pm_wadia_bombay_dockyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- West Ural Oil Depot ---
+# Theme: Petroleum storage and pipeline terminal in the Ural region
+pm_west_ural_oil_depot = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 25                     # Price:   30, Total cost:   750.0
+			# Output goods
+			goods_output_explosives_add = 20             # Price:   50, Total cost:  1000.0
+			goods_output_fertilizer_add = 15             # Price:   30, Total cost:   450.0
+			# Total input cost: 750.0
+			# Total output cost: 1450.0
+			# Profit: 700.0
+			# Profit margin: 93.33%
+			# Zero profit price multiplier: 0.52
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_machinists_add = 600
+			building_employment_laborers_add = 800
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Cramp Philadelphia Shipyard ---
+# Theme: Major naval shipbuilding complex on the Delaware River
+pm_cramp_philadelphia_shipyard = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_military_shipyard_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
+			# Output goods
+			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
+			# Total input cost: 1350.0
+			# Total output cost: 1800.0
+			# Profit: 450.0
+			# Profit margin: 33.33%
+			# Zero profit price multiplier: 0.75
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Sandford Newcastle-Natal Ironworks ---
+# Theme: South African iron smelting works in KwaZulu-Natal
+pm_sandford_newcastle_natal_ironworks = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Witkowitzer Ostrava Ironworks ---
+# Theme: Silesian iron and coal conglomerate near Ostrava
+pm_witkowitzer_ostrava_ironworks = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 20                    # Price:   40, Total cost:   800.0
+			goods_input_coal_add = 15                    # Price:   30, Total cost:   450.0
+			# Output goods
+			goods_output_steel_add = 25                  # Price:   50, Total cost:  1250.0
+			goods_output_tools_add = 10                  # Price:   40, Total cost:   400.0
+			# Total input cost: 1250.0
+			# Total output cost: 1650.0
+			# Profit: 400.0
+			# Profit margin: 32.00%
+			# Zero profit price multiplier: 0.76
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Ynchausti Manila Trading House ---
+# Theme: Basque-Filipino trading firm in hemp, sugar, and shipping
+pm_ynchausti_manila_trading_house = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_capacity_add = 5
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 10                  # Price:   20, Total cost:   200.0
+			goods_input_paper_add = 10                   # Price:   30, Total cost:   300.0
+			# Output goods
+			goods_output_merchant_marine_add = 30        # Price:   50, Total cost:  1500.0
+			# Total input cost: 500.0
+			# Total output cost: 1500.0
+			# Profit: 1000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 0.50
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_officers_add = 200
+		}
+	}
+}
+
+# --- Zastava Kragujevac Arsenal ---
+# Theme: Serbian state arms arsenal in Kragujevac
+pm_zastava_kragujevac_arsenal = {
+	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_arms_industry_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
+			goods_input_tools_add = 10                   # Price:   40, Total cost:   400.0
+			# Output goods
+			goods_output_small_arms_add = 20             # Price:   60, Total cost:  1200.0
+			goods_output_ammunition_add = 20             # Price:   60, Total cost:  1200.0
+			# Total input cost: 1150.0
+			# Total output cost: 2400.0
+			# Profit: 1250.0
+			# Profit margin: 108.70%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.62
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+

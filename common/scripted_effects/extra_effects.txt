@@ -1068,6 +1068,27 @@ te_update_migration_crowding_modifier = {
 	}
 }
 
+# Refreshes the free port tariff reduction modifiers.
+# Removes then re-applies so the multiplier reads the tariff rate
+# WITHOUT our own contribution, preventing negative tariffs.
+te_update_free_port_tariff = {
+	remove_modifier = free_port_tariff_import_modifier
+	remove_modifier = free_port_tariff_export_modifier
+	remove_modifier = free_port_state_modifier
+	add_modifier = free_port_state_modifier
+	if = {
+		limit = { has_variable = has_free_port }
+		if = {
+			limit = { free_port_tariff_import_cap > 0 }
+			add_modifier = { name = free_port_tariff_import_modifier multiplier = free_port_tariff_import_cap }
+		}
+		if = {
+			limit = { free_port_tariff_export_cap > 0 }
+			add_modifier = { name = free_port_tariff_export_modifier multiplier = free_port_tariff_export_cap }
+		}
+	}
+}
+
 # Combined refresh — delegates to each individual effect above.
 # Every immediate trigger hook calls this so a new modifier only needs
 # to be added in one place.
@@ -1082,6 +1103,7 @@ te_update_migration_crowding_modifier = {
 te_update_state_modifiers = {
 	te_update_pollution_modifier = yes
 	te_update_migration_crowding_modifier = yes
+	te_update_free_port_tariff = yes
 }
 
 # Remove infrastructure buildings from a state (state scope).

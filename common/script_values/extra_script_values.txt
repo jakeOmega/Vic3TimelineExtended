@@ -1735,6 +1735,24 @@ migration_crowding_mult = {
 }
 
 #==================================================
+# Free Port Tariff Caps (state scope)
+#==================================================
+# After the free_port_tariff_*_modifier is removed, these read the
+# remaining tariff rate (law base + other modifiers) and cap at 0+.
+# Used as the multiplier for free_port_tariff_*_modifier so the
+# reduction never pushes tariffs below zero.
+
+free_port_tariff_import_cap = {
+	value = modifier:state_tariff_import_add
+	min = 0
+}
+
+free_port_tariff_export_cap = {
+	value = modifier:state_tariff_export_add
+	min = 0
+}
+
+#==================================================
 # Wonder Sub-Building Slot Availability
 #==================================================
 # These script values compute remaining slots accounting for queued constructions.

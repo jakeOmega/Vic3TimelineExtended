@@ -168,7 +168,7 @@
  religious_mission_rights_effects_desc:0 "• Gradually converts population in the target state toward the protector's religion.\n• Attracts migration to the target state.\n• Source country loses authority and legitimacy.\n• Target country gains prestige."
  remove_culture_text:"This will change authority cost by @aut! [SCOPE.sCulture('curr_culture').MakeScope.ScriptValue('culture_discrimination_cost_script_value_player')]. All pops of this culture will also become more radical. Are you sure you want to remove this culture?"
  remove_culture_title:"Remove Culture"
- request_influence_effects_desc:0 "• Generates a large amount of [concept_leverage] for the source country, pulling the target toward their [concept_power_bloc]."
+ request_influence_effects_desc:0 "• Generates a large amount of [concept_power_bloc_leverage] for the source country, pulling the target toward their [concept_power_bloc]."
  rule_custom_religions_allowed_rule:0 "Custom Religion Allowed"
  science_aid_2_effects_desc:0 "• Greatly increases technology spread in the target country.\n• Source country loses significant weekly innovation.\n• Requires an existing Science Aid agreement.\n• Improves relations over time."
  science_aid_effects_desc:0 "• Increases technology spread in the target country.\n• Source country loses weekly innovation.\n• Improves relations over time."

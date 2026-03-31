@@ -1035,7 +1035,28 @@ suppress_subject_liberty = {
 	}
 
 	can_ratify = {
-		always = yes
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = suppress_subject_liberty
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
 	}
 
 	ai = {
@@ -1606,7 +1627,27 @@ intelligence_sharing_pact = {
     }
 
     can_ratify = {
-        always = yes
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:first_country = {
+					any_scope_treaty = {
+						binds = scope:second_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = intelligence_sharing_pact
+						}
+					}
+				}
+			}
+		}
     }
 
     ai = {
@@ -1744,7 +1785,27 @@ joint_military_exercises = {
     }
 
     can_ratify = {
-        always = yes
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:first_country = {
+					any_scope_treaty = {
+						binds = scope:second_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = joint_military_exercises
+						}
+					}
+				}
+			}
+		}
     }
 
     ai = {

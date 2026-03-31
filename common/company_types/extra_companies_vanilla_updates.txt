@@ -1858,3 +1858,1646 @@ INJECT:company_basic_wine_and_fruit = {
 	}
 }
 
+#============================================================
+# Phase 7: Remaining Vanilla Flavored Company Unique Buildings
+#============================================================
+
+# company_aker_mek → Unique building
+INJECT:company_aker_mek = {
+	building_types = {
+		building_aker_oslo_shipyard
+	}
+	prosperity_modifier = {
+		state_building_aker_oslo_shipyard_max_level_add = 1
+	}
+}
+
+# company_allatini_mills → Unique building
+INJECT:company_allatini_mills = {
+	building_types = {
+		building_allatini_thessaloniki_flour_mill
+	}
+	prosperity_modifier = {
+		state_building_allatini_thessaloniki_flour_mill_max_level_add = 1
+	}
+}
+
+# company_altos_hornos_de_vizcaya → Unique building
+INJECT:company_altos_hornos_de_vizcaya = {
+	building_types = {
+		building_altos_hornos_baracaldo_furnaces
+	}
+	prosperity_modifier = {
+		state_building_altos_hornos_baracaldo_furnaces_max_level_add = 1
+	}
+}
+
+# company_anglo_persian_oil → Unique building
+INJECT:company_anglo_persian_oil = {
+	building_types = {
+		building_anglo_persian_abadan_refinery
+	}
+	prosperity_modifier = {
+		state_building_anglo_persian_abadan_refinery_max_level_add = 1
+	}
+}
+
+# company_anglo_sicilian_sulphur_company → Unique building
+INJECT:company_anglo_sicilian_sulphur_company = {
+	building_types = {
+		building_anglo_sicilian_licata_wharf
+	}
+	prosperity_modifier = {
+		state_building_anglo_sicilian_licata_wharf_max_level_add = 1
+	}
+}
+
+# company_ansaldo → Unique building
+INJECT:company_ansaldo = {
+	building_types = {
+		building_ansaldo_sestri_ponente_works
+	}
+	prosperity_modifier = {
+		state_building_ansaldo_sestri_ponente_works_max_level_add = 1
+	}
+}
+
+# company_ap_moller → Unique building
+INJECT:company_ap_moller = {
+	building_types = {
+		building_ap_moller_copenhagen_wharf
+	}
+	prosperity_modifier = {
+		state_building_ap_moller_copenhagen_wharf_max_level_add = 1
+	}
+}
+
+# company_argentinian_wine → Unique building
+INJECT:company_argentinian_wine = {
+	building_types = {
+		building_argentinian_wine_mendoza_bodega
+	}
+	prosperity_modifier = {
+		state_building_argentinian_wine_mendoza_bodega_max_level_add = 1
+	}
+}
+
+# company_armstrong_whitworth → Unique building
+INJECT:company_armstrong_whitworth = {
+	building_types = {
+		building_armstrong_elswick_works
+	}
+	prosperity_modifier = {
+		state_building_armstrong_elswick_works_max_level_add = 1
+	}
+}
+
+# company_assam_company → Unique building
+INJECT:company_assam_company = {
+	building_types = {
+		building_assam_company_nazira_tea_estate
+	}
+	prosperity_modifier = {
+		state_building_assam_company_nazira_tea_estate_max_level_add = 1
+	}
+}
+
+# company_b_grimm → Unique building
+INJECT:company_b_grimm = {
+	building_types = {
+		building_b_grimm_bangkok_warehouse
+	}
+	prosperity_modifier = {
+		state_building_b_grimm_bangkok_warehouse_max_level_add = 1
+	}
+}
+
+# company_bacardi → Unique building
+INJECT:company_bacardi = {
+	building_types = {
+		building_bacardi_santiago_distillery
+	}
+	prosperity_modifier = {
+		state_building_bacardi_santiago_distillery_max_level_add = 1
+	}
+}
+
+# company_basf → Unique building
+INJECT:company_basf = {
+	building_types = {
+		building_basf_ludwigshafen_plant
+	}
+	prosperity_modifier = {
+		state_building_basf_ludwigshafen_plant_max_level_add = 1
+	}
+}
+
+# company_basileiades → Unique building
+INJECT:company_basileiades = {
+	building_types = {
+		building_basileiades_piraeus_works
+	}
+	prosperity_modifier = {
+		state_building_basileiades_piraeus_works_max_level_add = 1
+	}
+}
+
+# company_bengal_coal_company → Unique building
+INJECT:company_bengal_coal_company = {
+	building_types = {
+		building_bengal_coal_raniganj_mine
+	}
+	prosperity_modifier = {
+		state_building_bengal_coal_raniganj_mine_max_level_add = 1
+	}
+}
+
+# company_bolckow_vaughan → Unique building
+INJECT:company_bolckow_vaughan = {
+	building_types = {
+		building_bolckow_eston_ironworks
+	}
+	prosperity_modifier = {
+		state_building_bolckow_eston_ironworks_max_level_add = 1
+	}
+}
+
+# company_bombay_burmah_trading_corporation → Unique building
+INJECT:company_bombay_burmah_trading_corporation = {
+	building_types = {
+		building_bombay_burmah_rangoon_timber_depot
+	}
+	prosperity_modifier = {
+		state_building_bombay_burmah_rangoon_timber_depot_max_level_add = 1
+	}
+}
+
+# company_bombay_dyeing_company → Unique building
+INJECT:company_bombay_dyeing_company = {
+	building_types = {
+		building_bombay_dyeing_spring_mills
+	}
+	prosperity_modifier = {
+		state_building_bombay_dyeing_spring_mills_max_level_add = 1
+	}
+}
+
+# company_bunge_born → Unique building
+INJECT:company_bunge_born = {
+	building_types = {
+		building_bunge_born_buenos_aires_grain_silo
+	}
+	prosperity_modifier = {
+		state_building_bunge_born_buenos_aires_grain_silo_max_level_add = 1
+	}
+}
+
+# company_calcutta_electric → Unique building
+INJECT:company_calcutta_electric = {
+	building_types = {
+		building_calcutta_electric_victoria_house
+	}
+	prosperity_modifier = {
+		state_building_calcutta_electric_victoria_house_max_level_add = 1
+	}
+}
+
+# company_caribbean_petroleum → Unique building
+INJECT:company_caribbean_petroleum = {
+	building_types = {
+		building_caribbean_petroleum_maracaibo_depot
+	}
+	prosperity_modifier = {
+		state_building_caribbean_petroleum_maracaibo_depot_max_level_add = 1
+	}
+}
+
+# company_ccci → Unique building
+INJECT:company_ccci = {
+	building_types = {
+		building_ccci_leopoldville_depot
+	}
+	prosperity_modifier = {
+		state_building_ccci_leopoldville_depot_max_level_add = 1
+	}
+}
+
+# company_cfr → Unique building
+INJECT:company_cfr = {
+	building_types = {
+		building_cfr_bucharest_railway_works
+	}
+	prosperity_modifier = {
+		state_building_cfr_bucharest_railway_works_max_level_add = 1
+	}
+}
+
+# company_cgv → Unique building
+INJECT:company_cgv = {
+	building_types = {
+		building_cgv_haut_brion_estate
+	}
+	prosperity_modifier = {
+		state_building_cgv_haut_brion_estate_max_level_add = 1
+	}
+}
+
+# company_chr_hansens → Unique building
+INJECT:company_chr_hansens = {
+	building_types = {
+		building_chr_hansen_copenhagen_laboratory
+	}
+	prosperity_modifier = {
+		state_building_chr_hansen_copenhagen_laboratory_max_level_add = 1
+	}
+}
+
+# company_colt_firearms → Unique building
+INJECT:company_colt_firearms = {
+	building_types = {
+		building_colt_hartford_armory
+	}
+	prosperity_modifier = {
+		state_building_colt_hartford_armory_max_level_add = 1
+	}
+}
+
+# company_compania_sansinena_de_carnes_congeladas → Unique building
+INJECT:company_compania_sansinena_de_carnes_congeladas = {
+	building_types = {
+		building_sansinena_avellaneda_frigorífico
+	}
+	prosperity_modifier = {
+		state_building_sansinena_avellaneda_frigorífico_max_level_add = 1
+	}
+}
+
+# company_cordoba_railway → Unique building
+INJECT:company_cordoba_railway = {
+	building_types = {
+		building_cordoba_railway_alta_gracia_works
+	}
+	prosperity_modifier = {
+		state_building_cordoba_railway_alta_gracia_works_max_level_add = 1
+	}
+}
+
+# company_csfa → Unique building
+INJECT:company_csfa = {
+	building_types = {
+		building_csfa_sicilian_sulfur_depot
+	}
+	prosperity_modifier = {
+		state_building_csfa_sicilian_sulfur_depot_max_level_add = 1
+	}
+}
+
+# company_da_afghan_nassaji_sherkat → Unique building
+INJECT:company_da_afghan_nassaji_sherkat = {
+	building_types = {
+		building_afghan_nassaji_kabul_mills
+	}
+	prosperity_modifier = {
+		state_building_afghan_nassaji_kabul_mills_max_level_add = 1
+	}
+}
+
+# company_david_sassoon → Unique building
+INJECT:company_david_sassoon = {
+	building_types = {
+		building_sassoon_bombay_docks
+	}
+	prosperity_modifier = {
+		state_building_sassoon_bombay_docks_max_level_add = 1
+	}
+}
+
+# company_dmc → Unique building
+INJECT:company_dmc = {
+	building_types = {
+		building_dmc_mulhouse_mills
+	}
+	prosperity_modifier = {
+		state_building_dmc_mulhouse_mills_max_level_add = 1
+	}
+}
+
+# company_douro_wine_company → Unique building
+INJECT:company_douro_wine_company = {
+	building_types = {
+		building_douro_wine_lodge
+	}
+	prosperity_modifier = {
+		state_building_douro_wine_lodge_max_level_add = 1
+	}
+}
+
+# company_duro_y_compania → Unique building
+INJECT:company_duro_y_compania = {
+	building_types = {
+		building_duro_la_felguera_steelworks
+	}
+	prosperity_modifier = {
+		state_building_duro_la_felguera_steelworks_max_level_add = 1
+	}
+}
+
+# company_eea → Unique building
+INJECT:company_eea = {
+	building_types = {
+		building_eea_dock_sud_power_station
+	}
+	prosperity_modifier = {
+		state_building_eea_dock_sud_power_station_max_level_add = 1
+	}
+}
+
+# company_egyptian_rail → Unique building
+INJECT:company_egyptian_rail = {
+	building_types = {
+		building_egyptian_rail_cairo_central
+	}
+	prosperity_modifier = {
+		state_building_egyptian_rail_cairo_central_max_level_add = 1
+	}
+}
+
+# company_el_aguila → Unique building
+INJECT:company_el_aguila = {
+	building_types = {
+		building_el_aguila_tampico_refinery
+	}
+	prosperity_modifier = {
+		state_building_el_aguila_tampico_refinery_max_level_add = 1
+	}
+}
+
+# company_electricidad_de_caracas → Unique building
+INJECT:company_electricidad_de_caracas = {
+	building_types = {
+		building_electricidad_caracas_power_house
+	}
+	prosperity_modifier = {
+		state_building_electricidad_caracas_power_house_max_level_add = 1
+	}
+}
+
+# company_elso_budapesti_gozmalom → Unique building
+INJECT:company_elso_budapesti_gozmalom = {
+	building_types = {
+		building_elso_budapesti_steam_mill
+	}
+	prosperity_modifier = {
+		state_building_elso_budapesti_steam_mill_max_level_add = 1
+	}
+}
+
+# company_ericsson → Unique building
+INJECT:company_ericsson = {
+	building_types = {
+		building_ericsson_telefonplan
+	}
+	prosperity_modifier = {
+		state_building_ericsson_telefonplan_max_level_add = 1
+	}
+}
+
+# company_erste_brunner → Unique building
+INJECT:company_erste_brunner = {
+	building_types = {
+		building_erste_brunner_maschinenwerk
+	}
+	prosperity_modifier = {
+		state_building_erste_brunner_maschinenwerk_max_level_add = 1
+	}
+}
+
+# company_espana_industrial → Unique building
+INJECT:company_espana_industrial = {
+	building_types = {
+		building_espana_industrial_sants_mills
+	}
+	prosperity_modifier = {
+		state_building_espana_industrial_sants_mills_max_level_add = 1
+	}
+}
+
+# company_estaleiro_maua → Unique building
+INJECT:company_estaleiro_maua = {
+	building_types = {
+		building_estaleiro_maua_niteroi_dockyard
+	}
+	prosperity_modifier = {
+		state_building_estaleiro_maua_niteroi_dockyard_max_level_add = 1
+	}
+}
+
+# company_estanifera_llallagua → Unique building
+INJECT:company_estanifera_llallagua = {
+	building_types = {
+		building_estanifera_llallagua_tin_concentrator
+	}
+	prosperity_modifier = {
+		state_building_estanifera_llallagua_tin_concentrator_max_level_add = 1
+	}
+}
+
+# company_famae → Unique building
+INJECT:company_famae = {
+	building_types = {
+		building_famae_santiago_arsenal
+	}
+	prosperity_modifier = {
+		state_building_famae_santiago_arsenal_max_level_add = 1
+	}
+}
+
+# company_fcm → Unique building
+INJECT:company_fcm = {
+	building_types = {
+		building_fcm_la_seyne_shipyard
+	}
+	prosperity_modifier = {
+		state_building_fcm_la_seyne_shipyard_max_level_add = 1
+	}
+}
+
+# company_foochow_arsenal → Unique building
+INJECT:company_foochow_arsenal = {
+	building_types = {
+		building_foochow_mawei_dockyard
+	}
+	prosperity_modifier = {
+		state_building_foochow_mawei_dockyard_max_level_add = 1
+	}
+}
+
+# company_franco_belge → Unique building
+INJECT:company_franco_belge = {
+	building_types = {
+		building_franco_belge_raismes_works
+	}
+	prosperity_modifier = {
+		state_building_franco_belge_raismes_works_max_level_add = 1
+	}
+}
+
+# company_fundicao_ipanema → Unique building
+INJECT:company_fundicao_ipanema = {
+	building_types = {
+		building_fundicao_ipanema_sorocaba_foundry
+	}
+	prosperity_modifier = {
+		state_building_fundicao_ipanema_sorocaba_foundry_max_level_add = 1
+	}
+}
+
+# company_fundidora_monterrey → Unique building
+INJECT:company_fundidora_monterrey = {
+	building_types = {
+		building_fundidora_monterrey_blast_furnace
+	}
+	prosperity_modifier = {
+		state_building_fundidora_monterrey_blast_furnace_max_level_add = 1
+	}
+}
+
+# company_galician_carpathian_oil → Unique building
+INJECT:company_galician_carpathian_oil = {
+	building_types = {
+		building_galician_boryslaw_oil_field
+	}
+	prosperity_modifier = {
+		state_building_galician_boryslaw_oil_field_max_level_add = 1
+	}
+}
+
+# company_gebruder_thonet → Unique building
+INJECT:company_gebruder_thonet = {
+	building_types = {
+		building_thonet_bystrice_bentwood_factory
+	}
+	prosperity_modifier = {
+		state_building_thonet_bystrice_bentwood_factory_max_level_add = 1
+	}
+}
+
+# company_getzner_mutter → Unique building
+INJECT:company_getzner_mutter = {
+	building_types = {
+		building_getzner_bludenz_textile_works
+	}
+	prosperity_modifier = {
+		state_building_getzner_bludenz_textile_works_max_level_add = 1
+	}
+}
+
+# company_gotaverken → Unique building
+INJECT:company_gotaverken = {
+	building_types = {
+		building_gotaverken_gothenburg_shipyard
+	}
+	prosperity_modifier = {
+		state_building_gotaverken_gothenburg_shipyard_max_level_add = 1
+	}
+}
+
+# company_gran_azucarera → Unique building
+INJECT:company_gran_azucarera = {
+	building_types = {
+		building_gran_azucarera_aranjuez_refinery
+	}
+	prosperity_modifier = {
+		state_building_gran_azucarera_aranjuez_refinery_max_level_add = 1
+	}
+}
+
+# company_great_indian_railway → Unique building
+INJECT:company_great_indian_railway = {
+	building_types = {
+		building_great_indian_railway_jamalpur_works
+	}
+	prosperity_modifier = {
+		state_building_great_indian_railway_jamalpur_works_max_level_add = 1
+	}
+}
+
+# company_guinness → Unique building
+INJECT:company_guinness = {
+	building_types = {
+		building_guinness_st_james_gate_brewery
+	}
+	prosperity_modifier = {
+		state_building_guinness_st_james_gate_brewery_max_level_add = 1
+	}
+}
+
+# company_gwr → Unique building
+INJECT:company_gwr = {
+	building_types = {
+		building_gwr_swindon_works
+	}
+	prosperity_modifier = {
+		state_building_gwr_swindon_works_max_level_add = 1
+	}
+}
+
+# company_hanseong_jeongi_hoesa → Unique building
+INJECT:company_hanseong_jeongi_hoesa = {
+	building_types = {
+		building_hanseong_jeongi_gwanghwamun_station
+	}
+	prosperity_modifier = {
+		state_building_hanseong_jeongi_gwanghwamun_station_max_level_add = 1
+	}
+}
+
+# company_hanyang_arsenal → Unique building
+INJECT:company_hanyang_arsenal = {
+	building_types = {
+		building_hanyang_arsenal_iron_works
+	}
+	prosperity_modifier = {
+		state_building_hanyang_arsenal_iron_works_max_level_add = 1
+	}
+}
+
+# company_hbc → Unique building
+INJECT:company_hbc = {
+	building_types = {
+		building_hbc_york_factory
+	}
+	prosperity_modifier = {
+		state_building_hbc_york_factory_max_level_add = 1
+	}
+}
+
+# company_hispano_suiza → Unique building
+INJECT:company_hispano_suiza = {
+	building_types = {
+		building_hispano_suiza_barcelona_factory
+	}
+	prosperity_modifier = {
+		state_building_hispano_suiza_barcelona_factory_max_level_add = 1
+	}
+}
+
+# company_ilva → Unique building
+INJECT:company_ilva = {
+	building_types = {
+		building_ilva_bagnoli_steelworks
+	}
+	prosperity_modifier = {
+		state_building_ilva_bagnoli_steelworks_max_level_add = 1
+	}
+}
+
+# company_imperial_arsenal → Unique building
+INJECT:company_imperial_arsenal = {
+	building_types = {
+		building_imperial_arsenal_golden_horn
+	}
+	prosperity_modifier = {
+		state_building_imperial_arsenal_golden_horn_max_level_add = 1
+	}
+}
+
+# company_imperial_ethiopian_railways → Unique building
+INJECT:company_imperial_ethiopian_railways = {
+	building_types = {
+		building_ethiopian_railway_dire_dawa_depot
+	}
+	prosperity_modifier = {
+		state_building_ethiopian_railway_dire_dawa_depot_max_level_add = 1
+	}
+}
+
+# company_imperial_tobacco → Unique building
+INJECT:company_imperial_tobacco = {
+	building_types = {
+		building_imperial_tobacco_wills_factory
+	}
+	prosperity_modifier = {
+		state_building_imperial_tobacco_wills_factory_max_level_add = 1
+	}
+}
+
+# company_ingolstadt_electrical_company → Unique building
+INJECT:company_ingolstadt_electrical_company = {
+	building_types = {
+		building_ingolstadt_power_station
+	}
+	prosperity_modifier = {
+		state_building_ingolstadt_power_station_max_level_add = 1
+	}
+}
+
+# company_iranian_state_railway → Unique building
+INJECT:company_iranian_state_railway = {
+	building_types = {
+		building_iranian_state_railway_veresk_station
+	}
+	prosperity_modifier = {
+		state_building_iranian_state_railway_veresk_station_max_level_add = 1
+	}
+}
+
+# company_izhevsk_arms_plant → Unique building
+INJECT:company_izhevsk_arms_plant = {
+	building_types = {
+		building_izhevsk_arms_factory
+	}
+	prosperity_modifier = {
+		state_building_izhevsk_arms_factory_max_level_add = 1
+	}
+}
+
+# company_j_p_coats → Unique building
+INJECT:company_j_p_coats = {
+	building_types = {
+		building_coats_ferguslie_mills
+	}
+	prosperity_modifier = {
+		state_building_coats_ferguslie_mills_max_level_add = 1
+	}
+}
+
+# company_jakub_klein → Unique building
+INJECT:company_jakub_klein = {
+	building_types = {
+		building_klein_galician_paper_mill
+	}
+	prosperity_modifier = {
+		state_building_klein_galician_paper_mill_max_level_add = 1
+	}
+}
+
+# company_jiangnan_weaving_bureaus → Unique building
+INJECT:company_jiangnan_weaving_bureaus = {
+	building_types = {
+		building_jiangnan_nanjing_brocade_hall
+	}
+	prosperity_modifier = {
+		state_building_jiangnan_nanjing_brocade_hall_max_level_add = 1
+	}
+}
+
+# company_jingdezhen → Unique building
+INJECT:company_jingdezhen = {
+	building_types = {
+		building_jingdezhen_imperial_kiln
+	}
+	prosperity_modifier = {
+		state_building_jingdezhen_imperial_kiln_max_level_add = 1
+	}
+}
+
+# company_john_brown → Unique building
+INJECT:company_john_brown = {
+	building_types = {
+		building_john_brown_clydebank_yard
+	}
+	prosperity_modifier = {
+		state_building_john_brown_clydebank_yard_max_level_add = 1
+	}
+}
+
+# company_john_cockerill → Unique building
+INJECT:company_john_cockerill = {
+	building_types = {
+		building_cockerill_seraing_works
+	}
+	prosperity_modifier = {
+		state_building_cockerill_seraing_works_max_level_add = 1
+	}
+}
+
+# company_john_holt → Unique building
+INJECT:company_john_holt = {
+	building_types = {
+		building_john_holt_lagos_trading_house
+	}
+	prosperity_modifier = {
+		state_building_john_holt_lagos_trading_house_max_level_add = 1
+	}
+}
+
+# company_john_hughes → Unique building
+INJECT:company_john_hughes = {
+	building_types = {
+		building_hughes_yuzovka_steelworks
+	}
+	prosperity_modifier = {
+		state_building_hughes_yuzovka_steelworks_max_level_add = 1
+	}
+}
+
+# company_kablin → Unique building
+INJECT:company_kablin = {
+	building_types = {
+		building_kablin_zarate_paper_mill
+	}
+	prosperity_modifier = {
+		state_building_kablin_zarate_paper_mill_max_level_add = 1
+	}
+}
+
+# company_kaiping_mining → Unique building
+INJECT:company_kaiping_mining = {
+	building_types = {
+		building_kaiping_tangshan_colliery
+	}
+	prosperity_modifier = {
+		state_building_kaiping_tangshan_colliery_max_level_add = 1
+	}
+}
+
+# company_kinkozan_sobei → Unique building
+INJECT:company_kinkozan_sobei = {
+	building_types = {
+		building_kinkozan_kiyomizu_kiln
+	}
+	prosperity_modifier = {
+		state_building_kinkozan_kiyomizu_kiln_max_level_add = 1
+	}
+}
+
+# company_kirgizian_mining_company → Unique building
+INJECT:company_kirgizian_mining_company = {
+	building_types = {
+		building_kirgizian_copper_smelter
+	}
+	prosperity_modifier = {
+		state_building_kirgizian_copper_smelter_max_level_add = 1
+	}
+}
+
+# company_klanicko_drustvo → Unique building
+INJECT:company_klanicko_drustvo = {
+	building_types = {
+		building_klanicko_belgrade_slaughterhouse
+	}
+	prosperity_modifier = {
+		state_building_klanicko_belgrade_slaughterhouse_max_level_add = 1
+	}
+}
+
+# company_konigliche_porzellan_manufaktur_meissen → Unique building
+INJECT:company_konigliche_porzellan_manufaktur_meissen = {
+	building_types = {
+		building_meissen_porcelain_manufactory
+	}
+	prosperity_modifier = {
+		state_building_meissen_porcelain_manufactory_max_level_add = 1
+	}
+}
+
+# company_kouppas → Unique building
+INJECT:company_kouppas = {
+	building_types = {
+		building_kouppas_piraeus_foundry
+	}
+	prosperity_modifier = {
+		state_building_kouppas_piraeus_foundry_max_level_add = 1
+	}
+}
+
+# company_la_rosada → Unique building
+INJECT:company_la_rosada = {
+	building_types = {
+		building_la_rosada_buenos_aires_arsenal
+	}
+	prosperity_modifier = {
+		state_building_la_rosada_buenos_aires_arsenal_max_level_add = 1
+	}
+}
+
+# company_lanfang_kongsi → Unique building
+INJECT:company_lanfang_kongsi = {
+	building_types = {
+		building_lanfang_pontianak_kongsi_house
+	}
+	prosperity_modifier = {
+		state_building_lanfang_pontianak_kongsi_house_max_level_add = 1
+	}
+}
+
+# company_lee_wilson → Unique building
+INJECT:company_lee_wilson = {
+	building_types = {
+		building_lee_wilson_plantation_depot
+	}
+	prosperity_modifier = {
+		state_building_lee_wilson_plantation_depot_max_level_add = 1
+	}
+}
+
+# company_lilpop → Unique building
+INJECT:company_lilpop = {
+	building_types = {
+		building_lilpop_warsaw_metalworks
+	}
+	prosperity_modifier = {
+		state_building_lilpop_warsaw_metalworks_max_level_add = 1
+	}
+}
+
+# company_lkab → Unique building
+INJECT:company_lkab = {
+	building_types = {
+		building_lkab_kiruna_mine
+	}
+	prosperity_modifier = {
+		state_building_lkab_kiruna_mine_max_level_add = 1
+	}
+}
+
+# company_ludwig_moser_and_sons → Unique building
+INJECT:company_ludwig_moser_and_sons = {
+	building_types = {
+		building_moser_karlsbad_glass_works
+	}
+	prosperity_modifier = {
+		state_building_moser_karlsbad_glass_works_max_level_add = 1
+	}
+}
+
+# company_madura_mills → Unique building
+INJECT:company_madura_mills = {
+	building_types = {
+		building_madura_mills_madurai_complex
+	}
+	prosperity_modifier = {
+		state_building_madura_mills_madurai_complex_max_level_add = 1
+	}
+}
+
+# company_maison_worth → Unique building
+INJECT:company_maison_worth = {
+	building_types = {
+		building_worth_rue_de_la_paix_atelier
+	}
+	prosperity_modifier = {
+		state_building_worth_rue_de_la_paix_atelier_max_level_add = 1
+	}
+}
+
+# company_manfred_weiss → Unique building
+INJECT:company_manfred_weiss = {
+	building_types = {
+		building_manfred_weiss_csepel_works
+	}
+	prosperity_modifier = {
+		state_building_manfred_weiss_csepel_works_max_level_add = 1
+	}
+}
+
+# company_mantero_seta → Unique building
+INJECT:company_mantero_seta = {
+	building_types = {
+		building_mantero_como_silk_mill
+	}
+	prosperity_modifier = {
+		state_building_mantero_como_silk_mill_max_level_add = 1
+	}
+}
+
+# company_mantetsu → Unique building
+INJECT:company_mantetsu = {
+	building_types = {
+		building_mantetsu_dalian_railway_hub
+	}
+	prosperity_modifier = {
+		state_building_mantetsu_dalian_railway_hub_max_level_add = 1
+	}
+}
+
+# company_maple_and_co → Unique building
+INJECT:company_maple_and_co = {
+	building_types = {
+		building_maple_tottenham_court_showroom
+	}
+	prosperity_modifier = {
+		state_building_maple_tottenham_court_showroom_max_level_add = 1
+	}
+}
+
+# company_massey_harris → Unique building
+INJECT:company_massey_harris = {
+	building_types = {
+		building_massey_harris_toronto_implement_works
+	}
+	prosperity_modifier = {
+		state_building_massey_harris_toronto_implement_works_max_level_add = 1
+	}
+}
+
+# company_mate_gavrilovic → Unique building
+INJECT:company_mate_gavrilovic = {
+	building_types = {
+		building_gavrilovic_petrinja_meatworks
+	}
+	prosperity_modifier = {
+		state_building_gavrilovic_petrinja_meatworks_max_level_add = 1
+	}
+}
+
+# company_mav → Unique building
+INJECT:company_mav = {
+	building_types = {
+		building_mav_budapest_locomotive_works
+	}
+	prosperity_modifier = {
+		state_building_mav_budapest_locomotive_works_max_level_add = 1
+	}
+}
+
+# company_mines_anzin → Unique building
+INJECT:company_mines_anzin = {
+	building_types = {
+		building_anzin_colliery
+	}
+	prosperity_modifier = {
+		state_building_anzin_colliery_max_level_add = 1
+	}
+}
+
+# company_misr → Unique building
+INJECT:company_misr = {
+	building_types = {
+		building_misr_mahalla_textile_complex
+	}
+	prosperity_modifier = {
+		state_building_misr_mahalla_textile_complex_max_level_add = 1
+	}
+}
+
+# company_moscow_irrigation_company → Unique building
+INJECT:company_moscow_irrigation_company = {
+	building_types = {
+		building_moscow_irrigation_cotton_depot
+	}
+	prosperity_modifier = {
+		state_building_moscow_irrigation_cotton_depot_max_level_add = 1
+	}
+}
+
+# company_mozambique_company → Unique building
+INJECT:company_mozambique_company = {
+	building_types = {
+		building_mozambique_company_beira_concession
+	}
+	prosperity_modifier = {
+		state_building_mozambique_company_beira_concession_max_level_add = 1
+	}
+}
+
+# company_nam_dinh → Unique building
+INJECT:company_nam_dinh = {
+	building_types = {
+		building_nam_dinh_textile_plant
+	}
+	prosperity_modifier = {
+		state_building_nam_dinh_textile_plant_max_level_add = 1
+	}
+}
+
+# company_national_iranian_oil → Unique building
+INJECT:company_national_iranian_oil = {
+	building_types = {
+		building_nioc_masjed_soleyman_field
+	}
+	prosperity_modifier = {
+		state_building_nioc_masjed_soleyman_field_max_level_add = 1
+	}
+}
+
+# company_nederlandse_petroleum → Unique building
+INJECT:company_nederlandse_petroleum = {
+	building_types = {
+		building_nederlandse_petroleum_pangkalan_depot
+	}
+	prosperity_modifier = {
+		state_building_nederlandse_petroleum_pangkalan_depot_max_level_add = 1
+	}
+}
+
+# company_nicolas_portalis → Unique building
+INJECT:company_nicolas_portalis = {
+	building_types = {
+		building_portalis_lyon_silk_house
+	}
+	prosperity_modifier = {
+		state_building_portalis_lyon_silk_house_max_level_add = 1
+	}
+}
+
+# company_nokia → Unique building
+INJECT:company_nokia = {
+	building_types = {
+		building_nokia_cable_works
+	}
+	prosperity_modifier = {
+		state_building_nokia_cable_works_max_level_add = 1
+	}
+}
+
+# company_norsk_hydro → Unique building
+INJECT:company_norsk_hydro = {
+	building_types = {
+		building_norsk_hydro_rjukan_plant
+	}
+	prosperity_modifier = {
+		state_building_norsk_hydro_rjukan_plant_max_level_add = 1
+	}
+}
+
+# company_oesterreichisch_alpine_montangesellschaft → Unique building
+INJECT:company_oesterreichisch_alpine_montangesellschaft = {
+	building_types = {
+		building_alpine_donawitz_steelworks
+	}
+	prosperity_modifier = {
+		state_building_alpine_donawitz_steelworks_max_level_add = 1
+	}
+}
+
+# company_oevg → Unique building
+INJECT:company_oevg = {
+	building_types = {
+		building_oevg_steyr_arms_works
+	}
+	prosperity_modifier = {
+		state_building_oevg_steyr_arms_works_max_level_add = 1
+	}
+}
+
+# company_office_cherifien_des_phosphates → Unique building
+INJECT:company_office_cherifien_des_phosphates = {
+	building_types = {
+		building_ocp_khouribga_mine
+	}
+	prosperity_modifier = {
+		state_building_ocp_khouribga_mine_max_level_add = 1
+	}
+}
+
+# company_ong_lung_sheng_tea_company → Unique building
+INJECT:company_ong_lung_sheng_tea_company = {
+	building_types = {
+		building_ong_lung_sheng_tea_warehouse
+	}
+	prosperity_modifier = {
+		state_building_ong_lung_sheng_tea_warehouse_max_level_add = 1
+	}
+}
+
+# company_opium_export_monopoly → Unique building
+INJECT:company_opium_export_monopoly = {
+	building_types = {
+		building_opium_ghazipur_factory
+	}
+	prosperity_modifier = {
+		state_building_opium_ghazipur_factory_max_level_add = 1
+	}
+}
+
+# company_orient_express → Unique building
+INJECT:company_orient_express = {
+	building_types = {
+		building_orient_express_sirkeci_terminal
+	}
+	prosperity_modifier = {
+		state_building_orient_express_sirkeci_terminal_max_level_add = 1
+	}
+}
+
+# company_oriental_development_company → Unique building
+INJECT:company_oriental_development_company = {
+	building_types = {
+		building_oriental_dev_kunsan_granary
+	}
+	prosperity_modifier = {
+		state_building_oriental_dev_kunsan_granary_max_level_add = 1
+	}
+}
+
+# company_ottoman_tobacco_regie → Unique building
+INJECT:company_ottoman_tobacco_regie = {
+	building_types = {
+		building_tobacco_regie_cibali_factory
+	}
+	prosperity_modifier = {
+		state_building_tobacco_regie_cibali_factory_max_level_add = 1
+	}
+}
+
+# company_panama_company → Unique building
+INJECT:company_panama_company = {
+	building_types = {
+		building_panama_company_culebra_cut
+	}
+	prosperity_modifier = {
+		state_building_panama_company_culebra_cut_max_level_add = 1
+	}
+}
+
+# company_paradox → Unique building
+INJECT:company_paradox = {
+	building_types = {
+		building_paradox_kvarnholmen_studio
+	}
+	prosperity_modifier = {
+		state_building_paradox_kvarnholmen_studio_max_level_add = 1
+	}
+}
+
+# company_pedro_domecq → Unique building
+INJECT:company_pedro_domecq = {
+	building_types = {
+		building_pedro_domecq_jerez_bodega
+	}
+	prosperity_modifier = {
+		state_building_pedro_domecq_jerez_bodega_max_level_add = 1
+	}
+}
+
+# company_pernambuco_textiles → Unique building
+INJECT:company_pernambuco_textiles = {
+	building_types = {
+		building_pernambuco_recife_cotton_mill
+	}
+	prosperity_modifier = {
+		state_building_pernambuco_recife_cotton_mill_max_level_add = 1
+	}
+}
+
+# company_perskhlopok → Unique building
+INJECT:company_perskhlopok = {
+	building_types = {
+		building_perskhlopok_cotton_combines
+	}
+	prosperity_modifier = {
+		state_building_perskhlopok_cotton_combines_max_level_add = 1
+	}
+}
+
+# company_persshelk → Unique building
+INJECT:company_persshelk = {
+	building_types = {
+		building_persshelk_silk_reeling_house
+	}
+	prosperity_modifier = {
+		state_building_persshelk_silk_reeling_house_max_level_add = 1
+	}
+}
+
+# company_peruvian_amazon → Unique building
+INJECT:company_peruvian_amazon = {
+	building_types = {
+		building_peruvian_amazon_iquitos_depot
+	}
+	prosperity_modifier = {
+		state_building_peruvian_amazon_iquitos_depot_max_level_add = 1
+	}
+}
+
+# company_philips → Unique building
+INJECT:company_philips = {
+	building_types = {
+		building_philips_eindhoven_natlab
+	}
+	prosperity_modifier = {
+		state_building_philips_eindhoven_natlab_max_level_add = 1
+	}
+}
+
+# company_prussian_state_railways → Unique building
+INJECT:company_prussian_state_railways = {
+	building_types = {
+		building_prussian_railway_directorate
+	}
+	prosperity_modifier = {
+		state_building_prussian_railway_directorate_max_level_add = 1
+	}
+}
+
+# company_ralli_brothers → Unique building
+INJECT:company_ralli_brothers = {
+	building_types = {
+		building_ralli_odessa_grain_elevator
+	}
+	prosperity_modifier = {
+		state_building_ralli_odessa_grain_elevator_max_level_add = 1
+	}
+}
+
+# company_rheinmetall → Unique building
+INJECT:company_rheinmetall = {
+	building_types = {
+		building_rheinmetall_unterluss_proving_ground
+	}
+	prosperity_modifier = {
+		state_building_rheinmetall_unterluss_proving_ground_max_level_add = 1
+	}
+}
+
+# company_ricordi → Unique building
+INJECT:company_ricordi = {
+	building_types = {
+		building_ricordi_galleria_vittorio_emanuele
+	}
+	prosperity_modifier = {
+		state_building_ricordi_galleria_vittorio_emanuele_max_level_add = 1
+	}
+}
+
+# company_rodriguez_arguelles_y_cia → Unique building
+INJECT:company_rodriguez_arguelles_y_cia = {
+	building_types = {
+		building_rodriguez_arguelles_havana_tobacco_house
+	}
+	prosperity_modifier = {
+		state_building_rodriguez_arguelles_havana_tobacco_house_max_level_add = 1
+	}
+}
+
+# company_romanian_star → Unique building
+INJECT:company_romanian_star = {
+	building_types = {
+		building_romanian_star_ploiesti_refinery
+	}
+	prosperity_modifier = {
+		state_building_romanian_star_ploiesti_refinery_max_level_add = 1
+	}
+}
+
+# company_rossi → Unique building
+INJECT:company_rossi = {
+	building_types = {
+		building_rossi_sao_leopoldo_arms_factory
+	}
+	prosperity_modifier = {
+		state_building_rossi_sao_leopoldo_arms_factory_max_level_add = 1
+	}
+}
+
+# company_russian_american_company → Unique building
+INJECT:company_russian_american_company = {
+	building_types = {
+		building_rac_sitka_trading_post
+	}
+	prosperity_modifier = {
+		state_building_rac_sitka_trading_post_max_level_add = 1
+	}
+}
+
+# company_saint_etienne → Unique building
+INJECT:company_saint_etienne = {
+	building_types = {
+		building_saint_etienne_arms_manufactory
+	}
+	prosperity_modifier = {
+		state_building_saint_etienne_arms_manufactory_max_level_add = 1
+	}
+}
+
+# company_san_miguel → Unique building
+INJECT:company_san_miguel = {
+	building_types = {
+		building_san_miguel_manila_brewery
+	}
+	prosperity_modifier = {
+		state_building_san_miguel_manila_brewery_max_level_add = 1
+	}
+}
+
+# company_sao_paulo_railway → Unique building
+INJECT:company_sao_paulo_railway = {
+	building_types = {
+		building_sao_paulo_railway_paranapiacaba_workshop
+	}
+	prosperity_modifier = {
+		state_building_sao_paulo_railway_paranapiacaba_workshop_max_level_add = 1
+	}
+}
+
+# company_savva_morozov → Unique building
+INJECT:company_savva_morozov = {
+	building_types = {
+		building_morozov_orekhovo_zuevo_mills
+	}
+	prosperity_modifier = {
+		state_building_morozov_orekhovo_zuevo_mills_max_level_add = 1
+	}
+}
+
+# company_schichau → Unique building
+INJECT:company_schichau = {
+	building_types = {
+		building_schichau_elbing_shipyard
+	}
+	prosperity_modifier = {
+		state_building_schichau_elbing_shipyard_max_level_add = 1
+	}
+}
+
+# company_secn → Unique building
+INJECT:company_secn = {
+	building_types = {
+		building_secn_ferrol_shipyard
+	}
+	prosperity_modifier = {
+		state_building_secn_ferrol_shipyard_max_level_add = 1
+	}
+}
+
+# company_sherkat_shemali → Unique building
+INJECT:company_sherkat_shemali = {
+	building_types = {
+		building_sherkat_shemali_cotton_gin
+	}
+	prosperity_modifier = {
+		state_building_sherkat_shemali_cotton_gin_max_level_add = 1
+	}
+}
+
+# company_sherkate_eslamiya → Unique building
+INJECT:company_sherkate_eslamiya = {
+	building_types = {
+		building_sherkate_eslamiya_isfahan_mill
+	}
+	prosperity_modifier = {
+		state_building_sherkate_eslamiya_isfahan_mill_max_level_add = 1
+	}
+}
+
+# company_skoda → Unique building
+INJECT:company_skoda = {
+	building_types = {
+		building_skoda_pilsen_works
+	}
+	prosperity_modifier = {
+		state_building_skoda_pilsen_works_max_level_add = 1
+	}
+}
+
+# company_societe_mokta_el_hadid → Unique building
+INJECT:company_societe_mokta_el_hadid = {
+	building_types = {
+		building_mokta_el_hadid_beni_saf_mine
+	}
+	prosperity_modifier = {
+		state_building_mokta_el_hadid_beni_saf_mine_max_level_add = 1
+	}
+}
+
+# company_stabilimento_tecnico_di_fiume → Unique building
+INJECT:company_stabilimento_tecnico_di_fiume = {
+	building_types = {
+		building_stf_fiume_torpedo_works
+	}
+	prosperity_modifier = {
+		state_building_stf_fiume_torpedo_works_max_level_add = 1
+	}
+}
+
+# company_steel_brothers → Unique building
+INJECT:company_steel_brothers = {
+	building_types = {
+		building_steel_brothers_syriam_depot
+	}
+	prosperity_modifier = {
+		state_building_steel_brothers_syriam_depot_max_level_add = 1
+	}
+}
+
+# company_stt → Unique building
+INJECT:company_stt = {
+	building_types = {
+		building_stt_haskoy_shipyard
+	}
+	prosperity_modifier = {
+		state_building_stt_haskoy_shipyard_max_level_add = 1
+	}
+}
+
+# company_sudamericana_de_vapores → Unique building
+INJECT:company_sudamericana_de_vapores = {
+	building_types = {
+		building_sudamericana_valparaiso_pier
+	}
+	prosperity_modifier = {
+		state_building_sudamericana_valparaiso_pier_max_level_add = 1
+	}
+}
+
+# company_suez_company → Unique building
+INJECT:company_suez_company = {
+	building_types = {
+		building_suez_company_ismailia_hq
+	}
+	prosperity_modifier = {
+		state_building_suez_company_ismailia_hq_max_level_add = 1
+	}
+}
+
+# company_sunhwaguk → Unique building
+INJECT:company_sunhwaguk = {
+	building_types = {
+		building_sunhwaguk_seoul_tobacco_factory
+	}
+	prosperity_modifier = {
+		state_building_sunhwaguk_seoul_tobacco_factory_max_level_add = 1
+	}
+}
+
+# company_tashkent_railroad → Unique building
+INJECT:company_tashkent_railroad = {
+	building_types = {
+		building_tashkent_railroad_workshops
+	}
+	prosperity_modifier = {
+		state_building_tashkent_railroad_workshops_max_level_add = 1
+	}
+}
+
+# company_trubia → Unique building
+INJECT:company_trubia = {
+	building_types = {
+		building_trubia_cannon_foundry
+	}
+	prosperity_modifier = {
+		state_building_trubia_cannon_foundry_max_level_add = 1
+	}
+}
+
+# company_turkish_petroleum → Unique building
+INJECT:company_turkish_petroleum = {
+	building_types = {
+		building_turkish_petroleum_kirkuk_depot
+	}
+	prosperity_modifier = {
+		state_building_turkish_petroleum_kirkuk_depot_max_level_add = 1
+	}
+}
+
+# company_uniao_fabril → Unique building
+INJECT:company_uniao_fabril = {
+	building_types = {
+		building_uniao_fabril_barreiro_plant
+	}
+	prosperity_modifier = {
+		state_building_uniao_fabril_barreiro_plant_max_level_add = 1
+	}
+}
+
+# company_united_fruit → Unique building
+INJECT:company_united_fruit = {
+	building_types = {
+		building_united_fruit_great_white_fleet_terminal
+	}
+	prosperity_modifier = {
+		state_building_united_fruit_great_white_fleet_terminal_max_level_add = 1
+	}
+}
+
+# company_united_tobacco_factories → Unique building
+INJECT:company_united_tobacco_factories = {
+	building_types = {
+		building_united_tobacco_moscow_plant
+	}
+	prosperity_modifier = {
+		state_building_united_tobacco_moscow_plant_max_level_add = 1
+	}
+}
+
+# company_ursus → Unique building
+INJECT:company_ursus = {
+	building_types = {
+		building_ursus_warsaw_tractor_plant
+	}
+	prosperity_modifier = {
+		state_building_ursus_warsaw_tractor_plant_max_level_add = 1
+	}
+}
+
+# company_vodka_monopoly → Unique building
+INJECT:company_vodka_monopoly = {
+	building_types = {
+		building_vodka_monopoly_warehouse
+	}
+	prosperity_modifier = {
+		state_building_vodka_monopoly_warehouse_max_level_add = 1
+	}
+}
+
+# company_wadia_shipbuilders → Unique building
+INJECT:company_wadia_shipbuilders = {
+	building_types = {
+		building_wadia_bombay_dockyard
+	}
+	prosperity_modifier = {
+		state_building_wadia_bombay_dockyard_max_level_add = 1
+	}
+}
+
+# company_west_ural_petroleum → Unique building
+INJECT:company_west_ural_petroleum = {
+	building_types = {
+		building_west_ural_oil_depot
+	}
+	prosperity_modifier = {
+		state_building_west_ural_oil_depot_max_level_add = 1
+	}
+}
+
+# company_william_cramp → Unique building
+INJECT:company_william_cramp = {
+	building_types = {
+		building_cramp_philadelphia_shipyard
+	}
+	prosperity_modifier = {
+		state_building_cramp_philadelphia_shipyard_max_level_add = 1
+	}
+}
+
+# company_william_sandford → Unique building
+INJECT:company_william_sandford = {
+	building_types = {
+		building_sandford_newcastle_natal_ironworks
+	}
+	prosperity_modifier = {
+		state_building_sandford_newcastle_natal_ironworks_max_level_add = 1
+	}
+}
+
+# company_witkowitzer_bergbau_und_huttengewerkschaft → Unique building
+INJECT:company_witkowitzer_bergbau_und_huttengewerkschaft = {
+	building_types = {
+		building_witkowitzer_ostrava_ironworks
+	}
+	prosperity_modifier = {
+		state_building_witkowitzer_ostrava_ironworks_max_level_add = 1
+	}
+}
+
+# company_ynchausti_y_compania → Unique building
+INJECT:company_ynchausti_y_compania = {
+	building_types = {
+		building_ynchausti_manila_trading_house
+	}
+	prosperity_modifier = {
+		state_building_ynchausti_manila_trading_house_max_level_add = 1
+	}
+}
+
+# company_zastava → Unique building
+INJECT:company_zastava = {
+	building_types = {
+		building_zastava_kragujevac_arsenal
+	}
+	prosperity_modifier = {
+		state_building_zastava_kragujevac_arsenal_max_level_add = 1
+	}
+}

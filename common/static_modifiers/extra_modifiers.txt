@@ -3389,10 +3389,20 @@ free_port_state_modifier = {
 	state_trade_capacity_mult = 0.5
 	state_migration_pull_add = 10
 	state_trade_advantage_mult = 0.25
-	state_tariff_export_add = -10
-	state_tariff_import_add = -10
 	state_tax_collection_mult = -0.5
 	state_assimilation_mult = -0.25
+}
+
+# Applied dynamically by te_update_free_port_tariff with multiplier capped
+# at the state's current tariff rate, preventing negative tariffs.
+free_port_tariff_import_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_tariff_import_add = -1
+}
+
+free_port_tariff_export_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_tariff_export_add = -1
 }
 
 religious_mission_state_modifier = {

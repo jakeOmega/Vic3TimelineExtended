@@ -534,6 +534,8 @@
  free_port_concession:0 "Free Port Concession"
  free_port_concession_desc:0 "An agreement that opens a coastal state as a free port, eliminating tariffs and dramatically boosting trade capacity at the cost of fiscal sovereignty."
  free_port_state_modifier_desc:0 "This state has been opened as a free port under treaty obligations, dramatically boosting trade at the cost of fiscal sovereignty."
+ free_port_tariff_export_modifier_desc:0 "Export tariffs dynamically reduced to zero under free port treaty obligations."
+ free_port_tariff_import_modifier_desc:0 "Import tariffs dynamically reduced to zero under free port treaty obligations."
  french_union:0 "French Union"
  fund_resistance:0 "Fund Resistance"
  fund_resistance_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] is funding resistance movements in [TARGET_COUNTRY.GetName]."

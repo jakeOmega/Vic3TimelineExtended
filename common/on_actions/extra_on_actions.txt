@@ -141,6 +141,7 @@ on_yearly_pulse_state = {
 		migration_crowding_on_action
 		tourism_update_on_action
 		religious_mission_conversion_on_action
+		free_port_tariff_update_on_action
 	}
 }
 
@@ -1910,6 +1911,15 @@ construction_cost_scaling_on_action = {
 migration_crowding_on_action = {
 	effect = {
 		te_update_migration_crowding_modifier = yes
+	}
+}
+
+# ---- Free Port Tariff (state scope, yearly) ----
+# Recalculates the dynamic tariff reduction for free port states,
+# ensuring tariffs never go negative even when laws or other modifiers change.
+free_port_tariff_update_on_action = {
+	effect = {
+		te_update_free_port_tariff = yes
 	}
 }
 
