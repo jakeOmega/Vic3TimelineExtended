@@ -16,6 +16,7 @@ ruler_poor_administrator = {
 
 	country_modifier = {
 		country_bureaucracy_mult = -0.10
+		state_tax_capacity_mult = -0.10
 		country_legitimacy_base_add = -5
 	}
 
@@ -117,7 +118,7 @@ ruler_skilled_administrator = {
 	country_modifier = {
 		country_bureaucracy_mult = 0.10
 		country_legitimacy_base_add = 5
-		country_authority_add = 25
+		state_tax_capacity_mult = 0.10
 	}
 
 	agitator_modifier = {
@@ -177,7 +178,7 @@ ruler_exceptional_administrator = {
 	country_modifier = {
 		country_bureaucracy_mult = 0.20
 		country_legitimacy_base_add = 10
-		country_authority_add = 50
+		state_tax_capacity_mult = 0.20
 	}
 
 	agitator_modifier = {
@@ -241,7 +242,9 @@ ruler_poor_diplomat = {
 
 	country_modifier = {
 		country_prestige_mult = -0.10
-		country_diplomatic_reputation_add = -2
+		country_diplomatic_reputation_add = -5
+		country_infamy_generation_mult = 0.10
+		interest_group_amenability_add = -5
 	}
 
 	agitator_modifier = {
@@ -340,7 +343,10 @@ ruler_skilled_diplomat = {
 
 	country_modifier = {
 		country_prestige_mult = 0.10
-		country_diplomatic_reputation_add = 2
+		country_diplomatic_reputation_add = 5
+		country_influence_mult = 0.1
+		country_infamy_generation_mult = -0.10
+		interest_group_amenability_add = 5
 	}
 
 	agitator_modifier = {
@@ -399,7 +405,9 @@ ruler_exceptional_diplomat = {
 	country_modifier = {
 		country_prestige_mult = 0.20
 		country_diplomatic_reputation_add = 3
-		country_influence_add = 25
+		country_influence_mult = 0.25
+		country_infamy_generation_mult = -0.2
+		interest_group_amenability_add = 10
 	}
 
 	agitator_modifier = {
@@ -464,6 +472,10 @@ ruler_poor_commander = {
 
 	country_modifier = {
 		country_war_exhaustion_casualties_mult = 0.10
+		unit_morale_loss_mult = 0.2
+		unit_experience_gain_mult = -0.2
+		interest_group_ig_armed_forces_approval_add = -2
+		interest_group_ig_armed_forces_pop_attraction_mult = -0.05
 	}
 
 	agitator_modifier = {
@@ -572,6 +584,10 @@ ruler_skilled_commander = {
 
 	country_modifier = {
 		country_war_exhaustion_casualties_mult = -0.10
+		unit_morale_loss_mult = -0.2
+		unit_experience_gain_mult = 0.2
+		interest_group_ig_armed_forces_approval_add = 2
+		interest_group_ig_armed_forces_pop_attraction_mult = 0.05
 	}
 
 	agitator_modifier = {
@@ -639,6 +655,10 @@ ruler_exceptional_commander = {
 
 	country_modifier = {
 		country_war_exhaustion_casualties_mult = -0.15
+		unit_morale_loss_mult = -0.4
+		unit_experience_gain_mult = 0.4
+		interest_group_ig_armed_forces_approval_add = 5
+		interest_group_ig_armed_forces_pop_attraction_mult = 0.15
 	}
 
 	agitator_modifier = {
