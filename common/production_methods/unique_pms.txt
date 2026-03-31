@@ -4,7 +4,7 @@
 
 # --- Volkswagen ---
 pm_volkswagen_autostadt = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_mult = 0.1
@@ -37,7 +37,7 @@ pm_volkswagen_autostadt = {
 
 # --- Toyota ---
 pm_toyota_kaikan_plant = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_automobiles_mult = 0.1
@@ -70,7 +70,7 @@ pm_toyota_kaikan_plant = {
 
 # --- Samsung ---
 pm_samsung_digital_city = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_electrics_industry_appliances_throughput_add = 0.15
@@ -102,7 +102,7 @@ pm_samsung_digital_city = {
 
 # --- HP ---
 pm_hp_labs = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_education_access_add = 0.1
@@ -134,7 +134,7 @@ pm_hp_labs = {
 
 # --- Sony ---
 pm_sony_pictures_studios = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_film_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_fine_art_mult = 0.2
@@ -165,7 +165,7 @@ pm_sony_pictures_studios = {
 
 # --- IKEA ---
 pm_ikea_almhult_campus = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_furniture_manufactory_throughput_add = 0.5
@@ -197,7 +197,7 @@ pm_ikea_almhult_campus = {
 
 # --- Intel ---
 pm_intel_ronler_acres = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_electronic_components_and_semiconductor_industry_throughput_add = 0.5
@@ -228,7 +228,7 @@ pm_intel_ronler_acres = {
 
 # --- Microsoft ---
 pm_microsoft_redmond_campus = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.2
@@ -260,7 +260,7 @@ pm_microsoft_redmond_campus = {
 
 # --- Apple ---
 pm_apple_park = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_consumer_appliances_mult = 0.15
@@ -292,7 +292,7 @@ pm_apple_park = {
 
 # --- TSMC ---
 pm_tsmc_fab_18 = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_electronic_components_and_semiconductor_industry_throughput_add = 0.5
@@ -324,7 +324,7 @@ pm_tsmc_fab_18 = {
 
 # --- Huawei ---
 pm_huawei_ox_horn_campus = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_mult = 0.1
@@ -356,7 +356,7 @@ pm_huawei_ox_horn_campus = {
 
 # --- Amazon ---
 pm_amazon_fulfillment_center = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_port_throughput_add = 0.2
@@ -389,7 +389,7 @@ pm_amazon_fulfillment_center = {
 
 # --- Nvidia ---
 pm_nvidia_endeavor_campus = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_electronic_components_and_semiconductor_industry_throughput_add = 0.25
@@ -421,7 +421,7 @@ pm_nvidia_endeavor_campus = {
 
 # --- Google ---
 pm_googleplex = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.25
@@ -453,7 +453,7 @@ pm_googleplex = {
 
 # --- Netflix ---
 pm_netflix_animation_studios = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_film_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_fine_art_mult = 0.2
@@ -484,7 +484,7 @@ pm_netflix_animation_studios = {
 
 # --- SpaceX ---
 pm_spacex_starbase = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_aerospace_industry_throughput_add = 0.25
@@ -516,7 +516,7 @@ pm_spacex_starbase = {
 
 # --- ByteDance ---
 pm_bytedance_data_fortress = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_digital_assets_mult = 0.1
@@ -546,7 +546,7 @@ pm_bytedance_data_fortress = {
 
 # --- OpenAI ---
 pm_openai_research_lab = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_digital_assets_mult = 0.2
@@ -580,7 +580,7 @@ pm_openai_research_lab = {
 
 # --- CATL ---
 pm_catl_gigafactory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_advanced_material_fabricator_throughput_add = 0.25
@@ -611,7 +611,7 @@ pm_catl_gigafactory = {
 
 # --- Boston Dynamics ---
 pm_boston_dynamics_ai_institute = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_robotics_industry_throughput_add = 0.5
@@ -643,7 +643,7 @@ pm_boston_dynamics_ai_institute = {
 
 # --- ASML ---
 pm_asml_veldhoven_campus = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_tooling_workshop_throughput_add = 0.5
@@ -675,7 +675,7 @@ pm_asml_veldhoven_campus = {
 
 # --- Lockheed Martin ---
 pm_lockheed_skunk_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_aeroplanes_mult = 0.5
@@ -711,7 +711,7 @@ pm_lockheed_skunk_works = {
 
 # --- BAE Systems ---
 pm_bae_samlesbury_aerodrome = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_plane_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_aeroplanes_mult = 0.35
@@ -748,7 +748,7 @@ pm_bae_samlesbury_aerodrome = {
 
 # --- Roscosmos ---
 pm_roscosmos_vostochny_cosmodrome = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_aerospace_industry_throughput_add = 0.5
@@ -784,7 +784,7 @@ pm_roscosmos_vostochny_cosmodrome = {
 
 # --- Airbus ---
 pm_airbus_lagardere_plant = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_aeroplanes_mult = 0.4
@@ -815,7 +815,7 @@ pm_airbus_lagardere_plant = {
 
 # --- Dassault ---
 pm_dassault_merignac_plant = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_aeroplanes_mult = 0.5
@@ -851,7 +851,7 @@ pm_dassault_merignac_plant = {
 
 # --- Hyundai ---
 pm_hyundai_ulsan_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_automotive_industry_throughput_add = 0.4
@@ -883,7 +883,7 @@ pm_hyundai_ulsan_factory = {
 
 # --- SAP ---
 pm_sap_headquarters = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_economy_of_scale_level_cap_add = 20
@@ -914,7 +914,7 @@ pm_sap_headquarters = {
 
 # --- Tencent ---
 pm_tencent_seafront_towers = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_education_access_add = 0.1
@@ -946,7 +946,7 @@ pm_tencent_seafront_towers = {
 
 # --- Alibaba ---
 pm_alibaba_cainiao_park = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_advantage_mult = 0.25
@@ -977,7 +977,7 @@ pm_alibaba_cainiao_park = {
 
 # --- Nintendo ---
 pm_nintendo_development_center = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_film_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_fine_art_mult = 0.15
@@ -1008,7 +1008,7 @@ pm_nintendo_development_center = {
 
 # --- Gazprom ---
 pm_gazprom_lakhta_center = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.25
@@ -1038,7 +1038,7 @@ pm_gazprom_lakhta_center = {
 
 # --- Saudi Aramco ---
 pm_saudi_aramco_abqaiq_plant = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.5
@@ -1069,7 +1069,7 @@ pm_saudi_aramco_abqaiq_plant = {
 
 # --- Petrobras ---
 pm_petrobras_cenpes_center = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.25
@@ -1101,7 +1101,7 @@ pm_petrobras_cenpes_center = {
 
 # --- Rosatom ---
 pm_rosatom_mayak_association = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_nuclear_plant_throughput_add = 0.25
@@ -1133,7 +1133,7 @@ pm_rosatom_mayak_association = {
 
 # --- Oracle ---
 pm_oracle_cloud_data_center = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_education_access_add = 0.1
@@ -1165,7 +1165,7 @@ pm_oracle_cloud_data_center = {
 
 # --- SoftBank ---
 pm_softbank_vision_fund_hq = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_urban_center_throughput_add = 0.2
@@ -1195,7 +1195,7 @@ pm_softbank_vision_fund_hq = {
 
 # --- Roche ---
 pm_roche_tower = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_mortality_mult = -0.15
@@ -1226,7 +1226,7 @@ pm_roche_tower = {
 
 # --- Pfizer ---
 pm_pfizer_rd_campus = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_mortality_mult = -0.1
@@ -1258,7 +1258,7 @@ pm_pfizer_rd_campus = {
 
 # --- Vale ---
 pm_vale_carajas_mine = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_iron_mine_throughput_add = 0.25
@@ -1289,7 +1289,7 @@ pm_vale_carajas_mine = {
 
 # --- Disney ---
 pm_disney_world = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_suitcase_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_services_mult = 0.1
@@ -1323,7 +1323,7 @@ pm_disney_world = {
 
 # --- Universal ---
 pm_universal_studios_hollywood = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_suitcase_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_fine_art_mult = 0.1
@@ -1356,7 +1356,7 @@ pm_universal_studios_hollywood = {
 
 # --- Verizon ---
 pm_verizon_building = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_mult = 0.1
@@ -1388,7 +1388,7 @@ pm_verizon_building = {
 
 # --- Reliance ---
 pm_reliance_jamnagar_refinery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_chemical_plant_throughput_add = 0.25
@@ -1419,7 +1419,7 @@ pm_reliance_jamnagar_refinery = {
 
 # --- FANUC ---
 pm_fanuc_forest = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_robotics_industry_throughput_add = 0.5
@@ -1450,7 +1450,7 @@ pm_fanuc_forest = {
 
 # --- ENI ---
 pm_eni_palazzo = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.25
@@ -1484,7 +1484,7 @@ pm_eni_palazzo = {
 
 # --- Ferrari ---
 pm_ferrari_maranello_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_mult = 0.1
@@ -1515,7 +1515,7 @@ pm_ferrari_maranello_factory = {
 
 # --- BlackBerry ---
 pm_blackberry_rim_campus = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_government_administration_throughput_add = 0.25
@@ -1546,7 +1546,7 @@ pm_blackberry_rim_campus = {
 
 # --- Shopify ---
 pm_shopify_fulfillment_hub = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_advantage_mult = 0.25
@@ -1578,7 +1578,7 @@ pm_shopify_fulfillment_hub = {
 
 # --- BHP Group ---
 pm_bhp_mount_whaleback_mine = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_group_bg_mining_throughput_add = 0.5
@@ -1609,7 +1609,7 @@ pm_bhp_mount_whaleback_mine = {
 
 # --- Cochlear ---
 pm_cochlear_global_hq = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_mortality_mult = -0.1
@@ -1640,7 +1640,7 @@ pm_cochlear_global_hq = {
 
 # --- Infosys ---
 pm_infosys_mysore_campus = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
 	country_modifiers = {
 		workforce_scaled = {
 			country_company_throughput_bonus_add = 0.1
@@ -1669,7 +1669,7 @@ pm_infosys_mysore_campus = {
 
 # --- JSW Steel ---
 pm_jsw_vijayanagar_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.5
@@ -1703,7 +1703,7 @@ pm_jsw_vijayanagar_works = {
 #==================================================
 
 pm_generic_rd_complex = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			state_education_access_add = 0.1
@@ -1732,7 +1732,7 @@ pm_generic_rd_complex = {
 	}
 }
 pm_generic_logistics_hub = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			state_infrastructure_mult = 0.1
@@ -1762,7 +1762,7 @@ pm_generic_logistics_hub = {
 	}
 }
 pm_generic_hq_skyscraper = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 
     state_modifiers = {
 		workforce_scaled = {
@@ -1792,7 +1792,7 @@ pm_generic_hq_skyscraper = {
 	}
 }
 pm_generic_industrial_zone = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			building_group_bg_heavy_industry_throughput_add = 0.2
@@ -1820,7 +1820,7 @@ pm_generic_industrial_zone = {
 	}
 }
 pm_generic_mega_factory = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			building_group_bg_manufacturing_throughput_add = 0.1
@@ -1848,7 +1848,7 @@ pm_generic_mega_factory = {
 	}
 }
 pm_generic_exhibition_centre = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			state_trade_advantage_mult = 0.25
@@ -1877,7 +1877,7 @@ pm_generic_exhibition_centre = {
 	}
 }
 pm_generic_shipping_terminal = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			building_port_throughput_add = 0.3
@@ -1907,7 +1907,7 @@ pm_generic_shipping_terminal = {
 	}
 }
 pm_generic_materials_lab = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
     state_modifiers = {
 		workforce_scaled = {
 			state_education_access_add = 0.1
@@ -1937,7 +1937,7 @@ pm_generic_materials_lab = {
 	}
 }
 pm_generic_robotics_institute = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			building_robotics_industry_throughput_add = 0.5
@@ -1965,7 +1965,7 @@ pm_generic_robotics_institute = {
 	}
 }
 pm_generic_corporate_university = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			state_education_access_add = 0.25
@@ -1993,7 +1993,7 @@ pm_generic_corporate_university = {
 	}
 }
 pm_generic_data_fortress = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p0.dds"
     state_modifiers = {
 		workforce_scaled = {
 			goods_output_digital_assets_mult = 0.1
@@ -2021,7 +2021,7 @@ pm_generic_data_fortress = {
 	}
 }
 pm_generic_industrial_city = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			building_urban_center_throughput_add = 0.2
@@ -2050,7 +2050,7 @@ pm_generic_industrial_city = {
 	}
 }
 pm_generic_media_hq = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_film_gold_p0.dds"
     state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -2078,7 +2078,7 @@ pm_generic_media_hq = {
 	}
 }
 pm_generic_power_hub = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			goods_output_electricity_mult = 0.1
@@ -2106,7 +2106,7 @@ pm_generic_power_hub = {
 	}
 }
 pm_generic_pipeline_terminus = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			building_oil_rig_throughput_add = 0.2
@@ -2135,7 +2135,7 @@ pm_generic_pipeline_terminus = {
 	}
 }
 pm_generic_rail_nexus = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			building_railway_throughput_add = 0.25
@@ -2164,7 +2164,7 @@ pm_generic_rail_nexus = {
 	}
 }
 pm_generic_proving_grounds = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
     state_modifiers = {
 		workforce_scaled = {
 			state_building_barrack_max_level_add = 100
@@ -2192,7 +2192,7 @@ pm_generic_proving_grounds = {
 	}
 }
 pm_generic_resource_depository = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
     state_modifiers = {
         workforce_scaled = {
 			building_group_bg_mining_throughput_add = 0.2
@@ -2220,7 +2220,7 @@ pm_generic_resource_depository = {
 	}
 }
 pm_generic_financial_center = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
     state_modifiers = {
 		workforce_scaled = {
 			building_urban_center_throughput_add = 0.1
@@ -2247,7 +2247,7 @@ pm_generic_financial_center = {
 	}
 }
 pm_generic_monument_to_industry = {
-    texture = "gfx/interface/icons/production_method_icons/base1.dds"
+    texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
     state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -2275,7 +2275,7 @@ pm_generic_monument_to_industry = {
 	}
 }
 pm_generic_spaceport = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_launch_capacity_mult = 0.1
@@ -2310,7 +2310,7 @@ pm_generic_spaceport = {
 #==================================================
 
 pm_un_headquarters = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
             building_government_administration_throughput_add = 0.25
@@ -2334,7 +2334,7 @@ pm_un_headquarters = {
 }
 
 pm_hq_sovereign_empire = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p1.dds"
 
 	unlocking_identity = identity_sovereign_empire
 	is_hidden_when_unavailable = yes
@@ -2362,7 +2362,7 @@ pm_hq_sovereign_empire = {
 }
 
 pm_hq_military_treaty = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p2.dds"
 	
 	unlocking_identity = identity_military_treaty_organization
 	is_hidden_when_unavailable = yes
@@ -2386,7 +2386,7 @@ pm_hq_military_treaty = {
 }
 
 pm_hq_trade_league = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p3.dds"
 
 	unlocking_identity = identity_trade_league
 	is_hidden_when_unavailable = yes
@@ -2408,7 +2408,7 @@ pm_hq_trade_league = {
 }
 
 pm_hq_religious_convocation = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p4.dds"
 
 	unlocking_identity = identity_religious
 	is_hidden_when_unavailable = yes
@@ -2435,7 +2435,7 @@ pm_hq_religious_convocation = {
 }
 
 pm_hq_ideological_union = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p5.dds"
 
 	unlocking_identity = identity_ideological_union
 	is_hidden_when_unavailable = yes
@@ -2460,7 +2460,7 @@ pm_hq_ideological_union = {
 }
 
 pm_hq_cultural_coalition = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p6.dds"
 
 	unlocking_identity = identity_cultural
 	is_hidden_when_unavailable = yes
@@ -2483,7 +2483,7 @@ pm_hq_cultural_coalition = {
 }
 
 pm_hq_diplomatic_framework = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p7.dds"
 
 	unlocking_identity = identity_diplomatic
 	is_hidden_when_unavailable = yes
@@ -2512,7 +2512,7 @@ pm_hq_diplomatic_framework = {
 }
 
 pm_wonder_golden_gate_bridge = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
             state_infrastructure_add = 50
@@ -2529,7 +2529,7 @@ pm_wonder_golden_gate_bridge = {
 }
 
 pm_wonder_empire_state_building = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
             building_urban_center_throughput_add = 0.1
@@ -2544,7 +2544,7 @@ pm_wonder_empire_state_building = {
 }
 
 pm_wonder_sydney_opera_house = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
             building_art_academy_throughput_add = 0.25
@@ -2560,7 +2560,7 @@ pm_wonder_sydney_opera_house = {
 }
 
 pm_wonder_cn_tower = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_advantage_mult = 0.2
@@ -2576,7 +2576,7 @@ pm_wonder_cn_tower = {
 }
 
 pm_wonder_burj_khalifa = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
             building_economy_of_scale_level_cap_add = 5
@@ -2597,7 +2597,7 @@ pm_wonder_burj_khalifa = {
 # --- Krupp Essen Works ---
 # Theme: Steel/arms industrial complex - the "arsenal of the Empire"
 pm_krupp_essen_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -2638,7 +2638,7 @@ pm_krupp_essen_works = {
 # --- Standard Oil Refinery ---
 # Theme: Oil monopoly refinery complex
 pm_standard_oil_refinery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.15
@@ -2673,7 +2673,7 @@ pm_standard_oil_refinery = {
 # --- Carnegie Homestead Mill ---
 # Theme: Birthplace of American steel
 pm_carnegie_homestead_mill = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.15
@@ -2708,7 +2708,7 @@ pm_carnegie_homestead_mill = {
 # --- Ford Rouge Plant ---
 # Theme: The world's largest integrated factory
 pm_ford_rouge_plant = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_motor_industry_throughput_add = 0.1
@@ -2744,7 +2744,7 @@ pm_ford_rouge_plant = {
 # --- East India Company Trading House ---
 # Theme: Colonial commerce hub
 pm_eic_trading_house = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.15
@@ -2783,7 +2783,7 @@ pm_eic_trading_house = {
 # --- Schneider Le Creusot ---
 # Theme: France's premier arms and steel industrial complex
 pm_schneider_le_creusot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.15
@@ -2824,7 +2824,7 @@ pm_schneider_le_creusot = {
 # --- Putilov Works ---
 # Theme: Russia's heavy machinery and railway factory
 pm_putilov_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_railway_throughput_add = 0.1
@@ -2864,7 +2864,7 @@ pm_putilov_works = {
 # --- Mitsubishi Nagasaki Shipyard ---
 # Theme: Japan's premier shipbuilding and heavy industry complex
 pm_mitsubishi_nagasaki_shipyard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_shipyard_throughput_add = 0.15
@@ -2903,7 +2903,7 @@ pm_mitsubishi_nagasaki_shipyard = {
 # --- Tata Jamshedpur Works ---
 # Theme: India's pioneering steel and industrial conglomerate
 pm_tata_jamshedpur_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.15
@@ -2938,7 +2938,7 @@ pm_tata_jamshedpur_works = {
 # --- Siemens Erlangen Campus ---
 # Theme: Electrical engineering R&D and manufacturing pioneer
 pm_siemens_erlangen_campus = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_electrics_industry_throughput_add = 0.15
@@ -2982,7 +2982,7 @@ pm_siemens_erlangen_campus = {
 # --- De Beers Sorting Office ---
 # Theme: Diamond sorting, grading, and global trading center
 pm_de_beers_sorting_office = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	country_modifiers = {
 		workforce_scaled = {
 			country_prestige_mult = 0.05
@@ -3021,7 +3021,7 @@ pm_de_beers_sorting_office = {
 # --- Nobel Baku Refinery ---
 # Theme: Nobel Brothers' pioneering Baku oil extraction and refining operations
 pm_nobel_baku_refinery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.15
@@ -3055,7 +3055,7 @@ pm_nobel_baku_refinery = {
 # --- GE Schenectady Works ---
 # Theme: General Electric's electrical manufacturing and innovation center
 pm_ge_schenectady_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_electrics_industry_throughput_add = 0.1
@@ -3099,7 +3099,7 @@ pm_ge_schenectady_works = {
 # --- Mitsui Trading House ---
 # Theme: Japan's premier trading and banking conglomerate
 pm_mitsui_trading_house = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -3134,7 +3134,7 @@ pm_mitsui_trading_house = {
 # --- FIAT Lingotto Factory ---
 # Theme: Italy's iconic automobile manufacturing complex with rooftop test track
 pm_fiat_lingotto_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_motor_industry_throughput_add = 0.1
@@ -3172,7 +3172,7 @@ pm_fiat_lingotto_factory = {
 # --- Generic Granary Complex ---
 # Theme: Grain storage and distribution hub for agricultural companies
 pm_generic_granary_complex = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -3201,7 +3201,7 @@ pm_generic_granary_complex = {
 # --- Generic Textile Depot ---
 # Theme: Fabric warehousing and dyeing facility
 pm_generic_textile_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -3231,7 +3231,7 @@ pm_generic_textile_depot = {
 # --- Generic Cold Storage ---
 # Theme: Food preservation and distribution center
 pm_generic_cold_storage = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_birth_rate_mult = 0.03
@@ -3261,7 +3261,7 @@ pm_generic_cold_storage = {
 # --- Generic Foundry Complex ---
 # Theme: Steel and iron smelting campus
 pm_generic_foundry_complex = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -3291,7 +3291,7 @@ pm_generic_foundry_complex = {
 # --- Generic Machine Shop ---
 # Theme: Precision tools and engineering workshop
 pm_generic_machine_shop = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_motor_industry_throughput_add = 0.05
@@ -3321,7 +3321,7 @@ pm_generic_machine_shop = {
 # --- Generic Chemical Works ---
 # Theme: Chemical processing campus
 pm_generic_chem_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_chemical_plant_throughput_add = 0.1
@@ -3351,7 +3351,7 @@ pm_generic_chem_works = {
 # --- Generic Tank Farm ---
 # Theme: Oil storage and refining depot
 pm_generic_tank_farm = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -3381,7 +3381,7 @@ pm_generic_tank_farm = {
 # --- Generic Ordnance Depot ---
 # Theme: Munitions storage and testing facility
 pm_generic_ordnance_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_munition_plant_throughput_add = 0.1
@@ -3411,7 +3411,7 @@ pm_generic_ordnance_depot = {
 # --- Generic Motor Works ---
 # Theme: Engine and vehicle assembly plant
 pm_generic_motor_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_motor_industry_throughput_add = 0.1
@@ -3441,7 +3441,7 @@ pm_generic_motor_works = {
 # --- Generic Dry Dock ---
 # Theme: Ship repair and construction facility
 pm_generic_dry_dock = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_shipyard_throughput_add = 0.1
@@ -3471,7 +3471,7 @@ pm_generic_dry_dock = {
 # --- Generic Arsenal ---
 # Theme: Arms depot and proving ground
 pm_generic_arsenal = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.05
@@ -3501,7 +3501,7 @@ pm_generic_arsenal = {
 # --- Generic Fish Market ---
 # Theme: Wholesale fish market and distribution center
 pm_generic_fish_market = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -3534,7 +3534,7 @@ pm_generic_fish_market = {
 # --- Colonial Depot ---
 # Theme: A central depot for consolidating and distributing colonial commodities such as tea and opium.
 pm_generic_colonial_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_opium_plantation_throughput_add = 0.05
@@ -3564,7 +3564,7 @@ pm_generic_colonial_depot = {
 # --- Export Warehouse ---
 # Theme: A bonded warehouse for sorting, grading, and re-exporting colonial cash crops.
 pm_generic_export_warehouse = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_coffee_plantation_throughput_add = 0.05
@@ -3595,7 +3595,7 @@ pm_generic_export_warehouse = {
 # --- Electronics Laboratory ---
 # Theme: A research and testing laboratory for electrical components and consumer electronics.
 pm_generic_electronics_lab = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_electrics_industry_throughput_add = 0.05
@@ -3626,7 +3626,7 @@ pm_generic_electronics_lab = {
 # --- Assay Office ---
 # Theme: A facility for testing precious metal purity and facilitating bullion trade.
 pm_generic_assay_office = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_gold_mine_throughput_add = 0.05
@@ -3657,7 +3657,7 @@ pm_generic_assay_office = {
 # --- Ore Processing Plant ---
 # Theme: A central facility for crushing, smelting, and refining metallic ores.
 pm_generic_ore_processing = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_iron_mine_throughput_add = 0.05
@@ -3688,7 +3688,7 @@ pm_generic_ore_processing = {
 # --- Mineral Refinery ---
 # Theme: A refinery converting raw minerals into industrial chemicals and fertilizers.
 pm_generic_mineral_refinery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_coal_mine_throughput_add = 0.05
@@ -3719,7 +3719,7 @@ pm_generic_mineral_refinery = {
 # --- Silk Exchange ---
 # Theme: A trading house for sorting, grading, and auctioning raw silk and dyed textiles.
 pm_generic_silk_exchange = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_silk_plantation_throughput_add = 0.05
@@ -3749,7 +3749,7 @@ pm_generic_silk_exchange = {
 # --- Vintner's Hall ---
 # Theme: A facility for aging, blending, and bottling wine and processing fruit into preserves.
 pm_generic_vintner_hall = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_vineyard_throughput_add = 0.05
@@ -3784,7 +3784,7 @@ pm_generic_vintner_hall = {
 # --- Aker Oslo Shipyard ---
 # Theme: Norway's premier shipbuilding and engineering works
 pm_aker_oslo_shipyard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -3818,7 +3818,7 @@ pm_aker_oslo_shipyard = {
 # --- Allatini Thessaloniki Flour Mill ---
 # Theme: Ottoman-era flour mill complex in Thessaloniki
 pm_allatini_thessaloniki_flour_mill = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -3852,7 +3852,7 @@ pm_allatini_thessaloniki_flour_mill = {
 # --- Altos Hornos Baracaldo Furnaces ---
 # Theme: Basque Country blast furnaces dominating Spanish steel production
 pm_altos_hornos_baracaldo_furnaces = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -3886,7 +3886,7 @@ pm_altos_hornos_baracaldo_furnaces = {
 # --- Anglo-Persian Abadan Refinery ---
 # Theme: The world's largest oil refinery at the head of the Persian Gulf
 pm_anglo_persian_abadan_refinery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.1
@@ -3919,7 +3919,7 @@ pm_anglo_persian_abadan_refinery = {
 # --- Anglo-Sicilian Licata Wharf ---
 # Theme: Sulfur export wharf and calcining kilns at Licata
 pm_anglo_sicilian_licata_wharf = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_sulfur_mine_throughput_add = 0.1
@@ -3952,7 +3952,7 @@ pm_anglo_sicilian_licata_wharf = {
 # --- Ansaldo Sestri Ponente Works ---
 # Theme: Genoese heavy industry complex producing warships, locomotives, and artillery
 pm_ansaldo_sestri_ponente_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -3986,7 +3986,7 @@ pm_ansaldo_sestri_ponente_works = {
 # --- A.P. Møller Copenhagen Wharf ---
 # Theme: Maersk shipping line headquarters and dockyard
 pm_ap_moller_copenhagen_wharf = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -4019,7 +4019,7 @@ pm_ap_moller_copenhagen_wharf = {
 # --- Argentine Wine Mendoza Bodega ---
 # Theme: Malbec winemaking estate in the Andean foothills
 pm_argentinian_wine_mendoza_bodega = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -4058,7 +4058,7 @@ pm_argentinian_wine_mendoza_bodega = {
 # --- Armstrong Elswick Works ---
 # Theme: Massive armaments complex on the Tyne producing warships and artillery
 pm_armstrong_elswick_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -4092,7 +4092,7 @@ pm_armstrong_elswick_works = {
 # --- Assam Company Nazira Tea Estate ---
 # Theme: India's first commercial tea garden in upper Assam
 pm_assam_company_nazira_tea_estate = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_blue_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -4126,7 +4126,7 @@ pm_assam_company_nazira_tea_estate = {
 # --- B. Grimm Bangkok Warehouse ---
 # Theme: Siamese general trading and rice export house
 pm_b_grimm_bangkok_warehouse = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -4159,7 +4159,7 @@ pm_b_grimm_bangkok_warehouse = {
 # --- Bacardí Santiago Distillery ---
 # Theme: Legendary rum distillery founded in Santiago de Cuba
 pm_bacardi_santiago_distillery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -4193,7 +4193,7 @@ pm_bacardi_santiago_distillery = {
 # --- BASF Ludwigshafen Works ---
 # Theme: Pioneering chemical synthesis complex on the Rhine
 pm_basf_ludwigshafen_plant = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_chemical_plant_throughput_add = 0.1
@@ -4227,7 +4227,7 @@ pm_basf_ludwigshafen_plant = {
 # --- Basileiades Piraeus Works ---
 # Theme: Greek engineering and motor workshop near Athens port
 pm_basileiades_piraeus_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_motor_industry_throughput_add = 0.1
@@ -4261,7 +4261,7 @@ pm_basileiades_piraeus_works = {
 # --- Bengal Coal Raniganj Mine ---
 # Theme: India's first commercial coal mine in West Bengal
 pm_bengal_coal_raniganj_mine = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_coal_mine_throughput_add = 0.1
@@ -4294,7 +4294,7 @@ pm_bengal_coal_raniganj_mine = {
 # --- Bolckow Vaughan Eston Ironworks ---
 # Theme: Cleveland ironworks that pioneered basic Bessemer steelmaking
 pm_bolckow_eston_ironworks = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -4328,7 +4328,7 @@ pm_bolckow_eston_ironworks = {
 # --- Bombay Burmah Rangoon Timber Depot ---
 # Theme: Teak extraction and rubber plantation operations in Burma
 pm_bombay_burmah_rangoon_timber_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -4362,7 +4362,7 @@ pm_bombay_burmah_rangoon_timber_depot = {
 # --- Bombay Dyeing Spring Mills ---
 # Theme: Mumbai cotton textile spinning and dyeing complex
 pm_bombay_dyeing_spring_mills = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -4396,7 +4396,7 @@ pm_bombay_dyeing_spring_mills = {
 # --- Bunge & Born Buenos Aires Grain Silo ---
 # Theme: Massive grain elevators at Buenos Aires port
 pm_bunge_born_buenos_aires_grain_silo = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -4430,7 +4430,7 @@ pm_bunge_born_buenos_aires_grain_silo = {
 # --- Calcutta Electric Victoria House ---
 # Theme: India's first electric power station on the Hooghly
 pm_calcutta_electric_victoria_house = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_power_plant_throughput_add = 0.1
@@ -4463,7 +4463,7 @@ pm_calcutta_electric_victoria_house = {
 # --- Caribbean Petroleum Maracaibo Depot ---
 # Theme: Venezuelan oil storage and lake drilling operations
 pm_caribbean_petroleum_maracaibo_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.1
@@ -4496,7 +4496,7 @@ pm_caribbean_petroleum_maracaibo_depot = {
 # --- CCCI Léopoldville Rubber Depot ---
 # Theme: Congo rubber collection and export warehouse
 pm_ccci_leopoldville_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -4530,7 +4530,7 @@ pm_ccci_leopoldville_depot = {
 # --- CFR Bucharest Railway Works ---
 # Theme: Romanian state railway locomotive repair shops
 pm_cfr_bucharest_railway_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -4564,7 +4564,7 @@ pm_cfr_bucharest_railway_works = {
 # --- CGV Haut-Brion Estate ---
 # Theme: Premier cru Bordeaux winemaking estate and cellars
 pm_cgv_haut_brion_estate = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -4603,7 +4603,7 @@ pm_cgv_haut_brion_estate = {
 # --- Chr. Hansen Copenhagen Laboratory ---
 # Theme: Pioneering microbiology and food enzyme research lab
 pm_chr_hansen_copenhagen_laboratory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_chemical_plant_throughput_add = 0.1
@@ -4637,7 +4637,7 @@ pm_chr_hansen_copenhagen_laboratory = {
 # --- Colt Hartford Armory ---
 # Theme: Samuel Colt's famous blue-onion-domed arms factory in Connecticut
 pm_colt_hartford_armory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -4671,7 +4671,7 @@ pm_colt_hartford_armory = {
 # --- Sansinena Avellaneda Frigorífico ---
 # Theme: Pioneer refrigerated meat packing plant south of Buenos Aires
 pm_sansinena_avellaneda_frigorífico = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -4705,7 +4705,7 @@ pm_sansinena_avellaneda_frigorífico = {
 # --- Córdoba Railway Alta Gracia Works ---
 # Theme: Argentine railway repair and maintenance shops
 pm_cordoba_railway_alta_gracia_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -4739,7 +4739,7 @@ pm_cordoba_railway_alta_gracia_works = {
 # --- CSFA Sicilian Sulfur Depot ---
 # Theme: Sulfur mining concession and railway in Sicily
 pm_csfa_sicilian_sulfur_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_sulfur_mine_throughput_add = 0.1
@@ -4772,7 +4772,7 @@ pm_csfa_sicilian_sulfur_depot = {
 # --- Afghan Nassaji Kabul Mills ---
 # Theme: Afghanistan's first modern textile factory
 pm_afghan_nassaji_kabul_mills = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -4806,7 +4806,7 @@ pm_afghan_nassaji_kabul_mills = {
 # --- Sassoon Bombay Docks ---
 # Theme: Sassoon family trading house and cotton warehouse in Bombay
 pm_sassoon_bombay_docks = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -4839,7 +4839,7 @@ pm_sassoon_bombay_docks = {
 # --- DMC Mulhouse Thread Mills ---
 # Theme: Dollfus-Mieg cotton and embroidery thread works in Alsace
 pm_dmc_mulhouse_mills = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -4873,7 +4873,7 @@ pm_dmc_mulhouse_mills = {
 # --- Douro Wine Lodge ---
 # Theme: Port wine aging cellars in Vila Nova de Gaia
 pm_douro_wine_lodge = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -4912,7 +4912,7 @@ pm_douro_wine_lodge = {
 # --- Duro La Felguera Steelworks ---
 # Theme: Asturian coal and iron complex at La Felguera
 pm_duro_la_felguera_steelworks = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -4946,7 +4946,7 @@ pm_duro_la_felguera_steelworks = {
 # --- EEA Dock Sud Power Station ---
 # Theme: Buenos Aires metropolitan electricity generating station
 pm_eea_dock_sud_power_station = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_power_plant_throughput_add = 0.1
@@ -4979,7 +4979,7 @@ pm_eea_dock_sud_power_station = {
 # --- Egyptian Railway Cairo Central Station ---
 # Theme: Egypt's railway hub connecting the Nile Delta
 pm_egyptian_rail_cairo_central = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -5013,7 +5013,7 @@ pm_egyptian_rail_cairo_central = {
 # --- El Águila Tampico Refinery ---
 # Theme: Mexican Eagle Petroleum's massive Gulf Coast refinery
 pm_el_aguila_tampico_refinery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.1
@@ -5046,7 +5046,7 @@ pm_el_aguila_tampico_refinery = {
 # --- Electricidad de Caracas Power House ---
 # Theme: Venezuela's first and largest electric utility
 pm_electricidad_caracas_power_house = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_power_plant_throughput_add = 0.1
@@ -5079,7 +5079,7 @@ pm_electricidad_caracas_power_house = {
 # --- Első Budapesti Steam Mill ---
 # Theme: Budapest's premier flour milling complex on the Danube
 pm_elso_budapesti_steam_mill = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -5113,7 +5113,7 @@ pm_elso_budapesti_steam_mill = {
 # --- Ericsson Telefonplan ---
 # Theme: Stockholm telephone manufacturing campus
 pm_ericsson_telefonplan = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_electrics_industry_throughput_add = 0.1
@@ -5147,7 +5147,7 @@ pm_ericsson_telefonplan = {
 # --- Erste Brünner Maschinenwerk ---
 # Theme: Moravia's leading machine tool and locomotive manufacturer
 pm_erste_brunner_maschinenwerk = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_motor_industry_throughput_add = 0.1
@@ -5181,7 +5181,7 @@ pm_erste_brunner_maschinenwerk = {
 # --- España Industrial Sants Mills ---
 # Theme: Barcelona cotton spinning and weaving complex
 pm_espana_industrial_sants_mills = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -5215,7 +5215,7 @@ pm_espana_industrial_sants_mills = {
 # --- Estaleiro Mauá Niterói Dockyard ---
 # Theme: Brazil's first steamship building and repair yard
 pm_estaleiro_maua_niteroi_dockyard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -5249,7 +5249,7 @@ pm_estaleiro_maua_niteroi_dockyard = {
 # --- Estannífera Llallagua Tin Concentrator ---
 # Theme: Bolivia's richest tin mine and concentrating plant
 pm_estanifera_llallagua_tin_concentrator = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_iron_mine_throughput_add = 0.1
@@ -5282,7 +5282,7 @@ pm_estanifera_llallagua_tin_concentrator = {
 # --- FAMAE Santiago Arsenal ---
 # Theme: Chilean state arms and munitions factory
 pm_famae_santiago_arsenal = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -5316,7 +5316,7 @@ pm_famae_santiago_arsenal = {
 # --- FCM La Seyne Shipyard ---
 # Theme: Forges et Chantiers de la Méditerranée naval construction yard
 pm_fcm_la_seyne_shipyard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -5350,7 +5350,7 @@ pm_fcm_la_seyne_shipyard = {
 # --- Foochow Mawei Dockyard ---
 # Theme: Fujian naval dockyard and China's first modern shipyard
 pm_foochow_mawei_dockyard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -5384,7 +5384,7 @@ pm_foochow_mawei_dockyard = {
 # --- Franco-Belge Raismes Works ---
 # Theme: Railway locomotive and rolling stock factory near Valenciennes
 pm_franco_belge_raismes_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_motor_industry_throughput_add = 0.1
@@ -5418,7 +5418,7 @@ pm_franco_belge_raismes_works = {
 # --- Fundição Ipanema Sorocaba Foundry ---
 # Theme: Brazil's pioneering royal ironworks near São Paulo
 pm_fundicao_ipanema_sorocaba_foundry = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -5452,7 +5452,7 @@ pm_fundicao_ipanema_sorocaba_foundry = {
 # --- Fundidora Monterrey Blast Furnace ---
 # Theme: Latin America's first integrated steel mill
 pm_fundidora_monterrey_blast_furnace = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -5486,7 +5486,7 @@ pm_fundidora_monterrey_blast_furnace = {
 # --- Galician Borysław Oil Field ---
 # Theme: Pioneering petroleum extraction in the Carpathian foothills
 pm_galician_boryslaw_oil_field = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.1
@@ -5519,7 +5519,7 @@ pm_galician_boryslaw_oil_field = {
 # --- Thonet Bystřice Bentwood Factory ---
 # Theme: Mass production of the iconic bentwood chair No. 14
 pm_thonet_bystrice_bentwood_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -5558,7 +5558,7 @@ pm_thonet_bystrice_bentwood_factory = {
 # --- Getzner Bludenz Textile Works ---
 # Theme: Vorarlberg cotton and linen weaving mill
 pm_getzner_bludenz_textile_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -5592,7 +5592,7 @@ pm_getzner_bludenz_textile_works = {
 # --- Götaverken Gothenburg Shipyard ---
 # Theme: Sweden's largest shipbuilding yard on the Göta älv
 pm_gotaverken_gothenburg_shipyard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -5626,7 +5626,7 @@ pm_gotaverken_gothenburg_shipyard = {
 # --- Gran Azucarera Aranjuez Refinery ---
 # Theme: Spain's consolidated sugar refining complex
 pm_gran_azucarera_aranjuez_refinery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -5660,7 +5660,7 @@ pm_gran_azucarera_aranjuez_refinery = {
 # --- Great Indian Railway Jamalpur Works ---
 # Theme: India's first railway locomotive workshop in Bihar
 pm_great_indian_railway_jamalpur_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -5694,7 +5694,7 @@ pm_great_indian_railway_jamalpur_works = {
 # --- Guinness St. James's Gate Brewery ---
 # Theme: World-famous Dublin brewery producing iconic stout since 1759
 pm_guinness_st_james_gate_brewery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -5728,7 +5728,7 @@ pm_guinness_st_james_gate_brewery = {
 # --- GWR Swindon Works ---
 # Theme: Great Western Railway's locomotive manufacturing headquarters
 pm_gwr_swindon_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -5762,7 +5762,7 @@ pm_gwr_swindon_works = {
 # --- Hanseong Electric Gwanghwamun Station ---
 # Theme: Korea's first electric power and streetcar company
 pm_hanseong_jeongi_gwanghwamun_station = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_power_plant_throughput_add = 0.1
@@ -5795,7 +5795,7 @@ pm_hanseong_jeongi_gwanghwamun_station = {
 # --- Hanyang Arsenal Iron Works ---
 # Theme: Hubei arsenal and steelworks, China's Self-Strengthening centerpiece
 pm_hanyang_arsenal_iron_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -5829,7 +5829,7 @@ pm_hanyang_arsenal_iron_works = {
 # --- Hudson's Bay York Factory ---
 # Theme: Historic fur trade depot and administrative center on Hudson Bay
 pm_hbc_york_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -5862,7 +5862,7 @@ pm_hbc_york_factory = {
 # --- Hispano-Suiza Barcelona Factory ---
 # Theme: Luxury automobile and aero-engine manufacturer
 pm_hispano_suiza_barcelona_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_motor_industry_throughput_add = 0.1
@@ -5896,7 +5896,7 @@ pm_hispano_suiza_barcelona_factory = {
 # --- ILVA Bagnoli Steelworks ---
 # Theme: Italy's premier steelworks overlooking the Bay of Naples
 pm_ilva_bagnoli_steelworks = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -5930,7 +5930,7 @@ pm_ilva_bagnoli_steelworks = {
 # --- Imperial Arsenal Golden Horn ---
 # Theme: Ottoman naval arsenal on Istanbul's Golden Horn
 pm_imperial_arsenal_golden_horn = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -5964,7 +5964,7 @@ pm_imperial_arsenal_golden_horn = {
 # --- Ethiopian Railway Dire Dawa Depot ---
 # Theme: Addis Ababa-Djibouti railway maintenance depot
 pm_ethiopian_railway_dire_dawa_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -5998,7 +5998,7 @@ pm_ethiopian_railway_dire_dawa_depot = {
 # --- Imperial Tobacco Wills Factory ---
 # Theme: Massive cigarette factory complex in Bristol
 pm_imperial_tobacco_wills_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_tobacco_plantation_throughput_add = 0.1
@@ -6032,7 +6032,7 @@ pm_imperial_tobacco_wills_factory = {
 # --- Ingolstadt Power Station ---
 # Theme: Municipal electricity generating station
 pm_ingolstadt_power_station = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_power_plant_throughput_add = 0.1
@@ -6065,7 +6065,7 @@ pm_ingolstadt_power_station = {
 # --- Iranian State Railway Veresk Station ---
 # Theme: Engineering marvel on the Trans-Iranian railway across the Alborz
 pm_iranian_state_railway_veresk_station = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -6099,7 +6099,7 @@ pm_iranian_state_railway_veresk_station = {
 # --- Izhevsk Arms Factory ---
 # Theme: Imperial arms works in the Urals producing infantry weapons
 pm_izhevsk_arms_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -6133,7 +6133,7 @@ pm_izhevsk_arms_factory = {
 # --- J&P Coats Ferguslie Thread Mills ---
 # Theme: The world's largest thread manufacturing complex in Paisley
 pm_coats_ferguslie_mills = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -6167,7 +6167,7 @@ pm_coats_ferguslie_mills = {
 # --- Klein Galician Paper Mill ---
 # Theme: Paper and timber processing in eastern Galicia
 pm_klein_galician_paper_mill = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_paper_mill_throughput_add = 0.1
@@ -6201,7 +6201,7 @@ pm_klein_galician_paper_mill = {
 # --- Jiangnan Nanjing Brocade Hall ---
 # Theme: Imperial silk weaving bureau producing cloud brocade
 pm_jiangnan_nanjing_brocade_hall = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -6235,7 +6235,7 @@ pm_jiangnan_nanjing_brocade_hall = {
 # --- Jingdezhen Imperial Kiln ---
 # Theme: Porcelain capital of the world, supplier to the Imperial court
 pm_jingdezhen_imperial_kiln = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -6274,7 +6274,7 @@ pm_jingdezhen_imperial_kiln = {
 # --- John Brown Clydebank Shipyard ---
 # Theme: Legendary Clyde shipyard that built the Queen Mary and HMS Hood
 pm_john_brown_clydebank_yard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -6308,7 +6308,7 @@ pm_john_brown_clydebank_yard = {
 # --- Cockerill Seraing Works ---
 # Theme: Integrated steelworks on the Meuse, Belgium's industrial cradle
 pm_cockerill_seraing_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -6342,7 +6342,7 @@ pm_cockerill_seraing_works = {
 # --- John Holt Lagos Trading House ---
 # Theme: West African trading post and palm oil export depot
 pm_john_holt_lagos_trading_house = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -6375,7 +6375,7 @@ pm_john_holt_lagos_trading_house = {
 # --- Hughes Yuzovka Steelworks ---
 # Theme: Foundational steelworks of the Donbas industrial region
 pm_hughes_yuzovka_steelworks = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -6409,7 +6409,7 @@ pm_hughes_yuzovka_steelworks = {
 # --- Kablín Zárate Paper Mill ---
 # Theme: Argentine pulp and paper manufacturing plant
 pm_kablin_zarate_paper_mill = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_paper_mill_throughput_add = 0.1
@@ -6443,7 +6443,7 @@ pm_kablin_zarate_paper_mill = {
 # --- Kaiping Tangshan Colliery ---
 # Theme: China's first modern coal mine with railway connection
 pm_kaiping_tangshan_colliery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_coal_mine_throughput_add = 0.1
@@ -6476,7 +6476,7 @@ pm_kaiping_tangshan_colliery = {
 # --- Kinkozan Kiyomizu Kiln ---
 # Theme: Renowned Kyoto ceramics workshop producing Satsuma ware
 pm_kinkozan_kiyomizu_kiln = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -6515,7 +6515,7 @@ pm_kinkozan_kiyomizu_kiln = {
 # --- Kirgizian Copper Smelter ---
 # Theme: Ore smelting works in the Kyrgyz steppe
 pm_kirgizian_copper_smelter = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_iron_mine_throughput_add = 0.1
@@ -6548,7 +6548,7 @@ pm_kirgizian_copper_smelter = {
 # --- Klanično Belgrade Slaughterhouse ---
 # Theme: Belgrade municipal meat processing and cold storage
 pm_klanicko_belgrade_slaughterhouse = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -6582,7 +6582,7 @@ pm_klanicko_belgrade_slaughterhouse = {
 # --- Meissen Porcelain Manufactory ---
 # Theme: Europe's oldest porcelain factory, famed for crossed swords mark
 pm_meissen_porcelain_manufactory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -6621,7 +6621,7 @@ pm_meissen_porcelain_manufactory = {
 # --- Kouppas Piraeus Foundry ---
 # Theme: Greek metalworking and machinery foundry
 pm_kouppas_piraeus_foundry = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_motor_industry_throughput_add = 0.1
@@ -6655,7 +6655,7 @@ pm_kouppas_piraeus_foundry = {
 # --- La Rosada Buenos Aires Arsenal ---
 # Theme: Argentine state arms factory and munitions depot
 pm_la_rosada_buenos_aires_arsenal = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -6689,7 +6689,7 @@ pm_la_rosada_buenos_aires_arsenal = {
 # --- Lanfang Pontianak Kongsi House ---
 # Theme: Chinese kongsi gold mining and administrative center in Borneo
 pm_lanfang_pontianak_kongsi_house = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_gold_mine_throughput_add = 0.1
@@ -6722,7 +6722,7 @@ pm_lanfang_pontianak_kongsi_house = {
 # --- Lee Wilson Plantation Depot ---
 # Theme: Arkansas Delta cotton plantation and timber operation
 pm_lee_wilson_plantation_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -6756,7 +6756,7 @@ pm_lee_wilson_plantation_depot = {
 # --- Lilpop Warsaw Metalworks ---
 # Theme: Rolling stock and steel fabrication in the Polish capital
 pm_lilpop_warsaw_metalworks = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -6790,7 +6790,7 @@ pm_lilpop_warsaw_metalworks = {
 # --- LKAB Kiruna Iron Mine ---
 # Theme: The world's largest underground iron ore mine
 pm_lkab_kiruna_mine = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_iron_mine_throughput_add = 0.1
@@ -6823,7 +6823,7 @@ pm_lkab_kiruna_mine = {
 # --- Moser Karlsbad Glass Works ---
 # Theme: Crystal glassworks patronized by European royal courts
 pm_moser_karlsbad_glass_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -6862,7 +6862,7 @@ pm_moser_karlsbad_glass_works = {
 # --- Madura Mills Madurai Complex ---
 # Theme: South Indian textile spinning and weaving complex
 pm_madura_mills_madurai_complex = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -6896,7 +6896,7 @@ pm_madura_mills_madurai_complex = {
 # --- Worth Rue de la Paix Atelier ---
 # Theme: The birthplace of Parisian haute couture
 pm_worth_rue_de_la_paix_atelier = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -6935,7 +6935,7 @@ pm_worth_rue_de_la_paix_atelier = {
 # --- Manfred Weiss Csepel Works ---
 # Theme: Budapest munitions and metalworking complex on Csepel Island
 pm_manfred_weiss_csepel_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -6969,7 +6969,7 @@ pm_manfred_weiss_csepel_works = {
 # --- Mantero Como Silk Mill ---
 # Theme: Lake Como silk weaving and dyeing workshops
 pm_mantero_como_silk_mill = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -7003,7 +7003,7 @@ pm_mantero_como_silk_mill = {
 # --- Mantetsu Dalian Railway Hub ---
 # Theme: South Manchuria Railway headquarters and rail junction
 pm_mantetsu_dalian_railway_hub = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -7037,7 +7037,7 @@ pm_mantetsu_dalian_railway_hub = {
 # --- Maple & Co Tottenham Court Road ---
 # Theme: London's premier furniture showroom and workshop
 pm_maple_tottenham_court_showroom = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -7076,7 +7076,7 @@ pm_maple_tottenham_court_showroom = {
 # --- Massey-Harris Toronto Implement Works ---
 # Theme: Agricultural machinery manufacturer in Toronto
 pm_massey_harris_toronto_implement_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_motor_industry_throughput_add = 0.1
@@ -7110,7 +7110,7 @@ pm_massey_harris_toronto_implement_works = {
 # --- Gavrilović Petrinja Meatworks ---
 # Theme: Croatian salami and preserved meat factory
 pm_gavrilovic_petrinja_meatworks = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -7144,7 +7144,7 @@ pm_gavrilovic_petrinja_meatworks = {
 # --- MÁV Budapest Locomotive Works ---
 # Theme: Hungarian state railway locomotive manufacturing plant
 pm_mav_budapest_locomotive_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -7178,7 +7178,7 @@ pm_mav_budapest_locomotive_works = {
 # --- Mines d'Anzin Colliery ---
 # Theme: France's largest and oldest coal mining company in the Nord
 pm_anzin_colliery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_coal_mine_throughput_add = 0.1
@@ -7211,7 +7211,7 @@ pm_anzin_colliery = {
 # --- Misr Mahalla Textile Complex ---
 # Theme: Egypt's largest textile factory in the Nile Delta
 pm_misr_mahalla_textile_complex = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -7245,7 +7245,7 @@ pm_misr_mahalla_textile_complex = {
 # --- Moscow Irrigation Cotton Depot ---
 # Theme: Central Asian cotton ginning and distribution center
 pm_moscow_irrigation_cotton_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -7279,7 +7279,7 @@ pm_moscow_irrigation_cotton_depot = {
 # --- Mozambique Company Beira Concession ---
 # Theme: Charter company headquarters and port in Beira
 pm_mozambique_company_beira_concession = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_blue_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -7313,7 +7313,7 @@ pm_mozambique_company_beira_concession = {
 # --- Nam Định Textile Plant ---
 # Theme: French Indochina cotton spinning factory
 pm_nam_dinh_textile_plant = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -7347,7 +7347,7 @@ pm_nam_dinh_textile_plant = {
 # --- NIOC Masjed Soleyman Oil Field ---
 # Theme: Site of the Middle East's first commercial oil discovery
 pm_nioc_masjed_soleyman_field = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.1
@@ -7380,7 +7380,7 @@ pm_nioc_masjed_soleyman_field = {
 # --- NedPetroleum Pangkalan Brandan Depot ---
 # Theme: Oil storage and shipping facility in the Dutch East Indies
 pm_nederlandse_petroleum_pangkalan_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.1
@@ -7413,7 +7413,7 @@ pm_nederlandse_petroleum_pangkalan_depot = {
 # --- Portalis Lyon Silk House ---
 # Theme: Lyon silk weaving and finishing workshops
 pm_portalis_lyon_silk_house = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -7447,7 +7447,7 @@ pm_portalis_lyon_silk_house = {
 # --- Nokia Cable Works ---
 # Theme: Finnish cable and rubber factory transitioning to electronics
 pm_nokia_cable_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_electrics_industry_throughput_add = 0.1
@@ -7481,7 +7481,7 @@ pm_nokia_cable_works = {
 # --- Norsk Hydro Rjukan Plant ---
 # Theme: Hydroelectric-powered fertilizer and heavy water plant
 pm_norsk_hydro_rjukan_plant = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_chemical_plant_throughput_add = 0.1
@@ -7515,7 +7515,7 @@ pm_norsk_hydro_rjukan_plant = {
 # --- Alpine Donawitz Steelworks ---
 # Theme: Styrian steelworks using the revolutionary LD process
 pm_alpine_donawitz_steelworks = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -7549,7 +7549,7 @@ pm_alpine_donawitz_steelworks = {
 # --- OEVG Steyr Arms Works ---
 # Theme: Austrian state arms factory in Upper Austria
 pm_oevg_steyr_arms_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -7583,7 +7583,7 @@ pm_oevg_steyr_arms_works = {
 # --- OCP Khouribga Phosphate Mine ---
 # Theme: Morocco's vast open-pit phosphate mining operation
 pm_ocp_khouribga_mine = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_sulfur_mine_throughput_add = 0.1
@@ -7616,7 +7616,7 @@ pm_ocp_khouribga_mine = {
 # --- Ong Lung Sheng Tea Warehouse ---
 # Theme: Fujianese tea processing and export warehouse
 pm_ong_lung_sheng_tea_warehouse = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -7650,7 +7650,7 @@ pm_ong_lung_sheng_tea_warehouse = {
 # --- Opium Ghazipur Factory ---
 # Theme: East India Company's opium processing center on the Ganges
 pm_opium_ghazipur_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -7684,7 +7684,7 @@ pm_opium_ghazipur_factory = {
 # --- Orient Express Sirkeci Terminal ---
 # Theme: Legendary terminus of the Orient Express in Constantinople
 pm_orient_express_sirkeci_terminal = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -7718,7 +7718,7 @@ pm_orient_express_sirkeci_terminal = {
 # --- Oriental Development Kunsan Granary ---
 # Theme: Japanese colonial agricultural exploitation depot
 pm_oriental_dev_kunsan_granary = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -7752,7 +7752,7 @@ pm_oriental_dev_kunsan_granary = {
 # --- Tobacco Régie Cibali Factory ---
 # Theme: Ottoman state tobacco monopoly factory in Istanbul
 pm_tobacco_regie_cibali_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_tobacco_plantation_throughput_add = 0.1
@@ -7786,7 +7786,7 @@ pm_tobacco_regie_cibali_factory = {
 # --- Panama Company Culebra Cut ---
 # Theme: Canal zone construction headquarters and transit facilities
 pm_panama_company_culebra_cut = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_blue_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -7819,7 +7819,7 @@ pm_panama_company_culebra_cut = {
 # --- Paradox Kvarnholmen Studio ---
 # Theme: Grand strategy game development studio on the Stockholm archipelago
 pm_paradox_kvarnholmen_studio = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_film_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_electrics_industry_throughput_add = 0.1
@@ -7853,7 +7853,7 @@ pm_paradox_kvarnholmen_studio = {
 # --- Pedro Domecq Jerez Bodega ---
 # Theme: Sherry aging cellars in Jerez de la Frontera
 pm_pedro_domecq_jerez_bodega = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -7892,7 +7892,7 @@ pm_pedro_domecq_jerez_bodega = {
 # --- Pernambuco Recife Cotton Mill ---
 # Theme: Northeastern Brazilian cotton spinning complex
 pm_pernambuco_recife_cotton_mill = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -7926,7 +7926,7 @@ pm_pernambuco_recife_cotton_mill = {
 # --- Perskhlopok Cotton Combines ---
 # Theme: Persian cotton processing and spinning mills
 pm_perskhlopok_cotton_combines = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -7960,7 +7960,7 @@ pm_perskhlopok_cotton_combines = {
 # --- Persshelk Silk Reeling House ---
 # Theme: Caucasian silk reeling and weaving facility
 pm_persshelk_silk_reeling_house = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -7994,7 +7994,7 @@ pm_persshelk_silk_reeling_house = {
 # --- Peruvian Amazon Iquitos Rubber Depot ---
 # Theme: Rubber collection and shipping in the Amazon basin
 pm_peruvian_amazon_iquitos_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -8028,7 +8028,7 @@ pm_peruvian_amazon_iquitos_depot = {
 # --- Philips Eindhoven NatLab ---
 # Theme: Philips Physics Laboratory where revolutionary lighting and electronics were developed
 pm_philips_eindhoven_natlab = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_electrics_industry_throughput_add = 0.1
@@ -8062,7 +8062,7 @@ pm_philips_eindhoven_natlab = {
 # --- Prussian Railway Directorate ---
 # Theme: Central administration for the largest state railway network in Europe
 pm_prussian_railway_directorate = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -8096,7 +8096,7 @@ pm_prussian_railway_directorate = {
 # --- Ralli Odessa Grain Elevator ---
 # Theme: Greek diaspora grain trading and export warehouse
 pm_ralli_odessa_grain_elevator = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -8129,7 +8129,7 @@ pm_ralli_odessa_grain_elevator = {
 # --- Rheinmetall Unterlüss Proving Ground ---
 # Theme: Artillery and weapons testing range in the Lüneburg Heath
 pm_rheinmetall_unterluss_proving_ground = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -8163,7 +8163,7 @@ pm_rheinmetall_unterluss_proving_ground = {
 # --- Ricordi Galleria Publishing House ---
 # Theme: Music publisher at the heart of Milan's cultural life
 pm_ricordi_galleria_vittorio_emanuele = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_film_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -8202,7 +8202,7 @@ pm_ricordi_galleria_vittorio_emanuele = {
 # --- Rodríguez Argüelles Havana Tobacco House ---
 # Theme: Cuban cigar manufacturing and tobacco curing operation
 pm_rodriguez_arguelles_havana_tobacco_house = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_tobacco_plantation_throughput_add = 0.1
@@ -8236,7 +8236,7 @@ pm_rodriguez_arguelles_havana_tobacco_house = {
 # --- Romanian Star Ploiești Refinery ---
 # Theme: Petroleum refinery in the heart of Romania's oil country
 pm_romanian_star_ploiesti_refinery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.1
@@ -8269,7 +8269,7 @@ pm_romanian_star_ploiesti_refinery = {
 # --- Rossi São Leopoldo Arms Factory ---
 # Theme: Brazilian firearms manufacturer in Rio Grande do Sul
 pm_rossi_sao_leopoldo_arms_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -8303,7 +8303,7 @@ pm_rossi_sao_leopoldo_arms_factory = {
 # --- Russian-American Company Sitka Trading Post ---
 # Theme: Fur trade headquarters and supply depot in Russian Alaska
 pm_rac_sitka_trading_post = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -8336,7 +8336,7 @@ pm_rac_sitka_trading_post = {
 # --- Saint-Étienne Arms Manufactory ---
 # Theme: State arms factory in France's industrial heartland
 pm_saint_etienne_arms_manufactory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -8370,7 +8370,7 @@ pm_saint_etienne_arms_manufactory = {
 # --- San Miguel Manila Brewery ---
 # Theme: Southeast Asia's oldest brewery and food conglomerate
 pm_san_miguel_manila_brewery = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -8404,7 +8404,7 @@ pm_san_miguel_manila_brewery = {
 # --- São Paulo Railway Paranapiacaba Workshop ---
 # Theme: Railway workshops at the Serra do Mar cable incline
 pm_sao_paulo_railway_paranapiacaba_workshop = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -8438,7 +8438,7 @@ pm_sao_paulo_railway_paranapiacaba_workshop = {
 # --- Morozov Orekhovo-Zuevo Mills ---
 # Theme: Russia's largest cotton textile complex near Moscow
 pm_morozov_orekhovo_zuevo_mills = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -8472,7 +8472,7 @@ pm_morozov_orekhovo_zuevo_mills = {
 # --- Schichau-Werke Elbing ---
 # Theme: Shipbuilding and locomotive works on the Baltic
 pm_schichau_elbing_shipyard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -8506,7 +8506,7 @@ pm_schichau_elbing_shipyard = {
 # --- SECN Ferrol Shipyard ---
 # Theme: Naval construction yard in Galicia building warships for Spain
 pm_secn_ferrol_shipyard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -8540,7 +8540,7 @@ pm_secn_ferrol_shipyard = {
 # --- Sherkat-e Shemali Cotton Gin ---
 # Theme: Northern Iranian cotton ginning and processing works
 pm_sherkat_shemali_cotton_gin = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -8574,7 +8574,7 @@ pm_sherkat_shemali_cotton_gin = {
 # --- Sherkat-e Eslāmiyyeh Isfahan Mill ---
 # Theme: Isfahan textile weaving and carpet manufacturing complex
 pm_sherkate_eslamiya_isfahan_mill = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_textile_mill_throughput_add = 0.1
@@ -8608,7 +8608,7 @@ pm_sherkate_eslamiya_isfahan_mill = {
 # --- Škoda Pilsen Works ---
 # Theme: Bohemian heavy engineering and armaments colossus
 pm_skoda_pilsen_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -8642,7 +8642,7 @@ pm_skoda_pilsen_works = {
 # --- Mokta el Hadid Beni Saf Mine ---
 # Theme: Algerian iron ore mining and export operation
 pm_mokta_el_hadid_beni_saf_mine = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_iron_mine_throughput_add = 0.1
@@ -8675,7 +8675,7 @@ pm_mokta_el_hadid_beni_saf_mine = {
 # --- STF Fiume Torpedo Works ---
 # Theme: Birthplace of the modern self-propelled torpedo
 pm_stf_fiume_torpedo_works = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -8709,7 +8709,7 @@ pm_stf_fiume_torpedo_works = {
 # --- Steel Brothers Syriam Depot ---
 # Theme: Burmese oil and rice export center near Rangoon
 pm_steel_brothers_syriam_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.1
@@ -8742,7 +8742,7 @@ pm_steel_brothers_syriam_depot = {
 # --- STT Hasköy Shipyard ---
 # Theme: Ottoman commercial shipbuilding yard on the Bosphorus
 pm_stt_haskoy_shipyard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -8776,7 +8776,7 @@ pm_stt_haskoy_shipyard = {
 # --- Sudamericana Valparaíso Pier ---
 # Theme: Chilean shipping line's main Pacific coast terminal
 pm_sudamericana_valparaiso_pier = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -8809,7 +8809,7 @@ pm_sudamericana_valparaiso_pier = {
 # --- Suez Company Ismailia Headquarters ---
 # Theme: Administrative center of the Suez Canal Company at Ismailia
 pm_suez_company_ismailia_hq = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_blue_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -8842,7 +8842,7 @@ pm_suez_company_ismailia_hq = {
 # --- Sunhwaguk Seoul Tobacco Factory ---
 # Theme: Korean tobacco and agricultural processing works
 pm_sunhwaguk_seoul_tobacco_factory = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_tobacco_plantation_throughput_add = 0.1
@@ -8876,7 +8876,7 @@ pm_sunhwaguk_seoul_tobacco_factory = {
 # --- Tashkent Railroad Workshops ---
 # Theme: Central Asian railway maintenance and locomotive depot
 pm_tashkent_railroad_workshops = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_infrastructure_add = 10
@@ -8910,7 +8910,7 @@ pm_tashkent_railroad_workshops = {
 # --- Trubia Cannon Foundry ---
 # Theme: Royal artillery foundry in Asturias
 pm_trubia_cannon_foundry = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
@@ -8944,7 +8944,7 @@ pm_trubia_cannon_foundry = {
 # --- Turkish Petroleum Kirkuk Depot ---
 # Theme: Oil extraction and pipeline works at Kirkuk
 pm_turkish_petroleum_kirkuk_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.1
@@ -8977,7 +8977,7 @@ pm_turkish_petroleum_kirkuk_depot = {
 # --- União Fabril Barreiro Plant ---
 # Theme: Portuguese chemical and cement works across the Tagus from Lisbon
 pm_uniao_fabril_barreiro_plant = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_chemical_plant_throughput_add = 0.1
@@ -9011,7 +9011,7 @@ pm_uniao_fabril_barreiro_plant = {
 # --- United Fruit Terminal ---
 # Theme: Banana importing and cold storage terminal on the Gulf Coast
 pm_united_fruit_great_white_fleet_terminal = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_standard_of_living_add = 1
@@ -9045,7 +9045,7 @@ pm_united_fruit_great_white_fleet_terminal = {
 # --- United Tobacco Moscow Plant ---
 # Theme: Russia's consolidated cigarette manufacturing complex
 pm_united_tobacco_moscow_plant = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_tobacco_plantation_throughput_add = 0.1
@@ -9079,7 +9079,7 @@ pm_united_tobacco_moscow_plant = {
 # --- Ursus Warsaw Tractor Plant ---
 # Theme: Poland's premier agricultural and military vehicle manufacturer
 pm_ursus_warsaw_tractor_plant = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_motor_industry_throughput_add = 0.1
@@ -9113,7 +9113,7 @@ pm_ursus_warsaw_tractor_plant = {
 # --- State Vodka Monopoly Warehouse ---
 # Theme: Central state liquor storage and distribution facility
 pm_vodka_monopoly_warehouse = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
@@ -9147,7 +9147,7 @@ pm_vodka_monopoly_warehouse = {
 # --- Wadia Bombay Dockyard ---
 # Theme: Parsi-owned shipyard that built vessels for the Royal Navy
 pm_wadia_bombay_dockyard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -9181,7 +9181,7 @@ pm_wadia_bombay_dockyard = {
 # --- West Ural Oil Depot ---
 # Theme: Petroleum storage and pipeline terminal in the Ural region
 pm_west_ural_oil_depot = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.1
@@ -9214,7 +9214,7 @@ pm_west_ural_oil_depot = {
 # --- Cramp Philadelphia Shipyard ---
 # Theme: Major naval shipbuilding complex on the Delaware River
 pm_cramp_philadelphia_shipyard = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_military_shipyard_throughput_add = 0.1
@@ -9248,7 +9248,7 @@ pm_cramp_philadelphia_shipyard = {
 # --- Sandford Newcastle-Natal Ironworks ---
 # Theme: South African iron smelting works in KwaZulu-Natal
 pm_sandford_newcastle_natal_ironworks = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -9282,7 +9282,7 @@ pm_sandford_newcastle_natal_ironworks = {
 # --- Witkowitzer Ostrava Ironworks ---
 # Theme: Silesian iron and coal conglomerate near Ostrava
 pm_witkowitzer_ostrava_ironworks = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_steel_mill_throughput_add = 0.1
@@ -9316,7 +9316,7 @@ pm_witkowitzer_ostrava_ironworks = {
 # --- Ynchausti Manila Trading House ---
 # Theme: Basque-Filipino trading firm in hemp, sugar, and shipping
 pm_ynchausti_manila_trading_house = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_add = 5
@@ -9349,7 +9349,7 @@ pm_ynchausti_manila_trading_house = {
 # --- Zastava Kragujevac Arsenal ---
 # Theme: Serbian state arms arsenal in Kragujevac
 pm_zastava_kragujevac_arsenal = {
-	texture = "gfx/interface/icons/production_method_icons/base1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			building_arms_industry_throughput_add = 0.1
