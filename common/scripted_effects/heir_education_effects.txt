@@ -1,24 +1,418 @@
 ﻿### Heir Education - Scripted Effects
+### Reworked: 5-tier system (terrible/poor/average/skilled/exceptional)
+### Hidden intelligence (1-5) modifies gain amount per pulse tick
+### 8% rebel child chance inverts ideology at resolution
+### Adult heirs pre-initialized based on age
+
+# ──────────────────────── INTELLIGENCE-MODIFIED GAIN EFFECTS ────────────────────────
+# Called by monthly pulse when a focus's 3% chance succeeds.
+# Intelligence modifies the AMOUNT gained per tick:
+#   Low intelligence (1-2): 25% chance of wasted opportunity (no gain)
+#   Medium intelligence (3): standard +1 gain
+#   High intelligence (4-5): 30% chance of double gain (+2)
+
+heir_ed_gain_admin = {
+	# Intelligence modifies gain amount:
+	#   High (4-5): 30% chance of double gain (+2)
+	#   Medium (3): standard gain (+1)
+	#   Low (1-2): 25% chance of wasted opportunity (+0)
+	if = {
+		limit = { var:heir_ed_intelligence >= 4 }
+		random_list = {
+			30 = {
+				change_variable = { name = heir_ed_admin add = 2 }
+				change_variable = { name = heir_ed_total add = 2 }
+			}
+			70 = {
+				change_variable = { name = heir_ed_admin add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_intelligence <= 2 }
+		random_list = {
+			25 = { }
+			75 = {
+				change_variable = { name = heir_ed_admin add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else = {
+		change_variable = { name = heir_ed_admin add = 1 }
+		change_variable = { name = heir_ed_total add = 1 }
+	}
+	scope:journal_entry = {
+		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+	}
+	add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
+	heir_education_admin_ig_reaction = yes
+}
+
+heir_ed_gain_diplo = {
+	# Intelligence modifies gain amount:
+	#   High (4-5): 30% chance of double gain (+2)
+	#   Medium (3): standard gain (+1)
+	#   Low (1-2): 25% chance of wasted opportunity (+0)
+	if = {
+		limit = { var:heir_ed_intelligence >= 4 }
+		random_list = {
+			30 = {
+				change_variable = { name = heir_ed_diplo add = 2 }
+				change_variable = { name = heir_ed_total add = 2 }
+			}
+			70 = {
+				change_variable = { name = heir_ed_diplo add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_intelligence <= 2 }
+		random_list = {
+			25 = { }
+			75 = {
+				change_variable = { name = heir_ed_diplo add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else = {
+		change_variable = { name = heir_ed_diplo add = 1 }
+		change_variable = { name = heir_ed_total add = 1 }
+	}
+	scope:journal_entry = {
+		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+	}
+	add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
+	heir_education_diplo_ig_reaction = yes
+}
+
+heir_ed_gain_military = {
+	# Intelligence modifies gain amount:
+	#   High (4-5): 30% chance of double gain (+2)
+	#   Medium (3): standard gain (+1)
+	#   Low (1-2): 25% chance of wasted opportunity (+0)
+	if = {
+		limit = { var:heir_ed_intelligence >= 4 }
+		random_list = {
+			30 = {
+				change_variable = { name = heir_ed_military add = 2 }
+				change_variable = { name = heir_ed_total add = 2 }
+			}
+			70 = {
+				change_variable = { name = heir_ed_military add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_intelligence <= 2 }
+		random_list = {
+			25 = { }
+			75 = {
+				change_variable = { name = heir_ed_military add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else = {
+		change_variable = { name = heir_ed_military add = 1 }
+		change_variable = { name = heir_ed_total add = 1 }
+	}
+	scope:journal_entry = {
+		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+	}
+	add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
+	heir_education_military_ig_reaction = yes
+}
+
+heir_ed_gain_progressive = {
+	if = {
+		limit = { var:heir_ed_intelligence >= 4 }
+		random_list = {
+			30 = {
+				change_variable = { name = heir_ed_ideology add = 2 }
+				change_variable = { name = heir_ed_total add = 2 }
+			}
+			70 = {
+				change_variable = { name = heir_ed_ideology add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_intelligence <= 2 }
+		random_list = {
+			25 = { }
+			75 = {
+				change_variable = { name = heir_ed_ideology add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else = {
+		change_variable = { name = heir_ed_ideology add = 1 }
+		change_variable = { name = heir_ed_total add = 1 }
+	}
+	scope:journal_entry = {
+		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+	}
+	heir_education_progressive_ig_reaction = yes
+}
+
+heir_ed_gain_conservative = {
+	if = {
+		limit = { var:heir_ed_intelligence >= 4 }
+		random_list = {
+			30 = {
+				change_variable = { name = heir_ed_ideology add = -2 }
+				change_variable = { name = heir_ed_total add = 2 }
+			}
+			70 = {
+				change_variable = { name = heir_ed_ideology add = -1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_intelligence <= 2 }
+		random_list = {
+			25 = { }
+			75 = {
+				change_variable = { name = heir_ed_ideology add = -1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else = {
+		change_variable = { name = heir_ed_ideology add = -1 }
+		change_variable = { name = heir_ed_total add = 1 }
+	}
+	scope:journal_entry = {
+		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+	}
+	heir_education_conservative_ig_reaction = yes
+}
+
+heir_ed_gain_radical = {
+	if = {
+		limit = { var:heir_ed_intelligence >= 4 }
+		random_list = {
+			30 = {
+				change_variable = { name = heir_ed_ig_radical add = 2 }
+				change_variable = { name = heir_ed_total add = 2 }
+			}
+			70 = {
+				change_variable = { name = heir_ed_ig_radical add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_intelligence <= 2 }
+		random_list = {
+			25 = { }
+			75 = {
+				change_variable = { name = heir_ed_ig_radical add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else = {
+		change_variable = { name = heir_ed_ig_radical add = 1 }
+		change_variable = { name = heir_ed_total add = 1 }
+	}
+	scope:journal_entry = {
+		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+	}
+	heir_education_radical_ig_reaction = yes
+}
+
+heir_ed_gain_moderate = {
+	if = {
+		limit = { var:heir_ed_intelligence >= 4 }
+		random_list = {
+			30 = {
+				change_variable = { name = heir_ed_ig_moderate add = 2 }
+				change_variable = { name = heir_ed_total add = 2 }
+			}
+			70 = {
+				change_variable = { name = heir_ed_ig_moderate add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_intelligence <= 2 }
+		random_list = {
+			25 = { }
+			75 = {
+				change_variable = { name = heir_ed_ig_moderate add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else = {
+		change_variable = { name = heir_ed_ig_moderate add = 1 }
+		change_variable = { name = heir_ed_total add = 1 }
+	}
+	scope:journal_entry = {
+		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+	}
+	heir_education_moderate_ig_reaction = yes
+}
+
+heir_ed_gain_regressive = {
+	if = {
+		limit = { var:heir_ed_intelligence >= 4 }
+		random_list = {
+			30 = {
+				change_variable = { name = heir_ed_ig_regressive add = 2 }
+				change_variable = { name = heir_ed_total add = 2 }
+			}
+			70 = {
+				change_variable = { name = heir_ed_ig_regressive add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { var:heir_ed_intelligence <= 2 }
+		random_list = {
+			25 = { }
+			75 = {
+				change_variable = { name = heir_ed_ig_regressive add = 1 }
+				change_variable = { name = heir_ed_total add = 1 }
+			}
+		}
+	}
+	else = {
+		change_variable = { name = heir_ed_ig_regressive add = 1 }
+		change_variable = { name = heir_ed_total add = 1 }
+	}
+	scope:journal_entry = {
+		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+	}
+	heir_education_regressive_ig_reaction = yes
+}
+
+# ──────────────────────── ADULT HEIR INITIALIZATION ────────────────────────
+# Pre-initializes investment variables for heirs who aren't newborns.
+# Simulates passive development based on heir's age.
+# Called from JE immediate block.
+
+heir_education_init_adult = {
+	heir ?= {
+		# Age 15+: significant prior development
+		if = {
+			limit = { age >= 15 }
+			root = {
+				# Admin: 1-3 points
+				random_list = {
+					25 = { change_variable = { name = heir_ed_admin add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+					50 = { change_variable = { name = heir_ed_admin add = 2 } change_variable = { name = heir_ed_total add = 2 } }
+					25 = { change_variable = { name = heir_ed_admin add = 3 } change_variable = { name = heir_ed_total add = 3 } }
+				}
+				# Diplo: 1-3 points
+				random_list = {
+					25 = { change_variable = { name = heir_ed_diplo add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+					50 = { change_variable = { name = heir_ed_diplo add = 2 } change_variable = { name = heir_ed_total add = 2 } }
+					25 = { change_variable = { name = heir_ed_diplo add = 3 } change_variable = { name = heir_ed_total add = 3 } }
+				}
+				# Military: 1-3 points
+				random_list = {
+					25 = { change_variable = { name = heir_ed_military add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+					50 = { change_variable = { name = heir_ed_military add = 2 } change_variable = { name = heir_ed_total add = 2 } }
+					25 = { change_variable = { name = heir_ed_military add = 3 } change_variable = { name = heir_ed_total add = 3 } }
+				}
+				# Random ideology lean
+				random_list = {
+					30 = { change_variable = { name = heir_ed_ideology add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+					40 = { }
+					30 = { change_variable = { name = heir_ed_ideology add = -1 } change_variable = { name = heir_ed_total add = 1 } }
+				}
+				# Random IG lean
+				random_list = {
+					33 = { change_variable = { name = heir_ed_ig_radical add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+					34 = { change_variable = { name = heir_ed_ig_moderate add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+					33 = { change_variable = { name = heir_ed_ig_regressive add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+				}
+			}
+		}
+		# Age 10-14: moderate prior development
+		else_if = {
+			limit = { age >= 10 }
+			root = {
+				random_list = {
+					50 = { change_variable = { name = heir_ed_admin add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+					50 = { change_variable = { name = heir_ed_admin add = 2 } change_variable = { name = heir_ed_total add = 2 } }
+				}
+				random_list = {
+					50 = { change_variable = { name = heir_ed_diplo add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+					50 = { change_variable = { name = heir_ed_diplo add = 2 } change_variable = { name = heir_ed_total add = 2 } }
+				}
+				random_list = {
+					50 = { change_variable = { name = heir_ed_military add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+					50 = { change_variable = { name = heir_ed_military add = 2 } change_variable = { name = heir_ed_total add = 2 } }
+				}
+			}
+		}
+		# Age 5-9: minimal prior development
+		else_if = {
+			limit = { age >= 5 }
+			root = {
+				random_list = {
+					60 = { }
+					40 = { change_variable = { name = heir_ed_admin add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+				}
+				random_list = {
+					60 = { }
+					40 = { change_variable = { name = heir_ed_diplo add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+				}
+				random_list = {
+					60 = { }
+					40 = { change_variable = { name = heir_ed_military add = 1 } change_variable = { name = heir_ed_total add = 1 } }
+				}
+			}
+		}
+	}
+}
 
 # ──────────────────────── MAIN RESOLUTION ────────────────────────
-# Called when the heir reaches adulthood (JE complete) or on timeout.
-# Applies traits, ideology, and IG to the heir based on accumulated investments.
-# Investment thresholds scaled for monthly pulse system (~5% chance/month per focus):
-#   0   = no investment -> weighted toward poor/average
+# Called when the heir reaches adulthood or on JE timeout.
+# 5-tier system: terrible / poor / average / skilled / exceptional
+# Investment thresholds scaled for 3% monthly pulse:
+#   0   = no investment -> heavily weighted toward terrible/poor
 #   1-2 = light investment
-#   3-5 = moderate investment
-#   6+  = heavy investment (sustained focus over many years)
+#   3-4 = moderate investment
+#   5-7 = heavy investment
+#   8+  = extreme investment (sustained high-intelligence focus over many years)
 
 heir_education_resolve_effect = {
 	# ─── Resolve Administrative Trait ───
 	if = {
-		limit = { has_variable = heir_ed_admin var:heir_ed_admin >= 6 }
+		limit = { has_variable = heir_ed_admin var:heir_ed_admin >= 8 }
 		heir ?= {
 			random_list = {
-				0 = { add_trait = ruler_poor_administrator }
-				5 = { add_trait = ruler_average_administrator }
-				35 = { add_trait = ruler_skilled_administrator }
-				60 = { add_trait = ruler_exceptional_administrator }
+			0 = { add_trait = ruler_terrible_administrator }
+			2 = { add_trait = ruler_poor_administrator }
+			10 = { add_trait = ruler_average_administrator }
+			38 = { add_trait = ruler_skilled_administrator }
+			50 = { add_trait = ruler_exceptional_administrator }
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = heir_ed_admin var:heir_ed_admin >= 5 }
+		heir ?= {
+			random_list = {
+			2 = { add_trait = ruler_terrible_administrator }
+			5 = { add_trait = ruler_poor_administrator }
+			18 = { add_trait = ruler_average_administrator }
+			45 = { add_trait = ruler_skilled_administrator }
+			30 = { add_trait = ruler_exceptional_administrator }
 			}
 		}
 	}
@@ -26,10 +420,11 @@ heir_education_resolve_effect = {
 		limit = { has_variable = heir_ed_admin var:heir_ed_admin >= 3 }
 		heir ?= {
 			random_list = {
-				5 = { add_trait = ruler_poor_administrator }
-				15 = { add_trait = ruler_average_administrator }
-				45 = { add_trait = ruler_skilled_administrator }
-				35 = { add_trait = ruler_exceptional_administrator }
+			5 = { add_trait = ruler_terrible_administrator }
+			15 = { add_trait = ruler_poor_administrator }
+			30 = { add_trait = ruler_average_administrator }
+			35 = { add_trait = ruler_skilled_administrator }
+			15 = { add_trait = ruler_exceptional_administrator }
 			}
 		}
 	}
@@ -37,33 +432,48 @@ heir_education_resolve_effect = {
 		limit = { has_variable = heir_ed_admin var:heir_ed_admin >= 1 }
 		heir ?= {
 			random_list = {
-				10 = { add_trait = ruler_poor_administrator }
-				30 = { add_trait = ruler_average_administrator }
-				40 = { add_trait = ruler_skilled_administrator }
-				20 = { add_trait = ruler_exceptional_administrator }
+			15 = { add_trait = ruler_terrible_administrator }
+			25 = { add_trait = ruler_poor_administrator }
+			35 = { add_trait = ruler_average_administrator }
+			20 = { add_trait = ruler_skilled_administrator }
+			5 = { add_trait = ruler_exceptional_administrator }
 			}
 		}
 	}
 	else = {
 		heir ?= {
 			random_list = {
-				25 = { add_trait = ruler_poor_administrator }
-				45 = { add_trait = ruler_average_administrator }
-				25 = { add_trait = ruler_skilled_administrator }
-				5 = { add_trait = ruler_exceptional_administrator }
+			35 = { add_trait = ruler_terrible_administrator }
+			30 = { add_trait = ruler_poor_administrator }
+			25 = { add_trait = ruler_average_administrator }
+			8 = { add_trait = ruler_skilled_administrator }
+			2 = { add_trait = ruler_exceptional_administrator }
 			}
 		}
 	}
 
 	# ─── Resolve Diplomatic Trait ───
 	if = {
-		limit = { has_variable = heir_ed_diplo var:heir_ed_diplo >= 6 }
+		limit = { has_variable = heir_ed_diplo var:heir_ed_diplo >= 8 }
 		heir ?= {
 			random_list = {
-				0 = { add_trait = ruler_poor_diplomat }
-				5 = { add_trait = ruler_average_diplomat }
-				35 = { add_trait = ruler_skilled_diplomat }
-				60 = { add_trait = ruler_exceptional_diplomat }
+			0 = { add_trait = ruler_terrible_diplomat }
+			2 = { add_trait = ruler_poor_diplomat }
+			10 = { add_trait = ruler_average_diplomat }
+			38 = { add_trait = ruler_skilled_diplomat }
+			50 = { add_trait = ruler_exceptional_diplomat }
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = heir_ed_diplo var:heir_ed_diplo >= 5 }
+		heir ?= {
+			random_list = {
+			2 = { add_trait = ruler_terrible_diplomat }
+			5 = { add_trait = ruler_poor_diplomat }
+			18 = { add_trait = ruler_average_diplomat }
+			45 = { add_trait = ruler_skilled_diplomat }
+			30 = { add_trait = ruler_exceptional_diplomat }
 			}
 		}
 	}
@@ -71,10 +481,11 @@ heir_education_resolve_effect = {
 		limit = { has_variable = heir_ed_diplo var:heir_ed_diplo >= 3 }
 		heir ?= {
 			random_list = {
-				5 = { add_trait = ruler_poor_diplomat }
-				15 = { add_trait = ruler_average_diplomat }
-				45 = { add_trait = ruler_skilled_diplomat }
-				35 = { add_trait = ruler_exceptional_diplomat }
+			5 = { add_trait = ruler_terrible_diplomat }
+			15 = { add_trait = ruler_poor_diplomat }
+			30 = { add_trait = ruler_average_diplomat }
+			35 = { add_trait = ruler_skilled_diplomat }
+			15 = { add_trait = ruler_exceptional_diplomat }
 			}
 		}
 	}
@@ -82,33 +493,48 @@ heir_education_resolve_effect = {
 		limit = { has_variable = heir_ed_diplo var:heir_ed_diplo >= 1 }
 		heir ?= {
 			random_list = {
-				10 = { add_trait = ruler_poor_diplomat }
-				30 = { add_trait = ruler_average_diplomat }
-				40 = { add_trait = ruler_skilled_diplomat }
-				20 = { add_trait = ruler_exceptional_diplomat }
+			15 = { add_trait = ruler_terrible_diplomat }
+			25 = { add_trait = ruler_poor_diplomat }
+			35 = { add_trait = ruler_average_diplomat }
+			20 = { add_trait = ruler_skilled_diplomat }
+			5 = { add_trait = ruler_exceptional_diplomat }
 			}
 		}
 	}
 	else = {
 		heir ?= {
 			random_list = {
-				25 = { add_trait = ruler_poor_diplomat }
-				45 = { add_trait = ruler_average_diplomat }
-				25 = { add_trait = ruler_skilled_diplomat }
-				5 = { add_trait = ruler_exceptional_diplomat }
+			35 = { add_trait = ruler_terrible_diplomat }
+			30 = { add_trait = ruler_poor_diplomat }
+			25 = { add_trait = ruler_average_diplomat }
+			8 = { add_trait = ruler_skilled_diplomat }
+			2 = { add_trait = ruler_exceptional_diplomat }
 			}
 		}
 	}
 
 	# ─── Resolve Military Trait ───
 	if = {
-		limit = { has_variable = heir_ed_military var:heir_ed_military >= 6 }
+		limit = { has_variable = heir_ed_military var:heir_ed_military >= 8 }
 		heir ?= {
 			random_list = {
-				0 = { add_trait = ruler_poor_commander }
-				5 = { add_trait = ruler_average_commander }
-				35 = { add_trait = ruler_skilled_commander }
-				60 = { add_trait = ruler_exceptional_commander }
+			0 = { add_trait = ruler_terrible_commander }
+			2 = { add_trait = ruler_poor_commander }
+			10 = { add_trait = ruler_average_commander }
+			38 = { add_trait = ruler_skilled_commander }
+			50 = { add_trait = ruler_exceptional_commander }
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = heir_ed_military var:heir_ed_military >= 5 }
+		heir ?= {
+			random_list = {
+			2 = { add_trait = ruler_terrible_commander }
+			5 = { add_trait = ruler_poor_commander }
+			18 = { add_trait = ruler_average_commander }
+			45 = { add_trait = ruler_skilled_commander }
+			30 = { add_trait = ruler_exceptional_commander }
 			}
 		}
 	}
@@ -116,10 +542,11 @@ heir_education_resolve_effect = {
 		limit = { has_variable = heir_ed_military var:heir_ed_military >= 3 }
 		heir ?= {
 			random_list = {
-				5 = { add_trait = ruler_poor_commander }
-				15 = { add_trait = ruler_average_commander }
-				45 = { add_trait = ruler_skilled_commander }
-				35 = { add_trait = ruler_exceptional_commander }
+			5 = { add_trait = ruler_terrible_commander }
+			15 = { add_trait = ruler_poor_commander }
+			30 = { add_trait = ruler_average_commander }
+			35 = { add_trait = ruler_skilled_commander }
+			15 = { add_trait = ruler_exceptional_commander }
 			}
 		}
 	}
@@ -127,227 +554,185 @@ heir_education_resolve_effect = {
 		limit = { has_variable = heir_ed_military var:heir_ed_military >= 1 }
 		heir ?= {
 			random_list = {
-				10 = { add_trait = ruler_poor_commander }
-				30 = { add_trait = ruler_average_commander }
-				40 = { add_trait = ruler_skilled_commander }
-				20 = { add_trait = ruler_exceptional_commander }
+			15 = { add_trait = ruler_terrible_commander }
+			25 = { add_trait = ruler_poor_commander }
+			35 = { add_trait = ruler_average_commander }
+			20 = { add_trait = ruler_skilled_commander }
+			5 = { add_trait = ruler_exceptional_commander }
 			}
 		}
 	}
 	else = {
 		heir ?= {
 			random_list = {
-				25 = { add_trait = ruler_poor_commander }
-				45 = { add_trait = ruler_average_commander }
-				25 = { add_trait = ruler_skilled_commander }
-				5 = { add_trait = ruler_exceptional_commander }
+			35 = { add_trait = ruler_terrible_commander }
+			30 = { add_trait = ruler_poor_commander }
+			25 = { add_trait = ruler_average_commander }
+			8 = { add_trait = ruler_skilled_commander }
+			2 = { add_trait = ruler_exceptional_commander }
 			}
 		}
+	}
+
+	# ─── Rebel Child Check ───
+	# 8% chance the heir's ideology inverts from what the player aimed for
+	random_list = {
+		8 = {
+			change_variable = { name = heir_ed_ideology multiply = -1 }
+		}
+		92 = { }
 	}
 
 	# ─── Resolve Ideology ───
-	# heir_ed_ideology: negative = conservative, positive = progressive
+	# Positive = progressive, Negative = conservative
+	# Thresholds at ±1 (leaning) and ±4 (strong)
 	if = {
-		limit = { has_variable = heir_ed_ideology var:heir_ed_ideology >= 4 }
-		# Strong progressive push
+		limit = { var:heir_ed_ideology >= 4 }
 		heir ?= {
 			random_list = {
-				35 = { set_ideology = ideology:ideology_reformer }
-				25 = { set_ideology = ideology:ideology_liberal_leader }
-				20 = { set_ideology = ideology:ideology_social_democrat }
-				10 = { set_ideology = ideology:ideology_humanitarian }
-				5 = { set_ideology = ideology:ideology_communist }
-				3 = { set_ideology = ideology:ideology_vanguardist }
-				2 = { }
+				50 = { set_ideology = ideology:ideology_reformer }
+				30 = { set_ideology = ideology:ideology_liberal }
+				20 = { set_ideology = ideology:ideology_radical }
 			}
 		}
 	}
 	else_if = {
-		limit = { has_variable = heir_ed_ideology var:heir_ed_ideology >= 1 }
-		# Mild progressive push
+		limit = { var:heir_ed_ideology >= 1 }
 		heir ?= {
 			random_list = {
-				30 = { set_ideology = ideology:ideology_reformer }
-				20 = { set_ideology = ideology:ideology_liberal_leader }
-				15 = { set_ideology = ideology:ideology_humanitarian }
-				5 = { set_ideology = ideology:ideology_social_democrat }
-				30 = { }
+				40 = { set_ideology = ideology:ideology_reformer }
+				35 = { set_ideology = ideology:ideology_moderate }
+				25 = { set_ideology = ideology:ideology_liberal }
 			}
 		}
 	}
 	else_if = {
-		limit = { has_variable = heir_ed_ideology var:heir_ed_ideology <= -4 }
-		# Strong conservative push
+		limit = { var:heir_ed_ideology <= -4 }
 		heir ?= {
 			random_list = {
-				35 = { set_ideology = ideology:ideology_royalist }
-				25 = { set_ideology = ideology:ideology_traditionalist }
-				15 = { set_ideology = ideology:ideology_authoritarian }
-				10 = { set_ideology = ideology:ideology_theocrat }
-				8 = { set_ideology = ideology:ideology_ethno_nationalist }
-				5 = { set_ideology = ideology:ideology_jingoist_leader }
-				2 = { }
+				50 = { set_ideology = ideology:ideology_traditionalist }
+				30 = { set_ideology = ideology:ideology_patriarchal }
+				20 = { set_ideology = ideology:ideology_orthodox }
 			}
 		}
 	}
 	else_if = {
-		limit = { has_variable = heir_ed_ideology var:heir_ed_ideology <= -1 }
-		# Mild conservative push
+		limit = { var:heir_ed_ideology <= -1 }
 		heir ?= {
 			random_list = {
-				30 = { set_ideology = ideology:ideology_royalist }
+				40 = { set_ideology = ideology:ideology_traditionalist }
+				35 = { set_ideology = ideology:ideology_moderate }
+				25 = { set_ideology = ideology:ideology_patriarchal }
+			}
+		}
+	}
+	else = {
+		# Neutral ideology
+		heir ?= {
+			random_list = {
+				50 = { set_ideology = ideology:ideology_moderate }
+				20 = { set_ideology = ideology:ideology_reformer }
 				20 = { set_ideology = ideology:ideology_traditionalist }
-				10 = { set_ideology = ideology:ideology_authoritarian }
-				5 = { set_ideology = ideology:ideology_theocrat }
-				35 = { }
+				10 = { set_ideology = ideology:ideology_liberal }
 			}
 		}
 	}
-	# else: no ideology investment, no change
 
-	# ─── Resolve Interest Group ───
-	# Three IG mentorship groups: radical, moderate, regressive
-	# The group with the highest counter wins; magnitude affects probability
-
-	# Find winning group
-	# Radical wins: radical >= moderate AND radical >= regressive AND radical >= 1
+	# ─── Resolve IG Alignment ───
+	# Compares radical vs moderate vs regressive investment
+	# Winner's magnitude determines alignment strength
 	if = {
-		limit = {
-			var:heir_ed_ig_radical >= var:heir_ed_ig_moderate
-			var:heir_ed_ig_radical >= var:heir_ed_ig_regressive
-			var:heir_ed_ig_radical >= 4
-		}
-		heir ?= {
-			random_list = {
-				35 = { set_interest_group = owner.ig:ig_intelligentsia }
-				25 = { set_interest_group = owner.ig:ig_rural_folk }
-				15 = { set_interest_group = owner.ig:ig_trade_unions }
-				25 = { }
-			}
-		}
-	}
-	else_if = {
 		limit = {
 			var:heir_ed_ig_radical >= var:heir_ed_ig_moderate
 			var:heir_ed_ig_radical >= var:heir_ed_ig_regressive
 			var:heir_ed_ig_radical >= 1
 		}
-		heir ?= {
-			random_list = {
-				25 = { set_interest_group = owner.ig:ig_intelligentsia }
-				15 = { set_interest_group = owner.ig:ig_rural_folk }
-				5 = { set_interest_group = owner.ig:ig_trade_unions }
-				55 = { }
+		# Radical wins
+		if = {
+			limit = { var:heir_ed_ig_radical >= 4 }
+			heir ?= {
+				random_list = {
+					40 = { set_interest_group_type = ig_type:ig_trade_unions }
+					30 = { set_interest_group_type = ig_type:ig_intelligentsia }
+					30 = { set_interest_group_type = ig_type:ig_rural_folk }
+				}
 			}
 		}
-	}
-	# Moderate wins: moderate > radical AND moderate >= regressive AND moderate >= 1
-	else_if = {
-		limit = {
-			var:heir_ed_ig_moderate > var:heir_ed_ig_radical
-			var:heir_ed_ig_moderate >= var:heir_ed_ig_regressive
-			var:heir_ed_ig_moderate >= 4
-		}
-		heir ?= {
-			random_list = {
-				30 = { set_interest_group = owner.ig:ig_industrialists }
-				25 = { set_interest_group = owner.ig:ig_petty_bourgeoisie }
-				20 = { set_interest_group = owner.ig:ig_armed_forces }
-				25 = { }
+		else = {
+			heir ?= {
+				random_list = {
+					35 = { set_interest_group_type = ig_type:ig_trade_unions }
+					35 = { set_interest_group_type = ig_type:ig_intelligentsia }
+					30 = { set_interest_group_type = ig_type:ig_rural_folk }
+				}
 			}
 		}
 	}
 	else_if = {
 		limit = {
-			var:heir_ed_ig_moderate > var:heir_ed_ig_radical
+			var:heir_ed_ig_moderate >= var:heir_ed_ig_radical
 			var:heir_ed_ig_moderate >= var:heir_ed_ig_regressive
 			var:heir_ed_ig_moderate >= 1
 		}
-		heir ?= {
-			random_list = {
-				20 = { set_interest_group = owner.ig:ig_industrialists }
-				15 = { set_interest_group = owner.ig:ig_petty_bourgeoisie }
-				10 = { set_interest_group = owner.ig:ig_armed_forces }
-				55 = { }
+		# Moderate wins
+		if = {
+			limit = { var:heir_ed_ig_moderate >= 4 }
+			heir ?= {
+				random_list = {
+					40 = { set_interest_group_type = ig_type:ig_industrialists }
+					30 = { set_interest_group_type = ig_type:ig_petty_bourgeoisie }
+					30 = { set_interest_group_type = ig_type:ig_armed_forces }
+				}
 			}
 		}
-	}
-	# Regressive wins: regressive > radical AND regressive > moderate AND regressive >= 1
-	else_if = {
-		limit = {
-			var:heir_ed_ig_regressive > var:heir_ed_ig_radical
-			var:heir_ed_ig_regressive > var:heir_ed_ig_moderate
-			var:heir_ed_ig_regressive >= 4
-		}
-		heir ?= {
-			random_list = {
-				35 = { set_interest_group = owner.ig:ig_landowners }
-				30 = { set_interest_group = owner.ig:ig_devout }
-				35 = { }
+		else = {
+			heir ?= {
+				random_list = {
+					35 = { set_interest_group_type = ig_type:ig_industrialists }
+					35 = { set_interest_group_type = ig_type:ig_petty_bourgeoisie }
+					30 = { set_interest_group_type = ig_type:ig_armed_forces }
+				}
 			}
 		}
 	}
 	else_if = {
 		limit = {
-			var:heir_ed_ig_regressive > var:heir_ed_ig_radical
-			var:heir_ed_ig_regressive > var:heir_ed_ig_moderate
+			var:heir_ed_ig_regressive >= var:heir_ed_ig_radical
+			var:heir_ed_ig_regressive >= var:heir_ed_ig_moderate
 			var:heir_ed_ig_regressive >= 1
 		}
-		heir ?= {
-			random_list = {
-				25 = { set_interest_group = owner.ig:ig_landowners }
-				15 = { set_interest_group = owner.ig:ig_devout }
-				60 = { }
+		# Regressive wins
+		if = {
+			limit = { var:heir_ed_ig_regressive >= 4 }
+			heir ?= {
+				random_list = {
+					40 = { set_interest_group_type = ig_type:ig_landowners }
+					30 = { set_interest_group_type = ig_type:ig_devout }
+					30 = { set_interest_group_type = ig_type:ig_rural_folk }
+				}
+			}
+		}
+		else = {
+			heir ?= {
+				random_list = {
+					35 = { set_interest_group_type = ig_type:ig_landowners }
+					35 = { set_interest_group_type = ig_type:ig_devout }
+					30 = { set_interest_group_type = ig_type:ig_rural_folk }
+				}
 			}
 		}
 	}
 	else = {
-		# No explicit IG mentorship: education type influences IG weakly
-		if = {
-			limit = {
-				has_variable = heir_ed_admin
-				has_variable = heir_ed_diplo
-				has_variable = heir_ed_military
-				var:heir_ed_admin > var:heir_ed_diplo
-				var:heir_ed_admin > var:heir_ed_military
-			}
-			heir ?= {
-				random_list = {
-					25 = { set_interest_group = owner.ig:ig_industrialists }
-					15 = { set_interest_group = owner.ig:ig_petty_bourgeoisie }
-					60 = { }
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				has_variable = heir_ed_diplo
-				has_variable = heir_ed_admin
-				has_variable = heir_ed_military
-				var:heir_ed_diplo > var:heir_ed_admin
-				var:heir_ed_diplo > var:heir_ed_military
-			}
-			heir ?= {
-				random_list = {
-					30 = { set_interest_group = owner.ig:ig_intelligentsia }
-					10 = { set_interest_group = owner.ig:ig_landowners }
-					60 = { }
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				has_variable = heir_ed_military
-				has_variable = heir_ed_admin
-				has_variable = heir_ed_diplo
-				var:heir_ed_military > var:heir_ed_admin
-				var:heir_ed_military > var:heir_ed_diplo
-			}
-			heir ?= {
-				random_list = {
-					35 = { set_interest_group = owner.ig:ig_armed_forces }
-					65 = { }
-				}
+		# No clear winner - random IG
+		heir ?= {
+			random_list = {
+				15 = { set_interest_group_type = ig_type:ig_industrialists }
+				15 = { set_interest_group_type = ig_type:ig_landowners }
+				14 = { set_interest_group_type = ig_type:ig_intelligentsia }
+				14 = { set_interest_group_type = ig_type:ig_devout }
+				14 = { set_interest_group_type = ig_type:ig_trade_unions }
+				14 = { set_interest_group_type = ig_type:ig_armed_forces }
+				14 = { set_interest_group_type = ig_type:ig_rural_folk }
 			}
 		}
 	}
@@ -355,11 +740,37 @@ heir_education_resolve_effect = {
 	# ─── Mark heir as educated ───
 	heir ?= {
 		set_variable = received_education
+		set_aptitude_trait_vars_effect = yes
 	}
 }
 
 # ──────────────────────── IG REACTION EFFECTS ────────────────────────
-# Called by monthly pulse when investments advance
+# Called by gain effects when investments advance
+
+# ──────────────────────── APTITUDE TRAIT VARIABLE SETTER ────────────────────────
+# Character-scope effect. Reads which aptitude traits the character has
+# and sets variables (ruler_admin_tier, ruler_diplo_tier, ruler_military_tier)
+# for GUI display purposes. Values: 1=terrible, 2=poor, 3=average, 4=skilled, 5=exceptional.
+
+set_aptitude_trait_vars_effect = {
+	if = { limit = { has_trait = ruler_exceptional_administrator } set_variable = { name = ruler_admin_tier value = 5 } }
+	else_if = { limit = { has_trait = ruler_skilled_administrator } set_variable = { name = ruler_admin_tier value = 4 } }
+	else_if = { limit = { has_trait = ruler_average_administrator } set_variable = { name = ruler_admin_tier value = 3 } }
+	else_if = { limit = { has_trait = ruler_poor_administrator } set_variable = { name = ruler_admin_tier value = 2 } }
+	else_if = { limit = { has_trait = ruler_terrible_administrator } set_variable = { name = ruler_admin_tier value = 1 } }
+
+	if = { limit = { has_trait = ruler_exceptional_diplomat } set_variable = { name = ruler_diplo_tier value = 5 } }
+	else_if = { limit = { has_trait = ruler_skilled_diplomat } set_variable = { name = ruler_diplo_tier value = 4 } }
+	else_if = { limit = { has_trait = ruler_average_diplomat } set_variable = { name = ruler_diplo_tier value = 3 } }
+	else_if = { limit = { has_trait = ruler_poor_diplomat } set_variable = { name = ruler_diplo_tier value = 2 } }
+	else_if = { limit = { has_trait = ruler_terrible_diplomat } set_variable = { name = ruler_diplo_tier value = 1 } }
+
+	if = { limit = { has_trait = ruler_exceptional_commander } set_variable = { name = ruler_military_tier value = 5 } }
+	else_if = { limit = { has_trait = ruler_skilled_commander } set_variable = { name = ruler_military_tier value = 4 } }
+	else_if = { limit = { has_trait = ruler_average_commander } set_variable = { name = ruler_military_tier value = 3 } }
+	else_if = { limit = { has_trait = ruler_poor_commander } set_variable = { name = ruler_military_tier value = 2 } }
+	else_if = { limit = { has_trait = ruler_terrible_commander } set_variable = { name = ruler_military_tier value = 1 } }
+}
 
 heir_education_admin_ig_reaction = {
 	ig:ig_industrialists = {
@@ -373,6 +784,9 @@ heir_education_admin_ig_reaction = {
 heir_education_diplo_ig_reaction = {
 	ig:ig_intelligentsia = {
 		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+	}
+	ig:ig_industrialists = {
+		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
 	}
 }
 
@@ -471,6 +885,7 @@ heir_education_cleanup_effect = {
 	remove_variable = heir_ed_ig_moderate
 	remove_variable = heir_ed_ig_regressive
 	remove_variable = heir_ed_total
+	remove_variable = heir_ed_intelligence
 	# Focus variables
 	if = { limit = { has_variable = heir_ed_focus_admin } remove_variable = heir_ed_focus_admin }
 	if = { limit = { has_variable = heir_ed_focus_diplo } remove_variable = heir_ed_focus_diplo }
@@ -484,12 +899,15 @@ heir_education_cleanup_effect = {
 	if = { limit = { has_modifier = heir_education_innovation_cost } remove_modifier = heir_education_innovation_cost }
 	if = { limit = { has_modifier = heir_education_grace_period } remove_modifier = heir_education_grace_period }
 	if = { limit = { has_modifier = heir_education_event_cooldown } remove_modifier = heir_education_event_cooldown }
+	if = { limit = { has_modifier = heir_ed_trait_focus_active } remove_modifier = heir_ed_trait_focus_active }
+	if = { limit = { has_modifier = heir_ed_ideology_focus_active } remove_modifier = heir_ed_ideology_focus_active }
+	if = { limit = { has_modifier = heir_ed_ig_focus_active } remove_modifier = heir_ed_ig_focus_active }
 }
 
 # ──────────────────────── NON-HEIR TRAIT ASSIGNMENT ────────────────────────
 # Assigns aptitude traits to adult characters who lack them.
-# Mostly gives average traits, with small chances for better/worse.
-# Generals/admirals are biased toward better military traits.
+# 5-tier distribution for characters without formal education.
+# Generals/admirals biased toward better military traits.
 
 assign_aptitude_traits_effect = {
 	# Administrative trait
@@ -504,6 +922,7 @@ assign_aptitude_traits_effect = {
 				has_role = admiral
 			}
 			NOR = {
+				has_trait = ruler_terrible_administrator
 				has_trait = ruler_poor_administrator
 				has_trait = ruler_average_administrator
 				has_trait = ruler_skilled_administrator
@@ -511,10 +930,11 @@ assign_aptitude_traits_effect = {
 			}
 		}
 		random_list = {
-			15 = { add_trait = ruler_poor_administrator }
-			55 = { add_trait = ruler_average_administrator }
-			25 = { add_trait = ruler_skilled_administrator }
-			5 = { add_trait = ruler_exceptional_administrator }
+			20 = { add_trait = ruler_terrible_administrator }
+			30 = { add_trait = ruler_poor_administrator }
+			35 = { add_trait = ruler_average_administrator }
+			12 = { add_trait = ruler_skilled_administrator }
+			3 = { add_trait = ruler_exceptional_administrator }
 		}
 	}
 
@@ -530,6 +950,7 @@ assign_aptitude_traits_effect = {
 				has_role = admiral
 			}
 			NOR = {
+				has_trait = ruler_terrible_diplomat
 				has_trait = ruler_poor_diplomat
 				has_trait = ruler_average_diplomat
 				has_trait = ruler_skilled_diplomat
@@ -537,10 +958,11 @@ assign_aptitude_traits_effect = {
 			}
 		}
 		random_list = {
-			15 = { add_trait = ruler_poor_diplomat }
-			55 = { add_trait = ruler_average_diplomat }
-			25 = { add_trait = ruler_skilled_diplomat }
-			5 = { add_trait = ruler_exceptional_diplomat }
+			20 = { add_trait = ruler_terrible_diplomat }
+			30 = { add_trait = ruler_poor_diplomat }
+			35 = { add_trait = ruler_average_diplomat }
+			12 = { add_trait = ruler_skilled_diplomat }
+			3 = { add_trait = ruler_exceptional_diplomat }
 		}
 	}
 
@@ -556,6 +978,7 @@ assign_aptitude_traits_effect = {
 				has_role = admiral
 			}
 			NOR = {
+				has_trait = ruler_terrible_commander
 				has_trait = ruler_poor_commander
 				has_trait = ruler_average_commander
 				has_trait = ruler_skilled_commander
@@ -570,19 +993,44 @@ assign_aptitude_traits_effect = {
 				}
 			}
 			random_list = {
-				5 = { add_trait = ruler_poor_commander }
+				5 = { add_trait = ruler_terrible_commander }
+				15 = { add_trait = ruler_poor_commander }
 				30 = { add_trait = ruler_average_commander }
-				45 = { add_trait = ruler_skilled_commander }
-				20 = { add_trait = ruler_exceptional_commander }
+				35 = { add_trait = ruler_skilled_commander }
+				15 = { add_trait = ruler_exceptional_commander }
 			}
 		}
 		else = {
 			random_list = {
-				15 = { add_trait = ruler_poor_commander }
-				55 = { add_trait = ruler_average_commander }
-				25 = { add_trait = ruler_skilled_commander }
-				5 = { add_trait = ruler_exceptional_commander }
+				20 = { add_trait = ruler_terrible_commander }
+				30 = { add_trait = ruler_poor_commander }
+				35 = { add_trait = ruler_average_commander }
+				12 = { add_trait = ruler_skilled_commander }
+				3 = { add_trait = ruler_exceptional_commander }
 			}
 		}
+	}
+
+	# Set GUI display variables for all characters with aptitude traits
+	every_scope_character = {
+		limit = {
+			NOT = { age < define:NCharacters|ADULT_AGE }
+			OR = {
+				is_ruler = yes
+				has_role = politician
+				has_role = agitator
+				has_role = general
+				has_role = admiral
+			}
+			OR = {
+				has_trait = ruler_terrible_administrator
+				has_trait = ruler_poor_administrator
+				has_trait = ruler_average_administrator
+				has_trait = ruler_skilled_administrator
+				has_trait = ruler_exceptional_administrator
+			}
+			NOT = { has_variable = ruler_admin_tier }
+		}
+		set_aptitude_trait_vars_effect = yes
 	}
 }

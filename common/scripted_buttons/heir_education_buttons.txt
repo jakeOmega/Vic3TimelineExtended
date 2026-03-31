@@ -48,6 +48,11 @@ he_enable_admin_focus = {
 			remove_variable = heir_ed_focus_military
 		}
 		set_variable = heir_ed_focus_admin
+		if = {
+			limit = { NOT = { has_modifier = heir_ed_trait_focus_active } }
+			add_modifier = { name = heir_ed_trait_focus_active }
+		}
+		heir_education_admin_ig_reaction = yes
 	}
 }
 
@@ -71,6 +76,7 @@ he_disable_admin_focus = {
 
 	effect = {
 		remove_variable = heir_ed_focus_admin
+		if = { limit = { has_modifier = heir_ed_trait_focus_active } remove_modifier = heir_ed_trait_focus_active }
 	}
 }
 
@@ -122,6 +128,11 @@ he_enable_diplo_focus = {
 			remove_variable = heir_ed_focus_military
 		}
 		set_variable = heir_ed_focus_diplo
+		if = {
+			limit = { NOT = { has_modifier = heir_ed_trait_focus_active } }
+			add_modifier = { name = heir_ed_trait_focus_active }
+		}
+		heir_education_diplo_ig_reaction = yes
 	}
 }
 
@@ -145,6 +156,7 @@ he_disable_diplo_focus = {
 
 	effect = {
 		remove_variable = heir_ed_focus_diplo
+		if = { limit = { has_modifier = heir_ed_trait_focus_active } remove_modifier = heir_ed_trait_focus_active }
 	}
 }
 
@@ -196,6 +208,11 @@ he_enable_military_focus = {
 			remove_variable = heir_ed_focus_diplo
 		}
 		set_variable = heir_ed_focus_military
+		if = {
+			limit = { NOT = { has_modifier = heir_ed_trait_focus_active } }
+			add_modifier = { name = heir_ed_trait_focus_active }
+		}
+		heir_education_military_ig_reaction = yes
 	}
 }
 
@@ -219,6 +236,7 @@ he_disable_military_focus = {
 
 	effect = {
 		remove_variable = heir_ed_focus_military
+		if = { limit = { has_modifier = heir_ed_trait_focus_active } remove_modifier = heir_ed_trait_focus_active }
 	}
 }
 
@@ -269,6 +287,11 @@ he_enable_progressive = {
 			remove_variable = heir_ed_focus_conservative
 		}
 		set_variable = heir_ed_focus_progressive
+		if = {
+			limit = { NOT = { has_modifier = heir_ed_ideology_focus_active } }
+			add_modifier = { name = heir_ed_ideology_focus_active }
+		}
+		heir_education_progressive_ig_reaction = yes
 	}
 }
 
@@ -292,6 +315,7 @@ he_disable_progressive = {
 
 	effect = {
 		remove_variable = heir_ed_focus_progressive
+		if = { limit = { has_modifier = heir_ed_ideology_focus_active } remove_modifier = heir_ed_ideology_focus_active }
 	}
 }
 
@@ -342,6 +366,11 @@ he_enable_conservative = {
 			remove_variable = heir_ed_focus_progressive
 		}
 		set_variable = heir_ed_focus_conservative
+		if = {
+			limit = { NOT = { has_modifier = heir_ed_ideology_focus_active } }
+			add_modifier = { name = heir_ed_ideology_focus_active }
+		}
+		heir_education_conservative_ig_reaction = yes
 	}
 }
 
@@ -365,6 +394,7 @@ he_disable_conservative = {
 
 	effect = {
 		remove_variable = heir_ed_focus_conservative
+		if = { limit = { has_modifier = heir_ed_ideology_focus_active } remove_modifier = heir_ed_ideology_focus_active }
 	}
 }
 
@@ -420,6 +450,11 @@ he_enable_radical = {
 			remove_variable = heir_ed_focus_regressive
 		}
 		set_variable = heir_ed_focus_radical
+		if = {
+			limit = { NOT = { has_modifier = heir_ed_ig_focus_active } }
+			add_modifier = { name = heir_ed_ig_focus_active }
+		}
+		heir_education_radical_ig_reaction = yes
 	}
 }
 
@@ -443,6 +478,7 @@ he_disable_radical = {
 
 	effect = {
 		remove_variable = heir_ed_focus_radical
+		if = { limit = { has_modifier = heir_ed_ig_focus_active } remove_modifier = heir_ed_ig_focus_active }
 	}
 }
 
@@ -498,6 +534,11 @@ he_enable_moderate = {
 			remove_variable = heir_ed_focus_regressive
 		}
 		set_variable = heir_ed_focus_moderate
+		if = {
+			limit = { NOT = { has_modifier = heir_ed_ig_focus_active } }
+			add_modifier = { name = heir_ed_ig_focus_active }
+		}
+		heir_education_moderate_ig_reaction = yes
 	}
 }
 
@@ -521,6 +562,7 @@ he_disable_moderate = {
 
 	effect = {
 		remove_variable = heir_ed_focus_moderate
+		if = { limit = { has_modifier = heir_ed_ig_focus_active } remove_modifier = heir_ed_ig_focus_active }
 	}
 }
 
@@ -572,6 +614,11 @@ he_enable_regressive = {
 			remove_variable = heir_ed_focus_moderate
 		}
 		set_variable = heir_ed_focus_regressive
+		if = {
+			limit = { NOT = { has_modifier = heir_ed_ig_focus_active } }
+			add_modifier = { name = heir_ed_ig_focus_active }
+		}
+		heir_education_regressive_ig_reaction = yes
 	}
 }
 
@@ -595,5 +642,6 @@ he_disable_regressive = {
 
 	effect = {
 		remove_variable = heir_ed_focus_regressive
+		if = { limit = { has_modifier = heir_ed_ig_focus_active } remove_modifier = heir_ed_ig_focus_active }
 	}
 }

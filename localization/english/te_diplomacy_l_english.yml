@@ -67,6 +67,8 @@
  ruler_poor_diplomat_desc:0 "A ruler whose social graces and diplomatic instincts leave much to be desired. Foreign envoys are unimpressed, and the nation's voice carries little weight abroad."
  ruler_skilled_diplomat:0 "Skilled Diplomat"
  ruler_skilled_diplomat_desc:0 "A ruler with natural charm and a talent for negotiation. The nation enjoys enhanced prestige and a more favorable reputation in foreign courts."
+ ruler_terrible_diplomat:0 "Terrible Diplomat"
+ ruler_terrible_diplomat_desc:0 "A ruler spectacularly unsuited for diplomacy. Foreign envoys leave insulted, alliances crumble, and the nation's reputation suffers at every turn."
  ste_telepathic_diplomacy:0 "Telepathic Diplomacy"
  ste_telepathic_diplomacy_desc:0 "A direct mind-to-mind diplomatic channel has opened new possibilities for cooperation."
  ste_telepathic_diplomacy_rejected:0 "Telepathic Diplomacy Rejected"

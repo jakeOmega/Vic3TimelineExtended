@@ -3,9 +3,58 @@
 
 # ──────────────────────── ADMINISTRATIVE ────────────────────────
 
+ruler_terrible_administrator = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/ruler_terrible_administrator.dds"
+
+	character_modifier = {
+		character_popularity_add = -20
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+		country_bureaucracy_mult = -0.20
+		state_tax_capacity_mult = -0.20
+		country_legitimacy_base_add = -10
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+		interest_group_pol_str_mult = -0.10
+	}
+
+	executive_modifier = {
+		building_throughput_add = -0.05
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+	}
+
+	replace = {
+		ruler_poor_administrator
+		ruler_average_administrator
+		ruler_skilled_administrator
+		ruler_exceptional_administrator
+	}
+}
 ruler_poor_administrator = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/political_appointee.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_poor_administrator.dds"
 
 	character_modifier = {
 		character_popularity_add = -10
@@ -59,11 +108,12 @@ ruler_poor_administrator = {
 		ruler_average_administrator
 		ruler_skilled_administrator
 		ruler_exceptional_administrator
+			ruler_terrible_administrator
 	}
 }
 ruler_average_administrator = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/ambitious.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_average_administrator.dds"
 
 	character_modifier = {
 	}
@@ -101,12 +151,13 @@ ruler_average_administrator = {
 		ruler_poor_administrator
 		ruler_skilled_administrator
 		ruler_exceptional_administrator
+			ruler_terrible_administrator
 	}
 }
 
 ruler_skilled_administrator = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/experienced.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_skilled_administrator.dds"
 
 	character_modifier = {
 		character_popularity_add = 10
@@ -161,12 +212,13 @@ ruler_skilled_administrator = {
 		ruler_poor_administrator
 		ruler_average_administrator
 		ruler_exceptional_administrator
+			ruler_terrible_administrator
 	}
 }
 
 ruler_exceptional_administrator = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/meticulous.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_exceptional_administrator.dds"
 
 	character_modifier = {
 		character_popularity_add = 20
@@ -224,14 +276,64 @@ ruler_exceptional_administrator = {
 		ruler_poor_administrator
 		ruler_average_administrator
 		ruler_skilled_administrator
+			ruler_terrible_administrator
 	}
 }
 
 # ──────────────────────── DIPLOMATIC ────────────────────────
 
+ruler_terrible_diplomat = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/ruler_terrible_diplomat.dds"
+
+	character_modifier = {
+		character_popularity_add = -15
+	}
+
+	command_modifier = {
+	}
+
+	country_modifier = {
+		country_prestige_mult = -0.20
+		country_diplomatic_reputation_add = -10
+		country_infamy_generation_mult = 0.20
+		interest_group_amenability_add = -10
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+		interest_group_pop_attraction_mult = -0.10
+	}
+
+	executive_modifier = {
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+	}
+
+	replace = {
+		ruler_poor_diplomat
+		ruler_average_diplomat
+		ruler_skilled_diplomat
+		ruler_exceptional_diplomat
+	}
+}
 ruler_poor_diplomat = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/arrogant.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_poor_diplomat.dds"
 
 	character_modifier = {
 		character_popularity_add = -5
@@ -285,11 +387,12 @@ ruler_poor_diplomat = {
 		ruler_average_diplomat
 		ruler_skilled_diplomat
 		ruler_exceptional_diplomat
+			ruler_terrible_diplomat
 	}
 }
 ruler_average_diplomat = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/cautious.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_average_diplomat.dds"
 
 	character_modifier = {
 	}
@@ -327,12 +430,13 @@ ruler_average_diplomat = {
 		ruler_poor_diplomat
 		ruler_skilled_diplomat
 		ruler_exceptional_diplomat
+			ruler_terrible_diplomat
 	}
 }
 
 ruler_skilled_diplomat = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/tactful.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_skilled_diplomat.dds"
 
 	character_modifier = {
 		character_popularity_add = 10
@@ -388,12 +492,13 @@ ruler_skilled_diplomat = {
 		ruler_poor_diplomat
 		ruler_average_diplomat
 		ruler_exceptional_diplomat
+			ruler_terrible_diplomat
 	}
 }
 
 ruler_exceptional_diplomat = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/charismatic.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_exceptional_diplomat.dds"
 
 	character_modifier = {
 		character_popularity_add = 20
@@ -452,14 +557,68 @@ ruler_exceptional_diplomat = {
 		ruler_poor_diplomat
 		ruler_average_diplomat
 		ruler_skilled_diplomat
+			ruler_terrible_diplomat
 	}
 }
 
 # ──────────────────────── MILITARY ────────────────────────
 
+ruler_terrible_commander = {
+	type = condition
+	texture = "gfx/interface/icons/character_trait_icons/ruler_terrible_commander.dds"
+
+	character_modifier = {
+		character_popularity_add = -15
+	}
+
+	command_modifier = {
+		unit_offense_mult = -0.15
+		unit_defense_mult = -0.15
+	}
+
+	country_modifier = {
+		country_war_exhaustion_casualties_mult = 0.20
+		unit_morale_loss_mult = 0.4
+		unit_experience_gain_mult = -0.4
+		interest_group_ig_armed_forces_approval_add = -5
+		interest_group_ig_armed_forces_pop_attraction_mult = -0.10
+	}
+
+	agitator_modifier = {
+	}
+
+	interest_group_modifier = {
+	}
+
+	executive_modifier = {
+	}
+
+	possible = {
+		NOT = { age < define:NCharacters|ADULT_AGE }
+		OR = {
+			has_role = politician
+			has_role = agitator
+			has_role = general
+			has_role = admiral
+			is_ruler = yes
+			is_heir = yes
+		}
+	}
+
+	weight = {
+		value = 0
+	}
+
+	replace = {
+		ruler_poor_commander
+		ruler_average_commander
+		ruler_skilled_commander
+		ruler_exceptional_commander
+	}
+}
 ruler_poor_commander = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/reckless.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_poor_commander.dds"
 
 	character_modifier = {
 		character_popularity_add = -5
@@ -521,11 +680,12 @@ ruler_poor_commander = {
 		ruler_average_commander
 		ruler_skilled_commander
 		ruler_exceptional_commander
+			ruler_terrible_commander
 	}
 }
 ruler_average_commander = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/brave.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_average_commander.dds"
 
 	character_modifier = {
 	}
@@ -565,12 +725,13 @@ ruler_average_commander = {
 		ruler_poor_commander
 		ruler_skilled_commander
 		ruler_exceptional_commander
+			ruler_terrible_commander
 	}
 }
 
 ruler_skilled_commander = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/direct.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_skilled_commander.dds"
 
 	character_modifier = {
 		character_popularity_add = 10
@@ -635,12 +796,13 @@ ruler_skilled_commander = {
 		ruler_poor_commander
 		ruler_average_commander
 		ruler_exceptional_commander
+			ruler_terrible_commander
 	}
 }
 
 ruler_exceptional_commander = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/expert_offensive_planner.dds"
+	texture = "gfx/interface/icons/character_trait_icons/ruler_exceptional_commander.dds"
 
 	character_modifier = {
 		character_popularity_add = 25
@@ -709,5 +871,6 @@ ruler_exceptional_commander = {
 		ruler_poor_commander
 		ruler_average_commander
 		ruler_skilled_commander
+			ruler_terrible_commander
 	}
 }

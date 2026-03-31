@@ -1,6 +1,6 @@
 ﻿heir_education_progress_bar = {
 	start_value = 0
 	min_value = 0
-	max_value = 15
+	max_value = 20
 	default_green = yes
 }

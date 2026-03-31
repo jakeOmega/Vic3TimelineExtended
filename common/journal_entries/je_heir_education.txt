@@ -1,7 +1,6 @@
 ﻿### Heir Education Journal Entry
-### Allows monarchies to shape their heir's education through focus toggles
-### Monthly pulse applies investments probabilistically based on active focuses
-### Completes when the heir reaches adulthood (or after 5 years for adult heirs)
+### Reworked: 3% base monthly pulse (down from 5%), intelligence-modified gains,
+### adult heir pre-initialization, 5-tier trait resolution, rebel child mechanic.
 
 je_heir_education = {
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
@@ -48,8 +47,23 @@ je_heir_education = {
 		set_variable = { name = heir_ed_ig_moderate value = 0 }
 		set_variable = { name = heir_ed_ig_regressive value = 0 }
 		set_variable = { name = heir_ed_total value = 0 }
+		# Hidden intelligence score (1-5): affects gain amount per pulse tick
+		# Higher = faster learning, but player never sees exact value
+		random_list = {
+			20 = { set_variable = { name = heir_ed_intelligence value = 1 } }
+			20 = { set_variable = { name = heir_ed_intelligence value = 2 } }
+			20 = { set_variable = { name = heir_ed_intelligence value = 3 } }
+			20 = { set_variable = { name = heir_ed_intelligence value = 4 } }
+			20 = { set_variable = { name = heir_ed_intelligence value = 5 } }
+		}
 		heir ?= {
 			set_variable = being_educated
+		}
+		# Pre-initialize adult heirs based on their age
+		heir_education_init_adult = yes
+		# Update progress bar with any pre-initialized total
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
 		}
 		# Grace period prevents instant completion for adult heirs
 		add_modifier = { name = heir_education_grace_period days = 365 }
@@ -72,6 +86,34 @@ je_heir_education = {
 	# If the heir changes (dies, replaced), detect and reset
 	on_monthly_pulse = {
 		effect = {
+			# Backwards compatibility: initialize each variable separately if missing
+			if = { limit = { NOT = { has_variable = heir_ed_admin } } set_variable = { name = heir_ed_admin value = 0 } }
+			if = { limit = { NOT = { has_variable = heir_ed_diplo } } set_variable = { name = heir_ed_diplo value = 0 } }
+			if = { limit = { NOT = { has_variable = heir_ed_military } } set_variable = { name = heir_ed_military value = 0 } }
+			if = { limit = { NOT = { has_variable = heir_ed_ideology } } set_variable = { name = heir_ed_ideology value = 0 } }
+			if = { limit = { NOT = { has_variable = heir_ed_ig_radical } } set_variable = { name = heir_ed_ig_radical value = 0 } }
+			if = { limit = { NOT = { has_variable = heir_ed_ig_moderate } } set_variable = { name = heir_ed_ig_moderate value = 0 } }
+			if = { limit = { NOT = { has_variable = heir_ed_ig_regressive } } set_variable = { name = heir_ed_ig_regressive value = 0 } }
+			# Ensure total exists; also perform the adult pre-init and grace-period when total was missing
+			if = {
+				limit = { NOT = { has_variable = heir_ed_total } }
+				set_variable = { name = heir_ed_total value = 0 }
+				heir ?= { set_variable = being_educated }
+				heir_education_init_adult = yes
+				scope:journal_entry = { set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total } }
+				add_modifier = { name = heir_education_grace_period days = 365 }
+			}
+			# Initialize newly added intelligence value if missing
+			if = {
+				limit = { NOT = { has_variable = heir_ed_intelligence } }
+				random_list = {
+					20 = { set_variable = { name = heir_ed_intelligence value = 1 } }
+					20 = { set_variable = { name = heir_ed_intelligence value = 2 } }
+					20 = { set_variable = { name = heir_ed_intelligence value = 3 } }
+					20 = { set_variable = { name = heir_ed_intelligence value = 4 } }
+					20 = { set_variable = { name = heir_ed_intelligence value = 5 } }
+				}
+			}
 			# ─── Heir change detection ───
 			if = {
 				limit = {
@@ -89,6 +131,14 @@ je_heir_education = {
 				set_variable = { name = heir_ed_ig_moderate value = 0 }
 				set_variable = { name = heir_ed_ig_regressive value = 0 }
 				set_variable = { name = heir_ed_total value = 0 }
+				# Re-roll intelligence for new heir
+				random_list = {
+					20 = { set_variable = { name = heir_ed_intelligence value = 1 } }
+					20 = { set_variable = { name = heir_ed_intelligence value = 2 } }
+					20 = { set_variable = { name = heir_ed_intelligence value = 3 } }
+					20 = { set_variable = { name = heir_ed_intelligence value = 4 } }
+					20 = { set_variable = { name = heir_ed_intelligence value = 5 } }
+				}
 				# Clear focus variables
 				if = { limit = { has_variable = heir_ed_focus_admin } remove_variable = heir_ed_focus_admin }
 				if = { limit = { has_variable = heir_ed_focus_diplo } remove_variable = heir_ed_focus_diplo }
@@ -106,132 +156,79 @@ je_heir_education = {
 					heir ?= {
 						set_variable = being_educated
 					}
+					# Pre-initialize for new adult heir
+					heir_education_init_adult = yes
+					scope:journal_entry = {
+						set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+					}
 				}
 			}
 
 			# ─── Monthly investment processing ───
-			# Each active focus has a 5% chance per month to advance
-			# Administrative focus
+			# Each active focus has a 3% chance per month to trigger a gain.
+			# Gain amount is modified by hidden intelligence score.
+			# Admin focus
 			if = {
 				limit = { has_variable = heir_ed_focus_admin }
 				random_list = {
-					5 = {
-						change_variable = { name = heir_ed_admin add = 1 }
-						change_variable = { name = heir_ed_total add = 1 }
-						scope:journal_entry = {
-							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-						}
-						add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
-						heir_education_admin_ig_reaction = yes
-					}
-					95 = { }
+					3 = { heir_ed_gain_admin = yes }
+					97 = { }
 				}
 			}
-			# Diplomatic focus
+			# Diplo focus
 			if = {
 				limit = { has_variable = heir_ed_focus_diplo }
 				random_list = {
-					5 = {
-						change_variable = { name = heir_ed_diplo add = 1 }
-						change_variable = { name = heir_ed_total add = 1 }
-						scope:journal_entry = {
-							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-						}
-						add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
-						heir_education_diplo_ig_reaction = yes
-					}
-					95 = { }
+					3 = { heir_ed_gain_diplo = yes }
+					97 = { }
 				}
 			}
 			# Military focus
 			if = {
 				limit = { has_variable = heir_ed_focus_military }
 				random_list = {
-					5 = {
-						change_variable = { name = heir_ed_military add = 1 }
-						change_variable = { name = heir_ed_total add = 1 }
-						scope:journal_entry = {
-							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-						}
-						add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
-						heir_education_military_ig_reaction = yes
-					}
-					95 = { }
+					3 = { heir_ed_gain_military = yes }
+					97 = { }
 				}
 			}
-			# Progressive ideology focus
+			# Progressive focus
 			if = {
 				limit = { has_variable = heir_ed_focus_progressive }
 				random_list = {
-					5 = {
-						change_variable = { name = heir_ed_ideology add = 1 }
-						change_variable = { name = heir_ed_total add = 1 }
-						scope:journal_entry = {
-							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-						}
-						heir_education_progressive_ig_reaction = yes
-					}
-					95 = { }
+					3 = { heir_ed_gain_progressive = yes }
+					97 = { }
 				}
 			}
-			# Conservative ideology focus
+			# Conservative focus
 			if = {
 				limit = { has_variable = heir_ed_focus_conservative }
 				random_list = {
-					5 = {
-						change_variable = { name = heir_ed_ideology add = -1 }
-						change_variable = { name = heir_ed_total add = 1 }
-						scope:journal_entry = {
-							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-						}
-						heir_education_conservative_ig_reaction = yes
-					}
-					95 = { }
+					3 = { heir_ed_gain_conservative = yes }
+					97 = { }
 				}
 			}
-			# Radical IG focus
+			# Radical focus
 			if = {
 				limit = { has_variable = heir_ed_focus_radical }
 				random_list = {
-					5 = {
-						change_variable = { name = heir_ed_ig_radical add = 1 }
-						change_variable = { name = heir_ed_total add = 1 }
-						scope:journal_entry = {
-							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-						}
-						heir_education_radical_ig_reaction = yes
-					}
-					95 = { }
+					3 = { heir_ed_gain_radical = yes }
+					97 = { }
 				}
 			}
-			# Moderate IG focus
+			# Moderate focus
 			if = {
 				limit = { has_variable = heir_ed_focus_moderate }
 				random_list = {
-					5 = {
-						change_variable = { name = heir_ed_ig_moderate add = 1 }
-						change_variable = { name = heir_ed_total add = 1 }
-						scope:journal_entry = {
-							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-						}
-						heir_education_moderate_ig_reaction = yes
-					}
-					95 = { }
+					3 = { heir_ed_gain_moderate = yes }
+					97 = { }
 				}
 			}
-			# Regressive IG focus
+			# Regressive focus
 			if = {
 				limit = { has_variable = heir_ed_focus_regressive }
 				random_list = {
-					5 = {
-						change_variable = { name = heir_ed_ig_regressive add = 1 }
-						change_variable = { name = heir_ed_total add = 1 }
-						scope:journal_entry = {
-							set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-						}
-						heir_education_regressive_ig_reaction = yes
-					}
-					95 = { }
+					3 = { heir_ed_gain_regressive = yes }
+					97 = { }
 				}
 			}
 
@@ -297,6 +294,18 @@ je_heir_education = {
 				}
 			}
 			triggered_desc = {
+				desc = je_heir_education_status_bright
+				trigger = {
+					var:heir_ed_intelligence >= 4
+				}
+			}
+			triggered_desc = {
+				desc = je_heir_education_status_slow
+				trigger = {
+					var:heir_ed_intelligence <= 2
+				}
+			}
+			triggered_desc = {
 				desc = je_heir_education_status_active
 				trigger = { always = yes }
 			}
@@ -305,7 +314,7 @@ je_heir_education = {
 
 	weight = 100
 
-	timeout = 5475 # 15 years - safety fallback
+	timeout = 5840 # 16 years - safety fallback
 	on_timeout = {
 		heir_education_resolve_effect = yes
 		heir_education_cleanup_effect = yes
@@ -316,6 +325,6 @@ je_heir_education = {
 	}
 
 	goal_add_value = {
-		value = 15
+		value = 20
 	}
 }
