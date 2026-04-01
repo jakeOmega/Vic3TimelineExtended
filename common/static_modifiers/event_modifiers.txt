@@ -313,7 +313,7 @@ ste_antiglobal_crackdown = {
 
 # ======= Terrorism
 ste_terror_security_state = {
-    icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
     country_military_wages_mult = 0.05
     country_legitimacy_base_add = -5
     country_institution_cost_institution_ministry_of_intelligence_and_security_mult = -0.1
@@ -474,12 +474,12 @@ ste_reactor_leak_shutdown = {
     country_legitimacy_base_add = 5
 }
 ste_meltdown_evacuate = {
-    icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
     country_government_wages_mult = 0.05
     goods_output_electricity_mult = -0.15
 }
 ste_meltdown_contain = {
-    icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
     goods_output_electricity_mult = -0.08
     country_legitimacy_base_add = -10
 }
@@ -596,7 +596,7 @@ ste_reactor_leak_audit = {
 
 # Nuclear - institutional emergency response (faster containment, moderate cost)
 ste_meltdown_institutional_response = {
-    icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
     goods_output_electricity_mult = -0.05
     country_government_wages_mult = 0.03
     country_legitimacy_base_add = -5

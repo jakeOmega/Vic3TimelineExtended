@@ -1123,7 +1123,7 @@ diplomatic_overture_rebuffed_modifier = {
 
 # Event 1c: Ignore the arms race - save money but lose deterrence
 arms_race_ignored_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_military_goods_cost_mult = -0.05
 	country_prestige_from_army_power_projection_mult = -0.10
 	country_prestige_from_navy_power_projection_mult = -0.10
@@ -1131,7 +1131,7 @@ arms_race_ignored_modifier = {
 
 # Event 2a: Proxy conflict funding (weaken rival, but costly and risky)
 proxy_conflict_funding_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_from_army_power_projection_mult = 0.05
 	country_prestige_add = -25
 	country_bureaucracy_mult = -0.05
@@ -1219,7 +1219,7 @@ space_race_redirected_modifier = {
 
 # Event 8a: Nuclear brinkmanship - stand firm
 nuclear_brinkmanship_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_from_army_power_projection_mult = 0.15
 	state_standard_of_living_add = -1
 	state_radicals_from_political_movements_mult = 0.10
@@ -1234,7 +1234,7 @@ nuclear_deescalation_modifier = {
 
 # Event 8c: Nuclear mobilization (aggressive, terrifies population)
 nuclear_mobilization_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_from_army_power_projection_mult = 0.20
 	country_prestige_from_navy_power_projection_mult = 0.20
 	state_standard_of_living_add = -2
@@ -1244,7 +1244,7 @@ nuclear_mobilization_modifier = {
 
 # Event 1a bilateral: Rival feels arms race pressure from our matching buildup
 arms_race_rival_pressure_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_military_goods_cost_mult = 0.05
 	country_prestige_add = -10
 }
@@ -1278,7 +1278,7 @@ espionage_agent_exposed_modifier = {
 
 # Event 8a bilateral: Nuclear rival also suffers standoff tension
 nuclear_standoff_tension_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	state_standard_of_living_add = -1
 	country_prestige_from_army_power_projection_mult = 0.10
 }
@@ -1292,7 +1292,7 @@ nuclear_standoff_relief_modifier = {
 
 # Event 8c bilateral: Nuclear rival terrified by full mobilization
 nuclear_standoff_terror_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	state_standard_of_living_add = -2
 	state_radicals_from_political_movements_mult = 0.15
 }
@@ -1309,7 +1309,7 @@ decolonization_negotiations_modifier = {
 }
 
 colonial_crackdown_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_add = -75
 	country_prestige_from_army_power_projection_mult = 0.05
 	country_bureaucracy_mult = -0.05
@@ -1322,7 +1322,7 @@ peaceful_decolonization_modifier = {
 }
 
 colonial_war_exhaustion_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_add = -100
 	state_standard_of_living_add = -1
 	country_prestige_from_army_power_projection_mult = -0.10
@@ -1400,7 +1400,7 @@ colonial_development_investment_modifier = {
 }
 
 colonial_military_garrison_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_from_army_power_projection_mult = -0.05
 	country_bureaucracy_mult = -0.03
 }
@@ -1446,7 +1446,7 @@ colonial_integration_progress_modifier = {
 }
 
 colonial_unrest_suppressed_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_add = -50
 	country_prestige_from_army_power_projection_mult = 0.05
 }
@@ -1539,7 +1539,7 @@ border_dispute_resolved_modifier = {
 
 # Event 18: Post-Colonial Coup
 military_strongman_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_add = -50
 	country_authority_add = 200
 	state_standard_of_living_add = -1
@@ -1559,7 +1559,7 @@ one_party_consolidation_modifier = {
 
 # Event 19: Suez Crisis-style GP Intervention
 gp_military_intervention_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_add = -150
 	country_influence_add = -75
 	country_bureaucracy_mult = -0.05
@@ -1807,7 +1807,7 @@ movement_crushed_expulsion_modifier = {
 # ============================================================================
 
 draft_enforcement_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	state_conscription_rate_mult = 0.10
 	state_turmoil_effects_mult = 0.10
 }
@@ -2398,7 +2398,7 @@ un_human_rights_champion_modifier = {
 # ---- Peacekeeping Modifiers ----
 
 un_peacekeeping_contributor_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_leverage_generation_mult = 0.05
 	country_prestige_mult = 0.05
 	country_military_goods_cost_mult = 0.05
@@ -2406,7 +2406,7 @@ un_peacekeeping_contributor_modifier = {
 }
 
 un_peacekeeping_deployed_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_leverage_generation_mult = 0.10
 	country_prestige_mult = 0.05
 	country_military_goods_cost_mult = 0.05
@@ -2469,7 +2469,7 @@ un_development_contributor_modifier = {
 # ---- Arms Control Modifiers ----
 
 un_arms_control_participant_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_infamy_decay_mult = 0.10
 	unit_kill_rate_add = -0.05
 	unit_devastation_mult = -0.15
@@ -2950,7 +2950,7 @@ ww_reconstruction_modifier = {
 
 # Post-war occupation duties (victor's burden)
 ww_occupation_duties_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_military_goods_cost_mult = 0.15
 	country_bureaucracy_mult = -0.1
 	country_prestige_add = 50
@@ -3534,7 +3534,7 @@ religious_mission_state_modifier = {
 }
 
 demilitarized_zone_state_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	state_conscription_rate_mult = -1.0
 	state_building_barrack_max_level_add = -1000
 	state_building_naval_base_max_level_add = -1000
@@ -3816,6 +3816,36 @@ population_transfer_neglect_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	state_turmoil_effects_mult = 0.1
 	country_prestige_add = -15
+}
+
+# Intelligence Sharing Pact - publicize success (prestige boost)
+intelligence_victory_showcase_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+}
+
+# Minority Protection - celebrate cultural renaissance (prestige boost)
+cultural_renaissance_prestige_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 25
+}
+
+# Minority Protection - appease nationalist demands (prestige loss)
+nationalist_appeasement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -10
+}
+
+# Joint Military Exercises - assert own doctrine (prestige boost)
+military_doctrine_prestige_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 25
+}
+
+# Population Transfer - nation-building controversy (prestige loss)
+nation_building_controversy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -25
 }
 
 # ============================================================================

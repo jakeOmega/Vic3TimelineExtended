@@ -1809,7 +1809,7 @@ population_transfer_number = {
 							# Don't count pops whose culture is also primary in the source country
 							NOT = { culture = { is_primary_culture_of = scope:source_country } }
 						}
-						add = size
+						add = THIS.size
 					}
 				}
 			}

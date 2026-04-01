@@ -246,24 +246,6 @@
             if = { limit = { var:bubble_pressure < 0 }   set_variable = { name = bubble_pressure value = 0 } }
             if = { limit = { var:bubble_pressure > 100 } set_variable = { name = bubble_pressure value = 100 } }
 
-            # --- Bubble inertia: high speculation sustains expansion (positive feedback) ---
-            # Applied as modifiers so players can see the effect in the modifier stack.
-            remove_modifier = bubble_inertia_moderate
-            remove_modifier = bubble_inertia_high
-            remove_modifier = bubble_inertia_extreme
-            if = {
-                limit = { var:bubble_pressure >= 75 }
-                add_modifier = { name = bubble_inertia_extreme }
-            }
-            else_if = {
-                limit = { var:bubble_pressure >= 50 }
-                add_modifier = { name = bubble_inertia_high }
-            }
-            else_if = {
-                limit = { var:bubble_pressure >= 25 }
-                add_modifier = { name = bubble_inertia_moderate }
-            }
-
             # --- sudden crash check (asymmetric) ---
             # Base monthly crash chances by phase (tuneable):
             # frenzy  = (bubble-15)*0.35; boom = (bubble-25)*0.15; expansion = (bubble-50)*0.05; stable = (bubble-75)*0.02
@@ -328,13 +310,7 @@
                 every_country = {
                     limit = {
                         NOT = { THIS = scope:banking_crash_origin_country }
-                        has_technology_researched = stock_exchange
-                        any_scope_state = {
-                            any_scope_building = {
-                                is_building_type = building_urban_center
-                                level >= 5
-                            }
-                        }
+                        has_journal_entry = je_banking_cycle
                         # Same market OR trade-reachable (same-market countries don't need trade routes)
                         OR = {
                             this.market = scope:banking_crash_origin_country.market
@@ -370,7 +346,7 @@
                     }
 
                     random = {
-                        chance = 5
+                        chance = 25
                         # Same market = strongest contagion channel
                         modifier = {
                             trigger = { this.market = scope:banking_crash_origin_country.market }
@@ -379,35 +355,35 @@
                         # Hard crash spreads more easily
                         modifier = {
                             trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
-                            add = 8
+                            add = 10
                         }
                         modifier = {
                             trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 30 var:crash_severity < 60 } }
-                            add = 4
+                            add = 5
                         }
                         modifier = {
                             trigger = { is_in_customs_union_with = scope:banking_crash_origin_country }
-                            add = 4
+                            add = 10
                         }
                         modifier = {
                             trigger = { is_adjacent_to_country = scope:banking_crash_origin_country }
-                            add = 2
+                            add = 5
                         }
                         modifier = {
                             trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.10 } }
-                            add = 3
+                            add = 5
                         }
                         modifier = {
                             trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.25 } }
-                            add = 3
+                            add = 10
                         }
                         modifier = {
                             trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.05 } } }
-                            add = 2
+                            add = 5
                         }
                         modifier = {
-                            trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.12 } } }
-                            add = 3
+                            trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.1 } } }
+                            add = 10
                         }
                         modifier = {
                             trigger = { scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial }
@@ -425,7 +401,7 @@
                         # Contagion effects (value/momentum/bubble) now applied in event .7 options
                         # via apply_banking_contagion_effects, tiered by origin crash_severity.
 
-                        trigger_event = { id = minor_events_timelineextended.7 popup = yes }
+                        trigger_event = { id = minor_events_timelineextended.7 popup = yes days = 7 }
                     }
                 }
             }
@@ -438,6 +414,21 @@
 
             # --- Phase modifiers (remove previous; add current) ---
             remove_all_banking_phase_modifiers = yes
+
+            # --- Bubble inertia: high speculation sustains expansion (positive feedback) ---
+            # Applied as modifiers so players can see the effect in the modifier stack.
+            if = {
+                limit = { var:bubble_pressure >= 75 }
+                add_modifier = { name = bubble_inertia_extreme }
+            }
+            else_if = {
+                limit = { var:bubble_pressure >= 50 }
+                add_modifier = { name = bubble_inertia_high }
+            }
+            else_if = {
+                limit = { var:bubble_pressure >= 25 }
+                add_modifier = { name = bubble_inertia_moderate }
+            }
 
             if = {
                 limit = { has_law = law_type:law_command_economy }

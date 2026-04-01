@@ -780,29 +780,47 @@ nuclear_tactical_strike = {
 }
 
 trigger_mass_migration = {
-	ordered_state = {
+	if = {
 		limit = {
-			NOT = { owner = { has_law = law_type:law_closed_borders } }
-			state_cultural_acceptance = {
-				target = scope:curr_culture
-				value > owner.modifier:country_migration_restrictiveness_add
+			any_state = {
+				NOT = { owner = { has_law = law_type:law_closed_borders } }
+				state_cultural_acceptance = {
+					target = scope:curr_culture
+					value > owner.modifier:country_migration_restrictiveness_add
+				}
+				NOT = { owner = PREV.owner }
 			}
 		}
-		order_by = migration_attraction_script_value
+		owner = {
+			ordered_state = {
+				limit = {
+					NOT = { owner = { has_law = law_type:law_closed_borders } }
+					state_cultural_acceptance = {
+						target = scope:curr_culture
+						value > owner.modifier:country_migration_restrictiveness_add
+					}
+				}
+				order_by = migration_attraction_script_value
+				position = 0
 
-		save_scope_as = migration_target
-	}
-	move_partial_pop = {
-		state = scope:migration_target
-		population_ratio = $POP_RATIO$
-	}
-	scope:curr_state = {
-		if = {
-			limit = {
-				NOT = { has_variable = sent_message }
+				save_scope_as = migration_target
 			}
-			post_notification = violence_against_minorities
-			set_variable = sent_message
+		}
+	
+
+		move_partial_pop = {
+			state = scope:migration_target
+			population_ratio = $POP_RATIO$
+		}
+
+		state = {
+			if = {
+				limit = {
+					NOT = { has_variable = sent_message }
+				}
+				post_notification = violence_against_minorities
+				set_variable = sent_message
+			}
 		}
 	}
 }

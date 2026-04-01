@@ -2,6 +2,12 @@
 
 # Global cooldown tick - once per month per country (not per-JE)
 on_monthly_pulse_country = {
+	on_actions = {
+		space_race_on_action
+	}
+}
+
+space_race_on_action = {
 	effect = {
 		if = {
 			limit = { sr_has_failure_cooldown = yes }
