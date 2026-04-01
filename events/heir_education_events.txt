@@ -114,7 +114,7 @@ heir_education_events.2 = {
 	}
 
 	# Option A: "Discipline builds character."
-	# Persevere with current education — keeps progress but creates unrest
+	# Persevere with current education: keeps progress but creates unrest
 	option = {
 		name = heir_education_events.2.a
 		default_option = yes
@@ -151,7 +151,7 @@ heir_education_events.2 = {
 	}
 
 	# Option B: "Perhaps a lighter touch."
-	# Ease off — lose progress but gain stability
+	# Ease off: lose progress but gain stability
 	option = {
 		name = heir_education_events.2.b
 		custom_tooltip = {

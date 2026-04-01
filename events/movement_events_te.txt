@@ -985,7 +985,7 @@ movement_events_te.16 = {
 }
 
 # ============================================================================
-# EVENT 100: Oppressive Regime Victory — Movement Crushed
+# EVENT 100: Oppressive Regime Victory: Movement Crushed
 # Fires when the civil rights movement is defeated under discriminatory laws.
 # Options are gated by specific minority rights laws for tailored outcomes.
 # ============================================================================
@@ -1010,7 +1010,7 @@ movement_events_te.100 = {
 	option = {
 		name = movement_events_te.100.a
 		default_option = yes
-		# Default: Declare order restored — generic oppressor benefit
+		# Default: Declare order restored: generic oppressor benefit
 		ai_chance = {
 			base = 5
 		}
@@ -1025,7 +1025,7 @@ movement_events_te.100 = {
 
 	option = {
 		name = movement_events_te.100.b
-		# Assimilation drive — available under cultural assimilation law
+		# Assimilation drive: available under cultural assimilation law
 		trigger = {
 			has_law = law_type:law_minority_rights_cultural_assimilation
 		}
@@ -1042,7 +1042,7 @@ movement_events_te.100 = {
 
 	option = {
 		name = movement_events_te.100.c
-		# Enforce ghettoization — available under ghettoization or violent hostility
+		# Enforce ghettoization: available under ghettoization or violent hostility
 		trigger = {
 			OR = {
 				has_law = law_type:law_minority_rights_ghettoization
@@ -1063,7 +1063,7 @@ movement_events_te.100 = {
 
 	option = {
 		name = movement_events_te.100.d
-		# Reduce minority political power — available under discrimination or worse
+		# Reduce minority political power: available under discrimination or worse
 		trigger = {
 			OR = {
 				has_law = law_type:law_minority_rights_discrimination
@@ -1085,7 +1085,7 @@ movement_events_te.100 = {
 
 	option = {
 		name = movement_events_te.100.e
-		# Encourage emigration / expulsion — available under violent hostility
+		# Encourage emigration / expulsion: available under violent hostility
 		trigger = {
 			has_law = law_type:law_minority_rights_violent_hostility
 		}

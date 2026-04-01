@@ -1098,7 +1098,7 @@ te_update_free_port_tariff = {
 	}
 }
 
-# Combined refresh — delegates to each individual effect above.
+# Combined refresh: delegates to each individual effect above.
 # Every immediate trigger hook calls this so a new modifier only needs
 # to be added in one place.
 # NOTE: Tourism is NOT included here because its script values use

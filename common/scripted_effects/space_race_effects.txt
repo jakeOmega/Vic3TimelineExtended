@@ -784,7 +784,7 @@ sr_fire_ambitious_failure_event = {
 		10 = {
 			trigger_event = { id = space_race_events.19 }
 		}
-		# Launch Pad Explosion (always — targets building)
+		# Launch Pad Explosion (always: targets building)
 		10 = {
 			trigger_event = { id = space_race_events.70 }
 		}
@@ -799,7 +799,7 @@ sr_fire_ambitious_failure_event = {
 			}
 			trigger_event = { id = space_race_events.71 }
 		}
-		# Engineering Breakthrough (always — silver lining from failure)
+		# Engineering Breakthrough (always: silver lining from failure)
 		5 = {
 			trigger_event = { id = space_race_events.74 }
 		}
@@ -845,15 +845,15 @@ sr_fire_safe_setback_event = {
 		10 = {
 			trigger_event = { id = space_race_events.26 }
 		}
-		# Facility Fire (always — targets building)
+		# Facility Fire (always: targets building)
 		10 = {
 			trigger_event = { id = space_race_events.72 }
 		}
-		# Supply Chain Disruption (always — targets building)
+		# Supply Chain Disruption (always: targets building)
 		10 = {
 			trigger_event = { id = space_race_events.75 }
 		}
-		# Budget Scandal (always — political fallout)
+		# Budget Scandal (always: political fallout)
 		10 = {
 			trigger_event = { id = space_race_events.73 }
 		}

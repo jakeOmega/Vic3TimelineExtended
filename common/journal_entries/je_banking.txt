@@ -122,12 +122,6 @@
 
     status_desc = {
         first_valid = {
-            triggered_desc = { desc = je_banking_cycle_reason_command_economy trigger = { has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = je_banking_cycle_reason_cooperative_ownership trigger = { has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = je_banking_cycle_reason trigger = { always = yes } }
-        }
-
-        first_valid = {
             triggered_desc = { desc = banking_cycle_status_panic_cmd       trigger = { var:finance_cycle_value < 10  has_law = law_type:law_command_economy } }
             triggered_desc = { desc = banking_cycle_status_panic_coop      trigger = { var:finance_cycle_value < 10  has_law = law_type:law_cooperative_ownership } }
             triggered_desc = { desc = banking_cycle_status_panic           trigger = { var:finance_cycle_value < 10 } }
@@ -252,6 +246,24 @@
             if = { limit = { var:bubble_pressure < 0 }   set_variable = { name = bubble_pressure value = 0 } }
             if = { limit = { var:bubble_pressure > 100 } set_variable = { name = bubble_pressure value = 100 } }
 
+            # --- Bubble inertia: high speculation sustains expansion (positive feedback) ---
+            # Applied as modifiers so players can see the effect in the modifier stack.
+            remove_modifier = bubble_inertia_moderate
+            remove_modifier = bubble_inertia_high
+            remove_modifier = bubble_inertia_extreme
+            if = {
+                limit = { var:bubble_pressure >= 75 }
+                add_modifier = { name = bubble_inertia_extreme }
+            }
+            else_if = {
+                limit = { var:bubble_pressure >= 50 }
+                add_modifier = { name = bubble_inertia_high }
+            }
+            else_if = {
+                limit = { var:bubble_pressure >= 25 }
+                add_modifier = { name = bubble_inertia_moderate }
+            }
+
             # --- sudden crash check (asymmetric) ---
             # Base monthly crash chances by phase (tuneable):
             # frenzy  = (bubble-15)*0.35; boom = (bubble-25)*0.15; expansion = (bubble-50)*0.05; stable = (bubble-75)*0.02
@@ -308,19 +320,8 @@
                         change_variable = { name = crash_severity multiply = 2 }
                     }
                 }
-                if = {
-                    limit = { var:crash_severity >= 60 }
-                    # hard crash → PANIC floor & negative momentum
-                    set_variable   = { name = finance_cycle_value value = 10 }
-                    set_variable = { name = finance_cycle_momentum value = -5 }  # overwrite momentum hard negative
-                }
-                else = {
-                    # soft crash → DOWNTURN band & mild negative momentum
-                    set_variable   = { name = finance_cycle_value value = 30 }
-                    set_variable = { name = finance_cycle_momentum value = -3 }
-                }
-                # Clear bubble
-                set_variable = { name = bubble_pressure value = 0 }
+                # Crash effects (value/momentum/bubble reset) now applied in event .6 options
+                # via apply_banking_crash_origin_effects, tiered by crash_severity.
 
                 trigger_event = { id = minor_events_timelineextended.6 popup = yes }
 
@@ -331,102 +332,98 @@
                         any_scope_state = {
                             any_scope_building = {
                                 is_building_type = building_urban_center
-                                level >= 10
+                                level >= 5
                             }
                         }
-                        is_market_reachable_for_trade = scope:banking_crash_origin_country.market
+                        # Same market OR trade-reachable (same-market countries don't need trade routes)
                         OR = {
+                            this.market = scope:banking_crash_origin_country.market
+                            is_market_reachable_for_trade = scope:banking_crash_origin_country.market
+                        }
+                        OR = {
+                            this.market = scope:banking_crash_origin_country.market  # same market = auto-qualify
                             is_in_customs_union_with = scope:banking_crash_origin_country
                             is_adjacent_to_country = scope:banking_crash_origin_country
                             economic_dependence = {
                                 target = scope:banking_crash_origin_country
-                                value > 0.75
+                                value > 0.05
                             }
                             market = {
                                 market_trade_reliance = {
                                     target = scope:banking_crash_origin_country.market
-                                    value > 0.03
-                                }
-                            }
-                            market = {
-                                market_trade = {
-                                    target = scope:banking_crash_origin_country.market
-                                    value > 500
+                                    value > 0.01
                                 }
                             }
                             market = {
                                 market_production_share = {
                                     target = scope:banking_crash_origin_country
-                                    value > 0.03
+                                    value > 0.01
                                 }
                             }
                             market = {
                                 market_consumption_share = {
                                     target = scope:banking_crash_origin_country
-                                    value > 0.03
+                                    value > 0.01
                                 }
                             }
                         }
                     }
 
                     random = {
-                        chance = 1.5
+                        chance = 5
+                        # Same market = strongest contagion channel
+                        modifier = {
+                            trigger = { this.market = scope:banking_crash_origin_country.market }
+                            add = 10
+                        }
+                        # Hard crash spreads more easily
+                        modifier = {
+                            trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
+                            add = 8
+                        }
+                        modifier = {
+                            trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 30 var:crash_severity < 60 } }
+                            add = 4
+                        }
                         modifier = {
                             trigger = { is_in_customs_union_with = scope:banking_crash_origin_country }
-                            add = 2
+                            add = 4
                         }
                         modifier = {
                             trigger = { is_adjacent_to_country = scope:banking_crash_origin_country }
-                            add = 0.75
-                        }
-                        modifier = {
-                            trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 1.25 } }
-                            add = 1.25
-                        }
-                        modifier = {
-                            trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.08 } } }
-                            add = 1
-                        }
-                        modifier = {
-                            trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.15 } } }
                             add = 2
                         }
                         modifier = {
-                            trigger = { market = { market_trade = { target = scope:banking_crash_origin_country.market value > 1500 } } }
-                            add = 0.75
+                            trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.10 } }
+                            add = 3
                         }
                         modifier = {
-                            trigger = { market = { market_trade = { target = scope:banking_crash_origin_country.market value > 4000 } } }
-                            add = 1.5
+                            trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.25 } }
+                            add = 3
+                        }
+                        modifier = {
+                            trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.05 } } }
+                            add = 2
+                        }
+                        modifier = {
+                            trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.12 } } }
+                            add = 3
                         }
                         modifier = {
                             trigger = { scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial }
-                            add = 0.75
+                            add = 1.5
                         }
                         modifier = {
                             trigger = { has_law_or_variant = law_type:law_free_trade }
-                            add = 0.75
+                            add = 1.5
                         }
 
                         scope:banking_crash_origin_country = {
                             save_scope_as = banking_crash_origin_country
                         }
 
-                        change_variable = { name = finance_cycle_value subtract = 8 }
-                        if = {
-                            limit = { var:finance_cycle_value < 10 }
-                            set_variable = { name = finance_cycle_value value = 10 }
-                        }
-                        change_variable = { name = finance_cycle_momentum subtract = 1.5 }
-                        if = {
-                            limit = { var:finance_cycle_momentum < -5 }
-                            set_variable = { name = finance_cycle_momentum value = -5 }
-                        }
-                        change_variable = { name = bubble_pressure subtract = 25 }
-                        if = {
-                            limit = { var:bubble_pressure < 0 }
-                            set_variable = { name = bubble_pressure value = 0 }
-                        }
+                        # Contagion effects (value/momentum/bubble) now applied in event .7 options
+                        # via apply_banking_contagion_effects, tiered by origin crash_severity.
 
                         trigger_event = { id = minor_events_timelineextended.7 popup = yes }
                     }

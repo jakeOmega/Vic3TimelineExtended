@@ -1667,7 +1667,7 @@ principle_cultural_unity_4 = {
 		country_institution_cost_institution_ministry_of_culture_mult = -0.25
 		country_homelands_can_change_bool = yes
 		state_homeland_change_speed_mult = 0.20
-		state_homeland_creation_threshold_add = 0.4
+		state_homeland_creation_threshold_add = -0.4
 		state_homeland_removal_threshold_add = 0.2
 	}
 

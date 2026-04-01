@@ -2719,15 +2719,15 @@ tourism_bonus_from_urban_centers = {
 	}
 }
 
-# Large bonus from Airports — now applied via state_modifiers on pm_airport
+# Large bonus from Airports: now applied via state_modifiers on pm_airport
 # tourism_bonus_from_airports: REMOVED (moved to goods_output_tourism_mult = 0.15 per level on airport/spaceport PMs)
 
-# Law bonuses/penalties — now applied via goods_output_tourism_mult on each law's modifier block
+# Law bonuses/penalties: now applied via goods_output_tourism_mult on each law's modifier block
 # tourism_penalty_from_laws: REMOVED (moved to INJECT/REPLACE on individual laws)
 # tourism_bonus_from_laws: REMOVED (moved to INJECT/REPLACE on individual laws)
 # tourism_net_bonus_from_laws: REMOVED
 
-# Turmoil, pollution, obstinance penalties — now applied via INJECT on code static modifiers
+# Turmoil, pollution, obstinance penalties: now applied via INJECT on code static modifiers
 # tourism_penalty_from_turmoil: REMOVED (moved to INJECT:state_turmoil)
 # tourism_penalty_from_pollution: REMOVED (moved to INJECT:state_region_pollution_general)
 
@@ -2871,7 +2871,7 @@ tourism_throughput_from_monuments = {
 	}
 }
 
-# Decree bonus — now applied via building_tourism_industry_throughput_add on decree_promote_tourism
+# Decree bonus: now applied via building_tourism_industry_throughput_add on decree_promote_tourism
 # tourism_throughput_from_decree: REMOVED (moved to decree modifier block)
 
 # --- TOTAL CALCULATIONS ---

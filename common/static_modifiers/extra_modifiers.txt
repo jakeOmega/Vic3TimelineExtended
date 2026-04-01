@@ -1686,7 +1686,7 @@ civil_rights_struggle_active_modifier = {
 	state_radicals_from_political_movements_mult = 0.10
 }
 
-# Timeout modifier — unresolved stagnation
+# Timeout modifier: unresolved stagnation
 civil_rights_stagnation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_add = -50
@@ -2278,7 +2278,7 @@ un_nonmember_pariah_modifier = {
 }
 
 # Applied to non-nuclear member powers when authority >= 80 + IAEA exists
-# Represents NPT enforcement pressure — blocks nuclear program
+# Represents NPT enforcement pressure: blocks nuclear program
 un_npt_disarmament_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	nuclear_disarmament = yes
@@ -3540,12 +3540,12 @@ demilitarized_zone_state_modifier = {
 	state_building_naval_base_max_level_add = -1000
 }
 # ============================================================
-# COMMAND ECONOMY — Planning & Allocation Tools
+# COMMAND ECONOMY: Planning & Allocation Tools
 # (Spend planning budget via country_banking_intervention_max_add,
 #  affect finance_cycle_value / momentum / bubble via monthly channels)
 # ============================================================
 
-# 1. Emergency Plan Revision — clear bottlenecks by rewriting targets
+# 1. Emergency Plan Revision: clear bottlenecks by rewriting targets
 planning_plan_revision = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_banking_intervention_max_add = -3
@@ -3554,7 +3554,7 @@ planning_plan_revision = {
 	country_finance_momentum_monthly_add = -0.10
 }
 
-# 2. Emergency Resource Allocation — redirect materials to a priority sector
+# 2. Emergency Resource Allocation: redirect materials to a priority sector
 planning_emergency_allocation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_banking_intervention_max_add = -3
@@ -3564,7 +3564,7 @@ planning_emergency_allocation = {
 	country_bubble_pressure_monthly_add  = 0.50
 }
 
-# 3. Production Target Reduction — formally reduce overambitious quotas
+# 3. Production Target Reduction: formally reduce overambitious quotas
 planning_target_reduction = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_banking_intervention_max_add = -2
@@ -3573,7 +3573,7 @@ planning_target_reduction = {
 	country_finance_momentum_monthly_add = -0.20
 }
 
-# 4. Strategic Material Stockpile — build national reserves to buffer shortages
+# 4. Strategic Material Stockpile: build national reserves to buffer shortages
 planning_strategic_stockpile = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_banking_intervention_max_add = -2
@@ -3583,7 +3583,7 @@ planning_strategic_stockpile = {
 	country_finance_momentum_monthly_add = -0.05
 }
 
-# 5. Central Distribution Upgrade — invest in logistics infrastructure
+# 5. Central Distribution Upgrade: invest in logistics infrastructure
 planning_distribution_upgrade = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_banking_intervention_max_add = -4
@@ -3593,7 +3593,7 @@ planning_distribution_upgrade = {
 	country_bubble_pressure_monthly_add  = 0.40
 }
 
-# 6. Administrative Performance Campaign — purge inefficient planners
+# 6. Administrative Performance Campaign: purge inefficient planners
 planning_admin_campaign = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_banking_intervention_max_add = -3
@@ -3604,7 +3604,7 @@ planning_admin_campaign = {
 	country_finance_momentum_monthly_add = -0.15
 }
 
-# 7. Inter-Sectoral Coordination Protocol — multi-ministry joint committee
+# 7. Inter-Sectoral Coordination Protocol: multi-ministry joint committee
 planning_coordination_protocol = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_banking_intervention_max_add = -1
@@ -3613,7 +3613,7 @@ planning_coordination_protocol = {
 	country_finance_momentum_monthly_add = 0.10
 }
 
-# 8. Plant Consolidation Order — concentrate parallel plants into efficient units
+# 8. Plant Consolidation Order: concentrate parallel plants into efficient units
 planning_consolidation_order = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_banking_intervention_max_add = -2
@@ -3624,10 +3624,10 @@ planning_consolidation_order = {
 }
 
 # ============================================================
-# COOPERATIVE OWNERSHIP — Council, Federation & Solidarity Tools
+# COOPERATIVE OWNERSHIP: Council, Federation & Solidarity Tools
 # ============================================================
 
-# 1. Dividend Restraint Resolution — vote to prioritise reinvestment over payouts
+# 1. Dividend Restraint Resolution: vote to prioritise reinvestment over payouts
 cooperative_dividend_restraint = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_banking_intervention_max_add = -2
@@ -3637,7 +3637,7 @@ cooperative_dividend_restraint = {
 	country_finance_momentum_monthly_add = -0.10
 }
 
-# 2. Mutual Aid Fund Deployment — bail out cooperatives at risk of insolvency
+# 2. Mutual Aid Fund Deployment: bail out cooperatives at risk of insolvency
 cooperative_mutual_aid = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_banking_intervention_max_add = -4
@@ -3647,7 +3647,7 @@ cooperative_mutual_aid = {
 	country_bubble_pressure_monthly_add  = 0.30
 }
 
-# 3. Collective Capital Investment Plan — democratic vote on capacity investment
+# 3. Collective Capital Investment Plan: democratic vote on capacity investment
 cooperative_capital_plan = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_banking_intervention_max_add = -4
@@ -3657,7 +3657,7 @@ cooperative_capital_plan = {
 	country_bubble_pressure_monthly_add  = 0.40
 }
 
-# 4. Worker Solidarity Campaign — social pressure to moderate overconsumption
+# 4. Worker Solidarity Campaign: social pressure to moderate overconsumption
 cooperative_solidarity_campaign = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_banking_intervention_max_add = -1
@@ -3666,7 +3666,7 @@ cooperative_solidarity_campaign = {
 	country_finance_momentum_monthly_add = -0.05
 }
 
-# 5. Cooperative Credit Union Expansion — expand internal member lending
+# 5. Cooperative Credit Union Expansion: expand internal member lending
 cooperative_credit_expansion = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_loan_interest_rate_mult = -0.03
@@ -3676,7 +3676,7 @@ cooperative_credit_expansion = {
 	country_bubble_pressure_monthly_add  = 0.50
 }
 
-# 6. Consumption Ceiling Resolution — hard cap on per-member consumption allowances
+# 6. Consumption Ceiling Resolution: hard cap on per-member consumption allowances
 cooperative_consumption_ceiling = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_banking_intervention_max_add = -2
@@ -3687,7 +3687,7 @@ cooperative_consumption_ceiling = {
 	country_finance_momentum_monthly_add = -0.20
 }
 
-# 7. Federation Council Advisory Directive — formal guidance to member boards
+# 7. Federation Council Advisory Directive: formal guidance to member boards
 cooperative_council_directive = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_banking_intervention_max_add = -1
@@ -3696,7 +3696,7 @@ cooperative_council_directive = {
 	country_finance_momentum_monthly_add = 0.05
 }
 
-# 8. Worker Buyout Facilitation — enable workers to take over failing cooperatives
+# 8. Worker Buyout Facilitation: enable workers to take over failing cooperatives
 cooperative_worker_buyout = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_banking_intervention_max_add = -3
@@ -4597,4 +4597,20 @@ secular_agenda_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	political_movement_pop_attraction_mult = 0.10
 	country_prestige_add = 5
+}
+
+# ----- Bubble inertia: self-reinforcing speculation -----
+bubble_inertia_moderate = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_finance_momentum_monthly_add = 0.25
+}
+
+bubble_inertia_high = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_finance_momentum_monthly_add = 0.5
+}
+
+bubble_inertia_extreme = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_finance_momentum_monthly_add = 1.0
 }

@@ -3683,7 +3683,7 @@ extra_law_events.35 = {
 #
 #   Law-specific effects target the groups most affected:
 #     Collectivized agriculture → farmers, peasants (naturally
-#       scales with agrarian pop share — industrial countries
+#       scales with agrarian pop share: industrial countries
 #       with few farmers get proportionally less backlash)
 #     Command economy → capitalists, shopkeepers; lighter under
 #       technocracy
@@ -3691,9 +3691,9 @@ extra_law_events.35 = {
 #     Communal child rearing → broadest backlash across society
 #     Cooperative ownership → capitalists, shopkeepers
 #
-#   Option A: Stand firm — governance-scaled modifier + law-specific
+#   Option A: Stand firm: governance-scaled modifier + law-specific
 #             IG and pop type reactions
-#   Option B: Reverse course — law reverts to a moderate alternative
+#   Option B: Reverse course: law reverts to a moderate alternative
 # ======================================================================
 extra_law_events.36 = {
 	type = country_event
@@ -3787,7 +3787,7 @@ extra_law_events.36 = {
 
 		# === LAW-SPECIFIC IG AND POP-TYPE REACTIONS ===
 
-		# Communal child rearing (type 1) — broadest backlash
+		# Communal child rearing (type 1): broadest backlash
 		if = {
 			limit = { var:radical_law_backlash_type = 1 }
 			ig:ig_devout ?= {
@@ -3822,7 +3822,7 @@ extra_law_events.36 = {
 			}
 		}
 
-		# State atheism (type 2) — devout are primary opponents
+		# State atheism (type 2): devout are primary opponents
 		if = {
 			limit = { var:radical_law_backlash_type = 2 }
 			ig:ig_devout ?= {
@@ -3847,7 +3847,7 @@ extra_law_events.36 = {
 			}
 		}
 
-		# Cooperative ownership (type 3) — capitalists and shopkeepers
+		# Cooperative ownership (type 3): capitalists and shopkeepers
 		if = {
 			limit = { var:radical_law_backlash_type = 3 }
 			ig:ig_industrialists ?= {
@@ -3876,7 +3876,7 @@ extra_law_events.36 = {
 			}
 		}
 
-		# Command economy (type 4) — industrialists; lighter under technocracy
+		# Command economy (type 4): industrialists; lighter under technocracy
 		if = {
 			limit = { var:radical_law_backlash_type = 4 }
 			ig:ig_industrialists ?= {
@@ -3915,7 +3915,7 @@ extra_law_events.36 = {
 			}
 		}
 
-		# Collectivized agriculture (type 5) — targets farmers & peasants directly
+		# Collectivized agriculture (type 5): targets farmers & peasants directly
 		# Radicals naturally scale with how many of these pops exist, so
 		# industrialized countries with few farmers get proportionally less backlash.
 		if = {
@@ -3998,7 +3998,7 @@ extra_law_events.36 = {
 		}
 	}
 
-	option = { # Reverse course — revert the radical law
+	option = { # Reverse course: revert the radical law
 		name = extra_law_events.36.b
 		default_option = yes
 		# Revert the specific radical law to a moderate alternative

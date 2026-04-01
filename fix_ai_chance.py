@@ -228,7 +228,7 @@ def format_trigger_content(trigger_str, base_indent):
             j += 1
             if j < len(toks):
                 if toks[j][0] == 'LBRACE':
-                    # key = { ... } — put opening brace on same line
+                    # key = { ... }: put opening brace on same line
                     stmt_parts.append('{')
                     lines.append(base_indent + '\t' * depth + ' '.join(stmt_parts))
                     depth += 1

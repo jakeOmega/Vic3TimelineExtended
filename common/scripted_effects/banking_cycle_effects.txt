@@ -1154,4 +1154,150 @@ remove_all_banking_phase_modifiers = {
 	remove_modifier = financial_cycle_phase_expansion_coop
 	remove_modifier = financial_cycle_phase_boom_coop
 	remove_modifier = financial_cycle_phase_frenzy_coop
+	# Bubble inertia
+	remove_modifier = bubble_inertia_moderate
+	remove_modifier = bubble_inertia_high
+	remove_modifier = bubble_inertia_extreme
+}
+
+# Apply crash effects to the origin country (event .6).
+# Tiered by crash_severity: correction (<20), downturn (20-39), crash (40-59), panic (60-79), systemic (≥80).
+# Uses custom_tooltip so effects are visible in event option tooltips.
+apply_banking_crash_origin_effects = {
+	if = {
+		limit = { var:crash_severity >= 80 }
+		custom_tooltip = {
+			text = CRASH_CYCLE_VALUE_5_DESC
+			set_variable = { name = finance_cycle_value value = 5 }
+		}
+		custom_tooltip = {
+			text = CRASH_MOMENTUM_MINUS_5_DESC
+			set_variable = { name = finance_cycle_momentum value = -5 }
+		}
+	}
+	else_if = {
+		limit = { var:crash_severity >= 60 }
+		custom_tooltip = {
+			text = CRASH_CYCLE_VALUE_10_DESC
+			set_variable = { name = finance_cycle_value value = 10 }
+		}
+		custom_tooltip = {
+			text = CRASH_MOMENTUM_MINUS_4_DESC
+			set_variable = { name = finance_cycle_momentum value = -4 }
+		}
+	}
+	else_if = {
+		limit = { var:crash_severity >= 40 }
+		custom_tooltip = {
+			text = CRASH_CYCLE_VALUE_20_DESC
+			set_variable = { name = finance_cycle_value value = 20 }
+		}
+		custom_tooltip = {
+			text = CRASH_MOMENTUM_MINUS_3_DESC
+			set_variable = { name = finance_cycle_momentum value = -3 }
+		}
+	}
+	else_if = {
+		limit = { var:crash_severity >= 20 }
+		custom_tooltip = {
+			text = CRASH_CYCLE_VALUE_30_DESC
+			set_variable = { name = finance_cycle_value value = 30 }
+		}
+		custom_tooltip = {
+			text = CRASH_MOMENTUM_MINUS_2_DESC
+			set_variable = { name = finance_cycle_momentum value = -2 }
+		}
+	}
+	else = {
+		custom_tooltip = {
+			text = CRASH_CYCLE_VALUE_40_DESC
+			set_variable = { name = finance_cycle_value value = 40 }
+		}
+		custom_tooltip = {
+			text = CRASH_MOMENTUM_MINUS_1_DESC
+			set_variable = { name = finance_cycle_momentum value = -1 }
+		}
+	}
+	custom_tooltip = {
+		text = CRASH_BUBBLE_CLEAR_DESC
+		set_variable = { name = bubble_pressure value = 0 }
+	}
+}
+
+# Apply contagion effects to a country hit by financial contagion (event .7).
+# Tiered by origin country's crash_severity (via scope:banking_crash_origin_country).
+# Uses change_variable (subtraction) since the target has its own independent cycle.
+apply_banking_contagion_effects = {
+	if = {
+		limit = { scope:banking_crash_origin_country = { var:crash_severity >= 80 } }
+		custom_tooltip = {
+			text = CYCLE_VALUE_MINUS_15_DESC
+			change_variable = { name = finance_cycle_value add = -15 }
+		}
+		custom_tooltip = {
+			text = MOMENTUM_MINUS_3_DESC
+			change_variable = { name = finance_cycle_momentum add = -3 }
+		}
+		custom_tooltip = {
+			text = BUBBLE_PRESSURE_MINUS_25_DESC
+			change_variable = { name = bubble_pressure add = -25 }
+		}
+	}
+	else_if = {
+		limit = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
+		custom_tooltip = {
+			text = CYCLE_VALUE_MINUS_10_DESC
+			change_variable = { name = finance_cycle_value add = -10 }
+		}
+		custom_tooltip = {
+			text = MOMENTUM_MINUS_2_DESC
+			change_variable = { name = finance_cycle_momentum add = -2 }
+		}
+		custom_tooltip = {
+			text = BUBBLE_PRESSURE_MINUS_20_DESC
+			change_variable = { name = bubble_pressure add = -20 }
+		}
+	}
+	else_if = {
+		limit = { scope:banking_crash_origin_country = { var:crash_severity >= 40 } }
+		custom_tooltip = {
+			text = CYCLE_VALUE_MINUS_8_DESC
+			change_variable = { name = finance_cycle_value add = -8 }
+		}
+		custom_tooltip = {
+			text = MOMENTUM_MINUS_1_DESC
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		custom_tooltip = {
+			text = BUBBLE_PRESSURE_MINUS_15_DESC
+			change_variable = { name = bubble_pressure add = -15 }
+		}
+	}
+	else = {
+		custom_tooltip = {
+			text = CYCLE_VALUE_MINUS_5_DESC
+			change_variable = { name = finance_cycle_value add = -5 }
+		}
+		custom_tooltip = {
+			text = MOMENTUM_MINUS_1_DESC
+			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+		custom_tooltip = {
+			text = BUBBLE_PRESSURE_MINUS_10_DESC
+			change_variable = { name = bubble_pressure add = -10 }
+		}
+	}
+	# Clamp values
+	if = {
+		limit = { var:finance_cycle_value < 10 }
+		set_variable = { name = finance_cycle_value value = 10 }
+	}
+	if = {
+		limit = { var:finance_cycle_momentum < -5 }
+		set_variable = { name = finance_cycle_momentum value = -5 }
+	}
+	if = {
+		limit = { var:bubble_pressure < 0 }
+		set_variable = { name = bubble_pressure value = 0 }
+	}
 }

@@ -403,7 +403,7 @@
 						var:un_authority >= 60
 					}
 				}
-				# Apply pariah status — non-members face diplomatic pressure
+				# Apply pariah status: non-members face diplomatic pressure
 				if = {
 					limit = { NOT = { has_modifier = un_nonmember_pariah_modifier } }
 					add_modifier = { name = un_nonmember_pariah_modifier }

@@ -18,6 +18,7 @@ ruler_terrible_administrator = {
 		country_bureaucracy_mult = -0.20
 		state_tax_capacity_mult = -0.20
 		country_legitimacy_base_add = -10
+		country_bubble_pressure_monthly_add = 0.2
 	}
 
 	agitator_modifier = {
@@ -67,6 +68,7 @@ ruler_poor_administrator = {
 		country_bureaucracy_mult = -0.10
 		state_tax_capacity_mult = -0.10
 		country_legitimacy_base_add = -5
+		country_bubble_pressure_monthly_add = 0.1
 	}
 
 	agitator_modifier = {
@@ -170,6 +172,7 @@ ruler_skilled_administrator = {
 		country_bureaucracy_mult = 0.10
 		country_legitimacy_base_add = 5
 		state_tax_capacity_mult = 0.10
+		country_bubble_pressure_monthly_add = -0.1
 	}
 
 	agitator_modifier = {
@@ -231,6 +234,7 @@ ruler_exceptional_administrator = {
 		country_bureaucracy_mult = 0.20
 		country_legitimacy_base_add = 10
 		state_tax_capacity_mult = 0.20
+		country_bubble_pressure_monthly_add = -0.2
 	}
 
 	agitator_modifier = {

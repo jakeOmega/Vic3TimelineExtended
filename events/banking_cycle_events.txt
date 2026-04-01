@@ -144,7 +144,7 @@ banking_cycle_events.101 = {
 
 	immediate = {}
 
-	# Option A: Let the overambitious directive stand — ambition drives productivity
+	# Option A: Let the overambitious directive stand: ambition drives productivity
 	option = {
 		name = banking_cycle_events.101.a
 		default_option = yes
@@ -167,7 +167,7 @@ banking_cycle_events.101 = {
 		}
 	}
 
-	# Option B: Issue a corrective addendum — scale targets to proven capacity
+	# Option B: Issue a corrective addendum: scale targets to proven capacity
 	option = {
 		name = banking_cycle_events.101.b
 		custom_tooltip = {
@@ -224,7 +224,7 @@ banking_cycle_events.151 = {
 
 	immediate = {}
 
-	# Option A: Permit the advance distributions — member confidence is an asset
+	# Option A: Permit the advance distributions: member confidence is an asset
 	option = {
 		name = banking_cycle_events.151.a
 		default_option = yes
@@ -247,7 +247,7 @@ banking_cycle_events.151 = {
 		}
 	}
 
-	# Option B: Issue advisory guidance — call on cooperatives to align distributions with realised profits
+	# Option B: Issue advisory guidance: call on cooperatives to align distributions with realised profits
 	option = {
 		name = banking_cycle_events.151.b
 		custom_tooltip = {
@@ -303,7 +303,7 @@ banking_cycle_events.104 = {
 
 	immediate = {}
 
-	# Option A: Absorb the crisis — full emergency mobilisation, reorganise from scratch
+	# Option A: Absorb the crisis: full emergency mobilisation, reorganise from scratch
 	option = {
 		name = banking_cycle_events.104.a
 		default_option = yes
@@ -314,7 +314,7 @@ banking_cycle_events.104 = {
 		ai_chance = { base = 20 }
 	}
 
-	# Option B: Emergency stockpile release — tap strategic reserves to bridge the gap
+	# Option B: Emergency stockpile release: tap strategic reserves to bridge the gap
 	option = {
 		name = banking_cycle_events.104.b
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_5_DESC" change_variable = { name = finance_cycle_value add = -5 } }
@@ -324,7 +324,7 @@ banking_cycle_events.104 = {
 		ai_chance = { base = 60 }
 	}
 
-	# Option C: Priority triage — fully fund the most critical sectors, abandon the rest
+	# Option C: Priority triage: fully fund the most critical sectors, abandon the rest
 	option = {
 		name = banking_cycle_events.104.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
@@ -353,7 +353,7 @@ banking_cycle_events.154 = {
 
 	immediate = {}
 
-	# Option A: No special intervention — let insolvent cooperatives liquidate
+	# Option A: No special intervention: let insolvent cooperatives liquidate
 	option = {
 		name = banking_cycle_events.154.a
 		default_option = yes
@@ -364,7 +364,7 @@ banking_cycle_events.154 = {
 		ai_chance = { base = 20 }
 	}
 
-	# Option B: Activate the Federation Emergency Relief Fund — deploy collective reserves
+	# Option B: Activate the Federation Emergency Relief Fund: deploy collective reserves
 	option = {
 		name = banking_cycle_events.154.b
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_5_DESC" change_variable = { name = finance_cycle_value add = -5 } }
@@ -374,7 +374,7 @@ banking_cycle_events.154 = {
 		ai_chance = { base = 60 }
 	}
 
-	# Option C: Facilitate forced mergers — weaker cooperatives absorbed by larger members
+	# Option C: Facilitate forced mergers: weaker cooperatives absorbed by larger members
 	option = {
 		name = banking_cycle_events.154.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
@@ -413,7 +413,7 @@ banking_cycle_events.106 = {
 		ai_chance = { base = 50 }
 	}
 
-	# Option B: Accept the shortfall without intervention — adjust next year's quotas
+	# Option B: Accept the shortfall without intervention: adjust next year's quotas
 	option = {
 		name = banking_cycle_events.106.b
 		add_modifier = { name = banking_event_default_rural_impact days = short_modifier_time is_decaying = yes }
@@ -445,7 +445,7 @@ banking_cycle_events.156 = {
 
 	immediate = {}
 
-	# Option A: Activate cooperative mutual aid — urban cooperatives supplement rural members
+	# Option A: Activate cooperative mutual aid: urban cooperatives supplement rural members
 	option = {
 		name = banking_cycle_events.156.a
 		default_option = yes
@@ -455,7 +455,7 @@ banking_cycle_events.156 = {
 		ai_chance = { base = 50 }
 	}
 
-	# Option B: Accept the shortfall — adjust contribution assessments for affected cooperatives
+	# Option B: Accept the shortfall: adjust contribution assessments for affected cooperatives
 	option = {
 		name = banking_cycle_events.156.b
 		add_modifier = { name = banking_event_default_rural_impact days = short_modifier_time is_decaying = yes }
@@ -1262,7 +1262,7 @@ banking_cycle_events.110 = {
 
 	immediate = {}
 
-	# Option A: Impose austerity on lower-priority sectors — fiscal discipline
+	# Option A: Impose austerity on lower-priority sectors: fiscal discipline
 	option = {
 		name = banking_cycle_events.110.a
 		default_option = yes
@@ -1282,7 +1282,7 @@ banking_cycle_events.110 = {
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
 	}
 
-	# Option C: Formally cancel some commitments — partial plan default
+	# Option C: Formally cancel some commitments: partial plan default
 	option = {
 		name = banking_cycle_events.110.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_10_DESC" change_variable = { name = finance_cycle_value add = -10 } }
@@ -1329,7 +1329,7 @@ banking_cycle_events.160 = {
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
 	}
 
-	# Option C: Dissolve some inter-cooperative agreements — partial defaults on shared obligations
+	# Option C: Dissolve some inter-cooperative agreements: partial defaults on shared obligations
 	option = {
 		name = banking_cycle_events.160.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_10_DESC" change_variable = { name = finance_cycle_value add = -10 } }
@@ -1844,7 +1844,7 @@ banking_cycle_events.115 = {
 		ai_chance = { base = 40 }
 	}
 
-	# Option B: Impose strict import licensing — restrict inputs to critical sectors only
+	# Option B: Impose strict import licensing: restrict inputs to critical sectors only
 	option = {
 		name = banking_cycle_events.115.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
@@ -1854,7 +1854,7 @@ banking_cycle_events.115 = {
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
 	}
 
-	# Option C: Permit factor prices to adjust — accept production disruption as the cost of rebalancing
+	# Option C: Permit factor prices to adjust: accept production disruption as the cost of rebalancing
 	option = {
 		name = banking_cycle_events.115.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
@@ -1891,7 +1891,7 @@ banking_cycle_events.165 = {
 		ai_chance = { base = 40 }
 	}
 
-	# Option B: Mandate cooperative import substitution — source domestically wherever possible
+	# Option B: Mandate cooperative import substitution: source domestically wherever possible
 	option = {
 		name = banking_cycle_events.165.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
@@ -1901,7 +1901,7 @@ banking_cycle_events.165 = {
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
 	}
 
-	# Option C: Let the adjustment flow through — accept hardship, rebuild structural independence
+	# Option C: Let the adjustment flow through: accept hardship, rebuild structural independence
 	option = {
 		name = banking_cycle_events.165.c
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
@@ -2029,7 +2029,7 @@ banking_cycle_events.116 = {
 
 	immediate = {}
 
-	# Option A: Back the Gosplan technocrats — rational planning must be insulated from politics
+	# Option A: Back the Gosplan technocrats: rational planning must be insulated from politics
 	option = {
 		name = banking_cycle_events.116.a
 		default_option = yes
@@ -2039,7 +2039,7 @@ banking_cycle_events.116 = {
 		ai_chance = { base = 50 }
 	}
 
-	# Option B: Side with Party leadership — political goals take precedence over technocratic limits
+	# Option B: Side with Party leadership: political goals take precedence over technocratic limits
 	option = {
 		name = banking_cycle_events.116.b
 		custom_tooltip = { text = "MOMENTUM_3_DESC" change_variable = { name = finance_cycle_momentum add = 3 } }
@@ -2048,7 +2048,7 @@ banking_cycle_events.116 = {
 		ai_chance = { base = 30 modifier = { add = 15 banking_cycle_is_recession = yes } }
 	}
 
-	# Option C: Form a joint Planning-Party review committee — balance technical and political goals
+	# Option C: Form a joint Planning-Party review committee: balance technical and political goals
 	option = {
 		name = banking_cycle_events.116.c
 		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
@@ -2074,7 +2074,7 @@ banking_cycle_events.166 = {
 
 	immediate = {}
 
-	# Option A: Uphold the traditionalist platform — democratic cooperative values prevail
+	# Option A: Uphold the traditionalist platform: democratic cooperative values prevail
 	option = {
 		name = banking_cycle_events.166.a
 		default_option = yes
@@ -2084,7 +2084,7 @@ banking_cycle_events.166 = {
 		ai_chance = { base = 50 }
 	}
 
-	# Option B: Allow the reformers to succeed — efficiency over orthodoxy
+	# Option B: Allow the reformers to succeed: efficiency over orthodoxy
 	option = {
 		name = banking_cycle_events.166.b
 		custom_tooltip = { text = "MOMENTUM_3_DESC" change_variable = { name = finance_cycle_momentum add = 3 } }
@@ -2093,7 +2093,7 @@ banking_cycle_events.166 = {
 		ai_chance = { base = 30 modifier = { add = 15 banking_cycle_is_recession = yes } }
 	}
 
-	# Option C: Form a mixed-mandate council — balance cooperative values with practical flexibility
+	# Option C: Form a mixed-mandate council: balance cooperative values with practical flexibility
 	option = {
 		name = banking_cycle_events.166.c
 		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
@@ -2214,7 +2214,7 @@ banking_cycle_events.117 = {
 
 	immediate = {}
 
-	# Option A: Tolerate the blat economy — it fills the supply chain gaps
+	# Option A: Tolerate the blat economy: it fills the supply chain gaps
 	option = {
 		name = banking_cycle_events.117.a
 		default_option = yes
@@ -2225,7 +2225,7 @@ banking_cycle_events.117 = {
 		ai_chance = { base = 35 modifier = { add = -25 banking_cycle_bubble_risk_high = yes } }
 	}
 
-	# Option B: Formalise and regulate informal production — bring it under state oversight
+	# Option B: Formalise and regulate informal production: bring it under state oversight
 	option = {
 		name = banking_cycle_events.117.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
@@ -2233,7 +2233,7 @@ banking_cycle_events.117 = {
 		ai_chance = { base = 40 modifier = { add = 10 banking_cycle_bubble_risk_rising = yes } }
 	}
 
-	# Option C: Suppress the informal economy — enforce plan discipline
+	# Option C: Suppress the informal economy: enforce plan discipline
 	option = {
 		name = banking_cycle_events.117.c
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
@@ -2260,7 +2260,7 @@ banking_cycle_events.167 = {
 
 	immediate = {}
 
-	# Option A: Permit the loan expansion — member financial autonomy is a cooperative value
+	# Option A: Permit the loan expansion: member financial autonomy is a cooperative value
 	option = {
 		name = banking_cycle_events.167.a
 		default_option = yes
@@ -2279,7 +2279,7 @@ banking_cycle_events.167 = {
 		ai_chance = { base = 40 modifier = { add = 10 banking_cycle_bubble_risk_rising = yes } }
 	}
 
-	# Option C: Restrict all personal lending against dividends — enforce mandatory savings
+	# Option C: Restrict all personal lending against dividends: enforce mandatory savings
 	option = {
 		name = banking_cycle_events.167.c
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
@@ -2591,7 +2591,7 @@ banking_cycle_events.120 = {
 
 	immediate = {}
 
-	# Option A: Expose and prosecute the entire network — full regulatory crackdown
+	# Option A: Expose and prosecute the entire network: full regulatory crackdown
 	option = {
 		name = banking_cycle_events.120.a
 		default_option = yes
@@ -2603,7 +2603,7 @@ banking_cycle_events.120 = {
 		ai_chance = { base = 40 modifier = { add = 20 banking_cycle_bubble_risk_high = yes } }
 	}
 
-	# Option B: Tacitly accept the blat network — unofficial coordination is filling real gaps in the plan
+	# Option B: Tacitly accept the blat network: unofficial coordination is filling real gaps in the plan
 	option = {
 		name = banking_cycle_events.120.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_15_DESC" change_variable = { name = bubble_pressure add = 15 } }
@@ -2635,7 +2635,7 @@ banking_cycle_events.170 = {
 
 	immediate = {}
 
-	# Option A: Full transparency investigation — prosecute and publish findings
+	# Option A: Full transparency investigation: prosecute and publish findings
 	option = {
 		name = banking_cycle_events.170.a
 		default_option = yes
@@ -2647,7 +2647,7 @@ banking_cycle_events.170 = {
 		ai_chance = { base = 40 modifier = { add = 20 banking_cycle_bubble_risk_high = yes } }
 	}
 
-	# Option B: Conduct a quiet internal audit — acknowledge but minimise public exposure
+	# Option B: Conduct a quiet internal audit: acknowledge but minimise public exposure
 	option = {
 		name = banking_cycle_events.170.b
 		custom_tooltip = { text = "BUBBLE_PRESSURE_15_DESC" change_variable = { name = bubble_pressure add = 15 } }
@@ -2655,7 +2655,7 @@ banking_cycle_events.170 = {
 		ai_chance = { base = 30 modifier = { add = -20 banking_cycle_bubble_risk_high = yes } }
 	}
 
-	# Option C: Ignore the allegation — it falls within cooperative internal autonomy
+	# Option C: Ignore the allegation: it falls within cooperative internal autonomy
 	option = {
 		name = banking_cycle_events.170.c
 		custom_tooltip = { text = "BUBBLE_PRESSURE_20_DESC" change_variable = { name = bubble_pressure add = 20 } }
@@ -4785,7 +4785,7 @@ banking_cycle_events.51 = {
 		}
 	}
 
-	# Option C: Turn a blind eye — the reports look good on paper
+	# Option C: Turn a blind eye: the reports look good on paper
 	option = {
 		name = banking_cycle_events.51.c
 		custom_tooltip = { text = "BUBBLE_PRESSURE_10_DESC" change_variable = { name = bubble_pressure add = 10 } }
@@ -4984,7 +4984,7 @@ banking_cycle_events.55 = {
 		}
 	}
 
-	# Option B: Accept with conditions — joint planning committees
+	# Option B: Accept with conditions: joint planning committees
 	option = {
 		name = banking_cycle_events.55.b
 		custom_tooltip = { text = "CYCLE_VALUE_3_DESC" change_variable = { name = finance_cycle_value add = 3 } }
@@ -4994,7 +4994,7 @@ banking_cycle_events.55 = {
 		}
 	}
 
-	# Option C: Decline — maintain economic independence
+	# Option C: Decline: maintain economic independence
 	option = {
 		name = banking_cycle_events.55.c
 		add_loyalists = { value = small_radicals strata = upper }
@@ -5191,7 +5191,7 @@ banking_cycle_events.61 = {
 		}
 	}
 
-	# Option B: Public accountability — name and shame
+	# Option B: Public accountability: name and shame
 	option = {
 		name = banking_cycle_events.61.b
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_3_DESC" change_variable = { name = finance_cycle_value add = -3 } }
@@ -5243,7 +5243,7 @@ banking_cycle_events.62 = {
 		}
 	}
 
-	# Option B: Call for extended deliberation — take the time to get it right
+	# Option B: Call for extended deliberation: take the time to get it right
 	option = {
 		name = banking_cycle_events.62.b
 		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }

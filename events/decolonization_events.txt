@@ -1718,7 +1718,7 @@ decolonization_events.15 = {
 		}
 	}
 
-	# Option A: Full nationalization — seize all foreign assets
+	# Option A: Full nationalization: seize all foreign assets
 	option = {
 		name = decolonization_events.15.a
 		default_option = yes
@@ -1778,7 +1778,7 @@ decolonization_events.15 = {
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
 	}
 
-	# Option B: Selective nationalization — strategic sectors only
+	# Option B: Selective nationalization: strategic sectors only
 	option = {
 		name = decolonization_events.15.b
 		ai_chance = {
@@ -1972,7 +1972,7 @@ decolonization_events.16 = {
 		}
 	}
 
-	# Option A: Demand unification — press for incorporating neighboring peoples
+	# Option A: Demand unification: press for incorporating neighboring peoples
 	option = {
 		name = decolonization_events.16.a
 		default_option = yes
@@ -2057,7 +2057,7 @@ decolonization_events.16 = {
 }
 
 # Event 17: Border Disputes Between New Nations
-# Fires for newly independent countries bordering another new nation — inherited
+# Fires for newly independent countries bordering another new nation: inherited
 # colonial boundaries rarely respect ethnic, linguistic, or geographic realities.
 decolonization_events.17 = {
 	type = country_event
@@ -2125,7 +2125,7 @@ decolonization_events.17 = {
 		}
 	}
 
-	# Option A: Press our claims — the borders must be redrawn
+	# Option A: Press our claims: the borders must be redrawn
 	option = {
 		name = decolonization_events.17.a
 		default_option = yes
@@ -2209,7 +2209,7 @@ decolonization_events.17 = {
 }
 
 # Event 18: The Strongman's Promise
-# Fires for newly independent countries with political instability — the temptation
+# Fires for newly independent countries with political instability: the temptation
 # of authoritarian consolidation in a fragile state.
 decolonization_events.18 = {
 	type = country_event
@@ -2256,7 +2256,7 @@ decolonization_events.18 = {
 	immediate = {
 	}
 
-	# Option A: Military takeover — the general promises order
+	# Option A: Military takeover: the general promises order
 	option = {
 		name = decolonization_events.18.a
 		default_option = yes
@@ -2284,7 +2284,7 @@ decolonization_events.18 = {
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
 	}
 
-	# Option B: Democratic transition — messy but legitimate
+	# Option B: Democratic transition: messy but legitimate
 	option = {
 		name = decolonization_events.18.b
 		ai_chance = {
@@ -2310,7 +2310,7 @@ decolonization_events.18 = {
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
-	# Option C: One-party state — the revolutionary vanguard
+	# Option C: One-party state: the revolutionary vanguard
 	option = {
 		name = decolonization_events.18.c
 		ai_chance = {
@@ -2330,7 +2330,7 @@ decolonization_events.18 = {
 }
 
 # ============================================================================
-# Event 19: The [Region] Crisis — Suez Crisis Model
+# Event 19: The [Region] Crisis: Suez Crisis Model
 # Fires for great powers when a recently-independent former colony
 # nationalizes assets. The GP can intervene militarily, apply sanctions,
 # or accept the new status quo. Other GPs then react.
@@ -2386,7 +2386,7 @@ decolonization_events.19 = {
 		}
 	}
 
-	# Option A: Military intervention — send in the troops
+	# Option A: Military intervention: send in the troops
 	option = {
 		name = decolonization_events.19.a
 		ai_chance = {
@@ -2440,7 +2440,7 @@ decolonization_events.19 = {
 		}
 	}
 
-	# Option B: Economic sanctions — punish without war
+	# Option B: Economic sanctions: punish without war
 	option = {
 		name = decolonization_events.19.b
 		default_option = yes
@@ -2465,7 +2465,7 @@ decolonization_events.19 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
-	# Option C: Accept the new order — swallow the humiliation
+	# Option C: Accept the new order: swallow the humiliation
 	option = {
 		name = decolonization_events.19.c
 		ai_chance = {
@@ -2541,7 +2541,7 @@ decolonization_events.20 = {
 		}
 	}
 
-	# Option A: Condemn the intervention — demand withdrawal
+	# Option A: Condemn the intervention: demand withdrawal
 	option = {
 		name = decolonization_events.20.a
 		default_option = yes
@@ -2592,7 +2592,7 @@ decolonization_events.20 = {
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
-	# Option B: Support the intervention — old empires must be defended
+	# Option B: Support the intervention: old empires must be defended
 	option = {
 		name = decolonization_events.20.b
 		ai_chance = {
@@ -2631,7 +2631,7 @@ decolonization_events.20 = {
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
 
-	# Option C: Remain neutral — this is not our affair
+	# Option C: Remain neutral: this is not our affair
 	option = {
 		name = decolonization_events.20.c
 		ai_chance = {
@@ -2704,7 +2704,7 @@ decolonization_events.21 = {
 		}
 	}
 
-	# Option A: Chart our own course — the non-aligned movement
+	# Option A: Chart our own course: the non-aligned movement
 	option = {
 		name = decolonization_events.21.a
 		default_option = yes
@@ -2750,7 +2750,7 @@ decolonization_events.21 = {
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
-	# Option C: Align with the pro-colonial power — pragmatic economics
+	# Option C: Align with the pro-colonial power: pragmatic economics
 	option = {
 		name = decolonization_events.21.c
 		ai_chance = {

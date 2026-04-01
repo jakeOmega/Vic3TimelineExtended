@@ -146,7 +146,7 @@ religious_mission_rights = {
 
 		evaluation_chance = {
 			value = 0.05
-			# Don't bother if same religion — no need for missionaries
+			# Don't bother if same religion: no need for missionaries
 			if = {
 				limit = {
 					religion = scope:other_country.religion

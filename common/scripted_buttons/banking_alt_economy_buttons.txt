@@ -1,6 +1,6 @@
 ﻿
 # ============================================================
-# BANKING CYCLE — COMMAND ECONOMY PLANNING TOOLS
+# BANKING CYCLE: COMMAND ECONOMY PLANNING TOOLS
 # Visible only under law_command_economy.
 # These replace market-economy CB tools with planning/allocation equivalents.
 # Budget is still tracked via country_banking_intervention_max_add.
@@ -311,7 +311,7 @@ ce_coordination_protocol = {
 		if = { limit = { var:bubble_pressure >= 20 var:bubble_pressure < 65 } add = 25 }
 		if = { limit = { banking_cycle_is_stable = yes } add = 10 }
 		if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
-		# Very cheap — always consider when points scarce
+		# Very cheap: always consider when points scarce
 		if = { limit = { banking_points_low = yes } add = 30 }
 		# Not useful in deep crisis
 		if = { limit = { banking_cycle_is_panic = yes } add = -15 }
@@ -385,7 +385,7 @@ ce_disable_consolidation_order = {
 
 
 # ============================================================
-# BANKING CYCLE — COOPERATIVE OWNERSHIP COUNCIL TOOLS
+# BANKING CYCLE: COOPERATIVE OWNERSHIP COUNCIL TOOLS
 # Visible only under law_cooperative_ownership.
 # ============================================================
 
@@ -496,7 +496,7 @@ cw_capital_plan = {
 	}
 	ai_chance = {
 		value = 0
-		# Core: stagnation/downturn — invest out of the dip
+		# Core: stagnation/downturn: invest out of the dip
 		if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
 		if = { limit = { banking_cycle_is_stagnation = yes } add = 30 }
 		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = yes } add = 15 }
@@ -544,7 +544,7 @@ cw_solidarity_campaign = {
 		# General-purpose; use when bubble is rising but not critical
 		if = { limit = { var:bubble_pressure >= 25 var:bubble_pressure < 60 } add = 25 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 20 }
-		# Very cheap — always consider when points scarce
+		# Very cheap: always consider when points scarce
 		if = { limit = { banking_points_low = yes } add = 30 }
 		if = { limit = { banking_points_none = yes } add = -30 }
 		# Not strong enough for deep crisis
@@ -584,7 +584,7 @@ cw_credit_expansion = {
 	}
 	ai_chance = {
 		value = 0
-		# Core: panic/downturn — provide liquidity
+		# Core: panic/downturn: provide liquidity
 		if = { limit = { banking_cycle_is_panic = yes } add = 55 }
 		if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
 		if = { limit = { banking_cycle_is_stagnation = yes } add = 20 }
@@ -685,7 +685,7 @@ cw_council_directive = {
 		# General-purpose; slight preference for mild heat
 		if = { limit = { var:bubble_pressure >= 20 var:bubble_pressure < 55 } add = 20 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 15 }
-		# Very cheap — use when points nearly exhausted
+		# Very cheap: use when points nearly exhausted
 		if = { limit = { banking_points_low = yes } add = 35 }
 		if = { limit = { banking_points_none = yes } add = -20 }
 		# Weak in extremes

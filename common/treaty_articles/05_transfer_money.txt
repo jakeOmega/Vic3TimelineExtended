@@ -456,7 +456,7 @@
 					}
 				}
 
-				# Longer treaties mean more total money received — scale acceptance strongly
+				# Longer treaties mean more total money received: scale acceptance strongly
 				if = {
 					limit = {
 						NOT = { exists = scope:is_treaty_active }

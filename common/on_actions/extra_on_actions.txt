@@ -1,5 +1,5 @@
 ﻿# ============================================================================
-# LAW ENACTMENT PASS — banking cycle modifier cleanup
+# LAW ENACTMENT PASS: banking cycle modifier cleanup
 # When an economy-type law changes, remove modifiers that belonged to the old
 # economy type so stale planning/council/CB-tool modifiers don't linger.
 # Root = country that enacted the law. Scope is country.
@@ -1966,7 +1966,7 @@ te_modifier_update_on_technology_on_action = {
 # NOTE: Only migration crowding is updated here. Pollution and free-port
 # modifiers use has_variable in their script values, but the engine traces
 # the parent scope chain through the law root scope, which doesn't support
-# variables — causing hundreds of "has_variable trigger" errors. Those
+# variables: causing hundreds of "has_variable trigger" errors. Those
 # modifiers are caught by the periodic state pulses instead.
 te_modifier_update_on_law_on_action = {
 	effect = {
@@ -1979,7 +1979,7 @@ te_modifier_update_on_law_on_action = {
 }
 
 # NOTE: Investment on_action hook was removed (same scope chain issue
-# as buildings — institution scope doesn't support variables/modifiers).
+# as buildings: institution scope doesn't support variables/modifiers).
 # Institution changes are picked up by the yearly state pulse.
 
 # ============================================================================

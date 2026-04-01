@@ -212,9 +212,33 @@ minor_events_timelineextended.6 = {
 
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-	title = minor_events_timelineextended.6.t
-	desc = minor_events_timelineextended.6.d
-	flavor = minor_events_timelineextended.6.f
+	title = {
+		first_valid = {
+			triggered_desc = { trigger = { var:crash_severity >= 80 } desc = minor_events_timelineextended.6.t_systemic }
+			triggered_desc = { trigger = { var:crash_severity >= 60 } desc = minor_events_timelineextended.6.t_panic }
+			triggered_desc = { trigger = { var:crash_severity >= 40 } desc = minor_events_timelineextended.6.t_crash }
+			triggered_desc = { trigger = { var:crash_severity >= 20 } desc = minor_events_timelineextended.6.t_downturn }
+			triggered_desc = { trigger = { always = yes }             desc = minor_events_timelineextended.6.t_correction }
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = { trigger = { var:crash_severity >= 80 } desc = minor_events_timelineextended.6.d_systemic }
+			triggered_desc = { trigger = { var:crash_severity >= 60 } desc = minor_events_timelineextended.6.d_panic }
+			triggered_desc = { trigger = { var:crash_severity >= 40 } desc = minor_events_timelineextended.6.d_crash }
+			triggered_desc = { trigger = { var:crash_severity >= 20 } desc = minor_events_timelineextended.6.d_downturn }
+			triggered_desc = { trigger = { always = yes }             desc = minor_events_timelineextended.6.d_correction }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { var:crash_severity >= 80 } desc = minor_events_timelineextended.6.f_systemic }
+			triggered_desc = { trigger = { var:crash_severity >= 60 } desc = minor_events_timelineextended.6.f_panic }
+			triggered_desc = { trigger = { var:crash_severity >= 40 } desc = minor_events_timelineextended.6.f_crash }
+			triggered_desc = { trigger = { var:crash_severity >= 20 } desc = minor_events_timelineextended.6.f_downturn }
+			triggered_desc = { trigger = { always = yes }             desc = minor_events_timelineextended.6.f_correction }
+		}
+	}
 
     immediate = {
     }
@@ -226,6 +250,7 @@ minor_events_timelineextended.6 = {
     option = {
         name = minor_events_timelineextended.6.a
         default_option = yes
+		apply_banking_crash_origin_effects = yes
 		add_radicals = {
 			value = medium_radicals
 			strata = upper
@@ -242,6 +267,7 @@ minor_events_timelineextended.6 = {
 	# Option B: Emergency fiscal response - spend to cushion the blow
 	option = {
 		name = minor_events_timelineextended.6.b
+		apply_banking_crash_origin_effects = yes
 		add_modifier = {
 			name = banking_event_deposit_guarantee_emergency
 			multiplier = banking_event_expense_huge
@@ -274,9 +300,26 @@ minor_events_timelineextended.7 = {
 
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-	title = minor_events_timelineextended.7.t
-	desc = minor_events_timelineextended.7.d
-	flavor = minor_events_timelineextended.7.f
+	title = {
+		first_valid = {
+			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.t_severe }
+			triggered_desc = { trigger = { always = yes } desc = minor_events_timelineextended.7.t }
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 80 } } desc = minor_events_timelineextended.7.d_systemic }
+			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.d_panic }
+			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 40 } } desc = minor_events_timelineextended.7.d_crash }
+			triggered_desc = { trigger = { always = yes } desc = minor_events_timelineextended.7.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.f_severe }
+			triggered_desc = { trigger = { always = yes } desc = minor_events_timelineextended.7.f }
+		}
+	}
 
     immediate = {
     }
@@ -288,6 +331,7 @@ minor_events_timelineextended.7 = {
     option = {
         name = minor_events_timelineextended.7.a
         default_option = yes
+		apply_banking_contagion_effects = yes
 		add_radicals = {
 			value = small_radicals
 			strata = upper
@@ -304,6 +348,7 @@ minor_events_timelineextended.7 = {
 	# Option B: Maintain open markets - ride it out
 	option = {
 		name = minor_events_timelineextended.7.b
+		apply_banking_contagion_effects = yes
 		add_radicals = {
 			value = medium_radicals
 			strata = upper
@@ -318,7 +363,7 @@ minor_events_timelineextended.7 = {
 	}
 }
 
-# Hidden country event — weekly PM retooling cleanup.
+# Hidden country event: weekly PM retooling cleanup.
 # Fired with delays from on_monthly_pulse_country to simulate weekly state cleanup.
 minor_events_timelineextended.100 = {
 	type = country_event

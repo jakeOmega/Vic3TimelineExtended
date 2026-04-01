@@ -1,6 +1,6 @@
 ﻿# Colonial Collapse Effects
 # When the decolonization era arrives, tiny non-player countries
-# that lack population collapse — either reverting to decentralized
+# that lack population collapse: either reverting to decentralized
 # (uncolonized) land or being absorbed by a culturally similar neighbor.
 #
 # Fired from colonial_collapse_on_action (on_yearly_pulse_country).
@@ -114,7 +114,7 @@ colonial_collapse_effect = {
             }
         }
         else = {
-            # No culturally similar neighbor — revert to decentralized (uncolonized)
+            # No culturally similar neighbor: revert to decentralized (uncolonized)
             set_country_type = decentralized
             
             # Notify countries with strategic interest

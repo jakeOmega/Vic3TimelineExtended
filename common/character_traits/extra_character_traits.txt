@@ -245,3 +245,18 @@ trait_swarm_technology = {
 		trait_jadc2
 	}
 }
+
+# ----- Banking cycle: ruler personality effects on bubble pressure / momentum -----
+INJECT:reckless = {
+	country_modifier = {
+		country_bubble_pressure_monthly_add = 0.6
+		country_finance_momentum_monthly_add = 0.2
+	}
+}
+
+INJECT:cautious = {
+	country_modifier = {
+		country_bubble_pressure_monthly_add = -0.3
+		country_finance_momentum_monthly_add = -0.1
+	}
+}

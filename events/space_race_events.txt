@@ -1248,7 +1248,7 @@ space_race_events.41 = {
 	option = {
 		name = space_race_events.41.c
 		ai_chance = { base = 3 }
-		# Conventional chemical rockets — reliable but expensive per kg
+		# Conventional chemical rockets: reliable but expensive per kg
 		if = {
 			limit = { has_variable = sr_active_moon_base }
 			change_variable = { name = sr_progress_moon_base add = 5 }
@@ -1324,7 +1324,7 @@ space_race_events.42 = {
 }
 
 # Event 43: Closed-Loop Life Support Challenge (moon base/mars)
-# Bioregenerative ECLSS — growing air and water instead of importing it
+# Bioregenerative ECLSS: growing air and water instead of importing it
 space_race_events.43 = {
 	type = country_event
 	placement = root
@@ -1406,7 +1406,7 @@ space_race_events.43 = {
 }
 
 # Event 44: Solar Flare Warning (any active mission)
-# Coronal mass ejections — a real hazard for astronauts and electronics
+# Coronal mass ejections: a real hazard for astronauts and electronics
 space_race_events.44 = {
 	type = country_event
 	placement = root
@@ -1532,7 +1532,7 @@ space_race_events.44 = {
 }
 
 # Event 45: Gravitational Slingshot Calculation (probe)
-# Using planetary gravity assists to reach the outer system — real orbital mechanics
+# Using planetary gravity assists to reach the outer system: real orbital mechanics
 space_race_events.45 = {
 	type = country_event
 	placement = root
@@ -1560,7 +1560,7 @@ space_race_events.45 = {
 		name = space_race_events.45.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Jupiter slingshot — fastest trajectory, narrow launch window
+		# Jupiter slingshot: fastest trajectory, narrow launch window
 		change_variable = {
 			name = sr_progress_probe
 			add = 10
@@ -1570,7 +1570,7 @@ space_race_events.45 = {
 	option = {
 		name = space_race_events.45.b
 		ai_chance = { base = 4 }
-		# Venus-Earth-Jupiter triple gravity assist — slower but more data
+		# Venus-Earth-Jupiter triple gravity assist: slower but more data
 		change_variable = {
 			name = sr_progress_probe
 			add = 6
@@ -1581,7 +1581,7 @@ space_race_events.45 = {
 	option = {
 		name = space_race_events.45.c
 		ai_chance = { base = 2 }
-		# Direct trajectory with ion drive — expensive, no gravity assists
+		# Direct trajectory with ion drive: expensive, no gravity assists
 		change_variable = {
 			name = sr_progress_probe
 			add = 8
@@ -1630,7 +1630,7 @@ space_race_events.46 = {
 		name = space_race_events.46.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Extract oxygen and water from regolith — proven chemistry
+		# Extract oxygen and water from regolith: proven chemistry
 		if = {
 			limit = { has_variable = sr_active_moon_base }
 			change_variable = { name = sr_progress_moon_base add = 8 }
@@ -1645,7 +1645,7 @@ space_race_events.46 = {
 	option = {
 		name = space_race_events.46.b
 		ai_chance = { base = 3 }
-		# Attempt metal smelting from local ores — high reward if it works
+		# Attempt metal smelting from local ores: high reward if it works
 		random_list = {
 			70 = {
 				if = {
@@ -1723,7 +1723,7 @@ space_race_events.47 = {
 		name = space_race_events.47.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Deploy repair crew / remote patch — standard procedure
+		# Deploy repair crew / remote patch: standard procedure
 		if = {
 			limit = { has_variable = sr_active_orbital }
 			change_variable = { name = sr_progress_orbital subtract = 4 }
@@ -1741,7 +1741,7 @@ space_race_events.47 = {
 	option = {
 		name = space_race_events.47.b
 		ai_chance = { base = 3 }
-		# Redesign with Whipple shielding — prevents future impacts but costs time
+		# Redesign with Whipple shielding: prevents future impacts but costs time
 		if = {
 			limit = { has_variable = sr_active_orbital }
 			change_variable = { name = sr_progress_orbital subtract = 8 }
@@ -1759,7 +1759,7 @@ space_race_events.47 = {
 }
 
 # Event 48: Crew Psychology Report (Mars/colonization)
-# Long-duration spaceflight isolation — a realistic hard sf concern
+# Long-duration spaceflight isolation: a realistic hard sf concern
 space_race_events.48 = {
 	type = country_event
 	placement = root
@@ -1829,7 +1829,7 @@ space_race_events.48 = {
 	option = {
 		name = space_race_events.48.c
 		ai_chance = { base = 2 }
-		# Select only psychologically screened loners — smaller crew pool
+		# Select only psychologically screened loners: smaller crew pool
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
 			change_variable = { name = sr_progress_mars_landing add = 7 }
@@ -1905,7 +1905,7 @@ space_race_events.49 = {
 		name = space_race_events.49.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Build the depot — reduces delta-v requirements for all future missions
+		# Build the depot: reduces delta-v requirements for all future missions
 		set_variable = { name = sr_progress_boost value = 8 }
 		sr_boost_active_milestones = yes
 	}
@@ -1987,7 +1987,7 @@ space_race_events.50 = {
 		name = space_race_events.50.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Public-private partnership — combine government resources and private innovation
+		# Public-private partnership: combine government resources and private innovation
 		set_variable = { name = sr_progress_boost value = 10 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -1997,7 +1997,7 @@ space_race_events.50 = {
 	option = {
 		name = space_race_events.50.b
 		ai_chance = { base = 3 }
-		# Let the company take the lead — faster, but they get the credit
+		# Let the company take the lead: faster, but they get the credit
 		set_variable = { name = sr_progress_boost value = 15 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = small_radicals strata = lower }
@@ -2007,7 +2007,7 @@ space_race_events.50 = {
 	option = {
 		name = space_race_events.50.c
 		ai_chance = { base = 2 }
-		# Keep the program fully state-run — slower but sovereign
+		# Keep the program fully state-run: slower but sovereign
 		set_variable = { name = sr_progress_boost value = 3 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals strata = lower }
@@ -2071,7 +2071,7 @@ space_race_events.51 = {
 	option = {
 		name = space_race_events.51.c
 		ai_chance = { base = 2 }
-		# Regulated tourism — limited flights, safety first
+		# Regulated tourism: limited flights, safety first
 		add_modifier = {
 			name = sr_space_tourism_boost
 			days = normal_modifier_time
@@ -2118,7 +2118,7 @@ space_race_events.52 = {
 				add = 3
 			}
 		}
-		# Join the international station project — shared costs, shared science
+		# Join the international station project: shared costs, shared science
 		add_modifier = {
 			name = sr_iss_cooperation
 			days = long_modifier_time
@@ -2140,7 +2140,7 @@ space_race_events.52 = {
 	option = {
 		name = space_race_events.52.b
 		ai_chance = { base = 3 }
-		# Build our own station — national sovereignty, no sharing
+		# Build our own station: national sovereignty, no sharing
 		add_modifier = {
 			name = sr_iss_independence
 			days = long_modifier_time
@@ -2208,7 +2208,7 @@ space_race_events.53 = {
 }
 
 # Event 54: Heat Shield Re-entry Problem (suborbital/orbital)
-# Ablative vs reusable heat shield — real engineering tradeoff
+# Ablative vs reusable heat shield: real engineering tradeoff
 space_race_events.54 = {
 	type = country_event
 	placement = root
@@ -2248,7 +2248,7 @@ space_race_events.54 = {
 		name = space_race_events.54.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Ablative heat shield — proven, single-use, lighter
+		# Ablative heat shield: proven, single-use, lighter
 		if = {
 			limit = { has_variable = sr_active_suborbital }
 			change_variable = { name = sr_progress_suborbital add = 6 }
@@ -2262,7 +2262,7 @@ space_race_events.54 = {
 	option = {
 		name = space_race_events.54.b
 		ai_chance = { base = 3 }
-		# Ceramic tile system — reusable but complex, saves money long-term
+		# Ceramic tile system: reusable but complex, saves money long-term
 		if = {
 			limit = { has_variable = sr_active_suborbital }
 			change_variable = { name = sr_progress_suborbital add = 4 }
@@ -2277,7 +2277,7 @@ space_race_events.54 = {
 	option = {
 		name = space_race_events.54.c
 		ai_chance = { base = 2 }
-		# Experimental transpiration cooling — cutting-edge, unproven
+		# Experimental transpiration cooling: cutting-edge, unproven
 		random_list = {
 			60 = {
 				if = {
@@ -2484,7 +2484,7 @@ space_race_events.12 = {
 	option = {
 		name = space_race_events.12.b
 		ai_chance = { base = 3 }
-		# Redesign the fuel system entirely — slower but safer
+		# Redesign the fuel system entirely: slower but safer
 		sr_mission_failure_effect = yes
 		sr_switch_to_safe_effect = yes
 	}
@@ -2492,7 +2492,7 @@ space_race_events.12 = {
 	option = {
 		name = space_race_events.12.c
 		ai_chance = { base = 1 }
-		# Rush a replacement vehicle — accept the risk
+		# Rush a replacement vehicle: accept the risk
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = large_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals }
@@ -2521,14 +2521,14 @@ space_race_events.13 = {
 		name = space_race_events.13.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Attempt signal recovery — reorient deep-space antenna network
+		# Attempt signal recovery: reorient deep-space antenna network
 		sr_mission_failure_effect = yes
 	}
 
 	option = {
 		name = space_race_events.13.b
 		ai_chance = { base = 3 }
-		# Build a redundant backup probe — expensive but insurance against total loss
+		# Build a redundant backup probe: expensive but insurance against total loss
 		sr_mission_failure_effect = yes
 		sr_switch_to_safe_effect = yes
 	}
@@ -2536,7 +2536,7 @@ space_race_events.13 = {
 	option = {
 		name = space_race_events.13.c
 		ai_chance = { base = 1 }
-		# Assume the probe is still on course — wait and hope
+		# Assume the probe is still on course: wait and hope
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = medium_radicals pop_type = academics }
 	}
@@ -2571,14 +2571,14 @@ space_race_events.14 = {
 	option = {
 		name = space_race_events.14.b
 		ai_chance = { base = 3 }
-		# Evacuate to backup shelter — redesign the habitat module
+		# Evacuate to backup shelter: redesign the habitat module
 		sr_mission_catastrophic_failure_effect = yes
 	}
 
 	option = {
 		name = space_race_events.14.c
 		ai_chance = { base = 2 }
-		# Patch and continue — the crew is brave
+		# Patch and continue: the crew is brave
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_radicals = { value = large_radicals pop_type = academics }
 	}
@@ -2606,14 +2606,14 @@ space_race_events.15 = {
 		name = space_race_events.15.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Abort the landing attempt — bring the crew home safely
+		# Abort the landing attempt: bring the crew home safely
 		sr_mission_failure_effect = yes
 	}
 
 	option = {
 		name = space_race_events.15.b
 		ai_chance = { base = 2 }
-		# Manual override — let the pilot take control
+		# Manual override: let the pilot take control
 		random_list = {
 			50 = {
 				# Pilot succeeds!
@@ -2623,7 +2623,7 @@ space_race_events.15 = {
 				}
 			}
 			50 = {
-				# Hard landing — damage but survival
+				# Hard landing: damage but survival
 				sr_mission_failure_effect = yes
 				custom_tooltip = {
 					text = "SR_MANUAL_OVERRIDE_FAIL_TT"
@@ -2635,7 +2635,7 @@ space_race_events.15 = {
 	option = {
 		name = space_race_events.15.c
 		ai_chance = { base = 3 }
-		# Switch to safe approach — recalibrate everything
+		# Switch to safe approach: recalibrate everything
 		sr_mission_failure_effect = yes
 		sr_switch_to_safe_effect = yes
 	}
@@ -2663,7 +2663,7 @@ space_race_events.16 = {
 		name = space_race_events.16.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Activate emergency separation bolts — jettison the stage
+		# Activate emergency separation bolts: jettison the stage
 		sr_mission_failure_effect = yes
 	}
 
@@ -2678,7 +2678,7 @@ space_race_events.16 = {
 	option = {
 		name = space_race_events.16.c
 		ai_chance = { base = 1 }
-		# Fly the next mission with the same design — anomaly, not systemic
+		# Fly the next mission with the same design: anomaly, not systemic
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = large_radicals pop_type = academics }
 	}
@@ -2706,14 +2706,14 @@ space_race_events.17 = {
 		name = space_race_events.17.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Emergency medical evacuation — bring the crew member home
+		# Emergency medical evacuation: bring the crew member home
 		sr_mission_failure_effect = yes
 	}
 
 	option = {
 		name = space_race_events.17.b
 		ai_chance = { base = 3 }
-		# Treat in place with telemedicine — risky but keeps the mission alive
+		# Treat in place with telemedicine: risky but keeps the mission alive
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_radicals = { value = small_radicals }
@@ -2722,7 +2722,7 @@ space_race_events.17 = {
 	option = {
 		name = space_race_events.17.c
 		ai_chance = { base = 2 }
-		# Invest in advanced space medicine — learn from this crisis
+		# Invest in advanced space medicine: learn from this crisis
 		sr_mission_failure_effect = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -2750,7 +2750,7 @@ space_race_events.18 = {
 		name = space_race_events.18.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Launch a public inquiry — restore confidence through transparency
+		# Launch a public inquiry: restore confidence through transparency
 		sr_mission_failure_effect = yes
 		add_loyalists = { value = small_radicals }
 	}
@@ -2758,7 +2758,7 @@ space_race_events.18 = {
 	option = {
 		name = space_race_events.18.b
 		ai_chance = { base = 3 }
-		# Quietly restructure management — minimize political damage
+		# Quietly restructure management: minimize political damage
 		set_variable = { name = sr_failure_cooldown value = 10 }
 		add_radicals = { value = small_radicals strata = lower }
 	}
@@ -2766,7 +2766,7 @@ space_race_events.18 = {
 	option = {
 		name = space_race_events.18.c
 		ai_chance = { base = 1 }
-		# Blame foreign agents — deflect and accelerate
+		# Blame foreign agents: deflect and accelerate
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
@@ -2795,14 +2795,14 @@ space_race_events.19 = {
 		name = space_race_events.19.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Full security review — sweep every system
+		# Full security review: sweep every system
 		sr_mission_failure_effect = yes
 	}
 
 	option = {
 		name = space_race_events.19.b
 		ai_chance = { base = 3 }
-		# Counterintelligence investigation — find the mole
+		# Counterintelligence investigation: find the mole
 		sr_mission_failure_effect = yes
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = officers }
@@ -2811,7 +2811,7 @@ space_race_events.19 = {
 	option = {
 		name = space_race_events.19.c
 		ai_chance = { base = 2 }
-		# Harden systems and press on — waste no time on paranoia
+		# Harden systems and press on: waste no time on paranoia
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = large_radicals pop_type = academics }
 	}
@@ -2844,14 +2844,14 @@ space_race_events.21 = {
 		name = space_race_events.21.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Wait for the parts — accept the delay
+		# Wait for the parts: accept the delay
 		set_variable = { name = sr_failure_cooldown value = 6 }
 	}
 
 	option = {
 		name = space_race_events.21.b
 		ai_chance = { base = 3 }
-		# Source from alternative suppliers — faster but untested quality
+		# Source from alternative suppliers: faster but untested quality
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
@@ -2859,7 +2859,7 @@ space_race_events.21 = {
 	option = {
 		name = space_race_events.21.c
 		ai_chance = { base = 2 }
-		# Develop domestic manufacturing capability — long-term investment
+		# Develop domestic manufacturing capability: long-term investment
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -2887,14 +2887,14 @@ space_race_events.22 = {
 		name = space_race_events.22.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Wait for the next window — run more simulations in the meantime
+		# Wait for the next window: run more simulations in the meantime
 		set_variable = { name = sr_failure_cooldown value = 4 }
 	}
 
 	option = {
 		name = space_race_events.22.b
 		ai_chance = { base = 2 }
-		# Launch in marginal conditions — the schedule demands it
+		# Launch in marginal conditions: the schedule demands it
 		random_list = {
 			70 = {
 				# Successful launch despite weather
@@ -2936,7 +2936,7 @@ space_race_events.23 = {
 		name = space_race_events.23.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Full code audit — find and fix every instance
+		# Full code audit: find and fix every instance
 		set_variable = { name = sr_failure_cooldown value = 6 }
 	}
 
@@ -2951,7 +2951,7 @@ space_race_events.23 = {
 	option = {
 		name = space_race_events.23.c
 		ai_chance = { base = 2 }
-		# Rewrite the flight software from scratch — radical but thorough
+		# Rewrite the flight software from scratch: radical but thorough
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -2979,7 +2979,7 @@ space_race_events.24 = {
 		name = space_race_events.24.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Defend the program before the committee — accept some delays
+		# Defend the program before the committee: accept some delays
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_loyalists = { value = small_radicals }
 	}
@@ -2994,7 +2994,7 @@ space_race_events.24 = {
 	option = {
 		name = space_race_events.24.c
 		ai_chance = { base = 2 }
-		# Appeal directly to the public — generate grassroots support
+		# Appeal directly to the public: generate grassroots support
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_loyalists = { value = medium_radicals }
 		add_radicals = { value = small_radicals strata = upper }
@@ -3023,7 +3023,7 @@ space_race_events.25 = {
 		name = space_race_events.25.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Return the defective parts — demand replacements
+		# Return the defective parts: demand replacements
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
@@ -3031,7 +3031,7 @@ space_race_events.25 = {
 	option = {
 		name = space_race_events.25.b
 		ai_chance = { base = 3 }
-		# Bring manufacturing in-house — control quality directly
+		# Bring manufacturing in-house: control quality directly
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -3059,14 +3059,14 @@ space_race_events.26 = {
 		name = space_race_events.26.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Absorb the disruption — space transcends politics
+		# Absorb the disruption: space transcends politics
 		set_variable = { name = sr_failure_cooldown value = 6 }
 	}
 
 	option = {
 		name = space_race_events.26.b
 		ai_chance = { base = 3 }
-		# Leverage the crisis — rally national pride around the space program
+		# Leverage the crisis: rally national pride around the space program
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_loyalists = { value = medium_radicals }
 	}
@@ -3095,7 +3095,7 @@ space_race_events.26 = {
 ##############################################
 
 # Event 70: Launch Pad Explosion
-# Ambitious failure — catastrophic explosion kills workers and damages facility
+# Ambitious failure: catastrophic explosion kills workers and damages facility
 space_race_events.70 = {
 	type = country_event
 	placement = root
@@ -3117,7 +3117,7 @@ space_race_events.70 = {
 		name = space_race_events.70.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Rebuild the pad — full safety overhaul before resuming
+		# Rebuild the pad: full safety overhaul before resuming
 		sr_mission_catastrophic_failure_effect = yes
 		random_scope_state = {
 			limit = {
@@ -3134,7 +3134,7 @@ space_race_events.70 = {
 	option = {
 		name = space_race_events.70.b
 		ai_chance = { base = 2 }
-		# Rush repairs — we can't afford to fall behind
+		# Rush repairs: we can't afford to fall behind
 		sr_mission_failure_effect = yes
 		random_scope_state = {
 			limit = {
@@ -3151,7 +3151,7 @@ space_race_events.70 = {
 }
 
 # Event 71: Capsule Depressurization
-# Ambitious failure — loss of pressure kills crew during testing
+# Ambitious failure: loss of pressure kills crew during testing
 space_race_events.71 = {
 	type = country_event
 	placement = root
@@ -3173,7 +3173,7 @@ space_race_events.71 = {
 		name = space_race_events.71.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Ground all capsules — redesign the pressure system
+		# Ground all capsules: redesign the pressure system
 		sr_mission_catastrophic_failure_effect = yes
 		random_scope_state = {
 			limit = {
@@ -3199,7 +3199,7 @@ space_race_events.71 = {
 }
 
 # Event 72: Facility Fire
-# Safe setback — fire damages equipment but no fatalities
+# Safe setback: fire damages equipment but no fatalities
 space_race_events.72 = {
 	type = country_event
 	placement = root
@@ -3237,7 +3237,7 @@ space_race_events.72 = {
 	option = {
 		name = space_race_events.72.b
 		ai_chance = { base = 3 }
-		# Use insurance payout — invest in better safety systems
+		# Use insurance payout: invest in better safety systems
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		random_scope_state = {
 			limit = {
@@ -3253,7 +3253,7 @@ space_race_events.72 = {
 }
 
 # Event 73: Budget Scandal
-# Political fallout — cost overruns and mismanagement exposed
+# Political fallout: cost overruns and mismanagement exposed
 space_race_events.73 = {
 	type = country_event
 	placement = root
@@ -3275,7 +3275,7 @@ space_race_events.73 = {
 		name = space_race_events.73.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Launch a public inquiry — restore trust through transparency
+		# Launch a public inquiry: restore trust through transparency
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals pop_type = engineers }
@@ -3284,7 +3284,7 @@ space_race_events.73 = {
 	option = {
 		name = space_race_events.73.b
 		ai_chance = { base = 3 }
-		# Suppress the story — national security demands secrecy
+		# Suppress the story: national security demands secrecy
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_radicals = { value = large_radicals }
 	}
@@ -3292,7 +3292,7 @@ space_race_events.73 = {
 	option = {
 		name = space_race_events.73.c
 		ai_chance = { base = 2 }
-		# Restructure the program — bring in new leadership
+		# Restructure the program: bring in new leadership
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		random_scope_state = {
 			limit = {
@@ -3308,7 +3308,7 @@ space_race_events.73 = {
 }
 
 # Event 74: Engineering Breakthrough
-# Positive event — major technical innovation boosts the program
+# Positive event: major technical innovation boosts the program
 space_race_events.74 = {
 	type = country_event
 	placement = root
@@ -3330,7 +3330,7 @@ space_race_events.74 = {
 		name = space_race_events.74.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Apply the breakthrough — integrate it into the current program
+		# Apply the breakthrough: integrate it into the current program
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
@@ -3362,7 +3362,7 @@ space_race_events.74 = {
 }
 
 # Event 75: Supply Chain Disruption
-# Safe setback — critical component delays from suppliers
+# Safe setback: critical component delays from suppliers
 space_race_events.75 = {
 	type = country_event
 	placement = root
@@ -3384,7 +3384,7 @@ space_race_events.75 = {
 		name = space_race_events.75.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Wait for the original suppliers — quality matters
+		# Wait for the original suppliers: quality matters
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		random_scope_state = {
 			limit = {
@@ -3400,7 +3400,7 @@ space_race_events.75 = {
 	option = {
 		name = space_race_events.75.b
 		ai_chance = { base = 3 }
-		# Source alternative suppliers — accept slightly lower quality
+		# Source alternative suppliers: accept slightly lower quality
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		random_scope_state = {
 			limit = {

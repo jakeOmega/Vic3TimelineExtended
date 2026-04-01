@@ -2199,7 +2199,7 @@ nuclear_program_pause = {
 			}
 			else = {
 				# Target perspective: I'm being asked to freeze my nuclear program
-				# Much less severe than disarmament — preserves stockpile and progress
+				# Much less severe than disarmament: preserves stockpile and progress
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
 					value = -50
@@ -2247,7 +2247,7 @@ nuclear_program_pause = {
 						value = 30
 					}
 				}
-				# Already has nukes — less painful since stockpile preserved
+				# Already has nukes: less painful since stockpile preserved
 				if = {
 					limit = { has_modifier = nuclear_power }
 					add = {
@@ -2425,7 +2425,7 @@ population_transfer = {
 						value = 25
 					}
 				}
-				# Expansionists DON'T want this — they want to claim the land, not extract people
+				# Expansionists DON'T want this: they want to claim the land, not extract people
 				if = {
 					limit = {
 						any_interest_group = {

@@ -90,7 +90,7 @@ seize_company = {
 	# This section governs AI behavior regarding the treaty article.
 	ai = {
 		treaty_categories = { economy }
-		# The AI will demand this via "request" — forcing the other side (source)
+		# The AI will demand this via "request": forcing the other side (source)
 		# to surrender their company to the requesting country (target).
 		article_ai_usage = { request }
 
@@ -218,7 +218,7 @@ seize_company = {
 
 	# This defines the wargoal if this article is pushed in a diplomatic play.
 	wargoal = {
-		execution_priority = 75 # Higher than disband (70) — more aggressive demand.
+		execution_priority = 75 # Higher than disband (70): more aggressive demand.
 		contestion_type = control_target_country_capital
 		
 		# Infamy is higher than disband since you're taking, not just destroying.

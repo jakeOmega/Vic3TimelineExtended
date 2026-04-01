@@ -2,7 +2,7 @@
 """
 gen_batch_pm_icons.py - Generate category icons for all placeholder production methods.
 
-Creates ~18 silhouette shapes Ã— 6 tier colors, assigns each PM to a category,
+Creates ~18 silhouette shapes Ã- 6 tier colors, assigns each PM to a category,
 generates metallic embossed DDS icons, and updates PM texture references.
 
 Usage:
@@ -62,7 +62,7 @@ PM_DIR = SCRIPT_DIR / "common" / "production_methods"
 
 # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # SHAPE DRAWING FUNCTIONS
-# Each returns a 512Ã—512 RGBA image: white solid shape on transparent bg.
+# Each returns a 512Ã-512 RGBA image: white solid shape on transparent bg.
 # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 def _new() -> Image.Image:

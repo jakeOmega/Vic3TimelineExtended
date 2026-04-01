@@ -47,7 +47,7 @@ is_radical_law_activated = {
 }
 
 # True if the country (country scope) has a governance type that exempts it
-# from radical law backlash — revolutionary, authoritarian, or anarchist regimes
+# from radical law backlash: revolutionary, authoritarian, or anarchist regimes
 is_exempt_from_radical_backlash = {
 	OR = {
 		has_law = law_type:law_council_republic
