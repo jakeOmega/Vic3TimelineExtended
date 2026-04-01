@@ -280,6 +280,30 @@ un_program_expense_value = {
 	divide = 52 # weekly cost
 }
 
+# Scaled expense for humanitarian aid (accounts for multiple ongoing programs)
+un_aid_total_expense_value = {
+	value = un_program_expense_value
+	if = {
+		limit = {
+			has_variable = un_aid_contribution_count
+			var:un_aid_contribution_count >= 2
+		}
+		multiply = var:un_aid_contribution_count
+	}
+}
+
+# Scaled expense for peacekeeping (accounts for multiple ongoing operations)
+un_peacekeeping_total_expense_value = {
+	value = un_program_expense_value
+	if = {
+		limit = {
+			has_variable = un_peacekeeping_contribution_count
+			var:un_peacekeeping_contribution_count >= 2
+		}
+		multiply = var:un_peacekeeping_contribution_count
+	}
+}
+
 # How many countries are currently contributing to peacekeeping
 un_peacekeeping_donor_count = {
 	value = 0

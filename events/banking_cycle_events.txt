@@ -4626,6 +4626,7 @@ banking_cycle_events.45 = {
 				country = scope:bailout_country
 				value = 30
 			}
+			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:bailout_country }
 		}
 		ai_chance = {
 			base = 40
@@ -4676,6 +4677,7 @@ banking_cycle_events.45 = {
 				country = scope:bailout_country
 				value = -20
 			}
+			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:bailout_country }
 		}
 		add_loyalists = {
 			value = small_radicals

@@ -87,6 +87,7 @@ fmc_on_country_released_as_independent = {
             id = fmc_update_events.4
         }
         scope:target = {
+            set_variable = { name = former_overlord value = root }
             trigger_event = {
                 id = fmc_update_events.4
             }
@@ -108,12 +109,12 @@ fmc_on_country_released_as_own_subject = {
             id = fmc_update_events.4
         }
         scope:target = {
+            set_variable = { name = former_overlord value = root }
             trigger_event = {
                 id = fmc_update_events.4
             }
         }
     }
-    
 }
 
 # Root = Releasing Country
@@ -130,6 +131,7 @@ fmc_on_country_released_as_overlord_subject = {
             id = fmc_update_events.4
         }
         scope:target = {
+            set_variable = { name = former_overlord value = root }
             trigger_event = {
                 id = fmc_update_events.4
             }

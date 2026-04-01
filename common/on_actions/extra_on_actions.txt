@@ -96,7 +96,6 @@ on_become_independent = {
 
 on_monthly_pulse_state = {
 	on_actions = {
-		te_pm_retooling_cleanup_immediate
 		space_elevator_on_action
 		solar_collector_on_action
 		orbital_battlestation_on_action
@@ -107,15 +106,6 @@ on_monthly_pulse_state = {
 		state_yearly_cultural_acceptance_add_on_action
 		tourism_on_action
 		resettlement_transfer_on_action
-	}
-}
-
-# PM RETOOLING CLEANUP - the engine can leave pm_retooling on level-0 building
-# sites. Immediate cleanup runs in the monthly state pulse; delayed weekly
-# cleanups fire as country events at day 7/14/21 from the monthly country pulse.
-te_pm_retooling_cleanup_immediate = {
-	effect = {
-		te_remove_pm_retooling_from_zero_level_state_buildings = yes
 	}
 }
 
@@ -144,10 +134,13 @@ on_monthly_pulse_country = {
 	}
 }
 
-# PM RETOOLING - schedule delayed country events at 7/14/21 days
-# to simulate weekly cleanup from the monthly country pulse.
+# PM RETOOLING - schedule country events at day 0/7/14/21 from the monthly
+# country pulse. Each event iterates all states and cleans up pm_retooling on
+# level-0 building sites. The on_start_expanding_building hook in
+# fmc_on_actions.txt handles single-building cleanup immediately.
 te_pm_retooling_weekly_schedule = {
 	effect = {
+		trigger_event = { id = minor_events_timelineextended.100 }
 		trigger_event = { id = minor_events_timelineextended.100 days = 7 }
 		trigger_event = { id = minor_events_timelineextended.100 days = 14 }
 		trigger_event = { id = minor_events_timelineextended.100 days = 21 }

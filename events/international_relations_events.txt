@@ -237,6 +237,7 @@ international_relations_events.2 = {
 			country = scope:proxy_rival
 			value = -30
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:proxy_rival }
 		scope:proxy_rival = {
 			trigger_event = { id = international_relations_events.101 days = 14 }
 			add_modifier = {
@@ -543,6 +544,7 @@ international_relations_events.5 = {
 			country = scope:embargo_rival
 			value = -30
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:embargo_rival }
 		scope:embargo_rival = {
 			trigger_event = { id = international_relations_events.102 days = 14 }
 			add_modifier = {
@@ -624,6 +626,7 @@ international_relations_events.6 = {
 			country = scope:espionage_rival
 			value = -30
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:espionage_rival }
 		scope:espionage_rival = {
 			trigger_event = { id = international_relations_events.103 days = 14 }
 			add_modifier = {
@@ -681,6 +684,7 @@ international_relations_events.6 = {
 			country = scope:espionage_rival
 			value = -50
 		}
+		create_diplomatic_catalyst = { type = catalyst_diplomatic_incident target = scope:espionage_rival }
 		scope:espionage_rival = {
 			trigger_event = { id = international_relations_events.103 days = 14 }
 			add_modifier = {
@@ -830,6 +834,7 @@ international_relations_events.8 = {
 			country = scope:nuclear_rival
 			value = -40
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:nuclear_rival }
 		add_radicals = { value = medium_radicals }
 		scope:nuclear_rival = {
 			trigger_event = { id = international_relations_events.104 days = 3 }
@@ -858,6 +863,7 @@ international_relations_events.8 = {
 			country = scope:nuclear_rival
 			value = 20
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:nuclear_rival }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		scope:nuclear_rival = {
 			trigger_event = { id = international_relations_events.104 days = 3 }
@@ -882,6 +888,7 @@ international_relations_events.8 = {
 			country = scope:nuclear_rival
 			value = -60
 		}
+		create_diplomatic_catalyst = { type = catalyst_diplomatic_incident target = scope:nuclear_rival }
 		add_radicals = { value = large_radicals }
 		scope:nuclear_rival = {
 			trigger_event = { id = international_relations_events.104 days = 3 }

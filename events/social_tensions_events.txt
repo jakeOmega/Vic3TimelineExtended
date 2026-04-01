@@ -157,6 +157,7 @@ social_tensions_events.2 = {
 		default_option = yes
 		add_modifier = { name = foreign_terror_retaliation_modifier days = normal_modifier_time is_decaying = yes }
 		change_relations = { country = scope:terror_linked_country value = -30 }
+		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:terror_linked_country }
 		add_lobby_appeasement_from_diplomacy_unidirectional = {
 			FIRST = root
 			SECOND = scope:terror_linked_country

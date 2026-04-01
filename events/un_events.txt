@@ -447,6 +447,7 @@ un_events.4 = {
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
 		change_relations = { country = scope:peacekeeping_target value = 20 }
+		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:peacekeeping_target }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Military costs
 		add_radicals = {
@@ -550,6 +551,7 @@ un_events.5 = {
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
 		change_relations = { country = scope:sanctioned_country value = -20 }
+		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:sanctioned_country }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 
@@ -807,6 +809,7 @@ un_events.7 = {
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
 		change_relations = { country = scope:crisis_country value = 30 }
+		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:crisis_country }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# GDP-scaled benefit to crisis country: min(giver, receiver) / receiver * 2
@@ -1577,6 +1580,7 @@ un_events.13 = {
 		custom_tooltip = un_authority_change_minus_3
 		change_variable = { name = un_authority add = -3 }
 		change_relations = { country = scope:ideological_rival value = -20 }
+		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:ideological_rival }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper

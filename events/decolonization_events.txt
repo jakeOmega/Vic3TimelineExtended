@@ -138,6 +138,7 @@ decolonization_events.1 = {
 			country = scope:restless_subject
 			value = 30
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:restless_subject }
 		add_lobby_appeasement_from_diplomacy_unidirectional = {
 			FIRST = root
 			SECOND = scope:restless_subject
@@ -296,6 +297,7 @@ decolonization_events.2 = {
 			country = scope:pressuring_power
 			value = -20
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:pressuring_power }
 		add_lobby_appeasement_from_diplomacy_unidirectional = {
 			FIRST = root
 			SECOND = scope:pressuring_power
@@ -592,7 +594,8 @@ decolonization_events.5 = {
 		NOT = { any_subject_or_below = { always = yes } }
 		any_country = {
 			NOT = { this = root }
-			was_formed_from = ROOT
+			has_variable = former_overlord
+			var:former_overlord = root
 			is_subject = no
 		}
 	}
@@ -601,7 +604,8 @@ decolonization_events.5 = {
 		random_country = {
 			limit = {
 				NOT = { this = root }
-				was_formed_from = ROOT
+				has_variable = former_overlord
+				var:former_overlord = root
 				is_subject = no
 			}
 			save_scope_as = former_colony
@@ -673,7 +677,8 @@ decolonization_events.6 = {
 		country_rank >= rank_value:major_power
 		any_country = {
 			NOT = { this = root }
-			was_formed_from = ROOT
+			has_variable = former_overlord
+			var:former_overlord = root
 			is_subject = no
 		}
 	}
@@ -682,7 +687,8 @@ decolonization_events.6 = {
 		random_country = {
 			limit = {
 				NOT = { this = root }
-				was_formed_from = ROOT
+				has_variable = former_overlord
+				var:former_overlord = root
 				is_subject = no
 			}
 			save_scope_as = reparations_claimant
@@ -703,6 +709,7 @@ decolonization_events.6 = {
 			country = scope:reparations_claimant
 			value = 40
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:reparations_claimant }
 		scope:reparations_claimant = {
 			post_notification = colonial_reparations_paid_notice
 		}
@@ -720,6 +727,7 @@ decolonization_events.6 = {
 			country = scope:reparations_claimant
 			value = -20
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:reparations_claimant }
 		scope:reparations_claimant = {
 			post_notification = colonial_reparations_refused_notice
 		}
@@ -766,7 +774,10 @@ decolonization_events.7 = {
 		random_country = {
 			limit = {
 				NOT = { this = root }
-				root = { was_formed_from = PREV }
+				root = {
+				has_variable = former_overlord
+				var:former_overlord = prev
+			}
 			}
 			save_scope_as = former_overlord
 		}
@@ -1335,6 +1346,7 @@ decolonization_events.12 = {
 			country = scope:supporting_power
 			value = 20
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:supporting_power }
 		scope:supporting_power = {
 			post_notification = gp_support_accepted_notice
 		}
@@ -2233,7 +2245,7 @@ decolonization_events.18 = {
 			any_political_movement = {
 				is_revolutionary = yes
 			}
-			country_has_primary_culture = no
+			primary_cultures_percent_country < 0.5
 			any_scope_pop = {
 				is_pop_type = soldiers
 				pop_radical_fraction >= 0.3
@@ -2354,7 +2366,8 @@ decolonization_events.19 = {
 		# A former colony has nationalized assets
 		any_country = {
 			NOT = { this = root }
-			was_formed_from = ROOT
+			has_variable = former_overlord
+			var:former_overlord = root
 			is_subject = no
 			has_modifier = independence_nationalization_modifier
 		}
@@ -2364,7 +2377,8 @@ decolonization_events.19 = {
 		random_country = {
 			limit = {
 				NOT = { this = root }
-				was_formed_from = ROOT
+				has_variable = former_overlord
+				var:former_overlord = root
 				is_subject = no
 				has_modifier = independence_nationalization_modifier
 			}

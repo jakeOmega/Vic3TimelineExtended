@@ -177,7 +177,7 @@ post_scarcity_events.3 = {
 	trigger = {
 		has_technology_researched = universal_basic_income
 		NOT = { has_law = law_type:law_post-scarcity }
-		has_technology_researched = artificial_general_intelligence
+		has_technology_researched = artificial_intelligence
 		NOT = { has_global_variable = ai_bureaucracy_debate_happened }
 	}
 

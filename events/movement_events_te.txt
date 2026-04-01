@@ -432,6 +432,7 @@ movement_events_te.4 = {
 			country = scope:criticizing_country
 			value = -30
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:criticizing_country }
 		add_lobby_appeasement_from_diplomacy_unidirectional = {
 			FIRST = root
 			SECOND = scope:criticizing_country
@@ -469,6 +470,7 @@ movement_events_te.4 = {
 			country = scope:criticizing_country
 			value = 20
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:criticizing_country }
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_radicals = { value = small_radicals strata = upper }
 		scope:civil_rights_movement = {
@@ -497,6 +499,7 @@ movement_events_te.4 = {
 			country = scope:criticizing_country
 			value = -50
 		}
+		create_diplomatic_catalyst = { type = catalyst_diplomatic_incident target = scope:criticizing_country }
 		add_loyalists = { value = small_radicals strata = upper }
 	}
 }
@@ -588,6 +591,7 @@ movement_events_te.13 = {
 			country = scope:refuge_country
 			value = -20
 		}
+		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:refuge_country }
 	}
 
 	option = {
