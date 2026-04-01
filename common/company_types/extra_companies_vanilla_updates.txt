@@ -2125,10 +2125,10 @@ INJECT:company_colt_firearms = {
 # company_compania_sansinena_de_carnes_congeladas → Unique building
 INJECT:company_compania_sansinena_de_carnes_congeladas = {
 	building_types = {
-		building_sansinena_avellaneda_frigorífico
+		building_sansinena_avellaneda_frigorifico
 	}
 	prosperity_modifier = {
-		state_building_sansinena_avellaneda_frigorífico_max_level_add = 1
+		state_building_sansinena_avellaneda_frigorifico_max_level_add = 1
 	}
 }
 

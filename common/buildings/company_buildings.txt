@@ -2560,7 +2560,7 @@ building_standard_oil_refinery = {
 # --- US Steel / Carnegie (USA) ---
 building_carnegie_homestead_mill = {
     building_group = bg_company_buildings
-    icon = "gfx/interface/icons/company_icons/historical_company_icons/american_us_steel.dds"
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/american_carnegie_steel.dds"
     expandable = yes
     downsizeable = yes
     has_max_level = yes
@@ -2630,7 +2630,7 @@ building_ford_rouge_plant = {
 # --- East India Company (GBR) ---
 building_eic_trading_house = {
     building_group = bg_company_buildings
-    icon = "gfx/interface/icons/company_icons/historical_company_icons/british_eic.dds"
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/gb_eic.dds"
     expandable = yes
     downsizeable = yes
     has_max_level = yes
@@ -4655,7 +4655,7 @@ building_colt_hartford_armory = {
 	}
 }
 
-building_sansinena_avellaneda_frigorífico = {
+building_sansinena_avellaneda_frigorifico = {
 	building_group = bg_company_buildings
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_compania_sansinena_de_carnes_congeladas.dds"
 	expandable = yes
@@ -4665,7 +4665,7 @@ building_sansinena_avellaneda_frigorífico = {
 	city_type = city
 	ai_nationalization_desire = 0
 	production_method_groups = {
-		pmg_sansinena_avellaneda_frigorífico
+		pmg_sansinena_avellaneda_frigorifico
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -4676,12 +4676,12 @@ building_sansinena_avellaneda_frigorífico = {
 		}
 		OR = {
 			any_scope_building = {
-				is_building_type = building_sansinena_avellaneda_frigorífico
+				is_building_type = building_sansinena_avellaneda_frigorifico
 			}
 			NOT = {
 				any_state = {
 					any_scope_building = {
-						is_building_type = building_sansinena_avellaneda_frigorífico
+						is_building_type = building_sansinena_avellaneda_frigorifico
 					}
 				}
 			}

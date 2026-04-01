@@ -2374,7 +2374,7 @@ state_building_colt_hartford_armory_max_level_add = {
 	percent = no
 	decimals = 0
 }
-state_building_sansinena_avellaneda_frigorífico_max_level_add = {
+state_building_sansinena_avellaneda_frigorifico_max_level_add = {
 	color = good
 	percent = no
 	decimals = 0

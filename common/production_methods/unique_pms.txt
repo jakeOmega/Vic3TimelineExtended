@@ -4670,7 +4670,7 @@ pm_colt_hartford_armory = {
 
 # --- Sansinena Avellaneda Frigorífico ---
 # Theme: Pioneer refrigerated meat packing plant south of Buenos Aires
-pm_sansinena_avellaneda_frigorífico = {
+pm_sansinena_avellaneda_frigorifico = {
 	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {

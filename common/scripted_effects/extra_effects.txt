@@ -1384,13 +1384,13 @@ population_transfer_effect = {
 						scope:source_country = {
 							change_variable = {
 								name = pop_transfer_count
-								add = scope:moving_pop.total_population
+								add = scope:moving_pop.total_size
 							}
 						}
 						scope:target_country = {
 							change_variable = {
 								name = pop_transfer_count
-								add = scope:moving_pop.total_population
+								add = scope:moving_pop.total_size
 							}
 						}
 						# Move to a random state in target, weighted by population

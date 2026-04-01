@@ -764,7 +764,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
 
     # â”€â”€ Shipbuilding/naval â”€â”€
     (r"shipbuild|dockyard|shipyard|sailing_ship|dry_dock|fleet_terminal|"
-     r"cruise_ship|generic_dry_dock|aker_oslo|anglo_sicilian|"
+     r"cruise_ship|diesel_electric_ferr|generic_dry_dock|aker_oslo|anglo_sicilian|"
      r"ap_moller|cramp_philadelphia|estaleiro_maua|fcm_la_seyne|"
      r"foochow_mawei|gotaverken|john_brown_clydebank|schichau_elbing|"
      r"secn_ferrol|stt_haskoy|wadia_bombay|advanced_metamaterial|"
@@ -784,7 +784,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
     # â”€â”€ Automotive/road â”€â”€
     (r"automobile|motor_industry|motor_works|electric_car|highway|"
      r"hydrogen_fuel_cell|fusion_battery_motor|fusion_battery_vehicle|"
-     r"graphene_electric_motor|diesel_electric_ferr|"
+     r"graphene_electric_motor|"
      r"no_water_personal_transport|generic_motor|"
      r"hispano_suiza|volkswagen|ursus_warsaw|massey_harris", "car"),
 

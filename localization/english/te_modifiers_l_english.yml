@@ -466,7 +466,7 @@
  state_building_samsung_digital_city_max_level_add:0 "[GetBuildingType('building_samsung_digital_city').GetName] Max Level"
  state_building_san_miguel_manila_brewery_max_level_add:0 "[GetBuildingType('building_san_miguel_manila_brewery').GetName] Max Level"
  state_building_sandford_newcastle_natal_ironworks_max_level_add:0 "[GetBuildingType('building_sandford_newcastle_natal_ironworks').GetName] Max Level"
- state_building_sansinena_avellaneda_frigorífico_max_level_add:0 "[GetBuildingType('building_sansinena_avellaneda_frigorífico').GetName] Max Level"
+ state_building_sansinena_avellaneda_frigorifico_max_level_add:0 "[GetBuildingType('building_sansinena_avellaneda_frigorifico').GetName] Max Level"
  state_building_sao_paulo_railway_paranapiacaba_workshop_max_level_add:0 "[GetBuildingType('building_sao_paulo_railway_paranapiacaba_workshop').GetName] Max Level"
  state_building_sap_headquarters_max_level_add:0 "[GetBuildingType('building_sap_headquarters').GetName] Max Level"
  state_building_sassoon_bombay_docks_max_level_add:0 "[GetBuildingType('building_sassoon_bombay_docks').GetName] Max Level"

@@ -43,6 +43,7 @@
  AI_NATIONALIST_GOVERNMENT:0 "from nationalist government"
  AI_NATIONAL_MILITIA:0 "from having national militia"
  AI_NATIONAL_SUPREMACY:0 "from national supremacy laws"
+ AI_POPULATION_TO_RECOVER:0 "from population to recover"
  AI_PROTECTIONIST_POLICY:0 "from protectionist trade policy"
  AI_PROTECTIVE_ATTITUDE:0 "from protective attitude"
  AI_REBELLIOUS_SUBJECT:0 "from rebellious subject"

@@ -1896,6 +1896,7 @@ joint_military_exercises = {
 join_united_nations = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
+	maintenance_paid_by = source_country
 	cost = 200
 
 	target_modifier = {
@@ -2199,7 +2200,7 @@ nuclear_program_pause = {
 			}
 			else = {
 				# Target perspective: I'm being asked to freeze my nuclear program
-				# Much less severe than disarmament: preserves stockpile and progress
+				# Much less severe than disarmament — preserves stockpile and progress
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
 					value = -50
@@ -2247,7 +2248,7 @@ nuclear_program_pause = {
 						value = 30
 					}
 				}
-				# Already has nukes: less painful since stockpile preserved
+				# Already has nukes — less painful since stockpile preserved
 				if = {
 					limit = { has_modifier = nuclear_power }
 					add = {
@@ -2425,7 +2426,7 @@ population_transfer = {
 						value = 25
 					}
 				}
-				# Expansionists DON'T want this: they want to claim the land, not extract people
+				# Expansionists DON'T want this — they want to claim the land, not extract people
 				if = {
 					limit = {
 						any_interest_group = {
@@ -2438,15 +2439,20 @@ population_transfer = {
 						value = -30
 					}
 				}
-				# If we have claims on the source country's territory, we'd rather conquer it
+				# If we have claims on the source country's territory, we'd rather conquer it (-10 per claim, max -50)
 				if = {
 					limit = {
 						has_claim = scope:source_country
 					}
 					add = {
 						desc = "AI_HAS_CLAIMS"
-						value = -40
+						value = population_transfer_claims_score
 					}
+				}
+				# Bonus based on how many people will be transferred relative to our population
+				add = {
+					desc = "AI_POPULATION_TO_RECOVER"
+					value = population_transfer_pop_ratio_score
 				}
 			}
 			else = {

@@ -1799,20 +1799,51 @@ antimatter_sub_building_slots_remaining = {
 
 population_transfer_number = {
 	value = 0
-	scope:target_country = {
-		every_primary_culture = {
-			scope:source_country = {
-				every_scope_state = {
-					every_scope_pop = {
-						limit = {
-							culture = { this = scope:transfer_culture }
-							# Don't count pops whose culture is also primary in the source country
-							NOT = { culture = { is_primary_culture_of = scope:source_country } }
-						}
-						add = THIS.size
-					}
+	scope:source_country = {
+		every_scope_state = {
+			every_scope_pop = {
+				limit = {
+					culture = { is_primary_culture_of = scope:target_country }
+					# Don't count pops whose culture is also primary in the source country
+					NOT = { culture = { is_primary_culture_of = scope:source_country } }
 				}
+				add = total_size
 			}
 		}
 	}
+}
+
+# Number of claims the target country has on the source country's states
+# Evaluated in country scope with scope:source_country and scope:target_country available
+population_transfer_claims_on_source = {
+	value = 0
+	scope:source_country = {
+		every_scope_state = {
+			limit = {
+				has_claim_by = scope:target_country
+			}
+			add = 1
+		}
+	}
+}
+
+# AI score from claims: -10 per claimed state, capped at -50
+population_transfer_claims_score = {
+	value = population_transfer_claims_on_source
+	multiply = -10
+	max = 0
+	min = -50
+}
+
+# Population being transferred as a percentage of target country's total population
+# ~5 points per 1% of target population, capped at 50
+population_transfer_pop_ratio_score = {
+	value = population_transfer_number
+	divide = {
+		value = scope:target_country.total_population
+		min = 1
+	}
+	multiply = 500 # 1% → 0.01 * 500 = 5
+	min = 0
+	max = 50
 }
