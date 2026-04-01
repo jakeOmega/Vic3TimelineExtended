@@ -2233,7 +2233,7 @@ nuclear_program_pause = {
 					limit = { scope:target_country.relations:root < relations_threshold:neutral }
 					add = {
 						desc = "AI_BAD_RELATIONS"
-						value = -25
+						value = -8
 					}
 				}
 				# Good relations with a great power helps
@@ -2308,7 +2308,6 @@ population_transfer = {
 
 	possible = {
 		has_diplomatic_relevance = scope:other_country
-		NOT = { has_war_with = scope:other_country }
 		NOT = { is_country_type = decentralized }
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
@@ -2529,7 +2528,7 @@ population_transfer = {
 					limit = { scope:target_country.relations:root < relations_threshold:neutral }
 					add = {
 						desc = "AI_BAD_RELATIONS"
-						value = -25
+						value = -5
 					}
 				}
 				# Good relations helps

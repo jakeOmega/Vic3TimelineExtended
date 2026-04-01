@@ -3796,7 +3796,7 @@ pm_aker_oslo_shipyard = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -5227,7 +5227,7 @@ pm_estaleiro_maua_niteroi_dockyard = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -5328,7 +5328,7 @@ pm_fcm_la_seyne_shipyard = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -5362,7 +5362,7 @@ pm_foochow_mawei_dockyard = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -5604,7 +5604,7 @@ pm_gotaverken_gothenburg_shipyard = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -5942,7 +5942,7 @@ pm_imperial_arsenal_golden_horn = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -6286,7 +6286,7 @@ pm_john_brown_clydebank_yard = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -8484,7 +8484,7 @@ pm_schichau_elbing_shipyard = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -8518,7 +8518,7 @@ pm_secn_ferrol_shipyard = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -8687,7 +8687,7 @@ pm_stf_fiume_torpedo_works = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -8754,7 +8754,7 @@ pm_stt_haskoy_shipyard = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -9159,7 +9159,7 @@ pm_wadia_bombay_dockyard = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0
@@ -9226,7 +9226,7 @@ pm_cramp_philadelphia_shipyard = {
 			goods_input_steel_add = 15                   # Price:   50, Total cost:   750.0
 			goods_input_engines_add = 10                 # Price:   60, Total cost:   600.0
 			# Output goods
-			goods_output_man_o_wars_baseline_add = 20    # Price:   60, Total cost:  1200.0
+			goods_output_manowars_add = 20    # Price:   60, Total cost:  1200.0
 			goods_output_tools_add = 15                  # Price:   40, Total cost:   600.0
 			# Total input cost: 1350.0
 			# Total output cost: 1800.0

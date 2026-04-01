@@ -1,0 +1,121 @@
+﻿je_lgbtq_rights = {
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	group = je_group_internal_affairs
+
+	modifiers_while_active = {
+		lgbtq_rights_struggle_active_modifier
+	}
+
+	is_shown_when_inactive = {
+		has_technology_researched = LGBTQ_rights_movement
+		NOT = { is_country_type = decentralized }
+		NOT = {
+			has_law = law_type:law_full_equality_and_protection
+		}
+	}
+
+	possible = {
+		has_technology_researched = LGBTQ_rights_movement
+		NOT = {
+			has_law = law_type:law_full_equality_and_protection
+		}
+	}
+
+	immediate = {
+	}
+
+	on_monthly_pulse = {
+		random_events = {
+			200 = 0
+			10 = lgbtq_events.1
+			10 = lgbtq_events.2
+			10 = lgbtq_events.3
+			10 = lgbtq_events.4
+			10 = lgbtq_events.5
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_lgbtq_rights_status_persecuted
+				trigger = {
+					has_law = law_type:law_active_persecution
+				}
+			}
+			triggered_desc = {
+				desc = je_lgbtq_rights_status_limbo
+				trigger = {
+					has_law = law_type:law_legal_limbo
+				}
+			}
+			triggered_desc = {
+				desc = je_lgbtq_rights_status_basic
+				trigger = {
+					has_law = law_type:law_basic_protections
+				}
+			}
+			triggered_desc = {
+				desc = je_lgbtq_rights_status_comprehensive
+				trigger = {
+					has_law = law_type:law_comprehensive_rights
+				}
+			}
+		}
+	}
+
+	complete = {
+		has_law = law_type:law_full_equality_and_protection
+	}
+
+	on_complete = {
+		add_loyalists = {
+			value = medium_radicals
+			strata = middle
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = lgbtq_rights_triumph_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	invalid = {
+		is_country_type = decentralized
+	}
+
+	fail = {
+		has_law = law_type:law_active_persecution
+		has_technology_researched = social_justice_movements
+		# Fail = they had a late-stage backlash, persecution reimposed after having the tech
+	}
+
+	on_fail = {
+		trigger_event = { id = lgbtq_events.100 }
+	}
+
+	timeout = 7300
+
+	on_timeout = {
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		add_modifier = {
+			name = lgbtq_rights_stagnation_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+}

@@ -1,0 +1,393 @@
+﻿namespace = post_scarcity_events
+
+# ============================================================================
+# POST-SCARCITY TRANSITION EVENTS
+# ============================================================================
+
+# Event 1: Mass Unemployment Protests
+post_scarcity_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/globalization_protest.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = post_scarcity_events.1.t
+	desc = post_scarcity_events.1.d
+	flavor = post_scarcity_events.1.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_technology_researched = universal_basic_income
+		NOT = { has_law = law_type:law_post-scarcity }
+	}
+
+	immediate = {
+	}
+
+	# Expand UBI programs
+	option = {
+		name = post_scarcity_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = ubi_expansion_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.05
+		}
+	}
+
+	# Retrain the workforce
+	option = {
+		name = post_scarcity_events.1.b
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = workforce_retraining_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.03
+		}
+	}
+
+	# Suppress the protests
+	option = {
+		name = post_scarcity_events.1.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}
+
+# Event 2: Meaning Crisis
+post_scarcity_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/social_media_crisis.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = post_scarcity_events.2.t
+	desc = post_scarcity_events.2.d
+	flavor = post_scarcity_events.2.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_technology_researched = universal_basic_income
+		NOT = { has_law = law_type:law_post-scarcity }
+	}
+
+	immediate = {
+	}
+
+	# Fund arts and culture programs
+	option = {
+		name = post_scarcity_events.2.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = cultural_renaissance_funding_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.03
+		}
+	}
+
+	# Mandatory work programs
+	option = {
+		name = post_scarcity_events.2.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = mandatory_work_programs_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+	}
+
+	# Ignore the crisis
+	option = {
+		name = post_scarcity_events.2.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+}
+
+# Event 3: AI Replaces Bureaucrats
+# AI systems are now capable of replacing government administrators.
+post_scarcity_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/neural_interface.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_science.dds"
+
+	title = post_scarcity_events.3.t
+	desc = post_scarcity_events.3.d
+	flavor = post_scarcity_events.3.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = universal_basic_income
+		NOT = { has_law = law_type:law_post-scarcity }
+		has_technology_researched = artificial_general_intelligence
+		NOT = { has_global_variable = ai_bureaucracy_debate_happened }
+	}
+
+	immediate = {
+		set_global_variable = ai_bureaucracy_debate_happened
+	}
+
+	# Automate government - efficient but unsettling
+	option = {
+		name = post_scarcity_events.3.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = ai_bureaucracy_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	# Hybrid approach - AI assists human administrators
+	option = {
+		name = post_scarcity_events.3.b
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = ai_assisted_governance_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Keep humans in charge
+	option = {
+		name = post_scarcity_events.3.c
+		ai_chance = {
+			base = 1
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 4: Neo-Luddite Terrorism
+# A radical anti-technology movement destroys automation infrastructure.
+post_scarcity_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/social_revolution.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = post_scarcity_events.4.t
+	desc = post_scarcity_events.4.d
+	flavor = post_scarcity_events.4.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = universal_basic_income
+		NOT = { has_law = law_type:law_post-scarcity }
+	}
+
+	immediate = {
+	}
+
+	# Crack down on terrorists, expand social safety net
+	option = {
+		name = post_scarcity_events.4.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = neo_luddite_crackdown_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.03
+		}
+	}
+
+	# Address root causes - slow automation transition
+	option = {
+		name = post_scarcity_events.4.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = automation_slowdown_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	# Heavy-handed suppression
+	option = {
+		name = post_scarcity_events.4.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_modifier = {
+			name = neo_luddite_suppressed_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Event 5: Post-Scarcity Art Renaissance
+# Freed from economic necessity, a creative renaissance blossoms.
+post_scarcity_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/cultural_renaissance.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = post_scarcity_events.5.t
+	desc = post_scarcity_events.5.d
+	flavor = post_scarcity_events.5.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = universal_basic_income
+		NOT = { has_law = law_type:law_post-scarcity }
+		has_law = law_type:law_universal_basic_income
+	}
+
+	immediate = {
+	}
+
+	# Fund a national arts program
+	option = {
+		name = post_scarcity_events.5.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = art_renaissance_funded_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Let creativity flourish organically
+	option = {
+		name = post_scarcity_events.5.b
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = organic_creativity_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Channel into productive output
+	option = {
+		name = post_scarcity_events.5.c
+		ai_chance = {
+			base = 1
+		}
+		add_modifier = {
+			name = creative_productivity_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+}

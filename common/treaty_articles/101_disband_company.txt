@@ -84,7 +84,10 @@ disband_company = {
 		evaluation_chance = {
 			value = 0
 			if = {
-				limit = { country_rank > scope:other_country.country_rank }
+				limit = {
+					exists = scope:other_country
+					country_rank > scope:other_country.country_rank
+				}
 				add = 0.1
 			}
 		}
@@ -120,17 +123,15 @@ disband_company = {
 				# Count the levels of buildings owned by the targeted company.
 				subtract = {
 					desc = "DISBAND_COMPANY_ECONOMIC_SIGNIFICANCE"
-					every_scope_building = {
-						limit = {
-							exists = owning_company
-							owning_company = scope:article.input_company
-						}
-						add = level
-						multiply = {
-							value = weekly_profit
-							divide = 250
-							add = 1
-							max = 2
+					scope:article.input_company ?= {
+						every_scope_regional_hqs = {
+							add = this.level
+							multiply = {
+								value = weekly_profit
+								divide = 250
+								add = 1
+								max = 2
+							}
 						}
 					}
 					max = 200
@@ -186,14 +187,12 @@ disband_company = {
 				# The more profitable the company's buildings, the more we gain.
 				add = {
 					desc = "DISBAND_COMPANY_COMPETITIVE_BENEFIT"
-					scope:source_country ?= {
-						every_scope_building = {
+					scope:article.input_company ?= {
+						every_scope_regional_hqs = {
 							limit = {
-								exists = owning_company
-								owning_company = scope:article.input_company
 								weekly_profit > 5
 							}
-							add = level
+							add = this.level
 							multiply = {
 								value = weekly_profit
 								divide = 250

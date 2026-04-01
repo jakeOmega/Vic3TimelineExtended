@@ -293,7 +293,16 @@ fmc_on_war_end = {
     }
 }
 
+te_on_building_retooling_cleanup = {
+	effect = {
+		te_remove_pm_retooling_from_zero_level_building = yes
+	}
+}
+
 on_start_expanding_building = {
+    on_actions = {
+        te_on_building_retooling_cleanup
+    }
     events = {
         fmc_update_events.6
     }

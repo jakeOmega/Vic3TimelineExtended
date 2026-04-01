@@ -241,3 +241,5 @@
  ministry_religion_pulpit_advance_desc:0 "A strong positive boost to ministry law enactment progress from a recent event."
  ministry_religion_pulpit_cautious:0 "Religion Ministry: Pulpit Cautious Advance"
  ministry_religion_pulpit_cautious_desc:0 "A smaller positive boost to ministry law enactment progress from a recent event."
+ new_religions_regulated_modifier:0 "New Religions Regulated"
+ new_religions_regulated_modifier_desc:0 "Regulation of new religious movements provides order but limits spiritual freedom."

@@ -96,6 +96,7 @@ on_become_independent = {
 
 on_monthly_pulse_state = {
 	on_actions = {
+		te_pm_retooling_cleanup_immediate
 		space_elevator_on_action
 		solar_collector_on_action
 		orbital_battlestation_on_action
@@ -106,6 +107,15 @@ on_monthly_pulse_state = {
 		state_yearly_cultural_acceptance_add_on_action
 		tourism_on_action
 		resettlement_transfer_on_action
+	}
+}
+
+# PM RETOOLING CLEANUP - the engine can leave pm_retooling on level-0 building
+# sites. Immediate cleanup runs in the monthly state pulse; delayed weekly
+# cleanups fire as country events at day 7/14/21 from the monthly country pulse.
+te_pm_retooling_cleanup_immediate = {
+	effect = {
+		te_remove_pm_retooling_from_zero_level_state_buildings = yes
 	}
 }
 
@@ -130,6 +140,17 @@ on_monthly_pulse_country = {
 		society_technology_events_on_action
 		world_war_events_on_action
 		overbuild_protection_on_action
+		te_pm_retooling_weekly_schedule
+	}
+}
+
+# PM RETOOLING - schedule delayed country events at 7/14/21 days
+# to simulate weekly cleanup from the monthly country pulse.
+te_pm_retooling_weekly_schedule = {
+	effect = {
+		trigger_event = { id = minor_events_timelineextended.100 days = 7 }
+		trigger_event = { id = minor_events_timelineextended.100 days = 14 }
+		trigger_event = { id = minor_events_timelineextended.100 days = 21 }
 	}
 }
 
@@ -1925,11 +1946,15 @@ free_port_tariff_update_on_action = {
 
 # ============================================================================
 # INTELLIGENT MODIFIER UPDATE ON_ACTIONS
-# These fire immediately when buildings, technologies, laws, or institution
-# investment changes, so that migration crowding, tourism, and pollution
-# modifiers respond quickly rather than waiting for the next periodic pulse.
-# Each handler delegates to te_update_state_modifiers (see extra_effects.txt)
-# so that adding a new modifier update only requires a single change there.
+# These fire immediately when technologies or laws change, so that
+# migration crowding modifiers respond quickly rather than waiting for
+# the next periodic pulse.
+# NOTE: Pollution and free-port modifiers use has_variable in their
+# script values. The engine traces the parent scope chain, so calling
+# them from law scope (root = law) triggers "has_variable: scope doesn't
+# support variables" errors. Only migration crowding (which has no
+# has_variable) is safe to call from the law hook. The full set of
+# state modifiers is refreshed on the periodic state pulses.
 # ============================================================================
 
 # Country scope. Updates all states owned by the country when a technology
@@ -1945,11 +1970,16 @@ te_modifier_update_on_technology_on_action = {
 
 # Law scope (ROOT = law type, owner = enacting country). Updates all
 # states owned by the country when a law is enacted.
+# NOTE: Only migration crowding is updated here. Pollution and free-port
+# modifiers use has_variable in their script values, but the engine traces
+# the parent scope chain through the law root scope, which doesn't support
+# variables — causing hundreds of "has_variable trigger" errors. Those
+# modifiers are caught by the periodic state pulses instead.
 te_modifier_update_on_law_on_action = {
 	effect = {
 		owner = {
 			every_scope_state = {
-				te_update_state_modifiers = yes
+				te_update_migration_crowding_modifier = yes
 			}
 		}
 	}

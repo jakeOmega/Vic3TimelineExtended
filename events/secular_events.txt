@@ -1,0 +1,488 @@
+﻿namespace = secular_events
+
+# ============================================================================
+# DECLINE OF RELIGION / SECULAR TRANSITION EVENTS
+# ============================================================================
+
+# Event 1: Megachurch Scandal
+secular_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/parliamentary_debate.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = secular_events.1.t
+	desc = secular_events.1.d
+	flavor = secular_events.1.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_technology_researched = decline_of_organized_religion
+	}
+
+	immediate = {
+	}
+
+	# Investigate religious institutions
+	option = {
+		name = secular_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = religious_institution_investigation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Cover it up
+	option = {
+		name = secular_events.1.b
+		ai_chance = {
+			base = 1
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Use it to push secularism
+	option = {
+		name = secular_events.1.c
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = secular_momentum_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+}
+
+# Event 2: Moral Panic
+secular_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/social_revolution.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = secular_events.2.t
+	desc = secular_events.2.d
+	flavor = secular_events.2.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_technology_researched = decline_of_organized_religion
+		any_interest_group = {
+			is_interest_group_type = ig_devout
+			is_powerful = yes
+		}
+	}
+
+	immediate = {
+		random_interest_group = {
+			limit = {
+				is_interest_group_type = ig_devout
+				is_powerful = yes
+			}
+			save_scope_as = devout_ig
+		}
+	}
+
+	# Dismiss the panic
+	option = {
+		name = secular_events.2.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = moral_panic_dismissed_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Engage with religious concerns
+	option = {
+		name = secular_events.2.b
+		ai_chance = {
+			base = 3
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Crack down on religious extremism
+	option = {
+		name = secular_events.2.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = small_radicals
+			interest_group = ig_devout
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 3: New Age Spirituality Movement
+# A new spiritual movement fills the void left by declining organized religion.
+secular_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/cultural_renaissance.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = secular_events.3.t
+	desc = secular_events.3.d
+	flavor = secular_events.3.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decline_of_organized_religion
+		NOT = { has_law = law_type:law_no_ministry_of_religion }
+	}
+
+	immediate = {
+	}
+
+	# Embrace spiritual diversity
+	option = {
+		name = secular_events.3.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = spiritual_diversity_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Regulate new religious movements
+	option = {
+		name = secular_events.3.b
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = new_religions_regulated_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Crack down on "cults"
+	option = {
+		name = secular_events.3.c
+		ai_chance = {
+			base = 1
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 4: State Religion Debate
+# Pressure mounts to formally disestablish the state church.
+secular_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/parliamentary_debate.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = secular_events.4.t
+	desc = secular_events.4.d
+	flavor = secular_events.4.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decline_of_organized_religion
+		has_law = law_type:law_ministry_of_religion
+		NOT = { has_global_variable = state_religion_debate_happened }
+	}
+
+	immediate = {
+		set_global_variable = state_religion_debate_happened
+		random_interest_group = {
+			limit = {
+				is_interest_group_type = ig_devout
+			}
+			save_scope_as = devout_ig
+		}
+	}
+
+	# Support disestablishment
+	option = {
+		name = secular_events.4.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = disestablishment_push_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = disestablishment_anger_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Defend the state church
+	option = {
+		name = secular_events.4.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					ig:ig_devout ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		add_loyalists = {
+			value = small_radicals
+			interest_group = ig_devout
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Form a committee to study the question
+	option = {
+		name = secular_events.4.c
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+}
+
+# Event 5: Interfaith Dialogue Initiative
+# An interfaith dialogue initiative seeks common ground in a fractured society.
+secular_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/diplomatic_summit.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = secular_events.5.t
+	desc = secular_events.5.d
+	flavor = secular_events.5.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decline_of_organized_religion
+	}
+
+	immediate = {
+	}
+
+	# Support the dialogue - bridge divides
+	option = {
+		name = secular_events.5.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = interfaith_dialogue_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Dismiss it as irrelevant
+	option = {
+		name = secular_events.5.b
+		ai_chance = {
+			base = 2
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Use it to push secular values
+	option = {
+		name = secular_events.5.c
+		ai_chance = {
+			base = 1
+		}
+		add_modifier = {
+			name = secular_agenda_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			interest_group = ig_devout
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 100: Religious Revivalism (fail state)
+secular_events.100 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/political_rally.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = secular_events.100.t
+	desc = secular_events.100.desc
+	flavor = secular_events.100.f
+
+	duration = 3
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+
+	# Accept the revival
+	option = {
+		name = secular_events.100.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = religious_revivalism_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Resist the tide
+	option = {
+		name = secular_events.100.b
+		ai_chance = {
+			base = 2
+		}
+		add_radicals = {
+			value = small_radicals
+			interest_group = ig_devout
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+}

@@ -1,0 +1,113 @@
+﻿je_post_scarcity = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	group = je_group_technology
+
+	modifiers_while_active = {
+		post_scarcity_transition_active_modifier
+	}
+
+	is_shown_when_inactive = {
+		has_technology_researched = universal_basic_income
+		NOT = { is_country_type = decentralized }
+		NOT = {
+			has_law = law_type:law_post-scarcity
+		}
+	}
+
+	possible = {
+		has_technology_researched = universal_basic_income
+		NOT = {
+			has_law = law_type:law_post-scarcity
+		}
+	}
+
+	immediate = {
+	}
+
+	on_monthly_pulse = {
+		random_events = {
+			200 = 0
+			10 = post_scarcity_events.1
+			10 = post_scarcity_events.2
+			10 = post_scarcity_events.3
+			10 = post_scarcity_events.4
+			10 = post_scarcity_events.5
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_post_scarcity_status_early
+				trigger = {
+					NOT = {
+						has_law = law_type:law_universal_basic_income
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_post_scarcity_status_ubi
+				trigger = {
+					has_law = law_type:law_universal_basic_income
+					NOT = { has_technology_researched = post-scarcity_economy }
+				}
+			}
+			triggered_desc = {
+				desc = je_post_scarcity_status_transition
+				trigger = {
+					has_law = law_type:law_universal_basic_income
+					has_technology_researched = post-scarcity_economy
+				}
+			}
+		}
+	}
+
+	complete = {
+		has_law = law_type:law_post-scarcity
+	}
+
+	on_complete = {
+		add_loyalists = {
+			value = large_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = middle
+		}
+		add_modifier = {
+			name = post_scarcity_achieved_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	invalid = {
+		is_country_type = decentralized
+	}
+
+	fail = {
+		# No clear fail state - just timeout
+		always = no
+	}
+
+	on_fail = {
+	}
+
+	timeout = 10950 # 30 years - long late-game JE
+
+	on_timeout = {
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_modifier = {
+			name = post_scarcity_stagnation_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+}

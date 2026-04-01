@@ -49,7 +49,6 @@ religious_mission_rights = {
 
 	possible = {
 		has_diplomatic_relevance = scope:other_country
-		NOT = { has_war_with = scope:other_country }
 		NOT = { is_country_type = decentralized }
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }

@@ -1,0 +1,111 @@
+﻿je_second_wave_feminism = {
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	group = je_group_internal_affairs
+
+	modifiers_while_active = {
+		feminism_struggle_active_modifier
+	}
+
+	is_shown_when_inactive = {
+		has_technology_researched = second_wave_feminism
+		NOT = { is_country_type = decentralized }
+		NOT = {
+			has_law = law_type:law_protected_class
+		}
+	}
+
+	possible = {
+		has_technology_researched = second_wave_feminism
+		NOT = {
+			has_law = law_type:law_protected_class
+		}
+	}
+
+	immediate = {
+	}
+
+	on_monthly_pulse = {
+		random_events = {
+			200 = 0
+			10 = feminist_events.1
+			10 = feminist_events.2
+			10 = feminist_events.3
+			10 = feminist_events.4
+			10 = feminist_events.5
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_feminism_status_no_rights
+				trigger = {
+					has_law = law_type:law_no_womens_rights
+				}
+			}
+			triggered_desc = {
+				desc = je_feminism_status_property
+				trigger = {
+					has_law = law_type:law_women_own_property
+				}
+			}
+			triggered_desc = {
+				desc = je_feminism_status_suffrage
+				trigger = {
+					has_law = law_type:law_womens_suffrage
+				}
+			}
+		}
+	}
+
+	complete = {
+		has_law = law_type:law_protected_class
+	}
+
+	on_complete = {
+		add_loyalists = {
+			value = medium_radicals
+			strata = middle
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = feminism_triumph_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	invalid = {
+		is_country_type = decentralized
+	}
+
+	fail = {
+		has_law = law_type:law_no_womens_rights
+		has_technology_researched = contraceptive_pill
+		# Fail = traditionalist backlash after progressive tech era
+	}
+
+	on_fail = {
+		trigger_event = { id = feminist_events.100 }
+	}
+
+	timeout = 7300
+
+	on_timeout = {
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = feminism_stagnation_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+}

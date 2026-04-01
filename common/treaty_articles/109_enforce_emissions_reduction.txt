@@ -56,7 +56,6 @@ enforce_emissions_reduction = {
 
 	possible = {
 		has_diplomatic_relevance = scope:other_country
-		NOT = { has_war_with = scope:other_country }
 		NOT = { is_country_type = decentralized }
 		temperature_anomaly_display >= 0.5
 		scope:other_country = {

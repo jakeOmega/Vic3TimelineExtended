@@ -1,0 +1,533 @@
+﻿namespace = feminist_events
+
+# ============================================================================
+# SECOND-WAVE FEMINISM EVENTS
+# ============================================================================
+
+# Event 1: Equal Pay Protest
+feminist_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/political_rally.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = feminist_events.1.t
+	desc = feminist_events.1.d
+	flavor = feminist_events.1.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_technology_researched = second_wave_feminism
+		NOT = { has_law = law_type:law_protected_class }
+	}
+
+	immediate = {
+	}
+
+	# Enforce equal pay mandate
+	option = {
+		name = feminist_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = equal_pay_mandate_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Suppress the protests
+	option = {
+		name = feminist_events.1.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_no_womens_rights }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = equal_pay_suppressed_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	# Study the issue (delay)
+	option = {
+		name = feminist_events.1.c
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+	}
+}
+
+# Event 2: Glass Ceiling Incident
+feminist_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/parliamentary_debate.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = feminist_events.2.t
+	desc = feminist_events.2.d
+	flavor = feminist_events.2.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_technology_researched = second_wave_feminism
+		NOT = { has_law = law_type:law_protected_class }
+	}
+
+	immediate = {
+	}
+
+	# Promote the woman - progressive signal
+	option = {
+		name = feminist_events.2.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_law = law_type:law_womens_suffrage }
+				add = 2
+			}
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		add_modifier = {
+			name = glass_ceiling_broken_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Quietly settle
+	option = {
+		name = feminist_events.2.b
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Side with status quo
+	option = {
+		name = feminist_events.2.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_no_womens_rights }
+				add = 3
+			}
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}
+
+# Event 3: Reproductive Rights Debate
+# The contraceptive pill creates a fierce debate about bodily autonomy.
+feminist_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/parliamentary_debate.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = feminist_events.3.t
+	desc = feminist_events.3.d
+	flavor = feminist_events.3.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = second_wave_feminism
+		has_technology_researched = contraceptive_pill
+		NOT = { has_law = law_type:law_protected_class }
+	}
+
+	immediate = {
+	}
+
+	# State-subsidized contraception
+	option = {
+		name = feminist_events.3.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					has_law = law_type:law_womens_suffrage
+				}
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = reproductive_rights_progressive_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Allow but don't subsidize
+	option = {
+		name = feminist_events.3.b
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Restrict contraception access
+	option = {
+		name = feminist_events.3.c
+		trigger = {
+			OR = {
+				has_law = law_type:law_no_womens_rights
+				has_law = law_type:law_women_own_property
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_no_womens_rights }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = contraception_restricted_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}
+
+# Event 4: Women in the Military
+# Pressure mounts to allow women in combat roles.
+feminist_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/military_parade.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = feminist_events.4.t
+	desc = feminist_events.4.d
+	flavor = feminist_events.4.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = second_wave_feminism
+		NOT = { has_law = law_type:law_protected_class }
+		has_law = law_type:law_professional_standing_army
+		NOT = { has_global_variable = women_military_debate_happened }
+	}
+
+	immediate = {
+		set_global_variable = women_military_debate_happened
+	}
+
+	# Full combat roles for women
+	option = {
+		name = feminist_events.4.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = women_combat_roles_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Support roles only
+	option = {
+		name = feminist_events.4.b
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# No women in the military
+	option = {
+		name = feminist_events.4.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_no_womens_rights }
+				add = 3
+			}
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}
+
+# Event 5: Feminist Literature Boom
+# A wave of feminist writing captures the national imagination.
+feminist_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/cultural_renaissance.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = feminist_events.5.t
+	desc = feminist_events.5.d
+	flavor = feminist_events.5.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = second_wave_feminism
+		NOT = { has_law = law_type:law_protected_class }
+		literacy_rate >= 0.5
+	}
+
+	immediate = {
+	}
+
+	# Fund feminist literature and education programs
+	option = {
+		name = feminist_events.5.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = feminist_literature_funded_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Let it flourish without state involvement
+	option = {
+		name = feminist_events.5.b
+		ai_chance = {
+			base = 3
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Ban subversive literature
+	option = {
+		name = feminist_events.5.c
+		trigger = {
+			OR = {
+				has_law = law_type:law_no_womens_rights
+				has_law = law_type:law_censorship
+				has_law = law_type:law_outlawed_dissent
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_no_womens_rights }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = feminist_literature_banned_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 100: Movement Collapsed (fail state)
+feminist_events.100 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/social_revolution.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = feminist_events.100.t
+	desc = feminist_events.100.desc
+	flavor = feminist_events.100.f
+
+	duration = 3
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+
+	# Traditional values reinforced
+	option = {
+		name = feminist_events.100.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = feminism_movement_crushed_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		add_loyalists = {
+			value = small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# A quiet setback
+	option = {
+		name = feminist_events.100.b
+		ai_chance = {
+			base = 2
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}

@@ -2237,3 +2237,825 @@ state_building_generic_vintner_hall_max_level_add = {
 	percent = no
 	decimals = 0
 }
+
+# Phase 7: Remaining Flavored Company Buildings
+state_building_aker_oslo_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_allatini_thessaloniki_flour_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_altos_hornos_baracaldo_furnaces_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_anglo_persian_abadan_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_anglo_sicilian_licata_wharf_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ansaldo_sestri_ponente_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ap_moller_copenhagen_wharf_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_argentinian_wine_mendoza_bodega_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_armstrong_elswick_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_assam_company_nazira_tea_estate_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_b_grimm_bangkok_warehouse_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_bacardi_santiago_distillery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_basf_ludwigshafen_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_basileiades_piraeus_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_bengal_coal_raniganj_mine_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_bolckow_eston_ironworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_bombay_burmah_rangoon_timber_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_bombay_dyeing_spring_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_bunge_born_buenos_aires_grain_silo_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_calcutta_electric_victoria_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_caribbean_petroleum_maracaibo_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ccci_leopoldville_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_cfr_bucharest_railway_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_cgv_haut_brion_estate_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_chr_hansen_copenhagen_laboratory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_coats_ferguslie_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_colt_hartford_armory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_sansinena_avellaneda_frigorífico_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_cordoba_railway_alta_gracia_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_cramp_philadelphia_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_csfa_sicilian_sulfur_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_afghan_nassaji_kabul_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_sassoon_bombay_docks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_dmc_mulhouse_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_douro_wine_lodge_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_duro_la_felguera_steelworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_eea_dock_sud_power_station_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_egyptian_rail_cairo_central_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_el_aguila_tampico_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_electricidad_caracas_power_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_elso_budapesti_steam_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ericsson_telefonplan_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_erste_brunner_maschinenwerk_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_espana_industrial_sants_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_estaleiro_maua_niteroi_dockyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_estanifera_llallagua_tin_concentrator_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_famae_santiago_arsenal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_fcm_la_seyne_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_foochow_mawei_dockyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_franco_belge_raismes_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_fundicao_ipanema_sorocaba_foundry_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_fundidora_monterrey_blast_furnace_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_galician_boryslaw_oil_field_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_getzner_bludenz_textile_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_gotaverken_gothenburg_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_gran_azucarera_aranjuez_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_great_indian_railway_jamalpur_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_guinness_st_james_gate_brewery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_gwr_swindon_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_hanseong_jeongi_gwanghwamun_station_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_hanyang_arsenal_iron_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_hbc_york_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_hispano_suiza_barcelona_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ilva_bagnoli_steelworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_imperial_arsenal_golden_horn_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ethiopian_railway_dire_dawa_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_imperial_tobacco_wills_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ingolstadt_power_station_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_iranian_state_railway_veresk_station_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_izhevsk_arms_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_klein_galician_paper_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_jiangnan_nanjing_brocade_hall_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_jingdezhen_imperial_kiln_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_john_brown_clydebank_yard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_cockerill_seraing_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_john_holt_lagos_trading_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_hughes_yuzovka_steelworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_kablin_zarate_paper_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_kaiping_tangshan_colliery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_kinkozan_kiyomizu_kiln_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_kirgizian_copper_smelter_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_klanicko_belgrade_slaughterhouse_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_meissen_porcelain_manufactory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_kouppas_piraeus_foundry_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_la_rosada_buenos_aires_arsenal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_lanfang_pontianak_kongsi_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_lee_wilson_plantation_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_lilpop_warsaw_metalworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_lkab_kiruna_mine_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_madura_mills_madurai_complex_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_worth_rue_de_la_paix_atelier_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_manfred_weiss_csepel_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_mantero_como_silk_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_mantetsu_dalian_railway_hub_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_maple_tottenham_court_showroom_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_gavrilovic_petrinja_meatworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_massey_harris_toronto_implement_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_mav_budapest_locomotive_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_anzin_colliery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_misr_mahalla_textile_complex_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_moscow_irrigation_cotton_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_mozambique_company_beira_concession_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_nam_dinh_textile_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_nioc_masjed_soleyman_field_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_nederlandse_petroleum_pangkalan_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_portalis_lyon_silk_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_nokia_cable_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_norsk_hydro_rjukan_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_alpine_donawitz_steelworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_oevg_steyr_arms_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ocp_khouribga_mine_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ong_lung_sheng_tea_warehouse_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_opium_ghazipur_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_orient_express_sirkeci_terminal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_oriental_dev_kunsan_granary_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_tobacco_regie_cibali_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_panama_company_culebra_cut_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_paradox_kvarnholmen_studio_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_pedro_domecq_jerez_bodega_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_pernambuco_recife_cotton_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_perskhlopok_cotton_combines_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_persshelk_silk_reeling_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_peruvian_amazon_iquitos_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_philips_eindhoven_natlab_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_prussian_railway_directorate_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ralli_odessa_grain_elevator_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_rheinmetall_unterluss_proving_ground_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ricordi_galleria_vittorio_emanuele_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_rodriguez_arguelles_havana_tobacco_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_romanian_star_ploiesti_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_rossi_sao_leopoldo_arms_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_rac_sitka_trading_post_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_saint_etienne_arms_manufactory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_san_miguel_manila_brewery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_sao_paulo_railway_paranapiacaba_workshop_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_morozov_orekhovo_zuevo_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_schichau_elbing_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_secn_ferrol_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_sherkat_shemali_cotton_gin_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_sherkate_eslamiya_isfahan_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_skoda_pilsen_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_mokta_el_hadid_beni_saf_mine_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_stf_fiume_torpedo_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_steel_brothers_syriam_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_stt_haskoy_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_sudamericana_valparaiso_pier_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_suez_company_ismailia_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_sunhwaguk_seoul_tobacco_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_tashkent_railroad_workshops_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_trubia_cannon_foundry_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_turkish_petroleum_kirkuk_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_uniao_fabril_barreiro_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_united_fruit_great_white_fleet_terminal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_united_tobacco_moscow_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ursus_warsaw_tractor_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_vodka_monopoly_warehouse_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_wadia_bombay_dockyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_west_ural_oil_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_sandford_newcastle_natal_ironworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_witkowitzer_ostrava_ironworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_ynchausti_manila_trading_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_zastava_kragujevac_arsenal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_thonet_bystrice_bentwood_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_moser_karlsbad_glass_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}

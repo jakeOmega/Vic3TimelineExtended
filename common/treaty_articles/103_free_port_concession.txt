@@ -42,7 +42,6 @@ free_port_concession = {
 
 	possible = {
 		has_diplomatic_relevance = scope:other_country
-		NOT = { has_war_with = scope:other_country }
 		NOT = { is_country_type = decentralized }
 		NOT = { has_law = law_type:law_isolationism }
 		scope:other_country = {

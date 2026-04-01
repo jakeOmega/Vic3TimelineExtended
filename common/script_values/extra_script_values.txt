@@ -555,14 +555,14 @@ market_carbon_capture_script_value = {
 				if = {
 					limit = { has_active_production_method = pm_synthetic_oil_2 }
 					add = {
-						value = level
+						value = this.level
 						multiply = occupancy
 						multiply = -0.06  # 300 oil * 2 weight / 10000
 					}
 				}
 				else = {
 					add = {
-						value = level
+						value = this.level
 						multiply = occupancy
 						multiply = -0.036  # 180 oil * 2 weight / 10000
 					}
@@ -571,7 +571,7 @@ market_carbon_capture_script_value = {
 			every_scope_building = {
 				limit = { is_building_type = building_synthetics_plant_coal }
 				add = {
-					value = level
+					value = this.level
 					multiply = occupancy
 					multiply = -0.168  # 840 coal * 2 weight / 10000
 				}
@@ -1744,11 +1744,19 @@ migration_crowding_mult = {
 
 free_port_tariff_import_cap = {
 	value = modifier:state_tariff_import_add
+	if = {
+		limit = { has_variable = prior_free_port_import_cap }
+		add = var:prior_free_port_import_cap
+	}
 	min = 0
 }
 
 free_port_tariff_export_cap = {
 	value = modifier:state_tariff_export_add
+	if = {
+		limit = { has_variable = prior_free_port_export_cap }
+		add = var:prior_free_port_export_cap
+	}
 	min = 0
 }
 

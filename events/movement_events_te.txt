@@ -501,6 +501,603 @@ movement_events_te.4 = {
 	}
 }
 
+# Event 13: Underground Railroad / Refugee Networks
+# Discriminated communities organize secret networks to help their most vulnerable escape.
+movement_events_te.13 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/political_rally.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = movement_events_te.13.t
+	desc = movement_events_te.13.d
+	flavor = movement_events_te.13.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_civil_rights
+		}
+		OR = {
+			has_law = law_type:law_minority_rights_violent_hostility
+			has_law = law_type:law_minority_rights_ghettoization
+		}
+		any_country = {
+			NOT = { this = root }
+			OR = {
+				has_law = law_type:law_minority_rights_protection
+				has_law = law_type:law_minority_rights_affirmative_action
+				has_law = law_type:law_multicultural
+			}
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_civil_rights
+			}
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				OR = {
+					has_law = law_type:law_minority_rights_protection
+					has_law = law_type:law_minority_rights_affirmative_action
+					has_law = law_type:law_multicultural
+				}
+			}
+			save_scope_as = refuge_country
+		}
+	}
+
+	option = {
+		name = movement_events_te.13.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_minority_rights_violent_hostility
+						has_law = law_type:law_minority_rights_ghettoization
+					}
+				}
+				add = 3
+			}
+		}
+		# Crack down on the networks - order preserved, international condemnation
+		add_modifier = {
+			name = refugee_network_crackdown_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals strata = lower }
+		change_relations = {
+			country = scope:refuge_country
+			value = -20
+		}
+	}
+
+	option = {
+		name = movement_events_te.13.b
+		ai_chance = {
+			base = 2
+		}
+		# Turn a blind eye - some emigration, reduced tension
+		add_modifier = {
+			name = refugee_emigration_safety_valve_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = very_small_radicals strata = lower }
+	}
+
+	option = {
+		name = movement_events_te.13.c
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 3
+			}
+		}
+		# Quietly fund the networks - humanitarian act, risky
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.05
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = very_small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals strata = upper }
+		change_relations = {
+			country = scope:refuge_country
+			value = 10
+		}
+	}
+}
+
+# Event 14: Minority-Owned Business Boycott
+# Organized boycotts target (or defend) businesses owned by discriminated groups.
+movement_events_te.14 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/labor_dispute.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = movement_events_te.14.t
+	desc = movement_events_te.14.d
+	flavor = movement_events_te.14.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_civil_rights
+		}
+		has_technology_researched = civil_rights_movement
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_civil_rights
+			}
+		}
+	}
+
+	immediate = {
+		random_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			save_scope_as = civil_rights_movement
+		}
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				any_scope_pop = {
+					pop_acceptance < acceptance_status_4
+				}
+			}
+			save_scope_as = boycott_state
+		}
+	}
+
+	option = {
+		name = movement_events_te.14.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					ig:ig_industrialists ?= { is_in_government = yes }
+				}
+				add = 2
+			}
+		}
+		# Protect the boycotted businesses - state intervention, costly
+		add_modifier = {
+			name = minority_business_protection_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = very_small_radicals strata = lower }
+		add_radicals = { value = very_small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.14.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_minority_rights_violent_hostility
+						has_law = law_type:law_minority_rights_ghettoization
+					}
+				}
+				add = 2
+			}
+		}
+		# Encourage the boycott against minorities - popular with supremacists
+		add_modifier = {
+			name = anti_minority_boycott_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = medium_radicals strata = lower }
+	}
+
+	option = {
+		name = movement_events_te.14.c
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 3
+			}
+		}
+		# Launch a counter-boycott campaign supporting minority businesses
+		scope:civil_rights_movement = {
+			add_modifier = {
+				name = solidarity_boycott_movement_momentum
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+}
+
+# Event 15: Martyrdom
+# A prominent civil rights figure is killed, galvanizing the movement or vindicating oppressors.
+movement_events_te.15 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/political_rally.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+	title = movement_events_te.15.t
+	desc = movement_events_te.15.d
+	flavor = movement_events_te.15.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_civil_rights
+		}
+		has_technology_researched = civil_rights_movement
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_civil_rights
+			}
+		}
+	}
+
+	immediate = {
+		random_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			save_scope_as = civil_rights_movement
+		}
+	}
+
+	option = {
+		name = movement_events_te.15.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 2
+			}
+		}
+		# Declare a national day of mourning - political shift
+		add_modifier = {
+			name = civil_rights_martyrdom_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.15.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_minority_rights_violent_hostility
+						has_law = law_type:law_minority_rights_ghettoization
+					}
+				}
+				add = 3
+			}
+		}
+		# Blame the victim, suppress coverage
+		add_modifier = {
+			name = civil_rights_suppression_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		scope:civil_rights_movement = {
+			add_modifier = {
+				name = martyrdom_suppression_movement_radicalism
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_radicals = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.15.c
+		ai_chance = {
+			base = 1
+		}
+		# Investigate the killing, promise justice
+		add_modifier = {
+			name = civil_rights_investigation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+	}
+}
+
+# Event 16: Civil Disobedience Campaign
+# Organized mass non-compliance with discriminatory laws.
+movement_events_te.16 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/parliamentary_debate.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = movement_events_te.16.t
+	desc = movement_events_te.16.d
+	flavor = movement_events_te.16.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		any_political_movement = {
+			is_political_movement_type = movement_civil_rights
+		}
+		OR = {
+			has_law = law_type:law_minority_rights_violent_hostility
+			has_law = law_type:law_minority_rights_ghettoization
+			has_law = law_type:law_minority_rights_discrimination
+			has_law = law_type:law_minority_rights_cultural_assimilation
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = {
+			any_political_movement = {
+				is_political_movement_type = movement_civil_rights
+			}
+		}
+	}
+
+	immediate = {
+		random_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			save_scope_as = civil_rights_movement
+		}
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				any_scope_pop = {
+					pop_acceptance < acceptance_status_4
+				}
+			}
+			save_scope_as = disobedience_state
+		}
+	}
+
+	option = {
+		name = movement_events_te.16.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_minority_rights_violent_hostility
+						has_law = law_type:law_minority_rights_ghettoization
+					}
+				}
+				add = 3
+			}
+		}
+		# Mass arrests - crush the disobedience
+		add_modifier = {
+			name = civil_disobedience_crackdown_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = medium_radicals strata = lower }
+		add_radicals = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.16.b
+		ai_chance = {
+			base = 2
+		}
+		# Negotiate limited concessions
+		add_modifier = {
+			name = civil_disobedience_concessions_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		add_radicals = { value = very_small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.16.c
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 3
+			}
+		}
+		# Let the disobedience expose the law's injustice
+		scope:civil_rights_movement = {
+			add_modifier = {
+				name = civil_disobedience_movement_galvanized
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_loyalists = { value = medium_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = medium_radicals strata = upper }
+	}
+}
+
+# ============================================================================
+# EVENT 100: Oppressive Regime Victory — Movement Crushed
+# Fires when the civil rights movement is defeated under discriminatory laws.
+# Options are gated by specific minority rights laws for tailored outcomes.
+# ============================================================================
+movement_events_te.100 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/parliamentary_debate.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = movement_events_te.100.t
+	desc = movement_events_te.100.desc
+	flavor = movement_events_te.100.f
+
+	duration = 3
+
+	option = {
+		name = movement_events_te.100.a
+		default_option = yes
+		# Default: Declare order restored — generic oppressor benefit
+		ai_chance = {
+			base = 5
+		}
+		add_modifier = {
+			name = movement_crushed_order_restored_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals strata = upper }
+		add_radicals = { value = small_radicals strata = lower }
+	}
+
+	option = {
+		name = movement_events_te.100.b
+		# Assimilation drive — available under cultural assimilation law
+		trigger = {
+			has_law = law_type:law_minority_rights_cultural_assimilation
+		}
+		ai_chance = {
+			base = 10
+		}
+		add_modifier = {
+			name = movement_crushed_assimilation_drive_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = movement_events_te.100.c
+		# Enforce ghettoization — available under ghettoization or violent hostility
+		trigger = {
+			OR = {
+				has_law = law_type:law_minority_rights_ghettoization
+				has_law = law_type:law_minority_rights_violent_hostility
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+		add_modifier = {
+			name = movement_crushed_segregation_enforced_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals strata = upper }
+		add_radicals = { value = medium_radicals strata = lower }
+	}
+
+	option = {
+		name = movement_events_te.100.d
+		# Reduce minority political power — available under discrimination or worse
+		trigger = {
+			OR = {
+				has_law = law_type:law_minority_rights_discrimination
+				has_law = law_type:law_minority_rights_ghettoization
+				has_law = law_type:law_minority_rights_violent_hostility
+			}
+		}
+		ai_chance = {
+			base = 8
+		}
+		add_modifier = {
+			name = movement_crushed_political_suppression_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals strata = lower }
+	}
+
+	option = {
+		name = movement_events_te.100.e
+		# Encourage emigration / expulsion — available under violent hostility
+		trigger = {
+			has_law = law_type:law_minority_rights_violent_hostility
+		}
+		ai_chance = {
+			base = 10
+		}
+		add_modifier = {
+			name = movement_crushed_expulsion_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals strata = upper }
+		add_radicals = { value = large_radicals strata = lower }
+	}
+}
+
 # ============================================================================
 # ANTI-WAR MOVEMENT EVENTS (5-8)
 # ============================================================================

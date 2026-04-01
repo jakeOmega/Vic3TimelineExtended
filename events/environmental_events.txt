@@ -1,0 +1,498 @@
+﻿namespace = environmental_events
+
+# ============================================================================
+# ENVIRONMENTAL CRISIS RESPONSE EVENTS
+# ============================================================================
+
+# Event 1: Pollution Incident
+environmental_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/industrial_pollution.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = environmental_events.1.t
+	desc = environmental_events.1.d
+	flavor = environmental_events.1.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = environmental_movement
+			has_technology_researched = pollution_control
+		}
+		NOT = { has_law = law_type:law_ministry_of_the_environment }
+	}
+
+	immediate = {
+	}
+
+	# Impose strict regulations
+	option = {
+		name = environmental_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = pollution_regulations_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+
+	# Protect industry
+	option = {
+		name = environmental_events.1.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_law = law_type:law_laissez_faire }
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = industry_protected_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Investigate
+	option = {
+		name = environmental_events.1.c
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+}
+
+# Event 2: Environmental Protest
+environmental_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/environmental_movement.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = environmental_events.2.t
+	desc = environmental_events.2.d
+	flavor = environmental_events.2.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = environmental_movement
+			has_technology_researched = pollution_control
+		}
+		NOT = { has_law = law_type:law_ministry_of_the_environment }
+	}
+
+	immediate = {
+	}
+
+	# Listen to the protesters
+	option = {
+		name = environmental_events.2.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = environmental_concessions_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Disperse them
+	option = {
+		name = environmental_events.2.b
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Co-opt the movement
+	option = {
+		name = environmental_events.2.c
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = greenwashing_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 3: Eco-Terrorism Incident
+# Radical environmentalists sabotage industrial infrastructure.
+environmental_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/social_revolution.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = environmental_events.3.t
+	desc = environmental_events.3.d
+	flavor = environmental_events.3.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = environmental_movement
+			has_technology_researched = pollution_control
+		}
+		NOT = { has_law = law_type:law_ministry_of_the_environment }
+	}
+
+	immediate = {
+	}
+
+	# Crack down on eco-terrorists, but acknowledge grievances
+	option = {
+		name = environmental_events.3.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = eco_terrorism_crackdown_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+
+	# Use incident to justify environmental reforms
+	option = {
+		name = environmental_events.3.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = clean_energy_technologies }
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = eco_reform_justification_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Label all environmentalists as terrorists
+	option = {
+		name = environmental_events.3.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_outlawed_dissent
+						has_law = law_type:law_censorship
+					}
+				}
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = environmentalist_crackdown_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 4: Oil Spill Disaster
+# A catastrophic oil spill devastates a coastal region.
+environmental_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/industrial_pollution.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = environmental_events.4.t
+	desc = environmental_events.4.d
+	flavor = environmental_events.4.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = environmental_movement
+			has_technology_researched = pollution_control
+		}
+		any_scope_state = {
+			is_coastal = yes
+		}
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = { is_coastal = yes }
+			save_scope_as = spill_state
+		}
+	}
+
+	# Massive cleanup effort - costly but popular
+	option = {
+		name = environmental_events.4.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = oil_spill_cleanup_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.15
+		}
+		scope:spill_state = {
+			add_loyalists_in_state = {
+				value = small_radicals
+			}
+		}
+	}
+
+	# Hold industry accountable
+	option = {
+		name = environmental_events.4.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = industry_accountability_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+
+	# Minimize the damage publicly
+	option = {
+		name = environmental_events.4.c
+		ai_chance = {
+			base = 1
+		}
+		scope:spill_state = {
+			add_radicals_in_state = {
+				value = medium_radicals
+			}
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+}
+
+# Event 5: International Environmental Pressure
+# Foreign nations criticize the country's environmental record.
+environmental_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/diplomatic_summit.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = environmental_events.5.t
+	desc = environmental_events.5.d
+	flavor = environmental_events.5.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = environmental_movement
+			has_technology_researched = pollution_control
+		}
+		NOT = { has_law = law_type:law_ministry_of_the_environment }
+		country_rank >= rank_value:major_power
+	}
+
+	immediate = {
+	}
+
+	# Pledge environmental reforms on the world stage
+	option = {
+		name = environmental_events.5.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = environmental_pledge_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+
+	# Reject foreign interference
+	option = {
+		name = environmental_events.5.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = environmental_sovereignty_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Greenwash with token gestures
+	option = {
+		name = environmental_events.5.c
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = environmental_greenwash_intl_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 100: Environmental Collapse (fail state)
+environmental_events.100 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/industrial_pollution.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = environmental_events.100.t
+	desc = environmental_events.100.desc
+	flavor = environmental_events.100.f
+
+	duration = 3
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+
+	# Industry wins
+	option = {
+		name = environmental_events.100.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = environmental_neglect_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Damage acknowledged
+	option = {
+		name = environmental_events.100.b
+		ai_chance = {
+			base = 2
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}

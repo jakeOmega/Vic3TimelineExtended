@@ -1,0 +1,105 @@
+﻿je_mental_health_crisis = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	group = je_group_internal_affairs
+
+	modifiers_while_active = {
+		mental_health_crisis_active_modifier
+	}
+
+	is_shown_when_inactive = {
+		has_technology_researched = mental_health_awareness
+		NOT = { is_country_type = decentralized }
+	}
+
+	possible = {
+		has_technology_researched = mental_health_awareness
+	}
+
+	immediate = {
+	}
+
+	on_monthly_pulse = {
+		random_events = {
+			200 = 0
+			10 = mental_health_events.1
+			10 = mental_health_events.2
+			10 = mental_health_events.3
+			10 = mental_health_events.4
+			10 = mental_health_events.5
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_mental_health_status_crisis
+				trigger = {
+					NOT = {
+						has_law = law_type:law_rehabilitation_focused_criminal_justice
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_mental_health_status_rehab
+				trigger = {
+					has_law = law_type:law_rehabilitation_focused_criminal_justice
+				}
+			}
+		}
+	}
+
+	complete = {
+		has_law = law_type:law_rehabilitation_focused_criminal_justice
+		institution_investment_level = {
+			institution = institution_social_security
+			value >= 4
+		}
+	}
+
+	on_complete = {
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_modifier = {
+			name = mental_health_infrastructure_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	invalid = {
+		is_country_type = decentralized
+	}
+
+	fail = {
+		# Fail if they still have punitive justice and have moved past the era
+		has_law = law_type:law_punishment_focused_criminal_justice
+		has_technology_researched = decline_of_organized_religion
+	}
+
+	on_fail = {
+		trigger_event = { id = mental_health_events.100 }
+	}
+
+	timeout = 7300
+
+	on_timeout = {
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_modifier = {
+			name = mental_health_neglect_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+}

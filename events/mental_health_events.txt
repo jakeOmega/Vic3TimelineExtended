@@ -1,0 +1,468 @@
+﻿namespace = mental_health_events
+
+# ============================================================================
+# MENTAL HEALTH CRISIS EVENTS
+# ============================================================================
+
+# Event 1: Workplace Burnout Epidemic
+mental_health_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/labor_dispute.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = mental_health_events.1.t
+	desc = mental_health_events.1.d
+	flavor = mental_health_events.1.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_technology_researched = mental_health_awareness
+	}
+
+	immediate = {
+	}
+
+	# Mandate mental health leave
+	option = {
+		name = mental_health_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = mental_health_leave_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.03
+		}
+	}
+
+	# Encourage resilience programs
+	option = {
+		name = mental_health_events.1.b
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = resilience_programs_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# It's not the government's problem
+	option = {
+		name = mental_health_events.1.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = middle
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+}
+
+# Event 2: Youth Mental Health Crisis
+mental_health_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/social_media_crisis.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = mental_health_events.2.t
+	desc = mental_health_events.2.d
+	flavor = mental_health_events.2.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_technology_researched = mental_health_awareness
+	}
+
+	immediate = {
+	}
+
+	# Fund youth mental health services
+	option = {
+		name = mental_health_events.2.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = youth_mental_health_funding_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.03
+		}
+	}
+
+	# Regulate social media
+	option = {
+		name = mental_health_events.2.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = social_media_regulation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+
+	# Blame the parents
+	option = {
+		name = mental_health_events.2.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+}
+
+# Event 3: Addiction Crisis
+# A wave of addiction (opioids, digital, synthetic drugs) sweeps the nation.
+mental_health_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/humanitarian_crisis.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = mental_health_events.3.t
+	desc = mental_health_events.3.d
+	flavor = mental_health_events.3.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = mental_health_awareness
+	}
+
+	immediate = {
+	}
+
+	# Treat addiction as a public health issue
+	option = {
+		name = mental_health_events.3.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					has_law = law_type:law_rehabilitation_focused_criminal_justice
+				}
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = addiction_public_health_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	# War on drugs - criminalize and punish
+	option = {
+		name = mental_health_events.3.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					has_law = law_type:law_punishment_focused_criminal_justice
+				}
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = war_on_drugs_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	# It's a personal choice
+	option = {
+		name = mental_health_events.3.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = middle
+		}
+	}
+}
+
+# Event 4: Veteran PTSD Wave
+# Returning soldiers from recent conflicts overwhelm mental health services.
+mental_health_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/labor_dispute.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = mental_health_events.4.t
+	desc = mental_health_events.4.d
+	flavor = mental_health_events.4.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = mental_health_awareness
+		OR = {
+			is_at_war = yes
+			any_country = {
+				NOT = { this = root }
+				root = { has_truce_with = PREV }
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	# Fund veteran mental health programs
+	option = {
+		name = mental_health_events.4.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = veteran_mental_health_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.05
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	# Military handles its own
+	option = {
+		name = mental_health_events.4.b
+		ai_chance = {
+			base = 2
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	# Deny the problem exists
+	option = {
+		name = mental_health_events.4.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+	}
+}
+
+# Event 5: Institutional Care Scandal
+# Horrific conditions in mental health institutions are exposed.
+mental_health_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/humanitarian_crisis.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = mental_health_events.5.t
+	desc = mental_health_events.5.d
+	flavor = mental_health_events.5.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = mental_health_awareness
+		institution_investment_level = {
+			institution = institution_social_security
+			value >= 2
+		}
+	}
+
+	immediate = {
+	}
+
+	# Reform institutions - community-based care
+	option = {
+		name = mental_health_events.5.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = institutional_reform_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Increase oversight and funding
+	option = {
+		name = mental_health_events.5.b
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = institutional_oversight_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+
+	# Suppress the story
+	option = {
+		name = mental_health_events.5.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}
+
+# Event 100: Crisis Ignored (fail state)
+mental_health_events.100 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/humanitarian_crisis.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = mental_health_events.100.t
+	desc = mental_health_events.100.desc
+	flavor = mental_health_events.100.f
+
+	duration = 3
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+
+	# Accept the status quo
+	option = {
+		name = mental_health_events.100.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = mental_health_crisis_ignored_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# It's a personal responsibility issue
+	option = {
+		name = mental_health_events.100.b
+		ai_chance = {
+			base = 2
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}

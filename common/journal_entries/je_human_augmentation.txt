@@ -1,0 +1,129 @@
+﻿je_human_augmentation = {
+	icon = "gfx/interface/icons/event_icons/event_science.dds"
+	group = je_group_internal_affairs
+
+	modifiers_while_active = {
+		augmentation_debate_active_modifier
+	}
+
+	is_shown_when_inactive = {
+		OR = {
+			has_technology_researched = biohacking_and_human_augmentation
+			has_technology_researched = brain_computer_interfaces
+		}
+		NOT = { is_country_type = decentralized }
+	}
+
+	possible = {
+		OR = {
+			has_technology_researched = biohacking_and_human_augmentation
+			has_technology_researched = brain_computer_interfaces
+		}
+	}
+
+	immediate = {
+	}
+
+	on_monthly_pulse = {
+		random_events = {
+			200 = 0
+			10 = augmentation_events.1
+			10 = augmentation_events.2
+			10 = augmentation_events.3
+			10 = augmentation_events.4
+			10 = augmentation_events.5
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_augmentation_status_banned
+				trigger = {
+					OR = {
+						has_law = law_type:law_no_augmentation
+						has_law = law_type:law_human_purity
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_augmentation_status_medical
+				trigger = {
+					has_law = law_type:law_medical_augmentation_only
+				}
+			}
+			triggered_desc = {
+				desc = je_augmentation_status_regulated
+				trigger = {
+					has_law = law_type:law_regulated_augmentation_market
+				}
+			}
+			triggered_desc = {
+				desc = je_augmentation_status_unrestricted
+				trigger = {
+					has_law = law_type:law_unrestricted_augmentation
+				}
+			}
+			triggered_desc = {
+				desc = je_augmentation_status_mandatory
+				trigger = {
+					has_law = law_type:law_mandatory_augmentation
+				}
+			}
+		}
+	}
+
+	complete = {
+		OR = {
+			has_law = law_type:law_regulated_augmentation_market
+			has_law = law_type:law_mandatory_augmentation
+		}
+		# Society has resolved the debate by integrating augmentation
+	}
+
+	on_complete = {
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = augmentation_integrated_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	invalid = {
+		is_country_type = decentralized
+	}
+
+	fail = {
+		has_law = law_type:law_human_purity
+		# Society chose to reject augmentation entirely
+	}
+
+	on_fail = {
+		trigger_event = { id = augmentation_events.100 }
+	}
+
+	timeout = 7300
+
+	on_timeout = {
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		add_modifier = {
+			name = augmentation_divide_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	weight = 75
+	should_be_pinned_by_default = yes
+}

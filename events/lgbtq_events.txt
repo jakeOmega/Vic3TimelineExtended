@@ -1,0 +1,549 @@
+﻿namespace = lgbtq_events
+
+# ============================================================================
+# LGBTQ+ RIGHTS MOVEMENT EVENTS
+# ============================================================================
+
+# Event 1: Pride March
+lgbtq_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/pride_march.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = lgbtq_events.1.t
+	desc = lgbtq_events.1.d
+	flavor = lgbtq_events.1.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_technology_researched = LGBTQ_rights_movement
+		NOT = { has_law = law_type:law_full_equality_and_protection }
+	}
+
+	immediate = {
+	}
+
+	# Allow the march - legitimacy and support
+	option = {
+		name = lgbtq_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = pride_march_momentum_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Suppress the march
+	option = {
+		name = lgbtq_events.1.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_active_persecution }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = pride_march_suppressed_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Ignore it
+	option = {
+		name = lgbtq_events.1.c
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+	}
+}
+
+# Event 2: Religious Backlash
+lgbtq_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/parliamentary_debate.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = lgbtq_events.2.t
+	desc = lgbtq_events.2.d
+	flavor = lgbtq_events.2.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_technology_researched = LGBTQ_rights_movement
+		NOT = { has_law = law_type:law_full_equality_and_protection }
+		any_interest_group = {
+			is_interest_group_type = ig_devout
+			is_powerful = yes
+		}
+	}
+
+	immediate = {
+		random_interest_group = {
+			limit = {
+				is_interest_group_type = ig_devout
+				is_powerful = yes
+			}
+			save_scope_as = devout_ig
+		}
+	}
+
+	# Stand firm for rights - anger devout
+	option = {
+		name = lgbtq_events.2.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = lgbtq_backlash_ig_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Compromise - water down reforms
+	option = {
+		name = lgbtq_events.2.b
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Side with the devout
+	option = {
+		name = lgbtq_events.2.c
+		ai_chance = {
+			base = 1
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = lgbtq_devout_support_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 3: Military Service Debate
+# Should LGBTQ+ citizens be allowed to serve openly in the military?
+lgbtq_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/military_parade.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = lgbtq_events.3.t
+	desc = lgbtq_events.3.d
+	flavor = lgbtq_events.3.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = LGBTQ_rights_movement
+		NOT = { has_law = law_type:law_full_equality_and_protection }
+		has_law = law_type:law_professional_standing_army
+		NOT = { has_global_variable = lgbtq_military_debate_happened }
+	}
+
+	immediate = {
+		set_global_variable = lgbtq_military_debate_happened
+	}
+
+	# Allow openly LGBTQ+ soldiers
+	option = {
+		name = lgbtq_events.3.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = lgbtq_military_inclusion_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Don't ask, don't tell
+	option = {
+		name = lgbtq_events.3.b
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+	}
+
+	# Ban LGBTQ+ service entirely
+	option = {
+		name = lgbtq_events.3.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					has_law = law_type:law_active_persecution
+				}
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = lgbtq_military_ban_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 4: Celebrity Coming Out
+# A prominent public figure comes out, sparking a national conversation.
+lgbtq_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/cultural_renaissance.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = lgbtq_events.4.t
+	desc = lgbtq_events.4.d
+	flavor = lgbtq_events.4.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = LGBTQ_rights_movement
+		NOT = { has_law = law_type:law_full_equality_and_protection }
+		literacy_rate >= 0.5
+	}
+
+	immediate = {
+	}
+
+	# Celebrate - endorse publicly
+	option = {
+		name = lgbtq_events.4.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_basic_protections
+						has_law = law_type:law_comprehensive_rights
+					}
+				}
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = lgbtq_cultural_shift_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# No comment from the government
+	option = {
+		name = lgbtq_events.4.b
+		ai_chance = {
+			base = 3
+		}
+		# Missed opportunity - minor discontent
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Condemn and censor
+	option = {
+		name = lgbtq_events.4.c
+		trigger = {
+			OR = {
+				has_law = law_type:law_active_persecution
+				has_law = law_type:law_legal_limbo
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_active_persecution }
+				add = 4
+			}
+		}
+		add_modifier = {
+			name = lgbtq_censorship_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 5: Hate Crime Incident
+# A violent hate crime against an LGBTQ+ citizen sparks outrage.
+lgbtq_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/police_brutality.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = lgbtq_events.5.t
+	desc = lgbtq_events.5.d
+	flavor = lgbtq_events.5.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = LGBTQ_rights_movement
+		NOT = { has_law = law_type:law_full_equality_and_protection }
+		NOT = { has_law = law_type:law_active_persecution }
+	}
+
+	immediate = {
+	}
+
+	# Investigate and prosecute as hate crime
+	option = {
+		name = lgbtq_events.5.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = hate_crime_investigation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+	}
+
+	# Use as political leverage for reform
+	option = {
+		name = lgbtq_events.5.b
+		ai_chance = {
+			base = 1
+		}
+		add_modifier = {
+			name = lgbtq_reform_leverage_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+
+	# Downplay the incident
+	option = {
+		name = lgbtq_events.5.c
+		ai_chance = {
+			base = 2
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+}
+
+# Event 100: Movement Crushed (fail state)
+lgbtq_events.100 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/police_brutality.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = lgbtq_events.100.t
+	desc = lgbtq_events.100.desc
+	flavor = lgbtq_events.100.f
+
+	duration = 3
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+
+	# Order restored - persecute
+	option = {
+		name = lgbtq_events.100.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = lgbtq_movement_crushed_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Quiet tolerance
+	option = {
+		name = lgbtq_events.100.b
+		ai_chance = {
+			base = 2
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}

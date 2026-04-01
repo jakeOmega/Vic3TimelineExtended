@@ -1029,18 +1029,21 @@ update_characters = {
 # Refreshes the pollution_generation_mult_effect modifier.
 te_update_pollution_modifier = {
 	if = {
-		limit = { has_modifier = pollution_generation_mult_effect }
-		remove_modifier = pollution_generation_mult_effect
-	}
-	if = {
-		limit = { institution_ministry_of_the_environment_pollution_generation < 0 }
-		add_modifier = {
-			name = pollution_generation_mult_effect
-			multiplier = institution_ministry_of_the_environment_pollution_generation
+		limit = { exists = owner }
+		if = {
+			limit = { has_modifier = pollution_generation_mult_effect }
+			remove_modifier = pollution_generation_mult_effect
 		}
-		set_variable = {
-			name = prior_pollution_reduction
-			value = institution_ministry_of_the_environment_pollution_generation
+		if = {
+			limit = { institution_ministry_of_the_environment_pollution_generation < 0 }
+			add_modifier = {
+				name = pollution_generation_mult_effect
+				multiplier = institution_ministry_of_the_environment_pollution_generation
+			}
+			set_variable = {
+				name = prior_pollution_reduction
+				value = institution_ministry_of_the_environment_pollution_generation
+			}
 		}
 	}
 }
@@ -1075,17 +1078,23 @@ te_update_free_port_tariff = {
 	remove_modifier = free_port_tariff_import_modifier
 	remove_modifier = free_port_tariff_export_modifier
 	remove_modifier = free_port_state_modifier
-	add_modifier = free_port_state_modifier
 	if = {
 		limit = { has_variable = has_free_port }
+		add_modifier = free_port_state_modifier
 		if = {
 			limit = { free_port_tariff_import_cap > 0 }
 			add_modifier = { name = free_port_tariff_import_modifier multiplier = free_port_tariff_import_cap }
 		}
+		set_variable = { name = prior_free_port_import_cap value = free_port_tariff_import_cap }
 		if = {
 			limit = { free_port_tariff_export_cap > 0 }
 			add_modifier = { name = free_port_tariff_export_modifier multiplier = free_port_tariff_export_cap }
 		}
+		set_variable = { name = prior_free_port_export_cap value = free_port_tariff_export_cap }
+	}
+	else = {
+		remove_variable = prior_free_port_import_cap
+		remove_variable = prior_free_port_export_cap
 	}
 }
 
@@ -1446,5 +1455,24 @@ population_transfer_effect = {
 			limit = { has_variable = pop_transfer_count }
 			remove_variable = pop_transfer_count
 		}
+	}
+}
+
+# Remove the vanilla pm_retooling penalty from buildings that still have no
+# completed levels. The modifier is only intended to matter once a real level
+# exists, but the engine can leave it on fresh construction sites.
+te_remove_pm_retooling_from_zero_level_building = {
+	if = {
+		limit = {
+			has_modifier = pm_retooling
+			level = 0
+		}
+		remove_modifier = pm_retooling
+	}
+}
+
+te_remove_pm_retooling_from_zero_level_state_buildings = {
+	every_scope_building = {
+		te_remove_pm_retooling_from_zero_level_building = yes
 	}
 }

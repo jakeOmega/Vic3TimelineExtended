@@ -98,7 +98,10 @@ seize_company = {
 		evaluation_chance = {
 			value = 0
 			if = {
-				limit = { country_rank > scope:other_country.country_rank }
+				limit = {
+					exists = scope:other_country
+					country_rank > scope:other_country.country_rank
+				}
 				add = 0.05
 			}
 		}
@@ -130,17 +133,15 @@ seize_company = {
 				# Penalty scales with the company's economic contribution.
 				subtract = {
 					desc = "SEIZE_COMPANY_ECONOMIC_SIGNIFICANCE"
-					every_scope_building = {
-						limit = {
-							exists = owning_company
-							owning_company = scope:article.input_company
-						}
-						add = level
-						multiply = {
-							value = weekly_profit
-							divide = 250
-							add = 1
-							max = 2
+					scope:article.input_company ?= {
+						every_scope_regional_hqs = {
+							add = this.level
+							multiply = {
+								value = weekly_profit
+								divide = 250
+								add = 1
+								max = 2
+							}
 						}
 					}
 					max = 300
@@ -194,14 +195,12 @@ seize_company = {
 				# Gaining a company is highly desirable.
 				add = {
 					desc = "SEIZE_COMPANY_ACQUISITION_BENEFIT"
-					scope:source_country ?= {
-						every_scope_building = {
+					scope:article.input_company ?= {
+						every_scope_regional_hqs = {
 							limit = {
-								exists = owning_company
-								owning_company = scope:article.input_company
 								weekly_profit > 5
 							}
-							add = level
+							add = this.level
 							multiply = {
 								value = weekly_profit
 								divide = 250

@@ -1,0 +1,113 @@
+﻿je_digital_rights = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	group = je_group_internal_affairs
+
+	modifiers_while_active = {
+		digital_rights_debate_active_modifier
+	}
+
+	is_shown_when_inactive = {
+		OR = {
+			has_technology_researched = automated_surveillance
+			has_technology_researched = cybersecurity
+		}
+		NOT = { is_country_type = decentralized }
+		NOT = {
+			has_law = law_type:law_strong_privacy_rights
+		}
+	}
+
+	possible = {
+		OR = {
+			has_technology_researched = automated_surveillance
+			has_technology_researched = cybersecurity
+		}
+		NOT = {
+			has_law = law_type:law_strong_privacy_rights
+		}
+	}
+
+	immediate = {
+	}
+
+	on_monthly_pulse = {
+		random_events = {
+			200 = 0
+			10 = surveillance_events.1
+			10 = surveillance_events.2
+			10 = surveillance_events.3
+			10 = surveillance_events.4
+			10 = surveillance_events.5
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_digital_rights_status_surveillance
+				trigger = {
+					has_law = law_type:law_intrusive_surveillance
+				}
+			}
+			triggered_desc = {
+				desc = je_digital_rights_status_minimal
+				trigger = {
+					has_law = law_type:law_minimal_privacy_protection
+				}
+			}
+			triggered_desc = {
+				desc = je_digital_rights_status_moderate
+				trigger = {
+					has_law = law_type:law_moderate_data_privacy
+				}
+			}
+		}
+	}
+
+	complete = {
+		has_law = law_type:law_strong_privacy_rights
+	}
+
+	on_complete = {
+		add_loyalists = {
+			value = medium_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = digital_rights_triumph_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	invalid = {
+		is_country_type = decentralized
+	}
+
+	fail = {
+		has_law = law_type:law_intrusive_surveillance
+		has_law = law_type:law_ministry_of_intelligence_and_security
+		# Full surveillance state established
+	}
+
+	on_fail = {
+		trigger_event = { id = surveillance_events.100 }
+	}
+
+	timeout = 5475
+
+	on_timeout = {
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = digital_rights_stagnation_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+}

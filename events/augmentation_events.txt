@@ -1,0 +1,509 @@
+﻿namespace = augmentation_events
+
+# ============================================================================
+# HUMAN AUGMENTATION DEBATE EVENTS
+# ============================================================================
+
+# Event 1: Augmentation Divide
+augmentation_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/neural_interface.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = augmentation_events.1.t
+	desc = augmentation_events.1.d
+	flavor = augmentation_events.1.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = biohacking_and_human_augmentation
+			has_technology_researched = brain_computer_interfaces
+		}
+	}
+
+	immediate = {
+	}
+
+	# Subsidize augmentation for all
+	option = {
+		name = augmentation_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = augmentation_subsidies_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.05
+		}
+	}
+
+	# Leave it to the market
+	option = {
+		name = augmentation_events.1.b
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+	}
+
+	# Ban non-medical augmentation
+	option = {
+		name = augmentation_events.1.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_human_purity
+						has_law = law_type:law_no_augmentation
+					}
+				}
+				add = 4
+			}
+		}
+		add_modifier = {
+			name = augmentation_ban_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Event 2: Black Market Implants
+augmentation_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/genetic_engineering.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = augmentation_events.2.t
+	desc = augmentation_events.2.d
+	flavor = augmentation_events.2.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = biohacking_and_human_augmentation
+			has_technology_researched = brain_computer_interfaces
+		}
+	}
+
+	immediate = {
+	}
+
+	# Crack down on black market
+	option = {
+		name = augmentation_events.2.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = augmentation_crackdown_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+	}
+
+	# Regulate and legalize
+	option = {
+		name = augmentation_events.2.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = augmentation_regulation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Ignore the problem
+	option = {
+		name = augmentation_events.2.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+}
+
+# Event 3: Workplace Discrimination
+# Unaugmented workers are being fired in favor of enhanced employees.
+augmentation_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/labor_dispute.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = augmentation_events.3.t
+	desc = augmentation_events.3.d
+	flavor = augmentation_events.3.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = biohacking_and_human_augmentation
+			has_technology_researched = brain_computer_interfaces
+		}
+		NOT = {
+			OR = {
+				has_law = law_type:law_human_purity
+				has_law = law_type:law_no_augmentation
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	# Protect unaugmented workers
+	option = {
+		name = augmentation_events.3.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = augmentation_workplace_protection_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	# Let the market decide
+	option = {
+		name = augmentation_events.3.b
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_modifier = {
+			name = augmentation_market_efficiency_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Mandate augmentation for competitive industries
+	option = {
+		name = augmentation_events.3.c
+		trigger = {
+			OR = {
+				has_law = law_type:law_unrestricted_augmentation
+				has_law = law_type:law_mandatory_augmentation
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_modifier = {
+			name = augmentation_mandate_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Event 4: Religious Condemnation
+# Religious leaders declare augmentation an affront to divine creation.
+augmentation_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/parliamentary_debate.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = augmentation_events.4.t
+	desc = augmentation_events.4.d
+	flavor = augmentation_events.4.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = biohacking_and_human_augmentation
+			has_technology_researched = brain_computer_interfaces
+		}
+		any_interest_group = {
+			is_interest_group_type = ig_devout
+			is_powerful = yes
+		}
+	}
+
+	immediate = {
+		random_interest_group = {
+			limit = {
+				is_interest_group_type = ig_devout
+				is_powerful = yes
+			}
+			save_scope_as = devout_ig
+		}
+	}
+
+	# Dismiss religious concerns
+	option = {
+		name = augmentation_events.4.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = augmentation_religious_anger_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Establish an ethics board with religious input
+	option = {
+		name = augmentation_events.4.b
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = augmentation_ethics_board_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	# Side with the devout - restrict augmentation
+	option = {
+		name = augmentation_events.4.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					ig:ig_devout ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = augmentation_devout_victory_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 5: Augmented Crime Wave
+# Enhanced criminals exploit their augmentations for a new wave of crime.
+augmentation_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/espionage.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = augmentation_events.5.t
+	desc = augmentation_events.5.d
+	flavor = augmentation_events.5.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = biohacking_and_human_augmentation
+			has_technology_researched = brain_computer_interfaces
+		}
+		NOT = {
+			OR = {
+				has_law = law_type:law_human_purity
+				has_law = law_type:law_no_augmentation
+			}
+		}
+	}
+
+	immediate = {
+	}
+
+	# Augment the police force to match
+	option = {
+		name = augmentation_events.5.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = augmented_police_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.03
+		}
+	}
+
+	# Crack down with implant kill-switches
+	option = {
+		name = augmentation_events.5.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = augmentation_kill_switch_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	# Use as justification to ban augmentation
+	option = {
+		name = augmentation_events.5.c
+		ai_chance = {
+			base = 1
+		}
+		add_modifier = {
+			name = augmentation_crime_ban_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 100: The Great Divide (fail state)
+augmentation_events.100 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/augmented_athlete.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = augmentation_events.100.t
+	desc = augmentation_events.100.desc
+	flavor = augmentation_events.100.f
+
+	duration = 3
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+
+	# Accept the divide
+	option = {
+		name = augmentation_events.100.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = augmentation_divide_permanent_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Mandate purity
+	option = {
+		name = augmentation_events.100.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = human_purity_enforced_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}

@@ -1,0 +1,99 @@
+﻿je_decline_of_religion = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	group = je_group_internal_affairs
+
+	modifiers_while_active = {
+		secular_transition_active_modifier
+	}
+
+	is_shown_when_inactive = {
+		has_technology_researched = decline_of_organized_religion
+		NOT = { is_country_type = decentralized }
+	}
+
+	possible = {
+		has_technology_researched = decline_of_organized_religion
+	}
+
+	immediate = {
+	}
+
+	on_monthly_pulse = {
+		random_events = {
+			200 = 0
+			10 = secular_events.1
+			10 = secular_events.2
+			10 = secular_events.3
+			10 = secular_events.4
+			10 = secular_events.5
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_decline_religion_status_ministry
+				trigger = {
+					has_law = law_type:law_ministry_of_religion
+				}
+			}
+			triggered_desc = {
+				desc = je_decline_religion_status_secular
+				trigger = {
+					has_law = law_type:law_no_ministry_of_religion
+				}
+			}
+		}
+	}
+
+	complete = {
+		has_law = law_type:law_no_ministry_of_religion
+		# TODO: could also gate on total secularization / state atheism
+	}
+
+	on_complete = {
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = secular_transition_complete_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	invalid = {
+		is_country_type = decentralized
+	}
+
+	fail = {
+		# Religious revivalism - ministry re-established or strengthened
+		has_law = law_type:law_ministry_of_religion
+		institution_investment_level = {
+			institution = institution_ministry_of_religion
+			value >= 4
+		}
+	}
+
+	on_fail = {
+		trigger_event = { id = secular_events.100 }
+	}
+
+	timeout = 7300
+
+	on_timeout = {
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = secular_stagnation_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+}

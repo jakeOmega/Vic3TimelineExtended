@@ -2,6 +2,10 @@
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 	group = je_group_internal_affairs
 
+	modifiers_while_active = {
+		civil_rights_struggle_active_modifier
+	}
+
 	is_shown_when_inactive = {
 		has_technology_researched = civil_rights_movement
 		NOT = { is_country_type = decentralized }
@@ -34,11 +38,15 @@
 
 	on_monthly_pulse = {
 		random_events = {
-			200 = 0
+			150 = 0
 			10 = movement_events_te.1
 			10 = movement_events_te.2
 			5 = movement_events_te.3
 			5 = movement_events_te.4
+			8 = movement_events_te.13
+			8 = movement_events_te.14
+			5 = movement_events_te.15
+			5 = movement_events_te.16
 		}
 	}
 
@@ -126,22 +134,44 @@
 	}
 
 	on_fail = {
-		add_radicals = {
-			value = small_radicals
-			strata = lower
+		# Fire the oppressive regime outcome event if laws are discriminatory/hostile
+		# Otherwise just a mild penalty — movement fizzled without clear oppressor win
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_minority_rights_violent_hostility
+					has_law = law_type:law_minority_rights_ghettoization
+					has_law = law_type:law_minority_rights_discrimination
+					has_law = law_type:law_minority_rights_cultural_assimilation
+				}
+			}
+			trigger_event = { id = movement_events_te.100 }
+		}
+		else = {
+			# Movement dissolved without oppressive laws — mild consequence
+			add_radicals = {
+				value = small_radicals
+				strata = lower
+			}
 		}
 	}
 
 	timeout = 7300
 
 	on_timeout = {
+		# Timeout is always bad — stagnation and unresolved tensions
 		add_radicals = {
-			value = small_radicals
+			value = medium_radicals
 			strata = lower
 		}
 		add_radicals = {
-			value = very_small_radicals
+			value = small_radicals
 			pop_type = academics
+		}
+		add_modifier = {
+			name = civil_rights_stagnation_modifier
+			days = long_modifier_time
+			is_decaying = yes
 		}
 	}
 

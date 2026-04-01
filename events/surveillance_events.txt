@@ -1,0 +1,484 @@
+﻿namespace = surveillance_events
+
+# ============================================================================
+# DIGITAL RIGHTS & SURVEILLANCE DEBATE EVENTS
+# ============================================================================
+
+# Event 1: Whistleblower Revelation
+surveillance_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/surveillance_debate.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = surveillance_events.1.t
+	desc = surveillance_events.1.d
+	flavor = surveillance_events.1.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = automated_surveillance
+			has_technology_researched = cybersecurity
+		}
+		NOT = { has_law = law_type:law_strong_privacy_rights }
+	}
+
+	immediate = {
+	}
+
+	# Protect the whistleblower - reform
+	option = {
+		name = surveillance_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = whistleblower_reform_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+
+	# Prosecute the whistleblower
+	option = {
+		name = surveillance_events.1.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = whistleblower_prosecuted_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Suppress the story
+	option = {
+		name = surveillance_events.1.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}	}
+}
+
+# Event 2: Data Breach
+surveillance_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/cyber_attack.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = surveillance_events.2.t
+	desc = surveillance_events.2.d
+	flavor = surveillance_events.2.f
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = automated_surveillance
+			has_technology_researched = cybersecurity
+		}
+		NOT = { has_law = law_type:law_strong_privacy_rights }
+	}
+
+	immediate = {
+	}
+
+	# Strengthen data protections
+	option = {
+		name = surveillance_events.2.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = data_protection_strengthened_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+	}
+
+	# Use breach to justify more surveillance
+	option = {
+		name = surveillance_events.2.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = surveillance_expanded_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Downplay the breach
+	option = {
+		name = surveillance_events.2.c
+		ai_chance = {
+			base = 1
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}	}
+}
+
+# Event 3: Hacker Collective Attack
+# A hacker group breaches government systems and leaks sensitive data.
+surveillance_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/cyber_attack.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = surveillance_events.3.t
+	desc = surveillance_events.3.d
+	flavor = surveillance_events.3.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = automated_surveillance
+			has_technology_researched = cybersecurity
+		}
+		NOT = { has_law = law_type:law_strong_privacy_rights }
+	}
+
+	immediate = {
+	}
+
+	# Hire the hackers - reform through collaboration
+	option = {
+		name = surveillance_events.3.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = hacker_collaboration_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Hunt them down - expand surveillance to catch them
+	option = {
+		name = surveillance_events.3.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = hacker_manhunt_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Use breach to justify massive surveillance expansion
+	option = {
+		name = surveillance_events.3.c
+		trigger = {
+			OR = {
+				has_law = law_type:law_intrusive_surveillance
+				has_law = law_type:law_ministry_of_intelligence_and_security
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_intrusive_surveillance }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = surveillance_massive_expansion_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 4: AI Predictive Policing
+# AI systems begin predicting crimes before they happen.
+surveillance_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/surveillance_debate.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_science.dds"
+
+	title = surveillance_events.4.t
+	desc = surveillance_events.4.d
+	flavor = surveillance_events.4.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = automated_surveillance
+		has_technology_researched = cybersecurity
+		NOT = { has_law = law_type:law_strong_privacy_rights }
+		NOT = { has_global_variable = ai_predictive_policing_debate_happened }
+	}
+
+	immediate = {
+		set_global_variable = ai_predictive_policing_debate_happened
+	}
+
+	# Deploy predictive policing
+	option = {
+		name = surveillance_events.4.a
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = predictive_policing_deployed_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+
+	# Only for intelligence, not domestic policing
+	option = {
+		name = surveillance_events.4.b
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = predictive_intelligence_only_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Ban AI policing systems
+	option = {
+		name = surveillance_events.4.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					has_law = law_type:law_moderate_data_privacy
+				}
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = ai_policing_banned_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 5: Foreign Cyber-Espionage
+# A foreign power is caught conducting cyber-espionage.
+surveillance_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/espionage.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = surveillance_events.5.t
+	desc = surveillance_events.5.d
+	flavor = surveillance_events.5.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		OR = {
+			has_technology_researched = automated_surveillance
+			has_technology_researched = cybersecurity
+		}
+		NOT = { has_law = law_type:law_strong_privacy_rights }
+		any_rival_country = {
+			has_technology_researched = cybersecurity
+		}
+	}
+
+	immediate = {
+	}
+
+	# Strengthen cybersecurity defenses
+	option = {
+		name = surveillance_events.5.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = cyber_defense_strengthened_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.03
+		}
+	}
+
+	# Retaliate with counter-espionage
+	option = {
+		name = surveillance_events.5.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = counter_espionage_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	# Use to justify domestic surveillance expansion
+	option = {
+		name = surveillance_events.5.c
+		ai_chance = {
+			base = 1
+		}
+		add_modifier = {
+			name = foreign_threat_surveillance_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 100: Security State Established (fail state)
+surveillance_events.100 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/espionage.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = surveillance_events.100.t
+	desc = surveillance_events.100.desc
+	flavor = surveillance_events.100.f
+
+	duration = 3
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+
+	# Embrace the security state
+	option = {
+		name = surveillance_events.100.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = security_state_established_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Quiet resistance
+	option = {
+		name = surveillance_events.100.b
+		ai_chance = {
+			base = 2
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}

@@ -65,6 +65,7 @@
             # Existential threats dramatically increase evaluation
             if = {
                 limit = {
+                    exists = scope:country
                     scope:country = {
                         OR = {
                             war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
@@ -301,6 +302,7 @@ tactical_nuke_diplo_action = {
             # Existential threats increase evaluation
             if = {
                 limit = {
+                    exists = scope:country
                     scope:country = {
                         OR = {
                             war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }

@@ -314,7 +314,7 @@ je_heir_education = {
 
 	weight = 100
 
-	timeout = 5840 # 16 years - safety fallback
+	timeout = 6570 # 18 years - safety fallback
 	on_timeout = {
 		heir_education_resolve_effect = yes
 		heir_education_cleanup_effect = yes

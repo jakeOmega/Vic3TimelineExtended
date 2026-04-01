@@ -317,3 +317,16 @@ minor_events_timelineextended.7 = {
 		}
 	}
 }
+
+# Hidden country event — weekly PM retooling cleanup.
+# Fired with delays from on_monthly_pulse_country to simulate weekly state cleanup.
+minor_events_timelineextended.100 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			te_remove_pm_retooling_from_zero_level_state_buildings = yes
+		}
+	}
+}
