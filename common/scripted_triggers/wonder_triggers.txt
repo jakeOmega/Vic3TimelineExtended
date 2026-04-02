@@ -1,0 +1,99 @@
+﻿# ======================================================================
+#  Wonder Building Scripted Triggers
+#  Reusable triggers for wonder building potential/possible blocks.
+# ======================================================================
+
+# State scope: true if this state is in at least one recognized continental region.
+# States not covered (e.g. Oceania) return false.
+state_is_in_recognized_continent = {
+	OR = {
+		any_state_in_africa = { this = prev }
+		any_state_in_europe = { this = prev }
+		any_state_in_north_america = { this = prev }
+		any_state_in_south_america = { this = prev }
+		any_state_in_east_asia = { this = prev }
+		any_state_in_south_east_asia = { this = prev }
+		any_state_in_india = { this = prev }
+		any_state_in_middle_east = { this = prev }
+		any_state_in_central_asia = { this = prev }
+	}
+}
+
+# State scope: true if no state in the same continental region already
+# has a building of type $BUILDING_TYPE$.
+# Gate on state_is_in_recognized_continent first — unrecognized states
+# pass vacuously (all NOT blocks succeed because no continent matches).
+continent_has_no_building_of_type = {
+	NOT = {
+		AND = {
+			any_state_in_africa = { this = prev }
+			any_state_in_africa = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		}
+	}
+	NOT = {
+		AND = {
+			any_state_in_europe = { this = prev }
+			any_state_in_europe = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		}
+	}
+	NOT = {
+		AND = {
+			any_state_in_north_america = { this = prev }
+			any_state_in_north_america = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		}
+	}
+	NOT = {
+		AND = {
+			any_state_in_south_america = { this = prev }
+			any_state_in_south_america = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		}
+	}
+	NOT = {
+		AND = {
+			any_state_in_east_asia = { this = prev }
+			any_state_in_east_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		}
+	}
+	NOT = {
+		AND = {
+			any_state_in_south_east_asia = { this = prev }
+			any_state_in_south_east_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		}
+	}
+	NOT = {
+		AND = {
+			any_state_in_india = { this = prev }
+			any_state_in_india = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		}
+	}
+	NOT = {
+		AND = {
+			any_state_in_middle_east = { this = prev }
+			any_state_in_middle_east = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		}
+	}
+	NOT = {
+		AND = {
+			any_state_in_central_asia = { this = prev }
+			any_state_in_central_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		}
+	}
+}
+
+# State scope: standard "unique per owner" potential guard.
+# True if this state already has the building OR the owner doesn't have one anywhere.
+# Used by generic wonders that allow one per country.
+building_unique_per_owner_potential = {
+	OR = {
+		any_scope_building = {
+			is_building_type = $BUILDING_TYPE$
+		}
+		NOT = {
+			owner = {
+				any_scope_building = {
+					is_building_type = $BUILDING_TYPE$
+				}
+			}
+		}
+	}
+}

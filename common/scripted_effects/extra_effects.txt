@@ -1494,3 +1494,70 @@ te_remove_pm_retooling_from_zero_level_state_buildings = {
 		te_remove_pm_retooling_from_zero_level_building = yes
 	}
 }
+
+#==================================================
+# Nanofabrication Center Construction Effect
+#==================================================
+
+nanofabrication_center_construction = {
+	if = {
+		limit = {
+			NOT = { has_variable = nanofabrication_center_progress_var }
+		}
+		set_variable = {
+			name = nanofabrication_center_progress_var
+			value = 0
+		}
+	}
+	if = {
+		limit = {
+			has_variable = nanofabrication_center_progress_var
+			any_scope_building = {
+				is_building_type = building_nanofabrication_center_construction_site
+				building_has_goods_shortage = no
+			}
+		}
+		change_variable = {
+			name = nanofabrication_center_progress_var
+			add = {
+				value = b:building_nanofabrication_center_construction_site.occupancy
+				divide = 12
+				multiply = b:building_nanofabrication_center_construction_site.modifier:building_annual_nanofabrication_center_progress
+				multiply = 1000
+				ceiling = yes
+				divide = 1000
+			}
+		}
+	}
+	if = {
+		limit = {
+			var:nanofabrication_center_progress_var >= 1
+		}
+		set_variable = {
+			name = nanofabrication_center_progress_var
+			value = 0
+		}
+		remove_building = building_nanofabrication_center_construction_site
+		if = {
+			limit = { has_building = building_nanofabrication_center }
+			switch = {
+				trigger = b:building_nanofabrication_center.level
+				1 = { create_building = { building = building_nanofabrication_center level = 2 } }
+				2 = { create_building = { building = building_nanofabrication_center level = 3 } }
+				3 = { create_building = { building = building_nanofabrication_center level = 4 } }
+				4 = { create_building = { building = building_nanofabrication_center level = 5 } }
+				5 = { create_building = { building = building_nanofabrication_center level = 6 } }
+				6 = { create_building = { building = building_nanofabrication_center level = 7 } }
+				7 = { create_building = { building = building_nanofabrication_center level = 8 } }
+				8 = { create_building = { building = building_nanofabrication_center level = 9 } }
+				9 = { create_building = { building = building_nanofabrication_center level = 10 } }
+			}
+		}
+		else = {
+			create_building = {
+				building = building_nanofabrication_center
+				level = 1
+			}
+		}
+	}
+}

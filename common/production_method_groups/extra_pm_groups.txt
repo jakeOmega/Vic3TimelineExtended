@@ -938,7 +938,6 @@ REPLACE_OR_CREATE:pmg_base_building_space_mine = {
     production_methods = {
         pm_space_mine
         pm_space_colony_mining
-        pm_space_colony_grain
         pm_space_colony_vacation
     }
 }
@@ -1486,5 +1485,26 @@ pmg_base_building_antimatter_engine = {
 pmg_base_building_antimatter_warhead_plant = {
 	production_methods = {
 		pm_antimatter_warhead_plant
+	}
+}
+
+#==================================================
+# Nanofabrication Center PMGs
+#==================================================
+
+pmg_base_building_nanofabrication_center_construction_site = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_nanofabrication_center_construction_paused
+		pm_nanofabrication_center_construction_slow
+		pm_nanofabrication_center_construction_medium
+		pm_nanofabrication_center_construction_fast
+	}
+}
+
+pmg_base_building_nanofabrication_center = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_nanofabrication_center
 	}
 }

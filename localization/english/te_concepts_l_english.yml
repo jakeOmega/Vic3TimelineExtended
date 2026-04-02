@@ -902,6 +902,8 @@
  monpol_printing_press_advance_desc:0 "A strong positive boost to law enactment progress from a recent event."
  monpol_printing_press_cautious_desc:0 "A smaller positive boost to law enactment progress from a recent event."
  moral_panic_dismissed_modifier_desc:0 "The dismissal of the moral panic weakens the devout interest group."
+ nanofabrication_center_progress:0 "Nanofabrication Center Progress"
+ nanofabrication_center_progress_desc:0 "Tracks accumulated progress toward completing the Nanofabrication Center."
  nation_building_controversy_modifier_desc:0 "Using forced population transfers as a nation-building tool has drawn international condemnation."
  nation_building_investment_modifier_desc:0 "The new nation is investing in education, infrastructure, and institutions to build a brighter future."
  nationalist_appeasement_modifier:0 "Nationalist Appeasement"

@@ -4644,3 +4644,13 @@ bubble_inertia_extreme = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_finance_momentum_monthly_add = 1.0
 }
+
+#==================================================
+# Nanofabrication Center Progress Modifier
+#==================================================
+
+nanofabrication_center_progress = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds"
+
+	building_total_nanofabrication_center_progress = 1
+}

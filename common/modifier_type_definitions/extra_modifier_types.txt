@@ -3064,3 +3064,17 @@ state_building_moser_karlsbad_glass_works_max_level_add = {
 	percent = no
 	decimals = 0
 }
+
+#==================================================
+# Nanofabrication Center Modifier Types
+#==================================================
+
+building_annual_nanofabrication_center_progress = {
+	color = good
+	percent = yes
+}
+
+building_total_nanofabrication_center_progress = {
+	color = good
+	percent = yes
+}

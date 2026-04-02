@@ -88,3 +88,16 @@ has_commerce_ministry_3 = {
 has_propaganda_ministry_3 = {
 	institution_investment_level = { institution = institution_ministry_of_propaganda value >= 3 }
 }
+
+# Science
+has_science_ministry_3 = {
+	institution_investment_level = { institution = institution_ministry_of_science value >= 3 }
+}
+
+# Foreign Affairs
+has_foreign_affairs_ministry_3 = {
+	institution_investment_level = { institution = institution_ministry_of_foreign_affairs value >= 3 }
+}
+has_foreign_affairs_ministry_5 = {
+	institution_investment_level = { institution = institution_ministry_of_foreign_affairs value >= 5 }
+}

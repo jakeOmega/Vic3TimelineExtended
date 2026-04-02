@@ -101,6 +101,7 @@ on_monthly_pulse_state = {
 		orbital_battlestation_on_action
 		mind_upload_nexus_on_action
 		antimatter_facility_on_action
+		nanofabrication_center_on_action
 		pollution_on_action
 		war_propaganda_on_action
 		state_yearly_cultural_acceptance_add_on_action
@@ -2211,6 +2212,31 @@ overbuild_protection_on_action = {
 				else_if = {
 					limit = { has_building = building_antimatter_warhead_plant }
 					remove_building = building_antimatter_warhead_plant
+				}
+			}
+		}
+	}
+}
+
+#==================================================
+# Nanofabrication Center Construction On-Action
+#==================================================
+
+nanofabrication_center_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_building = building_nanofabrication_center_construction_site
+			}
+			nanofabrication_center_construction = yes
+			every_scope_building = {
+				limit = {
+					is_building_type = building_nanofabrication_center_construction_site
+				}
+				remove_modifier = nanofabrication_center_progress
+				add_modifier = {
+					name = nanofabrication_center_progress
+					multiplier = this.var:nanofabrication_center_progress_var
 				}
 			}
 		}
