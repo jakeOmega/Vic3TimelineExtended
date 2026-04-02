@@ -26,9 +26,7 @@ movement_events_te.1 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		any_political_movement = {
-			is_political_movement_type = movement_civil_rights
-		}
+		has_active_civil_rights_movement = yes
 		has_technology_researched = civil_rights_movement
 		any_scope_state = {
 			is_incorporated = yes
@@ -40,17 +38,12 @@ movement_events_te.1 = {
 
 	cancellation_trigger = {
 		NOT = {
-			any_political_movement = {
-				is_political_movement_type = movement_civil_rights
-			}
+			has_active_civil_rights_movement = yes
 		}
 	}
 
 	immediate = {
-		random_political_movement = {
-			limit = { is_political_movement_type = movement_civil_rights }
-			save_scope_as = civil_rights_movement
-		}
+		save_civil_rights_movement_scope = yes
 		random_scope_state = {
 			limit = {
 				is_incorporated = yes
@@ -95,10 +88,7 @@ movement_events_te.1 = {
 			base = 1
 			modifier = {
 				trigger = {
-					OR = {
-						has_law = law_type:law_minority_rights_violent_hostility
-						has_law = law_type:law_minority_rights_ghettoization
-					}
+					has_severe_discriminatory_minority_law = yes
 				}
 				add = 2
 			}
@@ -117,9 +107,7 @@ movement_events_te.1 = {
 	option = {
 		name = movement_events_te.1.c
 		trigger = {
-			any_political_movement = {
-				is_political_movement_type = movement_civil_rights
-			}
+			has_active_civil_rights_movement = yes
 		}
 		ai_chance = {
 			base = 0
@@ -170,30 +158,18 @@ movement_events_te.2 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		any_political_movement = {
-			is_political_movement_type = movement_civil_rights
-		}
-		OR = {
-			has_law = law_type:law_minority_rights_violent_hostility
-			has_law = law_type:law_minority_rights_ghettoization
-			has_law = law_type:law_minority_rights_cultural_assimilation
-			has_law = law_type:law_minority_rights_discrimination
-		}
+		has_active_civil_rights_movement = yes
+		has_discriminatory_minority_law = yes
 	}
 
 	cancellation_trigger = {
 		NOT = {
-			any_political_movement = {
-				is_political_movement_type = movement_civil_rights
-			}
+			has_active_civil_rights_movement = yes
 		}
 	}
 
 	immediate = {
-		random_political_movement = {
-			limit = { is_political_movement_type = movement_civil_rights }
-			save_scope_as = civil_rights_movement
-		}
+		save_civil_rights_movement_scope = yes
 	}
 
 	option = {
@@ -279,17 +255,13 @@ movement_events_te.3 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_political_movement = {
-			is_political_movement_type = movement_civil_rights
-		}
+		has_active_civil_rights_movement = yes
 		literacy_rate >= 0.4
 	}
 
 	cancellation_trigger = {
 		NOT = {
-			any_political_movement = {
-				is_political_movement_type = movement_civil_rights
-			}
+			has_active_civil_rights_movement = yes
 		}
 	}
 
@@ -373,16 +345,10 @@ movement_events_te.4 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_political_movement = {
-			is_political_movement_type = movement_civil_rights
-		}
+		has_active_civil_rights_movement = yes
 		OR = {
 			NOT = { 
-				OR = {
-					has_law = law_type:law_multicultural
-					has_law = law_type:law_minority_rights_protection
-					has_law = law_type:law_minority_rights_affirmative_action
-				}
+				has_progressive_minority_law = yes
 			}
 			has_law = law_type:law_active_persecution
 			has_law = law_type:law_no_womens_rights
@@ -396,9 +362,7 @@ movement_events_te.4 = {
 
 	cancellation_trigger = {
 		NOT = {
-			any_political_movement = {
-				is_political_movement_type = movement_civil_rights
-			}
+			has_active_civil_rights_movement = yes
 		}
 	}
 
@@ -411,10 +375,7 @@ movement_events_te.4 = {
 			}
 			save_scope_as = criticizing_country
 		}
-		random_political_movement = {
-			limit = { is_political_movement_type = movement_civil_rights }
-			save_scope_as = civil_rights_movement
-		}
+		save_civil_rights_movement_scope = yes
 	}
 
 	option = {
@@ -526,28 +487,17 @@ movement_events_te.13 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		any_political_movement = {
-			is_political_movement_type = movement_civil_rights
-		}
-		OR = {
-			has_law = law_type:law_minority_rights_violent_hostility
-			has_law = law_type:law_minority_rights_ghettoization
-		}
+		has_active_civil_rights_movement = yes
+		has_severe_discriminatory_minority_law = yes
 		any_country = {
 			NOT = { this = root }
-			OR = {
-				has_law = law_type:law_minority_rights_protection
-				has_law = law_type:law_minority_rights_affirmative_action
-				has_law = law_type:law_multicultural
-			}
+			has_progressive_minority_law = yes
 		}
 	}
 
 	cancellation_trigger = {
 		NOT = {
-			any_political_movement = {
-				is_political_movement_type = movement_civil_rights
-			}
+			has_active_civil_rights_movement = yes
 		}
 	}
 
@@ -555,11 +505,7 @@ movement_events_te.13 = {
 		random_country = {
 			limit = {
 				NOT = { this = root }
-				OR = {
-					has_law = law_type:law_minority_rights_protection
-					has_law = law_type:law_minority_rights_affirmative_action
-					has_law = law_type:law_multicultural
-				}
+				has_progressive_minority_law = yes
 			}
 			save_scope_as = refuge_country
 		}
@@ -572,10 +518,7 @@ movement_events_te.13 = {
 			base = 1
 			modifier = {
 				trigger = {
-					OR = {
-						has_law = law_type:law_minority_rights_violent_hostility
-						has_law = law_type:law_minority_rights_ghettoization
-					}
+					has_severe_discriminatory_minority_law = yes
 				}
 				add = 3
 			}
@@ -654,25 +597,18 @@ movement_events_te.14 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		any_political_movement = {
-			is_political_movement_type = movement_civil_rights
-		}
+		has_active_civil_rights_movement = yes
 		has_technology_researched = civil_rights_movement
 	}
 
 	cancellation_trigger = {
 		NOT = {
-			any_political_movement = {
-				is_political_movement_type = movement_civil_rights
-			}
+			has_active_civil_rights_movement = yes
 		}
 	}
 
 	immediate = {
-		random_political_movement = {
-			limit = { is_political_movement_type = movement_civil_rights }
-			save_scope_as = civil_rights_movement
-		}
+		save_civil_rights_movement_scope = yes
 		random_scope_state = {
 			limit = {
 				is_incorporated = yes
@@ -712,10 +648,7 @@ movement_events_te.14 = {
 			base = 1
 			modifier = {
 				trigger = {
-					OR = {
-						has_law = law_type:law_minority_rights_violent_hostility
-						has_law = law_type:law_minority_rights_ghettoization
-					}
+					has_severe_discriminatory_minority_law = yes
 				}
 				add = 2
 			}
@@ -775,25 +708,18 @@ movement_events_te.15 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_political_movement = {
-			is_political_movement_type = movement_civil_rights
-		}
+		has_active_civil_rights_movement = yes
 		has_technology_researched = civil_rights_movement
 	}
 
 	cancellation_trigger = {
 		NOT = {
-			any_political_movement = {
-				is_political_movement_type = movement_civil_rights
-			}
+			has_active_civil_rights_movement = yes
 		}
 	}
 
 	immediate = {
-		random_political_movement = {
-			limit = { is_political_movement_type = movement_civil_rights }
-			save_scope_as = civil_rights_movement
-		}
+		save_civil_rights_movement_scope = yes
 	}
 
 	option = {
@@ -823,10 +749,7 @@ movement_events_te.15 = {
 			base = 1
 			modifier = {
 				trigger = {
-					OR = {
-						has_law = law_type:law_minority_rights_violent_hostility
-						has_law = law_type:law_minority_rights_ghettoization
-					}
+					has_severe_discriminatory_minority_law = yes
 				}
 				add = 3
 			}
@@ -885,30 +808,18 @@ movement_events_te.16 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		any_political_movement = {
-			is_political_movement_type = movement_civil_rights
-		}
-		OR = {
-			has_law = law_type:law_minority_rights_violent_hostility
-			has_law = law_type:law_minority_rights_ghettoization
-			has_law = law_type:law_minority_rights_discrimination
-			has_law = law_type:law_minority_rights_cultural_assimilation
-		}
+		has_active_civil_rights_movement = yes
+		has_discriminatory_minority_law = yes
 	}
 
 	cancellation_trigger = {
 		NOT = {
-			any_political_movement = {
-				is_political_movement_type = movement_civil_rights
-			}
+			has_active_civil_rights_movement = yes
 		}
 	}
 
 	immediate = {
-		random_political_movement = {
-			limit = { is_political_movement_type = movement_civil_rights }
-			save_scope_as = civil_rights_movement
-		}
+		save_civil_rights_movement_scope = yes
 		random_scope_state = {
 			limit = {
 				is_incorporated = yes
@@ -927,10 +838,7 @@ movement_events_te.16 = {
 			base = 1
 			modifier = {
 				trigger = {
-					OR = {
-						has_law = law_type:law_minority_rights_violent_hostility
-						has_law = law_type:law_minority_rights_ghettoization
-					}
+					has_severe_discriminatory_minority_law = yes
 				}
 				add = 3
 			}
@@ -1044,10 +952,7 @@ movement_events_te.100 = {
 		name = movement_events_te.100.c
 		# Enforce ghettoization: available under ghettoization or violent hostility
 		trigger = {
-			OR = {
-				has_law = law_type:law_minority_rights_ghettoization
-				has_law = law_type:law_minority_rights_violent_hostility
-			}
+			has_severe_discriminatory_minority_law = yes
 		}
 		ai_chance = {
 			base = 10

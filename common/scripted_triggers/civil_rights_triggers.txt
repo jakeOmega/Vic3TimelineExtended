@@ -1,0 +1,49 @@
+﻿# ============================================================================
+# CIVIL RIGHTS & MINORITY LAW SCRIPTED TRIGGERS
+# Reusable triggers for checking minority rights law tiers and movements
+# ============================================================================
+
+# Country scope: True if the country has any discriminatory minority rights law
+# (the "bad" tier laws that civil rights movements oppose)
+has_discriminatory_minority_law = {
+	OR = {
+		has_law = law_type:law_minority_rights_violent_hostility
+		has_law = law_type:law_minority_rights_ghettoization
+		has_law = law_type:law_minority_rights_cultural_assimilation
+		has_law = law_type:law_minority_rights_discrimination
+	}
+}
+
+# Country scope: True if the country has the worst discriminatory laws
+# (violent hostility or ghettoization)
+has_severe_discriminatory_minority_law = {
+	OR = {
+		has_law = law_type:law_minority_rights_violent_hostility
+		has_law = law_type:law_minority_rights_ghettoization
+	}
+}
+
+# Country scope: True if the country has progressive minority rights laws
+# (protection, affirmative action, or multiculturalism)
+has_progressive_minority_law = {
+	OR = {
+		has_law = law_type:law_minority_rights_protection
+		has_law = law_type:law_minority_rights_affirmative_action
+		has_law = law_type:law_multicultural
+	}
+}
+
+# Country scope: True if the country has an active civil rights movement
+has_active_civil_rights_movement = {
+	any_political_movement = {
+		is_political_movement_type = movement_civil_rights
+	}
+}
+
+# Country scope: True if the country has augmentation/BCI technology
+has_augmentation_tech = {
+	OR = {
+		has_technology_researched = biohacking_and_human_augmentation
+		has_technology_researched = brain_computer_interfaces
+	}
+}

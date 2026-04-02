@@ -1,0 +1,57 @@
+﻿# ============================================================================
+# NUCLEAR DIPLOMACY SCRIPTED TRIGGERS
+# Reusable triggers for nuclear weapon diplomatic actions AI logic
+# ============================================================================
+
+# Country scope: True if scope:country has existential war goals against ROOT
+# (subjugation via protectorate/dominion/tributary, or outright annexation)
+# Requires scope:country to be set (the enemy)
+enemy_has_existential_war_goal = {
+	scope:country = {
+		OR = {
+			war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
+			war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
+			war_side_has_war_goal_of_type_against = { type = make_tributary target = ROOT }
+			war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
+		}
+	}
+}
+
+# Country scope: True if scope:country wants to annex or subjugate ROOT
+# (excludes tributary - only the most threatening goals)
+enemy_has_subjugation_war_goal = {
+	scope:country = {
+		OR = {
+			war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
+			war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
+			war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
+		}
+	}
+}
+
+# Country scope: True if the country's ruler has aggressive/reckless personality traits
+ruler_is_aggressive = {
+	ruler = {
+		OR = {
+			has_trait = reckless
+			has_trait = wrathful
+			has_trait = war_criminal
+		}
+	}
+}
+
+# Country scope: True if the country's ruler has cautious/honorable personality traits
+ruler_is_cautious = {
+	ruler = {
+		OR = {
+			has_trait = cautious
+			has_trait = honorable
+		}
+	}
+}
+
+# Country scope: True if this specific enemy (scope:country) previously nuked us
+was_nuked_by_enemy = {
+	has_variable = nuked_by_country
+	var:nuked_by_country = scope:country
+}

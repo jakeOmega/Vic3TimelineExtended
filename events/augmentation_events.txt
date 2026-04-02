@@ -24,10 +24,7 @@ augmentation_events.1 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		OR = {
-			has_technology_researched = biohacking_and_human_augmentation
-			has_technology_researched = brain_computer_interfaces
-		}
+		has_augmentation_tech = yes
 	}
 
 	immediate = {
@@ -106,10 +103,7 @@ augmentation_events.2 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		OR = {
-			has_technology_researched = biohacking_and_human_augmentation
-			has_technology_researched = brain_computer_interfaces
-		}
+		has_augmentation_tech = yes
 	}
 
 	immediate = {
@@ -188,10 +182,7 @@ augmentation_events.3 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		OR = {
-			has_technology_researched = biohacking_and_human_augmentation
-			has_technology_researched = brain_computer_interfaces
-		}
+		has_augmentation_tech = yes
 		NOT = {
 			OR = {
 				has_law = law_type:law_human_purity
@@ -283,10 +274,7 @@ augmentation_events.4 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		OR = {
-			has_technology_researched = biohacking_and_human_augmentation
-			has_technology_researched = brain_computer_interfaces
-		}
+		has_augmentation_tech = yes
 		any_interest_group = {
 			is_interest_group_type = ig_devout
 			is_powerful = yes
@@ -387,10 +375,7 @@ augmentation_events.5 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		OR = {
-			has_technology_researched = biohacking_and_human_augmentation
-			has_technology_researched = brain_computer_interfaces
-		}
+		has_augmentation_tech = yes
 		NOT = {
 			OR = {
 				has_law = law_type:law_human_purity

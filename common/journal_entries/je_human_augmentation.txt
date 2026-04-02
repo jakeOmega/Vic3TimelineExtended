@@ -7,18 +7,12 @@
 	}
 
 	is_shown_when_inactive = {
-		OR = {
-			has_technology_researched = biohacking_and_human_augmentation
-			has_technology_researched = brain_computer_interfaces
-		}
+		has_augmentation_tech = yes
 		NOT = { is_country_type = decentralized }
 	}
 
 	possible = {
-		OR = {
-			has_technology_researched = biohacking_and_human_augmentation
-			has_technology_researched = brain_computer_interfaces
-		}
+		has_augmentation_tech = yes
 	}
 
 	immediate = {

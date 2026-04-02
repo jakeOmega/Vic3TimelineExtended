@@ -544,10 +544,7 @@ movement_civil_rights = {
         if = {
             limit = {
                 owner = {
-                    OR = {
-                        has_law = law_type:law_minority_rights_violent_hostility
-                        has_law = law_type:law_minority_rights_ghettoization
-                    }
+                    has_severe_discriminatory_minority_law = yes
                 }
             }
             add = {

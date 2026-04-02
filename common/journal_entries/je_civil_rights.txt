@@ -18,18 +18,14 @@
 	}
 
 	possible = {
-		any_political_movement = {
-			is_political_movement_type = movement_civil_rights
-		}
+		has_active_civil_rights_movement = yes
 	}
 
 	immediate = {
 		if = {
 			limit = {
 				NOT = {
-					any_political_movement = {
-						is_political_movement_type = movement_civil_rights
-					}
+					has_active_civil_rights_movement = yes
 				}
 			}
 			create_political_movement = { type = movement_civil_rights }
@@ -55,10 +51,7 @@
 			triggered_desc = {
 				desc = je_civil_rights_status_hostile
 				trigger = {
-					OR = {
-						has_law = law_type:law_minority_rights_violent_hostility
-						has_law = law_type:law_minority_rights_ghettoization
-					}
+					has_severe_discriminatory_minority_law = yes
 				}
 			}
 			triggered_desc = {
@@ -127,9 +120,7 @@
 
 	fail = {
 		NOT = {
-			any_political_movement = {
-				is_political_movement_type = movement_civil_rights
-			}
+			has_active_civil_rights_movement = yes
 		}
 	}
 
@@ -138,12 +129,7 @@
 		# Otherwise just a mild penalty: movement fizzled without clear oppressor win
 		if = {
 			limit = {
-				OR = {
-					has_law = law_type:law_minority_rights_violent_hostility
-					has_law = law_type:law_minority_rights_ghettoization
-					has_law = law_type:law_minority_rights_discrimination
-					has_law = law_type:law_minority_rights_cultural_assimilation
-				}
+				has_discriminatory_minority_law = yes
 			}
 			trigger_event = { id = movement_events_te.100 }
 		}

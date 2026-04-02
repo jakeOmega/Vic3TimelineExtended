@@ -1,0 +1,13 @@
+﻿# ============================================================================
+# CIVIL RIGHTS SCRIPTED EFFECTS
+# Reusable effects for civil rights movement event logic
+# ============================================================================
+
+# Country scope: Saves the active civil rights movement as scope:civil_rights_movement
+# Call from immediate = { } block in events that need to reference the movement
+save_civil_rights_movement_scope = {
+	random_political_movement = {
+		limit = { is_political_movement_type = movement_civil_rights }
+		save_scope_as = civil_rights_movement
+	}
+}

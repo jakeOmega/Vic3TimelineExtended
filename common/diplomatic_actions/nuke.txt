@@ -66,26 +66,13 @@
             if = {
                 limit = {
                     exists = scope:country
-                    scope:country = {
-                        OR = {
-                            war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
-                            war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
-                            war_side_has_war_goal_of_type_against = { type = make_tributary target = ROOT }
-                            war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
-                        }
-                    }
+                    enemy_has_existential_war_goal = yes
                 }
                 multiply = 7 # 70% - existential threats make the AI seriously consider nuclear use
             }
             if = {
                 limit = {
-                    ruler = {
-                        OR = {
-                            has_trait = reckless
-                            has_trait = wrathful
-                            has_trait = war_criminal
-                        }
-                    }
+                    ruler_is_aggressive = yes
                 }
                 multiply = 3
             }
@@ -98,20 +85,14 @@
             }
             if = {
                 limit = {
-                    ruler = {
-                        OR = {
-                            has_trait = cautious
-                            has_trait = honorable
-                        }
-                    }
+                    ruler_is_cautious = yes
                 }
                 multiply = 0.25 # very reluctant but not impossible in existential situations
             }
             # Retaliation: only if THIS specific enemy nuked us
             if = {
                 limit = {
-                    has_variable = nuked_by_country
-                    var:nuked_by_country = scope:country
+                    was_nuked_by_enemy = yes
                 }
                 multiply = 5 # retaliation after being nuked by this enemy is strongly favored
             }
@@ -128,14 +109,7 @@
             # Must face a sufficiently severe threat - no nuking over minor disputes
             OR = {
                 # Existential threat: enemy wants to subjugate or annex us
-                scope:country = {
-                    OR = {
-                        war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
-                        war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
-                        war_side_has_war_goal_of_type_against = { type = make_tributary target = ROOT }
-                        war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
-                    }
-                }
+                enemy_has_existential_war_goal = yes
                 # Losing core incorporated territory AND the war is going badly
                 AND = {
                     any_scope_state = {
@@ -147,27 +121,14 @@
                     }
                 }
                 # Retaliation: this specific enemy nuked us
-                AND = {
-                    has_variable = nuked_by_country
-                    var:nuked_by_country = scope:country
-                }
+                was_nuked_by_enemy = yes
             }
 
             # Cautious or honorable leaders require extreme circumstances
             OR = {
-                NOT = {
-                    ruler = {
-                        OR = {
-                            has_trait = cautious
-                            has_trait = honorable
-                        }
-                    }
-                }
+                NOT = { ruler_is_cautious = yes }
                 # Retaliation against the country that nuked us overrides personality
-                AND = {
-                    has_variable = nuked_by_country
-                    var:nuked_by_country = scope:country
-                }
+                was_nuked_by_enemy = yes
                 # Facing complete annexation overrides personality
                 scope:country = {
                     war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
@@ -178,24 +139,9 @@
             OR = {
                 NOT = { scope:country = { has_modifier = nuclear_power } }
                 # Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
-                AND = {
-                    has_variable = nuked_by_country
-                    var:nuked_by_country = scope:country
-                }
-                scope:country = {
-                    OR = {
-                        war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
-                        war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
-                        war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
-                    }
-                }
-                ruler = {
-                    OR = {
-                        has_trait = reckless
-                        has_trait = wrathful
-                        has_trait = war_criminal
-                    }
-                }
+                was_nuked_by_enemy = yes
+                enemy_has_subjugation_war_goal = yes
+                ruler_is_aggressive = yes
             }
         }
 
@@ -303,37 +249,19 @@ tactical_nuke_diplo_action = {
             if = {
                 limit = {
                     exists = scope:country
-                    scope:country = {
-                        OR = {
-                            war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
-                            war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
-                            war_side_has_war_goal_of_type_against = { type = make_tributary target = ROOT }
-                            war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
-                        }
-                    }
+                    enemy_has_existential_war_goal = yes
                 }
                 multiply = 3 # 75% evaluation when facing subjugation/annexation
             }
             if = {
                 limit = {
-                    ruler = {
-                        OR = {
-                            has_trait = reckless
-                            has_trait = wrathful
-                            has_trait = war_criminal
-                        }
-                    }
+                    ruler_is_aggressive = yes
                 }
                 multiply = 2
             }
             if = {
                 limit = {
-                    ruler = {
-                        OR = {
-                            has_trait = cautious
-                            has_trait = honorable
-                        }
-                    }
+                    ruler_is_cautious = yes
                 }
                 multiply = 0.25 # reluctant but not impossible
             }
@@ -367,14 +295,7 @@ tactical_nuke_diplo_action = {
             # Must face a sufficiently severe threat - no tactical nukes over minor disputes
             OR = {
                 # Existential threat: enemy wants to subjugate or annex us
-                scope:country = {
-                    OR = {
-                        war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
-                        war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
-                        war_side_has_war_goal_of_type_against = { type = make_tributary target = ROOT }
-                        war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
-                    }
-                }
+                enemy_has_existential_war_goal = yes
                 # Losing core incorporated territory AND the war is going badly
                 AND = {
                     any_scope_state = {
@@ -386,27 +307,14 @@ tactical_nuke_diplo_action = {
                     }
                 }
                 # Retaliation: this specific enemy nuked us
-                AND = {
-                    has_variable = nuked_by_country
-                    var:nuked_by_country = scope:country
-                }
+                was_nuked_by_enemy = yes
             }
 
             # Cautious or honorable leaders require extreme circumstances
             OR = {
-                NOT = {
-                    ruler = {
-                        OR = {
-                            has_trait = cautious
-                            has_trait = honorable
-                        }
-                    }
-                }
+                NOT = { ruler_is_cautious = yes }
                 # Retaliation against the country that nuked us overrides personality
-                AND = {
-                    has_variable = nuked_by_country
-                    var:nuked_by_country = scope:country
-                }
+                was_nuked_by_enemy = yes
                 # Facing annexation overrides personality
                 scope:country = {
                     war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
@@ -417,24 +325,9 @@ tactical_nuke_diplo_action = {
             OR = {
                 NOT = { scope:country = { has_modifier = nuclear_power } }
                 # Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
-                AND = {
-                    has_variable = nuked_by_country
-                    var:nuked_by_country = scope:country
-                }
-                scope:country = {
-                    OR = {
-                        war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
-                        war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
-                        war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
-                    }
-                }
-                ruler = {
-                    OR = {
-                        has_trait = reckless
-                        has_trait = wrathful
-                        has_trait = war_criminal
-                    }
-                }
+                was_nuked_by_enemy = yes
+                enemy_has_subjugation_war_goal = yes
+                ruler_is_aggressive = yes
             }
         }
 	
