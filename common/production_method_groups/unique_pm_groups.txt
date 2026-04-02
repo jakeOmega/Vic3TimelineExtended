@@ -563,6 +563,182 @@ pmg_wonder_burj_khalifa = {
     production_methods = { pm_wonder_burj_khalifa }
 }
 
+# Era 6
+pmg_wonder_hoover_dam = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_hoover_dam }
+}
+pmg_wonder_pentagon = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_pentagon }
+}
+
+# Era 7
+pmg_wonder_kennedy_space_center = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_kennedy_space_center }
+}
+pmg_wonder_aswan_high_dam = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_aswan_high_dam }
+}
+pmg_wonder_tokyo_tower = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_tokyo_tower }
+}
+pmg_wonder_moscow_state_university = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_moscow_state_university }
+}
+pmg_wonder_berlin_tv_tower = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_berlin_tv_tower }
+}
+
+# Era 8
+pmg_wonder_world_trade_center = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_world_trade_center }
+}
+pmg_wonder_lotus_temple = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_lotus_temple }
+}
+pmg_wonder_itaipu_dam = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_itaipu_dam }
+}
+pmg_wonder_petronas_towers = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_petronas_towers }
+}
+
+# Era 9
+pmg_wonder_three_gorges_dam = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_three_gorges_dam }
+}
+pmg_wonder_channel_tunnel = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_channel_tunnel }
+}
+pmg_wonder_taipei_101 = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_taipei_101 }
+}
+pmg_wonder_lotte_world_tower = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_lotte_world_tower }
+}
+
+# Era 10
+pmg_wonder_shanghai_tower = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_shanghai_tower }
+}
+pmg_wonder_fast_telescope = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_fast_telescope }
+}
+
+# Generic
+pmg_wonder_international_space_station = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_international_space_station }
+}
+pmg_wonder_large_hadron_collider = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_large_hadron_collider }
+}
+
+# Additional State-Locked
+pmg_wonder_statue_of_unity = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_statue_of_unity }
+}
+pmg_wonder_gardens_by_the_bay = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_gardens_by_the_bay }
+}
+pmg_wonder_abraj_al_bait = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_abraj_al_bait }
+}
+pmg_wonder_azadi_tower = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_azadi_tower }
+}
+pmg_wonder_basilica_of_our_lady_of_peace = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_basilica_of_our_lady_of_peace }
+}
+pmg_wonder_golden_bridge = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_golden_bridge }
+}
+pmg_wonder_kenyatta_icc = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_kenyatta_icc }
+}
+
+# Additional Generic
+pmg_wonder_iter = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_iter }
+}
+pmg_wonder_svalbard_seed_vault = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_svalbard_seed_vault }
+}
+pmg_wonder_ligo = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_ligo }
+}
+pmg_wonder_continental_union_hq = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_continental_union_hq }
+}
+pmg_wonder_peace_palace = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_peace_palace }
+}
+pmg_wonder_palais_des_nations = {
+    texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+    ai_selection = most_productive
+    production_methods = { pm_wonder_palais_des_nations }
+}
+
 #==================================================
 # Phase 1: Vanilla Company PMGs
 #==================================================

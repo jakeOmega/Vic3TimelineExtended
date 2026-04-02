@@ -30,6 +30,7 @@
  AI_MUTUAL_TRADE_VALUE:0 "from mutual trade value"
  AI_NOT_CAPITALIST_ECONOMY:0 "from not having a capitalist economy"
  AI_PEOPLE_OF_THE_BOOK:0 "from People of the Book laws"
+ AI_POPULATION_TO_RECOVER:0 "from population to recover"
  AI_SAME_POWER_BLOC:0 "from being in the same power bloc"
  AI_SAME_RELIGION_NO_NEED:0 "from having the same religion"
  AI_SEVERE_WARMING_DEMAND:0 "from severe climate pressure"

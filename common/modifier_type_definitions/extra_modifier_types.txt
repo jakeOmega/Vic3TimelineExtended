@@ -632,6 +632,11 @@ state_building_un_headquarters_max_level_add = {
 	percent = no
 }
 
+building_hydro_plant_throughput_add = {
+	color = good
+	percent = yes
+}
+
 building_renewable_energy_plant_throughput_add = {
 	color = good
 	percent = yes

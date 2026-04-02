@@ -2591,6 +2591,600 @@ pm_wonder_burj_khalifa = {
 }
 
 #==================================================
+# Era 6 Wonder PMs
+#==================================================
+
+pm_wonder_hoover_dam = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_building_hydro_plant_max_level_add = 10
+			building_hydro_plant_throughput_add = 0.25
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_engineers_add = 4000
+			building_employment_machinists_add = 4000
+			building_employment_laborers_add = 2000
+		}
+	}
+}
+
+pm_wonder_pentagon = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			country_institution_impact_institution_ministry_of_war_mult = 0.1
+			country_institution_cost_institution_ministry_of_war_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 7000
+			building_employment_engineers_add = 3000
+		}
+	}
+}
+
+#==================================================
+# Era 7 Wonder PMs
+#==================================================
+
+pm_wonder_kennedy_space_center = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			goods_output_launch_capacity_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_engineers_add = 5000
+			building_employment_academics_add = 3000
+			building_employment_machinists_add = 2000
+		}
+	}
+}
+
+pm_wonder_aswan_high_dam = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_building_hydro_plant_max_level_add = 10
+			building_hydro_plant_throughput_add = 0.25
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_engineers_add = 4000
+			building_employment_machinists_add = 3000
+			building_employment_laborers_add = 3000
+		}
+	}
+}
+
+pm_wonder_tokyo_tower = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_trade_advantage_mult = 0.15
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_engineers_add = 4000
+			building_employment_clerks_add = 4000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+pm_wonder_moscow_state_university = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 50
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 6000
+			building_employment_clerks_add = 3000
+			building_employment_engineers_add = 1000
+		}
+	}
+}
+
+pm_wonder_berlin_tv_tower = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			country_legitimacy_ideological_incoherence_mult = -0.1
+			interest_group_in_government_attraction_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_engineers_add = 3000
+			building_employment_clerks_add = 5000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+#==================================================
+# Era 8 Wonder PMs
+#==================================================
+
+pm_wonder_world_trade_center = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_trade_center_throughput_add = 0.15
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 8000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+pm_wonder_lotus_temple = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			interest_group_ig_devout_approval_add = 2
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 4000
+			building_employment_clerks_add = 4000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+pm_wonder_itaipu_dam = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_building_hydro_plant_max_level_add = 10
+			building_hydro_plant_throughput_add = 0.25
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_engineers_add = 4000
+			building_employment_machinists_add = 4000
+			building_employment_laborers_add = 2000
+		}
+	}
+}
+
+pm_wonder_petronas_towers = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_economy_of_scale_level_cap_add = 5
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 6000
+			building_employment_engineers_add = 2000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+#==================================================
+# Era 9 Wonder PMs
+#==================================================
+
+pm_wonder_three_gorges_dam = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_building_hydro_plant_max_level_add = 20
+			building_hydro_plant_throughput_add = 0.25
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_engineers_add = 5000
+			building_employment_machinists_add = 3000
+			building_employment_laborers_add = 2000
+		}
+	}
+}
+
+pm_wonder_channel_tunnel = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			goods_output_merchant_marine_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_engineers_add = 5000
+			building_employment_machinists_add = 3000
+			building_employment_laborers_add = 2000
+		}
+	}
+}
+
+pm_wonder_taipei_101 = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_trade_center_throughput_add = 0.2
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 7000
+			building_employment_shopkeepers_add = 3000
+		}
+	}
+}
+
+pm_wonder_lotte_world_tower = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_group_bg_service_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 7000
+			building_employment_shopkeepers_add = 2000
+			building_employment_engineers_add = 1000
+		}
+	}
+}
+
+#==================================================
+# Era 10 Wonder PMs
+#==================================================
+
+pm_wonder_shanghai_tower = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_urban_center_throughput_add = 0.2
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 8000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+pm_wonder_fast_telescope = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_university_throughput_add = 0.25
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 5000
+			building_employment_engineers_add = 3000
+			building_employment_machinists_add = 2000
+		}
+	}
+}
+
+#==================================================
+# Generic Wonder PMs
+#==================================================
+
+pm_wonder_international_space_station = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_pop_qualifications_mult = 0.15
+			building_university_throughput_add = 0.25
+			state_education_access_add = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 200
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_engineers_add = 5000
+			building_employment_academics_add = 3000
+			building_employment_machinists_add = 2000
+		}
+	}
+}
+
+pm_wonder_large_hadron_collider = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_university_throughput_add = 0.5
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 200
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 4000
+			building_employment_engineers_add = 4000
+			building_employment_machinists_add = 2000
+		}
+	}
+}
+
+#==================================================
+# Additional State-Locked Wonder PMs
+#==================================================
+
+pm_wonder_statue_of_unity = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 100
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 4000
+			building_employment_shopkeepers_add = 4000
+			building_employment_laborers_add = 2000
+		}
+	}
+}
+
+pm_wonder_gardens_by_the_bay = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_standard_of_living_add = 2
+			state_birth_rate_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 3000
+			building_employment_clerks_add = 4000
+			building_employment_shopkeepers_add = 3000
+		}
+	}
+}
+
+pm_wonder_abraj_al_bait = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			interest_group_ig_devout_approval_add = 3
+			country_prestige_add = 75
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 6000
+			building_employment_shopkeepers_add = 4000
+		}
+	}
+}
+
+pm_wonder_azadi_tower = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 50
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			state_loyalists_from_political_movements_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 5000
+			building_employment_academics_add = 3000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+pm_wonder_basilica_of_our_lady_of_peace = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			interest_group_ig_devout_approval_add = 2
+			country_prestige_add = 50
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 3000
+			building_employment_clerks_add = 4000
+			building_employment_shopkeepers_add = 3000
+		}
+	}
+}
+
+pm_wonder_golden_bridge = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 30
+			state_migration_pull_mult = 0.15
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_engineers_add = 3000
+			building_employment_clerks_add = 3000
+			building_employment_shopkeepers_add = 4000
+		}
+	}
+}
+
+pm_wonder_kenyatta_icc = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_government_administration_throughput_add = 0.15
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 50
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 6000
+			building_employment_academics_add = 2000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+#==================================================
+# Additional Generic Wonder PMs
+#==================================================
+
+pm_wonder_iter = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_nuclear_plant_throughput_add = 0.25
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 150
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_engineers_add = 5000
+			building_employment_academics_add = 3000
+			building_employment_machinists_add = 2000
+		}
+	}
+}
+
+pm_wonder_svalbard_seed_vault = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_group_bg_agriculture_throughput_add = 0.1
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 50
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 4000
+			building_employment_engineers_add = 3000
+			building_employment_clerks_add = 3000
+		}
+	}
+}
+
+pm_wonder_ligo = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_university_throughput_add = 0.25
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 100
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 4000
+			building_employment_engineers_add = 4000
+			building_employment_machinists_add = 2000
+		}
+	}
+}
+
+pm_wonder_continental_union_hq = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 100
+			country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 6000
+			building_employment_academics_add = 2000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+pm_wonder_peace_palace = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.15
+			country_prestige_add = 75
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 5000
+			building_employment_academics_add = 3000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+pm_wonder_palais_des_nations = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	country_modifiers = {
+		workforce_scaled = {
+			country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.1
+			country_prestige_add = 50
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			building_government_administration_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 5000
+			building_employment_academics_add = 3000
+			building_employment_shopkeepers_add = 2000
+		}
+	}
+}
+
+#==================================================
 # Phase 1: Vanilla Company PMs
 #==================================================
 
