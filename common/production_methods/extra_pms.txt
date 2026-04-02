@@ -18535,3 +18535,237 @@ pm_nanofabrication_center = {
 
 	required_input_goods = electricity
 }
+
+#==================================================
+# Consciousness Network PMs
+#==================================================
+
+pm_consciousness_network_construction_paused = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p1.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_advanced_materials_add = 5               # Price: 4000, Total cost: 20000.0 (100.00%)
+			# Output goods
+			# Total input cost: 20000.0
+			# Total output cost: 0
+			# Profit: -20000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 500
+			# Wage breakeven: -40.00
+		}
+
+		level_scaled = {
+			building_employment_academics_add = 500
+		}
+	}
+}
+
+pm_consciousness_network_construction_slow = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p2.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_digital_access_add = 5000                # Price:  120, Total cost: 600000.0 (6.00%)
+			goods_input_digital_assets_add = 20000               # Price:  100, Total cost: 2000000.0 (20.00%)
+			goods_input_electronic_components_add = 10000        # Price:   80, Total cost: 800000.0 (8.00%)
+			goods_input_electricity_add = 50000                  # Price:   30, Total cost: 1500000.0 (15.00%)
+			goods_input_advanced_materials_add = 1275            # Price: 4000, Total cost: 5100000.0 (51.00%)
+			# Output goods
+			# Total input cost: 10000000.0
+			# Total output cost: 0
+			# Profit: -10000000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 50000
+			# Wage breakeven: -200.00
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 20000
+			building_employment_academics_add = 30000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_consciousness_network_construction_medium = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p3.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_digital_access_add = 10000               # Price:  120, Total cost: 1200000.0 (6.00%)
+			goods_input_digital_assets_add = 40000               # Price:  100, Total cost: 4000000.0 (20.00%)
+			goods_input_electronic_components_add = 20000        # Price:   80, Total cost: 1600000.0 (8.00%)
+			goods_input_electricity_add = 100000                 # Price:   30, Total cost: 3000000.0 (15.00%)
+			goods_input_advanced_materials_add = 2550            # Price: 4000, Total cost: 10200000.0 (51.00%)
+			# Output goods
+			# Total input cost: 20000000.0
+			# Total output cost: 0
+			# Profit: -20000000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 50000
+			# Wage breakeven: -400.00
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 20000
+			building_employment_academics_add = 30000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_consciousness_network_construction_fast = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p4.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_digital_access_add = 20000               # Price:  120, Total cost: 2400000.0 (6.00%)
+			goods_input_digital_assets_add = 80000               # Price:  100, Total cost: 8000000.0 (20.00%)
+			goods_input_electronic_components_add = 40000        # Price:   80, Total cost: 3200000.0 (8.00%)
+			goods_input_electricity_add = 200000                 # Price:   30, Total cost: 6000000.0 (15.00%)
+			goods_input_advanced_materials_add = 5100            # Price: 4000, Total cost: 20400000.0 (51.00%)
+			# Output goods
+			# Total input cost: 40000000.0
+			# Total output cost: 0
+			# Profit: -40000000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 50000
+			# Wage breakeven: -800.00
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 20000
+			building_employment_academics_add = 30000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+# Base operational PM — coordination bonuses: economy of scale,
+# institution impact, infrastructure. Non-economic megaproject
+# focused on solving coordination problems.
+pm_consciousness_network = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 50
+			state_institution_impact_add = 0.10
+			state_tax_capacity_add = 50
+			state_education_access_add = 0.05
+		}
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			building_economy_of_scale_level_cap_add = 25
+			country_bureaucracy_add = 100
+			country_weekly_innovation_max_add = 10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_digital_access_add = 3000                # Price:  120, Total cost: 360000.0 (19.15%)
+			goods_input_digital_assets_add = 5000                # Price:  100, Total cost: 500000.0 (26.60%)
+			goods_input_electronic_components_add = 2000         # Price:   80, Total cost: 160000.0 (8.51%)
+			goods_input_electricity_add = 20000                  # Price:   30, Total cost: 600000.0 (31.91%)
+			goods_input_advanced_materials_add = 65              # Price: 4000, Total cost: 260000.0 (13.83%)
+			# Output goods
+			# Total input cost: 1880000.0
+			# Total output cost: 0
+			# Profit: -1880000.0
+			# Profit margin: -100.00%
+			# Employment: 6000
+			# Wage breakeven: -313.33
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 2000
+			building_employment_academics_add = 3000
+			building_employment_bureaucrats_add = 1000
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+# Open Network mode — democratic coordination bonuses.
+# Research speed, innovation, political freedom effects.
+# Available when NOT running oppressive laws.
+pm_consciousness_network_open = {
+	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
+
+	disallowing_laws = {
+		law_secret_police
+		law_single_party_state
+		law_autocracy
+		law_mandatory_augmentation
+		law_intrusive_surveillance
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_loyalists_from_political_movements_mult = 0.25
+			state_standard_of_living_add = 2
+		}
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_tech_research_speed_mult = 0.03
+			country_weekly_innovation_add = 25
+			country_prestige_mult = 0.05
+			country_influence_mult = 0.10
+		}
+	}
+}
+
+# Social Control mode — oppressive coordination.
+# Reduces turmoil, radicals; increases government IG attraction.
+# Only available with oppressive laws.
+pm_consciousness_network_social_control = {
+	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
+
+	unlocking_laws = {
+		law_secret_police
+		law_single_party_state
+		law_autocracy
+		law_mandatory_augmentation
+		law_intrusive_surveillance
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_turmoil_effects_mult = -0.25
+			state_radicals_from_political_movements_mult = -0.25
+			state_loyalists_from_political_movements_mult = -0.25
+		}
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			interest_group_in_government_approval_add = 3
+			interest_group_in_government_attraction_mult = 0.10
+			country_authority_add = 100
+			country_monthly_loyalists_add = 0.001
+		}
+	}
+}

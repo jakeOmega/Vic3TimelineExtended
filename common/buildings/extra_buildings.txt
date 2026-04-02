@@ -2158,3 +2158,48 @@ REPLACE_OR_CREATE:building_nanofabrication_center = {
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
+
+#==================================================
+# Consciousness Network
+#==================================================
+
+REPLACE_OR_CREATE:building_consciousness_network_construction_site = {
+	building_group = bg_government	
+	icon = "gfx/interface/icons/building_icons/network.dds"
+	city_type = city
+	levels_per_mesh = -1
+	
+	unlocking_technologies = {
+		telepathic_communities
+	}
+
+	production_method_groups = {
+		pmg_base_building_consciousness_network_construction_site
+	}
+
+	required_construction = construction_cost_medium
+	
+	expandable = no
+	
+	ownership_type = no_ownership
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+REPLACE_OR_CREATE:building_consciousness_network = {
+	building_group = bg_government	
+	icon = "gfx/interface/icons/building_icons/network.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	production_method_groups = {
+		pmg_base_building_consciousness_network
+		pmg_consciousness_network_mode
+	}
+
+	required_construction = construction_cost_canal
+	
+	buildable = no
+	expandable = no
+	ownership_type = no_ownership
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}

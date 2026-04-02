@@ -102,6 +102,7 @@ on_monthly_pulse_state = {
 		mind_upload_nexus_on_action
 		antimatter_facility_on_action
 		nanofabrication_center_on_action
+		consciousness_network_on_action
 		pollution_on_action
 		war_propaganda_on_action
 		state_yearly_cultural_acceptance_add_on_action
@@ -2237,6 +2238,31 @@ nanofabrication_center_on_action = {
 				add_modifier = {
 					name = nanofabrication_center_progress
 					multiplier = this.var:nanofabrication_center_progress_var
+				}
+			}
+		}
+	}
+}
+
+#==================================================
+# Consciousness Network Construction On-Action
+#==================================================
+
+consciousness_network_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_building = building_consciousness_network_construction_site
+			}
+			consciousness_network_construction = yes
+			every_scope_building = {
+				limit = {
+					is_building_type = building_consciousness_network_construction_site
+				}
+				remove_modifier = consciousness_network_progress
+				add_modifier = {
+					name = consciousness_network_progress
+					multiplier = this.var:consciousness_network_progress_var
 				}
 			}
 		}

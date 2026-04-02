@@ -361,6 +361,8 @@
  colonial_stability_bar_desc:0 "Measures the stability of our colonial holdings. At 100, the empire is fully integrated. At 0, it collapses."
  colonial_unrest_suppressed_modifier_desc:0 "Military force has been used to suppress unrest in a colonial territory, at the cost of our international reputation."
  colonial_war_exhaustion_modifier_desc:0 "A brutal colonial conflict has drained our military resources and sapped the nation's morale."
+ consciousness_network_progress:0 "Consciousness Network Progress"
+ consciousness_network_progress_desc:0 "Tracks accumulated progress toward completing the Consciousness Network."
  construction:0 "Construction Services"
  construction_cost_scaling:0 "Development Cost Scaling"
  construction_cost_scaling_desc:0 "Higher GDP per capita increases construction costs, reflecting more expensive labor and real estate markets. Provides a natural catchup mechanism for developing nations."

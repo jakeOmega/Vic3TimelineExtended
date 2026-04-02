@@ -3078,3 +3078,17 @@ building_total_nanofabrication_center_progress = {
 	color = good
 	percent = yes
 }
+
+#==================================================
+# Consciousness Network Modifier Types
+#==================================================
+
+building_annual_consciousness_network_progress = {
+	color = good
+	percent = yes
+}
+
+building_total_consciousness_network_progress = {
+	color = good
+	percent = yes
+}

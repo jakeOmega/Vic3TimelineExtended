@@ -17,18 +17,21 @@ class ModState:
             if not file_name.endswith(".yml"):
                 continue
             file_path = os.path.join(loc_path, file_name)
-            with open(file_path, "r", encoding="utf-8") as f:
-                for line in f:
-                    if line.startswith("#") or (":" not in line):
-                        continue
-                    key, value = line.split(":", 1)
-                    key = key.strip()
-                    quote_locations = [i for i, c in enumerate(value) if c == '"']
-                    if len(quote_locations) >= 2:
-                        value = value[
-                            quote_locations[0] + 1 : quote_locations[1]
-                        ].strip()
-                    self.localization[key] = value
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    for line in f:
+                        if line.startswith("#") or (":" not in line):
+                            continue
+                        key, value = line.split(":", 1)
+                        key = key.strip()
+                        quote_locations = [i for i, c in enumerate(value) if c == '"']
+                        if len(quote_locations) >= 2:
+                            value = value[
+                                quote_locations[0] + 1 : quote_locations[1]
+                            ].strip()
+                        self.localization[key] = value
+            except Exception as e:
+                print(f"WARNING: Failed to read localization file {file_path}: {e}")
         # Invalidate reverse localization cache when new loc is added
         self._reverse_loc = None
 
@@ -36,6 +39,9 @@ class ModState:
         for entity_type, dir_path in base_game_dir.items():
             self.base_parsers[entity_type] = ParadoxFileParser()
             self.mod_parsers[entity_type] = ParadoxFileParser()
+            if not os.path.isdir(dir_path):
+                print(f"WARNING: Base game directory not found: {dir_path}")
+                continue
             self.load_files_from_directory(entity_type, dir_path, base_game=True)
 
             if diff:
@@ -45,9 +51,13 @@ class ModState:
                 )
             else:
                 if entity_type in mod_dir:
-                    self.load_files_from_directory(
-                        entity_type, mod_dir[entity_type], base_game=False
-                    )
+                    mod_dir_path = mod_dir[entity_type]
+                    if os.path.isdir(mod_dir_path):
+                        self.load_files_from_directory(
+                            entity_type, mod_dir_path, base_game=False
+                        )
+                    else:
+                        print(f"WARNING: Mod directory not found: {mod_dir_path}")
 
         # Load mod-only entity types (not in base game)
         if not diff and isinstance(mod_dir, dict):
@@ -59,6 +69,8 @@ class ModState:
                         self.load_files_from_directory(
                             entity_type, dir_path, base_game=False
                         )
+                    else:
+                        print(f"WARNING: Mod-only directory not found: {dir_path}")
 
     def load_files_from_directory(self, entity_type, dir_path, base_game=True):
         for file_name in os.listdir(dir_path):

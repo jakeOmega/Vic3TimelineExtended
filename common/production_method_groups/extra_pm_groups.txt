@@ -1508,3 +1508,32 @@ pmg_base_building_nanofabrication_center = {
 		pm_nanofabrication_center
 	}
 }
+
+#==================================================
+# Consciousness Network PMGs
+#==================================================
+
+pmg_base_building_consciousness_network_construction_site = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_consciousness_network_construction_paused
+		pm_consciousness_network_construction_slow
+		pm_consciousness_network_construction_medium
+		pm_consciousness_network_construction_fast
+	}
+}
+
+pmg_base_building_consciousness_network = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_consciousness_network
+	}
+}
+
+pmg_consciousness_network_mode = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_consciousness_network_open
+		pm_consciousness_network_social_control
+	}
+}

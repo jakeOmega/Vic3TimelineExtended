@@ -4654,3 +4654,13 @@ nanofabrication_center_progress = {
 
 	building_total_nanofabrication_center_progress = 1
 }
+
+#==================================================
+# Consciousness Network Progress Modifier
+#==================================================
+
+consciousness_network_progress = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds"
+
+	building_total_consciousness_network_progress = 1
+}

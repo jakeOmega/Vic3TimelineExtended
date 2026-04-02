@@ -10,9 +10,12 @@ Query:  Invoke-RestMethod http://localhost:8950/status
 """
 
 import json
+import logging
+import os
 import re
 import sys
 import time
+import traceback
 from collections import defaultdict
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, unquote
@@ -21,6 +24,25 @@ from mod_state import ModState
 from path_constants import base_game_path, doc_path, mod_path
 
 PORT = 8950
+
+# ---------------------------------------------------------------------------
+# Logging setup
+# ---------------------------------------------------------------------------
+LOG_FILE = os.path.join(mod_path, "mod_state_server.log")
+
+logger = logging.getLogger("mod_state_server")
+logger.setLevel(logging.DEBUG)
+
+_console_handler = logging.StreamHandler()
+_console_handler.setLevel(logging.INFO)
+_console_handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
+
+_file_handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
+_file_handler.setLevel(logging.DEBUG)
+_file_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s: %(message)s"))
+
+logger.addHandler(_console_handler)
+logger.addHandler(_file_handler)
 
 # ---------------------------------------------------------------------------
 # Path configuration (mirrors mod_state_script.py)
@@ -107,6 +129,359 @@ mod_paths = {
 # ---------------------------------------------------------------------------
 ms: ModState = None  # type: ignore[assignment]
 startup_elapsed: float = 0.0
+engine_docs: dict = {}  # Parsed engine documentation (effects, triggers, etc.)
+dev_reference_docs: dict = {}  # .md files from base game common/ dirs
+
+
+# ---------------------------------------------------------------------------
+# Engine docs parser
+# ---------------------------------------------------------------------------
+ENGINE_DOCS_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(mod_path)),  # Victoria 3 user dir
+    "docs",
+)
+
+def _parse_effects_triggers_log(filepath: str) -> list[dict]:
+    """Parse effects.log / triggers.log format:
+    ## name
+    description lines...
+    **Supported Scopes**: scope1, scope2
+    **Supported Targets**: target1, target2
+    """
+    entries = []
+    try:
+        with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+            lines = f.readlines()
+    except Exception as e:
+        logger.error(f"Failed to read engine doc {filepath}: {e}")
+        return entries
+
+    current = None
+    for line in lines:
+        line = line.rstrip("\n")
+        if line.startswith("## "):
+            if current:
+                current["description"] = current["description"].strip()
+                entries.append(current)
+            current = {"name": line[3:].strip(), "description": "", "scopes": [], "targets": []}
+        elif current:
+            if line.startswith("**Supported Scopes**:"):
+                scopes_text = line.split(":", 1)[1].strip()
+                current["scopes"] = [s.strip() for s in scopes_text.split(",") if s.strip()]
+            elif line.startswith("**Supported Targets**:"):
+                targets_text = line.split(":", 1)[1].strip()
+                current["targets"] = [t.strip() for t in targets_text.split(",") if t.strip()]
+            else:
+                current["description"] += line + "\n"
+    if current:
+        current["description"] = current["description"].strip()
+        entries.append(current)
+    return entries
+
+
+def _parse_modifiers_log(filepath: str) -> list[dict]:
+    """Parse modifiers.log format:
+    modifier_name:
+      Mask: mask_type
+      Name: Display Name
+      Description: ...
+    """
+    entries = []
+    try:
+        with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+            lines = f.readlines()
+    except Exception as e:
+        logger.error(f"Failed to read engine doc {filepath}: {e}")
+        return entries
+
+    current = None
+    for line in lines:
+        stripped = line.rstrip("\n")
+        if stripped.startswith("---"):
+            continue
+        # New modifier entry: starts at column 0 and ends with ':'
+        if stripped and not stripped[0].isspace() and stripped.endswith(":"):
+            if current:
+                entries.append(current)
+            current = {"name": stripped[:-1], "mask": "", "display_name": "", "description": ""}
+        elif current and stripped.startswith("  "):
+            kv = stripped.strip()
+            if kv.startswith("Mask:"):
+                current["mask"] = kv.split(":", 1)[1].strip()
+            elif kv.startswith("Name:"):
+                current["display_name"] = kv.split(":", 1)[1].strip()
+            elif kv.startswith("Description:"):
+                current["description"] = kv.split(":", 1)[1].strip()
+    if current:
+        entries.append(current)
+    return entries
+
+
+def _parse_event_targets_log(filepath: str) -> list[dict]:
+    """Parse event_targets.log — uses ### headers with Input/Output Scopes.
+    Format:
+    ### name
+    description
+    Input Scopes: scope1, scope2
+    Output Scopes: scope1, scope2
+    """
+    entries = []
+    try:
+        with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+            lines = f.readlines()
+    except Exception as e:
+        logger.error(f"Failed to read engine doc {filepath}: {e}")
+        return entries
+
+    current = None
+    for line in lines:
+        stripped = line.rstrip("\n")
+        if stripped.startswith("### "):
+            if current:
+                current["description"] = current["description"].strip()
+                entries.append(current)
+            current = {
+                "name": stripped[4:].strip(),
+                "description": "",
+                "input_scopes": [],
+                "output_scopes": [],
+                "requires_data": False,
+            }
+        elif current:
+            if stripped.startswith("Input Scopes:"):
+                scopes_text = stripped.split(":", 1)[1].strip()
+                current["input_scopes"] = [s.strip() for s in scopes_text.split(",") if s.strip()]
+                # Also expose as "scopes" for consistent filtering
+                current["scopes"] = current["input_scopes"]
+            elif stripped.startswith("Output Scopes:"):
+                scopes_text = stripped.split(":", 1)[1].strip()
+                current["output_scopes"] = [s.strip() for s in scopes_text.split(",") if s.strip()]
+            elif stripped.startswith("Requires Data:"):
+                current["requires_data"] = stripped.split(":", 1)[1].strip().lower() == "yes"
+            elif stripped.startswith("#"):
+                # New section header — ignore
+                pass
+            else:
+                current["description"] += stripped + "\n"
+    if current:
+        current["description"] = current["description"].strip()
+        entries.append(current)
+    return entries
+
+
+def _parse_on_actions_log(filepath: str) -> list[dict]:
+    """Parse on_actions.log format:
+    --------------------
+    name:
+    From Code: Yes/No
+    Expected Scope: scope
+    --------------------
+    """
+    entries = []
+    try:
+        with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+            lines = f.readlines()
+    except Exception as e:
+        logger.error(f"Failed to read engine doc {filepath}: {e}")
+        return entries
+
+    current = None
+    for line in lines:
+        stripped = line.rstrip("\n").strip()
+        if stripped.startswith("----"):
+            if current:
+                entries.append(current)
+            current = None
+            continue
+        if stripped.startswith("On Action Documentation"):
+            continue
+        if not stripped:
+            continue
+        # Line ending with ':' that's not a known field = new on_action name
+        if stripped.endswith(":") and not stripped.startswith("From Code") and not stripped.startswith("Expected Scope"):
+            current = {"name": stripped[:-1], "from_code": False, "scopes": []}
+        elif current:
+            if stripped.startswith("From Code:"):
+                current["from_code"] = stripped.split(":", 1)[1].strip().lower() == "yes"
+            elif stripped.startswith("Expected Scope:"):
+                scope = stripped.split(":", 1)[1].strip()
+                current["scopes"] = [scope] if scope and scope != "none" else []
+    if current:
+        entries.append(current)
+    return entries
+
+
+def _parse_custom_localization_log(filepath: str) -> list[dict]:
+    """Parse custom_localization.log format:
+    --------------------
+    name:
+    Scope: scope
+    Random Valid: yes/no
+    Entries:
+    entry1
+    entry2
+    --------------------
+    """
+    entries = []
+    try:
+        with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+            lines = f.readlines()
+    except Exception as e:
+        logger.error(f"Failed to read engine doc {filepath}: {e}")
+        return entries
+
+    current = None
+    in_entries = False
+    for line in lines:
+        stripped = line.rstrip("\n").strip()
+        if stripped.startswith("----"):
+            if current:
+                entries.append(current)
+            current = None
+            in_entries = False
+            continue
+        if stripped.startswith("Custom Localization Documentation"):
+            continue
+        if not stripped:
+            continue
+        # Name line ends with ':' and isn't a field
+        if (
+            stripped.endswith(":")
+            and not stripped.startswith("Scope")
+            and not stripped.startswith("Random Valid")
+            and not stripped.startswith("Entries")
+            and current is None
+        ):
+            current = {"name": stripped[:-1], "scopes": [], "random_valid": False, "loc_entries": []}
+            in_entries = False
+        elif current:
+            if stripped.startswith("Scope:"):
+                scope = stripped.split(":", 1)[1].strip()
+                current["scopes"] = [scope] if scope and scope != "none" else []
+            elif stripped.startswith("Random Valid:"):
+                current["random_valid"] = stripped.split(":", 1)[1].strip().lower() == "yes"
+            elif stripped.startswith("Entries:"):
+                in_entries = True
+            elif in_entries:
+                current["loc_entries"].append(stripped)
+    if current:
+        entries.append(current)
+    return entries
+
+
+def _group_similar_entries(entries: list[dict]) -> list[dict]:
+    """Group entries that differ only by a building/entity name in the middle.
+    E.g., building_coal_mine_throughput_add and building_iron_mine_throughput_add
+    become a single pattern entry: building_{name}_throughput_add
+    """
+    # Build pattern groups by trying to find common prefix+suffix
+    pattern_groups: dict[str, list[dict]] = {}
+    ungrouped = []
+
+    # Known patterns: building_{name}_something, interest_group_ig_{name}_something
+    patterns = [
+        (r'^(building_)(.+?)(_throughput_add|_throughput_mult|_max_level_add|_employees_add|_employees_mult|_mortality_mult|_unincorporated_throughput_add)$', 'building_{name}_{suffix}'),
+        (r'^(building_group_bg_)(.+?)(_throughput_add|_throughput_mult|_tax_mult|_employee_mult|_urbanization_mult|_wages_mult|_fertility_mult|_expected_sol_mult)$', 'building_group_bg_{group}_{suffix}'),
+        (r'^(interest_group_ig_)(.+?)(_pol_str_mult|_approval_add|_pop_attraction_mult)$', 'interest_group_ig_{ig}_{suffix}'),
+        (r'^(country_institution_impact_)(.+?)(_mult)$', 'country_institution_impact_{institution}_mult'),
+        (r'^(pop_)(.+?)(_political_strength_mult|_mortality_mult|_pol_str_mult)$', 'pop_{pop_type}_{suffix}'),
+        (r'^(state_pop_type_)(.+?)(_mortality_mult)$', 'state_pop_type_{pop_type}_mortality_mult'),
+    ]
+
+    for entry in entries:
+        name = entry.get("name", "")
+        grouped = False
+        for regex, template in patterns:
+            m = re.match(regex, name)
+            if m:
+                # Build pattern key from prefix + placeholder + suffix
+                suffix = m.group(3).lstrip("_") if m.lastindex >= 3 else ""
+                pattern_key = template.replace("{suffix}", suffix)
+                if pattern_key not in pattern_groups:
+                    pattern_groups[pattern_key] = []
+                pattern_groups[pattern_key].append(entry)
+                grouped = True
+                break
+        if not grouped:
+            ungrouped.append(entry)
+
+    # Convert groups to summary entries
+    grouped_entries = []
+    for pattern_key, members in pattern_groups.items():
+        example = members[0]
+        member_names = sorted(set(m["name"] for m in members))
+        grouped_entries.append({
+            "pattern": pattern_key,
+            "count": len(members),
+            "members": member_names,
+            "description": example.get("description", ""),
+            "scopes": example.get("scopes", []),
+            "mask": example.get("mask", ""),
+        })
+
+    return grouped_entries, ungrouped
+
+
+def _load_engine_docs():
+    """Parse all engine documentation files into structured data."""
+    global engine_docs
+    engine_docs = {}
+
+    doc_files = {
+        "effects": ("effects.log", _parse_effects_triggers_log),
+        "triggers": ("triggers.log", _parse_effects_triggers_log),
+        "modifiers": ("modifiers.log", _parse_modifiers_log),
+        "event-targets": ("event_targets.log", _parse_event_targets_log),
+        "on-actions": ("on_actions.log", _parse_on_actions_log),
+        "custom-localization": ("custom_localization.log", _parse_custom_localization_log),
+    }
+
+    for key, (filename, parser_fn) in doc_files.items():
+        filepath = os.path.join(ENGINE_DOCS_DIR, filename)
+        if os.path.isfile(filepath):
+            try:
+                engine_docs[key] = parser_fn(filepath)
+                logger.info(f"Parsed engine doc {filename}: {len(engine_docs[key])} entries")
+            except Exception as e:
+                logger.error(f"Failed to parse engine doc {filename}: {e}")
+                engine_docs[key] = []
+        else:
+            logger.warning(f"Engine doc not found: {filepath}")
+            engine_docs[key] = []
+
+
+def _load_dev_reference_docs():
+    """Scan base game common/ directories for .md files (developer reference docs).
+    Stores them keyed by directory name (e.g. 'buildings', 'production_methods').
+    """
+    global dev_reference_docs
+    dev_reference_docs = {}
+    common_dir = os.path.join(base_game_path, "game", "common")
+    if not os.path.isdir(common_dir):
+        logger.warning(f"Base game common dir not found: {common_dir}")
+        return
+    for root, dirs, files in os.walk(common_dir):
+        for fname in files:
+            if not fname.endswith(".md"):
+                continue
+            fpath = os.path.join(root, fname)
+            # Key = relative path from common/, e.g. "buildings/buildings.md"
+            rel = os.path.relpath(fpath, common_dir).replace("\\", "/")
+            # Also derive a short directory key, e.g. "buildings"
+            dir_key = os.path.relpath(os.path.dirname(fpath), common_dir).replace("\\", "/")
+            try:
+                with open(fpath, "r", encoding="utf-8", errors="replace") as f:
+                    content = f.read()
+                dev_reference_docs[rel] = {
+                    "path": rel,
+                    "filename": fname,
+                    "directory": dir_key,
+                    "content": content,
+                    "size": len(content),
+                }
+            except Exception as e:
+                logger.error(f"Failed to read dev reference doc {fpath}: {e}")
+    logger.info(f"Loaded {len(dev_reference_docs)} developer reference docs from base game")
 
 
 # ---------------------------------------------------------------------------
@@ -204,6 +579,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         except KeyError as exc:
             self._respond_json({"error": f"Not found: {exc}"}, 404)
         except Exception as exc:
+            logger.error(f"Error handling GET {self.path}: {exc}\n{traceback.format_exc()}")
             self._respond_json({"error": str(exc)}, 500)
 
     def do_POST(self):
@@ -214,6 +590,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 _load_mod_state()
                 self._respond_json({"status": "reloaded", "startup_seconds": startup_elapsed})
             except Exception as exc:
+                logger.error(f"Error during reload: {exc}\n{traceback.format_exc()}")
                 self._respond_json({"error": str(exc)}, 500)
         else:
             self._respond_json({"error": "Unknown POST endpoint"}, 404)
@@ -251,6 +628,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "script-values": lambda: self._script_values(rest),
             "decrees": lambda: self._decrees(rest),
             "on-actions": lambda: self._on_actions(rest),
+            # Technology effects endpoint
+            "technology-effects": lambda: self._technology_effects(rest),
+            # Engine docs endpoints
+            "engine-docs": lambda: self._engine_docs(rest, params),
+            # Developer reference docs (.md files from base game)
+            "dev-docs": lambda: self._dev_docs(rest, params),
         }
         handler = dispatch.get(ep)
         if handler is None:
@@ -1071,6 +1454,241 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
         return [{"id": oaid} for oaid in oas]
 
+    # ---- technology effects -----------------------------------------------
+    def _technology_effects(self, parts):
+        """GET /technology-effects/<tech_id>
+        Returns ALL effects of a technology: direct modifiers, unlocked PMs,
+        buildings, combat units, laws, institutions, etc.
+        """
+        if not parts:
+            return {"error": "Provide a tech ID, e.g. /technology-effects/nuclear_fission"}
+        tid = parts[0]
+        techs = ms.get_data("Technologies")
+        if not techs:
+            return {"error": "Technologies data not loaded"}
+        if tid not in techs:
+            raise KeyError(tid)
+
+        td = get_entity_data(techs[tid])
+        era_str = get_field(td, "era", "era_0")
+        info: dict = {
+            "id": tid,
+            "name": ms.localize(tid),
+            "era": int(era_str.split("_")[-1]),
+            "description": ms.get_description(tid) or "",
+        }
+
+        # Direct modifiers from the tech definition
+        modifier = get_field(td, "modifier")
+        if modifier and isinstance(modifier, dict):
+            info["direct_modifiers"] = {
+                k: v[1] if isinstance(v, tuple) else v
+                for k, v in modifier.items()
+            }
+        else:
+            info["direct_modifiers"] = {}
+
+        # Prerequisites
+        prereqs = get_field(td, "unlocking_technologies")
+        if prereqs and isinstance(prereqs, list):
+            info["prerequisites"] = [
+                {"id": pt, "name": ms.localize(pt)} for pt in prereqs
+            ]
+
+        # Find everything this tech unlocks across all entity types
+        unlocked = {}
+        unlock_types = {
+            "Buildings": "buildings",
+            "PMs": "production_methods",
+            "Combat Unit Types": "combat_units",
+            "Laws": "laws",
+            "Institutions": "institutions",
+            "Decisions": "decisions",
+            "Journal Entries": "journal_entries",
+            "Diplomatic Actions": "diplomatic_actions",
+            "Company Types": "company_types",
+            "Mobilization Options": "mobilization_options",
+        }
+
+        for etype, output_key in unlock_types.items():
+            data = ms.get_data(etype)
+            if not data:
+                continue
+            found = []
+            for eid, raw in data.items():
+                ed = get_entity_data(raw)
+                ut = get_field(ed, "unlocking_technologies")
+                if ut and isinstance(ut, list) and tid in ut:
+                    entry = {"id": eid, "name": ms.localize(eid)}
+                    # For PMs, include modifier details
+                    if etype == "PMs":
+                        for mod_key in ("building_modifiers", "country_modifiers", "state_modifiers"):
+                            mod_data = get_field(ed, mod_key)
+                            if mod_data and isinstance(mod_data, dict):
+                                entry[mod_key] = {}
+                                for section, section_data in mod_data.items():
+                                    if isinstance(section_data, tuple) and len(section_data) >= 2:
+                                        section_data = section_data[1]
+                                    if isinstance(section_data, dict):
+                                        entry[mod_key][section] = {
+                                            k: v[1] if isinstance(v, tuple) else v
+                                            for k, v in section_data.items()
+                                        }
+                    found.append(entry)
+            if found:
+                unlocked[output_key] = found
+
+        info["unlocks"] = unlocked
+
+        # Find techs that require this one
+        dependents = []
+        for other_tid, other_raw in techs.items():
+            if other_tid == tid:
+                continue
+            other_td = get_entity_data(other_raw)
+            other_prereqs = get_field(other_td, "unlocking_technologies")
+            if other_prereqs and isinstance(other_prereqs, list) and tid in other_prereqs:
+                other_era = get_field(other_td, "era", "era_0")
+                dependents.append({
+                    "id": other_tid,
+                    "name": ms.localize(other_tid),
+                    "era": int(other_era.split("_")[-1]),
+                })
+        if dependents:
+            info["dependent_technologies"] = dependents
+
+        return info
+
+    # ---- engine docs ------------------------------------------------------
+    def _engine_docs(self, parts, params):
+        """GET /engine-docs                      - list available doc types
+        GET /engine-docs/<type>               - list all entries of a type
+        GET /engine-docs/<type>?q=<search>    - search entries
+        GET /engine-docs/<type>?scope=<scope> - filter by scope
+        GET /engine-docs/<type>?mask=<mask>   - filter by mask (modifiers only)
+        GET /engine-docs/<type>?group=true    - group similar entries
+        """
+        if not parts:
+            return {
+                "available_types": list(engine_docs.keys()),
+                "counts": {k: len(v) for k, v in engine_docs.items()},
+            }
+
+        doc_type = parts[0]
+        if doc_type not in engine_docs:
+            raise KeyError(f"Unknown engine doc type: {doc_type}. Available: {list(engine_docs.keys())}")
+
+        entries = engine_docs[doc_type]
+        query = params.get("q", [""])[0].lower()
+        scope_filter = params.get("scope", [""])[0].lower()
+        mask_filter = params.get("mask", [""])[0].lower()
+        do_group = params.get("group", ["false"])[0].lower() in ("true", "1", "yes")
+        limit = int(params.get("limit", ["500"])[0])
+
+        # Apply filters
+        filtered = entries
+        if query:
+            filtered = [
+                e for e in filtered
+                if query in e.get("name", "").lower()
+                or query in e.get("description", "").lower()
+                or query in e.get("display_name", "").lower()
+            ]
+        if scope_filter:
+            filtered = [
+                e for e in filtered
+                if scope_filter in [s.lower() for s in e.get("scopes", [])]
+                or scope_filter in [s.lower() for s in e.get("input_scopes", [])]
+                or scope_filter in [s.lower() for s in e.get("output_scopes", [])]
+            ]
+        if mask_filter:
+            filtered = [
+                e for e in filtered
+                if mask_filter in e.get("mask", "").lower()
+            ]
+
+        # Grouping
+        if do_group:
+            grouped, ungrouped = _group_similar_entries(filtered)
+            return {
+                "type": doc_type,
+                "grouped_patterns": grouped,
+                "ungrouped_count": len(ungrouped),
+                "ungrouped": ungrouped[:limit],
+            }
+
+        return {
+            "type": doc_type,
+            "count": len(filtered),
+            "entries": filtered[:limit],
+        }
+
+    # ---- developer reference docs -----------------------------------------
+    def _dev_docs(self, parts, params):
+        """GET /dev-docs                       - list available docs by directory
+        GET /dev-docs/<directory>           - get all docs in a directory
+        GET /dev-docs/<dir>/<file>          - get specific doc content
+        GET /dev-docs?q=<search>            - search doc contents
+        """
+        query = params.get("q", [""])[0].lower()
+
+        if not parts and not query:
+            # List all docs grouped by directory
+            by_dir: dict[str, list] = {}
+            for path, doc in dev_reference_docs.items():
+                d = doc["directory"]
+                if d not in by_dir:
+                    by_dir[d] = []
+                by_dir[d].append({"filename": doc["filename"], "path": path, "size": doc["size"]})
+            return {
+                "directories": sorted(by_dir.keys()),
+                "count": len(dev_reference_docs),
+                "docs_by_directory": {k: by_dir[k] for k in sorted(by_dir.keys())},
+            }
+
+        if not parts and query:
+            # Search across all docs
+            results = []
+            for path, doc in dev_reference_docs.items():
+                if query in doc["content"].lower():
+                    # Find matching lines for context
+                    matching_lines = []
+                    for i, line in enumerate(doc["content"].splitlines(), 1):
+                        if query in line.lower():
+                            matching_lines.append({"line": i, "text": line.rstrip()})
+                    results.append({
+                        "path": path,
+                        "directory": doc["directory"],
+                        "match_count": len(matching_lines),
+                        "matches": matching_lines[:20],
+                    })
+            return {"query": query, "count": len(results), "results": results}
+
+        # /dev-docs/<path...> — reconstruct path from parts
+        req_path = "/".join(parts)
+
+        # Exact match
+        if req_path in dev_reference_docs:
+            doc = dev_reference_docs[req_path]
+            return {"path": doc["path"], "directory": doc["directory"], "content": doc["content"]}
+
+        # Try as directory — list all docs in that dir
+        matches = {
+            p: d for p, d in dev_reference_docs.items()
+            if d["directory"] == req_path or d["directory"].startswith(req_path + "/")
+        }
+        if matches:
+            docs = []
+            for p, d in matches.items():
+                docs.append({"path": p, "filename": d["filename"], "size": d["size"]})
+            # If only one doc in the directory, return its content directly
+            if len(docs) == 1:
+                single = dev_reference_docs[docs[0]["path"]]
+                return {"path": single["path"], "directory": single["directory"], "content": single["content"]}
+            return {"directory": req_path, "count": len(docs), "docs": docs}
+
+        raise KeyError(f"No dev doc found for: {req_path}")
+
     # ---- response helpers -------------------------------------------------
     def _respond_json(self, data, status=200):
         body = json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
@@ -1090,23 +1708,58 @@ class ModStateHandler(BaseHTTPRequestHandler):
 # ---------------------------------------------------------------------------
 def _load_mod_state():
     global ms, startup_elapsed
-    print("Loading mod state… (this may take a minute)")
+    logger.info("Loading mod state… (this may take a minute)")
     t0 = time.time()
-    ms = ModState(base_game_paths, mod_paths)
-    ms.add_localization(base_game_path + r"\game\localization\english")
-    ms.add_localization(mod_path + r"\localization\english")
-    ms.add_localization(mod_path + r"\localization\english\replace")
+    try:
+        ms = ModState(base_game_paths, mod_paths)
+    except Exception as e:
+        logger.error(f"Failed to initialize ModState: {e}\n{traceback.format_exc()}")
+        raise
+
+    # Load localization — wrap each call so one bad directory doesn't kill everything
+    for loc_dir in [
+        base_game_path + r"\game\localization\english",
+        mod_path + r"\localization\english",
+        mod_path + r"\localization\english\replace",
+    ]:
+        try:
+            if os.path.isdir(loc_dir):
+                ms.add_localization(loc_dir)
+            else:
+                logger.warning(f"Localization directory not found: {loc_dir}")
+        except Exception as e:
+            logger.error(f"Failed to load localization from {loc_dir}: {e}")
+
     startup_elapsed = time.time() - t0
-    print(f"Loaded in {startup_elapsed:.1f}s  "
-          f"({len(ms.mod_parsers)} entity types, {len(ms.localization)} loc keys)")
+    logger.info(
+        f"Loaded in {startup_elapsed:.1f}s  "
+        f"({len(ms.mod_parsers)} entity types, {len(ms.localization)} loc keys)"
+    )
+
+    # Load engine documentation
+    try:
+        _load_engine_docs()
+    except Exception as e:
+        logger.error(f"Failed to load engine docs: {e}\n{traceback.format_exc()}")
+
+    # Load developer reference docs (.md files from base game)
+    try:
+        _load_dev_reference_docs()
+    except Exception as e:
+        logger.error(f"Failed to load dev reference docs: {e}\n{traceback.format_exc()}")
+
     # Regenerate docs/ text files from the freshly parsed data
-    from mod_state_script import generate_docs
-    generate_docs(ms)
+    try:
+        from mod_state_script import generate_docs
+        generate_docs(ms)
+    except Exception as e:
+        logger.error(f"Failed to regenerate docs: {e}\n{traceback.format_exc()}")
 
 
 def main():
     _load_mod_state()
     server = HTTPServer(("127.0.0.1", PORT), ModStateHandler)
+    logger.info(f"Mod-state server running on http://127.0.0.1:{PORT}")
     print(f"\nMod-state server running on http://127.0.0.1:{PORT}")
     print("Endpoints: /status  /laws  /technologies  /buildings  /goods")
     print("           /combat-units  /ideologies  /keys/<type>  /raw/<type>")
@@ -1115,7 +1768,9 @@ def main():
     print("           /decisions  /script-values  /decrees  /on-actions")
     print("           /references/<key>  /tech-tree/<id>  /modifier-search?q=...")
     print("           /unlocked-by/<tech>  /filter/<type>?field=&value=")
-    print("           POST /reload")
+    print("           /technology-effects/<tech>  /engine-docs/<type>?q=&scope=&group=")
+    print("           /dev-docs/<dir>  /dev-docs?q=<search>  POST /reload")
+    print(f"Log file: {LOG_FILE}")
     print("Press Ctrl+C to stop.\n")
     try:
         server.serve_forever()
