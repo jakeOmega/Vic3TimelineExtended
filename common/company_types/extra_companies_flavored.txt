@@ -664,6 +664,7 @@ company_nvidia = {
 	extension_building_types = {
 		building_software_industry # For CUDA and AI software
 		building_robotics_industry
+		building_mind_upload_nexus
 	}
 	potential = {
 		always = yes
@@ -690,6 +691,7 @@ company_nvidia = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_electronic_components
+		prestige_good_generic_software
 	}
 	ai_will_do = {
 		has_technology_researched = computer_aided_design
@@ -717,6 +719,7 @@ company_google = {
 	extension_building_types = {
 		building_robotics_industry
 		building_automotive_industry # For Waymo
+		building_mind_upload_nexus
 	}
 	potential = {
 		always = yes
@@ -741,10 +744,12 @@ company_google = {
 	prosperity_modifier = {
 		goods_output_digital_assets_mult = 0.15
 		goods_output_digital_access_mult = 0.05
+
 		state_building_googleplex_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
+		prestige_good_precision_robotics
 	}
 	ai_will_do = {
 		has_technology_researched = world_wide_web
@@ -825,6 +830,7 @@ company_spacex = {
 		building_network_infrastructure # For Starlink
 		building_advanced_material_fabricator
 		building_space_elevator
+		building_solar_receiver
 	}
 	potential = {
 		always = yes
@@ -851,7 +857,7 @@ company_spacex = {
 		state_building_spacex_starbase_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_heavy_lift_launch 
+		prestige_good_heavy_lift_launch
 	}
 	ai_will_do = {
 		has_technology_researched = reusable_rocketry
@@ -932,6 +938,7 @@ company_openai = {
 	extension_building_types = {
 		building_robotics_industry
 		building_network_infrastructure
+		building_mind_upload_nexus
 	}
 	potential = {
 		always = yes
@@ -960,10 +967,13 @@ company_openai = {
 	prosperity_modifier = {
 		country_tech_research_speed_mult = 0.10
 		country_weekly_innovation_mult = 0.10
+		goods_output_digital_assets_mult = 0.1
+		goods_output_robotics_mult = 0.1
 		state_building_openai_research_lab_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
+		prestige_good_precision_robotics
 	}
 	ai_will_do = {
 		has_technology_researched = machine_learning
@@ -1100,6 +1110,7 @@ company_asml = {
 	}
 	extension_building_types = {
 		building_advanced_material_fabricator
+		building_nanofabrication_center
 	}
 	potential = {
 		always = yes
@@ -1125,11 +1136,13 @@ company_asml = {
 	prosperity_modifier = {
 		building_electronic_components_and_semiconductor_industry_throughput_add = 0.25 # Crucial for all semiconductors
 		country_production_tech_research_speed_mult = 0.1
+		goods_output_electronic_components_mult = 0.1
 		state_building_asml_veldhoven_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_electronic_components
 		prestige_good_generic_tools
+
 	}
 	ai_will_do = {
 		has_technology_researched = early_nanotechnology
@@ -1159,7 +1172,8 @@ company_lockheed_martin = {
 		building_software_industry
 		building_advanced_material_fabricator
 		building_space_elevator
-        building_space_mine
+		building_space_mine
+		building_antimatter_engine
 	}
 	potential = {
 		always = yes
@@ -1186,8 +1200,9 @@ company_lockheed_martin = {
 		state_building_lockheed_skunk_works_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_advanced_aircraft 
-		prestige_good_heavy_lift_launch 
+		prestige_good_advanced_aircraft
+		prestige_good_heavy_lift_launch
+
 	}
     ai_will_do = {
         has_technology_researched = stealth_technology
@@ -2923,4 +2938,414 @@ company_jsw_steel = {
             level = 15
         }
     }
+}
+
+# --- Near-Future Era (2020s-2050s) ---
+
+# Axiom Space (2016) — first commercial space station company
+company_axiom_space = {
+	icon = "gfx/interface/icons/company_icons/basic_motors.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_harbor_shipbuilding.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_TEXAS # Houston — Axiom's base, NASA JSC neighbor
+		STATE_CALIFORNIA
+	}
+	building_types = {
+		building_aerospace_industry
+		building_tourism_industry
+		building_space_mine
+		building_axiom_space_hq
+	}
+	extension_building_types = {
+		building_space_elevator
+		building_solar_receiver
+		building_network_infrastructure # Satellite constellations
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		"goods_production_rank(g:launch_capacity)" <= 5
+	}
+	possible = {
+		has_technology_researched = reusable_rocketry
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_aerospace_industry
+				level >= 5
+			}
+		}
+		"goods_production_rank(g:tourism)" <= 10
+		global_country_ranking <= 10
+		exists = ig:ig_industrialists
+		ig:ig_industrialists ?= { is_powerful = yes }
+	}
+	prosperity_modifier = {
+		goods_output_launch_capacity_mult = 0.15
+		goods_output_tourism_mult = 0.2
+		state_building_axiom_space_hq_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_heavy_lift_launch
+		prestige_good_resort_travel
+	}
+	ai_will_do = {
+		has_technology_researched = reusable_rocketry
+	}
+	ai_construction_targets = {
+		building_aerospace_industry = { level = 5 }
+		building_tourism_industry = { level = 5 }
+	}
+}
+
+# Neurovault Systems — sci-fi neurotech and consciousness corporation
+company_neurovault = {
+	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_CALIFORNIA
+		STATE_WASHINGTON
+	}
+	building_types = {
+		building_software_industry
+		building_electronic_components_and_semiconductor_industry
+		building_neurovault_hq
+	}
+	extension_building_types = {
+		building_mind_upload_nexus
+		building_nanofabrication_center
+		building_robotics_industry
+		building_network_infrastructure
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		"goods_production_rank(g:digital_assets)" <= 3
+	}
+	possible = {
+		has_technology_researched = mind_backups
+		any_scope_state = {
+			any_scope_building = {
+				OR = {
+					is_building_type = building_software_industry
+					is_building_type = building_electronic_components_and_semiconductor_industry
+				}
+				level >= 10
+			}
+		}
+		leading_producer_of = g:digital_assets
+		literacy_rate >= 0.85
+		gdp_per_capita_ranking <= 10
+	}
+	prosperity_modifier = {
+		country_weekly_innovation_mult = 0.1
+		goods_output_digital_assets_mult = 0.15
+		goods_output_advanced_materials_mult = 0.1
+		goods_output_electronic_components_mult = 0.15
+		goods_output_robotics_mult = 0.1
+		state_building_neurovault_hq_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_software
+		prestige_good_entertainment
+		prestige_good_generic_advanced_materials
+		prestige_good_generic_electronic_components
+		prestige_good_resort_travel
+		prestige_good_precision_robotics
+	}
+	ai_will_do = {
+		has_technology_researched = mind_backups
+	}
+	ai_construction_targets = {
+		building_software_industry = { level = 10 }
+		building_electronic_components_and_semiconductor_industry = { level = 10 }
+	}
+}
+
+# --- Sci-Fi Companies ---
+
+# Tycho Manufacturing & Engineering
+# Oblique ref: 2001: A Space Odyssey (Tycho Magnetic Anomaly / TMA-1)
+# Theme: Space megastructure construction, orbital engineering
+company_tycho_manufacturing = {
+	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_harbor_shipbuilding.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_FLORIDA # Cape Canaveral proximity
+		STATE_TEXAS # Space launch corridor
+	}
+	building_types = {
+		building_aerospace_industry
+		building_tycho_manufacturing_hq
+	}
+	extension_building_types = {
+		building_antimatter_engine
+		building_solar_receiver
+		building_space_elevator
+		building_advanced_material_fabricator
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		"goods_production_rank(g:launch_capacity)" <= 5
+	}
+	possible = {
+		has_technology_researched = space_elevator
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_aerospace_industry
+				level >= 5
+			}
+		}
+		country_rank >= rank_value:major_power
+		leading_producer_of = g:launch_capacity
+	}
+	prosperity_modifier = {
+		goods_output_launch_capacity_mult = 0.2
+		goods_output_advanced_materials_mult = 0.1
+		country_military_tech_research_speed_mult = 0.05
+		state_building_tycho_manufacturing_hq_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_heavy_lift_launch
+		prestige_good_generic_advanced_materials
+	}
+	ai_will_do = {
+		has_technology_researched = space_elevator
+	}
+	ai_construction_targets = {
+		building_aerospace_industry = { level = 10 }
+	}
+}
+
+# Tessier-Ashpool S.A.
+# Oblique ref: Neuromancer by William Gibson
+# Theme: Orbital AI systems, neural interfaces, luxury space habitats
+company_tessier_ashpool = {
+	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_ILE_DE_FRANCE # French dynasty connotations
+		STATE_CALIFORNIA
+	}
+	building_types = {
+		building_software_industry
+		building_tessier_ashpool_hq
+	}
+	extension_building_types = {
+		building_mind_upload_nexus
+		building_space_elevator
+		building_network_infrastructure
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		"goods_production_rank(g:digital_assets)" <= 5
+	}
+	possible = {
+		has_technology_researched = mind_backups
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_software_industry
+				level >= 10
+			}
+		}
+		literacy_rate >= 0.9
+		gdp_per_capita_ranking <= 10
+	}
+	prosperity_modifier = {
+		country_weekly_innovation_mult = 0.1
+		goods_output_digital_assets_mult = 0.15
+		goods_output_launch_capacity_mult = 0.1
+		state_building_tessier_ashpool_hq_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_software
+		prestige_good_entertainment
+		prestige_good_resort_travel
+		prestige_good_heavy_lift_launch
+	}
+	ai_will_do = {
+		has_technology_researched = mind_backups
+	}
+	ai_construction_targets = {
+		building_software_industry = { level = 15 }
+	}
+}
+
+# Hanka Precision Instruments
+# Oblique ref: Ghost in the Shell (Hanka Robotics)
+# Theme: Cybernetic prosthetics, brain-machine interfaces, nanoassembly
+company_hanka_precision = {
+	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_KANTO # Tokyo, cybernetics hub
+	}
+	building_types = {
+		building_electronic_components_and_semiconductor_industry
+		building_hanka_precision_hq
+	}
+	extension_building_types = {
+		building_nanofabrication_center
+		building_mind_upload_nexus
+		building_robotics_industry
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		"goods_production_rank(g:electronic_components)" <= 5
+	}
+	possible = {
+		has_technology_researched = biohacking_and_human_augmentation
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_electronic_components_and_semiconductor_industry
+				level >= 10
+			}
+		}
+		has_technology_researched = early_nanotechnology
+		literacy_rate >= 0.85
+	}
+	prosperity_modifier = {
+		goods_output_electronic_components_mult = 0.2
+		goods_output_advanced_materials_mult = 0.1
+		goods_output_robotics_mult = 0.15
+		state_building_hanka_precision_hq_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_advanced_materials
+		prestige_good_generic_software
+		prestige_good_generic_electronic_components
+		prestige_good_entertainment
+		prestige_good_resort_travel
+		prestige_good_precision_robotics
+	}
+	ai_will_do = {
+		has_technology_researched = biohacking_and_human_augmentation
+	}
+	ai_construction_targets = {
+		building_electronic_components_and_semiconductor_industry = { level = 15 }
+	}
+}
+
+# Yoyodyne Propulsion Systems
+# Oblique ref: Thomas Pynchon's The Crying of Lot 49 / Buckaroo Banzai
+# Theme: Exotic propulsion research, antimatter engineering, energy systems
+company_yoyodyne_propulsion = {
+	icon = "gfx/interface/icons/company_icons/basic_motors.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_NEW_JERSEY # Grover's Mill, historical sci-fi connections
+		STATE_CALIFORNIA
+	}
+	building_types = {
+		building_aerospace_industry
+		building_yoyodyne_propulsion_hq
+	}
+	extension_building_types = {
+		building_antimatter_engine
+		building_solar_receiver
+		building_advanced_material_fabricator
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		"goods_production_rank(g:launch_capacity)" <= 5
+	}
+	possible = {
+		has_technology_researched = antimatter_production
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_aerospace_industry
+				level >= 5
+			}
+		}
+		country_rank >= rank_value:major_power
+	}
+	prosperity_modifier = {
+		goods_output_launch_capacity_mult = 0.15
+		country_production_tech_research_speed_mult = 0.1
+		state_building_yoyodyne_propulsion_hq_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_heavy_lift_launch
+		prestige_good_generic_advanced_materials
+	}
+	ai_will_do = {
+		has_technology_researched = antimatter_production
+	}
+	ai_construction_targets = {
+		building_aerospace_industry = { level = 10 }
+	}
+}
+
+# Rekal Incorporated
+# Oblique ref: Philip K. Dick's "We Can Remember It for You Wholesale" (Total Recall)
+# Theme: Memory technology, virtual experience, consciousness transfer
+company_rekal = {
+	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_CALIFORNIA
+		STATE_NEW_YORK
+	}
+	building_types = {
+		building_software_industry
+		building_rekal_hq
+	}
+	extension_building_types = {
+		building_mind_upload_nexus
+		building_nanofabrication_center
+		building_network_infrastructure
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		"goods_production_rank(g:digital_assets)" <= 5
+	}
+	possible = {
+		has_technology_researched = mind_backups
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_software_industry
+				level >= 10
+			}
+		}
+		OR = {
+			leading_producer_of = g:digital_assets
+			leading_producer_of = g:services
+		}
+	}
+	prosperity_modifier = {
+		goods_output_digital_assets_mult = 0.15
+		goods_output_advanced_materials_mult = 0.1
+		country_weekly_innovation_mult = 0.05
+		state_building_rekal_hq_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_entertainment
+		prestige_good_resort_travel
+		prestige_good_generic_software
+		prestige_good_generic_advanced_materials
+	}
+	ai_will_do = {
+		has_technology_researched = mind_backups
+	}
+	ai_construction_targets = {
+		building_software_industry = { level = 15 }
+	}
 }

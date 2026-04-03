@@ -807,6 +807,7 @@ building_wonder_large_hadron_collider = {
         }
     }
     potential = {
+        owner = { has_technology_researched = world_wide_web }
         building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_large_hadron_collider }
     }
 }
@@ -833,9 +834,11 @@ building_wonder_international_space_station = {
     possible = {
         owner = {
             country_rank >= rank_value:major_power
+            has_variable = sr_completed_moon_landing
         }
     }
     potential = {
+        owner = { has_technology_researched = satellite_communications }
         building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_international_space_station }
     }
 }
@@ -866,6 +869,7 @@ building_wonder_iter = {
         }
     }
     potential = {
+        owner = { has_technology_researched = fusion_power }
         building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_iter }
     }
 }
@@ -895,6 +899,7 @@ building_wonder_svalbard_seed_vault = {
         }
     }
     potential = {
+        owner = { has_technology_researched = biotechnology }
         building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_svalbard_seed_vault }
     }
 }
@@ -924,6 +929,7 @@ building_wonder_ligo = {
         }
     }
     potential = {
+        owner = { has_technology_researched = fiber_optics }
         building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_ligo }
     }
 }
@@ -954,6 +960,7 @@ building_wonder_continental_union_hq = {
         }
     }
     potential = {
+        owner = { has_technology_researched = globalization }
         OR = {
             any_scope_building = {
                 is_building_type = building_wonder_continental_union_hq
@@ -991,6 +998,7 @@ building_wonder_peace_palace = {
         }
     }
     potential = {
+        owner = { has_technology_researched = intergovernmental_organizations }
         building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_peace_palace }
     }
 }

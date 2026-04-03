@@ -108,7 +108,7 @@ sr_safe_progress = {
 	# SpaceX or other space company bonus
 	if = {
 		limit = {
-			has_company = company_type:company_spacex
+			has_space_company = yes
 		}
 		add = 0.3
 	}
@@ -180,7 +180,7 @@ sr_ambitious_progress = {
 	# SpaceX or other space company bonus
 	if = {
 		limit = {
-			has_company = company_type:company_spacex
+			has_space_company = yes
 		}
 		add = 0.4
 	}
@@ -242,7 +242,7 @@ sr_ambitious_failure_weight = {
 	}
 	# SpaceX company bonus reduces risk
 	if = {
-		limit = { has_company = company_type:company_spacex }
+		limit = { has_space_company = yes }
 		add = -2
 	}
 	# Space elevator infrastructure helps

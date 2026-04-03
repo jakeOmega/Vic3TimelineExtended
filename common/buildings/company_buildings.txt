@@ -9346,3 +9346,283 @@ building_zastava_kragujevac_arsenal = {
 		}
 	}
 }
+
+# --- Megastructure Consortium ---
+building_megastructure_consortium_hq = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_megastructure_consortium_hq
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_megastructure_consortium
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_megastructure_consortium_hq
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_megastructure_consortium_hq
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Axiom Space ---
+building_axiom_space_hq = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/basic_motors.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_axiom_space_hq
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_axiom_space
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_axiom_space_hq
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_axiom_space_hq
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Neurovault ---
+building_neurovault_hq = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_neurovault_hq
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_neurovault
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_neurovault_hq
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_neurovault_hq
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Tycho Manufacturing ---
+building_tycho_manufacturing_hq = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_tycho_manufacturing_hq
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_tycho_manufacturing
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_tycho_manufacturing_hq
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_tycho_manufacturing_hq
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Tessier-Ashpool ---
+building_tessier_ashpool_hq = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_tessier_ashpool_hq
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_tessier_ashpool
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_tessier_ashpool_hq
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_tessier_ashpool_hq
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Hanka Precision ---
+building_hanka_precision_hq = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_hanka_precision_hq
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_hanka_precision
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_hanka_precision_hq
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_hanka_precision_hq
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Yoyodyne Propulsion ---
+building_yoyodyne_propulsion_hq = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/basic_motors.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_yoyodyne_propulsion_hq
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_yoyodyne_propulsion
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_yoyodyne_propulsion_hq
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_yoyodyne_propulsion_hq
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Rekal ---
+building_rekal_hq = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_rekal_hq
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_rekal
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_rekal_hq
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_rekal_hq
+					}
+				}
+			}
+		}
+	}
+}

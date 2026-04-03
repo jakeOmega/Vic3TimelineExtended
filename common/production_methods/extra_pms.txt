@@ -18350,13 +18350,14 @@ pm_antimatter_engine = {
 			goods_input_advanced_materials_add = 20              # Price: 4000, Total cost: 80000.0 (34.19%)
 			goods_input_electronic_components_add = 50           # Price:   80, Total cost:  4000.0 (1.71%)
 			# Output goods
+			goods_output_launch_capacity_add = 1500              # Price:  200, Total cost: 300000.0 (100.00%)
 			# Total input cost: 234000.0
-			# Total output cost: 0
-			# Profit: -234000.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
+			# Total output cost: 300000.0
+			# Profit: 66000.0
+			# Profit margin: 28.21%
+			# Zero profit price multiplier: 0.78
 			# Employment: 1000
-			# Wage breakeven: -234.00
+			# Wage breakeven: 66.00
 		}
 
 		level_scaled = {
@@ -18417,7 +18418,7 @@ pm_antimatter_warhead_plant = {
 # 4-year / 2-year / 1-year build times at full occupancy.
 
 pm_nanofabrication_center_construction_paused = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p1.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -18440,7 +18441,7 @@ pm_nanofabrication_center_construction_paused = {
 }
 
 pm_nanofabrication_center_construction_slow = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p2.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -18472,7 +18473,7 @@ pm_nanofabrication_center_construction_slow = {
 }
 
 pm_nanofabrication_center_construction_medium = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p3.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -18504,7 +18505,7 @@ pm_nanofabrication_center_construction_medium = {
 }
 
 pm_nanofabrication_center_construction_fast = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p4.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p4.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -18542,7 +18543,7 @@ pm_nanofabrication_center_construction_fast = {
 # cheap launch_capacity via space elevator, cheap digital_assets via
 # mind upload nexus): margin rises to ~300%+.
 pm_nanofabrication_center = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 
 	building_modifiers = {
 		workforce_scaled = {

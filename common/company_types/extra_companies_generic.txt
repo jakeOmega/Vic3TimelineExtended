@@ -719,3 +719,84 @@ INJECT:company_basic_mineral_mining = {
 		building_industrial_mineral_salt_mine
 	}
 }
+
+# --- Megastructure Consortium ---
+company_megastructure_consortium = {
+	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_harbor_shipbuilding.dds"
+
+	uses_dynamic_naming = yes
+	dynamic_company_type_names = {
+		"dynamic_company_type_corporation"
+		"dynamic_company_type_conglomerate"
+		"dynamic_company_type_consortium"
+		"dynamic_company_type_syndicate"
+	}
+
+	building_types = {
+		building_aerospace_industry
+		building_advanced_material_fabricator
+		building_megastructure_consortium_hq
+	}
+
+	extension_building_types = {
+		building_space_elevator
+		building_solar_receiver
+		building_nanofabrication_center
+		building_mind_upload_nexus
+		building_antimatter_engine
+	}
+
+	potential = {
+		always = yes
+	}
+
+	attainable = {
+		OR = {
+			"goods_production_rank(g:launch_capacity)" <= 3
+			"goods_production_rank(g:advanced_materials)" <= 3
+		}
+	}
+
+	possible = {
+		has_technology_researched = space_elevator
+		country_rank >= rank_value:major_power
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_aerospace_industry
+				level >= 10
+			}
+		}
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_advanced_material_fabricator
+				level >= 5
+			}
+		}
+	}
+
+	prosperity_modifier = {
+		country_production_tech_research_speed_mult = 0.1
+		goods_output_advanced_materials_mult = 0.15
+		goods_output_launch_capacity_mult = 0.1
+		state_building_megastructure_consortium_hq_max_level_add = 1
+	}
+
+	possible_prestige_goods = {
+		prestige_good_generic_advanced_materials
+		prestige_good_heavy_lift_launch
+		prestige_good_generic_software
+		prestige_good_entertainment
+		prestige_good_resort_travel
+	}
+
+	flavored_company = no
+
+	ai_will_do = {
+		has_technology_researched = space_elevator
+	}
+	ai_construction_targets = {
+		building_aerospace_industry = { level = 10 }
+		building_advanced_material_fabricator = { level = 5 }
+	}
+}

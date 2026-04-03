@@ -262,4 +262,36 @@ remove_disbanded_company_buildings_effect = {
 		limit = { scope:company.type = company_type:company_basic_autarky }
 		remove_building = building_generic_resource_depository
 	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_megastructure_consortium }
+		remove_building = building_megastructure_consortium_hq
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_axiom_space }
+		remove_building = building_axiom_space_hq
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_neurovault }
+		remove_building = building_neurovault_hq
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_tycho_manufacturing }
+		remove_building = building_tycho_manufacturing_hq
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_tessier_ashpool }
+		remove_building = building_tessier_ashpool_hq
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_hanka_precision }
+		remove_building = building_hanka_precision_hq
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_yoyodyne_propulsion }
+		remove_building = building_yoyodyne_propulsion_hq
+	}
+	else_if = {
+		limit = { scope:company.type = company_type:company_rekal }
+		remove_building = building_rekal_hq
+	}
 }

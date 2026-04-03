@@ -1,15 +1,17 @@
 ﻿#!/usr/bin/env python3
-"""
-gen_batch_pm_icons.py - Generate category icons for all placeholder production methods.
+"""gen_batch_pm_icons.py - Generate category icons for all placeholder production methods.
 
-Creates ~18 silhouette shapes Ã- 6 tier colors, assigns each PM to a category,
+Creates ~18 silhouette shapes x 6 tier colors, assigns each PM to a category,
 generates metallic embossed DDS icons, and updates PM texture references.
 
+Idempotent: re-running only generates DDS files that don't already exist on disk.
+
 Usage:
-    python gen_batch_pm_icons.py                  # Generate icons + update PM files
-    python gen_batch_pm_icons.py --preview         # Only generate PNGs in preview/ dir
-    python gen_batch_pm_icons.py --dry-run         # Show PMâ†’icon mapping without generating
-    python gen_batch_pm_icons.py --icons-only      # Generate DDS icons but don't update PM files
+    python gen_batch_pm_icons.py                   # Generate missing DDS icons only
+    python gen_batch_pm_icons.py --update-files     # Also update PM texture references in .txt
+    python gen_batch_pm_icons.py --force             # Regenerate all icons even if DDS exists
+    python gen_batch_pm_icons.py --preview           # Only generate PNGs in preview/ dir
+    python gen_batch_pm_icons.py --dry-run           # Show PM->icon mapping without generating
 """
 
 from __future__ import annotations
@@ -655,7 +657,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
     (r"^pm_maintenance$", "wrench"),
 
     #  Space megastructures 
-    (r"solar_collector|solar_receiver|orbital_battlestation|antimatter_facility|mind_upload_nexus", "star"),
+    (r"solar_collector|solar_receiver|orbital_battlestation|antimatter_facility|mind_upload_nexus|nanofabrication_center|consciousness_network", "star"),
 
     #  Wonders 
     (r"^pm_wonder_", "star"),
@@ -1121,10 +1123,12 @@ def icon_key(category: str, color: str, pips: int) -> str:
 def generate_all_icons(
     pm_map: dict[str, tuple[str, str, str, str, int]],
     preview_only: bool = False,
+    force: bool = False,
 ) -> dict[str, Path]:
     """Generate all needed category x color x pips DDS icons.
 
     pm_map: {pm_name: (source_file, placeholder, category, color, pips)}
+    force: If True, regenerate even if DDS already exists on disk.
 
     Returns: {icon_key_str: dds_path}
     """
@@ -1132,6 +1136,23 @@ def generate_all_icons(
     needed: set[tuple[str, str, int]] = set()
     for pm_name, (_, _, category, color, pips) in pm_map.items():
         needed.add((category, color, pips))
+
+    # Filter out icons that already exist on disk (unless force)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    if not force and not preview_only:
+        already_exist = set()
+        for cat, color, pips in needed:
+            dds_path = OUTPUT_DIR / f"{icon_key(cat, color, pips)}.dds"
+            if dds_path.exists():
+                already_exist.add((cat, color, pips))
+        skipped = len(already_exist)
+        needed -= already_exist
+        if skipped:
+            print(f"Skipping {skipped} icons already on disk (use --force to regenerate)")
+
+    if not needed:
+        print("All icons up to date, nothing to generate.")
+        return {}
 
     print(f"Need to generate {len(needed)} unique icons "
           f"across {len(set(c for c, _, _ in needed))} categories")
@@ -1146,7 +1167,6 @@ def generate_all_icons(
             texconv = ensure_texconv()
         print(f"Using texconv: {texconv}")
 
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     preview_dir = SCRIPT_DIR / "preview_pm_icons"
 
     if preview_only:
@@ -1341,8 +1361,10 @@ def main():
                         help="Only generate preview PNGs")
     parser.add_argument("--dry-run", action="store_true",
                         help="Show PM->icon mapping without generating")
-    parser.add_argument("--icons-only", action="store_true",
-                        help="Generate DDS but don't update PM files")
+    parser.add_argument("--update-files", action="store_true",
+                        help="Also update PM texture references in .txt files")
+    parser.add_argument("--force", action="store_true",
+                        help="Regenerate all icons even if DDS already exists")
     args = parser.parse_args()
 
     # 1. Find placeholder PMs
@@ -1428,14 +1450,14 @@ def main():
 
     # 7. Generate icons
     print("\nGenerating icons...")
-    icon_paths = generate_all_icons(pm_map, preview_only=args.preview)
+    icon_paths = generate_all_icons(pm_map, preview_only=args.preview, force=args.force)
 
     if args.preview:
         print(f"\nPreview PNGs saved to preview_pm_icons/")
         return
 
-    if args.icons_only:
-        print(f"\nDDS icons generated. Skipping PM file updates.")
+    if not args.update_files:
+        print(f"\nDDS icons generated. Use --update-files to also update PM texture references.")
         return
 
     # 8. Update PM files

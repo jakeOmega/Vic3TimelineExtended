@@ -23,3 +23,11 @@ sr_has_failure_cooldown = {
 	has_variable = sr_failure_cooldown
 	var:sr_failure_cooldown > 0
 }
+
+has_space_company = {
+	OR = {
+		has_company = company_type:company_spacex
+		has_company = company_type:company_lockheed_martin
+		has_company = company_type:company_roscosmos
+	}
+}

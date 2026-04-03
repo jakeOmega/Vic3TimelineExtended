@@ -895,6 +895,10 @@ REPLACE_OR_CREATE:building_space_elevator_construction_site = {
 	
 	expandable = no
 	
+	potential = {
+		owner = { has_technology_researched = space_elevator }
+	}
+	
 	possible = {
 		#OR = {
 		#	b:building_space_elevator.level < 20
@@ -1015,6 +1019,9 @@ REPLACE_OR_CREATE:building_space_elevator = {
 	
 	buildable = no
 	expandable = no
+	potential = {
+		has_building = building_space_elevator
+	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -1858,6 +1865,10 @@ REPLACE_OR_CREATE:building_solar_collector_construction_site = {
 	
 	expandable = no
 	
+	potential = {
+		owner = { has_technology_researched = space_based_solar_power }
+	}
+	
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -1876,6 +1887,9 @@ REPLACE_OR_CREATE:building_solar_collector = {
 	
 	buildable = no
 	expandable = no
+	potential = {
+		has_building = building_solar_collector
+	}
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -1938,6 +1952,10 @@ REPLACE_OR_CREATE:building_orbital_battlestation_construction_site = {
 	
 	expandable = no
 	
+	potential = {
+		owner = { has_technology_researched = orbital_weapon_platforms }
+	}
+	
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -1956,6 +1974,9 @@ REPLACE_OR_CREATE:building_orbital_battlestation = {
 	
 	buildable = no
 	expandable = no
+	potential = {
+		has_building = building_orbital_battlestation
+	}
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -1982,6 +2003,10 @@ REPLACE_OR_CREATE:building_mind_upload_nexus_construction_site = {
 	
 	expandable = no
 	
+	potential = {
+		owner = { has_technology_researched = mind_backups }
+	}
+	
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -2000,6 +2025,9 @@ REPLACE_OR_CREATE:building_mind_upload_nexus = {
 	
 	buildable = no
 	expandable = no
+	potential = {
+		has_building = building_mind_upload_nexus
+	}
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -2025,6 +2053,10 @@ REPLACE_OR_CREATE:building_antimatter_facility_construction_site = {
 	
 	expandable = no
 	
+	potential = {
+		owner = { has_technology_researched = antimatter_production }
+	}
+	
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -2043,6 +2075,9 @@ REPLACE_OR_CREATE:building_antimatter_facility = {
 	
 	buildable = no
 	expandable = no
+	potential = {
+		has_building = building_antimatter_facility
+	}
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -2137,6 +2172,10 @@ REPLACE_OR_CREATE:building_nanofabrication_center_construction_site = {
 	
 	expandable = no
 	
+	potential = {
+		owner = { has_technology_researched = molecular_assemblers }
+	}
+	
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -2155,6 +2194,9 @@ REPLACE_OR_CREATE:building_nanofabrication_center = {
 	
 	buildable = no
 	expandable = no
+	potential = {
+		has_building = building_nanofabrication_center
+	}
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -2181,6 +2223,10 @@ REPLACE_OR_CREATE:building_consciousness_network_construction_site = {
 	
 	expandable = no
 	
+	potential = {
+		owner = { has_technology_researched = telepathic_communities }
+	}
+	
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -2200,6 +2246,9 @@ REPLACE_OR_CREATE:building_consciousness_network = {
 	
 	buildable = no
 	expandable = no
+	potential = {
+		has_building = building_consciousness_network
+	}
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }

@@ -1752,3 +1752,43 @@ pmg_zastava_kragujevac_arsenal = {
 	ai_selection = most_productive
 	production_methods = { pm_zastava_kragujevac_arsenal }
 }
+pmg_megastructure_consortium_hq = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_megastructure_consortium_hq }
+}
+pmg_axiom_space_hq = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_axiom_space_hq }
+}
+pmg_neurovault_hq = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_neurovault_hq }
+}
+pmg_tycho_manufacturing_hq = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_tycho_manufacturing_hq }
+}
+pmg_tessier_ashpool_hq = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_tessier_ashpool_hq }
+}
+pmg_hanka_precision_hq = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_hanka_precision_hq }
+}
+pmg_yoyodyne_propulsion_hq = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_yoyodyne_propulsion_hq }
+}
+pmg_rekal_hq = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_rekal_hq }
+}
