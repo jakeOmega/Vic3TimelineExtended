@@ -38,7 +38,7 @@ from gen_pm_icons import (
     OUTPUT_DIR,
 )
 
-# â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Constants 
 S = 512       # Silhouette canvas size
 C = S // 2    # Center (256)
 R = 186       # Usable radius
@@ -612,7 +612,7 @@ def draw_globe() -> Image.Image:
     return img
 
 
-# â”€â”€ Shape registry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Shape registry â”€
 SHAPES: dict[str, callable] = {
     "factory":  draw_factory,
     "gear":     draw_gear,
@@ -651,49 +651,49 @@ SHAPES: dict[str, callable] = {
 
 # Regex patterns â†’ category name (checked in priority order)
 CATEGORY_RULES: list[tuple[str, str]] = [
-    # â”€â”€ Maintenance/special â”€â”€
+    #  Maintenance/special 
     (r"^pm_maintenance$", "wrench"),
 
-    # â”€â”€ Space megastructures â”€â”€
+    #  Space megastructures 
     (r"solar_collector|solar_receiver|orbital_battlestation|antimatter_facility|mind_upload_nexus", "star"),
 
-    # â”€â”€ Wonders â”€â”€
+    #  Wonders 
     (r"^pm_wonder_", "star"),
 
-    # â”€â”€ Space/rockets â”€â”€
+    #  Space/rockets 
     (r"rocket|earth_orbit|moon_mission|mars_mission|solar_exploration|interstellar_mission|"
      r"ssto|spaceport|spacex|roscosmos|orbital_fab|microgravity|orbital_nano|"
      r"antimatter_engine|no_rockets", "rocket"),
 
-    # â”€â”€ Aviation â”€â”€
+    #  Aviation 
     (r"aeroplane|airport|aerodrome|aerospace_production|bae_samlesbury", "plane"),
 
-    # â”€â”€ Military/weapons â”€â”€
+    #  Military/weapons 
     (r"cartridge|rifle|explosive|artillery|armor(?!ed)|munition|fuze|shell(?!_)|"
      r"projector|warhead|small_arms|ordnance|arsenal|proving_ground|military_research|"
      r"military_ship|active_protection|smart_fuze|networked_munition|swarm_coordinated|"
      r"swarm_release|programmable_matter_artillery|programmable_munition", "shield"),
 
-    # â”€â”€ Mining/extraction â”€â”€
+    #  Mining/extraction 
     (r"mine(?!r)|mining|colliery|excavation|continuous_miner|ore_sorting|geophysical|"
      r"assay_office|smelter|concentrat|lkab_kiruna|ocp_khouribga|kaiping_tangshan|"
      r"mokta_el_hadid|bengal_coal|kirgizian_copper", "diamond"),
 
-    # â”€â”€ Drilling/oil â”€â”€
+    #  Drilling/oil 
     (r"drill(?:ing)?_rig|fracking|offshore_rig|oil_field|oil_depot|pipeline|tank_farm|"
      r"catalytic_cracking|synthetic_oil|boryslaw|masjed_soleyman|maracaibo|ploiesti|"
      r"tampico_refinery|abadan_refinery|nioc_|west_ural_oil|turkish_petroleum|"
      r"galician_boryslaw|romanian_star|caribbean_petroleum|nederlandse_petroleum|"
      r"anglo_persian|petroleum", "drill"),
 
-    # â”€â”€ Power/energy â”€â”€
+    #  Power/energy 
     (r"power_(?:manual|centralized|integrated|hub)|renewable_power|tokamak|fusion_power|"
      r"inertial_fusion|compact_modular_fusion|space_power|power_station|"
      r"distributed_control|smart_systems|streetlight|led_street|sodium_street|"
      r"ai_managed_power_plant|ingolstadt_power|calcutta_electric|electricidad_caracas|"
      r"eea_dock_sud|norsk_hydro|nuclear_power", "bolt"),
 
-    # â”€â”€ Computing/electronics â”€â”€
+    #  Computing/electronics 
     (r"punchcard|transistor|integrated_circuit|microprocessor|cleanroom|"
      r"multicore|neuromorphic|self_improving_ai|academic_computing|"
      r"personal_electronics|smart_phone|virtual_reality|computer_aided|"
@@ -701,19 +701,19 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"data_fortress|generic_electronics|generic_data|quantum_dot|"
      r"micro_?processor|ai_optimized_operations", "chip"),
 
-    # â”€â”€ Communications â”€â”€
+    #  Communications 
     (r"teletype|telegraph|twisted_pair|vhf_and_uhf|satellite_comm|fiber_optic|"
      r"internet_comm|quantum_comm|neural_lace_comm|integrated_optical|"
      r"local_network|bandwidth|ericsson_telefonplan|nokia_cable|"
      r"verizon_building|philips_eindhoven|cochlear_global|blackberry_rim|"
      r"huawei_ox_horn", "antenna"),
 
-    # â”€â”€ Robotics/AI/automation â”€â”€
+    #  Robotics/AI/automation 
     (r"^pm_(?:robots|smart_robots|nanobot|nanorobot|self_replicating|drone_delivery|"
      r"robotic_service|generic_robotics|autonomous_network|boston_dynamics|fanuc_forest|"
      r"advanced_self_replicating|ai_governance|artificial_personalit)", "robot"),
 
-    # â”€â”€ Agriculture â”€â”€
+    #  Agriculture 
     (r"farming|rice_farm|crop|harvest|orchard|potatoes|precision_agri|improved_crop|"
      r"fig_orchard|grain|cotton(?:_gin|_depot|_combine)|tea(?:_estate|_warehouse)|"
      r"sugar|plantation|granary|apple_orchard|citrus|natural_nurturing|"
@@ -721,10 +721,10 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"lee_wilson|perskhlopok|persshelk|opium_ghazipur|"
      r"generic_granary|generic_cold_storage", "wheat"),
 
-    # â”€â”€ Fishing â”€â”€
+    #  Fishing 
     (r"purse_seine|fishing|fish_market|generic_fish", "wheat"),
 
-    # â”€â”€ Chemistry/materials â”€â”€
+    #  Chemistry/materials 
     (r"polyester|polyisoprene|injection_molding|blow_molding|bioplastic|"
      r"polymerization|ziegler_natta|neodymium_catalyz|styrene_butadiene|"
      r"nylon|elastomeric|bioengineered_rubber|advanced_material_fiber|"
@@ -733,7 +733,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"food_additive|high_fructose|programmable_sweet|"
      r"basf_ludwigshafen|chr_hansen|pfizer_rd|roche_tower", "flask"),
 
-    # â”€â”€ Food/beverages â”€â”€
+    #  Food/beverages 
     (r"wine|liquor|beer|brew|distill|vodka|bodega|vintner|tobacco|"
      r"robotic_food|programmable_food|cold_storage|frigor|slaughter|"
      r"meat|bakery|dairy|cheese|flour|"
@@ -743,14 +743,14 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"klanicko_|gavrilovic_|sansinena_|allatini_|elso_budapesti|"
      r"gran_azucarera", "bottle"),
 
-    # â”€â”€ Environment/emissions â”€â”€
+    #  Environment/emissions 
     (r"emission|effluent|filtration|scrub|ventilation|tailings|waste_fiber|"
      r"settling_pond|closed_loop(?:_synth|_recycl)|green_assembly|"
      r"predictive_maintenance|fume|environmental|no_emission|no_effluent|"
      r"no_facility_emission|no_glassworks_fume|no_precision_environ|"
      r"no_synthesis_scrub|no_tailings", "leaf"),
 
-    # â”€â”€ Textiles/clothing â”€â”€
+    #  Textiles/clothing 
     (r"textile|cloth|fabric|silk(?:_exchange|_mill|_reeling|_house)|"
      r"cotton_mill|wool|loom|weaving|spinning|dye|garment|fashion|"
      r"microfiber|performance_textile|programmable_matter_cloth|"
@@ -762,7 +762,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"sherkat_shemali|portalis_lyon|afghan_nassaji|"
      r"jiangnan_nanjing|worth_rue|ai_managed_textile", "cloth"),
 
-    # â”€â”€ Shipbuilding/naval â”€â”€
+    #  Shipbuilding/naval 
     (r"shipbuild|dockyard|shipyard|sailing_ship|dry_dock|fleet_terminal|"
      r"cruise_ship|diesel_electric_ferr|generic_dry_dock|aker_oslo|anglo_sicilian|"
      r"ap_moller|cramp_philadelphia|estaleiro_maua|fcm_la_seyne|"
@@ -770,7 +770,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"secn_ferrol|stt_haskoy|wadia_bombay|advanced_metamaterial|"
      r"modular_shipbuilding|robotic_ship_assembly|steam_paddleboat", "ship"),
 
-    # â”€â”€ Rail/transport/logistics â”€â”€
+    #  Rail/transport/logistics 
     (r"traffic_control|passenger_carriage|bullet_train|containerized|"
      r"maglev|autonomous_train|container_port|global_port|"
      r"rail_nexus|logistics_hub|partial_bulk|multimodal_transit|"
@@ -781,26 +781,26 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"mantetsu_dalian|hanseong_jeongi|generic_rail|suez_company|"
      r"panama_company", "train"),
 
-    # â”€â”€ Automotive/road â”€â”€
+    #  Automotive/road 
     (r"automobile|motor_industry|motor_works|electric_car|highway|"
      r"hydrogen_fuel_cell|fusion_battery_motor|fusion_battery_vehicle|"
      r"graphene_electric_motor|"
      r"no_water_personal_transport|generic_motor|"
      r"hispano_suiza|volkswagen|ursus_warsaw|massey_harris", "car"),
 
-    # â”€â”€ Tourism/parks â”€â”€
+    #  Tourism/parks 
     (r"tourism|mass_tourism|jet_age_tourism|modern_tourism|space_tourism|"
      r"national_park|national_forest|national_wildlife|"
      r"disney_world|universal_studios", "suitcase"),
 
-    # â”€â”€ Media/entertainment â”€â”€
+    #  Media/entertainment 
     (r"sound_film|television|broadcast|video_game|digital_stream|"
      r"digital_creation|version_control_and_dist|state_directed_media|"
      r"influencer|content_creator|fully_automated_content|"
      r"generic_media|netflix_|nintendo_|sony_pictures|"
      r"paradox_kvarnholmen|ricordi_galleria", "film"),
 
-    # â”€â”€ Trade/commerce â”€â”€
+    #  Trade/commerce 
     (r"electronic_brokerage|digital_trading|automated_trading|e.commerce|"
      r"shopping_mall|department_store|remote_work|trade_center_trade_quantity|"
      r"generic_export|generic_colonial|generic_financial|generic_resource_depository|"
@@ -811,12 +811,12 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"united_fruit|mozambique_company|ccci_leopoldville|"
      r"peruvian_amazon|b_grimm_bangkok|steel_brothers_syriam", "cube"),
 
-    # â”€â”€ Construction/buildings â”€â”€
+    #  Construction/buildings 
     (r"reinforced_concrete|tower_crane|prefab|nanomaterial_build|"
      r"3d_printed_build|no_construction_autom|advanced_construction|"
      r"generic_exhibition|generic_monument|generic_proving", "building"),
 
-    # â”€â”€ Science/research/biotech â”€â”€
+    #  Science/research/biotech 
     (r"ai_assisted_research|assisted_postnatal|communal_child|"
      r"ectogenesis|eugenics|behavioral_condition|cloning_vat|"
      r"bioelectronic|neurostimulation|neural_lace_telepath|"
@@ -825,40 +825,40 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"biotech_dye|quantum_dot_pigment|programmable_paper|"
      r"openai_research|infosys_mysore|hp_labs|sap_headquarters", "atom"),
 
-    # â”€â”€ Paper â”€â”€
+    #  Paper 
     (r"kraft_pulp|calendered|self_growing_paper", "flask"),
 
-    # â”€â”€ HQ/power bloc â”€â”€
+    #  HQ/power bloc 
     (r"hq_cultural|hq_diplomatic|hq_ideological|hq_military_treaty|"
      r"hq_religious|hq_sovereign|hq_trade_league|"
      r"generic_hq_skyscraper|generic_industrial_city|generic_industrial_zone|"
      r"un_headquarters", "building"),
 
-    # â”€â”€ AM fabrication â”€â”€
+    #  AM fabrication 
     (r"am_fabrication|3d_printed_porcelain", "gear"),
 
-    # â”€â”€ Specific company headquarters â†’ building â”€â”€
+    #  Specific company headquarters â†’ building 
     (r"apple_park|googleplex|microsoft_redmond|samsung_digital|"
      r"siemens_erlangen|softbank_vision|tencent_seafront|gazprom_lakhta|"
      r"oracle_cloud|petrobras_cenpes|rosatom_mayak|"
      r"bytedance_data|catl_giga|ikea_almhult|eni_palazzo", "building"),
 
-    # â”€â”€ Semiconductor/space companies â”€â”€
+    #  Semiconductor/space companies 
     (r"spacex_starbase|roscosmos_vostochny", "rocket"),
 
-    # â”€â”€ Porcelain/glass â”€â”€
+    #  Porcelain/glass 
     (r"porcelain|glass_works|kiln|pottery|jingdezhen|kinkozan|meissen|"
      r"moser_karlsbad", "flask"),
 
-    # â”€â”€ Wood/furniture/paper â”€â”€
+    #  Wood/furniture/paper 
     (r"debarker|chipper|skidder|forwarder|lumber|timber|furniture|"
      r"programmable_matter_furniture|maple_tottenham|"
      r"bombay_burmah|kablin_zarate|klein_galician|thonet_bystrice", "gear"),
 
-    # â”€â”€  Religion/social â”€â”€
+    #   Religion/social 
     (r"decentralized_religious|secular_society|youth_cadre|voluntary_daycare", "building"),
 
-    # â”€â”€ Specific company PMs â†’ factory (catch-all for named companies) â”€â”€
+    #  Specific company PMs â†’ factory (catch-all for named companies) 
     (r"(?:_works|_mill[s]?|_factory|_plant|_foundry|_steelworks|_ironworks|"
      r"_arsenal|_armory|_furnace|_smelter|_dockyard|_shipyard|_colliery|"
      r"_laboratory|_station|_terminal|_workshop|_bakery|_warehouse|"
@@ -866,7 +866,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"_estate|_trading_house|_trading_post|_slaughterhouse|_meatworks|"
      r"_proving_ground|_campus|_institute|_center|_munition)", "factory"),
 
-    # â”€â”€ Assembly/manufacturing generics â”€â”€
+    #  Assembly/manufacturing generics 
     (r"manual_assembly|manual_production|manual_batch|"
      r"automated_assembly|robotic_assembly|ai_managed_building|"
      r"advanced_assembly|intelligent_manufacturing|self_optimizing|"
@@ -876,10 +876,10 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"networked_control|automated_chemical|"
      r"generic_foundry|generic_ordnance|schneider_le_creusot", "gear"),
 
-    # â”€â”€ Fusion battery appliances, etc â”€â”€
+    #  Fusion battery appliances, etc 
     (r"fusion_battery_appliance", "bolt"),
 
-    # â”€â”€ Fallback: everything else â†’ gear â”€â”€
+    #  Fallback: everything else â†’ gear 
 ]
 
 # Compiled rules

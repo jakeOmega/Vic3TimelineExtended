@@ -109,8 +109,8 @@ def process_and_update_production_methods_grouped(
         )
         for workforce_scaled_content in workforce_scaled_match:
             original_workforce_scaled_content = workforce_scaled_content
-            # Clear existing comments
-            workforce_scaled_content = re.sub(r"#.*?\n", "", workforce_scaled_content)
+            # Clear existing comments (preserve newlines to avoid merging lines)
+            workforce_scaled_content = re.sub(r"#[^\n]*", "", workforce_scaled_content)
 
             # Separate and process input and output goods
             input_goods_content, output_goods_content = "", ""
@@ -163,6 +163,13 @@ def process_and_update_production_methods_grouped(
             wage_breakeven = profit / employment if employment != 0 else 0
 
             # Construct the updated workforce_scaled content
+            other_lines_str = "\n".join(other_lines_content)
+            other_section = ""
+            if other_lines_str.strip():
+                other_section = (
+                    "\t\t\t# Other modifiers\n"
+                    + other_lines_str + "\n"
+                )
             updated_workforce_scaled_content = (
                 "workforce_scaled = {\n"
                 "\t\t\t# Input goods\n"
@@ -176,8 +183,7 @@ def process_and_update_production_methods_grouped(
                 f"\t\t\t# Zero profit price multiplier: {zero_profit_price_multiplier:.2f}\n"
                 f"\t\t\t# Employment: {employment}\n"
                 f"\t\t\t# Wage breakeven: {wage_breakeven:.2f}\n"
-                + "\n".join(other_lines_content)
-                + "\n" * (len(other_lines_content) > 0)
+                + other_section
                 + "\t\t}"
             )
 

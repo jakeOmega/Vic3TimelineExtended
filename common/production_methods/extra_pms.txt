@@ -13028,7 +13028,7 @@ pm_global_ports = {
 }
 
 pm_no_water_personal_transport = {
-	texture = "gfx/interface/icons/production_method_icons/cat_car_purple_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_car_purple_p0.dds"
 }
 
 pm_sailing_ships = {
@@ -13890,6 +13890,8 @@ pm_space_elevator_construction_slow = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 100000
 			# Wage breakeven: -724.85
+			# Other modifiers
+			building_annual_space_elevator_progress = 0.25
 		}
 
 		level_scaled = {
@@ -13929,6 +13931,8 @@ pm_space_elevator_construction_medium = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 100000
 			# Wage breakeven: -1449.70
+			# Other modifiers
+			building_annual_space_elevator_progress = 0.5
 		}
 
 		level_scaled = {
@@ -13968,6 +13972,8 @@ pm_space_elevator_construction_fast = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 100000
 			# Wage breakeven: -2899.40
+			# Other modifiers
+			building_annual_space_elevator_progress = 1
 		}
 
 		level_scaled = {
@@ -17688,6 +17694,8 @@ pm_solar_collector_construction_slow = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -217.80
+			# Other modifiers
+			building_annual_solar_collector_progress = 0.25
 		}
 
 		level_scaled = {
@@ -17720,6 +17728,8 @@ pm_solar_collector_construction_medium = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -435.60
+			# Other modifiers
+			building_annual_solar_collector_progress = 0.5
 		}
 
 		level_scaled = {
@@ -17752,6 +17762,8 @@ pm_solar_collector_construction_fast = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -871.20
+			# Other modifiers
+			building_annual_solar_collector_progress = 1
 		}
 
 		level_scaled = {
@@ -17878,6 +17890,8 @@ pm_orbital_battlestation_construction_slow = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -371.80
+			# Other modifiers
+			building_annual_orbital_battlestation_progress = 0.25
 		}
 
 		level_scaled = {
@@ -17907,6 +17921,8 @@ pm_orbital_battlestation_construction_medium = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -743.60
+			# Other modifiers
+			building_annual_orbital_battlestation_progress = 0.5
 		}
 
 		level_scaled = {
@@ -17936,6 +17952,8 @@ pm_orbital_battlestation_construction_fast = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -1487.20
+			# Other modifiers
+			building_annual_orbital_battlestation_progress = 1
 		}
 
 		level_scaled = {
@@ -18032,6 +18050,8 @@ pm_mind_upload_nexus_construction_slow = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 60000
 			# Wage breakeven: -233.33
+			# Other modifiers
+			building_annual_mind_upload_nexus_progress = 0.25
 		}
 
 		level_scaled = {
@@ -18062,6 +18082,8 @@ pm_mind_upload_nexus_construction_medium = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 60000
 			# Wage breakeven: -466.67
+			# Other modifiers
+			building_annual_mind_upload_nexus_progress = 0.5
 		}
 
 		level_scaled = {
@@ -18092,6 +18114,8 @@ pm_mind_upload_nexus_construction_fast = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 60000
 			# Wage breakeven: -933.33
+			# Other modifiers
+			building_annual_mind_upload_nexus_progress = 1
 		}
 
 		level_scaled = {
@@ -18190,6 +18214,8 @@ pm_antimatter_facility_construction_slow = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -451.00
+			# Other modifiers
+			building_annual_antimatter_facility_progress = 0.25
 		}
 
 		level_scaled = {
@@ -18219,6 +18245,8 @@ pm_antimatter_facility_construction_medium = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -902.00
+			# Other modifiers
+			building_annual_antimatter_facility_progress = 0.5
 		}
 
 		level_scaled = {
@@ -18248,6 +18276,8 @@ pm_antimatter_facility_construction_fast = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -1804.00
+			# Other modifiers
+			building_annual_antimatter_facility_progress = 1
 		}
 
 		level_scaled = {
@@ -18428,6 +18458,8 @@ pm_nanofabrication_center_construction_slow = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -323.00
+			# Other modifiers
+			building_annual_nanofabrication_center_progress = 0.25
 		}
 
 		level_scaled = {
@@ -18458,6 +18490,8 @@ pm_nanofabrication_center_construction_medium = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -646.00
+			# Other modifiers
+			building_annual_nanofabrication_center_progress = 0.5
 		}
 
 		level_scaled = {
@@ -18488,6 +18522,8 @@ pm_nanofabrication_center_construction_fast = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -1292.00
+			# Other modifiers
+			building_annual_nanofabrication_center_progress = 1
 		}
 
 		level_scaled = {
@@ -18582,6 +18618,8 @@ pm_consciousness_network_construction_slow = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -200.00
+			# Other modifiers
+			building_annual_consciousness_network_progress = 0.25
 		}
 
 		level_scaled = {
@@ -18613,6 +18651,8 @@ pm_consciousness_network_construction_medium = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -400.00
+			# Other modifiers
+			building_annual_consciousness_network_progress = 0.5
 		}
 
 		level_scaled = {
@@ -18644,6 +18684,8 @@ pm_consciousness_network_construction_fast = {
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
 			# Wage breakeven: -800.00
+			# Other modifiers
+			building_annual_consciousness_network_progress = 1
 		}
 
 		level_scaled = {
@@ -18692,6 +18734,7 @@ pm_consciousness_network = {
 			# Total output cost: 0
 			# Profit: -1880000.0
 			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
 			# Employment: 6000
 			# Wage breakeven: -313.33
 		}
@@ -18711,7 +18754,7 @@ pm_consciousness_network = {
 # Research speed, innovation, political freedom effects.
 # Available when NOT running oppressive laws.
 pm_consciousness_network_open = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_purple_p1.dds"
 
 	disallowing_laws = {
 		law_secret_police
@@ -18742,7 +18785,7 @@ pm_consciousness_network_open = {
 # Reduces turmoil, radicals; increases government IG attraction.
 # Only available with oppressive laws.
 pm_consciousness_network_social_control = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_purple_p2.dds"
 
 	unlocking_laws = {
 		law_secret_police
