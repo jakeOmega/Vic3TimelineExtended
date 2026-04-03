@@ -10053,13 +10053,13 @@ pm_megastructure_consortium_hq = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (41.38%)
-			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (17.24%)
-			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (6.90%)
-			goods_input_electronic_components_add = 10          # Price:   80, Total cost:   800.0 (27.59%)
+			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (44.44%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (18.52%)
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (7.41%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (29.63%)
 			# Output goods
-			goods_output_advanced_materials_add = 2             # Price: 4000, Total cost:  8000.0 (72.73%)
-			goods_output_launch_capacity_add = 15               # Price:  200, Total cost:  3000.0 (27.27%)
+			goods_output_advanced_materials_add = 2              # Price: 4000, Total cost:  8000.0 (72.73%)
+			goods_output_launch_capacity_add = 15                # Price:  200, Total cost:  3000.0 (27.27%)
 			# Total input cost: 2700.0
 			# Total output cost: 11000.0
 			# Profit: 8300.0
@@ -10092,7 +10092,7 @@ pm_axiom_space_hq = {
 			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (54.55%)
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (45.45%)
 			# Output goods
-			goods_output_launch_capacity_add = 15               # Price:  200, Total cost:  3000.0 (33.33%)
+			goods_output_launch_capacity_add = 15                # Price:  200, Total cost:  3000.0 (33.33%)
 			goods_output_services_add = 200                      # Price:   30, Total cost:  6000.0 (66.67%)
 			# Total input cost: 1650.0
 			# Total output cost: 9000.0
@@ -10100,7 +10100,7 @@ pm_axiom_space_hq = {
 			# Profit margin: 445.45%
 			# Zero profit price multiplier: 0.18
 			# Employment: 2000
-			# Wage breakeven: 3.68
+			# Wage breakeven: 3.67
 		}
 		level_scaled = {
 			building_employment_engineers_add = 800
@@ -10129,10 +10129,10 @@ pm_neurovault_hq = {
 		workforce_scaled = {
 			# Input goods
 			goods_input_electricity_add = 50                     # Price:   30, Total cost:  1500.0 (65.22%)
-			goods_input_electronic_components_add = 10          # Price:   80, Total cost:   800.0 (34.78%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (34.78%)
 			# Output goods
-			goods_output_digital_assets_add = 30                # Price:  100, Total cost:  3000.0 (42.86%)
-			goods_output_advanced_materials_add = 1             # Price: 4000, Total cost:  4000.0 (57.14%)
+			goods_output_digital_assets_add = 30                 # Price:  100, Total cost:  3000.0 (42.86%)
+			goods_output_advanced_materials_add = 1              # Price: 4000, Total cost:  4000.0 (57.14%)
 			# Total input cost: 2300.0
 			# Total output cost: 7000.0
 			# Profit: 4700.0
@@ -10166,12 +10166,12 @@ pm_tycho_manufacturing_hq = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (45.45%)
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (18.18%)
-			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (27.27%)
-			goods_input_electronic_components_add = 2            # Price:   80, Total cost:   160.0 (7.27%)
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (46.30%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (18.52%)
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (27.78%)
+			goods_input_electronic_components_add = 2            # Price:   80, Total cost:   160.0 (7.41%)
 			# Output goods
-			goods_output_launch_capacity_add = 25               # Price:  200, Total cost:  5000.0 (62.50%)
+			goods_output_launch_capacity_add = 25                # Price:  200, Total cost:  5000.0 (62.50%)
 			goods_output_advanced_materials_add = 0.75           # Price: 4000, Total cost:  3000.0 (37.50%)
 			# Total input cost: 2160.0
 			# Total output cost: 8000.0
@@ -10209,9 +10209,9 @@ pm_tessier_ashpool_hq = {
 			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (75.00%)
 			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (25.00%)
 			# Output goods
-			goods_output_digital_assets_add = 60                # Price:  100, Total cost:  6000.0 (75.00%)
+			goods_output_digital_assets_add = 60                 # Price:  100, Total cost:  6000.0 (75.00%)
 			goods_output_services_add = 50                       # Price:   30, Total cost:  1500.0 (18.75%)
-			goods_output_launch_capacity_add = 2.5              # Price:  200, Total cost:   500.0 (6.25%)
+			goods_output_launch_capacity_add = 2.5               # Price:  200, Total cost:   500.0 (6.25%)
 			# Total input cost: 1600.0
 			# Total output cost: 8000.0
 			# Profit: 6400.0
@@ -10244,8 +10244,8 @@ pm_hanka_precision_hq = {
 			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (42.86%)
 			goods_input_electronic_components_add = 15           # Price:   80, Total cost:  1200.0 (57.14%)
 			# Output goods
-			goods_output_advanced_materials_add = 1.5           # Price: 4000, Total cost:  6000.0 (75.00%)
-			goods_output_digital_assets_add = 20                # Price:  100, Total cost:  2000.0 (25.00%)
+			goods_output_advanced_materials_add = 1.5            # Price: 4000, Total cost:  6000.0 (75.00%)
+			goods_output_digital_assets_add = 20                 # Price:  100, Total cost:  2000.0 (25.00%)
 			# Total input cost: 2100.0
 			# Total output cost: 8000.0
 			# Profit: 5900.0
@@ -10279,12 +10279,12 @@ pm_yoyodyne_propulsion_hq = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (52.17%)
-			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (32.61%)
-			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (8.70%)
-			goods_input_electronic_components_add = 2            # Price:   80, Total cost:   160.0 (6.96%)
+			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (51.95%)
+			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (32.47%)
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (8.66%)
+			goods_input_electronic_components_add = 2            # Price:   80, Total cost:   160.0 (6.93%)
 			# Output goods
-			goods_output_launch_capacity_add = 30               # Price:  200, Total cost:  6000.0 (66.67%)
+			goods_output_launch_capacity_add = 30                # Price:  200, Total cost:  6000.0 (66.67%)
 			goods_output_advanced_materials_add = 0.75           # Price: 4000, Total cost:  3000.0 (33.33%)
 			# Total input cost: 2310.0
 			# Total output cost: 9000.0
@@ -10318,7 +10318,7 @@ pm_rekal_hq = {
 			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (60.00%)
 			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (40.00%)
 			# Output goods
-			goods_output_digital_assets_add = 40                # Price:  100, Total cost:  4000.0 (57.14%)
+			goods_output_digital_assets_add = 40                 # Price:  100, Total cost:  4000.0 (57.14%)
 			goods_output_services_add = 100                      # Price:   30, Total cost:  3000.0 (42.86%)
 			# Total input cost: 2000.0
 			# Total output cost: 7000.0

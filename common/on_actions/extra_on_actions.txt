@@ -2158,136 +2158,78 @@ antimatter_facility_on_action = {
 
 overbuild_protection_on_action = {
 	effect = {
-		# Solar receivers - remove up to 5 excess per month
+		# Solar receivers - remove up to 1 excess level per month (cheapest electricity first)
 		if = {
 			limit = { modifier:country_solar_receiver_max_level_add < 0 }
-			random_scope_state = {
+			ordered_scope_state = {
 				limit = { has_building = building_solar_receiver }
+				order_by = market.mg:electricity.market_goods_cheaper
+				max = 1
+				set_variable = {
+					name = lvl_tmp
+					value = b:building_solar_receiver.level
+				}
+				change_variable = {
+					name = lvl_tmp
+					add = -1
+				}
 				remove_building = building_solar_receiver
+				if = {
+					limit = { variable:lvl_tmp > 0 }
+					create_building = {
+						building = building_solar_receiver
+						level = variable:lvl_tmp
+					}
+				}
+				remove_variable = lvl_tmp
 			}
 		}
-		if = {
-			limit = { modifier:country_solar_receiver_max_level_add < 0 }
-			random_scope_state = {
-				limit = { has_building = building_solar_receiver }
-				remove_building = building_solar_receiver
-			}
-		}
-		if = {
-			limit = { modifier:country_solar_receiver_max_level_add < 0 }
-			random_scope_state = {
-				limit = { has_building = building_solar_receiver }
-				remove_building = building_solar_receiver
-			}
-		}
-		if = {
-			limit = { modifier:country_solar_receiver_max_level_add < 0 }
-			random_scope_state = {
-				limit = { has_building = building_solar_receiver }
-				remove_building = building_solar_receiver
-			}
-		}
-		if = {
-			limit = { modifier:country_solar_receiver_max_level_add < 0 }
-			random_scope_state = {
-				limit = { has_building = building_solar_receiver }
-				remove_building = building_solar_receiver
-			}
-		}
-		# Antimatter sub-buildings - remove up to 5 excess per month
+
+		# Antimatter sub-buildings - remove up to 1 excess level per month
 		if = {
 			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
 			random_scope_state = {
-				limit = {
-					OR = {
-						has_building = building_antimatter_engine
-						has_building = building_antimatter_warhead_plant
+				limit = { has_building = building_antimatter_engine }
+				set_variable = {
+					name = lvl_tmp
+					value = b:building_antimatter_engine.level
+				}
+				change_variable = {
+					name = lvl_tmp
+					add = -1
+				}
+				remove_building = building_antimatter_engine
+				if = {
+					limit = { variable:lvl_tmp > 0 }
+					create_building = {
+						building = building_antimatter_engine
+						level = variable:lvl_tmp
 					}
 				}
-				if = {
-					limit = { has_building = building_antimatter_engine }
-					remove_building = building_antimatter_engine
-				}
-				else_if = {
-					limit = { has_building = building_antimatter_warhead_plant }
-					remove_building = building_antimatter_warhead_plant
-				}
+				remove_variable = lvl_tmp
 			}
 		}
 		if = {
 			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
 			random_scope_state = {
-				limit = {
-					OR = {
-						has_building = building_antimatter_engine
-						has_building = building_antimatter_warhead_plant
+				limit = { has_building = building_antimatter_warhead_plant }
+				set_variable = {
+					name = lvl_tmp
+					value = b:building_antimatter_warhead_plant.level
+				}
+				change_variable = {
+					name = lvl_tmp
+					add = -1
+				}
+				remove_building = building_antimatter_warhead_plant
+				if = {
+					limit = { variable:lvl_tmp > 0 }
+					create_building = {
+						building = building_antimatter_warhead_plant
+						level = variable:lvl_tmp
 					}
 				}
-				if = {
-					limit = { has_building = building_antimatter_engine }
-					remove_building = building_antimatter_engine
-				}
-				else_if = {
-					limit = { has_building = building_antimatter_warhead_plant }
-					remove_building = building_antimatter_warhead_plant
-				}
-			}
-		}
-		if = {
-			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
-			random_scope_state = {
-				limit = {
-					OR = {
-						has_building = building_antimatter_engine
-						has_building = building_antimatter_warhead_plant
-					}
-				}
-				if = {
-					limit = { has_building = building_antimatter_engine }
-					remove_building = building_antimatter_engine
-				}
-				else_if = {
-					limit = { has_building = building_antimatter_warhead_plant }
-					remove_building = building_antimatter_warhead_plant
-				}
-			}
-		}
-		if = {
-			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
-			random_scope_state = {
-				limit = {
-					OR = {
-						has_building = building_antimatter_engine
-						has_building = building_antimatter_warhead_plant
-					}
-				}
-				if = {
-					limit = { has_building = building_antimatter_engine }
-					remove_building = building_antimatter_engine
-				}
-				else_if = {
-					limit = { has_building = building_antimatter_warhead_plant }
-					remove_building = building_antimatter_warhead_plant
-				}
-			}
-		}
-		if = {
-			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
-			random_scope_state = {
-				limit = {
-					OR = {
-						has_building = building_antimatter_engine
-						has_building = building_antimatter_warhead_plant
-					}
-				}
-				if = {
-					limit = { has_building = building_antimatter_engine }
-					remove_building = building_antimatter_engine
-				}
-				else_if = {
-					limit = { has_building = building_antimatter_warhead_plant }
-					remove_building = building_antimatter_warhead_plant
-				}
+				remove_variable = lvl_tmp
 			}
 		}
 	}

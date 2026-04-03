@@ -17680,20 +17680,20 @@ pm_solar_collector_construction_slow = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_advanced_materials_add = 500             # Price: 4000, Total cost: 2000000.0 (18.37%)
-			goods_input_launch_capacity_add = 40000              # Price:  200, Total cost: 8000000.0 (73.46%)
-			goods_input_electronic_components_add = 5000         # Price:   80, Total cost: 400000.0 (3.67%)
-			goods_input_steel_add = 2000                         # Price:   50, Total cost: 100000.0 (0.92%)
-			goods_input_electricity_add = 5000                   # Price:   30, Total cost: 150000.0 (1.38%)
-			goods_input_digital_access_add = 2000                # Price:  120, Total cost: 240000.0 (2.20%)
+			goods_input_advanced_materials_add = 2000            # Price: 4000, Total cost: 8000000.0 (18.37%)
+			goods_input_launch_capacity_add = 160000             # Price:  200, Total cost: 32000000.0 (73.46%)
+			goods_input_electronic_components_add = 20000        # Price:   80, Total cost: 1600000.0 (3.67%)
+			goods_input_steel_add = 8000                         # Price:   50, Total cost: 400000.0 (0.92%)
+			goods_input_electricity_add = 20000                  # Price:   30, Total cost: 600000.0 (1.38%)
+			goods_input_digital_access_add = 8000                # Price:  120, Total cost: 960000.0 (2.20%)
 			# Output goods
-			# Total input cost: 10890000.0
+			# Total input cost: 43560000.0
 			# Total output cost: 0
-			# Profit: -10890000.0
+			# Profit: -43560000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
-			# Wage breakeven: -217.80
+			# Wage breakeven: -871.20
 			# Other modifiers
 			building_annual_solar_collector_progress = 0.25
 		}
@@ -17714,20 +17714,20 @@ pm_solar_collector_construction_medium = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_advanced_materials_add = 1000            # Price: 4000, Total cost: 4000000.0 (18.37%)
-			goods_input_launch_capacity_add = 80000              # Price:  200, Total cost: 16000000.0 (73.46%)
-			goods_input_electronic_components_add = 10000        # Price:   80, Total cost: 800000.0 (3.67%)
-			goods_input_steel_add = 4000                         # Price:   50, Total cost: 200000.0 (0.92%)
-			goods_input_electricity_add = 10000                  # Price:   30, Total cost: 300000.0 (1.38%)
-			goods_input_digital_access_add = 4000                # Price:  120, Total cost: 480000.0 (2.20%)
+			goods_input_advanced_materials_add = 4000            # Price: 4000, Total cost: 16000000.0 (18.37%)
+			goods_input_launch_capacity_add = 320000             # Price:  200, Total cost: 64000000.0 (73.46%)
+			goods_input_electronic_components_add = 40000        # Price:   80, Total cost: 3200000.0 (3.67%)
+			goods_input_steel_add = 16000                        # Price:   50, Total cost: 800000.0 (0.92%)
+			goods_input_electricity_add = 40000                  # Price:   30, Total cost: 1200000.0 (1.38%)
+			goods_input_digital_access_add = 16000               # Price:  120, Total cost: 1920000.0 (2.20%)
 			# Output goods
-			# Total input cost: 21780000.0
+			# Total input cost: 87120000.0
 			# Total output cost: 0
-			# Profit: -21780000.0
+			# Profit: -87120000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
-			# Wage breakeven: -435.60
+			# Wage breakeven: -1742.40
 			# Other modifiers
 			building_annual_solar_collector_progress = 0.5
 		}
@@ -17748,20 +17748,20 @@ pm_solar_collector_construction_fast = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_advanced_materials_add = 2000            # Price: 4000, Total cost: 8000000.0 (18.37%)
-			goods_input_launch_capacity_add = 160000             # Price:  200, Total cost: 32000000.0 (73.46%)
-			goods_input_electronic_components_add = 20000        # Price:   80, Total cost: 1600000.0 (3.67%)
-			goods_input_steel_add = 8000                         # Price:   50, Total cost: 400000.0 (0.92%)
-			goods_input_electricity_add = 20000                  # Price:   30, Total cost: 600000.0 (1.38%)
-			goods_input_digital_access_add = 8000                # Price:  120, Total cost: 960000.0 (2.20%)
+			goods_input_advanced_materials_add = 16000           # Price: 4000, Total cost: 64000000.0 (31.03%)
+			goods_input_launch_capacity_add = 640000             # Price:  200, Total cost: 128000000.0 (62.06%)
+			goods_input_electronic_components_add = 80000        # Price:   80, Total cost: 6400000.0 (3.10%)
+			goods_input_steel_add = 32000                        # Price:   50, Total cost: 1600000.0 (0.78%)
+			goods_input_electricity_add = 80000                  # Price:   30, Total cost: 2400000.0 (1.16%)
+			goods_input_digital_access_add = 32000               # Price:  120, Total cost: 3840000.0 (1.86%)
 			# Output goods
-			# Total input cost: 43560000.0
+			# Total input cost: 206240000.0
 			# Total output cost: 0
-			# Profit: -43560000.0
+			# Profit: -206240000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 50000
-			# Wage breakeven: -871.20
+			# Wage breakeven: -4124.80
 			# Other modifiers
 			building_annual_solar_collector_progress = 1
 		}
@@ -17782,26 +17782,26 @@ pm_solar_collector = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_solar_receiver_max_level_add = 10
+			country_solar_receiver_max_level_add = 3
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_advanced_materials_add = 200             # Price: 4000, Total cost: 800000.0 (61.07%)
-			goods_input_electronic_components_add = 500          # Price:   80, Total cost: 40000.0 (3.05%)
-			goods_input_launch_capacity_add = 2000               # Price:  200, Total cost: 400000.0 (30.53%)
-			goods_input_steel_add = 200                          # Price:   50, Total cost: 10000.0 (0.76%)
-			goods_input_digital_access_add = 500                 # Price:  120, Total cost: 60000.0 (4.58%)
+			goods_input_advanced_materials_add = 100             # Price: 4000, Total cost: 400000.0 (61.07%)
+			goods_input_electronic_components_add = 250          # Price:   80, Total cost: 20000.0 (3.05%)
+			goods_input_launch_capacity_add = 1000               # Price:  200, Total cost: 200000.0 (30.53%)
+			goods_input_steel_add = 100                          # Price:   50, Total cost:  5000.0 (0.76%)
+			goods_input_digital_access_add = 250                 # Price:  120, Total cost: 30000.0 (4.58%)
 			# Output goods
-			# Total input cost: 1310000.0
+			# Total input cost: 655000.0
 			# Total output cost: 0
-			# Profit: -1310000.0
+			# Profit: -655000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 4000
-			# Wage breakeven: -327.50
+			# Wage breakeven: -163.75
 		}
 
 		level_scaled = {
@@ -17824,17 +17824,17 @@ pm_solar_receiver = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electronic_components_add = 20           # Price:   80, Total cost:  1600.0 (76.19%)
-			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (23.81%)
+			goods_input_electronic_components_add = 100          # Price:   80, Total cost:  8000.0 (76.19%)
+			goods_input_steel_add = 50                           # Price:   50, Total cost:  2500.0 (23.81%)
 			# Output goods
-			goods_output_electricity_add = 200000                # Price:   30, Total cost: 6000000.0 (100.00%)
-			# Total input cost: 2100.0
-			# Total output cost: 6000000.0
-			# Profit: 5997900.0
+			goods_output_electricity_add = 1000000               # Price:   30, Total cost: 30000000.0 (100.00%)
+			# Total input cost: 10500.0
+			# Total output cost: 30000000.0
+			# Profit: 29989500.0
 			# Profit margin: 285614.29%
 			# Zero profit price multiplier: 0.00
 			# Employment: 1000
-			# Wage breakeven: 5997.90
+			# Wage breakeven: 29989.50
 		}
 
 		level_scaled = {

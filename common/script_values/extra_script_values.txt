@@ -1486,6 +1486,14 @@ city_size = {
 	}
 }
 
+# MEGA PROJECT EVENT EXPENSE SCALING
+# Used with add_modifier = { name = X multiplier = wonder_event_expense_Y }
+# where the modifier has country_expenses_add = 1. The multiplier scales expenses with GDP.
+wonder_event_expense_medium = {
+	value = gdp
+	multiply = 0.0004
+}
+
 # BANKING EVENT EXPENSE SCALING
 # Used with add_modifier = { name = X multiplier = banking_event_expense_Y }
 # where the modifier has country_expenses_add = 1. The multiplier scales expenses with GDP.

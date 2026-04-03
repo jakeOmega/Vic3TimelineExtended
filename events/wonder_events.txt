@@ -250,6 +250,7 @@ wonder_events.5 = {
 		add_modifier = {
 			name = we_se_debris_clearance
 			days = long_modifier_time
+			multiplier = wonder_event_expense_medium
 			is_decaying = yes
 		}
 		add_radicals = { value = small_radicals strata = upper }

@@ -3042,7 +3042,7 @@
  wonder_events.5.a:0 "Launch an emergency debris clearance mission."
  wonder_events.5.b:0 "Deploy automated defense systems along the cable."
  wonder_events.5.d:0 "A cascade of orbital debris threatens the space elevator's cable and nearby orbital infrastructure. Without intervention, a runaway chain of collisions could render low Earth orbit unusable for decades."
- wonder_events.5.f:0 "- One collision becomes ten. Ten becomes a thousand. A thousand becomes a wall of shrapnel moving at eight kilometers per second.\n\n- And our elevator cable is sitting right in the path."
+ wonder_events.5.f:0 "One collision becomes ten. Ten becomes a thousand. A thousand becomes a wall of shrapnel moving at eight kilometers per second.\n\nAnd our elevator cable is sitting right in the path."
  wonder_events.5.t:0 "Kessler Syndrome"
  wonder_events.6.a:0 "Fund advanced space education programs."
  wonder_events.6.b:0 "Channel their talent into industry."

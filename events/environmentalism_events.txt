@@ -95,7 +95,12 @@ environmentalism_events.2 = {
 				add = 2
 			}
 		}
-		# Ignore the warnings - population suffers
+		# Ignore the warnings - industry continues unrestricted
+		add_modifier = {
+			name = climate_dismissal_boost_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_radicals = { value = medium_radicals }
 		add_loyalists = { value = small_radicals strata = upper }
 	}
@@ -188,13 +193,13 @@ environmentalism_events.3 = {
 		ai_chance = {
 			base = 1
 		}
-		# Do nothing - severe consequences
-		add_radicals = { value = large_radicals }
+		# Do nothing - severe consequences but government saves resources
 		add_modifier = {
-			name = crop_failure_modifier
+			name = climate_inaction_savings_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		add_radicals = { value = large_radicals }
 		add_loyalists = { value = small_radicals strata = upper }
 	}
 }
@@ -314,9 +319,14 @@ environmentalism_events.5 = {
 	option = {
 		name = environmentalism_events.5.b
 		ai_chance = { base = 1 }
-		# Endure the crisis
+		# Endure the crisis - no spending saves bureaucracy
 		add_modifier = {
 			name = crop_failure_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = crop_failure_austerity_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
@@ -532,7 +542,12 @@ environmentalism_events.8 = {
 				add = 2
 			}
 		}
-		# Dismiss the environmentalists - radicalizes academics and movement
+		# Dismiss the environmentalists - industry runs free but radicalizes academics
+		add_modifier = {
+			name = climate_dismissal_boost_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_modifier = {
 			name = climate_political_turmoil_modifier
@@ -704,10 +719,10 @@ environmentalism_events.10 = {
 		ai_chance = {
 			base = 1
 		}
-		# Strict water rationing
+		# Strict water rationing - harsh but brief
 		add_modifier = {
 			name = water_crisis_rationing_modifier
-			days = normal_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		add_radicals = { value = medium_radicals strata = lower }
@@ -974,7 +989,12 @@ environmentalism_events.13 = {
 				add = 2
 			}
 		}
-		# Reject the accord
+		# Reject the accord - fossil fuel industry runs unrestricted
+		add_modifier = {
+			name = climate_accord_rejection_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_radicals = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals strata = upper }
 	}
@@ -1274,7 +1294,12 @@ environmentalism_events.17 = {
 	option = {
 		name = environmentalism_events.17.b
 		ai_chance = { base = 2 }
-		# Scale back emergency spending and normalize governance
+		# Scale back emergency spending - economic boost from deregulation
+		add_modifier = {
+			name = climate_deregulation_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = { value = small_radicals strata = upper }
 		add_radicals = { value = very_small_radicals pop_type = academics }
 	}
@@ -1315,7 +1340,12 @@ environmentalism_events.18 = {
 	option = {
 		name = environmentalism_events.18.b
 		ai_chance = { base = 2 }
-		# Ease restrictions now that severe risks are easing
+		# Ease restrictions - industry benefits from relaxed climate rules
+		add_modifier = {
+			name = climate_deregulation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = { value = very_small_radicals strata = upper }
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
@@ -1356,7 +1386,12 @@ environmentalism_events.19 = {
 	option = {
 		name = environmentalism_events.19.b
 		ai_chance = { base = 2 }
-		# Pivot resources to conventional growth priorities
+		# Pivot resources to conventional growth - industry benefits
+		add_modifier = {
+			name = climate_deregulation_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = { value = very_small_radicals strata = upper }
 		add_radicals = { value = very_small_radicals pop_type = academics }
 	}
@@ -1397,7 +1432,12 @@ environmentalism_events.20 = {
 	option = {
 		name = environmentalism_events.20.b
 		ai_chance = { base = 2 }
-		# Sunset emergency-era climate measures
+		# Sunset emergency-era climate measures - economic benefit but emissions rise
+		add_modifier = {
+			name = climate_measures_sunset_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = { value = very_small_radicals strata = upper }
 	}
 }
@@ -1437,7 +1477,12 @@ environmentalism_events.21 = {
 	option = {
 		name = environmentalism_events.21.b
 		ai_chance = { base = 2 }
-		# Declare victory and reduce policy intensity
+		# Declare victory - prestige and economic dividend but risks complacency
+		add_modifier = {
+			name = climate_victory_dividend_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = { value = small_radicals strata = upper }
 		add_radicals = { value = very_small_radicals pop_type = academics }
 	}

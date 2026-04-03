@@ -1075,6 +1075,57 @@ arctic_adaptation_modifier = {
 	building_port_throughput_add = -0.05
 }
 
+# Dismissing climate concerns - industry runs unrestricted (events 2A, 8A)
+climate_dismissal_boost_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_throughput_add = 0.03
+	country_greenhouse_gas_emissions_mult = 0.05
+}
+
+# Not spending on climate crisis - saves government resources (event 3B)
+climate_inaction_savings_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_bureaucracy_mult = 0.05
+	building_throughput_add = 0.02
+}
+
+# Enduring crop failure without relief spending - saves bureaucracy (event 5B)
+crop_failure_austerity_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_bureaucracy_mult = 0.03
+}
+
+# Rejecting international climate accord - fossil fuels unrestricted (event 13C)
+climate_accord_rejection_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_coal_mining_throughput_add = 0.05
+	building_group_bg_oil_extraction_throughput_add = 0.05
+	country_greenhouse_gas_emissions_mult = 0.05
+}
+
+# Rolling back climate protections during cooling (events 17B, 18B, 19B)
+climate_deregulation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_throughput_add = 0.03
+	country_greenhouse_gas_emissions_mult = 0.05
+	country_bureaucracy_mult = 0.03
+}
+
+# Sunsetting emergency climate measures (event 20B)
+climate_measures_sunset_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_throughput_add = 0.05
+	country_greenhouse_gas_emissions_mult = 0.10
+}
+
+# Declaring victory on climate and reducing policy intensity (event 21B)
+climate_victory_dividend_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_prestige_add = 100
+	building_throughput_add = 0.05
+	country_greenhouse_gas_emissions_mult = 0.05
+}
+
 # ============================================================================
 # IG APPROVAL MODIFIERS (for interest group reactions to events)
 # ============================================================================
