@@ -39,3 +39,67 @@
 		value = 100	
 	}
 }
+
+# ============================================================================
+# Secularization Campaign
+# Removes all permanent religious revival modifiers.
+# Available after researching decline_of_organized_religion.
+# ============================================================================
+secularization_campaign = {
+	is_shown = {
+		has_technology_researched = decline_of_organized_religion
+		OR = {
+			has_modifier = rre_religious_right_modifier
+			has_modifier = rre_televangelism_modifier
+			has_modifier = rre_liberation_theology_modifier
+			has_modifier = rre_religious_nationalism_modifier
+			has_modifier = rre_digital_faith_modifier
+			has_modifier = rre_culture_war_modifier
+			has_modifier = rre_faith_services_modifier
+		}
+	}
+
+	possible = {
+		has_technology_researched = decline_of_organized_religion
+		NOT = { is_country_type = decentralized }
+	}
+
+	when_taken = {
+		if = {
+			limit = { has_modifier = rre_religious_right_modifier }
+			remove_modifier = rre_religious_right_modifier
+		}
+		if = {
+			limit = { has_modifier = rre_televangelism_modifier }
+			remove_modifier = rre_televangelism_modifier
+		}
+		if = {
+			limit = { has_modifier = rre_liberation_theology_modifier }
+			remove_modifier = rre_liberation_theology_modifier
+		}
+		if = {
+			limit = { has_modifier = rre_religious_nationalism_modifier }
+			remove_modifier = rre_religious_nationalism_modifier
+		}
+		if = {
+			limit = { has_modifier = rre_digital_faith_modifier }
+			remove_modifier = rre_digital_faith_modifier
+		}
+		if = {
+			limit = { has_modifier = rre_culture_war_modifier }
+			remove_modifier = rre_culture_war_modifier
+		}
+		if = {
+			limit = { has_modifier = rre_faith_services_modifier }
+			remove_modifier = rre_faith_services_modifier
+		}
+		add_radicals = {
+			value = medium_radicals
+			interest_group = ig_devout
+		}
+	}
+
+	ai_chance = {
+		value = 0
+	}
+}

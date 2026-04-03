@@ -1,0 +1,912 @@
+﻿namespace = religious_revival_events
+
+# ============================================================================
+# RELIGIOUS REVIVAL EVENTS
+# Events tied to social techs that can significantly strengthen the Devout IG,
+# counterbalancing its natural decline from urbanization and literacy.
+# Inspired by 20th/21st century religious-political movements.
+#
+# Religion-variant descriptions via heritage traits:
+#   heritage_christian, heritage_islamic, heritage_dharmic, heritage_taoic,
+#   heritage_jewish, plus a generic default.
+#
+# Law gating:
+#   - state_atheism blocks most events (except liberation theology / welfare)
+#   - total_separation and freedom_of_conscience modulate AI weights
+#   - ministry_of_religion amplifies some effects
+# ============================================================================
+
+# Event 1: The Moral Majority
+# Trigger: television_broadcasting (era 7)
+# Religious leaders discover mass media as a political organizing tool.
+# Inspired by Jerry Falwell, Muslim Brotherhood media, RSS campaigns, Evangelical TV.
+religious_revival_events.1 = {
+type = country_event
+placement = root
+
+event_image = {
+video = "europenorthamerica_political_extremism"
+}
+
+on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+title = religious_revival_events.1.t
+
+desc = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.1.d_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.1.d_dharmic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.1.d }
+}
+}
+
+flavor = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.1.f_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.1.f_dharmic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.1.f }
+}
+}
+
+duration = 3
+cooldown = { days = long_modifier_time }
+
+trigger = {
+has_technology_researched = television_broadcasting
+NOT = { has_modifier = rre_religious_right_modifier }
+NOT = { has_law = law_type:law_state_atheism }
+any_interest_group = { is_interest_group_type = ig_devout }
+}
+
+immediate = {
+random_interest_group = {
+limit = { is_interest_group_type = ig_devout }
+save_scope_as = devout_ig
+}
+}
+
+# Embrace the religious vote
+option = {
+name = religious_revival_events.1.a
+default_option = yes
+ai_chance = {
+base = 3
+modifier = {
+trigger = {
+any_interest_group = {
+is_interest_group_type = ig_devout
+is_powerful = yes
+}
+}
+add = 5
+}
+modifier = {
+trigger = { has_law = law_type:law_total_separation }
+add = -2
+}
+modifier = {
+trigger = { has_law = law_type:law_ministry_of_religion }
+add = 3
+}
+}
+add_modifier = {
+name = rre_religious_right_modifier
+}
+add_loyalists = {
+value = medium_radicals
+interest_group = ig_devout
+}
+add_radicals = {
+value = small_radicals
+pop_type = academics
+}
+}
+
+# Moderate engagement with faith leaders
+option = {
+name = religious_revival_events.1.b
+ai_chance = {
+base = 5
+}
+add_modifier = {
+name = rre_religious_engagement_modifier
+days = very_long_modifier_time
+is_decaying = yes
+}
+add_loyalists = {
+value = small_radicals
+interest_group = ig_devout
+}
+}
+
+# Keep politics and religion separate
+option = {
+name = religious_revival_events.1.c
+ai_chance = {
+base = 3
+modifier = {
+trigger = {
+any_interest_group = {
+is_interest_group_type = ig_intelligentsia
+is_powerful = yes
+}
+}
+add = 3
+}
+modifier = {
+trigger = { has_law = law_type:law_total_separation }
+add = 3
+}
+}
+add_radicals = {
+value = small_radicals
+interest_group = ig_devout
+}
+add_loyalists = {
+value = small_radicals
+pop_type = academics
+}
+}
+}
+
+# Event 2: The Electronic Pulpit
+# Trigger: pop_culture (era 8)
+# Televangelism, megachurches, prosperity gospel.
+# Inspired by Billy Graham, Joel Osteen, Hillsong, megachurch movement, Islamic satellite TV.
+religious_revival_events.2 = {
+type = country_event
+placement = root
+
+event_image = {
+video = "southamerica_christianity"
+}
+
+on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+title = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.2.t_islamic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.2.t }
+}
+}
+
+desc = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.2.d_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.2.d_dharmic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.2.d }
+}
+}
+
+flavor = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.2.f_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.2.f_dharmic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.2.f }
+}
+}
+
+duration = 3
+cooldown = { days = long_modifier_time }
+
+trigger = {
+has_technology_researched = pop_culture
+NOT = { has_modifier = rre_televangelism_modifier }
+NOT = { has_law = law_type:law_state_atheism }
+any_interest_group = { is_interest_group_type = ig_devout }
+}
+
+immediate = {
+random_interest_group = {
+limit = { is_interest_group_type = ig_devout }
+save_scope_as = devout_ig
+}
+}
+
+# Give them the airwaves
+option = {
+name = religious_revival_events.2.a
+default_option = yes
+ai_chance = {
+base = 3
+modifier = {
+trigger = {
+any_interest_group = {
+is_interest_group_type = ig_devout
+is_powerful = yes
+}
+}
+add = 5
+}
+modifier = {
+trigger = { has_law = law_type:law_total_separation }
+add = -2
+}
+}
+add_modifier = {
+name = rre_televangelism_modifier
+}
+add_loyalists = {
+value = medium_radicals
+interest_group = ig_devout
+}
+}
+
+# Regulate religious broadcasting
+option = {
+name = religious_revival_events.2.b
+ai_chance = {
+base = 5
+}
+add_modifier = {
+name = rre_religious_broadcasting_modifier
+days = very_long_modifier_time
+is_decaying = yes
+}
+add_loyalists = {
+value = small_radicals
+interest_group = ig_devout
+}
+}
+
+# Tax megachurches like businesses
+option = {
+name = religious_revival_events.2.c
+ai_chance = {
+base = 2
+modifier = {
+trigger = { has_law = law_type:law_total_separation }
+add = 3
+}
+}
+add_radicals = {
+value = medium_radicals
+interest_group = ig_devout
+}
+add_loyalists = {
+value = small_radicals
+pop_type = academics
+}
+}
+}
+
+# Event 3: Liberation Theology
+# Trigger: civil_rights_movement (era 7)
+# CAN fire under state atheism (underground faith movements for justice).
+# Inspired by Oscar Romero, MLK, Islamic socialism, Engaged Buddhism, Dalit theology.
+religious_revival_events.3 = {
+type = country_event
+placement = root
+
+event_image = {
+video = "southamerica_christianity"
+}
+
+on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+title = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.3.t_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.3.t_dharmic }
+triggered_desc = { trigger = { has_law = law_type:law_state_atheism } desc = religious_revival_events.3.t_atheism }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.3.t }
+}
+}
+
+desc = {
+first_valid = {
+triggered_desc = { trigger = { has_law = law_type:law_state_atheism } desc = religious_revival_events.3.d_atheism }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.3.d_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.3.d_dharmic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.3.d }
+}
+}
+
+flavor = {
+first_valid = {
+triggered_desc = { trigger = { has_law = law_type:law_state_atheism } desc = religious_revival_events.3.f_atheism }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.3.f_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.3.f_dharmic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.3.f }
+}
+}
+
+duration = 3
+cooldown = { days = long_modifier_time }
+
+trigger = {
+has_technology_researched = civil_rights_movement
+NOT = { has_modifier = rre_liberation_theology_modifier }
+any_interest_group = { is_interest_group_type = ig_devout }
+}
+
+immediate = {
+random_interest_group = {
+limit = { is_interest_group_type = ig_devout }
+save_scope_as = devout_ig
+}
+}
+
+# The faithful speak for the oppressed
+option = {
+name = religious_revival_events.3.a
+default_option = yes
+ai_chance = {
+base = 3
+modifier = {
+trigger = {
+any_interest_group = {
+is_interest_group_type = ig_devout
+is_powerful = yes
+}
+}
+add = 3
+}
+modifier = {
+trigger = { has_law = law_type:law_state_atheism }
+add = -2
+}
+}
+add_modifier = {
+name = rre_liberation_theology_modifier
+}
+add_loyalists = {
+value = medium_radicals
+interest_group = ig_devout
+}
+add_radicals = {
+value = small_radicals
+pop_type = capitalists
+}
+}
+
+# Channel this energy constructively
+option = {
+name = religious_revival_events.3.b
+ai_chance = {
+base = 5
+}
+add_modifier = {
+name = rre_progressive_faith_modifier
+days = very_long_modifier_time
+is_decaying = yes
+}
+add_loyalists = {
+value = small_radicals
+interest_group = ig_devout
+}
+}
+
+# Religion should stay out of politics
+option = {
+name = religious_revival_events.3.c
+ai_chance = {
+base = 3
+modifier = {
+trigger = { has_law = law_type:law_state_atheism }
+add = 5
+}
+}
+add_radicals = {
+value = medium_radicals
+interest_group = ig_devout
+}
+add_loyalists = {
+value = small_radicals
+pop_type = academics
+}
+}
+}
+
+# Event 4: One Nation Under God
+# Trigger: globalization (era 9)
+# Religious nationalism as a response to globalization.
+# Inspired by BJP/RSS, Islamic political movements, Christian nationalism, Buddhist nationalism.
+religious_revival_events.4 = {
+type = country_event
+placement = root
+
+event_image = {
+video = "unspecific_ruler_speaking_to_people"
+}
+
+on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+title = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.4.t_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.4.t_dharmic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_jewish } } desc = religious_revival_events.4.t_jewish }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.4.t }
+}
+}
+
+desc = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.4.d_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.4.d_dharmic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_jewish } } desc = religious_revival_events.4.d_jewish }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.4.d }
+}
+}
+
+flavor = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.4.f_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.4.f_dharmic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.4.f }
+}
+}
+
+duration = 3
+cooldown = { days = long_modifier_time }
+
+trigger = {
+has_technology_researched = globalization
+NOT = { has_modifier = rre_religious_nationalism_modifier }
+NOT = { has_law = law_type:law_state_atheism }
+any_interest_group = { is_interest_group_type = ig_devout }
+}
+
+immediate = {
+random_interest_group = {
+limit = { is_interest_group_type = ig_devout }
+save_scope_as = devout_ig
+}
+}
+
+# Our nation's soul is bound to its faith
+option = {
+name = religious_revival_events.4.a
+default_option = yes
+ai_chance = {
+base = 2
+modifier = {
+trigger = {
+any_interest_group = {
+is_interest_group_type = ig_devout
+is_powerful = yes
+}
+}
+add = 5
+}
+modifier = {
+trigger = { has_law = law_type:law_ministry_of_religion }
+add = 3
+}
+modifier = {
+trigger = { has_law = law_type:law_total_separation }
+add = -3
+}
+}
+add_modifier = {
+name = rre_religious_nationalism_modifier
+}
+add_loyalists = {
+value = large_radicals
+interest_group = ig_devout
+}
+add_radicals = {
+value = small_radicals
+pop_type = academics
+}
+}
+
+# Civic nationalism beyond creed
+option = {
+name = religious_revival_events.4.b
+ai_chance = {
+base = 5
+}
+add_modifier = {
+name = rre_civic_faith_modifier
+days = very_long_modifier_time
+is_decaying = yes
+}
+add_loyalists = {
+value = small_radicals
+interest_group = ig_devout
+}
+}
+
+# We are a secular republic
+option = {
+name = religious_revival_events.4.c
+ai_chance = {
+base = 3
+modifier = {
+trigger = { has_law = law_type:law_no_ministry_of_religion }
+add = 3
+}
+modifier = {
+trigger = { has_law = law_type:law_total_separation }
+add = 5
+}
+}
+add_radicals = {
+value = medium_radicals
+interest_group = ig_devout
+}
+add_loyalists = {
+value = medium_radicals
+pop_type = academics
+}
+}
+}
+
+# Event 5: The Digital Pulpit
+# Trigger: social_media (era 9)
+# Online religious communities, streaming megachurches, faith influencers.
+# Inspired by online megachurches, Islamic YouTube scholars, Hindu WhatsApp movements.
+religious_revival_events.5 = {
+type = country_event
+placement = root
+
+event_image = {
+video = "southamerica_christianity"
+}
+
+on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+title = religious_revival_events.5.t
+
+desc = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.5.d_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.5.d_dharmic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.5.d }
+}
+}
+
+flavor = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.5.f_islamic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.5.f }
+}
+}
+
+duration = 3
+cooldown = { days = long_modifier_time }
+
+trigger = {
+has_technology_researched = social_media
+NOT = { has_modifier = rre_digital_faith_modifier }
+NOT = { has_law = law_type:law_state_atheism }
+any_interest_group = { is_interest_group_type = ig_devout }
+}
+
+immediate = {
+random_interest_group = {
+limit = { is_interest_group_type = ig_devout }
+save_scope_as = devout_ig
+}
+}
+
+# Let faith flourish in the digital age
+option = {
+name = religious_revival_events.5.a
+default_option = yes
+ai_chance = {
+base = 3
+modifier = {
+trigger = {
+any_interest_group = {
+is_interest_group_type = ig_devout
+is_powerful = yes
+}
+}
+add = 5
+}
+modifier = {
+trigger = { has_law = law_type:law_total_separation }
+add = -2
+}
+}
+add_modifier = {
+name = rre_digital_faith_modifier
+}
+add_loyalists = {
+value = medium_radicals
+interest_group = ig_devout
+}
+}
+
+# Moderate the online message
+option = {
+name = religious_revival_events.5.b
+ai_chance = {
+base = 5
+}
+add_modifier = {
+name = rre_online_faith_modifier
+days = very_long_modifier_time
+is_decaying = yes
+}
+add_loyalists = {
+value = small_radicals
+interest_group = ig_devout
+}
+}
+
+# Monitor for extremism
+option = {
+name = religious_revival_events.5.c
+ai_chance = {
+base = 3
+modifier = {
+trigger = { has_law = law_type:law_total_separation }
+add = 3
+}
+}
+add_radicals = {
+value = small_radicals
+interest_group = ig_devout
+}
+ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+}
+}
+
+# Event 6: The Culture War
+# Trigger: sexual_revolution (era 8)
+# Religious backlash against social liberalization.
+# Inspired by Moral Majority, Focus on the Family, pro-family movements worldwide.
+religious_revival_events.6 = {
+type = country_event
+placement = root
+
+event_image = {
+video = "africa_public_protest"
+}
+
+on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+title = religious_revival_events.6.t
+
+desc = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.6.d_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.6.d_dharmic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.6.d }
+}
+}
+
+flavor = {
+first_valid = {
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.6.f_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.6.f_dharmic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.6.f }
+}
+}
+
+duration = 3
+cooldown = { days = long_modifier_time }
+
+trigger = {
+has_technology_researched = sexual_revolution
+NOT = { has_modifier = rre_culture_war_modifier }
+NOT = { has_law = law_type:law_state_atheism }
+any_interest_group = { is_interest_group_type = ig_devout }
+}
+
+immediate = {
+random_interest_group = {
+limit = { is_interest_group_type = ig_devout }
+save_scope_as = devout_ig
+}
+}
+
+# Stand with tradition
+option = {
+name = religious_revival_events.6.a
+default_option = yes
+ai_chance = {
+base = 2
+modifier = {
+trigger = {
+any_interest_group = {
+is_interest_group_type = ig_devout
+is_powerful = yes
+}
+}
+add = 5
+}
+modifier = {
+trigger = { has_law = law_type:law_ministry_of_religion }
+add = 3
+}
+modifier = {
+trigger = { has_law = law_type:law_total_separation }
+add = -3
+}
+}
+add_modifier = {
+name = rre_culture_war_modifier
+}
+add_loyalists = {
+value = large_radicals
+interest_group = ig_devout
+}
+add_radicals = {
+value = medium_radicals
+pop_type = academics
+}
+}
+
+# Seek theological reform
+option = {
+name = religious_revival_events.6.b
+ai_chance = {
+base = 5
+}
+add_modifier = {
+name = rre_faith_reform_modifier
+days = very_long_modifier_time
+is_decaying = yes
+}
+add_loyalists = {
+value = small_radicals
+interest_group = ig_devout
+}
+}
+
+# The march of progress continues
+option = {
+name = religious_revival_events.6.c
+ai_chance = {
+base = 3
+modifier = {
+trigger = {
+any_interest_group = {
+is_interest_group_type = ig_intelligentsia
+is_powerful = yes
+}
+}
+add = 5
+}
+modifier = {
+trigger = { has_law = law_type:law_total_separation }
+add = 3
+}
+}
+add_radicals = {
+value = medium_radicals
+interest_group = ig_devout
+}
+add_loyalists = {
+value = small_radicals
+pop_type = academics
+}
+}
+}
+
+# Event 7: Faith-Based Welfare
+# Trigger: social_justice_movements (era 9)
+# CAN fire under state atheism (underground charities, civil society).
+# Inspired by Catholic Charities, Islamic zakat, Sikh langars, evangelical humanitarian work.
+religious_revival_events.7 = {
+type = country_event
+placement = root
+
+event_image = {
+video = "southamerica_christianity"
+}
+
+on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+title = religious_revival_events.7.t
+
+desc = {
+first_valid = {
+triggered_desc = { trigger = { has_law = law_type:law_state_atheism } desc = religious_revival_events.7.d_atheism }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.7.d_islamic }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.7.d_dharmic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.7.d }
+}
+}
+
+flavor = {
+first_valid = {
+triggered_desc = { trigger = { has_law = law_type:law_state_atheism } desc = religious_revival_events.7.f_atheism }
+triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.7.f_islamic }
+triggered_desc = { trigger = { always = yes } desc = religious_revival_events.7.f }
+}
+}
+
+duration = 3
+cooldown = { days = long_modifier_time }
+
+trigger = {
+has_technology_researched = social_justice_movements
+NOT = { has_modifier = rre_faith_services_modifier }
+any_interest_group = { is_interest_group_type = ig_devout }
+}
+
+immediate = {
+random_interest_group = {
+limit = { is_interest_group_type = ig_devout }
+save_scope_as = devout_ig
+}
+}
+
+# Fund faith-based institutions
+option = {
+name = religious_revival_events.7.a
+default_option = yes
+ai_chance = {
+base = 3
+modifier = {
+trigger = {
+any_interest_group = {
+is_interest_group_type = ig_devout
+is_powerful = yes
+}
+}
+add = 5
+}
+modifier = {
+trigger = { has_law = law_type:law_state_atheism }
+add = -4
+}
+modifier = {
+trigger = { has_law = law_type:law_ministry_of_religion }
+add = 3
+}
+}
+add_modifier = {
+name = rre_faith_services_modifier
+}
+add_loyalists = {
+value = medium_radicals
+interest_group = ig_devout
+}
+}
+
+# Partner with faith organizations
+option = {
+name = religious_revival_events.7.b
+ai_chance = {
+base = 5
+}
+add_modifier = {
+name = rre_faith_partnership_modifier
+days = very_long_modifier_time
+is_decaying = yes
+}
+add_loyalists = {
+value = small_radicals
+interest_group = ig_devout
+}
+}
+
+# Expand secular state welfare
+option = {
+name = religious_revival_events.7.c
+ai_chance = {
+base = 3
+modifier = {
+trigger = { has_law = law_type:law_state_atheism }
+add = 5
+}
+}
+add_radicals = {
+value = small_radicals
+interest_group = ig_devout
+}
+add_loyalists = {
+value = small_radicals
+pop_type = academics
+}
+add_modifier = {
+name = rre_secular_welfare_modifier
+days = very_long_modifier_time
+is_decaying = yes
+}
+}
+}

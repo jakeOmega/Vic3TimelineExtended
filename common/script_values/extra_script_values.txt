@@ -391,7 +391,11 @@ power_bloc_mandate_progress_diplomatic_identity = {
 }
 
 institution_ministry_of_the_environment_pollution_generation = {
-	value = pollution_generation
+	value = 0
+	if = {
+		limit = { pollution_generation > 0 }
+		add = pollution_generation
+	}
 	if = {
 		limit = { has_variable = prior_pollution_reduction }
 		subtract = var:prior_pollution_reduction
@@ -1207,7 +1211,10 @@ global_tech_spread_script_value = {
 state_arable_land_add_script_value = {
 	value = arable_land
 	multiply = modifier:state_arable_land_mult
-	subtract = var:arable_land_added
+	if = {
+		limit = { has_variable = arable_land_added }
+		subtract = var:arable_land_added
+	}
 	floor = yes
 }
 
@@ -1546,6 +1553,16 @@ financial_cycle_government_fiscal_policy_effect_size = {
 	multiply = 20 # deficit spending 5% of GDP per year adds 1 points to the financial cycle monthly
 }
 
+# +0.1/month at 10 bubble pressure, +1 at ~30, +10 at 100
+bubble_inertia_multiplier_script_value = {
+	value = 0
+	add = {
+		value = var:bubble_pressure
+		multiply = var:bubble_pressure
+		divide = 1000
+	}
+}
+
 country_unemployment_rate = {
 	value = 0
 	every_scope_state = {
@@ -1707,7 +1724,10 @@ state_population_density = {
 	divide = {
 		value = {
 			value = arable_land
-			subtract = var:arable_land_added # exclude arable land added by tech, as that effectively double-counts the effect
+			if = {
+				limit = { has_variable = arable_land_added }
+				subtract = var:arable_land_added # exclude arable land added by tech, as that effectively double-counts the effect
+			}
 		}
 		min = 1  # prevent division by zero for states with 0 arable land
 	}

@@ -1186,7 +1186,7 @@ city_rank_on_action = {
 		ordered_state = {
 			order_by = city_size
 			min = 0
-			max = 20000
+			max = 500
 			set_variable = {
 				name = state_city_size_rank
 				value = global_var:city_size_rank
@@ -1903,6 +1903,80 @@ society_technology_events_on_action = {
 					OR = { has_modifier = ste_av_full_adoption has_modifier = ste_av_cautious_rollout }
 				}
 				trigger_event = { id = society_technology_events.31 }
+			}
+
+			# === RELIGIOUS REVIVAL EVENTS ===
+			# These events can significantly strengthen the Devout IG,
+			# counterbalancing its natural decline from modernization.
+
+			# The Moral Majority (television_broadcasting, era 7)
+			8 = {
+				trigger = {
+					has_technology_researched = television_broadcasting
+					NOT = { has_modifier = rre_religious_right_modifier }
+					any_interest_group = { is_interest_group_type = ig_devout }
+				}
+				trigger_event = { id = religious_revival_events.1 }
+			}
+
+			# The Electronic Pulpit (pop_culture, era 8)
+			8 = {
+				trigger = {
+					has_technology_researched = pop_culture
+					NOT = { has_modifier = rre_televangelism_modifier }
+					any_interest_group = { is_interest_group_type = ig_devout }
+				}
+				trigger_event = { id = religious_revival_events.2 }
+			}
+
+			# Liberation Theology (civil_rights_movement, era 7)
+			8 = {
+				trigger = {
+					has_technology_researched = civil_rights_movement
+					NOT = { has_modifier = rre_liberation_theology_modifier }
+					any_interest_group = { is_interest_group_type = ig_devout }
+				}
+				trigger_event = { id = religious_revival_events.3 }
+			}
+
+			# One Nation Under God (globalization, era 9)
+			8 = {
+				trigger = {
+					has_technology_researched = globalization
+					NOT = { has_modifier = rre_religious_nationalism_modifier }
+					any_interest_group = { is_interest_group_type = ig_devout }
+				}
+				trigger_event = { id = religious_revival_events.4 }
+			}
+
+			# The Digital Pulpit (social_media, era 9)
+			8 = {
+				trigger = {
+					has_technology_researched = social_media
+					NOT = { has_modifier = rre_digital_faith_modifier }
+					any_interest_group = { is_interest_group_type = ig_devout }
+				}
+				trigger_event = { id = religious_revival_events.5 }
+			}
+
+			# The Culture War (sexual_revolution, era 8)
+			8 = {
+				trigger = {
+					has_technology_researched = sexual_revolution
+					NOT = { has_modifier = rre_culture_war_modifier }
+					any_interest_group = { is_interest_group_type = ig_devout }
+				}
+				trigger_event = { id = religious_revival_events.6 }
+			}
+
+			# Faith-Based Welfare (social_justice_movements, era 9)
+			8 = {
+				trigger = {
+					has_technology_researched = social_justice_movements
+					NOT = { has_modifier = rre_faith_services_modifier }
+					any_interest_group = { is_interest_group_type = ig_devout }
+				}
+				trigger_event = { id = religious_revival_events.7 }
 			}
 		}
 	}
