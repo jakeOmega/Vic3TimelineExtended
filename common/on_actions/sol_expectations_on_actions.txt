@@ -1,0 +1,13 @@
+﻿# SoL Expectations System - hooks into monthly country pulse.
+
+on_monthly_pulse_country = {
+	on_actions = {
+		sol_expectations_monthly_on_action
+	}
+}
+
+sol_expectations_monthly_on_action = {
+	effect = {
+		sol_expectations_monthly_update = yes
+	}
+}

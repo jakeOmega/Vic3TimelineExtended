@@ -1,0 +1,339 @@
+﻿# Populist Party - anti-establishment, nativist, anti-globalization
+# Appeals to Rural Folk, Petty Bourgeoisie, sometimes Devout and Armed Forces
+# Gated by social_media tech (Era 9) - populism thrives in the age of viral discourse
+
+populist_party = {
+	color = { 255 140 0 }
+	name = {
+		first_valid = {
+			triggered_desc = {
+				desc = party_america_first
+				trigger = {
+					exists = c:USA
+					c:USA ?= THIS
+				}
+			}
+			triggered_desc = {
+				desc = party_national_rally
+				trigger = {
+					country_has_primary_culture = cu:french
+				}
+			}
+			triggered_desc = {
+				desc = party_five_star_movement
+				trigger = {
+					OR = {
+						country_has_primary_culture = cu:north_italian
+						country_has_primary_culture = cu:south_italian
+					}
+					NOR = {
+						c:AUS ?= this
+						c:KUK ?= this
+						c:HRE ?= this
+					}
+				}
+			}
+			triggered_desc = {
+				desc = party_reform_party
+				trigger = {
+					exists = c:GBR
+					c:GBR ?= THIS
+				}
+			}
+			triggered_desc = {
+				desc = party_alternative_fuer_deutschland
+				trigger = {
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+			}
+			triggered_desc = {
+				desc = party_sweden_democrats
+				trigger = {
+					country_has_primary_culture = cu:swedish
+				}
+			}
+			triggered_desc = {
+				desc = party_one_nation
+				trigger = {
+					country_has_primary_culture = cu:australian
+				}
+			}
+			triggered_desc = {
+				desc = party_bharatiya_janata
+				trigger = {
+					OR = {
+						country_has_primary_culture = cu:hindustani
+						country_has_primary_culture = cu:avadhi
+						country_has_primary_culture = cu:rajput
+						country_has_primary_culture = cu:marathi
+						country_has_primary_culture = cu:gujarati
+						country_has_primary_culture = cu:bengali
+						country_has_primary_culture = cu:panjabi
+						country_has_primary_culture = cu:telegu
+						country_has_primary_culture = cu:tamil
+						country_has_primary_culture = cu:kannarese
+					}
+				}
+			}
+			triggered_desc = {
+				desc = party_true_finns
+				trigger = {
+					country_has_primary_culture = cu:finnish
+				}
+			}
+			triggered_desc = {
+				desc = party_freedom_party_populist
+				trigger = {
+					exists = c:NET
+					c:NET ?= THIS
+				}
+			}
+			triggered_desc = {
+				desc = party_lei_e_ordem
+				trigger = {
+					country_has_primary_culture = cu:brazilian
+				}
+			}
+			triggered_desc = {
+				desc = party_populist
+				trigger = {
+					always = yes
+				}
+			}
+		}
+	}
+
+	icon = {
+		default = "/gfx/interface/icons/political_parties/radical.dds"
+	}
+
+	unlocking_technologies = {
+		social_media
+	}
+
+	valid_for_country = {
+		always = yes
+	}
+
+	available_for_interest_group = {
+		owner = {
+			country_has_voting_franchise = yes
+			OR = {
+				py:populist_party ?= {
+					any_member = {}
+				}
+				ig:ig_rural_folk ?= {
+					ig_counts_as_marginal = no
+				}
+				ig:ig_petty_bourgeoisie ?= {
+					ig_counts_as_marginal = no
+				}
+			}
+		}
+		leader ?= {
+			NOR = {
+				has_ideology = ideology:ideology_communist
+				has_ideology = ideology:ideology_vanguardist
+				has_ideology = ideology:ideology_anarchist
+			}
+		}
+	}
+
+	# Root - IG considering joining
+	# scope:number - the number of IGs that would join this party before the root IG
+	join_weight = {
+		value = {
+			value = -5
+			desc = "base_value"
+		}
+		if = { # ethno-nationalists are drawn to populism
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_ethno_nationalist
+				}
+			}
+			add = {
+				value = 8
+				desc = "from_ethno_nationalism"
+			}
+		}
+		if = { # reactionaries embrace populist rhetoric
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_reactionary
+				}
+			}
+			add = {
+				value = 5
+				desc = "from_reactionary"
+			}
+		}
+		if = { # jingoists find populism appealing
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_jingoist
+						has_ideology = ideology:ideology_jingoist_leader
+					}
+				}
+			}
+			add = {
+				value = 5
+				desc = "from_jingoist"
+			}
+		}
+		if = { # paternalists and traditionalists lean populist
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_paternalistic
+						has_ideology = ideology:ideology_traditionalist
+					}
+				}
+			}
+			add = {
+				value = 3
+				desc = "from_traditionalist"
+			}
+		}
+		if = { # devout often align with populist movements
+			limit = {
+				is_interest_group_type = ig_devout
+			}
+			add = {
+				value = 3
+				desc = "from_devout"
+			}
+		}
+		if = { # rural folk are the populist base
+			limit = {
+				is_interest_group_type = ig_rural_folk
+			}
+			add = {
+				value = 4
+				desc = "from_rural_base"
+			}
+		}
+		if = { # petty bourgeoisie's anxieties drive populism
+			limit = {
+				is_interest_group_type = ig_petty_bourgeoisie
+			}
+			add = {
+				value = 3
+				desc = "from_petit_bourgeois_anxiety"
+			}
+		}
+		if = { # armed forces sometimes back populists
+			limit = {
+				is_interest_group_type = ig_armed_forces
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_jingoist
+						has_ideology = ideology:ideology_jingoist_leader
+						has_ideology = ideology:ideology_ethno_nationalist
+					}
+				}
+			}
+			add = {
+				value = 3
+				desc = "from_military_nationalists"
+			}
+		}
+		if = { # a powerful populist IG draws weaker ones
+			limit = {
+				is_powerful = no
+				owner = {
+					any_interest_group = {
+						is_powerful = yes
+						leader ?= {
+							has_ideology = ideology:ideology_ethno_nationalist
+						}
+					}
+				}
+			}
+			add = {
+				value = 4
+				desc = "from_strong_populist_movement"
+			}
+		}
+		if = { # liberals and reformers strongly oppose populism
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_liberal_leader
+						has_ideology = ideology:ideology_reformer
+						has_ideology = ideology:ideology_humanitarian
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+				}
+			}
+			add = {
+				value = -8
+				desc = "from_liberal_opposition"
+			}
+		}
+		if = { # leftists have their own movements
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_communist
+						has_ideology = ideology:ideology_vanguardist
+						has_ideology = ideology:ideology_social_democrat
+					}
+				}
+			}
+			add = {
+				value = -10
+				desc = "from_leftist"
+			}
+		}
+		if = { # moderates are repelled by extreme rhetoric
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_moderate
+				}
+			}
+			add = {
+				value = -5
+				desc = "from_moderate"
+			}
+		}
+		if = { # intelligentsia views populism skeptically
+			limit = {
+				is_interest_group_type = ig_intelligentsia
+			}
+			add = {
+				value = -4
+				desc = "from_intelligentsia"
+			}
+		}
+		if = { # environmentalists oppose populist dismissiveness
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_environmentalists
+				}
+			}
+			add = {
+				value = -5
+				desc = "from_environmentalist"
+			}
+		}
+		if = { # fascists have their own party
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_fascist
+						has_ideology = ideology:ideology_integralist
+					}
+				}
+			}
+			add = {
+				value = -5
+				desc = "from_fascist_distinction"
+			}
+		}
+	}
+}

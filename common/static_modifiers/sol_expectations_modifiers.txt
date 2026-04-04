@@ -1,0 +1,6 @@
+﻿sol_expectations_adaptive_shift = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_lower_strata_expected_sol_add = 1
+	state_middle_strata_expected_sol_add = 1
+	state_upper_strata_expected_sol_add = 1
+}

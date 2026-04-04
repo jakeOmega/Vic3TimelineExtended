@@ -1,0 +1,266 @@
+﻿# Technocratic Party - evidence-based governance, expert-led policy, innovation
+# Appeals to Industrialists and Intelligentsia
+# Gated by machine_learning tech (Era 10) - when algorithmic governance becomes plausible
+
+technocratic_party = {
+	color = { 70 130 180 }
+	name = {
+		first_valid = {
+			triggered_desc = {
+				desc = party_forward
+				trigger = {
+					exists = c:USA
+					c:USA ?= THIS
+				}
+			}
+			triggered_desc = {
+				desc = party_en_marche
+				trigger = {
+					country_has_primary_culture = cu:french
+				}
+			}
+			triggered_desc = {
+				desc = party_ciudadanos
+				trigger = {
+					country_has_primary_culture = cu:spanish
+				}
+			}
+			triggered_desc = {
+				desc = party_neos
+				trigger = {
+					exists = c:AUS
+					c:AUS ?= THIS
+				}
+			}
+			triggered_desc = {
+				desc = party_aam_aadmi
+				trigger = {
+					OR = {
+						country_has_primary_culture = cu:hindustani
+						country_has_primary_culture = cu:avadhi
+						country_has_primary_culture = cu:panjabi
+					}
+				}
+			}
+			triggered_desc = {
+				desc = party_technocratic
+				trigger = {
+					always = yes
+				}
+			}
+		}
+	}
+
+	icon = {
+		default = "/gfx/interface/icons/political_parties/liberal.dds"
+	}
+
+	unlocking_technologies = {
+		machine_learning
+	}
+
+	valid_for_country = {
+		always = yes
+	}
+
+	available_for_interest_group = {
+		owner = {
+			country_has_voting_franchise = yes
+			OR = {
+				py:technocratic_party ?= {
+					any_member = {}
+				}
+				ig:ig_industrialists ?= {
+					ig_counts_as_marginal = no
+				}
+				ig:ig_intelligentsia ?= {
+					ig_counts_as_marginal = no
+				}
+			}
+		}
+		leader ?= {
+			NOR = {
+				has_ideology = ideology:ideology_fascist
+				has_ideology = ideology:ideology_integralist
+				has_ideology = ideology:ideology_ethno_nationalist
+				has_ideology = ideology:ideology_communist
+				has_ideology = ideology:ideology_vanguardist
+				has_ideology = ideology:ideology_anarchist
+			}
+		}
+	}
+
+	# Root - IG considering joining
+	# scope:number - the number of IGs that would join this party before the root IG
+	join_weight = {
+		value = {
+			value = -5
+			desc = "base_value"
+		}
+		if = { # corporatists and technocrats love this
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_corporate
+				}
+			}
+			add = {
+				value = 8
+				desc = "from_corporate"
+			}
+		}
+		if = { # transhumanists are natural allies
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_optimist_transhumanist
+				}
+			}
+			add = {
+				value = 8
+				desc = "from_transhumanist"
+			}
+		}
+		if = { # market liberals favor technocratic efficiency
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_market_liberal
+				}
+			}
+			add = {
+				value = 5
+				desc = "from_market_liberal"
+			}
+		}
+		if = { # moderates appreciate evidence-based policy
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_moderate
+				}
+			}
+			add = {
+				value = 5
+				desc = "from_moderate"
+			}
+		}
+		if = { # reformers drawn to rational governance
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_reformer
+						has_ideology = ideology:ideology_liberal_leader
+					}
+				}
+			}
+			add = {
+				value = 3
+				desc = "from_reformer"
+			}
+		}
+		if = { # industrialists are the core base
+			limit = {
+				is_interest_group_type = ig_industrialists
+			}
+			add = {
+				value = 5
+				desc = "from_industrialist_base"
+			}
+		}
+		if = { # intelligentsia provides expertise
+			limit = {
+				is_interest_group_type = ig_intelligentsia
+			}
+			add = {
+				value = 4
+				desc = "from_expertise"
+			}
+		}
+		if = { # environmentalists can align if technocratic approaches help
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_environmentalists
+				}
+			}
+			add = {
+				value = 2
+				desc = "from_green_tech"
+			}
+		}
+		if = { # reactionaries reject technocracy
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_reactionary
+				}
+			}
+			add = {
+				value = -8
+				desc = "from_reactionary"
+			}
+		}
+		if = { # populists are anti-expert
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_ethno_nationalist
+				}
+			}
+			add = {
+				value = -8
+				desc = "from_populist_opposition"
+			}
+		}
+		if = { # devout distrust secular technocrats
+			limit = {
+				is_interest_group_type = ig_devout
+			}
+			add = {
+				value = -5
+				desc = "from_religious_skepticism"
+			}
+		}
+		if = { # rural folk see technocrats as distant elitists
+			limit = {
+				is_interest_group_type = ig_rural_folk
+			}
+			add = {
+				value = -4
+				desc = "from_rural_skepticism"
+			}
+		}
+		if = { # socialists and communists oppose corporate technocracy
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_communist
+						has_ideology = ideology:ideology_vanguardist
+						has_ideology = ideology:ideology_social_democrat
+					}
+				}
+			}
+			add = {
+				value = -5
+				desc = "from_socialist_opposition"
+			}
+		}
+		if = { # landowners resist disruption of traditional hierarchies
+			limit = {
+				is_interest_group_type = ig_landowners
+			}
+			add = {
+				value = -3
+				desc = "from_landowner_tradition"
+			}
+		}
+		if = { # jingoists don't care for technocratic restraint
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_jingoist
+						has_ideology = ideology:ideology_jingoist_leader
+					}
+				}
+			}
+			add = {
+				value = -3
+				desc = "from_militarist"
+			}
+		}
+	}
+}

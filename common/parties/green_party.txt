@@ -1,0 +1,290 @@
+﻿# Green Party - environmentalism, sustainability, pacifism
+# Appeals to Intelligentsia and Rural Folk with environmentalist leanings
+# Gated by environmental_movement tech (Era 8)
+
+green_party = {
+	color = { 34 139 34 }
+	name = {
+		first_valid = {
+			triggered_desc = {
+				desc = party_die_gruenen
+				trigger = {
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+			}
+			triggered_desc = {
+				desc = party_les_verts
+				trigger = {
+					country_has_primary_culture = cu:french
+				}
+			}
+			triggered_desc = {
+				desc = party_miljoepartiet
+				trigger = {
+					country_has_primary_culture = cu:swedish
+				}
+			}
+			triggered_desc = {
+				desc = party_de_groenen
+				trigger = {
+					OR = {
+						exists = c:NET
+						exists = c:BEL
+					}
+					OR = {
+						c:NET ?= THIS
+						c:BEL ?= THIS
+					}
+				}
+			}
+			triggered_desc = {
+				desc = party_verdi
+				trigger = {
+					OR = {
+						country_has_primary_culture = cu:north_italian
+						country_has_primary_culture = cu:south_italian
+					}
+					NOR = {
+						c:AUS ?= this
+						c:KUK ?= this
+						c:HRE ?= this
+					}
+				}
+			}
+			triggered_desc = {
+				desc = party_the_greens
+				trigger = {
+					OR = {
+						country_has_primary_culture = cu:australian
+						country_has_primary_culture = cu:anglo_canadian
+					}
+				}
+			}
+			triggered_desc = {
+				desc = party_green
+				trigger = {
+					always = yes
+				}
+			}
+		}
+	}
+
+	icon = {
+		default = "/gfx/interface/icons/political_parties/agrarians.dds"
+	}
+
+	unlocking_technologies = {
+		environmental_movement
+	}
+
+	valid_for_country = {
+		always = yes
+	}
+
+	available_for_interest_group = {
+		owner = {
+			country_has_voting_franchise = yes
+			OR = {
+				py:green_party ?= {
+					any_member = {}
+				}
+				ig:ig_intelligentsia ?= {
+					ig_counts_as_marginal = no
+				}
+				ig:ig_rural_folk ?= {
+					ig_counts_as_marginal = no
+				}
+			}
+		}
+		leader ?= {
+			NOR = {
+				has_ideology = ideology:ideology_fascist
+				has_ideology = ideology:ideology_integralist
+				has_ideology = ideology:ideology_ethno_nationalist
+				has_ideology = ideology:ideology_vanguardist
+			}
+		}
+	}
+
+	# Root - IG considering joining
+	# scope:number - the number of IGs that would join this party before the root IG
+	join_weight = {
+		value = {
+			value = -5
+			desc = "base_value"
+		}
+		if = { # environmentalists love green parties
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_environmentalists
+				}
+			}
+			add = {
+				value = 10
+				desc = "from_environmentalism"
+			}
+		}
+		if = { # pacifists and humanitarians are natural allies
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_pacifist
+						has_ideology = ideology:ideology_humanitarian
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+				}
+			}
+			add = {
+				value = 5
+				desc = "from_progressive_values"
+			}
+		}
+		if = { # reformers and social democrats lean green
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_reformer
+						has_ideology = ideology:ideology_social_democrat
+						has_ideology = ideology:ideology_radical
+					}
+				}
+			}
+			add = {
+				value = 3
+				desc = "from_left_progressive"
+			}
+		}
+		if = { # feminists often align with green movements
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_feminist
+				}
+			}
+			add = {
+				value = 3
+				desc = "from_feminist"
+			}
+		}
+		if = { # rural folk have natural connection to land conservation
+			limit = {
+				is_interest_group_type = ig_rural_folk
+			}
+			add = {
+				value = 3
+				desc = "from_rural_conservation"
+			}
+		}
+		if = { # intelligentsia is the academic base
+			limit = {
+				is_interest_group_type = ig_intelligentsia
+			}
+			add = {
+				value = 2
+				desc = "from_academic_base"
+			}
+		}
+		if = { # a powerful environmentalist IG draws others in
+			limit = {
+				is_powerful = no
+				owner = {
+					any_interest_group = {
+						is_powerful = yes
+						leader ?= {
+							has_ideology = ideology:ideology_environmentalists
+						}
+					}
+				}
+			}
+			add = {
+				value = 3
+				desc = "from_strong_green_movement"
+			}
+		}
+		if = { # industrialists oppose environmental regulation
+			limit = {
+				is_interest_group_type = ig_industrialists
+			}
+			add = {
+				value = -5
+				desc = "from_industry_opposition"
+			}
+		}
+		if = { # reactionaries don't care about environment
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_reactionary
+				}
+			}
+			add = {
+				value = -5
+				desc = "from_reactionary"
+			}
+		}
+		if = { # far right opposes green politics
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_fascist
+						has_ideology = ideology:ideology_integralist
+						has_ideology = ideology:ideology_ethno_nationalist
+					}
+				}
+			}
+			add = {
+				value = -10
+				desc = "from_far_right"
+			}
+		}
+		if = { # militarists oppose pacifist green politics
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_jingoist
+						has_ideology = ideology:ideology_jingoist_leader
+					}
+				}
+			}
+			add = {
+				value = -3
+				desc = "from_militarist"
+			}
+		}
+		if = { # armed forces don't go green
+			limit = {
+				is_interest_group_type = ig_armed_forces
+			}
+			add = {
+				value = -3
+				desc = "from_military"
+			}
+		}
+		if = { # communists have their own party
+			limit = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_communist
+						has_ideology = ideology:ideology_vanguardist
+					}
+				}
+			}
+			add = {
+				value = -8
+				desc = "from_communist"
+			}
+		}
+		if = { # market liberals prefer free trade party
+			limit = {
+				leader ?= {
+					has_ideology = ideology:ideology_market_liberal
+				}
+			}
+			add = {
+				value = -3
+				desc = "from_market_liberal"
+			}
+		}
+	}
+}

@@ -1,1 +1,58 @@
-﻿
+﻿# =============================
+# Extended Timeline Game Concepts
+# =============================
+
+# Major Systems
+concept_banking_cycle = {}
+concept_bubble_pressure = {}
+concept_banking_momentum = {}
+concept_banking_crash = {}
+concept_banking_contagion = {}
+concept_financial_regulation = {}
+concept_global_warming_system = {}
+concept_greenhouse_gas_emissions = {}
+concept_temperature_anomaly = {}
+concept_climate_policy = {}
+concept_nuclear_program = {}
+concept_nuclear_strike = {}
+concept_nuclear_stockpile = {}
+concept_space_race = {}
+concept_space_milestone = {}
+concept_solar_colonization = {}
+concept_decolonization_system = {}
+concept_colonial_stability = {}
+concept_united_nations_system = {}
+concept_heir_education_system = {}
+concept_sol_expectations = {}
+concept_world_war_system = {}
+
+# Social Movement Systems
+concept_lgbtq_rights_movement = {}
+concept_feminism_movement = {}
+concept_human_augmentation_system = {}
+concept_digital_rights_system = {}
+concept_environmental_crisis = {}
+concept_post_scarcity_system = {}
+concept_mental_health_crisis = {}
+concept_decline_of_religion = {}
+concept_civil_rights_movement = {}
+
+# Economy & Scaling
+concept_construction_cost_scaling = {}
+concept_migration_crowding = {}
+concept_wonder_building = {}
+concept_tourism_system = {}
+
+# Military & Diplomacy
+concept_combined_arms = {}
+concept_rules_of_war_system = {}
+concept_custom_treaty_articles = {}
+
+# Institutions
+concept_ministry_system = {}
+
+# Other
+concept_religious_revival = {}
+concept_custom_religion = {}
+concept_state_collapse_system = {}
+concept_pollution_system = {}

@@ -1,0 +1,2986 @@
+﻿namespace = modern_election_events
+
+# =============================================================
+# 1. VIRAL FIRESTORM
+# A party's social media post goes massively viral, dominating the campaign
+# =============================================================
+modern_election_events.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.1.t
+	desc = modern_election_events.1.d
+	flavor = modern_election_events.1.f
+
+	event_image = { video = "europenorthamerica_political_extremism" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = social_media
+		any_interest_group = {
+			has_party = yes
+			is_in_government = no
+		}
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Amplify the message
+		name = modern_election_events.1.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small_decrease }
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Let the opposition have their moment
+		name = modern_election_events.1.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Call for digital restraint
+		name = modern_election_events.1.c
+		add_modifier = { name = me_digital_decorum_modifier days = short_modifier_time }
+		ai_chance = { base = 2 }
+	}
+}
+
+# =============================================================
+# 2. DEEPFAKE SCANDAL
+# An AI-generated deepfake of an opposition leader surfaces
+# =============================================================
+modern_election_events.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.2.t
+	desc = modern_election_events.2.d
+	flavor = modern_election_events.2.f
+
+	event_image = { video = "unspecific_politicians_arguing" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = generative_ai
+		any_interest_group = {
+			has_party = yes
+			is_in_government = no
+		}
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Exploit the deepfake for advantage
+		name = modern_election_events.2.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_large }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_large_decrease }
+		}
+		add_radicals = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Publicly expose the forgery
+		name = modern_election_events.2.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		add_modifier = { name = me_deepfake_exposed_modifier days = short_modifier_time }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Ban AI-generated campaign content
+		name = modern_election_events.2.c
+		highlighted_option = yes
+		trigger = {
+			has_technology_researched = cybersecurity
+		}
+		add_modifier = { name = me_ai_content_ban_modifier days = normal_modifier_time }
+		add_loyalists = { value = medium_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 3. CLIMATE ELECTION
+# Record-breaking weather makes climate the defining electoral issue
+# =============================================================
+modern_election_events.3 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.3.t
+	desc = modern_election_events.3.d
+	flavor = modern_election_events.3.f
+
+	event_image = { video = "unspecific_devastation" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = clean_energy_technologies
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+		if = {
+			limit = {
+				any_active_party = { is_party_type = green_party }
+			}
+			random_active_party = {
+				limit = { is_party_type = green_party }
+				save_scope_as = green_scope
+			}
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Pledge a green transition
+		name = modern_election_events.3.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:green_scope }
+			scope:green_scope = { add_momentum = momentum_large }
+		}
+		if = {
+			limit = { NOT = { exists = scope:green_scope } exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_modifier = { name = me_climate_pledge_modifier days = normal_modifier_time }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Double down on economic growth
+		name = modern_election_events.3.b
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		if = {
+			limit = { exists = scope:green_scope }
+			scope:green_scope = { add_momentum = momentum_medium_decrease }
+		}
+		add_radicals = { value = small_radicals strata = lower }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Form a bipartisan climate task force
+		name = modern_election_events.3.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 4. DATA MICROTARGETING
+# A campaign harvests personal data for hyper-targeted digital ads
+# =============================================================
+modern_election_events.4 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.4.t
+	desc = modern_election_events.4.d
+	flavor = modern_election_events.4.f
+
+	event_image = { video = "europenorthamerica_capitalists_meeting" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = cloud_computing
+		has_technology_researched = social_media
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Deploy the microtargeting machine
+		name = modern_election_events.4.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_large }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small_decrease }
+		}
+		add_radicals = { value = small_radicals strata = middle }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Reject the practice outright
+		name = modern_election_events.4.b
+		add_loyalists = { value = small_radicals }
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Regulate data use in campaigns
+		name = modern_election_events.4.c
+		highlighted_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_moderate_data_privacy
+				has_law = law_type:law_strong_privacy_rights
+			}
+		}
+		add_modifier = { name = me_data_regulation_modifier days = normal_modifier_time }
+		add_loyalists = { value = medium_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 5. POPULIST RALLY
+# A massive anti-establishment rally draws unexpected crowds
+# =============================================================
+modern_election_events.5 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.5.t
+	desc = modern_election_events.5.d
+	flavor = modern_election_events.5.f
+
+	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = social_media
+		any_interest_group = {
+			has_party = yes
+			is_in_government = no
+		}
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+		if = {
+			limit = {
+				any_active_party = { is_party_type = populist_party }
+			}
+			random_active_party = {
+				limit = { is_party_type = populist_party }
+				save_scope_as = populist_scope
+			}
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Co-opt their message
+		name = modern_election_events.5.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		if = {
+			limit = { exists = scope:populist_scope }
+			scope:populist_scope = { add_momentum = momentum_small_decrease }
+		}
+		add_radicals = { value = small_radicals strata = lower }
+		ai_chance = { base = 4 }
+	}
+
+	option = { # Dismiss them as demagogues
+		name = modern_election_events.5.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:populist_scope }
+			scope:populist_scope = { add_momentum = momentum_large }
+		}
+		if = {
+			limit = { NOT = { exists = scope:populist_scope } exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Engage with grassroots concerns
+		name = modern_election_events.5.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 5 }
+	}
+}
+
+# =============================================================
+# 6. FOREIGN ELECTION INTERFERENCE
+# Evidence surfaces that foreign actors are meddling in the campaign via cyber operations
+# =============================================================
+modern_election_events.6 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.6.t
+	desc = modern_election_events.6.d
+	flavor = modern_election_events.6.f
+
+	event_image = { video = "votp_conspiring" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = cybersecurity
+		any_country = {
+			NOT = { this = ROOT }
+			country_rank >= rank_value:major_power
+			has_technology_researched = cybersecurity
+		}
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Blame the opposition for being compromised
+		name = modern_election_events.6.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium_decrease }
+		}
+		add_radicals = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Launch a public investigation
+		name = modern_election_events.6.b
+		default_option = yes
+		add_modifier = { name = me_foreign_interference_investigation_modifier days = normal_modifier_time }
+		add_loyalists = { value = medium_radicals }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Strengthen cyber defenses silently
+		name = modern_election_events.6.c
+		add_modifier = { name = me_cyber_defense_modifier days = normal_modifier_time }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 7. CORPORATE SUPER PAC
+# A massive corporate spending campaign floods the airwaves
+# =============================================================
+modern_election_events.7 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.7.t
+	desc = modern_election_events.7.d
+	flavor = modern_election_events.7.f
+
+	event_image = { video = "europenorthamerica_capitalists_meeting" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		OR = {
+			has_law = law_type:law_no_campaign_finance_laws
+			has_law = law_type:law_unregulated_donations
+		}
+		ig:ig_industrialists ?= {
+			ig_clout >= 0.10
+		}
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Welcome the corporate backing
+		name = modern_election_events.7.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_large }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Denounce corporate influence
+		name = modern_election_events.7.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Match their spending with party funds
+		name = modern_election_events.7.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		add_modifier = { name = me_campaign_spending_spree_modifier days = short_modifier_time }
+		ai_chance = { base = 3 }
+	}
+}
+
+# =============================================================
+# 8. YOUTH VOTE SURGE
+# Young voters organize on social platforms, demanding change
+# =============================================================
+modern_election_events.8 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.8.t
+	desc = modern_election_events.8.d
+	flavor = modern_election_events.8.f
+
+	event_image = { video = "europenorthamerica_sufferage" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = social_media
+		OR = {
+			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_census_voting
+			has_law = law_type:law_anarchy
+		}
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Appeal to the youth
+		name = modern_election_events.8.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Dismiss youth politics as naive
+		name = modern_election_events.8.b
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		add_radicals = { value = small_radicals strata = lower }
+		ai_chance = { base = 2 }
+	}
+
+	option = { # Channel their energy into civic reform
+		name = modern_election_events.8.c
+		highlighted_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_protected_class
+				has_law = law_type:law_comprehensive_rights
+				has_law = law_type:law_full_equality_and_protection
+			}
+		}
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = medium_radicals strata = lower }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 9. TELEVISED GAFFE
+# A candidate makes a catastrophic live blunder on television
+# =============================================================
+modern_election_events.9 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.9.t
+	desc = modern_election_events.9.d
+	flavor = modern_election_events.9.f
+
+	event_image = { video = "unspecific_politicians_arguing" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = television_broadcasting
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+		# Randomly determine which side gaffes
+		random_list = {
+			50 = { set_local_variable = govt_gaffe }
+			50 = { set_local_variable = opp_gaffe }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Capitalize ruthlessly
+		name = modern_election_events.9.a
+		default_option = yes
+		if = {
+			limit = { has_local_variable = govt_gaffe }
+			# Government gaffed - opposition benefits
+			if = {
+				limit = { exists = scope:opp_party }
+				scope:opp_party = { add_momentum = momentum_large }
+			}
+			if = {
+				limit = { exists = scope:govt_party }
+				scope:govt_party = { add_momentum = momentum_large_decrease }
+			}
+		}
+		if = {
+			limit = { has_local_variable = opp_gaffe }
+			# Opposition gaffed - government benefits
+			if = {
+				limit = { exists = scope:govt_party }
+				scope:govt_party = { add_momentum = momentum_large }
+			}
+			if = {
+				limit = { exists = scope:opp_party }
+				scope:opp_party = { add_momentum = momentum_large_decrease }
+			}
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Take the high road
+		name = modern_election_events.9.b
+		add_loyalists = { value = small_radicals }
+		if = {
+			limit = { has_local_variable = govt_gaffe exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small_decrease }
+		}
+		if = {
+			limit = { has_local_variable = opp_gaffe exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small_decrease }
+		}
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Spin it into a relatable moment
+		name = modern_election_events.9.c
+		if = {
+			limit = { has_local_variable = govt_gaffe exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { has_local_variable = opp_gaffe exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 10. CELEBRITY ENDORSEMENT
+# A major cultural figure publicly endorses a party
+# =============================================================
+modern_election_events.10 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.10.t
+	desc = modern_election_events.10.d
+	flavor = modern_election_events.10.f
+
+	event_image = { video = "southamerica_election" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = social_media
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Embrace the endorsement
+		name = modern_election_events.10.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Distance from celebrity politics
+		name = modern_election_events.10.b
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Recruit your own celebrity endorsement
+		name = modern_election_events.10.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 11. VOICE OF THE NATION
+# A powerful radio address captivates or alienates the public (pre-TV era)
+# =============================================================
+modern_election_events.11 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.11.t
+	desc = modern_election_events.11.d
+	flavor = modern_election_events.11.f
+
+	event_image = { texture = "gfx/event_pictures/propaganda_broadcast.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = mass_propaganda
+		NOT = { has_technology_researched = television_broadcasting }
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Replay the address on every station
+		name = modern_election_events.11.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small_decrease }
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Dismiss it as mere propaganda
+		name = modern_election_events.11.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Counter with our own broadcast
+		name = modern_election_events.11.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 12. THE WAR HERO STEPS UP
+# A decorated military figure throws their hat in the ring
+# =============================================================
+modern_election_events.12 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.12.t
+	desc = modern_election_events.12.d
+	flavor = modern_election_events.12.f
+
+	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = mass_propaganda
+		ig:ig_armed_forces ?= {
+			ig_clout >= 0.05
+		}
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Welcome the hero into our ranks
+		name = modern_election_events.12.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_large }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Question their fitness for civilian office
+		name = modern_election_events.12.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Challenge them to a policy debate
+		name = modern_election_events.12.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 13. PRESS BARON'S ENDORSEMENT
+# A powerful newspaper magnate throws the weight of print media behind a party
+# =============================================================
+modern_election_events.13 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.13.t
+	desc = modern_election_events.13.d
+	flavor = modern_election_events.13.f
+
+	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = mass_media
+		NOT = { has_technology_researched = world_wide_web }
+		ig:ig_industrialists ?= {
+			ig_clout >= 0.08
+		}
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Accept the baron's endorsement
+		name = modern_election_events.13.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_large }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Reject the press baron's influence
+		name = modern_election_events.13.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Negotiate editorial independence
+		name = modern_election_events.13.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals strata = middle }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 14. RED MENACE
+# Anti-communist panic grips the campaign trail
+# =============================================================
+modern_election_events.14 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.14.t
+	desc = modern_election_events.14.d
+	flavor = modern_election_events.14.f
+
+	event_image = { texture = "gfx/event_pictures/espionage.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = keynesian_economics
+		NOT = { has_law = law_type:law_council_republic }
+		any_interest_group = {
+			OR = {
+				has_ideology = ideology:ideology_communist
+				has_ideology = ideology:ideology_vanguardist
+			}
+		}
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Stoke the red scare
+		name = modern_election_events.14.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_large }
+		}
+		add_modifier = { name = me_anti_communist_campaign_modifier days = normal_modifier_time }
+		add_radicals = { value = small_radicals }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Defend civil liberties
+		name = modern_election_events.14.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Propose a bipartisan anti-extremism commission
+		name = modern_election_events.14.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals strata = middle }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 15. ECONOMIC MIRACLE
+# A booming economy becomes the centerpiece of the campaign
+# =============================================================
+modern_election_events.15 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.15.t
+	desc = modern_election_events.15.d
+	flavor = modern_election_events.15.f
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = marketing_research
+		any_interest_group = {
+			is_in_government = yes
+			ig_clout >= 0.15
+		}
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Take credit for the boom
+		name = modern_election_events.15.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_large }
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Warn that bubbles always burst
+		name = modern_election_events.15.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_loyalists = { value = small_radicals strata = middle }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Promise to share the wealth with everyone
+		name = modern_election_events.15.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 16. A QUESTION OF EQUALITY
+# The civil rights movement forces candidates to take a stand
+# =============================================================
+modern_election_events.16 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.16.t
+	desc = modern_election_events.16.d
+	flavor = modern_election_events.16.f
+
+	event_image = { texture = "gfx/event_pictures/human_rights.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = civil_rights_movement
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Champion equal rights as our platform
+		name = modern_election_events.16.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_modifier = { name = me_equal_rights_platform_modifier days = normal_modifier_time }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_radicals = { value = small_radicals strata = upper }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Defend traditions and the status quo
+		name = modern_election_events.16.b
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_landowners }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_radicals = { value = small_radicals strata = lower }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Propose gradual, measured reform
+		name = modern_election_events.16.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 17. THE SPACE CARD
+# Space achievements become a potent campaign symbol
+# =============================================================
+modern_election_events.17 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.17.t
+	desc = modern_election_events.17.d
+	flavor = modern_election_events.17.f
+
+	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = space_exploration
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Promise to expand the space program
+		name = modern_election_events.17.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		add_modifier = { name = me_space_program_pledge_modifier days = normal_modifier_time }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Redirect space funds to earthbound problems
+		name = modern_election_events.17.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Frame space as a matter of national prestige
+		name = modern_election_events.17.c
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 18. CAMPUS UPRISING
+# Student protests turn the campaign into a referendum on youth dissent
+# =============================================================
+modern_election_events.18 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.18.t
+	desc = modern_election_events.18.d
+	flavor = modern_election_events.18.f
+
+	event_image = { texture = "gfx/event_pictures/campus_protest.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = anti_war_movement
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Crack down on the agitators
+		name = modern_election_events.18.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_radicals = { value = small_radicals strata = middle }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Embrace the youth movement
+		name = modern_election_events.18.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Open a dialogue with student leaders
+		name = modern_election_events.18.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 19. THE GREAT DEBATE
+# A historic televised debate rivets the nation
+# =============================================================
+modern_election_events.19 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.19.t
+	desc = modern_election_events.19.d
+	flavor = modern_election_events.19.f
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = television_broadcasting
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+		# Determine who wins the debate
+		random_list = {
+			50 = { set_local_variable = govt_wins_debate }
+			50 = { set_local_variable = opp_wins_debate }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Go on the offensive with policy attacks
+		name = modern_election_events.19.a
+		default_option = yes
+		if = {
+			limit = { has_local_variable = govt_wins_debate }
+			if = {
+				limit = { exists = scope:govt_party }
+				scope:govt_party = { add_momentum = momentum_large }
+			}
+			if = {
+				limit = { exists = scope:opp_party }
+				scope:opp_party = { add_momentum = momentum_medium_decrease }
+			}
+		}
+		if = {
+			limit = { has_local_variable = opp_wins_debate }
+			if = {
+				limit = { exists = scope:opp_party }
+				scope:opp_party = { add_momentum = momentum_large }
+			}
+			if = {
+				limit = { exists = scope:govt_party }
+				scope:govt_party = { add_momentum = momentum_medium_decrease }
+			}
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Present a calm, statesmanlike image
+		name = modern_election_events.19.b
+		add_loyalists = { value = small_radicals }
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		ai_chance = { base = 4 }
+	}
+
+	option = { # Make a bold live policy announcement
+		name = modern_election_events.19.c
+		random_list = {
+			60 = {
+				if = {
+					limit = { exists = scope:govt_party }
+					scope:govt_party = { add_momentum = momentum_very_large }
+				}
+			}
+			40 = {
+				if = {
+					limit = { exists = scope:govt_party }
+					scope:govt_party = { add_momentum = momentum_large_decrease }
+				}
+				add_radicals = { value = small_radicals }
+			}
+		}
+		ai_chance = { base = 3 }
+	}
+}
+
+# =============================================================
+# 20. A WOMAN'S PLACE
+# A feminist trailblazer challenges the old guard on the campaign trail
+# =============================================================
+modern_election_events.20 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.20.t
+	desc = modern_election_events.20.d
+	flavor = modern_election_events.20.f
+
+	event_image = { texture = "gfx/event_pictures/social_revolution.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = second_wave_feminism
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Back the trailblazer
+		name = modern_election_events.20.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals strata = middle }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Appeal to traditional values
+		name = modern_election_events.20.b
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_radicals = { value = small_radicals strata = middle }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Adopt women's rights as a core platform plank
+		name = modern_election_events.20.c
+		highlighted_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_protected_class
+				has_law = law_type:law_comprehensive_rights
+				has_law = law_type:law_full_equality_and_protection
+			}
+		}
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = medium_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 21. TOXIC LEGACY
+# An industrial disaster makes pollution the defining election issue
+# =============================================================
+modern_election_events.21 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.21.t
+	desc = modern_election_events.21.d
+	flavor = modern_election_events.21.f
+
+	event_image = { texture = "gfx/event_pictures/industrial_pollution.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = environmental_movement
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Pledge an industrial cleanup
+		name = modern_election_events.21.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_modifier = { name = me_pollution_cleanup_modifier days = normal_modifier_time }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Defend jobs over the environment
+		name = modern_election_events.21.b
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_radicals = { value = small_radicals strata = middle }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Invest in green technology
+		name = modern_election_events.21.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 22. THE OUTSIDER CANDIDATE
+# A pop culture figure with no political experience enters the race
+# =============================================================
+modern_election_events.22 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.22.t
+	desc = modern_election_events.22.d
+	flavor = modern_election_events.22.f
+
+	event_image = { texture = "gfx/event_pictures/political_rally.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = pop_culture
+		any_interest_group = {
+			has_party = yes
+			is_in_government = no
+		}
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Mock their lack of experience
+		name = modern_election_events.22.a
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_large }
+		}
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small_decrease }
+		}
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Embrace populist appeal
+		name = modern_election_events.22.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_petty_bourgeoisie }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Challenge them to debate policy substance
+		name = modern_election_events.22.c
+		add_loyalists = { value = small_radicals }
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 23. THE GENOME QUESTION
+# Genetic engineering ethics divide the electorate
+# =============================================================
+modern_election_events.23 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.23.t
+	desc = modern_election_events.23.d
+	flavor = modern_election_events.23.f
+
+	event_image = { texture = "gfx/event_pictures/genetic_engineering.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = gene_splicing
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Endorse genetic research wholeheartedly
+		name = modern_election_events.23.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 4 }
+	}
+
+	option = { # Call for an outright moratorium
+		name = modern_election_events.23.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Establish a genetics ethics commission
+		name = modern_election_events.23.c
+		default_option = yes
+		add_modifier = { name = me_genetics_ethics_commission_modifier days = normal_modifier_time }
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		ai_chance = { base = 5 }
+	}
+}
+
+# =============================================================
+# 24. RALLY 'ROUND THE FLAG
+# A security crisis forces national unity — or partisan exploitation
+# =============================================================
+modern_election_events.24 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.24.t
+	desc = modern_election_events.24.d
+	flavor = modern_election_events.24.f
+
+	event_image = { texture = "gfx/event_pictures/terrorist_attack.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = terrorism_and_anti_terrorism
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Demand a security crackdown
+		name = modern_election_events.24.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_large }
+		}
+		add_modifier = { name = me_security_crackdown_modifier days = normal_modifier_time }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_radicals = { value = small_radicals }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Warn against eroding civil liberties
+		name = modern_election_events.24.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Propose measured, bipartisan security reform
+		name = modern_election_events.24.c
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = medium_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 25. THE LEAK
+# A whistleblower exposes a classified surveillance program mid-campaign
+# =============================================================
+modern_election_events.25 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.25.t
+	desc = modern_election_events.25.d
+	flavor = modern_election_events.25.f
+
+	event_image = { texture = "gfx/event_pictures/surveillance_debate.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = automated_surveillance
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Justify it as necessary for security
+		name = modern_election_events.25.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		add_modifier = { name = me_security_crackdown_modifier days = normal_modifier_time }
+		add_radicals = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Condemn the surveillance program
+		name = modern_election_events.25.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_large }
+		}
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium_decrease }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Pass transparency legislation
+		name = modern_election_events.25.c
+		highlighted_option = yes
+		trigger = {
+			has_technology_researched = decolonization
+		}
+		add_modifier = { name = me_transparency_act_modifier days = normal_modifier_time }
+		add_loyalists = { value = medium_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 26. TRADE WAR RHETORIC
+# Globalization backlash dominates the campaign trail
+# =============================================================
+modern_election_events.26 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.26.t
+	desc = modern_election_events.26.d
+	flavor = modern_election_events.26.f
+
+	event_image = { texture = "gfx/event_pictures/globalization_protest.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = globalization
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Promise tariffs and protectionism
+		name = modern_election_events.26.a
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_rural_folk }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_petty_bourgeoisie }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 4 }
+	}
+
+	option = { # Champion free trade and open markets
+		name = modern_election_events.26.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Propose fair trade reforms
+		name = modern_election_events.26.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 27. SHORES OF THE DISPLACED
+# Climate refugees become the most divisive campaign issue
+# =============================================================
+modern_election_events.27 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.27.t
+	desc = modern_election_events.27.d
+	flavor = modern_election_events.27.f
+
+	event_image = { texture = "gfx/event_pictures/climate_refugees.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = clean_energy_technologies
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Welcome refugees with open arms
+		name = modern_election_events.27.a
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals }
+		add_radicals = { value = small_radicals strata = lower }
+		ai_chance = { base = 4 }
+	}
+
+	option = { # Secure our borders first
+		name = modern_election_events.27.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_radicals = { value = small_radicals }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Invest in climate solutions at the source
+		name = modern_election_events.27.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 28. THE MACHINE BEHIND THE CURTAIN
+# An AI system secretly manages a party's campaign strategy
+# =============================================================
+modern_election_events.28 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.28.t
+	desc = modern_election_events.28.d
+	flavor = modern_election_events.28.f
+
+	event_image = { texture = "gfx/event_pictures/automation_factory.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = machine_learning
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Let the algorithm run the show
+		name = modern_election_events.28.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_large }
+		}
+		add_radicals = { value = small_radicals strata = middle }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Reject machine politics entirely
+		name = modern_election_events.28.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Disclose AI use and campaign transparently
+		name = modern_election_events.28.c
+		default_option = yes
+		add_modifier = { name = me_ai_transparency_modifier days = normal_modifier_time }
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 29. FREE MONEY?
+# Universal basic income becomes the most debated campaign promise
+# =============================================================
+modern_election_events.29 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.29.t
+	desc = modern_election_events.29.d
+	flavor = modern_election_events.29.f
+
+	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = universal_basic_income
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Campaign on universal basic income
+		name = modern_election_events.29.a
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_large }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Denounce it as fiscal irresponsibility
+		name = modern_election_events.29.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 4 }
+	}
+
+	option = { # Propose a limited pilot program
+		name = modern_election_events.29.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 30. LIGHTS OUT
+# A cyberattack strikes election infrastructure on the eve of the vote
+# =============================================================
+modern_election_events.30 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.30.t
+	desc = modern_election_events.30.d
+	flavor = modern_election_events.30.f
+
+	event_image = { texture = "gfx/event_pictures/cyber_attack.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = cyber_warfare
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Blame foreign adversaries
+		name = modern_election_events.30.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		add_radicals = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+
+	option = { # Demand an election integrity review
+		name = modern_election_events.30.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Deploy military cyber countermeasures
+		name = modern_election_events.30.c
+		add_modifier = { name = me_election_infrastructure_hardened_modifier days = normal_modifier_time }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 31. DESIGNER CANDIDATE
+# A genetically enhanced politician enters the race, sparking outrage and fascination
+# =============================================================
+modern_election_events.31 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.31.t
+	desc = modern_election_events.31.d
+	flavor = modern_election_events.31.f
+
+	event_image = { texture = "gfx/event_pictures/augmented_athlete.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = biotechnology
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Embrace human enhancement as progress
+		name = modern_election_events.31.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		add_radicals = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+
+	option = { # Demand only natural-born candidates
+		name = modern_election_events.31.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_devout }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Regulate enhancement but allow candidacy
+		name = modern_election_events.31.c
+		add_modifier = { name = me_genetics_ethics_commission_modifier days = normal_modifier_time }
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 32. ONE SMALL VOTE FOR MAN
+# Space colonists demand electoral representation back home
+# =============================================================
+modern_election_events.32 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.32.t
+	desc = modern_election_events.32.d
+	flavor = modern_election_events.32.f
+
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = reusable_rocketry
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Grant colonial representation
+		name = modern_election_events.32.a
+		add_modifier = { name = me_colonial_representation_modifier days = normal_modifier_time }
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+
+	option = { # They left our soil — no representation
+		name = modern_election_events.32.b
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		add_radicals = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Offer nonvoting observer status
+		name = modern_election_events.32.c
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 5 }
+	}
+}
+
+# =============================================================
+# 33. THOUGHT MADE MANIFEST
+# Neural-interface direct democracy is proposed as a replacement for elections
+# =============================================================
+modern_election_events.33 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.33.t
+	desc = modern_election_events.33.d
+	flavor = modern_election_events.33.f
+
+	event_image = { texture = "gfx/event_pictures/neural_interface.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = machine_learning
+		has_technology_researched = generative_ai
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Endorse neural direct democracy
+		name = modern_election_events.33.a
+		add_modifier = { name = me_neural_democracy_modifier days = normal_modifier_time }
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_large }
+		}
+		add_radicals = { value = small_radicals strata = upper }
+		ai_chance = { base = 3 }
+	}
+
+	option = { # Defend traditional elections
+		name = modern_election_events.33.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Propose voluntary neural polling as a supplement
+		name = modern_election_events.33.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 34. HARVEST OF VOTES
+# Synthetic food policy divides farmers and futurists
+# =============================================================
+modern_election_events.34 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.34.t
+	desc = modern_election_events.34.d
+	flavor = modern_election_events.34.f
+
+	event_image = { texture = "gfx/event_pictures/synthetic_crops.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = biotechnology
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Champion synthetic agriculture as the future
+		name = modern_election_events.34.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_rural_folk }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 4 }
+	}
+
+	option = { # Defend traditional farming
+		name = modern_election_events.34.b
+		default_option = yes
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_rural_folk }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Promise coexistence of both approaches
+		name = modern_election_events.34.c
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+}
+
+# =============================================================
+# 35. THE AUTONOMOUS QUESTION
+# The rise of autonomous systems forces candidates to debate the future of human labor
+# =============================================================
+modern_election_events.35 = {
+	type = country_event
+	placement = ROOT
+
+	title = modern_election_events.35.t
+	desc = modern_election_events.35.d
+	flavor = modern_election_events.35.f
+
+	event_image = { texture = "gfx/event_pictures/self_driving.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		in_election_campaign = yes
+		NOT = { has_variable = election_event_cooldown }
+		NOT = { has_variable = mute_election_events }
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = generative_ai
+	}
+
+	immediate = {
+		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = yes }
+			party = { save_scope_as = govt_party }
+		}
+		random_interest_group = {
+			limit = { has_party = yes is_in_government = no }
+			party = { save_scope_as = opp_party }
+		}
+	}
+
+	cancellation_trigger = { in_election_campaign = no }
+
+	option = { # Accelerate automation for prosperity
+		name = modern_election_events.35.a
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 4 }
+	}
+
+	option = { # Protect human workers at all costs
+		name = modern_election_events.35.b
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_medium }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+		ai_chance = { base = 5 }
+	}
+
+	option = { # Phase in automation with retraining programs
+		name = modern_election_events.35.c
+		default_option = yes
+		if = {
+			limit = { exists = scope:govt_party }
+			scope:govt_party = { add_momentum = momentum_small }
+		}
+		if = {
+			limit = { exists = scope:opp_party }
+			scope:opp_party = { add_momentum = momentum_small }
+		}
+		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 4 }
+	}
+}

@@ -1,0 +1,50 @@
+﻿# Hooks modern election events into the vanilla elections_monthly_events pool
+# Fired off on_monthly_pulse_country_elections
+
+elections_monthly_events = {
+	random_events = {
+		# Social media era (events 1-10)
+		1 = modern_election_events.1
+		1 = modern_election_events.2
+		1 = modern_election_events.3
+		1 = modern_election_events.4
+		1 = modern_election_events.5
+		1 = modern_election_events.6
+		1 = modern_election_events.7
+		1 = modern_election_events.8
+		1 = modern_election_events.9
+		1 = modern_election_events.10
+		# Era 5: Radio/Propaganda era
+		1 = modern_election_events.11
+		1 = modern_election_events.12
+		# Era 6: Mass Media era
+		1 = modern_election_events.13
+		1 = modern_election_events.14
+		1 = modern_election_events.15
+		# Era 7: Civil Rights/Space/TV era
+		1 = modern_election_events.16
+		1 = modern_election_events.17
+		1 = modern_election_events.18
+		1 = modern_election_events.19
+		1 = modern_election_events.20
+		# Era 8: Environment/Computers/Culture
+		1 = modern_election_events.21
+		1 = modern_election_events.22
+		1 = modern_election_events.23
+		# Era 9: Internet/Terror/Globalization
+		1 = modern_election_events.24
+		1 = modern_election_events.25
+		1 = modern_election_events.26
+		1 = modern_election_events.27
+		# Era 10: AI/Future
+		1 = modern_election_events.28
+		1 = modern_election_events.29
+		1 = modern_election_events.30
+		# Futuristic
+		1 = modern_election_events.31
+		1 = modern_election_events.32
+		1 = modern_election_events.33
+		1 = modern_election_events.34
+		1 = modern_election_events.35
+	}
+}

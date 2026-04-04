@@ -1803,6 +1803,8 @@ law_unregulated_banking = {
     modifier = {
 		country_banking_intervention_max_add = 1
 		building_urban_center_throughput_add = 0.25
+		country_banking_random_momentum_mult = 0.5
+		country_banking_crash_chance_mult = 0.25
     }
 }
 
@@ -1818,6 +1820,7 @@ law_free_mutual_banking = {
         country_banking_intervention_max_add = 3
 		building_urban_center_throughput_add = 0.1
 		state_farmers_investment_pool_contribution_add = 0.05
+		country_banking_crash_chance_mult = -0.1
     }
 }
 
@@ -1832,6 +1835,7 @@ law_universal_banking_light_prudence = {
     modifier = {
         country_banking_intervention_max_add = 4
 		building_urban_center_throughput_add = 0.2
+		country_banking_random_momentum_mult = 0.1
     }
 }
 
@@ -1846,6 +1850,8 @@ law_prudential_narrow_banking = {
     modifier = {
         country_banking_intervention_max_add = 7
 		building_urban_center_throughput_add = 0.1
+		country_banking_random_momentum_mult = -0.25
+		country_banking_crash_chance_mult = -0.25
     }
 }
 
@@ -1864,6 +1870,8 @@ law_directed_credit_development_banks = {
         country_banking_intervention_max_add = 7
 		country_government_dividends_efficiency_add = 0.1
 		state_capitalists_investment_pool_contribution_add = -0.05
+		country_banking_random_momentum_mult = -0.25
+		country_banking_crash_chance_mult = -0.2
     }
 }
 
@@ -1888,6 +1896,8 @@ law_central_bank_independence = {
 	}
     modifier = {
 		country_banking_intervention_max_add = 7
+		country_banking_random_momentum_mult = -0.1
+		country_banking_crash_chance_mult = -0.3
     }
 }
 

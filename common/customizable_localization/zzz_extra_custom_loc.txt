@@ -53,3 +53,125 @@ te_yearly_temp_change_prefix = {
 		localization_key = te_yearly_temp_change_prefix_up_red
 	}
 }
+
+# ========== NUCLEAR ATTACK TECH BREAKDOWN ==========
+# Each function returns the tech's contribution line if researched, or empty string.
+
+te_nuke_attack_nuclear_weapons = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_technology_researched = nuclear_weapons }
+		localization_key = nuke_attack_line_nuclear_weapons
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+te_nuke_attack_icbms = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_technology_researched = ICBMs }
+		localization_key = nuke_attack_line_icbms
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+te_nuke_attack_hypersonic = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_technology_researched = hypersonic_weapons }
+		localization_key = nuke_attack_line_hypersonic
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+te_nuke_attack_orbital = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_technology_researched = orbital_weapon_platforms }
+		localization_key = nuke_attack_line_orbital
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+# ========== NUCLEAR DEFENSE TECH BREAKDOWN ==========
+
+te_nuke_defense_aviation = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_technology_researched = military_aviation }
+		localization_key = nuke_defense_line_aviation
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+te_nuke_defense_radar = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_technology_researched = radar }
+		localization_key = nuke_defense_line_radar
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+te_nuke_defense_missile = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_technology_researched = missile_defense_systems }
+		localization_key = nuke_defense_line_missile
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+te_nuke_defense_directed_energy = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_technology_researched = directed_energy_defenses }
+		localization_key = nuke_defense_line_directed_energy
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+te_nuke_defense_orbital = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_technology_researched = orbital_weapon_platforms }
+		localization_key = nuke_defense_line_orbital
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}

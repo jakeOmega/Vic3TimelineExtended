@@ -4829,3 +4829,110 @@ rre_secular_welfare_modifier = {
 	country_bureaucracy_mult = -0.03
 	state_standard_of_living_add = 0.5
 }
+
+# --- Modern Election Events ---
+me_digital_decorum_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_legitimacy_govt_total_clout_add = 5
+}
+
+me_deepfake_exposed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_govt_total_clout_add = 5
+	country_prestige_add = 25
+}
+
+me_ai_content_ban_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_govt_total_clout_add = 10
+	country_authority_add = -25
+}
+
+me_climate_pledge_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	country_authority_add = -25
+}
+
+me_data_regulation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_govt_total_clout_add = 10
+	country_bureaucracy_mult = -0.02
+}
+
+me_foreign_interference_investigation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_govt_total_clout_add = -5
+	country_prestige_add = -25
+}
+
+me_cyber_defense_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_authority_add = 50
+}
+
+me_campaign_spending_spree_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_legitimacy_govt_total_clout_add = -5
+}
+
+me_anti_communist_campaign_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = 25
+}
+
+me_equal_rights_platform_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 25
+	country_legitimacy_govt_total_clout_add = 5
+}
+
+me_space_program_pledge_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+}
+
+me_pollution_cleanup_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 25
+	country_authority_add = -25
+}
+
+me_genetics_ethics_commission_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_govt_total_clout_add = 5
+}
+
+me_security_crackdown_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = 50
+	country_legitimacy_govt_total_clout_add = -5
+}
+
+me_transparency_act_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_govt_total_clout_add = 10
+	country_authority_add = -25
+}
+
+me_ai_transparency_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_govt_total_clout_add = 5
+}
+
+me_election_infrastructure_hardened_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_authority_add = 25
+	country_legitimacy_govt_total_clout_add = 5
+}
+
+me_colonial_representation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 25
+	country_authority_add = -25
+}
+
+me_neural_democracy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_legitimacy_govt_total_clout_add = 10
+}

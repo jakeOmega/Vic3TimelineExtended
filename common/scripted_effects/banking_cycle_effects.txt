@@ -1346,12 +1346,13 @@ banking_cycle_advance_variables = {
 	add_investment_pool = investment_pool_banking_cycle_add
 
 	# Random mean-reversion nudge: biased towards equilibrium
+	# Magnitude scales with country_banking_random_momentum_mult modifier
 	random_list = {
 		25 = {
 			modifier = {
 				value = var:finance_cycle_value
 			}
-			change_variable = { name = finance_cycle_momentum add = -1 }
+			change_variable = { name = finance_cycle_momentum add = banking_random_nudge_down_value }
 		}
 		50 = { }
 		25 = {
@@ -1359,7 +1360,7 @@ banking_cycle_advance_variables = {
 				value = 100
 				subtract = var:finance_cycle_value
 			}
-			change_variable = { name = finance_cycle_momentum add = 1 }
+			change_variable = { name = finance_cycle_momentum add = banking_random_nudge_up_value }
 		}
 	}
 
@@ -1408,6 +1409,8 @@ banking_cycle_check_and_execute_crash = {
 					multiply = 0.02
 				}
 				min = 0
+				# Scale crash probability by the crash chance modifier
+				multiply = banking_crash_chance_multiplier_value
 			}
 			set_variable = { name = crash value = 1 }
 		}

@@ -854,6 +854,20 @@ country_banking_intervention_max_add = {
 	script_only = yes
 }
 
+country_banking_random_momentum_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+country_banking_crash_chance_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
 country_finance_momentum_monthly_add = {
 	color = neutral
 	percent = no
@@ -3166,4 +3180,15 @@ building_annual_consciousness_network_progress = {
 building_total_consciousness_network_progress = {
 	color = good
 	percent = yes
+}
+
+#==================================================
+# SoL Expectations Modifier Types
+#==================================================
+
+country_sol_expectation_adaptation_rate_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
 }

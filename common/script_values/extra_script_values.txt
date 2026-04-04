@@ -1553,6 +1553,80 @@ banking_monthly_cycle = {
 	value = modifier:country_finance_value_monthly_add
 }
 
+# Random momentum nudge values, scaled by the banking_random_momentum_mult modifier.
+# Base nudge is ±1. The modifier (default 0) scales it: 0 → ×1, +0.5 → ×1.5, -0.5 → ×0.5.
+banking_random_nudge_down_value = {
+	value = -1
+	multiply = {
+		value = 1
+		add = modifier:country_banking_random_momentum_mult
+	}
+}
+
+banking_random_nudge_up_value = {
+	value = 1
+	multiply = {
+		value = 1
+		add = modifier:country_banking_random_momentum_mult
+	}
+}
+
+# Multiplier applied to the crash probability roll.
+# Base is 1.0 (modifier value 0). Positive modifier increases crash chance, negative decreases it.
+banking_crash_chance_multiplier_value = {
+	value = 1
+	add = modifier:country_banking_crash_chance_mult
+	min = 0
+}
+
+# ========== SoL Expectations System ==========
+
+# Half-life in years: how long it takes for the gap between expected and actual SoL
+# to close by half. 5 years means ~50% adapted after 5y, ~75% after 10y, ~94% after 20y.
+# Change this single value to tune convergence speed.
+sol_expectations_half_life_years = 5
+
+# Monthly adaptation rate derived from half-life: rate = ln(2) / (H * 12)
+# ln(2) ≈ 0.6931. At default 5y: 0.6931 / 60 ≈ 0.01155/month.
+# The country_sol_expectation_adaptation_rate_mult modifier scales this.
+sol_expectations_adaptation_rate_value = {
+	value = 0.6931
+	divide = {
+		value = sol_expectations_half_life_years
+		multiply = 12
+	}
+	multiply = {
+		value = 1
+		add = modifier:country_sol_expectation_adaptation_rate_mult
+	}
+	min = 0.001
+	max = 0.1
+}
+
+# Compute the shift to apply: adaptive - actual average SoL
+sol_expectations_shift_value = {
+	value = var:sol_expectations_adaptive
+	subtract = average_sol
+}
+
+# Display value for UI (shows the current shift)
+sol_expectations_shift_display = {
+	value = sol_expectations_shift_value
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+# Display the adaptive expectations value
+sol_expectations_adaptive_display = {
+	value = var:sol_expectations_adaptive
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+# ========== End SoL Expectations ==========
+
 # fiscal policy effect based on spending relative to GDP
 financial_cycle_government_fiscal_policy_effect_size = {
 	value = total_expenses

@@ -1,0 +1,45 @@
+﻿# SoL Expectations System - Monthly Update
+# Scope: country
+# Tracks an adaptive expectations variable that converges toward actual average SoL.
+# The shift (adaptive - actual) is applied as a modifier to expected SoL for all strata.
+#   Positive shift = expectations above reality (people unhappy - SoL recently dropped)
+#   Negative shift = reality above expectations (people content - SoL recently rose)
+# Converges with ~5-year half-life, ~90% adapted in 20 years.
+
+sol_expectations_monthly_update = {
+	# Initialize if variable doesn't exist yet
+	if = {
+		limit = { NOT = { has_variable = sol_expectations_adaptive } }
+		set_variable = { name = sol_expectations_adaptive value = average_sol }
+	}
+
+	# Compute adjustment: (actual_sol - adaptive) * rate
+	change_variable = {
+		name = sol_expectations_adaptive
+		add = {
+			value = average_sol
+			subtract = var:sol_expectations_adaptive
+			multiply = sol_expectations_adaptation_rate_value
+		}
+	}
+
+	# Remove old modifier
+	if = {
+		limit = { has_modifier = sol_expectations_adaptive_shift }
+		remove_modifier = sol_expectations_adaptive_shift
+	}
+
+	# Apply modifier with multiplier = shift (only if non-negligible)
+	if = {
+		limit = {
+			OR = {
+				sol_expectations_shift_value > 0.05
+				sol_expectations_shift_value < -0.05
+			}
+		}
+		add_modifier = {
+			name = sol_expectations_adaptive_shift
+			multiplier = sol_expectations_shift_value
+		}
+	}
+}
