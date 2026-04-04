@@ -2153,84 +2153,114 @@ antimatter_facility_on_action = {
 
 #==================================================
 # Overbuild Protection - removes excess sub-buildings
-# when slot modifier goes negative (race condition fix)
+# when slot modifier goes negative (race condition fix).
+# Grace period: buildings are only removed after ~6 consecutive
+# months over the limit. The counter resets if the modifier
+# returns to zero or positive.
 #==================================================
 
 overbuild_protection_on_action = {
 	effect = {
-		# Solar receivers - remove up to 1 excess level per month (cheapest electricity first)
+		# --- Solar receivers ---
 		if = {
 			limit = { modifier:country_solar_receiver_max_level_add < 0 }
-			ordered_scope_state = {
-				limit = { has_building = building_solar_receiver }
-				order_by = market.mg:electricity.market_goods_cheaper
-				max = 1
-				set_variable = {
-					name = lvl_tmp
-					value = b:building_solar_receiver.level
-				}
-				change_variable = {
-					name = lvl_tmp
-					add = -1
-				}
-				remove_building = building_solar_receiver
-				if = {
-					limit = { var:lvl_tmp > 0 }
-					extended_timeline_add_specified_building_level = {
-						ADD_LEVEL = var:lvl_tmp
-						SPEC_TYPE = building_solar_receiver
-					}
-				}
-				remove_variable = lvl_tmp
+			# Increment grace counter
+			if = {
+				limit = { NOT = { has_variable = overbuild_solar_receiver_months } }
+				set_variable = { name = overbuild_solar_receiver_months value = 1 }
 			}
+			else = {
+				change_variable = { name = overbuild_solar_receiver_months add = 1 }
+			}
+			# After 6 months, start removing 1 excess level per month
+			if = {
+				limit = { var:overbuild_solar_receiver_months >= 6 }
+				ordered_scope_state = {
+					limit = { has_building = building_solar_receiver }
+					order_by = market.mg:electricity.market_goods_cheaper
+					max = 1
+					set_variable = {
+						name = lvl_tmp
+						value = b:building_solar_receiver.level
+					}
+					change_variable = {
+						name = lvl_tmp
+						add = -1
+					}
+					remove_building = building_solar_receiver
+					if = {
+						limit = { var:lvl_tmp > 0 }
+						extended_timeline_add_specified_building_level = {
+							ADD_LEVEL = var:lvl_tmp
+							SPEC_TYPE = building_solar_receiver
+						}
+					}
+					remove_variable = lvl_tmp
+				}
+			}
+		}
+		else = {
+			remove_variable = overbuild_solar_receiver_months
 		}
 
-		# Antimatter sub-buildings - remove up to 1 excess level per month
+		# --- Antimatter sub-buildings ---
 		if = {
 			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
-			random_scope_state = {
-				limit = { has_building = building_antimatter_engine }
-				set_variable = {
-					name = lvl_tmp
-					value = b:building_antimatter_engine.level
-				}
-				change_variable = {
-					name = lvl_tmp
-					add = -1
-				}
-				remove_building = building_antimatter_engine
-				if = {
-					limit = { var:lvl_tmp > 0 }
-					extended_timeline_add_specified_building_level = {
-						ADD_LEVEL = var:lvl_tmp
-						SPEC_TYPE = building_antimatter_engine
+			# Increment grace counter
+			if = {
+				limit = { NOT = { has_variable = overbuild_antimatter_months } }
+				set_variable = { name = overbuild_antimatter_months value = 1 }
+			}
+			else = {
+				change_variable = { name = overbuild_antimatter_months add = 1 }
+			}
+			# After 6 months, start removing 1 excess level per month
+			if = {
+				limit = { var:overbuild_antimatter_months >= 6 }
+				random_scope_state = {
+					limit = { has_building = building_antimatter_engine }
+					set_variable = {
+						name = lvl_tmp
+						value = b:building_antimatter_engine.level
 					}
+					change_variable = {
+						name = lvl_tmp
+						add = -1
+					}
+					remove_building = building_antimatter_engine
+					if = {
+						limit = { var:lvl_tmp > 0 }
+						extended_timeline_add_specified_building_level = {
+							ADD_LEVEL = var:lvl_tmp
+							SPEC_TYPE = building_antimatter_engine
+						}
+					}
+					remove_variable = lvl_tmp
 				}
-				remove_variable = lvl_tmp
+				random_scope_state = {
+					limit = { has_building = building_antimatter_warhead_plant }
+					set_variable = {
+						name = lvl_tmp
+						value = b:building_antimatter_warhead_plant.level
+					}
+					change_variable = {
+						name = lvl_tmp
+						add = -1
+					}
+					remove_building = building_antimatter_warhead_plant
+					if = {
+						limit = { var:lvl_tmp > 0 }
+						extended_timeline_add_specified_building_level = {
+							ADD_LEVEL = var:lvl_tmp
+							SPEC_TYPE = building_antimatter_warhead_plant
+						}
+					}
+					remove_variable = lvl_tmp
+				}
 			}
 		}
-		if = {
-			limit = { modifier:country_antimatter_facility_max_level_add < 0 }
-			random_scope_state = {
-				limit = { has_building = building_antimatter_warhead_plant }
-				set_variable = {
-					name = lvl_tmp
-					value = b:building_antimatter_warhead_plant.level
-				}
-				change_variable = {
-					name = lvl_tmp
-					add = -1
-				}
-				remove_building = building_antimatter_warhead_plant
-				if = {
-					limit = { var:lvl_tmp > 0 }
-					extended_timeline_add_specified_building_level = {
-						ADD_LEVEL = var:lvl_tmp
-						SPEC_TYPE = building_antimatter_warhead_plant
-					}
-				}
-				remove_variable = lvl_tmp
-			}
+		else = {
+			remove_variable = overbuild_antimatter_months
 		}
 	}
 }

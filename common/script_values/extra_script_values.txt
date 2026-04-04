@@ -1720,9 +1720,9 @@ construction_cost_scaling_mult = {
 # ====================================================================================
 
 # Reference density: population per unit of arable_land for a "normally developed" state.
-# E.g., 2.5M people / 100 arable_land = 25000. Lower base to encourage spread;
+# E.g., 10M people / 100 arable_land = 100000. Lower base to encourage spread;
 # techs and Urban Planning institution scale it up over time.
-migration_crowding_density_reference = 25000
+migration_crowding_density_reference = 100000
 
 # No migration penalty below this multiple of reference density
 migration_crowding_floor_ratio = 1  # 1x reference = normal density

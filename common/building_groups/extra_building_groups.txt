@@ -48,6 +48,8 @@ REPLACE_OR_CREATE:bg_resettlement = {
 REPLACE_OR_CREATE:bg_megastructure_capped_private = {
 	category = urban
 
+	lens = development
+
 	always_possible = yes
 
 	economy_of_scale = yes
