@@ -632,6 +632,41 @@ state_building_un_headquarters_max_level_add = {
 	percent = no
 }
 
+state_building_space_elevator_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_solar_collector_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_orbital_battlestation_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_mind_upload_nexus_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_antimatter_facility_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_nanofabrication_center_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_consciousness_network_max_level_add = {
+	color = good
+	percent = no
+}
+
 building_hydro_plant_throughput_add = {
 	color = good
 	percent = yes
@@ -3060,6 +3095,46 @@ state_building_thonet_bystrice_bentwood_factory_max_level_add = {
 	decimals = 0
 }
 state_building_moser_karlsbad_glass_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_megastructure_consortium_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_axiom_space_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_neurovault_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_tycho_manufacturing_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_tessier_ashpool_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_hanka_precision_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_yoyodyne_propulsion_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_rekal_hq_max_level_add = {
 	color = good
 	percent = no
 	decimals = 0

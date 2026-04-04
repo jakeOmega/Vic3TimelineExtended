@@ -2232,8 +2232,8 @@ law_freedom_of_contract = {
 
     modifier = {
         building_throughput_add = -0.1                            # monopolistic inefficiencies
-		country_company_throughput_bonus_add = 0.2                # companies do better
-		country_company_construction_efficiency_bonus_add = -0.2  # monopolies slow new entry
+		country_company_construction_efficiency_bonus_add = 0.4   # companies do better
+		state_construction_mult = -0.2  						  # monopolies slow new entry
     }
 }
 
@@ -2253,11 +2253,9 @@ law_trust_busting = {
     # Adjudicative, ex-post enforcement focus
     modifier = {
         country_forbid_monopoly_bool = yes
-        country_company_throughput_bonus_add = -0.2    # cartel rents trimmed
-        building_throughput_add = 0.1                  # competitive gains
-		country_free_charters_add = 1			       # ease of entry
-		country_weekly_innovation_mult = 0.1           # contestability spurs innovation
-		country_max_companies_add = 1                  # more firms		
+        country_company_construction_efficiency_bonus_add = -0.2    # cartel rents trimmed
+        building_throughput_add = 0.1                               # competitive gains
+		country_max_companies_add = 1                               # more firms		
     }
 }
 
@@ -2272,10 +2270,9 @@ law_regulated_utilities = {
     # Treat networks as regulated natural monopolies or unbundle "pipes" from "services"
     modifier = {
         country_forbid_monopoly_bool = yes
-        country_company_throughput_bonus_add = -0.2         # cartel rents trimmed
-        building_throughput_add = 0.1                       # competitive gains
-		country_weekly_innovation_mult = 0.01               # contestability spurs innovation
-        country_government_dividends_efficiency_add = 0.10  # stable utility revenues
+        country_company_construction_efficiency_bonus_add = -0.2    # cartel rents trimmed
+        building_throughput_add = 0.1                               # competitive gains
+        building_company_government_dividends_add = 0.10            # stable utility revenues
     }
 }
 
@@ -2295,9 +2292,9 @@ law_dirigisme = {
     modifier = {
         building_company_government_dividends_add = 0.05
         country_government_dividends_efficiency_add = 0.05
-        state_export_advantage_mult = 0.05
-        state_trade_advantage_mult = 0.05
-        country_weekly_innovation_mult = -0.1
+		country_government_dividends_efficiency_add = 0.05
+        state_export_advantage_mult = 0.1
+        state_trade_advantage_mult = 0.1
     }
 }
 
@@ -2313,8 +2310,9 @@ law_command_cooperative_economy = {
 	}
 
     modifier = {
-        building_company_worker_dividends_add = 0.05
-        building_company_government_dividends_add = 0.05
+        building_company_worker_dividends_add = 0.1
+        building_company_government_dividends_add = 0.1
+		country_government_dividends_efficiency_add = 0.1
 		country_company_construction_efficiency_bonus_add = -0.4
     }
 }

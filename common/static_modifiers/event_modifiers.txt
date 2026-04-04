@@ -545,6 +545,24 @@ ste_designer_baby_unrestricted = {
     country_tech_research_speed_mult = 0.1
     country_legitimacy_base_add = -10
 }
+ste_designer_baby_state_eugenics = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+    country_tech_research_speed_mult = 0.1
+    country_authority_add = 200
+}
+ste_designer_baby_open_source = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+    country_tech_research_speed_mult = 0.15
+    country_prestige_mult = 0.05
+    country_legitimacy_base_add = -5
+}
+ste_designer_baby_corporate = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+    country_tech_research_speed_mult = 0.05
+    building_group_bg_service_throughput_add = 0.05
+    country_company_throughput_bonus_add = 0.05
+    country_legitimacy_base_add = -10
+}
 ste_synthetic_crops_adopt = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
     country_tech_research_speed_mult = 0.05

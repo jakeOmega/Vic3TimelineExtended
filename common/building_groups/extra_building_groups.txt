@@ -44,3 +44,19 @@ REPLACE_OR_CREATE:bg_resettlement = {
 	parent_group = bg_bureaucracy
 	economy_of_scale = no
 }
+
+REPLACE_OR_CREATE:bg_megastructure_capped_private = {
+	category = urban
+
+	always_possible = yes
+
+	economy_of_scale = yes
+
+	cash_reserves_max = 25000
+
+	should_auto_expand = {
+		default_auto_expand_rule = yes
+	}
+
+	foreign_investment_ai_factor = 0
+}

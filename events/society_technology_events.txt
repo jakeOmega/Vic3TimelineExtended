@@ -2441,6 +2441,9 @@ society_technology_events.28 = {
 		NOT = { has_modifier = ste_designer_baby_ban }
 		NOT = { has_modifier = ste_designer_baby_medical }
 		NOT = { has_modifier = ste_designer_baby_unrestricted }
+		NOT = { has_modifier = ste_designer_baby_state_eugenics }
+		NOT = { has_modifier = ste_designer_baby_open_source }
+		NOT = { has_modifier = ste_designer_baby_corporate }
 		NOT = { has_variable = ste_event_28_fired }
 	}
 
@@ -2483,19 +2486,54 @@ society_technology_events.28 = {
 	option = {
 		name = society_technology_events.28.c
 		trigger = {
-			OR = {
-				has_law = law_type:law_state_eugenics_program
-				has_law = law_type:law_open_source_genetics
-				has_law = law_type:law_corporate_genetic_licensing
-			}
+			has_law = law_type:law_state_eugenics_program
 		}
 		highlighted_option = yes
 		ai_chance = {
-			base = 2
+			base = 4
 		}
-		# No restrictions on human improvement
+		# State-directed genetic perfection
 		add_modifier = {
-			name = ste_designer_baby_unrestricted
+			name = ste_designer_baby_state_eugenics
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals pop_type = clergymen }
+		add_radicals = { value = very_small_radicals strata = lower }
+		add_loyalists = { value = small_radicals strata = upper }
+	}
+
+	option = {
+		name = society_technology_events.28.c2
+		trigger = {
+			has_law = law_type:law_open_source_genetics
+		}
+		highlighted_option = yes
+		ai_chance = {
+			base = 4
+		}
+		# Open the genetic code to all
+		add_modifier = {
+			name = ste_designer_baby_open_source
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals pop_type = clergymen }
+		add_loyalists = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = society_technology_events.28.c3
+		trigger = {
+			has_law = law_type:law_corporate_genetic_licensing
+		}
+		highlighted_option = yes
+		ai_chance = {
+			base = 4
+		}
+		# Let the market perfect humanity
+		add_modifier = {
+			name = ste_designer_baby_corporate
 			days = long_modifier_time
 			is_decaying = yes
 		}
@@ -2664,6 +2702,13 @@ society_technology_events.30 = {
 		custom_tooltip = {
 			text = "MOMENTUM_MINUS_1_DESC"
 			change_variable = { name = finance_cycle_momentum add = -1 }
+		}
+	}
+
+	after = {
+		if = {
+			limit = { has_journal_entry = je_banking_cycle }
+			banking_cycle_post_event_refresh = yes
 		}
 	}
 }

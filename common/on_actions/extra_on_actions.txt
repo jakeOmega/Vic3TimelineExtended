@@ -2175,10 +2175,10 @@ overbuild_protection_on_action = {
 				}
 				remove_building = building_solar_receiver
 				if = {
-					limit = { variable:lvl_tmp > 0 }
-					create_building = {
-						building = building_solar_receiver
-						level = variable:lvl_tmp
+					limit = { var:lvl_tmp > 0 }
+					extended_timeline_add_specified_building_level = {
+						ADD_LEVEL = var:lvl_tmp
+						SPEC_TYPE = building_solar_receiver
 					}
 				}
 				remove_variable = lvl_tmp
@@ -2200,10 +2200,10 @@ overbuild_protection_on_action = {
 				}
 				remove_building = building_antimatter_engine
 				if = {
-					limit = { variable:lvl_tmp > 0 }
-					create_building = {
-						building = building_antimatter_engine
-						level = variable:lvl_tmp
+					limit = { var:lvl_tmp > 0 }
+					extended_timeline_add_specified_building_level = {
+						ADD_LEVEL = var:lvl_tmp
+						SPEC_TYPE = building_antimatter_engine
 					}
 				}
 				remove_variable = lvl_tmp
@@ -2223,10 +2223,10 @@ overbuild_protection_on_action = {
 				}
 				remove_building = building_antimatter_warhead_plant
 				if = {
-					limit = { variable:lvl_tmp > 0 }
-					create_building = {
-						building = building_antimatter_warhead_plant
-						level = variable:lvl_tmp
+					limit = { var:lvl_tmp > 0 }
+					extended_timeline_add_specified_building_level = {
+						ADD_LEVEL = var:lvl_tmp
+						SPEC_TYPE = building_antimatter_warhead_plant
 					}
 				}
 				remove_variable = lvl_tmp

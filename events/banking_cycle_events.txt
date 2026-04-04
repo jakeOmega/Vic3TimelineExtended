@@ -120,6 +120,10 @@ banking_cycle_events.1 = {
 			modifier = { add = 15 banking_cycle_is_frenzy = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -205,6 +209,10 @@ banking_cycle_events.101 = {
 			modifier = { add = 15 banking_cycle_is_frenzy = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 banking_cycle_events.151 = {
@@ -285,6 +293,10 @@ banking_cycle_events.151 = {
 			modifier = { add = 15 banking_cycle_is_frenzy = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 banking_cycle_events.104 = {
@@ -334,6 +346,10 @@ banking_cycle_events.104 = {
 		add_radicals = { value = small_radicals strata = lower }
 		add_loyalists = { value = small_radicals strata = upper }
 		ai_chance = { base = 40 }
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -385,6 +401,10 @@ banking_cycle_events.154 = {
 		add_loyalists = { value = small_radicals strata = upper }
 		ai_chance = { base = 40 }
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 banking_cycle_events.106 = {
@@ -427,6 +447,10 @@ banking_cycle_events.106 = {
 		add_modifier = { name = banking_event_import_and_subsidy_cost multiplier = banking_event_expense_small days = short_modifier_time is_decaying = yes }
 		ai_chance = { base = 25 }
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 banking_cycle_events.156 = {
@@ -468,6 +492,10 @@ banking_cycle_events.156 = {
 		add_modifier = { name = banking_event_import_and_subsidy days = short_modifier_time is_decaying = yes }
 		add_modifier = { name = banking_event_import_and_subsidy_cost multiplier = banking_event_expense_small days = short_modifier_time is_decaying = yes }
 		ai_chance = { base = 25 }
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -555,6 +583,10 @@ banking_cycle_events.2 = {
 			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -618,6 +650,10 @@ banking_cycle_events.3 = {
 			base = 45
 			modifier = { add = 10 banking_cycle_bubble_risk_rising = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -732,6 +768,10 @@ banking_cycle_events.4 = {
 			base = 40
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -796,6 +836,10 @@ banking_cycle_events.5 = {
 			base = 50
 			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -897,6 +941,10 @@ banking_cycle_events.6 = {
 			base = 40
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 
@@ -973,6 +1021,10 @@ banking_cycle_events.7 = {
 			base = 55
 			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -1061,6 +1113,10 @@ banking_cycle_events.8 = {
 			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -1143,6 +1199,10 @@ banking_cycle_events.9 = {
 		ai_chance = {
 			base = 30
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -1243,6 +1303,10 @@ banking_cycle_events.10 = {
 			modifier = { add = 20 banking_cycle_is_panic = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Command / Cooperative variants for Sovereign Debt Scare
@@ -1291,6 +1355,10 @@ banking_cycle_events.110 = {
 		add_radicals = { value = small_radicals strata = upper }
 		ai_chance = { base = 20 modifier = { add = 20 banking_cycle_is_panic = yes } }
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 banking_cycle_events.160 = {
@@ -1337,6 +1405,10 @@ banking_cycle_events.160 = {
 		add_modifier = { name = banking_event_partial_default days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals strata = upper }
 		ai_chance = { base = 20 modifier = { add = 20 banking_cycle_is_panic = yes } }
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -1427,6 +1499,10 @@ banking_cycle_events.11 = {
 			base = 30
 			modifier = { add = -20 banking_cycle_bubble_risk_high = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -1527,6 +1603,10 @@ banking_cycle_events.12 = {
 			modifier = { add = 25 banking_cycle_is_panic = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -1613,6 +1693,10 @@ banking_cycle_events.13 = {
 			base = 20
 			modifier = { add = 25 banking_cycle_bubble_risk_high = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -1717,6 +1801,10 @@ banking_cycle_events.14 = {
 			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -1816,6 +1904,10 @@ banking_cycle_events.15 = {
 			base = 25
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Command / Cooperative variants for Currency Crisis
@@ -1864,6 +1956,10 @@ banking_cycle_events.115 = {
 		add_radicals = { value = medium_radicals }
 		ai_chance = { base = 25 }
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 banking_cycle_events.165 = {
@@ -1910,6 +2006,10 @@ banking_cycle_events.165 = {
 		add_modifier = { name = banking_event_currency_collapse days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals }
 		ai_chance = { base = 25 }
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -2010,6 +2110,10 @@ banking_cycle_events.16 = {
 			base = 40
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Command / Cooperative variants for CB Independence Debate
@@ -2056,6 +2160,10 @@ banking_cycle_events.116 = {
 		add_modifier = { name = banking_event_dual_mandate days = normal_modifier_time is_decaying = yes }
 		ai_chance = { base = 40 }
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 banking_cycle_events.166 = {
@@ -2100,6 +2208,10 @@ banking_cycle_events.166 = {
 		custom_tooltip = { text = "BUBBLE_PRESSURE_2_DESC" change_variable = { name = bubble_pressure add = 2 } }
 		add_modifier = { name = banking_event_dual_mandate days = normal_modifier_time is_decaying = yes }
 		ai_chance = { base = 40 }
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -2195,6 +2307,10 @@ banking_cycle_events.17 = {
 			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Command / Cooperative variants for Consumer Credit Boom
@@ -2242,6 +2358,10 @@ banking_cycle_events.117 = {
 		add_radicals = { value = medium_radicals strata = lower }
 		ai_chance = { base = 15 modifier = { add = 20 banking_cycle_bubble_risk_high = yes } }
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 banking_cycle_events.167 = {
@@ -2287,6 +2407,10 @@ banking_cycle_events.167 = {
 		add_radicals = { value = medium_radicals strata = middle }
 		add_radicals = { value = medium_radicals strata = lower }
 		ai_chance = { base = 15 modifier = { add = 20 banking_cycle_bubble_risk_high = yes } }
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -2381,6 +2505,10 @@ banking_cycle_events.18 = {
 		ai_chance = {
 			base = 10
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -2484,6 +2612,10 @@ banking_cycle_events.19 = {
 			base = 30
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -2572,6 +2704,10 @@ banking_cycle_events.20 = {
 			base = 15
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Command / Cooperative variants for Shadow Banking Discovery
@@ -2617,6 +2753,10 @@ banking_cycle_events.120 = {
 		custom_tooltip = { text = "BUBBLE_PRESSURE_20_DESC" change_variable = { name = bubble_pressure add = 20 } }
 		ai_chance = { base = 15 }
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 banking_cycle_events.170 = {
@@ -2660,6 +2800,10 @@ banking_cycle_events.170 = {
 		name = banking_cycle_events.170.c
 		custom_tooltip = { text = "BUBBLE_PRESSURE_20_DESC" change_variable = { name = bubble_pressure add = 20 } }
 		ai_chance = { base = 15 }
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -2738,6 +2882,10 @@ banking_cycle_events.21 = {
 			base = 40
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -2795,6 +2943,10 @@ banking_cycle_events.22 = {
 		ai_chance = {
 			base = 45
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -2861,6 +3013,10 @@ banking_cycle_events.23 = {
 		ai_chance = {
 			base = 45
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -2940,6 +3096,10 @@ banking_cycle_events.24 = {
 			base = 20
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -3006,6 +3166,10 @@ banking_cycle_events.25 = {
 		ai_chance = {
 			base = 40
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -3080,6 +3244,10 @@ banking_cycle_events.26 = {
 			modifier = { add = -15 banking_cycle_bubble_risk_high = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -3138,6 +3306,10 @@ banking_cycle_events.27 = {
 		ai_chance = {
 			base = 45
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -3226,6 +3398,10 @@ banking_cycle_events.28 = {
 			base = 25
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -3309,6 +3485,10 @@ banking_cycle_events.29 = {
 			base = 45
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -3391,6 +3571,10 @@ banking_cycle_events.30 = {
 			base = 25
 			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -3488,6 +3672,10 @@ banking_cycle_events.31 = {
 			base = 35
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -3580,6 +3768,10 @@ banking_cycle_events.32 = {
 			base = 20
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -3652,6 +3844,10 @@ banking_cycle_events.33 = {
 			base = 45
 			modifier = { add = -15 banking_cycle_bubble_risk_high = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -3746,6 +3942,10 @@ banking_cycle_events.34 = {
 			base = 35
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -3810,6 +4010,10 @@ banking_cycle_events.35 = {
 			base = 50
 			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -3899,6 +4103,10 @@ banking_cycle_events.36 = {
 			base = 20
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -3983,6 +4191,10 @@ banking_cycle_events.37 = {
 			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -4055,6 +4267,10 @@ banking_cycle_events.38 = {
 		ai_chance = {
 			base = 45
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -4155,6 +4371,10 @@ banking_cycle_events.39 = {
 			base = 20
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -4236,6 +4456,10 @@ banking_cycle_events.40 = {
 		ai_chance = {
 			base = 20
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -4329,6 +4553,10 @@ banking_cycle_events.41 = {
 			base = 25
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -4404,6 +4632,10 @@ banking_cycle_events.42 = {
 			base = 45
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -4468,6 +4700,10 @@ banking_cycle_events.43 = {
 			base = 50
 			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -4562,6 +4798,10 @@ banking_cycle_events.44 = {
 		ai_chance = {
 			base = 15
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -4687,6 +4927,10 @@ banking_cycle_events.45 = {
 			base = 25
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # ==========================================================================
@@ -4743,6 +4987,10 @@ banking_cycle_events.50 = {
 			base = 25
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Event 51: Factory Director Corruption (expansion+)
@@ -4794,6 +5042,10 @@ banking_cycle_events.51 = {
 			base = 20
 			modifier = { add = -15 banking_cycle_bubble_risk_high = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -4847,6 +5099,10 @@ banking_cycle_events.52 = {
 			base = 25
 			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -4902,6 +5158,10 @@ banking_cycle_events.53 = {
 			modifier = { add = 20 banking_cycle_is_panic = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Event 54: Worker Motivation Campaign (stable+)
@@ -4952,6 +5212,10 @@ banking_cycle_events.54 = {
 			base = 25
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Event 55: Socialist Fraternal Aid (downturn/panic, keynesian)
@@ -5001,6 +5265,10 @@ banking_cycle_events.55 = {
 		ai_chance = {
 			base = 15
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -5053,6 +5321,10 @@ banking_cycle_events.56 = {
 			base = 25
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Event 57: Collectivization Efficiency Drive (boom/frenzy, corporate_management)
@@ -5104,6 +5376,10 @@ banking_cycle_events.57 = {
 			base = 25
 			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -5159,6 +5435,10 @@ banking_cycle_events.60 = {
 			base = 25
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Event 61: Free Rider Problem (expansion+)
@@ -5210,6 +5490,10 @@ banking_cycle_events.61 = {
 			base = 30
 			modifier = { add = -15 banking_cycle_bubble_risk_high = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -5263,6 +5547,10 @@ banking_cycle_events.62 = {
 			base = 35
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Event 63: Worker-Owner Burnout (downturn/panic)
@@ -5314,6 +5602,10 @@ banking_cycle_events.63 = {
 			base = 25
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Event 64: Cooperative Export Success (stable+)
@@ -5364,6 +5656,10 @@ banking_cycle_events.64 = {
 		ai_chance = {
 			base = 20
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -5417,6 +5713,10 @@ banking_cycle_events.65 = {
 			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 # Event 66: Innovation Through Collaboration (expansion+, central_banking)
@@ -5467,6 +5767,10 @@ banking_cycle_events.66 = {
 			base = 25
 			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 
@@ -5520,5 +5824,9 @@ banking_cycle_events.67 = {
 			base = 25
 			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }

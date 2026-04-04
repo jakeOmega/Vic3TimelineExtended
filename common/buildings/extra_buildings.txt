@@ -1017,8 +1017,10 @@ REPLACE_OR_CREATE:building_space_elevator = {
 
 	required_construction = construction_cost_canal
 	
-	buildable = no
-	expandable = no
+	buildable = yes
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
 	potential = {
 		has_building = building_space_elevator
 	}
@@ -1885,8 +1887,10 @@ REPLACE_OR_CREATE:building_solar_collector = {
 
 	required_construction = construction_cost_canal
 	
-	buildable = no
-	expandable = no
+	buildable = yes
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
 	potential = {
 		has_building = building_solar_collector
 	}
@@ -1895,7 +1899,7 @@ REPLACE_OR_CREATE:building_solar_collector = {
 }
 
 REPLACE_OR_CREATE:building_solar_receiver = {
-	building_group = bg_private_infrastructure	
+	building_group = bg_megastructure_capped_private	
 	icon = "gfx/interface/icons/building_icons/power_plant.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -1972,8 +1976,10 @@ REPLACE_OR_CREATE:building_orbital_battlestation = {
 
 	required_construction = construction_cost_canal
 	
-	buildable = no
-	expandable = no
+	buildable = yes
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
 	potential = {
 		has_building = building_orbital_battlestation
 	}
@@ -2023,8 +2029,10 @@ REPLACE_OR_CREATE:building_mind_upload_nexus = {
 
 	required_construction = construction_cost_canal
 	
-	buildable = no
-	expandable = no
+	buildable = yes
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
 	potential = {
 		has_building = building_mind_upload_nexus
 	}
@@ -2073,8 +2081,10 @@ REPLACE_OR_CREATE:building_antimatter_facility = {
 
 	required_construction = construction_cost_canal
 	
-	buildable = no
-	expandable = no
+	buildable = yes
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
 	potential = {
 		has_building = building_antimatter_facility
 	}
@@ -2083,7 +2093,7 @@ REPLACE_OR_CREATE:building_antimatter_facility = {
 }
 
 REPLACE_OR_CREATE:building_antimatter_engine = {
-	building_group = bg_private_infrastructure
+	building_group = bg_megastructure_capped_private
 	icon = "gfx/interface/icons/building_icons/power_plant.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -2192,8 +2202,10 @@ REPLACE_OR_CREATE:building_nanofabrication_center = {
 
 	required_construction = construction_cost_canal
 	
-	buildable = no
-	expandable = no
+	buildable = yes
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
 	potential = {
 		has_building = building_nanofabrication_center
 	}
@@ -2244,8 +2256,10 @@ REPLACE_OR_CREATE:building_consciousness_network = {
 
 	required_construction = construction_cost_canal
 	
-	buildable = no
-	expandable = no
+	buildable = yes
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
 	potential = {
 		has_building = building_consciousness_network
 	}

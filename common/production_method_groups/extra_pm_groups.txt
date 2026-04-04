@@ -97,7 +97,7 @@ INJECT:pmg_fertilizer_production = {
         pm_polymerization_processes
         pm_automated_chemical_reactors
         pm_flow_chemistry_production
-        pm_ai_optimized_synthesis
+        pm_molecular_foundry
     }
 }
 INJECT:pmg_explosives_building_chemical_plant = {

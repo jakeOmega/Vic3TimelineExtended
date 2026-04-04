@@ -12343,7 +12343,7 @@ pm_flow_chemistry_production = {
 	}
 }
 
-pm_ai_optimized_synthesis = {
+pm_molecular_foundry = {
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p3.dds"
 
 	unlocking_technologies = {
@@ -13989,6 +13989,12 @@ pm_space_elevator_construction_fast = {
 
 pm_space_elevator = {
 	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+
+	state_modifiers = {
+		level_scaled = {
+			state_building_space_elevator_max_level_add = 1
+		}
+	}
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -17780,6 +17786,12 @@ pm_solar_collector_construction_fast = {
 pm_solar_collector = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 
+	state_modifiers = {
+		level_scaled = {
+			state_building_solar_collector_max_level_add = 1
+		}
+	}
+
 	country_modifiers = {
 		workforce_scaled = {
 			country_solar_receiver_max_level_add = 3
@@ -17967,6 +17979,12 @@ pm_orbital_battlestation_construction_fast = {
 pm_orbital_battlestation = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 
+	state_modifiers = {
+		level_scaled = {
+			state_building_orbital_battlestation_max_level_add = 1
+		}
+	}
+
 	country_modifiers = {
 		workforce_scaled = {
 			unit_offense_mult = 0.05
@@ -18131,6 +18149,12 @@ pm_mind_upload_nexus_construction_fast = {
 pm_mind_upload_nexus = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 
+	state_modifiers = {
+		level_scaled = {
+			state_building_mind_upload_nexus_max_level_add = 1
+		}
+	}
+
 	country_modifiers = {
 		workforce_scaled = {
 			country_tech_research_speed_mult = 0.05
@@ -18292,6 +18316,12 @@ pm_antimatter_facility_construction_fast = {
 # Antimatter facility hub - enables antimatter sub-building slots
 pm_antimatter_facility = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+
+	state_modifiers = {
+		level_scaled = {
+			state_building_antimatter_facility_max_level_add = 1
+		}
+	}
 
 	country_modifiers = {
 		workforce_scaled = {
@@ -18545,6 +18575,12 @@ pm_nanofabrication_center_construction_fast = {
 pm_nanofabrication_center = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 
+	state_modifiers = {
+		level_scaled = {
+			state_building_nanofabrication_center_max_level_add = 1
+		}
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -18711,6 +18747,9 @@ pm_consciousness_network = {
 			state_institution_impact_add = 0.10
 			state_tax_capacity_add = 50
 			state_education_access_add = 0.05
+		}
+		level_scaled = {
+			state_building_consciousness_network_max_level_add = 1
 		}
 	}
 

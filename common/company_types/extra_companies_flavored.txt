@@ -3037,24 +3037,18 @@ company_neurovault = {
 			}
 		}
 		leading_producer_of = g:digital_assets
-		literacy_rate >= 0.85
+		is_top_innovation_country = yes
 		gdp_per_capita_ranking <= 10
 	}
 	prosperity_modifier = {
-		country_weekly_innovation_mult = 0.1
-		goods_output_digital_assets_mult = 0.15
+		goods_output_digital_assets_mult = 0.1
 		goods_output_advanced_materials_mult = 0.1
-		goods_output_electronic_components_mult = 0.15
-		goods_output_robotics_mult = 0.1
 		state_building_neurovault_hq_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
 		prestige_good_entertainment
-		prestige_good_generic_advanced_materials
 		prestige_good_generic_electronic_components
-		prestige_good_resort_travel
-		prestige_good_precision_robotics
 	}
 	ai_will_do = {
 		has_technology_researched = mind_backups
@@ -3080,13 +3074,14 @@ company_tycho_manufacturing = {
 	}
 	building_types = {
 		building_aerospace_industry
+		building_space_elevator
+		building_advanced_material_fabricator
 		building_tycho_manufacturing_hq
 	}
 	extension_building_types = {
+		building_nanofabrication_center
 		building_antimatter_engine
 		building_solar_receiver
-		building_space_elevator
-		building_advanced_material_fabricator
 	}
 	potential = {
 		always = yes
@@ -3136,12 +3131,12 @@ company_tessier_ashpool = {
 	}
 	building_types = {
 		building_software_industry
+		building_network_infrastructure
+		building_mind_upload_nexus
 		building_tessier_ashpool_hq
 	}
 	extension_building_types = {
-		building_mind_upload_nexus
 		building_space_elevator
-		building_network_infrastructure
 	}
 	potential = {
 		always = yes
@@ -3157,20 +3152,17 @@ company_tessier_ashpool = {
 				level >= 10
 			}
 		}
-		literacy_rate >= 0.9
+		is_top_innovation_country = yes
 		gdp_per_capita_ranking <= 10
 	}
 	prosperity_modifier = {
-		country_weekly_innovation_mult = 0.1
 		goods_output_digital_assets_mult = 0.15
-		goods_output_launch_capacity_mult = 0.1
 		state_building_tessier_ashpool_hq_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
 		prestige_good_entertainment
 		prestige_good_resort_travel
-		prestige_good_heavy_lift_launch
 	}
 	ai_will_do = {
 		has_technology_researched = mind_backups
@@ -3192,10 +3184,11 @@ company_hanka_precision = {
 	}
 	building_types = {
 		building_electronic_components_and_semiconductor_industry
+		building_software_industry
+		building_nanofabrication_center
 		building_hanka_precision_hq
 	}
 	extension_building_types = {
-		building_nanofabrication_center
 		building_mind_upload_nexus
 		building_robotics_industry
 	}
@@ -3214,7 +3207,7 @@ company_hanka_precision = {
 			}
 		}
 		has_technology_researched = early_nanotechnology
-		literacy_rate >= 0.85
+		is_top_innovation_country = yes
 	}
 	prosperity_modifier = {
 		goods_output_electronic_components_mult = 0.2
@@ -3226,9 +3219,6 @@ company_hanka_precision = {
 		prestige_good_generic_advanced_materials
 		prestige_good_generic_software
 		prestige_good_generic_electronic_components
-		prestige_good_entertainment
-		prestige_good_resort_travel
-		prestige_good_precision_robotics
 	}
 	ai_will_do = {
 		has_technology_researched = biohacking_and_human_augmentation
@@ -3251,10 +3241,11 @@ company_yoyodyne_propulsion = {
 	}
 	building_types = {
 		building_aerospace_industry
+		building_antimatter_engine
 		building_yoyodyne_propulsion_hq
 	}
 	extension_building_types = {
-		building_antimatter_engine
+		building_space_elevator
 		building_solar_receiver
 		building_advanced_material_fabricator
 	}
@@ -3275,13 +3266,12 @@ company_yoyodyne_propulsion = {
 		country_rank >= rank_value:major_power
 	}
 	prosperity_modifier = {
-		goods_output_launch_capacity_mult = 0.15
+		goods_output_launch_capacity_mult = 0.25
 		country_production_tech_research_speed_mult = 0.1
 		state_building_yoyodyne_propulsion_hq_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_heavy_lift_launch
-		prestige_good_generic_advanced_materials
 	}
 	ai_will_do = {
 		has_technology_researched = antimatter_production
@@ -3304,12 +3294,12 @@ company_rekal = {
 	}
 	building_types = {
 		building_software_industry
+		building_mind_upload_nexus
+		building_network_infrastructure
 		building_rekal_hq
 	}
 	extension_building_types = {
-		building_mind_upload_nexus
 		building_nanofabrication_center
-		building_network_infrastructure
 	}
 	potential = {
 		always = yes
@@ -3331,16 +3321,14 @@ company_rekal = {
 		}
 	}
 	prosperity_modifier = {
-		goods_output_digital_assets_mult = 0.15
-		goods_output_advanced_materials_mult = 0.1
-		country_weekly_innovation_mult = 0.05
+		goods_output_digital_assets_mult = 0.1
+		goods_output_services_mult = 0.1
 		state_building_rekal_hq_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
 		prestige_good_resort_travel
 		prestige_good_generic_software
-		prestige_good_generic_advanced_materials
 	}
 	ai_will_do = {
 		has_technology_researched = mind_backups

@@ -286,6 +286,10 @@ minor_events_timelineextended.6 = {
 			base = 50
 		}
 	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
 }
 
 minor_events_timelineextended.7 = {
@@ -360,6 +364,10 @@ minor_events_timelineextended.7 = {
 		ai_chance = {
 			base = 50
 		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
 	}
 }
 

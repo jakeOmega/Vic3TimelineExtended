@@ -8444,7 +8444,7 @@ pm_panama_company_culebra_cut = {
 	texture = "gfx/interface/icons/production_method_icons/cat_train_blue_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 5
+			state_trade_capacity_add = 500
 		}
 	}
 	building_modifiers = {
@@ -9467,7 +9467,7 @@ pm_suez_company_ismailia_hq = {
 	texture = "gfx/interface/icons/production_method_icons/cat_train_blue_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 5
+			state_trade_capacity_add = 500
 		}
 	}
 	building_modifiers = {
@@ -10155,7 +10155,7 @@ pm_tycho_manufacturing_hq = {
 	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_aerospace_industry_throughput_add = 0.15
+			goods_output_launch_capacity_mult = 0.15
 		}
 	}
 	country_modifiers = {
@@ -10195,7 +10195,7 @@ pm_tessier_ashpool_hq = {
 	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			goods_output_digital_assets_mult = 0.15
+			goods_output_digital_assets_mult = 0.25
 		}
 	}
 	country_modifiers = {

@@ -118,3 +118,12 @@ is_privately_expandable_building_type = {
 		is_building_type = building_railway
 	}
 }
+
+is_top_innovation_country = {
+	NOT = {
+		any_country = {
+			NOT = { THIS = PREV }
+			modifier:country_weekly_innovation_add > PREV.modifier:country_weekly_innovation_add
+		}
+	}
+}
