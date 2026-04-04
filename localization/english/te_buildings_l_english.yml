@@ -440,7 +440,7 @@
  building_total_space_elevator_progress:0 "Space Elevator Progress"
  building_total_space_elevator_progress_desc:0 "Space Elevator Progress"
  building_tourism_industry:0 "Tourism Industry"
- building_tourism_industry_desc:0 "A collection of hotels, resorts, and services that cater to visitors, generating revenue from the state's natural and cultural appeal."
+ building_tourism_industry_desc:0 "A collection of hotels, resorts, and services that cater to visitors, generating [concept_tourism_system] revenue from the state's natural and cultural appeal."
  building_tourism_industry_throughput_add:0 "Tourism Industry Throughput"
  building_tourism_industry_throughput_add_desc:0 "$state_tourism_throughput_breakdown$ A multiplier affecting the efficiency of Tourism Industries in this state.#!"
  building_toyota_kaikan_plant:0 "Toyota Kaikan Museum & Plant"
