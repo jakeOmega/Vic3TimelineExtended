@@ -258,8 +258,7 @@ universal_basic_income = {
 	}
 	
 	modifier = {
-		state_lower_strata_expected_sol_add = 2
-		state_middle_strata_expected_sol_add = 2
+		country_sol_expectations_target_add = 0.5
 		country_institution_social_security_max_investment_add = 1
 		country_institution_national_bank_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1

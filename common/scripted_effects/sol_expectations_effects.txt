@@ -1,26 +1,39 @@
 ﻿# SoL Expectations System - Monthly Update
 # Scope: country
-# Tracks an adaptive expectations variable that converges toward actual average SoL.
-# The shift (adaptive - actual) is applied as a modifier to expected SoL for all strata.
-#   Positive shift = expectations above reality (people unhappy - SoL recently dropped)
-#   Negative shift = reality above expectations (people content - SoL recently rose)
+# Tracks a shift variable that converges expected SoL toward a target.
+# Target = average_sol + country_sol_expectations_target_add.
+# Each month, reads the gap (target - average_expected_sol) and nudges
+# the shift to close it. At equilibrium, expected SoL ≈ target.
+#   Example: average_sol=20, target_add=+2 → expected converges to 22
 # Converges with ~5-year half-life, ~90% adapted in 20 years.
 
 sol_expectations_monthly_update = {
-	# Initialize if variable doesn't exist yet
+	# Initialize shift variable if it doesn't exist yet (start at 0 = no adjustment)
 	if = {
-		limit = { NOT = { has_variable = sol_expectations_adaptive } }
-		set_variable = { name = sol_expectations_adaptive value = average_sol }
+		limit = { NOT = { has_variable = sol_expectations_shift } }
+		set_variable = { name = sol_expectations_shift value = 0 }
 	}
 
-	# Compute adjustment: (actual_sol - adaptive) * rate
+	# Cache the gap BEFORE removing the modifier.
+	# average_expected_sol won't recalculate mid-effect after modifier removal.
+	# Gap = (average_sol + target_add) - average_expected_sol.
+	# Gap > 0 means expectations are below target; gap < 0 means above.
+	set_variable = { name = sol_expectations_gap_cached value = sol_expectations_gap_value }
+
+	# Nudge the shift to close the gap: shift += gap * rate
 	change_variable = {
-		name = sol_expectations_adaptive
+		name = sol_expectations_shift
 		add = {
-			value = average_sol
-			subtract = var:sol_expectations_adaptive
+			value = var:sol_expectations_gap_cached
 			multiply = sol_expectations_adaptation_rate_value
 		}
+	}
+
+	# Apply persistent monthly bias from modifiers (laws, techs, buildings, etc.)
+	# Positive = expectations rise (people expect more), negative = lower expectations.
+	change_variable = {
+		name = sol_expectations_shift
+		add = modifier:country_sol_expectations_shift_add
 	}
 
 	# Remove old modifier
@@ -30,6 +43,100 @@ sol_expectations_monthly_update = {
 	}
 
 	# Apply modifier with multiplier = shift (only if non-negligible)
+	if = {
+		limit = {
+			OR = {
+				sol_expectations_shift_value > 0.05
+				sol_expectations_shift_value < -0.05
+			}
+		}
+		add_modifier = {
+			name = sol_expectations_adaptive_shift
+			multiplier = sol_expectations_shift_value
+		}
+	}
+}
+
+# ========== Utility Scripted Effects ==========
+# For events, decisions, and other systems to call.
+
+# Instantly adjust the expectations shift by a fixed amount.
+# Scope: country
+# Parameters:
+#   AMOUNT — how much to add to the shift. Positive = raise expected SoL,
+#            negative = lower it. Can be a script value or literal.
+# Example: sol_expectations_instant_adjust = { AMOUNT = 2 }
+#          sol_expectations_instant_adjust = { AMOUNT = -3 }
+sol_expectations_instant_adjust = {
+	if = {
+		limit = { NOT = { has_variable = sol_expectations_shift } }
+		set_variable = { name = sol_expectations_shift value = 0 }
+	}
+
+	change_variable = {
+		name = sol_expectations_shift
+		add = $AMOUNT$
+	}
+
+	# Re-apply modifier immediately
+	sol_expectations_reapply_modifier = yes
+}
+
+# Instantly close a fraction of the remaining gap between expected and actual SoL.
+# Scope: country
+# Parameters:
+#   FRACTION — 0 to 1 (0.5 = close half the gap, 1.0 = fully reset to equilibrium).
+#              Values > 1 overshoot past equilibrium.
+# Example: sol_expectations_close_gap = { FRACTION = 0.5 }
+sol_expectations_close_gap = {
+	if = {
+		limit = { NOT = { has_variable = sol_expectations_shift } }
+		set_variable = { name = sol_expectations_shift value = 0 }
+	}
+
+	# Cache the current gap (with our modifier still active)
+	set_variable = { name = sol_expectations_gap_cached value = sol_expectations_gap_value }
+
+	change_variable = {
+		name = sol_expectations_shift
+		add = {
+			value = var:sol_expectations_gap_cached
+			multiply = $FRACTION$
+		}
+	}
+
+	# Re-apply modifier immediately
+	sol_expectations_reapply_modifier = yes
+}
+
+# Fully reset expectations to match current SoL (close 100% of gap).
+# Scope: country
+# Example: sol_expectations_reset = yes
+sol_expectations_reset = {
+	if = {
+		limit = { NOT = { has_variable = sol_expectations_shift } }
+		set_variable = { name = sol_expectations_shift value = 0 }
+	}
+
+	# Cache the current gap and close it completely
+	set_variable = { name = sol_expectations_gap_cached value = sol_expectations_gap_value }
+
+	change_variable = {
+		name = sol_expectations_shift
+		add = var:sol_expectations_gap_cached
+	}
+
+	# Re-apply modifier immediately
+	sol_expectations_reapply_modifier = yes
+}
+
+# Internal helper: remove and re-apply the modifier with current shift value.
+# Scope: country
+sol_expectations_reapply_modifier = {
+	if = {
+		limit = { has_modifier = sol_expectations_adaptive_shift }
+		remove_modifier = sol_expectations_adaptive_shift
+	}
 	if = {
 		limit = {
 			OR = {

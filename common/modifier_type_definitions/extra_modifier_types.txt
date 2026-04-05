@@ -3192,3 +3192,22 @@ country_sol_expectation_adaptation_rate_mult = {
 	decimals = 0
 	script_only = yes
 }
+
+# Persistent monthly bias added to the expectations shift each month.
+# Positive = expectations rise faster (people expect more), negative = expectations drop.
+# Laws, techs, buildings, or timed modifiers can apply this.
+country_sol_expectations_shift_add = {
+	color = neutral
+	decimals = 2
+	script_only = yes
+}
+
+# Offsets the convergence target for SoL expectations.
+# Positive = people permanently expect more than current average SoL, negative = less.
+# At equilibrium: average_expected_sol ≈ average_sol + target_add.
+# Use this for techs, laws, and other permanent unlocks that raise/lower expectations.
+country_sol_expectations_target_add = {
+	color = neutral
+	decimals = 1
+	script_only = yes
+}

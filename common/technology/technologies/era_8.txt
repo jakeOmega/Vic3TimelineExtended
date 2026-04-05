@@ -309,7 +309,6 @@ sexual_revolution = {
 		country_weekly_innovation_max_add = 50
 		state_bureaucracy_population_base_cost_factor_mult = 0.5
 		country_institution_home_affairs_max_investment_add = 1
-		state_expected_sol_from_literacy = 1
 	}
 	
 	ai_weight = {

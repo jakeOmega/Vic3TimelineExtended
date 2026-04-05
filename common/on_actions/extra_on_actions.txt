@@ -1761,6 +1761,7 @@ society_technology_events_on_action = {
 			}
 			5 = {
 				trigger = {
+					in_election_campaign = yes
 					has_technology_researched = social_media
 					NOT = { has_law = law_type:law_single_party_state }
 					any_country = {

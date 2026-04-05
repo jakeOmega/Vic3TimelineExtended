@@ -1603,23 +1603,36 @@ sol_expectations_adaptation_rate_value = {
 	max = 0.1
 }
 
-# Compute the shift to apply: adaptive - actual average SoL
-sol_expectations_shift_value = {
-	value = var:sol_expectations_adaptive
-	subtract = average_sol
+# Gap between target SoL and current expected SoL (including our modifier).
+# Target = average_sol + country_sol_expectations_target_add.
+# Positive = expectations below target (needs upward correction).
+# Negative = expectations above target (needs downward correction).
+# Must be cached in a variable BEFORE removing the modifier, since
+# average_expected_sol won't recalculate mid-effect after removal.
+sol_expectations_gap_value = {
+	value = average_sol
+	add = modifier:country_sol_expectations_target_add
+	subtract = average_expected_sol
 }
 
-# Display value for UI (shows the current shift)
+# The current shift stored in var:sol_expectations_shift.
+# This is the modifier multiplier — it converges toward whatever value
+# makes average_expected_sol equal average_sol.
+sol_expectations_shift_value = {
+	value = var:sol_expectations_shift
+}
+
+# Display value for UI (shows the current shift, rounded to 1 decimal)
 sol_expectations_shift_display = {
-	value = sol_expectations_shift_value
+	value = var:sol_expectations_shift
 	multiply = 10
 	round = yes
 	divide = 10
 }
 
-# Display the adaptive expectations value
-sol_expectations_adaptive_display = {
-	value = var:sol_expectations_adaptive
+# Display the current remaining gap for UI
+sol_expectations_gap_display = {
+	value = var:sol_expectations_gap_cached
 	multiply = 10
 	round = yes
 	divide = 10

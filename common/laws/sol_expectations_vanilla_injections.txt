@@ -1,0 +1,22 @@
+﻿# ====================================================================================
+# SoL Expectations System - Vanilla Law Injections
+# ====================================================================================
+# Injects country_sol_expectations_target_add into vanilla laws while cancelling
+# their original state_expected_sol_* modifiers with inverse values.
+
+# law_industry_banned: vanilla has state_expected_sol_mult = -0.1
+INJECT:law_industry_banned = {
+	modifier = {
+		state_expected_sol_mult = 0.1
+		country_sol_expectations_target_add = -1
+	}
+}
+
+# law_women_in_the_fields: vanilla has state_middle_strata_expected_sol_add = -4, state_lower_strata_expected_sol_add = -2
+INJECT:law_women_in_the_fields = {
+	modifier = {
+		state_middle_strata_expected_sol_add = 4
+		state_lower_strata_expected_sol_add = 2
+		country_sol_expectations_target_add = -2
+	}
+}

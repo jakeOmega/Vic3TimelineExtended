@@ -3137,7 +3137,7 @@ principle_healthcare_5 = {
 		state_birth_rate_mult = 0.02
 		country_loyalism_increases_full_acceptance_mult = 0.02
 		country_authority_add = 100
-		state_expected_sol_mult = -0.02
+		country_sol_expectations_target_add = -0.25
 	}
 
 	ai_weight = {
@@ -3226,7 +3226,7 @@ principle_welfare_3 = {
 		state_radicals_from_political_movements_mult = -0.05
 		state_education_access_add = 0.02
 		state_pop_qualifications_mult = 0.05
-		state_lower_strata_expected_sol_add = -0.5
+		country_sol_expectations_target_add = -0.25
 	}
 
 	ai_weight = {
@@ -3258,7 +3258,7 @@ principle_welfare_4 = {
 		state_radicals_from_political_movements_mult = -0.05
 		state_education_access_add = 0.02
 		state_pop_qualifications_mult = 0.05
-		state_lower_strata_expected_sol_add = -0.5
+		country_sol_expectations_target_add = -0.25
 		state_construction_mult = 0.02
 	}
 
@@ -3291,7 +3291,7 @@ principle_welfare_5 = {
 		state_radicals_from_political_movements_mult = -0.05
 		state_education_access_add = 0.02
 		state_pop_qualifications_mult = 0.05
-		state_lower_strata_expected_sol_add = -0.5
+		country_sol_expectations_target_add = -0.25
 		state_construction_mult = 0.02
 		country_authority_add = 100
 	}

@@ -1281,6 +1281,7 @@ society_technology_events.14 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		in_election_campaign = yes
 		has_technology_researched = social_media
 		NOT = { has_modifier = ste_election_interference_counter }
 		NOT = { has_modifier = ste_election_interference_ignored }
@@ -1300,6 +1301,8 @@ society_technology_events.14 = {
 			has_law = law_type:law_landed_voting
 		}
 	}
+
+	cancellation_trigger = { in_election_campaign = no }
 
 	immediate = {
 		random_country = {

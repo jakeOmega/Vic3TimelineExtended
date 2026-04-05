@@ -1,0 +1,43 @@
+﻿# ====================================================================================
+# SoL Expectations System - Vanilla Technology Injections
+# ====================================================================================
+# Injects country_sol_expectations_target_add into vanilla society techs
+# while cancelling out their original state_expected_sol_from_literacy with inverse values.
+# This avoids full overrides and preserves any vanilla changes to these entities.
+
+# Each had state_expected_sol_from_literacy = 1; cancel and replace with target_add = 1
+
+INJECT:egalitarianism = {
+	modifier = {
+		state_expected_sol_from_literacy = -1
+		country_sol_expectations_target_add = 0.5
+	}
+}
+
+INJECT:labor_movement = {
+	modifier = {
+		state_expected_sol_from_literacy = -1
+		country_sol_expectations_target_add = 0.5
+	}
+}
+
+INJECT:socialism = {
+	modifier = {
+		state_expected_sol_from_literacy = -1
+		country_sol_expectations_target_add = 0.5
+	}
+}
+
+INJECT:political_agitation = {
+	modifier = {
+		state_expected_sol_from_literacy = -1
+		country_sol_expectations_target_add = 0.5
+	}
+}
+
+INJECT:mass_propaganda = {
+	modifier = {
+		state_expected_sol_from_literacy = -1
+		country_sol_expectations_target_add = 0.5
+	}
+}
