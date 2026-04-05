@@ -6,6 +6,17 @@
 # the shift to close it. At equilibrium, expected SoL ≈ target.
 #   Example: average_sol=20, target_add=+2 → expected converges to 22
 # Converges with ~5-year half-life, ~90% adapted in 20 years.
+#
+# Additional features:
+# - Min/max clamp: shift is bounded by configurable floor/ceiling.
+#   country_sol_expectations_shift_min_add raises the floor (welfare floors).
+#   country_sol_expectations_shift_max_add lowers the ceiling.
+# - Per-strata offsets: country_sol_expectations_upper/middle/lower_offset_add
+#   apply direct (non-adaptive) shifts to specific class expectations.
+#   Models class-relative comparison (aristocratic vs egalitarian societies).
+# - The system applies 3 separate strata modifiers (upper, middle, lower),
+#   each with multiplier = clamped shift + class offset. No shared "overall"
+#   modifier; each class's expectation is fully explicit.
 
 sol_expectations_monthly_update = {
 	# Initialize shift variable if it doesn't exist yet (start at 0 = no adjustment)
@@ -36,25 +47,13 @@ sol_expectations_monthly_update = {
 		add = modifier:country_sol_expectations_shift_add
 	}
 
-	# Remove old modifier
-	if = {
-		limit = { has_modifier = sol_expectations_adaptive_shift }
-		remove_modifier = sol_expectations_adaptive_shift
-	}
+	# Clamp shift to configured [min, max] bounds.
+	# Default: [0, 50] (effectively unlimited). Welfare laws raise the floor;
+	# people are unhappy starving regardless of how long it's persisted.
+	set_variable = { name = sol_expectations_shift value = sol_expectations_shift_clamped_value }
 
-	# Apply modifier with multiplier = shift (only if non-negligible)
-	if = {
-		limit = {
-			OR = {
-				sol_expectations_shift_value > 0.05
-				sol_expectations_shift_value < -0.05
-			}
-		}
-		add_modifier = {
-			name = sol_expectations_adaptive_shift
-			multiplier = sol_expectations_shift_value
-		}
-	}
+	# Apply per-class shift modifiers (adaptive shift + class offset for each stratum).
+	sol_expectations_apply_strata_shifts = yes
 }
 
 # ========== Utility Scripted Effects ==========
@@ -130,23 +129,70 @@ sol_expectations_reset = {
 	sol_expectations_reapply_modifier = yes
 }
 
-# Internal helper: remove and re-apply the modifier with current shift value.
+# Internal helper: clamp shift and re-apply all strata modifiers.
 # Scope: country
 sol_expectations_reapply_modifier = {
+	# Clamp before reapplying
+	set_variable = { name = sol_expectations_shift value = sol_expectations_shift_clamped_value }
+
+	sol_expectations_apply_strata_shifts = yes
+}
+
+# Internal helper: remove and re-apply the 3 per-class strata shift modifiers.
+# Each uses multiplier = clamped shift + class offset.
+# Scope: country
+sol_expectations_apply_strata_shifts = {
+	# Upper strata
 	if = {
-		limit = { has_modifier = sol_expectations_adaptive_shift }
-		remove_modifier = sol_expectations_adaptive_shift
+		limit = { has_modifier = sol_expectations_upper_strata_shift }
+		remove_modifier = sol_expectations_upper_strata_shift
 	}
 	if = {
 		limit = {
 			OR = {
-				sol_expectations_shift_value > 0.05
-				sol_expectations_shift_value < -0.05
+				sol_expectations_upper_shift_value > 0.1
+				sol_expectations_upper_shift_value < -0.1
 			}
 		}
 		add_modifier = {
-			name = sol_expectations_adaptive_shift
-			multiplier = sol_expectations_shift_value
+			name = sol_expectations_upper_strata_shift
+			multiplier = sol_expectations_upper_shift_value
+		}
+	}
+
+	# Middle strata
+	if = {
+		limit = { has_modifier = sol_expectations_middle_strata_shift }
+		remove_modifier = sol_expectations_middle_strata_shift
+	}
+	if = {
+		limit = {
+			OR = {
+				sol_expectations_middle_shift_value > 0.1
+				sol_expectations_middle_shift_value < -0.1
+			}
+		}
+		add_modifier = {
+			name = sol_expectations_middle_strata_shift
+			multiplier = sol_expectations_middle_shift_value
+		}
+	}
+
+	# Lower strata
+	if = {
+		limit = { has_modifier = sol_expectations_lower_strata_shift }
+		remove_modifier = sol_expectations_lower_strata_shift
+	}
+	if = {
+		limit = {
+			OR = {
+				sol_expectations_lower_shift_value > 0.1
+				sol_expectations_lower_shift_value < -0.1
+			}
+		}
+		add_modifier = {
+			name = sol_expectations_lower_strata_shift
+			multiplier = sol_expectations_lower_shift_value
 		}
 	}
 }

@@ -1,6 +1,14 @@
-﻿sol_expectations_adaptive_shift = {
+﻿sol_expectations_upper_strata_shift = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_upper_strata_expected_sol_add = 1
+}
+
+sol_expectations_middle_strata_shift = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_middle_strata_expected_sol_add = 1
+}
+
+sol_expectations_lower_strata_shift = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	state_lower_strata_expected_sol_add = 1
-	state_middle_strata_expected_sol_add = 1
-	state_upper_strata_expected_sol_add = 1
 }

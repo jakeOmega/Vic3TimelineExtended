@@ -351,7 +351,7 @@ secular_events.5 = {
 	placement = root
 
 	event_image = {
-		texture = "gfx/event_pictures/diplomatic_summit.dds"
+		texture = "gfx/event_pictures/diplomatic_meeting.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"

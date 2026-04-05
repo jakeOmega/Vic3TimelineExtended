@@ -3539,7 +3539,7 @@ extra_law_events.35 = {
 	desc = extra_law_events.35.d
 	flavor = extra_law_events.35.f
 
-	event_image = { video = "europenorthamerica_capitalists_meeting" }
+	event_image = { texture = "gfx/event_pictures/ministry_building.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -3729,7 +3729,7 @@ extra_law_events.36 = {
 	}
 	flavor = extra_law_events.36.f
 
-	event_image = { video = "europenorthamerica_political_extremism" }
+	event_image = { texture = "gfx/event_pictures/social_revolution.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 

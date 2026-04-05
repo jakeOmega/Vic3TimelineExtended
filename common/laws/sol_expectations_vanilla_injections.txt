@@ -3,6 +3,7 @@
 # ====================================================================================
 # Injects country_sol_expectations_target_add into vanilla laws while cancelling
 # their original state_expected_sol_* modifiers with inverse values.
+# Also injects per-strata offsets and shift floor/ceiling modifiers.
 
 # law_industry_banned: vanilla has state_expected_sol_mult = -0.1
 INJECT:law_industry_banned = {
@@ -18,5 +19,79 @@ INJECT:law_women_in_the_fields = {
 		state_middle_strata_expected_sol_add = 4
 		state_lower_strata_expected_sol_add = 2
 		country_sol_expectations_target_add = -2
+	}
+}
+
+# === Voting Laws — Per-Strata Offsets ===
+# Model class-relative comparison: restrictive franchises → elites expect
+# more than average (they compare to other elites); broad suffrage → lower
+# class expects more (they compare to the whole population).
+
+INJECT:law_autocracy = {
+	modifier = {
+		country_sol_expectations_upper_offset_add = 1.5
+	}
+}
+
+INJECT:law_landed_voting = {
+	modifier = {
+		country_sol_expectations_upper_offset_add = 2
+	}
+}
+
+INJECT:law_wealth_voting = {
+	modifier = {
+		country_sol_expectations_upper_offset_add = 1.5
+		country_sol_expectations_middle_offset_add = 0.5
+	}
+}
+
+INJECT:law_census_voting = {
+	modifier = {
+		country_sol_expectations_upper_offset_add = 0.5
+	}
+}
+
+INJECT:law_universal_suffrage = {
+	modifier = {
+		country_sol_expectations_lower_offset_add = 1
+	}
+}
+
+# === Welfare Laws — Shift Floor ===
+# Welfare sets a floor on how far expectations can drop. People with a
+# safety net won't fully adapt to starvation-level conditions.
+
+INJECT:law_poor_laws = {
+	modifier = {
+		country_sol_expectations_shift_min_add = 3
+	}
+}
+
+INJECT:law_wage_subsidies = {
+	modifier = {
+		country_sol_expectations_shift_min_add = 5
+	}
+}
+
+INJECT:law_old_age_pension = {
+	modifier = {
+		country_sol_expectations_shift_min_add = 8
+	}
+}
+
+# === Labor Rights — Lower Strata Offset ===
+# Worker protections raise lower-class expectations: organized workers
+# expect better living conditions than the country average.
+
+INJECT:law_regulatory_bodies = {
+	modifier = {
+		country_sol_expectations_lower_offset_add = 0.5
+	}
+}
+
+INJECT:law_worker_protections = {
+	modifier = {
+		country_sol_expectations_lower_offset_add = 1
 	}
 }

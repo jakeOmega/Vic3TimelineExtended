@@ -38,7 +38,7 @@ un_vote.1 = {
 	placement = ROOT
 
 	event_image = {
-		video = "unspecific_politicians_arguing"
+		texture = "gfx/event_pictures/un_assembly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1369,7 +1369,7 @@ un_vote.2 = {
 	placement = ROOT
 
 	event_image = {
-		video = "unspecific_politicians_arguing"
+		texture = "gfx/event_pictures/un_assembly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1919,7 +1919,7 @@ un_vote.3 = {
 	placement = ROOT
 
 	event_image = {
-		video = "unspecific_politicians_arguing"
+		texture = "gfx/event_pictures/un_assembly.dds"
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"

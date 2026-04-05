@@ -407,6 +407,10 @@ social_media = {
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 		country_social_media_pb_principles_bool = yes
 		state_homeland_change_speed_mult = 0.15
+		# Social media → everyone compares to the whole population, not their class
+		country_sol_expectations_upper_offset_add = -1
+		country_sol_expectations_middle_offset_add = -0.5
+		country_sol_expectations_target_add = 0.5
 	}
 	
 	ai_weight = {

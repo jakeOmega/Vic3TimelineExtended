@@ -3211,3 +3211,44 @@ country_sol_expectations_target_add = {
 	decimals = 1
 	script_only = yes
 }
+
+# Floor on the adaptive shift. Positive values raise the floor (expectations can't drop as far).
+# Default floor: 0. E.g. welfare_state adds +5 → floor becomes 5.
+# Prevents expectations from collapsing indefinitely — people are unhappy starving regardless of duration.
+country_sol_expectations_shift_min_add = {
+	color = good
+	decimals = 1
+	script_only = yes
+}
+
+# Ceiling on the adaptive shift. Negative values lower the ceiling (expectations can't rise as far).
+# Default ceiling: 50. E.g. command_economy adds -5 → ceiling becomes 45.
+country_sol_expectations_shift_max_add = {
+	color = bad
+	decimals = 1
+	script_only = yes
+}
+
+# Per-strata expected SoL offsets. These are direct (non-adaptive) adjustments
+# applied on top of the base convergence. Positive = that class expects more
+# than the country average, negative = expects less.
+# Use to model class-relative comparison: aristocratic societies have high upper
+# offsets (elites compare to other elites); egalitarian techs reduce offsets
+# (everyone compares to the whole population).
+country_sol_expectations_upper_offset_add = {
+	color = neutral
+	decimals = 1
+	script_only = yes
+}
+
+country_sol_expectations_middle_offset_add = {
+	color = neutral
+	decimals = 1
+	script_only = yes
+}
+
+country_sol_expectations_lower_offset_add = {
+	color = neutral
+	decimals = 1
+	script_only = yes
+}

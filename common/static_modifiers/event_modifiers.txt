@@ -509,12 +509,16 @@ ste_deepfake_ignore = {
     country_legitimacy_base_add = -10
     building_software_industry_throughput_add = 0.05
 }
-ste_ai_rights_granted = {
+ste_ai_safety_protocols = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_tech_research_speed_mult = 0.05
-    country_bureaucracy_mult = -0.03
+    country_tech_research_speed_mult = 0.03
+    country_bureaucracy_mult = 0.05
 }
-ste_ai_rights_denied = {
+ste_ai_alignment_research = {
+    icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+    country_tech_research_speed_mult = 0.08
+}
+ste_ai_alignment_dismissed = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
     building_software_industry_throughput_add = 0.05
     building_robotics_industry_throughput_add = 0.05

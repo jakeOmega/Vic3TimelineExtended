@@ -12,7 +12,7 @@ modern_election_events.1 = {
 	desc = modern_election_events.1.d
 	flavor = modern_election_events.1.f
 
-	event_image = { video = "europenorthamerica_political_extremism" }
+	event_image = { texture = "gfx/event_pictures/social_media_crisis.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -88,7 +88,7 @@ modern_election_events.2 = {
 	desc = modern_election_events.2.d
 	flavor = modern_election_events.2.f
 
-	event_image = { video = "unspecific_politicians_arguing" }
+	event_image = { texture = "gfx/event_pictures/deepfake_crisis.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -171,7 +171,7 @@ modern_election_events.3 = {
 	desc = modern_election_events.3.d
 	flavor = modern_election_events.3.f
 
-	event_image = { video = "unspecific_devastation" }
+	event_image = { texture = "gfx/event_pictures/climate_awareness.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -265,7 +265,7 @@ modern_election_events.4 = {
 	desc = modern_election_events.4.d
 	flavor = modern_election_events.4.f
 
-	event_image = { video = "europenorthamerica_capitalists_meeting" }
+	event_image = { texture = "gfx/event_pictures/surveillance_debate.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -347,7 +347,7 @@ modern_election_events.5 = {
 	desc = modern_election_events.5.d
 	flavor = modern_election_events.5.f
 
-	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	event_image = { texture = "gfx/event_pictures/political_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -444,7 +444,7 @@ modern_election_events.6 = {
 	desc = modern_election_events.6.d
 	flavor = modern_election_events.6.f
 
-	event_image = { video = "votp_conspiring" }
+	event_image = { texture = "gfx/event_pictures/espionage.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
 
@@ -519,7 +519,7 @@ modern_election_events.7 = {
 	desc = modern_election_events.7.d
 	flavor = modern_election_events.7.f
 
-	event_image = { video = "europenorthamerica_capitalists_meeting" }
+	event_image = { texture = "gfx/event_pictures/corp_office.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_money.dds"
 
@@ -613,7 +613,7 @@ modern_election_events.8 = {
 	desc = modern_election_events.8.d
 	flavor = modern_election_events.8.f
 
-	event_image = { video = "europenorthamerica_sufferage" }
+	event_image = { texture = "gfx/event_pictures/campus_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -703,7 +703,7 @@ modern_election_events.9 = {
 	desc = modern_election_events.9.d
 	flavor = modern_election_events.9.f
 
-	event_image = { video = "unspecific_politicians_arguing" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -807,7 +807,7 @@ modern_election_events.10 = {
 	desc = modern_election_events.10.d
 	flavor = modern_election_events.10.f
 
-	event_image = { video = "southamerica_election" }
+	event_image = { texture = "gfx/event_pictures/political_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 

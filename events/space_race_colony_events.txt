@@ -19,7 +19,7 @@ space_race_colony_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -53,7 +53,7 @@ space_race_colony_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -87,7 +87,7 @@ space_race_colony_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -121,7 +121,7 @@ space_race_colony_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -155,7 +155,7 @@ space_race_colony_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -189,7 +189,7 @@ space_race_colony_events.6 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -223,7 +223,7 @@ space_race_colony_events.7 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -257,7 +257,7 @@ space_race_colony_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -291,7 +291,7 @@ space_race_colony_events.9 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -325,7 +325,7 @@ space_race_colony_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -364,7 +364,7 @@ space_race_colony_events.11 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -398,7 +398,7 @@ space_race_colony_events.12 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -432,7 +432,7 @@ space_race_colony_events.13 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -467,7 +467,7 @@ space_race_colony_events.14 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -502,7 +502,7 @@ space_race_colony_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -536,7 +536,7 @@ space_race_colony_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -570,7 +570,7 @@ space_race_colony_events.17 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -609,7 +609,7 @@ space_race_colony_events.18 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -643,7 +643,7 @@ space_race_colony_events.19 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -677,7 +677,7 @@ space_race_colony_events.20 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -710,7 +710,7 @@ space_race_colony_events.21 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -744,7 +744,7 @@ space_race_colony_events.22 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -777,7 +777,7 @@ space_race_colony_events.23 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -815,7 +815,7 @@ space_race_colony_events.24 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -848,7 +848,7 @@ space_race_colony_events.25 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -882,7 +882,7 @@ space_race_colony_events.26 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -916,7 +916,7 @@ space_race_colony_events.27 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -950,7 +950,7 @@ space_race_colony_events.28 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -985,7 +985,7 @@ space_race_colony_events.29 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1024,7 +1024,7 @@ space_race_colony_events.30 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1059,7 +1059,7 @@ space_race_colony_events.31 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1093,7 +1093,7 @@ space_race_colony_events.32 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1127,7 +1127,7 @@ space_race_colony_events.33 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1161,7 +1161,7 @@ space_race_colony_events.34 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "event_space_station" }
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 

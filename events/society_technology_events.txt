@@ -2296,8 +2296,8 @@ society_technology_events.25 = {
 	}
 }
 
-# Event 26: The AI Labor Question
-# Should artificial minds have labor rights?
+# Event 26: The Alignment Problem
+# A deployed AI produces optimal outcomes that violate human values
 society_technology_events.26 = {
 	type = country_event
 	placement = root
@@ -2315,8 +2315,9 @@ society_technology_events.26 = {
 
 	trigger = {
 		has_technology_researched = artificial_intelligence
-		NOT = { has_modifier = ste_ai_rights_granted }
-		NOT = { has_modifier = ste_ai_rights_denied }
+		NOT = { has_modifier = ste_ai_safety_protocols }
+		NOT = { has_modifier = ste_ai_alignment_research }
+		NOT = { has_modifier = ste_ai_alignment_dismissed }
 		NOT = { has_variable = ste_event_26_fired }
 	}
 
@@ -2327,32 +2328,39 @@ society_technology_events.26 = {
 	option = {
 		name = society_technology_events.26.a
 		default_option = yes
-		ai_chance = {
-			base = 2
-		}
-		# Extend some protections to sentient AI
+		ai_chance = { base = 3 }
+		# Establish mandatory pre-deployment safety audits
 		add_modifier = {
-			name = ste_ai_rights_granted
+			name = ste_ai_safety_protocols
 			days = long_modifier_time
 			is_decaying = yes
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_radicals = { value = small_radicals strata = upper }
+		add_radicals = { value = very_small_radicals strata = upper }
 	}
 
 	option = {
 		name = society_technology_events.26.b
-		ai_chance = {
-			base = 3
-		}
-		# AI are tools, not persons
+		ai_chance = { base = 2 }
+		# Fund academic alignment research programs
 		add_modifier = {
-			name = ste_ai_rights_denied
+			name = ste_ai_alignment_research
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = very_small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = society_technology_events.26.c
+		ai_chance = { base = 2 }
+		# Dismiss as a management failure, not an AI problem
+		add_modifier = {
+			name = ste_ai_alignment_dismissed
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals strata = upper }
-		add_radicals = { value = very_small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals pop_type = academics }
 	}
 }
 

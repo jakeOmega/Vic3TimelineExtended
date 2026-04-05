@@ -10,7 +10,7 @@ heir_education_events.1 = {
 	desc = heir_education_events.1.d
 	flavor = heir_education_events.1.f
 
-	event_image = { video = "europenorthamerica_capitalists_meeting" }
+	event_image = { texture = "gfx/event_pictures/ministry_building.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
@@ -97,7 +97,7 @@ heir_education_events.2 = {
 	desc = heir_education_events.2.d
 	flavor = heir_education_events.2.f
 
-	event_image = { video = "votp_conspiring" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
@@ -199,7 +199,7 @@ heir_education_events.3 = {
 	desc = heir_education_events.3.d
 	flavor = heir_education_events.3.f
 
-	event_image = { video = "unspecific_signed_contract" }
+	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 

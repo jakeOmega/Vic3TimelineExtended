@@ -11,6 +11,8 @@
 	
 	modifier = {
 		country_sol_expectations_target_add = 1
+		country_sol_expectations_shift_min_add = 10
+		country_sol_expectations_lower_offset_add = 1
 	}
 
 	institution = institution_social_security
@@ -64,6 +66,9 @@ law_post-scarcity = {
 		state_academics_investment_pool_contribution_add = 0.01
 		state_shopkeepers_investment_pool_contribution_add = -0.19
 		country_sol_expectations_target_add = 2
+		country_sol_expectations_shift_min_add = 15
+		country_sol_expectations_lower_offset_add = 2
+		country_sol_expectations_upper_offset_add = -1
 		building_self_investment_chance_add = 0.5
 	}
 

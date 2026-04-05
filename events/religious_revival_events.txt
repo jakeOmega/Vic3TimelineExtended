@@ -25,7 +25,7 @@ type = country_event
 placement = root
 
 event_image = {
-video = "europenorthamerica_political_extremism"
+texture = "gfx/event_pictures/propaganda_broadcast.dds"
 }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -159,7 +159,7 @@ type = country_event
 placement = root
 
 event_image = {
-video = "southamerica_christianity"
+texture = "gfx/event_pictures/propaganda_broadcast.dds"
 }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -281,7 +281,7 @@ type = country_event
 placement = root
 
 event_image = {
-video = "southamerica_christianity"
+texture = "gfx/event_pictures/campus_protest.dds"
 }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -410,7 +410,7 @@ type = country_event
 placement = root
 
 event_image = {
-video = "unspecific_ruler_speaking_to_people"
+texture = "gfx/event_pictures/political_rally.dds"
 }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -547,7 +547,7 @@ type = country_event
 placement = root
 
 event_image = {
-video = "southamerica_christianity"
+texture = "gfx/event_pictures/social_media_crisis.dds"
 }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -660,7 +660,7 @@ type = country_event
 placement = root
 
 event_image = {
-video = "africa_public_protest"
+texture = "gfx/event_pictures/campus_protest.dds"
 }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -794,7 +794,7 @@ type = country_event
 placement = root
 
 event_image = {
-video = "southamerica_christianity"
+texture = "gfx/event_pictures/cultural_renaissance.dds"
 }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
