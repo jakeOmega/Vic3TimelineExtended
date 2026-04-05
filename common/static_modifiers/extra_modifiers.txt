@@ -10,7 +10,7 @@
 
 	state_building_resettlement_colony_max_level_add = 1
 
-	country_sol_expectations_target_add = -3
+	country_sol_expectations_target_add = -2.5
 	state_expected_sol_from_literacy = -5
 }
 

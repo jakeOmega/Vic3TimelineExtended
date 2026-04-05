@@ -1582,9 +1582,9 @@ banking_crash_chance_multiplier_value = {
 # ========== SoL Expectations System ==========
 
 # Half-life in years: how long it takes for the gap between expected and actual SoL
-# to close by half. 5 years means ~50% adapted after 5y, ~75% after 10y, ~94% after 20y.
+# to close by half. 10 years means ~50% adapted after 10y, ~75% after 20y, ~94% after 40y.
 # Change this single value to tune convergence speed.
-sol_expectations_half_life_years = 5
+sol_expectations_half_life_years = 10
 
 # Monthly adaptation rate derived from half-life: rate = ln(2) / (H * 12)
 # ln(2) ≈ 0.6931. At default 5y: 0.6931 / 60 ≈ 0.01155/month.

@@ -29,19 +29,19 @@ INJECT:law_women_in_the_fields = {
 
 INJECT:law_autocracy = {
 	modifier = {
-		country_sol_expectations_upper_offset_add = 1.5
+		country_sol_expectations_upper_offset_add = 2.5
 	}
 }
 
 INJECT:law_landed_voting = {
 	modifier = {
-		country_sol_expectations_upper_offset_add = 2
+		country_sol_expectations_upper_offset_add = 3
 	}
 }
 
 INJECT:law_wealth_voting = {
 	modifier = {
-		country_sol_expectations_upper_offset_add = 1.5
+		country_sol_expectations_upper_offset_add = 2.5
 		country_sol_expectations_middle_offset_add = 0.5
 	}
 }

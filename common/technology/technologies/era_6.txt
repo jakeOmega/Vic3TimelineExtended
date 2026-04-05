@@ -146,6 +146,7 @@ commercial_aviation = {
 	modifier = {
 		state_building_airport_max_level_add = 1
 		country_institution_ministry_of_commerce_max_investment_add = 1
+		country_sol_expectations_upper_offset_add = 0.5
 	}
 	
 	ai_weight = {
@@ -695,6 +696,7 @@ art_deco_architecture = {
 	modifier = {
 		country_weekly_innovation_max_add = 15
 		country_institution_ministry_of_culture_max_investment_add = 1
+		country_sol_expectations_upper_offset_add = 0.5
 	}
 	
 	unlocking_technologies = {	
