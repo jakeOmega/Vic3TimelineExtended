@@ -1008,6 +1008,15 @@ fossil_lobby_concessions_modifier = {
 	building_group_bg_coal_mining_throughput_add = 0.10
 	building_group_bg_oil_extraction_throughput_add = 0.10
 	country_greenhouse_gas_emissions_mult = 0.10
+	state_pollution_generation_mult = 0.05
+}
+
+# Replacement when global warming rule is disabled
+fossil_lobby_concessions_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_group_bg_coal_mining_throughput_add = 0.10
+	building_group_bg_oil_extraction_throughput_add = 0.10
+	state_pollution_generation_mult = 0.15
 }
 
 climate_summit_leader_modifier = {
@@ -1017,10 +1026,25 @@ climate_summit_leader_modifier = {
 	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.10
 }
 
+# Replacement when global warming rule is disabled: pollution reduction instead of GHG
+climate_summit_leader_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 200
+	state_pollution_generation_mult = -0.10
+	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.10
+}
+
 climate_summit_pledge_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 50
 	country_greenhouse_gas_emissions_mult = -0.03
+}
+
+# Replacement when global warming rule is disabled
+climate_summit_pledge_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
+	state_pollution_generation_mult = -0.05
 }
 
 tropical_disease_spread_modifier = {
@@ -1085,6 +1109,13 @@ climate_dismissal_boost_modifier = {
 	country_greenhouse_gas_emissions_mult = 0.05
 }
 
+# Replacement when global warming rule is disabled
+climate_dismissal_boost_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_throughput_add = 0.03
+	state_pollution_generation_mult = 0.10
+}
+
 # Not spending on climate crisis - saves government resources (event 3B)
 climate_inaction_savings_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -1106,11 +1137,27 @@ climate_accord_rejection_modifier = {
 	country_greenhouse_gas_emissions_mult = 0.05
 }
 
+# Replacement when global warming rule is disabled
+climate_accord_rejection_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_coal_mining_throughput_add = 0.05
+	building_group_bg_oil_extraction_throughput_add = 0.05
+	state_pollution_generation_mult = 0.10
+}
+
 # Rolling back climate protections during cooling (events 17B, 18B, 19B)
 climate_deregulation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = 0.03
 	country_greenhouse_gas_emissions_mult = 0.05
+	country_bureaucracy_mult = 0.03
+}
+
+# Replacement when global warming rule is disabled
+climate_deregulation_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_throughput_add = 0.03
+	state_pollution_generation_mult = 0.10
 	country_bureaucracy_mult = 0.03
 }
 
@@ -1121,12 +1168,27 @@ climate_measures_sunset_modifier = {
 	country_greenhouse_gas_emissions_mult = 0.10
 }
 
+# Replacement when global warming rule is disabled
+climate_measures_sunset_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_throughput_add = 0.05
+	state_pollution_generation_mult = 0.15
+}
+
 # Declaring victory on climate and reducing policy intensity (event 21B)
 climate_victory_dividend_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_prestige_add = 100
 	building_throughput_add = 0.05
 	country_greenhouse_gas_emissions_mult = 0.05
+}
+
+# Replacement when global warming rule is disabled
+climate_victory_dividend_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_prestige_add = 100
+	building_throughput_add = 0.05
+	state_pollution_generation_mult = 0.10
 }
 
 # ============================================================================

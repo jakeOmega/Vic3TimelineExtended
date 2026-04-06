@@ -197,8 +197,6 @@ combined_arms = {
 		state_building_barrack_max_level_add = 50
 		country_combined_arms_bonus_enabled_bool = yes
 		country_combined_arms_pb_principles_bool = yes
-		country_can_use_rearmament_bool = yes
-		country_can_use_total_war_economy_bool = yes
 	}
 	
 	ai_weight = {
@@ -441,7 +439,6 @@ mass_media = {
 		country_free_charters_add = 1
 		country_voting_power_mult = 0.1
 		country_mass_media_pb_principles_bool = yes
-		country_can_use_war_propaganda_bool = yes
 		country_homelands_can_change_bool = yes
 	}
 	

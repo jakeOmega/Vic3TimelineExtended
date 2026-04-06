@@ -9,3 +9,39 @@
         flag = custom_religions_allowed
     }
 }
+
+banking_system_rule = {
+    default = banking_system_enabled
+
+    banking_system_enabled = {
+        flag = banking_system_enabled
+    }
+
+    banking_system_disabled = {
+        flag = banking_system_disabled
+    }
+}
+
+global_warming_rule = {
+    default = global_warming_enabled
+
+    global_warming_enabled = {
+        flag = global_warming_enabled
+    }
+
+    global_warming_disabled = {
+        flag = global_warming_disabled
+    }
+}
+
+world_war_rule = {
+    default = world_war_disabled
+
+    world_war_enabled = {
+        flag = world_war_enabled
+    }
+
+    world_war_disabled = {
+        flag = world_war_disabled
+    }
+}

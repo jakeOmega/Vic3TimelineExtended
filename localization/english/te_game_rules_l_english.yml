@@ -4,6 +4,24 @@
 # GAME_RULES
 #
  setting_custom_religions_allowed:0 "Custom Religions Allowed"
- setting_custom_religions_allowed_desc:0 "Custom religions are allowed in this game. You will recieve a journal entry allowing you to select the ideology and name of your religion."
+ setting_custom_religions_allowed_desc:0 "Custom religions are allowed in this game. You will receive a journal entry allowing you to select the ideology and name of your religion."
  setting_custom_religions_not_allowed:0 "Custom Religions Not Allowed"
  setting_custom_religions_not_allowed_desc:0 "Custom religions are not allowed in this game."
+
+ rule_banking_system_rule:0 "Banking System"
+ setting_banking_system_enabled:0 "Banking System Enabled"
+ setting_banking_system_enabled_desc:0 "The banking cycle journal entry is active. Financial regulation laws provide banking intervention tools, momentum effects, and crash chance modifiers that interact with the banking cycle system."
+ setting_banking_system_disabled:0 "Banking System Disabled"
+ setting_banking_system_disabled_desc:0 "The banking cycle journal entry is disabled. Financial regulation laws still provide standard economic effects such as construction cost reductions and infrastructure bonuses, but banking-specific modifiers are inactive."
+
+ rule_global_warming_rule:0 "Global Warming"
+ setting_global_warming_enabled:0 "Global Warming Enabled"
+ setting_global_warming_enabled_desc:0 "The global warming journal entry is active. Greenhouse gas emissions are tracked and climate policies affect global temperature rise. Environmental modifiers provide both emissions reduction and pollution reduction effects."
+ setting_global_warming_disabled:0 "Global Warming Disabled"
+ setting_global_warming_disabled_desc:0 "The global warming journal entry is disabled. Greenhouse gas tracking is inactive, but environmental policies and events still provide pollution reduction effects as an alternative."
+
+ rule_world_war_rule:0 "World War"
+ setting_world_war_enabled:0 "World War Enabled"
+ setting_world_war_enabled_desc:0 "The world war journal entry is active for great powers. Ideological tensions between great powers can escalate into a global conflict with leadup, active war, and post-war phases."
+ setting_world_war_disabled:0 "World War Disabled"
+ setting_world_war_disabled_desc:0 "The world war journal entry is disabled. Ideological tensions and world war events will not occur."

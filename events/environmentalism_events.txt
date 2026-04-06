@@ -96,10 +96,20 @@ environmentalism_events.2 = {
 			}
 		}
 		# Ignore the warnings - industry continues unrestricted
-		add_modifier = {
-			name = climate_dismissal_boost_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			add_modifier = {
+				name = climate_dismissal_boost_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = climate_dismissal_boost_no_gw_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_radicals = { value = medium_radicals }
 		add_loyalists = { value = small_radicals strata = upper }
@@ -543,10 +553,20 @@ environmentalism_events.8 = {
 			}
 		}
 		# Dismiss the environmentalists - industry runs free but radicalizes academics
-		add_modifier = {
-			name = climate_dismissal_boost_modifier
-			days = short_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			add_modifier = {
+				name = climate_dismissal_boost_modifier
+				days = short_modifier_time
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = climate_dismissal_boost_no_gw_modifier
+				days = short_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_modifier = {
@@ -905,10 +925,20 @@ environmentalism_events.12 = {
 			}
 		}
 		# Grant concessions to fossil fuel industry
-		add_modifier = {
-			name = fossil_lobby_concessions_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			add_modifier = {
+				name = fossil_lobby_concessions_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = fossil_lobby_concessions_no_gw_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_loyalists = { value = small_radicals strata = upper }
 		add_radicals = { value = medium_radicals pop_type = academics }
@@ -937,7 +967,9 @@ environmentalism_events.13 = {
 	trigger = {
 		NOR = {
 			has_modifier = climate_summit_leader_modifier
+			has_modifier = climate_summit_leader_no_gw_modifier
 			has_modifier = climate_summit_pledge_modifier
+			has_modifier = climate_summit_pledge_no_gw_modifier
 		}
 		has_modifier = global_warming
 		temperature_anomaly_display >= 1.0
@@ -959,10 +991,20 @@ environmentalism_events.13 = {
 			}
 		}
 		# Lead the summit - massive prestige, emission pledges
-		add_modifier = {
-			name = climate_summit_leader_modifier
-			days = long_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			add_modifier = {
+				name = climate_summit_leader_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = climate_summit_leader_no_gw_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_radicals = { value = small_radicals strata = upper }
 	}
@@ -973,10 +1015,20 @@ environmentalism_events.13 = {
 			base = 2
 		}
 		# Sign the accord but let others lead
-		add_modifier = {
-			name = climate_summit_pledge_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			add_modifier = {
+				name = climate_summit_pledge_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = climate_summit_pledge_no_gw_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 	}
 
@@ -990,10 +1042,20 @@ environmentalism_events.13 = {
 			}
 		}
 		# Reject the accord - fossil fuel industry runs unrestricted
-		add_modifier = {
-			name = climate_accord_rejection_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			add_modifier = {
+				name = climate_accord_rejection_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = climate_accord_rejection_no_gw_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals strata = upper }
@@ -1295,10 +1357,20 @@ environmentalism_events.17 = {
 		name = environmentalism_events.17.b
 		ai_chance = { base = 2 }
 		# Scale back emergency spending - economic boost from deregulation
-		add_modifier = {
-			name = climate_deregulation_modifier
-			days = long_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			add_modifier = {
+				name = climate_deregulation_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = climate_deregulation_no_gw_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_loyalists = { value = small_radicals strata = upper }
 		add_radicals = { value = very_small_radicals pop_type = academics }
@@ -1341,10 +1413,20 @@ environmentalism_events.18 = {
 		name = environmentalism_events.18.b
 		ai_chance = { base = 2 }
 		# Ease restrictions - industry benefits from relaxed climate rules
-		add_modifier = {
-			name = climate_deregulation_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			add_modifier = {
+				name = climate_deregulation_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = climate_deregulation_no_gw_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_loyalists = { value = very_small_radicals strata = upper }
 		add_radicals = { value = small_radicals pop_type = academics }
@@ -1387,10 +1469,20 @@ environmentalism_events.19 = {
 		name = environmentalism_events.19.b
 		ai_chance = { base = 2 }
 		# Pivot resources to conventional growth - industry benefits
-		add_modifier = {
-			name = climate_deregulation_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			add_modifier = {
+				name = climate_deregulation_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = climate_deregulation_no_gw_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_loyalists = { value = very_small_radicals strata = upper }
 		add_radicals = { value = very_small_radicals pop_type = academics }
@@ -1433,10 +1525,20 @@ environmentalism_events.20 = {
 		name = environmentalism_events.20.b
 		ai_chance = { base = 2 }
 		# Sunset emergency-era climate measures - economic benefit but emissions rise
-		add_modifier = {
-			name = climate_measures_sunset_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			add_modifier = {
+				name = climate_measures_sunset_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = climate_measures_sunset_no_gw_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_loyalists = { value = very_small_radicals strata = upper }
 	}
@@ -1478,10 +1580,20 @@ environmentalism_events.21 = {
 		name = environmentalism_events.21.b
 		ai_chance = { base = 2 }
 		# Declare victory - prestige and economic dividend but risks complacency
-		add_modifier = {
-			name = climate_victory_dividend_modifier
-			days = normal_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			add_modifier = {
+				name = climate_victory_dividend_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = climate_victory_dividend_no_gw_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_loyalists = { value = small_radicals strata = upper }
 		add_radicals = { value = very_small_radicals pop_type = academics }

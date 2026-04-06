@@ -243,13 +243,6 @@ PRINCIPLE_TECH_MODIFIERS = {
 # { tech_name: [(modifier_name, loc_name, loc_desc), ...] }
 # We need to track which button file and the exact has_technology_researched line
 BUTTON_TECH_MODIFIERS = {
-    'combined_arms': [
-        ('country_can_use_rearmament_bool', 'Enables Rearmament', 'Enables the Rearmament button for World War preparation.'),
-        ('country_can_use_total_war_economy_bool', 'Enables Total War Economy', 'Enables the Total War Economy button during wartime.'),
-    ],
-    'mass_media': [
-        ('country_can_use_war_propaganda_bool', 'Enables War Propaganda', 'Enables the War Propaganda button during wartime.'),
-    ],
     'intergovernmental_organizations': [
         ('country_can_join_united_nations_bool', 'Enables Joining the United Nations', 'Enables the option to join the United Nations.'),
     ],
@@ -280,10 +273,6 @@ BUTTON_TECH_MODIFIERS = {
 # Map of (button_file, button_name, tech_name) -> modifier_name
 # This is needed because some techs have multiple buttons, we need to match the right one
 BUTTON_SPECIFIC_MAP = [
-    # World War buttons
-    ('common/scripted_buttons/world_war_buttons.txt', 'ww_rearm_button', 'combined_arms', 'country_can_use_rearmament_bool'),
-    ('common/scripted_buttons/world_war_buttons.txt', 'ww_total_war_economy_button', 'combined_arms', 'country_can_use_total_war_economy_bool'),
-    ('common/scripted_buttons/world_war_buttons.txt', 'ww_war_propaganda_button', 'mass_media', 'country_can_use_war_propaganda_bool'),
     # UN buttons
     ('common/scripted_buttons/un_buttons.txt', 'un_join_button', 'intergovernmental_organizations', 'country_can_join_united_nations_bool'),
     # Colonial empire buttons
