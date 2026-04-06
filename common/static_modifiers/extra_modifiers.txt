@@ -822,7 +822,6 @@ carbon_tax_modifier = {
 	building_group_bg_oil_extraction_tax_mult = 1
 	building_group_bg_coal_mining_tax_mult = 1
 	country_greenhouse_gas_emissions_mult = -0.20         # 20% direct emissions reduction
-	state_pollution_generation_mult = -0.30               # pollution reduction fallback when global warming journal entry is disabled
 }
 
 renewable_investment_modifier = {
@@ -832,7 +831,6 @@ renewable_investment_modifier = {
 	building_power_plant_throughput_add = -0.10                               # transition away from conventional power
 	building_group_bg_power_construction_efficiency_add = 0.25                # accelerates renewable construction, indirectly reducing emissions
 	country_greenhouse_gas_emissions_mult = -0.15                             # 15% direct emissions reduction
-	state_pollution_generation_mult = -0.20                                   # pollution reduction fallback when global warming journal entry is disabled
 }
 
 climate_adaptation_modifier = {
@@ -845,7 +843,7 @@ climate_adaptation_modifier = {
 emission_standards_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	building_throughput_add = -0.05                 # compliance overhead across all industries
-	state_pollution_generation_mult = -0.35         # reduces pollution (increased to compensate when global warming journal entry is disabled)
+	state_pollution_generation_mult = -0.25         # reduces pollution
 	country_greenhouse_gas_emissions_mult = -0.10   # 10% direct emissions reduction
 	country_authority_add = -200
 }
@@ -1010,6 +1008,14 @@ fossil_lobby_concessions_modifier = {
 	building_group_bg_coal_mining_throughput_add = 0.10
 	building_group_bg_oil_extraction_throughput_add = 0.10
 	country_greenhouse_gas_emissions_mult = 0.10
+	state_pollution_generation_mult = 0.05
+}
+
+# Replacement when global warming rule is disabled
+fossil_lobby_concessions_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_group_bg_coal_mining_throughput_add = 0.10
+	building_group_bg_oil_extraction_throughput_add = 0.10
 	state_pollution_generation_mult = 0.15
 }
 
@@ -1017,6 +1023,13 @@ climate_summit_leader_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 200
 	country_greenhouse_gas_emissions_mult = -0.05
+	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.10
+}
+
+# Replacement when global warming rule is disabled: pollution reduction instead of GHG
+climate_summit_leader_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 200
 	state_pollution_generation_mult = -0.10
 	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.10
 }
@@ -1025,6 +1038,12 @@ climate_summit_pledge_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 50
 	country_greenhouse_gas_emissions_mult = -0.03
+}
+
+# Replacement when global warming rule is disabled
+climate_summit_pledge_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 50
 	state_pollution_generation_mult = -0.05
 }
 
@@ -1088,6 +1107,12 @@ climate_dismissal_boost_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = 0.03
 	country_greenhouse_gas_emissions_mult = 0.05
+}
+
+# Replacement when global warming rule is disabled
+climate_dismissal_boost_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_throughput_add = 0.03
 	state_pollution_generation_mult = 0.10
 }
 
@@ -1110,6 +1135,13 @@ climate_accord_rejection_modifier = {
 	building_group_bg_coal_mining_throughput_add = 0.05
 	building_group_bg_oil_extraction_throughput_add = 0.05
 	country_greenhouse_gas_emissions_mult = 0.05
+}
+
+# Replacement when global warming rule is disabled
+climate_accord_rejection_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_coal_mining_throughput_add = 0.05
+	building_group_bg_oil_extraction_throughput_add = 0.05
 	state_pollution_generation_mult = 0.10
 }
 
@@ -1118,6 +1150,13 @@ climate_deregulation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = 0.03
 	country_greenhouse_gas_emissions_mult = 0.05
+	country_bureaucracy_mult = 0.03
+}
+
+# Replacement when global warming rule is disabled
+climate_deregulation_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_throughput_add = 0.03
 	state_pollution_generation_mult = 0.10
 	country_bureaucracy_mult = 0.03
 }
@@ -1127,6 +1166,12 @@ climate_measures_sunset_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = 0.05
 	country_greenhouse_gas_emissions_mult = 0.10
+}
+
+# Replacement when global warming rule is disabled
+climate_measures_sunset_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_throughput_add = 0.05
 	state_pollution_generation_mult = 0.15
 }
 
@@ -1136,6 +1181,13 @@ climate_victory_dividend_modifier = {
 	country_prestige_add = 100
 	building_throughput_add = 0.05
 	country_greenhouse_gas_emissions_mult = 0.05
+}
+
+# Replacement when global warming rule is disabled
+climate_victory_dividend_no_gw_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_prestige_add = 100
+	building_throughput_add = 0.05
 	state_pollution_generation_mult = 0.10
 }
 
