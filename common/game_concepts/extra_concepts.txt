@@ -4,6 +4,7 @@
 
 # Major Systems
 concept_banking_cycle = {}
+concept_religious_trait = {}
 concept_bubble_pressure = {}
 concept_banking_momentum = {}
 concept_banking_crash = {}

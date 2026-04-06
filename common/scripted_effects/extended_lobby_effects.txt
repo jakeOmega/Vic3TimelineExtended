@@ -1,0 +1,128 @@
+﻿############################
+# EXTENDED LOBBY EFFECTS
+# Naming and appeasement helper effects for custom lobby types
+############################
+
+# Custom naming for extended lobby types
+# Called from on_created in lobby type definitions
+# Scope: political_lobby
+extended_initialize_lobby_custom_name = {
+	remove_variable = lobby_custom_name_var_1
+	remove_variable = lobby_custom_name_var_2
+	remove_variable = lobby_custom_name_var_3
+	remove_variable = lobby_custom_name_var_4
+	remove_variable = lobby_custom_name_var_5
+	remove_variable = lobby_custom_name_var_6
+	remove_variable = lobby_custom_name_var_7
+	remove_variable = lobby_custom_name_var_8
+	remove_variable = lobby_custom_name_var_9
+	remove_variable = lobby_custom_name_var_10
+	remove_variable = lobby_custom_name_var_11
+	remove_variable = lobby_custom_name_var_12
+	remove_variable = lobby_custom_name_var_13
+	remove_variable = lobby_custom_name_var_14
+	remove_variable = lobby_custom_name_var_15
+	remove_variable = lobby_custom_name_var_16
+	remove_variable = lobby_custom_name_var_17
+	remove_variable = lobby_custom_name_var_18
+	remove_variable = lobby_custom_name_var_19
+	remove_variable = lobby_custom_name_var_20
+	remove_variable = lobby_custom_name_var_21
+	remove_variable = lobby_custom_name_var_22
+	remove_variable = lobby_custom_name_var_23
+	remove_variable = lobby_custom_name_var_24
+	remove_variable = lobby_custom_name_var_25
+
+	if = {
+		limit = { is_political_lobby_type = lobby_colonial }
+		random_list = {
+			2 = { set_variable = lobby_custom_name_var_3 }  # Society
+			2 = { set_variable = lobby_custom_name_var_21 } # Committee
+			1 = { set_variable = lobby_custom_name_var_22 } # Council
+		}
+	}
+	else_if = {
+		limit = { is_political_lobby_type = lobby_anti_colonial }
+		random_list = {
+			2 = { set_variable = lobby_custom_name_var_6 }  # League
+			2 = { set_variable = lobby_custom_name_var_24 } # Movement
+			1 = { set_variable = lobby_custom_name_var_23 } # Congress
+		}
+	}
+	else_if = {
+		limit = { is_political_lobby_type = lobby_fossil_fuel }
+		random_list = {
+			2 = { set_variable = lobby_custom_name_var_22 } # Council
+			2 = { set_variable = lobby_custom_name_var_25 } # Alliance
+			1 = { set_variable = lobby_custom_name_var_6 }  # League
+		}
+	}
+	else_if = {
+		limit = { is_political_lobby_type = lobby_environmental }
+		random_list = {
+			2 = { set_variable = lobby_custom_name_var_3 }  # Society
+			2 = { set_variable = lobby_custom_name_var_21 } # Committee
+			1 = { set_variable = lobby_custom_name_var_25 } # Alliance
+		}
+	}
+}
+
+# Apply appeasement to colonial lobbies in a country targeting a specific subject
+# FIRST = overlord country scope
+# SECOND = subject country scope
+# PRO_AMOUNT = amount for colonial lobby
+# ANTI_AMOUNT = amount for anti-colonial lobby
+# FACTOR = appeasement factor key
+add_colonial_lobby_appeasement = {
+	$FIRST$ = {
+		every_political_lobby = {
+			limit = {
+				is_political_lobby_type = lobby_colonial
+				target = $SECOND$
+			}
+			change_appeasement = {
+				amount = $PRO_AMOUNT$
+				factor = $FACTOR$
+			}
+		}
+		every_political_lobby = {
+			limit = {
+				is_political_lobby_type = lobby_anti_colonial
+				target = $SECOND$
+			}
+			change_appeasement = {
+				amount = $ANTI_AMOUNT$
+				factor = $FACTOR$
+			}
+		}
+	}
+}
+
+# Apply appeasement to environmental/fossil fuel lobbies in a country
+# Applies to ALL environmental/fossil fuel lobbies in the country (all targets)
+# COUNTRY = country scope to iterate lobbies in
+# ENV_AMOUNT = amount for environmental lobby
+# FOSSIL_AMOUNT = amount for fossil fuel lobby
+# FACTOR = appeasement factor key
+add_environmental_lobby_appeasement = {
+	$COUNTRY$ = {
+		every_political_lobby = {
+			limit = {
+				is_political_lobby_type = lobby_environmental
+			}
+			change_appeasement = {
+				amount = $ENV_AMOUNT$
+				factor = $FACTOR$
+			}
+		}
+		every_political_lobby = {
+			limit = {
+				is_political_lobby_type = lobby_fossil_fuel
+			}
+			change_appeasement = {
+				amount = $FOSSIL_AMOUNT$
+				factor = $FACTOR$
+			}
+		}
+	}
+}

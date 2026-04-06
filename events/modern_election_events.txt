@@ -531,24 +531,26 @@ modern_election_events.7 = {
 		NOT = { has_variable = election_event_cooldown }
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		has_technology_researched = social_media
 		OR = {
 			has_law = law_type:law_no_campaign_finance_laws
 			has_law = law_type:law_unregulated_donations
 		}
 		ig:ig_industrialists ?= {
 			ig_clout >= 0.10
+			has_party = yes
 		}
 	}
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
+		# Corporate money backs the industrialists' party
+		ig:ig_industrialists = {
+			party = { save_scope_as = corp_party }
 		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
+		# Anti-corporate opposition coalesces around trade unions
+		ig:ig_trade_unions = {
+			party = { save_scope_as = labor_party }
 		}
 	}
 
@@ -558,8 +560,8 @@ modern_election_events.7 = {
 		name = modern_election_events.7.a
 		default_option = yes
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_large }
+			limit = { exists = scope:corp_party }
+			scope:corp_party = { add_momentum = momentum_large }
 		}
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_industrialists }
@@ -575,8 +577,8 @@ modern_election_events.7 = {
 	option = { # Denounce corporate influence
 		name = modern_election_events.7.b
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:labor_party }
+			scope:labor_party = { add_momentum = momentum_medium }
 		}
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_trade_unions }
@@ -593,8 +595,8 @@ modern_election_events.7 = {
 	option = { # Match their spending with party funds
 		name = modern_election_events.7.c
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:labor_party }
+			scope:labor_party = { add_momentum = momentum_small }
 		}
 		add_modifier = { name = me_campaign_spending_spree_modifier days = short_modifier_time }
 		ai_chance = { base = 3 }
@@ -1060,17 +1062,21 @@ modern_election_events.13 = {
 		NOT = { has_technology_researched = world_wide_web }
 		ig:ig_industrialists ?= {
 			ig_clout >= 0.08
+			has_party = yes
 		}
 	}
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
+		# Press baron backs the industrialists' party
+		ig:ig_industrialists = {
+			party = { save_scope_as = press_party }
 		}
 		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
+			limit = {
+				has_party = yes
+				NOT = { is_interest_group_type = ig_industrialists }
+			}
 			party = { save_scope_as = opp_party }
 		}
 	}
@@ -1081,8 +1087,8 @@ modern_election_events.13 = {
 		name = modern_election_events.13.a
 		default_option = yes
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_large }
+			limit = { exists = scope:press_party }
+			scope:press_party = { add_momentum = momentum_large }
 		}
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_industrialists }
@@ -1112,8 +1118,8 @@ modern_election_events.13 = {
 	option = { # Negotiate editorial independence
 		name = modern_election_events.13.c
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:press_party }
+			scope:press_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals strata = middle }
 		ai_chance = { base = 4 }

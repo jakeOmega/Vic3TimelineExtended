@@ -3749,13 +3749,12 @@ REPLACE:ideology_anarchist = {
 			}
 			add = 50
 		}
-		# More likely if in "government" under anarchy
+		# More likely under anarchy (all IGs participate in governance)
 		if = {
 			limit = {
 				owner = {
 					has_law_or_variant = law_type:law_anarchy
 				}
-				is_in_government = yes
 			}
 			add = 75
 		}

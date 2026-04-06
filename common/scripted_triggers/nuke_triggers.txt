@@ -31,6 +31,7 @@ enemy_has_subjugation_war_goal = {
 
 # Country scope: True if the country's ruler has aggressive/reckless personality traits
 ruler_is_aggressive = {
+	exists = ruler
 	ruler = {
 		OR = {
 			has_trait = reckless
@@ -42,6 +43,7 @@ ruler_is_aggressive = {
 
 # Country scope: True if the country's ruler has cautious/honorable personality traits
 ruler_is_cautious = {
+	exists = ruler
 	ruler = {
 		OR = {
 			has_trait = cautious

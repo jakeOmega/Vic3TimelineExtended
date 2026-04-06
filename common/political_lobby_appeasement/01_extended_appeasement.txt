@@ -1,0 +1,30 @@
+﻿############################
+# EXTENDED LOBBY APPEASEMENT FACTORS
+# Custom factors for Colonial and Environmental lobbies
+############################
+
+# Colonial lobby factors - triggered from decolonization events
+appeasement_colonial_crackdown = {
+	duration_to_show = { months = 60 }
+}
+
+appeasement_colonial_concession = {
+	duration_to_show = { months = 60 }
+}
+
+# Environmental lobby factors - triggered from environmental events
+appeasement_environmental_regulation = {
+	duration_to_show = { months = 60 }
+}
+
+appeasement_environmental_deregulation = {
+	duration_to_show = { months = 60 }
+}
+
+appeasement_fossil_expansion = {
+	duration_to_show = { months = 60 }
+}
+
+appeasement_green_investment = {
+	duration_to_show = { months = 60 }
+}

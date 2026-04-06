@@ -77,6 +77,14 @@ decolonization_events.1 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_negative_event days = 90 }
+		# Colonial lobby appeasement: negotiation is a concession
+		add_colonial_lobby_appeasement = {
+			FIRST = root
+			SECOND = scope:restless_subject
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_colonial_concession
+		}
 	}
 
 	# Option B: Crack down on the movement
@@ -103,6 +111,14 @@ decolonization_events.1 = {
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event months = 2 }
+		# Colonial lobby appeasement: crackdown pleases colonial lobby
+		add_colonial_lobby_appeasement = {
+			FIRST = root
+			SECOND = scope:restless_subject
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_colonial_crackdown
+		}
 	}
 
 	# Option C: Grant independence outright
@@ -146,6 +162,14 @@ decolonization_events.1 = {
 			ANTI_AMOUNT = -1
 			FACTOR = appeasement_relations_increased
 		}
+		# Colonial lobby: granting independence is a major concession
+		add_colonial_lobby_appeasement = {
+			FIRST = root
+			SECOND = scope:restless_subject
+			PRO_AMOUNT = -2
+			ANTI_AMOUNT = 2
+			FACTOR = appeasement_colonial_concession
+		}
 		# Prestige boost from moral leadership, but landowners furious
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 150 }
@@ -185,6 +209,14 @@ decolonization_events.1 = {
 			PRO_AMOUNT = -1
 			ANTI_AMOUNT = 1
 			FACTOR = appeasement_relations_decreased
+		}
+		# Colonial lobby: neocolonialism is a mixed signal (less harsh than crack down, not independence)
+		add_colonial_lobby_appeasement = {
+			FIRST = root
+			SECOND = scope:restless_subject
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_colonial_concession
 		}
 		# Industrialists love this, intelligentsia see through it
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
@@ -1744,7 +1776,7 @@ decolonization_events.15 = {
 
 		add_modifier = {
 			name = independence_nationalization_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 
@@ -1793,7 +1825,7 @@ decolonization_events.15 = {
 
 		add_modifier = {
 			name = selective_nationalization_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 
@@ -1837,7 +1869,7 @@ decolonization_events.15 = {
 
 		add_modifier = {
 			name = foreign_property_protected_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 

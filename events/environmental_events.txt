@@ -50,6 +50,13 @@ environmental_events.1 = {
 			value = very_small_radicals
 			strata = upper
 		}
+		# Environmental lobby appeasement: regulation pleases green lobby
+		add_environmental_lobby_appeasement = {
+			COUNTRY = root
+			ENV_AMOUNT = 1
+			FOSSIL_AMOUNT = -1
+			FACTOR = appeasement_environmental_regulation
+		}
 	}
 
 	# Protect industry
@@ -70,6 +77,13 @@ environmental_events.1 = {
 		add_radicals = {
 			value = very_small_radicals
 			pop_type = academics
+		}
+		# Environmental lobby appeasement: protecting industry pleases fossil lobby
+		add_environmental_lobby_appeasement = {
+			COUNTRY = root
+			ENV_AMOUNT = -1
+			FOSSIL_AMOUNT = 1
+			FACTOR = appeasement_fossil_expansion
 		}
 	}
 
@@ -136,9 +150,14 @@ environmental_events.2 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		# Environmental lobby appeasement: listening to protesters pleases green lobby
+		add_environmental_lobby_appeasement = {
+			COUNTRY = root
+			ENV_AMOUNT = 1
+			FOSSIL_AMOUNT = -1
+			FACTOR = appeasement_environmental_regulation
+		}
 	}
-
-	# Disperse them
 	option = {
 		name = environmental_events.2.b
 		ai_chance = {
@@ -147,6 +166,13 @@ environmental_events.2 = {
 		add_radicals = {
 			value = small_radicals
 			pop_type = academics
+		}
+		# Environmental lobby appeasement: dispersing protesters pleases fossil lobby
+		add_environmental_lobby_appeasement = {
+			COUNTRY = root
+			ENV_AMOUNT = -1
+			FOSSIL_AMOUNT = 1
+			FACTOR = appeasement_environmental_deregulation
 		}
 	}
 
@@ -327,9 +353,14 @@ environmental_events.4 = {
 				value = small_radicals
 			}
 		}
+		# Environmental lobby appeasement: cleanup effort shows green commitment
+		add_environmental_lobby_appeasement = {
+			COUNTRY = root
+			ENV_AMOUNT = 1
+			FOSSIL_AMOUNT = -1
+			FACTOR = appeasement_green_investment
+		}
 	}
-
-	# Hold industry accountable
 	option = {
 		name = environmental_events.4.b
 		ai_chance = {
@@ -343,6 +374,13 @@ environmental_events.4 = {
 		add_radicals = {
 			value = very_small_radicals
 			strata = upper
+		}
+		# Environmental lobby appeasement: holding industry accountable pleases green lobby
+		add_environmental_lobby_appeasement = {
+			COUNTRY = root
+			ENV_AMOUNT = 1
+			FOSSIL_AMOUNT = -1
+			FACTOR = appeasement_environmental_regulation
 		}
 	}
 
@@ -360,6 +398,13 @@ environmental_events.4 = {
 		add_loyalists = {
 			value = very_small_radicals
 			strata = upper
+		}
+		# Environmental lobby appeasement: minimizing damage pleases fossil lobby
+		add_environmental_lobby_appeasement = {
+			COUNTRY = root
+			ENV_AMOUNT = -1
+			FOSSIL_AMOUNT = 1
+			FACTOR = appeasement_fossil_expansion
 		}
 	}
 }
@@ -412,6 +457,13 @@ environmental_events.5 = {
 			value = very_small_radicals
 			strata = upper
 		}
+		# Environmental lobby appeasement: pledging reforms on world stage pleases green lobby
+		add_environmental_lobby_appeasement = {
+			COUNTRY = root
+			ENV_AMOUNT = 1
+			FOSSIL_AMOUNT = -1
+			FACTOR = appeasement_environmental_regulation
+		}
 	}
 
 	# Reject foreign interference
@@ -425,9 +477,14 @@ environmental_events.5 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		# Environmental lobby appeasement: rejecting foreign pressure pleases fossil lobby
+		add_environmental_lobby_appeasement = {
+			COUNTRY = root
+			ENV_AMOUNT = -1
+			FOSSIL_AMOUNT = 1
+			FACTOR = appeasement_environmental_deregulation
+		}
 	}
-
-	# Greenwash with token gestures
 	option = {
 		name = environmental_events.5.c
 		ai_chance = {

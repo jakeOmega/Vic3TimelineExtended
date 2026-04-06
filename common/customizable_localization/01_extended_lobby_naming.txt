@@ -1,0 +1,116 @@
+﻿############################
+# Custom lobby name flavoring for extended lobby types
+# Resolves $CUSTOM_NAME$ in lobby_<type>_name localization
+############################
+
+flavored_name_lobby_colonial = {
+	type = political_lobby
+	random_valid = yes
+
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_3 }
+		localization_key = custom_lobby_society
+	}
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_21 }
+		localization_key = custom_lobby_committee
+	}
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_22 }
+		localization_key = custom_lobby_council
+	}
+	text = {
+		trigger = {
+			NOR = {
+				has_variable = lobby_custom_name_var_3
+				has_variable = lobby_custom_name_var_21
+				has_variable = lobby_custom_name_var_22
+			}
+		}
+		localization_key = custom_lobby_lobby
+	}
+}
+
+flavored_name_lobby_anti_colonial = {
+	type = political_lobby
+	random_valid = yes
+
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_6 }
+		localization_key = custom_lobby_league
+	}
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_24 }
+		localization_key = custom_lobby_movement
+	}
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_23 }
+		localization_key = custom_lobby_congress
+	}
+	text = {
+		trigger = {
+			NOR = {
+				has_variable = lobby_custom_name_var_6
+				has_variable = lobby_custom_name_var_24
+				has_variable = lobby_custom_name_var_23
+			}
+		}
+		localization_key = custom_lobby_lobby
+	}
+}
+
+flavored_name_lobby_fossil_fuel = {
+	type = political_lobby
+	random_valid = yes
+
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_22 }
+		localization_key = custom_lobby_council
+	}
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_25 }
+		localization_key = custom_lobby_alliance
+	}
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_6 }
+		localization_key = custom_lobby_league
+	}
+	text = {
+		trigger = {
+			NOR = {
+				has_variable = lobby_custom_name_var_22
+				has_variable = lobby_custom_name_var_25
+				has_variable = lobby_custom_name_var_6
+			}
+		}
+		localization_key = custom_lobby_lobby
+	}
+}
+
+flavored_name_lobby_environmental = {
+	type = political_lobby
+	random_valid = yes
+
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_3 }
+		localization_key = custom_lobby_society
+	}
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_21 }
+		localization_key = custom_lobby_committee
+	}
+	text = {
+		trigger = { has_variable = lobby_custom_name_var_25 }
+		localization_key = custom_lobby_alliance
+	}
+	text = {
+		trigger = {
+			NOR = {
+				has_variable = lobby_custom_name_var_3
+				has_variable = lobby_custom_name_var_21
+				has_variable = lobby_custom_name_var_25
+			}
+		}
+		localization_key = custom_lobby_lobby
+	}
+}

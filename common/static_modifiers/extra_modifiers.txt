@@ -10,7 +10,7 @@
 
 	state_building_resettlement_colony_max_level_add = 1
 
-	country_sol_expectations_target_add = -2.5
+	country_sol_expectations_target_add = -5
 	state_expected_sol_from_literacy = -5
 }
 
@@ -3865,11 +3865,11 @@ population_transfer_aftermath_modifier = {
 	country_prestige_add = -5
 }
 
-# Population Transfer - neglect
+# Population Transfer - neglect (saves resources but causes instability)
 population_transfer_neglect_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	state_turmoil_effects_mult = 0.1
-	country_prestige_add = -15
+	country_bureaucracy_mult = 0.05
 }
 
 # Intelligence Sharing Pact - publicize success (prestige boost)
@@ -3900,6 +3900,13 @@ military_doctrine_prestige_modifier = {
 nation_building_controversy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_add = -25
+}
+
+# Population Transfer - nation-building unity (assimilation/cohesion boost)
+nation_building_unity_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_assimilation_mult = 0.15
+	state_migration_quota_mult = 0.1
 }
 
 # ============================================================================

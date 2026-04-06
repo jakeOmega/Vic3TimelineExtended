@@ -24,7 +24,7 @@ treaty_article_events.1 = {
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	duration = 3
-	cooldown = { months = normal_modifier_time }
+	cooldown = { days = normal_modifier_time }
 
 	trigger = {
 		any_scope_treaty = {
@@ -78,7 +78,7 @@ treaty_article_events.1 = {
 		default_option = yes
 		add_modifier = {
 			name = intelligence_tip_off_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		change_relations = {
@@ -93,12 +93,12 @@ treaty_article_events.1 = {
 		# Publicize the success for prestige
 		add_modifier = {
 			name = intelligence_victory_showcase_modifier
-			months = short_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		add_modifier = {
 			name = intelligence_tip_off_modifier
-			months = short_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		# But publicizing strains the intelligence relationship
@@ -135,7 +135,7 @@ treaty_article_events.2 = {
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	duration = 3
-	cooldown = { months = normal_modifier_time }
+	cooldown = { days = normal_modifier_time }
 
 	trigger = {
 		any_scope_treaty = {
@@ -190,7 +190,7 @@ treaty_article_events.2 = {
 		# Demand answers from our partner
 		add_modifier = {
 			name = intelligence_failure_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		change_relations = {
@@ -205,7 +205,7 @@ treaty_article_events.2 = {
 		# Accept the failure quietly, preserve the relationship
 		add_modifier = {
 			name = intelligence_failure_modifier
-			months = short_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		add_radicals = {
@@ -232,7 +232,7 @@ treaty_article_events.3 = {
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
 	duration = 3
-	cooldown = { months = normal_modifier_time }
+	cooldown = { days = normal_modifier_time }
 
 	trigger = {
 		any_scope_treaty = {
@@ -261,12 +261,12 @@ treaty_article_events.3 = {
 		# Celebrate the cultural renaissance
 		add_modifier = {
 			name = cultural_renaissance_prestige_modifier
-			months = short_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		add_modifier = {
 			name = cultural_flowering_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		ai_chance = { base = 10 }
@@ -277,7 +277,7 @@ treaty_article_events.3 = {
 		# Channel it into national identity
 		add_modifier = {
 			name = cultural_flowering_modifier
-			months = long_modifier_time
+			days = long_modifier_time
 			is_decaying = yes
 		}
 		add_loyalists = {
@@ -305,7 +305,7 @@ treaty_article_events.4 = {
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
 	duration = 3
-	cooldown = { months = normal_modifier_time }
+	cooldown = { days = normal_modifier_time }
 
 	trigger = {
 		any_scope_treaty = {
@@ -334,7 +334,7 @@ treaty_article_events.4 = {
 		# Crack down on nationalist agitators
 		add_modifier = {
 			name = nationalist_backlash_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
@@ -350,7 +350,7 @@ treaty_article_events.4 = {
 		# Try to address legitimate concerns
 		add_modifier = {
 			name = nationalist_backlash_modifier
-			months = short_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		add_loyalists = {
@@ -359,7 +359,7 @@ treaty_article_events.4 = {
 		}
 		add_modifier = {
 			name = nationalist_appeasement_modifier
-			months = short_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		ai_chance = { base = 5 }
@@ -384,7 +384,7 @@ treaty_article_events.5 = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
 	duration = 3
-	cooldown = { months = long_modifier_time }
+	cooldown = { days = long_modifier_time }
 
 	trigger = {
 		any_scope_treaty = {
@@ -405,7 +405,7 @@ treaty_article_events.5 = {
 		# Reassure the generals: conventional forces remain strong
 		add_modifier = {
 			name = military_disarmament_anger_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
@@ -417,7 +417,7 @@ treaty_article_events.5 = {
 		# Purge the dissenters
 		add_modifier = {
 			name = military_disarmament_purge_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = long_modifier_time }
@@ -443,7 +443,7 @@ treaty_article_events.5 = {
 		# Promise to rebuild: covertly restart preparations
 		add_modifier = {
 			name = military_disarmament_anger_modifier
-			months = short_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		change_infamy = 5
@@ -479,7 +479,7 @@ treaty_article_events.6 = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
 	duration = 3
-	cooldown = { months = normal_modifier_time }
+	cooldown = { days = normal_modifier_time }
 
 	trigger = {
 		any_scope_treaty = {
@@ -518,7 +518,7 @@ treaty_article_events.6 = {
 		# Adopt the new doctrine
 		add_modifier = {
 			name = joint_exercises_success_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		change_relations = {
@@ -533,7 +533,7 @@ treaty_article_events.6 = {
 		# Focus on our own methods
 		add_modifier = {
 			name = military_doctrine_prestige_modifier
-			months = short_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -558,7 +558,7 @@ treaty_article_events.7 = {
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
 	duration = 3
-	cooldown = { months = normal_modifier_time }
+	cooldown = { days = normal_modifier_time }
 
 	trigger = {
 		any_scope_treaty = {
@@ -578,7 +578,7 @@ treaty_article_events.7 = {
 		default_option = yes
 		add_modifier = {
 			name = education_breakthrough_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		ai_chance = { base = 10 }
@@ -589,7 +589,7 @@ treaty_article_events.7 = {
 		# Redirect toward technical education
 		add_modifier = {
 			name = education_technical_focus_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		ai_chance = { base = 5 }
@@ -613,7 +613,7 @@ treaty_article_events.8 = {
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	duration = 3
-	cooldown = { months = long_modifier_time }
+	cooldown = { days = long_modifier_time }
 
 	trigger = {
 		any_scope_treaty = {
@@ -635,7 +635,7 @@ treaty_article_events.8 = {
 		# Accept the freeze as the price of peace
 		add_modifier = {
 			name = nuclear_freeze_tension_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		add_loyalists = {
@@ -650,7 +650,7 @@ treaty_article_events.8 = {
 		# Promise the hawks that this is only temporary
 		add_modifier = {
 			name = nuclear_freeze_tension_modifier
-			months = short_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -676,7 +676,7 @@ treaty_article_events.9 = {
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	duration = 3
-	cooldown = { months = normal_modifier_time }
+	cooldown = { days = normal_modifier_time }
 
 	trigger = {
 		any_scope_treaty = {
@@ -714,7 +714,7 @@ treaty_article_events.9 = {
 		# Accept the dependency for now
 		add_modifier = {
 			name = security_dependency_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		change_relations = {
@@ -729,7 +729,7 @@ treaty_article_events.9 = {
 		# Assert our own capabilities
 		add_modifier = {
 			name = security_independence_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		change_relations = {
@@ -758,7 +758,7 @@ treaty_article_events.10 = {
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
 	duration = 3
-	cooldown = { months = long_modifier_time }
+	cooldown = { days = long_modifier_time }
 
 	trigger = {
 		has_modifier = population_transfer_disruption
@@ -774,7 +774,7 @@ treaty_article_events.10 = {
 		# Resettle the displaced with government support
 		add_modifier = {
 			name = population_transfer_aftermath_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		add_loyalists = {
@@ -789,7 +789,7 @@ treaty_article_events.10 = {
 		# Let them fend for themselves
 		add_modifier = {
 			name = population_transfer_neglect_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		add_radicals = {
@@ -804,15 +804,28 @@ treaty_article_events.10 = {
 		# Use this as an opportunity for nation-building
 		add_modifier = {
 			name = nation_building_controversy_modifier
-			months = short_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		add_modifier = {
-			name = population_transfer_aftermath_modifier
-			months = long_modifier_time
+			name = nation_building_unity_modifier
+			days = normal_modifier_time
 			is_decaying = yes
 		}
+		add_loyalists = {
+			value = medium_radicals
+		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					ig:ig_intelligentsia = {
+						is_in_government = no
+					}
+				}
+				add = 2
+			}
+		}
 	}
 }

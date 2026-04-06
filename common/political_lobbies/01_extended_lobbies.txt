@@ -1,0 +1,1045 @@
+﻿############################
+# COLONIAL / ANTI-COLONIAL LOBBIES
+# Form in overlord countries, targeting their subjects
+# Represents the metropolitan political debate over empire
+############################
+
+lobby_colonial = {
+	category = foreign_anti_country
+
+	texture = "gfx/interface/icons/political_lobby_icons/lobby_anti.dds"
+
+	can_create = {
+		has_dlc_feature = lobbies
+		NOT = { is_country_type = decentralized }
+		is_revolutionary = no
+		scope:target_country = {
+			is_revolutionary = no
+			is_subject_of = root
+		}
+	}
+
+	on_created = {
+		save_temporary_scope_as = lobby_country
+		scope:political_lobby ?= {
+			change_appeasement = {
+				amount = 2
+				factor = appeasement_diplomatic_status_quo
+			}
+			extended_initialize_lobby_custom_name = yes
+		}
+	}
+
+	# Target must remain a subject; if independent - swap to anti-country
+	requirement_to_maintain = {
+		trigger = { scope:target_country = { is_subject_of = root } }
+		swap_type_on_failed = lobby_anti_country
+		on_failed = {
+			scope:political_lobby = { initialize_lobby_custom_name = yes }
+		}
+	}
+
+	# Disband if all members are marginal
+	requirement_to_maintain = {
+		trigger = {
+			OR = {
+				NOT = { exists = scope:political_lobby }
+				scope:political_lobby ?= {
+					any_lobby_member = { ig_counts_as_marginal = no }
+				}
+			}
+		}
+		on_failed = { }
+	}
+
+	appeasement_factors_pro = {
+		appeasement_autonomy_decreased
+		appeasement_diplomatic_demand_made
+		appeasement_colonial_crackdown
+		appeasement_special_events_positive
+	}
+
+	appeasement_factors_anti = {
+		appeasement_autonomy_increased
+		appeasement_gained_independence
+		appeasement_independence_supported
+		appeasement_colonial_concession
+		appeasement_special_events_negative
+	}
+
+	available_for_interest_group = {
+		NOT = {
+			any_political_lobby = {
+				target = scope:target_country
+			}
+		}
+	}
+
+	join_weight = {
+		### Stickiness factor if already in lobby
+		if = {
+			limit = {
+				exists = scope:political_lobby
+				scope:political_lobby = { any_lobby_member = { this = root } }
+			}
+			add = {
+				value = 50
+				desc = "member_of_lobby"
+			}
+		}
+
+		### Formation reasons
+		add = {
+			if = {
+				limit = { is_lobby_formation_reason_ideology = yes }
+				leader ?= {
+					if = {
+						limit = {
+							OR = {
+								has_ideology = ideology:ideology_jingoist_leader
+								has_ideology = ideology:ideology_fascist
+							}
+						}
+						add = 25
+					}
+					else_if = {
+						limit = { has_ideology = ideology:ideology_pacifist }
+						add = -25
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_patriotic
+							has_ideology = ideology:ideology_military_absolutist
+						}
+					}
+					add = 25
+				}
+				if = {
+					limit = { has_ideology = ideology:ideology_liberal }
+					add = -25
+				}
+			}
+			desc = "formation_reason_ideology_desc"
+		}
+
+		add = {
+			if = {
+				limit = { is_lobby_formation_reason_economy = yes }
+				leader ?= {
+					if = {
+						limit = {
+							OR = {
+								has_ideology = ideology:ideology_market_liberal
+								has_ideology = ideology:ideology_protectionist
+							}
+						}
+						add = 15
+					}
+				}
+				if = {
+					limit = { has_ideology = ideology:ideology_laissez_faire }
+					add = 15
+				}
+			}
+			desc = "formation_reason_economy_desc"
+		}
+
+		add = {
+			if = {
+				limit = { is_lobby_formation_reason_aggression = yes }
+				leader ?= {
+					if = {
+						limit = {
+							OR = {
+								has_ideology = ideology:ideology_jingoist_leader
+								has_ideology = ideology:ideology_fascist
+							}
+						}
+						add = 25
+					}
+					else_if = {
+						limit = { has_ideology = ideology:ideology_pacifist }
+						add = -25
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_patriotic
+						}
+					}
+					add = 25
+				}
+			}
+			desc = "formation_reason_aggression_desc"
+		}
+
+		### IG type tendencies
+		# Military: colonial garrisons, strategic bases, prestige
+		if = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add = {
+				value = 20
+				desc = "military_colonial_interest"
+			}
+		}
+		# Landowners: plantations, resource extraction
+		if = {
+			limit = { is_interest_group_type = ig_landowners }
+			add = {
+				value = 15
+				desc = "colonial_economic_interest"
+			}
+		}
+		# Industrialists: colonial markets, raw materials
+		if = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add = {
+				value = 10
+				desc = "colonial_resource_interest"
+			}
+		}
+		# Devout: missionary activity
+		if = {
+			limit = { is_interest_group_type = ig_devout }
+			add = {
+				value = 10
+				desc = "missionary_interest"
+			}
+		}
+		# Petty bourgeoisie: colonial trade
+		if = {
+			limit = { is_interest_group_type = ig_petty_bourgeoisie }
+			add = {
+				value = 5
+				desc = "colonial_trade_interest"
+			}
+		}
+		# Intelligentsia: anti-imperialist
+		if = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add = {
+				value = -15
+				desc = "anti_imperialist_sentiment"
+			}
+		}
+		# Trade unions: anti-exploitation
+		if = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add = {
+				value = -10
+				desc = "anti_exploitation_sentiment"
+			}
+		}
+		# Rural folk: sons serving overseas
+		if = {
+			limit = { is_interest_group_type = ig_rural_folk }
+			add = {
+				value = -5
+				desc = "anti_conscription_sentiment"
+			}
+		}
+
+		### Ideology bonuses (cumulative with IG type)
+		if = {
+			limit = {
+				OR = {
+					has_ideology = ideology:ideology_jingoist
+					has_ideology = ideology:ideology_patriotic
+					has_ideology = ideology:ideology_military_absolutist
+				}
+			}
+			add = {
+				value = 15
+				desc = "imperialist_ideology"
+			}
+		}
+		if = {
+			limit = { has_ideology = ideology:ideology_anti_colonialist }
+			add = {
+				value = -50
+				desc = "anti_colonial_ideology"
+			}
+		}
+		if = {
+			limit = { has_ideology = ideology:ideology_liberal }
+			add = {
+				value = -10
+				desc = "liberal_anti_colonialism"
+			}
+		}
+
+		### Leader ideologies
+		leader ?= {
+			if = {
+				limit = {
+					OR = {
+						has_ideology = ideology:ideology_jingoist_leader
+						has_ideology = ideology:ideology_fascist
+					}
+				}
+				add = {
+					value = 15
+					desc = "jingoist_leader"
+				}
+			}
+			if = {
+				limit = { has_ideology = ideology:ideology_pacifist }
+				add = {
+					value = -15
+					desc = "pacifist_leader"
+				}
+			}
+		}
+	}
+}
+
+lobby_anti_colonial = {
+	category = foreign_pro_country
+
+	texture = "gfx/interface/icons/political_lobby_icons/lobby_pro.dds"
+
+	can_create = {
+		has_dlc_feature = lobbies
+		NOT = { is_country_type = decentralized }
+		is_revolutionary = no
+		scope:target_country = {
+			is_revolutionary = no
+			is_subject_of = root
+		}
+	}
+
+	on_created = {
+		save_temporary_scope_as = lobby_country
+		scope:political_lobby ?= {
+			change_appeasement = {
+				amount = 2
+				factor = appeasement_diplomatic_status_quo
+			}
+			extended_initialize_lobby_custom_name = yes
+		}
+	}
+
+	# Target must remain a subject; if independent - swap to pro-country
+	requirement_to_maintain = {
+		trigger = { scope:target_country = { is_subject_of = root } }
+		swap_type_on_failed = lobby_pro_country
+		on_failed = {
+			scope:political_lobby = { initialize_lobby_custom_name = yes }
+		}
+	}
+
+	# Disband if all members are marginal
+	requirement_to_maintain = {
+		trigger = {
+			OR = {
+				NOT = { exists = scope:political_lobby }
+				scope:political_lobby ?= {
+					any_lobby_member = { ig_counts_as_marginal = no }
+				}
+			}
+		}
+		on_failed = { }
+	}
+
+	appeasement_factors_pro = {
+		appeasement_autonomy_increased
+		appeasement_gained_independence
+		appeasement_independence_supported
+		appeasement_relations_increased
+		appeasement_colonial_concession
+		appeasement_special_events_positive
+	}
+
+	appeasement_factors_anti = {
+		appeasement_autonomy_decreased
+		appeasement_diplomatic_demand_made
+		appeasement_diplomatic_play_started
+		appeasement_colonial_crackdown
+		appeasement_special_events_negative
+	}
+
+	available_for_interest_group = {
+		NOT = {
+			any_political_lobby = {
+				target = scope:target_country
+			}
+		}
+	}
+
+	join_weight = {
+		### Stickiness factor if already in lobby
+		if = {
+			limit = {
+				exists = scope:political_lobby
+				scope:political_lobby = { any_lobby_member = { this = root } }
+			}
+			add = {
+				value = 50
+				desc = "member_of_lobby"
+			}
+		}
+
+		### Formation reasons
+		add = {
+			if = {
+				limit = { is_lobby_formation_reason_ideology = yes }
+				leader ?= {
+					if = {
+						limit = { has_ideology = ideology:ideology_pacifist }
+						add = 25
+					}
+					else_if = {
+						limit = {
+							OR = {
+								has_ideology = ideology:ideology_jingoist_leader
+								has_ideology = ideology:ideology_fascist
+							}
+						}
+						add = -25
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_ideology = ideology:ideology_liberal
+							has_paternalist_ideology = yes
+						}
+					}
+					add = 25
+				}
+				if = {
+					limit = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_military_absolutist
+						}
+					}
+					add = -25
+				}
+			}
+			desc = "formation_reason_ideology_desc"
+		}
+
+		add = {
+			if = {
+				limit = { is_lobby_formation_reason_diplomacy = yes }
+				leader ?= {
+					if = {
+						limit = { has_ideology = ideology:ideology_pacifist }
+						add = 25
+					}
+					else_if = {
+						limit = {
+							OR = {
+								has_ideology = ideology:ideology_jingoist_leader
+								has_ideology = ideology:ideology_fascist
+							}
+						}
+						add = -25
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_ideology = ideology:ideology_liberal
+							has_paternalist_ideology = yes
+						}
+					}
+					add = 25
+				}
+			}
+			desc = "formation_reason_diplomacy_desc"
+		}
+
+		### IG type tendencies (inverse of colonial lobby)
+		# Intelligentsia: humanitarian, anti-imperialism
+		if = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add = {
+				value = 20
+				desc = "humanitarian_interest"
+			}
+		}
+		# Trade unions: solidarity with colonial workers
+		if = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add = {
+				value = 15
+				desc = "worker_solidarity"
+			}
+		}
+		# Rural folk: anti-conscription, war-weariness
+		if = {
+			limit = { is_interest_group_type = ig_rural_folk }
+			add = {
+				value = 5
+				desc = "anti_conscription_sentiment"
+			}
+		}
+		# Armed forces: loss of prestige and bases
+		if = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add = {
+				value = -15
+				desc = "military_prestige_loss"
+			}
+		}
+		# Landowners: loss of colonial revenue
+		if = {
+			limit = { is_interest_group_type = ig_landowners }
+			add = {
+				value = -15
+				desc = "colonial_revenue_loss"
+			}
+		}
+		# Industrialists: loss of raw materials
+		if = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add = {
+				value = -10
+				desc = "colonial_resource_loss"
+			}
+		}
+
+		### Ideology bonuses
+		if = {
+			limit = { has_ideology = ideology:ideology_anti_colonialist }
+			add = {
+				value = 50
+				desc = "anti_colonial_ideology"
+			}
+		}
+		if = {
+			limit = { has_ideology = ideology:ideology_liberal }
+			add = {
+				value = 10
+				desc = "liberal_humanitarianism"
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_ideology = ideology:ideology_jingoist
+					has_ideology = ideology:ideology_patriotic
+					has_ideology = ideology:ideology_military_absolutist
+				}
+			}
+			add = {
+				value = -15
+				desc = "imperialist_ideology"
+			}
+		}
+
+		### Leader ideologies
+		leader ?= {
+			if = {
+				limit = { has_ideology = ideology:ideology_pacifist }
+				add = {
+					value = 15
+					desc = "pacifist_leader"
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_ideology = ideology:ideology_jingoist_leader
+						has_ideology = ideology:ideology_fascist
+					}
+				}
+				add = {
+					value = -15
+					desc = "jingoist_leader"
+				}
+			}
+		}
+	}
+}
+
+############################
+# ENVIRONMENTAL / FOSSIL FUEL LOBBIES
+# Form when environmental_movement tech is researched
+# Target: diplomatically relevant major/great power with environmental tech
+# Represents the political battle over environmental policy
+############################
+
+lobby_fossil_fuel = {
+	category = foreign_anti_country
+
+	texture = "gfx/interface/icons/political_lobby_icons/lobby_anti.dds"
+
+	can_create = {
+		has_dlc_feature = lobbies
+		NOT = { is_country_type = decentralized }
+		is_revolutionary = no
+		has_technology_researched = environmental_movement
+		scope:target_country = {
+			is_revolutionary = no
+			has_technology_researched = environmental_movement
+			country_rank >= rank_value:major_power
+		}
+	}
+
+	on_created = {
+		save_temporary_scope_as = lobby_country
+		scope:political_lobby ?= {
+			change_appeasement = {
+				amount = 0
+				factor = appeasement_diplomatic_status_quo
+			}
+			extended_initialize_lobby_custom_name = yes
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = { has_diplomatic_relevance = scope:target_country }
+		on_failed = { }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			OR = {
+				NOT = { exists = scope:political_lobby }
+				scope:political_lobby ?= {
+					any_lobby_member = { ig_counts_as_marginal = no }
+				}
+			}
+		}
+		on_failed = { }
+	}
+
+	appeasement_factors_pro = {
+		appeasement_rivalry_declared
+		appeasement_embargo_declared
+		appeasement_trade_agreement_broken
+		appeasement_fossil_expansion
+		appeasement_environmental_deregulation
+		appeasement_special_events_positive
+	}
+
+	appeasement_factors_anti = {
+		appeasement_trade_agreement_formed
+		appeasement_alliance_formed
+		appeasement_relations_increased
+		appeasement_environmental_regulation
+		appeasement_green_investment
+		appeasement_special_events_negative
+	}
+
+	available_for_interest_group = {
+		NOT = {
+			any_political_lobby = {
+				target = scope:target_country
+			}
+		}
+	}
+
+	join_weight = {
+		### Stickiness factor if already in lobby
+		if = {
+			limit = {
+				exists = scope:political_lobby
+				scope:political_lobby = { any_lobby_member = { this = root } }
+			}
+			add = {
+				value = 50
+				desc = "member_of_lobby"
+			}
+		}
+
+		### Formation reasons
+		add = {
+			if = {
+				limit = { is_lobby_formation_reason_economy = yes }
+				leader ?= {
+					if = {
+						limit = {
+							OR = {
+								has_ideology = ideology:ideology_market_liberal
+								has_ideology = ideology:ideology_protectionist
+							}
+						}
+						add = 20
+					}
+					else_if = {
+						limit = { has_ideology = ideology:ideology_positivist }
+						add = -20
+					}
+				}
+				if = {
+					limit = { has_ideology = ideology:ideology_laissez_faire }
+					add = 20
+				}
+				if = {
+					limit = { has_ideology = ideology:ideology_isolationist }
+					add = 15
+				}
+			}
+			desc = "formation_reason_economy_desc"
+		}
+
+		add = {
+			if = {
+				limit = { is_lobby_formation_reason_technology = yes }
+				leader ?= {
+					if = {
+						limit = { has_ideology = ideology:ideology_luddite }
+						add = 15
+					}
+					else_if = {
+						limit = { has_ideology = ideology:ideology_positivist }
+						add = -15
+					}
+				}
+				if = {
+					limit = { has_ideology = ideology:ideology_particularist }
+					add = 10
+				}
+			}
+			desc = "formation_reason_technology_desc"
+		}
+
+		### IG type tendencies
+		# Industrialists: fossil fuel business interests
+		if = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add = {
+				value = 25
+				desc = "fossil_fuel_business"
+			}
+		}
+		# Landowners: resource extraction interests
+		if = {
+			limit = { is_interest_group_type = ig_landowners }
+			add = {
+				value = 10
+				desc = "resource_extraction_interest"
+			}
+		}
+		# Petty bourgeoisie: cheap energy dependence
+		if = {
+			limit = { is_interest_group_type = ig_petty_bourgeoisie }
+			add = {
+				value = 10
+				desc = "cheap_energy_interest"
+			}
+		}
+		# Armed forces: energy security
+		if = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add = {
+				value = 5
+				desc = "energy_security_interest"
+			}
+		}
+		# Rural folk: traditional energy, anti-change
+		if = {
+			limit = { is_interest_group_type = ig_rural_folk }
+			add = {
+				value = 5
+				desc = "traditional_energy_interest"
+			}
+		}
+		# Intelligentsia: opposes fossil fuel
+		if = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add = {
+				value = -20
+				desc = "scientific_opposition"
+			}
+		}
+		# Trade unions: ambivalent (some fossil jobs)
+		if = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add = {
+				value = -5
+				desc = "climate_concern"
+			}
+		}
+
+		### Ideology bonuses
+		if = {
+			limit = { has_ideology = ideology:ideology_laissez_faire }
+			add = {
+				value = 15
+				desc = "anti_regulation_ideology"
+			}
+		}
+		if = {
+			limit = { has_ideology = ideology:ideology_isolationist }
+			add = {
+				value = 10
+				desc = "energy_independence"
+			}
+		}
+
+		### Environmental law and leader checks
+		# Environmentalist leaders strongly oppose fossil lobby
+		leader ?= {
+			if = {
+				limit = { has_ideology = ideology:ideology_environmentalists }
+				add = {
+					value = -50
+					desc = "environmentalist_leader"
+				}
+			}
+			if = {
+				limit = { has_ideology = ideology:ideology_market_liberal }
+				add = {
+					value = 10
+					desc = "market_liberal_leader"
+				}
+			}
+		}
+
+		# Country with environmental ministry: fossil lobby is the opposition
+		if = {
+			limit = {
+				owner = { has_law = law_type:law_ministry_of_the_environment }
+			}
+			add = {
+				value = 10
+				desc = "opposing_environmental_regulation"
+			}
+		}
+	}
+}
+
+lobby_environmental = {
+	category = foreign_pro_country
+
+	texture = "gfx/interface/icons/political_lobby_icons/lobby_pro.dds"
+
+	can_create = {
+		has_dlc_feature = lobbies
+		NOT = { is_country_type = decentralized }
+		is_revolutionary = no
+		has_technology_researched = environmental_movement
+		scope:target_country = {
+			is_revolutionary = no
+			has_technology_researched = environmental_movement
+			country_rank >= rank_value:major_power
+		}
+	}
+
+	on_created = {
+		save_temporary_scope_as = lobby_country
+		scope:political_lobby ?= {
+			change_appeasement = {
+				amount = 0
+				factor = appeasement_diplomatic_status_quo
+			}
+			extended_initialize_lobby_custom_name = yes
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = { has_diplomatic_relevance = scope:target_country }
+		on_failed = { }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			OR = {
+				NOT = { exists = scope:political_lobby }
+				scope:political_lobby ?= {
+					any_lobby_member = { ig_counts_as_marginal = no }
+				}
+			}
+		}
+		on_failed = { }
+	}
+
+	appeasement_factors_pro = {
+		appeasement_trade_agreement_formed
+		appeasement_alliance_formed
+		appeasement_foreign_investment_agreement_formed
+		appeasement_relations_increased
+		appeasement_environmental_regulation
+		appeasement_green_investment
+		appeasement_special_events_positive
+	}
+
+	appeasement_factors_anti = {
+		appeasement_embargo_declared
+		appeasement_rivalry_declared
+		appeasement_relations_decreased
+		appeasement_trade_agreement_broken
+		appeasement_fossil_expansion
+		appeasement_environmental_deregulation
+		appeasement_special_events_negative
+	}
+
+	available_for_interest_group = {
+		NOT = {
+			any_political_lobby = {
+				target = scope:target_country
+			}
+		}
+	}
+
+	join_weight = {
+		### Stickiness factor if already in lobby
+		if = {
+			limit = {
+				exists = scope:political_lobby
+				scope:political_lobby = { any_lobby_member = { this = root } }
+			}
+			add = {
+				value = 50
+				desc = "member_of_lobby"
+			}
+		}
+
+		### Formation reasons
+		add = {
+			if = {
+				limit = { is_lobby_formation_reason_economy = yes }
+				leader ?= {
+					if = {
+						limit = { has_ideology = ideology:ideology_positivist }
+						add = 20
+					}
+					else_if = {
+						limit = { has_ideology = ideology:ideology_luddite }
+						add = -20
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_ideology = ideology:ideology_meritocratic
+							has_ideology = ideology:ideology_modernizer
+						}
+					}
+					add = 15
+				}
+			}
+			desc = "formation_reason_economy_desc"
+		}
+
+		add = {
+			if = {
+				limit = { is_lobby_formation_reason_technology = yes }
+				leader ?= {
+					if = {
+						limit = { has_ideology = ideology:ideology_positivist }
+						add = 25
+					}
+					else_if = {
+						limit = { has_ideology = ideology:ideology_luddite }
+						add = -25
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_ideology = ideology:ideology_meritocratic
+							has_ideology = ideology:ideology_modernizer
+						}
+					}
+					add = 20
+				}
+			}
+			desc = "formation_reason_technology_desc"
+		}
+
+		### IG type tendencies
+		# Intelligentsia: scientific consensus
+		if = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add = {
+				value = 25
+				desc = "scientific_consensus"
+			}
+		}
+		# Trade unions: green jobs, worker safety
+		if = {
+			limit = { is_interest_group_type = ig_trade_unions }
+			add = {
+				value = 10
+				desc = "green_jobs_interest"
+			}
+		}
+		# Rural folk: affected by climate degradation
+		if = {
+			limit = { is_interest_group_type = ig_rural_folk }
+			add = {
+				value = 5
+				desc = "climate_impact_concern"
+			}
+		}
+		# Industrialists: regulatory burden
+		if = {
+			limit = { is_interest_group_type = ig_industrialists }
+			add = {
+				value = -20
+				desc = "regulatory_burden"
+			}
+		}
+		# Petty bourgeoisie: compliance costs
+		if = {
+			limit = { is_interest_group_type = ig_petty_bourgeoisie }
+			add = {
+				value = -10
+				desc = "compliance_costs"
+			}
+		}
+		# Landowners: resource extraction threatened
+		if = {
+			limit = { is_interest_group_type = ig_landowners }
+			add = {
+				value = -10
+				desc = "resource_interests_threatened"
+			}
+		}
+
+		### Ideology bonuses
+		if = {
+			limit = {
+				OR = {
+					has_ideology = ideology:ideology_meritocratic
+					has_ideology = ideology:ideology_modernizer
+				}
+			}
+			add = {
+				value = 10
+				desc = "modernizer_green_support"
+			}
+		}
+
+		### Environmental law checks
+		# Environmentalist leaders gravitate to this lobby
+		leader ?= {
+			if = {
+				limit = { has_ideology = ideology:ideology_environmentalists }
+				add = {
+					value = 50
+					desc = "environmentalist_leader"
+				}
+			}
+			if = {
+				limit = { has_ideology = ideology:ideology_positivist }
+				add = {
+					value = 15
+					desc = "scientific_leader"
+				}
+			}
+		}
+
+		# Country with environmental ministry: env lobby is the supporter
+		if = {
+			limit = {
+				owner = { has_law = law_type:law_ministry_of_the_environment }
+			}
+			add = {
+				value = 10
+				desc = "supporting_environmental_policy"
+			}
+		}
+	}
+}

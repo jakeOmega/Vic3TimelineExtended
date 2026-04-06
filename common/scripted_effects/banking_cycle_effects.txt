@@ -1486,7 +1486,7 @@ banking_cycle_spread_contagion = {
 
 		random = {
 			chance = 25
-			# GDP weight: larger source economy → higher contagion chance
+			# GDP weight: larger source economy -> higher contagion chance
 			modifier = {
 				add = banking_contagion_gdp_weight
 			}
