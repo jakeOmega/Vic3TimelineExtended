@@ -247,16 +247,6 @@ country_www_pb_principles_bool = {
 }
 
 # Scripted button technology requirements
-country_can_use_rearmament_bool = {
-	color = good
-	boolean = yes
-}
-
-country_can_use_total_war_economy_bool = {
-	color = good
-	boolean = yes
-}
-
 country_can_use_deposit_guarantee_bool = {
 	color = good
 	boolean = yes
@@ -308,11 +298,6 @@ country_can_use_fx_devaluation_bool = {
 }
 
 country_can_use_asset_relief_bool = {
-	color = good
-	boolean = yes
-}
-
-country_can_use_war_propaganda_bool = {
 	color = good
 	boolean = yes
 }

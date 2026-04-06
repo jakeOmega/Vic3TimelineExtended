@@ -14,6 +14,7 @@ je_world_war = {
 	group = je_group_foreign_affairs
 
 	is_shown_when_inactive = {
+		has_game_rule = world_war_enabled
 		has_technology_researched = combined_arms
 		country_rank >= rank_value:great_power
 		NOT = { has_variable = ww_fully_resolved }
