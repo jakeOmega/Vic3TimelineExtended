@@ -8,7 +8,7 @@
 	}
 
 	possible = {
-		temperature_anomaly_display > 0.1
+		temperature_anomaly_display >= 0.1
 	}
 
 	status_desc = {

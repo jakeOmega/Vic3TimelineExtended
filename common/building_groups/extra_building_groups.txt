@@ -43,6 +43,9 @@ REPLACE_OR_CREATE:bg_discoverable_mining = {
 REPLACE_OR_CREATE:bg_resettlement = {
 	parent_group = bg_bureaucracy
 	economy_of_scale = no
+
+	min_hiring_rate = 0.25
+	max_hiring_rate = 1
 }
 
 REPLACE_OR_CREATE:bg_megastructure_capped_private = {
