@@ -1,0 +1,13 @@
+﻿# Cultural Hegemony bonuses by country rank
+
+INJECT:great_power = {
+	modifier = {
+		country_cultural_pull_mult = 0.25
+	}
+}
+
+INJECT:major_power = {
+	modifier = {
+		country_cultural_pull_mult = 0.1
+	}
+}

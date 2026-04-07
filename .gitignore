@@ -9,3 +9,5 @@ path_constants.py
 /.vscode
 /docs
 *.log
+*.log.*
+*.pid

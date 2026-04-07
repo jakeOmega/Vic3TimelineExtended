@@ -1,0 +1,174 @@
+﻿# ============================================================================
+# CULTURAL HEGEMONY — Journal Entry (Command Center)
+# ============================================================================
+# This JE is the player's window into the Cultural Hegemony system.
+# It shows cultural pull breakdown, global leaderboard, and ideology effects.
+# Dynamic modifiers are applied in the monthly pulse.
+# ============================================================================
+
+je_cultural_hegemony = {
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	group = je_group_soft_power
+
+	is_shown_when_inactive = {
+		always = yes
+	}
+
+	possible = {
+		country_rank >= rank_value:minor_power
+		has_technology_researched = romanticism
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_cultural_hegemony_status_dominant
+				trigger = { cultural_pull_total >= 25 }
+			}
+			triggered_desc = {
+				desc = je_cultural_hegemony_status_major
+				trigger = { cultural_pull_total >= 15 }
+			}
+			triggered_desc = {
+				desc = je_cultural_hegemony_status_significant
+				trigger = { cultural_pull_total >= 10 }
+			}
+			triggered_desc = {
+				desc = je_cultural_hegemony_status_moderate
+				trigger = { cultural_pull_total >= 5 }
+			}
+			triggered_desc = {
+				desc = je_cultural_hegemony_status_minor
+				trigger = { cultural_pull_total >= 2 }
+			}
+			triggered_desc = {
+				desc = je_cultural_hegemony_status_negligible
+				trigger = { always = yes }
+			}
+		}
+		# Share info
+		triggered_desc = {
+			desc = je_ch_share_info
+			trigger = { always = yes }
+		}
+		# Raw score breakdown
+		triggered_desc = {
+			desc = je_ch_score_header
+			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_ch_breakdown_art
+			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_ch_breakdown_prestige
+			trigger = { prestige > 0 }
+		}
+		triggered_desc = {
+			desc = je_ch_breakdown_sol
+			trigger = { cultural_pull_from_sol > 0 }
+		}
+		triggered_desc = {
+			desc = je_ch_breakdown_tech
+			trigger = {
+				has_variable = ch_tech_firsts_recent
+				var:ch_tech_firsts_recent > 0
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_breakdown_monuments
+			trigger = { cultural_pull_from_monuments >= 1 }
+		}
+		triggered_desc = {
+			desc = je_ch_breakdown_megaprojects
+			trigger = { cultural_pull_from_megaprojects >= 1 }
+		}
+		triggered_desc = {
+			desc = je_ch_breakdown_rank
+			trigger = { always = yes }
+		}
+		# Global hegemon info
+		triggered_desc = {
+			desc = je_ch_global_hegemon_info
+			trigger = { has_global_variable = ch_top_cultural_pull }
+		}
+	}
+
+	# Progress bar: 0 to 100 cultural pull
+	current_value = {
+		value = cultural_pull_total
+	}
+
+	goal_add_value = {
+		value = {
+			value = 100
+			subtract = cultural_pull_total
+		}
+	}
+
+	progressbar = yes
+
+	immediate = {
+	}
+
+	complete = {
+		always = no
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			# ---- Update cultural hegemony modifier ----
+			if = {
+				limit = { cultural_pull_total >= 1 }
+				remove_modifier = cultural_hegemony_effect
+				add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult }
+			}
+			else_if = {
+				limit = { has_modifier = cultural_hegemony_effect }
+				remove_modifier = cultural_hegemony_effect
+			}
+
+			# ---- Update foreign benchmark (SoL expectations from hegemon) ----
+			if = {
+				limit = { cultural_hegemony_benchmark_mult >= 0.1 }
+				remove_modifier = cultural_hegemony_foreign_benchmark
+				add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = cultural_hegemony_benchmark_mult }
+			}
+			else_if = {
+				limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+				remove_modifier = cultural_hegemony_foreign_benchmark
+			}
+		}
+	}
+
+	on_yearly_pulse = {
+		effect = {
+			# ---- Track global #1 cultural power for benchmark system ----
+			set_global_variable = { name = ch_top_cultural_pull value = cultural_pull_total }
+			every_country = {
+				limit = {
+					cultural_pull_total > global_var:ch_top_cultural_pull
+				}
+				ROOT = {
+					set_global_variable = { name = ch_top_cultural_pull value = PREV.cultural_pull_total }
+				}
+			}
+
+			# ---- Decay tech firsts counter ----
+			if = {
+				limit = {
+					has_variable = ch_tech_firsts_recent
+					var:ch_tech_firsts_recent > 0
+				}
+				change_variable = { name = ch_tech_firsts_recent subtract = 1 }
+				clamp_variable = { name = ch_tech_firsts_recent min = 0 max = 30 }
+			}
+		}
+	}
+
+	weight = 900
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = no
+}

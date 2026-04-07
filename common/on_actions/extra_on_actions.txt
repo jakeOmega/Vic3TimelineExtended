@@ -222,6 +222,7 @@ on_acquired_technology = {
 		fix_incompatible_laws
 		character_update_on_action
 		te_modifier_update_on_technology_on_action
+		cultural_hegemony_tech_first_on_action
 	}
 }
 

@@ -1,0 +1,51 @@
+﻿### Cultural Hegemony hooks ###
+
+country_cultural_pull_add = {
+	color = good
+	percent = no
+	decimals = 1
+}
+
+country_cultural_pull_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+country_ideology_resistance_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+country_cultural_hegemony_art_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+### Information Warfare hooks ###
+
+country_digital_sovereignty_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+country_digital_sovereignty_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+country_cyber_attack_efficiency_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+country_cyber_operation_slot_add = {
+	color = good
+	percent = no
+	decimals = 0
+}

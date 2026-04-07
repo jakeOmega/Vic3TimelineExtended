@@ -1907,3 +1907,25 @@ nationalization_notice = {
 	notification_type = feed
 	color = bad
 }
+
+# Information Warfare notifications
+iw_operation_launched = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
+	notification_type = feed
+	color = good
+}
+
+iw_operation_cancelled = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
+	notification_type = feed
+	color = neutral
+}
+
+iw_funding_changed = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
+	notification_type = feed
+	color = neutral
+}

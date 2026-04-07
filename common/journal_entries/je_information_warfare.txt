@@ -1,0 +1,292 @@
+﻿# ============================================================================
+# INFORMATION WARFARE — Journal Entry (Command Center)
+# ============================================================================
+# This JE is the player's window into the Information Warfare system.
+# It shows Digital Sovereignty score, active operations, available slots,
+# and provides buttons to launch/cancel cyber operations and adjust funding.
+# ============================================================================
+
+je_information_warfare = {
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	group = je_group_cyber_power
+
+	is_shown_when_inactive = {
+		always = yes
+	}
+
+	possible = {
+		has_technology_researched = television
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_iw_status_fortress
+				trigger = { digital_sovereignty_total >= 80 }
+			}
+			triggered_desc = {
+				desc = je_iw_status_hardened
+				trigger = { digital_sovereignty_total >= 60 }
+			}
+			triggered_desc = {
+				desc = je_iw_status_defended
+				trigger = { digital_sovereignty_total >= 40 }
+			}
+			triggered_desc = {
+				desc = je_iw_status_exposed
+				trigger = { digital_sovereignty_total >= 20 }
+			}
+			triggered_desc = {
+				desc = je_iw_status_vulnerable
+				trigger = { always = yes }
+			}
+		}
+		# Sovereignty breakdown
+		triggered_desc = {
+			desc = je_iw_sovereignty_header
+			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_iw_sovereignty_modifiers
+			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_iw_sovereignty_literacy
+			trigger = { digital_sovereignty_from_literacy >= 1 }
+		}
+		triggered_desc = {
+			desc = je_iw_sovereignty_gdp
+			trigger = { digital_sovereignty_from_gdp >= 1 }
+		}
+		# Cyber operations summary
+		triggered_desc = {
+			desc = je_iw_ops_header
+			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_iw_operations_summary
+			trigger = {
+				has_variable = iw_active_operations
+				var:iw_active_operations >= 1
+			}
+		}
+		# Operation details
+		triggered_desc = {
+			desc = je_iw_op_election_interference_active
+			trigger = { has_variable = iw_op_election_interference }
+		}
+		triggered_desc = {
+			desc = je_iw_op_financial_subversion_active
+			trigger = { has_variable = iw_op_financial_subversion }
+		}
+		triggered_desc = {
+			desc = je_iw_op_infrastructure_sabotage_active
+			trigger = { has_variable = iw_op_infrastructure_sabotage }
+		}
+		triggered_desc = {
+			desc = je_iw_op_comms_disruption_active
+			trigger = { has_variable = iw_op_comms_disruption }
+		}
+		triggered_desc = {
+			desc = je_iw_no_operations
+			trigger = {
+				OR = {
+					NOT = { has_variable = iw_active_operations }
+					var:iw_active_operations < 1
+				}
+			}
+		}
+		triggered_desc = {
+			desc = je_iw_funding_status
+			trigger = { always = yes }
+		}
+	}
+
+	# Progress bar: Digital Sovereignty score (0 to 100)
+	current_value = {
+		value = digital_sovereignty_total
+	}
+
+	goal_add_value = {
+		value = {
+			value = 100
+			subtract = digital_sovereignty_total
+		}
+	}
+
+	progressbar = yes
+
+	# Cancel operation and funding management buttons
+	# (Launch operations via diplomatic actions targeting specific countries)
+	scripted_button = iw_cancel_election_interference_button
+	scripted_button = iw_cancel_financial_subversion_button
+	scripted_button = iw_cancel_infrastructure_sabotage_button
+	scripted_button = iw_cancel_comms_disruption_button
+	scripted_button = iw_increase_funding_button
+	scripted_button = iw_decrease_funding_button
+
+	immediate = {
+		# Initialize tracking variables if missing
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		if = {
+			limit = { NOT = { has_variable = iw_funding_level } }
+			set_variable = { name = iw_funding_level value = 0 }
+		}
+	}
+
+	complete = {
+		always = no
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			# ---- Update digital sovereignty defense modifier ----
+			if = {
+				limit = { digital_sovereignty_total >= 1 }
+				remove_modifier = digital_sovereignty_defense
+				add_modifier = { name = digital_sovereignty_defense multiplier = digital_sovereignty_modifier_mult }
+			}
+			else_if = {
+				limit = { has_modifier = digital_sovereignty_defense }
+				remove_modifier = digital_sovereignty_defense
+			}
+
+			# ---- Apply operation funding cost ----
+			if = {
+				limit = {
+					has_variable = iw_active_operations
+					var:iw_active_operations >= 1
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				remove_modifier = cyber_operation_funding_cost
+				add_modifier = { name = cyber_operation_funding_cost multiplier = cyber_operation_cost_mult }
+			}
+			else_if = {
+				limit = { has_modifier = cyber_operation_funding_cost }
+				remove_modifier = cyber_operation_funding_cost
+			}
+
+			# ---- Apply operation effects to specific targets (only if funding > 0) ----
+			# Election Interference: apply to stored target country
+			if = {
+				limit = {
+					has_variable = iw_op_election_interference
+					has_variable = iw_target_election_interference
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				var:iw_target_election_interference = {
+					remove_modifier = cyber_election_interference
+					add_modifier = { name = cyber_election_interference months = 3 is_decaying = yes }
+				}
+			}
+
+			# Financial Subversion: apply to stored target country
+			if = {
+				limit = {
+					has_variable = iw_op_financial_subversion
+					has_variable = iw_target_financial_subversion
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				var:iw_target_financial_subversion = {
+					remove_modifier = cyber_financial_subversion
+					add_modifier = { name = cyber_financial_subversion months = 3 is_decaying = yes }
+				}
+			}
+
+			# Infrastructure Sabotage: apply to random state in stored target country
+			if = {
+				limit = {
+					has_variable = iw_op_infrastructure_sabotage
+					has_variable = iw_target_infrastructure_sabotage
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+					is_at_war = yes
+				}
+				var:iw_target_infrastructure_sabotage = {
+					random_scope_state = {
+						limit = { any_scope_building = { level >= 1 } }
+						remove_modifier = cyber_infrastructure_sabotage
+						add_modifier = { name = cyber_infrastructure_sabotage months = 3 is_decaying = yes }
+					}
+				}
+			}
+
+			# Comms Disruption: apply to stored target country
+			if = {
+				limit = {
+					has_variable = iw_op_comms_disruption
+					has_variable = iw_target_comms_disruption
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+					is_at_war = yes
+				}
+				var:iw_target_comms_disruption = {
+					remove_modifier = cyber_comms_disruption
+					add_modifier = { name = cyber_comms_disruption months = 3 is_decaying = yes }
+				}
+			}
+
+			# ---- Cancel wartime ops when peace returns ----
+			if = {
+				limit = {
+					is_at_war = no
+					has_variable = iw_op_infrastructure_sabotage
+				}
+				remove_variable = iw_op_infrastructure_sabotage
+				if = {
+					limit = { has_variable = iw_target_infrastructure_sabotage }
+					remove_variable = iw_target_infrastructure_sabotage
+				}
+				change_variable = { name = iw_active_operations subtract = 1 }
+				clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+			}
+			if = {
+				limit = {
+					is_at_war = no
+					has_variable = iw_op_comms_disruption
+				}
+				remove_variable = iw_op_comms_disruption
+				if = {
+					limit = { has_variable = iw_target_comms_disruption }
+					remove_variable = iw_target_comms_disruption
+				}
+				change_variable = { name = iw_active_operations subtract = 1 }
+				clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+			}
+
+			# ---- Detection check for each active operation (only if funding > 0) ----
+			if = {
+				limit = {
+					has_variable = iw_active_operations
+					var:iw_active_operations >= 1
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				random_list = {
+					1 = {
+						modifier = {
+							add = cyber_operation_detection_chance
+						}
+						# Detected! Fire the detection event
+						trigger_event = { id = information_warfare.1 }
+					}
+					99 = {
+						# Not detected this month
+					}
+				}
+			}
+		}
+	}
+
+	weight = 800
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = no
+}

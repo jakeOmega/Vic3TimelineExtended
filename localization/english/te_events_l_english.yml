@@ -1064,6 +1064,29 @@
  heir_education_events.3.t:0 "Foreign Correspondence"
 
 #
+# INFORMATION_WARFARE
+#
+ information_warfare.1.a:0 "Acknowledge the failure and stand down"
+ information_warfare.1.b:0 "Deny everything and harden our defenses"
+ information_warfare.1.d:0 "Our intelligence services report a catastrophic security breach. One of our covert cyber operations has been detected by [scope:detected_by_country.GetName]. The operation must be terminated immediately, and the diplomatic fallout will be considerable."
+ information_warfare.1.f:0 "The encrypted channel went dark at 03:47. By dawn, every foreign ministry in Europe had the intercepted transmissions on their desk."
+ information_warfare.1.t:0 "Operation Compromised"
+ information_warfare.2.a:0 "Invest in cultural projection abroad"
+ information_warfare.2.b:0 "Consolidate our domestic institutions"
+ information_warfare.2.d:0 "[ROOT.GetName]'s cultural influence has reached a level where it can no longer be ignored. Our art, our media, and our way of life are being discussed, debated, and emulated in foreign capitals. We stand at a crossroads: invest further in our cultural projection, or consolidate our domestic strengths."
+ information_warfare.2.f:0 "They wore our fashions in Shanghai, hummed our melodies in Kinshasa, and debated our philosophers in Buenos Aires — all without a single soldier crossing a border."
+ information_warfare.2.t:0 "The World is Watching"
+ information_warfare.3.a:0 "The world looks to us for leadership"
+ information_warfare.3.d:0 "[ROOT.GetName] now stands as the undisputed cultural center of the world. Our language is the language of diplomacy, our media shapes global opinion, and our political model is the one others aspire to emulate. This is a position of immense power — and immense responsibility."
+ information_warfare.3.f:0 "When the world needed a word for progress, they borrowed ours."
+ information_warfare.3.t:0 "The Cultural Hegemon"
+ information_warfare.4.a:0 "Shore up our cyber defenses"
+ information_warfare.4.b:0 "Retaliate in kind"
+ information_warfare.4.d:0 "Our counterintelligence services have uncovered evidence of a sustained foreign cyber campaign targeting our institutions. Enemy agents have been manipulating our information networks, attempting to undermine our political stability. We must decide how to respond."
+ information_warfare.4.f:0 "The anomalies in the election data were too precise to be accidental, too subtle to be domestic in origin."
+ information_warfare.4.t:0 "Foreign Interference Detected"
+
+#
 # INTERNATIONAL_RELATIONS_EVENTS
 #
  international_relations_events.1.a:0 "Steel must answer steel."

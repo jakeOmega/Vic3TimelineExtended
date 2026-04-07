@@ -331,6 +331,7 @@ mainframe_computers = {
 		country_weekly_innovation_max_add = 50
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 		country_institution_ministry_of_commerce_max_investment_add = 1
+		country_digital_sovereignty_add = 4
 	}
 	
 	unlocking_technologies = {	

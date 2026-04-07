@@ -1,0 +1,46 @@
+﻿# ============================================================================
+# CULTURAL HEGEMONY & INFORMATION WARFARE — On-Actions
+# ============================================================================
+
+# Track "World First" technology achievements for Cultural Pull
+# Root scope = Country that just acquired the technology
+# The technology scope is not directly available, so we use a naming convention:
+# For each tech researched, check if any other country already has it.
+# If no one else does, this country gets a "world first" bonus.
+cultural_hegemony_tech_first_on_action = {
+	effect = {
+		# Check if any other country already has the tech we just researched
+		# We use the scoped technology via the on_acquired_technology hook
+		# The ROOT is the country; the technology is accessible via scope
+		save_scope_as = researching_country
+
+		# Count how many other countries already have this tech
+		# If the answer is 0, we are the world first
+		# Unfortunately, on_acquired_technology doesn't give us a tech scope.
+		# Instead, we just award a smaller flat bonus per tech acquired,
+		# scaled by how many techs the country has relative to others.
+
+		# Simple approach: if this country has the most techs globally, they get
+		# an accumulating bonus. This approximates "world first" without per-tech tracking.
+		if = {
+			limit = {
+				NOT = {
+					any_country = {
+						NOT = { this = ROOT }
+						# No other country has more innovations
+						country_rank > ROOT.country_rank
+					}
+				}
+				# Only GP/Major powers are likely actual tech leaders
+				country_rank >= rank_value:major_power
+			}
+			# Award "world first" points
+			if = {
+				limit = { NOT = { has_variable = ch_tech_firsts_recent } }
+				set_variable = { name = ch_tech_firsts_recent value = 0 }
+			}
+			change_variable = { name = ch_tech_firsts_recent add = cultural_pull_tech_first_bonus }
+			clamp_variable = { name = ch_tech_firsts_recent min = 0 max = 30 }
+		}
+	}
+}

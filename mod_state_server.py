@@ -1,32 +1,41 @@
 """
 Mod State Server - persistent HTTP API for querying parsed mod/vanilla data.
 
-Start:  python mod_state_server.py
-        (loads all data once, then listens on http://127.0.0.1:8950)
+Start:  python mod_state_server.py            # normal start (skips if already running)
+        python mod_state_server.py --replace   # kill existing instance, take over port
 
 Query:  Invoke-RestMethod http://localhost:8950/status
         Invoke-RestMethod http://localhost:8950/laws
         python mod_state_client.py laws
+
+Logs:   mod_state_server.log (rotated each startup, previous kept as .log.1)
 """
 
 import json
 import logging
+import logging.handlers
 import os
 import re
+import signal
+import socket
 import sys
 import time
 import traceback
 from collections import defaultdict
+from datetime import datetime, timezone
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, unquote
+from urllib.request import urlopen
+from urllib.error import URLError
 
 from mod_state import ModState
 from path_constants import base_game_path, doc_path, mod_path
 
 PORT = 8950
+PID_FILE = os.path.join(mod_path, "mod_state_server.pid")
 
 # ---------------------------------------------------------------------------
-# Logging setup
+# Logging setup  (log rotates each startup; keeps 1 backup)
 # ---------------------------------------------------------------------------
 LOG_FILE = os.path.join(mod_path, "mod_state_server.log")
 
@@ -37,12 +46,16 @@ _console_handler = logging.StreamHandler()
 _console_handler.setLevel(logging.INFO)
 _console_handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
 
-_file_handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
+_file_handler = logging.handlers.RotatingFileHandler(
+    LOG_FILE, mode="a", maxBytes=0, backupCount=2, encoding="utf-8",
+)
 _file_handler.setLevel(logging.DEBUG)
 _file_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s: %(message)s"))
 
 logger.addHandler(_console_handler)
 logger.addHandler(_file_handler)
+
+_server_start_time: float = 0.0  # set in main()
 
 # ---------------------------------------------------------------------------
 # Path configuration (mirrors mod_state_script.py)
@@ -131,6 +144,179 @@ ms: ModState = None  # type: ignore[assignment]
 startup_elapsed: float = 0.0
 engine_docs: dict = {}  # Parsed engine documentation (effects, triggers, etc.)
 dev_reference_docs: dict = {}  # .md files from base game common/ dirs
+
+
+# ---------------------------------------------------------------------------
+# Instance management  (duplicate detection, PID file, port probing)
+# ---------------------------------------------------------------------------
+def _probe_existing_server(timeout: float = 3.0) -> dict | None:
+    """Try to reach an existing server on PORT.  Returns status dict or None."""
+    try:
+        resp = urlopen(f"http://127.0.0.1:{PORT}/status", timeout=timeout)
+        return json.loads(resp.read())
+    except Exception:
+        return None
+
+
+def _is_pid_alive(pid: int) -> bool:
+    """Check if a process with the given PID is running."""
+    if sys.platform == "win32":
+        import ctypes
+        kernel32 = ctypes.windll.kernel32
+        PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
+        handle = kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
+        if handle:
+            kernel32.CloseHandle(handle)
+            return True
+        return False
+    else:
+        try:
+            os.kill(pid, 0)
+            return True
+        except (OSError, ProcessLookupError):
+            return False
+
+
+def _write_pid_file():
+    """Write our PID to the PID file."""
+    try:
+        with open(PID_FILE, "w") as f:
+            f.write(str(os.getpid()))
+    except Exception as e:
+        logger.warning(f"Could not write PID file: {e}")
+
+
+def _read_pid_file() -> int | None:
+    """Read PID from PID file.  Returns None if missing or invalid."""
+    try:
+        with open(PID_FILE, "r") as f:
+            return int(f.read().strip())
+    except Exception:
+        return None
+
+
+def _cleanup_pid_file():
+    """Remove PID file on exit."""
+    try:
+        if os.path.exists(PID_FILE):
+            os.remove(PID_FILE)
+    except Exception:
+        pass
+
+
+def _kill_existing_server() -> bool:
+    """Attempt to kill an existing server process.  Returns True if killed."""
+    pid = _read_pid_file()
+    if pid and pid != os.getpid() and _is_pid_alive(pid):
+        logger.info(f"Killing existing server (PID {pid})…")
+        try:
+            if sys.platform == "win32":
+                import subprocess
+                subprocess.run(["taskkill", "/F", "/PID", str(pid)],
+                               capture_output=True, timeout=10)
+            else:
+                os.kill(pid, signal.SIGTERM)
+            # Wait up to 5s for it to die
+            for _ in range(50):
+                if not _is_pid_alive(pid):
+                    break
+                time.sleep(0.1)
+            else:
+                logger.warning(f"PID {pid} did not die after 5s")
+                return False
+            logger.info(f"Killed existing server (PID {pid})")
+            return True
+        except Exception as e:
+            logger.warning(f"Failed to kill PID {pid}: {e}")
+    return False
+
+
+def _check_port_available() -> bool:
+    """Check if the port is available for binding."""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        sock.bind(("127.0.0.1", PORT))
+        return True
+    except OSError:
+        return False
+    finally:
+        sock.close()
+
+
+def _ensure_single_instance(replace: bool = False) -> bool:
+    """Ensure only one server instance runs.
+
+    If replace=True, kills any existing instance.
+    Returns True if we should proceed to start, False if we should exit.
+    """
+    existing = _probe_existing_server()
+    if existing:
+        pid = _read_pid_file()
+        pid_info = f" (PID {pid})" if pid else ""
+        if replace:
+            logger.info(f"--replace: taking over from existing server{pid_info}")
+            _kill_existing_server()
+            # Wait for port to become available
+            for i in range(50):
+                if _check_port_available():
+                    break
+                time.sleep(0.1)
+            else:
+                logger.error("Port still occupied after killing existing server")
+                return False
+            return True
+        else:
+            logger.info(
+                f"Server already running{pid_info} "
+                f"(up {existing.get('startup_seconds', '?')}s load, "
+                f"{existing.get('localization_keys', '?')} loc keys). "
+                f"Use --replace to take over."
+            )
+            print(f"\nServer already running on http://127.0.0.1:{PORT}{pid_info}.")
+            print("Use --replace to kill the existing instance and start a new one.")
+            return False
+
+    # No server responding — check for stale PID file
+    stale_pid = _read_pid_file()
+    if stale_pid:
+        if _is_pid_alive(stale_pid):
+            # Process exists but not responding on port — might be loading
+            logger.info(
+                f"PID {stale_pid} is alive but not responding on port {PORT} "
+                f"(may still be loading). Waiting up to 90s…"
+            )
+            for i in range(90):
+                time.sleep(1)
+                resp = _probe_existing_server(timeout=2.0)
+                if resp:
+                    logger.info(f"Existing server came up after {i+1}s wait")
+                    print(f"\nExisting server (PID {stale_pid}) finished loading after {i+1}s.")
+                    return False
+                if not _is_pid_alive(stale_pid):
+                    logger.info(f"PID {stale_pid} died while waiting")
+                    break
+            else:
+                if replace:
+                    logger.info(f"Timed out waiting; killing PID {stale_pid}")
+                    _kill_existing_server()
+                else:
+                    logger.warning(
+                        f"PID {stale_pid} still alive but unresponsive after 90s. "
+                        f"Use --replace to force."
+                    )
+                    return False
+        else:
+            logger.debug(f"Removing stale PID file (PID {stale_pid} not running)")
+
+    # Check port isn't held by something else entirely
+    if not _check_port_available():
+        logger.error(
+            f"Port {PORT} is in use by another process (not our server). "
+            f"Free the port or change PORT in mod_state_server.py."
+        )
+        return False
+
+    return True
 
 
 # ---------------------------------------------------------------------------
@@ -642,8 +828,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- endpoints --------------------------------------------------------
     def _status(self):
+        uptime = time.time() - _server_start_time if _server_start_time else 0
         return {
             "status": "running",
+            "pid": os.getpid(),
+            "uptime_seconds": round(uptime, 1),
             "startup_seconds": round(startup_elapsed, 1),
             "entity_types": list(ms.mod_parsers.keys()),
             "localization_keys": len(ms.localization),
@@ -1699,8 +1888,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def log_message(self, format, *args):
-        # Suppress default access-log noise
-        pass
+        # Log requests at DEBUG level to the file (suppresses console spam)
+        logger.debug(f"HTTP {args[0] if args else '?'} {args[1] if len(args) > 1 else ''}")
 
 
 # ---------------------------------------------------------------------------
@@ -1757,10 +1946,45 @@ def _load_mod_state():
 
 
 def main():
+    global _server_start_time
+
+    replace = "--replace" in sys.argv
+
+    # --- Duplicate instance check (before anything else) ---
+    if not _ensure_single_instance(replace=replace):
+        sys.exit(0)
+
+    # Rotate the log file at each startup so we get a clean session log
+    try:
+        _file_handler.doRollover()
+    except PermissionError:
+        # On Windows the old instance may still hold the file; non-fatal
+        logger.debug("Could not rotate log (file locked); appending to existing log")
+
+    logger.info(f"=== Mod State Server starting (PID {os.getpid()}) ===")
+
+    # Write PID file and register cleanup
+    _write_pid_file()
+    import atexit
+    atexit.register(_cleanup_pid_file)
+
     _load_mod_state()
-    server = HTTPServer(("127.0.0.1", PORT), ModStateHandler)
-    logger.info(f"Mod-state server running on http://127.0.0.1:{PORT}")
-    print(f"\nMod-state server running on http://127.0.0.1:{PORT}")
+
+    try:
+        server = HTTPServer(("127.0.0.1", PORT), ModStateHandler)
+    except OSError as e:
+        if "address already in use" in str(e).lower() or e.errno == 10048:  # 10048 = WSAEADDRINUSE on Windows
+            logger.error(
+                f"Port {PORT} is already in use. Another server may have started between our check "
+                f"and bind. Check: Invoke-RestMethod http://localhost:{PORT}/status"
+            )
+            _cleanup_pid_file()
+            sys.exit(1)
+        raise
+
+    _server_start_time = time.time()
+    logger.info(f"Mod-state server running on http://127.0.0.1:{PORT} (PID {os.getpid()})")
+    print(f"\nMod-state server running on http://127.0.0.1:{PORT} (PID {os.getpid()})")
     print("Endpoints: /status  /laws  /technologies  /buildings  /goods")
     print("           /combat-units  /ideologies  /keys/<type>  /raw/<type>")
     print("           /localize/<key>  /unlocalize/<text>  /search?q=...")
@@ -1777,6 +2001,8 @@ def main():
     except KeyboardInterrupt:
         print("\nShutting down.")
         server.shutdown()
+    finally:
+        _cleanup_pid_file()
 
 
 if __name__ == "__main__":

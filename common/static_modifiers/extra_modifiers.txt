@@ -1446,8 +1446,9 @@ colonial_war_exhaustion_modifier = {
 
 cultural_reclamation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_add = 50
+	country_prestige_add = 25
 	state_standard_of_living_add = 1
+	country_cultural_pull_add = 3
 }
 
 post_colonial_partnership_modifier = {
@@ -1773,13 +1774,15 @@ minority_rights_reform_push_modifier = {
 cultural_renaissance_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_acceptance_not_homeland_add = 10
-	country_prestige_add = 50
+	country_prestige_add = 25
+	country_cultural_pull_add = 5
 }
 
 cultural_cooptation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_add = 100
+	country_prestige_add = 50
 	state_assimilation_mult = 0.25
+	country_cultural_pull_mult = 0.1
 }
 
 human_rights_reform_pledge_modifier = {
@@ -2313,6 +2316,7 @@ cultural_openness_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_assimilation_mult = 0.1
 	country_prestige_add = 25
+	country_cultural_pull_add = 3
 }
 
 cultural_protection_modifier = {
@@ -2324,7 +2328,8 @@ cultural_protection_modifier = {
 cultural_synthesis_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02
-	country_prestige_add = 50
+	country_prestige_add = 25
+	country_cultural_pull_mult = 0.05
 }
 
 # ============================================================================
@@ -3854,6 +3859,7 @@ cultural_flowering_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 15
 	country_tech_spread_add = 10
+	country_cultural_pull_add = 2
 }
 
 # Minority Protection - nationalist backlash
@@ -3943,7 +3949,8 @@ intelligence_victory_showcase_modifier = {
 # Minority Protection - celebrate cultural renaissance (prestige boost)
 cultural_renaissance_prestige_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_add = 25
+	country_prestige_add = 15
+	country_cultural_pull_add = 2
 }
 
 # Minority Protection - appease nationalist demands (prestige loss)
@@ -4520,6 +4527,7 @@ workforce_retraining_modifier = {
 cultural_renaissance_funding_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 15
+	country_cultural_pull_add = 3
 }
 
 mandatory_work_programs_modifier = {
@@ -5007,4 +5015,67 @@ me_colonial_representation_modifier = {
 me_neural_democracy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_legitimacy_govt_total_clout_add = 10
+}
+
+# ============================================================================
+# CULTURAL HEGEMONY - Dynamic modifier scaled by cultural_pull script value
+# Applied in JE on_monthly_pulse with multiplier = cultural_hegemony_modifier_mult
+# ============================================================================
+
+cultural_hegemony_effect = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_mass_migration_attraction_mult = 0.0025
+	country_tech_spread_mult = 0.001
+}
+
+# Applied to foreign countries to shift SoL expectations and reduce legitimacy
+# (ideology pressure from the cultural hegemon)
+cultural_hegemony_foreign_benchmark = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_sol_expectations_target_add = 1
+	country_legitimacy_base_add = -5
+}
+
+# ============================================================================
+# INFORMATION WARFARE - Static modifiers applied with dynamic multipliers
+# ============================================================================
+
+# Applied to the ATTACKER's target country when an election interference operation is active
+cyber_election_interference = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -5
+	country_authority_add = -25
+}
+
+# Applied to the ATTACKER's target when a financial subversion operation is active
+cyber_financial_subversion = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_bubble_pressure_monthly_add = 2
+}
+
+# Applied to the target during wartime infrastructure sabotage
+cyber_infrastructure_sabotage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_infrastructure_mult = -0.15
+	building_throughput_add = -0.10
+}
+
+# Applied to the target during wartime comms disruption
+cyber_comms_disruption = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	unit_offense_mult = -0.10
+	unit_defense_mult = -0.10
+}
+
+# Cost modifier applied to the country running cyber operations (scales with GDP)
+cyber_operation_funding_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_minting_mult = -0.01
+}
+
+# Defensive bonus from digital sovereignty
+digital_sovereignty_defense = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_support_separatism_resistance_mult = 0.05
+	country_coup_resistance_add = 0.02
 }

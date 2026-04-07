@@ -30,6 +30,7 @@ cloud_computing = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 100
+		country_digital_sovereignty_add = 3
 	}
 	
 	ai_weight = {
@@ -248,6 +249,7 @@ military_grade_cybersecurity = {
 
 	modifier = {
 		country_military_tech_spread_mult = 0.25
+		country_digital_sovereignty_add = 5
 	}
 	
 	ai_weight = {
@@ -411,6 +413,7 @@ social_media = {
 		country_sol_expectations_upper_offset_add = -1
 		country_sol_expectations_middle_offset_add = -0.5
 		country_sol_expectations_target_add = 0.5
+		country_cultural_pull_mult = 0.15
 	}
 	
 	ai_weight = {

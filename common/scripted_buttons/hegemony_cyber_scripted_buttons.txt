@@ -1,0 +1,138 @@
+﻿# ============================================================================
+# INFORMATION WARFARE — Scripted Buttons for Cyber Operation Management
+# ============================================================================
+# Cancel buttons for operations launched via diplomatic actions.
+# Funding management buttons (0 = paused, 1 = low, 2 = medium, 3 = high).
+# ============================================================================
+
+# ---- CANCEL: Election Interference ----
+iw_cancel_election_interference_button = {
+	name = "iw_cancel_election_interference_button"
+	visible = {
+		has_variable = iw_op_election_interference
+	}
+	possible = {
+		always = yes
+	}
+	effect = {
+		remove_variable = iw_op_election_interference
+		if = {
+			limit = { has_variable = iw_target_election_interference }
+			remove_variable = iw_target_election_interference
+		}
+		change_variable = { name = iw_active_operations subtract = 1 }
+		clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+		post_notification = iw_operation_cancelled
+	}
+}
+
+# ---- CANCEL: Financial Subversion ----
+iw_cancel_financial_subversion_button = {
+	name = "iw_cancel_financial_subversion_button"
+	visible = {
+		has_variable = iw_op_financial_subversion
+	}
+	possible = {
+		always = yes
+	}
+	effect = {
+		remove_variable = iw_op_financial_subversion
+		if = {
+			limit = { has_variable = iw_target_financial_subversion }
+			remove_variable = iw_target_financial_subversion
+		}
+		change_variable = { name = iw_active_operations subtract = 1 }
+		clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+		post_notification = iw_operation_cancelled
+	}
+}
+
+# ---- CANCEL: Infrastructure Sabotage ----
+iw_cancel_infrastructure_sabotage_button = {
+	name = "iw_cancel_infrastructure_sabotage_button"
+	visible = {
+		has_variable = iw_op_infrastructure_sabotage
+	}
+	possible = {
+		always = yes
+	}
+	effect = {
+		remove_variable = iw_op_infrastructure_sabotage
+		if = {
+			limit = { has_variable = iw_target_infrastructure_sabotage }
+			remove_variable = iw_target_infrastructure_sabotage
+		}
+		change_variable = { name = iw_active_operations subtract = 1 }
+		clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+		post_notification = iw_operation_cancelled
+	}
+}
+
+# ---- CANCEL: Comms Disruption ----
+iw_cancel_comms_disruption_button = {
+	name = "iw_cancel_comms_disruption_button"
+	visible = {
+		has_variable = iw_op_comms_disruption
+	}
+	possible = {
+		always = yes
+	}
+	effect = {
+		remove_variable = iw_op_comms_disruption
+		if = {
+			limit = { has_variable = iw_target_comms_disruption }
+			remove_variable = iw_target_comms_disruption
+		}
+		change_variable = { name = iw_active_operations subtract = 1 }
+		clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+		post_notification = iw_operation_cancelled
+	}
+}
+
+# ---- FUNDING LEVEL: Increase (0 → 1 → 2 → 3) ----
+iw_increase_funding_button = {
+	name = "iw_increase_funding_button"
+	visible = {
+		has_technology_researched = television
+	}
+	possible = {
+		custom_tooltip = {
+			text = iw_funding_not_max_tt
+			OR = {
+				NOT = { has_variable = iw_funding_level }
+				var:iw_funding_level < 3
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = iw_funding_level } }
+			set_variable = { name = iw_funding_level value = 1 }
+		}
+		else = {
+			change_variable = { name = iw_funding_level add = 1 }
+			clamp_variable = { name = iw_funding_level min = 0 max = 3 }
+		}
+		post_notification = iw_funding_changed
+	}
+}
+
+# ---- FUNDING LEVEL: Decrease (3 → 2 → 1 → 0) ----
+iw_decrease_funding_button = {
+	name = "iw_decrease_funding_button"
+	visible = {
+		has_technology_researched = television
+	}
+	possible = {
+		custom_tooltip = {
+			text = iw_funding_not_min_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level > 0
+		}
+	}
+	effect = {
+		change_variable = { name = iw_funding_level subtract = 1 }
+		clamp_variable = { name = iw_funding_level min = 0 max = 3 }
+		post_notification = iw_funding_changed
+	}
+}

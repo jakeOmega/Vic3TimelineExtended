@@ -1,0 +1,429 @@
+﻿namespace = information_warfare
+
+# ============================================================================
+# EVENT 1: Cyber Operation Detected
+# ============================================================================
+# Fired when a monthly detection check succeeds. The attacker (ROOT) has
+# one of their operations burned. They gain infamy and the targeted rival
+# gets a notification. A random active operation is cancelled.
+# ============================================================================
+
+information_warfare.1 = {
+	type = country_event
+	placement = root
+
+	title = information_warfare.1.t
+	desc = information_warfare.1.d
+	flavor = information_warfare.1.f
+
+	event_image = {
+		video = "event_newspaper"
+	}
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	trigger = {
+		has_variable = iw_active_operations
+		var:iw_active_operations >= 1
+	}
+
+	immediate = {
+		# Pick the target of one of our operations as the "detector"
+		if = {
+			limit = { has_variable = iw_target_election_interference }
+			var:iw_target_election_interference = { save_scope_as = detected_by_country }
+		}
+		else_if = {
+			limit = { has_variable = iw_target_financial_subversion }
+			var:iw_target_financial_subversion = { save_scope_as = detected_by_country }
+		}
+		else_if = {
+			limit = { has_variable = iw_target_infrastructure_sabotage }
+			var:iw_target_infrastructure_sabotage = { save_scope_as = detected_by_country }
+		}
+		else_if = {
+			limit = { has_variable = iw_target_comms_disruption }
+			var:iw_target_comms_disruption = { save_scope_as = detected_by_country }
+		}
+
+		# Determine which operation gets burned (priority: peacetime first)
+		if = {
+			limit = { has_variable = iw_op_election_interference }
+			set_variable = { name = iw_burned_op_type value = 1 }
+		}
+		else_if = {
+			limit = { has_variable = iw_op_financial_subversion }
+			set_variable = { name = iw_burned_op_type value = 2 }
+		}
+		else_if = {
+			limit = { has_variable = iw_op_infrastructure_sabotage }
+			set_variable = { name = iw_burned_op_type value = 3 }
+		}
+		else_if = {
+			limit = { has_variable = iw_op_comms_disruption }
+			set_variable = { name = iw_burned_op_type value = 4 }
+		}
+	}
+
+	option = {
+		name = information_warfare.1.a
+		default_option = yes
+
+		# Generate infamy from the operation
+		change_infamy = cyber_ops_detected_infamy
+
+		# Cancel the burned operation and clean up target variable
+		if = {
+			limit = {
+				has_variable = iw_burned_op_type
+				var:iw_burned_op_type = 1
+			}
+			remove_variable = iw_op_election_interference
+			if = {
+				limit = { has_variable = iw_target_election_interference }
+				remove_variable = iw_target_election_interference
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = iw_burned_op_type
+				var:iw_burned_op_type = 2
+			}
+			remove_variable = iw_op_financial_subversion
+			if = {
+				limit = { has_variable = iw_target_financial_subversion }
+				remove_variable = iw_target_financial_subversion
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = iw_burned_op_type
+				var:iw_burned_op_type = 3
+			}
+			remove_variable = iw_op_infrastructure_sabotage
+			if = {
+				limit = { has_variable = iw_target_infrastructure_sabotage }
+				remove_variable = iw_target_infrastructure_sabotage
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = iw_burned_op_type
+				var:iw_burned_op_type = 4
+			}
+			remove_variable = iw_op_comms_disruption
+			if = {
+				limit = { has_variable = iw_target_comms_disruption }
+				remove_variable = iw_target_comms_disruption
+			}
+		}
+
+		# Decrement active operations
+		change_variable = { name = iw_active_operations subtract = 1 }
+		clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+
+		# Clean up temp variable
+		remove_variable = iw_burned_op_type
+
+		# Fire event on the detected country
+		if = {
+			limit = { exists = scope:detected_by_country }
+			scope:detected_by_country = {
+				trigger_event = { id = information_warfare.4 }
+			}
+		}
+
+		ai_chance = {
+			base = 10
+		}
+	}
+
+	option = {
+		name = information_warfare.1.b
+
+		# Deny and double down: keep infamy, add a small cooldown modifier
+		change_infamy = cyber_ops_detected_infamy
+
+		# Cancel the burned operation and clean up target variable
+		if = {
+			limit = {
+				has_variable = iw_burned_op_type
+				var:iw_burned_op_type = 1
+			}
+			remove_variable = iw_op_election_interference
+			if = {
+				limit = { has_variable = iw_target_election_interference }
+				remove_variable = iw_target_election_interference
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = iw_burned_op_type
+				var:iw_burned_op_type = 2
+			}
+			remove_variable = iw_op_financial_subversion
+			if = {
+				limit = { has_variable = iw_target_financial_subversion }
+				remove_variable = iw_target_financial_subversion
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = iw_burned_op_type
+				var:iw_burned_op_type = 3
+			}
+			remove_variable = iw_op_infrastructure_sabotage
+			if = {
+				limit = { has_variable = iw_target_infrastructure_sabotage }
+				remove_variable = iw_target_infrastructure_sabotage
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = iw_burned_op_type
+				var:iw_burned_op_type = 4
+			}
+			remove_variable = iw_op_comms_disruption
+			if = {
+				limit = { has_variable = iw_target_comms_disruption }
+				remove_variable = iw_target_comms_disruption
+			}
+				var:iw_burned_op_type = 1
+			}
+			remove_variable = iw_op_election_interference
+			if = {
+				limit = { has_variable = iw_target_election_interference }
+				remove_variable = iw_target_election_interference
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = iw_burned_op_type
+				var:iw_burned_op_type = 2
+			}
+			remove_variable = iw_op_financial_subversion
+			if = {
+				limit = { has_variable = iw_target_financial_subversion }
+				remove_variable = iw_target_financial_subversion
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = iw_burned_op_type
+				var:iw_burned_op_type = 3
+			}
+			remove_variable = iw_op_infrastructure_sabotage
+			if = {
+				limit = { has_variable = iw_target_infrastructure_sabotage }
+				remove_variable = iw_target_infrastructure_sabotage
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = iw_burned_op_type
+				var:iw_burned_op_type = 4
+			}
+			remove_variable = iw_op_comms_disruption
+			if = {
+				limit = { has_variable = iw_target_comms_disruption }
+				remove_variable = iw_target_comms_disruption
+			}
+		}
+
+		change_variable = { name = iw_active_operations subtract = 1 }
+		clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+		remove_variable = iw_burned_op_type
+
+		# Bonus: the denial hardens your digital defense temporarily
+		add_modifier = {
+			name = digital_sovereignty_defense
+			months = short_modifier_time
+			is_decaying = yes
+			multiplier = 2
+		}
+
+		ai_chance = {
+			base = 3
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 2: Cultural Milestone — Rising Cultural Power
+# ============================================================================
+# Fired once when a country's cultural pull first exceeds 30
+# (significant cultural power). This represents the world taking notice.
+# ============================================================================
+
+information_warfare.2 = {
+	type = country_event
+	placement = root
+
+	title = information_warfare.2.t
+	desc = information_warfare.2.d
+	flavor = information_warfare.2.f
+
+	event_image = {
+		video = "event_art_gallery"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	trigger = {
+		cultural_pull_total >= 10
+		NOT = { has_variable = ch_milestone_significant }
+	}
+
+	immediate = {
+		set_variable = ch_milestone_significant
+	}
+
+	option = {
+		name = information_warfare.2.a
+		default_option = yes
+
+		# Invest in cultural projection
+		add_modifier = {
+			name = cultural_hegemony_effect
+			months = normal_modifier_time
+			is_decaying = yes
+			multiplier = 2
+		}
+
+		ai_chance = {
+			base = 10
+		}
+	}
+
+	option = {
+		name = information_warfare.2.b
+
+		# Focus on internal development instead
+		add_modifier = {
+			name = digital_sovereignty_defense
+			months = normal_modifier_time
+			is_decaying = yes
+			multiplier = 2
+		}
+
+		ai_chance = {
+			base = 5
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 3: Cultural Milestone — Dominant Cultural Power
+# ============================================================================
+# Fired once when a country's cultural pull first exceeds 80.
+# The country is now the world's cultural hegemon.
+# ============================================================================
+
+information_warfare.3 = {
+	type = country_event
+	placement = root
+
+	title = information_warfare.3.t
+	desc = information_warfare.3.d
+	flavor = information_warfare.3.f
+
+	event_image = {
+		video = "event_art_gallery"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	trigger = {
+		cultural_pull_total >= 25
+		NOT = { has_variable = ch_milestone_dominant }
+	}
+
+	immediate = {
+		set_variable = ch_milestone_dominant
+	}
+
+	option = {
+		name = information_warfare.3.a
+		default_option = yes
+
+		add_prestige = 200
+
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 4: Foreign Cyber Attack Detected (Defender's Perspective)
+# ============================================================================
+# Fired on the target country when they detect (via intelligence) that
+# someone is running operations against them. Gives them options to respond.
+# ============================================================================
+
+information_warfare.4 = {
+	type = country_event
+	placement = root
+
+	title = information_warfare.4.t
+	desc = information_warfare.4.d
+	flavor = information_warfare.4.f
+
+	event_image = {
+		video = "event_newspaper"
+	}
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	trigger = {
+		# Only fire if someone has a cyber modifier on us
+		OR = {
+			has_modifier = cyber_election_interference
+			has_modifier = cyber_financial_subversion
+		}
+		NOT = { has_variable = iw_defender_event_cooldown }
+	}
+
+	immediate = {
+		set_variable = { name = iw_defender_event_cooldown value = yes }
+	}
+
+	option = {
+		name = information_warfare.4.a
+		default_option = yes
+
+		# Harden defenses
+		add_modifier = {
+			name = digital_sovereignty_defense
+			months = normal_modifier_time
+			is_decaying = yes
+			multiplier = 3
+		}
+		# Remove cooldown after a year
+		set_variable = { name = iw_defender_event_cooldown value = yes }
+
+		ai_chance = {
+			base = 10
+		}
+	}
+
+	option = {
+		name = information_warfare.4.b
+
+		# Retaliate: gains a free operation slot for a limited time
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		# Grant a temporary boost via prestige (representing diplomatic capital)
+		add_prestige = 50
+
+		ai_chance = {
+			base = 5
+		}
+	}
+}
