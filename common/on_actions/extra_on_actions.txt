@@ -2039,20 +2039,14 @@ te_modifier_update_on_technology_on_action = {
 	}
 }
 
-# Law scope (ROOT = law type, owner = enacting country). Updates all
-# states owned by the country when a law is enacted.
-# NOTE: Only migration crowding is updated here. Pollution and free-port
-# modifiers use has_variable in their script values, but the engine traces
-# the parent scope chain through the law root scope, which doesn't support
-# variables: causing hundreds of "has_variable trigger" errors. Those
-# modifiers are caught by the periodic state pulses instead.
+# Law scope (ROOT = law type, owner = enacting country).
+# NOTE: All state modifier updates (migration crowding, pollution,
+# free-port tariffs) use has_variable in their script values. The engine
+# traces the parent scope chain through the law root scope, which doesn't
+# support variables — causing "has_variable trigger" errors. All of these
+# modifiers are caught by the periodic state pulses instead (within 1 year).
 te_modifier_update_on_law_on_action = {
 	effect = {
-		owner = {
-			every_scope_state = {
-				te_update_migration_crowding_modifier = yes
-			}
-		}
 	}
 }
 

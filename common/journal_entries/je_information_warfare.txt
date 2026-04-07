@@ -12,7 +12,7 @@ je_information_warfare = {
 	group = je_group_cyber_power
 
 	is_shown_when_inactive = {
-		always = yes
+		has_game_rule = information_warfare_enabled
 	}
 
 	possible = {

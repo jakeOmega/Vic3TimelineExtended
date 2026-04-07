@@ -238,7 +238,7 @@ feminist_events.3 = {
 		}
 		add_radicals = {
 			value = very_small_radicals
-			interest_group = ig_devout
+			interest_group = ig:ig_devout
 		}
 	}
 
@@ -277,7 +277,7 @@ feminist_events.3 = {
 		}
 		add_loyalists = {
 			value = very_small_radicals
-			interest_group = ig_devout
+			interest_group = ig:ig_devout
 		}
 		add_radicals = {
 			value = small_radicals
@@ -343,7 +343,7 @@ feminist_events.4 = {
 		}
 		add_radicals = {
 			value = very_small_radicals
-			interest_group = ig_devout
+			interest_group = ig:ig_devout
 		}
 	}
 
@@ -511,7 +511,7 @@ feminist_events.100 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			interest_group = ig_devout
+			interest_group = ig:ig_devout
 		}
 	}
 

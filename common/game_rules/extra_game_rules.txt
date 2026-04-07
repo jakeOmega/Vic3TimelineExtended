@@ -45,3 +45,27 @@ world_war_rule = {
         flag = world_war_disabled
     }
 }
+
+cultural_hegemony_rule = {
+    default = cultural_hegemony_enabled
+
+    cultural_hegemony_enabled = {
+        flag = cultural_hegemony_enabled
+    }
+
+    cultural_hegemony_disabled = {
+        flag = cultural_hegemony_disabled
+    }
+}
+
+information_warfare_rule = {
+    default = information_warfare_enabled
+
+    information_warfare_enabled = {
+        flag = information_warfare_enabled
+    }
+
+    information_warfare_disabled = {
+        flag = information_warfare_disabled
+    }
+}

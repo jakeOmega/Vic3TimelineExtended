@@ -1,0 +1,240 @@
+﻿# ============================================================================
+# CULTURAL HEGEMONY — Scripted Effects
+# ============================================================================
+# All CH computation logic extracted from the JE into reusable effects.
+# Called from on_actions (game start) and JE (display only after 1845).
+# ============================================================================
+
+# ---- MONTHLY: Per-country cache + modifier application ----
+# Scope: Country
+# Caches all display variables and applies/removes CH modifiers.
+ch_monthly_country_update = {
+	# Cache trigger/display values using fast (O(1)) computations
+	set_variable = { name = ch_total value = ch_total_fast }
+	set_variable = { name = ch_art value = cultural_pull_from_art }
+	set_variable = { name = ch_sol value = cultural_pull_from_sol_fast }
+	set_variable = { name = ch_disp_total value = ch_total_fast }
+	set_variable = { name = ch_disp_raw value = cultural_pull_raw_fast }
+	set_variable = { name = ch_disp_art value = cultural_pull_from_art }
+	set_variable = { name = ch_disp_prestige value = cultural_pull_from_prestige_fast }
+	set_variable = { name = ch_disp_sol value = cultural_pull_from_sol_fast }
+	set_variable = { name = ch_disp_tech value = cultural_pull_from_tech_leadership }
+	set_variable = { name = ch_disp_monuments value = cultural_pull_from_monuments }
+	set_variable = { name = ch_disp_megaprojects value = cultural_pull_from_megaprojects }
+	set_variable = { name = ch_disp_rank value = cultural_pull_rank_display }
+	set_variable = { name = ch_monuments value = cultural_pull_from_monuments }
+	set_variable = { name = ch_megaprojects value = cultural_pull_from_megaprojects }
+
+	# Apply/remove cultural hegemony modifier
+	if = {
+		limit = { var:ch_total >= 1 }
+		remove_modifier = cultural_hegemony_effect
+		add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult }
+	}
+	else_if = {
+		limit = { has_modifier = cultural_hegemony_effect }
+		remove_modifier = cultural_hegemony_effect
+	}
+
+	# Apply/remove foreign benchmark (SoL expectations from hegemon)
+	if = {
+		limit = { cultural_hegemony_benchmark_mult >= 0.1 }
+		remove_modifier = cultural_hegemony_foreign_benchmark
+		add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = cultural_hegemony_benchmark_mult }
+	}
+	else_if = {
+		limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+		remove_modifier = cultural_hegemony_foreign_benchmark
+	}
+}
+
+# ---- YEARLY: Refresh global caches + build leaderboard ----
+# Scope: Country (uses lock guard, only first caller runs leaderboard)
+ch_yearly_global_update = {
+	if = {
+		limit = { NOT = { has_global_variable = ch_ldr_lock } }
+		set_global_variable = { name = ch_ldr_lock value = yes days = 180 }
+
+		# Refresh global caches
+		set_global_variable = { name = ch_cached_prestige value = global_prestige_total }
+		set_global_variable = { name = ch_cached_sol_avg value = global_average_sol }
+		set_global_variable = { name = ch_cached_global_raw value = global_raw_cultural_pull_fast }
+
+		# Save previous rank scores for year-over-year delta
+		if = {
+			limit = { has_global_variable = ch_rank_1_score }
+			set_global_variable = { name = ch_rank_1_prev value = global_var:ch_rank_1_score }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_2_score }
+			set_global_variable = { name = ch_rank_2_prev value = global_var:ch_rank_2_score }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_3_score }
+			set_global_variable = { name = ch_rank_3_prev value = global_var:ch_rank_3_score }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_4_score }
+			set_global_variable = { name = ch_rank_4_prev value = global_var:ch_rank_4_score }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_5_score }
+			set_global_variable = { name = ch_rank_5_prev value = global_var:ch_rank_5_score }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_6_score }
+			set_global_variable = { name = ch_rank_6_prev value = global_var:ch_rank_6_score }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_7_score }
+			set_global_variable = { name = ch_rank_7_prev value = global_var:ch_rank_7_score }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_8_score }
+			set_global_variable = { name = ch_rank_8_prev value = global_var:ch_rank_8_score }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_9_score }
+			set_global_variable = { name = ch_rank_9_prev value = global_var:ch_rank_9_score }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_10_score }
+			set_global_variable = { name = ch_rank_10_prev value = global_var:ch_rank_10_score }
+		}
+
+		# Clear stale rank slots
+		remove_global_variable = ch_rank_1
+		remove_global_variable = ch_rank_2
+		remove_global_variable = ch_rank_3
+		remove_global_variable = ch_rank_4
+		remove_global_variable = ch_rank_5
+		remove_global_variable = ch_rank_6
+		remove_global_variable = ch_rank_7
+		remove_global_variable = ch_rank_8
+		remove_global_variable = ch_rank_9
+		remove_global_variable = ch_rank_10
+
+		# Single ordered pass: top 10 countries by raw cultural pull
+		set_global_variable = { name = ch_ldr_idx value = 0 }
+		ordered_country = {
+			limit = { cultural_pull_raw_fast >= 0.01 }
+			order_by = cultural_pull_raw_fast
+			check_range_bounds = no
+
+			if = {
+				limit = { global_var:ch_ldr_idx < 1 }
+				set_global_variable = { name = ch_rank_1 value = THIS }
+				set_global_variable = { name = ch_rank_1_score value = ch_display_fast }
+				set_global_variable = { name = ch_top_cultural_pull value = ch_total_fast }
+			}
+			else_if = {
+				limit = { global_var:ch_ldr_idx < 2 }
+				set_global_variable = { name = ch_rank_2 value = THIS }
+				set_global_variable = { name = ch_rank_2_score value = ch_display_fast }
+			}
+			else_if = {
+				limit = { global_var:ch_ldr_idx < 3 }
+				set_global_variable = { name = ch_rank_3 value = THIS }
+				set_global_variable = { name = ch_rank_3_score value = ch_display_fast }
+			}
+			else_if = {
+				limit = { global_var:ch_ldr_idx < 4 }
+				set_global_variable = { name = ch_rank_4 value = THIS }
+				set_global_variable = { name = ch_rank_4_score value = ch_display_fast }
+			}
+			else_if = {
+				limit = { global_var:ch_ldr_idx < 5 }
+				set_global_variable = { name = ch_rank_5 value = THIS }
+				set_global_variable = { name = ch_rank_5_score value = ch_display_fast }
+			}
+			else_if = {
+				limit = { global_var:ch_ldr_idx < 6 }
+				set_global_variable = { name = ch_rank_6 value = THIS }
+				set_global_variable = { name = ch_rank_6_score value = ch_display_fast }
+			}
+			else_if = {
+				limit = { global_var:ch_ldr_idx < 7 }
+				set_global_variable = { name = ch_rank_7 value = THIS }
+				set_global_variable = { name = ch_rank_7_score value = ch_display_fast }
+			}
+			else_if = {
+				limit = { global_var:ch_ldr_idx < 8 }
+				set_global_variable = { name = ch_rank_8 value = THIS }
+				set_global_variable = { name = ch_rank_8_score value = ch_display_fast }
+			}
+			else_if = {
+				limit = { global_var:ch_ldr_idx < 9 }
+				set_global_variable = { name = ch_rank_9 value = THIS }
+				set_global_variable = { name = ch_rank_9_score value = ch_display_fast }
+			}
+			else_if = {
+				limit = { global_var:ch_ldr_idx < 10 }
+				set_global_variable = { name = ch_rank_10 value = THIS }
+				set_global_variable = { name = ch_rank_10_score value = ch_display_fast }
+			}
+			change_global_variable = { name = ch_ldr_idx add = 1 }
+		}
+
+		# Compute year-over-year deltas
+		if = {
+			limit = { has_global_variable = ch_rank_1_prev }
+			set_global_variable = { name = ch_rank_1_delta value = global_var:ch_rank_1_score }
+			change_global_variable = { name = ch_rank_1_delta subtract = global_var:ch_rank_1_prev }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_2_prev }
+			set_global_variable = { name = ch_rank_2_delta value = global_var:ch_rank_2_score }
+			change_global_variable = { name = ch_rank_2_delta subtract = global_var:ch_rank_2_prev }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_3_prev }
+			set_global_variable = { name = ch_rank_3_delta value = global_var:ch_rank_3_score }
+			change_global_variable = { name = ch_rank_3_delta subtract = global_var:ch_rank_3_prev }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_4_prev }
+			set_global_variable = { name = ch_rank_4_delta value = global_var:ch_rank_4_score }
+			change_global_variable = { name = ch_rank_4_delta subtract = global_var:ch_rank_4_prev }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_5_prev }
+			set_global_variable = { name = ch_rank_5_delta value = global_var:ch_rank_5_score }
+			change_global_variable = { name = ch_rank_5_delta subtract = global_var:ch_rank_5_prev }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_6_prev }
+			set_global_variable = { name = ch_rank_6_delta value = global_var:ch_rank_6_score }
+			change_global_variable = { name = ch_rank_6_delta subtract = global_var:ch_rank_6_prev }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_7_prev }
+			set_global_variable = { name = ch_rank_7_delta value = global_var:ch_rank_7_score }
+			change_global_variable = { name = ch_rank_7_delta subtract = global_var:ch_rank_7_prev }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_8_prev }
+			set_global_variable = { name = ch_rank_8_delta value = global_var:ch_rank_8_score }
+			change_global_variable = { name = ch_rank_8_delta subtract = global_var:ch_rank_8_prev }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_9_prev }
+			set_global_variable = { name = ch_rank_9_delta value = global_var:ch_rank_9_score }
+			change_global_variable = { name = ch_rank_9_delta subtract = global_var:ch_rank_9_prev }
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_10_prev }
+			set_global_variable = { name = ch_rank_10_delta value = global_var:ch_rank_10_score }
+			change_global_variable = { name = ch_rank_10_delta subtract = global_var:ch_rank_10_prev }
+		}
+	}
+
+	# Decay tech firsts counter (runs per country, not guarded)
+	if = {
+		limit = {
+			has_variable = ch_tech_firsts_recent
+			var:ch_tech_firsts_recent > 0
+		}
+		change_variable = { name = ch_tech_firsts_recent subtract = 1 }
+		clamp_variable = { name = ch_tech_firsts_recent min = 0 max = 30 }
+	}
+}

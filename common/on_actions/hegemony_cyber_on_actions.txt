@@ -2,6 +2,36 @@
 # CULTURAL HEGEMONY & INFORMATION WARFARE — On-Actions
 # ============================================================================
 
+# ---- Monthly pulse: update per-country CH values and modifiers ----
+# Runs from game start for all qualifying countries (even before JE activates).
+# This ensures scores are stable by the time the JE appears in 1845.
+on_monthly_pulse_country = {
+	effect = {
+		if = {
+			limit = {
+				has_game_rule = cultural_hegemony_enabled
+				country_rank >= rank_value:minor_power
+			}
+			ch_monthly_country_update = yes
+		}
+	}
+}
+
+# ---- Yearly pulse: refresh global caches + build leaderboard ----
+# Runs from game start. Lock guard inside the effect ensures only one country
+# per year does the expensive global computation.
+on_yearly_pulse_country = {
+	effect = {
+		if = {
+			limit = {
+				has_game_rule = cultural_hegemony_enabled
+				country_rank >= rank_value:minor_power
+			}
+			ch_yearly_global_update = yes
+		}
+	}
+}
+
 # Track "World First" technology achievements for Cultural Pull
 # Root scope = Country that just acquired the technology
 # The technology scope is not directly available, so we use a naming convention:
@@ -9,6 +39,11 @@
 # If no one else does, this country gets a "world first" bonus.
 cultural_hegemony_tech_first_on_action = {
 	effect = {
+		# Skip if cultural hegemony is disabled
+		if = {
+			limit = { NOT = { has_game_rule = cultural_hegemony_enabled } }
+			return = yes
+		}
 		# Check if any other country already has the tech we just researched
 		# We use the scoped technology via the on_acquired_technology hook
 		# The ROOT is the country; the technology is accessible via scope

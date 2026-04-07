@@ -1488,6 +1488,7 @@ banking_cycle_spread_contagion = {
 			chance = 25
 			# GDP weight: larger source economy -> higher contagion chance
 			modifier = {
+				trigger = { always = yes }
 				add = banking_contagion_gdp_weight
 			}
 			# Same market = strongest contagion channel

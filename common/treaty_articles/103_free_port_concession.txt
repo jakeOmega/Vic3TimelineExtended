@@ -110,7 +110,8 @@ free_port_concession = {
 						name = free_port_state_modifier
 					}
 					set_variable = has_free_port
-					te_update_free_port_tariff = yes
+					# NOTE: te_update_free_port_tariff removed here — the treaty article scope chain
+					# doesn't support has_variable. The yearly state pulse catches it within 1 year.
 				}
 			}
 		}

@@ -1,9 +1,11 @@
 ﻿# ============================================================================
-# CULTURAL HEGEMONY — Journal Entry (Command Center)
+# CULTURAL HEGEMONY — Journal Entry (Display Only)
 # ============================================================================
 # This JE is the player's window into the Cultural Hegemony system.
-# It shows cultural pull breakdown, global leaderboard, and ideology effects.
-# Dynamic modifiers are applied in the monthly pulse.
+# It shows cultural pull breakdown, global leaderboard, and tier status.
+# All computation runs in on_actions (hegemony_cyber_on_actions.txt) via
+# scripted effects (cultural_hegemony_effects.txt) from game start.
+# The JE only activates after 1845 so scores are stable when first shown.
 # ============================================================================
 
 je_cultural_hegemony = {
@@ -12,10 +14,11 @@ je_cultural_hegemony = {
 	group = je_group_soft_power
 
 	is_shown_when_inactive = {
-		always = yes
+		has_game_rule = cultural_hegemony_enabled
 	}
 
 	possible = {
+		game_date >= 1845.1.1
 		country_rank >= rank_value:minor_power
 		has_technology_researched = romanticism
 	}
@@ -24,23 +27,23 @@ je_cultural_hegemony = {
 		first_valid = {
 			triggered_desc = {
 				desc = je_cultural_hegemony_status_dominant
-				trigger = { cultural_pull_total >= 25 }
+				trigger = { has_variable = ch_total var:ch_total >= 25 }
 			}
 			triggered_desc = {
 				desc = je_cultural_hegemony_status_major
-				trigger = { cultural_pull_total >= 15 }
+				trigger = { has_variable = ch_total var:ch_total >= 15 }
 			}
 			triggered_desc = {
 				desc = je_cultural_hegemony_status_significant
-				trigger = { cultural_pull_total >= 10 }
+				trigger = { has_variable = ch_total var:ch_total >= 10 }
 			}
 			triggered_desc = {
 				desc = je_cultural_hegemony_status_moderate
-				trigger = { cultural_pull_total >= 5 }
+				trigger = { has_variable = ch_total var:ch_total >= 5 }
 			}
 			triggered_desc = {
 				desc = je_cultural_hegemony_status_minor
-				trigger = { cultural_pull_total >= 2 }
+				trigger = { has_variable = ch_total var:ch_total >= 2 }
 			}
 			triggered_desc = {
 				desc = je_cultural_hegemony_status_negligible
@@ -58,16 +61,16 @@ je_cultural_hegemony = {
 			trigger = { always = yes }
 		}
 		triggered_desc = {
-			desc = je_ch_breakdown_art
-			trigger = { always = yes }
-		}
-		triggered_desc = {
 			desc = je_ch_breakdown_prestige
 			trigger = { prestige > 0 }
 		}
 		triggered_desc = {
+			desc = je_ch_breakdown_art
+			trigger = { has_variable = ch_art var:ch_art > 0 }
+		}
+		triggered_desc = {
 			desc = je_ch_breakdown_sol
-			trigger = { cultural_pull_from_sol > 0 }
+			trigger = { has_variable = ch_sol var:ch_sol > 0 }
 		}
 		triggered_desc = {
 			desc = je_ch_breakdown_tech
@@ -78,38 +81,107 @@ je_cultural_hegemony = {
 		}
 		triggered_desc = {
 			desc = je_ch_breakdown_monuments
-			trigger = { cultural_pull_from_monuments >= 1 }
+			trigger = { has_variable = ch_monuments var:ch_monuments >= 1 }
 		}
 		triggered_desc = {
 			desc = je_ch_breakdown_megaprojects
-			trigger = { cultural_pull_from_megaprojects >= 1 }
+			trigger = { has_variable = ch_megaprojects var:ch_megaprojects >= 1 }
 		}
 		triggered_desc = {
 			desc = je_ch_breakdown_rank
 			trigger = { always = yes }
 		}
-		# Global hegemon info
+		# Top 10 Cultural Powers leaderboard
 		triggered_desc = {
-			desc = je_ch_global_hegemon_info
-			trigger = { has_global_variable = ch_top_cultural_pull }
+			desc = je_ch_leaderboard_header
+			trigger = { has_global_variable = ch_rank_1 }
+		}
+		triggered_desc = {
+			desc = je_ch_rank_1_entry
+			trigger = { has_global_variable = ch_rank_1 }
+		}
+		triggered_desc = {
+			desc = je_ch_rank_2_entry
+			trigger = { has_global_variable = ch_rank_2 }
+		}
+		triggered_desc = {
+			desc = je_ch_rank_3_entry
+			trigger = { has_global_variable = ch_rank_3 }
+		}
+		triggered_desc = {
+			desc = je_ch_rank_4_entry
+			trigger = { has_global_variable = ch_rank_4 }
+		}
+		triggered_desc = {
+			desc = je_ch_rank_5_entry
+			trigger = { has_global_variable = ch_rank_5 }
+		}
+		triggered_desc = {
+			desc = je_ch_rank_6_entry
+			trigger = { has_global_variable = ch_rank_6 }
+		}
+		triggered_desc = {
+			desc = je_ch_rank_7_entry
+			trigger = { has_global_variable = ch_rank_7 }
+		}
+		triggered_desc = {
+			desc = je_ch_rank_8_entry
+			trigger = { has_global_variable = ch_rank_8 }
+		}
+		triggered_desc = {
+			desc = je_ch_rank_9_entry
+			trigger = { has_global_variable = ch_rank_9 }
+		}
+		triggered_desc = {
+			desc = je_ch_rank_10_entry
+			trigger = { has_global_variable = ch_rank_10 }
 		}
 	}
 
-	# Progress bar: 0 to 100 cultural pull
+	# Progress bar: 0 to 100 cultural pull (uses cached variable)
 	current_value = {
-		value = cultural_pull_total
+		value = 0
+		if = {
+			limit = { has_variable = ch_total }
+			add = var:ch_total
+		}
 	}
 
 	goal_add_value = {
 		value = {
 			value = 100
-			subtract = cultural_pull_total
+			subtract = {
+				value = 0
+				if = {
+					limit = { has_variable = ch_total }
+					add = var:ch_total
+				}
+			}
 		}
 	}
 
 	progressbar = yes
 
 	immediate = {
+		# Variables are already populated by on_actions before JE activates.
+		# Initialize any that might not exist (safety fallback).
+		if = {
+			limit = { NOT = { has_variable = ch_total } }
+			set_variable = { name = ch_total value = 0 }
+			set_variable = { name = ch_art value = 0 }
+			set_variable = { name = ch_sol value = 0 }
+			set_variable = { name = ch_monuments value = 0 }
+			set_variable = { name = ch_megaprojects value = 0 }
+			set_variable = { name = ch_disp_total value = 0 }
+			set_variable = { name = ch_disp_raw value = 0 }
+			set_variable = { name = ch_disp_art value = 0 }
+			set_variable = { name = ch_disp_prestige value = 0 }
+			set_variable = { name = ch_disp_sol value = 0 }
+			set_variable = { name = ch_disp_tech value = 0 }
+			set_variable = { name = ch_disp_monuments value = 0 }
+			set_variable = { name = ch_disp_megaprojects value = 0 }
+			set_variable = { name = ch_disp_rank value = 0 }
+		}
 	}
 
 	complete = {
@@ -117,54 +189,13 @@ je_cultural_hegemony = {
 	}
 
 	on_monthly_pulse = {
-		effect = {
-			# ---- Update cultural hegemony modifier ----
-			if = {
-				limit = { cultural_pull_total >= 1 }
-				remove_modifier = cultural_hegemony_effect
-				add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult }
-			}
-			else_if = {
-				limit = { has_modifier = cultural_hegemony_effect }
-				remove_modifier = cultural_hegemony_effect
-			}
-
-			# ---- Update foreign benchmark (SoL expectations from hegemon) ----
-			if = {
-				limit = { cultural_hegemony_benchmark_mult >= 0.1 }
-				remove_modifier = cultural_hegemony_foreign_benchmark
-				add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = cultural_hegemony_benchmark_mult }
-			}
-			else_if = {
-				limit = { has_modifier = cultural_hegemony_foreign_benchmark }
-				remove_modifier = cultural_hegemony_foreign_benchmark
-			}
-		}
+		# Computation handled by on_monthly_pulse_country in on_actions.
+		# No additional work needed here.
 	}
 
 	on_yearly_pulse = {
-		effect = {
-			# ---- Track global #1 cultural power for benchmark system ----
-			set_global_variable = { name = ch_top_cultural_pull value = cultural_pull_total }
-			every_country = {
-				limit = {
-					cultural_pull_total > global_var:ch_top_cultural_pull
-				}
-				ROOT = {
-					set_global_variable = { name = ch_top_cultural_pull value = PREV.cultural_pull_total }
-				}
-			}
-
-			# ---- Decay tech firsts counter ----
-			if = {
-				limit = {
-					has_variable = ch_tech_firsts_recent
-					var:ch_tech_firsts_recent > 0
-				}
-				change_variable = { name = ch_tech_firsts_recent subtract = 1 }
-				clamp_variable = { name = ch_tech_firsts_recent min = 0 max = 30 }
-			}
-		}
+		# Computation handled by on_yearly_pulse_country in on_actions.
+		# No additional work needed here.
 	}
 
 	weight = 900

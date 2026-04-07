@@ -18,6 +18,7 @@ cyber_election_interference_action = {
 	should_notify_third_parties = no
 
 	potential = {
+		has_game_rule = information_warfare_enabled
 		has_technology_researched = television
 		NOT = { has_variable = iw_op_election_interference }
 	}
@@ -81,6 +82,7 @@ cyber_financial_subversion_action = {
 	should_notify_third_parties = no
 
 	potential = {
+		has_game_rule = information_warfare_enabled
 		has_technology_researched = television
 		NOT = { has_variable = iw_op_financial_subversion }
 	}
@@ -144,6 +146,7 @@ cyber_infrastructure_sabotage_action = {
 	should_notify_third_parties = no
 
 	potential = {
+		has_game_rule = information_warfare_enabled
 		has_technology_researched = television
 		NOT = { has_variable = iw_op_infrastructure_sabotage }
 	}
@@ -206,6 +209,7 @@ cyber_comms_disruption_action = {
 	should_notify_third_parties = no
 
 	potential = {
+		has_game_rule = information_warfare_enabled
 		has_technology_researched = television
 		NOT = { has_variable = iw_op_comms_disruption }
 	}

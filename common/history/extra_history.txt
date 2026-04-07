@@ -139,7 +139,7 @@ GLOBAL = {
 	c:ARG = { # Argentina
 		activate_law = law_type:law_devolution
 	}
-	c:PEU = { # Peru
+	c:PEU ?= { # Peru (may not exist in all start dates)
 		activate_law = law_type:law_devolution
 	}
 	c:BOL = { # Bolivia

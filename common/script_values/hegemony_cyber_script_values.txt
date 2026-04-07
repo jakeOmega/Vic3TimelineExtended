@@ -58,7 +58,7 @@ cultural_hegemony_foreign_benchmark_max = 3
 global_fine_art_production = {
 	value = 0
 	every_market = {
-        mg:g_fine_art = {
+        mg:fine_art = {
             add = market_goods_production
 		}
 	}
@@ -106,7 +106,7 @@ global_raw_cultural_pull = {
 country_fine_art_production = {
 	value = 0
 	every_scope_state = {
-		sg:g_fine_art = {
+		sg:fine_art = {
 			add = state_goods_production
 		}
 	}
@@ -196,7 +196,7 @@ cultural_pull_from_monuments = {
 	every_scope_state = {
 		every_scope_building = {
 			limit = {
-				building_group = bg_monuments
+				is_building_group = bg_monuments
 				level >= 1
 			}
 			add = cultural_pull_monument_bonus
@@ -282,7 +282,7 @@ cultural_pull_total = {
 # Multiplier for the cultural_hegemony_effect static modifier
 # Equals cultural_pull_total directly (0-100 share percentage)
 cultural_hegemony_modifier_mult = {
-	value = cultural_pull_total
+	value = ch_total_fast
 	min = 0
 	max = 100
 }
@@ -296,7 +296,7 @@ cultural_hegemony_benchmark_mult = {
 		limit = { has_global_variable = ch_top_cultural_pull }
 		# The higher the hegemon's share vs yours, the more expectations rise
 		add = global_var:ch_top_cultural_pull
-		subtract = cultural_pull_total
+		subtract = ch_total_fast
 		divide = {
 			value = 100
 			min = 1
@@ -367,6 +367,117 @@ cultural_pull_rank_display = {
 	value = cultural_pull_rank_multiplier
 	multiply = 100
 	round = yes
+}
+
+# ============================================================================
+# SECTION 5b: CACHED GLOBAL SAFE ACCESSORS
+# ============================================================================
+# These read yearly-cached global variables (set in JE yearly pulse).
+# JE immediate seeds them on first activation. Avoids O(N) every_country
+# calls in global_prestige_total and global_sol_sum, reducing per-country
+# evaluation from O(N) to O(1).
+
+ch_cached_prestige_safe = {
+	value = 1
+	if = {
+		limit = { has_global_variable = ch_cached_prestige }
+		value = global_var:ch_cached_prestige
+	}
+	min = 1
+}
+
+ch_cached_sol_avg_safe = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_cached_sol_avg }
+		value = global_var:ch_cached_sol_avg
+	}
+}
+
+# ============================================================================
+# SECTION 5c: FAST PER-COUNTRY COMPONENTS (using cached globals)
+# ============================================================================
+# These mirror Section 3 values but use cached global variables instead of
+# live O(N) iterators. Art still uses live market data (every_market is
+# O(1) per country since it's market-scoped, not truly global).
+
+# Prestige: use cached global prestige total instead of every_country sum
+country_prestige_share_pct_fast = {
+	value = prestige
+	divide = ch_cached_prestige_safe
+	multiply = 100
+}
+
+cultural_pull_from_prestige_fast = {
+	value = country_prestige_absolute
+	max = country_prestige_share_pct_fast
+	min = 0
+}
+
+# SoL: use cached global average instead of every_country sum
+cultural_pull_from_sol_fast = {
+	value = average_sol
+	subtract = ch_cached_sol_avg_safe
+	min = cultural_pull_sol_min
+	max = cultural_pull_sol_max
+}
+
+# Fast raw: art uses live market data (cheap), prestige/SoL use cached globals
+cultural_pull_raw_fast = {
+	value = cultural_pull_from_art
+	add = cultural_pull_from_prestige_fast
+	add = cultural_pull_from_sol_fast
+	add = cultural_pull_from_tech_leadership
+	add = cultural_pull_from_monuments
+	add = cultural_pull_from_megaprojects
+	add = cultural_pull_from_modifiers
+	min = 0
+	multiply = cultural_pull_rank_multiplier
+	multiply = {
+		value = 1
+		add = modifier:country_cultural_pull_mult
+	}
+	min = 0
+}
+
+# Global sum using fast raw — O(N) instead of O(N²)
+global_raw_cultural_pull_fast = {
+	value = 0
+	every_country = {
+		add = cultural_pull_raw_fast
+	}
+	min = 1
+}
+
+# ============================================================================
+# SECTION 5d: FAST SHARE VALUES (use cached global total)
+# ============================================================================
+# Both monthly pulse and yearly leaderboard use these for consistency.
+# This eliminates oscillation between monthly and yearly calculations.
+
+ch_global_raw_safe = {
+	value = 1
+	if = {
+		limit = { has_global_variable = ch_cached_global_raw }
+		value = global_var:ch_cached_global_raw
+	}
+	min = 1
+}
+
+ch_total_fast = {
+	value = cultural_pull_raw_fast
+	divide = ch_global_raw_safe
+	multiply = 100
+	min = 0
+	max = 100
+}
+
+ch_display_fast = {
+	value = cultural_pull_raw_fast
+	divide = ch_global_raw_safe
+	multiply = 1000
+	round = yes
+	divide = 10
 }
 
 # ============================================================================
