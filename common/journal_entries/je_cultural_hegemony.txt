@@ -18,7 +18,9 @@ je_cultural_hegemony = {
 	}
 
 	possible = {
-		game_date >= 1845.1.1
+		any_country = {
+            has_technology_researched = mass_media
+        }
 		country_rank >= rank_value:minor_power
 		has_technology_researched = romanticism
 	}
@@ -189,8 +191,16 @@ je_cultural_hegemony = {
 	}
 
 	on_monthly_pulse = {
-		# Computation handled by on_monthly_pulse_country in on_actions.
-		# No additional work needed here.
+		# Apply/remove cultural hegemony modifier
+        if = {
+            limit = { var:ch_total >= 1 }
+            remove_modifier = cultural_hegemony_effect
+            add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult }
+        }
+        else_if = {
+            limit = { has_modifier = cultural_hegemony_effect }
+            remove_modifier = cultural_hegemony_effect
+        }
 	}
 
 	on_yearly_pulse = {

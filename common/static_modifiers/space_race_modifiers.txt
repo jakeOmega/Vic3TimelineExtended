@@ -13,23 +13,27 @@ sr_first_suborbital = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 100
 	country_weekly_innovation_max_add = 25
+	country_cultural_pull_mult = 0.10
 }
 sr_first_orbital = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 150
 	country_weekly_innovation_max_add = 50
+	country_cultural_pull_mult = 0.15
 }
 sr_first_moon_landing = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 300
 	country_weekly_innovation_max_add = 75
 	country_tech_research_speed_mult = 0.05
+	country_cultural_pull_mult = 0.25
 }
 sr_first_probe = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_prestige_add = 200
 	country_weekly_innovation_max_add = 50
 	country_tech_research_speed_mult = 0.03
+	country_cultural_pull_mult = 0.15
 }
 sr_first_moon_base = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -37,6 +41,7 @@ sr_first_moon_base = {
 	country_weekly_innovation_max_add = 75
 	country_tech_research_speed_mult = 0.05
 	country_influence_mult = 0.05
+	country_cultural_pull_mult = 0.20
 }
 sr_first_mars_landing = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -44,6 +49,7 @@ sr_first_mars_landing = {
 	country_weekly_innovation_max_add = 100
 	country_tech_research_speed_mult = 0.05
 	country_prestige_mult = 0.05
+	country_cultural_pull_mult = 0.30
 }
 sr_first_interstellar_probe = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -52,6 +58,7 @@ sr_first_interstellar_probe = {
 	country_tech_research_speed_mult = 0.10
 	country_prestige_mult = 0.10
 	country_influence_mult = 0.10
+	country_cultural_pull_mult = 0.25
 }
 # Solar colonization no longer has first/subsequent since it's repeatable
 
@@ -60,23 +67,27 @@ sr_suborbital = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 50
 	country_weekly_innovation_max_add = 10
+	country_cultural_pull_mult = 0.03
 }
 sr_orbital = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 75
 	country_weekly_innovation_max_add = 25
+	country_cultural_pull_mult = 0.05
 }
 sr_moon_landing = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 150
 	country_weekly_innovation_max_add = 35
 	country_tech_research_speed_mult = 0.02
+	country_cultural_pull_mult = 0.10
 }
 sr_probe = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_prestige_add = 100
 	country_weekly_innovation_max_add = 25
 	country_tech_research_speed_mult = 0.01
+	country_cultural_pull_mult = 0.05
 }
 sr_moon_base = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -84,6 +95,7 @@ sr_moon_base = {
 	country_weekly_innovation_max_add = 35
 	country_tech_research_speed_mult = 0.02
 	country_influence_mult = 0.02
+	country_cultural_pull_mult = 0.08
 }
 sr_mars_landing = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -91,11 +103,13 @@ sr_mars_landing = {
 	country_weekly_innovation_max_add = 50
 	country_tech_research_speed_mult = 0.02
 	country_prestige_mult = 0.02
+	country_cultural_pull_mult = 0.12
 }
 sr_mars_resource_extraction = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.03
 	country_weekly_innovation_max_add = 25
+	country_cultural_pull_mult = 0.05
 }
 sr_interstellar_probe = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -104,6 +118,7 @@ sr_interstellar_probe = {
 	country_tech_research_speed_mult = 0.05
 	country_prestige_mult = 0.05
 	country_influence_mult = 0.05
+	country_cultural_pull_mult = 0.10
 }
 # Solar colonization reward is sr_solar_system_trade applied after all stages complete
 
@@ -159,12 +174,14 @@ sr_interstellar_data = {
 	country_prestige_add = 500
 	country_tech_research_speed_mult = 0.10
 	country_weekly_innovation_max_add = 100
+	country_cultural_pull_mult = 0.15
 }
 sr_solar_system_trade = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_prestige_mult = 0.10
 	country_tech_research_speed_mult = 0.05
 	country_influence_mult = 0.10
+	country_cultural_pull_mult = 0.15
 }
 
 # ======= Space Race - Funding Cost (legacy, kept for migration)

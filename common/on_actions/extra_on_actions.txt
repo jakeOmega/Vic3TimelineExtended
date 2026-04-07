@@ -2031,10 +2031,15 @@ free_port_tariff_update_on_action = {
 # Country scope. Updates all states owned by the country when a technology
 # is researched, since techs can unlock production methods that carry
 # modifiers such as state_migration_crowding_density_mult.
+# NOTE: Do NOT call te_update_pollution_modifier here. pollution_generation
+# is state-scoped and the engine traces the on_acquired_technology country
+# root scope, producing hundreds of "Wrong scope: country, expected state"
+# errors. Pollution is caught by the periodic state pulse instead.
 te_modifier_update_on_technology_on_action = {
 	effect = {
 		every_scope_state = {
-			te_update_state_modifiers = yes
+			te_update_migration_crowding_modifier = yes
+			te_update_free_port_tariff = yes
 		}
 	}
 }

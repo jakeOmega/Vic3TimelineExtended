@@ -25,17 +25,6 @@ ch_monthly_country_update = {
 	set_variable = { name = ch_monuments value = cultural_pull_from_monuments }
 	set_variable = { name = ch_megaprojects value = cultural_pull_from_megaprojects }
 
-	# Apply/remove cultural hegemony modifier
-	if = {
-		limit = { var:ch_total >= 1 }
-		remove_modifier = cultural_hegemony_effect
-		add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult }
-	}
-	else_if = {
-		limit = { has_modifier = cultural_hegemony_effect }
-		remove_modifier = cultural_hegemony_effect
-	}
-
 	# Apply/remove foreign benchmark (SoL expectations from hegemon)
 	if = {
 		limit = { cultural_hegemony_benchmark_mult >= 0.1 }
@@ -236,5 +225,285 @@ ch_yearly_global_update = {
 		}
 		change_variable = { name = ch_tech_firsts_recent subtract = 1 }
 		clamp_variable = { name = ch_tech_firsts_recent min = 0 max = 30 }
+	}
+}
+
+# ---- HEGEMON IDEOLOGY → MOVEMENT PRESSURE ----
+# Scope: Country (the target being influenced)
+# Requires scope:cultural_hegemon to be set.
+# Detects the hegemon's ideological profile from laws and boosts
+# the matching political movements in this country.
+# Parameters: $MODIFIER$ (modifier name), $MONTHS$ (duration)
+#
+# Structure: EXCLUSIVE governance checks (else_if chain — pick one primary
+# political model) PLUS NON-EXCLUSIVE social policy checks (independent if
+# blocks — e.g. tolerant + feminist + environmentalist can all fire).
+ch_apply_hegemon_movement_pressure = {
+	if = {
+		limit = { NOT = { exists = scope:cultural_hegemon } }
+	}
+	else = {
+		# ================================================================
+		# PART 1: EXCLUSIVE — Primary political model (pick one)
+		# ================================================================
+
+		# Communist/Vanguardist hegemon
+		if = {
+			limit = {
+				scope:cultural_hegemon = {
+					OR = {
+						has_law = law_type:law_council_republic
+						AND = {
+							has_law = law_type:law_single_party_state
+							has_law = law_type:law_command_economy
+						}
+					}
+				}
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_communist }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+		# Anarchist hegemon
+		else_if = {
+			limit = {
+				scope:cultural_hegemon = { has_law = law_type:law_anarchy }
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_anarchist }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+		# Fascist/Ethnonationalist hegemon
+		else_if = {
+			limit = {
+				scope:cultural_hegemon = {
+					OR = {
+						has_law = law_type:law_ethnostate
+						AND = {
+							has_law = law_type:law_national_supremacy
+							OR = {
+								has_law = law_type:law_single_party_state
+								has_law = law_type:law_autocracy
+							}
+						}
+					}
+				}
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_fascist }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+		# Corporatist hegemon
+		else_if = {
+			limit = {
+				scope:cultural_hegemon = { has_law = law_type:law_corporate_state }
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_corporatist }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+		# Socialist hegemon (cooperative ownership, not communist/anarchist)
+		else_if = {
+			limit = {
+				scope:cultural_hegemon = { has_law = law_type:law_cooperative_ownership }
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_socialist }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+		# Absolutist monarchist hegemon
+		else_if = {
+			limit = {
+				scope:cultural_hegemon = {
+					has_law = law_type:law_monarchy
+					has_law = law_type:law_autocracy
+				}
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_royalist_absolutist }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+		# Constitutional monarchist hegemon
+		else_if = {
+			limit = {
+				scope:cultural_hegemon = {
+					has_law = law_type:law_monarchy
+					NOT = { has_law = law_type:law_autocracy }
+				}
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_royalist_constitutional }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+		# Theocratic/religious hegemon
+		else_if = {
+			limit = {
+				scope:cultural_hegemon = {
+					has_law = law_type:law_theocracy
+					has_law = law_type:law_state_religion
+				}
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_religious_majority }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+		# Reactionary/authoritarian hegemon (autocracy + state religion, not monarchy/theocracy)
+		else_if = {
+			limit = {
+				scope:cultural_hegemon = {
+					has_law = law_type:law_autocracy
+					has_law = law_type:law_state_religion
+				}
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_reactionary }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+		# Military junta hegemon (autocracy/single-party + professional army + secret police)
+		else_if = {
+			limit = {
+				scope:cultural_hegemon = {
+					OR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_single_party_state
+					}
+					has_law = law_type:law_professional_army
+					OR = {
+						has_law = law_type:law_secret_police
+						has_law = law_type:law_militarized_police
+					}
+				}
+			}
+			# Military juntas inspire reactionary movements abroad
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_reactionary }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+		# Liberal/Progressive democratic hegemon
+		else_if = {
+			limit = {
+				scope:cultural_hegemon = {
+					has_law = law_type:law_universal_suffrage
+					OR = {
+						has_law = law_type:law_protected_speech
+						has_law = law_type:law_right_of_assembly
+					}
+				}
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_liberal }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+
+		# ================================================================
+		# PART 2: NON-EXCLUSIVE — Social policies (can stack with above)
+		# ================================================================
+
+		# Feminist hegemon → boosts feminist movements
+		if = {
+			limit = {
+				scope:cultural_hegemon = { has_law = law_type:law_womens_suffrage }
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_feminist }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+
+		# Tolerant hegemon → boosts civil rights and minority rights movements
+		if = {
+			limit = {
+				scope:cultural_hegemon = { has_law = law_type:law_multicultural }
+			}
+			every_political_movement = {
+				limit = {
+					OR = {
+						is_political_movement_type = movement_civil_rights
+						is_political_movement_type = movement_minority_rights
+					}
+				}
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+
+		# Environmentalist hegemon → boosts environmental movements
+		if = {
+			limit = {
+				scope:cultural_hegemon = { has_law = law_type:law_ministry_of_the_environment }
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_environmental }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+
+		# Peaceful hegemon → boosts anti-war movements
+		if = {
+			limit = {
+				scope:cultural_hegemon = {
+					is_at_war = no
+					NOT = { has_law = law_type:law_mass_conscription }
+				}
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_anti_war }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+
+		# Abolitionist hegemon → boosts anti-slavery movements (only if target has slavery)
+		if = {
+			limit = {
+				scope:cultural_hegemon = { has_law = law_type:law_slavery_banned }
+				NOT = { has_law = law_type:law_slavery_banned }
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_anti_slavery }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+
+		# Pro-labor hegemon → boosts labor movements
+		if = {
+			limit = {
+				scope:cultural_hegemon = {
+					OR = {
+						has_law = law_type:law_worker_protections
+						has_law = law_type:law_regulatory_bodies
+					}
+				}
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_labor }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
+
+		# Land reform hegemon → boosts land reform movements
+		if = {
+			limit = {
+				scope:cultural_hegemon = {
+					OR = {
+						has_law = law_type:law_homesteading
+						has_law = law_type:law_collectivized_agriculture
+					}
+				}
+			}
+			every_political_movement = {
+				limit = { is_political_movement_type = movement_land_reform }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+			}
+		}
 	}
 }

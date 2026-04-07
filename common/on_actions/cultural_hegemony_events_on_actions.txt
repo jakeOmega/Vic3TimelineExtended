@@ -1,0 +1,14 @@
+﻿on_yearly_events = {
+	random_events = {
+		100 = 0
+
+		# Cultural hegemony events - fire yearly with event-internal cooldowns
+		5 = cultural_hegemony.1 # Cultural Renaissance (high pull)
+		5 = cultural_hegemony.2 # Foreign Cultural Infiltration (low pull, hegemonized)
+		5 = cultural_hegemony.3 # Media Dominance (very high pull)
+		5 = cultural_hegemony.4 # Cultural Backlash (low pull, traditionalists strong)
+		5 = cultural_hegemony.5 # Soft Power Dividend (moderate-high pull)
+		5 = cultural_hegemony.6 # Brain Drain Crisis (very low pull, hegemonized)
+		15 = cultural_hegemony.7 # Foreign Ideological Influence (fairly likely, low pull)
+	}
+}

@@ -74,18 +74,19 @@ global_prestige_total = {
 	min = 1
 }
 
-# Global average Standard of Living
-global_sol_sum = {
+# Global average Standard of Living (population-weighted mean)
+global_average_sol = {
 	value = 0
 	every_country = {
-		add = average_sol
-        multiply = total_population
+		add = {
+			value = average_sol
+			multiply = total_population
+		}
 	}
-}
-
-global_average_sol = {
-	value = global_sol_sum
-	divide = global_population
+	divide = {
+		value = global_population
+		min = 1
+	}
 }
 
 # Total raw cultural pull across all countries (for share calculation)

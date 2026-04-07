@@ -491,6 +491,48 @@
  banking_cycle_events.9.t:0 "Asset Price Uncertainty"
 
 #
+# CULTURAL_HEGEMONY
+#
+ cultural_hegemony.1.a:0 "Patronize the arts and academia"
+ cultural_hegemony.1.b:0 "Redirect cultural output toward state messaging"
+ cultural_hegemony.1.d:0 "[ROOT.GetName]'s cultural influence is growing, and its artists, writers, and filmmakers are producing works that captivate audiences at home and abroad. The nation's creative output is becoming a source of global prestige."
+ cultural_hegemony.1.f:0 "#bold The galleries were full again#!—not with the idle rich, but with students and workers, all drawn by the same strange conviction that something important was happening in the studios and concert halls of the capital."
+ cultural_hegemony.1.t:0 "Cultural Renaissance"
+ cultural_hegemony.2.a:0 "Embrace the cosmopolitan tide"
+ cultural_hegemony.2.b:0 "Rally behind our own traditions"
+ cultural_hegemony.2.c:0 "This is not worth our attention"
+ cultural_hegemony.2.d:0 "Foreign films, music, and literature are increasingly dominating the cultural landscape of [ROOT.GetName]. Traditional values are being displaced by imported ideas, and the younger generation seems more interested in foreign trends than in their own heritage."
+ cultural_hegemony.2.f:0 "The children sang along to foreign songs they barely understood, while their grandparents shook their heads and wondered when exactly the world had changed."
+ cultural_hegemony.2.t:0 "Foreign Cultural Infiltration"
+ cultural_hegemony.3.a:0 "Leverage our narrative dominance"
+ cultural_hegemony.3.b:0 "Promote a free and open press"
+ cultural_hegemony.3.d:0 "The media apparatus of [ROOT.GetName] has achieved an unprecedented level of global reach. Our newspapers, radio broadcasts, and films shape the opinions of millions beyond our borders, granting us extraordinary influence over international discourse."
+ cultural_hegemony.3.f:0 "Every morning, half the world woke up and read what we wanted them to read. That was power—not the kind that came from cannons, but the kind that made cannons unnecessary."
+ cultural_hegemony.3.t:0 "Media Dominance"
+ cultural_hegemony.4.a:0 "Channel this nationalist energy"
+ cultural_hegemony.4.b:0 "Suppress this dangerous populism"
+ cultural_hegemony.4.d:0 "The relentless tide of foreign cultural influence has provoked a fierce backlash among traditional elements of [ROOT.GetAdjectiveNoFormatting] society. Nationalist voices are growing louder, demanding protection of domestic culture and traditions."
+ cultural_hegemony.4.f:0 "The general spoke of foreign music as though it were an invading army—and to his audience, who had watched their children abandon old songs for new ones, it rather felt like one."
+ cultural_hegemony.4.t:0 "Cultural Backlash"
+ cultural_hegemony.5.a:0 "Capitalize on our cultural prestige"
+ cultural_hegemony.5.b:0 "Reinvest in cultural institutions"
+ cultural_hegemony.5.d:0 "[ROOT.GetName]'s growing cultural influence is paying diplomatic dividends. Foreign nations are more receptive to our overtures, immigrants are drawn to our shores, and our international prestige continues to climb."
+ cultural_hegemony.5.f:0 "They didn't come for the wages—those were better elsewhere. They came because they'd grown up watching our films, reading our books, and dreaming of a place they already felt they knew."
+ cultural_hegemony.5.t:0 "Soft Power Dividend"
+ cultural_hegemony.6.a:0 "Fund universities to retain talent"
+ cultural_hegemony.6.b:0 "Accept the inevitable"
+ cultural_hegemony.6.d:0 "The brightest minds of [ROOT.GetName] are leaving for nations with greater cultural prestige and higher standards of living. Universities are losing their best professors, and research institutions are hemorrhaging talent to foreign competitors."
+ cultural_hegemony.6.f:0 "The professor's farewell lecture drew a standing ovation. By the end of the month, three of his colleagues had followed him abroad. The department carried on, of course—with fewer people and dimmer prospects."
+ cultural_hegemony.6.t:0 "Brain Drain"
+ cultural_hegemony.7.a:0 "Embrace the exchange of ideas"
+ cultural_hegemony.7.b:0 "Crush this subversive foreign propaganda"
+ cultural_hegemony.7.c:0 "Control the narrative through state media"
+ cultural_hegemony.7.d:0 "Invest modestly in our own cultural voice"
+ cultural_hegemony.7.desc:0 "[scope:cultural_hegemon.GetName]'s cultural dominance is reshaping the political landscape of [ROOT.GetName]. Foreign films, literature, and media carry implicit political messages that resonate with certain interest groups and fuel political movements modeled on the hegemon's governing ideology."
+ cultural_hegemony.7.f:0 "The young radicals quoted foreign philosophers in foreign languages, wearing foreign fashions, demanding the same rights they'd seen in foreign films—and the old guard could only watch, wondering when exactly the future had arrived without their permission."
+ cultural_hegemony.7.t:0 "Foreign Ideological Influence"
+
+#
 # DECOLONIZATION_EVENTS
 #
  decolonization_events.1.a:0 "Open negotiations."
