@@ -90,8 +90,24 @@ je_cultural_hegemony = {
 			trigger = { has_variable = ch_megaprojects var:ch_megaprojects >= 1 }
 		}
 		triggered_desc = {
+			desc = je_ch_breakdown_modifiers
+			trigger = { has_variable = ch_disp_modifiers var:ch_disp_modifiers > 0 }
+		}
+		triggered_desc = {
+			desc = je_ch_breakdown_infamy
+			trigger = { infamy > 0 }
+		}
+		triggered_desc = {
+			desc = je_ch_breakdown_stability
+			trigger = { has_variable = ch_disp_stability var:ch_disp_stability < 0 }
+		}
+		triggered_desc = {
 			desc = je_ch_breakdown_rank
 			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_ch_breakdown_mult
+			trigger = { has_variable = ch_disp_mult var:ch_disp_mult > 0 }
 		}
 		# Top 10 Cultural Powers leaderboard
 		triggered_desc = {

@@ -46,6 +46,17 @@ cultural_pull_rank_insignificant_mult = 0.25
 cultural_pull_sol_min = -5
 cultural_pull_sol_max = 20
 
+# Infamy penalty: raw score += infamy * this factor
+# 10 infamy = -3, 25 = -7.5, 50 = -15 raw
+cultural_pull_infamy_factor = -0.3
+
+# Stability penalty constants
+# Turmoil scaling: country_turmoil (0-1 fraction) * this
+# 20% turmoil = -6, 50% = -15
+cultural_pull_turmoil_factor = -30
+# Flat penalty for active civil war (revolution or secession)
+cultural_pull_civil_war_penalty = -15
+
 # Hegemony effect scaling (multiplier = cultural_pull_total directly, 0-100)
 cultural_hegemony_modifier_max_mult = 100
 cultural_hegemony_foreign_benchmark_max = 3
@@ -246,6 +257,29 @@ cultural_pull_from_modifiers = {
 	value = modifier:country_cultural_pull_add
 }
 
+# Infamy penalty: countries with high infamy project less cultural influence
+cultural_pull_from_infamy = {
+	value = infamy
+	multiply = cultural_pull_infamy_factor
+	max = 0
+}
+
+# Stability penalty: turmoil and civil wars reduce cultural influence
+cultural_pull_from_stability = {
+	value = 0
+	# Turmoil component: population-weighted radical fraction
+	add = {
+		value = country_turmoil
+		multiply = cultural_pull_turmoil_factor
+	}
+	# Civil war: massive penalty
+	if = {
+		limit = { any_civil_war = { } }
+		add = cultural_pull_civil_war_penalty
+	}
+	max = 0
+}
+
 # ============================================================================
 # SECTION 4: RAW SCORE & SHARE-BASED FINAL SCORE
 # ============================================================================
@@ -259,6 +293,8 @@ cultural_pull_raw = {
 	add = cultural_pull_from_monuments
 	add = cultural_pull_from_megaprojects
 	add = cultural_pull_from_modifiers
+	add = cultural_pull_from_infamy
+	add = cultural_pull_from_stability
 	min = 0
 	# Apply rank multiplier
 	multiply = cultural_pull_rank_multiplier
@@ -370,6 +406,34 @@ cultural_pull_rank_display = {
 	round = yes
 }
 
+cultural_pull_from_modifiers_display = {
+	value = cultural_pull_from_modifiers
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+cultural_pull_from_infamy_display = {
+	value = cultural_pull_from_infamy
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+cultural_pull_from_stability_display = {
+	value = cultural_pull_from_stability
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+# Mult bonus from modifiers (percentage display)
+cultural_pull_mult_display = {
+	value = modifier:country_cultural_pull_mult
+	multiply = 100
+	round = yes
+}
+
 # ============================================================================
 # SECTION 5b: CACHED GLOBAL SAFE ACCESSORS
 # ============================================================================
@@ -432,6 +496,8 @@ cultural_pull_raw_fast = {
 	add = cultural_pull_from_monuments
 	add = cultural_pull_from_megaprojects
 	add = cultural_pull_from_modifiers
+	add = cultural_pull_from_infamy
+	add = cultural_pull_from_stability
 	min = 0
 	multiply = cultural_pull_rank_multiplier
 	multiply = {

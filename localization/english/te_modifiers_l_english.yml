@@ -279,6 +279,7 @@
  goods_output_wood_mult_desc:0 "A bonus or penalty to the amount of @wood! Wood produced by buildings"
  goods_trade_advantage_digital_assets_mult:0 "Trade Advantage for [GetGoods('digital_assets').GetName]"
  goods_trade_advantage_digital_assets_mult_desc:0 "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('digital_assets').GetName]."
+ je_ch_breakdown_mult:0 "\n  Modifier Bonus: +#v [ROOT.GetCountry.MakeScope.Var('ch_disp_mult').GetValue|0]#!%"
  state_arable_land_mult:0 "Arable Land"
  state_arable_land_mult_desc:0 "A multiplier for the amount of arable land in this [concept_state]."
  state_building_afghan_nassaji_kabul_mills_max_level_add:0 "[GetBuildingType('building_afghan_nassaji_kabul_mills').GetName] Max Level"

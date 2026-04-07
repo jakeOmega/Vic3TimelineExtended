@@ -5026,6 +5026,8 @@ cultural_hegemony_effect = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_mass_migration_attraction_mult = 0.0025
 	goods_output_tourism_mult = 0.01
+	goods_trade_advantage_fine_art_mult = 0.01
+	country_loyalists_from_legitimacy_mult = 0.01
 }
 
 # Applied to foreign countries to shift SoL expectations and reduce legitimacy

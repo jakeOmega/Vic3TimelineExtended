@@ -22,6 +22,10 @@ ch_monthly_country_update = {
 	set_variable = { name = ch_disp_monuments value = cultural_pull_from_monuments }
 	set_variable = { name = ch_disp_megaprojects value = cultural_pull_from_megaprojects }
 	set_variable = { name = ch_disp_rank value = cultural_pull_rank_display }
+	set_variable = { name = ch_disp_modifiers value = cultural_pull_from_modifiers }
+	set_variable = { name = ch_disp_infamy value = cultural_pull_from_infamy }
+	set_variable = { name = ch_disp_stability value = cultural_pull_from_stability }
+	set_variable = { name = ch_disp_mult value = cultural_pull_mult_display }
 	set_variable = { name = ch_monuments value = cultural_pull_from_monuments }
 	set_variable = { name = ch_megaprojects value = cultural_pull_from_megaprojects }
 
