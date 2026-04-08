@@ -80,6 +80,8 @@ concept_covert_warfare_system = {}
 concept_intelligence_capacity = {}
 concept_covert_operations = {}
 concept_operation_detection = {}
+concept_covert_efficiency = {}
+concept_target_defenses = {}
 
 # Institutions
 concept_ministry_system = {}

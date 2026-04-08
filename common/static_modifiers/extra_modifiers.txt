@@ -12,6 +12,10 @@
 
 	country_sol_expectations_target_add = -5
 	state_expected_sol_from_literacy = -5
+
+	# Covert Warfare: base operation slot and intelligence capacity for all countries
+	country_covert_operation_slot_add = 1
+	country_intelligence_capacity_add = 5
 }
 
 space_elevator_progress = {
@@ -5075,7 +5079,7 @@ covert_comms_disruption = {
 # Cost modifier applied to the country running covert operations (scales with GDP)
 covert_operation_funding_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_minting_mult = -0.01
+	country_expenses_add = 1
 }
 
 # Defensive bonus from intelligence capacity
@@ -5105,15 +5109,12 @@ covert_espionage_base = {
 covert_industrial_espionage = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_production_tech_spread_mult = 0.15
-	country_weekly_innovation_add = 10
 }
 
-# Applied to SELF when military espionage operation is active
+# Applied to SELF when military espionage operation is active AND target has tech advantage
 covert_military_espionage = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_military_tech_spread_mult = 0.15
-	unit_offense_mult = 0.05
-	unit_defense_mult = 0.05
 }
 
 # Applied to TARGET when influence campaign operation is active

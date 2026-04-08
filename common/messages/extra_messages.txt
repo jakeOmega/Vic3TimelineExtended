@@ -1922,10 +1922,3 @@ iw_operation_cancelled = {
 	notification_type = feed
 	color = neutral
 }
-
-iw_funding_changed = {
-	type = country
-	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
-	notification_type = feed
-	color = neutral
-}

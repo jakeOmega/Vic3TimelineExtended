@@ -13,18 +13,20 @@
 # SECTION 1: TUNING CONSTANTS
 # ============================================================================
 
-# Intelligence Capacity ranges
-intelligence_capacity_literacy_max = 20
-intelligence_capacity_gdp_max = 15
+# Intelligence Capacity component scaling
+intelligence_capacity_literacy_max = 50
+intelligence_capacity_gdp_max = 25
 
-# Covert Operations
-covert_ops_base_slots = 1
-covert_ops_gp_extra_slots = 2
-covert_ops_major_extra_slots = 1
+# Operation slots: base/rank via INJECT:base_values and INJECT:country_ranks
+covert_ops_max_slot_cap = 10
 
 # Detection probability ranges (base % chance per month)
 covert_ops_detection_base = 10
 covert_ops_detection_high_funding_add = 10
+
+# Target counterintelligence: detection penalty from target IC advantage
+covert_ops_target_ic_factor = 15
+covert_ops_target_ic_max = 20
 
 # Infamy on detection
 covert_ops_detected_infamy = 5
@@ -39,8 +41,7 @@ intelligence_capacity_from_modifiers = {
 
 intelligence_capacity_from_literacy = {
 	value = literacy_rate
-	multiply = 100
-	max = intelligence_capacity_literacy_max
+	multiply = intelligence_capacity_literacy_max
 	min = 0
 }
 
@@ -55,7 +56,7 @@ intelligence_capacity_from_gdp = {
 	min = 0
 }
 
-# Total Intelligence Capacity
+# Total Intelligence Capacity (uncapped — relative tier display scales automatically)
 intelligence_capacity_total = {
 	value = intelligence_capacity_from_modifiers
 	add = intelligence_capacity_from_literacy
@@ -65,13 +66,31 @@ intelligence_capacity_total = {
 		add = modifier:country_intelligence_capacity_mult
 	}
 	min = 0
+}
+
+# Relative IC: your IC as a percentage of the global best
+# global_max_ic is set each month by the JE monthly pulse (ordered_country)
+intelligence_capacity_relative = {
+	value = intelligence_capacity_total
+	divide = {
+		value = 1
+		if = {
+			limit = { has_global_variable = global_max_ic }
+			add = global_var:global_max_ic
+			subtract = 1
+		}
+		min = 1
+	}
+	multiply = 100
+	min = 0
 	max = 100
 }
 
 # Multiplier for the intelligence_capacity_defense static modifier
+# Scales with absolute IC, capped at 5x
 intelligence_capacity_modifier_mult = {
 	value = intelligence_capacity_total
-	divide = 20
+	divide = 25
 	min = 0
 	max = 5
 }
@@ -80,33 +99,13 @@ intelligence_capacity_modifier_mult = {
 # SECTION 3: COVERT OPERATION SLOTS & COSTS
 # ============================================================================
 
-# Slot breakdown components (for display)
-covert_ops_slots_from_base = {
-	value = covert_ops_base_slots
-}
-
-covert_ops_slots_from_rank = {
-	value = 0
-	if = {
-		limit = { country_rank = rank_value:great_power }
-		add = covert_ops_gp_extra_slots
-	}
-	else_if = {
-		limit = { country_rank >= rank_value:major_power }
-		add = covert_ops_major_extra_slots
-	}
-}
-
-covert_ops_slots_from_modifiers = {
-	value = modifier:country_covert_operation_slot_add
-}
-
+# Operation slots: entirely from modifier country_covert_operation_slot_add.
+# Base (1 via INJECT:base_values), rank (GP +2, Major +1 via country_ranks),
+# and tech/law bonuses all feed into a single modifier breakdown.
 covert_operation_max_slots = {
-	value = covert_ops_slots_from_base
-	add = covert_ops_slots_from_rank
-	add = covert_ops_slots_from_modifiers
+	value = modifier:country_covert_operation_slot_add
 	min = 0
-	max = 10
+	max = covert_ops_max_slot_cap
 }
 
 # Currently active operations — counted from active diplomatic pacts
@@ -147,6 +146,8 @@ covert_operation_cost_mult = {
 }
 
 # Detection chance per month for active operations
+# Factors: base risk, high funding bonus, target counterintelligence, attacker efficiency
+# Formula: raw = base + high_funding + target_IC, final = raw × (1 - efficiency), clamped [1, 50]
 covert_operation_detection_chance = {
 	value = covert_ops_detection_base
 	# Higher funding = higher detection risk
@@ -157,16 +158,34 @@ covert_operation_detection_chance = {
 		}
 		add = covert_ops_detection_high_funding_add
 	}
-	# Attacker's efficiency reduces detection
+	# Target's counterintelligence increases detection risk
+	add = target_counterintelligence_penalty
+	# Attacker's efficiency reduces detection: multiply by (1 - eff_mult), floor 0.2
 	multiply = {
 		value = 1
-		add = modifier:country_covert_operation_efficiency_mult
-		multiply = -1
-		add = 1
+		subtract = modifier:country_covert_operation_efficiency_mult
 		min = 0.2
 	}
 	min = 1
 	max = 50
+}
+
+# Target counterintelligence: penalty based on strongest target's IC vs yours.
+# var:target_max_ic is set during the monthly pulse.
+target_counterintelligence_penalty = {
+	value = 0
+	if = {
+		limit = { has_variable = target_max_ic }
+		add = var:target_max_ic
+		divide = {
+			value = intelligence_capacity_total
+			min = 1
+		}
+		subtract = 1
+		multiply = covert_ops_target_ic_factor
+		min = 0
+		max = covert_ops_target_ic_max
+	}
 }
 
 # ============================================================================
@@ -190,6 +209,21 @@ espionage_target_tech_advantage = {
 
 intelligence_capacity_display = {
 	value = intelligence_capacity_total
+	round = yes
+}
+
+intelligence_capacity_relative_display = {
+	value = intelligence_capacity_relative
+	round = yes
+}
+
+global_max_ic_display = {
+	value = 1
+	if = {
+		limit = { has_global_variable = global_max_ic }
+		add = global_var:global_max_ic
+		subtract = 1
+	}
 	round = yes
 }
 
@@ -232,17 +266,37 @@ covert_detection_chance_display = {
 	round = yes
 }
 
-covert_ops_slots_from_base_display = {
-	value = covert_ops_slots_from_base
+covert_detection_target_ic_display = {
+	value = target_counterintelligence_penalty
 	round = yes
 }
 
-covert_ops_slots_from_rank_display = {
-	value = covert_ops_slots_from_rank
+covert_detection_efficiency_pct_display = {
+	# Shows efficiency as percentage reduction (e.g., 15 means 15% efficiency = detection × 0.85)
+	value = modifier:country_covert_operation_efficiency_mult
+	multiply = 100
 	round = yes
 }
 
-covert_ops_slots_from_modifiers_display = {
-	value = covert_ops_slots_from_modifiers
+# Absolute detection reduction from efficiency, for additive display
+# = raw_risk × efficiency_mult
+covert_detection_efficiency_reduction = {
+	value = covert_ops_detection_base
+	if = {
+		limit = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 3
+		}
+		add = covert_ops_detection_high_funding_add
+	}
+	add = target_counterintelligence_penalty
+	multiply = modifier:country_covert_operation_efficiency_mult
+	min = 0
+	round = yes
+}
+
+# Cost display: shows the GDP-scaled expense amount (multiplier for country_expenses_add = 1)
+covert_operation_cost_display = {
+	value = covert_operation_cost_mult
 	round = yes
 }

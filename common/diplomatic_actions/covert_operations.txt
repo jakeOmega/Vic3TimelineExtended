@@ -3,7 +3,18 @@
 # ============================================================================
 # These diplomatic actions function like increase_relations: togglable pacts
 # that persist until the player breaks them or conditions change.
-# Effects are applied via the JE monthly pulse while the pact is active.
+# Core effects are applied via pact modifiers (auto-active while pact exists).
+# Complex state/movement-scoped effects supplement pact modifiers via JE pulse.
+# All ops auto-cancel when funding drops to 0 (requirement_to_maintain).
+#
+# AI DESIGN:
+# - Low evaluation_chance (0.02–0.05) — strategic long-term decisions, not
+#   re-evaluated every tick. Prevents spammy on/off toggling.
+# - will_propose guards: country rank, financial health (in_default = no),
+#   attitude/rivalry requirement, IC advantage for some ops.
+# - propose_score scales with rivalry, rank, ruler personality.
+# - Wartime ops have higher eval chance — urgency justifies faster decisions.
+# - Ruler personality: aggressive rulers more likely, cautious less.
 # ============================================================================
 
 # ---- PEACETIME: Election Interference ----
@@ -14,8 +25,15 @@ covert_election_interference_action = {
 	}
 	requires_approval = no
 	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
 	is_hostile = yes
 	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
@@ -29,10 +47,6 @@ covert_election_interference_action = {
 			covert_operations_available_slots >= 1
 		}
 		custom_tooltip = {
-			text = iw_not_at_war_tt
-			is_at_war = no
-		}
-		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
@@ -44,11 +58,17 @@ covert_election_interference_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
+		second_modifier = {
+			country_legitimacy_base_add = -5
+			country_authority_add = -25
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
 				}
 			}
 		}
@@ -56,22 +76,45 @@ covert_election_interference_action = {
 
 	ai = {
 		evaluation_chance = {
-			value = 0.1
+			value = 0.03
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.02
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.5
+			}
 		}
 
 		will_propose = {
 			covert_operations_available_slots >= 1
-			is_at_war = no
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
+			in_default = no
+			country_rank >= rank_value:major_power
 			OR = {
 				has_diplomatic_pact = { who = scope:target_country type = rivalry }
 				has_attitude = { who = scope:target_country attitude = antagonistic }
+				has_attitude = { who = scope:target_country attitude = domineering }
 			}
+			intelligence_capacity_total >= scope:target_country.intelligence_capacity_total
 		}
 
 		propose_score = {
-			value = 10
+			value = 5
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:target_country type = rivalry } }
+				add = 10
+			}
+			if = {
+				limit = { country_rank = rank_value:great_power }
+				add = 5
+			}
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 5
+			}
 		}
 	}
 }
@@ -84,8 +127,15 @@ covert_financial_subversion_action = {
 	}
 	requires_approval = no
 	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
 	is_hostile = yes
 	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
@@ -99,10 +149,6 @@ covert_financial_subversion_action = {
 			covert_operations_available_slots >= 1
 		}
 		custom_tooltip = {
-			text = iw_not_at_war_tt
-			is_at_war = no
-		}
-		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
@@ -114,11 +160,16 @@ covert_financial_subversion_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
+		second_modifier = {
+			country_bubble_pressure_monthly_add = 2
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
 				}
 			}
 		}
@@ -126,22 +177,45 @@ covert_financial_subversion_action = {
 
 	ai = {
 		evaluation_chance = {
-			value = 0.1
+			value = 0.03
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.02
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.5
+			}
 		}
 
 		will_propose = {
 			covert_operations_available_slots >= 1
-			is_at_war = no
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
+			in_default = no
+			country_rank >= rank_value:major_power
 			OR = {
 				has_diplomatic_pact = { who = scope:target_country type = rivalry }
 				has_attitude = { who = scope:target_country attitude = antagonistic }
+				has_attitude = { who = scope:target_country attitude = domineering }
 			}
+			intelligence_capacity_total >= scope:target_country.intelligence_capacity_total
 		}
 
 		propose_score = {
-			value = 10
+			value = 5
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:target_country type = rivalry } }
+				add = 10
+			}
+			if = {
+				limit = { country_rank = rank_value:great_power }
+				add = 5
+			}
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 5
+			}
 		}
 	}
 }
@@ -154,8 +228,18 @@ covert_infrastructure_sabotage_action = {
 	}
 	requires_approval = no
 	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
 	is_hostile = yes
 	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_infrastructure_sabotage_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
@@ -185,6 +269,10 @@ covert_infrastructure_sabotage_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
+		second_modifier = {
+			unit_morale_loss_mult = 0.15
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
@@ -193,11 +281,25 @@ covert_infrastructure_sabotage_action = {
 				}
 			}
 		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
 	}
 
 	ai = {
 		evaluation_chance = {
-			value = 0.15
+			value = 0.05
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.03
+			}
 		}
 
 		will_propose = {
@@ -205,10 +307,15 @@ covert_infrastructure_sabotage_action = {
 			covert_operations_available_slots >= 1
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
+			in_default = no
 		}
 
 		propose_score = {
 			value = 15
+			if = {
+				limit = { country_rank = rank_value:great_power }
+				add = 5
+			}
 		}
 	}
 }
@@ -221,8 +328,15 @@ covert_comms_disruption_action = {
 	}
 	requires_approval = no
 	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
 	is_hostile = yes
 	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
@@ -252,6 +366,11 @@ covert_comms_disruption_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
+		second_modifier = {
+			unit_offense_mult = -0.10
+			unit_defense_mult = -0.10
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
@@ -260,11 +379,25 @@ covert_comms_disruption_action = {
 				}
 			}
 		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
 	}
 
 	ai = {
 		evaluation_chance = {
-			value = 0.15
+			value = 0.05
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.03
+			}
 		}
 
 		will_propose = {
@@ -272,10 +405,15 @@ covert_comms_disruption_action = {
 			covert_operations_available_slots >= 1
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
+			in_default = no
 		}
 
 		propose_score = {
 			value = 15
+			if = {
+				limit = { country_rank = rank_value:great_power }
+				add = 5
+			}
 		}
 	}
 }
@@ -290,8 +428,18 @@ covert_industrial_espionage_action = {
 	}
 	requires_approval = no
 	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
 	is_hostile = yes
 	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_espionage_tech_spread_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
@@ -305,10 +453,6 @@ covert_industrial_espionage_action = {
 			covert_operations_available_slots >= 1
 		}
 		custom_tooltip = {
-			text = iw_not_at_war_tt
-			is_at_war = no
-		}
-		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
@@ -320,11 +464,16 @@ covert_industrial_espionage_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
+		first_modifier = {
+			country_weekly_innovation_add = 5
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
 				}
 			}
 		}
@@ -332,14 +481,23 @@ covert_industrial_espionage_action = {
 
 	ai = {
 		evaluation_chance = {
-			value = 0.1
+			value = 0.03
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.02
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.5
+			}
 		}
 
 		will_propose = {
 			covert_operations_available_slots >= 1
-			is_at_war = no
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
+			in_default = no
+			# Only spy on countries with tech advantage
 			scope:target_country = {
 				techs_researched > ROOT.techs_researched
 			}
@@ -347,6 +505,10 @@ covert_industrial_espionage_action = {
 
 		propose_score = {
 			value = 10
+			if = {
+				limit = { country_rank = rank_value:great_power }
+				add = 5
+			}
 		}
 	}
 }
@@ -361,8 +523,18 @@ covert_military_espionage_action = {
 	}
 	requires_approval = no
 	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
 	is_hostile = yes
 	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_espionage_tech_spread_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
@@ -376,10 +548,6 @@ covert_military_espionage_action = {
 			covert_operations_available_slots >= 1
 		}
 		custom_tooltip = {
-			text = iw_not_at_war_tt
-			is_at_war = no
-		}
-		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
@@ -391,11 +559,17 @@ covert_military_espionage_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
+		first_modifier = {
+			unit_offense_mult = 0.05
+			unit_defense_mult = 0.05
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
 				}
 			}
 		}
@@ -403,14 +577,22 @@ covert_military_espionage_action = {
 
 	ai = {
 		evaluation_chance = {
-			value = 0.1
+			value = 0.03
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.02
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.5
+			}
 		}
 
 		will_propose = {
 			covert_operations_available_slots >= 1
-			is_at_war = no
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
+			in_default = no
 			scope:target_country = {
 				techs_researched > ROOT.techs_researched
 			}
@@ -418,6 +600,10 @@ covert_military_espionage_action = {
 
 		propose_score = {
 			value = 10
+			if = {
+				limit = { country_rank = rank_value:great_power }
+				add = 5
+			}
 		}
 	}
 }
@@ -431,8 +617,15 @@ covert_influence_campaign_action = {
 	}
 	requires_approval = no
 	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
 	is_hostile = yes
 	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
@@ -445,10 +638,6 @@ covert_influence_campaign_action = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
-		}
-		custom_tooltip = {
-			text = iw_not_at_war_tt
-			is_at_war = no
 		}
 		custom_tooltip = {
 			text = iw_target_not_in_bloc_tt
@@ -466,11 +655,16 @@ covert_influence_campaign_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
+		second_modifier = {
+			country_leverage_resistance_mult = -0.15
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
 				}
 			}
 		}
@@ -493,20 +687,39 @@ covert_influence_campaign_action = {
 
 	ai = {
 		evaluation_chance = {
-			value = 0.1
+			value = 0.03
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.02
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.5
+			}
 		}
 
 		will_propose = {
 			is_power_bloc_leader = yes
 			NOT = { is_in_same_power_bloc = scope:target_country }
 			covert_operations_available_slots >= 1
-			is_at_war = no
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
+			in_default = no
+			country_rank >= rank_value:major_power
 		}
 
 		propose_score = {
-			value = 10
+			value = 8
+			if = {
+				limit = { country_rank = rank_value:great_power }
+				add = 7
+			}
+			if = {
+				limit = {
+					has_attitude = { who = scope:target_country attitude = domineering }
+				}
+				add = 5
+			}
 		}
 	}
 }
@@ -520,8 +733,18 @@ covert_ideological_subversion_action = {
 	}
 	requires_approval = no
 	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
 	is_hostile = yes
 	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_ideological_subversion_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
@@ -533,10 +756,6 @@ covert_ideological_subversion_action = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
-		}
-		custom_tooltip = {
-			text = iw_not_at_war_tt
-			is_at_war = no
 		}
 		custom_tooltip = {
 			text = iw_target_has_movements_tt
@@ -556,11 +775,16 @@ covert_ideological_subversion_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
+		second_modifier = {
+			country_support_separatism_resistance_mult = -0.10
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
 				}
 			}
 		}
@@ -579,21 +803,43 @@ covert_ideological_subversion_action = {
 
 	ai = {
 		evaluation_chance = {
-			value = 0.1
+			value = 0.02
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.02
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.5
+			}
 		}
 
 		will_propose = {
 			covert_operations_available_slots >= 1
-			is_at_war = no
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
+			in_default = no
+			country_rank >= rank_value:major_power
 			scope:target_country = {
 				any_political_movement = { count >= 1 }
+			}
+			OR = {
+				has_attitude = { who = scope:target_country attitude = antagonistic }
+				has_attitude = { who = scope:target_country attitude = domineering }
+				has_diplomatic_pact = { who = scope:target_country type = rivalry }
 			}
 		}
 
 		propose_score = {
-			value = 8
+			value = 5
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:target_country type = rivalry } }
+				add = 8
+			}
+			if = {
+				limit = { country_rank = rank_value:great_power }
+				add = 5
+			}
 		}
 	}
 }
@@ -607,8 +853,18 @@ covert_destabilization_action = {
 	}
 	requires_approval = no
 	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
 	is_hostile = yes
 	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_destabilization_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
@@ -620,10 +876,6 @@ covert_destabilization_action = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
-		}
-		custom_tooltip = {
-			text = iw_not_at_war_tt
-			is_at_war = no
 		}
 		has_diplomatic_pact = { who = scope:target_country type = rivalry }
 		custom_tooltip = {
@@ -644,11 +896,16 @@ covert_destabilization_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
+		second_modifier = {
+			country_support_separatism_resistance_mult = -0.15
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
 				}
 			}
 		}
@@ -673,22 +930,39 @@ covert_destabilization_action = {
 
 	ai = {
 		evaluation_chance = {
-			value = 0.1
+			value = 0.02
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.03
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.25
+			}
 		}
 
 		will_propose = {
 			has_diplomatic_pact = { who = scope:target_country type = rivalry }
 			covert_operations_available_slots >= 1
-			is_at_war = no
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
+			in_default = no
+			country_rank >= rank_value:major_power
 			scope:target_country = {
 				any_political_movement = { count >= 1 }
 			}
 		}
 
 		propose_score = {
-			value = 10
+			value = 5
+			if = {
+				limit = { country_rank = rank_value:great_power }
+				add = 5
+			}
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 8
+			}
 		}
 	}
 }

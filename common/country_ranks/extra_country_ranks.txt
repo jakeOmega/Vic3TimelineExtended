@@ -3,11 +3,15 @@
 INJECT:great_power = {
 	modifier = {
 		country_cultural_pull_mult = 0.25
+		country_covert_operation_slot_add = 2
+		country_intelligence_capacity_add = 10
 	}
 }
 
 INJECT:major_power = {
 	modifier = {
 		country_cultural_pull_mult = 0.1
+		country_covert_operation_slot_add = 1
+		country_intelligence_capacity_add = 5
 	}
 }

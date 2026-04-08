@@ -29,7 +29,20 @@ iw_increase_funding_button = {
 			change_variable = { name = iw_funding_level add = 1 }
 			clamp_variable = { name = iw_funding_level min = 0 max = 3 }
 		}
-		post_notification = iw_funding_changed
+		# Reapply cost modifier immediately
+		if = {
+			limit = {
+				covert_operations_active >= 1
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 1
+			}
+			remove_modifier = covert_operation_funding_cost
+			add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult }
+		}
+		else_if = {
+			limit = { has_modifier = covert_operation_funding_cost }
+			remove_modifier = covert_operation_funding_cost
+		}
 	}
 }
 
@@ -49,6 +62,19 @@ iw_decrease_funding_button = {
 	effect = {
 		change_variable = { name = iw_funding_level subtract = 1 }
 		clamp_variable = { name = iw_funding_level min = 0 max = 3 }
-		post_notification = iw_funding_changed
+		# Reapply cost modifier immediately
+		if = {
+			limit = {
+				covert_operations_active >= 1
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 1
+			}
+			remove_modifier = covert_operation_funding_cost
+			add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult }
+		}
+		else_if = {
+			limit = { has_modifier = covert_operation_funding_cost }
+			remove_modifier = covert_operation_funding_cost
+		}
 	}
 }

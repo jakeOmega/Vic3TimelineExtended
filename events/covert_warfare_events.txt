@@ -232,8 +232,8 @@ covert_warfare.2 = {
 	option = {
 		name = covert_warfare.2.b
 
-		# Retaliate: gain prestige (diplomatic capital to push back)
-		add_prestige = 50
+		# Retaliate: reduce infamy — use the detection to gain diplomatic credibility
+		change_infamy = -3
 
 		ai_chance = {
 			base = 5
