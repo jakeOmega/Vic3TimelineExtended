@@ -1,12 +1,12 @@
 ﻿# ============================================================================
 # COVERT WARFARE — Script Values
 # ============================================================================
-# These script values drive the Covert Warfare system via dynamic modifier
-# pattern.
+# These script values drive the Covert Warfare system.
+# Operations are tracked as diplomatic pacts (togglable like increase_relations).
+# Active operations are detected via any_scope_diplomatic_pact checks.
 #
 # INTELLIGENCE CAPACITY uses modifier hooks applied directly to techs, laws,
-# and institutions via country_intelligence_capacity_add, rather than
-# hardcoded script value checks.
+# and institutions via country_intelligence_capacity_add.
 # ============================================================================
 
 # ============================================================================
@@ -21,17 +21,10 @@ intelligence_capacity_gdp_max = 15
 covert_ops_base_slots = 1
 covert_ops_gp_extra_slots = 2
 covert_ops_major_extra_slots = 1
-covert_ops_tech_extra_slots = 1
-
-# Funding costs as fraction of GDP (via minting modifier)
-covert_ops_funding_low_cost = 1
-covert_ops_funding_medium_cost = 2
-covert_ops_funding_high_cost = 3
 
 # Detection probability ranges (base % chance per month)
 covert_ops_detection_base = 10
 covert_ops_detection_high_funding_add = 10
-covert_ops_detection_low_capacity_sub = 5
 
 # Infamy on detection
 covert_ops_detected_infamy = 5
@@ -39,11 +32,6 @@ covert_ops_detected_infamy = 5
 # ============================================================================
 # SECTION 2: INTELLIGENCE CAPACITY
 # ============================================================================
-
-# Intelligence Capacity Score: defense against covert operations
-# Technology, laws, and institution contributions come from
-# country_intelligence_capacity_add modifier applied directly to those entities.
-# Literacy and GDP share are computed here as intrinsic properties.
 
 intelligence_capacity_from_modifiers = {
 	value = modifier:country_intelligence_capacity_add
@@ -92,9 +80,13 @@ intelligence_capacity_modifier_mult = {
 # SECTION 3: COVERT OPERATION SLOTS & COSTS
 # ============================================================================
 
-covert_operation_max_slots = {
+# Slot breakdown components (for display)
+covert_ops_slots_from_base = {
 	value = covert_ops_base_slots
-	# Great powers get extra slots
+}
+
+covert_ops_slots_from_rank = {
+	value = 0
 	if = {
 		limit = { country_rank = rank_value:great_power }
 		add = covert_ops_gp_extra_slots
@@ -103,24 +95,32 @@ covert_operation_max_slots = {
 		limit = { country_rank >= rank_value:major_power }
 		add = covert_ops_major_extra_slots
 	}
-	# Tech gives extra slots
-	if = {
-		limit = { has_technology_researched = mainframe_computers }
-		add = covert_ops_tech_extra_slots
-	}
-	# Modifier hook
-	add = modifier:country_covert_operation_slot_add
-	min = 0
-	max = 6
 }
 
-# Currently active operations (tracked via country variable)
+covert_ops_slots_from_modifiers = {
+	value = modifier:country_covert_operation_slot_add
+}
+
+covert_operation_max_slots = {
+	value = covert_ops_slots_from_base
+	add = covert_ops_slots_from_rank
+	add = covert_ops_slots_from_modifiers
+	min = 0
+	max = 10
+}
+
+# Currently active operations — counted from active diplomatic pacts
 covert_operations_active = {
 	value = 0
-	if = {
-		limit = { has_variable = iw_active_operations }
-		add = var:iw_active_operations
-	}
+	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_election_interference_action } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_financial_subversion_action } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_infrastructure_sabotage_action } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_comms_disruption_action } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_industrial_espionage_action } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_military_espionage_action } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_influence_campaign_action } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_ideological_subversion_action } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_destabilization_action } } add = 1 }
 }
 
 covert_operations_available_slots = {
@@ -131,13 +131,8 @@ covert_operations_available_slots = {
 
 # Funding cost: multiplier for the covert_operation_funding_cost modifier
 # Scales with number of active operations and funding level
-# Level 0 = no cost (operations paused)
 covert_operation_cost_mult = {
-	value = 0
-	if = {
-		limit = { has_variable = iw_active_operations }
-		add = var:iw_active_operations
-	}
+	value = covert_operations_active
 	# Scale by funding level (0-3); 0 means no cost
 	multiply = {
 		value = 0
@@ -175,7 +170,22 @@ covert_operation_detection_chance = {
 }
 
 # ============================================================================
-# SECTION 4: DISPLAY VALUES FOR JE TOOLTIPS
+# SECTION 4: ESPIONAGE TECH GAP CHECK
+# ============================================================================
+
+# Used to gate tech spread bonuses — espionage only gives tech spread
+# if the target has more technologies researched than the spy
+espionage_target_tech_advantage = {
+	value = 0
+	if = {
+		limit = { exists = scope:espionage_target }
+		add = scope:espionage_target.techs_researched
+		subtract = techs_researched
+	}
+}
+
+# ============================================================================
+# SECTION 5: DISPLAY VALUES FOR JE TOOLTIPS
 # ============================================================================
 
 intelligence_capacity_display = {
@@ -214,5 +224,25 @@ covert_funding_level_display = {
 		limit = { has_variable = iw_funding_level }
 		add = var:iw_funding_level
 	}
+	round = yes
+}
+
+covert_detection_chance_display = {
+	value = covert_operation_detection_chance
+	round = yes
+}
+
+covert_ops_slots_from_base_display = {
+	value = covert_ops_slots_from_base
+	round = yes
+}
+
+covert_ops_slots_from_rank_display = {
+	value = covert_ops_slots_from_rank
+	round = yes
+}
+
+covert_ops_slots_from_modifiers_display = {
+	value = covert_ops_slots_from_modifiers
 	round = yes
 }

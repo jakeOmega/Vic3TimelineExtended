@@ -1,11 +1,11 @@
 ﻿namespace = covert_warfare
 
 # ============================================================================
-# EVENT 1: Covert Operation Detected
+# EVENT 1: Covert Operation Detected (Attacker's Perspective)
 # ============================================================================
-# Fired when a monthly detection check succeeds. The attacker (ROOT) has
-# one of their operations burned. They gain infamy and the targeted rival
-# gets a notification. A random active operation is cancelled.
+# Fired when a monthly detection check succeeds. A random active operation
+# pact is burned (removed). The attacker gains infamy and the target
+# country is notified.
 # ============================================================================
 
 covert_warfare.1 = {
@@ -24,45 +24,30 @@ covert_warfare.1 = {
 	duration = 3
 
 	trigger = {
-		has_variable = iw_active_operations
-		var:iw_active_operations >= 1
+		covert_operations_active >= 1
 	}
 
 	immediate = {
-		# Pick the target of one of our operations as the "detector"
-		if = {
-			limit = { has_variable = iw_target_election_interference }
-			var:iw_target_election_interference = { save_scope_as = detected_by_country }
-		}
-		else_if = {
-			limit = { has_variable = iw_target_financial_subversion }
-			var:iw_target_financial_subversion = { save_scope_as = detected_by_country }
-		}
-		else_if = {
-			limit = { has_variable = iw_target_infrastructure_sabotage }
-			var:iw_target_infrastructure_sabotage = { save_scope_as = detected_by_country }
-		}
-		else_if = {
-			limit = { has_variable = iw_target_comms_disruption }
-			var:iw_target_comms_disruption = { save_scope_as = detected_by_country }
-		}
-
-		# Determine which operation gets burned (priority: peacetime first)
-		if = {
-			limit = { has_variable = iw_op_election_interference }
-			set_variable = { name = iw_burned_op_type value = 1 }
-		}
-		else_if = {
-			limit = { has_variable = iw_op_financial_subversion }
-			set_variable = { name = iw_burned_op_type value = 2 }
-		}
-		else_if = {
-			limit = { has_variable = iw_op_infrastructure_sabotage }
-			set_variable = { name = iw_burned_op_type value = 3 }
-		}
-		else_if = {
-			limit = { has_variable = iw_op_comms_disruption }
-			set_variable = { name = iw_burned_op_type value = 4 }
+		# Pick a random active operation pact and save its target
+		random_scope_diplomatic_pact = {
+			limit = {
+				OR = {
+					is_diplomatic_action_type = covert_election_interference_action
+					is_diplomatic_action_type = covert_financial_subversion_action
+					is_diplomatic_action_type = covert_infrastructure_sabotage_action
+					is_diplomatic_action_type = covert_comms_disruption_action
+					is_diplomatic_action_type = covert_industrial_espionage_action
+					is_diplomatic_action_type = covert_military_espionage_action
+					is_diplomatic_action_type = covert_influence_campaign_action
+					is_diplomatic_action_type = covert_ideological_subversion_action
+					is_diplomatic_action_type = covert_destabilization_action
+				}
+			}
+			save_scope_as = burned_pact
+			every_participant = {
+				limit = { NOT = { this = ROOT } }
+				save_scope_as = detected_by_country
+			}
 		}
 	}
 
@@ -70,65 +55,54 @@ covert_warfare.1 = {
 		name = covert_warfare.1.a
 		default_option = yes
 
-		# Generate infamy from the operation
+		# Infamy from being caught
 		change_infamy = covert_ops_detected_infamy
 
-		# Cancel the burned operation and clean up target variable
+		# Cancel the burned operation pact
 		if = {
 			limit = {
-				has_variable = iw_burned_op_type
-				var:iw_burned_op_type = 1
+				exists = scope:detected_by_country
+				exists = scope:burned_pact
 			}
-			remove_variable = iw_op_election_interference
+			# Remove the pact — check each type
 			if = {
-				limit = { has_variable = iw_target_election_interference }
-				remove_variable = iw_target_election_interference
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_election_interference_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_election_interference_action }
 			}
-		}
-		else_if = {
-			limit = {
-				has_variable = iw_burned_op_type
-				var:iw_burned_op_type = 2
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_financial_subversion_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_financial_subversion_action }
 			}
-			remove_variable = iw_op_financial_subversion
-			if = {
-				limit = { has_variable = iw_target_financial_subversion }
-				remove_variable = iw_target_financial_subversion
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_infrastructure_sabotage_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_infrastructure_sabotage_action }
 			}
-		}
-		else_if = {
-			limit = {
-				has_variable = iw_burned_op_type
-				var:iw_burned_op_type = 3
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_comms_disruption_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_comms_disruption_action }
 			}
-			remove_variable = iw_op_infrastructure_sabotage
-			if = {
-				limit = { has_variable = iw_target_infrastructure_sabotage }
-				remove_variable = iw_target_infrastructure_sabotage
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_industrial_espionage_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_industrial_espionage_action }
 			}
-		}
-		else_if = {
-			limit = {
-				has_variable = iw_burned_op_type
-				var:iw_burned_op_type = 4
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_military_espionage_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_military_espionage_action }
 			}
-			remove_variable = iw_op_comms_disruption
-			if = {
-				limit = { has_variable = iw_target_comms_disruption }
-				remove_variable = iw_target_comms_disruption
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_influence_campaign_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_influence_campaign_action }
 			}
-		}
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_ideological_subversion_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_ideological_subversion_action }
+			}
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_destabilization_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_destabilization_action }
+			}
 
-		# Decrement active operations
-		change_variable = { name = iw_active_operations subtract = 1 }
-		clamp_variable = { name = iw_active_operations min = 0 max = 6 }
-
-		# Clean up temp variable
-		remove_variable = iw_burned_op_type
-
-		# Fire event on the detected country
-		if = {
-			limit = { exists = scope:detected_by_country }
+			# Notify the target
 			scope:detected_by_country = {
 				trigger_event = { id = covert_warfare.2 }
 			}
@@ -142,65 +116,53 @@ covert_warfare.1 = {
 	option = {
 		name = covert_warfare.1.b
 
-		# Deny and double down: keep infamy, add a small cooldown modifier
+		# Deny and double down — same mechanical effect but flavorful
 		change_infamy = covert_ops_detected_infamy
 
-		# Cancel the burned operation and clean up target variable
+		# Cancel the burned operation pact
 		if = {
 			limit = {
-				has_variable = iw_burned_op_type
-				var:iw_burned_op_type = 1
+				exists = scope:detected_by_country
+				exists = scope:burned_pact
 			}
-			remove_variable = iw_op_election_interference
 			if = {
-				limit = { has_variable = iw_target_election_interference }
-				remove_variable = iw_target_election_interference
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_election_interference_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_election_interference_action }
 			}
-		}
-		else_if = {
-			limit = {
-				has_variable = iw_burned_op_type
-				var:iw_burned_op_type = 2
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_financial_subversion_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_financial_subversion_action }
 			}
-			remove_variable = iw_op_financial_subversion
-			if = {
-				limit = { has_variable = iw_target_financial_subversion }
-				remove_variable = iw_target_financial_subversion
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_infrastructure_sabotage_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_infrastructure_sabotage_action }
 			}
-		}
-		else_if = {
-			limit = {
-				has_variable = iw_burned_op_type
-				var:iw_burned_op_type = 3
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_comms_disruption_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_comms_disruption_action }
 			}
-			remove_variable = iw_op_infrastructure_sabotage
-			if = {
-				limit = { has_variable = iw_target_infrastructure_sabotage }
-				remove_variable = iw_target_infrastructure_sabotage
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_industrial_espionage_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_industrial_espionage_action }
 			}
-		}
-		else_if = {
-			limit = {
-				has_variable = iw_burned_op_type
-				var:iw_burned_op_type = 4
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_military_espionage_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_military_espionage_action }
 			}
-			remove_variable = iw_op_comms_disruption
-			if = {
-				limit = { has_variable = iw_target_comms_disruption }
-				remove_variable = iw_target_comms_disruption
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_influence_campaign_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_influence_campaign_action }
 			}
-		}
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_ideological_subversion_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_ideological_subversion_action }
+			}
+			else_if = {
+				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_destabilization_action } }
+				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_destabilization_action }
+			}
 
-		# Decrement active operations
-		change_variable = { name = iw_active_operations subtract = 1 }
-		clamp_variable = { name = iw_active_operations min = 0 max = 6 }
-
-		# Clean up temp variable
-		remove_variable = iw_burned_op_type
-
-		# Fire event on the detected country
-		if = {
-			limit = { exists = scope:detected_by_country }
+			# Notify the target
 			scope:detected_by_country = {
 				trigger_event = { id = covert_warfare.2 }
 			}
@@ -235,10 +197,13 @@ covert_warfare.2 = {
 	duration = 3
 
 	trigger = {
-		# Only fire if someone has a covert modifier on us
+		# Only fire when someone has run an operation on us
 		OR = {
 			has_modifier = covert_election_interference
 			has_modifier = covert_financial_subversion
+			has_modifier = covert_infrastructure_sabotage
+			has_modifier = covert_comms_disruption
+			has_modifier = covert_influence_campaign
 		}
 		NOT = { has_variable = iw_defender_event_cooldown }
 	}
@@ -251,15 +216,13 @@ covert_warfare.2 = {
 		name = covert_warfare.2.a
 		default_option = yes
 
-		# Harden defenses
+		# Harden defenses: temporary IC boost
 		add_modifier = {
 			name = intelligence_capacity_defense
 			months = normal_modifier_time
 			is_decaying = yes
 			multiplier = 3
 		}
-		# Remove cooldown after a year
-		set_variable = { name = iw_defender_event_cooldown value = yes }
 
 		ai_chance = {
 			base = 10
@@ -269,12 +232,7 @@ covert_warfare.2 = {
 	option = {
 		name = covert_warfare.2.b
 
-		# Retaliate: gains a free operation slot for a limited time
-		if = {
-			limit = { NOT = { has_variable = iw_active_operations } }
-			set_variable = { name = iw_active_operations value = 0 }
-		}
-		# Grant a temporary boost via prestige (representing diplomatic capital)
+		# Retaliate: gain prestige (diplomatic capital to push back)
 		add_prestige = 50
 
 		ai_chance = {

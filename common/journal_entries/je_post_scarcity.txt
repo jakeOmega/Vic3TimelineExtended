@@ -7,6 +7,7 @@
 	}
 
 	is_shown_when_inactive = {
+		has_game_rule = social_movements_enabled
 		has_technology_researched = universal_basic_income
 		NOT = { is_country_type = decentralized }
 		NOT = {

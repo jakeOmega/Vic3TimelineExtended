@@ -1,10 +1,11 @@
 ﻿# United Nations events - wired into monthly country pulse
 un_events_on_action = {
 	effect = {
-		# Recurring events - only for members
+		# Recurring events - only for members with un_authority variable set
 		if = {
 			limit = {
 				has_modifier = un_member_modifier
+				has_variable = un_authority
 			}
 			random_list = {
 				75 = { } # Nothing happens most months

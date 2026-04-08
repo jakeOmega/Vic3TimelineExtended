@@ -69,3 +69,75 @@ covert_warfare_rule = {
         flag = covert_warfare_disabled
     }
 }
+
+heir_education_rule = {
+    default = heir_education_enabled
+
+    heir_education_enabled = {
+        flag = heir_education_enabled
+    }
+
+    heir_education_disabled = {
+        flag = heir_education_disabled
+    }
+}
+
+united_nations_rule = {
+    default = united_nations_enabled
+
+    united_nations_enabled = {
+        flag = united_nations_enabled
+    }
+
+    united_nations_disabled = {
+        flag = united_nations_disabled
+    }
+}
+
+nuclear_weapons_rule = {
+    default = nuclear_weapons_enabled
+
+    nuclear_weapons_enabled = {
+        flag = nuclear_weapons_enabled
+    }
+
+    nuclear_weapons_disabled = {
+        flag = nuclear_weapons_disabled
+    }
+}
+
+decolonization_rule = {
+    default = decolonization_enabled
+
+    decolonization_enabled = {
+        flag = decolonization_enabled
+    }
+
+    decolonization_disabled = {
+        flag = decolonization_disabled
+    }
+}
+
+space_race_rule = {
+    default = space_race_enabled
+
+    space_race_enabled = {
+        flag = space_race_enabled
+    }
+
+    space_race_disabled = {
+        flag = space_race_disabled
+    }
+}
+
+social_movements_rule = {
+    default = social_movements_enabled
+
+    social_movements_enabled = {
+        flag = social_movements_enabled
+    }
+
+    social_movements_disabled = {
+        flag = social_movements_disabled
+    }
+}

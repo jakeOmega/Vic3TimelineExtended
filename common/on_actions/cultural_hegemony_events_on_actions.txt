@@ -10,5 +10,11 @@
 		5 = cultural_hegemony.5 # Soft Power Dividend (moderate-high pull)
 		5 = cultural_hegemony.6 # Brain Drain Crisis (very low pull, hegemonized)
 		15 = cultural_hegemony.7 # Foreign Ideological Influence (fairly likely, low pull)
+		5 = cultural_hegemony.10 # International Art Exhibition (high pull, art-themed)
+		5 = cultural_hegemony.11 # Tourism Golden Age (moderate-high pull)
+		5 = cultural_hegemony.12 # University Prestige (high pull, education)
+		3 = cultural_hegemony.13 # Lingua Franca (very high pull, rare)
+		8 = cultural_hegemony.14 # Foreign Entertainment Invasion (low pull, influenced)
+		8 = cultural_hegemony.15 # Foreign Education Model (low pull, influenced)
 	}
 }

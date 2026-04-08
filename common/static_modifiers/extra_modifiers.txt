@@ -5086,15 +5086,22 @@ intelligence_capacity_defense = {
 }
 
 # Domestic defense bonus from unused covert operation slots
-# Applied with multiplier = available_slots (up to 6)
+# Applied with multiplier = available_slots
 iw_domestic_defense = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_intelligence_capacity_add = 2
 	country_support_separatism_resistance_mult = 0.03
 	country_coup_resistance_add = 0.005
 	state_radicals_from_political_movements_mult = -0.03
 }
 
-# Applied to SELF when industrial espionage operation is active
+# Applied to SELF when espionage target has NO tech advantage (base bonus only)
+covert_espionage_base = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_weekly_innovation_add = 5
+}
+
+# Applied to SELF when industrial espionage operation is active AND target has tech advantage
 covert_industrial_espionage = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_production_tech_spread_mult = 0.15
@@ -5195,7 +5202,7 @@ ch_media_dominance = {
 ch_media_freedom = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_cultural_pull_mult = 0.10
-	country_migration_pull_mult = 0.15
+	country_mass_migration_attraction_mult = 0.15
 	country_legitimacy_base_add = 5
 }
 
@@ -5216,7 +5223,7 @@ ch_nationalist_rally_ig = {
 ch_soft_power_dividend = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.05
-	country_migration_pull_mult = 0.10
+	country_mass_migration_attraction_mult = 0.10
 	country_cultural_pull_mult = 0.05
 }
 
@@ -5231,7 +5238,7 @@ ch_cultural_investment = {
 ch_talent_retention = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_tech_research_speed_mult = 0.05
-	state_education_access_mult = 0.10
+	state_education_access_add = 0.10
 }
 
 # Event 6 Option B: Brain drain remittances
@@ -5288,4 +5295,110 @@ ch_cultural_adaptation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_cultural_pull_mult = 0.05
 	country_prestige_add = 15
+}
+
+# Event 10 Option A: Tour art exhibition - prestige & cultural pull, authority cost
+ch_touring_exhibition = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_mult = 0.10
+	country_prestige_add = 50
+	country_authority_add = -50
+}
+
+# Event 10 Option B: Commercialize art - minting & tourism, reduced cultural pull
+ch_art_commercialization = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_minting_mult = 0.05
+	country_mass_migration_attraction_mult = 0.05
+	country_cultural_pull_mult = -0.05
+}
+
+# Event 11 Option A: Tourism infrastructure - sustained tourism & migration, authority cost
+ch_tourism_infrastructure = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_mass_migration_attraction_mult = 0.15
+	country_cultural_pull_mult = 0.05
+	country_authority_add = -50
+}
+
+# Event 11 Option B: Exploit tourists - quick cash, prestige damage
+ch_tourism_exploitation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_minting_mult = 0.08
+	country_prestige_add = -25
+}
+
+# Event 12 Option A: International university programs - research & migration, expensive
+ch_international_university = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_tech_research_speed_mult = 0.08
+	country_mass_migration_attraction_mult = 0.10
+	country_cultural_pull_mult = 0.05
+	country_bureaucracy_add = -50
+}
+
+# Event 12 Option B: Domestic university focus - research & education, no migration
+ch_domestic_university_focus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_tech_research_speed_mult = 0.05
+	state_education_access_add = 0.10
+}
+
+# Event 13 Option A: Language academies abroad - cultural pull & leverage, authority cost
+ch_language_academies = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_mult = 0.15
+	country_influence_add = 50
+	country_authority_add = -75
+}
+
+# Event 13 Option B: Natural lingua franca - slower cultural spread, trade advantage
+ch_natural_lingua_franca = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_mult = 0.05
+	country_max_trade_routes_add = 5
+}
+
+# Event 14 Option A: Embrace foreign entertainment - consumer benefits, SoL boost
+ch_entertainment_embrace = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = -15
+	state_standard_of_living_add = 1
+}
+
+# Event 14 Option B: Restrict foreign entertainment - protect culture, domestic boost
+ch_entertainment_restriction = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_mult = 0.05
+	country_authority_add = 25
+}
+
+# Event 14 Option C: Adapt and blend entertainment - modest cultural pull
+ch_entertainment_adaptation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_mult = 0.03
+	country_tech_research_speed_mult = 0.02
+}
+
+# Event 15 Option A: Adopt hegemon's education model - research, but ideological drift
+ch_adopted_education = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_tech_research_speed_mult = 0.08
+	state_education_access_add = 0.05
+	country_authority_add = -25
+}
+
+# Event 15 Option B: Resist foreign education - domestic solidarity
+ch_domestic_education_defense = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_authority_add = 50
+	country_cultural_pull_mult = 0.03
+	country_legitimacy_base_add = 5
+}
+
+# Event 15 Option C: Selective education adoption - small research + cultural pull
+ch_selective_education = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_tech_research_speed_mult = 0.03
+	country_cultural_pull_mult = 0.02
 }

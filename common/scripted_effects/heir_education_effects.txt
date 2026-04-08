@@ -663,7 +663,7 @@ heir_education_resolve_effect = {
 				random_list = {
 					35 = { trigger = { owner = { exists = ig:ig_trade_unions } } set_interest_group = ig:ig_trade_unions }
 					35 = { trigger = { owner = { exists = ig:ig_intelligentsia } } set_interest_group = ig:ig_intelligentsia }
-					30 = { trigger = { owner = { exists = ig:ig_rural_folk } } trigger = { owner = { exists = ig:ig_rural_folk } } set_interest_group = ig:ig_rural_folk }
+					30 = { trigger = { owner = { exists = ig:ig_rural_folk } } set_interest_group = ig:ig_rural_folk }
 				}
 			}
 		}
@@ -690,7 +690,7 @@ heir_education_resolve_effect = {
 				random_list = {
 					35 = { trigger = { owner = { exists = ig:ig_industrialists } } set_interest_group = ig:ig_industrialists }
 					35 = { trigger = { owner = { exists = ig:ig_petty_bourgeoisie } } set_interest_group = ig:ig_petty_bourgeoisie }
-					30 = { trigger = { owner = { exists = ig:ig_armed_forces } } trigger = { owner = { exists = ig:ig_armed_forces } } set_interest_group = ig:ig_armed_forces }
+					30 = { trigger = { owner = { exists = ig:ig_armed_forces } } set_interest_group = ig:ig_armed_forces }
 				}
 			}
 		}
@@ -717,7 +717,7 @@ heir_education_resolve_effect = {
 				random_list = {
 					35 = { trigger = { owner = { exists = ig:ig_landowners } } set_interest_group = ig:ig_landowners }
 					35 = { trigger = { owner = { exists = ig:ig_devout } } set_interest_group = ig:ig_devout }
-					30 = { trigger = { owner = { exists = ig:ig_rural_folk } } trigger = { owner = { exists = ig:ig_rural_folk } } set_interest_group = ig:ig_rural_folk }
+					30 = { trigger = { owner = { exists = ig:ig_rural_folk } } set_interest_group = ig:ig_rural_folk }
 				}
 			}
 		}

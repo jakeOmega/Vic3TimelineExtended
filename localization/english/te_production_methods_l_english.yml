@@ -324,7 +324,6 @@
  pm_low_bandwidth:0 "Low Bandwidth"
  pm_machine_learning_assisted_code_generation:0 "ML Assisted Code Generation"
  pm_maglev_trains:0 "Maglev Trains"
- pm_maintenance:0 "Maintenance"
  pm_manor_house_ai_ownership:0 "AI Management"
  pm_manor_house_principle_rural_1:0 "Rural Principle Manor House"
  pm_manual_assembly:0 "Manual Assembly"

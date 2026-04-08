@@ -11,6 +11,8 @@
 	
 	modifier = {
 		country_weekly_innovation_max_add = 100
+		country_intelligence_capacity_add = 3
+		country_covert_operation_efficiency_mult = 0.10
 	}
 	
 	ai_weight = {
@@ -169,6 +171,9 @@ cyber_warfare = {
 		country_institution_ministry_of_thought_control_max_investment_add = 1
 		country_institution_police_max_investment_add = 1
 		state_building_barrack_max_level_add = 50
+		country_intelligence_capacity_add = 3
+		country_covert_operation_efficiency_mult = 0.15
+		country_covert_operation_slot_add = 1
 	}
 	
 	unlocking_technologies = {	
@@ -193,6 +198,8 @@ electronic_warfare = {
 	modifier = {
 		state_building_barrack_max_level_add = 50
 		state_building_naval_base_max_level_add = 20
+		country_intelligence_capacity_add = 2
+		country_covert_operation_efficiency_mult = 0.10
 	}
 	
 	ai_weight = {

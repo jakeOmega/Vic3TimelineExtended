@@ -12,6 +12,7 @@ je_space_race_suborbital = {
 	group = je_group_foreign_affairs
 
 	is_shown_when_inactive = {
+		has_game_rule = space_race_enabled
 		has_technology_researched = rocketry
 		OR = {
 			country_rank = rank_value:great_power
@@ -168,6 +169,7 @@ je_space_race_orbital = {
 	group = je_group_foreign_affairs
 
 	is_shown_when_inactive = {
+		has_game_rule = space_race_enabled
 		has_variable = sr_completed_suborbital
 	}
 
@@ -313,6 +315,7 @@ je_space_race_moon_landing = {
 	group = je_group_foreign_affairs
 
 	is_shown_when_inactive = {
+		has_game_rule = space_race_enabled
 		has_variable = sr_completed_orbital
 		has_technology_researched = space_exploration
 	}
@@ -499,6 +502,7 @@ je_space_race_probe = {
 	group = je_group_foreign_affairs
 
 	is_shown_when_inactive = {
+		has_game_rule = space_race_enabled
 		has_variable = sr_completed_orbital
 		has_technology_researched = space_exploration
 	}
@@ -645,6 +649,7 @@ je_space_race_moon_base = {
 	group = je_group_foreign_affairs
 
 	is_shown_when_inactive = {
+		has_game_rule = space_race_enabled
 		has_variable = sr_completed_moon_landing
 		has_technology_researched = reusable_rocketry
 	}
@@ -792,6 +797,7 @@ je_space_race_mars_landing = {
 	group = je_group_foreign_affairs
 
 	is_shown_when_inactive = {
+		has_game_rule = space_race_enabled
 		has_variable = sr_completed_orbital
 		has_technology_researched = reusable_rocketry
 	}
@@ -939,6 +945,7 @@ je_space_race_interstellar_probe = {
 	group = je_group_foreign_affairs
 
 	is_shown_when_inactive = {
+		has_game_rule = space_race_enabled
 		has_variable = sr_completed_probe
 		has_variable = sr_completed_mars_landing
 		has_technology_researched = space_colonization
@@ -1088,6 +1095,7 @@ je_space_race_interstellar_results = {
 	group = je_group_foreign_affairs
 
 	is_shown_when_inactive = {
+		has_game_rule = space_race_enabled
 		has_variable = sr_probe_launched
 	}
 
@@ -1159,6 +1167,7 @@ je_space_race_solar_colonization = {
 	group = je_group_foreign_affairs
 
 	is_shown_when_inactive = {
+		has_game_rule = space_race_enabled
 		has_variable = sr_completed_moon_base
 		has_variable = sr_completed_mars_landing
 		has_technology_researched = space_colonization

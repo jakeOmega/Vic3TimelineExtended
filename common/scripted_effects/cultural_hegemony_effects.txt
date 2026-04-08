@@ -39,6 +39,7 @@ ch_yearly_global_update = {
 		set_global_variable = { name = ch_cached_prestige value = global_prestige_total }
 		set_global_variable = { name = ch_cached_sol_avg value = global_average_sol }
 		set_global_variable = { name = ch_cached_global_raw value = global_raw_cultural_pull }
+		set_global_variable = { name = ch_cached_global_art value = global_fine_art_production }
 
 		# Save previous rank scores for year-over-year delta
 		if = {
@@ -106,51 +107,101 @@ ch_yearly_global_update = {
 				set_global_variable = { name = ch_rank_1 value = THIS }
 				set_global_variable = { name = ch_rank_1_score value = cultural_pull_display }
 				set_global_variable = { name = ch_top_cultural_pull value = cultural_pull_total }
+				set_global_variable = { name = ch_rank_1_art value = cultural_pull_from_art_display }
+				set_global_variable = { name = ch_rank_1_prs value = cultural_pull_from_prestige_display }
+				set_global_variable = { name = ch_rank_1_sol value = cultural_pull_from_sol_display }
+				set_global_variable = { name = ch_rank_1_tech value = cultural_pull_from_tech_display }
+				set_global_variable = { name = ch_rank_1_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 2 }
 				set_global_variable = { name = ch_rank_2 value = THIS }
 				set_global_variable = { name = ch_rank_2_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_2_art value = cultural_pull_from_art_display }
+				set_global_variable = { name = ch_rank_2_prs value = cultural_pull_from_prestige_display }
+				set_global_variable = { name = ch_rank_2_sol value = cultural_pull_from_sol_display }
+				set_global_variable = { name = ch_rank_2_tech value = cultural_pull_from_tech_display }
+				set_global_variable = { name = ch_rank_2_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 3 }
 				set_global_variable = { name = ch_rank_3 value = THIS }
 				set_global_variable = { name = ch_rank_3_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_3_art value = cultural_pull_from_art_display }
+				set_global_variable = { name = ch_rank_3_prs value = cultural_pull_from_prestige_display }
+				set_global_variable = { name = ch_rank_3_sol value = cultural_pull_from_sol_display }
+				set_global_variable = { name = ch_rank_3_tech value = cultural_pull_from_tech_display }
+				set_global_variable = { name = ch_rank_3_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 4 }
 				set_global_variable = { name = ch_rank_4 value = THIS }
 				set_global_variable = { name = ch_rank_4_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_4_art value = cultural_pull_from_art_display }
+				set_global_variable = { name = ch_rank_4_prs value = cultural_pull_from_prestige_display }
+				set_global_variable = { name = ch_rank_4_sol value = cultural_pull_from_sol_display }
+				set_global_variable = { name = ch_rank_4_tech value = cultural_pull_from_tech_display }
+				set_global_variable = { name = ch_rank_4_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 5 }
 				set_global_variable = { name = ch_rank_5 value = THIS }
 				set_global_variable = { name = ch_rank_5_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_5_art value = cultural_pull_from_art_display }
+				set_global_variable = { name = ch_rank_5_prs value = cultural_pull_from_prestige_display }
+				set_global_variable = { name = ch_rank_5_sol value = cultural_pull_from_sol_display }
+				set_global_variable = { name = ch_rank_5_tech value = cultural_pull_from_tech_display }
+				set_global_variable = { name = ch_rank_5_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 6 }
 				set_global_variable = { name = ch_rank_6 value = THIS }
 				set_global_variable = { name = ch_rank_6_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_6_art value = cultural_pull_from_art_display }
+				set_global_variable = { name = ch_rank_6_prs value = cultural_pull_from_prestige_display }
+				set_global_variable = { name = ch_rank_6_sol value = cultural_pull_from_sol_display }
+				set_global_variable = { name = ch_rank_6_tech value = cultural_pull_from_tech_display }
+				set_global_variable = { name = ch_rank_6_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 7 }
 				set_global_variable = { name = ch_rank_7 value = THIS }
 				set_global_variable = { name = ch_rank_7_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_7_art value = cultural_pull_from_art_display }
+				set_global_variable = { name = ch_rank_7_prs value = cultural_pull_from_prestige_display }
+				set_global_variable = { name = ch_rank_7_sol value = cultural_pull_from_sol_display }
+				set_global_variable = { name = ch_rank_7_tech value = cultural_pull_from_tech_display }
+				set_global_variable = { name = ch_rank_7_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 8 }
 				set_global_variable = { name = ch_rank_8 value = THIS }
 				set_global_variable = { name = ch_rank_8_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_8_art value = cultural_pull_from_art_display }
+				set_global_variable = { name = ch_rank_8_prs value = cultural_pull_from_prestige_display }
+				set_global_variable = { name = ch_rank_8_sol value = cultural_pull_from_sol_display }
+				set_global_variable = { name = ch_rank_8_tech value = cultural_pull_from_tech_display }
+				set_global_variable = { name = ch_rank_8_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 9 }
 				set_global_variable = { name = ch_rank_9 value = THIS }
 				set_global_variable = { name = ch_rank_9_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_9_art value = cultural_pull_from_art_display }
+				set_global_variable = { name = ch_rank_9_prs value = cultural_pull_from_prestige_display }
+				set_global_variable = { name = ch_rank_9_sol value = cultural_pull_from_sol_display }
+				set_global_variable = { name = ch_rank_9_tech value = cultural_pull_from_tech_display }
+				set_global_variable = { name = ch_rank_9_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 10 }
 				set_global_variable = { name = ch_rank_10 value = THIS }
 				set_global_variable = { name = ch_rank_10_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_10_art value = cultural_pull_from_art_display }
+				set_global_variable = { name = ch_rank_10_prs value = cultural_pull_from_prestige_display }
+				set_global_variable = { name = ch_rank_10_sol value = cultural_pull_from_sol_display }
+				set_global_variable = { name = ch_rank_10_tech value = cultural_pull_from_tech_display }
+				set_global_variable = { name = ch_rank_10_raw value = cultural_pull_raw_display }
 			}
 			change_global_variable = { name = ch_ldr_idx add = 1 }
 		}
@@ -206,16 +257,17 @@ ch_yearly_global_update = {
 			set_global_variable = { name = ch_rank_10_delta value = global_var:ch_rank_10_score }
 			change_global_variable = { name = ch_rank_10_delta subtract = global_var:ch_rank_10_prev }
 		}
-	}
 
-	# Decay tech firsts counter (runs per country, not guarded)
-	if = {
-		limit = {
-			has_variable = ch_tech_firsts_recent
-			var:ch_tech_firsts_recent > 0
+		# Decay tech firsts counter for all countries (inside lock guard so it
+		# runs exactly once per cycle, even when triggered by war-end recalc)
+		every_country = {
+			limit = {
+				has_variable = ch_tech_firsts_recent
+				var:ch_tech_firsts_recent > 0
+			}
+			change_variable = { name = ch_tech_firsts_recent multiply = cultural_hegemony_tech_firsts_decay_mult }
+			clamp_variable = { name = ch_tech_firsts_recent min = 0 max = 30 }
 		}
-		change_variable = { name = ch_tech_firsts_recent multiply = cultural_hegemony_tech_firsts_decay_mult }
-		clamp_variable = { name = ch_tech_firsts_recent min = 0 max = 30 }
 	}
 }
 

@@ -306,6 +306,8 @@ telepathic_communities = {
 		country_infamy_generation_mult = -0.1
 		building_economy_of_scale_level_cap_add = 100
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 2
+		country_intelligence_capacity_add = 5
+		country_covert_operation_efficiency_mult = 0.20
 	}
 	
 	ai_weight = {

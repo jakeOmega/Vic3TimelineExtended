@@ -332,6 +332,8 @@ mainframe_computers = {
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_intelligence_capacity_add = 4
+		country_covert_operation_slot_add = 1
+		country_covert_operation_efficiency_mult = 0.05
 	}
 	
 	unlocking_technologies = {	

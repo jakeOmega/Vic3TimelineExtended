@@ -4,6 +4,7 @@
 	group = je_group_foreign_affairs
 
     is_shown_when_inactive = {
+		has_game_rule = nuclear_weapons_enabled
 		has_technology_researched = nuclear_weapons
 	}
 

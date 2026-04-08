@@ -618,6 +618,7 @@ cultural_hegemony.7 = {
 			weight = {
 				base = 1
 				modifier = {
+					trigger = { always = yes }
 					add = var:ch_total
 				}
 			}
@@ -967,6 +968,623 @@ cultural_hegemony.9 = {
 
 		ai_chance = {
 			base = 10
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 10: International Art Exhibition
+# ============================================================================
+# A cultural power's art captures international attention. The player
+# can tour the exhibition for prestige and influence, or sell the rights
+# commercially for economic gain at the cost of cultural authenticity.
+# ============================================================================
+
+cultural_hegemony.10 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.10.t
+	desc = cultural_hegemony.10.d
+	flavor = cultural_hegemony.10.f
+
+	event_image = {
+		video = "europenorthamerica_art_gallery"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+	cooldown = { months = very_long_modifier_time }
+
+	trigger = {
+		has_game_rule = cultural_hegemony_enabled
+		has_variable = ch_total
+		var:ch_total >= 10
+		has_technology_researched = romanticism
+		NOT = { has_modifier = ch_touring_exhibition }
+		NOT = { has_modifier = ch_art_commercialization }
+	}
+
+	immediate = {
+	}
+
+	# A: Tour the exhibition internationally — prestige & cultural pull, but costs authority
+	option = {
+		name = cultural_hegemony.10.a
+		default_option = yes
+
+		add_modifier = {
+			name = ch_touring_exhibition
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+
+		ai_chance = {
+			base = 6
+			modifier = {
+				trigger = { ig:ig_intelligentsia = { is_in_government = yes } }
+				add = 4
+			}
+		}
+	}
+
+	# B: Sell the art rights commercially — minting boost, tourism, but less cultural pull
+	option = {
+		name = cultural_hegemony.10.b
+
+		add_modifier = {
+			name = ch_art_commercialization
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { ig:ig_industrialists = { is_in_government = yes } }
+				add = 4
+			}
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 11: Tourism Golden Age
+# ============================================================================
+# A rising cultural power attracts waves of tourists. Develop proper
+# infrastructure (costs authority, boosts tourism and migration) or
+# exploit the spending (quick cash, but gouging damages reputation).
+# ============================================================================
+
+cultural_hegemony.11 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.11.t
+	desc = cultural_hegemony.11.d
+	flavor = cultural_hegemony.11.f
+
+	event_image = {
+		video = "unspecific_world_fair"
+	}
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { months = very_long_modifier_time }
+
+	trigger = {
+		has_game_rule = cultural_hegemony_enabled
+		has_variable = ch_total
+		var:ch_total >= 8
+		has_technology_researched = romanticism
+		NOT = { has_modifier = ch_tourism_infrastructure }
+		NOT = { has_modifier = ch_tourism_exploitation }
+	}
+
+	immediate = {
+	}
+
+	# A: Develop tourism infrastructure — sustained benefits but bureaucratic overhead
+	option = {
+		name = cultural_hegemony.11.a
+		default_option = yes
+
+		add_modifier = {
+			name = ch_tourism_infrastructure
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+
+		ai_chance = {
+			base = 6
+			modifier = {
+				trigger = { ig:ig_petty_bourgeoisie = { is_in_government = yes } }
+				add = 3
+			}
+		}
+	}
+
+	# B: Exploit tourist spending — quick financial gain but damages reputation
+	option = {
+		name = cultural_hegemony.11.b
+
+		add_modifier = {
+			name = ch_tourism_exploitation
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			pop_type = shopkeepers
+			value = very_small_radicals
+		}
+
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { ig:ig_industrialists = { is_in_government = yes } }
+				add = 3
+			}
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 12: University Prestige
+# ============================================================================
+# A cultural power's universities gain international acclaim. Expand with
+# international scholarships (research + migration, but costs) or focus
+# exclusively on domestic students (research + education, no migration).
+# ============================================================================
+
+cultural_hegemony.12 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.12.t
+	desc = cultural_hegemony.12.d
+	flavor = cultural_hegemony.12.f
+
+	event_image = {
+		image = "gfx/event_pictures/cultural_exchange.dds"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+	cooldown = { months = very_long_modifier_time }
+
+	trigger = {
+		has_game_rule = cultural_hegemony_enabled
+		has_variable = ch_total
+		var:ch_total >= 12
+		has_technology_researched = mass_media
+		NOT = { has_modifier = ch_international_university }
+		NOT = { has_modifier = ch_domestic_university_focus }
+	}
+
+	immediate = {
+	}
+
+	# A: International scholarship programs — research & migration, but expenses
+	option = {
+		name = cultural_hegemony.12.a
+		default_option = yes
+
+		add_modifier = {
+			name = ch_international_university
+			months = long_modifier_time
+			is_decaying = yes
+		}
+
+		ai_chance = {
+			base = 6
+			modifier = {
+				trigger = { ig:ig_intelligentsia = { is_in_government = yes } }
+				add = 4
+			}
+		}
+	}
+
+	# B: Exclusive domestic focus — research & education access, but no migration
+	option = {
+		name = cultural_hegemony.12.b
+
+		add_modifier = {
+			name = ch_domestic_university_focus
+			months = long_modifier_time
+			is_decaying = yes
+		}
+
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { ig:ig_landowners = { is_in_government = yes } }
+				add = 3
+			}
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 13: Lingua Franca
+# ============================================================================
+# A dominant cultural power's language becomes the language of diplomacy,
+# trade, and science. Push adoption diplomatically (leverage + cultural
+# pull, costs authority) or let it spread naturally (slower but free,
+# trade advantage).
+# ============================================================================
+
+cultural_hegemony.13 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.13.t
+	desc = cultural_hegemony.13.d
+	flavor = cultural_hegemony.13.f
+
+	event_image = {
+		image = "gfx/event_pictures/diplomatic_meeting.dds"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+	cooldown = { months = very_long_modifier_time }
+
+	trigger = {
+		has_game_rule = cultural_hegemony_enabled
+		has_variable = ch_total
+		var:ch_total >= 20
+		has_technology_researched = mass_media
+		NOT = { has_modifier = ch_language_academies }
+		NOT = { has_modifier = ch_natural_lingua_franca }
+	}
+
+	immediate = {
+	}
+
+	# A: Establish language academies abroad — cultural pull & leverage, costs authority
+	option = {
+		name = cultural_hegemony.13.a
+		default_option = yes
+
+		add_modifier = {
+			name = ch_language_academies
+			months = long_modifier_time
+			is_decaying = yes
+		}
+
+		ai_chance = {
+			base = 6
+			modifier = {
+				trigger = { var:ch_total >= 25 }
+				add = 3
+			}
+		}
+	}
+
+	# B: Let market forces do the work — slower cultural spread, but free trade advantage
+	option = {
+		name = cultural_hegemony.13.b
+
+		add_modifier = {
+			name = ch_natural_lingua_franca
+			months = long_modifier_time
+			is_decaying = yes
+		}
+
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { ig:ig_industrialists = { is_in_government = yes } }
+				add = 3
+			}
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 14: Foreign Entertainment Invasion
+# ============================================================================
+# A culturally influenced country sees foreign entertainment flood its
+# domestic market. Embrace it (consumer benefits, relations w/ hegemon,
+# but traditionalists angry), restrict it (protect domestic culture,
+# worsen hegemon relations, improve rival relations), or adapt and blend.
+# ============================================================================
+
+cultural_hegemony.14 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.14.t
+	desc = cultural_hegemony.14.d
+	flavor = cultural_hegemony.14.f
+
+	event_image = {
+		image = "gfx/event_pictures/gaming_industry.dds"
+	}
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+	cooldown = { months = very_long_modifier_time }
+
+	trigger = {
+		has_game_rule = cultural_hegemony_enabled
+		has_variable = ch_total
+		var:ch_total < 8
+		has_modifier = cultural_hegemony_foreign_benchmark
+		has_technology_researched = mass_media
+		any_country = {
+			NOT = { this = ROOT }
+			has_variable = ch_total
+			var:ch_total >= 15
+		}
+	}
+
+	immediate = {
+		# Save the hegemon weighted by cultural pull share
+		random_country = {
+			limit = {
+				NOT = { this = ROOT }
+				has_variable = ch_total
+				var:ch_total >= 15
+			}
+			weight = {
+				base = 1
+				modifier = {
+					trigger = { always = yes }
+					add = var:ch_total
+				}
+			}
+			save_scope_as = cultural_hegemon
+		}
+	}
+
+	# A: Embrace the flood — consumer satisfaction, improve relations with hegemon
+	#    but devout and armed forces angry, drift toward hegemon's politics
+	option = {
+		name = cultural_hegemony.14.a
+		default_option = yes
+
+		add_modifier = {
+			name = ch_entertainment_embrace
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:cultural_hegemon }
+			change_relations = {
+				country = scope:cultural_hegemon
+				value = 20
+			}
+		}
+		every_scope_state = {
+			limit = { state_population > 50000 }
+			add_radicals = {
+				interest_group = ig:ig_devout
+				value = small_radicals
+			}
+		}
+
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { ig:ig_intelligentsia = { is_in_government = yes } }
+				add = 3
+			}
+		}
+	}
+
+	# B: Restrict foreign entertainment — protect domestic culture, anger capitalists
+	#    worsen relations with hegemon, improve with their rivals
+	option = {
+		name = cultural_hegemony.14.b
+
+		add_modifier = {
+			name = ch_entertainment_restriction
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:cultural_hegemon }
+			change_relations = {
+				country = scope:cultural_hegemon
+				value = -20
+			}
+			# Improve relations with a rival of the hegemon
+			scope:cultural_hegemon = {
+				random_country = {
+					limit = {
+						NOT = { this = ROOT }
+						has_attitude = {
+							who = PREV
+							attitude = antagonistic
+						}
+					}
+					ROOT = {
+						change_relations = {
+							country = PREV
+							value = 15
+						}
+					}
+				}
+			}
+		}
+		every_scope_state = {
+			limit = { state_population > 50000 }
+			add_radicals = {
+				pop_type = shopkeepers
+				value = small_radicals
+			}
+			add_loyalists = {
+				interest_group = ig:ig_devout
+				value = very_small_radicals
+			}
+		}
+
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { ig:ig_devout = { is_in_government = yes } }
+				add = 3
+			}
+		}
+	}
+
+	# C: Adapt and blend — modest cultural pull boost, no diplomatic consequences
+	option = {
+		name = cultural_hegemony.14.c
+
+		add_modifier = {
+			name = ch_entertainment_adaptation
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+
+		ai_chance = {
+			base = 3
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 15: Foreign Education Model
+# ============================================================================
+# Pressure mounts to adopt the cultural hegemon's education system.
+# Adopt it (research boost, but ideological drift, closer to hegemon),
+# resist (authority & traditionalists, worse hegemon relations), or
+# selectively adopt (small research boost, cultural pull).
+# ============================================================================
+
+cultural_hegemony.15 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.15.t
+	desc = cultural_hegemony.15.d
+	flavor = cultural_hegemony.15.f
+
+	event_image = {
+		image = "gfx/event_pictures/campus_protest.dds"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+	cooldown = { months = very_long_modifier_time }
+
+	trigger = {
+		has_game_rule = cultural_hegemony_enabled
+		has_variable = ch_total
+		var:ch_total < 10
+		has_modifier = cultural_hegemony_foreign_benchmark
+		has_technology_researched = mass_media
+		any_country = {
+			NOT = { this = ROOT }
+			has_variable = ch_total
+			var:ch_total >= 12
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				NOT = { this = ROOT }
+				has_variable = ch_total
+				var:ch_total >= 12
+			}
+			weight = {
+				base = 1
+				modifier = {
+					trigger = { always = yes }
+					add = var:ch_total
+				}
+			}
+			save_scope_as = cultural_hegemon
+		}
+	}
+
+	# A: Adopt the hegemon's education model — research and education, but ideological drift
+	option = {
+		name = cultural_hegemony.15.a
+		default_option = yes
+
+		add_modifier = {
+			name = ch_adopted_education
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:cultural_hegemon }
+			change_relations = {
+				country = scope:cultural_hegemon
+				value = 15
+			}
+		}
+		# Hegemon's ideology seeps through the education system
+		if = {
+			limit = { exists = scope:cultural_hegemon }
+			ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = normal_modifier_time }
+		}
+		every_scope_state = {
+			limit = { state_population > 50000 }
+			add_radicals = {
+				interest_group = ig:ig_devout
+				value = very_small_radicals
+			}
+		}
+
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { ig:ig_intelligentsia = { is_in_government = yes } }
+				add = 4
+			}
+		}
+	}
+
+	# B: Resist and strengthen domestic system — traditionalists rally, worse hegemon relations
+	option = {
+		name = cultural_hegemony.15.b
+
+		add_modifier = {
+			name = ch_domestic_education_defense
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:cultural_hegemon }
+			change_relations = {
+				country = scope:cultural_hegemon
+				value = -15
+			}
+		}
+		ig:ig_devout = {
+			add_modifier = {
+				name = ch_cultural_resistance_ig
+				months = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { ig:ig_devout = { is_in_government = yes } }
+				add = 4
+			}
+		}
+	}
+
+	# C: Selective adoption — cherry-pick best practices, small boost to both research and culture
+	option = {
+		name = cultural_hegemony.15.c
+
+		add_modifier = {
+			name = ch_selective_education
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+
+		ai_chance = {
+			base = 4
 		}
 	}
 }

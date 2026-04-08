@@ -91,6 +91,8 @@ institution_ministry_of_intelligence_and_security = {
 		country_support_separatism_resistance_mult = 0.1
 		country_coup_resistance_add = 0.05
 		country_intelligence_capacity_add = 4
+		country_covert_operation_slot_add = 1
+		country_covert_operation_efficiency_mult = 0.05
 	}
 }
 

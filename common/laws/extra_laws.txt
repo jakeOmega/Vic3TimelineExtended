@@ -129,6 +129,8 @@ law_intrusive_surveillance = {
 		country_institution_impact_institution_ministry_of_intelligence_and_security_mult = 0.20
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = 1
 		goods_output_tourism_mult = -0.25
+		country_intelligence_capacity_add = 5
+		country_covert_operation_efficiency_mult = 0.10
 	}
 }
 
@@ -137,7 +139,11 @@ law_minimal_privacy_protection = {
 	
 	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
 	
-	progressiveness = 25		
+	progressiveness = 25
+
+	modifier = {
+		country_intelligence_capacity_add = 2
+	}
 }
 
 law_moderate_data_privacy = {
@@ -183,6 +189,7 @@ law_strong_privacy_rights = {
 		country_institution_cost_institution_ministry_of_intelligence_and_security_mult = 1
 		state_bureaucracy_population_base_cost_factor_mult = -0.1
 		goods_output_tourism_mult = 0.10
+		country_intelligence_capacity_add = -2
 	}
 }
 
@@ -357,6 +364,7 @@ law_no_ip_protection = {
 
 	modifier = {
 		country_weekly_innovation_mult = 0.05
+		country_intelligence_capacity_add = -2
 	}	
 }
 
@@ -435,6 +443,7 @@ law_strict_ip_protection = {
 		country_tech_spread_mult = -0.1
 		country_tech_research_speed_mult = -0.05
 		interest_group_ig_industrialists_pol_str_mult = 0.1
+		country_intelligence_capacity_add = 2
 	}
 
 	ai_enact_weight_modifier = {
@@ -604,6 +613,11 @@ law_informal_government_secrecy = {
 	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
 	
 	progressiveness = 5
+
+	modifier = {
+		country_intelligence_capacity_add = 2
+		country_covert_operation_efficiency_mult = 0.05
+	}
 }
 
 law_freedom_of_information = {
@@ -623,6 +637,7 @@ law_freedom_of_information = {
 		country_bureaucracy_investment_cost_factor_mult = -0.05
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = -1
 		country_loyalists_from_legitimacy_mult = 0.25
+		country_intelligence_capacity_add = -2
 	}
 }
 
@@ -643,6 +658,7 @@ law_open_government = {
 		country_bureaucracy_investment_cost_factor_mult = -0.1
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = -2
 		country_loyalists_from_legitimacy_mult = 0.5
+		country_intelligence_capacity_add = -3
 	}
 }
 
@@ -809,6 +825,7 @@ law_unrestricted_augmentation = {
 		state_mortality_mult = -0.05
 		country_sol_expectations_target_add = 2
 		country_tech_research_speed_mult = 0.2
+		country_covert_operation_efficiency_mult = 0.05
 	}
 }
 
@@ -906,6 +923,8 @@ law_mandatory_augmentation = {
 		state_radicals_from_political_movements_mult = 0.2
 		state_standard_of_living_add = -2
 		building_throughput_add = 0.2
+		country_intelligence_capacity_add = 3
+		country_covert_operation_efficiency_mult = 0.10
 	}
 
 	unlocking_laws = {
@@ -1644,6 +1663,10 @@ law_no_campaign_finance_laws = {
 	group = lawgroup_electoral_finance
 	icon = "gfx/interface/icons/law_icons/no_home_affairs.dds"
 	progressiveness = 0
+
+	modifier = {
+		country_intelligence_capacity_add = -1
+	}
 	
 	# This law is only valid if there are no voting laws.
 	disallowing_laws = {
@@ -1719,6 +1742,7 @@ law_publicly_funded_elections = {
 		state_political_strength_from_wealth_mult = -0.25
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 		country_legitimacy_base_add = 10
+		country_intelligence_capacity_add = 2
 	}
 }
 
@@ -1810,6 +1834,7 @@ law_unregulated_banking = {
 		building_urban_center_throughput_add = 0.25
 		country_banking_random_momentum_mult = 0.5
 		country_banking_crash_chance_mult = 0.25
+		country_intelligence_capacity_add = -1
     }
 }
 
@@ -1903,6 +1928,7 @@ law_central_bank_independence = {
 		country_banking_intervention_max_add = 7
 		country_banking_random_momentum_mult = -0.1
 		country_banking_crash_chance_mult = -0.3
+		country_intelligence_capacity_add = 2
     }
 }
 
@@ -1935,6 +1961,7 @@ law_unregulated_internet = {
 		country_tech_spread_mult = 0.2
 		country_company_throughput_bonus_add = 0.1
 		political_movement_radicalism_add = 0.1
+		country_intelligence_capacity_add = -2
 	}
 }
 
@@ -1952,6 +1979,8 @@ law_state_controlled_internet = {
 		country_tech_spread_mult = -0.25
 		state_radicals_from_political_movements_mult = 0.25
 		goods_output_tourism_mult = -0.05
+		country_intelligence_capacity_add = 4
+		country_covert_operation_efficiency_mult = 0.10
 	}
 }
 
@@ -1966,6 +1995,7 @@ law_net_neutrality = {
 		state_education_access_add = 0.1
 		goods_output_digital_access_mult = 0.10
 		goods_trade_advantage_digital_assets_mult = 0.5
+		country_intelligence_capacity_add = 1
 	}
 }
 

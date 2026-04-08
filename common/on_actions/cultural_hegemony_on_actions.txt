@@ -2,6 +2,27 @@
 # CULTURAL HEGEMONY — On-Actions
 # ============================================================================
 
+# ---- War end: force leaderboard recalculation ----
+# When a war ends, countries may be annexed or borders may change.
+# Remove the leaderboard lock so the next monthly pulse forces a full
+# recalculation, ensuring dead/annexed countries are removed from rankings.
+on_war_end = {
+	on_actions = {
+		ch_war_end_recalc_on_action
+	}
+}
+ch_war_end_recalc_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_global_variable = ch_ldr_lock
+				has_game_rule = cultural_hegemony_enabled
+			}
+			remove_global_variable = ch_ldr_lock
+		}
+	}
+}
+
 # ---- Monthly pulse: update per-country CH values and modifiers ----
 # Runs from game start for all qualifying countries (even before JE activates).
 # This ensures scores are stable by the time the JE appears in 1845.
@@ -18,6 +39,11 @@ ch_monthly_pulse_on_action = {
 				country_rank >= rank_value:minor_power
 			}
 			ch_monthly_country_update = yes
+			# If leaderboard lock was cleared (e.g. by war end), rebuild immediately
+			if = {
+				limit = { NOT = { has_global_variable = ch_ldr_lock } }
+				ch_yearly_global_update = yes
+			}
 		}
 	}
 }

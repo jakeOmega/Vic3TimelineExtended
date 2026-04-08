@@ -7,6 +7,7 @@
 	}
 
 	is_shown_when_inactive = {
+		has_game_rule = social_movements_enabled
 		has_augmentation_tech = yes
 		NOT = { is_country_type = decentralized }
 	}

@@ -605,5 +605,6 @@ INJECT:law_outlawed_dissent = {
 INJECT:law_guaranteed_liberties = {
 	modifier = {
 		goods_output_tourism_mult = 0.10
+		country_intelligence_capacity_add = -1
 	}
 }

@@ -41,8 +41,6 @@ forced_law_through_event_authority_multiplier_large = {
 	multiply = 3
 }
 
-ministry_of_thought_control_monthly_effect = 0.001
-
 construction_cost_super_high = 2000
 construction_cost_mega_high = 5000
 construction_cost_extreme = 10000
@@ -120,56 +118,6 @@ needed_private_levels = {
 }
 
 expand_levels = 1
-
-available_principle_slots = {
-	value = 1
-	if = {
-		limit = {
-			hidden_trigger = {
-				has_dlc_feature = power_bloc_features
-			}
-		}
-		add = 1
-		if = {
-			limit = {
-				power_bloc_rank <= 5
-				num_power_bloc_members >= 5
-			}
-			add = 1
-		}
-		if = {
-			limit = {
-				power_bloc_rank <= 3
-				num_power_bloc_members >= 10
-			}
-			add = 1
-		}
-		if = {
-			limit = {
-				power_bloc_leader = { has_technology_researched = intergovernmental_organizations }
-			}
-			add = 1
-		}
-		if = {
-			limit = {
-				power_bloc_leader = { has_technology_researched = decolonization }
-			}
-			add = 1
-		}
-		if = {
-			limit = {
-				power_bloc_leader = { has_technology_researched = cellular_networks }
-			}
-			add = 1
-		}
-		if = {
-			limit = {
-				power_bloc_leader = { has_technology_researched = globalization }
-			}
-			add = 1
-		}
-	}
-}
 
 starting_investment_pool = {
 	value = fmc_private_construction_spending_target
@@ -278,44 +226,6 @@ accepted_culture_state_count = {
 	}
 }
 
-multicultural_state_count = {
-	value = 0
-	every_power_bloc_member = {
-		every_scope_state = {
-			limit = {
-				owner = {
-					has_law = law_type:law_multicultural
-				}
-			}
-			add = 1
-		}
-	}
-}
-
-total_state_count = {
-	value = 0
-	every_power_bloc_member = {
-		every_scope_state = {
-			add = 1
-		}
-	}
-	min = 1
-}
-
-leverage_threshold_to_invite = {
-	value = 200
-	power_bloc_leader = {
-		if = {
-			limit = { has_technology_researched = intergovernmental_organizations }
-			subtract = 100
-		}
-		if = {
-			limit = { has_technology_researched = globalization }
-			subtract = 50
-		}
-	}
-}
-
 power_bloc_population = {
 	value = 0
 	every_power_bloc_member = {
@@ -362,10 +272,6 @@ power_bloc_avg_literacy = {
 	}
 	divide = num_power_bloc_members
 	multiply = 100
-}
-
-bloc_states_script_value = {
-	value = num_power_bloc_states
 }
 
 power_bloc_mandate_progress_diplomatic_identity = {
@@ -444,16 +350,6 @@ nuclear_strike_success_chance = {
 nuclear_strike_fail_chance = {
 	value = 100
 	subtract = nuclear_strike_success_chance
-}
-
-state_country_population_share = {
-	value = state_population
-	owner = {
-		divide = {
-			value = total_population
-			min = 1
-		}
-	}
 }
 
 migration_attraction_script_value = {
@@ -1264,21 +1160,6 @@ war_propaganda_support_script_value = {
 	}
 }
 
-total_gdp_share = {
-	value = gdp
-	divide = {
-		value = 0
-		every_country = {
-			add = gdp
-		}
-	}
-}
-
-test_cost = {
-	value = scope:other_country.total_population
-	divide = 1000000
-}
-
 country_gdp_per_capita = {
 	value = 0
 	every_scope_state = {
@@ -1298,19 +1179,9 @@ global_gdp_per_capita = {
 	}
 }
 
-rel_gdp_per_capita = {
-	value = gdp_per_capita
-	divide = {
-		value = global_gdp_per_capita
-		min = 0.01
-	}
-}
-
 curr_year = {
 	value = year
 }
-
-movement_base_year = 1930
 
 target_queue_length = 500
 
@@ -1424,11 +1295,6 @@ nuclear_industrial_strike_target_score = {
 	}
 }
 
-low_pop_state_threshold = {
-	value = 5000
-	multiply = arable_land
-}
-
 pop_culture_conversion_propotion_script_value = {
 	value = 0.002 # base rate
 	multiply = {
@@ -1522,15 +1388,6 @@ banking_law_base_points_value = {
 	}
 }
 
-banking_current_free_points_val = {
-	value = modifier:country_banking_intervention_max_add
-}
-
-banking_current_points_spend_val = {
-	value = banking_law_base_points_value
-	subtract = banking_current_free_points_val
-}
-
 # Random momentum nudge values, scaled by the banking_random_momentum_mult modifier.
 # Base nudge is ±1. The modifier (default 0) scales it: 0 → ×1, +0.5 → ×1.5, -0.5 → ×0.5.
 banking_random_nudge_down_value = {
@@ -1593,29 +1450,6 @@ sol_expectations_gap_value = {
 	subtract = average_expected_sol
 }
 
-# The current shift stored in var:sol_expectations_shift.
-# This is the modifier multiplier — it converges toward whatever value
-# makes average_expected_sol equal average_sol.
-sol_expectations_shift_value = {
-	value = var:sol_expectations_shift
-}
-
-# Display value for UI (shows the current shift, rounded to 1 decimal)
-sol_expectations_shift_display = {
-	value = var:sol_expectations_shift
-	multiply = 10
-	round = yes
-	divide = 10
-}
-
-# Display the current remaining gap for UI
-sol_expectations_gap_display = {
-	value = var:sol_expectations_gap_cached
-	multiply = 10
-	round = yes
-	divide = 10
-}
-
 # Clamped shift value. Applied after convergence calculation.
 # Floor (min) defaults to 0, raised by country_sol_expectations_shift_min_add.
 # Ceiling (max) defaults to 50, lowered by country_sol_expectations_shift_max_add.
@@ -1674,33 +1508,6 @@ bubble_inertia_multiplier_script_value = {
 banking_contagion_min_source_gdp = {
 	value = gdp
 	multiply = 0.01
-}
-
-# GDP-based contagion weight.
-# Returns a bonus to contagion chance based on source/target GDP ratio.
-# Larger source economy → higher contagion risk to smaller target.
-# Ratio 1:1 → +5, ratio 5:1 → +25, ratio 10:1+ → +50 (capped).
-# Ratio 0.1:1 → +0.5 (minimal, only barely above the 1% filter).
-banking_contagion_gdp_weight = {
-	value = scope:banking_crash_origin_country.gdp
-	divide = { value = gdp min = 1 }
-	min = 0
-	max = 10
-	multiply = 5
-}
-
-country_unemployment_rate = {
-	value = 0
-	every_scope_state = {
-		add = {
-			value = state_unemployment_rate
-			multiply = state_population
-		}
-	}
-	divide = {
-		value = total_population
-		min = 1
-	}
 }
 
 emergency_liquidity_program_activation_cost = {

@@ -54,6 +54,9 @@ quantum_computing = {
 	modifier = {
 		building_economy_of_scale_level_cap_add = 50
 		country_weekly_innovation_max_add = 100
+		country_intelligence_capacity_add = 3
+		country_covert_operation_efficiency_mult = 0.10
+		country_covert_operation_slot_add = 1
 	}
 	
 	ai_weight = {
@@ -224,6 +227,8 @@ quantum_communications = {
 	
 	modifier = {
 		country_weekly_innovation_max_add = 100
+		country_intelligence_capacity_add = 4
+		country_covert_operation_efficiency_mult = 0.15
 	}
 	
 	ai_weight = {
@@ -324,6 +329,8 @@ brain_computer_interfaces = {
 		country_institution_schools_max_investment_add = 1
 		state_education_access_add = -0.1
 		country_institution_ministry_of_thought_control_max_investment_add = 2
+		country_intelligence_capacity_add = 2
+		country_covert_operation_efficiency_mult = 0.10
 	}
 	
 	unlocking_technologies = {	

@@ -1489,7 +1489,13 @@ banking_cycle_spread_contagion = {
 			# GDP weight: larger source economy -> higher contagion chance
 			modifier = {
 				trigger = { always = yes }
-				add = banking_contagion_gdp_weight
+				add = {
+					value = scope:banking_crash_origin_country.gdp
+					divide = { value = gdp min = 1 }
+					min = 0
+					max = 10
+					multiply = 5
+				}
 			}
 			# Same market = strongest contagion channel
 			modifier = {

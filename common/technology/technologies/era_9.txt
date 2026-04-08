@@ -98,6 +98,7 @@ world_wide_web = {
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
 		country_www_pb_principles_bool = yes
+		country_intelligence_capacity_add = 2
 	}
 	
 	ai_weight = {
@@ -120,6 +121,8 @@ digital_telecommunications = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
+		country_intelligence_capacity_add = 3
+		country_covert_operation_efficiency_mult = 0.05
 	}
 	
 	ai_weight = {
@@ -250,6 +253,7 @@ military_grade_cybersecurity = {
 	modifier = {
 		country_military_tech_spread_mult = 0.25
 		country_intelligence_capacity_add = 5
+		country_covert_operation_efficiency_mult = 0.10
 	}
 	
 	ai_weight = {
@@ -414,6 +418,7 @@ social_media = {
 		country_sol_expectations_middle_offset_add = -0.5
 		country_sol_expectations_target_add = 0.5
 		country_cultural_pull_mult = 0.15
+		country_intelligence_capacity_add = 2
 	}
 	
 	ai_weight = {
@@ -588,6 +593,8 @@ cybersecurity = {
 		building_network_infrastructure_throughput_add = 0.1
 		country_institution_home_affairs_max_investment_add = 1
 		country_voting_power_mult = 0.1
+		country_intelligence_capacity_add = 3
+		country_covert_operation_efficiency_mult = 0.05
 	}
 	
 	ai_weight = {
