@@ -1,0 +1,43 @@
+﻿# ============================================================================
+# COVERT WARFARE — Scripted Triggers
+# ============================================================================
+
+# Check if a diplomatic pact is a covert operation pact (any of the 9 types).
+# Scope: diplomatic_pact
+is_covert_operation_pact = {
+	OR = {
+		is_diplomatic_action_type = covert_election_interference_action
+		is_diplomatic_action_type = covert_financial_subversion_action
+		is_diplomatic_action_type = covert_infrastructure_sabotage_action
+		is_diplomatic_action_type = covert_comms_disruption_action
+		is_diplomatic_action_type = covert_industrial_espionage_action
+		is_diplomatic_action_type = covert_military_espionage_action
+		is_diplomatic_action_type = covert_influence_campaign_action
+		is_diplomatic_action_type = covert_ideological_subversion_action
+		is_diplomatic_action_type = covert_destabilization_action
+	}
+}
+
+# Check if the country has not reached the per-type cap for a given op type.
+# Parameters: $TYPE$ = diplomatic_action_type key (e.g. covert_election_interference_action)
+# Scope: country
+covert_ops_type_below_cap = {
+	OR = {
+		# With cyber_warfare (era 10): cap is 3
+		AND = {
+			has_technology_researched = cyber_warfare
+			NOT = { any_scope_diplomatic_pact = { count >= 3 is_diplomatic_action_type = $TYPE$ } }
+		}
+		# With mainframe_computers (era 7): cap is 2
+		AND = {
+			has_technology_researched = mainframe_computers
+			NOT = { has_technology_researched = cyber_warfare }
+			NOT = { any_scope_diplomatic_pact = { count >= 2 is_diplomatic_action_type = $TYPE$ } }
+		}
+		# Base (television): cap is 1
+		AND = {
+			NOT = { has_technology_researched = mainframe_computers }
+			NOT = { any_scope_diplomatic_pact = { is_diplomatic_action_type = $TYPE$ } }
+		}
+	}
+}

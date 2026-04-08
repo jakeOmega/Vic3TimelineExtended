@@ -90,6 +90,32 @@ treaty_article_events.1 = {
 
 	option = {
 		name = treaty_article_events.1.b
+		# Use the intelligence to harden our counter-espionage
+		add_modifier = {
+			name = intelligence_tip_off_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = intelligence_tip_off_defense_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:intel_partner
+			value = 5
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { covert_operations_targeted >= 1 }
+				add = 5
+			}
+		}
+	}
+
+	option = {
+		name = treaty_article_events.1.c
 		# Publicize the success for prestige
 		add_modifier = {
 			name = intelligence_victory_showcase_modifier
@@ -212,6 +238,32 @@ treaty_article_events.2 = {
 			value = small_radicals
 		}
 		ai_chance = { base = 5 }
+	}
+
+	option = {
+		name = treaty_article_events.2.c
+		# The breach has left our defenses exposed
+		add_modifier = {
+			name = intelligence_failure_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = intelligence_failure_exposure_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:intel_partner
+			value = -20
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { covert_operations_targeted >= 1 }
+				add = 3
+			}
+		}
 	}
 }
 
@@ -825,6 +877,202 @@ treaty_article_events.10 = {
 					}
 				}
 				add = 2
+			}
+		}
+	}
+}
+
+# =================================================================
+# Event 11: Cultural Exchange Triumph (Cultural Exchange - Positive)
+# The cultural exchange program produces a soft power windfall,
+# artists and intellectuals praising the partnership.
+# =================================================================
+treaty_article_events.11 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.11.t
+	desc = treaty_article_events.11.d
+	flavor = treaty_article_events.11.f
+
+	event_image = { texture = "gfx/event_pictures/cultural_exchange.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = cultural_exchange_program
+			}
+		}
+		NOT = { has_modifier = cultural_exchange_soft_power_modifier }
+		NOT = { has_modifier = cultural_exchange_deepened_ties_modifier }
+		NOT = { has_law = law_type:law_ethnostate }
+	}
+
+	immediate = {
+		random_scope_treaty = {
+			limit = {
+				any_scope_article = {
+					has_type = cultural_exchange_program
+				}
+			}
+			first_country = {
+				if = {
+					limit = { NOT = { this = ROOT } }
+					save_scope_as = exchange_partner
+				}
+			}
+			if = {
+				limit = { NOT = { exists = scope:exchange_partner } }
+				second_country = {
+					save_scope_as = exchange_partner
+				}
+			}
+		}
+	}
+
+	option = {
+		name = treaty_article_events.11.a
+		default_option = yes
+		# Celebrate the soft power success
+		add_modifier = {
+			name = cultural_exchange_soft_power_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:exchange_partner
+			value = 10
+		}
+		ai_chance = { base = 7 }
+	}
+
+	option = {
+		name = treaty_article_events.11.b
+		# Deepen the ties — longer-lasting but more modest boost
+		add_modifier = {
+			name = cultural_exchange_deepened_ties_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:exchange_partner
+			value = 5
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_law = law_type:law_multicultural }
+				add = 3
+			}
+		}
+	}
+}
+
+# =================================================================
+# Event 12: Cultural Exchange Backlash (Cultural Exchange - Negative)
+# Domestic traditionalists decry the foreign cultural influence,
+# claiming the exchange threatens national identity.
+# =================================================================
+treaty_article_events.12 = {
+	type = country_event
+	placement = ROOT
+
+	title = treaty_article_events.12.t
+	desc = treaty_article_events.12.d
+	flavor = treaty_article_events.12.f
+
+	event_image = { texture = "gfx/event_pictures/political_rally.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = cultural_exchange_program
+			}
+		}
+		NOT = { has_modifier = cultural_exchange_backlash_modifier }
+		NOT = { has_modifier = cultural_exchange_retrenchment_modifier }
+		# More likely with strong traditionalist/devout groups
+		OR = {
+			ig:ig_devout = { is_powerful = yes }
+			ig:ig_landowners = { is_powerful = yes }
+			has_law = law_type:law_national_supremacy
+		}
+	}
+
+	immediate = {
+		random_scope_treaty = {
+			limit = {
+				any_scope_article = {
+					has_type = cultural_exchange_program
+				}
+			}
+			first_country = {
+				if = {
+					limit = { NOT = { this = ROOT } }
+					save_scope_as = exchange_partner
+				}
+			}
+			if = {
+				limit = { NOT = { exists = scope:exchange_partner } }
+				second_country = {
+					save_scope_as = exchange_partner
+				}
+			}
+		}
+	}
+
+	option = {
+		name = treaty_article_events.12.a
+		default_option = yes
+		# Stand firm: cultural openness is worth the controversy
+		add_modifier = {
+			name = cultural_exchange_backlash_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_law = law_type:law_multicultural }
+				add = 3
+			}
+		}
+	}
+
+	option = {
+		name = treaty_article_events.12.b
+		# Concede to the critics: scale back the exchange
+		add_modifier = {
+			name = cultural_exchange_retrenchment_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		change_relations = {
+			country = scope:exchange_partner
+			value = -10
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_law = law_type:law_national_supremacy }
+				add = 3
 			}
 		}
 	}

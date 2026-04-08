@@ -2003,61 +2003,14 @@ extra_law_events.25 = {
 
 	trigger = {
 		has_law = law_type:law_state_led_language_reform
-		NOT = { has_variable = language_reform_type }
-		NOR = {
-			has_modifier = langreform_revival
-			has_modifier = langreform_revived_latin
-			has_modifier = langreform_revived_hebrew
-			has_modifier = langreform_revived_sanskrit
-			has_modifier = langreform_revived_geez
-			has_modifier = langreform_revived_slavonic
-			has_modifier = langreform_revived_pali
-			has_modifier = langreform_revived_avestan
-			has_modifier = langreform_revived_arabic
-			has_modifier = langreform_revived_chinese
-			has_modifier = langreform_revived_greek
-			has_modifier = langreform_revived_irish
-			has_modifier = langreform_revived_coptic
-			has_modifier = langreform_revived_nahuatl
-			has_modifier = langreform_revived_norse
-			has_modifier = langreform_revived_gothic
-			has_modifier = langreform_revived_mayan
-			has_modifier = langreform_revived_prussian
-			has_modifier = langreform_revived_aramaic
-			has_modifier = langreform_constructed
-			has_modifier = langreform_simplification
-		}
+		NOT = { has_any_langreform_reform_amendment = yes }
 	}
 
 	cancellation_trigger = {
-		OR = {
-			has_modifier = langreform_revival
-			has_modifier = langreform_revived_latin
-			has_modifier = langreform_revived_hebrew
-			has_modifier = langreform_revived_sanskrit
-			has_modifier = langreform_revived_geez
-			has_modifier = langreform_revived_slavonic
-			has_modifier = langreform_revived_pali
-			has_modifier = langreform_revived_avestan
-			has_modifier = langreform_revived_arabic
-			has_modifier = langreform_revived_chinese
-			has_modifier = langreform_revived_greek
-			has_modifier = langreform_revived_irish
-			has_modifier = langreform_revived_coptic
-			has_modifier = langreform_revived_nahuatl
-			has_modifier = langreform_revived_norse
-			has_modifier = langreform_revived_gothic
-			has_modifier = langreform_revived_mayan
-			has_modifier = langreform_revived_prussian
-			has_modifier = langreform_revived_aramaic
-			has_modifier = langreform_constructed
-			has_modifier = langreform_simplification
-		}
+		has_any_langreform_reform_amendment = yes
 	}
 
 	immediate = {
-		# Block re-fire while the player hasn't chosen yet
-		set_variable = { name = language_reform_type value = 0 }
 	}
 
 	# --- Sacred / Classical Tongue options (replace generic revival) ---
@@ -2067,8 +2020,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_romance }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_latin }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_latin }
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
@@ -2091,8 +2046,10 @@ extra_law_events.25 = {
 				any_primary_culture = { has_discrimination_trait_group = language_group_semitic }
 			}
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_hebrew }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_hebrew }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = clergymen
@@ -2115,8 +2072,10 @@ extra_law_events.25 = {
 				country_has_state_religion = rel:hindu
 			}
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_sanskrit }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_sanskrit }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = academics
@@ -2141,8 +2100,10 @@ extra_law_events.25 = {
 				}
 			}
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_geez }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_geez }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = clergymen
@@ -2158,8 +2119,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_slavic }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_slavonic }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_slavonic }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = clergymen
@@ -2179,8 +2142,10 @@ extra_law_events.25 = {
 		trigger = {
 			country_has_state_religion = rel:theravada
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_pali }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_pali }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = clergymen
@@ -2200,8 +2165,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_iranic }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_avestan }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_avestan }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = clergymen
@@ -2221,8 +2188,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_arabic }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_arabic }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_arabic }
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
@@ -2248,8 +2217,10 @@ extra_law_events.25 = {
 				}
 			}
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_chinese }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_chinese }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = bureaucrats
@@ -2269,8 +2240,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_hellenic }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_greek }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_greek }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = academics
@@ -2290,8 +2263,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_gaelic }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_irish }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_irish }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = clergymen
@@ -2311,8 +2286,10 @@ extra_law_events.25 = {
 		trigger = {
 			country_has_state_religion = rel:oriental_orthodox
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_coptic }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_coptic }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = clergymen
@@ -2332,8 +2309,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_nahuan }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_nahuatl }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_nahuatl }
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
@@ -2353,8 +2332,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_scandinavian }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_norse }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_norse }
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
@@ -2374,8 +2355,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_germanic }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_gothic }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_gothic }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = academics
@@ -2395,8 +2378,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_mayan }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_mayan }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_mayan }
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
@@ -2416,8 +2401,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_baltic }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_prussian }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_prussian }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = academics
@@ -2433,8 +2420,10 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_aramaic }
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revived_aramaic }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revived_aramaic }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = clergymen
@@ -2478,8 +2467,10 @@ extra_law_events.25 = {
 				any_primary_culture = { has_discrimination_trait = language_aramaic }
 			}
 		}
-		set_variable = { name = language_reform_type value = 1 }
-		add_modifier = { name = langreform_revival }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_revival }
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
@@ -2496,8 +2487,10 @@ extra_law_events.25 = {
 
 	option = { # Construct a new national language
 		name = extra_law_events.25.b
-		set_variable = { name = language_reform_type value = 2 }
-		add_modifier = { name = langreform_constructed }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_constructed }
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = academics
@@ -2518,8 +2511,10 @@ extra_law_events.25 = {
 
 	option = { # Simplify and standardize the existing language
 		name = extra_law_events.25.c
-		set_variable = { name = language_reform_type value = 3 }
-		add_modifier = { name = langreform_simplification }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_simplification }
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
@@ -2570,41 +2565,15 @@ extra_law_events.26 = {
 
 	trigger = {
 		has_law = law_type:law_state_led_language_reform
-		NOT = { has_variable = langreform_academy_pending }
-		NOR = {
-			has_modifier = langreform_powerful_academy
-			has_modifier = langreform_advisory_panel
-		}
+		has_any_langreform_reform_amendment = yes
+		NOT = { has_any_langreform_academy_amendment = yes }
 	}
 
 	cancellation_trigger = {
-		OR = {
-			has_modifier = langreform_revival
-			has_modifier = langreform_revived_latin
-			has_modifier = langreform_revived_hebrew
-			has_modifier = langreform_revived_sanskrit
-			has_modifier = langreform_revived_geez
-			has_modifier = langreform_revived_slavonic
-			has_modifier = langreform_revived_pali
-			has_modifier = langreform_revived_avestan
-			has_modifier = langreform_revived_arabic
-			has_modifier = langreform_revived_chinese
-			has_modifier = langreform_revived_greek
-			has_modifier = langreform_revived_irish
-			has_modifier = langreform_revived_coptic
-			has_modifier = langreform_revived_nahuatl
-			has_modifier = langreform_revived_norse
-			has_modifier = langreform_revived_gothic
-			has_modifier = langreform_revived_mayan
-			has_modifier = langreform_revived_prussian
-			has_modifier = langreform_revived_aramaic
-			has_modifier = langreform_constructed
-			has_modifier = langreform_simplification
-		}
+		has_any_langreform_academy_amendment = yes
 	}
 
 	immediate = {
-		set_variable = langreform_academy_pending
 		ig:ig_intelligentsia ?= {
 			save_scope_as = intelligentsia_ig
 		}
@@ -2613,7 +2582,10 @@ extra_law_events.26 = {
 	option = { # Powerful regulatory academy
 		name = extra_law_events.26.a
 		default_option = yes
-		add_modifier = { name = langreform_powerful_academy }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_powerful_academy }
+		}
 		if = {
 			limit = { exists = scope:intelligentsia_ig }
 			scope:intelligentsia_ig = {
@@ -2635,7 +2607,10 @@ extra_law_events.26 = {
 
 	option = { # Consultative panel of scholars
 		name = extra_law_events.26.b
-		add_modifier = { name = langreform_advisory_panel }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_advisory_panel }
+		}
 		add_loyalists = {
 			value = very_small_radicals
 			strata = middle
@@ -2675,11 +2650,8 @@ extra_law_events.27 = {
 
 	trigger = {
 		has_law = law_type:law_state_led_language_reform
-		NOT = { has_variable = langreform_minority_pending }
-		NOR = {
-			has_modifier = langreform_minority_protection
-			has_modifier = langreform_national_focus
-		}
+		has_any_langreform_reform_amendment = yes
+		NOT = { has_any_langreform_minority_amendment = yes }
 		any_scope_state = {
 			any_scope_culture = {
 				NOT = { is_primary_culture_of = root }
@@ -2688,39 +2660,19 @@ extra_law_events.27 = {
 	}
 
 	cancellation_trigger = {
-		OR = {
-			has_modifier = langreform_revival
-			has_modifier = langreform_revived_latin
-			has_modifier = langreform_revived_hebrew
-			has_modifier = langreform_revived_sanskrit
-			has_modifier = langreform_revived_geez
-			has_modifier = langreform_revived_slavonic
-			has_modifier = langreform_revived_pali
-			has_modifier = langreform_revived_avestan
-			has_modifier = langreform_revived_arabic
-			has_modifier = langreform_revived_chinese
-			has_modifier = langreform_revived_greek
-			has_modifier = langreform_revived_irish
-			has_modifier = langreform_revived_coptic
-			has_modifier = langreform_revived_nahuatl
-			has_modifier = langreform_revived_norse
-			has_modifier = langreform_revived_gothic
-			has_modifier = langreform_revived_mayan
-			has_modifier = langreform_revived_prussian
-			has_modifier = langreform_revived_aramaic
-			has_modifier = langreform_constructed
-			has_modifier = langreform_simplification
-		}
+		has_any_langreform_minority_amendment = yes
 	}
 
 	immediate = {
-		set_variable = langreform_minority_pending
 	}
 
 	option = { # Include minority language revival programmes
 		name = extra_law_events.27.a
 		default_option = yes
-		add_modifier = { name = langreform_minority_protection }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_minority_protection }
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
@@ -2733,7 +2685,10 @@ extra_law_events.27 = {
 
 	option = { # Focus entirely on the national language
 		name = extra_law_events.27.b
-		add_modifier = { name = langreform_national_focus }
+		every_scope_law = {
+			limit = { is_law_type = law_state_led_language_reform }
+			add_amendment = { type = amendment_langreform_national_focus }
+		}
 		add_radicals = {
 			value = small_radicals
 			strata = lower
@@ -3547,7 +3502,7 @@ extra_law_events.35 = {
 
 	trigger = {
 		has_law = law_type:law_state_led_language_reform
-		has_any_langreform_modifier = yes
+		has_any_langreform_reform_amendment = yes
 		NOR = {
 			has_modifier = langreform_transition_cost
 			has_modifier = langreform_intensive_transition_cost

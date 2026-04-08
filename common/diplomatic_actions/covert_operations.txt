@@ -31,20 +31,56 @@ covert_election_interference_action = {
 
 	accept_effect = {
 		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		covert_op_refresh_all_targets = yes
 	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		NOT = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_election_interference_action } }
+		covert_ops_type_below_cap = { TYPE = covert_election_interference_action }
 	}
 
 	possible = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_target_has_elections_tt
+			scope:target_country = {
+				OR = {
+					has_law = law_type:law_landed_voting
+					has_law = law_type:law_wealth_voting
+					has_law = law_type:law_census_voting
+					has_law = law_type:law_universal_suffrage
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_election_interference_action } }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_no_good_relations_tt
+			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
@@ -58,11 +94,6 @@ covert_election_interference_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
-		second_modifier = {
-			country_legitimacy_base_add = -5
-			country_authority_add = -25
-		}
-
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
@@ -70,8 +101,23 @@ covert_election_interference_action = {
 					has_variable = iw_funding_level
 					var:iw_funding_level >= 1
 				}
+				# Target must still have elections
+				custom_tooltip = {
+					text = iw_target_has_elections_tt
+					scope:target_country = {
+						OR = {
+							has_law = law_type:law_landed_voting
+							has_law = law_type:law_wealth_voting
+							has_law = law_type:law_census_voting
+							has_law = law_type:law_universal_suffrage
+						}
+					}
+				}
 			}
 		}
+
+		manual_break_effect = { covert_op_refresh_all_targets = yes }
+		auto_break_effect = { covert_op_refresh_all_targets = yes }
 	}
 
 	ai = {
@@ -133,20 +179,45 @@ covert_financial_subversion_action = {
 
 	accept_effect = {
 		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		covert_op_refresh_all_targets = yes
 	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		NOT = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_financial_subversion_action } }
+		covert_ops_type_below_cap = { TYPE = covert_financial_subversion_action }
 	}
 
 	possible = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_financial_subversion_action } }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_no_good_relations_tt
+			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
@@ -160,10 +231,6 @@ covert_financial_subversion_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
-		second_modifier = {
-			country_bubble_pressure_monthly_add = 2
-		}
-
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
@@ -173,6 +240,9 @@ covert_financial_subversion_action = {
 				}
 			}
 		}
+
+		manual_break_effect = { covert_op_refresh_all_targets = yes }
+		auto_break_effect = { covert_op_refresh_all_targets = yes }
 	}
 
 	ai = {
@@ -237,20 +307,45 @@ covert_infrastructure_sabotage_action = {
 			text = covert_infrastructure_sabotage_extra_tt
 		}
 		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		covert_op_refresh_all_targets = yes
 	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		NOT = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_infrastructure_sabotage_action } }
+		covert_ops_type_below_cap = { TYPE = covert_infrastructure_sabotage_action }
 	}
 
 	possible = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_infrastructure_sabotage_action } }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_no_good_relations_tt
+			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
 			text = iw_at_war_tt
@@ -268,10 +363,6 @@ covert_infrastructure_sabotage_action = {
 		cost = 0
 		is_two_sided_pact = no
 		show_in_outliner = yes
-
-		second_modifier = {
-			unit_morale_loss_mult = 0.15
-		}
 
 		requirement_to_maintain = {
 			trigger = {
@@ -291,6 +382,9 @@ covert_infrastructure_sabotage_action = {
 				}
 			}
 		}
+
+		manual_break_effect = { covert_op_refresh_all_targets = yes }
+		auto_break_effect = { covert_op_refresh_all_targets = yes }
 	}
 
 	ai = {
@@ -334,20 +428,45 @@ covert_comms_disruption_action = {
 
 	accept_effect = {
 		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		covert_op_refresh_all_targets = yes
 	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		NOT = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_comms_disruption_action } }
+		covert_ops_type_below_cap = { TYPE = covert_comms_disruption_action }
 	}
 
 	possible = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_comms_disruption_action } }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_no_good_relations_tt
+			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
 			text = iw_at_war_tt
@@ -365,11 +484,6 @@ covert_comms_disruption_action = {
 		cost = 0
 		is_two_sided_pact = no
 		show_in_outliner = yes
-
-		second_modifier = {
-			unit_offense_mult = -0.10
-			unit_defense_mult = -0.10
-		}
 
 		requirement_to_maintain = {
 			trigger = {
@@ -389,6 +503,9 @@ covert_comms_disruption_action = {
 				}
 			}
 		}
+
+		manual_break_effect = { covert_op_refresh_all_targets = yes }
+		auto_break_effect = { covert_op_refresh_all_targets = yes }
 	}
 
 	ai = {
@@ -420,8 +537,8 @@ covert_comms_disruption_action = {
 
 # ---- PEACETIME: Industrial Espionage ----
 # Steal production secrets and technology from a target nation
-# Effect: boosts own production tech spread (only if target has tech advantage)
-# and innovation (always)
+# Requires target to have more technologies researched than you.
+# Effect phases through preparatory → establishing → fully operational.
 covert_industrial_espionage_action = {
 	groups = {
 		general
@@ -437,20 +554,47 @@ covert_industrial_espionage_action = {
 			text = covert_espionage_tech_spread_tt
 		}
 		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		covert_op_refresh_all_targets = yes
 	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		NOT = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_industrial_espionage_action } }
+		covert_ops_type_below_cap = { TYPE = covert_industrial_espionage_action }
 	}
 
 	possible = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_industrial_espionage_action } }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_target_tech_advantage_tt
+			scope:target_country = {
+				techs_researched > ROOT.techs_researched
+			}
 		}
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
@@ -464,10 +608,6 @@ covert_industrial_espionage_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
-		first_modifier = {
-			country_weekly_innovation_add = 5
-		}
-
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
@@ -477,6 +617,9 @@ covert_industrial_espionage_action = {
 				}
 			}
 		}
+
+		manual_break_effect = { covert_op_refresh_all_targets = yes }
+		auto_break_effect = { covert_op_refresh_all_targets = yes }
 	}
 
 	ai = {
@@ -515,8 +658,7 @@ covert_industrial_espionage_action = {
 
 # ---- PEACETIME: Military Espionage ----
 # Gather intelligence on a target's military capabilities and steal secrets
-# Effect: boosts own military tech spread (only if target has tech advantage)
-# and unit effectiveness (always)
+# Effect phases through preparatory → establishing → fully operational.
 covert_military_espionage_action = {
 	groups = {
 		general
@@ -532,20 +674,41 @@ covert_military_espionage_action = {
 			text = covert_espionage_tech_spread_tt
 		}
 		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		covert_op_refresh_all_targets = yes
 	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		NOT = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_military_espionage_action } }
+		covert_ops_type_below_cap = { TYPE = covert_military_espionage_action }
 	}
 
 	possible = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_military_espionage_action } }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
 		}
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
@@ -559,11 +722,6 @@ covert_military_espionage_action = {
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
-		first_modifier = {
-			unit_offense_mult = 0.05
-			unit_defense_mult = 0.05
-		}
-
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
@@ -573,6 +731,9 @@ covert_military_espionage_action = {
 				}
 			}
 		}
+
+		manual_break_effect = { covert_op_refresh_all_targets = yes }
+		auto_break_effect = { covert_op_refresh_all_targets = yes }
 	}
 
 	ai = {
@@ -623,14 +784,18 @@ covert_influence_campaign_action = {
 
 	accept_effect = {
 		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		covert_op_refresh_all_targets = yes
 	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		NOT = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_influence_campaign_action } }
+		covert_ops_type_below_cap = { TYPE = covert_influence_campaign_action }
 		is_power_bloc_leader = yes
 	}
 
@@ -638,6 +803,27 @@ covert_influence_campaign_action = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_influence_campaign_action } }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_no_good_relations_tt
+			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
 			text = iw_target_not_in_bloc_tt
@@ -654,10 +840,6 @@ covert_influence_campaign_action = {
 		cost = 0
 		is_two_sided_pact = no
 		show_in_outliner = yes
-
-		second_modifier = {
-			country_leverage_resistance_mult = -0.15
-		}
 
 		requirement_to_maintain = {
 			trigger = {
@@ -683,6 +865,9 @@ covert_influence_campaign_action = {
 				}
 			}
 		}
+
+		manual_break_effect = { covert_op_refresh_all_targets = yes }
+		auto_break_effect = { covert_op_refresh_all_targets = yes }
 	}
 
 	ai = {
@@ -742,20 +927,45 @@ covert_ideological_subversion_action = {
 			text = covert_ideological_subversion_extra_tt
 		}
 		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		covert_op_refresh_all_targets = yes
 	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		NOT = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_ideological_subversion_action } }
+		covert_ops_type_below_cap = { TYPE = covert_ideological_subversion_action }
 	}
 
 	possible = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_ideological_subversion_action } }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_no_good_relations_tt
+			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
 			text = iw_target_has_movements_tt
@@ -774,10 +984,6 @@ covert_ideological_subversion_action = {
 		cost = 0
 		is_two_sided_pact = no
 		show_in_outliner = yes
-
-		second_modifier = {
-			country_support_separatism_resistance_mult = -0.10
-		}
 
 		requirement_to_maintain = {
 			trigger = {
@@ -799,6 +1005,9 @@ covert_ideological_subversion_action = {
 				}
 			}
 		}
+
+		manual_break_effect = { covert_op_refresh_all_targets = yes }
+		auto_break_effect = { covert_op_refresh_all_targets = yes }
 	}
 
 	ai = {
@@ -862,20 +1071,45 @@ covert_destabilization_action = {
 			text = covert_destabilization_extra_tt
 		}
 		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		covert_op_refresh_all_targets = yes
 	}
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		NOT = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_destabilization_action } }
+		covert_ops_type_below_cap = { TYPE = covert_destabilization_action }
 	}
 
 	possible = {
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_destabilization_action } }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_no_good_relations_tt
+			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		has_diplomatic_pact = { who = scope:target_country type = rivalry }
 		custom_tooltip = {
@@ -895,10 +1129,6 @@ covert_destabilization_action = {
 		cost = 0
 		is_two_sided_pact = no
 		show_in_outliner = yes
-
-		second_modifier = {
-			country_support_separatism_resistance_mult = -0.15
-		}
 
 		requirement_to_maintain = {
 			trigger = {
@@ -926,6 +1156,9 @@ covert_destabilization_action = {
 				}
 			}
 		}
+
+		manual_break_effect = { covert_op_refresh_all_targets = yes }
+		auto_break_effect = { covert_op_refresh_all_targets = yes }
 	}
 
 	ai = {

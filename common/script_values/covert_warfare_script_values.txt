@@ -22,7 +22,13 @@ covert_ops_max_slot_cap = 10
 
 # Detection probability ranges (base % chance per month)
 covert_ops_detection_base = 10
-covert_ops_detection_high_funding_add = 10
+
+# Funding level detection reductions (cumulative: -3 at level 2, -8 at level 3)
+covert_ops_detection_funding_2_reduction = 3
+covert_ops_detection_funding_3_reduction = 5
+
+# Counterintelligence IC bonus per funding level above 1 (applied via iw_funding_defense modifier)
+covert_ops_funding_defense_ic_per_level = 5
 
 # Target counterintelligence: detection penalty from target IC advantage
 covert_ops_target_ic_factor = 15
@@ -108,18 +114,28 @@ covert_operation_max_slots = {
 	max = covert_ops_max_slot_cap
 }
 
-# Currently active operations — counted from active diplomatic pacts
+# Maximum operations of the same type that can run simultaneously
+# Scales with technology: 1 base + 1 with mainframe_computers + 1 with cyber_warfare
+covert_ops_max_per_type = {
+	value = 1
+	if = { limit = { has_technology_researched = mainframe_computers } add = 1 }
+	if = { limit = { has_technology_researched = cyber_warfare } add = 1 }
+}
+
+# Currently active operations — exact pact count using step pattern
+# (each "count >= N" check adds 1, giving the precise total)
 covert_operations_active = {
 	value = 0
-	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_election_interference_action } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_financial_subversion_action } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_infrastructure_sabotage_action } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_comms_disruption_action } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_industrial_espionage_action } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_military_espionage_action } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_influence_campaign_action } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_ideological_subversion_action } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_destabilization_action } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 1 is_covert_operation_pact = yes } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 2 is_covert_operation_pact = yes } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 3 is_covert_operation_pact = yes } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 4 is_covert_operation_pact = yes } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 5 is_covert_operation_pact = yes } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 6 is_covert_operation_pact = yes } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 7 is_covert_operation_pact = yes } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 8 is_covert_operation_pact = yes } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 9 is_covert_operation_pact = yes } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 10 is_covert_operation_pact = yes } } add = 1 }
 }
 
 covert_operations_available_slots = {
@@ -146,19 +162,27 @@ covert_operation_cost_mult = {
 }
 
 # Detection chance per month for active operations
-# Factors: base risk, high funding bonus, target counterintelligence, attacker efficiency
-# Formula: raw = base + high_funding + target_IC, final = raw × (1 - efficiency), clamped [1, 50]
+# Factors: base risk, funding reduction, target counterintelligence (IC + type defense), attacker efficiency
+# Formula: raw = base - funding_reduction + target_defense_penalty, final = raw × (1 - efficiency), clamped [1, 50]
+# var:target_max_ic and var:target_type_defense must be set before evaluating.
 covert_operation_detection_chance = {
 	value = covert_ops_detection_base
-	# Higher funding = higher detection risk
+	# Higher funding reduces detection risk (better tradecraft)
+	if = {
+		limit = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 2
+		}
+		subtract = covert_ops_detection_funding_2_reduction
+	}
 	if = {
 		limit = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 3
 		}
-		add = covert_ops_detection_high_funding_add
+		subtract = covert_ops_detection_funding_3_reduction
 	}
-	# Target's counterintelligence increases detection risk
+	# Target's counterintelligence increases detection risk (IC + type defense vs your IC)
 	add = target_counterintelligence_penalty
 	# Attacker's efficiency reduces detection: multiply by (1 - eff_mult), floor 0.2
 	multiply = {
@@ -170,13 +194,19 @@ covert_operation_detection_chance = {
 	max = 50
 }
 
-# Target counterintelligence: penalty based on strongest target's IC vs yours.
-# var:target_max_ic is set during the monthly pulse.
+# Target counterintelligence: penalty based on target's total defense vs yours.
+# Total defense = target IC + target type-specific defense modifier.
+# var:target_max_ic and var:target_type_defense are set per-slot by covert_op_track_targets.
 target_counterintelligence_penalty = {
 	value = 0
 	if = {
 		limit = { has_variable = target_max_ic }
 		add = var:target_max_ic
+		# Add type-specific defense
+		if = {
+			limit = { has_variable = target_type_defense }
+			add = var:target_type_defense
+		}
 		divide = {
 			value = intelligence_capacity_total
 			min = 1
@@ -285,9 +315,16 @@ covert_detection_efficiency_reduction = {
 	if = {
 		limit = {
 			has_variable = iw_funding_level
+			var:iw_funding_level >= 2
+		}
+		subtract = covert_ops_detection_funding_2_reduction
+	}
+	if = {
+		limit = {
+			has_variable = iw_funding_level
 			var:iw_funding_level >= 3
 		}
-		add = covert_ops_detection_high_funding_add
+		subtract = covert_ops_detection_funding_3_reduction
 	}
 	add = target_counterintelligence_penalty
 	multiply = modifier:country_covert_operation_efficiency_mult
@@ -295,8 +332,93 @@ covert_detection_efficiency_reduction = {
 	round = yes
 }
 
+# ---- Funding defense multiplier ----
+# For iw_funding_defense static modifier: scales with funding level above 1
+# Level 0-1: 0, Level 2: 1, Level 3: 2
+covert_ops_funding_ci_mult = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_funding_level }
+		add = var:iw_funding_level
+		subtract = 1
+		min = 0
+	}
+}
+
+# Display: detection reduction from funding level (for JE tooltip)
+covert_ops_funding_detection_reduction_display = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 2
+		}
+		add = covert_ops_detection_funding_2_reduction
+	}
+	if = {
+		limit = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 3
+		}
+		add = covert_ops_detection_funding_3_reduction
+	}
+	round = yes
+}
+
+# Display: funding IC bonus (funding_ci_mult * per_level)
+covert_ops_funding_ic_display = {
+	value = covert_ops_funding_ci_mult
+	multiply = covert_ops_funding_defense_ic_per_level
+	round = yes
+}
+
 # Cost display: shows the GDP-scaled expense amount (multiplier for country_expenses_add = 1)
 covert_operation_cost_display = {
 	value = covert_operation_cost_mult
+	round = yes
+}
+
+# ---- Funding button preview values ----
+# What the funding level will be after increasing
+covert_funding_next_level_up = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_funding_level }
+		add = var:iw_funding_level
+	}
+	add = 1
+	min = 0
+	max = 3
+	round = yes
+}
+
+# What the funding level will be after decreasing
+covert_funding_next_level_down = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_funding_level }
+		add = var:iw_funding_level
+	}
+	subtract = 1
+	min = 0
+	max = 3
+	round = yes
+}
+
+# Cost at the next-up funding level
+covert_operation_cost_at_next_up = {
+	value = covert_operations_active
+	multiply = covert_funding_next_level_up
+	multiply = banking_event_expense_small
+	min = 0
+	round = yes
+}
+
+# Cost at the next-down funding level
+covert_operation_cost_at_next_down = {
+	value = covert_operations_active
+	multiply = covert_funding_next_level_down
+	multiply = banking_event_expense_small
+	min = 0
 	round = yes
 }

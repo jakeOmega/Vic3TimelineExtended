@@ -364,7 +364,7 @@ law_no_ip_protection = {
 
 	modifier = {
 		country_weekly_innovation_mult = 0.05
-		country_intelligence_capacity_add = -2
+		country_covert_defense_economic_add = -2
 	}	
 }
 
@@ -443,7 +443,7 @@ law_strict_ip_protection = {
 		country_tech_spread_mult = -0.1
 		country_tech_research_speed_mult = -0.05
 		interest_group_ig_industrialists_pol_str_mult = 0.1
-		country_intelligence_capacity_add = 2
+		country_covert_defense_economic_add = 2
 	}
 
 	ai_enact_weight_modifier = {
@@ -1665,7 +1665,7 @@ law_no_campaign_finance_laws = {
 	progressiveness = 0
 
 	modifier = {
-		country_intelligence_capacity_add = -1
+		country_covert_defense_ideological_add = -1
 	}
 	
 	# This law is only valid if there are no voting laws.
@@ -1742,7 +1742,7 @@ law_publicly_funded_elections = {
 		state_political_strength_from_wealth_mult = -0.25
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 		country_legitimacy_base_add = 10
-		country_intelligence_capacity_add = 2
+		country_covert_defense_ideological_add = 2
 	}
 }
 
@@ -1834,7 +1834,7 @@ law_unregulated_banking = {
 		building_urban_center_throughput_add = 0.25
 		country_banking_random_momentum_mult = 0.5
 		country_banking_crash_chance_mult = 0.25
-		country_intelligence_capacity_add = -1
+		country_covert_defense_economic_add = -1
     }
 }
 
@@ -1928,7 +1928,7 @@ law_central_bank_independence = {
 		country_banking_intervention_max_add = 7
 		country_banking_random_momentum_mult = -0.1
 		country_banking_crash_chance_mult = -0.3
-		country_intelligence_capacity_add = 2
+		country_covert_defense_economic_add = 2
     }
 }
 
@@ -1961,7 +1961,8 @@ law_unregulated_internet = {
 		country_tech_spread_mult = 0.2
 		country_company_throughput_bonus_add = 0.1
 		political_movement_radicalism_add = 0.1
-		country_intelligence_capacity_add = -2
+		country_covert_defense_economic_add = -1
+		country_covert_defense_ideological_add = -1
 	}
 }
 
@@ -1979,7 +1980,9 @@ law_state_controlled_internet = {
 		country_tech_spread_mult = -0.25
 		state_radicals_from_political_movements_mult = 0.25
 		goods_output_tourism_mult = -0.05
-		country_intelligence_capacity_add = 4
+		country_intelligence_capacity_add = 2
+		country_covert_defense_economic_add = 1
+		country_covert_defense_ideological_add = 1
 		country_covert_operation_efficiency_mult = 0.10
 	}
 }

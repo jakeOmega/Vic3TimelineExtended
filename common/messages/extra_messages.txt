@@ -1922,3 +1922,10 @@ iw_operation_cancelled = {
 	notification_type = feed
 	color = neutral
 }
+
+iw_election_interference_confidence = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
+	notification_type = feed
+	color = bad
+}

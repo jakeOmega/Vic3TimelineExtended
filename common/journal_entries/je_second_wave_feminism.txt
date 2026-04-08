@@ -85,7 +85,7 @@
 
 	fail = {
 		has_law = law_type:law_no_womens_rights
-		has_technology_researched = contraceptive_pill
+		has_technology_researched = sexual_revolution
 		# Fail = traditionalist backlash after progressive tech era
 	}
 

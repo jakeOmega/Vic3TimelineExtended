@@ -2,36 +2,70 @@
 #  Miscellaneous Reusable Triggers
 # ======================================================================
 
-# True if the country has any language reform modifier active
+# True if the country has any language reform modifier active (transition costs)
+# or any language reform amendment on the law
 has_any_langreform_modifier = {
 	OR = {
-		has_modifier = langreform_revival
-		has_modifier = langreform_revived_latin
-		has_modifier = langreform_revived_hebrew
-		has_modifier = langreform_revived_sanskrit
-		has_modifier = langreform_revived_geez
-		has_modifier = langreform_revived_slavonic
-		has_modifier = langreform_revived_pali
-		has_modifier = langreform_revived_avestan
-		has_modifier = langreform_revived_arabic
-		has_modifier = langreform_revived_chinese
-		has_modifier = langreform_revived_greek
-		has_modifier = langreform_revived_irish
-		has_modifier = langreform_revived_coptic
-		has_modifier = langreform_revived_nahuatl
-		has_modifier = langreform_revived_norse
-		has_modifier = langreform_revived_gothic
-		has_modifier = langreform_revived_mayan
-		has_modifier = langreform_revived_prussian
-		has_modifier = langreform_revived_aramaic
-		has_modifier = langreform_constructed
-		has_modifier = langreform_simplification
-		has_modifier = langreform_powerful_academy
-		has_modifier = langreform_advisory_panel
-		has_modifier = langreform_minority_protection
-		has_modifier = langreform_national_focus
 		has_modifier = langreform_transition_cost
 		has_modifier = langreform_intensive_transition_cost
+		has_modifier = langreform_minimal_transition_cost
+		has_modifier = langreform_ministry_transition_cost
+		has_any_langreform_reform_amendment = yes
+	}
+}
+
+# True if the country's state-led language reform law has any reform type amendment
+# (Country scope)
+has_any_langreform_reform_amendment = {
+	any_scope_law = {
+		is_law_type = law_state_led_language_reform
+		OR = {
+			has_amendment = amendment_type:amendment_langreform_revival
+			has_amendment = amendment_type:amendment_langreform_revived_latin
+			has_amendment = amendment_type:amendment_langreform_revived_hebrew
+			has_amendment = amendment_type:amendment_langreform_revived_sanskrit
+			has_amendment = amendment_type:amendment_langreform_revived_geez
+			has_amendment = amendment_type:amendment_langreform_revived_slavonic
+			has_amendment = amendment_type:amendment_langreform_revived_pali
+			has_amendment = amendment_type:amendment_langreform_revived_avestan
+			has_amendment = amendment_type:amendment_langreform_revived_arabic
+			has_amendment = amendment_type:amendment_langreform_revived_chinese
+			has_amendment = amendment_type:amendment_langreform_revived_greek
+			has_amendment = amendment_type:amendment_langreform_revived_irish
+			has_amendment = amendment_type:amendment_langreform_revived_coptic
+			has_amendment = amendment_type:amendment_langreform_revived_nahuatl
+			has_amendment = amendment_type:amendment_langreform_revived_norse
+			has_amendment = amendment_type:amendment_langreform_revived_gothic
+			has_amendment = amendment_type:amendment_langreform_revived_mayan
+			has_amendment = amendment_type:amendment_langreform_revived_prussian
+			has_amendment = amendment_type:amendment_langreform_revived_aramaic
+			has_amendment = amendment_type:amendment_langreform_constructed
+			has_amendment = amendment_type:amendment_langreform_simplification
+		}
+	}
+}
+
+# True if the country's state-led language reform law has an academy amendment
+# (Country scope)
+has_any_langreform_academy_amendment = {
+	any_scope_law = {
+		is_law_type = law_state_led_language_reform
+		OR = {
+			has_amendment = amendment_type:amendment_langreform_powerful_academy
+			has_amendment = amendment_type:amendment_langreform_advisory_panel
+		}
+	}
+}
+
+# True if the country's state-led language reform law has a minority policy amendment
+# (Country scope)
+has_any_langreform_minority_amendment = {
+	any_scope_law = {
+		is_law_type = law_state_led_language_reform
+		OR = {
+			has_amendment = amendment_type:amendment_langreform_minority_protection
+			has_amendment = amendment_type:amendment_langreform_national_focus
+		}
 	}
 }
 

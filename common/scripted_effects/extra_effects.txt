@@ -1199,9 +1199,16 @@ gw_copy_market_policy_modifiers = {
 	}
 }
 
-# Remove all language reform modifiers and the reform type variable.
+# Remove all language reform modifiers and variables.
 # Called when the country no longer has the state-led language reform law.
+# Amendments are automatically removed when the law changes;
+# this only cleans up transition cost modifiers and legacy variables.
 remove_all_langreform_modifiers = {
+	remove_modifier = langreform_transition_cost
+	remove_modifier = langreform_intensive_transition_cost
+	remove_modifier = langreform_minimal_transition_cost
+	remove_modifier = langreform_ministry_transition_cost
+	# Legacy modifier cleanup (for saves that still have the old modifiers)
 	remove_modifier = langreform_revival
 	remove_modifier = langreform_revived_latin
 	remove_modifier = langreform_revived_hebrew
@@ -1227,8 +1234,6 @@ remove_all_langreform_modifiers = {
 	remove_modifier = langreform_advisory_panel
 	remove_modifier = langreform_minority_protection
 	remove_modifier = langreform_national_focus
-	remove_modifier = langreform_transition_cost
-	remove_modifier = langreform_intensive_transition_cost
 	remove_variable = language_reform_type
 	remove_variable = langreform_academy_pending
 	remove_variable = langreform_minority_pending

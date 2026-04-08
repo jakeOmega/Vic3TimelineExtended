@@ -1,0 +1,24 @@
+﻿# Covert warfare hooks into vanilla on_actions.
+# on_election_campaign_end: ROOT = country that just held an election.
+# We use on_actions = { } to add a named sub-action (safe, additive).
+# Adding effect = { } would overwrite vanilla's BRZ election variable and coup modifier removal.
+
+on_election_campaign_end = {
+	on_actions = {
+		covert_warfare_election_end
+	}
+}
+
+covert_warfare_election_end = {
+	effect = {
+		# Check if any election interference operations are targeting this country
+		if = {
+			limit = {
+				any_scope_diplomatic_pact = {
+					is_diplomatic_action_type = covert_election_interference_action
+				}
+			}
+			covert_op_election_confidence_effect = yes
+		}
+	}
+}

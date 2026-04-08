@@ -19,5 +19,8 @@
 		6 = treaty_article_events.9		# Security dependency (negative)
 		# Population Transfer
 		10 = treaty_article_events.10	# Population transfer aftermath
+		# Cultural Exchange
+		8 = treaty_article_events.11	# Cultural exchange triumph (positive)
+		6 = treaty_article_events.12	# Cultural exchange backlash (negative)
 	}
 }

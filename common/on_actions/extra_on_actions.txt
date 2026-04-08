@@ -343,15 +343,15 @@ te_on_state_owner_change = {
 language_reform_law_on_action = {
 	effect = {
 		owner = {
-			# Fire founding event immediately when language reform is activated
+			# Fire founding event when language reform is active but has no reform type amendment
 			if = {
 				limit = {
 					has_law = law_type:law_state_led_language_reform
-					NOT = { has_variable = language_reform_type }
+					NOT = { has_any_langreform_reform_amendment = yes }
 				}
 				trigger_event = { id = extra_law_events.25 }
 			}
-			# Clean up all language reform modifiers when law changes away
+			# Clean up transition cost modifiers and legacy data when law changes away
 			if = {
 				limit = {
 					NOT = { has_law = law_type:law_state_led_language_reform }

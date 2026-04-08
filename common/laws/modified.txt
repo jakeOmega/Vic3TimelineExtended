@@ -451,6 +451,10 @@ REPLACE:law_multicultural = {
 	unlocking_laws = {
 		law_slavery_banned
 	}
+
+	disallowing_laws = {
+		law_no_ministry_of_refugee_affairs
+	}
 	
 	unlocking_technologies = {
 		human_rights

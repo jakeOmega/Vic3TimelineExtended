@@ -1532,7 +1532,7 @@ nuclear_program_aid = {
 # TREATY ARTICLE: intelligence_sharing_pact
 intelligence_sharing_pact = {
     kind = mutual
-    cost = 200  # Upfront Influence cost
+    cost = 300  # High Influence cost — deep intelligence entanglement
 
     # Improves relations over time, showing growing trust.
     relations_progress_per_day = 1.0
@@ -1557,19 +1557,21 @@ intelligence_sharing_pact = {
     # Mutual modifier applies to both signatories.
     mutual_modifier = {
         # The core benefit: a 20% boost to the institution's effectiveness.
-        country_institution_impact_institution_ministry_of_intelligence_and_security_mult = 0.20
+        country_institution_impact_institution_ministry_of_intelligence_and_security_mult = 0.05
+
+        # Direct intelligence capacity boost from shared resources
+        country_intelligence_capacity_add = 3
+
+        # Shared counter-intelligence boosts all covert defense categories
+        country_covert_defense_economic_add = 1
+        country_covert_defense_military_add = 1
+        country_covert_defense_ideological_add = 1
 
         # The trade-off: a 10% increase in Bureaucracy cost.
         country_institution_cost_institution_ministry_of_intelligence_and_security_mult = 0.10
 
-        # The second trade-off: a continuous drain on Authority.
-        country_authority_add = -50
-
         # Represents the mutual dependence and entanglement of the pact.
         country_treaty_leverage_generation_add = 300
-
-        # A passive benefit representing shared counter-intelligence.
-        country_leverage_resistance_mult = 0.1
     }
 
     # Executed once when the treaty is signed.
@@ -1654,10 +1656,10 @@ intelligence_sharing_pact = {
     ai = {
         treaty_categories = { military }
         article_ai_usage = { offer request }
-        evaluation_chance = { value = 0.15 }
+        evaluation_chance = { value = 0.1 }
 
         inherent_accept_score = {
-            value = 0
+            value = -15
             # AI is more willing if they have good relations or a common threat.
             if = {
                 limit = { has_attitude = { who = scope:other_country attitude = friendly } }

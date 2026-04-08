@@ -35,13 +35,7 @@ pollution_generation_mult_effect = {
 
 cheaty = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_minting_mult = 10000
-	country_max_weekly_construction_progress_add = 10000
-	country_tech_research_speed_mult = 99
-	country_law_enactment_success_add = 0.8
-	country_law_enactment_time_mult = -0.8
-	political_movement_radicalism_add = -1
-	country_ahead_of_time_research_penalty_mult = -1
+	state_capitalists_investment_pool_efficiency_mult = 1000
 }
 
 extra_training_modifier = {
@@ -5053,7 +5047,6 @@ cultural_hegemony_foreign_benchmark = {
 covert_election_interference = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_legitimacy_base_add = -5
-	country_authority_add = -25
 }
 
 # Applied to the ATTACKER's target when a financial subversion operation is active
@@ -5087,6 +5080,13 @@ intelligence_capacity_defense = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_support_separatism_resistance_mult = 0.05
 	country_coup_resistance_add = 0.02
+}
+
+# Counterintelligence bonus from covert funding level (applied with multiplier = funding_level - 1)
+# Level 2: +5 IC, Level 3: +10 IC
+iw_funding_defense = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_intelligence_capacity_add = 5
 }
 
 # Domestic defense bonus from unused covert operation slots
@@ -5143,6 +5143,31 @@ covert_destabilization_general = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	political_movement_radicalism_add = 1
 	political_movement_pop_attraction_mult = 0.03
+}
+
+# Applied to TARGET during wartime infrastructure sabotage (morale effect, country-scoped)
+covert_infra_sabotage_morale = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	unit_morale_loss_mult = 0.15
+}
+
+# Applied to SELF during military espionage (unit effectiveness bonus, country-scoped)
+covert_military_espionage_unit = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	unit_offense_mult = 0.05
+	unit_defense_mult = 0.05
+}
+
+# Applied to TARGET during ideological subversion (separatism resistance, country-scoped)
+covert_ideological_subversion_resist = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_support_separatism_resistance_mult = -0.10
+}
+
+# Applied to TARGET during destabilization (separatism resistance, country-scoped)
+covert_destabilization_resist = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_support_separatism_resistance_mult = -0.15
 }
 
 # ============================================================================
@@ -5402,4 +5427,52 @@ ch_selective_education = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_tech_research_speed_mult = 0.03
 	country_cultural_pull_mult = 0.02
+}
+
+# ============================================================================
+# CULTURAL EXCHANGE TREATY ARTICLE EVENT MODIFIERS
+# ============================================================================
+
+# Cultural Exchange - soft power dividend (positive)
+cultural_exchange_soft_power_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_add = 2
+	country_prestige_add = 15
+}
+
+# Cultural Exchange - deepened ties (positive, longer lasting)
+cultural_exchange_deepened_ties_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_add = 1
+	state_yearly_cultural_acceptance_add = 1
+}
+
+# Cultural Exchange - domestic backlash (negative)
+cultural_exchange_backlash_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_cultural_pull_add = -1
+	country_prestige_add = -10
+}
+
+# Cultural Exchange - cultural retrenchment (negative, longer)
+cultural_exchange_retrenchment_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_yearly_cultural_acceptance_add = -1
+	country_legitimacy_base_add = -5
+}
+
+# Intelligence Sharing - covert defense boost from tip-off
+intelligence_tip_off_defense_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_covert_defense_economic_add = 2
+	country_covert_defense_military_add = 2
+	country_covert_defense_ideological_add = 2
+}
+
+# Intelligence Sharing - security exposure from failure
+intelligence_failure_exposure_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_covert_defense_economic_add = -1
+	country_covert_defense_military_add = -1
+	country_covert_defense_ideological_add = -1
 }

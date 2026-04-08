@@ -44,6 +44,7 @@ je_covert_warfare = {
 			}
 		}
 
+		desc = iw_separator
 		# ---- Intelligence Capacity Breakdown ----
 		triggered_desc = {
 			desc = je_iw_capacity_header
@@ -69,9 +70,23 @@ je_covert_warfare = {
 		}
 
 		# ---- Funding & Cost Info ----
-		triggered_desc = {
-			desc = je_iw_funding_header
-			trigger = { always = yes }
+		first_valid = {
+			triggered_desc = {
+				desc = je_iw_funding_3
+				trigger = { has_variable = iw_funding_level var:iw_funding_level >= 3 }
+			}
+			triggered_desc = {
+				desc = je_iw_funding_2
+				trigger = { has_variable = iw_funding_level var:iw_funding_level >= 2 }
+			}
+			triggered_desc = {
+				desc = je_iw_funding_1
+				trigger = { has_variable = iw_funding_level var:iw_funding_level >= 1 }
+			}
+			triggered_desc = {
+				desc = je_iw_funding_0
+				trigger = { always = yes }
+			}
 		}
 		triggered_desc = {
 			desc = je_iw_cost_info
@@ -82,59 +97,192 @@ je_covert_warfare = {
 			}
 		}
 
-		# ---- Detection Risk (shown per-operation in Active Ops section) ----
 		triggered_desc = {
 			desc = je_iw_detection_factors
 			trigger = { covert_operations_active >= 1 }
 		}
 
+		desc = iw_separator
 		# ---- Covert Defense Info ----
 		triggered_desc = {
 			desc = je_iw_defense_header
 			trigger = { always = yes }
 		}
 
-		# ---- Active Operations ----
+		desc = iw_separator
+		# ---- Active Operations (up to 3 per type, keyed by variable) ----
 		triggered_desc = {
 			desc = je_iw_ops_header
 			trigger = { always = yes }
 		}
+		# Phase explanation (shown if any operations active)
 		triggered_desc = {
-			desc = je_iw_op_election_interference_active
-			trigger = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_election_interference_action } }
+			desc = je_iw_phase_info
+			trigger = { covert_operations_active >= 1 }
 		}
-		triggered_desc = {
-			desc = je_iw_op_financial_subversion_active
-			trigger = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_financial_subversion_action } }
+
+		# ---- Election Interference ----
+		triggered_desc = { desc = je_iw_type_header_election_interference trigger = { has_variable = iw_target_election_interference_1 } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_election_interference_1_full trigger = { has_variable = iw_target_election_interference_1 has_variable = iw_duration_election_interference_1 var:iw_duration_election_interference_1 >= 12 } }
+			triggered_desc = { desc = je_iw_op_election_interference_1_est trigger = { has_variable = iw_target_election_interference_1 has_variable = iw_duration_election_interference_1 var:iw_duration_election_interference_1 >= 6 } }
+			triggered_desc = { desc = je_iw_op_election_interference_1_prep trigger = { has_variable = iw_target_election_interference_1 } }
 		}
-		triggered_desc = {
-			desc = je_iw_op_infrastructure_sabotage_active
-			trigger = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_infrastructure_sabotage_action } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_election_interference_2_full trigger = { has_variable = iw_target_election_interference_2 has_variable = iw_duration_election_interference_2 var:iw_duration_election_interference_2 >= 12 } }
+			triggered_desc = { desc = je_iw_op_election_interference_2_est trigger = { has_variable = iw_target_election_interference_2 has_variable = iw_duration_election_interference_2 var:iw_duration_election_interference_2 >= 6 } }
+			triggered_desc = { desc = je_iw_op_election_interference_2_prep trigger = { has_variable = iw_target_election_interference_2 } }
 		}
-		triggered_desc = {
-			desc = je_iw_op_comms_disruption_active
-			trigger = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_comms_disruption_action } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_election_interference_3_full trigger = { has_variable = iw_target_election_interference_3 has_variable = iw_duration_election_interference_3 var:iw_duration_election_interference_3 >= 12 } }
+			triggered_desc = { desc = je_iw_op_election_interference_3_est trigger = { has_variable = iw_target_election_interference_3 has_variable = iw_duration_election_interference_3 var:iw_duration_election_interference_3 >= 6 } }
+			triggered_desc = { desc = je_iw_op_election_interference_3_prep trigger = { has_variable = iw_target_election_interference_3 } }
 		}
-		triggered_desc = {
-			desc = je_iw_op_industrial_espionage_active
-			trigger = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_industrial_espionage_action } }
+
+		# ---- Financial Subversion ----
+		triggered_desc = { desc = je_iw_type_header_financial_subversion trigger = { has_variable = iw_target_financial_subversion_1 } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_financial_subversion_1_full trigger = { has_variable = iw_target_financial_subversion_1 has_variable = iw_duration_financial_subversion_1 var:iw_duration_financial_subversion_1 >= 12 } }
+			triggered_desc = { desc = je_iw_op_financial_subversion_1_est trigger = { has_variable = iw_target_financial_subversion_1 has_variable = iw_duration_financial_subversion_1 var:iw_duration_financial_subversion_1 >= 6 } }
+			triggered_desc = { desc = je_iw_op_financial_subversion_1_prep trigger = { has_variable = iw_target_financial_subversion_1 } }
 		}
-		triggered_desc = {
-			desc = je_iw_op_military_espionage_active
-			trigger = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_military_espionage_action } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_financial_subversion_2_full trigger = { has_variable = iw_target_financial_subversion_2 has_variable = iw_duration_financial_subversion_2 var:iw_duration_financial_subversion_2 >= 12 } }
+			triggered_desc = { desc = je_iw_op_financial_subversion_2_est trigger = { has_variable = iw_target_financial_subversion_2 has_variable = iw_duration_financial_subversion_2 var:iw_duration_financial_subversion_2 >= 6 } }
+			triggered_desc = { desc = je_iw_op_financial_subversion_2_prep trigger = { has_variable = iw_target_financial_subversion_2 } }
 		}
-		triggered_desc = {
-			desc = je_iw_op_influence_campaign_active
-			trigger = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_influence_campaign_action } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_financial_subversion_3_full trigger = { has_variable = iw_target_financial_subversion_3 has_variable = iw_duration_financial_subversion_3 var:iw_duration_financial_subversion_3 >= 12 } }
+			triggered_desc = { desc = je_iw_op_financial_subversion_3_est trigger = { has_variable = iw_target_financial_subversion_3 has_variable = iw_duration_financial_subversion_3 var:iw_duration_financial_subversion_3 >= 6 } }
+			triggered_desc = { desc = je_iw_op_financial_subversion_3_prep trigger = { has_variable = iw_target_financial_subversion_3 } }
 		}
-		triggered_desc = {
-			desc = je_iw_op_ideological_subversion_active
-			trigger = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_ideological_subversion_action } }
+
+		# ---- Infrastructure Sabotage ----
+		triggered_desc = { desc = je_iw_type_header_infrastructure_sabotage trigger = { has_variable = iw_target_infrastructure_sabotage_1 } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_infrastructure_sabotage_1_full trigger = { has_variable = iw_target_infrastructure_sabotage_1 has_variable = iw_duration_infrastructure_sabotage_1 var:iw_duration_infrastructure_sabotage_1 >= 12 } }
+			triggered_desc = { desc = je_iw_op_infrastructure_sabotage_1_est trigger = { has_variable = iw_target_infrastructure_sabotage_1 has_variable = iw_duration_infrastructure_sabotage_1 var:iw_duration_infrastructure_sabotage_1 >= 6 } }
+			triggered_desc = { desc = je_iw_op_infrastructure_sabotage_1_prep trigger = { has_variable = iw_target_infrastructure_sabotage_1 } }
 		}
-		triggered_desc = {
-			desc = je_iw_op_destabilization_active
-			trigger = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_destabilization_action } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_infrastructure_sabotage_2_full trigger = { has_variable = iw_target_infrastructure_sabotage_2 has_variable = iw_duration_infrastructure_sabotage_2 var:iw_duration_infrastructure_sabotage_2 >= 12 } }
+			triggered_desc = { desc = je_iw_op_infrastructure_sabotage_2_est trigger = { has_variable = iw_target_infrastructure_sabotage_2 has_variable = iw_duration_infrastructure_sabotage_2 var:iw_duration_infrastructure_sabotage_2 >= 6 } }
+			triggered_desc = { desc = je_iw_op_infrastructure_sabotage_2_prep trigger = { has_variable = iw_target_infrastructure_sabotage_2 } }
 		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_infrastructure_sabotage_3_full trigger = { has_variable = iw_target_infrastructure_sabotage_3 has_variable = iw_duration_infrastructure_sabotage_3 var:iw_duration_infrastructure_sabotage_3 >= 12 } }
+			triggered_desc = { desc = je_iw_op_infrastructure_sabotage_3_est trigger = { has_variable = iw_target_infrastructure_sabotage_3 has_variable = iw_duration_infrastructure_sabotage_3 var:iw_duration_infrastructure_sabotage_3 >= 6 } }
+			triggered_desc = { desc = je_iw_op_infrastructure_sabotage_3_prep trigger = { has_variable = iw_target_infrastructure_sabotage_3 } }
+		}
+
+		# ---- Communications Disruption ----
+		triggered_desc = { desc = je_iw_type_header_comms_disruption trigger = { has_variable = iw_target_comms_disruption_1 } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_comms_disruption_1_full trigger = { has_variable = iw_target_comms_disruption_1 has_variable = iw_duration_comms_disruption_1 var:iw_duration_comms_disruption_1 >= 12 } }
+			triggered_desc = { desc = je_iw_op_comms_disruption_1_est trigger = { has_variable = iw_target_comms_disruption_1 has_variable = iw_duration_comms_disruption_1 var:iw_duration_comms_disruption_1 >= 6 } }
+			triggered_desc = { desc = je_iw_op_comms_disruption_1_prep trigger = { has_variable = iw_target_comms_disruption_1 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_comms_disruption_2_full trigger = { has_variable = iw_target_comms_disruption_2 has_variable = iw_duration_comms_disruption_2 var:iw_duration_comms_disruption_2 >= 12 } }
+			triggered_desc = { desc = je_iw_op_comms_disruption_2_est trigger = { has_variable = iw_target_comms_disruption_2 has_variable = iw_duration_comms_disruption_2 var:iw_duration_comms_disruption_2 >= 6 } }
+			triggered_desc = { desc = je_iw_op_comms_disruption_2_prep trigger = { has_variable = iw_target_comms_disruption_2 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_comms_disruption_3_full trigger = { has_variable = iw_target_comms_disruption_3 has_variable = iw_duration_comms_disruption_3 var:iw_duration_comms_disruption_3 >= 12 } }
+			triggered_desc = { desc = je_iw_op_comms_disruption_3_est trigger = { has_variable = iw_target_comms_disruption_3 has_variable = iw_duration_comms_disruption_3 var:iw_duration_comms_disruption_3 >= 6 } }
+			triggered_desc = { desc = je_iw_op_comms_disruption_3_prep trigger = { has_variable = iw_target_comms_disruption_3 } }
+		}
+
+		# ---- Industrial Espionage ----
+		triggered_desc = { desc = je_iw_type_header_industrial_espionage trigger = { has_variable = iw_target_industrial_espionage_1 } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_industrial_espionage_1_full trigger = { has_variable = iw_target_industrial_espionage_1 has_variable = iw_duration_industrial_espionage_1 var:iw_duration_industrial_espionage_1 >= 12 } }
+			triggered_desc = { desc = je_iw_op_industrial_espionage_1_est trigger = { has_variable = iw_target_industrial_espionage_1 has_variable = iw_duration_industrial_espionage_1 var:iw_duration_industrial_espionage_1 >= 6 } }
+			triggered_desc = { desc = je_iw_op_industrial_espionage_1_prep trigger = { has_variable = iw_target_industrial_espionage_1 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_industrial_espionage_2_full trigger = { has_variable = iw_target_industrial_espionage_2 has_variable = iw_duration_industrial_espionage_2 var:iw_duration_industrial_espionage_2 >= 12 } }
+			triggered_desc = { desc = je_iw_op_industrial_espionage_2_est trigger = { has_variable = iw_target_industrial_espionage_2 has_variable = iw_duration_industrial_espionage_2 var:iw_duration_industrial_espionage_2 >= 6 } }
+			triggered_desc = { desc = je_iw_op_industrial_espionage_2_prep trigger = { has_variable = iw_target_industrial_espionage_2 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_industrial_espionage_3_full trigger = { has_variable = iw_target_industrial_espionage_3 has_variable = iw_duration_industrial_espionage_3 var:iw_duration_industrial_espionage_3 >= 12 } }
+			triggered_desc = { desc = je_iw_op_industrial_espionage_3_est trigger = { has_variable = iw_target_industrial_espionage_3 has_variable = iw_duration_industrial_espionage_3 var:iw_duration_industrial_espionage_3 >= 6 } }
+			triggered_desc = { desc = je_iw_op_industrial_espionage_3_prep trigger = { has_variable = iw_target_industrial_espionage_3 } }
+		}
+
+		# ---- Military Espionage ----
+		triggered_desc = { desc = je_iw_type_header_military_espionage trigger = { has_variable = iw_target_military_espionage_1 } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_military_espionage_1_full trigger = { has_variable = iw_target_military_espionage_1 has_variable = iw_duration_military_espionage_1 var:iw_duration_military_espionage_1 >= 12 } }
+			triggered_desc = { desc = je_iw_op_military_espionage_1_est trigger = { has_variable = iw_target_military_espionage_1 has_variable = iw_duration_military_espionage_1 var:iw_duration_military_espionage_1 >= 6 } }
+			triggered_desc = { desc = je_iw_op_military_espionage_1_prep trigger = { has_variable = iw_target_military_espionage_1 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_military_espionage_2_full trigger = { has_variable = iw_target_military_espionage_2 has_variable = iw_duration_military_espionage_2 var:iw_duration_military_espionage_2 >= 12 } }
+			triggered_desc = { desc = je_iw_op_military_espionage_2_est trigger = { has_variable = iw_target_military_espionage_2 has_variable = iw_duration_military_espionage_2 var:iw_duration_military_espionage_2 >= 6 } }
+			triggered_desc = { desc = je_iw_op_military_espionage_2_prep trigger = { has_variable = iw_target_military_espionage_2 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_military_espionage_3_full trigger = { has_variable = iw_target_military_espionage_3 has_variable = iw_duration_military_espionage_3 var:iw_duration_military_espionage_3 >= 12 } }
+			triggered_desc = { desc = je_iw_op_military_espionage_3_est trigger = { has_variable = iw_target_military_espionage_3 has_variable = iw_duration_military_espionage_3 var:iw_duration_military_espionage_3 >= 6 } }
+			triggered_desc = { desc = je_iw_op_military_espionage_3_prep trigger = { has_variable = iw_target_military_espionage_3 } }
+		}
+
+		# ---- Influence Campaign ----
+		triggered_desc = { desc = je_iw_type_header_influence_campaign trigger = { has_variable = iw_target_influence_campaign_1 } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_influence_campaign_1_full trigger = { has_variable = iw_target_influence_campaign_1 has_variable = iw_duration_influence_campaign_1 var:iw_duration_influence_campaign_1 >= 12 } }
+			triggered_desc = { desc = je_iw_op_influence_campaign_1_est trigger = { has_variable = iw_target_influence_campaign_1 has_variable = iw_duration_influence_campaign_1 var:iw_duration_influence_campaign_1 >= 6 } }
+			triggered_desc = { desc = je_iw_op_influence_campaign_1_prep trigger = { has_variable = iw_target_influence_campaign_1 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_influence_campaign_2_full trigger = { has_variable = iw_target_influence_campaign_2 has_variable = iw_duration_influence_campaign_2 var:iw_duration_influence_campaign_2 >= 12 } }
+			triggered_desc = { desc = je_iw_op_influence_campaign_2_est trigger = { has_variable = iw_target_influence_campaign_2 has_variable = iw_duration_influence_campaign_2 var:iw_duration_influence_campaign_2 >= 6 } }
+			triggered_desc = { desc = je_iw_op_influence_campaign_2_prep trigger = { has_variable = iw_target_influence_campaign_2 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_influence_campaign_3_full trigger = { has_variable = iw_target_influence_campaign_3 has_variable = iw_duration_influence_campaign_3 var:iw_duration_influence_campaign_3 >= 12 } }
+			triggered_desc = { desc = je_iw_op_influence_campaign_3_est trigger = { has_variable = iw_target_influence_campaign_3 has_variable = iw_duration_influence_campaign_3 var:iw_duration_influence_campaign_3 >= 6 } }
+			triggered_desc = { desc = je_iw_op_influence_campaign_3_prep trigger = { has_variable = iw_target_influence_campaign_3 } }
+		}
+
+		# ---- Ideological Subversion ----
+		triggered_desc = { desc = je_iw_type_header_ideological_subversion trigger = { has_variable = iw_target_ideological_subversion_1 } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_ideological_subversion_1_full trigger = { has_variable = iw_target_ideological_subversion_1 has_variable = iw_duration_ideological_subversion_1 var:iw_duration_ideological_subversion_1 >= 12 } }
+			triggered_desc = { desc = je_iw_op_ideological_subversion_1_est trigger = { has_variable = iw_target_ideological_subversion_1 has_variable = iw_duration_ideological_subversion_1 var:iw_duration_ideological_subversion_1 >= 6 } }
+			triggered_desc = { desc = je_iw_op_ideological_subversion_1_prep trigger = { has_variable = iw_target_ideological_subversion_1 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_ideological_subversion_2_full trigger = { has_variable = iw_target_ideological_subversion_2 has_variable = iw_duration_ideological_subversion_2 var:iw_duration_ideological_subversion_2 >= 12 } }
+			triggered_desc = { desc = je_iw_op_ideological_subversion_2_est trigger = { has_variable = iw_target_ideological_subversion_2 has_variable = iw_duration_ideological_subversion_2 var:iw_duration_ideological_subversion_2 >= 6 } }
+			triggered_desc = { desc = je_iw_op_ideological_subversion_2_prep trigger = { has_variable = iw_target_ideological_subversion_2 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_ideological_subversion_3_full trigger = { has_variable = iw_target_ideological_subversion_3 has_variable = iw_duration_ideological_subversion_3 var:iw_duration_ideological_subversion_3 >= 12 } }
+			triggered_desc = { desc = je_iw_op_ideological_subversion_3_est trigger = { has_variable = iw_target_ideological_subversion_3 has_variable = iw_duration_ideological_subversion_3 var:iw_duration_ideological_subversion_3 >= 6 } }
+			triggered_desc = { desc = je_iw_op_ideological_subversion_3_prep trigger = { has_variable = iw_target_ideological_subversion_3 } }
+		}
+
+		# ---- Destabilization ----
+		triggered_desc = { desc = je_iw_type_header_destabilization trigger = { has_variable = iw_target_destabilization_1 } }
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_destabilization_1_full trigger = { has_variable = iw_target_destabilization_1 has_variable = iw_duration_destabilization_1 var:iw_duration_destabilization_1 >= 12 } }
+			triggered_desc = { desc = je_iw_op_destabilization_1_est trigger = { has_variable = iw_target_destabilization_1 has_variable = iw_duration_destabilization_1 var:iw_duration_destabilization_1 >= 6 } }
+			triggered_desc = { desc = je_iw_op_destabilization_1_prep trigger = { has_variable = iw_target_destabilization_1 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_destabilization_2_full trigger = { has_variable = iw_target_destabilization_2 has_variable = iw_duration_destabilization_2 var:iw_duration_destabilization_2 >= 12 } }
+			triggered_desc = { desc = je_iw_op_destabilization_2_est trigger = { has_variable = iw_target_destabilization_2 has_variable = iw_duration_destabilization_2 var:iw_duration_destabilization_2 >= 6 } }
+			triggered_desc = { desc = je_iw_op_destabilization_2_prep trigger = { has_variable = iw_target_destabilization_2 } }
+		}
+		first_valid = {
+			triggered_desc = { desc = je_iw_op_destabilization_3_full trigger = { has_variable = iw_target_destabilization_3 has_variable = iw_duration_destabilization_3 var:iw_duration_destabilization_3 >= 12 } }
+			triggered_desc = { desc = je_iw_op_destabilization_3_est trigger = { has_variable = iw_target_destabilization_3 has_variable = iw_duration_destabilization_3 var:iw_duration_destabilization_3 >= 6 } }
+			triggered_desc = { desc = je_iw_op_destabilization_3_prep trigger = { has_variable = iw_target_destabilization_3 } }
+		}
+
 		triggered_desc = {
 			desc = je_iw_no_operations
 			trigger = {
@@ -240,6 +388,17 @@ je_covert_warfare = {
 				remove_modifier = iw_domestic_defense
 			}
 
+			# ---- Counterintelligence bonus from funding level ----
+			if = {
+				limit = { covert_ops_funding_ci_mult >= 1 }
+				remove_modifier = iw_funding_defense
+				add_modifier = { name = iw_funding_defense multiplier = covert_ops_funding_ci_mult }
+			}
+			else_if = {
+				limit = { has_modifier = iw_funding_defense }
+				remove_modifier = iw_funding_defense
+			}
+
 			# ---- Apply operation funding cost ----
 			if = {
 				limit = {
@@ -255,236 +414,22 @@ je_covert_warfare = {
 				remove_modifier = covert_operation_funding_cost
 			}
 
-			# ---- Apply operation effects (only if funding > 0) ----
+			# ---- Update operation phase durations ----
+			covert_ops_update_all_durations = yes
+
+			# ---- Apply phase-based operation effects (only if funding > 0) ----
 			if = {
 				limit = {
 					has_variable = iw_funding_level
 					var:iw_funding_level >= 1
 				}
-
-				# Infrastructure Sabotage: apply to random state in target (state-scoped, not in pact)
-				every_scope_diplomatic_pact = {
-					limit = { is_diplomatic_action_type = covert_infrastructure_sabotage_action }
-					every_participant = {
-						limit = { NOT = { this = ROOT } }
-						random_scope_state = {
-							limit = { any_scope_building = { level >= 1 } }
-							remove_modifier = covert_infrastructure_sabotage
-							add_modifier = { name = covert_infrastructure_sabotage months = 3 is_decaying = yes }
-						}
-					}
-				}
-
-				# Communications Disruption: effects handled by pact second_modifier
-
-				# Industrial Espionage: conditional tech spread bonus (base innovation via pact)
-				every_scope_diplomatic_pact = {
-					limit = { is_diplomatic_action_type = covert_industrial_espionage_action }
-					every_participant = {
-						limit = { NOT = { this = ROOT } }
-						save_scope_as = espionage_target
-					}
-				}
-				if = {
-					limit = {
-						any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_industrial_espionage_action }
-						exists = scope:espionage_target
-						espionage_target_tech_advantage > 0
-					}
-					remove_modifier = covert_industrial_espionage
-					add_modifier = { name = covert_industrial_espionage months = 3 is_decaying = yes }
-				}
-
-				# Military Espionage: conditional tech spread bonus (base unit stats via pact)
-				every_scope_diplomatic_pact = {
-					limit = { is_diplomatic_action_type = covert_military_espionage_action }
-					every_participant = {
-						limit = { NOT = { this = ROOT } }
-						save_scope_as = espionage_target
-					}
-				}
-				if = {
-					limit = {
-						any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_military_espionage_action }
-						exists = scope:espionage_target
-						espionage_target_tech_advantage > 0
-					}
-					remove_modifier = covert_military_espionage
-					add_modifier = { name = covert_military_espionage months = 3 is_decaying = yes }
-				}
-
-				# Influence Campaign: effects handled by pact second_modifier
-
-				# Ideological Subversion: boost movements matching YOUR ideology in target (movement-scoped)
-				if = {
-					limit = {
-						any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_ideological_subversion_action }
-					}
-					save_scope_as = cultural_hegemon
-					every_scope_diplomatic_pact = {
-						limit = { is_diplomatic_action_type = covert_ideological_subversion_action }
-						every_participant = {
-							limit = { NOT = { this = ROOT } }
-							ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion MONTHS = 3 }
-						}
-					}
-				}
-
-				# Destabilization: boost all political movements + general radicalism in target
-				every_scope_diplomatic_pact = {
-					limit = { is_diplomatic_action_type = covert_destabilization_action }
-					every_participant = {
-						limit = { NOT = { this = ROOT } }
-						# Boost all political movements strongly
-						every_political_movement = {
-							remove_modifier = covert_destabilization_separatist
-							add_modifier = { name = covert_destabilization_separatist months = 3 is_decaying = yes }
-						}
-						# General radicalism boost
-						remove_modifier = covert_destabilization_general
-						add_modifier = { name = covert_destabilization_general months = 3 is_decaying = yes }
-					}
-				}
+				covert_ops_apply_all_phase_effects = yes
 			}
 
 			# ---- Per-operation target tracking & detection ----
-			# For each op: save target country, set target_max_ic to their IC,
-			# then compute & save per-op detection chance for JE display.
-			# Election Interference
-			every_scope_diplomatic_pact = {
-				limit = { is_diplomatic_action_type = covert_election_interference_action }
-				every_participant = {
-					limit = { NOT = { this = ROOT } }
-					ROOT = {
-						set_variable = { name = iw_target_election_interference value = PREV }
-						set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
-					}
-				}
-			}
-			if = {
-				limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_election_interference_action } }
-				set_variable = { name = iw_detect_election_interference value = covert_operation_detection_chance }
-			}
-			# Financial Subversion
-			every_scope_diplomatic_pact = {
-				limit = { is_diplomatic_action_type = covert_financial_subversion_action }
-				every_participant = {
-					limit = { NOT = { this = ROOT } }
-					ROOT = {
-						set_variable = { name = iw_target_financial_subversion value = PREV }
-						set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
-					}
-				}
-			}
-			if = {
-				limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_financial_subversion_action } }
-				set_variable = { name = iw_detect_financial_subversion value = covert_operation_detection_chance }
-			}
-			# Infrastructure Sabotage
-			every_scope_diplomatic_pact = {
-				limit = { is_diplomatic_action_type = covert_infrastructure_sabotage_action }
-				every_participant = {
-					limit = { NOT = { this = ROOT } }
-					ROOT = {
-						set_variable = { name = iw_target_infrastructure_sabotage value = PREV }
-						set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
-					}
-				}
-			}
-			if = {
-				limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_infrastructure_sabotage_action } }
-				set_variable = { name = iw_detect_infrastructure_sabotage value = covert_operation_detection_chance }
-			}
-			# Communications Disruption
-			every_scope_diplomatic_pact = {
-				limit = { is_diplomatic_action_type = covert_comms_disruption_action }
-				every_participant = {
-					limit = { NOT = { this = ROOT } }
-					ROOT = {
-						set_variable = { name = iw_target_comms_disruption value = PREV }
-						set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
-					}
-				}
-			}
-			if = {
-				limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_comms_disruption_action } }
-				set_variable = { name = iw_detect_comms_disruption value = covert_operation_detection_chance }
-			}
-			# Industrial Espionage
-			every_scope_diplomatic_pact = {
-				limit = { is_diplomatic_action_type = covert_industrial_espionage_action }
-				every_participant = {
-					limit = { NOT = { this = ROOT } }
-					ROOT = {
-						set_variable = { name = iw_target_industrial_espionage value = PREV }
-						set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
-					}
-				}
-			}
-			if = {
-				limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_industrial_espionage_action } }
-				set_variable = { name = iw_detect_industrial_espionage value = covert_operation_detection_chance }
-			}
-			# Military Espionage
-			every_scope_diplomatic_pact = {
-				limit = { is_diplomatic_action_type = covert_military_espionage_action }
-				every_participant = {
-					limit = { NOT = { this = ROOT } }
-					ROOT = {
-						set_variable = { name = iw_target_military_espionage value = PREV }
-						set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
-					}
-				}
-			}
-			if = {
-				limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_military_espionage_action } }
-				set_variable = { name = iw_detect_military_espionage value = covert_operation_detection_chance }
-			}
-			# Influence Campaign
-			every_scope_diplomatic_pact = {
-				limit = { is_diplomatic_action_type = covert_influence_campaign_action }
-				every_participant = {
-					limit = { NOT = { this = ROOT } }
-					ROOT = {
-						set_variable = { name = iw_target_influence_campaign value = PREV }
-						set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
-					}
-				}
-			}
-			if = {
-				limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_influence_campaign_action } }
-				set_variable = { name = iw_detect_influence_campaign value = covert_operation_detection_chance }
-			}
-			# Ideological Subversion
-			every_scope_diplomatic_pact = {
-				limit = { is_diplomatic_action_type = covert_ideological_subversion_action }
-				every_participant = {
-					limit = { NOT = { this = ROOT } }
-					ROOT = {
-						set_variable = { name = iw_target_ideological_subversion value = PREV }
-						set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
-					}
-				}
-			}
-			if = {
-				limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_ideological_subversion_action } }
-				set_variable = { name = iw_detect_ideological_subversion value = covert_operation_detection_chance }
-			}
-			# Destabilization
-			every_scope_diplomatic_pact = {
-				limit = { is_diplomatic_action_type = covert_destabilization_action }
-				every_participant = {
-					limit = { NOT = { this = ROOT } }
-					ROOT = {
-						set_variable = { name = iw_target_destabilization value = PREV }
-						set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
-					}
-				}
-			}
-			if = {
-				limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_destabilization_action } }
-				set_variable = { name = iw_detect_destabilization value = covert_operation_detection_chance }
-			}
+			# Uses covert_op_refresh_all_targets to assign up to 3 slots per type.
+			# Each slot stores: iw_target_<type>_N (capital state for loc), iw_detect_<type>_N (detection %), iw_tgt_ic_<type>_N (target IC).
+			covert_op_refresh_all_targets = yes
 
 			# ---- Restore target_max_ic to actual maximum for detection roll ----
 			set_variable = { name = target_max_ic value = 0 }

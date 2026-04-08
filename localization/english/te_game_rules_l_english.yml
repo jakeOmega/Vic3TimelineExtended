@@ -19,7 +19,7 @@
  setting_banking_system_enabled:0 "Banking System Enabled"
  setting_banking_system_enabled_desc:0 "The banking cycle journal entry is active. Financial regulation laws provide banking intervention tools, momentum effects, and crash chance modifiers that interact with the banking cycle system."
  setting_covert_warfare_disabled:0 "Covert Warfare Disabled"
- setting_covert_warfare_disabled_desc:0 "The covert warfare journal entry is disabled. Intelligence capacity modifiers from technologies still appear but covert operations are unavailable."
+ setting_covert_warfare_disabled_desc:0 "The covert warfare journal entry is disabled. [concept_intelligence_capacity] modifiers from technologies still appear but covert operations are unavailable."
  setting_covert_warfare_enabled:0 "Covert Warfare Enabled"
  setting_covert_warfare_enabled_desc:0 "The [concept_covert_warfare_system] journal entry is active. Nations build [concept_intelligence_capacity] through technology and literacy, and can launch [concept_covert_operations] against rivals. Unused operation slots boost domestic defense."
  setting_cultural_hegemony_disabled:0 "Cultural Hegemony Disabled"

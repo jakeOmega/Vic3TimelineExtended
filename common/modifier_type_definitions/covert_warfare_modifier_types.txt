@@ -23,3 +23,25 @@ country_covert_operation_slot_add = {
 	percent = no
 	decimals = 0
 }
+
+### Type-specific covert defense modifiers ###
+# These add to the target's defense for specific operation categories.
+# The total defense used in detection is: IC + type_defense.
+
+country_covert_defense_economic_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+country_covert_defense_military_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+country_covert_defense_ideological_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
