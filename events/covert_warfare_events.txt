@@ -1,20 +1,20 @@
-﻿namespace = information_warfare
+﻿namespace = covert_warfare
 
 # ============================================================================
-# EVENT 1: Cyber Operation Detected
+# EVENT 1: Covert Operation Detected
 # ============================================================================
 # Fired when a monthly detection check succeeds. The attacker (ROOT) has
 # one of their operations burned. They gain infamy and the targeted rival
 # gets a notification. A random active operation is cancelled.
 # ============================================================================
 
-information_warfare.1 = {
+covert_warfare.1 = {
 	type = country_event
 	placement = root
 
-	title = information_warfare.1.t
-	desc = information_warfare.1.d
-	flavor = information_warfare.1.f
+	title = covert_warfare.1.t
+	desc = covert_warfare.1.d
+	flavor = covert_warfare.1.f
 
 	event_image = {
 		video = "event_newspaper"
@@ -67,11 +67,11 @@ information_warfare.1 = {
 	}
 
 	option = {
-		name = information_warfare.1.a
+		name = covert_warfare.1.a
 		default_option = yes
 
 		# Generate infamy from the operation
-		change_infamy = cyber_ops_detected_infamy
+		change_infamy = covert_ops_detected_infamy
 
 		# Cancel the burned operation and clean up target variable
 		if = {
@@ -130,7 +130,7 @@ information_warfare.1 = {
 		if = {
 			limit = { exists = scope:detected_by_country }
 			scope:detected_by_country = {
-				trigger_event = { id = information_warfare.4 }
+				trigger_event = { id = covert_warfare.2 }
 			}
 		}
 
@@ -140,10 +140,10 @@ information_warfare.1 = {
 	}
 
 	option = {
-		name = information_warfare.1.b
+		name = covert_warfare.1.b
 
 		# Deny and double down: keep infamy, add a small cooldown modifier
-		change_infamy = cyber_ops_detected_infamy
+		change_infamy = covert_ops_detected_infamy
 
 		# Cancel the burned operation and clean up target variable
 		if = {
@@ -189,43 +189,21 @@ information_warfare.1 = {
 				limit = { has_variable = iw_target_comms_disruption }
 				remove_variable = iw_target_comms_disruption
 			}
-		uration = 3
-
-	trigger = {
-		cultural_pull_total >= 10
-		NOT = { has_variable = ch_milestone_significant }
-	}
-
-	immediate = {
-		set_variable = ch_milestone_significant
-	}
-
-	option = {
-		name = information_warfare.2.a
-		default_option = yes
-
-		# Invest in cultural projection
-		add_modifier = {
-			name = cultural_hegemony_effect
-			months = normal_modifier_time
-			is_decaying = yes
-			multiplier = 2
 		}
 
-		ai_chance = {
-			base = 10
-		}
-	}
+		# Decrement active operations
+		change_variable = { name = iw_active_operations subtract = 1 }
+		clamp_variable = { name = iw_active_operations min = 0 max = 6 }
 
-	option = {
-		name = information_warfare.2.b
+		# Clean up temp variable
+		remove_variable = iw_burned_op_type
 
-		# Focus on internal development instead
-		add_modifier = {
-			name = digital_sovereignty_defense
-			months = normal_modifier_time
-			is_decaying = yes
-			multiplier = 2
+		# Fire event on the detected country
+		if = {
+			limit = { exists = scope:detected_by_country }
+			scope:detected_by_country = {
+				trigger_event = { id = covert_warfare.2 }
+			}
 		}
 
 		ai_chance = {
@@ -235,62 +213,19 @@ information_warfare.1 = {
 }
 
 # ============================================================================
-# EVENT 3: Cultural Milestone — Dominant Cultural Power
+# EVENT 2: Foreign Covert Operation Detected (Defender's Perspective)
 # ============================================================================
-# Fired once when a country's cultural pull first exceeds 80.
-# The country is now the world's cultural hegemon.
+# Fired on the target country when they detect that someone is running
+# operations against them. Gives them options to respond.
 # ============================================================================
 
-information_warfare.3 = {
+covert_warfare.2 = {
 	type = country_event
 	placement = root
 
-	title = information_warfare.3.t
-	desc = information_warfare.3.d
-	flavor = information_warfare.3.f
-
-	event_image = {
-		video = "event_art_gallery"
-	}
-	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
-
-	duration = 3
-
-	trigger = {
-		cultural_pull_total >= 25
-		NOT = { has_variable = ch_milestone_dominant }
-	}
-
-	immediate = {
-		set_variable = ch_milestone_dominant
-	}
-
-	option = {
-		name = information_warfare.3.a
-		default_option = yes
-
-		add_prestige = 200
-
-		ai_chance = {
-			base = 10
-		}
-	}
-}
-
-# ============================================================================
-# EVENT 4: Foreign Cyber Attack Detected (Defender's Perspective)
-# ============================================================================
-# Fired on the target country when they detect (via intelligence) that
-# someone is running operations against them. Gives them options to respond.
-# ============================================================================
-
-information_warfare.4 = {
-	type = country_event
-	placement = root
-
-	title = information_warfare.4.t
-	desc = information_warfare.4.d
-	flavor = information_warfare.4.f
+	title = covert_warfare.2.t
+	desc = covert_warfare.2.d
+	flavor = covert_warfare.2.f
 
 	event_image = {
 		video = "event_newspaper"
@@ -300,10 +235,10 @@ information_warfare.4 = {
 	duration = 3
 
 	trigger = {
-		# Only fire if someone has a cyber modifier on us
+		# Only fire if someone has a covert modifier on us
 		OR = {
-			has_modifier = cyber_election_interference
-			has_modifier = cyber_financial_subversion
+			has_modifier = covert_election_interference
+			has_modifier = covert_financial_subversion
 		}
 		NOT = { has_variable = iw_defender_event_cooldown }
 	}
@@ -313,12 +248,12 @@ information_warfare.4 = {
 	}
 
 	option = {
-		name = information_warfare.4.a
+		name = covert_warfare.2.a
 		default_option = yes
 
 		# Harden defenses
 		add_modifier = {
-			name = digital_sovereignty_defense
+			name = intelligence_capacity_defense
 			months = normal_modifier_time
 			is_decaying = yes
 			multiplier = 3
@@ -332,7 +267,7 @@ information_warfare.4 = {
 	}
 
 	option = {
-		name = information_warfare.4.b
+		name = covert_warfare.2.b
 
 		# Retaliate: gains a free operation slot for a limited time
 		if = {

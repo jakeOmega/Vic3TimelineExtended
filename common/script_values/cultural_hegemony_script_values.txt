@@ -1,0 +1,422 @@
+﻿# ============================================================================
+# CULTURAL HEGEMONY — Script Values
+# ============================================================================
+# These script values drive the Cultural Hegemony (soft power) system
+# via dynamic modifier pattern.
+#
+# CULTURAL PULL uses a SHARE-BASED final score:
+#   1. Compute each country's "raw" cultural pull
+#   2. Sum all countries' raw scores
+#   3. Final score = (your raw / global raw sum) * 100
+# This ensures scaling even as populations grow 5x and GDP grows 1000x+.
+#
+# Art and Prestige use a MIN(absolute, share_of_global) pattern:
+#   - In early game, absolute production limits score (small market = high
+#     share but low actual output, so absolute is the bottleneck)
+#   - In late game, market share limits score (massive production but you
+#     can't dominate when everyone produces a lot)
+# ============================================================================
+
+# ============================================================================
+# SECTION 1: CULTURAL HEGEMONY — TUNING CONSTANTS
+# ============================================================================
+
+# Prestige scaling factor: raw prestige / this = absolute component
+# Puts prestige on a 0-100 scale comparable to share percentage
+cultural_pull_prestige_divisor = 5
+
+# Monument bonus per wonder building in bg_monuments group
+cultural_pull_monument_bonus = 3
+
+# Tech leadership: bonus per "world first" tech researched in last 10 years
+cultural_pull_tech_first_bonus = 2
+cultural_pull_society_tech_first_bonus = 4
+
+# SoL contribution caps
+cultural_pull_sol_min = -5
+cultural_pull_sol_max = 20
+
+# Infamy penalty: raw score += infamy * this factor
+# 10 infamy = -3, 25 = -7.5, 50 = -15 raw
+cultural_pull_infamy_factor = -0.1
+
+# Stability penalty constants
+# Turmoil scaling: country_turmoil (0-1 fraction) * this
+# 20% turmoil = -6, 50% = -15
+cultural_pull_turmoil_factor = -10
+# Flat penalty for active civil war (revolution or secession)
+cultural_pull_civil_war_penalty = -20
+
+# Hegemony effect scaling (multiplier = cultural_pull_total directly, 0-100)
+cultural_hegemony_modifier_max_mult = 100
+cultural_hegemony_foreign_benchmark_max = 3
+# Per year decay multiplier for tech leadership bonus (1 = no decay, 0.5 = 50% decay per year)
+cultural_hegemony_tech_firsts_decay_mult = 0.9 # ~6.5 year half-life
+
+# ============================================================================
+# SECTION 2: GLOBAL TOTALS (used for share calculations)
+# ============================================================================
+
+# Total fine art production across all countries' markets
+global_fine_art_production = {
+	value = 0
+	every_market = {
+        mg:fine_art = {
+            add = market_goods_production
+		}
+	}
+	min = 1		# avoid divide by zero
+}
+
+# Total prestige across all countries
+global_prestige_total = {
+	value = 0
+	every_country = {
+		add = prestige
+	}
+	min = 1
+}
+
+sol_factor = {
+    value = average_sol
+    min = 0
+    multiply = total_population_share
+}
+
+# Global average Standard of Living (population-weighted mean)
+global_average_sol = {
+	value = 0
+	every_country = {
+		add = sol_factor
+	}
+}
+
+# Total raw cultural pull across all countries (for share calculation)
+global_raw_cultural_pull = {
+	value = 0
+	every_country = {
+		add = cultural_pull_raw
+	}
+	min = 1
+}
+
+# ============================================================================
+# SECTION 3: CULTURAL HEGEMONY — PER-COUNTRY COMPONENTS
+# ============================================================================
+
+# Fine art goods production in this country (sum of state-level production)
+# Uses state_goods_production via sg: accessor to avoid shared-market overcounting
+country_fine_art_production = {
+	value = 0
+	market = {
+		mg:fine_art = {
+			add = market_goods_production
+		}
+        multiply = "market_production_share(PREV)"
+	}
+}
+
+# Art share of global production (0-100 scale)
+country_art_share_pct = {
+	value = country_fine_art_production
+	divide = global_fine_art_production
+	multiply = 100
+}
+
+# Art: min(absolute production, share of global * 100)
+# Uses `max = share` as a ceiling to cap absolute at share
+# Early game: absolute limits (high share but tiny global market)
+# Late game: share limits (massive production but fractional global share)
+cultural_pull_from_art = {
+	value = country_fine_art_production
+	max = country_art_share_pct
+	# Apply modifier hook for art contribution
+	multiply = {
+		value = 1
+		add = modifier:country_cultural_hegemony_art_mult
+	}
+	min = 0
+}
+
+# Prestige share of global prestige (0-100 scale)
+country_prestige_share_pct = {
+	value = prestige
+	divide = global_var:ch_cached_prestige
+	multiply = 100
+}
+
+# Prestige absolute (scaled down to comparable range)
+country_prestige_absolute = {
+	value = prestige
+	divide = cultural_pull_prestige_divisor
+}
+
+# Prestige: min(prestige / divisor, share of global * 100)
+cultural_pull_from_prestige = {
+	value = country_prestige_absolute
+	max = country_prestige_share_pct
+	min = 0
+}
+
+# Standard of Living: delta from global average, capped
+cultural_pull_from_sol = {
+	value = average_sol
+	subtract = global_var:ch_cached_sol_avg
+	min = cultural_pull_sol_min
+	max = cultural_pull_sol_max
+}
+
+# Technology leadership bonus from "world first" achievements
+# Uses a country variable ch_tech_firsts_recent that accumulates
+# and decays over time (managed in on_acquired_technology hook)
+cultural_pull_from_tech_leadership = {
+	value = 0
+	if = {
+		limit = { has_variable = ch_tech_firsts_recent }
+		add = var:ch_tech_firsts_recent
+	}
+}
+
+# Monument / wonder bonus: counts ALL buildings in bg_monuments group
+cultural_pull_from_monuments = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = {
+				is_building_group = bg_monuments
+				level >= 1
+			}
+			add = cultural_pull_monument_bonus
+		}
+	}
+}
+
+# Megaproject bonus: +1 per completed megaproject (not in bg_monuments)
+# Capped at 1 per type since these are unique buildings
+cultural_pull_from_megaprojects = {
+	value = 0
+	if = {
+		limit = { any_scope_state = { has_building = building_space_elevator } }
+		add = 1
+	}
+	if = {
+		limit = { any_scope_state = { has_building = building_solar_collector } }
+		add = 1
+	}
+	if = {
+		limit = { any_scope_state = { has_building = building_orbital_battlestation } }
+		add = 1
+	}
+	if = {
+		limit = { any_scope_state = { has_building = building_mind_upload_nexus } }
+		add = 1
+	}
+	if = {
+		limit = { any_scope_state = { has_building = building_antimatter_facility } }
+		add = 1
+	}
+	if = {
+		limit = { any_scope_state = { has_building = building_nanofabrication_center } }
+		add = 1
+	}
+	if = {
+		limit = { any_scope_state = { has_building = building_consciousness_network } }
+		add = 1
+	}
+	# Scale by monument bonus constant
+	multiply = cultural_pull_monument_bonus
+}
+
+# Modifier hook contribution
+cultural_pull_from_modifiers = {
+	value = modifier:country_cultural_pull_add
+}
+
+# Infamy penalty: countries with high infamy project less cultural influence
+cultural_pull_from_infamy = {
+	value = infamy
+	multiply = cultural_pull_infamy_factor
+	max = 0
+}
+
+# Stability penalty: turmoil and civil wars reduce cultural influence
+cultural_pull_from_stability = {
+	value = 0
+	# Turmoil component: population-weighted radical fraction
+	add = {
+		value = country_turmoil
+		multiply = cultural_pull_turmoil_factor
+	}
+	# Civil war: massive penalty
+	if = {
+		limit = { any_civil_war = { } }
+		add = cultural_pull_civil_war_penalty
+	}
+	max = 0
+}
+
+# ============================================================================
+# SECTION 4: RAW SCORE & SHARE-BASED FINAL SCORE
+# ============================================================================
+
+# Raw cultural pull (before global share normalization)
+cultural_pull_raw = {
+	value = cultural_pull_from_art
+	add = cultural_pull_from_prestige
+	add = cultural_pull_from_sol
+	add = cultural_pull_from_tech_leadership
+	add = cultural_pull_from_monuments
+	add = cultural_pull_from_megaprojects
+	add = cultural_pull_from_modifiers
+	add = cultural_pull_from_infamy
+	add = cultural_pull_from_stability
+	min = 0
+	# Apply general multiplier hook
+	multiply = {
+		value = 1
+		add = modifier:country_cultural_pull_mult
+	}
+	min = 0
+}
+
+# Final cultural pull: this country's SHARE of global raw cultural pull
+# Range: 0–100 (percentage of global cultural influence)
+cultural_pull_total = {
+	value = cultural_pull_raw
+	divide = global_var:ch_cached_global_raw
+	multiply = 100
+	min = 0
+	max = 100
+}
+
+# Multiplier for the cultural_hegemony_effect static modifier
+# Equals cultural_pull_total directly (0-100 share percentage)
+cultural_hegemony_modifier_mult = {
+	value = cultural_pull_total
+	min = 0
+	max = 100
+}
+
+# Foreign benchmark multiplier: how much this country's SoL expectations
+# are raised by the world's cultural hegemon
+# Uses global_var:ch_top_cultural_pull set by yearly pulse
+cultural_hegemony_benchmark_mult = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_top_cultural_pull }
+		# The higher the hegemon's share vs yours, the more expectations rise
+		add = global_var:ch_top_cultural_pull
+		subtract = cultural_pull_total
+		divide = {
+			value = 100
+			min = 1
+		}
+		multiply = cultural_hegemony_foreign_benchmark_max
+		min = 0
+		max = cultural_hegemony_foreign_benchmark_max
+	}
+}
+
+# ============================================================================
+# SECTION 5: CULTURAL HEGEMONY — DISPLAY VALUES (for JE tooltips)
+# ============================================================================
+
+cultural_pull_display = {
+	value = cultural_pull_total
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+cultural_pull_raw_display = {
+	value = cultural_pull_raw
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+country_fine_art_production_display = {
+    value = country_fine_art_production
+    round = yes
+}
+
+global_fine_art_production_display = {
+    value = global_fine_art_production
+    round = yes
+}
+
+cultural_pull_from_art_display = {
+	value = cultural_pull_from_art
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+prestige_display = {
+    value = prestige
+    round = yes
+}
+
+global_prestige_total_display = {
+    value = global_var:ch_cached_prestige
+    round = yes
+}
+
+cultural_pull_from_prestige_display = {
+	value = cultural_pull_from_prestige
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+sol_display = {
+    value = average_sol
+    multiply = 10
+    round = yes
+    divide = 10
+}
+
+global_average_sol_display = {
+    value = global_var:ch_cached_sol_avg
+    multiply = 10
+    round = yes
+    divide = 10
+}
+
+cultural_pull_from_sol_display = {
+	value = cultural_pull_from_sol
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+cultural_pull_from_tech_display = {
+	value = cultural_pull_from_tech_leadership
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+cultural_pull_from_monuments_display = {
+	value = cultural_pull_from_monuments
+	round = yes
+}
+
+cultural_pull_from_megaprojects_display = {
+	value = cultural_pull_from_megaprojects
+	round = yes
+}
+
+cultural_pull_from_infamy_display = {
+	value = cultural_pull_from_infamy
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+cultural_pull_from_stability_display = {
+	value = cultural_pull_from_stability
+	multiply = 10
+	round = yes
+	divide = 10
+}

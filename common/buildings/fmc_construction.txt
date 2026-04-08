@@ -35,10 +35,7 @@ REPLACE:building_construction_sector = {
 	icon = "gfx/interface/icons/building_icons/construction_camp.dds"
 	city_type = city
 	levels_per_mesh = 5
-	# meshes = {
-	# 	fmc_building_construction_site
-	# }
-	ai_nationalization_desire = 0.25 # AI will generally not privatize steel mills due to importance for construction
+	ai_nationalization_desire = 0.25
 	ownership_type = self
 	required_construction = construction_cost_low
 	unlocking_technologies = {

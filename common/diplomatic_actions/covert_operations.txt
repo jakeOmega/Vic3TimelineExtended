@@ -1,0 +1,612 @@
+﻿# ============================================================================
+# COVERT WARFARE — Covert Operation Diplomatic Actions
+# ============================================================================
+# These diplomatic actions allow a country to launch covert operations
+# against a target country. The operations persist as tracked variables and
+# their effects are applied via the JE monthly pulse.
+# ============================================================================
+
+# ---- PEACETIME: Election Interference ----
+# Undermine a rival's political stability through covert influence campaigns
+covert_election_interference_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		has_technology_researched = television
+		NOT = { has_variable = iw_op_election_interference }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_not_at_war_tt
+			is_at_war = no
+		}
+		has_diplomatic_pact = { who = scope:target_country type = rivalry }
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	accept_effect = {
+		set_variable = iw_op_election_interference
+		set_variable = { name = iw_target_election_interference value = scope:target_country }
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		change_variable = { name = iw_active_operations add = 1 }
+		post_notification = iw_operation_launched
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.1
+		}
+
+		will_propose = {
+			has_diplomatic_pact = { who = scope:target_country type = rivalry }
+			covert_operations_available_slots >= 1
+			is_at_war = no
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+
+		propose_score = {
+			value = 10
+		}
+	}
+}
+
+# ---- PEACETIME: Financial Subversion ----
+# Destabilize a rival's economy through market manipulation and currency attacks
+covert_financial_subversion_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		has_technology_researched = television
+		NOT = { has_variable = iw_op_financial_subversion }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_not_at_war_tt
+			is_at_war = no
+		}
+		has_diplomatic_pact = { who = scope:target_country type = rivalry }
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	accept_effect = {
+		set_variable = iw_op_financial_subversion
+		set_variable = { name = iw_target_financial_subversion value = scope:target_country }
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		change_variable = { name = iw_active_operations add = 1 }
+		post_notification = iw_operation_launched
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.1
+		}
+
+		will_propose = {
+			has_diplomatic_pact = { who = scope:target_country type = rivalry }
+			covert_operations_available_slots >= 1
+			is_at_war = no
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+
+		propose_score = {
+			value = 10
+		}
+	}
+}
+
+# ---- WARTIME: Infrastructure Sabotage ----
+# Disrupt enemy production and logistics through sabotage operations
+covert_infrastructure_sabotage_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		has_technology_researched = television
+		NOT = { has_variable = iw_op_infrastructure_sabotage }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_at_war_tt
+			is_at_war = yes
+		}
+		has_war_with = scope:target_country
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	accept_effect = {
+		set_variable = iw_op_infrastructure_sabotage
+		set_variable = { name = iw_target_infrastructure_sabotage value = scope:target_country }
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		change_variable = { name = iw_active_operations add = 1 }
+		post_notification = iw_operation_launched
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.15
+		}
+
+		will_propose = {
+			has_war_with = scope:target_country
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+
+		propose_score = {
+			value = 15
+		}
+	}
+}
+
+# ---- WARTIME: Communications Disruption ----
+# Disrupt enemy military command and control systems
+covert_comms_disruption_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		has_technology_researched = television
+		NOT = { has_variable = iw_op_comms_disruption }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_at_war_tt
+			is_at_war = yes
+		}
+		has_war_with = scope:target_country
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	accept_effect = {
+		set_variable = iw_op_comms_disruption
+		set_variable = { name = iw_target_comms_disruption value = scope:target_country }
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		change_variable = { name = iw_active_operations add = 1 }
+		post_notification = iw_operation_launched
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.15
+		}
+
+		will_propose = {
+			has_war_with = scope:target_country
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+
+		propose_score = {
+			value = 15
+		}
+	}
+}
+
+# ---- PEACETIME: Industrial Espionage ----
+# Steal production secrets and technology from a rival nation
+# Effect: boosts own production tech spread and innovation (applied to SELF)
+covert_industrial_espionage_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		has_technology_researched = television
+		NOT = { has_variable = iw_op_industrial_espionage }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_not_at_war_tt
+			is_at_war = no
+		}
+		has_diplomatic_pact = { who = scope:target_country type = rivalry }
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	accept_effect = {
+		set_variable = iw_op_industrial_espionage
+		set_variable = { name = iw_target_industrial_espionage value = scope:target_country }
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		change_variable = { name = iw_active_operations add = 1 }
+		post_notification = iw_operation_launched
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.1
+		}
+
+		will_propose = {
+			has_diplomatic_pact = { who = scope:target_country type = rivalry }
+			covert_operations_available_slots >= 1
+			is_at_war = no
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+
+		propose_score = {
+			value = 10
+		}
+	}
+}
+
+# ---- PEACETIME: Military Espionage ----
+# Gather intelligence on a rival's military capabilities and steal secrets
+# Effect: boosts own military tech spread and unit effectiveness (applied to SELF)
+covert_military_espionage_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		has_technology_researched = television
+		NOT = { has_variable = iw_op_military_espionage }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_not_at_war_tt
+			is_at_war = no
+		}
+		has_diplomatic_pact = { who = scope:target_country type = rivalry }
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	accept_effect = {
+		set_variable = iw_op_military_espionage
+		set_variable = { name = iw_target_military_espionage value = scope:target_country }
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		change_variable = { name = iw_active_operations add = 1 }
+		post_notification = iw_operation_launched
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.1
+		}
+
+		will_propose = {
+			has_diplomatic_pact = { who = scope:target_country type = rivalry }
+			covert_operations_available_slots >= 1
+			is_at_war = no
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+
+		propose_score = {
+			value = 10
+		}
+	}
+}
+
+# ---- PEACETIME: Influence Campaign ----
+# Bribery, blackmail, and covert media campaigns to weaken a nation's
+# resistance to power bloc pressure. Requires being a Power Bloc leader.
+# Effect: reduces target's leverage resistance (applied to TARGET)
+covert_influence_campaign_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		has_technology_researched = television
+		NOT = { has_variable = iw_op_influence_campaign }
+		is_power_bloc_leader = yes
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_not_at_war_tt
+			is_at_war = no
+		}
+		custom_tooltip = {
+			text = iw_target_not_in_bloc_tt
+			NOT = { is_in_same_power_bloc = scope:target_country }
+		}
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	accept_effect = {
+		set_variable = iw_op_influence_campaign
+		set_variable = { name = iw_target_influence_campaign value = scope:target_country }
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		change_variable = { name = iw_active_operations add = 1 }
+		post_notification = iw_operation_launched
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.1
+		}
+
+		will_propose = {
+			is_power_bloc_leader = yes
+			NOT = { is_in_same_power_bloc = scope:target_country }
+			covert_operations_available_slots >= 1
+			is_at_war = no
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+
+		propose_score = {
+			value = 10
+		}
+	}
+}
+
+# ---- PEACETIME: Ideological Subversion ----
+# Covertly support political movements aligned with YOUR government type
+# in a foreign nation. Does NOT require rivalry — you can "export" your
+# ideology to any country with matching movements.
+# Effect: boosts movements matching your governance model (same logic as
+# cultural hegemony movement pressure)
+covert_ideological_subversion_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		has_technology_researched = television
+		NOT = { has_variable = iw_op_ideological_subversion }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_not_at_war_tt
+			is_at_war = no
+		}
+		custom_tooltip = {
+			text = iw_target_has_movements_tt
+			scope:target_country = {
+				any_political_movement = { count >= 1 }
+			}
+		}
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	accept_effect = {
+		set_variable = iw_op_ideological_subversion
+		set_variable = { name = iw_target_ideological_subversion value = scope:target_country }
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		change_variable = { name = iw_active_operations add = 1 }
+		post_notification = iw_operation_launched
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.1
+		}
+
+		will_propose = {
+			covert_operations_available_slots >= 1
+			is_at_war = no
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			scope:target_country = {
+				any_political_movement = { count >= 1 }
+			}
+		}
+
+		propose_score = {
+			value = 8
+		}
+	}
+}
+
+# ---- PEACETIME: Destabilization ----
+# Covertly fund separatist movements and general unrest in a rival nation.
+# Requires rivalry. Especially boosts secessionist movements while also
+# providing a smaller general radicalism boost to all movements.
+covert_destabilization_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		has_technology_researched = television
+		NOT = { has_variable = iw_op_destabilization }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_not_at_war_tt
+			is_at_war = no
+		}
+		has_diplomatic_pact = { who = scope:target_country type = rivalry }
+		custom_tooltip = {
+			text = iw_target_has_movements_tt
+			scope:target_country = {
+				any_political_movement = { count >= 1 }
+			}
+		}
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	accept_effect = {
+		set_variable = iw_op_destabilization
+		set_variable = { name = iw_target_destabilization value = scope:target_country }
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		change_variable = { name = iw_active_operations add = 1 }
+		post_notification = iw_operation_launched
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.1
+		}
+
+		will_propose = {
+			has_diplomatic_pact = { who = scope:target_country type = rivalry }
+			covert_operations_available_slots >= 1
+			is_at_war = no
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			scope:target_country = {
+				any_political_movement = { count >= 1 }
+			}
+		}
+
+		propose_score = {
+			value = 10
+		}
+	}
+}

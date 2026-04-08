@@ -1,11 +1,16 @@
 ﻿# ============================================================================
-# CULTURAL HEGEMONY & INFORMATION WARFARE — On-Actions
+# CULTURAL HEGEMONY — On-Actions
 # ============================================================================
 
 # ---- Monthly pulse: update per-country CH values and modifiers ----
 # Runs from game start for all qualifying countries (even before JE activates).
 # This ensures scores are stable by the time the JE appears in 1845.
 on_monthly_pulse_country = {
+	on_actions = {
+		ch_monthly_pulse_on_action
+	}
+}
+ch_monthly_pulse_on_action = {
 	effect = {
 		if = {
 			limit = {
@@ -21,6 +26,11 @@ on_monthly_pulse_country = {
 # Runs from game start. Lock guard inside the effect ensures only one country
 # per year does the expensive global computation.
 on_yearly_pulse_country = {
+	on_actions = {
+		ch_yearly_pulse_on_action
+	}
+}
+ch_yearly_pulse_on_action = {
 	effect = {
 		if = {
 			limit = {
@@ -34,48 +44,29 @@ on_yearly_pulse_country = {
 
 # Track "World First" technology achievements for Cultural Pull
 # Root scope = Country that just acquired the technology
-# The technology scope is not directly available, so we use a naming convention:
-# For each tech researched, check if any other country already has it.
-# If no one else does, this country gets a "world first" bonus.
+# scope:technology = the technology just researched (from on_acquired_technology)
+# If no other country has this tech yet, this is a world first.
 cultural_hegemony_tech_first_on_action = {
 	effect = {
-		# Skip if cultural hegemony is disabled
 		if = {
 			limit = { NOT = { has_game_rule = cultural_hegemony_enabled } }
 			return = yes
 		}
-		# Check if any other country already has the tech we just researched
-		# We use the scoped technology via the on_acquired_technology hook
-		# The ROOT is the country; the technology is accessible via scope
-		save_scope_as = researching_country
-
-		# Count how many other countries already have this tech
-		# If the answer is 0, we are the world first
-		# Unfortunately, on_acquired_technology doesn't give us a tech scope.
-		# Instead, we just award a smaller flat bonus per tech acquired,
-		# scaled by how many techs the country has relative to others.
-
-		# Simple approach: if this country has the most techs globally, they get
-		# an accumulating bonus. This approximates "world first" without per-tech tracking.
 		if = {
 			limit = {
+				# True world first: no other country has researched this tech yet
 				NOT = {
 					any_country = {
 						NOT = { this = ROOT }
-						# No other country has more innovations
-						country_rank > ROOT.country_rank
+						has_technology_researched = scope:technology
 					}
 				}
-				# Only GP/Major powers are likely actual tech leaders
-				country_rank >= rank_value:major_power
 			}
-			# Award "world first" points
 			if = {
 				limit = { NOT = { has_variable = ch_tech_firsts_recent } }
 				set_variable = { name = ch_tech_firsts_recent value = 0 }
 			}
 			change_variable = { name = ch_tech_firsts_recent add = cultural_pull_tech_first_bonus }
-			clamp_variable = { name = ch_tech_firsts_recent min = 0 max = 30 }
 		}
 	}
 }

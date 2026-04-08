@@ -1,0 +1,25 @@
+﻿### Covert Warfare hooks ###
+
+country_intelligence_capacity_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+country_intelligence_capacity_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+country_covert_operation_efficiency_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+country_covert_operation_slot_add = {
+	color = good
+	percent = no
+	decimals = 0
+}

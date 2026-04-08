@@ -53,11 +53,23 @@ concept_custom_treaty_articles = {}
 concept_cultural_hegemony_system = {}
 concept_cultural_pull = {}
 concept_cultural_pull_components = {}
+concept_cultural_pull_share = {}
+concept_cultural_pull_raw_score = {}
+concept_ch_art_production = {}
+concept_ch_prestige = {}
+concept_ch_sol = {}
+concept_ch_tech_leadership = {}
+concept_ch_monuments = {}
+concept_ch_megaprojects = {}
+concept_ch_modifiers = {}
+concept_ch_infamy = {}
+concept_ch_instability = {}
+concept_ch_modifier_bonus = {}
 concept_foreign_cultural_benchmark = {}
-concept_information_warfare_system = {}
-concept_digital_sovereignty = {}
-concept_cyber_operations = {}
-concept_cyber_detection = {}
+concept_covert_warfare_system = {}
+concept_intelligence_capacity = {}
+concept_covert_operations = {}
+concept_operation_detection = {}
 
 # Institutions
 concept_ministry_system = {}

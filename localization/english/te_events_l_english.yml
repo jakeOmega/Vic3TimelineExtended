@@ -491,6 +491,20 @@
  banking_cycle_events.9.t:0 "Asset Price Uncertainty"
 
 #
+# COVERT_WARFARE
+#
+ covert_warfare.1.a:0 "Acknowledge the failure and stand down"
+ covert_warfare.1.b:0 "Deny everything and harden our defenses"
+ covert_warfare.1.d:0 "Our intelligence services report a catastrophic security breach. One of our covert operations has been detected by [scope:detected_by_country.GetName]. The operation must be terminated immediately, and the diplomatic fallout will be considerable."
+ covert_warfare.1.f:0 "The encrypted channel went dark at 03:47. By dawn, every foreign ministry in Europe had the intercepted transmissions on their desk."
+ covert_warfare.1.t:0 "Operation Compromised"
+ covert_warfare.2.a:0 "Shore up our counterintelligence"
+ covert_warfare.2.b:0 "Retaliate in kind"
+ covert_warfare.2.d:0 "Our counterintelligence services have uncovered evidence of a sustained foreign covert campaign targeting our institutions. Enemy agents have been manipulating our information networks, attempting to undermine our political stability. We must decide how to respond."
+ covert_warfare.2.f:0 "The anomalies in the election data were too precise to be accidental, too subtle to be domestic in origin."
+ covert_warfare.2.t:0 "Foreign Interference Detected"
+
+#
 # CULTURAL_HEGEMONY
 #
  cultural_hegemony.1.a:0 "Patronize the arts and academia"
@@ -531,6 +545,15 @@
  cultural_hegemony.7.desc:0 "[scope:cultural_hegemon.GetName]'s cultural dominance is reshaping the political landscape of [ROOT.GetName]. Foreign films, literature, and media carry implicit political messages that resonate with certain interest groups and fuel political movements modeled on the hegemon's governing ideology."
  cultural_hegemony.7.f:0 "The young radicals quoted foreign philosophers in foreign languages, wearing foreign fashions, demanding the same rights they'd seen in foreign films—and the old guard could only watch, wondering when exactly the future had arrived without their permission."
  cultural_hegemony.7.t:0 "Foreign Ideological Influence"
+ cultural_hegemony.8.a:0 "Invest in cultural projection abroad"
+ cultural_hegemony.8.b:0 "Consolidate our domestic institutions"
+ cultural_hegemony.8.d:0 "[ROOT.GetName]'s cultural influence has reached a level where it can no longer be ignored. Our art, our media, and our way of life are being discussed, debated, and emulated in foreign capitals. We stand at a crossroads: invest further in our cultural projection, or consolidate our domestic strengths."
+ cultural_hegemony.8.f:0 "They wore our fashions in Shanghai, hummed our melodies in Kinshasa, and debated our philosophers in Buenos Aires — all without a single soldier crossing a border."
+ cultural_hegemony.8.t:0 "The World is Watching"
+ cultural_hegemony.9.a:0 "The world looks to us for leadership"
+ cultural_hegemony.9.d:0 "[ROOT.GetName] now stands as the undisputed cultural center of the world. Our language is the language of diplomacy, our media shapes global opinion, and our political model is the one others aspire to emulate. This is a position of immense power — and immense responsibility."
+ cultural_hegemony.9.f:0 "When the world needed a word for progress, they borrowed ours."
+ cultural_hegemony.9.t:0 "The Cultural Hegemon"
 
 #
 # DECOLONIZATION_EVENTS
@@ -1104,26 +1127,6 @@
  heir_education_events.3.d:0 "Our allies have extended an invitation for the heir to spend time abroad, studying at their finest institutions. The experience would be invaluable for diplomatic training, though some worry about foreign influence on the young sovereign."
  heir_education_events.3.f:0 "\"To understand the world, one must first leave home.\"\n\n\"And to rule it, one must eventually come back.\""
  heir_education_events.3.t:0 "Foreign Correspondence"
-
-#
-# INFORMATION_WARFARE
-#
- information_warfare.1.a:0 "Acknowledge the failure and stand down"
- information_warfare.1.b:0 "Deny everything and harden our defenses"
- information_warfare.1.d:0 "Our intelligence services report a catastrophic security breach. One of our covert cyber operations has been detected by [scope:detected_by_country.GetName]. The operation must be terminated immediately, and the diplomatic fallout will be considerable."
- information_warfare.1.f:0 "The encrypted channel went dark at 03:47. By dawn, every foreign ministry in Europe had the intercepted transmissions on their desk."
- information_warfare.1.t:0 "Operation Compromised"
- information_warfare.2.a:0 "Invest in cultural projection abroad"
- information_warfare.2.b:0 "Consolidate our domestic institutions"
- information_warfare.3.a:0 "The world looks to us for leadership"
- information_warfare.3.d:0 "[ROOT.GetName] now stands as the undisputed cultural center of the world. Our language is the language of diplomacy, our media shapes global opinion, and our political model is the one others aspire to emulate. This is a position of immense power — and immense responsibility."
- information_warfare.3.f:0 "When the world needed a word for progress, they borrowed ours."
- information_warfare.3.t:0 "The Cultural Hegemon"
- information_warfare.4.a:0 "Shore up our cyber defenses"
- information_warfare.4.b:0 "Retaliate in kind"
- information_warfare.4.d:0 "Our counterintelligence services have uncovered evidence of a sustained foreign cyber campaign targeting our institutions. Enemy agents have been manipulating our information networks, attempting to undermine our political stability. We must decide how to respond."
- information_warfare.4.f:0 "The anomalies in the election data were too precise to be accidental, too subtle to be domestic in origin."
- information_warfare.4.t:0 "Foreign Interference Detected"
 
 #
 # INTERNATIONAL_RELATIONS_EVENTS

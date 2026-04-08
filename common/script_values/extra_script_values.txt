@@ -419,16 +419,6 @@ nuclear_weapons_program_current_cost = {
 	multiply = nuclear_weapon_program_funding_step
 }
 
-country_nuclear_weapon_attack_success_add_display = {
-	value = modifier:country_nuclear_weapon_attack_success_add
-	multiply = 100
-}
-
-country_nuclear_weapon_defense_chance_add_display = {
-	value = modifier:country_nuclear_weapon_defense_chance_add
-	multiply = 100
-}
-
 nuclear_industrial_strike_killed_population = {
 	value = state_population
 	multiply = 0.1
@@ -1539,18 +1529,6 @@ banking_current_free_points_val = {
 banking_current_points_spend_val = {
 	value = banking_law_base_points_value
 	subtract = banking_current_free_points_val
-}
-
-banking_monthly_momentum = {
-	value = modifier:country_finance_momentum_monthly_add
-}
-
-banking_monthly_bubble = {
-	value = modifier:country_bubble_pressure_monthly_add
-}
-
-banking_monthly_cycle = {
-	value = modifier:country_finance_value_monthly_add
 }
 
 # Random momentum nudge values, scaled by the banking_random_momentum_mult modifier.

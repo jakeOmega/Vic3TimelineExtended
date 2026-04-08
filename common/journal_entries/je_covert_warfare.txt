@@ -1,0 +1,454 @@
+﻿# ============================================================================
+# COVERT WARFARE — Journal Entry (Command Center)
+# ============================================================================
+# This JE is the player's window into the Covert Warfare system.
+# It shows Intelligence Capacity score, active operations, available slots,
+# and provides buttons to launch/cancel covert operations and adjust funding.
+# ============================================================================
+
+je_covert_warfare = {
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	group = je_group_covert_warfare
+
+	is_shown_when_inactive = {
+		has_game_rule = covert_warfare_enabled
+	}
+
+	possible = {
+		has_technology_researched = television
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_iw_status_fortress
+				trigger = { intelligence_capacity_total >= 80 }
+			}
+			triggered_desc = {
+				desc = je_iw_status_hardened
+				trigger = { intelligence_capacity_total >= 60 }
+			}
+			triggered_desc = {
+				desc = je_iw_status_defended
+				trigger = { intelligence_capacity_total >= 40 }
+			}
+			triggered_desc = {
+				desc = je_iw_status_exposed
+				trigger = { intelligence_capacity_total >= 20 }
+			}
+			triggered_desc = {
+				desc = je_iw_status_vulnerable
+				trigger = { always = yes }
+			}
+		}
+		# Intelligence Capacity breakdown
+		triggered_desc = {
+			desc = je_iw_capacity_header
+			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_iw_capacity_modifiers
+			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_iw_capacity_literacy
+			trigger = { intelligence_capacity_from_literacy >= 1 }
+		}
+		triggered_desc = {
+			desc = je_iw_capacity_gdp
+			trigger = { intelligence_capacity_from_gdp >= 1 }
+		}
+		# Covert operations summary
+		triggered_desc = {
+			desc = je_iw_ops_header
+			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_iw_operations_summary
+			trigger = {
+				has_variable = iw_active_operations
+				var:iw_active_operations >= 1
+			}
+		}
+		# Operation details
+		triggered_desc = {
+			desc = je_iw_op_election_interference_active
+			trigger = { has_variable = iw_op_election_interference }
+		}
+		triggered_desc = {
+			desc = je_iw_op_financial_subversion_active
+			trigger = { has_variable = iw_op_financial_subversion }
+		}
+		triggered_desc = {
+			desc = je_iw_op_infrastructure_sabotage_active
+			trigger = { has_variable = iw_op_infrastructure_sabotage }
+		}
+		triggered_desc = {
+			desc = je_iw_op_comms_disruption_active
+			trigger = { has_variable = iw_op_comms_disruption }
+		}
+		triggered_desc = {
+			desc = je_iw_op_industrial_espionage_active
+			trigger = { has_variable = iw_op_industrial_espionage }
+		}
+		triggered_desc = {
+			desc = je_iw_op_military_espionage_active
+			trigger = { has_variable = iw_op_military_espionage }
+		}
+		triggered_desc = {
+			desc = je_iw_op_influence_campaign_active
+			trigger = { has_variable = iw_op_influence_campaign }
+		}
+		triggered_desc = {
+			desc = je_iw_op_ideological_subversion_active
+			trigger = { has_variable = iw_op_ideological_subversion }
+		}
+		triggered_desc = {
+			desc = je_iw_op_destabilization_active
+			trigger = { has_variable = iw_op_destabilization }
+		}
+		triggered_desc = {
+			desc = je_iw_no_operations
+			trigger = {
+				OR = {
+					NOT = { has_variable = iw_active_operations }
+					var:iw_active_operations < 1
+				}
+			}
+		}
+		triggered_desc = {
+			desc = je_iw_funding_status
+			trigger = { always = yes }
+		}
+	}
+
+	# Progress bar: Intelligence Capacity score (0 to 100)
+	current_value = {
+		value = intelligence_capacity_total
+	}
+
+	goal_add_value = {
+		value = {
+			value = 100
+			subtract = intelligence_capacity_total
+		}
+	}
+
+	progressbar = yes
+
+	# Cancel operation and funding management buttons
+	# (Launch operations via diplomatic actions targeting specific countries)
+	scripted_button = iw_cancel_election_interference_button
+	scripted_button = iw_cancel_financial_subversion_button
+	scripted_button = iw_cancel_infrastructure_sabotage_button
+	scripted_button = iw_cancel_comms_disruption_button
+	scripted_button = iw_cancel_industrial_espionage_button
+	scripted_button = iw_cancel_military_espionage_button
+	scripted_button = iw_cancel_influence_campaign_button
+	scripted_button = iw_cancel_ideological_subversion_button
+	scripted_button = iw_cancel_destabilization_button
+	scripted_button = iw_increase_funding_button
+	scripted_button = iw_decrease_funding_button
+
+	immediate = {
+		# Initialize tracking variables if missing
+		if = {
+			limit = { NOT = { has_variable = iw_active_operations } }
+			set_variable = { name = iw_active_operations value = 0 }
+		}
+		if = {
+			limit = { NOT = { has_variable = iw_funding_level } }
+			set_variable = { name = iw_funding_level value = 0 }
+		}
+	}
+
+	complete = {
+		always = no
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			# ---- Update intelligence capacity defense modifier ----
+			if = {
+				limit = { intelligence_capacity_total >= 1 }
+				remove_modifier = intelligence_capacity_defense
+				add_modifier = { name = intelligence_capacity_defense multiplier = intelligence_capacity_modifier_mult }
+			}
+			else_if = {
+				limit = { has_modifier = intelligence_capacity_defense }
+				remove_modifier = intelligence_capacity_defense
+			}
+
+			# ---- Domestic defense from unused operation slots ----
+			if = {
+				limit = { covert_operations_available_slots >= 1 }
+				remove_modifier = iw_domestic_defense
+				add_modifier = { name = iw_domestic_defense multiplier = covert_operations_available_slots }
+			}
+			else_if = {
+				limit = { has_modifier = iw_domestic_defense }
+				remove_modifier = iw_domestic_defense
+			}
+
+			# ---- Apply operation funding cost ----
+			if = {
+				limit = {
+					has_variable = iw_active_operations
+					var:iw_active_operations >= 1
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				remove_modifier = covert_operation_funding_cost
+				add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult }
+			}
+			else_if = {
+				limit = { has_modifier = covert_operation_funding_cost }
+				remove_modifier = covert_operation_funding_cost
+			}
+
+			# ---- Apply operation effects to specific targets (only if funding > 0) ----
+			# Election Interference: apply to stored target country
+			if = {
+				limit = {
+					has_variable = iw_op_election_interference
+					has_variable = iw_target_election_interference
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				var:iw_target_election_interference = {
+					remove_modifier = covert_election_interference
+					add_modifier = { name = covert_election_interference months = 3 is_decaying = yes }
+				}
+			}
+
+			# Financial Subversion: apply to stored target country
+			if = {
+				limit = {
+					has_variable = iw_op_financial_subversion
+					has_variable = iw_target_financial_subversion
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				var:iw_target_financial_subversion = {
+					remove_modifier = covert_financial_subversion
+					add_modifier = { name = covert_financial_subversion months = 3 is_decaying = yes }
+				}
+			}
+
+			# Infrastructure Sabotage: apply to random state in stored target country
+			if = {
+				limit = {
+					has_variable = iw_op_infrastructure_sabotage
+					has_variable = iw_target_infrastructure_sabotage
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+					is_at_war = yes
+				}
+				var:iw_target_infrastructure_sabotage = {
+					random_scope_state = {
+						limit = { any_scope_building = { level >= 1 } }
+						remove_modifier = covert_infrastructure_sabotage
+						add_modifier = { name = covert_infrastructure_sabotage months = 3 is_decaying = yes }
+					}
+				}
+			}
+
+			# Comms Disruption: apply to stored target country
+			if = {
+				limit = {
+					has_variable = iw_op_comms_disruption
+					has_variable = iw_target_comms_disruption
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+					is_at_war = yes
+				}
+				var:iw_target_comms_disruption = {
+					remove_modifier = covert_comms_disruption
+					add_modifier = { name = covert_comms_disruption months = 3 is_decaying = yes }
+				}
+			}
+
+			# Industrial Espionage: apply buff to SELF (steal production tech)
+			if = {
+				limit = {
+					has_variable = iw_op_industrial_espionage
+					has_variable = iw_target_industrial_espionage
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				remove_modifier = covert_industrial_espionage
+				add_modifier = { name = covert_industrial_espionage months = 3 is_decaying = yes }
+			}
+
+			# Military Espionage: apply buff to SELF (steal military intel)
+			if = {
+				limit = {
+					has_variable = iw_op_military_espionage
+					has_variable = iw_target_military_espionage
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				remove_modifier = covert_military_espionage
+				add_modifier = { name = covert_military_espionage months = 3 is_decaying = yes }
+			}
+
+			# Influence Campaign: reduce target's leverage resistance
+			if = {
+				limit = {
+					has_variable = iw_op_influence_campaign
+					has_variable = iw_target_influence_campaign
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				var:iw_target_influence_campaign = {
+					remove_modifier = covert_influence_campaign
+					add_modifier = { name = covert_influence_campaign months = 3 is_decaying = yes }
+				}
+			}
+
+			# Ideological Subversion: boost movements matching YOUR ideology in target
+			if = {
+				limit = {
+					has_variable = iw_op_ideological_subversion
+					has_variable = iw_target_ideological_subversion
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				save_scope_as = cultural_hegemon
+				var:iw_target_ideological_subversion = {
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion MONTHS = 3 }
+				}
+			}
+
+			# Destabilization: boost separatist movements + general radicalism in target
+			if = {
+				limit = {
+					has_variable = iw_op_destabilization
+					has_variable = iw_target_destabilization
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				var:iw_target_destabilization = {
+					# Boost separatist movements strongly
+					every_political_movement = {
+						limit = { is_political_movement_type = movement_secession }
+						remove_modifier = covert_destabilization_separatist
+						add_modifier = { name = covert_destabilization_separatist months = 3 is_decaying = yes }
+					}
+					# General radicalism boost to all movements
+					every_political_movement = {
+						remove_modifier = covert_destabilization_general
+						add_modifier = { name = covert_destabilization_general months = 3 is_decaying = yes }
+					}
+				}
+			}
+
+			# ---- Cancel wartime ops when peace returns ----
+			if = {
+				limit = {
+					is_at_war = no
+					has_variable = iw_op_infrastructure_sabotage
+				}
+				remove_variable = iw_op_infrastructure_sabotage
+				if = {
+					limit = { has_variable = iw_target_infrastructure_sabotage }
+					remove_variable = iw_target_infrastructure_sabotage
+				}
+				change_variable = { name = iw_active_operations subtract = 1 }
+				clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+			}
+			if = {
+				limit = {
+					is_at_war = no
+					has_variable = iw_op_comms_disruption
+				}
+				remove_variable = iw_op_comms_disruption
+				if = {
+					limit = { has_variable = iw_target_comms_disruption }
+					remove_variable = iw_target_comms_disruption
+				}
+				change_variable = { name = iw_active_operations subtract = 1 }
+				clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+			}
+
+			# ---- Cancel influence campaign if no longer bloc leader or target joined bloc ----
+			if = {
+				limit = {
+					has_variable = iw_op_influence_campaign
+					OR = {
+						is_power_bloc_leader = no
+						AND = {
+							has_variable = iw_target_influence_campaign
+							is_in_same_power_bloc = var:iw_target_influence_campaign
+						}
+					}
+				}
+				remove_variable = iw_op_influence_campaign
+				if = {
+					limit = { has_variable = iw_target_influence_campaign }
+					remove_variable = iw_target_influence_campaign
+				}
+				change_variable = { name = iw_active_operations subtract = 1 }
+				clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+			}
+
+			# ---- Cancel ideological subversion if target has no movements left ----
+			if = {
+				limit = {
+					has_variable = iw_op_ideological_subversion
+					has_variable = iw_target_ideological_subversion
+					var:iw_target_ideological_subversion = {
+						NOT = { any_political_movement = { count >= 1 } }
+					}
+				}
+				remove_variable = iw_op_ideological_subversion
+				remove_variable = iw_target_ideological_subversion
+				change_variable = { name = iw_active_operations subtract = 1 }
+				clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+			}
+
+			# ---- Cancel destabilization if target has no movements left ----
+			if = {
+				limit = {
+					has_variable = iw_op_destabilization
+					has_variable = iw_target_destabilization
+					var:iw_target_destabilization = {
+						NOT = { any_political_movement = { count >= 1 } }
+					}
+				}
+				remove_variable = iw_op_destabilization
+				remove_variable = iw_target_destabilization
+				change_variable = { name = iw_active_operations subtract = 1 }
+				clamp_variable = { name = iw_active_operations min = 0 max = 6 }
+			}
+
+			# ---- Detection check for each active operation (only if funding > 0) ----
+			if = {
+				limit = {
+					has_variable = iw_active_operations
+					var:iw_active_operations >= 1
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+				random_list = {
+					1 = {
+						modifier = {
+							add = covert_operation_detection_chance
+						}
+						# Detected! Fire the detection event
+						trigger_event = { id = covert_warfare.1 }
+					}
+					99 = {
+						# Not detected this month
+					}
+				}
+			}
+		}
+	}
+
+	weight = 800
+	should_be_pinned_by_default = yes
+	can_revolution_inherit = yes
+	can_deactivate = no
+}

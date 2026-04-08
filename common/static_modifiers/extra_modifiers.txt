@@ -5028,6 +5028,9 @@ cultural_hegemony_effect = {
 	goods_output_tourism_mult = 0.01
 	goods_trade_advantage_fine_art_mult = 0.01
 	country_loyalists_from_legitimacy_mult = 0.01
+	country_leverage_generation_mult = 0.01
+	country_diplomatic_reputation_add = 0.1
+	country_infamy_decay_mult = 0.01
 }
 
 # Applied to foreign countries to shift SoL expectations and reduce legitimacy
@@ -5039,47 +5042,99 @@ cultural_hegemony_foreign_benchmark = {
 }
 
 # ============================================================================
-# INFORMATION WARFARE - Static modifiers applied with dynamic multipliers
+# COVERT WARFARE - Static modifiers applied with dynamic multipliers
 # ============================================================================
 
 # Applied to the ATTACKER's target country when an election interference operation is active
-cyber_election_interference = {
+covert_election_interference = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_legitimacy_base_add = -5
 	country_authority_add = -25
 }
 
 # Applied to the ATTACKER's target when a financial subversion operation is active
-cyber_financial_subversion = {
+covert_financial_subversion = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	country_bubble_pressure_monthly_add = 2
 }
 
 # Applied to the target during wartime infrastructure sabotage
-cyber_infrastructure_sabotage = {
+covert_infrastructure_sabotage = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	state_infrastructure_mult = -0.15
 	building_throughput_add = -0.10
 }
 
 # Applied to the target during wartime comms disruption
-cyber_comms_disruption = {
+covert_comms_disruption = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	unit_offense_mult = -0.10
 	unit_defense_mult = -0.10
 }
 
-# Cost modifier applied to the country running cyber operations (scales with GDP)
-cyber_operation_funding_cost = {
+# Cost modifier applied to the country running covert operations (scales with GDP)
+covert_operation_funding_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	country_minting_mult = -0.01
 }
 
-# Defensive bonus from digital sovereignty
-digital_sovereignty_defense = {
+# Defensive bonus from intelligence capacity
+intelligence_capacity_defense = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_support_separatism_resistance_mult = 0.05
 	country_coup_resistance_add = 0.02
+}
+
+# Domestic defense bonus from unused covert operation slots
+# Applied with multiplier = available_slots (up to 6)
+iw_domestic_defense = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_support_separatism_resistance_mult = 0.03
+	country_coup_resistance_add = 0.005
+	state_radicals_from_political_movements_mult = -0.03
+}
+
+# Applied to SELF when industrial espionage operation is active
+covert_industrial_espionage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_production_tech_spread_mult = 0.15
+	country_weekly_innovation_add = 10
+}
+
+# Applied to SELF when military espionage operation is active
+covert_military_espionage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_military_tech_spread_mult = 0.15
+	unit_offense_mult = 0.05
+	unit_defense_mult = 0.05
+}
+
+# Applied to TARGET when influence campaign operation is active
+covert_influence_campaign = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_leverage_resistance_mult = -0.15
+}
+
+# Applied to TARGET's political movements when ideological subversion operation is active
+# Boosts movements matching the attacker's government type (uses ch_apply_hegemon_movement_pressure)
+covert_ideological_subversion = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	political_movement_radicalism_add = 2
+	political_movement_pop_attraction_mult = 0.1
+}
+
+# Applied to TARGET's separatist movements during destabilization operation
+covert_destabilization_separatist = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	political_movement_radicalism_add = 5
+	political_movement_pop_attraction_mult = 0.15
+}
+
+# Applied to ALL of TARGET's political movements during destabilization (general unrest)
+covert_destabilization_general = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	political_movement_radicalism_add = 1
+	political_movement_pop_attraction_mult = 0.03
 }
 
 # ============================================================================

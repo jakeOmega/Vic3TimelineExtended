@@ -195,7 +195,7 @@ personal_computers = {
 	modifier = {
 		country_weekly_innovation_max_add = 50
 		country_institution_ministry_of_labor_max_investment_add = 1
-		country_digital_sovereignty_add = 4
+		country_intelligence_capacity_add = 4
 	}
 	
 	unlocking_technologies = {	

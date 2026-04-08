@@ -92,16 +92,16 @@ INJECT:urbanization = {
 	}
 }
 
-# Digital Sovereignty contributions from vanilla techs
+# Intelligence Capacity contributions from vanilla techs
 INJECT:telecommunications = {
 	modifier = {
-		country_digital_sovereignty_add = 2
+		country_intelligence_capacity_add = 2
 	}
 }
 
 INJECT:radio = {
 	modifier = {
-		country_digital_sovereignty_add = 2
+		country_intelligence_capacity_add = 2
 		country_cultural_pull_mult = 0.05
 	}
 }

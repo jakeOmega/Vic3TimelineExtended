@@ -863,3 +863,110 @@ cultural_hegemony.7 = {
 		}
 	}
 }
+
+# ============================================================================
+# EVENT 8: Cultural Milestone — Significant Cultural Power
+# ============================================================================
+# Fired once when a country's cultural pull first exceeds 10.
+# ============================================================================
+
+cultural_hegemony.8 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.8.t
+	desc = cultural_hegemony.8.d
+	flavor = cultural_hegemony.8.f
+
+	event_image = {
+		video = "event_art_gallery"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	trigger = {
+		cultural_pull_total >= 10
+		NOT = { has_variable = ch_milestone_significant }
+	}
+
+	immediate = {
+		set_variable = ch_milestone_significant
+	}
+
+	option = {
+		name = cultural_hegemony.8.a
+		default_option = yes
+
+		# Invest in cultural projection
+		add_modifier = {
+			name = cultural_hegemony_effect
+			months = normal_modifier_time
+			is_decaying = yes
+			multiplier = 2
+		}
+
+		ai_chance = {
+			base = 10
+		}
+	}
+
+	option = {
+		name = cultural_hegemony.8.b
+
+		# Focus on internal development instead
+		add_modifier = {
+			name = intelligence_capacity_defense
+			months = normal_modifier_time
+			is_decaying = yes
+			multiplier = 2
+		}
+
+		ai_chance = {
+			base = 5
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 9: Cultural Milestone — Dominant Cultural Power
+# ============================================================================
+# Fired once when a country's cultural pull first exceeds 25.
+# The country is now the world's cultural hegemon.
+# ============================================================================
+
+cultural_hegemony.9 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.9.t
+	desc = cultural_hegemony.9.d
+	flavor = cultural_hegemony.9.f
+
+	event_image = {
+		video = "event_art_gallery"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	trigger = {
+		cultural_pull_total >= 25
+		NOT = { has_variable = ch_milestone_dominant }
+	}
+
+	immediate = {
+		set_variable = ch_milestone_dominant
+	}
+
+	option = {
+		name = cultural_hegemony.9.a
+		default_option = yes
+
+		add_prestige = 200
+
+		ai_chance = {
+			base = 10
+		}
+	}
+}

@@ -1,5 +1,4 @@
-﻿
-extended_timeline_extra_construction_building = {
+﻿	extended_timeline_extra_construction_building = {
 	extended_timeline_add_specified_building_level = {
 		ADD_LEVEL = extra_construction_sectors
 		SPEC_TYPE = building_construction_sector

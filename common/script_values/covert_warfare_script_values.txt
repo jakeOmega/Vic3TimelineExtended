@@ -1,0 +1,218 @@
+﻿# ============================================================================
+# COVERT WARFARE — Script Values
+# ============================================================================
+# These script values drive the Covert Warfare system via dynamic modifier
+# pattern.
+#
+# INTELLIGENCE CAPACITY uses modifier hooks applied directly to techs, laws,
+# and institutions via country_intelligence_capacity_add, rather than
+# hardcoded script value checks.
+# ============================================================================
+
+# ============================================================================
+# SECTION 1: TUNING CONSTANTS
+# ============================================================================
+
+# Intelligence Capacity ranges
+intelligence_capacity_literacy_max = 20
+intelligence_capacity_gdp_max = 15
+
+# Covert Operations
+covert_ops_base_slots = 1
+covert_ops_gp_extra_slots = 2
+covert_ops_major_extra_slots = 1
+covert_ops_tech_extra_slots = 1
+
+# Funding costs as fraction of GDP (via minting modifier)
+covert_ops_funding_low_cost = 1
+covert_ops_funding_medium_cost = 2
+covert_ops_funding_high_cost = 3
+
+# Detection probability ranges (base % chance per month)
+covert_ops_detection_base = 10
+covert_ops_detection_high_funding_add = 10
+covert_ops_detection_low_capacity_sub = 5
+
+# Infamy on detection
+covert_ops_detected_infamy = 5
+
+# ============================================================================
+# SECTION 2: INTELLIGENCE CAPACITY
+# ============================================================================
+
+# Intelligence Capacity Score: defense against covert operations
+# Technology, laws, and institution contributions come from
+# country_intelligence_capacity_add modifier applied directly to those entities.
+# Literacy and GDP share are computed here as intrinsic properties.
+
+intelligence_capacity_from_modifiers = {
+	value = modifier:country_intelligence_capacity_add
+}
+
+intelligence_capacity_from_literacy = {
+	value = literacy_rate
+	multiply = 100
+	max = intelligence_capacity_literacy_max
+	min = 0
+}
+
+intelligence_capacity_from_gdp = {
+	value = gdp
+	divide = {
+		value = global_gdp
+		min = 1
+	}
+	multiply = 100
+	max = intelligence_capacity_gdp_max
+	min = 0
+}
+
+# Total Intelligence Capacity
+intelligence_capacity_total = {
+	value = intelligence_capacity_from_modifiers
+	add = intelligence_capacity_from_literacy
+	add = intelligence_capacity_from_gdp
+	multiply = {
+		value = 1
+		add = modifier:country_intelligence_capacity_mult
+	}
+	min = 0
+	max = 100
+}
+
+# Multiplier for the intelligence_capacity_defense static modifier
+intelligence_capacity_modifier_mult = {
+	value = intelligence_capacity_total
+	divide = 20
+	min = 0
+	max = 5
+}
+
+# ============================================================================
+# SECTION 3: COVERT OPERATION SLOTS & COSTS
+# ============================================================================
+
+covert_operation_max_slots = {
+	value = covert_ops_base_slots
+	# Great powers get extra slots
+	if = {
+		limit = { country_rank = rank_value:great_power }
+		add = covert_ops_gp_extra_slots
+	}
+	else_if = {
+		limit = { country_rank >= rank_value:major_power }
+		add = covert_ops_major_extra_slots
+	}
+	# Tech gives extra slots
+	if = {
+		limit = { has_technology_researched = mainframe_computers }
+		add = covert_ops_tech_extra_slots
+	}
+	# Modifier hook
+	add = modifier:country_covert_operation_slot_add
+	min = 0
+	max = 6
+}
+
+# Currently active operations (tracked via country variable)
+covert_operations_active = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_active_operations }
+		add = var:iw_active_operations
+	}
+}
+
+covert_operations_available_slots = {
+	value = covert_operation_max_slots
+	subtract = covert_operations_active
+	min = 0
+}
+
+# Funding cost: multiplier for the covert_operation_funding_cost modifier
+# Scales with number of active operations and funding level
+# Level 0 = no cost (operations paused)
+covert_operation_cost_mult = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_active_operations }
+		add = var:iw_active_operations
+	}
+	# Scale by funding level (0-3); 0 means no cost
+	multiply = {
+		value = 0
+		if = {
+			limit = { has_variable = iw_funding_level }
+			add = var:iw_funding_level
+		}
+	}
+	# Scale with GDP so big economies pay proportionally
+	multiply = banking_event_expense_small
+	min = 0
+}
+
+# Detection chance per month for active operations
+covert_operation_detection_chance = {
+	value = covert_ops_detection_base
+	# Higher funding = higher detection risk
+	if = {
+		limit = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 3
+		}
+		add = covert_ops_detection_high_funding_add
+	}
+	# Attacker's efficiency reduces detection
+	multiply = {
+		value = 1
+		add = modifier:country_covert_operation_efficiency_mult
+		multiply = -1
+		add = 1
+		min = 0.2
+	}
+	min = 1
+	max = 50
+}
+
+# ============================================================================
+# SECTION 4: DISPLAY VALUES FOR JE TOOLTIPS
+# ============================================================================
+
+intelligence_capacity_display = {
+	value = intelligence_capacity_total
+	round = yes
+}
+
+intelligence_capacity_from_literacy_display = {
+	value = intelligence_capacity_from_literacy
+	round = yes
+}
+
+intelligence_capacity_from_gdp_display = {
+	value = intelligence_capacity_from_gdp
+	round = yes
+}
+
+covert_slots_display = {
+	value = covert_operation_max_slots
+	round = yes
+}
+
+covert_active_display = {
+	value = covert_operations_active
+	round = yes
+}
+
+covert_available_slots_display = {
+	value = covert_operations_available_slots
+	round = yes
+}
+
+covert_funding_level_display = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_funding_level }
+		add = var:iw_funding_level
+	}
+	round = yes
+}

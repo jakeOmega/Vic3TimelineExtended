@@ -1097,6 +1097,7 @@ state_homeland_removal_threshold_add = {
 # +1.0 = +100% speed (doubles chance); -0.5 = -50% speed (halves chance)
 state_homeland_change_speed_mult = {
 	color = good
+	percent = yes
 	game_data = {
 		ai_value = 0
 	}

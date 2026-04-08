@@ -91,7 +91,7 @@ je_cultural_hegemony = {
 		}
 		triggered_desc = {
 			desc = je_ch_breakdown_modifiers
-			trigger = { has_variable = ch_disp_modifiers var:ch_disp_modifiers > 0 }
+			trigger = { modifier:country_cultural_pull_add > 0 }
 		}
 		triggered_desc = {
 			desc = je_ch_breakdown_infamy
@@ -99,16 +99,22 @@ je_cultural_hegemony = {
 		}
 		triggered_desc = {
 			desc = je_ch_breakdown_stability
-			trigger = { has_variable = ch_disp_stability var:ch_disp_stability < 0 }
+			trigger = {
+				OR = {
+					country_turmoil > 0.01
+					any_civil_war = { }
+				}
+			}
 		}
-		triggered_desc = {
-			desc = je_ch_breakdown_rank
-			trigger = { always = yes }
-		}
+        desc = separator
 		triggered_desc = {
 			desc = je_ch_breakdown_mult
-			trigger = { has_variable = ch_disp_mult var:ch_disp_mult > 0 }
+			trigger = { modifier:country_cultural_pull_mult > 0 }
 		}
+        desc = separator
+        desc = je_ce_raw_score
+        desc = je_ce_global_raw_score
+        desc = je_ch_leaderboard_delimiter
 		# Top 10 Cultural Powers leaderboard
 		triggered_desc = {
 			desc = je_ch_leaderboard_header
@@ -156,30 +162,6 @@ je_cultural_hegemony = {
 		}
 	}
 
-	# Progress bar: 0 to 100 cultural pull (uses cached variable)
-	current_value = {
-		value = 0
-		if = {
-			limit = { has_variable = ch_total }
-			add = var:ch_total
-		}
-	}
-
-	goal_add_value = {
-		value = {
-			value = 100
-			subtract = {
-				value = 0
-				if = {
-					limit = { has_variable = ch_total }
-					add = var:ch_total
-				}
-			}
-		}
-	}
-
-	progressbar = yes
-
 	immediate = {
 		# Variables are already populated by on_actions before JE activates.
 		# Initialize any that might not exist (safety fallback).
@@ -207,21 +189,14 @@ je_cultural_hegemony = {
 	}
 
 	on_monthly_pulse = {
-		# Apply/remove cultural hegemony modifier
-        if = {
-            limit = { var:ch_total >= 1 }
+        effect = {
+            # Apply/remove cultural hegemony modifier
             remove_modifier = cultural_hegemony_effect
-            add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult }
+            if = {
+                limit = { var:ch_total >= 1 }
+                add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult }
+            }
         }
-        else_if = {
-            limit = { has_modifier = cultural_hegemony_effect }
-            remove_modifier = cultural_hegemony_effect
-        }
-	}
-
-	on_yearly_pulse = {
-		# Computation handled by on_yearly_pulse_country in on_actions.
-		# No additional work needed here.
 	}
 
 	weight = 900

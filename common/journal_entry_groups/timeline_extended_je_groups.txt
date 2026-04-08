@@ -6,6 +6,6 @@ je_group_soft_power = {
 	context = country
 }
 
-je_group_cyber_power = {
+je_group_covert_warfare = {
 	context = country
 }
