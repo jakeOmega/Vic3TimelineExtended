@@ -503,7 +503,7 @@ cheaty_on_action = {
 	effect = {
 		if = {
 			limit = {
-				always = no
+				is_ai = no
 			}
 			if = {
 				limit = { NOT = { has_modifier = cheaty }}

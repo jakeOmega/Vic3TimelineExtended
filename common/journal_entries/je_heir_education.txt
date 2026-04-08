@@ -237,25 +237,25 @@ je_heir_education = {
 			random_list = {
 				2 = {
 					trigger = {
-						NOT = { has_modifier = heir_education_event_cooldown }
+						NOT = { has_variable = heir_education_event_cooldown }
 						has_variable = heir_ed_total
 						var:heir_ed_total >= 2
 					}
 					trigger_event = { id = heir_education_events.1 }
-					add_modifier = { name = heir_education_event_cooldown days = 365 }
+					set_variable = { name = heir_education_event_cooldown days = 365 }
 				}
 				2 = {
 					trigger = {
-						NOT = { has_modifier = heir_education_event_cooldown }
+						NOT = { has_variable = heir_education_event_cooldown }
 						has_variable = heir_ed_total
 						var:heir_ed_total >= 1
 					}
 					trigger_event = { id = heir_education_events.2 }
-					add_modifier = { name = heir_education_event_cooldown days = 365 }
+					set_variable = { name = heir_education_event_cooldown days = 365 }
 				}
 				2 = {
 					trigger = {
-						NOT = { has_modifier = heir_education_event_cooldown }
+						NOT = { has_variable = heir_education_event_cooldown }
 						has_variable = heir_ed_total
 						var:heir_ed_total >= 3
 						any_country = {
@@ -263,7 +263,7 @@ je_heir_education = {
 						}
 					}
 					trigger_event = { id = heir_education_events.3 }
-					add_modifier = { name = heir_education_event_cooldown days = 365 }
+					set_variable = { name = heir_education_event_cooldown days = 365 }
 				}
 				94 = { }
 			}

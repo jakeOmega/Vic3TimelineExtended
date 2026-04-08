@@ -898,7 +898,7 @@ heir_education_cleanup_effect = {
 	# Modifiers
 	if = { limit = { has_modifier = heir_education_innovation_cost } remove_modifier = heir_education_innovation_cost }
 	if = { limit = { has_modifier = heir_education_grace_period } remove_modifier = heir_education_grace_period }
-	if = { limit = { has_modifier = heir_education_event_cooldown } remove_modifier = heir_education_event_cooldown }
+	if = { limit = { has_variable = heir_education_event_cooldown } remove_variable = heir_education_event_cooldown }
 	if = { limit = { has_modifier = heir_ed_trait_focus_active } remove_modifier = heir_ed_trait_focus_active }
 	if = { limit = { has_modifier = heir_ed_ideology_focus_active } remove_modifier = heir_ed_ideology_focus_active }
 	if = { limit = { has_modifier = heir_ed_ig_focus_active } remove_modifier = heir_ed_ig_focus_active }

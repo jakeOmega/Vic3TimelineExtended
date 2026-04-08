@@ -2022,7 +2022,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_latin }
+			add_amendment = { type = amendment_langreform_revived_latin sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2048,7 +2048,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_hebrew }
+			add_amendment = { type = amendment_langreform_revived_hebrew sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2074,7 +2074,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_sanskrit }
+			add_amendment = { type = amendment_langreform_revived_sanskrit sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2102,7 +2102,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_geez }
+			add_amendment = { type = amendment_langreform_revived_geez sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2121,7 +2121,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_slavonic }
+			add_amendment = { type = amendment_langreform_revived_slavonic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2144,7 +2144,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_pali }
+			add_amendment = { type = amendment_langreform_revived_pali sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2167,7 +2167,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_avestan }
+			add_amendment = { type = amendment_langreform_revived_avestan sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2190,7 +2190,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_arabic }
+			add_amendment = { type = amendment_langreform_revived_arabic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2219,7 +2219,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_chinese }
+			add_amendment = { type = amendment_langreform_revived_chinese sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2242,7 +2242,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_greek }
+			add_amendment = { type = amendment_langreform_revived_greek sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2265,7 +2265,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_irish }
+			add_amendment = { type = amendment_langreform_revived_irish sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2288,7 +2288,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_coptic }
+			add_amendment = { type = amendment_langreform_revived_coptic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2311,7 +2311,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_nahuatl }
+			add_amendment = { type = amendment_langreform_revived_nahuatl sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2334,7 +2334,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_norse }
+			add_amendment = { type = amendment_langreform_revived_norse sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2357,7 +2357,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_gothic }
+			add_amendment = { type = amendment_langreform_revived_gothic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2380,7 +2380,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_mayan }
+			add_amendment = { type = amendment_langreform_revived_mayan sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2403,7 +2403,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_prussian }
+			add_amendment = { type = amendment_langreform_revived_prussian sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2422,7 +2422,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revived_aramaic }
+			add_amendment = { type = amendment_langreform_revived_aramaic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2469,7 +2469,7 @@ extra_law_events.25 = {
 		}
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_revival }
+			add_amendment = { type = amendment_langreform_revival sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2489,7 +2489,7 @@ extra_law_events.25 = {
 		name = extra_law_events.25.b
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_constructed }
+			add_amendment = { type = amendment_langreform_constructed sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2513,7 +2513,7 @@ extra_law_events.25 = {
 		name = extra_law_events.25.c
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_simplification }
+			add_amendment = { type = amendment_langreform_simplification sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2584,7 +2584,7 @@ extra_law_events.26 = {
 		default_option = yes
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_powerful_academy }
+			add_amendment = { type = amendment_langreform_powerful_academy sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		if = {
 			limit = { exists = scope:intelligentsia_ig }
@@ -2609,7 +2609,7 @@ extra_law_events.26 = {
 		name = extra_law_events.26.b
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_advisory_panel }
+			add_amendment = { type = amendment_langreform_advisory_panel sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = very_small_radicals
@@ -2671,7 +2671,7 @@ extra_law_events.27 = {
 		default_option = yes
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_minority_protection }
+			add_amendment = { type = amendment_langreform_minority_protection sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -2687,7 +2687,7 @@ extra_law_events.27 = {
 		name = extra_law_events.27.b
 		every_scope_law = {
 			limit = { is_law_type = law_state_led_language_reform }
-			add_amendment = { type = amendment_langreform_national_focus }
+			add_amendment = { type = amendment_langreform_national_focus sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
 		add_radicals = {
 			value = small_radicals

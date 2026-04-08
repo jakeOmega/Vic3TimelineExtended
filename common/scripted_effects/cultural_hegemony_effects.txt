@@ -16,14 +16,14 @@ ch_monthly_country_update = {
 	set_variable = { name = ch_monuments value = cultural_pull_from_monuments }
 	set_variable = { name = ch_megaprojects value = cultural_pull_from_megaprojects }
 
-	# Apply/remove foreign benchmark (SoL expectations from hegemon)
+	# Foreign benchmark is now applied in JE on_monthly_pulse
+	# (only affects countries that have the journal entry active)
+	# Clean up stale foreign benchmark from countries without the JE
 	if = {
-		limit = { cultural_hegemony_benchmark_mult >= 0.1 }
-		remove_modifier = cultural_hegemony_foreign_benchmark
-		add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = cultural_hegemony_benchmark_mult }
-	}
-	else_if = {
-		limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+		limit = {
+			has_modifier = cultural_hegemony_foreign_benchmark
+			NOT = { has_journal_entry = je_cultural_hegemony }
+		}
 		remove_modifier = cultural_hegemony_foreign_benchmark
 	}
 }

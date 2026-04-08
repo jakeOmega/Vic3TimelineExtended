@@ -661,7 +661,7 @@ amendment_langreform_revival = {
 		state_homeland_creation_threshold_add = -0.1
 		state_homeland_removal_threshold_add = 0.1
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -679,7 +679,7 @@ amendment_langreform_revived_latin = {
 		state_homeland_removal_threshold_add = 0.1
 		country_influence_mult = 0.25
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -697,7 +697,7 @@ amendment_langreform_revived_hebrew = {
 		state_homeland_removal_threshold_add = 0.1
 		state_conversion_mult = 0.1
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -715,7 +715,7 @@ amendment_langreform_revived_sanskrit = {
 		state_homeland_removal_threshold_add = 0.1
 		country_tech_research_speed_mult = 0.05
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -733,7 +733,7 @@ amendment_langreform_revived_geez = {
 		state_homeland_removal_threshold_add = 0.1
 		state_conversion_mult = 0.1
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -752,7 +752,7 @@ amendment_langreform_revived_slavonic = {
 		country_acceptance_shared_language_trait_group_add = 5
 		country_acceptance_shared_language_trait_add = 5
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -770,7 +770,7 @@ amendment_langreform_revived_pali = {
 		state_homeland_removal_threshold_add = 0.1
 		state_education_access_add = 0.05
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -788,7 +788,7 @@ amendment_langreform_revived_avestan = {
 		state_homeland_removal_threshold_add = 0.1
 		country_acceptance_shared_heritage_trait_add = 0.1
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -806,7 +806,7 @@ amendment_langreform_revived_arabic = {
 		state_homeland_removal_threshold_add = 0.1
 		country_influence_mult = 0.25
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -824,7 +824,7 @@ amendment_langreform_revived_chinese = {
 		state_homeland_removal_threshold_add = 0.1
 		country_bureaucracy_mult = 0.05
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -842,7 +842,7 @@ amendment_langreform_revived_greek = {
 		state_homeland_removal_threshold_add = 0.1
 		country_tech_research_speed_mult = 0.05
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -860,7 +860,7 @@ amendment_langreform_revived_irish = {
 		state_homeland_removal_threshold_add = 0.1
 		state_education_access_add = 0.05
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -878,7 +878,7 @@ amendment_langreform_revived_coptic = {
 		state_homeland_removal_threshold_add = 0.1
 		state_conversion_mult = 0.1
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -896,7 +896,7 @@ amendment_langreform_revived_nahuatl = {
 		state_homeland_removal_threshold_add = 0.1
 		country_acceptance_shared_heritage_trait_group_add = 5
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -914,7 +914,7 @@ amendment_langreform_revived_norse = {
 		state_homeland_removal_threshold_add = 0.1
 		country_war_exhaustion_casualties_mult = -0.1
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -932,7 +932,7 @@ amendment_langreform_revived_gothic = {
 		state_homeland_removal_threshold_add = 0.1
 		country_acceptance_shared_language_trait_group_add = 5
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -950,7 +950,7 @@ amendment_langreform_revived_mayan = {
 		state_homeland_removal_threshold_add = 0.1
 		country_acceptance_shared_heritage_trait_group_add = 5
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -968,7 +968,7 @@ amendment_langreform_revived_prussian = {
 		state_homeland_removal_threshold_add = 0.1
 		country_legitimacy_base_add = 5
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -986,7 +986,7 @@ amendment_langreform_revived_aramaic = {
 		state_homeland_removal_threshold_add = 0.1
 		state_trade_advantage_mult = 0.1
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -1005,7 +1005,7 @@ amendment_langreform_constructed = {
 		country_primary_culture_fervor_from_laws_add = -5
 		country_institution_cost_institution_schools_mult = -0.2
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -1023,7 +1023,7 @@ amendment_langreform_simplification = {
 		country_primary_culture_fervor_from_laws_add = 5
 		country_institution_cost_institution_schools_mult = -0.1
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -1040,7 +1040,7 @@ amendment_langreform_powerful_academy = {
 		state_assimilation_mult = 0.10
 		country_primary_culture_fervor_from_laws_add = 5
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -1054,7 +1054,7 @@ amendment_langreform_advisory_panel = {
 		country_influence_mult = 0.05
 		country_institution_cost_institution_schools_mult = -0.1
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -1072,7 +1072,7 @@ amendment_langreform_minority_protection = {
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 		state_assimilation_mult = -0.10
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }
@@ -1087,7 +1087,7 @@ amendment_langreform_national_focus = {
 		country_acceptance_no_shared_language_trait_add = -10
 		country_acceptance_shared_language_trait_group_add = -5
 	}
-	possible = { always = no }
+	possible = { always = yes }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
 	can_repeal = { always = yes }

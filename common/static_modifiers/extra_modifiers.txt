@@ -36,6 +36,7 @@ pollution_generation_mult_effect = {
 cheaty = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	state_capitalists_investment_pool_efficiency_mult = 1000
+	country_diplomatic_reputation_add = 100
 }
 
 extra_training_modifier = {

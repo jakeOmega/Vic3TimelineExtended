@@ -21,7 +21,6 @@ je_cultural_hegemony = {
 		any_country = {
             has_technology_researched = mass_media
         }
-		country_rank >= rank_value:minor_power
 		has_technology_researched = romanticism
 	}
 
@@ -190,11 +189,23 @@ je_cultural_hegemony = {
 
 	on_monthly_pulse = {
         effect = {
-            # Apply/remove cultural hegemony modifier
+            # Apply/remove cultural hegemony modifier (hegemon bonus)
             remove_modifier = cultural_hegemony_effect
             if = {
                 limit = { var:ch_total >= 1 }
                 add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult }
+            }
+
+            # Apply/remove foreign benchmark (SoL expectations from hegemon)
+            # Only applies to countries with this JE active
+            if = {
+                limit = { cultural_hegemony_benchmark_mult >= 0.1 }
+                remove_modifier = cultural_hegemony_foreign_benchmark
+                add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = cultural_hegemony_benchmark_mult }
+            }
+            else_if = {
+                limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+                remove_modifier = cultural_hegemony_foreign_benchmark
             }
         }
 	}

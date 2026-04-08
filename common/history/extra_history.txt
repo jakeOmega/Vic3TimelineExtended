@@ -157,12 +157,18 @@ GLOBAL = {
 		active_law:lawgroup_language_policy ?= {
 			add_amendment = {
 				type = amendment_langreform_simplification
+				sponsor = PREV.ig:ig_intelligentsia
+				cooldown = 60
 			}
 			add_amendment = {
 				type = amendment_langreform_advisory_panel
+				sponsor = PREV.ig:ig_intelligentsia
+				cooldown = 60
 			}
 			add_amendment = {
 				type = amendment_langreform_national_focus
+				sponsor = PREV.ig:ig_intelligentsia
+				cooldown = 60
 			}
 		}
 	}
@@ -187,12 +193,18 @@ GLOBAL = {
 		active_law:lawgroup_language_policy ?= {
 			add_amendment = {
 				type = amendment_langreform_revived_greek
+				sponsor = PREV.ig:ig_intelligentsia
+				cooldown = 60
 			}
 			add_amendment = {
 				type = amendment_langreform_powerful_academy
+				sponsor = PREV.ig:ig_intelligentsia
+				cooldown = 60
 			}
 			add_amendment = {
 				type = amendment_langreform_national_focus
+				sponsor = PREV.ig:ig_intelligentsia
+				cooldown = 60
 			}
 		}
 	}

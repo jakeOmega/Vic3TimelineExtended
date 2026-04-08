@@ -36,7 +36,6 @@ ch_monthly_pulse_on_action = {
 		if = {
 			limit = {
 				has_game_rule = cultural_hegemony_enabled
-				country_rank >= rank_value:minor_power
 			}
 			ch_monthly_country_update = yes
 			# If leaderboard lock was cleared (e.g. by war end), rebuild immediately
@@ -61,7 +60,6 @@ ch_yearly_pulse_on_action = {
 		if = {
 			limit = {
 				has_game_rule = cultural_hegemony_enabled
-				country_rank >= rank_value:minor_power
 			}
 			ch_yearly_global_update = yes
 		}

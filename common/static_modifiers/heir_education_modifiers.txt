@@ -11,11 +11,6 @@ heir_education_grace_period = {
 	icon = "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds"
 }
 
-# Cooldown between education events
-heir_education_event_cooldown = {
-	icon = "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds"
-}
-
 # Focus cost modifiers - applied while an education focus is active
 # Each category costs authority, representing political capital spent on hiring tutors
 heir_ed_trait_focus_active = {

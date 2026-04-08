@@ -29,7 +29,6 @@ cultural_hegemony.1 = {
 		var:ch_total >= 10
 		has_technology_researched = mass_media
 		NOT = { has_modifier = ch_cultural_renaissance }
-		NOT = { has_modifier = ch_cultural_stagnation }
 	}
 
 	immediate = {
