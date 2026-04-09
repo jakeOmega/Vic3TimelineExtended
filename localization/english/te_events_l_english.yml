@@ -1449,6 +1449,16 @@
  minor_events_timelineextended.7.t:0 "Contagion from Abroad"
  minor_events_timelineextended.7.t_cascade:0 "Cascading Financial Collapse"
  minor_events_timelineextended.7.t_severe:0 "Financial Contagion"
+ minor_events_timelineextended.8.a:0 "We must weather this storm."
+ minor_events_timelineextended.8.b:0 "Our isolation has served us well."
+ minor_events_timelineextended.8.c:0 "Brace for the global downturn."
+ minor_events_timelineextended.8.d:0 "A wave of financial collapses has swept across the world's major economies. One by one, the great trading nations have seen their banks fail, their markets collapse, and their credit freeze. No country with open markets can escape a contraction of this scale — reduced demand, collapsing trade, and a grinding loss of confidence will weigh on our economy for years to come."
+ minor_events_timelineextended.8.d_crashed:0 "Our own financial system was among the casualties. A cascading wave of bank failures, market panics, and credit freezes has engulfed the world's major economies — including ours. The global financial system is in ruins, and recovery will be measured in years, not months. We must prepare for a prolonged depression."
+ minor_events_timelineextended.8.d_isolated:0 "A wave of financial collapses has swept the world's trading nations. Banks have failed, markets have crashed, and credit has frozen across dozens of countries. Our own economy, sheltered from the worst of international finance, has so far been largely spared — but even we cannot fully escape the chill of a world in depression."
+ minor_events_timelineextended.8.f:0 "\"They called it a correction. Then a downturn. Then a crisis. Now they've stopped naming it. The word on everyone's lips is the one no economist wants to say: depression.\""
+ minor_events_timelineextended.8.f_crashed:0 "\"First it was foreign banks. Then ours. Then the factories. Then the shops. Now it's just — everything. My father says he's never seen anything like it, and he lived through the wars.\"\n\n\"Your father didn't have a mortgage.\""
+ minor_events_timelineextended.8.t:0 "The Great Depression"
+ minor_events_timelineextended.8.t_crashed:0 "The Great Depression"
 
 #
 # MODERN_ELECTION_EVENTS

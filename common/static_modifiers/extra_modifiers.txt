@@ -463,6 +463,28 @@ financial_cycle_phase_frenzy_coop = {
 
 # ----- Banking cycle event modifiers -----
 
+# --- Great Depression (global crisis from cascading crashes) ---
+# Applied to countries that crashed as part of the wave
+great_depression_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_finance_momentum_monthly_add = -0.4
+	country_loan_interest_rate_mult = 0.15
+	country_prestige_mult = -0.05
+}
+
+# Applied to non-crashed countries with open economies (trade partners affected by global downturn)
+great_depression_bystander_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_finance_momentum_monthly_add = -0.2
+	country_loan_interest_rate_mult = 0.05
+}
+
+# Applied to isolated/command economy countries (largely shielded)
+great_depression_isolated_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_finance_momentum_monthly_add = -0.1
+}
+
 # --- Original 3 (kept, used by events 7, 8, 9) ---
 banking_event_consolidation_boom = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds

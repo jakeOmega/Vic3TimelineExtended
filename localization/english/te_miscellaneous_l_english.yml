@@ -1209,6 +1209,8 @@
  gp_support_accepted_notice:0 "The colonial power has accepted our support."
  gp_support_declined_notice:0 "The colonial power has declined our offer of support."
  gp_supports_colonialism_modifier:0 "Great Power Support for Colonial Holdings"
+ great_depression_bystander_modifier:0 "Global Depression"
+ great_depression_isolated_modifier:0 "Global Depression (Sheltered)"
  green_building_codes_modifier:0 "Green Building Codes"
  green_tech_boom_modifier:0 "Green Technology Boom"
  green_tech_market_modifier:0 "Market-Led Green Growth"

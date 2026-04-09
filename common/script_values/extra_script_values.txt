@@ -1510,6 +1510,17 @@ banking_contagion_min_source_gdp = {
 	multiply = 0.01
 }
 
+# Current country's GDP (for crisis wave tracking).
+this_country_gdp_value = {
+	value = gdp
+}
+
+# GDP threshold for Great Depression: 50% of global GDP.
+great_depression_gdp_threshold = {
+	value = global_gdp
+	multiply = 0.50
+}
+
 emergency_liquidity_program_activation_cost = {
 	value = root.gdp
 	multiply = -0.012 # 1.2% of GDP

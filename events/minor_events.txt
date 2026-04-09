@@ -394,9 +394,132 @@ minor_events_timelineextended.7 = {
 		# Cascade: if contagion triggered a crash, spread contagion from this country
 		if = {
 			limit = { var:contagion_crash > 0 }
+			# Track this crash in the crisis wave (Great Depression mechanic)
+			banking_crisis_wave_increment = yes
 			save_scope_as = banking_crash_origin_country
 			banking_cycle_spread_contagion = yes
+			# Check if enough countries have crashed for Great Depression
+			banking_crisis_wave_check_great_depression = yes
 		}
+		banking_cycle_post_event_refresh = yes
+	}
+}
+
+# Great Depression event: fired for all countries when a cascading crash
+# wave hits 10+ countries covering 20%+ of world GDP.
+# Mostly notificational with long-lasting momentum penalty.
+# Isolated countries can avoid the worst effects.
+minor_events_timelineextended.8 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/stock_exchange.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = banking_crisis_wave_crashed } desc = minor_events_timelineextended.8.t_crashed }
+			triggered_desc = { trigger = { always = yes } desc = minor_events_timelineextended.8.t }
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = banking_crisis_wave_crashed } desc = minor_events_timelineextended.8.d_crashed }
+			triggered_desc = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_isolationism
+						has_law = law_type:law_command_economy
+					}
+				}
+				desc = minor_events_timelineextended.8.d_isolated
+			}
+			triggered_desc = { trigger = { always = yes } desc = minor_events_timelineextended.8.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = banking_crisis_wave_crashed } desc = minor_events_timelineextended.8.f_crashed }
+			triggered_desc = { trigger = { always = yes } desc = minor_events_timelineextended.8.f }
+		}
+	}
+
+	immediate = {
+	}
+
+	duration = 3
+	is_popup = yes
+
+	# Option A: Countries that crashed - endure the depression
+	option = {
+		name = minor_events_timelineextended.8.a
+		default_option = yes
+		trigger = { has_variable = banking_crisis_wave_crashed }
+		add_modifier = {
+			name = great_depression_modifier
+			months = long_modifier_time
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	# Option B: Isolated/command economy countries — largely shielded
+	option = {
+		name = minor_events_timelineextended.8.b
+		trigger = {
+			NOT = { has_variable = banking_crisis_wave_crashed }
+			OR = {
+				has_law = law_type:law_isolationism
+				has_law = law_type:law_command_economy
+			}
+		}
+		add_modifier = {
+			name = great_depression_isolated_modifier
+			months = normal_modifier_time
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	# Option C: Non-crashed market economies — still affected by global downturn
+	option = {
+		name = minor_events_timelineextended.8.c
+		trigger = {
+			NOT = { has_variable = banking_crisis_wave_crashed }
+			NOR = {
+				has_law = law_type:law_isolationism
+				has_law = law_type:law_command_economy
+			}
+		}
+		add_modifier = {
+			name = great_depression_bystander_modifier
+			months = long_modifier_time
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	after = {
 		banking_cycle_post_event_refresh = yes
 	}
 }

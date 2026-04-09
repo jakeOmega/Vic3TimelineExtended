@@ -1335,6 +1335,72 @@ apply_banking_contagion_effects = {
 # event `after` blocks.  Each handles one logical phase of the monthly cycle.
 # ============================================================================
 
+# ---- Crisis Wave Tracking (Great Depression mechanic) ----
+
+# Initialize a new crisis wave when an origin crash fires.
+# Clears any previous wave tracking and starts fresh.
+banking_crisis_wave_init = {
+	# Clear previous wave flags from all countries
+	every_country = {
+		limit = { has_variable = banking_crisis_wave_crashed }
+		remove_variable = banking_crisis_wave_crashed
+	}
+	# Initialize global wave counter
+	set_global_variable = { name = great_depression_wave_count value = 1 }
+	set_global_variable = { name = great_depression_wave_gdp value = this_country_gdp_value }
+	# Mark this country as part of the wave
+	set_variable = { name = banking_crisis_wave_crashed value = 1 }
+}
+
+# Increment wave tracking when a contagion crash triggers in a target country.
+# Called from event .7 after block when contagion_crash > 0.
+banking_crisis_wave_increment = {
+	if = {
+		limit = { NOT = { has_variable = banking_crisis_wave_crashed } }
+		set_variable = { name = banking_crisis_wave_crashed value = 1 }
+		if = {
+			limit = { has_global_variable = great_depression_wave_count }
+			change_global_variable = { name = great_depression_wave_count add = 1 }
+			change_global_variable = { name = great_depression_wave_gdp add = this_country_gdp_value }
+		}
+	}
+}
+
+# Check if the crisis wave has reached Great Depression thresholds.
+# Requirements:
+#   - 10+ countries crashed in the wave
+#   - Wave GDP >= 20% of global GDP
+#   - No country currently has a Great Depression modifier (acts as cooldown)
+# If triggered, fires the Great Depression event for all countries with banking systems.
+banking_crisis_wave_check_great_depression = {
+	if = {
+		limit = {
+			has_global_variable = great_depression_wave_count
+			global_var:great_depression_wave_count >= 10
+			global_var:great_depression_wave_gdp >= great_depression_gdp_threshold
+			# Cooldown: no new Great Depression while any country still has the modifier
+			NOT = {
+				any_country = {
+					OR = {
+						has_modifier = great_depression_modifier
+						has_modifier = great_depression_bystander_modifier
+						has_modifier = great_depression_isolated_modifier
+					}
+				}
+			}
+		}
+		# Fire Great Depression event for all countries with banking journals
+		every_country = {
+			limit = {
+				has_journal_entry = je_banking_cycle
+			}
+			trigger_event = { id = minor_events_timelineextended.8 days = 3 }
+		}
+	}
+}
+
+# ---- End of crisis wave tracking ----
+
 # 1. Fiscal policy modifier: re-apply every month to reflect current deficit/surplus.
 banking_cycle_update_fiscal_policy = {
 	remove_modifier = financial_cycle_government_fiscal_policy_effect
@@ -1457,6 +1523,9 @@ banking_cycle_check_and_execute_crash = {
 			20 = { change_variable = { name = crash_severity multiply = 1.5 } }
 			10 = { change_variable = { name = crash_severity multiply = 2 } }
 		}
+
+		# Initialize crisis wave tracking for Great Depression mechanic
+		banking_crisis_wave_init = yes
 
 		trigger_event = { id = minor_events_timelineextended.6 popup = yes }
 
