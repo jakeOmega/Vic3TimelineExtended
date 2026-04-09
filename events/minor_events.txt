@@ -306,12 +306,16 @@ minor_events_timelineextended.7 = {
 
 	title = {
 		first_valid = {
+			triggered_desc = { trigger = { var:contagion_crash > 0 } desc = minor_events_timelineextended.7.t_cascade }
 			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.t_severe }
 			triggered_desc = { trigger = { always = yes } desc = minor_events_timelineextended.7.t }
 		}
 	}
 	desc = {
 		first_valid = {
+			triggered_desc = { trigger = { var:contagion_crash > 0 scope:banking_crash_origin_country = { var:crash_severity >= 80 } } desc = minor_events_timelineextended.7.d_cascade_systemic }
+			triggered_desc = { trigger = { var:contagion_crash > 0 scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.d_cascade_severe }
+			triggered_desc = { trigger = { var:contagion_crash > 0 } desc = minor_events_timelineextended.7.d_cascade }
 			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 80 } } desc = minor_events_timelineextended.7.d_systemic }
 			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.d_panic }
 			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 40 } } desc = minor_events_timelineextended.7.d_crash }
@@ -320,46 +324,66 @@ minor_events_timelineextended.7 = {
 	}
 	flavor = {
 		first_valid = {
+			triggered_desc = { trigger = { var:contagion_crash > 0 } desc = minor_events_timelineextended.7.f_cascade }
 			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.f_severe }
 			triggered_desc = { trigger = { always = yes } desc = minor_events_timelineextended.7.f }
 		}
 	}
 
     immediate = {
+		banking_contagion_crash_check = yes
     }
 
     duration = 3
     is_popup = yes
 
-	# Option A: Close the gates - protect domestic banks
+	# Option A: Protect domestic banks
     option = {
         name = minor_events_timelineextended.7.a
         default_option = yes
 		apply_banking_contagion_effects = yes
-		add_radicals = {
-			value = small_radicals
-			strata = upper
+		if = {
+			limit = { var:contagion_crash > 0 }
+			add_radicals = {
+				value = small_radicals
+				strata = upper
+			}
+			add_radicals = {
+				value = small_radicals
+				strata = middle
+			}
 		}
-		add_radicals = {
-			value = small_radicals
-			strata = middle
+		else = {
+			add_radicals = {
+				value = very_small_radicals
+				strata = upper
+			}
 		}
         ai_chance = {
 			base = 50
 		}
     }
 
-	# Option B: Maintain open markets - ride it out
+	# Option B: Ride it out
 	option = {
 		name = minor_events_timelineextended.7.b
 		apply_banking_contagion_effects = yes
-		add_radicals = {
-			value = medium_radicals
-			strata = upper
+		if = {
+			limit = { var:contagion_crash > 0 }
+			add_radicals = {
+				value = medium_radicals
+				strata = upper
+			}
+			add_radicals = {
+				value = small_radicals
+				strata = lower
+			}
 		}
-		add_radicals = {
-			value = small_radicals
-			strata = lower
+		else = {
+			add_radicals = {
+				value = very_small_radicals
+				strata = middle
+			}
 		}
 		ai_chance = {
 			base = 50
@@ -367,6 +391,12 @@ minor_events_timelineextended.7 = {
 	}
 
 	after = {
+		# Cascade: if contagion triggered a crash, spread contagion from this country
+		if = {
+			limit = { var:contagion_crash > 0 }
+			save_scope_as = banking_crash_origin_country
+			banking_cycle_spread_contagion = yes
+		}
 		banking_cycle_post_event_refresh = yes
 	}
 }

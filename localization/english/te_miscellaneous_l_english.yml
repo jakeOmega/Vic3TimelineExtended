@@ -157,6 +157,8 @@
  CE_REMOVE_MILITARY_GARRISON_DESC:0 "Withdraw military forces from colonial territories."
  CE_STRATEGIC_STOCKPILE_DESC:0 "Order the accumulation of national material reserves as a buffer against sudden input shortages. A steady, defensive tool providing modest [concept_bubble_pressure] reduction at low planning cost."
  CE_TARGET_REDUCTION_DESC:0 "Formally scale back overambitious plan targets to provisioned capacity, clearing systemic friction. Reduces [concept_bubble_pressure] significantly but irritates upper strata who invested in ambitious output projections."
+ CONTAGION_SCARE_CYCLE_DESC:0 "[concept_banking_cycle] Value: #R -3#! (market jitters)"
+ CONTAGION_SCARE_MOMENTUM_DESC:0 "[concept_banking_momentum]: #N -1#! (market jitters)"
  COUNCIL_POINTS_1:0 "At least #bold 1#! free council mandate point"
  COUNCIL_POINTS_2:0 "At least #bold 2#! free council mandate points"
  COUNCIL_POINTS_3:0 "At least #bold 3#! free council mandate points"
