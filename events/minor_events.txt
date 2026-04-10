@@ -462,7 +462,7 @@ minor_events_timelineextended.8 = {
 		trigger = { has_variable = banking_crisis_wave_crashed }
 		add_modifier = {
 			name = great_depression_modifier
-			months = long_modifier_time
+			days = long_modifier_time
 		}
 		add_radicals = {
 			value = medium_radicals
@@ -489,7 +489,7 @@ minor_events_timelineextended.8 = {
 		}
 		add_modifier = {
 			name = great_depression_isolated_modifier
-			months = normal_modifier_time
+			days = normal_modifier_time
 		}
 		ai_chance = {
 			base = 100
@@ -508,7 +508,7 @@ minor_events_timelineextended.8 = {
 		}
 		add_modifier = {
 			name = great_depression_bystander_modifier
-			months = long_modifier_time
+			days = long_modifier_time
 		}
 		add_radicals = {
 			value = small_radicals

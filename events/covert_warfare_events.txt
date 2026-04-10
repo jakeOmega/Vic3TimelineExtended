@@ -219,7 +219,7 @@ covert_warfare.2 = {
 		# Harden defenses: temporary IC boost
 		add_modifier = {
 			name = intelligence_capacity_defense
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 			multiplier = 3
 		}

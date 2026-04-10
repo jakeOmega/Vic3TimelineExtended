@@ -21,10 +21,10 @@ cultural_hegemony.1 = {
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total >= 10
 		has_technology_researched = mass_media
@@ -41,13 +41,13 @@ cultural_hegemony.1 = {
 		# Patronize the arts - boost intelligentsia, attract academics
 		add_modifier = {
 			name = ch_cultural_renaissance
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		ig:ig_intelligentsia = {
 			add_modifier = {
 				name = ch_cultural_renaissance_ig
-				months = normal_modifier_time
+				days = normal_modifier_time
 				is_decaying = yes
 			}
 		}
@@ -74,13 +74,13 @@ cultural_hegemony.1 = {
 		# Redirect cultural output toward propaganda - boost prestige, anger intellectuals
 		add_modifier = {
 			name = ch_state_propaganda
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		ig:ig_intelligentsia = {
 			add_modifier = {
 				name = ch_state_propaganda_ig
-				months = normal_modifier_time
+				days = normal_modifier_time
 				is_decaying = yes
 			}
 		}
@@ -117,10 +117,10 @@ cultural_hegemony.2 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 5
 		has_modifier = cultural_hegemony_foreign_benchmark
@@ -138,7 +138,7 @@ cultural_hegemony.2 = {
 		ig:ig_intelligentsia = {
 			add_modifier = {
 				name = ch_foreign_ideas_embrace_ig
-				months = normal_modifier_time
+				days = normal_modifier_time
 				is_decaying = yes
 			}
 		}
@@ -174,14 +174,14 @@ cultural_hegemony.2 = {
 		ig:ig_devout = {
 			add_modifier = {
 				name = ch_cultural_resistance_ig
-				months = normal_modifier_time
+				days = normal_modifier_time
 				is_decaying = yes
 			}
 		}
 		ig:ig_rural_folk = {
 			add_modifier = {
 				name = ch_cultural_resistance_ig
-				months = short_modifier_time
+				days = short_modifier_time
 				is_decaying = yes
 			}
 		}
@@ -244,10 +244,10 @@ cultural_hegemony.3 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total >= 20
 		has_technology_researched = mass_media
@@ -265,7 +265,7 @@ cultural_hegemony.3 = {
 		# Leverage media dominance - cultural pull boost, political movements weakened
 		add_modifier = {
 			name = ch_media_dominance
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		add_loyalists = {
@@ -283,13 +283,13 @@ cultural_hegemony.3 = {
 		# Promote media freedom - migration pull, legitimacy, intelligentsia approval
 		add_modifier = {
 			name = ch_media_freedom
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		ig:ig_intelligentsia = {
 			add_modifier = {
 				name = ch_media_freedom_ig
-				months = normal_modifier_time
+				days = normal_modifier_time
 				is_decaying = yes
 			}
 		}
@@ -325,10 +325,10 @@ cultural_hegemony.4 = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 8
 		has_modifier = cultural_hegemony_foreign_benchmark
@@ -354,14 +354,14 @@ cultural_hegemony.4 = {
 		ig:ig_armed_forces = {
 			add_modifier = {
 				name = ch_nationalist_rally_ig
-				months = normal_modifier_time
+				days = normal_modifier_time
 				is_decaying = yes
 			}
 		}
 		ig:ig_devout = {
 			add_modifier = {
 				name = ch_nationalist_rally_ig
-				months = short_modifier_time
+				days = short_modifier_time
 				is_decaying = yes
 			}
 		}
@@ -435,10 +435,10 @@ cultural_hegemony.5 = {
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total >= 8
 		has_technology_researched = mass_media
@@ -456,7 +456,7 @@ cultural_hegemony.5 = {
 		# Capitalize on soft power - prestige and migration pull
 		add_modifier = {
 			name = ch_soft_power_dividend
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 
@@ -471,7 +471,7 @@ cultural_hegemony.5 = {
 		# Reinvest in cultural institutions - boost cultural pull directly
 		add_modifier = {
 			name = ch_cultural_investment
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 
@@ -502,10 +502,10 @@ cultural_hegemony.6 = {
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 3
 		has_modifier = cultural_hegemony_foreign_benchmark
@@ -527,7 +527,7 @@ cultural_hegemony.6 = {
 		# Fund universities and research - retain talent, cost innovation
 		add_modifier = {
 			name = ch_talent_retention
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 
@@ -556,8 +556,12 @@ cultural_hegemony.6 = {
 		}
 		add_modifier = {
 			name = ch_brain_drain_remittances
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
+		}
+		add_treasury = {
+			value = gdp
+			multiply = 0.005
 		}
 
 		ai_chance = {
@@ -590,10 +594,10 @@ cultural_hegemony.7 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	duration = 3
-	cooldown = { months = normal_modifier_time }
+	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 10
 		has_modifier = cultural_hegemony_foreign_benchmark
@@ -639,7 +643,7 @@ cultural_hegemony.7 = {
 		# Research bonus from cultural exchange
 		add_modifier = {
 			name = ch_cultural_exchange
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 
@@ -651,7 +655,7 @@ cultural_hegemony.7 = {
 				exists = ig:ig_intelligentsia
 			}
 			ig:ig_intelligentsia = {
-				add_modifier = { name = ch_foreign_ideological_influence_ig months = normal_modifier_time is_decaying = yes }
+				add_modifier = { name = ch_foreign_ideological_influence_ig days = normal_modifier_time is_decaying = yes }
 			}
 		}
 		if = {
@@ -661,7 +665,7 @@ cultural_hegemony.7 = {
 				exists = ig:ig_trade_unions
 			}
 			ig:ig_trade_unions = {
-				add_modifier = { name = ch_foreign_ideological_influence_ig months = normal_modifier_time is_decaying = yes }
+				add_modifier = { name = ch_foreign_ideological_influence_ig days = normal_modifier_time is_decaying = yes }
 			}
 		}
 		if = {
@@ -671,7 +675,7 @@ cultural_hegemony.7 = {
 				exists = ig:ig_industrialists
 			}
 			ig:ig_industrialists = {
-				add_modifier = { name = ch_foreign_ideological_influence_ig months = normal_modifier_time is_decaying = yes }
+				add_modifier = { name = ch_foreign_ideological_influence_ig days = normal_modifier_time is_decaying = yes }
 			}
 		}
 		if = {
@@ -681,7 +685,7 @@ cultural_hegemony.7 = {
 				exists = ig:ig_armed_forces
 			}
 			ig:ig_armed_forces = {
-				add_modifier = { name = ch_foreign_ideological_influence_ig months = normal_modifier_time is_decaying = yes }
+				add_modifier = { name = ch_foreign_ideological_influence_ig days = normal_modifier_time is_decaying = yes }
 			}
 		}
 		if = {
@@ -691,7 +695,7 @@ cultural_hegemony.7 = {
 				exists = ig:ig_devout
 			}
 			ig:ig_devout = {
-				add_modifier = { name = ch_foreign_ideological_influence_ig months = normal_modifier_time is_decaying = yes }
+				add_modifier = { name = ch_foreign_ideological_influence_ig days = normal_modifier_time is_decaying = yes }
 			}
 		}
 		if = {
@@ -701,7 +705,7 @@ cultural_hegemony.7 = {
 				exists = ig:ig_landowners
 			}
 			ig:ig_landowners = {
-				add_modifier = { name = ch_foreign_ideological_influence_ig months = normal_modifier_time is_decaying = yes }
+				add_modifier = { name = ch_foreign_ideological_influence_ig days = normal_modifier_time is_decaying = yes }
 			}
 		}
 		if = {
@@ -711,7 +715,7 @@ cultural_hegemony.7 = {
 				exists = ig:ig_petty_bourgeoisie
 			}
 			ig:ig_petty_bourgeoisie = {
-				add_modifier = { name = ch_foreign_ideological_influence_ig months = normal_modifier_time is_decaying = yes }
+				add_modifier = { name = ch_foreign_ideological_influence_ig days = normal_modifier_time is_decaying = yes }
 			}
 		}
 		if = {
@@ -721,12 +725,12 @@ cultural_hegemony.7 = {
 				exists = ig:ig_rural_folk
 			}
 			ig:ig_rural_folk = {
-				add_modifier = { name = ch_foreign_ideological_influence_ig months = normal_modifier_time is_decaying = yes }
+				add_modifier = { name = ch_foreign_ideological_influence_ig days = normal_modifier_time is_decaying = yes }
 			}
 		}
 
 		# Full political movement pressure from hegemon's ideology
-		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure MONTHS = normal_modifier_time }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure MONTHS = 60 }
 
 		# Radicals among pops disturbed by foreign ideology
 		every_scope_state = {
@@ -757,7 +761,7 @@ cultural_hegemony.7 = {
 		# Heavy-handed crackdown: no IG or movement effects, but government cost
 		add_modifier = {
 			name = ch_foreign_influence_crackdown
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		every_scope_state = {
@@ -798,7 +802,7 @@ cultural_hegemony.7 = {
 		# Moderate suppression costs
 		add_modifier = {
 			name = ch_narrative_control
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		# Only intelligentsia and trade unions leak through (shorter duration)
@@ -809,7 +813,7 @@ cultural_hegemony.7 = {
 				exists = ig:ig_intelligentsia
 			}
 			ig:ig_intelligentsia = {
-				add_modifier = { name = ch_foreign_ideological_influence_ig months = short_modifier_time is_decaying = yes }
+				add_modifier = { name = ch_foreign_ideological_influence_ig days = short_modifier_time is_decaying = yes }
 			}
 		}
 		if = {
@@ -819,12 +823,12 @@ cultural_hegemony.7 = {
 				exists = ig:ig_trade_unions
 			}
 			ig:ig_trade_unions = {
-				add_modifier = { name = ch_foreign_ideological_influence_ig months = short_modifier_time is_decaying = yes }
+				add_modifier = { name = ch_foreign_ideological_influence_ig days = short_modifier_time is_decaying = yes }
 			}
 		}
 
 		# Reduced political movement pressure (weaker modifier, shorter duration)
-		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = short_modifier_time }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 30 }
 
 		every_scope_state = {
 			limit = { state_population > 50000 }
@@ -847,12 +851,12 @@ cultural_hegemony.7 = {
 		# Small cultural adaptation bonus (much weaker than option A's research)
 		add_modifier = {
 			name = ch_cultural_adaptation
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 
 		# Reduced political movement pressure (you're not suppressing, just redirecting)
-		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = normal_modifier_time }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 60 }
 
 		ai_chance = {
 			base = 3
@@ -886,6 +890,7 @@ cultural_hegemony.8 = {
 	duration = 3
 
 	trigger = {
+		has_journal_entry = je_cultural_hegemony
 		cultural_pull_total >= 10
 		NOT = { has_variable = ch_milestone_significant }
 	}
@@ -901,7 +906,7 @@ cultural_hegemony.8 = {
 		# Invest in cultural projection
 		add_modifier = {
 			name = cultural_hegemony_effect
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 			multiplier = 2
 		}
@@ -916,8 +921,8 @@ cultural_hegemony.8 = {
 
 		# Focus on internal development instead
 		add_modifier = {
-			name = intelligence_capacity_defense
-			months = normal_modifier_time
+			name = ch_domestic_consolidation
+			days = normal_modifier_time
 			is_decaying = yes
 			multiplier = 2
 		}
@@ -951,6 +956,7 @@ cultural_hegemony.9 = {
 	duration = 3
 
 	trigger = {
+		has_journal_entry = je_cultural_hegemony
 		cultural_pull_total >= 25
 		NOT = { has_variable = ch_milestone_dominant }
 	}
@@ -993,13 +999,12 @@ cultural_hegemony.10 = {
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total >= 10
-		has_technology_researched = romanticism
 		NOT = { has_modifier = ch_touring_exhibition }
 		NOT = { has_modifier = ch_art_commercialization }
 	}
@@ -1014,7 +1019,7 @@ cultural_hegemony.10 = {
 
 		add_modifier = {
 			name = ch_touring_exhibition
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 
@@ -1027,14 +1032,18 @@ cultural_hegemony.10 = {
 		}
 	}
 
-	# B: Sell the art rights commercially — minting boost, tourism, but less cultural pull
+	# B: Sell the art rights commercially — cash from art sales, but less cultural pull
 	option = {
 		name = cultural_hegemony.10.b
 
 		add_modifier = {
 			name = ch_art_commercialization
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
+		}
+		add_treasury = {
+			value = gdp
+			multiply = 0.0025
 		}
 
 		ai_chance = {
@@ -1069,13 +1078,12 @@ cultural_hegemony.11 = {
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total >= 8
-		has_technology_researched = romanticism
 		NOT = { has_modifier = ch_tourism_infrastructure }
 		NOT = { has_modifier = ch_tourism_exploitation }
 	}
@@ -1090,7 +1098,7 @@ cultural_hegemony.11 = {
 
 		add_modifier = {
 			name = ch_tourism_infrastructure
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 
@@ -1109,7 +1117,7 @@ cultural_hegemony.11 = {
 
 		add_modifier = {
 			name = ch_tourism_exploitation
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		add_radicals = {
@@ -1149,10 +1157,10 @@ cultural_hegemony.12 = {
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total >= 12
 		has_technology_researched = mass_media
@@ -1170,7 +1178,7 @@ cultural_hegemony.12 = {
 
 		add_modifier = {
 			name = ch_international_university
-			months = long_modifier_time
+			days = long_modifier_time
 			is_decaying = yes
 		}
 
@@ -1189,7 +1197,7 @@ cultural_hegemony.12 = {
 
 		add_modifier = {
 			name = ch_domestic_university_focus
-			months = long_modifier_time
+			days = long_modifier_time
 			is_decaying = yes
 		}
 
@@ -1226,10 +1234,10 @@ cultural_hegemony.13 = {
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total >= 20
 		has_technology_researched = mass_media
@@ -1247,7 +1255,7 @@ cultural_hegemony.13 = {
 
 		add_modifier = {
 			name = ch_language_academies
-			months = long_modifier_time
+			days = long_modifier_time
 			is_decaying = yes
 		}
 
@@ -1266,7 +1274,7 @@ cultural_hegemony.13 = {
 
 		add_modifier = {
 			name = ch_natural_lingua_franca
-			months = long_modifier_time
+			days = long_modifier_time
 			is_decaying = yes
 		}
 
@@ -1303,10 +1311,10 @@ cultural_hegemony.14 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 8
 		has_modifier = cultural_hegemony_foreign_benchmark
@@ -1345,7 +1353,7 @@ cultural_hegemony.14 = {
 
 		add_modifier = {
 			name = ch_entertainment_embrace
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		if = {
@@ -1379,7 +1387,7 @@ cultural_hegemony.14 = {
 
 		add_modifier = {
 			name = ch_entertainment_restriction
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		if = {
@@ -1434,7 +1442,7 @@ cultural_hegemony.14 = {
 
 		add_modifier = {
 			name = ch_entertainment_adaptation
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 
@@ -1467,10 +1475,10 @@ cultural_hegemony.15 = {
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
-	cooldown = { months = very_long_modifier_time }
+	cooldown = { days = very_long_modifier_time }
 
 	trigger = {
-		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 10
 		has_modifier = cultural_hegemony_foreign_benchmark
@@ -1507,7 +1515,7 @@ cultural_hegemony.15 = {
 
 		add_modifier = {
 			name = ch_adopted_education
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		if = {
@@ -1520,7 +1528,7 @@ cultural_hegemony.15 = {
 		# Hegemon's ideology seeps through the education system
 		if = {
 			limit = { exists = scope:cultural_hegemon }
-			ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = normal_modifier_time }
+			ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 60 }
 		}
 		every_scope_state = {
 			limit = { state_population > 50000 }
@@ -1545,7 +1553,7 @@ cultural_hegemony.15 = {
 
 		add_modifier = {
 			name = ch_domestic_education_defense
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 		if = {
@@ -1558,7 +1566,7 @@ cultural_hegemony.15 = {
 		ig:ig_devout = {
 			add_modifier = {
 				name = ch_cultural_resistance_ig
-				months = normal_modifier_time
+				days = normal_modifier_time
 				is_decaying = yes
 			}
 		}
@@ -1578,7 +1586,7 @@ cultural_hegemony.15 = {
 
 		add_modifier = {
 			name = ch_selective_education
-			months = normal_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
 

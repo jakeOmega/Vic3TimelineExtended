@@ -34,6 +34,8 @@
  law_corporate_genetic_licensing_desc:0 "Genetic modification is a profitable enterprise, and its use is restricted to licensed corporations."
  law_creative_commons:0 "Creative Commons"
  law_creative_commons_desc:0 "Intellectual property protection is based on a Creative Commons philosophy, which encourages sharing and collaboration. Creators can choose from various licenses to determine how their works may be used, adapted, or redistributed by others."
+ law_decentralized_cryptocurrency:0 "Decentralized Cryptocurrency"
+ law_decentralized_cryptocurrency_desc:0 "A monetary system built on distributed cryptographic networks rather than central bank authority. Transactions are pseudonymous and resistant to state control, enabling frictionless cross-border trade but undermining tax collection and amplifying financial volatility."
  law_devolution:0 "Devolved Administration"
  law_devolution_desc:0 "Significant powers are delegated to regional governments, granting them a high degree of autonomy."
  law_digital_currency:0 "Digital Currency"

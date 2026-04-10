@@ -147,12 +147,21 @@ advanced_curency = [
     ("law_gold_standard", "neutral"),
     ("law_fiat_currency", "approve"),
     ("law_digital_currency", "strongly_approve"),
+    ("law_decentralized_cryptocurrency", "disapprove"),
 ]
 simple_currency = [
     ("law_commodity_money", "neutral"),
     ("law_gold_standard", "approve"),
     ("law_fiat_currency", "disapprove"),
     ("law_digital_currency", "disapprove"),
+    ("law_decentralized_cryptocurrency", "disapprove"),
+]
+libertarian_currency = [
+    ("law_commodity_money", "neutral"),
+    ("law_gold_standard", "neutral"),
+    ("law_fiat_currency", "disapprove"),
+    ("law_digital_currency", "strongly_disapprove"),
+    ("law_decentralized_cryptocurrency", "strongly_approve"),
 ]
 pro_secrecy = [
     ("law_informal_government_secrecy", "neutral"),
@@ -1091,6 +1100,7 @@ modifications = {
             ("law_publicly_funded_elections", "approve"),
         ],
         "lawgroup_financial_regulation": finreg_anarchist,
+        "lawgroup_monetary_policy": libertarian_currency,
         "lawgroup_internet_governance": [
             ("law_no_internet_policy", "neutral"),
             ("law_unregulated_internet", "strongly_approve"),

@@ -5295,7 +5295,6 @@ ch_talent_retention = {
 ch_brain_drain_remittances = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_tech_research_speed_mult = -0.05
-	country_minting_mult = 0.05
 }
 
 # Event 7: Foreign Ideological Influence - IG boost from hegemon's government
@@ -5344,38 +5343,46 @@ ch_narrative_control = {
 ch_cultural_adaptation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_cultural_pull_mult = 0.05
-	country_prestige_add = 15
+	country_prestige_mult = 0.03
+}
+
+# Event 8 Option B: Domestic consolidation - strengthen institutions instead of projecting abroad
+ch_domestic_consolidation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_authority_add = 50
+	country_bureaucracy_mult = 0.05
+	state_education_access_add = 0.05
 }
 
 # Event 10 Option A: Tour art exhibition - prestige & cultural pull, authority cost
 ch_touring_exhibition = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_cultural_pull_mult = 0.10
-	country_prestige_add = 50
+	country_prestige_mult = 0.08
 	country_authority_add = -50
 }
 
-# Event 10 Option B: Commercialize art - minting & tourism, reduced cultural pull
+# Event 10 Option B: Commercialize art - cash from art sales, reduced cultural pull
 ch_art_commercialization = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_minting_mult = 0.05
-	country_mass_migration_attraction_mult = 0.05
+	country_prestige_mult = 0.03
 	country_cultural_pull_mult = -0.05
 }
 
-# Event 11 Option A: Tourism infrastructure - sustained tourism & migration, authority cost
+# Event 11 Option A: Tourism infrastructure - tourism throughput & cultural appeal, authority cost
 ch_tourism_infrastructure = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_mass_migration_attraction_mult = 0.15
+	building_tourism_industry_throughput_add = 0.25
 	country_cultural_pull_mult = 0.05
 	country_authority_add = -50
 }
 
-# Event 11 Option B: Exploit tourists - quick cash, prestige damage
+# Event 11 Option B: Exploit tourists - quick cash, prestige and cultural damage
 ch_tourism_exploitation = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_minting_mult = 0.08
-	country_prestige_add = -25
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	goods_output_tourism_mult = 0.15
+	country_prestige_mult = -0.05
+	country_cultural_pull_mult = -0.05
 }
 
 # Event 12 Option A: International university programs - research & migration, expensive
@@ -5384,7 +5391,7 @@ ch_international_university = {
 	country_tech_research_speed_mult = 0.08
 	country_mass_migration_attraction_mult = 0.10
 	country_cultural_pull_mult = 0.05
-	country_bureaucracy_add = -50
+	country_bureaucracy_mult = -0.05
 }
 
 # Event 12 Option B: Domestic university focus - research & education, no migration
@@ -5412,7 +5419,7 @@ ch_natural_lingua_franca = {
 # Event 14 Option A: Embrace foreign entertainment - consumer benefits, SoL boost
 ch_entertainment_embrace = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_add = -15
+	country_prestige_mult = -0.03
 	state_standard_of_living_add = 1
 }
 
