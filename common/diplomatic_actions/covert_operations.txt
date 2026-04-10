@@ -1109,9 +1109,8 @@ covert_destabilization_action = {
 		}
 		custom_tooltip = {
 			text = iw_no_good_relations_tt
-			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
+			NOT = { scope:target_country.relations:root >= relations_threshold:cordial }
 		}
-		has_diplomatic_pact = { who = scope:target_country type = rivalry }
 		custom_tooltip = {
 			text = iw_target_has_movements_tt
 			scope:target_country = {
@@ -1142,7 +1141,7 @@ covert_destabilization_action = {
 
 		requirement_to_maintain = {
 			trigger = {
-				has_diplomatic_pact = { who = scope:target_country type = rivalry }
+				NOT = { scope:target_country.relations:root >= relations_threshold:cordial }
 			}
 		}
 

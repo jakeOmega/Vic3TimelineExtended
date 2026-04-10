@@ -46,7 +46,7 @@ heir_ed_gain_admin = {
 	scope:journal_entry = {
 		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
 	}
-	add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
+	add_modifier = { name = heir_education_innovation_cost days = 30 }
 	heir_education_admin_ig_reaction = yes
 }
 
@@ -85,7 +85,7 @@ heir_ed_gain_diplo = {
 	scope:journal_entry = {
 		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
 	}
-	add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
+	add_modifier = { name = heir_education_innovation_cost days = 30 }
 	heir_education_diplo_ig_reaction = yes
 }
 
@@ -124,7 +124,7 @@ heir_ed_gain_military = {
 	scope:journal_entry = {
 		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
 	}
-	add_modifier = { name = heir_education_innovation_cost days = 30 is_decaying = yes }
+	add_modifier = { name = heir_education_innovation_cost days = 30 }
 	heir_education_military_ig_reaction = yes
 }
 
@@ -732,7 +732,7 @@ heir_education_resolve_effect = {
 				14 = { trigger = { owner = { exists = ig:ig_devout } } set_interest_group = ig:ig_devout }
 				14 = { trigger = { owner = { exists = ig:ig_trade_unions } } set_interest_group = ig:ig_trade_unions }
 				14 = { trigger = { owner = { exists = ig:ig_armed_forces } } set_interest_group = ig:ig_armed_forces }
-				14 = { trigger = { owner = { exists = ig:ig_rural_folk } } trigger = { owner = { exists = ig:ig_rural_folk } } set_interest_group = ig:ig_rural_folk }
+				14 = { trigger = { owner = { exists = ig:ig_rural_folk } } set_interest_group = ig:ig_rural_folk }
 			}
 		}
 	}

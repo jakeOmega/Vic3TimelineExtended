@@ -420,3 +420,21 @@ cultural_pull_from_stability_display = {
 	round = yes
 	divide = 10
 }
+
+
+# Used as weight in random_country blocks (var: not valid in weight context)
+ch_total_weight = {
+	if = {
+		limit = { has_variable = ch_total }
+		add = var:ch_total
+	}
+}
+
+
+# Used as weight in random_country blocks (var: not valid in weight context)
+ch_total_weight = {
+	if = {
+		limit = { has_variable = ch_total }
+		add = var:ch_total
+	}
+}

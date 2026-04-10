@@ -123,11 +123,39 @@ legacy_je_modifier_cleanup_effect = {
 	if = { limit = { has_modifier = un_arms_control_participant_modifier } remove_modifier = un_arms_control_participant_modifier }
 	if = { limit = { has_modifier = un_peacekeeping_contributor_cost } remove_modifier = un_peacekeeping_contributor_cost }
 	if = { limit = { has_modifier = un_development_contributor_cost } remove_modifier = un_development_contributor_cost }
+	if = { limit = { has_modifier = un_humanitarian_aid_cost } remove_modifier = un_humanitarian_aid_cost }
 
 	# ── Colonial Empire (je:je_colonial_empire) ──
 	if = { limit = { has_modifier = colonial_empire_under_pressure_modifier } remove_modifier = colonial_empire_under_pressure_modifier }
 	if = { limit = { has_modifier = colonial_empire_crumbling_modifier } remove_modifier = colonial_empire_crumbling_modifier }
 
-	# Mark this country as cleaned up
-	set_variable = legacy_je_modifier_cleanup_done
+	# ── Cultural Hegemony (je:je_cultural_hegemony) ──
+	if = { limit = { has_modifier = ch_cultural_renaissance } remove_modifier = ch_cultural_renaissance }
+	if = { limit = { has_modifier = ch_state_propaganda } remove_modifier = ch_state_propaganda }
+	if = { limit = { has_modifier = ch_media_dominance } remove_modifier = ch_media_dominance }
+	if = { limit = { has_modifier = ch_media_freedom } remove_modifier = ch_media_freedom }
+	if = { limit = { has_modifier = ch_soft_power_dividend } remove_modifier = ch_soft_power_dividend }
+	if = { limit = { has_modifier = ch_cultural_investment } remove_modifier = ch_cultural_investment }
+	if = { limit = { has_modifier = ch_talent_retention } remove_modifier = ch_talent_retention }
+	if = { limit = { has_modifier = ch_brain_drain_remittances } remove_modifier = ch_brain_drain_remittances }
+	if = { limit = { has_modifier = ch_foreign_influence_crackdown } remove_modifier = ch_foreign_influence_crackdown }
+	if = { limit = { has_modifier = ch_narrative_control } remove_modifier = ch_narrative_control }
+	if = { limit = { has_modifier = ch_cultural_adaptation } remove_modifier = ch_cultural_adaptation }
+	if = { limit = { has_modifier = ch_domestic_consolidation } remove_modifier = ch_domestic_consolidation }
+	if = { limit = { has_modifier = ch_cultural_exchange } remove_modifier = ch_cultural_exchange }
+	if = { limit = { has_modifier = cultural_hegemony_effect } remove_modifier = cultural_hegemony_effect }
+	if = { limit = { has_modifier = ch_touring_exhibition } remove_modifier = ch_touring_exhibition }
+	if = { limit = { has_modifier = ch_art_commercialization } remove_modifier = ch_art_commercialization }
+	if = { limit = { has_modifier = ch_tourism_infrastructure } remove_modifier = ch_tourism_infrastructure }
+	if = { limit = { has_modifier = ch_tourism_exploitation } remove_modifier = ch_tourism_exploitation }
+	if = { limit = { has_modifier = ch_international_university } remove_modifier = ch_international_university }
+	if = { limit = { has_modifier = ch_domestic_university_focus } remove_modifier = ch_domestic_university_focus }
+	if = { limit = { has_modifier = ch_language_academies } remove_modifier = ch_language_academies }
+	if = { limit = { has_modifier = ch_natural_lingua_franca } remove_modifier = ch_natural_lingua_franca }
+	if = { limit = { has_modifier = ch_entertainment_embrace } remove_modifier = ch_entertainment_embrace }
+	if = { limit = { has_modifier = ch_entertainment_restriction } remove_modifier = ch_entertainment_restriction }
+	if = { limit = { has_modifier = ch_entertainment_adaptation } remove_modifier = ch_entertainment_adaptation }
+	if = { limit = { has_modifier = ch_adopted_education } remove_modifier = ch_adopted_education }
+	if = { limit = { has_modifier = ch_domestic_education_defense } remove_modifier = ch_domestic_education_defense }
+	if = { limit = { has_modifier = ch_selective_education } remove_modifier = ch_selective_education }
 }

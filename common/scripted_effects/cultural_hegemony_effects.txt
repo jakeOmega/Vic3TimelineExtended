@@ -276,7 +276,7 @@ ch_yearly_global_update = {
 # Requires scope:cultural_hegemon to be set.
 # Detects the hegemon's ideological profile from laws and boosts
 # the matching political movements in this country.
-# Parameters: $MODIFIER$ (modifier name), $MONTHS$ (duration)
+# Parameters: $MODIFIER$ (modifier name), $MONTHS$ (duration), $DECAYING$ (yes/no)
 #
 # Structure: EXCLUSIVE governance checks (else_if chain — pick one primary
 # political model) PLUS NON-EXCLUSIVE social policy checks (independent if
@@ -305,7 +305,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_communist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 		# Anarchist hegemon
@@ -315,7 +315,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_anarchist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 		# Fascist/Ethnonationalist hegemon
@@ -336,7 +336,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_fascist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 		# Corporatist hegemon
@@ -346,7 +346,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_corporatist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 		# Socialist hegemon (cooperative ownership, not communist/anarchist)
@@ -356,7 +356,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_socialist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 		# Absolutist monarchist hegemon
@@ -369,7 +369,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_royalist_absolutist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 		# Constitutional monarchist hegemon
@@ -382,7 +382,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_royalist_constitutional }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 		# Theocratic/religious hegemon
@@ -395,7 +395,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_religious_majority }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 		# Reactionary/authoritarian hegemon (autocracy + state religion, not monarchy/theocracy)
@@ -408,7 +408,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_reactionary }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 		# Military junta hegemon (autocracy/single-party + professional army + secret police)
@@ -429,7 +429,7 @@ ch_apply_hegemon_movement_pressure = {
 			# Military juntas inspire reactionary movements abroad
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_reactionary }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 		# Liberal/Progressive democratic hegemon
@@ -445,7 +445,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_liberal }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 
@@ -460,7 +460,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_feminist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 
@@ -476,7 +476,7 @@ ch_apply_hegemon_movement_pressure = {
 						is_political_movement_type = movement_minority_rights
 					}
 				}
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 
@@ -487,7 +487,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_environmental }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 
@@ -501,7 +501,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_anti_war }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 
@@ -513,7 +513,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_anti_slavery }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 
@@ -529,7 +529,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_labor }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 
@@ -545,7 +545,7 @@ ch_apply_hegemon_movement_pressure = {
 			}
 			every_political_movement = {
 				limit = { is_political_movement_type = movement_land_reform }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
 			}
 		}
 	}

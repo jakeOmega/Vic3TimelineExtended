@@ -1152,6 +1152,7 @@ war_propaganda_support_script_value = {
 		limit = {
 			ROOT.owner.modifier:country_war_support_monthly_add_religion > 0
 			exists = ROOT.owner.ig:ig_devout
+			ROOT = { is_capital = yes }
 		}
 		add = {
 			value = ROOT.owner.modifier:country_war_support_monthly_add_religion
@@ -1492,31 +1493,39 @@ financial_cycle_government_fiscal_policy_effect_size = {
 	multiply = 20 # deficit spending 5% of GDP per year adds 1 points to the financial cycle monthly
 }
 
-# linear up to +1 at 50 bubble pressure, then quadratic to reach +5 at max pressure.
+# linear up to +0.25 at 50 bubble pressure, then quadratic to reach +1.25 at max pressure.
 bubble_inertia_multiplier_script_value = {
 	value = 0
 	if = {
+		limit = {
+			var:bubble_pressure <= 15
+		}
+		add = 0
+	}
+	else_if = {
 		limit = {
 			var:bubble_pressure < 50
 		}
 		add = {
 			value = var:bubble_pressure
-			divide = 50
+			subtract = 15
+			multiply = 0.25
+			divide = 35 # rises by 0.25 over 35 points of pressure
 		}
 	}
 	else = {
 		add = {
-			# quadratic with f(50) = 1, f(100) = 5, f'(50) = 1/50
-			# => f(x) = 3 - 0.1 x + 0.0012*x^2
-			value = 3
+			# quadratic with f(50) = 0.25, f(100) = 1.25, f'(50) = 1/200
+			# => f(x) = 0.75 - 0.025 x + 0.0003*x^2
+			value = 0.75
 			add = {
 				value = var:bubble_pressure
-				multiply = -0.1
+				multiply = -0.025
 			}
 			add = {
 				value = var:bubble_pressure
 				multiply = var:bubble_pressure
-				multiply = 0.0012
+				multiply = 0.0003
 			}
 		}
 	}

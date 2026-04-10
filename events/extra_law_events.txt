@@ -2020,7 +2020,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_romance }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_latin sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2046,7 +2046,7 @@ extra_law_events.25 = {
 				any_primary_culture = { has_discrimination_trait_group = language_group_semitic }
 			}
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_hebrew sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2072,7 +2072,7 @@ extra_law_events.25 = {
 				country_has_state_religion = rel:hindu
 			}
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_sanskrit sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2100,7 +2100,7 @@ extra_law_events.25 = {
 				}
 			}
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_geez sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2119,7 +2119,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_slavic }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_slavonic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2142,7 +2142,7 @@ extra_law_events.25 = {
 		trigger = {
 			country_has_state_religion = rel:theravada
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_pali sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2165,7 +2165,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_iranic }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_avestan sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2188,7 +2188,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_arabic }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_arabic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2217,7 +2217,7 @@ extra_law_events.25 = {
 				}
 			}
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_chinese sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2240,7 +2240,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_hellenic }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_greek sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2263,7 +2263,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_gaelic }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_irish sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2286,7 +2286,7 @@ extra_law_events.25 = {
 		trigger = {
 			country_has_state_religion = rel:oriental_orthodox
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_coptic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2309,7 +2309,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_nahuan }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_nahuatl sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2332,7 +2332,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_scandinavian }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_norse sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2355,7 +2355,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_germanic }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_gothic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2378,7 +2378,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_mayan }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_mayan sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2401,7 +2401,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait_group = language_group_baltic }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_prussian sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2420,7 +2420,7 @@ extra_law_events.25 = {
 		trigger = {
 			any_primary_culture = { has_discrimination_trait = language_aramaic }
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revived_aramaic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2467,7 +2467,7 @@ extra_law_events.25 = {
 				any_primary_culture = { has_discrimination_trait = language_aramaic }
 			}
 		}
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_revival sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2487,7 +2487,7 @@ extra_law_events.25 = {
 
 	option = { # Construct a new national language
 		name = extra_law_events.25.b
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_constructed sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2511,7 +2511,7 @@ extra_law_events.25 = {
 
 	option = { # Simplify and standardize the existing language
 		name = extra_law_events.25.c
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_simplification sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2582,7 +2582,7 @@ extra_law_events.26 = {
 	option = { # Powerful regulatory academy
 		name = extra_law_events.26.a
 		default_option = yes
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_powerful_academy sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2607,7 +2607,7 @@ extra_law_events.26 = {
 
 	option = { # Consultative panel of scholars
 		name = extra_law_events.26.b
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_advisory_panel sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2669,7 +2669,7 @@ extra_law_events.27 = {
 	option = { # Include minority language revival programmes
 		name = extra_law_events.27.a
 		default_option = yes
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_minority_protection sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}
@@ -2685,7 +2685,7 @@ extra_law_events.27 = {
 
 	option = { # Focus entirely on the national language
 		name = extra_law_events.27.b
-		every_scope_law = {
+		every_active_law = {
 			limit = { is_law_type = law_state_led_language_reform }
 			add_amendment = { type = amendment_langreform_national_focus sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
 		}

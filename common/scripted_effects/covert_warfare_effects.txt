@@ -222,7 +222,7 @@ covert_op_apply_target_effect = {
 						}
 					}
 				}
-				add_modifier = { name = $MODIFIER$ multiplier = 2 months = 3 is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ multiplier = 2 months = 3 }
 			}
 			# Phase 2: Establishing (6-11 months)
 			else_if = {
@@ -235,7 +235,7 @@ covert_op_apply_target_effect = {
 						}
 					}
 				}
-				add_modifier = { name = $MODIFIER$ months = 3 is_decaying = yes }
+				add_modifier = { name = $MODIFIER$ months = 3 }
 			}
 			# Phase 1: Preparatory (0-5 months) — no modifier
 		}
@@ -260,7 +260,7 @@ covert_op_apply_self_effect = {
 					AND = { has_variable = iw_duration_$TYPE$_3 var:iw_duration_$TYPE$_3 >= 12 }
 				}
 			}
-			add_modifier = { name = $MODIFIER$ multiplier = 2 months = 3 is_decaying = yes }
+			add_modifier = { name = $MODIFIER$ multiplier = 2 months = 3 }
 		}
 		# Phase 2: any slot at 6+ months
 		else_if = {
@@ -271,7 +271,7 @@ covert_op_apply_self_effect = {
 					AND = { has_variable = iw_duration_$TYPE$_3 var:iw_duration_$TYPE$_3 >= 6 }
 				}
 			}
-			add_modifier = { name = $MODIFIER$ months = 3 is_decaying = yes }
+			add_modifier = { name = $MODIFIER$ months = 3 }
 		}
 		# Phase 1: all at prep — no modifier
 	}
@@ -308,7 +308,7 @@ covert_ops_apply_all_phase_effects = {
 						}
 					}
 				}
-				add_modifier = { name = covert_infra_sabotage_morale multiplier = 2 months = 3 is_decaying = yes }
+				add_modifier = { name = covert_infra_sabotage_morale multiplier = 2 months = 3 }
 			}
 			else_if = {
 				limit = {
@@ -320,7 +320,7 @@ covert_ops_apply_all_phase_effects = {
 						}
 					}
 				}
-				add_modifier = { name = covert_infra_sabotage_morale months = 3 is_decaying = yes }
+				add_modifier = { name = covert_infra_sabotage_morale months = 3 }
 			}
 			# State-scoped sabotage (random state, per-slot phase)
 			if = {
@@ -346,10 +346,10 @@ covert_ops_apply_all_phase_effects = {
 								}
 							}
 						}
-						add_modifier = { name = covert_infrastructure_sabotage multiplier = 2 months = 3 is_decaying = yes }
+						add_modifier = { name = covert_infrastructure_sabotage multiplier = 2 months = 3 }
 					}
 					else = {
-						add_modifier = { name = covert_infrastructure_sabotage months = 3 is_decaying = yes }
+						add_modifier = { name = covert_infrastructure_sabotage months = 3 }
 					}
 				}
 			}
@@ -398,10 +398,10 @@ covert_ops_apply_all_phase_effects = {
 						AND = { has_variable = iw_duration_military_espionage_3 var:iw_duration_military_espionage_3 >= 12 }
 					}
 				}
-				add_modifier = { name = covert_military_espionage multiplier = 2 months = 3 is_decaying = yes }
+				add_modifier = { name = covert_military_espionage multiplier = 2 months = 3 }
 			}
 			else = {
-				add_modifier = { name = covert_military_espionage months = 3 is_decaying = yes }
+				add_modifier = { name = covert_military_espionage months = 3 }
 			}
 		}
 	}
@@ -441,11 +441,11 @@ covert_ops_apply_all_phase_effects = {
 							}
 						}
 					}
-					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion MONTHS = 3 }
-					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion MONTHS = 3 }
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no }
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no }
 				}
 				else = {
-					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion MONTHS = 3 }
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no }
 				}
 			}
 		}
@@ -483,10 +483,10 @@ covert_ops_apply_all_phase_effects = {
 								}
 							}
 						}
-						add_modifier = { name = covert_destabilization_separatist multiplier = 2 months = 3 is_decaying = yes }
+						add_modifier = { name = covert_destabilization_separatist multiplier = 2 months = 3 }
 					}
 					else = {
-						add_modifier = { name = covert_destabilization_separatist months = 3 is_decaying = yes }
+						add_modifier = { name = covert_destabilization_separatist months = 3 }
 					}
 				}
 				# General destabilization pressure
@@ -501,10 +501,10 @@ covert_ops_apply_all_phase_effects = {
 							}
 						}
 					}
-					add_modifier = { name = covert_destabilization_general multiplier = 2 months = 3 is_decaying = yes }
+					add_modifier = { name = covert_destabilization_general multiplier = 2 months = 3 }
 				}
 				else = {
-					add_modifier = { name = covert_destabilization_general months = 3 is_decaying = yes }
+					add_modifier = { name = covert_destabilization_general months = 3 }
 				}
 			}
 		}

@@ -5278,22 +5278,22 @@ covert_influence_campaign = {
 # Boosts movements matching the attacker's government type (uses ch_apply_hegemon_movement_pressure)
 covert_ideological_subversion = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	political_movement_radicalism_add = 2
+	political_movement_radicalism_add = 0.05
 	political_movement_pop_attraction_mult = 0.1
 }
 
 # Applied to TARGET's separatist movements during destabilization operation
 covert_destabilization_separatist = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	political_movement_radicalism_add = 5
+	political_movement_radicalism_add = 0.15
 	political_movement_pop_attraction_mult = 0.15
 }
 
 # Applied to ALL of TARGET's political movements during destabilization (general unrest)
 covert_destabilization_general = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	political_movement_radicalism_add = 1
-	political_movement_pop_attraction_mult = 0.03
+	political_movement_radicalism_add = 0.05
+	political_movement_pop_attraction_mult = 0.05
 }
 
 # Applied to TARGET during wartime infrastructure sabotage (morale effect, country-scoped)
@@ -5540,7 +5540,7 @@ ch_language_academies = {
 ch_natural_lingua_franca = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_cultural_pull_mult = 0.05
-	country_max_trade_routes_add = 5
+	state_trade_advantage_mult = 0.1
 }
 
 # Event 14 Option A: Embrace foreign entertainment - consumer benefits, SoL boost

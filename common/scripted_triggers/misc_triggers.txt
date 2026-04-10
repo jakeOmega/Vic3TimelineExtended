@@ -17,8 +17,8 @@ has_any_langreform_modifier = {
 # True if the country's state-led language reform law has any reform type amendment
 # (Country scope)
 has_any_langreform_reform_amendment = {
-	any_scope_law = {
-		is_law_type = law_state_led_language_reform
+	has_law = law_type:law_state_led_language_reform
+	active_law:lawgroup_language_policy = {
 		OR = {
 			has_amendment = amendment_type:amendment_langreform_revival
 			has_amendment = amendment_type:amendment_langreform_revived_latin
@@ -48,8 +48,8 @@ has_any_langreform_reform_amendment = {
 # True if the country's state-led language reform law has an academy amendment
 # (Country scope)
 has_any_langreform_academy_amendment = {
-	any_scope_law = {
-		is_law_type = law_state_led_language_reform
+	has_law = law_type:law_state_led_language_reform
+	active_law:lawgroup_language_policy = {
 		OR = {
 			has_amendment = amendment_type:amendment_langreform_powerful_academy
 			has_amendment = amendment_type:amendment_langreform_advisory_panel
@@ -60,8 +60,8 @@ has_any_langreform_academy_amendment = {
 # True if the country's state-led language reform law has a minority policy amendment
 # (Country scope)
 has_any_langreform_minority_amendment = {
-	any_scope_law = {
-		is_law_type = law_state_led_language_reform
+	has_law = law_type:law_state_led_language_reform
+	active_law:lawgroup_language_policy = {
 		OR = {
 			has_amendment = amendment_type:amendment_langreform_minority_protection
 			has_amendment = amendment_type:amendment_langreform_national_focus
