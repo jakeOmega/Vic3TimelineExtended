@@ -1,0 +1,174 @@
+﻿# Cleanup variables set in un_vote.3 notification event
+un_vote_notification_cleanup = {
+	remove_variable = un_display_support
+	remove_variable = un_display_oppose
+	if = { limit = { has_variable = un_notif_vote_passed } remove_variable = un_notif_vote_passed }
+	if = { limit = { has_variable = un_vote_choice } remove_variable = un_vote_choice }
+	if = { limit = { has_variable = un_topic_condemn } remove_variable = un_topic_condemn }
+	if = { limit = { has_variable = un_topic_human_rights } remove_variable = un_topic_human_rights }
+	if = { limit = { has_variable = un_topic_npt } remove_variable = un_topic_npt }
+	if = { limit = { has_variable = un_topic_climate } remove_variable = un_topic_climate }
+	if = { limit = { has_variable = un_topic_reform } remove_variable = un_topic_reform }
+	if = { limit = { has_variable = un_topic_heritage } remove_variable = un_topic_heritage }
+	if = { limit = { has_variable = un_topic_decolonization } remove_variable = un_topic_decolonization }
+	if = { limit = { has_variable = un_topic_pandemic } remove_variable = un_topic_pandemic }
+	if = { limit = { has_variable = un_topic_refugee } remove_variable = un_topic_refugee }
+	if = { limit = { has_variable = un_topic_space } remove_variable = un_topic_space }
+	if = { limit = { has_variable = un_topic_peacekeeping_request } remove_variable = un_topic_peacekeeping_request }
+	if = { limit = { has_variable = un_topic_aid_request } remove_variable = un_topic_aid_request }
+	if = { limit = { has_variable = un_topic_sanctions } remove_variable = un_topic_sanctions }
+}
+
+# Apply all effects of complying with a passed UN resolution.
+# Called from un_vote.3 for both yes-voters (auto-apply) and no-voters who accept.
+# Expects: ROOT = country, scope:un_vote_proposer = proposer country (if exists)
+# Expects local vars: un_topic_X set for the active vote topic
+un_vote_apply_resolution_compliance = {
+	# Infamy reduction for supporting humanitarian/aid/peacekeeping votes
+	if = {
+		limit = {
+			OR = {
+				has_variable = un_topic_aid_request
+				has_variable = un_topic_peacekeeping_request
+				has_variable = un_topic_human_rights
+				has_variable = un_topic_refugee
+				has_variable = un_topic_pandemic
+			}
+			infamy > 0
+		}
+		change_infamy = -1
+	}
+
+	# Power bloc leverage: voting with the proposer's bloc on major resolutions
+	if = {
+		limit = {
+			exists = scope:un_vote_proposer
+			scope:un_vote_proposer = { is_power_bloc_leader = yes }
+			is_in_same_power_bloc = scope:un_vote_proposer
+		}
+		scope:un_vote_proposer = {
+			power_bloc ?= {
+				add_leverage = { target = root value = 5 }
+			}
+		}
+	}
+
+	# ---- Permanent treaty/declaration modifiers ----
+	if = {
+		limit = {
+			has_variable = un_topic_human_rights
+			NOT = { has_modifier = un_human_rights_declaration_modifier }
+		}
+		add_modifier = { name = un_human_rights_declaration_modifier }
+	}
+	if = {
+		limit = {
+			has_variable = un_topic_npt
+			NOT = { has_modifier = un_nonproliferation_modifier }
+		}
+		add_modifier = { name = un_nonproliferation_modifier }
+	}
+	if = {
+		limit = {
+			has_variable = un_topic_climate
+			NOT = { has_modifier = un_climate_binding_modifier }
+		}
+		add_modifier = { name = un_climate_binding_modifier }
+	}
+	if = {
+		limit = {
+			has_variable = un_topic_reform
+			NOT = { has_modifier = un_reform_champion_modifier }
+		}
+		add_modifier = {
+			name = un_reform_champion_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+	if = {
+		limit = {
+			has_variable = un_topic_heritage
+			NOT = { has_modifier = un_heritage_program_modifier }
+		}
+		add_modifier = { name = un_heritage_program_modifier }
+	}
+	if = {
+		limit = {
+			has_variable = un_topic_decolonization
+			NOT = { has_modifier = un_decolonization_champion_modifier }
+		}
+		add_modifier = {
+			name = un_decolonization_champion_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+	if = {
+		limit = {
+			has_variable = un_topic_pandemic
+			NOT = { has_modifier = un_pandemic_cooperation_modifier }
+		}
+		add_modifier = { name = un_pandemic_cooperation_modifier }
+	}
+	if = {
+		limit = {
+			has_variable = un_topic_refugee
+			NOT = { has_modifier = un_refugee_program_modifier }
+		}
+		add_modifier = { name = un_refugee_program_modifier }
+	}
+	if = {
+		limit = {
+			has_variable = un_topic_space
+			NOT = { has_modifier = un_space_partnership_modifier }
+		}
+		add_modifier = { name = un_space_partnership_modifier }
+	}
+
+	# ---- Peacekeeping/aid pledges ----
+	if = {
+		limit = {
+			has_variable = un_topic_peacekeeping_request
+			country_rank >= rank_value:major_power
+		}
+		add_modifier = { name = un_peacekeeping_contributor_modifier }
+		if = {
+			limit = { NOT = { has_variable = un_peacekeeping_contribution_count } }
+			set_variable = { name = un_peacekeeping_contribution_count value = 0 }
+		}
+		change_variable = { name = un_peacekeeping_contribution_count add = 1 }
+	}
+	if = {
+		limit = {
+			has_variable = un_topic_aid_request
+			country_rank >= rank_value:major_power
+		}
+		add_modifier = {
+			name = un_humanitarian_aid_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { NOT = { has_variable = un_aid_contribution_count } }
+			set_variable = { name = un_aid_contribution_count value = 0 }
+		}
+		change_variable = { name = un_aid_contribution_count add = 1 }
+	}
+
+	# Power bloc leader providing aid/peacekeeping: gain leverage over the recipient
+	if = {
+		limit = {
+			OR = {
+				has_variable = un_topic_aid_request
+				has_variable = un_topic_peacekeeping_request
+			}
+			is_power_bloc_leader = yes
+			exists = scope:un_vote_proposer
+			NOT = { THIS = scope:un_vote_proposer }
+		}
+		power_bloc ?= {
+			add_leverage = { target = scope:un_vote_proposer value = 50 }
+		}
+	}
+}

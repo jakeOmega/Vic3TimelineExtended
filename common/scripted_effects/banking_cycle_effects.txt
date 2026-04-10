@@ -1343,8 +1343,14 @@ apply_banking_contagion_effects = {
 banking_crisis_wave_init = {
 	# Clear previous wave flags from all countries
 	every_country = {
-		limit = { has_variable = banking_crisis_wave_crashed }
-		remove_variable = banking_crisis_wave_crashed
+		limit = {
+			OR = {
+				has_variable = banking_crisis_wave_crashed
+				has_variable = banking_crisis_wave_counted
+			}
+		}
+		if = { limit = { has_variable = banking_crisis_wave_crashed } remove_variable = banking_crisis_wave_crashed }
+		if = { limit = { has_variable = banking_crisis_wave_counted } remove_variable = banking_crisis_wave_counted }
 	}
 	# Initialize global wave counter
 	set_global_variable = { name = great_depression_wave_count value = 1 }
@@ -1357,8 +1363,8 @@ banking_crisis_wave_init = {
 # Called from event .7 after block when contagion_crash > 0.
 banking_crisis_wave_increment = {
 	if = {
-		limit = { NOT = { has_variable = banking_crisis_wave_crashed } }
-		set_variable = { name = banking_crisis_wave_crashed value = 1 }
+		limit = { NOT = { has_variable = banking_crisis_wave_counted } }
+		set_variable = { name = banking_crisis_wave_counted value = 1 }
 		if = {
 			limit = { has_global_variable = great_depression_wave_count }
 			change_global_variable = { name = great_depression_wave_count add = 1 }
@@ -1542,6 +1548,8 @@ banking_cycle_spread_contagion = {
 	every_country = {
 		limit = {
 			NOT = { THIS = scope:banking_crash_origin_country }
+			# Already hit by this crisis wave? Skip (prevents double-hits during cascades)
+			NOT = { has_variable = banking_crisis_wave_crashed }
 			has_journal_entry = je_banking_cycle
 			# Trade-reachable
 			OR = {
@@ -1644,6 +1652,10 @@ banking_cycle_spread_contagion = {
 			scope:banking_crash_origin_country = {
 				save_scope_as = banking_crash_origin_country
 			}
+
+			# Mark target immediately so cascading spreads from other countries
+			# in this wave cannot hit the same country twice
+			set_variable = { name = banking_crisis_wave_crashed value = 1 }
 
 			trigger_event = { id = minor_events_timelineextended.7 popup = yes days = 7 }
 		}

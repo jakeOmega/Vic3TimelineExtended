@@ -195,41 +195,13 @@ un_vote.1 = {
 
 		change_global_variable = { name = un_vote_support add = 1 }
 		change_global_variable = { name = un_vote_net add = 1 }
+		set_variable = { name = un_vote_choice value = 1 }
 
 		# Relations boost with proposer + diplomatic catalyst
 		if = {
 			limit = { exists = scope:un_vote_proposer }
 			change_relations = { country = scope:un_vote_proposer value = 15 }
 			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_proposer }
-		}
-
-		# Infamy reduction for supporting humanitarian/aid/peacekeeping votes
-		if = {
-			limit = {
-				OR = {
-					has_global_variable = un_vote_topic_aid_request
-					has_global_variable = un_vote_topic_peacekeeping_request
-					has_global_variable = un_vote_topic_human_rights
-					has_global_variable = un_vote_topic_refugee
-					has_global_variable = un_vote_topic_pandemic
-				}
-				infamy > 0
-			}
-			change_infamy = -1
-		}
-
-		# Power bloc leverage: voting with the proposer's bloc on major resolutions
-		if = {
-			limit = {
-				exists = scope:un_vote_proposer
-				scope:un_vote_proposer = { is_power_bloc_leader = yes }
-				is_in_same_power_bloc = scope:un_vote_proposer
-			}
-			scope:un_vote_proposer = {
-				power_bloc ?= {
-					add_leverage = { target = root value = 5 }
-				}
-			}
 		}
 
 		# IG reactions to voting yes
@@ -261,134 +233,6 @@ un_vote.1 = {
 				ig:ig_industrialists ?= { is_marginal = no }
 			}
 			ig:ig_industrialists = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
-		}
-
-		# If supporting human rights, adopt the declaration
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_human_rights
-				NOT = { has_modifier = un_human_rights_declaration_modifier }
-			}
-			add_modifier = { name = un_human_rights_declaration_modifier }
-		}
-		# If supporting NPT, adopt the treaty
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_npt
-				NOT = { has_modifier = un_nonproliferation_modifier }
-			}
-			add_modifier = { name = un_nonproliferation_modifier }
-		}
-		# If supporting climate accord, adopt binding targets
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_climate
-				NOT = { has_modifier = un_climate_binding_modifier }
-			}
-			add_modifier = { name = un_climate_binding_modifier }
-		}
-		# If supporting reform, endorse institutional changes
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_reform
-				NOT = { has_modifier = un_reform_champion_modifier }
-			}
-			add_modifier = {
-				name = un_reform_champion_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
-		# If supporting heritage, adopt cultural conservation
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_heritage
-				NOT = { has_modifier = un_heritage_program_modifier }
-			}
-			add_modifier = { name = un_heritage_program_modifier }
-		}
-		# If supporting decolonization, adopt anti-colonial stance
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_decolonization
-				NOT = { has_modifier = un_decolonization_champion_modifier }
-			}
-			add_modifier = {
-				name = un_decolonization_champion_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
-		# If supporting pandemic response, adopt WHO cooperation
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_pandemic
-				NOT = { has_modifier = un_pandemic_cooperation_modifier }
-			}
-			add_modifier = { name = un_pandemic_cooperation_modifier }
-		}
-		# If supporting refugee resolution, accept resettlement
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_refugee
-				NOT = { has_modifier = un_refugee_program_modifier }
-			}
-			add_modifier = { name = un_refugee_program_modifier }
-		}
-		# If supporting space cooperation, join partnership
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_space
-				NOT = { has_modifier = un_space_partnership_modifier }
-			}
-			add_modifier = { name = un_space_partnership_modifier }
-		}
-		# If supporting peacekeeping request, pledge contribution (cost applied when resolution passes)
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_peacekeeping_request
-				country_rank >= rank_value:major_power
-			}
-			add_modifier = { name = un_peacekeeping_contributor_modifier }
-			if = {
-				limit = { NOT = { has_variable = un_peacekeeping_contribution_count } }
-				set_variable = { name = un_peacekeeping_contribution_count value = 0 }
-			}
-			change_variable = { name = un_peacekeeping_contribution_count add = 1 }
-		}
-		# If supporting humanitarian aid request, pledge aid (cost applied when resolution passes)
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_aid_request
-				country_rank >= rank_value:major_power
-			}
-			add_modifier = {
-				name = un_humanitarian_aid_modifier
-				days = long_modifier_time
-				is_decaying = yes
-			}
-			if = {
-				limit = { NOT = { has_variable = un_aid_contribution_count } }
-				set_variable = { name = un_aid_contribution_count value = 0 }
-			}
-			change_variable = { name = un_aid_contribution_count add = 1 }
-		}
-
-		# Power bloc leader providing aid/peacekeeping: gain leverage over the recipient
-		if = {
-			limit = {
-				OR = {
-					has_global_variable = un_vote_topic_aid_request
-					has_global_variable = un_vote_topic_peacekeeping_request
-				}
-				is_power_bloc_leader = yes
-				exists = scope:un_vote_proposer
-				NOT = { THIS = scope:un_vote_proposer }
-			}
-			# Immediate leverage gain over the recipient
-			power_bloc ?= {
-				add_leverage = { target = scope:un_vote_proposer value = 50 }
-			}
 		}
 
 		ai_chance = {
@@ -918,6 +762,7 @@ un_vote.1 = {
 
 		change_global_variable = { name = un_vote_oppose add = 1 }
 		change_global_variable = { name = un_vote_net add = -1 }
+		set_variable = { name = un_vote_choice value = 2 }
 
 		# Relations damage with proposer + negative diplomatic catalyst
 		if = {
@@ -937,32 +782,6 @@ un_vote.1 = {
 			}
 			change_relations = { country = scope:un_vote_target value = 15 }
 			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_target }
-		}
-
-		# Infamy increase for opposing humanitarian resolutions
-		if = {
-			limit = {
-				OR = {
-					has_global_variable = un_vote_topic_human_rights
-					has_global_variable = un_vote_topic_refugee
-					has_global_variable = un_vote_topic_pandemic
-				}
-			}
-			change_infamy = 1
-		}
-
-		# Power bloc leverage: voting against the proposer's bloc costs leverage
-		if = {
-			limit = {
-				exists = scope:un_vote_proposer
-				scope:un_vote_proposer = { is_power_bloc_leader = yes }
-				is_in_same_power_bloc = scope:un_vote_proposer
-			}
-			scope:un_vote_proposer = {
-				power_bloc ?= {
-					add_leverage = { target = root value = -10 }
-				}
-			}
 		}
 
 		# IG reactions to voting no
@@ -1247,117 +1066,6 @@ un_vote.1 = {
 					has_law = law_type:law_isolationism
 				}
 				add = 20
-			}
-		}
-	}
-
-	# Option C: Abstain
-	option = {
-		name = un_vote.1.c
-
-		# Mild relations decline with proposer (less than outright opposition)
-		if = {
-			limit = { exists = scope:un_vote_proposer }
-			change_relations = { country = scope:un_vote_proposer value = -5 }
-		}
-
-		# Small authority cost: fence-sitting reduces your credibility
-		if = {
-			limit = { has_variable = un_authority }
-			change_variable = { name = un_authority add = -1 }
-		}
-
-		ai_chance = {
-			base = 15
-
-			# ================================================================
-			# GENERAL ABSTENTION TENDENCIES
-			# ================================================================
-
-			# Weak/minor nations prefer to abstain rather than pick sides
-			modifier = {
-				trigger = {
-					NOT = { country_rank >= rank_value:major_power }
-				}
-				add = 15
-			}
-			# Isolationists strongly prefer abstention over engagement
-			modifier = {
-				trigger = { has_law = law_type:law_isolationism }
-				add = 25
-			}
-			# Great powers rarely abstain - they take positions
-			modifier = {
-				trigger = { country_rank >= rank_value:great_power }
-				add = -10
-			}
-
-			# ================================================================
-			# DIPLOMATIC AWKWARDNESS: abstain when torn between ally-proposer
-			# and ally-target (rather than pick a side)
-			# ================================================================
-			modifier = {
-				trigger = {
-					exists = scope:un_vote_proposer
-					exists = scope:un_vote_target
-					has_diplomatic_relevance = scope:un_vote_proposer
-					has_diplomatic_relevance = scope:un_vote_target
-					OR = {
-						has_global_variable = un_vote_topic_condemn
-						has_global_variable = un_vote_topic_sanctions
-					}
-				}
-				add = 30
-			}
-
-			# Same power bloc as BOTH proposer and target: really awkward
-			modifier = {
-				trigger = {
-					exists = scope:un_vote_proposer
-					exists = scope:un_vote_target
-					is_in_same_power_bloc = scope:un_vote_proposer
-					is_in_same_power_bloc = scope:un_vote_target
-					OR = {
-						has_global_variable = un_vote_topic_condemn
-						has_global_variable = un_vote_topic_sanctions
-					}
-				}
-				add = 20
-			}
-
-			# ================================================================
-			# TOPIC-SPECIFIC ABSTENTION REASONS
-			# ================================================================
-
-			# Not invested in the issue: no subjects, don't care about decolonization
-			modifier = {
-				trigger = {
-					has_global_variable = un_vote_topic_decolonization
-					NOT = {
-						any_subject_or_below = {
-							count >= 1
-						}
-					}
-					NOT = { has_law = law_type:law_council_republic }
-				}
-				add = 10
-			}
-			# Space: countries without space tech don't have strong opinions
-			modifier = {
-				trigger = {
-					has_global_variable = un_vote_topic_space
-					NOT = { has_technology_researched = space_exploration }
-				}
-				add = 15
-			}
-			# NPT: non-nuclear nations without strong humanitarian stance abstain
-			modifier = {
-				trigger = {
-					has_global_variable = un_vote_topic_npt
-					NOT = { has_variable = nuclear_weapon_stockpile }
-					NOT = { has_law = law_type:law_humanitarian_regulations }
-				}
-				add = 10
 			}
 		}
 	}
@@ -1907,6 +1615,8 @@ un_vote.2 = {
 				limit = { has_variable = un_voted_this_round }
 				remove_variable = un_voted_this_round
 			}
+			# Clear proposer's own vote choice (non-proposers cleaned in un_vote.3)
+			if = { limit = { has_variable = un_vote_choice } remove_variable = un_vote_choice }
 		}
 
 		ai_chance = { base = 100 }
@@ -1967,17 +1677,141 @@ un_vote.3 = {
 			limit = { exists = global_var:un_vote_target_country }
 			global_var:un_vote_target_country = { save_scope_as = un_vote_target }
 		}
+
+		# Save vote topics locally so we don't depend on globals surviving
+		if = { limit = { has_global_variable = un_vote_topic_condemn } set_variable = un_topic_condemn }
+		if = { limit = { has_global_variable = un_vote_topic_human_rights } set_variable = un_topic_human_rights }
+		if = { limit = { has_global_variable = un_vote_topic_npt } set_variable = un_topic_npt }
+		if = { limit = { has_global_variable = un_vote_topic_climate } set_variable = un_topic_climate }
+		if = { limit = { has_global_variable = un_vote_topic_reform } set_variable = un_topic_reform }
+		if = { limit = { has_global_variable = un_vote_topic_heritage } set_variable = un_topic_heritage }
+		if = { limit = { has_global_variable = un_vote_topic_decolonization } set_variable = un_topic_decolonization }
+		if = { limit = { has_global_variable = un_vote_topic_pandemic } set_variable = un_topic_pandemic }
+		if = { limit = { has_global_variable = un_vote_topic_refugee } set_variable = un_topic_refugee }
+		if = { limit = { has_global_variable = un_vote_topic_space } set_variable = un_topic_space }
+		if = { limit = { has_global_variable = un_vote_topic_peacekeeping_request } set_variable = un_topic_peacekeeping_request }
+		if = { limit = { has_global_variable = un_vote_topic_aid_request } set_variable = un_topic_aid_request }
+		if = { limit = { has_global_variable = un_vote_topic_sanctions } set_variable = un_topic_sanctions }
 	}
 
+	# Option A: Vote passed AND you voted yes - effects apply automatically
 	option = {
 		name = un_vote.3.a
 		default_option = yes
+		trigger = {
+			OR = {
+				NOT = { has_variable = un_notif_vote_passed }
+				AND = {
+					has_variable = un_vote_choice
+					var:un_vote_choice = 1
+				}
+			}
+		}
+
+		# Apply resolution effects if the vote passed and we supported it
+		if = {
+			limit = { has_variable = un_notif_vote_passed }
+			un_vote_apply_resolution_compliance = yes
+		}
+
 		# Clean up notification variables
 		hidden_effect = {
-			remove_variable = un_display_support
-			remove_variable = un_display_oppose
-			if = { limit = { has_variable = un_notif_vote_passed } remove_variable = un_notif_vote_passed }
+			un_vote_notification_cleanup = yes
 		}
 		ai_chance = { base = 100 }
+	}
+
+	# Option B: Vote passed AND you voted no - accept the resolution anyway
+	option = {
+		name = un_vote.3.b
+		trigger = {
+			has_variable = un_notif_vote_passed
+			has_variable = un_vote_choice
+			var:un_vote_choice = 2
+		}
+
+		# Same effects as yes voters - you accept the majority decision
+		un_vote_apply_resolution_compliance = yes
+
+		# Clean up notification variables
+		hidden_effect = {
+			un_vote_notification_cleanup = yes
+		}
+		ai_chance = { base = 50 }
+	}
+
+	# Option C: Vote passed AND you voted no - refuse to comply
+	option = {
+		name = un_vote.3.c
+		trigger = {
+			has_variable = un_notif_vote_passed
+			has_variable = un_vote_choice
+			var:un_vote_choice = 2
+		}
+
+		# Diplomatic penalties for defying the international community
+		if = {
+			limit = { exists = scope:un_vote_proposer }
+			change_relations = { country = scope:un_vote_proposer value = -20 }
+			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
+		}
+		change_infamy = 3
+
+		# Power bloc leverage: defying bloc decision
+		if = {
+			limit = {
+				exists = scope:un_vote_proposer
+				scope:un_vote_proposer = { is_power_bloc_leader = yes }
+				is_in_same_power_bloc = scope:un_vote_proposer
+			}
+			scope:un_vote_proposer = {
+				power_bloc ?= {
+					add_leverage = { target = root value = -15 }
+				}
+			}
+		}
+
+		# Clean up notification variables
+		hidden_effect = {
+			un_vote_notification_cleanup = yes
+		}
+		ai_chance = {
+			base = 20
+			# Countries that are rivals of proposer more likely to refuse
+			modifier = {
+				trigger = {
+					exists = scope:un_vote_proposer
+					has_diplomatic_pact = {
+						who = scope:un_vote_proposer
+						type = rivalry
+					}
+				}
+				add = 40
+			}
+			# Great powers refuse more — sovereignty concerns
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 20
+			}
+			# NPT: nuclear powers refuse rather than disarm
+			modifier = {
+				trigger = {
+					has_variable = un_topic_npt
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile >= 1
+				}
+				add = 50
+			}
+			# Climate: heavy industry nations refuse binding targets
+			modifier = {
+				trigger = {
+					has_variable = un_topic_climate
+					ig:ig_industrialists ?= {
+						is_powerful = yes
+					}
+				}
+				add = 25
+			}
+		}
 	}
 }
