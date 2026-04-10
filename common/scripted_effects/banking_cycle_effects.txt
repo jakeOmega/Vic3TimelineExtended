@@ -850,6 +850,7 @@ banking_cycle_random_event_effect = {
 					if = {
 						limit = {
 							has_technology_researched = keynesian_economics
+							has_technology_researched = environmental_movement
 							OR = {
 								banking_cycle_is_stable = yes
 								banking_cycle_is_expansion = yes

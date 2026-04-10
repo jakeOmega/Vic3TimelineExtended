@@ -1492,13 +1492,33 @@ financial_cycle_government_fiscal_policy_effect_size = {
 	multiply = 20 # deficit spending 5% of GDP per year adds 1 points to the financial cycle monthly
 }
 
-# +0.1/month at 10 bubble pressure, +1 at ~30, +10 at 100
+# linear up to +1 at 50 bubble pressure, then quadratic to reach +5 at max pressure.
 bubble_inertia_multiplier_script_value = {
 	value = 0
-	add = {
-		value = var:bubble_pressure
-		multiply = var:bubble_pressure
-		divide = 1000
+	if = {
+		limit = {
+			var:bubble_pressure < 50
+		}
+		add = {
+			value = var:bubble_pressure
+			divide = 50
+		}
+	}
+	else = {
+		add = {
+			# quadratic with f(50) = 1, f(100) = 5, f'(50) = 1/50
+			# => f(x) = 3 - 0.1 x + 0.0012*x^2
+			value = 3
+			add = {
+				value = var:bubble_pressure
+				multiply = -0.1
+			}
+			add = {
+				value = var:bubble_pressure
+				multiply = var:bubble_pressure
+				multiply = 0.0012
+			}
+		}
 	}
 }
 
