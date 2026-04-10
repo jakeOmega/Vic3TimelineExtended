@@ -22,6 +22,8 @@
 #   un_vote_topic_peacekeeping_request   - Peacekeeping deployment (request button)
 #   un_vote_topic_aid_request            - Humanitarian aid (request button)
 #   un_vote_topic_sanctions              - International sanctions (sanctions button)
+#   un_vote_topic_law_of_sea             - Convention on the Law of the Sea (event 21)
+#   un_vote_topic_icc                    - International Criminal Court (event 22)
 #
 # Vote tracking global variables:
 #   un_vote_active              - flag: vote in progress
@@ -99,6 +101,14 @@ un_vote.1 = {
 				desc = un_vote.1.t_sanctions
 				trigger = { has_global_variable = un_vote_topic_sanctions }
 			}
+			triggered_desc = {
+				desc = un_vote.1.t_law_of_sea
+				trigger = { has_global_variable = un_vote_topic_law_of_sea }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_icc
+				trigger = { has_global_variable = un_vote_topic_icc }
+			}
 			desc = un_vote.1.t
 		}
 	}
@@ -155,6 +165,14 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.d_sanctions
 				trigger = { has_global_variable = un_vote_topic_sanctions }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_law_of_sea
+				trigger = { has_global_variable = un_vote_topic_law_of_sea }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_icc
+				trigger = { has_global_variable = un_vote_topic_icc }
 			}
 			desc = un_vote.1.d
 		}
@@ -218,6 +236,7 @@ un_vote.1 = {
 				OR = {
 					has_global_variable = un_vote_topic_npt
 					has_global_variable = un_vote_topic_peacekeeping_request
+					has_global_variable = un_vote_topic_icc
 				}
 				ig:ig_armed_forces ?= { is_marginal = no }
 			}
@@ -753,6 +772,78 @@ un_vote.1 = {
 				}
 				add = -20
 			}
+
+			# ================================================================
+			# TOPIC: Law of the Sea
+			# ================================================================
+			# Free traders support maritime regulation
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_law_of_sea
+					has_law = law_type:law_free_trade
+				}
+				add = 20
+			}
+			# Great powers benefit from codified maritime rules
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_law_of_sea
+					country_rank >= rank_value:great_power
+				}
+				add = 10
+			}
+			# Isolationists oppose
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_law_of_sea
+					has_law = law_type:law_isolationism
+				}
+				add = -15
+			}
+
+			# ================================================================
+			# TOPIC: International Criminal Court
+			# ================================================================
+			# Democracies support accountability
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_icc
+					has_law = law_type:law_universal_suffrage
+				}
+				add = 15
+			}
+			# Human rights-conscious nations support
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_icc
+					has_law = law_type:law_multicultural
+				}
+				add = 10
+			}
+			# Great powers wary of sovereignty loss
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_icc
+					country_rank >= rank_value:great_power
+				}
+				add = -20
+			}
+			# Warring nations strongly oppose
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_icc
+					is_at_war = yes
+				}
+				add = -30
+			}
+			# Authoritarian governments oppose accountability
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_icc
+					has_law = law_type:law_single_party_state
+				}
+				add = -25
+			}
 		}
 	}
 
@@ -791,6 +882,7 @@ un_vote.1 = {
 				OR = {
 					has_global_variable = un_vote_topic_npt
 					has_global_variable = un_vote_topic_peacekeeping_request
+					has_global_variable = un_vote_topic_icc
 				}
 				ig:ig_armed_forces ?= { is_marginal = no }
 			}
@@ -1067,6 +1159,49 @@ un_vote.1 = {
 				}
 				add = 20
 			}
+
+			# ================================================================
+			# TOPIC: Law of the Sea - protectionists oppose
+			# ================================================================
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_law_of_sea
+					has_law = law_type:law_protectionism
+				}
+				add = 20
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_law_of_sea
+					has_law = law_type:law_isolationism
+				}
+				add = 25
+			}
+
+			# ================================================================
+			# TOPIC: ICC - great powers and warring nations oppose
+			# ================================================================
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_icc
+					country_rank >= rank_value:great_power
+				}
+				add = 30
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_icc
+					is_at_war = yes
+				}
+				add = 40
+			}
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_icc
+					has_law = law_type:law_single_party_state
+				}
+				add = 30
+			}
 		}
 	}
 }
@@ -1217,6 +1352,26 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { has_global_variable = un_vote_topic_sanctions }
 				desc = un_vote.2.d_sanctions_failed
+			}
+			# Law of the Sea - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_law_of_sea global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_law_of_sea_passed
+			}
+			# Law of the Sea - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_law_of_sea }
+				desc = un_vote.2.d_law_of_sea_failed
+			}
+			# International Criminal Court - Passed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_icc global_var:un_vote_net >= 1 }
+				desc = un_vote.2.d_icc_passed
+			}
+			# International Criminal Court - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_icc }
+				desc = un_vote.2.d_icc_failed
 			}
 			# Generic fallback
 			triggered_desc = {
@@ -1474,6 +1629,22 @@ un_vote.2 = {
 				}
 			}
 
+			# ---- Law of the Sea: Maritime cooperation framework ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_law_of_sea }
+				custom_tooltip = un_vote_law_of_sea_passed_tt
+				change_variable = { name = un_authority add = 5 }
+				set_global_variable = un_agency_itlos
+			}
+
+			# ---- International Criminal Court: Global criminal justice ----
+			if = {
+				limit = { has_global_variable = un_vote_topic_icc }
+				custom_tooltip = un_vote_icc_passed_tt
+				change_variable = { name = un_authority add = 5 }
+				set_global_variable = un_agency_icc
+			}
+
 			# Influence reward for leading a successful resolution
 			add_modifier = {
 				name = un_vote_success_reward
@@ -1589,6 +1760,25 @@ un_vote.2 = {
 			}
 		}
 
+		# ---- Set per-topic 5-year cooldown before clearing vote state ----
+		hidden_effect = {
+			if = { limit = { has_global_variable = un_vote_topic_condemn } set_global_variable = { name = un_vote_cooldown_condemn days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_human_rights } set_global_variable = { name = un_vote_cooldown_human_rights days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_npt } set_global_variable = { name = un_vote_cooldown_npt days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_climate } set_global_variable = { name = un_vote_cooldown_climate days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_reform } set_global_variable = { name = un_vote_cooldown_reform days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_heritage } set_global_variable = { name = un_vote_cooldown_heritage days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_decolonization } set_global_variable = { name = un_vote_cooldown_decolonization days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_pandemic } set_global_variable = { name = un_vote_cooldown_pandemic days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_refugee } set_global_variable = { name = un_vote_cooldown_refugee days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_space } set_global_variable = { name = un_vote_cooldown_space days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_peacekeeping_request } set_global_variable = { name = un_vote_cooldown_peacekeeping_request days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_aid_request } set_global_variable = { name = un_vote_cooldown_aid_request days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_sanctions } set_global_variable = { name = un_vote_cooldown_sanctions days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_law_of_sea } set_global_variable = { name = un_vote_cooldown_law_of_sea days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_icc } set_global_variable = { name = un_vote_cooldown_icc days = normal_modifier_time } }
+		}
+
 		# ---- Cleanup: clear all vote state ----
 		hidden_effect = {
 			remove_global_variable = un_vote_active
@@ -1605,6 +1795,8 @@ un_vote.2 = {
 			if = { limit = { has_global_variable = un_vote_topic_peacekeeping_request } remove_global_variable = un_vote_topic_peacekeeping_request }
 			if = { limit = { has_global_variable = un_vote_topic_aid_request } remove_global_variable = un_vote_topic_aid_request }
 			if = { limit = { has_global_variable = un_vote_topic_sanctions } remove_global_variable = un_vote_topic_sanctions }
+			if = { limit = { has_global_variable = un_vote_topic_law_of_sea } remove_global_variable = un_vote_topic_law_of_sea }
+			if = { limit = { has_global_variable = un_vote_topic_icc } remove_global_variable = un_vote_topic_icc }
 			if = { limit = { has_global_variable = un_vote_proposer_country } remove_global_variable = un_vote_proposer_country }
 			if = { limit = { has_global_variable = un_vote_target_country } remove_global_variable = un_vote_target_country }
 			if = { limit = { has_global_variable = un_vote_net } remove_global_variable = un_vote_net }
@@ -1692,6 +1884,8 @@ un_vote.3 = {
 		if = { limit = { has_global_variable = un_vote_topic_peacekeeping_request } set_variable = un_topic_peacekeeping_request }
 		if = { limit = { has_global_variable = un_vote_topic_aid_request } set_variable = un_topic_aid_request }
 		if = { limit = { has_global_variable = un_vote_topic_sanctions } set_variable = un_topic_sanctions }
+		if = { limit = { has_global_variable = un_vote_topic_law_of_sea } set_variable = un_topic_law_of_sea }
+		if = { limit = { has_global_variable = un_vote_topic_icc } set_variable = un_topic_icc }
 	}
 
 	# Option A: Vote passed AND you voted yes - effects apply automatically

@@ -17,6 +17,8 @@ un_vote_notification_cleanup = {
 	if = { limit = { has_variable = un_topic_peacekeeping_request } remove_variable = un_topic_peacekeeping_request }
 	if = { limit = { has_variable = un_topic_aid_request } remove_variable = un_topic_aid_request }
 	if = { limit = { has_variable = un_topic_sanctions } remove_variable = un_topic_sanctions }
+	if = { limit = { has_variable = un_topic_law_of_sea } remove_variable = un_topic_law_of_sea }
+	if = { limit = { has_variable = un_topic_icc } remove_variable = un_topic_icc }
 }
 
 # Apply all effects of complying with a passed UN resolution.
@@ -124,6 +126,20 @@ un_vote_apply_resolution_compliance = {
 			NOT = { has_modifier = un_space_partnership_modifier }
 		}
 		add_modifier = { name = un_space_partnership_modifier }
+	}
+	if = {
+		limit = {
+			has_variable = un_topic_law_of_sea
+			NOT = { has_modifier = un_law_of_sea_modifier }
+		}
+		add_modifier = { name = un_law_of_sea_modifier }
+	}
+	if = {
+		limit = {
+			has_variable = un_topic_icc
+			NOT = { has_modifier = un_icc_member_modifier }
+		}
+		add_modifier = { name = un_icc_member_modifier }
 	}
 
 	# ---- Peacekeeping/aid pledges ----

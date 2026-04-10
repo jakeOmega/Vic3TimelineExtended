@@ -12,6 +12,7 @@ un_events_on_action = {
 				3 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_condemn }
 						any_country = {
 							has_diplomatic_pact = { who = ROOT type = rivalry }
 							is_at_war = yes
@@ -23,6 +24,7 @@ un_events_on_action = {
 				3 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_human_rights }
 						has_technology_researched = human_rights
 						var:un_authority >= 40
 						NOT = { has_modifier = un_human_rights_declaration_modifier }
@@ -51,6 +53,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_reform }
 						country_rank >= rank_value:great_power
 						var:un_authority >= 30
 						NOT = { has_modifier = un_reform_champion_modifier }
@@ -87,6 +90,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_heritage }
 						var:un_authority >= 40
 						NOT = { has_modifier = un_heritage_program_modifier }
 						NOT = { has_modifier = un_heritage_token_modifier }
@@ -120,6 +124,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_decolonization }
 						var:un_authority >= 30
 						NOT = { has_modifier = un_decolonization_champion_modifier }
 						NOT = { has_modifier = un_colonial_defender_modifier }
@@ -147,6 +152,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_npt }
 						var:un_authority >= 40
 						has_technology_researched = nuclear_weapons
 						NOT = { has_modifier = un_nonproliferation_modifier }
@@ -170,6 +176,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_pandemic }
 						country_rank >= rank_value:major_power
 						var:un_authority >= 20
 						has_technology_researched = antibiotics
@@ -181,6 +188,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_climate }
 						var:un_authority >= 30
 						has_technology_researched = environmental_movement
 						NOT = { has_modifier = un_climate_binding_modifier }
@@ -191,6 +199,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_refugee }
 						var:un_authority >= 20
 						NOT = { has_modifier = un_refugee_program_modifier }
 						NOT = { has_modifier = un_refugee_closed_modifier }
@@ -207,6 +216,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_space }
 						var:un_authority >= 40
 						has_technology_researched = space_exploration
 						country_rank >= rank_value:major_power
@@ -229,6 +239,29 @@ un_events_on_action = {
 						}
 					}
 					trigger_event = { id = un_events.20 }
+				}
+				2 = {
+					trigger = {
+						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_law_of_sea }
+						var:un_authority >= 30
+						has_technology_researched = international_trade
+						NOT = { has_modifier = un_law_of_sea_modifier }
+						NOT = { has_modifier = un_law_of_sea_refusal_modifier }
+					}
+					trigger_event = { id = un_events.21 }
+				}
+				2 = {
+					trigger = {
+						NOT = { has_global_variable = un_vote_active }
+						NOT = { has_global_variable = un_vote_cooldown_icc }
+						var:un_authority >= 40
+						has_technology_researched = human_rights
+						country_rank >= rank_value:major_power
+						NOT = { has_modifier = un_icc_member_modifier }
+						NOT = { has_modifier = un_icc_refusal_modifier }
+					}
+					trigger_event = { id = un_events.22 }
 				}
 			}
 		}

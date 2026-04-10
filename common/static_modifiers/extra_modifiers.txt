@@ -489,16 +489,20 @@ great_depression_isolated_modifier = {
 banking_event_consolidation_boom = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_services_mult = 0.10
+	country_banking_crash_chance_mult = 0.15
 }
 
 banking_event_new_instrument_boom = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_group_bg_manufacturing_throughput_add = 0.05
+	country_banking_random_momentum_mult = 0.2
+	country_banking_crash_chance_mult = 0.15
 }
 
 banking_event_investigation_chill = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	goods_output_services_mult = -0.05
+	country_banking_random_momentum_mult = -0.1
 }
 
 # --- Event 4: Country Bank Run ---
@@ -561,6 +565,7 @@ banking_event_partial_default = {
 banking_event_insurance_reserves = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	goods_output_services_mult = -0.03
+	country_banking_crash_chance_mult = -0.15
 }
 
 # --- Event 12: Gold Standard Pressure ---
@@ -586,6 +591,7 @@ banking_event_credit_rebalance = {
 banking_event_housing_boom = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_group_bg_construction_throughput_add = 0.10
+	country_banking_crash_chance_mult = 0.25
 }
 
 # --- Event 15: Currency Crisis ---
@@ -603,18 +609,22 @@ banking_event_currency_collapse = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = -0.10
 	state_trade_capacity_mult = -0.05
+	country_banking_random_momentum_mult = 0.25
 }
 
 # --- Event 16: Central Bank Independence Debate ---
 banking_event_cb_independence = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_loan_interest_rate_mult = -0.05
+	country_banking_random_momentum_mult = -0.15
+	country_banking_crash_chance_mult = -0.1
 }
 
 banking_event_dual_mandate = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_loan_interest_rate_mult = -0.03
 	building_group_bg_manufacturing_throughput_add = 0.02
+	country_banking_random_momentum_mult = 0.1
 }
 
 # --- Event 18: Derivatives Scandal ---
@@ -622,6 +632,7 @@ banking_event_derivatives_crackdown = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	goods_output_services_mult = -0.08
 	country_loan_interest_rate_mult = 0.10
+	country_banking_crash_chance_mult = -0.15
 }
 
 banking_event_quiet_rescue = {
@@ -640,6 +651,7 @@ banking_event_shadow_regulation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	goods_output_services_mult = -0.05
 	country_loan_interest_rate_mult = -0.05
+	country_banking_crash_chance_mult = -0.2
 }
 
 # --- Fiscal cost modifiers for GDP-scaled expenses (used with multiplier = script_value) ---
@@ -2060,12 +2072,14 @@ terror_crackdown_modifier = {
 	country_authority_add = 100
 	country_acceptance_no_shared_tradition_trait_add = -10
 	country_legitimacy_govt_total_clout_add = -10
+	country_sol_expectations_shift_max_add = -0.5
 }
 
 terror_resilience_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 50
 	country_legitimacy_govt_total_clout_add = 10
+	country_sol_expectation_adaptation_rate_mult = 0.1
 }
 
 terror_surveillance_modifier = {
@@ -2073,6 +2087,7 @@ terror_surveillance_modifier = {
 	country_authority_add = 150
 	country_acceptance_no_shared_tradition_trait_add = -15
 	country_bureaucracy_mult = -0.05
+	country_sol_expectations_shift_max_add = -1
 }
 
 terror_preempted_modifier = {
@@ -2080,18 +2095,21 @@ terror_preempted_modifier = {
 	country_prestige_add = 50
 	country_authority_add = 50
 	country_legitimacy_base_add = 10
+	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
 foreign_terror_retaliation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	country_prestige_add = 25
 	country_authority_add = 50
+	country_sol_expectations_shift_add = 0.02
 }
 
 foreign_terror_diplomacy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_authority_add = 50
 	country_tech_research_speed_mult = 0.01
+	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
 # --- Corporate Lobbying ---
@@ -2099,17 +2117,21 @@ corporate_lobbying_accepted_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_throughput_add = 0.03
 	country_legitimacy_govt_total_clout_add = -10
+	country_sol_expectations_upper_offset_add = 0.5
+	country_sol_expectations_lower_offset_add = -0.25
 }
 
 corporate_lobbying_restricted_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_legitimacy_govt_total_clout_add = 10
 	building_throughput_add = -0.01
+	country_sol_expectations_shift_add = -0.01
 }
 
 corporate_lobbying_exposed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_add = -55
+	country_sol_expectations_shift_add = 0.02
 }
 
 monopoly_tolerated_modifier = {
@@ -2117,12 +2139,16 @@ monopoly_tolerated_modifier = {
 	building_throughput_add = 0.05
 	goods_input_construction_mult = 0.1
 	state_standard_of_living_add = -1
+	country_sol_expectations_upper_offset_add = 0.5
+	country_sol_expectations_lower_offset_add = -0.5
 }
 
 monopoly_broken_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_prestige_add = 25
 	building_throughput_add = -0.02
+	country_sol_expectations_lower_offset_add = 0.25
+	country_sol_expectations_middle_offset_add = 0.25
 }
 
 monopoly_nationalized_modifier = {
@@ -2130,6 +2156,8 @@ monopoly_nationalized_modifier = {
 	country_authority_add = -100
 	building_throughput_add = -0.05
 	state_standard_of_living_add = 1
+	country_sol_expectations_shift_add = 0.02
+	country_sol_expectations_shift_min_add = 0.5
 }
 
 # --- Criminal Justice & Policing ---
@@ -2137,12 +2165,14 @@ police_defended_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	country_authority_add = 200
 	country_acceptance_no_shared_tradition_trait_add = -10
+	country_sol_expectations_shift_max_add = -0.5
 }
 
 police_reform_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_authority_add = -100
 	country_acceptance_no_shared_tradition_trait_add = 10
+	country_sol_expectations_lower_offset_add = 0.5
 }
 
 police_accountability_modifier = {
@@ -2150,94 +2180,114 @@ police_accountability_modifier = {
 	country_authority_add = -150
 	country_acceptance_no_shared_tradition_trait_add = 15
 	country_bureaucracy_mult = -0.03
+	country_sol_expectations_lower_offset_add = 0.5
+	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
 riot_curfew_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	country_authority_add = 50
 	state_standard_of_living_add = -0.5
+	country_sol_expectations_shift_max_add = -1
 }
 
 riot_concessions_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	state_standard_of_living_add = 0.5
 	country_authority_add = -50
+	country_sol_expectations_shift_add = 0.03
+	country_sol_expectations_lower_offset_add = 0.5
 }
 
 riot_commission_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_tech_research_speed_mult = 0.01
 	country_acceptance_no_shared_tradition_trait_add = -5
+	country_sol_expectation_adaptation_rate_mult = 0.1
 }
 
 riot_property_damage_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	building_throughput_add = -0.1
 	state_infrastructure_mult = -0.05
+	country_sol_expectations_shift_add = -0.02
 }
 
 # --- War Crimes ---
 war_crime_coverup_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_add = -50
+	country_sol_expectations_shift_add = -0.02
 }
 
 war_crime_scandal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_add = -150
 	country_legitimacy_govt_total_clout_add = -20
+	country_sol_expectations_shift_add = -0.03
 }
 
 war_crime_tribunal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_prestige_add = 50
 	country_authority_add = -50
+	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
 war_crime_reform_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_prestige_add = 75
 	building_training_rate_add = 0.05
+	country_sol_expectations_shift_add = 0.02
 }
 
 enemy_war_crime_rage_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	country_war_exhaustion_casualties_mult = -0.1
 	unit_morale_loss_mult = -0.1
+	country_sol_expectations_shift_add = 0.03
 }
 
 enemy_war_crime_tribunal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 75
+	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
 # --- Election Campaigns ---
 campaign_scandal_ignored_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_legitimacy_govt_total_clout_add = -10
+	country_sol_expectations_shift_add = -0.02
 }
 
 campaign_scandal_investigation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_bureaucracy_mult = -0.02
 	country_legitimacy_govt_total_clout_add = 5
+	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
 campaign_scandal_reform_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_legitimacy_govt_total_clout_add = 10
 	country_authority_add = -25
+	country_sol_expectations_shift_add = 0.02
 }
 
 big_money_election_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_throughput_add = 0.02
 	country_legitimacy_govt_total_clout_add = -10
+	country_sol_expectations_upper_offset_add = 0.5
+	country_sol_expectations_lower_offset_add = -0.25
 }
 
 grassroots_campaign_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_legitimacy_govt_total_clout_add = 10
+	country_sol_expectations_lower_offset_add = 0.25
+	country_sol_expectations_middle_offset_add = 0.25
 }
 
 # --- Migration ---
@@ -2245,12 +2295,14 @@ immigration_welcome_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_migration_pull_add = 100
 	state_standard_of_living_add = -0.5
+	country_sol_expectations_shift_add = 0.02
 }
 
 immigration_restrict_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	state_migration_pull_mult = -0.25
 	country_authority_add = 50
+	country_sol_expectations_shift_add = -0.02
 }
 
 immigration_integrate_modifier = {
@@ -2258,24 +2310,28 @@ immigration_integrate_modifier = {
 	state_migration_pull_add = 50
 	state_assimilation_mult = 0.15
 	country_bureaucracy_mult = -0.03
+	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
 nativist_appeased_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	state_migration_pull_mult = -0.25
 	country_acceptance_no_shared_tradition_trait_add = -15
+	country_sol_expectations_lower_offset_add = -0.25
 }
 
 nativist_countered_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_assimilation_mult = 0.1
 	country_prestige_add = 25
+	country_sol_expectations_shift_add = 0.01
 }
 
 nativist_dialogue_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	state_assimilation_mult = 0.05
 	country_legitimacy_govt_total_clout_add = 5
+	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
 # --- Religious Revivals ---
@@ -2283,36 +2339,44 @@ revival_embraced_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	interest_group_ig_devout_pol_str_mult = 0.15
 	country_authority_add = -25
+	country_sol_expectation_adaptation_rate_mult = -0.1
 }
 
 revival_secular_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_tech_research_speed_mult = 0.02
 	interest_group_ig_devout_pol_str_mult = -0.05
+	country_sol_expectation_adaptation_rate_mult = 0.05
+	country_sol_expectations_shift_add = 0.01
 }
 
 revival_channeled_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_standard_of_living_add = 0.5
 	interest_group_ig_devout_pol_str_mult = 0.05
+	country_sol_expectations_shift_min_add = 0.25
 }
 
 faith_tradition_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	interest_group_ig_devout_pol_str_mult = 0.1
 	country_tech_research_speed_mult = -0.02
+	country_sol_expectation_adaptation_rate_mult = -0.05
 }
 
 faith_modernize_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02
 	interest_group_ig_devout_pol_str_mult = -0.1
+	country_sol_expectation_adaptation_rate_mult = 0.05
+	country_sol_expectations_shift_add = 0.01
 }
 
 faith_compromise_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	interest_group_ig_devout_pol_str_mult = 0.05
 	country_tech_research_speed_mult = 0.01
+	country_sol_expectation_adaptation_rate_mult = 0.03
 }
 
 # --- Globalization ---
@@ -2320,18 +2384,24 @@ globalization_embrace_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_throughput_add = 0.03
 	state_standard_of_living_add = -0.5
+	country_sol_expectations_shift_add = 0.03
+	country_sol_expectations_upper_offset_add = 0.5
 }
 
 globalization_protect_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = -0.02
 	state_standard_of_living_add = 0.5
+	country_sol_expectations_shift_min_add = 0.5
+	country_sol_expectations_shift_max_add = -0.5
 }
 
 globalization_retrain_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	state_standard_of_living_add = 0.5
 	country_bureaucracy_mult = -0.02
+	country_sol_expectation_adaptation_rate_mult = 0.1
+	country_sol_expectations_middle_offset_add = 0.5
 }
 
 cultural_openness_modifier = {
@@ -2339,12 +2409,14 @@ cultural_openness_modifier = {
 	state_assimilation_mult = 0.1
 	country_prestige_add = 25
 	country_cultural_pull_add = 3
+	country_sol_expectations_shift_add = 0.02
 }
 
 cultural_protection_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_assimilation_mult = -0.1
 	interest_group_ig_devout_pol_str_mult = 0.05
+	country_sol_expectation_adaptation_rate_mult = -0.05
 }
 
 cultural_synthesis_modifier = {
@@ -2352,6 +2424,7 @@ cultural_synthesis_modifier = {
 	country_tech_research_speed_mult = 0.02
 	country_prestige_add = 25
 	country_cultural_pull_mult = 0.05
+	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
 # ============================================================================
@@ -2933,6 +3006,47 @@ un_aid_received_modifier = {
 	state_mortality_mult = -0.03
 }
 
+# ---- Law of the Sea (UNCLOS) ----
+
+# Permanent modifier for countries ratifying the Convention
+un_law_of_sea_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_convoys_capacity_mult = 0.05
+	country_prestige_mult = 0.03
+	country_improve_relations_speed_mult = 0.05
+}
+
+# Decaying penalty for refusing maritime regulation
+un_law_of_sea_refusal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.03
+	country_infamy_generation_mult = 0.05
+}
+
+# Reservations modifier (non-vote path)
+un_law_of_sea_reservations_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_convoys_capacity_mult = 0.02
+	country_prestige_mult = 0.01
+}
+
+# ---- International Criminal Court (Rome Statute) ----
+
+# Permanent modifier for ICC member states
+un_icc_member_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_infamy_generation_mult = -0.05
+	country_improve_relations_speed_mult = 0.05
+	country_war_exhaustion_casualties_mult = 0.1
+}
+
+# Decaying penalty for refusing international justice
+un_icc_refusal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.03
+	country_infamy_decay_mult = -0.05
+}
+
 # ============================================================================
 # WORLD WAR MODIFIERS
 # ============================================================================
@@ -3507,11 +3621,13 @@ banking_event_trade_bills = {
 banking_event_pension_stability = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_loan_interest_rate_mult = -0.03
+	country_banking_crash_chance_mult = -0.1
 }
 
 banking_event_telegraph_settlement = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_services_mult = 0.03
+	country_banking_random_momentum_mult = 0.15
 }
 
 banking_event_interbank_guarantee = {
@@ -3543,23 +3659,27 @@ banking_event_commercial_paper = {
 banking_event_deposit_insurance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_loan_interest_rate_mult = -0.03
+	country_banking_crash_chance_mult = -0.15
 }
 
 banking_event_joint_stock_boom = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_group_bg_manufacturing_throughput_add = 0.05
+	country_banking_random_momentum_mult = 0.15
 }
 
 banking_event_fintech_growth = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_services_mult = 0.03
 	country_loan_interest_rate_mult = -0.03
+	country_banking_random_momentum_mult = 0.1
 }
 
 banking_event_mbs_boom = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_group_bg_construction_throughput_add = 0.05
 	goods_output_services_mult = 0.05
+	country_banking_crash_chance_mult = 0.3
 }
 
 banking_event_microfinance = {
@@ -3576,12 +3696,14 @@ banking_event_microfinance_cost = {
 banking_event_qe_stimulus = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_loan_interest_rate_mult = -0.05
+	country_banking_random_momentum_mult = 0.15
 }
 
 banking_event_rating_crackdown = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	goods_output_services_mult = -0.05
 	country_loan_interest_rate_mult = 0.05
+	country_banking_random_momentum_mult = -0.15
 }
 
 banking_event_student_debt_relief = {
@@ -3603,11 +3725,13 @@ banking_event_green_bonds = {
 banking_event_venture_boom = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_group_bg_manufacturing_throughput_add = 0.05
+	country_banking_random_momentum_mult = 0.15
 }
 
 banking_event_predatory_crackdown = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	goods_output_services_mult = -0.03
+	country_banking_crash_chance_mult = -0.1
 }
 
 banking_event_bailout_cost = {
@@ -5009,12 +5133,14 @@ me_security_crackdown_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_add = 50
 	country_legitimacy_govt_total_clout_add = -5
+	country_sol_expectations_shift_max_add = -0.5
 }
 
 me_transparency_act_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_legitimacy_govt_total_clout_add = 10
 	country_authority_add = -25
+	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
 me_ai_transparency_modifier = {
@@ -5032,6 +5158,7 @@ me_colonial_representation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 25
 	country_authority_add = -25
+	country_sol_expectations_lower_offset_add = 0.5
 }
 
 me_neural_democracy_modifier = {

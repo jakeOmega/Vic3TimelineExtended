@@ -134,6 +134,7 @@ un_request_peacekeepers_button = {
 	possible = {
 		has_modifier = un_member_modifier
 		NOT = { has_global_variable = un_vote_active }
+		NOT = { has_global_variable = un_vote_cooldown_peacekeeping_request }
 		NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
 		NOT = { has_modifier = un_request_cooldown }
 		OR = {
@@ -203,6 +204,7 @@ un_request_humanitarian_aid_button = {
 	possible = {
 		has_modifier = un_member_modifier
 		NOT = { has_global_variable = un_vote_active }
+		NOT = { has_global_variable = un_vote_cooldown_aid_request }
 		NOT = { has_modifier = un_humanitarian_aid_received_modifier }
 		NOT = { has_modifier = un_request_cooldown }
 		any_scope_state = {
@@ -275,6 +277,7 @@ un_propose_condemn_button = {
 	possible = {
 		has_modifier = un_member_modifier
 		NOT = { has_global_variable = un_vote_active }
+		NOT = { has_global_variable = un_vote_cooldown_condemn }
 		NOT = { has_modifier = un_ga_resolution_modifier }
 		NOT = { has_modifier = un_request_cooldown }
 		any_country = {
@@ -418,6 +421,7 @@ un_propose_sanctions_button = {
 		has_modifier = un_member_modifier
 		country_rank >= rank_value:major_power
 		NOT = { has_global_variable = un_vote_active }
+		NOT = { has_global_variable = un_vote_cooldown_sanctions }
 		NOT = { has_modifier = un_ga_resolution_modifier }
 		NOT = { has_modifier = un_request_cooldown }
 		any_country = {
