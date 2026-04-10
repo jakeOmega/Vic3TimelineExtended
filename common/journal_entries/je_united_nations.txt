@@ -70,11 +70,11 @@
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_status_not_member
-				trigger = { NOT = { has_modifier = un_member_modifier } }
+				trigger = { NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } } }
 			}
 			triggered_desc = {
 				desc = je_un_status_member
-				trigger = { has_modifier = un_member_modifier }
+				trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			}
 		}
 
@@ -106,7 +106,7 @@
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_authority_drift
-				trigger = { has_modifier = un_member_modifier }
+				trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			}
 		}
 
@@ -114,7 +114,7 @@
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_hq_host
-				trigger = { has_modifier = un_headquarters_modifier }
+				trigger = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
 			}
 			triggered_desc = {
 				desc = je_un_hq_established
@@ -128,7 +128,7 @@
 				desc = je_un_statistics
 				trigger = {
 					any_country = {
-						has_modifier = un_member_modifier
+						je:je_united_nations ?= { has_modifier = un_member_modifier }
 						count >= 1
 					}
 				}
@@ -139,14 +139,14 @@
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_security_council_member
-				trigger = { has_modifier = un_security_council_modifier }
+				trigger = { je:je_united_nations ?= { has_modifier = un_security_council_modifier } }
 			}
 			triggered_desc = {
 				desc = je_un_security_council_nonmember
 				trigger = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					any_country = {
-						has_modifier = un_security_council_modifier
+						je:je_united_nations ?= { has_modifier = un_security_council_modifier }
 						count >= 1
 					}
 				}
@@ -157,7 +157,7 @@
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_agencies_header
-				trigger = { has_modifier = un_member_modifier }
+				trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			}
 		}
 
@@ -199,7 +199,7 @@
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_active_programs
-				trigger = { has_modifier = un_member_modifier }
+				trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			}
 			triggered_desc = {
 				desc = je_un_active_policies
@@ -213,39 +213,39 @@
 			# ---- Security Council cleanup (all countries with JE) ----
 			if = {
 				limit = {
-					has_modifier = un_security_council_modifier
+					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
 					OR = {
-						NOT = { has_modifier = un_member_modifier }
+						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 						NOT = { country_rank >= rank_value:great_power }
 					}
 				}
-				remove_modifier = un_security_council_modifier
+				je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
 			}
 
 			# ---- Treaty obligation auto-enrollment ----
 			if = {
 				limit = {
-					NOT = { has_modifier = un_member_modifier }
+					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 					modifier:un_membership_obligation = yes
 				}
-				add_modifier = { name = un_member_modifier }
+				je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
 				if = {
 					limit = {
 						country_rank >= rank_value:great_power
 						NOT = {
 							any_country = {
-								has_modifier = un_security_council_modifier
+								je:je_united_nations ?= { has_modifier = un_security_council_modifier }
 								count >= 5
 							}
 						}
 					}
-					add_modifier = { name = un_security_council_modifier }
+					je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
 				}
 			}
 
 			# ---- Member-only logic ----
 			if = {
-				limit = { has_modifier = un_member_modifier }
+				limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 
 				# Base monthly drift: toward 50 (slow)
 				if = {
@@ -299,7 +299,7 @@
 						is_at_war = yes
 						any_country = {
 							has_war_with = ROOT
-							has_modifier = un_member_modifier
+							je:je_united_nations ?= { has_modifier = un_member_modifier }
 						}
 					}
 					change_variable = { name = un_authority add = -1 }
@@ -381,26 +381,26 @@
 				if = {
 					limit = {
 						country_rank >= rank_value:great_power
-						NOT = { has_modifier = un_security_council_modifier }
+						NOT = { je:je_united_nations ?= { has_modifier = un_security_council_modifier } }
 						NOT = {
 							any_country = {
-								has_modifier = un_security_council_modifier
+								je:je_united_nations ?= { has_modifier = un_security_council_modifier }
 								count >= 5
 							}
 						}
 					}
-					add_modifier = { name = un_security_council_modifier }
+					je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
 				}
 			}
 
 			# ---- Non-member penalties at high authority (all countries with JE) ----
 			if = {
 				limit = {
-					NOT = { has_modifier = un_member_modifier }
+					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 					has_global_variable = un_founded
 					# Check authority from any member (use global estimate)
 					any_country = {
-						has_modifier = un_member_modifier
+						je:je_united_nations ?= { has_modifier = un_member_modifier }
 						has_variable = un_authority
 						var:un_authority >= 60
 					}
@@ -416,11 +416,11 @@
 				limit = {
 					je:je_united_nations = { has_modifier = un_nonmember_pariah_modifier }
 					OR = {
-						has_modifier = un_member_modifier
+						je:je_united_nations ?= { has_modifier = un_member_modifier }
 						NOT = { has_global_variable = un_founded }
 						NOT = {
 							any_country = {
-								has_modifier = un_member_modifier
+								je:je_united_nations ?= { has_modifier = un_member_modifier }
 								has_variable = un_authority
 								var:un_authority >= 55
 							}

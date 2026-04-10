@@ -35,7 +35,7 @@ un_events.1 = {
 	trigger = {
 		# Fired globally by on_action when 3+ great powers have the tech
 		NOT = { has_variable = un_charter_signed }
-		NOT = { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		is_subject = no
 		NOT = { is_country_type = decentralized }
 	}
@@ -60,15 +60,15 @@ un_events.1 = {
 		if = {
 			limit = { NOT = { has_global_variable = un_hq_country } }
 			set_global_variable = { name = un_hq_country value = ROOT }
-			add_modifier = { name = un_headquarters_modifier }
+			je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
 		}
 		# Great powers get Security Council permanent seats
 		if = {
 			limit = { country_rank >= rank_value:great_power }
-			add_modifier = { name = un_security_council_modifier }
+			je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
 		}
-		add_modifier = { name = un_member_modifier }
-		add_modifier = { name = un_founding_member_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
@@ -130,7 +130,7 @@ un_events.2 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		is_at_war = no
 		any_country = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
@@ -193,7 +193,7 @@ un_events.2 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -283,7 +283,7 @@ un_events.3 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_modifier = un_human_rights_declaration_modifier }
 		has_technology_researched = human_rights
 		var:un_authority >= 40
@@ -327,7 +327,7 @@ un_events.3 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -407,8 +407,8 @@ un_events.4 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
-		has_modifier = un_peacekeeping_contributor_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 		country_rank >= rank_value:major_power
 		any_country = {
 			NOT = { this = ROOT }
@@ -518,7 +518,7 @@ un_events.5 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_modifier = un_sanctions_enforcer_modifier
 		NOT = { has_modifier = un_sanctions_enforcement_modifier }
 	}
@@ -625,7 +625,7 @@ un_events.6 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		var:un_authority >= 30
 		NOT = { has_modifier = un_reform_champion_modifier }
@@ -686,7 +686,7 @@ un_events.6 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -761,7 +761,7 @@ un_events.7 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
 		NOT = { has_modifier = un_humanitarian_aid_modifier }
 		NOT = { has_modifier = un_humanitarian_token_modifier }
@@ -948,7 +948,7 @@ un_events.8 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 30
 		OR = {
 			is_at_war = yes
@@ -1056,7 +1056,7 @@ un_events.9 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 40
 		NOT = { has_modifier = un_heritage_program_modifier }
 		NOT = { has_modifier = un_heritage_token_modifier }
@@ -1094,7 +1094,7 @@ un_events.9 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -1170,7 +1170,7 @@ un_events.10 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		var:un_authority < 25
 		NOT = { has_modifier = un_authority_restored_modifier }
@@ -1277,7 +1277,7 @@ un_events.11 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		var:un_authority >= 30
 		NOT = { has_modifier = un_veto_crisis_modifier }
@@ -1285,7 +1285,7 @@ un_events.11 = {
 		any_country = {
 			NOT = { this = ROOT }
 			country_rank >= rank_value:great_power
-			has_modifier = un_member_modifier
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
 		}
 	}
 
@@ -1294,7 +1294,7 @@ un_events.11 = {
 			limit = {
 				NOT = { this = ROOT }
 				country_rank >= rank_value:great_power
-				has_modifier = un_member_modifier
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
 			}
 			save_scope_as = veto_power
 		}
@@ -1390,7 +1390,7 @@ un_events.12 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_technology_researched = decolonization
 		var:un_authority >= 30
 		NOT = { has_modifier = un_decolonization_champion_modifier }
@@ -1441,7 +1441,7 @@ un_events.12 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -1521,7 +1521,7 @@ un_events.13 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		var:un_authority >= 20
 		NOT = { has_modifier = un_ideological_champion_modifier }
@@ -1529,7 +1529,7 @@ un_events.13 = {
 		any_country = {
 			NOT = { this = ROOT }
 			country_rank >= rank_value:great_power
-			has_modifier = un_member_modifier
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			has_diplomatic_pact = { who = ROOT type = rivalry }
 		}
 	}
@@ -1539,7 +1539,7 @@ un_events.13 = {
 			limit = {
 				NOT = { this = ROOT }
 				country_rank >= rank_value:great_power
-				has_modifier = un_member_modifier
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 			}
 			save_scope_as = ideological_rival
@@ -1659,7 +1659,7 @@ un_events.14 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 40
 		has_technology_researched = nuclear_weapons
 		NOT = { has_modifier = un_nonproliferation_modifier }
@@ -1699,7 +1699,7 @@ un_events.14 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -1781,13 +1781,13 @@ un_events.15 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 30
 		NOT = { has_modifier = un_trade_arbitration_modifier }
 		NOT = { has_modifier = un_unilateral_tariffs_modifier }
 		any_country = {
 			NOT = { this = ROOT }
-			has_modifier = un_member_modifier
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			has_diplomatic_pact = { who = ROOT type = rivalry }
 		}
 	}
@@ -1796,7 +1796,7 @@ un_events.15 = {
 		random_country = {
 			limit = {
 				NOT = { this = ROOT }
-				has_modifier = un_member_modifier
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 			}
 			save_scope_as = trade_rival
@@ -1907,7 +1907,7 @@ un_events.16 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
 		var:un_authority >= 20
 		has_technology_researched = antibiotics
@@ -1947,7 +1947,7 @@ un_events.16 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -2022,7 +2022,7 @@ un_events.17 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 30
 		has_technology_researched = environmental_movement
 		NOT = { has_modifier = un_climate_binding_modifier }
@@ -2062,7 +2062,7 @@ un_events.17 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -2136,7 +2136,7 @@ un_events.18 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 20
 		NOT = { has_modifier = un_refugee_program_modifier }
 		NOT = { has_modifier = un_refugee_closed_modifier }
@@ -2200,7 +2200,7 @@ un_events.18 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -2291,7 +2291,7 @@ un_events.19 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 40
 		has_technology_researched = space_exploration
 		country_rank >= rank_value:major_power
@@ -2330,7 +2330,7 @@ un_events.19 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -2407,7 +2407,7 @@ un_events.20 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		var:un_authority < 50
 		NOT = { has_modifier = un_walkout_condemn_modifier }
@@ -2415,7 +2415,7 @@ un_events.20 = {
 		any_country = {
 			NOT = { this = ROOT }
 			country_rank >= rank_value:major_power
-			has_modifier = un_member_modifier
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			has_diplomatic_pact = { who = ROOT type = rivalry }
 		}
 	}
@@ -2425,7 +2425,7 @@ un_events.20 = {
 			limit = {
 				NOT = { this = ROOT }
 				country_rank >= rank_value:major_power
-				has_modifier = un_member_modifier
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 			}
 			save_scope_as = walkout_leader
@@ -2757,7 +2757,7 @@ un_events.21 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 30
 		has_technology_researched = international_trade
 		NOT = { has_modifier = un_law_of_sea_modifier }
@@ -2800,7 +2800,7 @@ un_events.21 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -2881,7 +2881,7 @@ un_events.22 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 40
 		has_technology_researched = human_rights
 		country_rank >= rank_value:major_power
@@ -2925,7 +2925,7 @@ un_events.22 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }

@@ -4,7 +4,7 @@ un_events_on_action = {
 		# Recurring events - only for members with un_authority variable set
 		if = {
 			limit = {
-				has_modifier = un_member_modifier
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
 				has_variable = un_authority
 			}
 			random_list = {
@@ -33,7 +33,7 @@ un_events_on_action = {
 				}
 				3 = {
 					trigger = {
-						has_modifier = un_peacekeeping_contributor_modifier
+						je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 						country_rank >= rank_value:major_power
 						any_country = {
 							NOT = { this = ROOT }
@@ -116,7 +116,7 @@ un_events_on_action = {
 						any_country = {
 							NOT = { this = ROOT }
 							country_rank >= rank_value:great_power
-							has_modifier = un_member_modifier
+							je:je_united_nations ?= { has_modifier = un_member_modifier }
 						}
 					}
 					trigger_event = { id = un_events.11 }
@@ -143,7 +143,7 @@ un_events_on_action = {
 						any_country = {
 							NOT = { this = ROOT }
 							country_rank >= rank_value:great_power
-							has_modifier = un_member_modifier
+							je:je_united_nations ?= { has_modifier = un_member_modifier }
 							has_diplomatic_pact = { who = ROOT type = rivalry }
 						}
 					}
@@ -167,7 +167,7 @@ un_events_on_action = {
 						NOT = { has_modifier = un_unilateral_tariffs_modifier }
 						any_country = {
 							NOT = { this = ROOT }
-							has_modifier = un_member_modifier
+							je:je_united_nations ?= { has_modifier = un_member_modifier }
 							has_diplomatic_pact = { who = ROOT type = rivalry }
 						}
 					}
@@ -234,7 +234,7 @@ un_events_on_action = {
 						any_country = {
 							NOT = { this = ROOT }
 							country_rank >= rank_value:major_power
-							has_modifier = un_member_modifier
+							je:je_united_nations ?= { has_modifier = un_member_modifier }
 							has_diplomatic_pact = { who = ROOT type = rivalry }
 						}
 					}

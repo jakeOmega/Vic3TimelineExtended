@@ -1384,7 +1384,7 @@ nuclear_program_aid = {
 				AND = {
 					has_global_variable = un_agency_iaea
 					any_country = {
-						has_modifier = un_member_modifier
+						je:je_united_nations ?= { has_modifier = un_member_modifier }
 						has_variable = un_authority
 						var:un_authority >= 60
 					}
@@ -1910,13 +1910,13 @@ join_united_nations = {
 
 	visible = {
 		has_global_variable = un_founded
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		scope:other_country = {
-			NOT = { has_modifier = un_member_modifier }
+			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			has_technology_researched = intergovernmental_organizations
 		}
 	}

@@ -7,7 +7,7 @@ pm_volkswagen_autostadt = {
 	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_infrastructure_mult = 0.1
+			state_building_highway_max_level_add = 1
 			goods_output_tourism_mult = 0.1
 			state_migration_pull_mult = 0.15
 		}

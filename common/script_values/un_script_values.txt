@@ -8,7 +8,7 @@
 un_member_count = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_member_modifier }
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		add = 1
 	}
 }
@@ -25,7 +25,7 @@ un_gp_member_count = {
 	value = 0
 	every_country = {
 		limit = {
-			has_modifier = un_member_modifier
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			country_rank >= rank_value:great_power
 		}
 		add = 1
@@ -45,7 +45,7 @@ un_total_gp_count = {
 un_member_gdp_share = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_member_modifier }
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		add = gdp
 	}
 	multiply = 100
@@ -58,7 +58,7 @@ un_member_gdp_share = {
 un_member_pop_share = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_member_modifier }
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		add = total_population
 	}
 	multiply = 100
@@ -73,7 +73,7 @@ un_member_pop_share = {
 un_security_council_count = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_security_council_modifier }
+		limit = { je:je_united_nations ?= { has_modifier = un_security_council_modifier } }
 		add = 1
 	}
 }
@@ -84,7 +84,7 @@ un_gp_with_humanitarian_regs = {
 	value = 0
 	every_country = {
 		limit = {
-			has_modifier = un_member_modifier
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			country_rank >= rank_value:great_power
 			has_law = law_type:law_humanitarian_regulations
 		}
@@ -96,11 +96,11 @@ un_member_wars_count = {
 	value = 0
 	every_country = {
 		limit = {
-			has_modifier = un_member_modifier
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			is_at_war = yes
 			any_country = {
 				has_war_with = PREV
-				has_modifier = un_member_modifier
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
 			}
 		}
 		add = 1
@@ -170,7 +170,7 @@ un_authority_drift_wars = {
 			is_at_war = yes
 			any_country = {
 				has_war_with = ROOT
-				has_modifier = un_member_modifier
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
 			}
 		}
 		add = -1
@@ -190,7 +190,7 @@ un_authority_drift_total = {
 un_peacekeeping_count = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_peacekeeping_contributor_modifier }
+		limit = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
 		add = 1
 	}
 }
@@ -198,7 +198,7 @@ un_peacekeeping_count = {
 un_development_count = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_development_contributor_modifier }
+		limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
 		add = 1
 	}
 }
@@ -206,7 +206,7 @@ un_development_count = {
 un_human_rights_champion_count = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_human_rights_champion_modifier }
+		limit = { je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } }
 		add = 1
 	}
 }
@@ -214,7 +214,7 @@ un_human_rights_champion_count = {
 un_arms_control_count = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_arms_control_participant_modifier }
+		limit = { je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } }
 		add = 1
 	}
 }
@@ -273,10 +273,10 @@ un_heritage_participants = {
 
 # ---- Financial Cost / Benefit Scaling ----
 
-# Expense for contributing to a UN program (~0.1% of GDP)
+# Expense for contributing to a UN program (~0.5% of GDP, matches banking_event_expense_small)
 un_program_expense_value = {
 	value = gdp
-	multiply = 0.001
+	multiply = 0.005
 	divide = 52 # weekly cost
 }
 
@@ -310,7 +310,7 @@ un_peacekeeping_donor_count = {
 	every_country = {
 		limit = {
 			OR = {
-				has_modifier = un_peacekeeping_contributor_modifier
+				je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 				has_modifier = un_peacekeeping_deployed_modifier
 			}
 		}
@@ -324,7 +324,7 @@ un_aid_donor_count = {
 	every_country = {
 		limit = {
 			OR = {
-				has_modifier = un_development_contributor_modifier
+				je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
 				has_modifier = un_humanitarian_aid_modifier
 			}
 		}
@@ -340,7 +340,7 @@ un_peacekeeping_benefit_scale = {
 	every_country = {
 		limit = {
 			OR = {
-				has_modifier = un_peacekeeping_contributor_modifier
+				je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 				has_modifier = un_peacekeeping_deployed_modifier
 			}
 		}
@@ -362,7 +362,7 @@ un_aid_benefit_scale = {
 	every_country = {
 		limit = {
 			OR = {
-				has_modifier = un_development_contributor_modifier
+				je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
 				has_modifier = un_humanitarian_aid_modifier
 			}
 		}

@@ -13,6 +13,7 @@ company_volkswagen = {
 	building_types = {
 		building_automotive_industry
 		building_motor_industry
+		building_highway
 		building_volkswagen_autostadt
 	}
 	extension_building_types = {
@@ -23,10 +24,10 @@ company_volkswagen = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:automobiles)" <= 3
+		has_technology_researched = modern_automotive_technology
 	}
 	possible = {
-		has_technology_researched = modern_automotive_technology
+		"goods_production_rank(g:automobiles)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_automotive_industry
@@ -39,11 +40,12 @@ company_volkswagen = {
 	}
 	prosperity_modifier = {
 		building_automotive_industry_throughput_add = 0.15
-		state_infrastructure_from_population_add = 10
+		state_building_highway_max_level_add = 1
 		state_building_volkswagen_autostadt_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_luxury_automobiles
+		prestige_good_performance_engines
 	}
 	ai_will_do = {
 		has_technology_researched = modern_automotive_technology
@@ -76,10 +78,10 @@ company_toyota = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:automobiles)" <= 3
+		has_technology_researched = modern_automotive_technology
 	}
 	possible = {
-		has_technology_researched = modern_automotive_technology
+		"goods_production_rank(g:automobiles)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_automotive_industry
@@ -134,10 +136,10 @@ company_samsung = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:consumer_appliances)" <= 3
+		has_technology_researched = transistors
 	}
 	possible = {
-		has_technology_researched = transistors
+		"goods_production_rank(g:consumer_appliances)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_electrics_industry_appliances
@@ -187,10 +189,10 @@ company_hp = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:consumer_appliances)" <= 3
+		has_technology_researched = transistors
 	}
 	possible = {
-		has_technology_researched = transistors
+		"goods_production_rank(g:consumer_appliances)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_electrics_industry_appliances
@@ -240,10 +242,10 @@ company_sony = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:consumer_appliances)" <= 3
+		has_technology_researched = transistors
 	}
 	possible = {
-		has_technology_researched = transistors
+		"goods_production_rank(g:consumer_appliances)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_electrics_industry_appliances
@@ -292,10 +294,10 @@ company_ikea = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:furniture)" <= 3
+		has_technology_researched = marketing_research
 	}
 	possible = {
-		has_technology_researched = marketing_research
+		"goods_production_rank(g:furniture)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_furniture_manufactory
@@ -346,10 +348,10 @@ company_intel = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:electronic_components)" <= 3
+		has_technology_researched = microprocessor
 	}
 	possible = {
-		has_technology_researched = microprocessor
+		"goods_production_rank(g:electronic_components)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_electronic_components_and_semiconductor_industry
@@ -398,10 +400,10 @@ company_microsoft = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 3
+		has_technology_researched = personal_computers
 	}
 	possible = {
-		has_technology_researched = personal_computers
+		"goods_production_rank(g:digital_assets)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_software_industry
@@ -452,10 +454,10 @@ company_apple = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:consumer_appliances)" <= 3
+		has_technology_researched = personal_computers
 	}
 	possible = {
-		has_technology_researched = personal_computers
+		"goods_production_rank(g:consumer_appliances)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_electrics_industry_appliances
@@ -505,10 +507,10 @@ company_tsmc = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:electronic_components)" <= 3
+		has_technology_researched = integrated_circuits
 	}
 	possible = {
-		has_technology_researched = integrated_circuits
+		"goods_production_rank(g:electronic_components)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_electronic_components_and_semiconductor_industry
@@ -560,10 +562,10 @@ company_huawei = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:telephones)" <= 3
+		has_technology_researched = computer_networks
 	}
 	possible = {
-		has_technology_researched = computer_networks
+		"goods_production_rank(g:telephones)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_network_infrastructure
@@ -616,10 +618,8 @@ company_amazon = {
 	potential = {
 		always = yes
 	}
-	attainable = {
-		"goods_production_rank(g:merchant_marine)" <= 3
-	}
 	possible = {
+		"goods_production_rank(g:merchant_marine)" <= 3
 		has_technology_researched = e-commerce
 		any_scope_state = {
 			any_scope_building = {
@@ -670,10 +670,10 @@ company_nvidia = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:electronic_components)" <= 3
+		has_technology_researched = computer_aided_design
 	}
 	possible = {
-		has_technology_researched = computer_aided_design
+		"goods_production_rank(g:electronic_components)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_electronic_components_and_semiconductor_industry
@@ -725,10 +725,10 @@ company_google = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 3
+		has_technology_researched = world_wide_web
 	}
 	possible = {
-		has_technology_researched = world_wide_web
+		"goods_production_rank(g:digital_assets)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_network_infrastructure
@@ -781,10 +781,10 @@ company_netflix = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:fine_art)" <= 3
+		has_technology_researched = wireless_internet
 	}
 	possible = {
-		has_technology_researched = wireless_internet
+		"goods_production_rank(g:fine_art)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_art_academy
@@ -836,10 +836,10 @@ company_spacex = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:launch_capacity)" <= 3
+		has_technology_researched = reusable_rocketry
 	}
 	possible = {
-		has_technology_researched = reusable_rocketry
+		"goods_production_rank(g:launch_capacity)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_aerospace_industry
@@ -892,10 +892,10 @@ company_bytedance = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 3
+		has_technology_researched = social_media
 	}
 	possible = {
-		has_technology_researched = social_media
+		"goods_production_rank(g:digital_assets)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_software_industry
@@ -944,10 +944,10 @@ company_openai = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 3
+		has_technology_researched = machine_learning
 	}
 	possible = {
-		has_technology_researched = machine_learning
+		"goods_production_rank(g:digital_assets)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_software_industry
@@ -1008,10 +1008,10 @@ company_catl = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:fertilizer)" <= 3
+		has_technology_researched = clean_energy_technologies
 	}
 	possible = {
-		has_technology_researched = clean_energy_technologies
+		"goods_production_rank(g:fertilizer)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_chemical_plant
@@ -1061,10 +1061,10 @@ company_boston_dynamics = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:robotics)" <= 3
+		has_technology_researched = machine_learning
 	}
 	possible = {
-		has_technology_researched = machine_learning
+		"goods_production_rank(g:robotics)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_robotics_industry
@@ -1116,10 +1116,10 @@ company_asml = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:electronic_components)" <= 3
+		has_technology_researched = early_nanotechnology
 	}
 	possible = {
-		has_technology_researched = early_nanotechnology
+		"goods_production_rank(g:electronic_components)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_electronic_components_and_semiconductor_industry
@@ -1179,10 +1179,10 @@ company_lockheed_martin = {
 		always = yes
 	}
 	attainable = {
-		global_country_ranking <= 5
+		has_technology_researched = stealth_technology
 	}
 	possible = {
-		has_technology_researched = stealth_technology
+		global_country_ranking <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_aerospace_industry
@@ -1238,10 +1238,10 @@ company_bae_systems = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:aeroplanes)" <= 5
+		has_technology_researched = supersonic_aircraft
 	}
 	possible = {
-		has_technology_researched = supersonic_aircraft
+		"goods_production_rank(g:aeroplanes)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_aerospace_industry
@@ -1292,10 +1292,10 @@ company_roscosmos = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:launch_capacity)" <= 3
+		has_technology_researched = reusable_rocketry
 	}
 	possible = {
-		has_technology_researched = reusable_rocketry
+		"goods_production_rank(g:launch_capacity)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_aerospace_industry
@@ -1347,10 +1347,10 @@ company_airbus = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:aeroplanes)" <= 5
+		has_technology_researched = supersonic_aircraft
 	}
 	possible = {
-		has_technology_researched = supersonic_aircraft
+		"goods_production_rank(g:aeroplanes)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_aerospace_industry
@@ -1412,10 +1412,10 @@ company_dassault_aviation = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:aeroplanes)" <= 5
+		has_technology_researched = jet_engine_technology
 	}
 	possible = {
-		has_technology_researched = jet_engine_technology
+		"goods_production_rank(g:aeroplanes)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_aerospace_industry
@@ -1468,11 +1468,11 @@ company_hyundai = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:automobiles)" <= 5
-		"goods_production_rank(g:ironclads)" <= 5
+		has_technology_researched = modern_automotive_technology
 	}
 	possible = {
-		has_technology_researched = modern_automotive_technology
+		"goods_production_rank(g:automobiles)" <= 5
+		"goods_production_rank(g:ironclads)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_automotive_industry
@@ -1522,10 +1522,10 @@ company_sap = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 5
+		has_technology_researched = computer_networks
 	}
 	possible = {
-		has_technology_researched = computer_networks
+		"goods_production_rank(g:digital_assets)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_software_industry
@@ -1578,10 +1578,10 @@ company_tencent = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 5
+		has_technology_researched = social_media
 	}
 	possible = {
-		has_technology_researched = social_media
+		"goods_production_rank(g:digital_assets)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_software_industry
@@ -1629,10 +1629,8 @@ company_alibaba = {
 	potential = {
 		always = yes
 	}
-	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 5
-	}
 	possible = {
+		"goods_production_rank(g:digital_assets)" <= 5
 		has_technology_researched = e-commerce
 		any_scope_state = {
 			any_scope_building = {
@@ -1683,13 +1681,13 @@ company_nintendo = {
 		always = yes
 	}
 	attainable = {
+		has_technology_researched = video_games
+	}
+	possible = {
 		OR = {
 			"goods_production_rank(g:fine_art)" <= 3
 			"goods_production_rank(g:consumer_appliances)" <= 3
 		}
-	}
-	possible = {
-		has_technology_researched = video_games
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_electrics_industry_appliances
@@ -1741,10 +1739,10 @@ company_gazprom = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:oil)" <= 3
+		has_technology_researched = containerization
 	}
 	possible = {
-		has_technology_researched = containerization
+		"goods_production_rank(g:oil)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_oil_rig
@@ -1790,10 +1788,10 @@ company_saudi_aramco = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:oil)" <= 3
+		has_technology_researched = transistors
 	}
 	possible = {
-		has_technology_researched = transistors
+		"goods_production_rank(g:oil)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_oil_rig
@@ -1838,11 +1836,11 @@ company_petrobras = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:oil)" <= 10
-		"goods_production_rank(g:fertilizer)" <= 10
+		has_technology_researched = transistors
 	}
 	possible = {
-		has_technology_researched = transistors
+		"goods_production_rank(g:oil)" <= 10
+		"goods_production_rank(g:fertilizer)" <= 10
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_oil_rig
@@ -1890,12 +1888,12 @@ company_rosatom = {
 		always = yes
 	}
 	attainable = {
+		has_technology_researched = nuclear_energy
+	}
+	possible = {
 		exists = ig:ig_armed_forces
 		ig:ig_armed_forces ?= { ig_approval >= 5 }
 		global_country_ranking <= 10
-	}
-	possible = {
-		has_technology_researched = nuclear_energy
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_nuclear_plant
@@ -1942,10 +1940,10 @@ company_oracle = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 5
+		has_technology_researched = knowledge_economy
 	}
 	possible = {
-		has_technology_researched = knowledge_economy
+		"goods_production_rank(g:digital_assets)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_software_industry
@@ -1994,10 +1992,10 @@ company_softbank = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 5
+		has_technology_researched = knowledge_economy
 	}
 	possible = {
-		has_technology_researched = knowledge_economy
+		"goods_production_rank(g:digital_assets)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_network_infrastructure
@@ -2043,10 +2041,10 @@ company_roche = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:fertilizer)" <= 5
+		has_technology_researched = modern_pharmaceuticals
 	}
 	possible = {
-		has_technology_researched = modern_pharmaceuticals
+		"goods_production_rank(g:fertilizer)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_chemical_plant
@@ -2091,10 +2089,10 @@ company_pfizer = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:fertilizer)" <= 5
+		has_technology_researched = modern_pharmaceuticals
 	}
 	possible = {
-		has_technology_researched = modern_pharmaceuticals
+		"goods_production_rank(g:fertilizer)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_chemical_plant
@@ -2153,10 +2151,10 @@ company_vale = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:iron)" <= 5
+		has_technology_researched = modern_tools
 	}
 	possible = {
-		has_technology_researched = modern_tools
+		"goods_production_rank(g:iron)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				OR = {
@@ -2167,7 +2165,6 @@ company_vale = {
 					is_building_type = building_copper_mine
 					is_building_type = building_potash_mine
 				}
-				
 				level >= 10
 			}
 		}
@@ -2216,11 +2213,11 @@ company_disney = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:fine_art)" <= 5
-		"goods_production_rank(g:tourism)" <= 5
+		has_technology_researched = mass_media
 	}
 	possible = {
-		has_technology_researched = mass_media
+		"goods_production_rank(g:fine_art)" <= 5
+		"goods_production_rank(g:tourism)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_art_academy
@@ -2274,10 +2271,10 @@ company_universal = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:fine_art)" <= 5
+		has_technology_researched = mass_media
 	}
 	possible = {
-		has_technology_researched = mass_media
+		"goods_production_rank(g:fine_art)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_art_academy
@@ -2326,10 +2323,10 @@ company_verizon = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:telephones)" <= 5
+		has_technology_researched = cellular_networks
 	}
 	possible = {
-		has_technology_researched = cellular_networks
+		"goods_production_rank(g:telephones)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_network_infrastructure
@@ -2383,11 +2380,11 @@ company_reliance = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:oil)" <= 10
-		"goods_production_rank(g:fertilizer)" <= 10
+		has_technology_researched = containerization
 	}
 	possible = {
-		has_technology_researched = containerization
+		"goods_production_rank(g:oil)" <= 10
+		"goods_production_rank(g:fertilizer)" <= 10
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_chemical_plant
@@ -2437,10 +2434,10 @@ company_fanuc = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:robotics)" <= 5
+		has_technology_researched = robotics
 	}
 	possible = {
-		has_technology_researched = robotics
+		"goods_production_rank(g:robotics)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_robotics_industry
@@ -2496,10 +2493,10 @@ company_eni = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:fertilizer)" <= 5
+		has_technology_researched = modern_chemical_processes
 	}
 	possible = {
-		has_technology_researched = modern_chemical_processes
+		"goods_production_rank(g:fertilizer)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_oil_rig
@@ -2551,11 +2548,11 @@ company_ferrari = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:automobiles)" <= 10
-		"goods_production_rank(g:engines)" <= 10
+		has_technology_researched = modern_automotive_technology
 	}
 	possible = {
-		has_technology_researched = modern_automotive_technology
+		"goods_production_rank(g:automobiles)" <= 10
+		"goods_production_rank(g:engines)" <= 10
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_automotive_industry
@@ -2608,10 +2605,10 @@ company_blackberry = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:consumer_appliances)" <= 10
+		has_technology_researched = cellular_networks
 	}
 	possible = {
-		has_technology_researched = cellular_networks
+		"goods_production_rank(g:consumer_appliances)" <= 10
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_network_infrastructure
@@ -2663,11 +2660,9 @@ company_shopify = {
 	potential = {
 		always = yes
 	}
-	attainable = {
+	possible = {
 		"goods_production_rank(g:digital_assets)" <= 10
 		"goods_production_rank(g:telephones)" <= 10
-	}
-	possible = {
 		has_technology_researched = e-commerce
 		any_scope_state = {
 			any_scope_building = {
@@ -2731,6 +2726,9 @@ company_bhp_group = {
 		always = yes
 	}
 	attainable = {
+		has_technology_researched = modern_tools
+	}
+	possible = {
 		OR = {
 			"goods_production_rank(g:iron)" <= 5
 			"goods_production_rank(g:coal)" <= 5
@@ -2738,9 +2736,6 @@ company_bhp_group = {
 			"goods_production_rank(g:sulfur)" <= 5
 			"goods_production_rank(g:tech_metals)" <= 5
 		}
-	}
-	possible = {
-		has_technology_researched = modern_tools
 		any_scope_state = {
 			any_scope_building = {
 				OR = {
@@ -2800,13 +2795,13 @@ company_cochlear = {
 		always = yes
 	}
 	attainable = {
+		has_technology_researched = modern_pharmaceuticals
+	}
+	possible = {
 		OR = {
 			"goods_production_rank(g:fertilizer)" <= 5
 			"goods_production_rank(g:consumer_appliances)" <= 5
 		}
-	}
-	possible = {
-		has_technology_researched = modern_pharmaceuticals
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_chemical_plant
@@ -2856,10 +2851,10 @@ company_infosys = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 10
+		has_technology_researched = knowledge_economy
 	}
 	possible = {
-		has_technology_researched = knowledge_economy
+		"goods_production_rank(g:digital_assets)" <= 10
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_software_industry
@@ -2909,10 +2904,10 @@ company_jsw_steel = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:steel)" <= 5
+		has_technology_researched = aluminum_mass_production
 	}
 	possible = {
-		has_technology_researched = aluminum_mass_production
+		"goods_production_rank(g:steel)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_steel_mill
@@ -2966,10 +2961,10 @@ company_axiom_space = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:launch_capacity)" <= 5
+		has_technology_researched = reusable_rocketry
 	}
 	possible = {
-		has_technology_researched = reusable_rocketry
+		"goods_production_rank(g:launch_capacity)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_aerospace_industry
@@ -3023,10 +3018,10 @@ company_neurovault = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 3
+		has_technology_researched = mind_backups
 	}
 	possible = {
-		has_technology_researched = mind_backups
+		"goods_production_rank(g:digital_assets)" <= 3
 		any_scope_state = {
 			any_scope_building = {
 				OR = {
@@ -3087,10 +3082,10 @@ company_tycho_manufacturing = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:launch_capacity)" <= 5
+		has_technology_researched = space_elevator
 	}
 	possible = {
-		has_technology_researched = space_elevator
+		"goods_production_rank(g:launch_capacity)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_aerospace_industry
@@ -3142,10 +3137,10 @@ company_tessier_ashpool = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 5
+		has_technology_researched = mind_backups
 	}
 	possible = {
-		has_technology_researched = mind_backups
+		"goods_production_rank(g:digital_assets)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_software_industry
@@ -3196,17 +3191,17 @@ company_hanka_precision = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:electronic_components)" <= 5
+		has_technology_researched = biohacking_and_human_augmentation
+		has_technology_researched = early_nanotechnology
 	}
 	possible = {
-		has_technology_researched = biohacking_and_human_augmentation
+		"goods_production_rank(g:electronic_components)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_electronic_components_and_semiconductor_industry
 				level >= 10
 			}
 		}
-		has_technology_researched = early_nanotechnology
 		is_top_innovation_country = yes
 	}
 	prosperity_modifier = {
@@ -3253,10 +3248,10 @@ company_yoyodyne_propulsion = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:launch_capacity)" <= 5
+		has_technology_researched = antimatter_production
 	}
 	possible = {
-		has_technology_researched = antimatter_production
+		"goods_production_rank(g:launch_capacity)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_aerospace_industry
@@ -3305,10 +3300,10 @@ company_rekal = {
 		always = yes
 	}
 	attainable = {
-		"goods_production_rank(g:digital_assets)" <= 5
+		has_technology_researched = mind_backups
 	}
 	possible = {
-		has_technology_researched = mind_backups
+		"goods_production_rank(g:digital_assets)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_software_industry

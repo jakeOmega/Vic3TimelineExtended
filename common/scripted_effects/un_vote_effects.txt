@@ -148,7 +148,7 @@ un_vote_apply_resolution_compliance = {
 			has_variable = un_topic_peacekeeping_request
 			country_rank >= rank_value:major_power
 		}
-		add_modifier = { name = un_peacekeeping_contributor_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
 		if = {
 			limit = { NOT = { has_variable = un_peacekeeping_contribution_count } }
 			set_variable = { name = un_peacekeeping_contribution_count value = 0 }

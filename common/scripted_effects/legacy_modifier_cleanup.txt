@@ -112,6 +112,17 @@ legacy_je_modifier_cleanup_effect = {
 	if = { limit = { has_modifier = un_nonmember_pariah_modifier } remove_modifier = un_nonmember_pariah_modifier }
 	if = { limit = { has_modifier = un_champion_order_cost } remove_modifier = un_champion_order_cost }
 	if = { limit = { has_modifier = un_undermine_order_cost } remove_modifier = un_undermine_order_cost }
+	# Status modifiers moved to JE scope
+	if = { limit = { has_modifier = un_member_modifier } remove_modifier = un_member_modifier }
+	if = { limit = { has_modifier = un_founding_member_modifier } remove_modifier = un_founding_member_modifier }
+	if = { limit = { has_modifier = un_security_council_modifier } remove_modifier = un_security_council_modifier }
+	if = { limit = { has_modifier = un_headquarters_modifier } remove_modifier = un_headquarters_modifier }
+	if = { limit = { has_modifier = un_peacekeeping_contributor_modifier } remove_modifier = un_peacekeeping_contributor_modifier }
+	if = { limit = { has_modifier = un_development_contributor_modifier } remove_modifier = un_development_contributor_modifier }
+	if = { limit = { has_modifier = un_human_rights_champion_modifier } remove_modifier = un_human_rights_champion_modifier }
+	if = { limit = { has_modifier = un_arms_control_participant_modifier } remove_modifier = un_arms_control_participant_modifier }
+	if = { limit = { has_modifier = un_peacekeeping_contributor_cost } remove_modifier = un_peacekeeping_contributor_cost }
+	if = { limit = { has_modifier = un_development_contributor_cost } remove_modifier = un_development_contributor_cost }
 
 	# ── Colonial Empire (je:je_colonial_empire) ──
 	if = { limit = { has_modifier = colonial_empire_under_pressure_modifier } remove_modifier = colonial_empire_under_pressure_modifier }

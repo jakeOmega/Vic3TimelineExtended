@@ -182,7 +182,7 @@ un_vote.1 = {
 	duration = 3
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_variable = un_voted_this_round }
 	}
 
@@ -558,7 +558,7 @@ un_vote.1 = {
 				trigger = {
 					has_global_variable = un_vote_topic_reform
 					country_rank >= rank_value:great_power
-					has_modifier = un_security_council_modifier
+					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
 				}
 				add = -20
 			}
@@ -1045,7 +1045,7 @@ un_vote.1 = {
 			modifier = {
 				trigger = {
 					has_global_variable = un_vote_topic_reform
-					has_modifier = un_security_council_modifier
+					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
 				}
 				add = 25
 			}
@@ -1394,7 +1394,7 @@ un_vote.2 = {
 	duration = 3
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 	}
 
 	immediate = {
@@ -1562,14 +1562,14 @@ un_vote.2 = {
 				hidden_effect = {
 					every_country = {
 						limit = {
-							has_modifier = un_peacekeeping_contributor_modifier
+							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 						}
 						# Remove old cost to re-apply with updated count-based scaling
-						if = { limit = { has_modifier = un_peacekeeping_contributor_cost } remove_modifier = un_peacekeeping_contributor_cost }
-						add_modifier = {
+						je:je_united_nations ?= { if = { limit = { has_modifier = un_peacekeeping_contributor_cost } remove_modifier = un_peacekeeping_contributor_cost } }
+						je:je_united_nations ?= { add_modifier = {
 							name = un_peacekeeping_contributor_cost
 							multiplier = un_peacekeeping_total_expense_value
-						}
+						} }
 						add_modifier = {
 							name = un_peacekeeping_cooldown
 							days = long_modifier_time
@@ -1673,7 +1673,7 @@ un_vote.2 = {
 				power_bloc ?= {
 					every_power_bloc_member = {
 						limit = {
-							has_modifier = un_member_modifier
+							je:je_united_nations ?= { has_modifier = un_member_modifier }
 							NOT = { THIS = ROOT }
 						}
 						root = {
@@ -1713,7 +1713,7 @@ un_vote.2 = {
 				power_bloc ?= {
 					every_power_bloc_member = {
 						limit = {
-							has_modifier = un_member_modifier
+							je:je_united_nations ?= { has_modifier = un_member_modifier }
 							NOT = { THIS = ROOT }
 						}
 						root = {
@@ -1730,10 +1730,10 @@ un_vote.2 = {
 					limit = { has_global_variable = un_vote_topic_peacekeeping_request }
 					every_country = {
 						limit = {
-							has_modifier = un_peacekeeping_contributor_modifier
-							NOT = { has_modifier = un_peacekeeping_contributor_cost }
+							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+							NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } }
 						}
-						remove_modifier = un_peacekeeping_contributor_modifier
+						je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
 					}
 				}
 				if = {
@@ -1753,7 +1753,7 @@ un_vote.2 = {
 		hidden_effect = {
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { THIS = ROOT }
 				}
 				trigger_event = { id = un_vote.3 }
@@ -1843,7 +1843,7 @@ un_vote.3 = {
 	duration = 3
 
 	trigger = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 	}
 
 	immediate = {

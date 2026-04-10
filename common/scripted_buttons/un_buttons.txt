@@ -42,14 +42,14 @@ un_found_button = {
 			# Establish the UN
 			set_global_variable = un_founded
 			# Founder becomes first member, HQ host, and founding member
-			add_modifier = { name = un_member_modifier }
-			add_modifier = { name = un_founding_member_modifier }
-			add_modifier = { name = un_headquarters_modifier }
+			je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+			je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
+			je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
 			set_global_variable = { name = un_hq_country value = ROOT }
 			# GP founder gets Security Council seat
 			if = {
 				limit = { country_rank >= rank_value:great_power }
-				add_modifier = { name = un_security_council_modifier }
+				je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
 			}
 			set_variable = { name = can_build_un_hq value = 1 }
 			# Fire charter event for all other recognized independent countries
@@ -73,12 +73,12 @@ un_join_button = {
 
 	visible = {
 		has_global_variable = un_founded
-		NOT = { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 	}
 
 	possible = {
 		has_global_variable = un_founded
-		NOT = { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		is_subject = no
 		NOT = { is_country_type = decentralized }
 		NOT = { has_modifier = un_expelled_cooldown }
@@ -98,19 +98,19 @@ un_join_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_JOIN_DESC"
-			add_modifier = { name = un_member_modifier }
+			je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
 			# Great powers auto-get SC seats if fewer than 5 exist
 			if = {
 				limit = {
 					country_rank >= rank_value:great_power
 					NOT = {
 						any_country = {
-							has_modifier = un_security_council_modifier
+							je:je_united_nations ?= { has_modifier = un_security_council_modifier }
 							count >= 5
 						}
 					}
 				}
-				add_modifier = { name = un_security_council_modifier }
+				je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
 			}
 		}
 	}
@@ -123,7 +123,7 @@ un_request_peacekeepers_button = {
 	desc = "UN_REQUEST_PEACEKEEPERS_DESC"
 
 	visible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
 		OR = {
 			is_at_war = yes
@@ -132,7 +132,7 @@ un_request_peacekeepers_button = {
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_global_variable = un_vote_active }
 		NOT = { has_global_variable = un_vote_cooldown_peacekeeping_request }
 		NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
@@ -175,7 +175,7 @@ un_request_peacekeepers_button = {
 			# Trigger vote for all other members
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -191,7 +191,7 @@ un_request_humanitarian_aid_button = {
 	desc = "UN_REQUEST_AID_DESC"
 
 	visible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_modifier = un_humanitarian_aid_received_modifier }
 		any_scope_state = {
 			OR = {
@@ -202,7 +202,7 @@ un_request_humanitarian_aid_button = {
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_global_variable = un_vote_active }
 		NOT = { has_global_variable = un_vote_cooldown_aid_request }
 		NOT = { has_modifier = un_humanitarian_aid_received_modifier }
@@ -250,7 +250,7 @@ un_request_humanitarian_aid_button = {
 			# Trigger vote for all other members
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -266,7 +266,7 @@ un_propose_condemn_button = {
 	desc = "UN_PROPOSE_CONDEMN_DESC"
 
 	visible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		any_country = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
 			is_at_war = yes
@@ -275,7 +275,7 @@ un_propose_condemn_button = {
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_global_variable = un_vote_active }
 		NOT = { has_global_variable = un_vote_cooldown_condemn }
 		NOT = { has_modifier = un_ga_resolution_modifier }
@@ -326,7 +326,7 @@ un_propose_condemn_button = {
 			# Trigger vote for all other members
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -342,11 +342,11 @@ un_leave_button = {
 	desc = "UN_LEAVE_DESC"
 
 	visible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 	}
 
 	ai_chance = {
@@ -359,19 +359,19 @@ un_leave_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_LEAVE_DESC"
-			remove_modifier = un_member_modifier
+			je:je_united_nations ?= { remove_modifier = un_member_modifier }
 			je:je_united_nations = { remove_modifier = un_membership_benefits_modifier }
-			remove_modifier = un_security_council_modifier
-			remove_modifier = un_founding_member_modifier
+			je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
+			je:je_united_nations ?= { remove_modifier = un_founding_member_modifier }
 			remove_modifier = un_sanctions_target_modifier
 			remove_modifier = un_sanctions_enforcer_modifier
-			remove_modifier = un_peacekeeping_contributor_modifier
-			remove_modifier = un_peacekeeping_contributor_cost
-			remove_modifier = un_development_contributor_modifier
-			remove_modifier = un_development_contributor_cost
+			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
+			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
+			je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
+			je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
 			remove_modifier = un_humanitarian_aid_cost
-			remove_modifier = un_human_rights_champion_modifier
-			remove_modifier = un_arms_control_participant_modifier
+			je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
+			je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
 			je:je_united_nations = { remove_modifier = un_champion_order_cost }
 			je:je_united_nations = { remove_modifier = un_undermine_order_cost }
 			# Remove permanent treaty commitments
@@ -385,15 +385,15 @@ un_leave_button = {
 			remove_modifier = un_space_partnership_modifier
 			# If we host the HQ, reassign it
 			if = {
-				limit = { has_modifier = un_headquarters_modifier }
-				remove_modifier = un_headquarters_modifier
+				limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
+				je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
 				random_country = {
 					limit = {
-						has_modifier = un_member_modifier
+						je:je_united_nations ?= { has_modifier = un_member_modifier }
 						country_rank >= rank_value:great_power
 						NOT = { this = ROOT }
 					}
-					add_modifier = { name = un_headquarters_modifier }
+					je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
 					set_global_variable = { name = un_hq_country value = THIS }
 				}
 			}
@@ -413,12 +413,12 @@ un_propose_sanctions_button = {
 	desc = "UN_PROPOSE_SANCTIONS_DESC"
 
 	visible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_modifier = un_sanctions_enforcer_modifier }
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
 		NOT = { has_global_variable = un_vote_active }
 		NOT = { has_global_variable = un_vote_cooldown_sanctions }
@@ -477,7 +477,7 @@ un_propose_sanctions_button = {
 			# Trigger vote for all other members
 			every_country = {
 				limit = {
-					has_modifier = un_member_modifier
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { this = ROOT }
 				}
 				trigger_event = { id = un_vote.1 days = 30 }
@@ -525,14 +525,14 @@ un_peacekeeping_mission_button = {
 	desc = "UN_PEACEKEEPING_DESC"
 
 	visible = {
-		has_modifier = un_member_modifier
-		NOT = { has_modifier = un_peacekeeping_contributor_modifier }
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
-		NOT = { has_modifier = un_peacekeeping_contributor_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
 		NOT = { has_modifier = un_peacekeeping_cooldown }
 	}
 
@@ -547,11 +547,7 @@ un_peacekeeping_mission_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_PEACEKEEPING_DESC"
-			add_modifier = { name = un_peacekeeping_contributor_modifier }
-			add_modifier = {
-				name = un_peacekeeping_contributor_cost
-				multiplier = un_program_expense_value
-			}
+			je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
 			add_modifier = {
 				name = un_peacekeeping_cooldown
 				days = long_modifier_time
@@ -559,6 +555,10 @@ un_peacekeeping_mission_button = {
 			}
 			change_variable = { name = un_authority add = 3 }
 		}
+		je:je_united_nations ?= { add_modifier = {
+			name = un_peacekeeping_contributor_cost
+			multiplier = un_program_expense_value
+		} }
 	}
 }
 
@@ -567,11 +567,11 @@ un_end_peacekeeping_button = {
 	desc = "UN_END_PEACEKEEPING_DESC"
 
 	visible = {
-		has_modifier = un_peacekeeping_contributor_modifier
+		je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 	}
 
 	possible = {
-		has_modifier = un_peacekeeping_contributor_modifier
+		je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 		custom_tooltip = {
 			text = un_end_peacekeeping_cooldown_tt
 			NOT = { has_modifier = un_peacekeeping_cooldown }
@@ -587,8 +587,8 @@ un_end_peacekeeping_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_END_PEACEKEEPING_DESC"
-			remove_modifier = un_peacekeeping_contributor_modifier
-			remove_modifier = un_peacekeeping_contributor_cost
+			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
+			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
 			change_variable = { name = un_authority add = -2 }
 		}
 	}
@@ -601,14 +601,14 @@ un_fund_development_button = {
 	desc = "UN_FUND_DEVELOPMENT_DESC"
 
 	visible = {
-		has_modifier = un_member_modifier
-		NOT = { has_modifier = un_development_contributor_modifier }
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
-		NOT = { has_modifier = un_development_contributor_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
 	}
 
 	ai_chance = {
@@ -629,13 +629,13 @@ un_fund_development_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_FUND_DEVELOPMENT_DESC"
-			add_modifier = { name = un_development_contributor_modifier }
-			add_modifier = {
-				name = un_development_contributor_cost
-				multiplier = un_program_expense_value
-			}
+			je:je_united_nations ?= { add_modifier = { name = un_development_contributor_modifier } }
 			change_variable = { name = un_authority add = 2 }
 		}
+		je:je_united_nations ?= { add_modifier = {
+			name = un_development_contributor_cost
+			multiplier = un_program_expense_value
+		} }
 	}
 }
 
@@ -644,11 +644,11 @@ un_defund_development_button = {
 	desc = "UN_DEFUND_DEVELOPMENT_DESC"
 
 	visible = {
-		has_modifier = un_development_contributor_modifier
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
 	}
 
 	possible = {
-		has_modifier = un_development_contributor_modifier
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
 	}
 
 	ai_chance = {
@@ -660,8 +660,8 @@ un_defund_development_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_DEFUND_DEVELOPMENT_DESC"
-			remove_modifier = un_development_contributor_modifier
-			remove_modifier = un_development_contributor_cost
+			je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
+			je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
 			change_variable = { name = un_authority add = -2 }
 		}
 	}
@@ -674,13 +674,13 @@ un_human_rights_resolution_button = {
 	desc = "UN_HUMAN_RIGHTS_DESC"
 
 	visible = {
-		has_modifier = un_member_modifier
-		NOT = { has_modifier = un_human_rights_champion_modifier }
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } }
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
-		NOT = { has_modifier = un_human_rights_champion_modifier }
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } }
 		OR = {
 			has_law = law_type:law_multicultural
 			has_law = law_type:law_universal_suffrage
@@ -699,7 +699,7 @@ un_human_rights_resolution_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_HUMAN_RIGHTS_DESC"
-			add_modifier = { name = un_human_rights_champion_modifier }
+			je:je_united_nations ?= { add_modifier = { name = un_human_rights_champion_modifier } }
 			change_variable = { name = un_authority add = 3 }
 		}
 	}
@@ -710,11 +710,11 @@ un_withdraw_human_rights_button = {
 	desc = "UN_WITHDRAW_HUMAN_RIGHTS_DESC"
 
 	visible = {
-		has_modifier = un_human_rights_champion_modifier
+		je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
 	}
 
 	possible = {
-		has_modifier = un_human_rights_champion_modifier
+		je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
 	}
 
 	ai_chance = {
@@ -726,7 +726,7 @@ un_withdraw_human_rights_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_WITHDRAW_HUMAN_RIGHTS_DESC"
-			remove_modifier = un_human_rights_champion_modifier
+			je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
 			change_variable = { name = un_authority add = -3 }
 		}
 	}
@@ -739,13 +739,13 @@ un_arms_control_button = {
 	desc = "UN_ARMS_CONTROL_DESC"
 
 	visible = {
-		has_modifier = un_member_modifier
-		NOT = { has_modifier = un_arms_control_participant_modifier }
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } }
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
-		NOT = { has_modifier = un_arms_control_participant_modifier }
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } }
 		OR = {
 			has_law = law_type:law_war_crimes_forbidden
 			has_law = law_type:law_humanitarian_regulations
@@ -762,7 +762,7 @@ un_arms_control_button = {
 			limit = {
 				any_country = {
 					has_diplomatic_pact = { who = ROOT type = rivalry }
-					has_modifier = un_arms_control_participant_modifier
+					je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
 				}
 			}
 			add = 15
@@ -772,7 +772,7 @@ un_arms_control_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_ARMS_CONTROL_DESC"
-			add_modifier = { name = un_arms_control_participant_modifier }
+			je:je_united_nations ?= { add_modifier = { name = un_arms_control_participant_modifier } }
 			change_variable = { name = un_authority add = 3 }
 		}
 	}
@@ -783,11 +783,11 @@ un_withdraw_arms_control_button = {
 	desc = "UN_WITHDRAW_ARMS_CONTROL_DESC"
 
 	visible = {
-		has_modifier = un_arms_control_participant_modifier
+		je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
 	}
 
 	possible = {
-		has_modifier = un_arms_control_participant_modifier
+		je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
 	}
 
 	ai_chance = {
@@ -799,7 +799,7 @@ un_withdraw_arms_control_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_WITHDRAW_ARMS_CONTROL_DESC"
-			remove_modifier = un_arms_control_participant_modifier
+			je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
 			change_variable = { name = un_authority add = -3 }
 		}
 	}
@@ -815,13 +815,13 @@ un_champion_order_button = {
 	desc = "UN_CHAMPION_ORDER_DESC"
 
 	visible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		NOT = { je:je_united_nations = { has_modifier = un_champion_order_cost } }
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		NOT = { je:je_united_nations = { has_modifier = un_champion_order_cost } }
 		NOT = { je:je_united_nations = { has_modifier = un_undermine_order_cost } }
@@ -874,13 +874,13 @@ un_undermine_order_button = {
 	desc = "UN_UNDERMINE_ORDER_DESC"
 
 	visible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		NOT = { je:je_united_nations = { has_modifier = un_undermine_order_cost } }
 	}
 
 	possible = {
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		NOT = { je:je_united_nations = { has_modifier = un_undermine_order_cost } }
 		NOT = { je:je_united_nations = { has_modifier = un_champion_order_cost } }

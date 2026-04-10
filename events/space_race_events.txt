@@ -2099,7 +2099,7 @@ space_race_events.52 = {
 
 	trigger = {
 		has_variable = sr_active_milestone
-		has_modifier = un_member_modifier
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_variable = sr_completed_orbital
 		NOT = { has_variable = sr_completed_moon_landing }
 		NOT = { has_modifier = sr_iss_cooperation }
@@ -2128,7 +2128,7 @@ space_race_events.52 = {
 		sr_boost_active_milestones = yes
 		every_country = {
 			limit = {
-				has_modifier = un_member_modifier
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
 				has_technology_researched = space_exploration
 				NOT = { THIS = ROOT }
 				has_diplomatic_relevance = ROOT
