@@ -140,9 +140,9 @@ je_world_war = {
 		remove_variable = ww_peace_months
 		remove_variable = ww_fully_resolved
 		# Clean up any lingering modifiers
-		if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
-		if = { limit = { has_modifier = ww_home_front_strain_modifier } remove_modifier = ww_home_front_strain_modifier }
-		if = { limit = { has_modifier = ww_prolonged_war_exhaustion_modifier } remove_modifier = ww_prolonged_war_exhaustion_modifier }
+		if = { limit = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } } je:je_world_war = { remove_modifier = ww_rising_tensions_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } } je:je_world_war = { remove_modifier = ww_prolonged_war_exhaustion_modifier } }
 	}
 
 	fail = {
@@ -168,21 +168,21 @@ je_world_war = {
 				limit = {
 					NOT = { has_variable = ww_peace_concluded }
 					NOT = { country_is_ww_belligerent = yes }
-					NOT = { has_modifier = ww_rising_tensions_modifier }
+					NOT = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } }
 					ww_ideological_tension >= 30
 				}
-				add_modifier = { name = ww_rising_tensions_modifier }
+				je:je_world_war = { add_modifier = { name = ww_rising_tensions_modifier } }
 			}
 			if = {
 				limit = {
-					has_modifier = ww_rising_tensions_modifier
+					je:je_world_war = { has_modifier = ww_rising_tensions_modifier }
 					OR = {
 						ww_ideological_tension < 30
 						country_is_ww_belligerent = yes
 						has_variable = ww_peace_concluded
 					}
 				}
-				remove_modifier = ww_rising_tensions_modifier
+				je:je_world_war = { remove_modifier = ww_rising_tensions_modifier }
 			}
 			# ---- ACTIVE WAR PHASE: Track war duration for belligerents ----
 			if = {
@@ -217,9 +217,9 @@ je_world_war = {
 					is_at_war = yes
 					has_variable = ww_years_elapsed
 					var:ww_years_elapsed >= 2
-					NOT = { has_modifier = ww_home_front_strain_modifier }
+					NOT = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } }
 				}
-				add_modifier = { name = ww_home_front_strain_modifier }
+				je:je_world_war = { add_modifier = { name = ww_home_front_strain_modifier } }
 			}
 			# Prolonged war exhaustion after 4+ years
 			if = {
@@ -228,9 +228,9 @@ je_world_war = {
 					is_at_war = yes
 					has_variable = ww_years_elapsed
 					var:ww_years_elapsed >= 4
-					NOT = { has_modifier = ww_prolonged_war_exhaustion_modifier }
+					NOT = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } }
 				}
-				add_modifier = { name = ww_prolonged_war_exhaustion_modifier }
+				je:je_world_war = { add_modifier = { name = ww_prolonged_war_exhaustion_modifier } }
 			}
 			# ---- PEACE DETECTION ----
 			# Belligerents: war is over when they stop fighting
@@ -242,11 +242,11 @@ je_world_war = {
 				}
 				set_variable = ww_peace_concluded
 				# Clean up war-phase modifiers
-				if = { limit = { has_modifier = ww_total_war_economy_modifier } remove_modifier = ww_total_war_economy_modifier }
-				if = { limit = { has_modifier = ww_war_propaganda_modifier } remove_modifier = ww_war_propaganda_modifier }
-				if = { limit = { has_modifier = ww_wartime_rationing_modifier } remove_modifier = ww_wartime_rationing_modifier }
-				if = { limit = { has_modifier = ww_home_front_strain_modifier } remove_modifier = ww_home_front_strain_modifier }
-				if = { limit = { has_modifier = ww_prolonged_war_exhaustion_modifier } remove_modifier = ww_prolonged_war_exhaustion_modifier }
+				if = { limit = { je:je_world_war = { has_modifier = ww_total_war_economy_modifier } } je:je_world_war = { remove_modifier = ww_total_war_economy_modifier } }
+				if = { limit = { je:je_world_war = { has_modifier = ww_war_propaganda_modifier } } je:je_world_war = { remove_modifier = ww_war_propaganda_modifier } }
+				if = { limit = { je:je_world_war = { has_modifier = ww_wartime_rationing_modifier } } je:je_world_war = { remove_modifier = ww_wartime_rationing_modifier } }
+				if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
+				if = { limit = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } } je:je_world_war = { remove_modifier = ww_prolonged_war_exhaustion_modifier } }
 				if = { limit = { has_modifier = ww_fresh_forces_modifier } remove_modifier = ww_fresh_forces_modifier }
 				if = { limit = { has_modifier = ww_arsenal_of_democracy_modifier } remove_modifier = ww_arsenal_of_democracy_modifier }
 				# Fire the peace conference event directly for belligerents
@@ -269,10 +269,10 @@ je_world_war = {
 				}
 				set_variable = ww_peace_concluded
 				# Clean up leadup modifiers for observers
-				if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
-				if = { limit = { has_modifier = ww_rearmament_modifier } remove_modifier = ww_rearmament_modifier }
-				if = { limit = { has_modifier = ww_appeasement_modifier } remove_modifier = ww_appeasement_modifier }
-				if = { limit = { has_modifier = ww_lend_lease_modifier } remove_modifier = ww_lend_lease_modifier }
+				if = { limit = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } } je:je_world_war = { remove_modifier = ww_rising_tensions_modifier } }
+				if = { limit = { je:je_world_war = { has_modifier = ww_rearmament_modifier } } je:je_world_war = { remove_modifier = ww_rearmament_modifier } }
+				if = { limit = { je:je_world_war = { has_modifier = ww_appeasement_modifier } } je:je_world_war = { remove_modifier = ww_appeasement_modifier } }
+				if = { limit = { je:je_world_war = { has_modifier = ww_lend_lease_modifier } } je:je_world_war = { remove_modifier = ww_lend_lease_modifier } }
 			}
 			# ---- POST-WAR TIMER ----
 			# After peace, count months. Resolve after 3 years (36 months).

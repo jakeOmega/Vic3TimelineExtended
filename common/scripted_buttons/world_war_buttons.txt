@@ -11,7 +11,7 @@ ww_rearm_button = {
 	desc = "WW_REARM_BUTTON_DESC"
 
 	visible = {
-		NOT = { has_modifier = ww_rearmament_modifier }
+		NOT = { je:je_world_war = { has_modifier = ww_rearmament_modifier } }
 		NOT = { has_variable = ww_active_phase }
 	}
 
@@ -40,7 +40,7 @@ ww_rearm_button = {
 	}
 
 	possible = {
-		NOT = { has_modifier = ww_appeasement_modifier }
+		NOT = { je:je_world_war = { has_modifier = ww_appeasement_modifier } }
 		ww_ideological_tension >= 30
 		custom_tooltip = {
 			text = WW_REARM_POSSIBLE_TT
@@ -49,7 +49,7 @@ ww_rearm_button = {
 	}
 
 	effect = {
-		add_modifier = { name = ww_rearmament_modifier }
+		je:je_world_war = { add_modifier = { name = ww_rearmament_modifier } }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_armed_forces }
 			add_modifier = {
@@ -70,7 +70,7 @@ ww_stop_rearm_button = {
 	desc = "WW_STOP_REARM_BUTTON_DESC"
 
 	visible = {
-		has_modifier = ww_rearmament_modifier
+		je:je_world_war = { has_modifier = ww_rearmament_modifier }
 		NOT = { has_variable = ww_active_phase }
 	}
 
@@ -83,11 +83,11 @@ ww_stop_rearm_button = {
 	}
 
 	possible = {
-		has_modifier = ww_rearmament_modifier
+		je:je_world_war = { has_modifier = ww_rearmament_modifier }
 	}
 
 	effect = {
-		remove_modifier = ww_rearmament_modifier
+		je:je_world_war = { remove_modifier = ww_rearmament_modifier }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_armed_forces }
 			add_modifier = {
@@ -106,7 +106,7 @@ ww_appease_button = {
 	desc = "WW_APPEASE_BUTTON_DESC"
 
 	visible = {
-		NOT = { has_modifier = ww_appeasement_modifier }
+		NOT = { je:je_world_war = { has_modifier = ww_appeasement_modifier } }
 		NOT = { has_variable = ww_active_phase }
 	}
 
@@ -129,7 +129,7 @@ ww_appease_button = {
 	}
 
 	possible = {
-		NOT = { has_modifier = ww_rearmament_modifier }
+		NOT = { je:je_world_war = { has_modifier = ww_rearmament_modifier } }
 		ww_ideological_tension >= 20
 		custom_tooltip = {
 			text = WW_APPEASE_POSSIBLE_TT
@@ -138,7 +138,7 @@ ww_appease_button = {
 	}
 
 	effect = {
-		add_modifier = { name = ww_appeasement_modifier }
+		je:je_world_war = { add_modifier = { name = ww_appeasement_modifier } }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
 			add_modifier = {
@@ -163,7 +163,7 @@ ww_stop_appease_button = {
 	desc = "WW_STOP_APPEASE_BUTTON_DESC"
 
 	visible = {
-		has_modifier = ww_appeasement_modifier
+		je:je_world_war = { has_modifier = ww_appeasement_modifier }
 		NOT = { has_variable = ww_active_phase }
 	}
 
@@ -176,11 +176,11 @@ ww_stop_appease_button = {
 	}
 
 	possible = {
-		has_modifier = ww_appeasement_modifier
+		je:je_world_war = { has_modifier = ww_appeasement_modifier }
 	}
 
 	effect = {
-		remove_modifier = ww_appeasement_modifier
+		je:je_world_war = { remove_modifier = ww_appeasement_modifier }
 	}
 }
 
@@ -191,7 +191,7 @@ ww_lend_lease_button = {
 	desc = "WW_LEND_LEASE_BUTTON_DESC"
 
 	visible = {
-		NOT = { has_modifier = ww_lend_lease_modifier }
+		NOT = { je:je_world_war = { has_modifier = ww_lend_lease_modifier } }
 		# Available during both leadup (supporting rearmament of allies) and active war
 		OR = {
 			ww_ideological_tension >= 40
@@ -234,7 +234,7 @@ ww_lend_lease_button = {
 	}
 
 	effect = {
-		add_modifier = { name = ww_lend_lease_modifier }
+		je:je_world_war = { add_modifier = { name = ww_lend_lease_modifier } }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_industrialists }
 			add_modifier = {
@@ -251,7 +251,7 @@ ww_stop_lend_lease_button = {
 	desc = "WW_STOP_LEND_LEASE_BUTTON_DESC"
 
 	visible = {
-		has_modifier = ww_lend_lease_modifier
+		je:je_world_war = { has_modifier = ww_lend_lease_modifier }
 	}
 
 	ai_chance = {
@@ -263,11 +263,11 @@ ww_stop_lend_lease_button = {
 	}
 
 	possible = {
-		has_modifier = ww_lend_lease_modifier
+		je:je_world_war = { has_modifier = ww_lend_lease_modifier }
 	}
 
 	effect = {
-		remove_modifier = ww_lend_lease_modifier
+		je:je_world_war = { remove_modifier = ww_lend_lease_modifier }
 	}
 }
 
@@ -278,7 +278,7 @@ ww_total_war_economy_button = {
 	desc = "WW_TOTAL_WAR_ECONOMY_BUTTON_DESC"
 
 	visible = {
-		NOT = { has_modifier = ww_total_war_economy_modifier }
+		NOT = { je:je_world_war = { has_modifier = ww_total_war_economy_modifier } }
 		has_variable = ww_active_phase
 		is_at_war = yes
 	}
@@ -304,7 +304,7 @@ ww_total_war_economy_button = {
 	}
 
 	effect = {
-		add_modifier = { name = ww_total_war_economy_modifier }
+		je:je_world_war = { add_modifier = { name = ww_total_war_economy_modifier } }
 		add_radicals = {
 			value = medium_radicals
 			strata = lower
@@ -337,7 +337,7 @@ ww_stop_total_war_economy_button = {
 	desc = "WW_STOP_TOTAL_WAR_ECONOMY_BUTTON_DESC"
 
 	visible = {
-		has_modifier = ww_total_war_economy_modifier
+		je:je_world_war = { has_modifier = ww_total_war_economy_modifier }
 	}
 
 	ai_chance = {
@@ -349,11 +349,11 @@ ww_stop_total_war_economy_button = {
 	}
 
 	possible = {
-		has_modifier = ww_total_war_economy_modifier
+		je:je_world_war = { has_modifier = ww_total_war_economy_modifier }
 	}
 
 	effect = {
-		remove_modifier = ww_total_war_economy_modifier
+		je:je_world_war = { remove_modifier = ww_total_war_economy_modifier }
 	}
 }
 
@@ -364,7 +364,7 @@ ww_war_propaganda_button = {
 	desc = "WW_WAR_PROPAGANDA_BUTTON_DESC"
 
 	visible = {
-		NOT = { has_modifier = ww_war_propaganda_modifier }
+		NOT = { je:je_world_war = { has_modifier = ww_war_propaganda_modifier } }
 		has_variable = ww_active_phase
 		is_at_war = yes
 	}
@@ -391,7 +391,7 @@ ww_war_propaganda_button = {
 	}
 
 	effect = {
-		add_modifier = { name = ww_war_propaganda_modifier }
+		je:je_world_war = { add_modifier = { name = ww_war_propaganda_modifier } }
 		add_loyalists = {
 			value = medium_radicals
 			strata = lower
@@ -412,7 +412,7 @@ ww_stop_war_propaganda_button = {
 	desc = "WW_STOP_WAR_PROPAGANDA_BUTTON_DESC"
 
 	visible = {
-		has_modifier = ww_war_propaganda_modifier
+		je:je_world_war = { has_modifier = ww_war_propaganda_modifier }
 	}
 
 	ai_chance = {
@@ -424,11 +424,11 @@ ww_stop_war_propaganda_button = {
 	}
 
 	possible = {
-		has_modifier = ww_war_propaganda_modifier
+		je:je_world_war = { has_modifier = ww_war_propaganda_modifier }
 	}
 
 	effect = {
-		remove_modifier = ww_war_propaganda_modifier
+		je:je_world_war = { remove_modifier = ww_war_propaganda_modifier }
 	}
 }
 
@@ -439,7 +439,7 @@ ww_wartime_rationing_button = {
 	desc = "WW_WARTIME_RATIONING_BUTTON_DESC"
 
 	visible = {
-		NOT = { has_modifier = ww_wartime_rationing_modifier }
+		NOT = { je:je_world_war = { has_modifier = ww_wartime_rationing_modifier } }
 		has_variable = ww_active_phase
 		is_at_war = yes
 	}
@@ -461,7 +461,7 @@ ww_wartime_rationing_button = {
 	}
 
 	effect = {
-		add_modifier = { name = ww_wartime_rationing_modifier }
+		je:je_world_war = { add_modifier = { name = ww_wartime_rationing_modifier } }
 		add_radicals = {
 			value = small_radicals
 			strata = lower
@@ -474,7 +474,7 @@ ww_stop_wartime_rationing_button = {
 	desc = "WW_STOP_WARTIME_RATIONING_BUTTON_DESC"
 
 	visible = {
-		has_modifier = ww_wartime_rationing_modifier
+		je:je_world_war = { has_modifier = ww_wartime_rationing_modifier }
 	}
 
 	ai_chance = {
@@ -486,11 +486,11 @@ ww_stop_wartime_rationing_button = {
 	}
 
 	possible = {
-		has_modifier = ww_wartime_rationing_modifier
+		je:je_world_war = { has_modifier = ww_wartime_rationing_modifier }
 	}
 
 	effect = {
-		remove_modifier = ww_wartime_rationing_modifier
+		je:je_world_war = { remove_modifier = ww_wartime_rationing_modifier }
 	}
 }
 

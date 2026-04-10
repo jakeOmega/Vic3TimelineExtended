@@ -543,7 +543,7 @@ gw_emission_multiplier_script_value = {
 gw_countries_with_carbon_tax_script_value = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = carbon_tax_modifier }
+		limit = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
 		add = 1
 	}
 }
@@ -551,7 +551,7 @@ gw_countries_with_carbon_tax_script_value = {
 gw_countries_with_renewables_script_value = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = renewable_investment_modifier }
+		limit = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
 		add = 1
 	}
 }
@@ -559,7 +559,7 @@ gw_countries_with_renewables_script_value = {
 gw_countries_with_adaptation_script_value = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = climate_adaptation_modifier }
+		limit = { je:je_global_warming = { has_modifier = climate_adaptation_modifier } }
 		add = 1
 	}
 }
@@ -567,7 +567,7 @@ gw_countries_with_adaptation_script_value = {
 gw_countries_with_emission_standards_script_value = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = emission_standards_modifier }
+		limit = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
 		add = 1
 	}
 }
@@ -575,7 +575,7 @@ gw_countries_with_emission_standards_script_value = {
 gw_countries_with_reforestation_script_value = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = reforestation_subsidies_modifier }
+		limit = { je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } }
 		add = 1
 	}
 }
@@ -583,7 +583,7 @@ gw_countries_with_reforestation_script_value = {
 gw_countries_with_public_transit_script_value = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = public_transit_modifier }
+		limit = { je:je_global_warming = { has_modifier = public_transit_modifier } }
 		add = 1
 	}
 }
@@ -591,7 +591,7 @@ gw_countries_with_public_transit_script_value = {
 gw_countries_with_divestment_script_value = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = fossil_fuel_divestment_modifier }
+		limit = { je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } }
 		add = 1
 	}
 }
@@ -599,7 +599,7 @@ gw_countries_with_divestment_script_value = {
 gw_countries_with_green_buildings_script_value = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = green_building_codes_modifier }
+		limit = { je:je_global_warming = { has_modifier = green_building_codes_modifier } }
 		add = 1
 	}
 }

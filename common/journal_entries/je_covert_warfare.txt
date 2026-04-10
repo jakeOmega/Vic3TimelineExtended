@@ -369,34 +369,34 @@ je_covert_warfare = {
 			# ---- Update intelligence capacity defense modifier ----
 			if = {
 				limit = { intelligence_capacity_total >= 1 }
-				remove_modifier = intelligence_capacity_defense
-				add_modifier = { name = intelligence_capacity_defense multiplier = intelligence_capacity_modifier_mult }
+				je:je_covert_warfare = { remove_modifier = intelligence_capacity_defense }
+				je:je_covert_warfare = { add_modifier = { name = intelligence_capacity_defense multiplier = intelligence_capacity_modifier_mult } }
 			}
 			else_if = {
-				limit = { has_modifier = intelligence_capacity_defense }
-				remove_modifier = intelligence_capacity_defense
+				limit = { je:je_covert_warfare = { has_modifier = intelligence_capacity_defense } }
+				je:je_covert_warfare = { remove_modifier = intelligence_capacity_defense }
 			}
 
 			# ---- Domestic defense from unused operation slots ----
 			if = {
 				limit = { covert_operations_available_slots >= 1 }
-				remove_modifier = iw_domestic_defense
-				add_modifier = { name = iw_domestic_defense multiplier = covert_operations_available_slots }
+				je:je_covert_warfare = { remove_modifier = iw_domestic_defense }
+				je:je_covert_warfare = { add_modifier = { name = iw_domestic_defense multiplier = covert_operations_available_slots } }
 			}
 			else_if = {
-				limit = { has_modifier = iw_domestic_defense }
-				remove_modifier = iw_domestic_defense
+				limit = { je:je_covert_warfare = { has_modifier = iw_domestic_defense } }
+				je:je_covert_warfare = { remove_modifier = iw_domestic_defense }
 			}
 
 			# ---- Counterintelligence bonus from funding level ----
 			if = {
 				limit = { covert_ops_funding_ci_mult >= 1 }
-				remove_modifier = iw_funding_defense
-				add_modifier = { name = iw_funding_defense multiplier = covert_ops_funding_ci_mult }
+				je:je_covert_warfare = { remove_modifier = iw_funding_defense }
+				je:je_covert_warfare = { add_modifier = { name = iw_funding_defense multiplier = covert_ops_funding_ci_mult } }
 			}
 			else_if = {
-				limit = { has_modifier = iw_funding_defense }
-				remove_modifier = iw_funding_defense
+				limit = { je:je_covert_warfare = { has_modifier = iw_funding_defense } }
+				je:je_covert_warfare = { remove_modifier = iw_funding_defense }
 			}
 
 			# ---- Apply operation funding cost ----
@@ -406,12 +406,12 @@ je_covert_warfare = {
 					has_variable = iw_funding_level
 					var:iw_funding_level >= 1
 				}
-				remove_modifier = covert_operation_funding_cost
-				add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult }
+				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+				je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
 			}
 			else_if = {
-				limit = { has_modifier = covert_operation_funding_cost }
-				remove_modifier = covert_operation_funding_cost
+				limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
+				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
 			}
 
 			# ---- Update operation phase durations ----

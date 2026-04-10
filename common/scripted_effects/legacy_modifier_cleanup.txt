@@ -1,0 +1,122 @@
+﻿########################################
+# LEGACY MODIFIER CLEANUP
+# Removes country-level modifiers that were moved to JE scope.
+# Safe to delete this file once no saves from before the JE modifier
+# migration exist (i.e., after all players have loaded and saved at
+# least once on the new version).
+# Also delete: common/on_actions/legacy_modifier_cleanup.txt
+########################################
+
+legacy_je_modifier_cleanup_effect = {
+	# ── Nuclear Weapons (je:je_nuclear_program) ──
+	if = { limit = { has_modifier = nuclear_weapon_program_funding } remove_modifier = nuclear_weapon_program_funding }
+
+	# ── Banking Cycle (je:je_banking_cycle) ── Market economy tools ──
+	if = { limit = { has_modifier = banking_policy_rate_hike } remove_modifier = banking_policy_rate_hike }
+	if = { limit = { has_modifier = banking_open_market_ops } remove_modifier = banking_open_market_ops }
+	if = { limit = { has_modifier = banking_countercyclical_capital_buffer } remove_modifier = banking_countercyclical_capital_buffer }
+	if = { limit = { has_modifier = banking_expand_deposit_guarantee } remove_modifier = banking_expand_deposit_guarantee }
+	if = { limit = { has_modifier = banking_directed_credit_infrastructure } remove_modifier = banking_directed_credit_infrastructure }
+	if = { limit = { has_modifier = banking_emergency_liquidity_program } remove_modifier = banking_emergency_liquidity_program }
+	if = { limit = { has_modifier = banking_moral_suasion } remove_modifier = banking_moral_suasion }
+	if = { limit = { has_modifier = banking_raise_margin_requirements } remove_modifier = banking_raise_margin_requirements }
+	if = { limit = { has_modifier = banking_fx_devaluation } remove_modifier = banking_fx_devaluation }
+	if = { limit = { has_modifier = banking_fx_support } remove_modifier = banking_fx_support }
+	if = { limit = { has_modifier = banking_capital_controls_out } remove_modifier = banking_capital_controls_out }
+	if = { limit = { has_modifier = banking_fx_swap_lines } remove_modifier = banking_fx_swap_lines }
+	if = { limit = { has_modifier = banking_export_credit_facility } remove_modifier = banking_export_credit_facility }
+	if = { limit = { has_modifier = banking_asset_relief_program } remove_modifier = banking_asset_relief_program }
+
+	# ── Banking Cycle ── Command economy (planning) tools ──
+	if = { limit = { has_modifier = planning_plan_revision } remove_modifier = planning_plan_revision }
+	if = { limit = { has_modifier = planning_emergency_allocation } remove_modifier = planning_emergency_allocation }
+	if = { limit = { has_modifier = planning_target_reduction } remove_modifier = planning_target_reduction }
+	if = { limit = { has_modifier = planning_strategic_stockpile } remove_modifier = planning_strategic_stockpile }
+	if = { limit = { has_modifier = planning_distribution_upgrade } remove_modifier = planning_distribution_upgrade }
+	if = { limit = { has_modifier = planning_admin_campaign } remove_modifier = planning_admin_campaign }
+	if = { limit = { has_modifier = planning_coordination_protocol } remove_modifier = planning_coordination_protocol }
+	if = { limit = { has_modifier = planning_consolidation_order } remove_modifier = planning_consolidation_order }
+
+	# ── Banking Cycle ── Cooperative economy tools ──
+	if = { limit = { has_modifier = cooperative_dividend_restraint } remove_modifier = cooperative_dividend_restraint }
+	if = { limit = { has_modifier = cooperative_mutual_aid } remove_modifier = cooperative_mutual_aid }
+	if = { limit = { has_modifier = cooperative_capital_plan } remove_modifier = cooperative_capital_plan }
+	if = { limit = { has_modifier = cooperative_solidarity_campaign } remove_modifier = cooperative_solidarity_campaign }
+	if = { limit = { has_modifier = cooperative_credit_expansion } remove_modifier = cooperative_credit_expansion }
+	if = { limit = { has_modifier = cooperative_consumption_ceiling } remove_modifier = cooperative_consumption_ceiling }
+	if = { limit = { has_modifier = cooperative_council_directive } remove_modifier = cooperative_council_directive }
+	if = { limit = { has_modifier = cooperative_worker_buyout } remove_modifier = cooperative_worker_buyout }
+
+	# ── Banking Cycle ── Phase modifiers (market) ──
+	if = { limit = { has_modifier = financial_cycle_phase_panic } remove_modifier = financial_cycle_phase_panic }
+	if = { limit = { has_modifier = financial_cycle_phase_downturn } remove_modifier = financial_cycle_phase_downturn }
+	if = { limit = { has_modifier = financial_cycle_phase_stagnation } remove_modifier = financial_cycle_phase_stagnation }
+	if = { limit = { has_modifier = financial_cycle_phase_expansion } remove_modifier = financial_cycle_phase_expansion }
+	if = { limit = { has_modifier = financial_cycle_phase_boom } remove_modifier = financial_cycle_phase_boom }
+	if = { limit = { has_modifier = financial_cycle_phase_frenzy } remove_modifier = financial_cycle_phase_frenzy }
+
+	# ── Banking Cycle ── Phase modifiers (command) ──
+	if = { limit = { has_modifier = financial_cycle_phase_panic_cmd } remove_modifier = financial_cycle_phase_panic_cmd }
+	if = { limit = { has_modifier = financial_cycle_phase_downturn_cmd } remove_modifier = financial_cycle_phase_downturn_cmd }
+	if = { limit = { has_modifier = financial_cycle_phase_stagnation_cmd } remove_modifier = financial_cycle_phase_stagnation_cmd }
+	if = { limit = { has_modifier = financial_cycle_phase_expansion_cmd } remove_modifier = financial_cycle_phase_expansion_cmd }
+	if = { limit = { has_modifier = financial_cycle_phase_boom_cmd } remove_modifier = financial_cycle_phase_boom_cmd }
+	if = { limit = { has_modifier = financial_cycle_phase_frenzy_cmd } remove_modifier = financial_cycle_phase_frenzy_cmd }
+
+	# ── Banking Cycle ── Phase modifiers (cooperative) ──
+	if = { limit = { has_modifier = financial_cycle_phase_panic_coop } remove_modifier = financial_cycle_phase_panic_coop }
+	if = { limit = { has_modifier = financial_cycle_phase_downturn_coop } remove_modifier = financial_cycle_phase_downturn_coop }
+	if = { limit = { has_modifier = financial_cycle_phase_stagnation_coop } remove_modifier = financial_cycle_phase_stagnation_coop }
+	if = { limit = { has_modifier = financial_cycle_phase_expansion_coop } remove_modifier = financial_cycle_phase_expansion_coop }
+	if = { limit = { has_modifier = financial_cycle_phase_boom_coop } remove_modifier = financial_cycle_phase_boom_coop }
+	if = { limit = { has_modifier = financial_cycle_phase_frenzy_coop } remove_modifier = financial_cycle_phase_frenzy_coop }
+
+	# ── Banking Cycle ── Bubble inertia & fiscal ──
+	if = { limit = { has_modifier = bubble_inertia_moderate } remove_modifier = bubble_inertia_moderate }
+	if = { limit = { has_modifier = bubble_inertia_high } remove_modifier = bubble_inertia_high }
+	if = { limit = { has_modifier = bubble_inertia_extreme } remove_modifier = bubble_inertia_extreme }
+	if = { limit = { has_modifier = financial_cycle_government_fiscal_policy_effect } remove_modifier = financial_cycle_government_fiscal_policy_effect }
+
+	# ── Global Warming (je:je_global_warming) ──
+	if = { limit = { has_modifier = global_warming } remove_modifier = global_warming }
+	if = { limit = { has_modifier = carbon_tax_modifier } remove_modifier = carbon_tax_modifier }
+	if = { limit = { has_modifier = renewable_investment_modifier } remove_modifier = renewable_investment_modifier }
+	if = { limit = { has_modifier = climate_adaptation_modifier } remove_modifier = climate_adaptation_modifier }
+	if = { limit = { has_modifier = emission_standards_modifier } remove_modifier = emission_standards_modifier }
+	if = { limit = { has_modifier = reforestation_subsidies_modifier } remove_modifier = reforestation_subsidies_modifier }
+	if = { limit = { has_modifier = public_transit_modifier } remove_modifier = public_transit_modifier }
+	if = { limit = { has_modifier = fossil_fuel_divestment_modifier } remove_modifier = fossil_fuel_divestment_modifier }
+	if = { limit = { has_modifier = green_building_codes_modifier } remove_modifier = green_building_codes_modifier }
+
+	# ── Covert Warfare (je:je_covert_warfare) ──
+	if = { limit = { has_modifier = intelligence_capacity_defense } remove_modifier = intelligence_capacity_defense }
+	if = { limit = { has_modifier = iw_domestic_defense } remove_modifier = iw_domestic_defense }
+	if = { limit = { has_modifier = iw_funding_defense } remove_modifier = iw_funding_defense }
+	if = { limit = { has_modifier = covert_operation_funding_cost } remove_modifier = covert_operation_funding_cost }
+
+	# ── World War (je:je_world_war) ──
+	if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
+	if = { limit = { has_modifier = ww_rearmament_modifier } remove_modifier = ww_rearmament_modifier }
+	if = { limit = { has_modifier = ww_appeasement_modifier } remove_modifier = ww_appeasement_modifier }
+	if = { limit = { has_modifier = ww_lend_lease_modifier } remove_modifier = ww_lend_lease_modifier }
+	if = { limit = { has_modifier = ww_total_war_economy_modifier } remove_modifier = ww_total_war_economy_modifier }
+	if = { limit = { has_modifier = ww_war_propaganda_modifier } remove_modifier = ww_war_propaganda_modifier }
+	if = { limit = { has_modifier = ww_wartime_rationing_modifier } remove_modifier = ww_wartime_rationing_modifier }
+	if = { limit = { has_modifier = ww_home_front_strain_modifier } remove_modifier = ww_home_front_strain_modifier }
+	if = { limit = { has_modifier = ww_prolonged_war_exhaustion_modifier } remove_modifier = ww_prolonged_war_exhaustion_modifier }
+
+	# ── United Nations (je:je_united_nations) ──
+	if = { limit = { has_modifier = un_membership_benefits_modifier } remove_modifier = un_membership_benefits_modifier }
+	if = { limit = { has_modifier = un_high_authority_infamy_modifier } remove_modifier = un_high_authority_infamy_modifier }
+	if = { limit = { has_modifier = un_npt_disarmament_modifier } remove_modifier = un_npt_disarmament_modifier }
+	if = { limit = { has_modifier = un_nonmember_pariah_modifier } remove_modifier = un_nonmember_pariah_modifier }
+	if = { limit = { has_modifier = un_champion_order_cost } remove_modifier = un_champion_order_cost }
+	if = { limit = { has_modifier = un_undermine_order_cost } remove_modifier = un_undermine_order_cost }
+
+	# ── Colonial Empire (je:je_colonial_empire) ──
+	if = { limit = { has_modifier = colonial_empire_under_pressure_modifier } remove_modifier = colonial_empire_under_pressure_modifier }
+	if = { limit = { has_modifier = colonial_empire_crumbling_modifier } remove_modifier = colonial_empire_crumbling_modifier }
+
+	# Mark this country as cleaned up
+	set_variable = legacy_je_modifier_cleanup_done
+}

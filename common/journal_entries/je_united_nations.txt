@@ -275,7 +275,7 @@
 
 				# Great Power toggle: championing adds authority monthly, scaled by rank
 				if = {
-					limit = { has_modifier = un_champion_order_cost }
+					limit = { je:je_united_nations = { has_modifier = un_champion_order_cost } }
 					change_variable = { name = un_authority add = 0.3 }
 					if = {
 						limit = { global_country_ranking < 3 }
@@ -285,7 +285,7 @@
 
 				# Great Power toggle: undermining reduces authority monthly, scaled by rank
 				if = {
-					limit = { has_modifier = un_undermine_order_cost }
+					limit = { je:je_united_nations = { has_modifier = un_undermine_order_cost } }
 					change_variable = { name = un_authority add = -0.3 }
 					if = {
 						limit = { global_country_ranking < 3 }
@@ -323,34 +323,34 @@
 				# ---- Apply scaled UN membership modifier ----
 				if = {
 					limit = { var:un_authority >= 30 }
-					remove_modifier = un_membership_benefits_modifier
-					add_modifier = {
+					je:je_united_nations = { remove_modifier = un_membership_benefits_modifier }
+					je:je_united_nations = { add_modifier = {
 						name = un_membership_benefits_modifier
 						multiplier = {
 							value = var:un_authority
 							divide = 50
-						}
+						} }
 					}
 				}
 				else = {
-					remove_modifier = un_membership_benefits_modifier
+					je:je_united_nations = { remove_modifier = un_membership_benefits_modifier }
 				}
 
 				# ---- High authority: infamy generation scales for everyone ----
 				if = {
 					limit = { var:un_authority >= 50 }
-					remove_modifier = un_high_authority_infamy_modifier
-					add_modifier = {
+					je:je_united_nations = { remove_modifier = un_high_authority_infamy_modifier }
+					je:je_united_nations = { add_modifier = {
 						name = un_high_authority_infamy_modifier
 						multiplier = {
 							value = var:un_authority
 							subtract = 40
 							divide = 30
-						}
+						} }
 					}
 				}
 				else = {
-					remove_modifier = un_high_authority_infamy_modifier
+					je:je_united_nations = { remove_modifier = un_high_authority_infamy_modifier }
 				}
 
 				# ---- NPT enforcement tiers (requires IAEA agency) ----
@@ -360,21 +360,21 @@
 						has_global_variable = un_agency_iaea
 						var:un_authority >= 80
 						NOT = { has_modifier = nuclear_power }
-						NOT = { has_modifier = un_npt_disarmament_modifier }
+						NOT = { je:je_united_nations = { has_modifier = un_npt_disarmament_modifier } }
 					}
-					add_modifier = { name = un_npt_disarmament_modifier }
+					je:je_united_nations = { add_modifier = { name = un_npt_disarmament_modifier } }
 				}
 				# Remove if authority drops or they become nuclear
 				if = {
 					limit = {
-						has_modifier = un_npt_disarmament_modifier
+						je:je_united_nations = { has_modifier = un_npt_disarmament_modifier }
 						OR = {
 							var:un_authority < 75
 							has_modifier = nuclear_power
 							NOT = { has_global_variable = un_agency_iaea }
 						}
 					}
-					remove_modifier = un_npt_disarmament_modifier
+					je:je_united_nations = { remove_modifier = un_npt_disarmament_modifier }
 				}
 
 				# ---- Security Council seat award ----
@@ -407,14 +407,14 @@
 				}
 				# Apply pariah status: non-members face diplomatic pressure
 				if = {
-					limit = { NOT = { has_modifier = un_nonmember_pariah_modifier } }
-					add_modifier = { name = un_nonmember_pariah_modifier }
+					limit = { NOT = { je:je_united_nations = { has_modifier = un_nonmember_pariah_modifier } } }
+					je:je_united_nations = { add_modifier = { name = un_nonmember_pariah_modifier } }
 				}
 			}
 			# Remove if authority drops or UN not founded or they join
 			if = {
 				limit = {
-					has_modifier = un_nonmember_pariah_modifier
+					je:je_united_nations = { has_modifier = un_nonmember_pariah_modifier }
 					OR = {
 						has_modifier = un_member_modifier
 						NOT = { has_global_variable = un_founded }
@@ -427,7 +427,7 @@
 						}
 					}
 				}
-				remove_modifier = un_nonmember_pariah_modifier
+				je:je_united_nations = { remove_modifier = un_nonmember_pariah_modifier }
 			}
 		}
 	}

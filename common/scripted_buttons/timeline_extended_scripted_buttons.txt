@@ -40,13 +40,15 @@ increase_funding_nuclear_program = {
                 name = nuclear_weapons_program_funding
                 add = 1
             }
-            if = {
-                limit = { has_modifier = nuclear_weapon_program_funding }
-                remove_modifier = nuclear_weapon_program_funding
-            }
-            add_modifier = {
-                name = nuclear_weapon_program_funding
-                multiplier = nuclear_weapons_program_current_cost
+            je:je_nuclear_program = {
+                if = {
+                    limit = { has_modifier = nuclear_weapon_program_funding }
+                    remove_modifier = nuclear_weapon_program_funding
+                }
+                add_modifier = {
+                    name = nuclear_weapon_program_funding
+                    multiplier = nuclear_weapons_program_current_cost
+                }
             }
         }
 	}
@@ -88,13 +90,15 @@ decrease_funding_nuclear_program = {
                 name = nuclear_weapons_program_funding
                 subtract = 1
             }
-            if = {
-                limit = { has_modifier = nuclear_weapon_program_funding }
-                remove_modifier = nuclear_weapon_program_funding
-            }
-            add_modifier = {
-                name = nuclear_weapon_program_funding
-                multiplier = nuclear_weapons_program_current_cost
+            je:je_nuclear_program = {
+                if = {
+                    limit = { has_modifier = nuclear_weapon_program_funding }
+                    remove_modifier = nuclear_weapon_program_funding
+                }
+                add_modifier = {
+                    name = nuclear_weapon_program_funding
+                    multiplier = nuclear_weapons_program_current_cost
+                }
             }
         }
 	}
@@ -105,7 +109,7 @@ cb_policy_rate_hike = {
     desc = "CB_POLICY_RATE_HIKE_DESC"
     visible = {
         banking_is_market_economy = yes
-        NOT = { has_modifier = banking_policy_rate_hike }
+        NOT = { je:je_banking_cycle = { has_modifier = banking_policy_rate_hike } }
     }
     ai_chance = {
         value = 0
@@ -133,12 +137,12 @@ cb_policy_rate_hike = {
                 text = BANKING_POINTS_2
                 modifier:country_banking_intervention_max_add >= 2
             }
-        NOT = { has_modifier = banking_open_market_ops }
+        NOT = { je:je_banking_cycle = { has_modifier = banking_open_market_ops } }
     }
 
     effect = {
         # Spend 2 points (via the modifier) and cool the cycle
-        add_modifier = { name = banking_policy_rate_hike }
+        je:je_banking_cycle = { add_modifier = { name = banking_policy_rate_hike } }
         add_radicals = {
             value = medium_radicals
         }
@@ -149,7 +153,7 @@ cb_disable_policy_rate_hike = {
     name = "CB_DISABLE_POLICY_RATE_HIKE"
     desc = "CB_DISABLE_POLICY_RATE_HIKE_DESC"
     visible = {
-        has_modifier = banking_policy_rate_hike
+        je:je_banking_cycle = { has_modifier = banking_policy_rate_hike }
     }
     ai_chance = {
         value = 0
@@ -161,10 +165,10 @@ cb_disable_policy_rate_hike = {
         if = { limit = { banking_tool_eliq_active = yes } add = 35 }
     }
     possible = {
-        has_modifier = banking_policy_rate_hike
+        je:je_banking_cycle = { has_modifier = banking_policy_rate_hike }
     }
     effect = {
-        remove_modifier = banking_policy_rate_hike
+        je:je_banking_cycle = { remove_modifier = banking_policy_rate_hike }
         add_loyalists = {
             value = small_radicals
         }
@@ -176,7 +180,7 @@ cb_open_market_ops = {
     desc = "CB_OPEN_MARKET_OPS_DESC"
     visible = {
         banking_is_market_economy = yes
-        NOT = { has_modifier = banking_open_market_ops }
+        NOT = { je:je_banking_cycle = { has_modifier = banking_open_market_ops } }
     }
     
     ai_chance = {
@@ -210,17 +214,17 @@ cb_open_market_ops = {
                 text = BANKING_POINTS_4
                 modifier:country_banking_intervention_max_add >= 4
             }
-        NOT = { has_modifier = banking_policy_rate_hike }
+        NOT = { je:je_banking_cycle = { has_modifier = banking_policy_rate_hike } }
     }
     effect = {
-        add_modifier = { name = banking_open_market_ops }
+        je:je_banking_cycle = { add_modifier = { name = banking_open_market_ops } }
     }
 }
 
 cb_disable_open_market_ops = {
     name = "CB_DISABLE_OPEN_MARKET_OPS"
     desc = "CB_DISABLE_OPEN_MARKET_OPS_DESC"
-    visible = { has_modifier = banking_open_market_ops }
+    visible = { je:je_banking_cycle = { has_modifier = banking_open_market_ops } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
@@ -230,17 +234,17 @@ cb_disable_open_market_ops = {
         if = { limit = { banking_tool_rate_hike_active = yes } add = 35 }
     }
     possible = {
-        has_modifier = banking_open_market_ops
+        je:je_banking_cycle = { has_modifier = banking_open_market_ops }
     }
     effect = {
-        remove_modifier = banking_open_market_ops
+        je:je_banking_cycle = { remove_modifier = banking_open_market_ops }
     }
 }
 
 cb_countercyclical_buffer = {
     name = "CB_COUNTERCYCLICAL_BUFFER"
     desc = "CB_COUNTERCYCLICAL_BUFFER_DESC"
-    visible = { banking_is_market_economy = yes NOT = { has_modifier = banking_countercyclical_capital_buffer } }
+    visible = { banking_is_market_economy = yes NOT = { je:je_banking_cycle = { has_modifier = banking_countercyclical_capital_buffer } } }
     
     ai_chance = {
         value = 0
@@ -270,14 +274,14 @@ cb_countercyclical_buffer = {
             }
     }
     effect = {
-        add_modifier = { name = banking_countercyclical_capital_buffer }
+        je:je_banking_cycle = { add_modifier = { name = banking_countercyclical_capital_buffer } }
     }
 }
 
 cb_disable_countercyclical_buffer = {
     name = "CB_DISABLE_COUNTERCYCLICAL_BUFFER"
     desc = "CB_DISABLE_COUNTERCYCLICAL_BUFFER_DESC"
-    visible = { has_modifier = banking_countercyclical_capital_buffer }
+    visible = { je:je_banking_cycle = { has_modifier = banking_countercyclical_capital_buffer } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_recession = yes } add = 75 }
@@ -287,17 +291,17 @@ cb_disable_countercyclical_buffer = {
         if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 15 }
     }
     possible = {
-        has_modifier = banking_countercyclical_capital_buffer
+        je:je_banking_cycle = { has_modifier = banking_countercyclical_capital_buffer }
     }
     effect = {
-        remove_modifier = banking_countercyclical_capital_buffer
+        je:je_banking_cycle = { remove_modifier = banking_countercyclical_capital_buffer }
     }
 }
 
 cb_expand_deposit_guarantee = {
     name = "CB_EXPAND_DEPOSIT_GUARANTEE"
     desc = "CB_EXPAND_DEPOSIT_GUARANTEE_DESC"
-    visible = { banking_is_market_economy = yes NOT = { has_modifier = banking_expand_deposit_guarantee } }
+    visible = { banking_is_market_economy = yes NOT = { je:je_banking_cycle = { has_modifier = banking_expand_deposit_guarantee } } }
     
     ai_chance = {
         value = 0
@@ -328,7 +332,7 @@ cb_expand_deposit_guarantee = {
             }
     }
     effect = {
-        add_modifier = { name = banking_expand_deposit_guarantee }
+        je:je_banking_cycle = { add_modifier = { name = banking_expand_deposit_guarantee } }
         add_loyalists = {
             value = small_radicals
         }
@@ -338,7 +342,7 @@ cb_expand_deposit_guarantee = {
 cb_disable_expand_deposit_guarantee = {
     name = "CB_DISABLE_EXPAND_DEPOSIT_GUARANTEE"
     desc = "CB_DISABLE_EXPAND_DEPOSIT_GUARANTEE_DESC"
-    visible = { has_modifier = banking_expand_deposit_guarantee }
+    visible = { je:je_banking_cycle = { has_modifier = banking_expand_deposit_guarantee } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_stable = yes } add = 15 }
@@ -348,10 +352,10 @@ cb_disable_expand_deposit_guarantee = {
         if = { limit = { banking_tool_eliq_active = yes banking_cycle_is_panic = no } add = 20 }
     }
     possible = {
-        has_modifier = banking_expand_deposit_guarantee
+        je:je_banking_cycle = { has_modifier = banking_expand_deposit_guarantee }
     }
     effect = {
-        remove_modifier = banking_expand_deposit_guarantee
+        je:je_banking_cycle = { remove_modifier = banking_expand_deposit_guarantee }
         add_radicals = {
             value = medium_radicals
         }
@@ -361,7 +365,7 @@ cb_disable_expand_deposit_guarantee = {
 cb_directed_credit_infrastructure = {
     name = "CB_DIRECTED_CREDIT_INFRA"
     desc = "CB_DIRECTED_CREDIT_INFRA_DESC"
-    visible = { banking_is_market_economy = yes NOT = { has_modifier = banking_directed_credit_infrastructure } }
+    visible = { banking_is_market_economy = yes NOT = { je:je_banking_cycle = { has_modifier = banking_directed_credit_infrastructure } } }
     
     ai_chance = {
         value = 0
@@ -389,14 +393,14 @@ cb_directed_credit_infrastructure = {
             }
     }
     effect = {
-        add_modifier = { name = banking_directed_credit_infrastructure }
+        je:je_banking_cycle = { add_modifier = { name = banking_directed_credit_infrastructure } }
     }
 }
 
 cb_disable_directed_credit_infrastructure = {
     name = "CB_DISABLE_DIRECTED_CREDIT_INFRA"
     desc = "CB_DISABLE_DIRECTED_CREDIT_INFRA_DESC"
-    visible = { has_modifier = banking_directed_credit_infrastructure }
+    visible = { je:je_banking_cycle = { has_modifier = banking_directed_credit_infrastructure } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_panic = yes } add = 45 }
@@ -406,17 +410,17 @@ cb_disable_directed_credit_infrastructure = {
         if = { limit = { banking_tool_eliq_active = yes } add = 20 }
     }
     possible = {
-        has_modifier = banking_directed_credit_infrastructure
+        je:je_banking_cycle = { has_modifier = banking_directed_credit_infrastructure }
     }
     effect = {
-        remove_modifier = banking_directed_credit_infrastructure
+        je:je_banking_cycle = { remove_modifier = banking_directed_credit_infrastructure }
     }
 }
 
 cb_emergency_liquidity_program = {
     name = "CB_EMERGENCY_LIQUIDITY"
     desc = "CB_EMERGENCY_LIQUIDITY_DESC"
-    visible = { banking_is_market_economy = yes NOT = { has_modifier = banking_emergency_liquidity_program } }
+    visible = { banking_is_market_economy = yes NOT = { je:je_banking_cycle = { has_modifier = banking_emergency_liquidity_program } } }
     
     ai_chance = {
         value = 0
@@ -448,7 +452,7 @@ cb_emergency_liquidity_program = {
             }
     }
     effect = {
-        add_modifier = { name = banking_emergency_liquidity_program }
+        je:je_banking_cycle = { add_modifier = { name = banking_emergency_liquidity_program } }
         # Big shock absorber
         custom_tooltip = {
             text = "BUBBLE_PRESSURE_10_DESC"
@@ -464,7 +468,7 @@ cb_emergency_liquidity_program = {
 cb_disable_emergency_liquidity_program = {
     name = "CB_DISABLE_EMERGENCY_LIQUIDITY"
     desc = "CB_DISABLE_EMERGENCY_LIQUIDITY_DESC"
-    visible = { has_modifier = banking_emergency_liquidity_program }
+    visible = { je:je_banking_cycle = { has_modifier = banking_emergency_liquidity_program } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_stable = yes } add = 25 }
@@ -474,10 +478,10 @@ cb_disable_emergency_liquidity_program = {
         if = { limit = { var:finance_cycle_momentum > -4 banking_cycle_is_panic = no } add = 20 }
     }
     possible = {
-        has_modifier = banking_emergency_liquidity_program
+        je:je_banking_cycle = { has_modifier = banking_emergency_liquidity_program }
     }
     effect = {
-        remove_modifier = banking_emergency_liquidity_program
+        je:je_banking_cycle = { remove_modifier = banking_emergency_liquidity_program }
         add_treasury = emergency_liquidity_program_deactivation_refund
     }
 }
@@ -485,7 +489,7 @@ cb_disable_emergency_liquidity_program = {
 cb_moral_suasion = {
     name = "CB_MORAL_SUASION"
     desc = "CB_MORAL_SUASION_DESC"
-    visible = { banking_is_market_economy = yes NOT = { has_modifier = banking_moral_suasion } }
+    visible = { banking_is_market_economy = yes NOT = { je:je_banking_cycle = { has_modifier = banking_moral_suasion } } }
     
     ai_chance = {
         value = 0
@@ -509,7 +513,7 @@ cb_moral_suasion = {
             }
     }
     effect = {
-        add_modifier = { name = banking_moral_suasion }
+        je:je_banking_cycle = { add_modifier = { name = banking_moral_suasion } }
 
     }
 }
@@ -517,7 +521,7 @@ cb_moral_suasion = {
 cb_disable_moral_suasion = {
     name = "CB_DISABLE_MORAL_SUASION"
     desc = "CB_DISABLE_MORAL_SUASION_DESC"
-    visible = { has_modifier = banking_moral_suasion }
+    visible = { je:je_banking_cycle = { has_modifier = banking_moral_suasion } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_panic = yes } add = 35 }
@@ -527,17 +531,17 @@ cb_disable_moral_suasion = {
         if = { limit = { banking_cycle_is_boom = yes } add = 15 }
     }
     possible = {
-        has_modifier = banking_moral_suasion
+        je:je_banking_cycle = { has_modifier = banking_moral_suasion }
     }
     effect = {
-        remove_modifier = banking_moral_suasion
+        je:je_banking_cycle = { remove_modifier = banking_moral_suasion }
     }
 }
 
 cb_raise_margin_requirements = {
     name = "CB_RAISE_MARGIN_REQ"
     desc = "CB_RAISE_MARGIN_REQ_DESC"
-    visible = { banking_is_market_economy = yes NOT = { has_modifier = banking_raise_margin_requirements } }
+    visible = { banking_is_market_economy = yes NOT = { je:je_banking_cycle = { has_modifier = banking_raise_margin_requirements } } }
     
     ai_chance = {
         value = 0
@@ -565,14 +569,14 @@ cb_raise_margin_requirements = {
             }
     }
     effect = {
-        add_modifier = { name = banking_raise_margin_requirements }
+        je:je_banking_cycle = { add_modifier = { name = banking_raise_margin_requirements } }
     }
 }
 
 cb_disable_raise_margin_requirements = {
     name = "CB_DISABLE_RAISE_MARGIN_REQ"
     desc = "CB_DISABLE_RAISE_MARGIN_REQ_DESC"
-    visible = { has_modifier = banking_raise_margin_requirements }
+    visible = { je:je_banking_cycle = { has_modifier = banking_raise_margin_requirements } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_recession = yes } add = 75 }
@@ -582,10 +586,10 @@ cb_disable_raise_margin_requirements = {
         if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 20 }
     }
     possible = {
-        has_modifier = banking_raise_margin_requirements
+        je:je_banking_cycle = { has_modifier = banking_raise_margin_requirements }
     }
     effect = {
-        remove_modifier = banking_raise_margin_requirements
+        je:je_banking_cycle = { remove_modifier = banking_raise_margin_requirements }
     }
 }
 
@@ -594,7 +598,7 @@ cb_fx_devaluation = {
     desc = "CB_FX_DEVALUATION_DESC"
     visible = {
         banking_is_market_economy = yes
-        NOT = { has_modifier = banking_fx_devaluation }
+        NOT = { je:je_banking_cycle = { has_modifier = banking_fx_devaluation } }
     }
 
     ai_chance = {
@@ -627,17 +631,17 @@ cb_fx_devaluation = {
                 modifier:country_banking_intervention_max_add >= 3
             }
         modifier:country_can_use_fx_devaluation_bool = yes
-        NOT = { has_modifier = banking_fx_support }
+        NOT = { je:je_banking_cycle = { has_modifier = banking_fx_support } }
     }
     effect = {
-        add_modifier = { name = banking_fx_devaluation }
+        je:je_banking_cycle = { add_modifier = { name = banking_fx_devaluation } }
     }
 }
 
 cb_disable_fx_devaluation = {
     name = "CB_DISABLE_FX_DEVALUATION"
     desc = "CB_DISABLE_FX_DEVALUATION_DESC"
-    visible = { has_modifier = banking_fx_devaluation }
+    visible = { je:je_banking_cycle = { has_modifier = banking_fx_devaluation } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_stable = yes } add = 15 }
@@ -645,13 +649,13 @@ cb_disable_fx_devaluation = {
         if = { limit = { banking_cycle_is_boom = yes } add = 35 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
         if = { limit = { banking_tool_rate_hike_active = yes } add = 25 }
-        if = { limit = { has_modifier = banking_fx_support } add = 30 }
+        if = { limit = { je:je_banking_cycle = { has_modifier = banking_fx_support } } add = 30 }
     }
     possible = {
-        has_modifier = banking_fx_devaluation
+        je:je_banking_cycle = { has_modifier = banking_fx_devaluation }
     }
     effect = {
-        remove_modifier = banking_fx_devaluation
+        je:je_banking_cycle = { remove_modifier = banking_fx_devaluation }
     }
 }
 
@@ -660,7 +664,7 @@ cb_fx_support = {
     desc = "CB_FX_SUPPORT_DESC"
     visible = {
         banking_is_market_economy = yes
-        NOT = { has_modifier = banking_fx_support }
+        NOT = { je:je_banking_cycle = { has_modifier = banking_fx_support } }
     }
 
     ai_chance = {
@@ -693,10 +697,10 @@ cb_fx_support = {
                 modifier:country_banking_intervention_max_add >= 3
             }
         modifier:country_can_use_fx_support_bool = yes
-        NOT = { has_modifier = banking_fx_devaluation }
+        NOT = { je:je_banking_cycle = { has_modifier = banking_fx_devaluation } }
     }
     effect = {
-        add_modifier = { name = banking_fx_support }
+        je:je_banking_cycle = { add_modifier = { name = banking_fx_support } }
         add_treasury = fx_support_activation_cost
     }
 }
@@ -704,7 +708,7 @@ cb_fx_support = {
 cb_disable_fx_support = {
     name = "CB_DISABLE_FX_SUPPORT"
     desc = "CB_DISABLE_FX_SUPPORT_DESC"
-    visible = { has_modifier = banking_fx_support }
+    visible = { je:je_banking_cycle = { has_modifier = banking_fx_support } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_stable = yes } add = 15 }
@@ -712,20 +716,20 @@ cb_disable_fx_support = {
         if = { limit = { banking_cycle_is_boom = yes } add = 35 }
         if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
         if = { limit = { banking_tool_rate_hike_active = yes } add = 20 }
-        if = { limit = { has_modifier = banking_fx_devaluation } add = 30 }
+        if = { limit = { je:je_banking_cycle = { has_modifier = banking_fx_devaluation } } add = 30 }
     }
     possible = {
-        has_modifier = banking_fx_support
+        je:je_banking_cycle = { has_modifier = banking_fx_support }
     }
     effect = {
-        remove_modifier = banking_fx_support
+        je:je_banking_cycle = { remove_modifier = banking_fx_support }
     }
 }
 
 cb_capital_controls_outflow = {
     name = "CB_CAPITAL_CONTROLS_OUT"
     desc = "CB_CAPITAL_CONTROLS_OUT_DESC"
-    visible = { banking_is_market_economy = yes NOT = { has_modifier = banking_capital_controls_out } }
+    visible = { banking_is_market_economy = yes NOT = { je:je_banking_cycle = { has_modifier = banking_capital_controls_out } } }
 
     ai_chance = {
         value = 0
@@ -763,14 +767,14 @@ cb_capital_controls_outflow = {
         }
     }
     effect = {
-        add_modifier = { name = banking_capital_controls_out }
+        je:je_banking_cycle = { add_modifier = { name = banking_capital_controls_out } }
     }
 }
 
 cb_disable_capital_controls_outflow = {
     name = "CB_DISABLE_CAPITAL_CONTROLS_OUT"
     desc = "CB_DISABLE_CAPITAL_CONTROLS_OUT_DESC"
-    visible = { has_modifier = banking_capital_controls_out }
+    visible = { je:je_banking_cycle = { has_modifier = banking_capital_controls_out } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_stable = yes } add = 20 }
@@ -780,17 +784,17 @@ cb_disable_capital_controls_outflow = {
         if = { limit = { banking_fiscal_stress_high = no banking_cycle_is_panic = no } add = 15 }
     }
     possible = {
-        has_modifier = banking_capital_controls_out
+        je:je_banking_cycle = { has_modifier = banking_capital_controls_out }
     }
     effect = {
-        remove_modifier = banking_capital_controls_out
+        je:je_banking_cycle = { remove_modifier = banking_capital_controls_out }
     }
 }
 
 cb_fx_swap_lines = {
     name = "CB_FX_SWAP_LINES"
     desc = "CB_FX_SWAP_LINES_DESC"
-    visible = { banking_is_market_economy = yes NOT = { has_modifier = banking_fx_swap_lines } }
+    visible = { banking_is_market_economy = yes NOT = { je:je_banking_cycle = { has_modifier = banking_fx_swap_lines } } }
 
     ai_chance = {
         value = 0
@@ -831,7 +835,7 @@ cb_fx_swap_lines = {
         }
     }
     effect = {
-        add_modifier = { name = banking_fx_swap_lines }
+        je:je_banking_cycle = { add_modifier = { name = banking_fx_swap_lines } }
         every_country = {
             limit = {
                 country_rank = rank_value:great_power
@@ -851,7 +855,7 @@ cb_fx_swap_lines = {
 cb_disable_fx_swap_lines = {
     name = "CB_DISABLE_FX_SWAP_LINES"
     desc = "CB_DISABLE_FX_SWAP_LINES_DESC"
-    visible = { has_modifier = banking_fx_swap_lines }
+    visible = { je:je_banking_cycle = { has_modifier = banking_fx_swap_lines } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_stable = yes } add = 20 }
@@ -861,10 +865,10 @@ cb_disable_fx_swap_lines = {
         if = { limit = { banking_cycle_risk_falling = no banking_cycle_is_panic = no banking_cycle_is_downturn = no } add = 15 }
     }
     possible = {
-        has_modifier = banking_fx_swap_lines
+        je:je_banking_cycle = { has_modifier = banking_fx_swap_lines }
     }
     effect = {
-        remove_modifier = banking_fx_swap_lines
+        je:je_banking_cycle = { remove_modifier = banking_fx_swap_lines }
     }
 }
 
@@ -872,7 +876,7 @@ cb_disable_fx_swap_lines = {
 cb_export_credit_facility = {
     name = "CB_EXPORT_CREDIT"
     desc = "CB_EXPORT_CREDIT_DESC"
-    visible = { banking_is_market_economy = yes NOT = { has_modifier = banking_export_credit_facility } }
+    visible = { banking_is_market_economy = yes NOT = { je:je_banking_cycle = { has_modifier = banking_export_credit_facility } } }
 
     ai_chance = {
         value = 0
@@ -906,7 +910,7 @@ cb_export_credit_facility = {
         modifier:country_can_use_export_credit_bool = yes
     }
     effect = {
-        add_modifier = { name = banking_export_credit_facility }
+        je:je_banking_cycle = { add_modifier = { name = banking_export_credit_facility } }
         add_treasury = export_credit_activation_cost
     }
 }
@@ -914,7 +918,7 @@ cb_export_credit_facility = {
 cb_disable_export_credit_facility = {
     name = "CB_DISABLE_EXPORT_CREDIT"
     desc = "CB_DISABLE_EXPORT_CREDIT_DESC"
-    visible = { has_modifier = banking_export_credit_facility }
+    visible = { je:je_banking_cycle = { has_modifier = banking_export_credit_facility } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_stable = yes } add = 15 }
@@ -924,17 +928,17 @@ cb_disable_export_credit_facility = {
         if = { limit = { banking_cycle_bubble_risk_high = yes } add = 20 }
     }
     possible = {
-        has_modifier = banking_export_credit_facility
+        je:je_banking_cycle = { has_modifier = banking_export_credit_facility }
     }
     effect = {
-        remove_modifier = banking_export_credit_facility
+        je:je_banking_cycle = { remove_modifier = banking_export_credit_facility }
     }
 }
 
 cb_asset_relief_program = {
     name = "CB_ASSET_RELIEF"
     desc = "CB_ASSET_RELIEF_DESC"
-    visible = { banking_is_market_economy = yes NOT = { has_modifier = banking_asset_relief_program } }
+    visible = { banking_is_market_economy = yes NOT = { je:je_banking_cycle = { has_modifier = banking_asset_relief_program } } }
 
     ai_chance = {
         value = 0
@@ -968,14 +972,14 @@ cb_asset_relief_program = {
     }
 
     effect = {
-        add_modifier = { name = banking_asset_relief_program }
+        je:je_banking_cycle = { add_modifier = { name = banking_asset_relief_program } }
     }
 }
 
 cb_disable_asset_relief_program = {
     name = "CB_DISABLE_ASSET_RELIEF"
     desc = "CB_DISABLE_ASSET_RELIEF_DESC"
-    visible = { has_modifier = banking_asset_relief_program }
+    visible = { je:je_banking_cycle = { has_modifier = banking_asset_relief_program } }
     ai_chance = {
         value = 0
         if = { limit = { banking_cycle_is_stable = yes } add = 20 }
@@ -985,10 +989,10 @@ cb_disable_asset_relief_program = {
         if = { limit = { banking_fiscal_stress_low = yes } add = 15 }
     }
     possible = {
-        has_modifier = banking_asset_relief_program
+        je:je_banking_cycle = { has_modifier = banking_asset_relief_program }
     }
     effect = {
-        remove_modifier = banking_asset_relief_program
+        je:je_banking_cycle = { remove_modifier = banking_asset_relief_program }
     }
 }
 
@@ -5914,7 +5918,7 @@ gw_carbon_tax_button = {
     desc = "GW_CARBON_TAX_DESC"
 
     visible = {
-        NOT = { has_modifier = carbon_tax_modifier }
+        NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
         # Emissions reduction only applies for the market leader; restrict button accordingly
         market_capital.owner = THIS
     }
@@ -5938,7 +5942,7 @@ gw_carbon_tax_button = {
     }
 
     possible = {
-        NOT = { has_modifier = carbon_tax_modifier }
+        NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
         temperature_anomaly_display >= 0.5
         market_capital.owner = THIS
     }
@@ -5949,9 +5953,9 @@ gw_carbon_tax_button = {
             every_country = {
                 limit = {
                     market_capital = ROOT.market_capital
-                    NOT = { has_modifier = carbon_tax_modifier }
+                    NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
                 }
-                add_modifier = { name = carbon_tax_modifier }
+                je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
             }
         }
     }
@@ -5962,7 +5966,7 @@ gw_remove_carbon_tax_button = {
     desc = "GW_REMOVE_CARBON_TAX_DESC"
 
     visible = {
-        has_modifier = carbon_tax_modifier
+        je:je_global_warming = { has_modifier = carbon_tax_modifier }
         market_capital.owner = THIS
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
@@ -5982,7 +5986,7 @@ gw_remove_carbon_tax_button = {
     }
 
     possible = {
-        has_modifier = carbon_tax_modifier
+        je:je_global_warming = { has_modifier = carbon_tax_modifier }
         market_capital.owner = THIS
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
@@ -5993,9 +5997,9 @@ gw_remove_carbon_tax_button = {
             every_country = {
                 limit = {
                     market_capital = ROOT.market_capital
-                    has_modifier = carbon_tax_modifier
+                    je:je_global_warming = { has_modifier = carbon_tax_modifier }
                 }
-                remove_modifier = carbon_tax_modifier
+                je:je_global_warming = { remove_modifier = carbon_tax_modifier }
             }
         }
     }
@@ -6006,7 +6010,7 @@ gw_renewable_investment_button = {
     desc = "GW_RENEWABLE_INVESTMENT_DESC"
 
     visible = {
-        NOT = { has_modifier = renewable_investment_modifier }
+        NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
         # Emissions reduction only applies for the market leader; restrict button accordingly
         market_capital.owner = THIS
     }
@@ -6024,7 +6028,7 @@ gw_renewable_investment_button = {
     }
 
     possible = {
-        NOT = { has_modifier = renewable_investment_modifier }
+        NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
         temperature_anomaly_display >= 0.5
         market_capital.owner = THIS
     }
@@ -6035,9 +6039,9 @@ gw_renewable_investment_button = {
             every_country = {
                 limit = {
                     market_capital = ROOT.market_capital
-                    NOT = { has_modifier = renewable_investment_modifier }
+                    NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
                 }
-                add_modifier = { name = renewable_investment_modifier }
+                je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
             }
         }
     }
@@ -6048,7 +6052,7 @@ gw_remove_renewable_investment_button = {
     desc = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
 
     visible = {
-        has_modifier = renewable_investment_modifier
+        je:je_global_warming = { has_modifier = renewable_investment_modifier }
         market_capital.owner = THIS
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
@@ -6072,7 +6076,7 @@ gw_remove_renewable_investment_button = {
     }
 
     possible = {
-        has_modifier = renewable_investment_modifier
+        je:je_global_warming = { has_modifier = renewable_investment_modifier }
         market_capital.owner = THIS
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
@@ -6083,9 +6087,9 @@ gw_remove_renewable_investment_button = {
             every_country = {
                 limit = {
                     market_capital = ROOT.market_capital
-                    has_modifier = renewable_investment_modifier
+                    je:je_global_warming = { has_modifier = renewable_investment_modifier }
                 }
-                remove_modifier = renewable_investment_modifier
+                je:je_global_warming = { remove_modifier = renewable_investment_modifier }
             }
         }
     }
@@ -6096,7 +6100,7 @@ gw_climate_adaptation_button = {
     desc = "GW_CLIMATE_ADAPTATION_DESC"
 
     visible = {
-        NOT = { has_modifier = climate_adaptation_modifier }
+        NOT = { je:je_global_warming = { has_modifier = climate_adaptation_modifier } }
     }
 
     ai_chance = {
@@ -6116,7 +6120,7 @@ gw_climate_adaptation_button = {
     }
 
     possible = {
-        NOT = { has_modifier = climate_adaptation_modifier }
+        NOT = { je:je_global_warming = { has_modifier = climate_adaptation_modifier } }
         adjusted_produced_authority > 250
         temperature_anomaly_display >= 0.5
     }
@@ -6124,7 +6128,7 @@ gw_climate_adaptation_button = {
     effect = {
         custom_tooltip = {
             text = "GW_CLIMATE_ADAPTATION_DESC"
-            add_modifier = { name = climate_adaptation_modifier }
+            je:je_global_warming = { add_modifier = { name = climate_adaptation_modifier } }
         }
     }
 }
@@ -6134,7 +6138,7 @@ gw_remove_climate_adaptation_button = {
     desc = "GW_REMOVE_CLIMATE_ADAPTATION_DESC"
 
     visible = {
-        has_modifier = climate_adaptation_modifier
+        je:je_global_warming = { has_modifier = climate_adaptation_modifier }
     }
 
     ai_chance = {
@@ -6146,13 +6150,13 @@ gw_remove_climate_adaptation_button = {
     }
 
     possible = {
-        has_modifier = climate_adaptation_modifier
+        je:je_global_warming = { has_modifier = climate_adaptation_modifier }
     }
 
     effect = {
         custom_tooltip = {
             text = "GW_REMOVE_CLIMATE_ADAPTATION_DESC"
-            remove_modifier = climate_adaptation_modifier
+            je:je_global_warming = { remove_modifier = climate_adaptation_modifier }
         }
     }
 }
@@ -6162,7 +6166,7 @@ gw_emission_standards_button = {
     desc = "GW_EMISSION_STANDARDS_DESC"
 
     visible = {
-        NOT = { has_modifier = emission_standards_modifier }
+        NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
         temperature_anomaly_display >= 0.5
         market_capital.owner = THIS
     }
@@ -6184,7 +6188,7 @@ gw_emission_standards_button = {
     }
 
     possible = {
-        NOT = { has_modifier = emission_standards_modifier }
+        NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
         temperature_anomaly_display >= 0.5
         market_capital.owner = THIS
         adjusted_produced_authority > 200
@@ -6196,9 +6200,9 @@ gw_emission_standards_button = {
             every_country = {
                 limit = {
                     market_capital = ROOT.market_capital
-                    NOT = { has_modifier = emission_standards_modifier }
+                    NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
                 }
-                add_modifier = { name = emission_standards_modifier }
+                je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
             }
         }
     }
@@ -6209,7 +6213,7 @@ gw_remove_emission_standards_button = {
     desc = "GW_REMOVE_EMISSION_STANDARDS_DESC"
 
     visible = {
-        has_modifier = emission_standards_modifier
+        je:je_global_warming = { has_modifier = emission_standards_modifier }
         market_capital.owner = THIS
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
@@ -6227,7 +6231,7 @@ gw_remove_emission_standards_button = {
     }
 
     possible = {
-        has_modifier = emission_standards_modifier
+        je:je_global_warming = { has_modifier = emission_standards_modifier }
         market_capital.owner = THIS
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
@@ -6238,9 +6242,9 @@ gw_remove_emission_standards_button = {
             every_country = {
                 limit = {
                     market_capital = ROOT.market_capital
-                    has_modifier = emission_standards_modifier
+                    je:je_global_warming = { has_modifier = emission_standards_modifier }
                 }
-                remove_modifier = emission_standards_modifier
+                je:je_global_warming = { remove_modifier = emission_standards_modifier }
             }
         }
     }
@@ -6251,7 +6255,7 @@ gw_reforestation_button = {
     desc = "GW_REFORESTATION_DESC"
 
     visible = {
-        NOT = { has_modifier = reforestation_subsidies_modifier }
+        NOT = { je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } }
         temperature_anomaly_display >= 0.5
     }
 
@@ -6268,7 +6272,7 @@ gw_reforestation_button = {
     }
 
     possible = {
-        NOT = { has_modifier = reforestation_subsidies_modifier }
+        NOT = { je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } }
         temperature_anomaly_display >= 0.5
         adjusted_produced_authority > 100
     }
@@ -6276,7 +6280,7 @@ gw_reforestation_button = {
     effect = {
         custom_tooltip = {
             text = "GW_REFORESTATION_DESC"
-            add_modifier = { name = reforestation_subsidies_modifier }
+            je:je_global_warming = { add_modifier = { name = reforestation_subsidies_modifier } }
         }
     }
 }
@@ -6286,7 +6290,7 @@ gw_remove_reforestation_button = {
     desc = "GW_REMOVE_REFORESTATION_DESC"
 
     visible = {
-        has_modifier = reforestation_subsidies_modifier
+        je:je_global_warming = { has_modifier = reforestation_subsidies_modifier }
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
 
@@ -6299,14 +6303,14 @@ gw_remove_reforestation_button = {
     }
 
     possible = {
-        has_modifier = reforestation_subsidies_modifier
+        je:je_global_warming = { has_modifier = reforestation_subsidies_modifier }
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
 
     effect = {
         custom_tooltip = {
             text = "GW_REMOVE_REFORESTATION_DESC"
-            remove_modifier = reforestation_subsidies_modifier
+            je:je_global_warming = { remove_modifier = reforestation_subsidies_modifier }
         }
     }
 }
@@ -6316,7 +6320,7 @@ gw_public_transit_button = {
     desc = "GW_PUBLIC_TRANSIT_DESC"
 
     visible = {
-        NOT = { has_modifier = public_transit_modifier }
+        NOT = { je:je_global_warming = { has_modifier = public_transit_modifier } }
     }
 
     ai_chance = {
@@ -6332,7 +6336,7 @@ gw_public_transit_button = {
     }
 
     possible = {
-        NOT = { has_modifier = public_transit_modifier }
+        NOT = { je:je_global_warming = { has_modifier = public_transit_modifier } }
         temperature_anomaly_display >= 0.5
         adjusted_produced_authority > 150
     }
@@ -6340,7 +6344,7 @@ gw_public_transit_button = {
     effect = {
         custom_tooltip = {
             text = "GW_PUBLIC_TRANSIT_DESC"
-            add_modifier = { name = public_transit_modifier }
+            je:je_global_warming = { add_modifier = { name = public_transit_modifier } }
         }
     }
 }
@@ -6350,7 +6354,7 @@ gw_remove_public_transit_button = {
     desc = "GW_REMOVE_PUBLIC_TRANSIT_DESC"
 
     visible = {
-        has_modifier = public_transit_modifier
+        je:je_global_warming = { has_modifier = public_transit_modifier }
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
 
@@ -6363,14 +6367,14 @@ gw_remove_public_transit_button = {
     }
 
     possible = {
-        has_modifier = public_transit_modifier
+        je:je_global_warming = { has_modifier = public_transit_modifier }
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
 
     effect = {
         custom_tooltip = {
             text = "GW_REMOVE_PUBLIC_TRANSIT_DESC"
-            remove_modifier = public_transit_modifier
+            je:je_global_warming = { remove_modifier = public_transit_modifier }
         }
     }
 }
@@ -6380,7 +6384,7 @@ gw_fossil_fuel_divestment_button = {
     desc = "GW_FOSSIL_FUEL_DIVESTMENT_DESC"
 
     visible = {
-        NOT = { has_modifier = fossil_fuel_divestment_modifier }
+        NOT = { je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } }
     }
 
     ai_chance = {
@@ -6400,7 +6404,7 @@ gw_fossil_fuel_divestment_button = {
     }
 
     possible = {
-        NOT = { has_modifier = fossil_fuel_divestment_modifier }
+        NOT = { je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } }
         temperature_anomaly_display >= 1.0
         adjusted_produced_authority > 200
     }
@@ -6408,7 +6412,7 @@ gw_fossil_fuel_divestment_button = {
     effect = {
         custom_tooltip = {
             text = "GW_FOSSIL_FUEL_DIVESTMENT_DESC"
-            add_modifier = { name = fossil_fuel_divestment_modifier }
+            je:je_global_warming = { add_modifier = { name = fossil_fuel_divestment_modifier } }
         }
     }
 }
@@ -6418,7 +6422,7 @@ gw_remove_fossil_fuel_divestment_button = {
     desc = "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC"
 
     visible = {
-        has_modifier = fossil_fuel_divestment_modifier
+        je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier }
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
 
@@ -6435,14 +6439,14 @@ gw_remove_fossil_fuel_divestment_button = {
     }
 
     possible = {
-        has_modifier = fossil_fuel_divestment_modifier
+        je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier }
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
 
     effect = {
         custom_tooltip = {
             text = "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC"
-            remove_modifier = fossil_fuel_divestment_modifier
+            je:je_global_warming = { remove_modifier = fossil_fuel_divestment_modifier }
         }
     }
 }
@@ -6452,7 +6456,7 @@ gw_green_building_codes_button = {
     desc = "GW_GREEN_BUILDING_CODES_DESC"
 
     visible = {
-        NOT = { has_modifier = green_building_codes_modifier }
+        NOT = { je:je_global_warming = { has_modifier = green_building_codes_modifier } }
     }
 
     ai_chance = {
@@ -6472,7 +6476,7 @@ gw_green_building_codes_button = {
     }
 
     possible = {
-        NOT = { has_modifier = green_building_codes_modifier }
+        NOT = { je:je_global_warming = { has_modifier = green_building_codes_modifier } }
         temperature_anomaly_display >= 0.5
         adjusted_produced_authority > 100
     }
@@ -6480,7 +6484,7 @@ gw_green_building_codes_button = {
     effect = {
         custom_tooltip = {
             text = "GW_GREEN_BUILDING_CODES_DESC"
-            add_modifier = { name = green_building_codes_modifier }
+            je:je_global_warming = { add_modifier = { name = green_building_codes_modifier } }
         }
     }
 }
@@ -6490,7 +6494,7 @@ gw_remove_green_building_codes_button = {
     desc = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
 
     visible = {
-        has_modifier = green_building_codes_modifier
+        je:je_global_warming = { has_modifier = green_building_codes_modifier }
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
 
@@ -6507,14 +6511,14 @@ gw_remove_green_building_codes_button = {
     }
 
     possible = {
-        has_modifier = green_building_codes_modifier
+        je:je_global_warming = { has_modifier = green_building_codes_modifier }
         NOT = { has_variable = has_emissions_reduction_treaty }
     }
 
     effect = {
         custom_tooltip = {
             text = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
-            remove_modifier = green_building_codes_modifier
+            je:je_global_warming = { remove_modifier = green_building_codes_modifier }
         }
     }
 }

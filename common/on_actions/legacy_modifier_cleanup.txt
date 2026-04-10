@@ -1,0 +1,26 @@
+﻿########################################
+# LEGACY MODIFIER CLEANUP - On Action Hook
+# Runs once per country on first monthly pulse to remove old
+# country-scoped modifiers that are now JE-scoped.
+# Safe to delete this file once no saves from before the JE modifier
+# migration exist (i.e., after all players have loaded and saved at
+# least once on the new version).
+# Also delete: common/scripted_effects/legacy_modifier_cleanup.txt
+########################################
+
+# Custom on_action with the cleanup effect
+legacy_je_modifier_cleanup_on_action = {
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = legacy_je_modifier_cleanup_done } }
+			legacy_je_modifier_cleanup_effect = yes
+		}
+	}
+}
+
+# Hook into monthly pulse so it runs quickly after save load
+on_monthly_pulse_country = {
+	on_actions = {
+		legacy_je_modifier_cleanup_on_action
+	}
+}

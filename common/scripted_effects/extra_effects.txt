@@ -1178,24 +1178,24 @@ reset_all_institutions_and_ministries = {
 gw_copy_market_policy_modifiers = {
 	if = {
 		limit = {
-			NOT = { has_modifier = carbon_tax_modifier }
-			scope:market.owner = { has_modifier = carbon_tax_modifier }
+			NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
+			scope:market.owner = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
 		}
-		add_modifier = { name = carbon_tax_modifier }
+		je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
 	}
 	if = {
 		limit = {
-			NOT = { has_modifier = renewable_investment_modifier }
-			scope:market.owner = { has_modifier = renewable_investment_modifier }
+			NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
+			scope:market.owner = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
 		}
-		add_modifier = { name = renewable_investment_modifier }
+		je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
 	}
 	if = {
 		limit = {
-			NOT = { has_modifier = emission_standards_modifier }
-			scope:market.owner = { has_modifier = emission_standards_modifier }
+			NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
+			scope:market.owner = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
 		}
-		add_modifier = { name = emission_standards_modifier }
+		je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
 	}
 }
 

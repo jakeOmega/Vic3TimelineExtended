@@ -176,20 +176,20 @@
 	on_monthly_pulse = {
 		effect = {
 			# Phase modifiers based on current bar value
-			remove_modifier = colonial_empire_under_pressure_modifier
-			remove_modifier = colonial_empire_crumbling_modifier
+			je:je_colonial_empire = { remove_modifier = colonial_empire_under_pressure_modifier }
+			je:je_colonial_empire = { remove_modifier = colonial_empire_crumbling_modifier }
 
 			if = {
 				limit = {
 					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 20 }
 				}
-				add_modifier = { name = colonial_empire_crumbling_modifier }
+				je:je_colonial_empire = { add_modifier = { name = colonial_empire_crumbling_modifier } }
 			}
 			else_if = {
 				limit = {
 					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 40 }
 				}
-				add_modifier = { name = colonial_empire_under_pressure_modifier }
+				je:je_colonial_empire = { add_modifier = { name = colonial_empire_under_pressure_modifier } }
 			}
 
 			# Apply radicalism to civil rights movement specifically (not all movements)

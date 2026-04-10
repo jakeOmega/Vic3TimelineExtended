@@ -357,7 +357,7 @@ un_leave_button = {
 		custom_tooltip = {
 			text = "UN_LEAVE_DESC"
 			remove_modifier = un_member_modifier
-			remove_modifier = un_membership_benefits_modifier
+			je:je_united_nations = { remove_modifier = un_membership_benefits_modifier }
 			remove_modifier = un_security_council_modifier
 			remove_modifier = un_founding_member_modifier
 			remove_modifier = un_sanctions_target_modifier
@@ -369,8 +369,8 @@ un_leave_button = {
 			remove_modifier = un_humanitarian_aid_cost
 			remove_modifier = un_human_rights_champion_modifier
 			remove_modifier = un_arms_control_participant_modifier
-			remove_modifier = un_champion_order_cost
-			remove_modifier = un_undermine_order_cost
+			je:je_united_nations = { remove_modifier = un_champion_order_cost }
+			je:je_united_nations = { remove_modifier = un_undermine_order_cost }
 			# Remove permanent treaty commitments
 			remove_modifier = un_human_rights_declaration_modifier
 			remove_modifier = un_human_rights_reservations_modifier
@@ -813,14 +813,14 @@ un_champion_order_button = {
 	visible = {
 		has_modifier = un_member_modifier
 		country_rank >= rank_value:great_power
-		NOT = { has_modifier = un_champion_order_cost }
+		NOT = { je:je_united_nations = { has_modifier = un_champion_order_cost } }
 	}
 
 	possible = {
 		has_modifier = un_member_modifier
 		country_rank >= rank_value:great_power
-		NOT = { has_modifier = un_champion_order_cost }
-		NOT = { has_modifier = un_undermine_order_cost }
+		NOT = { je:je_united_nations = { has_modifier = un_champion_order_cost } }
+		NOT = { je:je_united_nations = { has_modifier = un_undermine_order_cost } }
 	}
 
 	ai_chance = {
@@ -833,7 +833,7 @@ un_champion_order_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_CHAMPION_ORDER_DESC"
-			add_modifier = { name = un_champion_order_cost }
+			je:je_united_nations = { add_modifier = { name = un_champion_order_cost } }
 		}
 	}
 }
@@ -843,11 +843,11 @@ un_stop_championing_button = {
 	desc = "UN_STOP_CHAMPIONING_DESC"
 
 	visible = {
-		has_modifier = un_champion_order_cost
+		je:je_united_nations = { has_modifier = un_champion_order_cost }
 	}
 
 	possible = {
-		has_modifier = un_champion_order_cost
+		je:je_united_nations = { has_modifier = un_champion_order_cost }
 	}
 
 	ai_chance = {
@@ -860,7 +860,7 @@ un_stop_championing_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_STOP_CHAMPIONING_DESC"
-			remove_modifier = un_champion_order_cost
+			je:je_united_nations = { remove_modifier = un_champion_order_cost }
 		}
 	}
 }
@@ -872,14 +872,14 @@ un_undermine_order_button = {
 	visible = {
 		has_modifier = un_member_modifier
 		country_rank >= rank_value:great_power
-		NOT = { has_modifier = un_undermine_order_cost }
+		NOT = { je:je_united_nations = { has_modifier = un_undermine_order_cost } }
 	}
 
 	possible = {
 		has_modifier = un_member_modifier
 		country_rank >= rank_value:great_power
-		NOT = { has_modifier = un_undermine_order_cost }
-		NOT = { has_modifier = un_champion_order_cost }
+		NOT = { je:je_united_nations = { has_modifier = un_undermine_order_cost } }
+		NOT = { je:je_united_nations = { has_modifier = un_champion_order_cost } }
 	}
 
 	ai_chance = {
@@ -892,7 +892,7 @@ un_undermine_order_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_UNDERMINE_ORDER_DESC"
-			add_modifier = { name = un_undermine_order_cost }
+			je:je_united_nations = { add_modifier = { name = un_undermine_order_cost } }
 		}
 	}
 }
@@ -902,11 +902,11 @@ un_stop_undermining_button = {
 	desc = "UN_STOP_UNDERMINING_DESC"
 
 	visible = {
-		has_modifier = un_undermine_order_cost
+		je:je_united_nations = { has_modifier = un_undermine_order_cost }
 	}
 
 	possible = {
-		has_modifier = un_undermine_order_cost
+		je:je_united_nations = { has_modifier = un_undermine_order_cost }
 	}
 
 	ai_chance = {
@@ -919,7 +919,7 @@ un_stop_undermining_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_STOP_UNDERMINING_DESC"
-			remove_modifier = un_undermine_order_cost
+			je:je_united_nations = { remove_modifier = un_undermine_order_cost }
 		}
 	}
 }

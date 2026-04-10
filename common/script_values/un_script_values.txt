@@ -142,7 +142,7 @@ un_authority_drift_democracy = {
 un_authority_drift_champion = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_champion_order_cost }
+		limit = { je:je_united_nations = { has_modifier = un_champion_order_cost } }
 		add = 0.3
 		if = {
 			limit = { global_country_ranking < 3 }
@@ -154,7 +154,7 @@ un_authority_drift_champion = {
 un_authority_drift_undermine = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_undermine_order_cost }
+		limit = { je:je_united_nations = { has_modifier = un_undermine_order_cost } }
 		add = -0.3
 		if = {
 			limit = { global_country_ranking < 3 }

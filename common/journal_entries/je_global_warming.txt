@@ -83,12 +83,12 @@
 			# ---- Update warming modifier: temperature anomaly used directly as multiplier ----
 			if = {
 				limit = { temperature_anomaly_display >= 0.01 }
-				remove_modifier = global_warming
-				add_modifier = { name = global_warming multiplier = temperature_anomaly_display }
+				je:je_global_warming = { remove_modifier = global_warming }
+				je:je_global_warming = { add_modifier = { name = global_warming multiplier = temperature_anomaly_display } }
 			}
 			else_if = {
-				limit = { has_modifier = global_warming }
-				remove_modifier = global_warming
+				limit = { je:je_global_warming = { has_modifier = global_warming } }
+				je:je_global_warming = { remove_modifier = global_warming }
 			}
 		}
 	}

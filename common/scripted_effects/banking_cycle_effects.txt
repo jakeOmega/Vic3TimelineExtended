@@ -1134,30 +1134,30 @@ banking_cycle_random_event_effect = {
 # Called before applying the current phase modifier each month.
 remove_all_banking_phase_modifiers = {
 	# Market variants
-	remove_modifier = financial_cycle_phase_panic
-	remove_modifier = financial_cycle_phase_downturn
-	remove_modifier = financial_cycle_phase_stagnation
-	remove_modifier = financial_cycle_phase_expansion
-	remove_modifier = financial_cycle_phase_boom
-	remove_modifier = financial_cycle_phase_frenzy
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_panic }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_downturn }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_stagnation }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_expansion }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_boom }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_frenzy }
 	# Command Economy variants
-	remove_modifier = financial_cycle_phase_panic_cmd
-	remove_modifier = financial_cycle_phase_downturn_cmd
-	remove_modifier = financial_cycle_phase_stagnation_cmd
-	remove_modifier = financial_cycle_phase_expansion_cmd
-	remove_modifier = financial_cycle_phase_boom_cmd
-	remove_modifier = financial_cycle_phase_frenzy_cmd
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_panic_cmd }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_downturn_cmd }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_stagnation_cmd }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_expansion_cmd }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_boom_cmd }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_frenzy_cmd }
 	# Cooperative Ownership variants
-	remove_modifier = financial_cycle_phase_panic_coop
-	remove_modifier = financial_cycle_phase_downturn_coop
-	remove_modifier = financial_cycle_phase_stagnation_coop
-	remove_modifier = financial_cycle_phase_expansion_coop
-	remove_modifier = financial_cycle_phase_boom_coop
-	remove_modifier = financial_cycle_phase_frenzy_coop
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_panic_coop }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_downturn_coop }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_stagnation_coop }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_expansion_coop }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_boom_coop }
+	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_frenzy_coop }
 	# Bubble inertia
-	remove_modifier = bubble_inertia_moderate
-	remove_modifier = bubble_inertia_high
-	remove_modifier = bubble_inertia_extreme
+	je:je_banking_cycle = { remove_modifier = bubble_inertia_moderate }
+	je:je_banking_cycle = { remove_modifier = bubble_inertia_high }
+	je:je_banking_cycle = { remove_modifier = bubble_inertia_extreme }
 }
 
 # Apply crash effects to the origin country (event .6).
@@ -1403,11 +1403,11 @@ banking_crisis_wave_check_great_depression = {
 
 # 1. Fiscal policy modifier: re-apply every month to reflect current deficit/surplus.
 banking_cycle_update_fiscal_policy = {
-	remove_modifier = financial_cycle_government_fiscal_policy_effect
-	add_modifier = {
+	je:je_banking_cycle = { remove_modifier = financial_cycle_government_fiscal_policy_effect }
+	je:je_banking_cycle = { add_modifier = {
 		name = financial_cycle_government_fiscal_policy_effect
 		multiplier = financial_cycle_government_fiscal_policy_effect_size
-	}
+	} }
 }
 
 # 2. Advance all cycle variables for the month.
@@ -1664,47 +1664,47 @@ banking_cycle_apply_phase_modifiers = {
 		}
 		if = {
 			limit = { var:bubble_pressure >= 65 }
-			add_modifier = { name = bubble_inertia_extreme multiplier = bubble_inertia_multiplier_script_value }
+			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_extreme multiplier = bubble_inertia_multiplier_script_value } }
 		}
 		else_if = {
 			limit = { var:bubble_pressure >= 35 }
-			add_modifier = { name = bubble_inertia_high multiplier = bubble_inertia_multiplier_script_value }
+			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_high multiplier = bubble_inertia_multiplier_script_value } }
 		}
 		else_if = {
 			limit = { var:bubble_pressure > 0.5 }
-			add_modifier = { name = bubble_inertia_moderate multiplier = bubble_inertia_multiplier_script_value }
+			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_moderate multiplier = bubble_inertia_multiplier_script_value } }
 		}
 	}
 
 	# Phase modifier by economic law type
 	if = {
 		limit = { has_law = law_type:law_command_economy }
-		if = { limit = { var:finance_cycle_value < 10 }  add_modifier = { name = financial_cycle_phase_panic_cmd } }
-		else_if = { limit = { var:finance_cycle_value < 25 } add_modifier = { name = financial_cycle_phase_downturn_cmd } }
-		else_if = { limit = { var:finance_cycle_value < 40 } add_modifier = { name = financial_cycle_phase_stagnation_cmd } }
+		if = { limit = { var:finance_cycle_value < 10 }  je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_panic_cmd } } }
+		else_if = { limit = { var:finance_cycle_value < 25 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_downturn_cmd } } }
+		else_if = { limit = { var:finance_cycle_value < 40 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_stagnation_cmd } } }
 		else_if = { limit = { var:finance_cycle_value < 60 } } # Stable = no modifier
-		else_if = { limit = { var:finance_cycle_value < 75 } add_modifier = { name = financial_cycle_phase_expansion_cmd } }
-		else_if = { limit = { var:finance_cycle_value < 88 } add_modifier = { name = financial_cycle_phase_boom_cmd } }
-		else = { add_modifier = { name = financial_cycle_phase_frenzy_cmd } }
+		else_if = { limit = { var:finance_cycle_value < 75 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_expansion_cmd } } }
+		else_if = { limit = { var:finance_cycle_value < 88 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_boom_cmd } } }
+		else = { je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_frenzy_cmd } } }
 	}
 	else_if = {
 		limit = { has_law = law_type:law_cooperative_ownership }
-		if = { limit = { var:finance_cycle_value < 10 }  add_modifier = { name = financial_cycle_phase_panic_coop } }
-		else_if = { limit = { var:finance_cycle_value < 25 } add_modifier = { name = financial_cycle_phase_downturn_coop } }
-		else_if = { limit = { var:finance_cycle_value < 40 } add_modifier = { name = financial_cycle_phase_stagnation_coop } }
+		if = { limit = { var:finance_cycle_value < 10 }  je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_panic_coop } } }
+		else_if = { limit = { var:finance_cycle_value < 25 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_downturn_coop } } }
+		else_if = { limit = { var:finance_cycle_value < 40 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_stagnation_coop } } }
 		else_if = { limit = { var:finance_cycle_value < 60 } } # Stable = no modifier
-		else_if = { limit = { var:finance_cycle_value < 75 } add_modifier = { name = financial_cycle_phase_expansion_coop } }
-		else_if = { limit = { var:finance_cycle_value < 88 } add_modifier = { name = financial_cycle_phase_boom_coop } }
-		else = { add_modifier = { name = financial_cycle_phase_frenzy_coop } }
+		else_if = { limit = { var:finance_cycle_value < 75 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_expansion_coop } } }
+		else_if = { limit = { var:finance_cycle_value < 88 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_boom_coop } } }
+		else = { je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_frenzy_coop } } }
 	}
 	else = {
-		if = { limit = { var:finance_cycle_value < 10 }  add_modifier = { name = financial_cycle_phase_panic } }
-		else_if = { limit = { var:finance_cycle_value < 25 } add_modifier = { name = financial_cycle_phase_downturn } }
-		else_if = { limit = { var:finance_cycle_value < 40 } add_modifier = { name = financial_cycle_phase_stagnation } }
+		if = { limit = { var:finance_cycle_value < 10 }  je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_panic } } }
+		else_if = { limit = { var:finance_cycle_value < 25 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_downturn } } }
+		else_if = { limit = { var:finance_cycle_value < 40 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_stagnation } } }
 		else_if = { limit = { var:finance_cycle_value < 60 } } # Stable = no modifier
-		else_if = { limit = { var:finance_cycle_value < 75 } add_modifier = { name = financial_cycle_phase_expansion } }
-		else_if = { limit = { var:finance_cycle_value < 88 } add_modifier = { name = financial_cycle_phase_boom } }
-		else = { add_modifier = { name = financial_cycle_phase_frenzy } }
+		else_if = { limit = { var:finance_cycle_value < 75 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_expansion } } }
+		else_if = { limit = { var:finance_cycle_value < 88 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_boom } } }
+		else = { je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_frenzy } } }
 	}
 }
 
@@ -1756,7 +1756,7 @@ banking_cycle_post_event_refresh = {
 banking_cycle_cleanup_capital_controls = {
 	if = {
 		limit = {
-			has_modifier = banking_capital_controls_out
+			je:je_banking_cycle = { has_modifier = banking_capital_controls_out }
 			NOT = {
 				OR = {
 					has_law = law_type:law_prudential_narrow_banking
@@ -1765,6 +1765,6 @@ banking_cycle_cleanup_capital_controls = {
 				}
 			}
 		}
-		remove_modifier = banking_capital_controls_out
+		je:je_banking_cycle = { remove_modifier = banking_capital_controls_out }
 	}
 }

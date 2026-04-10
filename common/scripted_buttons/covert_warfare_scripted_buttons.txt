@@ -38,12 +38,12 @@ iw_increase_funding_button = {
 					has_variable = iw_funding_level
 					var:iw_funding_level >= 1
 				}
-				remove_modifier = covert_operation_funding_cost
-				add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult }
+				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+				je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
 			}
 			else_if = {
-				limit = { has_modifier = covert_operation_funding_cost }
-				remove_modifier = covert_operation_funding_cost
+				limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
+				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
 			}
 			# Refresh detection display for all active ops
 			covert_op_refresh_all_targets = yes
@@ -76,12 +76,12 @@ iw_decrease_funding_button = {
 					has_variable = iw_funding_level
 					var:iw_funding_level >= 1
 				}
-				remove_modifier = covert_operation_funding_cost
-				add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult }
+				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+				je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
 			}
 			else_if = {
-				limit = { has_modifier = covert_operation_funding_cost }
-				remove_modifier = covert_operation_funding_cost
+				limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
+				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
 			}
 			# Refresh detection display for all active ops
 			covert_op_refresh_all_targets = yes

@@ -52,7 +52,7 @@ world_war_events.1 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { has_modifier = ww_rearmament_modifier }
+				trigger = { je:je_world_war = { has_modifier = ww_rearmament_modifier } }
 				add = 2
 			}
 		}
@@ -84,7 +84,7 @@ world_war_events.1 = {
 				add = 2
 			}
 			modifier = {
-				trigger = { has_modifier = ww_appeasement_modifier }
+				trigger = { je:je_world_war = { has_modifier = ww_appeasement_modifier } }
 				add = 3
 			}
 		}
@@ -189,7 +189,7 @@ world_war_events.2 = {
 		ai_chance = {
 			base = 4
 			modifier = {
-				trigger = { has_modifier = ww_rearmament_modifier }
+				trigger = { je:je_world_war = { has_modifier = ww_rearmament_modifier } }
 				add = 2
 			}
 		}
@@ -266,11 +266,11 @@ world_war_events.2 = {
 			country = scope:border_rival
 			value = 40
 		}
-		add_modifier = {
+		je:je_world_war = { add_modifier = {
 			name = ww_rearmament_modifier
 			days = normal_modifier_time
 			is_decaying = yes
-		}
+		} }
 	}
 }
 
@@ -351,7 +351,7 @@ world_war_events.3 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { has_modifier = ww_appeasement_modifier }
+				trigger = { je:je_world_war = { has_modifier = ww_appeasement_modifier } }
 				add = 4
 			}
 		}
@@ -475,12 +475,12 @@ world_war_events.5 = {
 		}
 		# Remove leadup modifiers and apply war modifiers
 		if = {
-			limit = { has_modifier = ww_rising_tensions_modifier }
-			remove_modifier = ww_rising_tensions_modifier
+			limit = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } }
+			je:je_world_war = { remove_modifier = ww_rising_tensions_modifier }
 		}
 		if = {
-			limit = { has_modifier = ww_appeasement_modifier }
-			remove_modifier = ww_appeasement_modifier
+			limit = { je:je_world_war = { has_modifier = ww_appeasement_modifier } }
+			je:je_world_war = { remove_modifier = ww_appeasement_modifier }
 		}
 		# National rally effect
 		add_loyalists = {
@@ -598,11 +598,11 @@ world_war_events.11 = {
 				add = 2
 			}
 		}
-		add_modifier = {
+		je:je_world_war = { add_modifier = {
 			name = ww_home_front_strain_modifier
 			days = short_modifier_time
 			is_decaying = yes
-		}
+		} }
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
@@ -615,7 +615,7 @@ world_war_events.11 = {
 		ai_chance = {
 			base = 3
 			modifier = {
-				trigger = { has_modifier = ww_total_war_economy_modifier }
+				trigger = { je:je_world_war = { has_modifier = ww_total_war_economy_modifier } }
 				add = 3
 			}
 		}
@@ -862,11 +862,11 @@ world_war_events.20 = {
 				add = 3
 			}
 		}
-		add_modifier = {
+		je:je_world_war = { add_modifier = {
 			name = ww_lend_lease_modifier
 			days = long_modifier_time
 			is_decaying = yes
-		}
+		} }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_modifier = {
 			name = ww_late_entry_cooldown
@@ -1006,16 +1006,16 @@ world_war_events.100 = {
 
 	immediate = {
 		# Clean up all war modifiers
-		if = { limit = { has_modifier = ww_total_war_economy_modifier } remove_modifier = ww_total_war_economy_modifier }
-		if = { limit = { has_modifier = ww_war_propaganda_modifier } remove_modifier = ww_war_propaganda_modifier }
-		if = { limit = { has_modifier = ww_wartime_rationing_modifier } remove_modifier = ww_wartime_rationing_modifier }
-		if = { limit = { has_modifier = ww_home_front_strain_modifier } remove_modifier = ww_home_front_strain_modifier }
-		if = { limit = { has_modifier = ww_prolonged_war_exhaustion_modifier } remove_modifier = ww_prolonged_war_exhaustion_modifier }
-		if = { limit = { has_modifier = ww_rearmament_modifier } remove_modifier = ww_rearmament_modifier }
-		if = { limit = { has_modifier = ww_lend_lease_modifier } remove_modifier = ww_lend_lease_modifier }
+		if = { limit = { je:je_world_war = { has_modifier = ww_total_war_economy_modifier } } je:je_world_war = { remove_modifier = ww_total_war_economy_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_war_propaganda_modifier } } je:je_world_war = { remove_modifier = ww_war_propaganda_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_wartime_rationing_modifier } } je:je_world_war = { remove_modifier = ww_wartime_rationing_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } } je:je_world_war = { remove_modifier = ww_prolonged_war_exhaustion_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_rearmament_modifier } } je:je_world_war = { remove_modifier = ww_rearmament_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_lend_lease_modifier } } je:je_world_war = { remove_modifier = ww_lend_lease_modifier } }
 		if = { limit = { has_modifier = ww_fresh_forces_modifier } remove_modifier = ww_fresh_forces_modifier }
 		if = { limit = { has_modifier = ww_arsenal_of_democracy_modifier } remove_modifier = ww_arsenal_of_democracy_modifier }
-		if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
+		if = { limit = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } } je:je_world_war = { remove_modifier = ww_rising_tensions_modifier } }
 	}
 
 	# Option A: Impose a harsh peace - regime change, reparations
@@ -1445,7 +1445,7 @@ world_war_events.104 = {
 			base = 2
 			modifier = {
 				trigger = {
-					has_modifier = ww_home_front_strain_modifier
+					je:je_world_war = { has_modifier = ww_home_front_strain_modifier }
 				}
 				add = 3
 			}
