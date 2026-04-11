@@ -39,15 +39,18 @@ he_enable_admin_focus = {
 	}
 
 	effect = {
-		if = {
-			limit = { has_variable = heir_ed_focus_diplo }
-			remove_variable = heir_ed_focus_diplo
+		custom_tooltip = {
+			text = HE_ENABLE_ADMIN_FOCUS_EFFECT_TT
+			if = {
+				limit = { has_variable = heir_ed_focus_diplo }
+				remove_variable = heir_ed_focus_diplo
+			}
+			if = {
+				limit = { has_variable = heir_ed_focus_military }
+				remove_variable = heir_ed_focus_military
+			}
+			set_variable = heir_ed_focus_admin
 		}
-		if = {
-			limit = { has_variable = heir_ed_focus_military }
-			remove_variable = heir_ed_focus_military
-		}
-		set_variable = heir_ed_focus_admin
 		if = {
 			limit = { NOT = { has_modifier = heir_ed_trait_focus_active } }
 			add_modifier = { name = heir_ed_trait_focus_active }
@@ -75,7 +78,10 @@ he_disable_admin_focus = {
 	}
 
 	effect = {
-		remove_variable = heir_ed_focus_admin
+		custom_tooltip = {
+			text = HE_DISABLE_ADMIN_FOCUS_EFFECT_TT
+			remove_variable = heir_ed_focus_admin
+		}
 		if = { limit = { has_modifier = heir_ed_trait_focus_active } remove_modifier = heir_ed_trait_focus_active }
 	}
 }
@@ -119,15 +125,18 @@ he_enable_diplo_focus = {
 	}
 
 	effect = {
-		if = {
-			limit = { has_variable = heir_ed_focus_admin }
-			remove_variable = heir_ed_focus_admin
+		custom_tooltip = {
+			text = HE_ENABLE_DIPLO_FOCUS_EFFECT_TT
+			if = {
+				limit = { has_variable = heir_ed_focus_admin }
+				remove_variable = heir_ed_focus_admin
+			}
+			if = {
+				limit = { has_variable = heir_ed_focus_military }
+				remove_variable = heir_ed_focus_military
+			}
+			set_variable = heir_ed_focus_diplo
 		}
-		if = {
-			limit = { has_variable = heir_ed_focus_military }
-			remove_variable = heir_ed_focus_military
-		}
-		set_variable = heir_ed_focus_diplo
 		if = {
 			limit = { NOT = { has_modifier = heir_ed_trait_focus_active } }
 			add_modifier = { name = heir_ed_trait_focus_active }
@@ -155,7 +164,10 @@ he_disable_diplo_focus = {
 	}
 
 	effect = {
-		remove_variable = heir_ed_focus_diplo
+		custom_tooltip = {
+			text = HE_DISABLE_DIPLO_FOCUS_EFFECT_TT
+			remove_variable = heir_ed_focus_diplo
+		}
 		if = { limit = { has_modifier = heir_ed_trait_focus_active } remove_modifier = heir_ed_trait_focus_active }
 	}
 }
@@ -199,15 +211,18 @@ he_enable_military_focus = {
 	}
 
 	effect = {
-		if = {
-			limit = { has_variable = heir_ed_focus_admin }
-			remove_variable = heir_ed_focus_admin
+		custom_tooltip = {
+			text = HE_ENABLE_MILITARY_FOCUS_EFFECT_TT
+			if = {
+				limit = { has_variable = heir_ed_focus_admin }
+				remove_variable = heir_ed_focus_admin
+			}
+			if = {
+				limit = { has_variable = heir_ed_focus_diplo }
+				remove_variable = heir_ed_focus_diplo
+			}
+			set_variable = heir_ed_focus_military
 		}
-		if = {
-			limit = { has_variable = heir_ed_focus_diplo }
-			remove_variable = heir_ed_focus_diplo
-		}
-		set_variable = heir_ed_focus_military
 		if = {
 			limit = { NOT = { has_modifier = heir_ed_trait_focus_active } }
 			add_modifier = { name = heir_ed_trait_focus_active }
@@ -235,7 +250,10 @@ he_disable_military_focus = {
 	}
 
 	effect = {
-		remove_variable = heir_ed_focus_military
+		custom_tooltip = {
+			text = HE_DISABLE_MILITARY_FOCUS_EFFECT_TT
+			remove_variable = heir_ed_focus_military
+		}
 		if = { limit = { has_modifier = heir_ed_trait_focus_active } remove_modifier = heir_ed_trait_focus_active }
 	}
 }
@@ -282,11 +300,14 @@ he_enable_progressive = {
 	}
 
 	effect = {
-		if = {
-			limit = { has_variable = heir_ed_focus_conservative }
-			remove_variable = heir_ed_focus_conservative
+		custom_tooltip = {
+			text = HE_ENABLE_PROGRESSIVE_EFFECT_TT
+			if = {
+				limit = { has_variable = heir_ed_focus_conservative }
+				remove_variable = heir_ed_focus_conservative
+			}
+			set_variable = heir_ed_focus_progressive
 		}
-		set_variable = heir_ed_focus_progressive
 		if = {
 			limit = { NOT = { has_modifier = heir_ed_ideology_focus_active } }
 			add_modifier = { name = heir_ed_ideology_focus_active }
@@ -314,7 +335,10 @@ he_disable_progressive = {
 	}
 
 	effect = {
-		remove_variable = heir_ed_focus_progressive
+		custom_tooltip = {
+			text = HE_DISABLE_PROGRESSIVE_EFFECT_TT
+			remove_variable = heir_ed_focus_progressive
+		}
 		if = { limit = { has_modifier = heir_ed_ideology_focus_active } remove_modifier = heir_ed_ideology_focus_active }
 	}
 }
@@ -361,11 +385,14 @@ he_enable_conservative = {
 	}
 
 	effect = {
-		if = {
-			limit = { has_variable = heir_ed_focus_progressive }
-			remove_variable = heir_ed_focus_progressive
+		custom_tooltip = {
+			text = HE_ENABLE_CONSERVATIVE_EFFECT_TT
+			if = {
+				limit = { has_variable = heir_ed_focus_progressive }
+				remove_variable = heir_ed_focus_progressive
+			}
+			set_variable = heir_ed_focus_conservative
 		}
-		set_variable = heir_ed_focus_conservative
 		if = {
 			limit = { NOT = { has_modifier = heir_ed_ideology_focus_active } }
 			add_modifier = { name = heir_ed_ideology_focus_active }
@@ -393,7 +420,10 @@ he_disable_conservative = {
 	}
 
 	effect = {
-		remove_variable = heir_ed_focus_conservative
+		custom_tooltip = {
+			text = HE_DISABLE_CONSERVATIVE_EFFECT_TT
+			remove_variable = heir_ed_focus_conservative
+		}
 		if = { limit = { has_modifier = heir_ed_ideology_focus_active } remove_modifier = heir_ed_ideology_focus_active }
 	}
 }
@@ -441,15 +471,18 @@ he_enable_radical = {
 	}
 
 	effect = {
-		if = {
-			limit = { has_variable = heir_ed_focus_moderate }
-			remove_variable = heir_ed_focus_moderate
+		custom_tooltip = {
+			text = HE_ENABLE_RADICAL_EFFECT_TT
+			if = {
+				limit = { has_variable = heir_ed_focus_moderate }
+				remove_variable = heir_ed_focus_moderate
+			}
+			if = {
+				limit = { has_variable = heir_ed_focus_regressive }
+				remove_variable = heir_ed_focus_regressive
+			}
+			set_variable = heir_ed_focus_radical
 		}
-		if = {
-			limit = { has_variable = heir_ed_focus_regressive }
-			remove_variable = heir_ed_focus_regressive
-		}
-		set_variable = heir_ed_focus_radical
 		if = {
 			limit = { NOT = { has_modifier = heir_ed_ig_focus_active } }
 			add_modifier = { name = heir_ed_ig_focus_active }
@@ -477,7 +510,10 @@ he_disable_radical = {
 	}
 
 	effect = {
-		remove_variable = heir_ed_focus_radical
+		custom_tooltip = {
+			text = HE_DISABLE_RADICAL_EFFECT_TT
+			remove_variable = heir_ed_focus_radical
+		}
 		if = { limit = { has_modifier = heir_ed_ig_focus_active } remove_modifier = heir_ed_ig_focus_active }
 	}
 }
@@ -525,15 +561,18 @@ he_enable_moderate = {
 	}
 
 	effect = {
-		if = {
-			limit = { has_variable = heir_ed_focus_radical }
-			remove_variable = heir_ed_focus_radical
+		custom_tooltip = {
+			text = HE_ENABLE_MODERATE_EFFECT_TT
+			if = {
+				limit = { has_variable = heir_ed_focus_radical }
+				remove_variable = heir_ed_focus_radical
+			}
+			if = {
+				limit = { has_variable = heir_ed_focus_regressive }
+				remove_variable = heir_ed_focus_regressive
+			}
+			set_variable = heir_ed_focus_moderate
 		}
-		if = {
-			limit = { has_variable = heir_ed_focus_regressive }
-			remove_variable = heir_ed_focus_regressive
-		}
-		set_variable = heir_ed_focus_moderate
 		if = {
 			limit = { NOT = { has_modifier = heir_ed_ig_focus_active } }
 			add_modifier = { name = heir_ed_ig_focus_active }
@@ -561,7 +600,10 @@ he_disable_moderate = {
 	}
 
 	effect = {
-		remove_variable = heir_ed_focus_moderate
+		custom_tooltip = {
+			text = HE_DISABLE_MODERATE_EFFECT_TT
+			remove_variable = heir_ed_focus_moderate
+		}
 		if = { limit = { has_modifier = heir_ed_ig_focus_active } remove_modifier = heir_ed_ig_focus_active }
 	}
 }
@@ -605,15 +647,18 @@ he_enable_regressive = {
 	}
 
 	effect = {
-		if = {
-			limit = { has_variable = heir_ed_focus_radical }
-			remove_variable = heir_ed_focus_radical
+		custom_tooltip = {
+			text = HE_ENABLE_REGRESSIVE_EFFECT_TT
+			if = {
+				limit = { has_variable = heir_ed_focus_radical }
+				remove_variable = heir_ed_focus_radical
+			}
+			if = {
+				limit = { has_variable = heir_ed_focus_moderate }
+				remove_variable = heir_ed_focus_moderate
+			}
+			set_variable = heir_ed_focus_regressive
 		}
-		if = {
-			limit = { has_variable = heir_ed_focus_moderate }
-			remove_variable = heir_ed_focus_moderate
-		}
-		set_variable = heir_ed_focus_regressive
 		if = {
 			limit = { NOT = { has_modifier = heir_ed_ig_focus_active } }
 			add_modifier = { name = heir_ed_ig_focus_active }
@@ -641,7 +686,10 @@ he_disable_regressive = {
 	}
 
 	effect = {
-		remove_variable = heir_ed_focus_regressive
+		custom_tooltip = {
+			text = HE_DISABLE_REGRESSIVE_EFFECT_TT
+			remove_variable = heir_ed_focus_regressive
+		}
 		if = { limit = { has_modifier = heir_ed_ig_focus_active } remove_modifier = heir_ed_ig_focus_active }
 	}
 }

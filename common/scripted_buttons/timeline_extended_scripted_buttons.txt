@@ -836,17 +836,20 @@ cb_fx_swap_lines = {
     }
     effect = {
         je:je_banking_cycle = { add_modifier = { name = banking_fx_swap_lines } }
-        every_country = {
-            limit = {
-                country_rank = rank_value:great_power
-            }
-            change_relations = {
-                country = ROOT
-                value = -5
-            }
-            change_variable = {
-                name = bubble_pressure
-                add = 1
+        custom_tooltip = {
+            text = FX_SWAP_LINES_GP_RELATIONS_TT
+            every_country = {
+                limit = {
+                    country_rank = rank_value:great_power
+                }
+                change_relations = {
+                    country = ROOT
+                    value = -5
+                }
+                change_variable = {
+                    name = bubble_pressure
+                    add = 1
+                }
             }
         }
     }

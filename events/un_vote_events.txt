@@ -211,9 +211,12 @@ un_vote.1 = {
 		name = un_vote.1.a
 		default_option = yes
 
-		change_global_variable = { name = un_vote_support add = 1 }
-		change_global_variable = { name = un_vote_net add = 1 }
-		set_variable = { name = un_vote_choice value = 1 }
+		custom_tooltip = {
+			text = UN_VOTE_IN_FAVOR_TT
+			change_global_variable = { name = un_vote_support add = 1 }
+			change_global_variable = { name = un_vote_net add = 1 }
+			set_variable = { name = un_vote_choice value = 1 }
+		}
 
 		# Relations boost with proposer + diplomatic catalyst
 		if = {
@@ -851,9 +854,12 @@ un_vote.1 = {
 	option = {
 		name = un_vote.1.b
 
-		change_global_variable = { name = un_vote_oppose add = 1 }
-		change_global_variable = { name = un_vote_net add = -1 }
-		set_variable = { name = un_vote_choice value = 2 }
+		custom_tooltip = {
+			text = UN_VOTE_AGAINST_TT
+			change_global_variable = { name = un_vote_oppose add = 1 }
+			change_global_variable = { name = un_vote_net add = -1 }
+			set_variable = { name = un_vote_choice value = 2 }
+		}
 
 		# Relations damage with proposer + negative diplomatic catalyst
 		if = {

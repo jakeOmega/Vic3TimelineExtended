@@ -824,10 +824,13 @@ world_war_events.20 = {
 				}
 			}
 		}
-		set_variable = ww_active_phase
-		set_variable = ww_defender_side
-		set_variable = { name = ww_years_elapsed value = 0 }
-		set_variable = { name = ww_months_counter value = 0 }
+		custom_tooltip = {
+			text = WW_JOIN_DEFENDER_TT
+			set_variable = ww_active_phase
+			set_variable = ww_defender_side
+			set_variable = { name = ww_years_elapsed value = 0 }
+			set_variable = { name = ww_months_counter value = 0 }
+		}
 		add_modifier = {
 			name = ww_fresh_forces_modifier
 			days = normal_modifier_time
@@ -1167,12 +1170,15 @@ world_war_events.101 = {
 			strata = lower
 		}
 		# Clean up war variables
-		remove_variable = ww_active_phase
-		remove_variable = ww_aggressor_side
-		remove_variable = ww_defender_side
-		remove_variable = ww_years_elapsed
-		remove_variable = ww_months_counter
-		set_variable = ww_peace_concluded
+		custom_tooltip = {
+			text = WW_PEACE_CONCLUDED_TT
+			remove_variable = ww_active_phase
+			remove_variable = ww_aggressor_side
+			remove_variable = ww_defender_side
+			remove_variable = ww_years_elapsed
+			remove_variable = ww_months_counter
+			set_variable = ww_peace_concluded
+		}
 	}
 
 	# Option B: Resist - causes internal turmoil
@@ -1193,12 +1199,15 @@ world_war_events.101 = {
 			strata = upper
 		}
 		# Clean up war variables
-		remove_variable = ww_active_phase
-		remove_variable = ww_aggressor_side
-		remove_variable = ww_defender_side
-		remove_variable = ww_years_elapsed
-		remove_variable = ww_months_counter
-		set_variable = ww_peace_concluded
+		custom_tooltip = {
+			text = WW_PEACE_CONCLUDED_TT
+			remove_variable = ww_active_phase
+			remove_variable = ww_aggressor_side
+			remove_variable = ww_defender_side
+			remove_variable = ww_years_elapsed
+			remove_variable = ww_months_counter
+			set_variable = ww_peace_concluded
+		}
 	}
 }
 
@@ -1241,12 +1250,15 @@ world_war_events.102 = {
 			strata = lower
 		}
 		# Clean up war variables
-		remove_variable = ww_active_phase
-		remove_variable = ww_aggressor_side
-		remove_variable = ww_defender_side
-		remove_variable = ww_years_elapsed
-		remove_variable = ww_months_counter
-		set_variable = ww_peace_concluded
+		custom_tooltip = {
+			text = WW_PEACE_CONCLUDED_TT
+			remove_variable = ww_active_phase
+			remove_variable = ww_aggressor_side
+			remove_variable = ww_defender_side
+			remove_variable = ww_years_elapsed
+			remove_variable = ww_months_counter
+			set_variable = ww_peace_concluded
+		}
 	}
 
 	# Option B: Reject foreign aid - rebuild independently, slower but sovereign
@@ -1267,12 +1279,15 @@ world_war_events.102 = {
 			strata = lower
 		}
 		# Clean up war variables
-		remove_variable = ww_active_phase
-		remove_variable = ww_aggressor_side
-		remove_variable = ww_defender_side
-		remove_variable = ww_years_elapsed
-		remove_variable = ww_months_counter
-		set_variable = ww_peace_concluded
+		custom_tooltip = {
+			text = WW_PEACE_CONCLUDED_TT
+			remove_variable = ww_active_phase
+			remove_variable = ww_aggressor_side
+			remove_variable = ww_defender_side
+			remove_variable = ww_years_elapsed
+			remove_variable = ww_months_counter
+			set_variable = ww_peace_concluded
+		}
 	}
 }
 
@@ -1518,7 +1533,10 @@ world_war_events.105 = {
 			is_decaying = yes
 		}
 		# Mark the world war fully resolved
-		set_variable = ww_fully_resolved
+		custom_tooltip = {
+			text = WW_FULLY_RESOLVED_TT
+			set_variable = ww_fully_resolved
+		}
 	}
 
 	# Option B: Seek coexistence - attempt peaceful relations
@@ -1540,6 +1558,9 @@ world_war_events.105 = {
 			strata = middle
 		}
 		# Mark the world war fully resolved
-		set_variable = ww_fully_resolved
+		custom_tooltip = {
+			text = WW_FULLY_RESOLVED_TT
+			set_variable = ww_fully_resolved
+		}
 	}
 }
