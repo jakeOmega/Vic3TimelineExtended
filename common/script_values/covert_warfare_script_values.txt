@@ -94,9 +94,13 @@ intelligence_capacity_relative = {
 
 # Multiplier for the intelligence_capacity_defense static modifier
 # Scales with absolute IC, capped at 5x
+# owner = {} makes this safe from JE scope (JE→Country) while being a no-op from country scope
 intelligence_capacity_modifier_mult = {
-	value = intelligence_capacity_total
-	divide = 25
+	value = 0
+	owner = {
+		add = intelligence_capacity_total
+		divide = 25
+	}
 	min = 0
 	max = 5
 }
@@ -124,40 +128,48 @@ covert_ops_max_per_type = {
 
 # Currently active operations — exact pact count using step pattern
 # (each "count >= N" check adds 1, giving the precise total)
+# IMPORTANT: first_country filter ensures we only count ops WE initiated, not ops targeting us
 covert_operations_active = {
 	value = 0
-	if = { limit = { any_scope_diplomatic_pact = { count >= 1 is_covert_operation_pact = yes } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 2 is_covert_operation_pact = yes } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 3 is_covert_operation_pact = yes } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 4 is_covert_operation_pact = yes } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 5 is_covert_operation_pact = yes } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 6 is_covert_operation_pact = yes } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 7 is_covert_operation_pact = yes } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 8 is_covert_operation_pact = yes } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 9 is_covert_operation_pact = yes } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 10 is_covert_operation_pact = yes } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 1 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 2 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 3 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 4 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 5 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 6 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 7 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 8 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 9 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 10 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
 }
 
 covert_operations_available_slots = {
-	value = covert_operation_max_slots
-	subtract = covert_operations_active
+	value = 0
+	owner = {
+		add = covert_operation_max_slots
+		subtract = covert_operations_active
+	}
 	min = 0
 }
 
 # Funding cost: multiplier for the covert_operation_funding_cost modifier
-# Scales with number of active operations and funding level
+# Scales with number of active operations + 1 (base maintenance) and funding level
 covert_operation_cost_mult = {
-	value = covert_operations_active
-	# Scale by funding level (0-3); 0 means no cost
-	multiply = {
-		value = 0
-		if = {
-			limit = { has_variable = iw_funding_level }
-			add = var:iw_funding_level
+	value = 0
+	owner = {
+		add = covert_operations_active
+		add = 1 # base maintenance — you pay for defensive benefits even with no ops
+		# Scale by funding level (0-3); 0 means no cost
+		multiply = {
+			value = 0
+			if = {
+				limit = { has_variable = iw_funding_level }
+				add = var:iw_funding_level
+			}
 		}
+		# Scale with GDP so big economies pay proportionally
+		multiply = banking_event_expense_small
 	}
-	# Scale with GDP so big economies pay proportionally
-	multiply = banking_event_expense_small
 	min = 0
 }
 
@@ -268,67 +280,80 @@ intelligence_capacity_from_gdp_display = {
 }
 
 covert_slots_display = {
-	value = covert_operation_max_slots
+	value = 0
+	owner = { add = covert_operation_max_slots }
 	round = yes
 }
 
 covert_active_display = {
-	value = covert_operations_active
+	value = 0
+	owner = { add = covert_operations_active }
 	round = yes
 }
 
 covert_available_slots_display = {
-	value = covert_operations_available_slots
+	value = 0
+	owner = { add = covert_operations_available_slots }
 	round = yes
 }
 
 covert_funding_level_display = {
 	value = 0
-	if = {
-		limit = { has_variable = iw_funding_level }
-		add = var:iw_funding_level
+	owner = {
+		if = {
+			limit = { has_variable = iw_funding_level }
+			add = var:iw_funding_level
+		}
 	}
 	round = yes
 }
 
 covert_detection_chance_display = {
-	value = covert_operation_detection_chance
+	value = 0
+	owner = { add = covert_operation_detection_chance }
 	round = yes
 }
 
 covert_detection_target_ic_display = {
-	value = target_counterintelligence_penalty
+	value = 0
+	owner = { add = target_counterintelligence_penalty }
 	round = yes
 }
 
 covert_detection_efficiency_pct_display = {
 	# Shows efficiency as percentage reduction (e.g., 15 means 15% efficiency = detection × 0.85)
-	value = modifier:country_covert_operation_efficiency_mult
-	multiply = 100
+	value = 0
+	owner = {
+		add = modifier:country_covert_operation_efficiency_mult
+		multiply = 100
+	}
 	round = yes
 }
 
 # Absolute detection reduction from efficiency, for additive display
 # = raw_risk × efficiency_mult
 covert_detection_efficiency_reduction = {
-	value = covert_ops_detection_base
-	if = {
-		limit = {
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 2
+	value = 0
+	owner = {
+		add = covert_ops_detection_base
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 2
+			}
+			subtract = covert_ops_detection_funding_2_reduction
 		}
-		subtract = covert_ops_detection_funding_2_reduction
-	}
-	if = {
-		limit = {
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 3
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 3
+			}
+			subtract = covert_ops_detection_funding_3_reduction
 		}
-		subtract = covert_ops_detection_funding_3_reduction
+		add = target_counterintelligence_penalty
+		multiply = modifier:country_covert_operation_efficiency_mult
+		min = 0
 	}
-	add = target_counterintelligence_penalty
-	multiply = modifier:country_covert_operation_efficiency_mult
-	min = 0
 	round = yes
 }
 
@@ -337,44 +362,52 @@ covert_detection_efficiency_reduction = {
 # Level 0-1: 0, Level 2: 1, Level 3: 2
 covert_ops_funding_ci_mult = {
 	value = 0
-	if = {
-		limit = { has_variable = iw_funding_level }
-		add = var:iw_funding_level
-		subtract = 1
-		min = 0
+	owner = {
+		if = {
+			limit = { has_variable = iw_funding_level }
+			add = var:iw_funding_level
+			subtract = 1
+			min = 0
+		}
 	}
 }
 
 # Display: detection reduction from funding level (for JE tooltip)
 covert_ops_funding_detection_reduction_display = {
 	value = 0
-	if = {
-		limit = {
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 2
+	owner = {
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 2
+			}
+			add = covert_ops_detection_funding_2_reduction
 		}
-		add = covert_ops_detection_funding_2_reduction
-	}
-	if = {
-		limit = {
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 3
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 3
+			}
+			add = covert_ops_detection_funding_3_reduction
 		}
-		add = covert_ops_detection_funding_3_reduction
 	}
 	round = yes
 }
 
 # Display: funding IC bonus (funding_ci_mult * per_level)
 covert_ops_funding_ic_display = {
-	value = covert_ops_funding_ci_mult
-	multiply = covert_ops_funding_defense_ic_per_level
+	value = 0
+	owner = {
+		add = covert_ops_funding_ci_mult
+		multiply = covert_ops_funding_defense_ic_per_level
+	}
 	round = yes
 }
 
 # Cost display: shows the GDP-scaled expense amount (multiplier for country_expenses_add = 1)
 covert_operation_cost_display = {
-	value = covert_operation_cost_mult
+	value = 0
+	owner = { add = covert_operation_cost_mult }
 	round = yes
 }
 
@@ -382,43 +415,55 @@ covert_operation_cost_display = {
 # What the funding level will be after increasing
 covert_funding_next_level_up = {
 	value = 0
-	if = {
-		limit = { has_variable = iw_funding_level }
-		add = var:iw_funding_level
+	owner = {
+		if = {
+			limit = { has_variable = iw_funding_level }
+			add = var:iw_funding_level
+		}
+		add = 1
+		min = 0
+		max = 3
 	}
-	add = 1
-	min = 0
-	max = 3
 	round = yes
 }
 
 # What the funding level will be after decreasing
 covert_funding_next_level_down = {
 	value = 0
-	if = {
-		limit = { has_variable = iw_funding_level }
-		add = var:iw_funding_level
+	owner = {
+		if = {
+			limit = { has_variable = iw_funding_level }
+			add = var:iw_funding_level
+		}
+		subtract = 1
+		min = 0
+		max = 3
 	}
-	subtract = 1
-	min = 0
-	max = 3
 	round = yes
 }
 
 # Cost at the next-up funding level
 covert_operation_cost_at_next_up = {
-	value = covert_operations_active
-	multiply = covert_funding_next_level_up
-	multiply = banking_event_expense_small
+	value = 0
+	owner = {
+		add = covert_operations_active
+		add = 1
+		multiply = covert_funding_next_level_up
+		multiply = banking_event_expense_small
+	}
 	min = 0
 	round = yes
 }
 
 # Cost at the next-down funding level
 covert_operation_cost_at_next_down = {
-	value = covert_operations_active
-	multiply = covert_funding_next_level_down
-	multiply = banking_event_expense_small
+	value = 0
+	owner = {
+		add = covert_operations_active
+		add = 1
+		multiply = covert_funding_next_level_down
+		multiply = banking_event_expense_small
+	}
 	min = 0
 	round = yes
 }

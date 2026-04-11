@@ -73,24 +73,23 @@ ch_yearly_pulse_on_action = {
 cultural_hegemony_tech_first_on_action = {
 	effect = {
 		if = {
-			limit = { NOT = { has_game_rule = cultural_hegemony_enabled } }
-			return = yes
-		}
-		if = {
-			limit = {
-				# True world first: no other country has researched this tech yet
-				NOT = {
-					any_country = {
-						NOT = { this = ROOT }
-						has_technology_researched = scope:technology
+			limit = { has_game_rule = cultural_hegemony_enabled }
+			if = {
+				limit = {
+					# True world first: no other country has researched this tech yet
+					NOT = {
+						any_country = {
+							NOT = { this = ROOT }
+							has_technology_researched = scope:technology
+						}
 					}
 				}
+				if = {
+					limit = { NOT = { has_variable = ch_tech_firsts_recent } }
+					set_variable = { name = ch_tech_firsts_recent value = 0 }
+				}
+				change_variable = { name = ch_tech_firsts_recent add = cultural_pull_tech_first_bonus }
 			}
-			if = {
-				limit = { NOT = { has_variable = ch_tech_firsts_recent } }
-				set_variable = { name = ch_tech_firsts_recent value = 0 }
-			}
-			change_variable = { name = ch_tech_firsts_recent add = cultural_pull_tech_first_bonus }
 		}
 	}
 }

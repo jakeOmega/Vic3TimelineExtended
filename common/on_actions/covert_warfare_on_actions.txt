@@ -16,6 +16,7 @@ covert_warfare_election_end = {
 			limit = {
 				any_scope_diplomatic_pact = {
 					is_diplomatic_action_type = covert_election_interference_action
+					second_country = { this = ROOT }
 				}
 			}
 			covert_op_election_confidence_effect = yes

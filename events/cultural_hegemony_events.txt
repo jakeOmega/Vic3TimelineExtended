@@ -622,7 +622,7 @@ cultural_hegemony.7 = {
 				base = 1
 				modifier = {
 					trigger = { always = yes }
-					add = ch_total_weight
+					add = var:ch_total
 				}
 			}
 			save_scope_as = cultural_hegemon
@@ -905,10 +905,9 @@ cultural_hegemony.8 = {
 
 		# Invest in cultural projection
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = cultural_hegemony_effect
+			name = ch_soft_power_dividend
 			days = normal_modifier_time
 			is_decaying = yes
-			multiplier = 2
 		} }
 
 		ai_chance = {
@@ -969,7 +968,11 @@ cultural_hegemony.9 = {
 		name = cultural_hegemony.9.a
 		default_option = yes
 
-		add_prestige = 200
+		add_modifier = {
+			name = ch_soft_power_dividend
+			days = long_modifier_time
+			is_decaying = yes
+		}
 
 		ai_chance = {
 			base = 10
@@ -1338,7 +1341,7 @@ cultural_hegemony.14 = {
 				base = 1
 				modifier = {
 					trigger = { always = yes }
-					add = ch_total_weight
+					add = var:ch_total
 				}
 			}
 			save_scope_as = cultural_hegemon
@@ -1501,7 +1504,7 @@ cultural_hegemony.15 = {
 				base = 1
 				modifier = {
 					trigger = { always = yes }
-					add = ch_total_weight
+					add = var:ch_total
 				}
 			}
 			save_scope_as = cultural_hegemon

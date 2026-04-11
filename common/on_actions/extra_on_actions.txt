@@ -1285,6 +1285,23 @@ international_relations_events_on_action = {
 					}
 					trigger_event = { id = international_relations_events.8 }
 				}
+				# Nuclear Close Call
+				3 = {
+					trigger = {
+						has_modifier = nuclear_power
+						any_rival_country = { has_modifier = nuclear_power }
+					}
+					trigger_event = { id = nuclear_weapon_events.21 }
+				}
+				# Anti-Nuclear Movement
+				3 = {
+					trigger = {
+						has_technology_researched = nuclear_weapons
+						has_variable = nuclear_weapons_program_funding
+						var:nuclear_weapons_program_funding >= 1
+					}
+					trigger_event = { id = nuclear_weapon_events.22 }
+				}
 			}
 		}
 	}

@@ -367,6 +367,8 @@ je_covert_warfare = {
 			}
 
 			# ---- Update intelligence capacity defense modifier ----
+			# NOTE: Script values use owner={} internally to access country data
+			# from JE scope (owner is a no-op from country scope).
 			if = {
 				limit = { intelligence_capacity_total >= 1 }
 				je:je_covert_warfare = { remove_modifier = intelligence_capacity_defense }
@@ -402,7 +404,6 @@ je_covert_warfare = {
 			# ---- Apply operation funding cost ----
 			if = {
 				limit = {
-					covert_operations_active >= 1
 					has_variable = iw_funding_level
 					var:iw_funding_level >= 1
 				}
@@ -435,6 +436,7 @@ je_covert_warfare = {
 			set_variable = { name = target_max_ic value = 0 }
 			every_scope_diplomatic_pact = {
 				limit = {
+					first_country = { this = ROOT }
 					OR = {
 						is_diplomatic_action_type = covert_election_interference_action
 						is_diplomatic_action_type = covert_financial_subversion_action

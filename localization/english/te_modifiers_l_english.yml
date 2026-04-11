@@ -285,6 +285,8 @@
  goods_output_wood_mult_desc:0 "A bonus or penalty to the amount of @wood! Wood produced by buildings"
  goods_trade_advantage_digital_assets_mult:0 "Trade Advantage for [GetGoods('digital_assets').GetName]"
  goods_trade_advantage_digital_assets_mult_desc:0 "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('digital_assets').GetName]."
+ goods_trade_advantage_fine_art_mult:0 "Trade Advantage for [GetGoods('fine_art').GetName]"
+ goods_trade_advantage_fine_art_mult_desc:0 "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('fine_art').GetName]."
  je_ch_breakdown_mult:0 "\n  [concept_ch_modifier_bonus]: #v [GetPlayer.GetModifier.GetValueWithBreakdownFor('country_cultural_pull_mult')]#!"
  state_arable_land_mult:0 "Arable Land"
  state_arable_land_mult_desc:0 "A multiplier for the amount of arable land in this [concept_state]."

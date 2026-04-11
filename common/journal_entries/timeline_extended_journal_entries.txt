@@ -144,10 +144,47 @@
                     }
                 }
             }
+
+			# ---- Development events (only during first nuke, with active funding) ----
+			if = {
+				limit = {
+					var:nuclear_weapons_program_first_nuke_done = 0
+					has_variable = nuclear_weapons_program_funding
+					var:nuclear_weapons_program_funding >= 1
+					var:nuclear_weapon_program_progress >= 5
+				}
+				random_list = {
+					490 = { } # nothing happens
+					5 = {
+						trigger_event = { id = nuclear_weapon_events.19 }
+					}
+					5 = {
+						trigger_event = { id = nuclear_weapon_events.20 }
+					}
+				}
+			}
+
+			# ---- Proliferation alert (non-first country nearing completion) ----
+			if = {
+				limit = {
+					has_global_variable = world_first_nuclear_weapon
+					NOT = { has_variable = is_world_first_nuclear_power }
+					var:nuclear_weapons_program_first_nuke_done = 0
+					var:nuclear_weapon_program_progress >= 75
+					NOT = { has_variable = nuclear_proliferation_alert_sent }
+				}
+				set_variable = { name = nuclear_proliferation_alert_sent value = 1 }
+				save_scope_as = proliferating_country
+				every_country = {
+					limit = {
+						NOT = { THIS = ROOT }
+						NOT = { is_country_type = decentralized }
+					}
+					trigger_event = { id = nuclear_weapon_events.18 days = 7 }
+				}
+			}
 		}
 	}
-
-	weight = 10
 	should_be_pinned_by_default = yes
     can_revolution_inherit = yes
     can_deactivate = yes

@@ -599,6 +599,12 @@ nuclear_first_stike = { # Scope is target state
 						}
 					}
 					trigger_event = { id = nuclear_weapon_events.2 popup = yes }
+					# First nuclear weapon used in combat — world-historical event
+					if = {
+						limit = { NOT = { has_global_variable = world_first_nuclear_weapon_used } }
+						set_global_variable = { name = world_first_nuclear_weapon_used value = yes }
+						trigger_event = { id = nuclear_weapon_events.17 }
+					}
 					every_country = {
 						limit = {
 							NOT = { THIS = ROOT }
@@ -776,6 +782,12 @@ nuclear_tactical_strike = {
 	trigger_event = { id = nuclear_weapon_events.5 popup = yes }
 	scope:attacking_country = {
 		trigger_event = { id = nuclear_weapon_events.6 popup = yes }
+		# First nuclear weapon used in combat — world-historical event
+		if = {
+			limit = { NOT = { has_global_variable = world_first_nuclear_weapon_used } }
+			set_global_variable = { name = world_first_nuclear_weapon_used value = yes }
+			trigger_event = { id = nuclear_weapon_events.17 }
+		}
 	}
 }
 

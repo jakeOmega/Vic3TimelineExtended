@@ -618,9 +618,11 @@ company_amazon = {
 	potential = {
 		always = yes
 	}
+	attainable = {
+		has_technology_researched = e-commerce
+	}
 	possible = {
 		"goods_production_rank(g:merchant_marine)" <= 3
-		has_technology_researched = e-commerce
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_network_infrastructure
@@ -1629,9 +1631,11 @@ company_alibaba = {
 	potential = {
 		always = yes
 	}
+	attainable = {
+		has_technology_researched = e-commerce
+	}
 	possible = {
 		"goods_production_rank(g:digital_assets)" <= 5
-		has_technology_researched = e-commerce
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_network_infrastructure
@@ -2660,10 +2664,12 @@ company_shopify = {
 	potential = {
 		always = yes
 	}
+	attainable = {
+		has_technology_researched = e-commerce
+	}
 	possible = {
 		"goods_production_rank(g:digital_assets)" <= 10
 		"goods_production_rank(g:telephones)" <= 10
-		has_technology_researched = e-commerce
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_software_industry

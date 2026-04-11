@@ -5634,3 +5634,15 @@ intelligence_failure_exposure_modifier = {
 	country_covert_defense_military_add = -1
 	country_covert_defense_ideological_add = -1
 }
+
+# Nuclear program development — civilian applications bonus
+nuclear_civilian_applications = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_weekly_innovation_mult = 0.1
+}
+
+# Nuclear program — safety review after incident/close call
+nuclear_safety_review = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_tech_spread_add = 0.15
+}

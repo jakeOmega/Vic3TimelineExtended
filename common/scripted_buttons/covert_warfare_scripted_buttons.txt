@@ -34,7 +34,6 @@ iw_increase_funding_button = {
 			# Reapply cost modifier immediately
 			if = {
 				limit = {
-					covert_operations_active >= 1
 					has_variable = iw_funding_level
 					var:iw_funding_level >= 1
 				}
@@ -72,7 +71,6 @@ iw_decrease_funding_button = {
 			# Reapply cost modifier immediately
 			if = {
 				limit = {
-					covert_operations_active >= 1
 					has_variable = iw_funding_level
 					var:iw_funding_level >= 1
 				}

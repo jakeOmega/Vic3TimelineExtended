@@ -718,3 +718,459 @@ nuclear_weapon_events.16 = {
  		default_option = yes
  	}
 }
+
+# ============================================================================
+# EVENT 17: First Nuclear Weapon Used in Combat (Attacker)
+# ============================================================================
+# Fired when any country successfully uses a nuclear weapon in combat for the
+# first time in world history. Fires only on the attacker, alongside the
+# standard strike events. A world-historical moment.
+# ============================================================================
+
+nuclear_weapon_events.17 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/mushroom_cloud.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_weapon_events.17.t
+	desc = nuclear_weapon_events.17.d
+	flavor = nuclear_weapon_events.17.f
+
+	duration = 3
+
+	trigger = {
+		# triggered by nuclear strike scripted effects
+	}
+
+	immediate = {
+	}
+
+	# "A grave responsibility."
+	option = {
+		name = nuclear_weapon_events.17.a
+		default_option = yes
+		change_prestige = 100
+		add_radicals = {
+			value = very_small_radicals
+		}
+		ai_chance = { base = 5 }
+	}
+
+	# "History will judge us."
+	option = {
+		name = nuclear_weapon_events.17.b
+		change_prestige = 50
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { ruler_is_cautious = yes } add = 5 }
+		}
+	}
+
+	# Aggressive rulers: "Let this be a warning."
+	option = {
+		name = nuclear_weapon_events.17.c
+		trigger = { ruler_is_aggressive = yes }
+		highlighted_option = yes
+		change_prestige = 200
+		change_infamy = 10
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			interest_group = ig:ig_intelligentsia
+		}
+		ai_chance = {
+			base = 1
+			modifier = { trigger = { ruler_is_aggressive = yes } add = 10 }
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 18: Nuclear Proliferation Alert
+# ============================================================================
+# Fired on all countries (except the proliferating one) when a non-first
+# country reaches 75% progress toward its first nuclear weapon.
+# scope:proliferating_country = the country nearing completion.
+# ============================================================================
+
+nuclear_weapon_events.18 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = nuclear_weapon_events.18.t
+	desc = nuclear_weapon_events.18.d
+	flavor = nuclear_weapon_events.18.f
+
+	duration = 3
+
+	trigger = {
+		# triggered by JE pulse
+	}
+
+	immediate = {
+	}
+
+	# Nuclear power: "Monitor the situation."
+	option = {
+		name = nuclear_weapon_events.18.a
+		trigger = { has_modifier = nuclear_power }
+		default_option = yes
+		change_prestige = 10
+		ai_chance = { base = 5 }
+	}
+
+	# Has a nuclear program but no nukes yet: "We cannot fall behind."
+	option = {
+		name = nuclear_weapon_events.18.b
+		trigger = {
+			NOT = { has_modifier = nuclear_power }
+			has_variable = nuclear_weapon_program_progress
+			has_variable = nuclear_weapons_program_funding
+		}
+		highlighted_option = yes
+		change_variable = { name = nuclear_weapon_program_progress add = 5 }
+		ai_chance = { base = 7 }
+	}
+
+	# Anyone: "Push for non-proliferation."
+	option = {
+		name = nuclear_weapon_events.18.c
+		default_option = yes
+		if = {
+			limit = { exists = scope:proliferating_country }
+			change_relations = {
+				country = scope:proliferating_country
+				value = -10
+			}
+		}
+		change_prestige = 5
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { ruler_is_cautious = yes } add = 5 }
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 19: Critical Incident — Lab Accident (Development)
+# ============================================================================
+# Fires during first nuke development. A reactor malfunction or radiation
+# leak during weapons research.
+# ============================================================================
+
+nuclear_weapon_events.19 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "unspecific_fire"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = nuclear_weapon_events.19.t
+	desc = nuclear_weapon_events.19.d
+	flavor = nuclear_weapon_events.19.f
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		# triggered by JE pulse
+	}
+
+	immediate = {
+	}
+
+	# "Implement rigorous safety protocols." — big progress loss, but gain research benefit
+	option = {
+		name = nuclear_weapon_events.19.a
+		default_option = yes
+		change_variable = { name = nuclear_weapon_program_progress subtract = 15 }
+		change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		add_modifier = { name = nuclear_safety_review days = normal_modifier_time is_decaying = yes }
+		ai_chance = { base = 5 }
+	}
+
+	# "This was an acceptable risk. Continue." — small progress loss, radicals
+	option = {
+		name = nuclear_weapon_events.19.b
+		change_variable = { name = nuclear_weapon_program_progress subtract = 5 }
+		change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig:ig_intelligentsia
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { ruler_is_aggressive = yes } add = 5 }
+		}
+	}
+
+	# "Suspend the program for review." — heavy progress loss, prestige from caution
+	option = {
+		name = nuclear_weapon_events.19.c
+		change_variable = { name = nuclear_weapon_program_progress subtract = 25 }
+		change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		change_prestige = 15
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+			modifier = { trigger = { ruler_is_cautious = yes } add = 5 }
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 20: Unexpected Dividends — Civilian Applications (Development)
+# ============================================================================
+# Fires during first nuke development. Nuclear research yields unexpected
+# civilian applications — energy, medicine, materials science.
+# ============================================================================
+
+nuclear_weapon_events.20 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "event_power_plant"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = nuclear_weapon_events.20.t
+	desc = nuclear_weapon_events.20.d
+	flavor = nuclear_weapon_events.20.f
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		# triggered by JE pulse
+	}
+
+	immediate = {
+	}
+
+	# "Divert resources to civilian applications." — lose progress, gain innovation
+	option = {
+		name = nuclear_weapon_events.20.a
+		change_variable = { name = nuclear_weapon_program_progress subtract = 10 }
+		change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		add_modifier = { name = nuclear_civilian_applications days = normal_modifier_time is_decaying = yes }
+		change_prestige = 10
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { ruler_is_cautious = yes } add = 3 }
+		}
+	}
+
+	# "The weapon is our priority." — no cost, armed forces happy
+	option = {
+		name = nuclear_weapon_events.20.b
+		default_option = yes
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { ruler_is_aggressive = yes } add = 3 }
+		}
+	}
+
+	# "Pursue both tracks." — small progress loss, small innovation, small cost
+	option = {
+		name = nuclear_weapon_events.20.c
+		change_variable = { name = nuclear_weapon_program_progress subtract = 5 }
+		change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		add_modifier = { name = nuclear_civilian_applications days = short_modifier_time is_decaying = yes }
+		ai_chance = { base = 4 }
+	}
+}
+
+# ============================================================================
+# EVENT 21: A Moment of Terror — Nuclear Close Call
+# ============================================================================
+# Rare random event for nuclear powers. A false alarm, training exercise
+# malfunction, or near-accidental launch. Based on real Cold War incidents
+# (Petrov, Able Archer, Norwegian rocket incident, etc.).
+# ============================================================================
+
+nuclear_weapon_events.21 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = nuclear_weapon_events.21.t
+	desc = nuclear_weapon_events.21.d
+	flavor = nuclear_weapon_events.21.f
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		has_modifier = nuclear_power
+		any_rival_country = { has_modifier = nuclear_power }
+	}
+
+	immediate = {
+	}
+
+	# "Review our safety procedures." — small prestige loss, stability
+	option = {
+		name = nuclear_weapon_events.21.a
+		default_option = yes
+		change_prestige = -20
+		add_modifier = { name = nuclear_safety_review days = normal_modifier_time is_decaying = yes }
+		ai_chance = { base = 5 }
+	}
+
+	# "Tighten military oversight." — armed forces happy, intelligentsia unhappy
+	option = {
+		name = nuclear_weapon_events.21.b
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { ruler_is_aggressive = yes } add = 3 }
+		}
+	}
+
+	# "This must never be spoken of." — no cost, but no benefit
+	option = {
+		name = nuclear_weapon_events.21.c
+		ai_chance = { base = 2 }
+	}
+}
+
+# ============================================================================
+# EVENT 22: The Mushroom Cloud's Shadow — Anti-Nuclear Movement
+# ============================================================================
+# Rare random event for countries with active nuclear programs. Citizens
+# organize mass protests against nuclear weapons.
+# ============================================================================
+
+nuclear_weapon_events.22 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		video = "europenorthamerica_political_extremism"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = nuclear_weapon_events.22.t
+	desc = nuclear_weapon_events.22.d
+	flavor = nuclear_weapon_events.22.f
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		has_technology_researched = nuclear_weapons
+		has_variable = nuclear_weapons_program_funding
+		var:nuclear_weapons_program_funding >= 1
+	}
+
+	immediate = {
+	}
+
+	# "Address their concerns publicly." — intelligentsia happy, armed forces unhappy
+	option = {
+		name = nuclear_weapon_events.22.a
+		default_option = yes
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
+		}
+		ai_chance = { base = 4 }
+	}
+
+	# "The program is vital to national security." — armed forces happy, lower strata radicals
+	option = {
+		name = nuclear_weapon_events.22.b
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_armed_forces }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { ruler_is_aggressive = yes } add = 3 }
+		}
+	}
+
+	# "Disperse the protests." — broad radicals, but immediate quiet
+	option = {
+		name = nuclear_weapon_events.22.c
+		add_radicals = {
+			value = small_radicals
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig:ig_armed_forces
+		}
+		ai_chance = {
+			base = 2
+			modifier = { trigger = { ruler_is_aggressive = yes } add = 3 }
+		}
+	}
+}
+

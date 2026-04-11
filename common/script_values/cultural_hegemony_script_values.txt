@@ -292,7 +292,8 @@ cultural_pull_total = {
 # Multiplier for the cultural_hegemony_effect static modifier
 # Equals cultural_pull_total directly (0-100 share percentage)
 cultural_hegemony_modifier_mult = {
-	value = cultural_pull_total
+	value = 0
+	owner = { add = cultural_pull_total }
 	min = 0
 	max = 100
 }
@@ -419,15 +420,6 @@ cultural_pull_from_stability_display = {
 	multiply = 10
 	round = yes
 	divide = 10
-}
-
-
-# Used as weight in random_country blocks (var: not valid in weight context)
-ch_total_weight = {
-	if = {
-		limit = { has_variable = ch_total }
-		add = var:ch_total
-	}
 }
 
 

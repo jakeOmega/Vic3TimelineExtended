@@ -190,10 +190,10 @@ je_cultural_hegemony = {
 	on_monthly_pulse = {
         effect = {
             # Apply/remove cultural hegemony modifier (hegemon bonus)
-            remove_modifier = cultural_hegemony_effect
+            je:je_cultural_hegemony ?= { remove_modifier = cultural_hegemony_effect }
             if = {
                 limit = { var:ch_total >= 1 }
-                add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult }
+                je:je_cultural_hegemony ?= { add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult } }
             }
 
             # Apply/remove foreign benchmark (SoL expectations from hegemon)

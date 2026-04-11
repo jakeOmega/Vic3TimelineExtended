@@ -1496,36 +1496,38 @@ financial_cycle_government_fiscal_policy_effect_size = {
 # linear up to +0.25 at 50 bubble pressure, then quadratic to reach +1.25 at max pressure.
 bubble_inertia_multiplier_script_value = {
 	value = 0
-	if = {
-		limit = {
-			var:bubble_pressure <= 15
+	owner = {
+		if = {
+			limit = {
+				var:bubble_pressure <= 15
+			}
+			add = 0
 		}
-		add = 0
-	}
-	else_if = {
-		limit = {
-			var:bubble_pressure < 50
-		}
-		add = {
-			value = var:bubble_pressure
-			subtract = 15
-			multiply = 0.25
-			divide = 35 # rises by 0.25 over 35 points of pressure
-		}
-	}
-	else = {
-		add = {
-			# quadratic with f(50) = 0.25, f(100) = 1.25, f'(50) = 1/200
-			# => f(x) = 0.75 - 0.025 x + 0.0003*x^2
-			value = 0.75
-			add = {
-				value = var:bubble_pressure
-				multiply = -0.025
+		else_if = {
+			limit = {
+				var:bubble_pressure < 50
 			}
 			add = {
 				value = var:bubble_pressure
-				multiply = var:bubble_pressure
-				multiply = 0.0003
+				subtract = 15
+				multiply = 0.25
+				divide = 35 # rises by 0.25 over 35 points of pressure
+			}
+		}
+		else = {
+			add = {
+				# quadratic with f(50) = 0.25, f(100) = 1.25, f'(50) = 1/200
+				# => f(x) = 0.75 - 0.025 x + 0.0003*x^2
+				value = 0.75
+				add = {
+					value = var:bubble_pressure
+					multiply = -0.025
+				}
+				add = {
+					value = var:bubble_pressure
+					multiply = var:bubble_pressure
+					multiply = 0.0003
+				}
 			}
 		}
 	}
@@ -1537,6 +1539,15 @@ bubble_inertia_multiplier_script_value = {
 banking_contagion_min_source_gdp = {
 	value = gdp
 	multiply = 0.01
+}
+
+# GDP weight for contagion chance: source GDP / target GDP, clamped [0, 10], * 5
+banking_contagion_gdp_weight = {
+	value = scope:banking_crash_origin_country.gdp
+	divide = { value = gdp min = 1 }
+	min = 0
+	max = 10
+	multiply = 5
 }
 
 # Current country's GDP (for crisis wave tracking).
