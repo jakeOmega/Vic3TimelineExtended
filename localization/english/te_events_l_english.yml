@@ -1834,7 +1834,7 @@
  nuclear_weapon_events.18.a:0 "We must monitor this situation closely."
  nuclear_weapon_events.18.b:0 "We cannot afford to fall behind in this arms race."
  nuclear_weapon_events.18.c:0 "Push for non-proliferation agreements."
- nuclear_weapon_events.18.d:0 "Intelligence reports suggest that [scope:proliferating_country.GetName] is making rapid progress in its nuclear weapons program and may be approaching the capability to produce an atomic weapon. The prospect of another nation joining the nuclear club has sent shockwaves through diplomatic circles."
+ nuclear_weapon_events.18.d:0 "Intelligence reports suggest that [SCOPE.sCountry('proliferating_country').GetName] is making rapid progress in its nuclear weapons program and may be approaching the capability to produce an atomic weapon. The prospect of another nation joining the nuclear club has sent shockwaves through diplomatic circles."
  nuclear_weapon_events.18.f:0 "#italic The genie is out of the bottle, and there is no putting it back.#!"
  nuclear_weapon_events.18.t:0 "Nuclear Proliferation Alert"
  nuclear_weapon_events.19.a:0 "Implement rigorous safety protocols before we continue."

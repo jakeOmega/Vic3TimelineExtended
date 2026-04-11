@@ -12,6 +12,7 @@
 
 	country_sol_expectations_target_add = -5
 	state_expected_sol_from_literacy = -5
+	country_sol_expectations_offset_mult = -0.25
 
 	# Covert Warfare: base operation slot and intelligence capacity for all countries
 	country_covert_operation_slot_add = 1
@@ -5180,6 +5181,7 @@ cultural_hegemony_effect = {
 	country_leverage_generation_mult = 0.01
 	country_diplomatic_reputation_add = 0.1
 	country_infamy_decay_mult = 0.01
+	state_assimilation_mult = 0.05
 }
 
 # Applied to foreign countries to shift SoL expectations and reduce legitimacy

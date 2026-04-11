@@ -310,14 +310,21 @@ je_covert_warfare = {
 	on_monthly_pulse = {
 		effect = {
 			# ---- AI Funding Management ----
-			# AI automatically manages funding level based on financial health
-			# and strategic need. Player uses scripted buttons instead.
+			# AI automatically manages funding level based on financial health,
+			# strategic need, active operations, and cost awareness.
+			# Player uses scripted buttons instead.
+			#
+			# Cost formula: (active_ops + 1) × funding_level × banking_event_expense_small
+			# So more ops = higher cost per funding level. AI should scale funding
+			# to match its ambitions and avoid overpaying when it has many ops.
 			if = {
 				limit = {
 					is_player = no
 					has_technology_researched = television
 				}
-				# In default or severe financial trouble: cut funding to zero
+				# In default or severe financial trouble: cut funding
+				# But if we have active ops, drop to 1 instead of 0 to avoid
+				# auto-cancelling all operations (which wastes the setup investment)
 				if = {
 					limit = {
 						OR = {
@@ -325,7 +332,13 @@ je_covert_warfare = {
 							has_modifier = declared_bankruptcy
 						}
 					}
-					set_variable = { name = iw_funding_level value = 0 }
+					if = {
+						limit = { covert_operations_active >= 1 }
+						set_variable = { name = iw_funding_level value = 1 }
+					}
+					else = {
+						set_variable = { name = iw_funding_level value = 0 }
+					}
 				}
 				# Has rivals/enemies and is financially healthy: fund operations
 				else_if = {
@@ -338,20 +351,47 @@ je_covert_warfare = {
 							is_at_war = yes
 						}
 					}
-					# Great powers with strong finances get high funding
+					# At war: prioritize high funding for wartime ops
 					if = {
+						limit = { is_at_war = yes }
+						# Great powers at war: max funding
+						if = {
+							limit = { country_rank = rank_value:great_power }
+							set_variable = { name = iw_funding_level value = 3 }
+						}
+						else = {
+							set_variable = { name = iw_funding_level value = 2 }
+						}
+					}
+					# Peacetime with many active ops (3+): keep funding moderate
+					# to avoid runaway costs (cost scales with ops × funding)
+					else_if = {
+						limit = {
+							covert_operations_active >= 3
+							country_rank = rank_value:great_power
+						}
+						set_variable = { name = iw_funding_level value = 2 }
+					}
+					# Great powers with few ops: high funding (better tradecraft)
+					else_if = {
 						limit = {
 							country_rank = rank_value:great_power
 							NOT = { in_default = yes }
 						}
 						set_variable = { name = iw_funding_level value = 2 }
 					}
-					# Major powers or cautious rulers get low funding
+					# Major powers or cautious rulers: moderate funding
 					else = {
 						set_variable = { name = iw_funding_level value = 1 }
 					}
 				}
-				# No rivals and not at war: no need to fund operations
+				# No rivals and not at war but has active operations:
+				# maintain minimal funding to keep ops running
+				else_if = {
+					limit = { covert_operations_active >= 1 }
+					set_variable = { name = iw_funding_level value = 1 }
+				}
+				# No rivals, no war, no active ops: no need to fund
 				else = {
 					set_variable = { name = iw_funding_level value = 0 }
 				}

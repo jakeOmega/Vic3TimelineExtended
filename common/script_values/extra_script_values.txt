@@ -1467,20 +1467,45 @@ sol_expectations_shift_clamped_value = {
 }
 
 # Per-class total shift values: clamped adaptive shift + class-specific offset.
+# Overall mult scales the base shift before per-strata adjustments.
 # Each is the multiplier for its respective strata static modifier.
 sol_expectations_upper_shift_value = {
 	value = sol_expectations_shift_clamped_value
+	multiply = {
+		value = 1
+		add = modifier:country_sol_expectations_offset_mult
+	}
 	add = modifier:country_sol_expectations_upper_offset_add
+	multiply = {
+		value = 1
+		add = modifier:country_sol_expectations_upper_offset_mult
+	}
 }
 
 sol_expectations_middle_shift_value = {
 	value = sol_expectations_shift_clamped_value
+	multiply = {
+		value = 1
+		add = modifier:country_sol_expectations_offset_mult
+	}
 	add = modifier:country_sol_expectations_middle_offset_add
+	multiply = {
+		value = 1
+		add = modifier:country_sol_expectations_middle_offset_mult
+	}
 }
 
 sol_expectations_lower_shift_value = {
 	value = sol_expectations_shift_clamped_value
+	multiply = {
+		value = 1
+		add = modifier:country_sol_expectations_offset_mult
+	}
 	add = modifier:country_sol_expectations_lower_offset_add
+	multiply = {
+		value = 1
+		add = modifier:country_sol_expectations_lower_offset_mult
+	}
 }
 
 # ========== End SoL Expectations ==========
