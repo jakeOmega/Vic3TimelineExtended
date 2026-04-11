@@ -312,24 +312,21 @@ international_relations_events.3 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = {
-			text = SUMMIT_HOST_RELATIONS_TT
-			every_country = {
-				limit = {
-					country_rank >= rank_value:great_power
-					NOT = { THIS = ROOT }
-				}
-				change_relations = {
-					country = ROOT
-					value = 10
-				}
-				add_lobby_appeasement_from_diplomacy_unidirectional = {
-					FIRST = ROOT
-					SECOND = THIS
-					PRO_AMOUNT = 1
-					ANTI_AMOUNT = -1
-					FACTOR = appeasement_relations_increased
-				}
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+				NOT = { THIS = ROOT }
+			}
+			change_relations = {
+				country = ROOT
+				value = 10
+			}
+			add_lobby_appeasement_from_diplomacy_unidirectional = {
+				FIRST = ROOT
+				SECOND = THIS
+				PRO_AMOUNT = 1
+				ANTI_AMOUNT = -1
+				FACTOR = appeasement_relations_increased
 			}
 		}
 	}
@@ -343,24 +340,21 @@ international_relations_events.3 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = {
-			text = SUMMIT_ATTEND_RELATIONS_TT
-			every_country = {
-				limit = {
-					country_rank >= rank_value:great_power
-					NOT = { THIS = ROOT }
-				}
-				change_relations = {
-					country = ROOT
-					value = 5
-				}
-				add_lobby_appeasement_from_diplomacy_unidirectional = {
-					FIRST = ROOT
-					SECOND = THIS
-					PRO_AMOUNT = 1
-					ANTI_AMOUNT = -1
-					FACTOR = appeasement_relations_increased
-				}
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+				NOT = { THIS = ROOT }
+			}
+			change_relations = {
+				country = ROOT
+				value = 5
+			}
+			add_lobby_appeasement_from_diplomacy_unidirectional = {
+				FIRST = ROOT
+				SECOND = THIS
+				PRO_AMOUNT = 1
+				ANTI_AMOUNT = -1
+				FACTOR = appeasement_relations_increased
 			}
 		}
 	}
@@ -381,24 +375,21 @@ international_relations_events.3 = {
 			is_decaying = yes
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		custom_tooltip = {
-			text = SUMMIT_BOYCOTT_RELATIONS_TT
-			every_country = {
-				limit = { 
-					country_rank >= rank_value:great_power
-					NOT = { THIS = ROOT }
-				}
-				change_relations = {
-					country = ROOT
-					value = -5
-				}
-				add_lobby_appeasement_from_diplomacy_unidirectional = {
-					FIRST = ROOT
-					SECOND = THIS
-					PRO_AMOUNT = -1
-					ANTI_AMOUNT = 1
-					FACTOR = appeasement_relations_decreased
-				}
+		every_country = {
+			limit = { 
+				country_rank >= rank_value:great_power
+				NOT = { THIS = ROOT }
+			}
+			change_relations = {
+				country = ROOT
+				value = -5
+			}
+			add_lobby_appeasement_from_diplomacy_unidirectional = {
+				FIRST = ROOT
+				SECOND = THIS
+				PRO_AMOUNT = -1
+				ANTI_AMOUNT = 1
+				FACTOR = appeasement_relations_decreased
 			}
 		}
 	}

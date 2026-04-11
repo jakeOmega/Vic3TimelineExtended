@@ -1784,26 +1784,23 @@ decolonization_events.15 = {
 		}
 
 		# Hit relations with every foreign owner
-		custom_tooltip = {
-			text = NATIONALIZATION_FULL_RELATIONS_TT
-			every_country = {
-				limit = {
-					NOT = { this = root }
-					root = {
-						gdp_ownership_ratio = {
-							target = prev
-							value > 0.05
-						}
-					}
-				}
+		every_country = {
+			limit = {
+				NOT = { this = root }
 				root = {
-					change_relations = {
-						country = prev
-						value = -60
+					gdp_ownership_ratio = {
+						target = prev
+						value > 0.05
 					}
 				}
-				post_notification = nationalization_notice
 			}
+			root = {
+				change_relations = {
+					country = prev
+					value = -60
+				}
+			}
+			post_notification = nationalization_notice
 		}
 
 		# Infamy from seizing property
@@ -1835,23 +1832,20 @@ decolonization_events.15 = {
 			is_decaying = yes
 		}
 
-		custom_tooltip = {
-			text = NATIONALIZATION_SELECTIVE_RELATIONS_TT
-			every_country = {
-				limit = {
-					NOT = { this = root }
-					root = {
-						gdp_ownership_ratio = {
-							target = prev
-							value > 0.05
-						}
+		every_country = {
+			limit = {
+				NOT = { this = root }
+				root = {
+					gdp_ownership_ratio = {
+						target = prev
+						value > 0.05
 					}
 				}
-				root = {
-					change_relations = {
-						country = prev
-						value = -30
-					}
+			}
+			root = {
+				change_relations = {
+					country = prev
+					value = -30
 				}
 			}
 		}
@@ -1882,23 +1876,20 @@ decolonization_events.15 = {
 			is_decaying = yes
 		}
 
-		custom_tooltip = {
-			text = PROTECT_FOREIGN_PROPERTY_RELATIONS_TT
-			every_country = {
-				limit = {
-					NOT = { this = root }
-					root = {
-						gdp_ownership_ratio = {
-							target = prev
-							value > 0.05
-						}
+		every_country = {
+			limit = {
+				NOT = { this = root }
+				root = {
+					gdp_ownership_ratio = {
+						target = prev
+						value > 0.05
 					}
 				}
-				root = {
-					change_relations = {
-						country = prev
-						value = 20
-					}
+			}
+			root = {
+				change_relations = {
+					country = prev
+					value = 20
 				}
 			}
 		}

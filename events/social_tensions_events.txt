@@ -156,10 +156,7 @@ social_tensions_events.2 = {
 		name = social_tensions_events.2.a
 		default_option = yes
 		add_modifier = { name = foreign_terror_retaliation_modifier days = normal_modifier_time is_decaying = yes }
-		custom_tooltip = {
-			text = RELATIONS_DECREASE_RIVAL_TT
-			change_relations = { country = scope:terror_linked_country value = -30 }
-		}
+		change_relations = { country = scope:terror_linked_country value = -30 }
 		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:terror_linked_country }
 		add_lobby_appeasement_from_diplomacy_unidirectional = {
 			FIRST = root
@@ -180,10 +177,7 @@ social_tensions_events.2 = {
 		trigger = { has_law = law_type:law_ministry_of_intelligence_and_security }
 		highlighted_option = yes
 		add_modifier = { name = foreign_terror_diplomacy_modifier days = long_modifier_time is_decaying = yes }
-		custom_tooltip = {
-			text = RELATIONS_INCREASE_RIVAL_TT
-			change_relations = { country = scope:terror_linked_country value = 10 }
-		}
+		change_relations = { country = scope:terror_linked_country value = 10 }
 		add_lobby_appeasement_from_diplomacy_unidirectional = {
 			FIRST = root
 			SECOND = scope:terror_linked_country
