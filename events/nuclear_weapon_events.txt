@@ -850,7 +850,10 @@ nuclear_weapon_events.18 = {
 			has_variable = nuclear_weapons_program_funding
 		}
 		highlighted_option = yes
-		change_variable = { name = nuclear_weapon_program_progress add = 5 }
+		custom_tooltip = {
+			text = NW_PROGRESS_ADD_5_TT
+			change_variable = { name = nuclear_weapon_program_progress add = 5 }
+		}
 		ai_chance = { base = 7 }
 	}
 
@@ -910,8 +913,11 @@ nuclear_weapon_events.19 = {
 	option = {
 		name = nuclear_weapon_events.19.a
 		default_option = yes
-		change_variable = { name = nuclear_weapon_program_progress subtract = 15 }
-		change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		custom_tooltip = {
+			text = NW_PROGRESS_SUBTRACT_15_TT
+			change_variable = { name = nuclear_weapon_program_progress subtract = 15 }
+			change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		}
 		add_modifier = { name = nuclear_safety_review days = normal_modifier_time is_decaying = yes }
 		ai_chance = { base = 5 }
 	}
@@ -919,8 +925,11 @@ nuclear_weapon_events.19 = {
 	# "This was an acceptable risk. Continue." — small progress loss, radicals
 	option = {
 		name = nuclear_weapon_events.19.b
-		change_variable = { name = nuclear_weapon_program_progress subtract = 5 }
-		change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		custom_tooltip = {
+			text = NW_PROGRESS_SUBTRACT_5_TT
+			change_variable = { name = nuclear_weapon_program_progress subtract = 5 }
+			change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		}
 		add_radicals = {
 			value = small_radicals
 			strata = lower
@@ -938,8 +947,11 @@ nuclear_weapon_events.19 = {
 	# "Suspend the program for review." — heavy progress loss, prestige from caution
 	option = {
 		name = nuclear_weapon_events.19.c
-		change_variable = { name = nuclear_weapon_program_progress subtract = 25 }
-		change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		custom_tooltip = {
+			text = NW_PROGRESS_SUBTRACT_25_TT
+			change_variable = { name = nuclear_weapon_program_progress subtract = 25 }
+			change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		}
 		change_prestige = 15
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
@@ -988,8 +1000,11 @@ nuclear_weapon_events.20 = {
 	# "Divert resources to civilian applications." — lose progress, gain innovation
 	option = {
 		name = nuclear_weapon_events.20.a
-		change_variable = { name = nuclear_weapon_program_progress subtract = 10 }
-		change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		custom_tooltip = {
+			text = NW_PROGRESS_SUBTRACT_10_TT
+			change_variable = { name = nuclear_weapon_program_progress subtract = 10 }
+			change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		}
 		add_modifier = { name = nuclear_civilian_applications days = normal_modifier_time is_decaying = yes }
 		change_prestige = 10
 		ai_chance = {
@@ -1015,8 +1030,11 @@ nuclear_weapon_events.20 = {
 	# "Pursue both tracks." — small progress loss, small innovation, small cost
 	option = {
 		name = nuclear_weapon_events.20.c
-		change_variable = { name = nuclear_weapon_program_progress subtract = 5 }
-		change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		custom_tooltip = {
+			text = NW_PROGRESS_SUBTRACT_5_TT
+			change_variable = { name = nuclear_weapon_program_progress subtract = 5 }
+			change_variable = { name = nuclear_weapon_program_progress max = 0 }
+		}
 		add_modifier = { name = nuclear_civilian_applications days = short_modifier_time is_decaying = yes }
 		ai_chance = { base = 4 }
 	}

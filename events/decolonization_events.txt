@@ -1627,13 +1627,16 @@ decolonization_events.14 = {
 		ai_chance = {
 			base = 1
 		}
-		if = {
-			limit = { has_variable = gp_anti_colonial_stance }
-			remove_variable = gp_anti_colonial_stance
-		}
-		if = {
-			limit = { has_variable = gp_pro_colonial_stance }
-			remove_variable = gp_pro_colonial_stance
+		custom_tooltip = {
+			text = GP_NEUTRAL_STANCE_TT
+			if = {
+				limit = { has_variable = gp_anti_colonial_stance }
+				remove_variable = gp_anti_colonial_stance
+			}
+			if = {
+				limit = { has_variable = gp_pro_colonial_stance }
+				remove_variable = gp_pro_colonial_stance
+			}
 		}
 		# Cautious approach - no strong reactions either way
 		add_loyalists = { value = very_small_radicals }
@@ -1781,23 +1784,26 @@ decolonization_events.15 = {
 		}
 
 		# Hit relations with every foreign owner
-		every_country = {
-			limit = {
-				NOT = { this = root }
-				root = {
-					gdp_ownership_ratio = {
-						target = prev
-						value > 0.05
+		custom_tooltip = {
+			text = NATIONALIZATION_FULL_RELATIONS_TT
+			every_country = {
+				limit = {
+					NOT = { this = root }
+					root = {
+						gdp_ownership_ratio = {
+							target = prev
+							value > 0.05
+						}
 					}
 				}
-			}
-			root = {
-				change_relations = {
-					country = prev
-					value = -60
+				root = {
+					change_relations = {
+						country = prev
+						value = -60
+					}
 				}
+				post_notification = nationalization_notice
 			}
-			post_notification = nationalization_notice
 		}
 
 		# Infamy from seizing property
@@ -1829,20 +1835,23 @@ decolonization_events.15 = {
 			is_decaying = yes
 		}
 
-		every_country = {
-			limit = {
-				NOT = { this = root }
-				root = {
-					gdp_ownership_ratio = {
-						target = prev
-						value > 0.05
+		custom_tooltip = {
+			text = NATIONALIZATION_SELECTIVE_RELATIONS_TT
+			every_country = {
+				limit = {
+					NOT = { this = root }
+					root = {
+						gdp_ownership_ratio = {
+							target = prev
+							value > 0.05
+						}
 					}
 				}
-			}
-			root = {
-				change_relations = {
-					country = prev
-					value = -30
+				root = {
+					change_relations = {
+						country = prev
+						value = -30
+					}
 				}
 			}
 		}
@@ -1873,20 +1882,23 @@ decolonization_events.15 = {
 			is_decaying = yes
 		}
 
-		every_country = {
-			limit = {
-				NOT = { this = root }
-				root = {
-					gdp_ownership_ratio = {
-						target = prev
-						value > 0.05
+		custom_tooltip = {
+			text = PROTECT_FOREIGN_PROPERTY_RELATIONS_TT
+			every_country = {
+				limit = {
+					NOT = { this = root }
+					root = {
+						gdp_ownership_ratio = {
+							target = prev
+							value > 0.05
+						}
 					}
 				}
-			}
-			root = {
-				change_relations = {
-					country = prev
-					value = 20
+				root = {
+					change_relations = {
+						country = prev
+						value = 20
+					}
 				}
 			}
 		}
@@ -2462,13 +2474,16 @@ decolonization_events.19 = {
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
 		add_radicals = { value = large_radicals pop_type = academics }
 		# Trigger GP response event for all other great powers
-		every_country = {
-			limit = {
-				NOT = { this = root }
-				country_rank >= rank_value:great_power
-				has_technology_researched = decolonization
+		custom_tooltip = {
+			text = GP_MILITARY_INTERVENTION_NOTIFY_TT
+			every_country = {
+				limit = {
+					NOT = { this = root }
+					country_rank >= rank_value:great_power
+					has_technology_researched = decolonization
+				}
+				trigger_event = { id = decolonization_events.20 }
 			}
-			trigger_event = { id = decolonization_events.20 }
 		}
 	}
 
@@ -2511,7 +2526,10 @@ decolonization_events.19 = {
 				add = 5
 			}
 		}
-		set_variable = { name = gp_accepted_nationalization days = long_modifier_time }
+		custom_tooltip = {
+			text = GP_ACCEPT_NATIONALIZATION_TT
+			set_variable = { name = gp_accepted_nationalization days = long_modifier_time }
+		}
 		add_modifier = {
 			name = peaceful_decolonization_modifier
 			days = normal_modifier_time

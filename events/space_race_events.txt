@@ -180,13 +180,16 @@ space_race_events.4 = {
 		ai_chance = { base = 5 }
 		# Share data with international community
 		add_loyalists = { value = medium_radicals pop_type = academics }
-		every_country = {
-			limit = {
-				has_technology_researched = space_exploration
-				NOT = { THIS = ROOT }
-				has_diplomatic_relevance = ROOT
+		custom_tooltip = {
+			text = SR_SHARE_DATA_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_exploration
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 20 }
 			}
-			change_relations = { country = ROOT value = 20 }
 		}
 	}
 
@@ -306,13 +309,16 @@ space_race_events.6 = {
 		name = space_race_events.6.b
 		ai_chance = { base = 4 }
 		# International lunar research hub
-		every_country = {
-			limit = {
-				has_technology_researched = space_exploration
-				NOT = { THIS = ROOT }
-				has_diplomatic_relevance = ROOT
+		custom_tooltip = {
+			text = SR_INTL_COOPERATION_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_exploration
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 15 }
 			}
-			change_relations = { country = ROOT value = 15 }
 		}
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -413,13 +419,16 @@ space_race_events.8 = {
 		name = space_race_events.8.c
 		ai_chance = { base = 2 }
 		# International probe - share costs and data with all spacefaring nations
-		every_country = {
-			limit = {
-				has_technology_researched = space_colonization
-				NOT = { THIS = ROOT }
-				has_diplomatic_relevance = ROOT
+		custom_tooltip = {
+			text = SR_INTL_PROBE_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 25 }
 			}
-			change_relations = { country = ROOT value = 25 }
 		}
 		add_loyalists = { value = medium_radicals }
 	}
@@ -685,13 +694,16 @@ space_race_events.31 = {
 		name = space_race_events.31.c
 		ai_chance = { base = 3 }
 		# Propose international debris management treaty
-		every_country = {
-			limit = {
-				has_technology_researched = space_exploration
-				NOT = { THIS = ROOT }
-				has_diplomatic_relevance = ROOT
+		custom_tooltip = {
+			text = SR_DEBRIS_TREATY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_exploration
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 10 }
 			}
-			change_relations = { country = ROOT value = 10 }
 		}
 	}
 }
@@ -753,13 +765,16 @@ space_race_events.32 = {
 			name = sr_progress_moon_landing
 			add = 3
 		}
-		every_country = {
-			limit = {
-				has_technology_researched = space_exploration
-				NOT = { THIS = ROOT }
-				has_diplomatic_relevance = ROOT
+		custom_tooltip = {
+			text = SR_INTL_CREW_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_exploration
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 10 }
 			}
-			change_relations = { country = ROOT value = 10 }
 		}
 	}
 }
@@ -871,13 +886,16 @@ space_race_events.34 = {
 			name = sr_progress_interstellar_probe
 			add = 12
 		}
-		every_country = {
-			limit = {
-				has_technology_researched = space_colonization
-				NOT = { THIS = ROOT }
-				has_diplomatic_relevance = ROOT
+		custom_tooltip = {
+			text = SR_INTL_CONSORTIUM_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 15 }
 			}
-			change_relations = { country = ROOT value = 15 }
 		}
 	}
 }
@@ -928,13 +946,16 @@ space_race_events.35 = {
 			name = sr_progress_solar_colonization
 			add = 25
 		}
-		every_country = {
-			limit = {
-				has_technology_researched = space_colonization
-				NOT = { THIS = ROOT }
-				has_diplomatic_relevance = ROOT
+		custom_tooltip = {
+			text = SR_MULTINATIONAL_VESSEL_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 20 }
 			}
-			change_relations = { country = ROOT value = 20 }
 		}
 	}
 
@@ -2177,14 +2198,17 @@ space_race_events.52 = {
 		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		set_variable = { name = sr_progress_boost value = 5 }
 		sr_boost_active_milestones = yes
-		every_country = {
-			limit = {
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
-				has_technology_researched = space_exploration
-				NOT = { THIS = ROOT }
-				has_diplomatic_relevance = ROOT
+		custom_tooltip = {
+			text = SR_ISS_COOPERATION_RELATIONS_TT
+			every_country = {
+				limit = {
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
+					has_technology_researched = space_exploration
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 15 }
 			}
-			change_relations = { country = ROOT value = 15 }
 		}
 	}
 
@@ -2481,13 +2505,16 @@ space_race_events.60 = {
 		# Share the data freely - advance all of humanity's knowledge
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
-		every_country = {
-			limit = {
-				has_technology_researched = space_colonization
-				NOT = { THIS = ROOT }
-				has_diplomatic_relevance = ROOT
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
 			}
-			change_relations = { country = ROOT value = 30 }
 		}
 	}
 
@@ -3162,13 +3189,16 @@ space_race_events.26 = {
 		# Use the space program as a diplomatic olive branch
 		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
-		every_country = {
-			limit = {
-				has_technology_researched = rocketry
-				NOT = { THIS = ROOT }
-				has_diplomatic_relevance = ROOT
+		custom_tooltip = {
+			text = SR_OLIVE_BRANCH_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = rocketry
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 10 }
 			}
-			change_relations = { country = ROOT value = 10 }
 		}
 	}
 }
