@@ -56,6 +56,7 @@ institution_ministry_of_culture = {
 		state_conversion_mult = 0.1
 		country_primary_culture_fervor_from_laws_add = 2.5
 		country_society_tech_research_speed_mult = 0.05
+		country_cultural_pull_mult = 0.05
 	}
 }
 

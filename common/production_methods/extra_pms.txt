@@ -15562,7 +15562,7 @@ pm_moon_mission = {
 	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p2.dds"
 
 	unlocking_technologies = {
-		satellite_communications
+		space_exploration
 	}
 	
 	building_modifiers = {

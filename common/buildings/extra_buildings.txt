@@ -1088,7 +1088,7 @@ REPLACE_OR_CREATE:building_space_program = {
 	expandable = no
 	
 	unlocking_technologies = {
-		space_exploration
+		guided_missiles
 	}
 
 	production_method_groups = {

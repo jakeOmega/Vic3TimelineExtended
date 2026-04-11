@@ -171,10 +171,12 @@ je_space_race_orbital = {
 	is_shown_when_inactive = {
 		has_game_rule = space_race_enabled
 		has_variable = sr_completed_suborbital
+		has_technology_researched = guided_missiles
 	}
 
 	possible = {
 		has_variable = sr_completed_suborbital
+		has_technology_researched = guided_missiles
 		modifier:country_sr_earth_orbit_program_bool = yes
 		NOT = { has_variable = sr_completed_orbital }
 		OR = {
@@ -799,12 +801,12 @@ je_space_race_mars_landing = {
 	is_shown_when_inactive = {
 		has_game_rule = space_race_enabled
 		has_variable = sr_completed_orbital
-		has_technology_researched = reusable_rocketry
+		has_technology_researched = knowledge_economy
 	}
 
 	possible = {
 		has_variable = sr_completed_orbital
-		has_technology_researched = reusable_rocketry
+		has_technology_researched = knowledge_economy
 		modifier:country_sr_mars_mission_program_bool = yes
 		NOT = { has_variable = sr_completed_mars_landing }
 		OR = {

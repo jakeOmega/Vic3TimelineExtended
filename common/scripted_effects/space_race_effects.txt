@@ -690,6 +690,7 @@ sr_check_colony_stage_effect = {
 # Mission failure effect - sets back progress
 sr_mission_failure_effect = {
 	# Progress reduction now handled inline in monthly pulse (per-JE)
+	custom_tooltip = SR_COOLDOWN_12_TT
 	set_variable = { name = sr_failure_cooldown value = 12 }
 	add_modifier = {
 		name = sr_mission_failure
@@ -702,6 +703,7 @@ sr_mission_failure_effect = {
 # Catastrophic failure effect - major setback
 sr_mission_catastrophic_failure_effect = {
 	# Progress reduction now handled inline in monthly pulse (per-JE)
+	custom_tooltip = SR_COOLDOWN_24_TT
 	set_variable = { name = sr_failure_cooldown value = 24 }
 	add_modifier = {
 		name = sr_mission_failure_catastrophic

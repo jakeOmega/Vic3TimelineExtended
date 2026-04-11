@@ -496,6 +496,7 @@ space_race_events.10 = {
 		ai_chance = { base = 1 }
 		# Double down - accept the loss, push harder
 		# Only minor setback but adds radicals
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = large_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals }
@@ -524,16 +525,18 @@ space_race_events.11 = {
 		name = space_race_events.11.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Careful review - small progress loss
+		# Careful review - accept the delay
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
-		add_radicals = { value = small_radicals pop_type = academics }
 	}
 
 	option = {
 		name = space_race_events.11.b
 		ai_chance = { base = 3 }
-		# Redirect resources - lose more progress but gain innovation
-		set_variable = { name = sr_failure_cooldown value = 6 }
+		# Redirect resources - resume faster but engineers grumble
+		custom_tooltip = SR_COOLDOWN_4_TT
+		set_variable = { name = sr_failure_cooldown value = 4 }
+		add_radicals = { value = small_radicals pop_type = academics }
 	}
 }
 
@@ -613,6 +616,7 @@ space_race_events.30 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Use test data to accelerate program
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		change_variable = {
 			name = sr_progress_suborbital
 			add = 5
@@ -657,6 +661,7 @@ space_race_events.31 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Invest in debris tracking and cleanup
+		custom_tooltip = SR_PROGRESS_ADD_3_TT
 		change_variable = {
 			name = sr_progress_orbital
 			add = 3
@@ -667,6 +672,7 @@ space_race_events.31 = {
 		name = space_race_events.31.b
 		ai_chance = { base = 2 }
 		# Ignore the problem, full speed ahead
+		custom_tooltip = SR_PROGRESS_ADD_8_TT
 		change_variable = {
 			name = sr_progress_orbital
 			add = 8
@@ -719,6 +725,7 @@ space_race_events.32 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Select from military pilots - disciplined, experienced
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		change_variable = {
 			name = sr_progress_moon_landing
 			add = 5
@@ -729,6 +736,7 @@ space_race_events.32 = {
 		name = space_race_events.32.b
 		ai_chance = { base = 3 }
 		# Open civilian program - inspiring but slower
+		custom_tooltip = SR_PROGRESS_ADD_2_TT
 		change_variable = {
 			name = sr_progress_moon_landing
 			add = 2
@@ -740,6 +748,7 @@ space_race_events.32 = {
 		name = space_race_events.32.c
 		ai_chance = { base = 2 }
 		# International crew selection
+		custom_tooltip = SR_PROGRESS_ADD_3_TT
 		change_variable = {
 			name = sr_progress_moon_landing
 			add = 3
@@ -784,6 +793,7 @@ space_race_events.33 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Redirect to water-rich landing site - progress boost
+		custom_tooltip = SR_PROGRESS_ADD_10_TT
 		change_variable = {
 			name = sr_progress_mars_landing
 			add = 10
@@ -795,6 +805,7 @@ space_race_events.33 = {
 		name = space_race_events.33.b
 		ai_chance = { base = 3 }
 		# Stick to the plan - conservative but safe
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		change_variable = {
 			name = sr_progress_mars_landing
 			add = 5
@@ -831,6 +842,7 @@ space_race_events.34 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Maximize instrument payload - more data, slower trip
+		custom_tooltip = SR_PROGRESS_ADD_15_TT
 		change_variable = {
 			name = sr_progress_interstellar_probe
 			add = 15
@@ -842,6 +854,7 @@ space_race_events.34 = {
 		name = space_race_events.34.b
 		ai_chance = { base = 4 }
 		# Strip to essentials - faster transit, camera and spectrometer only
+		custom_tooltip = SR_PROGRESS_ADD_20_TT
 		change_variable = {
 			name = sr_progress_interstellar_probe
 			add = 20
@@ -853,6 +866,7 @@ space_race_events.34 = {
 		name = space_race_events.34.c
 		ai_chance = { base = 2 }
 		# International instrument consortium - shared design, shared data
+		custom_tooltip = SR_PROGRESS_ADD_12_TT
 		change_variable = {
 			name = sr_progress_interstellar_probe
 			add = 12
@@ -897,6 +911,7 @@ space_race_events.35 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# National colony ship - sovereignty in the stars
+		custom_tooltip = SR_PROGRESS_ADD_20_TT
 		change_variable = {
 			name = sr_progress_solar_colonization
 			add = 20
@@ -908,6 +923,7 @@ space_race_events.35 = {
 		name = space_race_events.35.b
 		ai_chance = { base = 4 }
 		# Multi-national vessel - shared costs, shared glory
+		custom_tooltip = SR_PROGRESS_ADD_25_TT
 		change_variable = {
 			name = sr_progress_solar_colonization
 			add = 25
@@ -926,6 +942,7 @@ space_race_events.35 = {
 		name = space_race_events.35.c
 		ai_chance = { base = 2 }
 		# Private enterprise leads - faster but controversial
+		custom_tooltip = SR_PROGRESS_ADD_30_TT
 		change_variable = {
 			name = sr_progress_solar_colonization
 			add = 30
@@ -964,6 +981,7 @@ space_race_events.36 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Begin extraction operations immediately
+		custom_tooltip = SR_PROGRESS_ADD_10_TT
 		change_variable = {
 			name = sr_progress_moon_base
 			add = 10
@@ -975,6 +993,7 @@ space_race_events.36 = {
 		name = space_race_events.36.b
 		ai_chance = { base = 3 }
 		# Study deposits first - ensure sustainable extraction
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		change_variable = {
 			name = sr_progress_moon_base
 			add = 5
@@ -986,6 +1005,7 @@ space_race_events.36 = {
 		name = space_race_events.36.c
 		ai_chance = { base = 2 }
 		# License extraction rights to private industry
+		custom_tooltip = SR_PROGRESS_ADD_8_TT
 		change_variable = {
 			name = sr_progress_moon_base
 			add = 8
@@ -1023,6 +1043,7 @@ space_race_events.37 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Release images to a captivated public
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		change_variable = {
 			name = sr_progress_probe
 			add = 5
@@ -1034,6 +1055,7 @@ space_race_events.37 = {
 		name = space_race_events.37.b
 		ai_chance = { base = 3 }
 		# Prioritize scientific analysis over publicity
+		custom_tooltip = SR_PROGRESS_ADD_8_TT
 		change_variable = {
 			name = sr_progress_probe
 			add = 8
@@ -1093,6 +1115,7 @@ space_race_events.40 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Active magnetic shielding - heavier but more effective
+		custom_tooltip = SR_PROGRESS_ADD_4_TT
 		if = {
 			limit = { has_variable = sr_active_orbital }
 			change_variable = { name = sr_progress_orbital add = 4 }
@@ -1112,6 +1135,7 @@ space_race_events.40 = {
 		name = space_race_events.40.b
 		ai_chance = { base = 4 }
 		# Passive water shielding - proven physics, adds mass budget
+		custom_tooltip = SR_PROGRESS_ADD_6_TT
 		if = {
 			limit = { has_variable = sr_active_orbital }
 			change_variable = { name = sr_progress_orbital add = 6 }
@@ -1130,6 +1154,7 @@ space_race_events.40 = {
 		name = space_race_events.40.c
 		ai_chance = { base = 2 }
 		# Accept higher dose limits - faster but crew health risk
+		custom_tooltip = SR_PROGRESS_ADD_10_TT
 		if = {
 			limit = { has_variable = sr_active_orbital }
 			change_variable = { name = sr_progress_orbital add = 10 }
@@ -1188,6 +1213,7 @@ space_race_events.41 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Invest in electromagnetic launch catapult
+		custom_tooltip = SR_PROGRESS_ADD_8_TT
 		if = {
 			limit = { has_variable = sr_active_moon_base }
 			change_variable = { name = sr_progress_moon_base add = 8 }
@@ -1218,6 +1244,7 @@ space_race_events.41 = {
 					is_building_type = building_space_elevator
 				}
 			}
+			custom_tooltip = SR_PROGRESS_ADD_15_TT
 			if = {
 				limit = { has_variable = sr_active_moon_base }
 				change_variable = { name = sr_progress_moon_base add = 15 }
@@ -1231,6 +1258,7 @@ space_race_events.41 = {
 			}
 		}
 		else = {
+			custom_tooltip = SR_PROGRESS_ADD_4_TT
 			if = {
 				limit = { has_variable = sr_active_moon_base }
 				change_variable = { name = sr_progress_moon_base add = 4 }
@@ -1249,6 +1277,7 @@ space_race_events.41 = {
 		name = space_race_events.41.c
 		ai_chance = { base = 3 }
 		# Conventional chemical rockets: reliable but expensive per kg
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		if = {
 			limit = { has_variable = sr_active_moon_base }
 			change_variable = { name = sr_progress_moon_base add = 5 }
@@ -1294,6 +1323,7 @@ space_race_events.42 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Invest in autonomous AI systems for crew operations
+		custom_tooltip = SR_PROGRESS_ADD_8_TT
 		change_variable = {
 			name = sr_progress_mars_landing
 			add = 8
@@ -1305,6 +1335,7 @@ space_race_events.42 = {
 		name = space_race_events.42.b
 		ai_chance = { base = 3 }
 		# Laser relay network - reduce delay with expensive infrastructure
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		change_variable = {
 			name = sr_progress_mars_landing
 			add = 5
@@ -1315,6 +1346,7 @@ space_race_events.42 = {
 		name = space_race_events.42.c
 		ai_chance = { base = 2 }
 		# Train crew for complete operational independence
+		custom_tooltip = SR_PROGRESS_ADD_6_TT
 		change_variable = {
 			name = sr_progress_mars_landing
 			add = 6
@@ -1365,6 +1397,7 @@ space_race_events.43 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Full bioregenerative system - algae reactors and plant bays
+		custom_tooltip = SR_PROGRESS_ADD_7_TT
 		if = {
 			limit = { has_variable = sr_active_moon_base }
 			change_variable = { name = sr_progress_moon_base add = 7 }
@@ -1380,6 +1413,7 @@ space_race_events.43 = {
 		name = space_race_events.43.b
 		ai_chance = { base = 4 }
 		# Hybrid chemical-biological - proven fallback for each subsystem
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		if = {
 			limit = { has_variable = sr_active_moon_base }
 			change_variable = { name = sr_progress_moon_base add = 5 }
@@ -1394,6 +1428,7 @@ space_race_events.43 = {
 		name = space_race_events.43.c
 		ai_chance = { base = 2 }
 		# Import everything from Earth - simpler but supply-chain dependent
+		custom_tooltip = SR_PROGRESS_ADD_3_TT
 		if = {
 			limit = { has_variable = sr_active_moon_base }
 			change_variable = { name = sr_progress_moon_base add = 3 }
@@ -1459,6 +1494,7 @@ space_race_events.44 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Emergency shelter protocols - lose time but protect crew
+		custom_tooltip = SR_PROGRESS_SUBTRACT_3_TT
 		if = {
 			limit = { has_variable = sr_active_moon_landing }
 			change_variable = { name = sr_progress_moon_landing subtract = 3 }
@@ -1561,6 +1597,7 @@ space_race_events.45 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Jupiter slingshot: fastest trajectory, narrow launch window
+		custom_tooltip = SR_PROGRESS_ADD_10_TT
 		change_variable = {
 			name = sr_progress_probe
 			add = 10
@@ -1571,6 +1608,7 @@ space_race_events.45 = {
 		name = space_race_events.45.b
 		ai_chance = { base = 4 }
 		# Venus-Earth-Jupiter triple gravity assist: slower but more data
+		custom_tooltip = SR_PROGRESS_ADD_6_TT
 		change_variable = {
 			name = sr_progress_probe
 			add = 6
@@ -1582,6 +1620,7 @@ space_race_events.45 = {
 		name = space_race_events.45.c
 		ai_chance = { base = 2 }
 		# Direct trajectory with ion drive: expensive, no gravity assists
+		custom_tooltip = SR_PROGRESS_ADD_8_TT
 		change_variable = {
 			name = sr_progress_probe
 			add = 8
@@ -1631,6 +1670,7 @@ space_race_events.46 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Extract oxygen and water from regolith: proven chemistry
+		custom_tooltip = SR_PROGRESS_ADD_8_TT
 		if = {
 			limit = { has_variable = sr_active_moon_base }
 			change_variable = { name = sr_progress_moon_base add = 8 }
@@ -1724,6 +1764,7 @@ space_race_events.47 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Deploy repair crew / remote patch: standard procedure
+		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		if = {
 			limit = { has_variable = sr_active_orbital }
 			change_variable = { name = sr_progress_orbital subtract = 4 }
@@ -1742,6 +1783,7 @@ space_race_events.47 = {
 		name = space_race_events.47.b
 		ai_chance = { base = 3 }
 		# Redesign with Whipple shielding: prevents future impacts but costs time
+		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		if = {
 			limit = { has_variable = sr_active_orbital }
 			change_variable = { name = sr_progress_orbital subtract = 8 }
@@ -1800,6 +1842,7 @@ space_race_events.48 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Mandatory psychological screening and rotating crews
+		custom_tooltip = SR_PROGRESS_ADD_4_TT
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
 			change_variable = { name = sr_progress_mars_landing add = 4 }
@@ -1815,6 +1858,7 @@ space_race_events.48 = {
 		name = space_race_events.48.b
 		ai_chance = { base = 3 }
 		# VR communication suites and family leave rotations
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
 			change_variable = { name = sr_progress_mars_landing add = 5 }
@@ -1830,6 +1874,7 @@ space_race_events.48 = {
 		name = space_race_events.48.c
 		ai_chance = { base = 2 }
 		# Select only psychologically screened loners: smaller crew pool
+		custom_tooltip = SR_PROGRESS_ADD_7_TT
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
 			change_variable = { name = sr_progress_mars_landing add = 7 }
@@ -1906,6 +1951,7 @@ space_race_events.49 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Build the depot: reduces delta-v requirements for all future missions
+		custom_tooltip = SR_PROGRESS_ADD_8_TT
 		set_variable = { name = sr_progress_boost value = 8 }
 		sr_boost_active_milestones = yes
 	}
@@ -1914,6 +1960,7 @@ space_race_events.49 = {
 		name = space_race_events.49.b
 		ai_chance = { base = 3 }
 		# Fund research into in-orbit propellant manufacturing
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		set_variable = { name = sr_progress_boost value = 5 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -1988,6 +2035,7 @@ space_race_events.50 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Public-private partnership: combine government resources and private innovation
+		custom_tooltip = SR_PROGRESS_ADD_10_TT
 		set_variable = { name = sr_progress_boost value = 10 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -1998,6 +2046,7 @@ space_race_events.50 = {
 		name = space_race_events.50.b
 		ai_chance = { base = 3 }
 		# Let the company take the lead: faster, but they get the credit
+		custom_tooltip = SR_PROGRESS_ADD_15_TT
 		set_variable = { name = sr_progress_boost value = 15 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = small_radicals strata = lower }
@@ -2008,6 +2057,7 @@ space_race_events.50 = {
 		name = space_race_events.50.c
 		ai_chance = { base = 2 }
 		# Keep the program fully state-run: slower but sovereign
+		custom_tooltip = SR_PROGRESS_ADD_3_TT
 		set_variable = { name = sr_progress_boost value = 3 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals strata = lower }
@@ -2124,6 +2174,7 @@ space_race_events.52 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		set_variable = { name = sr_progress_boost value = 5 }
 		sr_boost_active_milestones = yes
 		every_country = {
@@ -2146,6 +2197,7 @@ space_race_events.52 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		custom_tooltip = SR_PROGRESS_ADD_3_TT
 		set_variable = { name = sr_progress_boost value = 3 }
 		sr_boost_active_milestones = yes
 	}
@@ -2184,6 +2236,7 @@ space_race_events.53 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Integrate extraplanetary base operations with the space program
+		custom_tooltip = SR_PROGRESS_ADD_15_TT
 		change_variable = {
 			name = sr_progress_solar_colonization
 			add = 15
@@ -2200,6 +2253,7 @@ space_race_events.53 = {
 		name = space_race_events.53.b
 		ai_chance = { base = 3 }
 		# Keep mining operations and the space program separate
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		change_variable = {
 			name = sr_progress_solar_colonization
 			add = 5
@@ -2249,6 +2303,7 @@ space_race_events.54 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Ablative heat shield: proven, single-use, lighter
+		custom_tooltip = SR_PROGRESS_ADD_6_TT
 		if = {
 			limit = { has_variable = sr_active_suborbital }
 			change_variable = { name = sr_progress_suborbital add = 6 }
@@ -2263,6 +2318,7 @@ space_race_events.54 = {
 		name = space_race_events.54.b
 		ai_chance = { base = 3 }
 		# Ceramic tile system: reusable but complex, saves money long-term
+		custom_tooltip = SR_PROGRESS_ADD_4_TT
 		if = {
 			limit = { has_variable = sr_active_suborbital }
 			change_variable = { name = sr_progress_suborbital add = 4 }
@@ -2359,6 +2415,7 @@ space_race_events.55 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Route all mission cargo through the elevator - massive cost reduction
+		custom_tooltip = SR_PROGRESS_ADD_12_TT
 		if = {
 			limit = { has_variable = sr_active_moon_base }
 			change_variable = { name = sr_progress_moon_base add = 12 }
@@ -2378,6 +2435,7 @@ space_race_events.55 = {
 		name = space_race_events.55.b
 		ai_chance = { base = 3 }
 		# Use elevator for bulk cargo, rockets for time-critical payloads
+		custom_tooltip = SR_PROGRESS_ADD_8_TT
 		if = {
 			limit = { has_variable = sr_active_moon_base }
 			change_variable = { name = sr_progress_moon_base add = 8 }
@@ -2493,6 +2551,7 @@ space_race_events.12 = {
 		name = space_race_events.12.c
 		ai_chance = { base = 1 }
 		# Rush a replacement vehicle: accept the risk
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = large_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals }
@@ -2537,6 +2596,7 @@ space_race_events.13 = {
 		name = space_race_events.13.c
 		ai_chance = { base = 1 }
 		# Assume the probe is still on course: wait and hope
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = medium_radicals pop_type = academics }
 	}
@@ -2579,6 +2639,7 @@ space_race_events.14 = {
 		name = space_race_events.14.c
 		ai_chance = { base = 2 }
 		# Patch and continue: the crew is brave
+		custom_tooltip = SR_COOLDOWN_8_TT
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_radicals = { value = large_radicals pop_type = academics }
 	}
@@ -2679,6 +2740,7 @@ space_race_events.16 = {
 		name = space_race_events.16.c
 		ai_chance = { base = 1 }
 		# Fly the next mission with the same design: anomaly, not systemic
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = large_radicals pop_type = academics }
 	}
@@ -2714,6 +2776,7 @@ space_race_events.17 = {
 		name = space_race_events.17.b
 		ai_chance = { base = 3 }
 		# Treat in place with telemedicine: risky but keeps the mission alive
+		custom_tooltip = SR_COOLDOWN_8_TT
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_radicals = { value = small_radicals }
@@ -2722,8 +2785,10 @@ space_race_events.17 = {
 	option = {
 		name = space_race_events.17.c
 		ai_chance = { base = 2 }
-		# Invest in advanced space medicine: learn from this crisis
+		# Invest in advanced space medicine: learn from this crisis (longer delay)
 		sr_mission_failure_effect = yes
+		change_variable = { name = sr_failure_cooldown add = 4 }
+		custom_tooltip = SR_COOLDOWN_EXTENDED_4_TT
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
 }
@@ -2759,6 +2824,7 @@ space_race_events.18 = {
 		name = space_race_events.18.b
 		ai_chance = { base = 3 }
 		# Quietly restructure management: minimize political damage
+		custom_tooltip = SR_COOLDOWN_10_TT
 		set_variable = { name = sr_failure_cooldown value = 10 }
 		add_radicals = { value = small_radicals strata = lower }
 	}
@@ -2767,6 +2833,7 @@ space_race_events.18 = {
 		name = space_race_events.18.c
 		ai_chance = { base = 1 }
 		# Blame foreign agents: deflect and accelerate
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
@@ -2812,6 +2879,7 @@ space_race_events.19 = {
 		name = space_race_events.19.c
 		ai_chance = { base = 2 }
 		# Harden systems and press on: waste no time on paranoia
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = large_radicals pop_type = academics }
 	}
@@ -2845,6 +2913,7 @@ space_race_events.21 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Wait for the parts: accept the delay
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 	}
 
@@ -2852,6 +2921,7 @@ space_race_events.21 = {
 		name = space_race_events.21.b
 		ai_chance = { base = 3 }
 		# Source from alternative suppliers: faster but untested quality
+		custom_tooltip = SR_COOLDOWN_4_TT
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
@@ -2860,7 +2930,8 @@ space_race_events.21 = {
 		name = space_race_events.21.c
 		ai_chance = { base = 2 }
 		# Develop domestic manufacturing capability: long-term investment
-		set_variable = { name = sr_failure_cooldown value = 6 }
+		custom_tooltip = SR_COOLDOWN_8_TT
+		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
 }
@@ -2888,6 +2959,7 @@ space_race_events.22 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Wait for the next window: run more simulations in the meantime
+		custom_tooltip = SR_COOLDOWN_4_TT
 		set_variable = { name = sr_failure_cooldown value = 4 }
 	}
 
@@ -2904,6 +2976,7 @@ space_race_events.22 = {
 			}
 			30 = {
 				# Scrubbed anyway after aborted countdown
+				custom_tooltip = SR_COOLDOWN_6_TT
 				set_variable = { name = sr_failure_cooldown value = 6 }
 				add_radicals = { value = small_radicals pop_type = academics }
 				custom_tooltip = {
@@ -2937,6 +3010,7 @@ space_race_events.23 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Full code audit: find and fix every instance
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 	}
 
@@ -2944,14 +3018,16 @@ space_race_events.23 = {
 		name = space_race_events.23.b
 		ai_chance = { base = 3 }
 		# Patch the specific bug and continue testing
+		custom_tooltip = SR_COOLDOWN_4_TT
 		set_variable = { name = sr_failure_cooldown value = 4 }
-		add_radicals = { value = very_small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals pop_type = academics }
 	}
 
 	option = {
 		name = space_race_events.23.c
 		ai_chance = { base = 2 }
 		# Rewrite the flight software from scratch: radical but thorough
+		custom_tooltip = SR_COOLDOWN_8_TT
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -2980,6 +3056,7 @@ space_race_events.24 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Defend the program before the committee: accept some delays
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_loyalists = { value = small_radicals }
 	}
@@ -2987,14 +3064,17 @@ space_race_events.24 = {
 	option = {
 		name = space_race_events.24.b
 		ai_chance = { base = 3 }
-		# Propose cost-cutting measures to appease the budget hawks
-		set_variable = { name = sr_failure_cooldown value = 6 }
+		# Propose cost-cutting measures: faster resolution but engineers resent cuts
+		custom_tooltip = SR_COOLDOWN_4_TT
+		set_variable = { name = sr_failure_cooldown value = 4 }
+		add_radicals = { value = small_radicals pop_type = academics }
 	}
 
 	option = {
 		name = space_race_events.24.c
 		ai_chance = { base = 2 }
 		# Appeal directly to the public: generate grassroots support
+		custom_tooltip = SR_COOLDOWN_4_TT
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_loyalists = { value = medium_radicals }
 		add_radicals = { value = small_radicals strata = upper }
@@ -3023,16 +3103,18 @@ space_race_events.25 = {
 		name = space_race_events.25.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Return the defective parts: demand replacements
-		set_variable = { name = sr_failure_cooldown value = 6 }
+		# Return the defective parts: demand replacements (quicker but frustrating)
+		custom_tooltip = SR_COOLDOWN_4_TT
+		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
 
 	option = {
 		name = space_race_events.25.b
 		ai_chance = { base = 3 }
-		# Bring manufacturing in-house: control quality directly
-		set_variable = { name = sr_failure_cooldown value = 8 }
+		# Bring manufacturing in-house: much slower, but builds capability and trust
+		custom_tooltip = SR_COOLDOWN_10_TT
+		set_variable = { name = sr_failure_cooldown value = 10 }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
 }
@@ -3060,21 +3142,25 @@ space_race_events.26 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Absorb the disruption: space transcends politics
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 	}
 
 	option = {
 		name = space_race_events.26.b
 		ai_chance = { base = 3 }
-		# Leverage the crisis: rally national pride around the space program
+		# Leverage the crisis: rally national pride but alienate internationalists
+		custom_tooltip = SR_COOLDOWN_4_TT
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_loyalists = { value = medium_radicals }
+		add_radicals = { value = small_radicals interest_group = ig:ig_intelligentsia }
 	}
 
 	option = {
 		name = space_race_events.26.c
 		ai_chance = { base = 2 }
 		# Use the space program as a diplomatic olive branch
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		every_country = {
 			limit = {
@@ -3222,6 +3308,7 @@ space_race_events.72 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Replace the damaged equipment and improve fire suppression
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		random_scope_state = {
 			limit = {
@@ -3238,6 +3325,7 @@ space_race_events.72 = {
 		name = space_race_events.72.b
 		ai_chance = { base = 3 }
 		# Use insurance payout: invest in better safety systems
+		custom_tooltip = SR_COOLDOWN_8_TT
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		random_scope_state = {
 			limit = {
@@ -3276,6 +3364,7 @@ space_race_events.73 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Launch a public inquiry: restore trust through transparency
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals pop_type = engineers }
@@ -3285,6 +3374,7 @@ space_race_events.73 = {
 		name = space_race_events.73.b
 		ai_chance = { base = 3 }
 		# Suppress the story: national security demands secrecy
+		custom_tooltip = SR_COOLDOWN_4_TT
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_radicals = { value = large_radicals }
 	}
@@ -3293,6 +3383,7 @@ space_race_events.73 = {
 		name = space_race_events.73.c
 		ai_chance = { base = 2 }
 		# Restructure the program: bring in new leadership
+		custom_tooltip = SR_COOLDOWN_8_TT
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		random_scope_state = {
 			limit = {
@@ -3385,6 +3476,7 @@ space_race_events.75 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Wait for the original suppliers: quality matters
+		custom_tooltip = SR_COOLDOWN_6_TT
 		set_variable = { name = sr_failure_cooldown value = 6 }
 		random_scope_state = {
 			limit = {
@@ -3400,7 +3492,8 @@ space_race_events.75 = {
 	option = {
 		name = space_race_events.75.b
 		ai_chance = { base = 3 }
-		# Source alternative suppliers: accept slightly lower quality
+		# Source alternative suppliers: faster but lower quality causes more issues
+		custom_tooltip = SR_COOLDOWN_4_TT
 		set_variable = { name = sr_failure_cooldown value = 4 }
 		random_scope_state = {
 			limit = {
@@ -3408,7 +3501,7 @@ space_race_events.75 = {
 			}
 			random_scope_building = {
 				limit = { is_building_type = building_space_program }
-				add_modifier = { name = sr_supply_chain_disruption months = 3 }
+				add_modifier = { name = sr_supply_chain_disruption months = 9 }
 			}
 		}
 	}
@@ -3417,6 +3510,7 @@ space_race_events.75 = {
 		name = space_race_events.75.c
 		ai_chance = { base = 2 }
 		# Develop domestic production capacity
+		custom_tooltip = SR_COOLDOWN_8_TT
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 	}
