@@ -23,6 +23,11 @@
 	}
 
 	immediate = {
+		# Grace period: industrialist failure condition cannot trigger for 5 years
+		add_modifier = {
+			name = env_crisis_reform_window
+			days = 1825
+		}
 	}
 
 	on_monthly_pulse = {
@@ -73,8 +78,13 @@
 
 	fail = {
 		has_law = law_type:law_no_ministry_of_the_environment
-		has_technology_researched = clean_energy_technologies
-		# Failed to establish env ministry despite having advanced green tech
+		# Grace period must have expired (5 years after JE activation)
+		NOT = { has_modifier = env_crisis_reform_window }
+		# Industrialists have consolidated power and blocked reform
+		ig:ig_industrialists = {
+			is_in_government = yes
+			ig_clout >= 0.25
+		}
 	}
 
 	on_fail = {

@@ -256,6 +256,103 @@ ideology_multicultural_ig = {
 	}
 }
 
+# Tech-gated evolution of ideology_multicultural: adds LGBTQ rights opinions
+# Available after sexual_revolution tech, representing the broadening of civil rights
+ideology_multicultural_inclusive = {
+	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_humanitarism.dds"
+
+	character_ideology = yes
+
+	priority = 300
+	lawgroup_citizenship = {
+		law_ethnostate = strongly_disapprove
+		law_national_supremacy = disapprove
+		law_racial_segregation = disapprove
+		law_cultural_exclusion = neutral
+		law_multicultural = strongly_approve	
+	}
+
+	lawgroup_minority_rights = {
+		law_minority_rights_violent_hostility = strongly_disapprove
+		law_minority_rights_ghettoization = strongly_disapprove
+		law_minority_rights_cultural_assimilation = disapprove
+		law_minority_rights_discrimination = disapprove
+		law_minority_rights_indifference = neutral
+		law_minority_rights_protection = approve
+		law_minority_rights_affirmative_action = strongly_approve
+	}
+
+	lawgroup_LGBTQ_rights = {
+		law_active_persecution = strongly_disapprove
+		law_legal_limbo = disapprove
+		law_basic_protections = neutral
+		law_comprehensive_rights = approve
+		law_full_equality_and_protection = strongly_approve
+	}
+
+	lawgroup_state_power = {
+		law_unitary_state = neutral
+		law_federal_system = approve
+		law_devolution = strongly_approve
+	}
+
+	country_trigger = {
+		has_technology_researched = sexual_revolution
+		any_political_movement = {
+			is_political_movement_type = movement_civil_rights
+		}
+	}
+	
+	non_interest_group_leader_trigger = {
+		always = no
+	}
+	
+	interest_group_leader_weight = {
+		value = 0
+		# progressive
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						is_interest_group_type = ig_intelligentsia
+						ig:ig_intelligentsia = {
+							NOT = { has_ideology = ideology:ideology_multicultural_ig }
+						}
+					}
+					is_interest_group_type = ig_trade_unions
+				}
+			}
+			add = 300
+		}
+		# national strength
+		else_if = {
+			limit = {
+				OR = {
+					is_interest_group_type = ig_industrialists
+					is_interest_group_type = ig_armed_forces
+					is_interest_group_type = ig_petty_bourgeoisie
+				}
+			}
+			add = 150
+		}
+		# traditional
+		else_if = {
+			limit = {
+				OR = {
+					is_interest_group_type = ig_devout
+					is_interest_group_type = ig_rural_folk
+					is_interest_group_type = ig_landowners
+				}
+			}
+			add = 75
+		}
+	}
+	
+	non_interest_group_leader_weight = {
+		value = 0
+	}
+}
+
 ideology_anti_colonialist = {
 	icon = "gfx/interface/icons/ideology_icons/abolitionist.dds"
 	

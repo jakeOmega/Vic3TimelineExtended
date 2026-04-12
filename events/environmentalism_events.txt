@@ -603,6 +603,14 @@ environmentalism_events.8 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_environmental }
+			add_modifier = {
+				name = environmentalist_momentum_movement_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
 		ig:ig_intelligentsia ?= {
 			leader = {
 				set_ideology = ideology:ideology_environmentalists

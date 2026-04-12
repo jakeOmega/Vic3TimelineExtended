@@ -75,6 +75,19 @@ secular_events.1 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		every_political_movement = {
+			limit = {
+				OR = {
+					is_political_movement_type = movement_religious_majority
+					is_political_movement_type = movement_religious_minority
+				}
+			}
+			add_modifier = {
+				name = secular_momentum_religious_movement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 		add_radicals = {
 			value = very_small_radicals
 			interest_group = ig:ig_devout
@@ -292,6 +305,19 @@ secular_events.4 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		every_political_movement = {
+			limit = {
+				OR = {
+					is_political_movement_type = movement_religious_majority
+					is_political_movement_type = movement_religious_minority
+				}
+			}
+			add_modifier = {
+				name = disestablishment_religious_movement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 		scope:devout_ig = {
 			add_modifier = {
 				name = disestablishment_anger_modifier
@@ -415,6 +441,19 @@ secular_events.5 = {
 			name = secular_agenda_modifier
 			days = normal_modifier_time
 			is_decaying = yes
+		}
+		every_political_movement = {
+			limit = {
+				OR = {
+					is_political_movement_type = movement_religious_majority
+					is_political_movement_type = movement_religious_minority
+				}
+			}
+			add_modifier = {
+				name = secular_agenda_religious_movement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_radicals = {
 			value = small_radicals

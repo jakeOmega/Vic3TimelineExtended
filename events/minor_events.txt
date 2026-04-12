@@ -337,20 +337,22 @@ minor_events_timelineextended.7 = {
     duration = 3
     is_popup = yes
 
-	# Option A: Protect domestic banks
+	# Option A: Protect domestic banks — trade penalty for weaker impact
     option = {
         name = minor_events_timelineextended.7.a
         default_option = yes
 		apply_banking_contagion_effects = yes
+		# Protectionist measures: contain the crisis but hurt trade
+		add_modifier = {
+			name = banking_crisis_protectionism_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
 		if = {
 			limit = { var:contagion_crash > 0 }
 			add_radicals = {
 				value = small_radicals
 				strata = upper
-			}
-			add_radicals = {
-				value = small_radicals
-				strata = middle
 			}
 		}
 		else = {
@@ -364,7 +366,7 @@ minor_events_timelineextended.7 = {
 		}
     }
 
-	# Option B: Ride it out
+	# Option B: Ride it out — maintain open markets, take the full hit
 	option = {
 		name = minor_events_timelineextended.7.b
 		apply_banking_contagion_effects = yes
@@ -376,10 +378,18 @@ minor_events_timelineextended.7 = {
 			}
 			add_radicals = {
 				value = small_radicals
+				strata = middle
+			}
+			add_radicals = {
+				value = small_radicals
 				strata = lower
 			}
 		}
 		else = {
+			add_radicals = {
+				value = small_radicals
+				strata = upper
+			}
 			add_radicals = {
 				value = very_small_radicals
 				strata = middle

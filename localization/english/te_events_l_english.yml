@@ -493,8 +493,8 @@
 #
 # COVERT_WARFARE
 #
- covert_warfare.1.a:0 "Acknowledge the failure and stand down"
- covert_warfare.1.b:0 "Deny everything and harden our defenses"
+ covert_warfare.1.a:0 "Recall our operatives and apologize through back-channels"
+ covert_warfare.1.b:0 "Deny everything — our people were never there"
  covert_warfare.1.d:0 "Our intelligence services report a catastrophic security breach. One of our covert operations has been detected by [SCOPE.sCountry('detected_by_country').GetName]. The operation must be terminated immediately, and the diplomatic fallout will be considerable."
  covert_warfare.1.f:0 "The encrypted channel went dark at 03:47. By dawn, every foreign ministry in Europe had the intercepted transmissions on their desk."
  covert_warfare.1.t:0 "Operation Compromised"
@@ -838,7 +838,7 @@
  environmental_events.1.t:0 "The Pollution Crisis"
  environmental_events.100.a:0 "Industry must continue"
  environmental_events.100.b:0 "We acknowledge the damage"
- environmental_events.100.desc:0 "Despite having the technology to address environmental destruction, the government has failed to act. The environmental movement has been defeated by industrial interests, and pollution continues unchecked."
+ environmental_events.100.desc:0 "The environmental movement has been defeated. Industrial interests have successfully lobbied against reform, and the government has failed to establish meaningful environmental protections despite the growing crisis."
  environmental_events.100.f:0 "The technology existed. The funding was available. The committee voted it down eleven to three."
  environmental_events.100.t:0 "Environmental Collapse"
  environmental_events.2.a:0 "Listen to their demands"
@@ -2721,7 +2721,7 @@
  space_race_events.3.b:0 "A solid foundation for the future."
  space_race_events.3.c:0 "One small step, one giant leap."
  space_race_events.3.d:0 "Billions watch as the lander touches down on the lunar surface. The first human feet press into regolith that has lain undisturbed since the formation of the solar system. A flag is planted, instruments are deployed, and for a brief shining moment the divisions of Earth seem impossibly petty."
- space_race_events.3.f:0 "\"Houston: or rather, Mission Control: we have landed. The surface is fine and powdery. I can see our boot prints stretching back to the lander. It is... quiet here. Quiet in a way that has no earthly comparison.\"\n\n- First words from the lunar surface"
+ space_race_events.3.f:0 "\"Mission Control: we have landed. The surface is fine and powdery. I can see our boot prints stretching back to the lander. It is... quiet here. Quiet in a way that has no earthly comparison.\"\n\n- First words from the lunar surface"
  space_race_events.3.t:0 "The Eagle Has Landed"
  space_race_events.30.a:0 "Excellent data. Press forward."
  space_race_events.30.b:0 "Let the world see what we have accomplished."

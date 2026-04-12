@@ -227,6 +227,7 @@ guided_missiles = {
 
 	modifier = {
 		state_building_naval_base_max_level_add = 20
+		state_building_military_base_max_level_add = 1
 	}
 	
 	ai_weight = {

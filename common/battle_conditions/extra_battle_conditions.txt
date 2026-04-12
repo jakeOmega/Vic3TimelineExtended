@@ -1,0 +1,296 @@
+﻿############ FORTIFIED POSITIONS
+# Tiered defender-only battle conditions based on state fortification level.
+# state_fortification_level_add comes from military base PMs (workforce_scaled):
+#   Earthwork Fortifications = 1/level, Concrete Bunkers = 2/level,
+#   Hardened Positions = 3/level, Territorial Defense = 1/level.
+# Max building level = 5, max fort/level = 4 (hardened + territorial) = 20 max.
+# Tiers: basic (any), Stronghold (5+), Bastion (10+), Impregnable (15+).
+# All tiers are mutually exclusive via NOT blocks. Higher tiers have higher
+# weight so they are preferentially selected when multiple tiers are possible.
+
+battle_condition_fortified_position = {
+	icon = "gfx/interface/icons/battle_conditions/battle_condition_dug_in.dds"
+
+	modifier = {
+		unit_army_defense_mult = 0.2
+		unit_morale_loss_mult = -0.1
+        battle_combat_width_mult = -0.2
+	}
+
+	possible = {
+		scope:is_advancing_side = no
+		exists = scope:character
+		scope:character = {
+			has_role = general
+		}
+		NOT = { has_battle_condition = battle_condition_aggressive_maneuver }
+		NOT = { has_battle_condition = battle_condition_fortified_stronghold }
+		NOT = { has_battle_condition = battle_condition_fortified_bastion }
+		NOT = { has_battle_condition = battle_condition_impregnable_fortress }
+		province = {
+			state = {
+				has_building = building_military_base
+			}
+		}
+	}
+
+	weight = {
+		value = 3
+		# Scale weight with building level (proxy for fortification investment)
+		if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 1
+					}
+				}
+			}
+			add = 1
+		}
+        if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 2
+					}
+				}
+			}
+			add = 1
+		}
+        if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 3
+					}
+				}
+			}
+			add = 1
+		}
+        if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 4
+					}
+				}
+			}
+			add = 1
+		}
+	}
+}
+
+battle_condition_fortified_stronghold = {
+	icon = "gfx/interface/icons/battle_conditions/battle_condition_dug_in.dds"
+
+	modifier = {
+		unit_army_defense_mult = 0.35
+		unit_morale_loss_mult = -0.2
+		unit_kill_rate_add = 0.1
+        battle_combat_width_mult = -0.4
+	}
+
+	possible = {
+		scope:is_advancing_side = no
+		exists = scope:character
+		scope:character = {
+			has_role = general
+		}
+		NOT = { has_battle_condition = battle_condition_aggressive_maneuver }
+		NOT = { has_battle_condition = battle_condition_fortified_bastion }
+		NOT = { has_battle_condition = battle_condition_impregnable_fortress }
+		province = {
+			state = {
+				has_building = building_military_base
+				modifier:state_fortification_level_add >= 5
+			}
+		}
+	}
+
+	weight = {
+		value = 6
+		if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 6
+					}
+				}
+			}
+			add = 2
+		}
+        if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 7
+					}
+				}
+			}
+			add = 2
+		}
+        if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 8
+					}
+				}
+			}
+			add = 2
+		}
+        if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 9
+					}
+				}
+			}
+			add = 2
+		}
+    }
+}
+
+battle_condition_fortified_bastion = {
+	icon = "gfx/interface/icons/battle_conditions/battle_condition_dug_in.dds"
+
+	modifier = {
+		unit_army_defense_mult = 0.5
+		unit_morale_loss_mult = -0.3
+		unit_kill_rate_add = 0.15
+		unit_recovery_rate_add = 0.05
+        battle_combat_width_mult = -0.6
+	}
+
+	possible = {
+		scope:is_advancing_side = no
+		exists = scope:character
+		scope:character = {
+			has_role = general
+		}
+		NOT = { has_battle_condition = battle_condition_aggressive_maneuver }
+		NOT = { has_battle_condition = battle_condition_impregnable_fortress }
+		province = {
+			state = {
+				has_building = building_military_base
+				modifier:state_fortification_level_add >= 10
+			}
+		}
+	}
+
+	weight = {
+		value = 10
+		if = {
+            limit = {
+                province = {
+                    state = {
+                        modifier:state_fortification_level_add >= 11
+                    }
+                }
+            }
+            add = 3
+        }
+        if = {
+            limit = {
+                province = {
+                    state = {
+                        modifier:state_fortification_level_add >= 12
+                    }
+                }
+            }
+            add = 3
+        }
+        if = {
+            limit = {
+                province = {
+                    state = {
+                        modifier:state_fortification_level_add >= 13
+                    }
+                }
+            }
+            add = 3
+        }
+        if = {
+            limit = {
+                province = {
+                    state = {
+                        modifier:state_fortification_level_add >= 14
+                    }
+                }
+            }
+            add = 3
+        }
+	}
+}
+
+battle_condition_impregnable_fortress = {
+	icon = "gfx/interface/icons/battle_conditions/battle_condition_dug_in.dds"
+
+	modifier = {
+		unit_army_defense_mult = 0.7
+		unit_morale_loss_mult = -0.4
+		unit_kill_rate_add = 0.2
+		unit_recovery_rate_add = 0.1
+        battle_combat_width_mult = -0.8
+	}
+
+	possible = {
+		scope:is_advancing_side = no
+		exists = scope:character
+		scope:character = {
+			has_role = general
+		}
+		NOT = { has_battle_condition = battle_condition_aggressive_maneuver }
+		province = {
+			state = {
+				has_building = building_military_base
+				modifier:state_fortification_level_add >= 15
+			}
+		}
+	}
+
+	weight = {
+		value = 15
+		if = {
+            limit = {
+                province = {
+                    state = {
+                        modifier:state_fortification_level_add >= 16
+                    }
+                }
+            }
+            add = 4
+        }
+        if = {
+            limit = {
+                province = {
+                    state = {
+                        modifier:state_fortification_level_add >= 17
+                    }
+                }
+            }
+            add = 4
+        }
+        if = {
+            limit = {
+                province = {
+                    state = {
+                        modifier:state_fortification_level_add >= 18
+                    }
+                }
+            }
+            add = 4
+        }
+        if = {
+            limit = {
+                province = {
+                    state = {
+                        modifier:state_fortification_level_add >= 19
+                    }
+                }
+            }
+            add = 4
+        }
+    }
+}

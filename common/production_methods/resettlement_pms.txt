@@ -252,8 +252,7 @@ pm_settler_homesteads = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_migration_pull_add = 10
-			state_migration_pull_mult = 0.25
+			state_migration_pull_add = 5
 		}
 	}
 
@@ -287,8 +286,8 @@ pm_planned_settlement = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_migration_pull_add = 20
-			state_migration_pull_mult = 0.50
+			state_migration_pull_add = 10
+			state_migration_pull_mult = -0.10
 			state_colony_growth_speed_mult = 0.50
 		}
 	}
@@ -325,8 +324,8 @@ pm_administered_territory = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_migration_pull_add = 30
-			state_migration_pull_mult = 1.0
+			state_migration_pull_add = 15
+			state_migration_pull_mult = -0.25
 			state_colony_growth_speed_mult = 0.75
 			# Harsh conditions in administered settlements
 			state_mortality_mult = 0.02
@@ -365,11 +364,13 @@ pm_development_zone = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_migration_pull_add = 25
-			state_migration_pull_mult = 0.75
+			state_migration_pull_add = 10
+			state_migration_pull_mult = 0.15
 			state_colony_growth_speed_mult = 0.50
 			# Development zones boost local infrastructure
 			state_infrastructure_mult = 0.05
+			# Tax incentives to attract investment reduce state revenue
+			state_tax_collection_mult = -0.15
 		}
 	}
 
@@ -395,12 +396,6 @@ pm_development_zone = {
 pm_resettlement_overland = {
 	texture = "gfx/interface/icons/production_method_icons/no_rail_transport.dds"
 
-	state_modifiers = {
-		workforce_scaled = {
-			# Overland is slow; modest additional pull
-			state_migration_pull_add = 5
-		}
-	}
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -424,8 +419,7 @@ pm_resettlement_railway = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_migration_pull_add = 10
-			state_migration_pull_mult = 0.15
+			state_migration_pull_add = 3
 		}
 	}
 
@@ -451,8 +445,7 @@ pm_resettlement_steamship = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_migration_pull_add = 15
-			state_migration_pull_mult = 0.25
+			state_migration_pull_add = 5
 			# Steamships are particularly effective for colonial growth
 			state_colony_growth_speed_mult = 0.25
 		}
@@ -474,7 +467,7 @@ pm_resettlement_steamship = {
 
 # Air transport: fast modern airlift capacity
 pm_resettlement_airlift = {
-	texture = "gfx/interface/icons/production_method_icons/no_rail_transport.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_plane_gold_p0.dds"
 
 	unlocking_technologies = {
 		commercial_aviation
@@ -482,8 +475,7 @@ pm_resettlement_airlift = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_migration_pull_add = 20
-			state_migration_pull_mult = 0.35
+			state_migration_pull_add = 8
 		}
 	}
 

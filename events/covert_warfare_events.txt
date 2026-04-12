@@ -56,71 +56,52 @@ covert_warfare.1 = {
 		name = covert_warfare.1.a
 		default_option = yes
 
-		# Infamy from being caught
-		change_infamy = covert_ops_detected_infamy
-
-		# Cancel the burned operation pact
+		# Acknowledge — lower infamy, bigger relations hit, clean break
+		custom_tooltip = covert_op_burned_tt
+		change_infamy = 1
 		if = {
-			limit = {
-				exists = scope:detected_by_country
-				exists = scope:burned_pact
-			}
-			# Remove the pact — check each type
-			if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_election_interference_action } }
-				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_election_interference_action }
-			}
-			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_financial_subversion_action } }
-				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_financial_subversion_action }
-			}
-			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_infrastructure_sabotage_action } }
-				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_infrastructure_sabotage_action }
-			}
-			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_comms_disruption_action } }
-				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_comms_disruption_action }
-			}
-			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_industrial_espionage_action } }
-				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_industrial_espionage_action }
-			}
-			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_military_espionage_action } }
-				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_military_espionage_action }
-			}
-			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_influence_campaign_action } }
-				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_influence_campaign_action }
-			}
-			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_ideological_subversion_action } }
-				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_ideological_subversion_action }
-			}
-			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_destabilization_action } }
-				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_destabilization_action }
-			}
-
-			# Notify the target
-			scope:detected_by_country = {
-				trigger_event = { id = covert_warfare.2 }
-			}
+			limit = { exists = scope:detected_by_country }
+			change_relations = { country = scope:detected_by_country value = -30 }
 		}
 
 		ai_chance = {
 			base = 10
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 5
+			}
 		}
 	}
 
 	option = {
 		name = covert_warfare.1.b
 
-		# Deny and double down — same mechanical effect but flavorful
-		change_infamy = covert_ops_detected_infamy
+		# Deny — more infamy, less relations hit, but target hardens defenses
+		custom_tooltip = covert_op_burned_tt
+		change_infamy = 2
+		if = {
+			limit = { exists = scope:detected_by_country }
+			change_relations = { country = scope:detected_by_country value = -15 }
+			scope:detected_by_country = {
+				add_modifier = {
+					name = covert_op_heightened_vigilance_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+			}
+		}
 
-		# Cancel the burned operation pact
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 5
+			}
+		}
+	}
+
+	after = {
+		# Always cancel the burned pact and notify target regardless of option chosen
 		if = {
 			limit = {
 				exists = scope:detected_by_country
@@ -163,15 +144,11 @@ covert_warfare.1 = {
 				remove_diplomatic_pact = { country = scope:detected_by_country type = covert_destabilization_action }
 			}
 
-			# Notify the target
 			scope:detected_by_country = {
 				trigger_event = { id = covert_warfare.2 }
 			}
 		}
-
-		ai_chance = {
-			base = 5
-		}
+		covert_op_refresh_all_targets = yes
 	}
 }
 

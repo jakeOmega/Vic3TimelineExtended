@@ -81,6 +81,46 @@ covert_op_refresh_all_targets = {
 	covert_op_track_targets = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add }
 }
 
+# Register a newly started operation's target into the next empty slot.
+# Called from accept_effect AFTER covert_op_refresh_all_targets, because the
+# new pact doesn't exist yet when accept_effect fires, so the iterator can't
+# find it. This directly fills the next available slot using scope:target_country.
+# Parameters: $TYPE$ = short name, $DEFENSE_MOD$ = type-specific defense modifier
+# Scope: country (ROOT = initiator), scope:target_country must be set
+covert_op_register_new_target = {
+	# Compute target defense data
+	set_variable = { name = target_max_ic value = scope:target_country.intelligence_capacity_total }
+	set_variable = { name = target_type_defense value = scope:target_country.modifier:$DEFENSE_MOD$ }
+	# Find next empty slot and fill it
+	scope:target_country = {
+		capital = {
+			ROOT = {
+				if = {
+					limit = { NOT = { has_variable = iw_target_$TYPE$_1 } }
+					set_variable = { name = iw_target_$TYPE$_1 value = PREV }
+					set_variable = { name = iw_detect_$TYPE$_1 value = covert_operation_detection_chance }
+					set_variable = { name = iw_tgt_ic_$TYPE$_1 value = var:target_max_ic }
+					set_variable = { name = iw_tgt_td_$TYPE$_1 value = var:target_type_defense }
+				}
+				else_if = {
+					limit = { NOT = { has_variable = iw_target_$TYPE$_2 } }
+					set_variable = { name = iw_target_$TYPE$_2 value = PREV }
+					set_variable = { name = iw_detect_$TYPE$_2 value = covert_operation_detection_chance }
+					set_variable = { name = iw_tgt_ic_$TYPE$_2 value = var:target_max_ic }
+					set_variable = { name = iw_tgt_td_$TYPE$_2 value = var:target_type_defense }
+				}
+				else_if = {
+					limit = { NOT = { has_variable = iw_target_$TYPE$_3 } }
+					set_variable = { name = iw_target_$TYPE$_3 value = PREV }
+					set_variable = { name = iw_detect_$TYPE$_3 value = covert_operation_detection_chance }
+					set_variable = { name = iw_tgt_ic_$TYPE$_3 value = var:target_max_ic }
+					set_variable = { name = iw_tgt_td_$TYPE$_3 value = var:target_type_defense }
+				}
+			}
+		}
+	}
+}
+
 # ============================================================================
 # PHASE DURATION TRACKING (PER-SLOT)
 # ============================================================================
@@ -249,7 +289,7 @@ covert_op_apply_target_effect = {
 # Scope: country (ROOT = JE owner / operation initiator)
 covert_op_apply_self_effect = {
 	if = {
-		limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = $ACTION$ first_country = { this = PREV } } }
+		limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = $ACTION$ first_country = prev } }
 		remove_modifier = $MODIFIER$
 		# Phase 3: any slot at 12+ months
 		if = {
@@ -370,7 +410,7 @@ covert_ops_apply_all_phase_effects = {
 	# Conditional tech spread: only if target has tech advantage (best phase of any slot)
 	if = {
 		limit = {
-			any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_military_espionage_action first_country = { this = PREV } }
+			any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_military_espionage_action first_country = prev }
 			OR = {
 				AND = { has_variable = iw_duration_military_espionage_1 var:iw_duration_military_espionage_1 >= 6 }
 				AND = { has_variable = iw_duration_military_espionage_2 var:iw_duration_military_espionage_2 >= 6 }

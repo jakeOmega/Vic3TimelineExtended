@@ -990,9 +990,14 @@ pollution_scandal_review_modifier = {
 
 environmentalist_momentum_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	political_movement_pop_attraction_mult = 0.25
 	country_institution_size_change_speed_institution_ministry_of_the_environment_mult = 0.25
 	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.05
+}
+
+# Movement-scoped: applied to environmental movement via every_political_movement
+environmentalist_momentum_movement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	political_movement_pop_attraction_mult = 0.25
 }
 
 coastal_flooding_modifier = {
@@ -4153,8 +4158,13 @@ lgbtq_rights_stagnation_modifier = {
 # Event 1: Pride march
 pride_march_momentum_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	political_movement_pop_attraction_mult = 0.10
 	country_prestige_add = 10
+}
+
+# Movement-scoped: applied to civil rights movement via every_political_movement
+pride_march_civil_rights_movement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	political_movement_pop_attraction_mult = 0.10
 }
 
 pride_march_suppressed_modifier = {
@@ -4197,6 +4207,11 @@ lgbtq_military_ban_modifier = {
 lgbtq_cultural_shift_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 10
+}
+
+# Movement-scoped: applied to civil rights movement via every_political_movement
+lgbtq_cultural_shift_civil_rights_movement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	political_movement_pop_attraction_mult = 0.05
 }
 
@@ -4215,8 +4230,13 @@ hate_crime_investigation_modifier = {
 
 lgbtq_reform_leverage_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	political_movement_pop_attraction_mult = 0.10
 	country_prestige_add = -5
+}
+
+# Movement-scoped: applied to civil rights movement via every_political_movement
+lgbtq_reform_civil_rights_movement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	political_movement_pop_attraction_mult = 0.10
 }
 
 # ============================================================================
@@ -4482,6 +4502,11 @@ eco_terrorism_crackdown_modifier = {
 eco_reform_justification_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_prestige_add = 10
+}
+
+# Movement-scoped: applied to environmental movement via every_political_movement
+eco_reform_env_movement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	political_movement_pop_attraction_mult = 0.05
 }
 
@@ -4853,8 +4878,13 @@ religious_institution_investigation_modifier = {
 
 secular_momentum_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	political_movement_pop_attraction_mult = 0.05
 	country_prestige_add = 5
+}
+
+# Movement-scoped: reduces religious movement attraction
+secular_momentum_religious_movement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	political_movement_pop_attraction_mult = -0.05
 }
 
 # Event 2: Moral panic dismissed
@@ -4886,7 +4916,12 @@ new_religions_regulated_modifier = {
 disestablishment_push_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 10
-	political_movement_pop_attraction_mult = 0.05
+}
+
+# Movement-scoped: reduces religious movement attraction
+disestablishment_religious_movement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	political_movement_pop_attraction_mult = -0.05
 }
 
 disestablishment_anger_modifier = {
@@ -4903,8 +4938,13 @@ interfaith_dialogue_modifier = {
 
 secular_agenda_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	political_movement_pop_attraction_mult = 0.10
 	country_prestige_add = 5
+}
+
+# Movement-scoped: reduces religious movement attraction
+secular_agenda_religious_movement_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	political_movement_pop_attraction_mult = -0.10
 }
 
 # ----- Bubble inertia: self-reinforcing speculation -----
@@ -5248,7 +5288,7 @@ iw_domestic_defense = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_intelligence_capacity_add = 2
 	country_support_separatism_resistance_mult = 0.03
-	country_coup_resistance_add = 0.005
+	country_coup_resistance_add = 0.1
 	state_radicals_from_political_movements_mult = -0.03
 }
 
@@ -5647,4 +5687,24 @@ nuclear_civilian_applications = {
 nuclear_safety_review = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_tech_spread_add = 0.15
+}
+
+# Covert warfare: target hardens defenses after detecting an operation
+covert_op_heightened_vigilance_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_covert_defense_ideological_add = 5
+	country_covert_defense_economic_add = 5
+	country_covert_defense_military_add = 5
+}
+
+# Banking contagion: protectionist trade measures to contain financial crisis
+banking_crisis_protectionism_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_trade_center_throughput_add = -0.25
+}
+
+# Environmental crisis: grace period before industrialist failure can trigger
+env_crisis_reform_window = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_law_enactment_time_mult = -0.05
 }

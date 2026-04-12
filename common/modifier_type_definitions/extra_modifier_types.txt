@@ -748,6 +748,24 @@ building_tourism_industry_throughput_add = {
 	decimals = 0
 }
 
+building_space_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_solar_collector_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_fusion_plant_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
 building_annual_space_elevator_progress = {
 	color = good
 	percent = yes
@@ -3290,5 +3308,18 @@ country_sol_expectations_lower_offset_mult = {
 goods_trade_advantage_fine_art_mult = {
 	color = good
 	percent = yes
+	decimals = 0
+}
+
+# Military Base
+state_building_military_base_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_fortification_level_add = {
+	color = good
+	percent = no
 	decimals = 0
 }

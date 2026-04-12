@@ -140,3 +140,22 @@ INJECT:film = {
 	}
 }
 
+# Military Base level cap progression
+INJECT:trench_works = {
+	modifier = {
+		state_building_military_base_max_level_add = 1
+	}
+}
+
+INJECT:defense_in_depth = {
+	modifier = {
+		state_building_military_base_max_level_add = 1
+	}
+}
+
+INJECT:concrete_fortifications = {
+	modifier = {
+		state_building_military_base_max_level_add = 1
+	}
+}
+

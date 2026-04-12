@@ -442,6 +442,7 @@ precision_guided_munitions = {
 		state_building_naval_base_max_level_add = 20
 		country_weekly_innovation_max_add = 50
 		state_building_barrack_max_level_add = 50
+		state_building_military_base_max_level_add = 1
 	}
 	
 	ai_weight = {

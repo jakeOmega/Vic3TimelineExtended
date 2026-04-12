@@ -1537,3 +1537,30 @@ pmg_consciousness_network_mode = {
 		pm_consciousness_network_social_control
 	}
 }
+
+############ MILITARY BASE
+
+pmg_base_building_military_base = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_military_base
+	}
+}
+
+pmg_fortification_type = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_earthwork_fortifications
+		pm_concrete_bunkers
+		pm_hardened_positions
+	}
+}
+
+pmg_military_base_purpose = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_garrison_duty
+		pm_territorial_defense
+		pm_logistics_hub
+	}
+}

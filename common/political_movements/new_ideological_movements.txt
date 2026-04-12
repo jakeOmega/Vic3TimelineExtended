@@ -325,6 +325,7 @@ movement_civil_rights = {
     ideology = ideology_multicultural
     character_ideologies = {
         ideology_multicultural
+        ideology_multicultural_inclusive
     }
     
     disband_trigger = {

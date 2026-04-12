@@ -1,7 +1,7 @@
 ﻿law_universal_basic_income = {
 	group = lawgroup_welfare
 	
-	icon = "gfx/interface/icons/law_icons/old_age_pension.dds"
+	icon = "gfx/interface/icons/law_icons/universal_basic_income.dds"
 	
 	progressiveness = 110
 	
@@ -54,7 +54,7 @@
 law_post-scarcity = {
 	group = lawgroup_welfare
 	
-	icon = "gfx/interface/icons/law_icons/old_age_pension.dds"
+	icon = "gfx/interface/icons/law_icons/post-scarcity.dds"
 	
 	progressiveness = 120
 	
@@ -111,7 +111,7 @@ law_post-scarcity = {
 law_intrusive_surveillance = {
 	group = lawgroup_privacy_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/intrusive_surveillance.dds"
 	
 	unlocking_technologies = {
 		social_media
@@ -137,7 +137,7 @@ law_intrusive_surveillance = {
 law_minimal_privacy_protection = {
 	group = lawgroup_privacy_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/minimal_privacy_protection.dds"
 	
 	progressiveness = 25
 
@@ -149,7 +149,7 @@ law_minimal_privacy_protection = {
 law_moderate_data_privacy = {
 	group = lawgroup_privacy_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/moderate_data_privacy.dds"
 	
 	unlocking_technologies = {
 		knowledge_economy
@@ -170,7 +170,7 @@ law_moderate_data_privacy = {
 law_strong_privacy_rights = {
 	group = lawgroup_privacy_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/strong_privacy_rights.dds"
 	
 	unlocking_technologies = {
 		cybersecurity
@@ -196,7 +196,7 @@ law_strong_privacy_rights = {
 law_primogeniture = {
 	group = lawgroup_inheritance
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/primogeniture.dds"
 	
 	progressiveness = 0		
 
@@ -213,7 +213,7 @@ law_primogeniture = {
 law_partible = {
 	group = lawgroup_inheritance
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/partible.dds"
 	
 	progressiveness = 10	
 
@@ -224,7 +224,7 @@ law_partible = {
 law_equal_inheritance = {
 	group = lawgroup_inheritance
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/equal_inheritance.dds"
 	
 	unlocking_technologies = {
 		egalitarianism
@@ -247,7 +247,7 @@ law_equal_inheritance = {
 law_non_inheritable_usage_rights = {
 	group = lawgroup_inheritance
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/non_inheritable_usage_rights.dds"
 
 	unlocking_laws = {
 		law_command_economy
@@ -268,7 +268,7 @@ law_non_inheritable_usage_rights = {
 law_total_war = {
 	group = lawgroup_rules_of_war
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/total_war.dds"
 
 	unlocking_technologies = {
 		bombing_aircraft
@@ -289,7 +289,7 @@ law_total_war = {
 law_traditional_rules_of_war = {
 	group = lawgroup_rules_of_war
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/traditional_rules_of_war.dds"
 	
 	progressiveness = 10		
 }
@@ -297,7 +297,7 @@ law_traditional_rules_of_war = {
 law_war_crimes_forbidden = {
 	group = lawgroup_rules_of_war
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/war_crimes_forbidden.dds"
 	
 	unlocking_technologies = {
 		wargaming
@@ -317,7 +317,7 @@ law_war_crimes_forbidden = {
 law_humanitarian_regulations = {
 	group = lawgroup_rules_of_war
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/humanitarian_regulations.dds"
 	
 	unlocking_technologies = {
 		nuclear_weapons
@@ -338,7 +338,7 @@ law_humanitarian_regulations = {
 law_limited_war = {
 	group = lawgroup_rules_of_war
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/limited_war.dds"
 
 	unlocking_technologies = {
 		ICBMs
@@ -358,7 +358,7 @@ law_limited_war = {
 law_no_ip_protection = {
 	group = lawgroup_intellectual_property
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ip_protection.dds"
 	
 	progressiveness = 65
 
@@ -371,7 +371,7 @@ law_no_ip_protection = {
 law_creative_commons = {
 	group = lawgroup_intellectual_property
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/creative_commons.dds"
 	
 	unlocking_technologies = {
 		analytical_philosophy
@@ -394,7 +394,7 @@ law_creative_commons = {
 law_traditional_ip_protection = {
 	group = lawgroup_intellectual_property
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/traditional_ip_protection.dds"
 	
 	unlocking_technologies = {
 		mutual_funds
@@ -429,7 +429,7 @@ law_traditional_ip_protection = {
 law_strict_ip_protection = {
 	group = lawgroup_intellectual_property
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/strict_ip_protection.dds"
 	
 	unlocking_technologies = {
 		corporate_management
@@ -466,7 +466,7 @@ law_strict_ip_protection = {
 law_open_source_innovation = {
 	group = lawgroup_intellectual_property
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/open_source_innovation.dds"
 	
 	unlocking_technologies = {
 		knowledge_economy
@@ -488,7 +488,7 @@ law_open_source_innovation = {
 law_commodity_money = {
 	group = lawgroup_monetary_policy
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/commodity_money.dds"
 	
 	progressiveness = 0	
 
@@ -501,7 +501,7 @@ law_commodity_money = {
 law_gold_standard = {
 	group = lawgroup_monetary_policy
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/gold_standard.dds"
 
 	unlocking_technologies = {
 		international_exchange_standards
@@ -523,7 +523,7 @@ law_gold_standard = {
 law_fiat_currency = {
 	group = lawgroup_monetary_policy
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/fiat_currency.dds"
 	
 	unlocking_technologies = {
 		keynesian_economics
@@ -550,7 +550,7 @@ law_fiat_currency = {
 law_digital_currency = {
 	group = lawgroup_monetary_policy
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/digital_currency.dds"
 	
 	unlocking_technologies = {
 		cybersecurity
@@ -577,7 +577,7 @@ law_digital_currency = {
 law_decentralized_cryptocurrency = {
 	group = lawgroup_monetary_policy
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/decentralized_cryptocurrency.dds"
 	
 	unlocking_technologies = {
 		cybersecurity
@@ -600,7 +600,7 @@ law_decentralized_cryptocurrency = {
 law_state_secrets = {
 	group = lawgroup_right_to_information
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/state_secrets.dds"
 	
 	unlocking_technologies = {
 		cryptography
@@ -619,7 +619,7 @@ law_state_secrets = {
 law_informal_government_secrecy = {
 	group = lawgroup_right_to_information
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/informal_government_secrecy.dds"
 	
 	progressiveness = 5
 
@@ -632,7 +632,7 @@ law_informal_government_secrecy = {
 law_freedom_of_information = {
 	group = lawgroup_right_to_information
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/freedom_of_information.dds"
 	
 	unlocking_technologies = {
 		decolonization
@@ -653,7 +653,7 @@ law_freedom_of_information = {
 law_open_government = {
 	group = lawgroup_right_to_information
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/open_government.dds"
 	
 	unlocking_technologies = {
 		knowledge_economy
@@ -674,7 +674,7 @@ law_open_government = {
 law_punishment_focused_criminal_justice = {
 	group = lawgroup_criminal_justice
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/punishment_focused_criminal_justice.dds"
 	
 	progressiveness = 0	
 }
@@ -682,7 +682,7 @@ law_punishment_focused_criminal_justice = {
 law_restorative_justice = {
 	group = lawgroup_criminal_justice
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/restorative_justice.dds"
 	
 	unlocking_technologies = {
 		behaviorism
@@ -701,7 +701,7 @@ law_restorative_justice = {
 law_rehabilitation_focused_criminal_justice = {
 	group = lawgroup_criminal_justice
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/rehabilitation_focused_criminal_justice.dds"
 	
 	unlocking_technologies = {
 		mental_health_awareness
@@ -720,7 +720,7 @@ law_rehabilitation_focused_criminal_justice = {
 law_active_persecution = {
 	group = lawgroup_LGBTQ_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/active_persecution.dds"
 	
 	progressiveness = 0	
 	
@@ -732,7 +732,7 @@ law_active_persecution = {
 law_legal_limbo = {
 	group = lawgroup_LGBTQ_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/legal_limbo.dds"
 	
 	unlocking_technologies = {
 		romanticism
@@ -749,7 +749,7 @@ law_legal_limbo = {
 law_basic_protections = {
 	group = lawgroup_LGBTQ_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/basic_protections.dds"
 	
 	unlocking_technologies = {
 		human_rights
@@ -767,7 +767,7 @@ law_basic_protections = {
 law_comprehensive_rights = {
 	group = lawgroup_LGBTQ_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/comprehensive_rights.dds"
 	
 	unlocking_technologies = {
 		sexual_revolution
@@ -785,7 +785,7 @@ law_comprehensive_rights = {
 law_full_equality_and_protection = {
 	group = lawgroup_LGBTQ_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/full_equality_and_protection.dds"
 	
 	unlocking_technologies = {
 		LGBTQ_rights_movement
@@ -803,7 +803,7 @@ law_full_equality_and_protection = {
 law_no_augmentation = {
 	group = lawgroup_human_augmentation
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_augmentation.dds"
 	
 	progressiveness = 50
 	
@@ -819,7 +819,7 @@ law_no_augmentation = {
 law_unrestricted_augmentation = {
 	group = lawgroup_human_augmentation
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/unrestricted_augmentation.dds"
 	
 	unlocking_technologies = {
 		brain_computer_interfaces
@@ -841,7 +841,7 @@ law_unrestricted_augmentation = {
 law_human_purity = {
 	group = lawgroup_human_augmentation
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/human_purity.dds"
 	
 	unlocking_technologies = {
 		brain_computer_interfaces
@@ -859,7 +859,7 @@ law_human_purity = {
 law_medical_augmentation_only = {
 	group = lawgroup_human_augmentation
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/medical_augmentation_only.dds"
 	
 	unlocking_technologies = {
 		brain_computer_interfaces
@@ -888,7 +888,7 @@ law_medical_augmentation_only = {
 law_regulated_augmentation_market = {
 	group = lawgroup_human_augmentation
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/regulated_augmentation_market.dds"
 	
 	unlocking_technologies = {
 		biohacking_and_human_augmentation
@@ -919,7 +919,7 @@ law_regulated_augmentation_market = {
 law_mandatory_augmentation = {
 	group = lawgroup_human_augmentation
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/mandatory_augmentation.dds"
 	
 	unlocking_technologies = {
 		bioenhanced_soldiers
@@ -957,7 +957,7 @@ law_mandatory_augmentation = {
 law_minority_rights_violent_hostility = {
 	group = lawgroup_minority_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/minority_rights_violent_hostility.dds"
 	
 	progressiveness = 0	
 
@@ -1049,7 +1049,7 @@ law_minority_rights_violent_hostility = {
 law_minority_rights_ghettoization = {
 	group = lawgroup_minority_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/minority_rights_ghettoization.dds"
 	
 	unlocking_technologies = {
 		urbanization
@@ -1149,7 +1149,7 @@ law_minority_rights_ghettoization = {
 law_minority_rights_cultural_assimilation = {
 	group = lawgroup_minority_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/minority_rights_cultural_assimilation.dds"
 	
 	unlocking_technologies = {
 		urbanization
@@ -1256,7 +1256,7 @@ law_minority_rights_cultural_assimilation = {
 law_minority_rights_discrimination = {
 	group = lawgroup_minority_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/minority_rights_discrimination.dds"
 	
 	progressiveness = 20		
 
@@ -1353,7 +1353,7 @@ law_minority_rights_discrimination = {
 law_minority_rights_indifference = {
 	group = lawgroup_minority_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/minority_rights_indifference.dds"
 	
 	progressiveness = 30		
 
@@ -1438,7 +1438,7 @@ law_minority_rights_indifference = {
 law_minority_rights_protection = {
 	group = lawgroup_minority_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/minority_rights_protection.dds"
 	
 	unlocking_technologies = {
 		human_rights
@@ -1523,7 +1523,7 @@ law_minority_rights_protection = {
 law_minority_rights_affirmative_action = {
 	group = lawgroup_minority_rights
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/minority_rights_affirmative_action.dds"
 	
 	unlocking_technologies = {
 		civil_rights_movement
@@ -1611,7 +1611,7 @@ law_minority_rights_affirmative_action = {
 
 law_feudal_contracts = {
 	group = lawgroup_state_power
-	icon = "gfx/interface/icons/law_icons/serfdom.dds" # Thematically appropriate
+	icon = "gfx/interface/icons/law_icons/feudal_contracts.dds" # Thematically appropriate
 	progressiveness = -10 # Represents a pre-modern system
 
 	modifier = {
@@ -1623,7 +1623,7 @@ law_feudal_contracts = {
 
 law_unitary_state = {
 	group = lawgroup_state_power
-	icon = "gfx/interface/icons/law_icons/autocracy.dds"
+	icon = "gfx/interface/icons/law_icons/unitary_state.dds"
 	progressiveness = 0
 	
 	modifier = {
@@ -1634,7 +1634,7 @@ law_unitary_state = {
 
 law_federal_system = {
 	group = lawgroup_state_power
-	icon = "gfx/interface/icons/law_icons/landed_voting.dds"
+	icon = "gfx/interface/icons/law_icons/federal_system.dds"
 	progressiveness = 10
 	
 	modifier = {
@@ -1648,7 +1648,7 @@ law_federal_system = {
 
 law_devolution = {
 	group = lawgroup_state_power
-	icon = "gfx/interface/icons/law_icons/anarchy.dds"
+	icon = "gfx/interface/icons/law_icons/devolution.dds"
 	progressiveness = 20
 	
 	modifier = {
@@ -1670,7 +1670,7 @@ law_devolution = {
 
 law_no_campaign_finance_laws = {
 	group = lawgroup_electoral_finance
-	icon = "gfx/interface/icons/law_icons/no_home_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_campaign_finance_laws.dds"
 	progressiveness = 0
 
 	modifier = {
@@ -1689,7 +1689,7 @@ law_no_campaign_finance_laws = {
 
 law_unregulated_donations = {
 	group = lawgroup_electoral_finance
-	icon = "gfx/interface/icons/law_icons/wealth_voting.dds"
+	icon = "gfx/interface/icons/law_icons/unregulated_donations.dds"
 	progressiveness = 0
 	
 	unlocking_laws = { 
@@ -1708,7 +1708,7 @@ law_unregulated_donations = {
 
 law_donation_limits = {
 	group = lawgroup_electoral_finance
-	icon = "gfx/interface/icons/law_icons/census_voting.dds"
+	icon = "gfx/interface/icons/law_icons/donation_limits.dds"
 	progressiveness = 10
 	
 	unlocking_technologies = { mass_media }
@@ -1734,7 +1734,7 @@ law_donation_limits = {
 
 law_publicly_funded_elections = {
 	group = lawgroup_electoral_finance
-	icon = "gfx/interface/icons/law_icons/public_schools.dds"
+	icon = "gfx/interface/icons/law_icons/publicly_funded_elections.dds"
 	progressiveness = 25
 	
 	unlocking_technologies = { keynesian_economics }
@@ -1762,7 +1762,7 @@ law_publicly_funded_elections = {
 
 law_traditional_family_structure = {
 	group = lawgroup_family_reproductive_policy
-	icon = "gfx/interface/icons/law_icons/traditionalism.dds"
+	icon = "gfx/interface/icons/law_icons/traditional_family_structure.dds"
 	progressiveness = 50
 	
 	# This is the default state before any family laws are enacted.
@@ -1770,7 +1770,7 @@ law_traditional_family_structure = {
 
 law_pro_natalist_subsidies = {
 	group = lawgroup_family_reproductive_policy
-	icon = "gfx/interface/icons/law_icons/guaranteed_liberties.dds"
+	icon = "gfx/interface/icons/law_icons/pro_natalist_subsidies.dds"
 	progressiveness = 25
 	
 	unlocking_technologies = { mass_propaganda }
@@ -1785,7 +1785,7 @@ law_pro_natalist_subsidies = {
 
 law_state_sponsored_family_planning = {
 	group = lawgroup_family_reproductive_policy
-	icon = "gfx/interface/icons/law_icons/guaranteed_liberties.dds"
+	icon = "gfx/interface/icons/law_icons/state_sponsored_family_planning.dds"
 	progressiveness = 75
 	
 	unlocking_technologies = { second_wave_feminism }
@@ -1799,7 +1799,7 @@ law_state_sponsored_family_planning = {
 
 law_population_control_measures = {
 	group = lawgroup_family_reproductive_policy
-	icon = "gfx/interface/icons/law_icons/guaranteed_liberties.dds"
+	icon = "gfx/interface/icons/law_icons/population_control_measures.dds"
 	progressiveness = 0
 
 	unlocking_technologies = { mass_surveillance }
@@ -1813,7 +1813,7 @@ law_population_control_measures = {
 
 law_communal_child_rearing = {
 	group = lawgroup_family_reproductive_policy
-	icon = "gfx/interface/icons/law_icons/public_schools.dds"
+	icon = "gfx/interface/icons/law_icons/communal_child_rearing.dds"
 	progressiveness = 100
 	
 	unlocking_technologies = { anarchism }
@@ -1833,7 +1833,7 @@ law_communal_child_rearing = {
 # DEFAULT - Unregulated Banking (laissez-faire, no interventions)
 law_unregulated_banking = {
     group = lawgroup_financial_regulation
-    icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+    icon = "gfx/interface/icons/law_icons/unregulated_banking.dds"
     progressiveness = 0
 	disallowing_laws = {
 		law_command_economy
@@ -1850,7 +1850,7 @@ law_unregulated_banking = {
 # Free & Mutual Banking (weak toolkit, co-ops; no central bank)
 law_free_mutual_banking = {
     group = lawgroup_financial_regulation
-    icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+    icon = "gfx/interface/icons/law_icons/free_mutual_banking.dds"
     progressiveness = 10
     unlocking_technologies = {
 		postal_savings
@@ -1866,7 +1866,7 @@ law_free_mutual_banking = {
 # Universal Banking, Light Prudence (permissive + some tools)
 law_universal_banking_light_prudence = {
     group = lawgroup_financial_regulation
-    icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+    icon = "gfx/interface/icons/law_icons/universal_banking_light_prudence.dds"
 	progressiveness = 20
     unlocking_technologies = {
 		central_banking
@@ -1881,7 +1881,7 @@ law_universal_banking_light_prudence = {
 # Prudential / Narrow Banking (deposit insurance + buffers; solid tools)
 law_prudential_narrow_banking = {
     group = lawgroup_financial_regulation
-    icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+    icon = "gfx/interface/icons/law_icons/prudential_narrow_banking.dds"
 	progressiveness = 30
     unlocking_technologies = {
 		modern_financial_instruments
@@ -1897,7 +1897,7 @@ law_prudential_narrow_banking = {
 # Directed Credit & Development Banks (state steering; strong tools)
 law_directed_credit_development_banks = {
     group = lawgroup_financial_regulation
-    icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+    icon = "gfx/interface/icons/law_icons/directed_credit_development_banks.dds"
 	progressiveness = 40
 	disallowing_laws = {
 		law_laissez_faire
@@ -1917,7 +1917,7 @@ law_directed_credit_development_banks = {
 # Central Bank - Independence (modern CB toolkit; max tools)
 law_central_bank_independence = {
     group = lawgroup_financial_regulation
-    icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+    icon = "gfx/interface/icons/law_icons/central_bank_independence.dds"
 	progressiveness = 50
     unlocking_technologies = {
 		keynesian_economics
@@ -1948,7 +1948,7 @@ law_central_bank_independence = {
 
 law_no_internet_policy = {
 	group = lawgroup_internet_governance
-	icon = "gfx/interface/icons/law_icons/no_home_affairs.dds" # Placeholder
+	icon = "gfx/interface/icons/law_icons/no_internet_policy.dds" # Placeholder
 	progressiveness = 0
 
 	# This is the default state before the internet exists.
@@ -1961,7 +1961,7 @@ law_no_internet_policy = {
 
 law_unregulated_internet = {
 	group = lawgroup_internet_governance
-	icon = "gfx/interface/icons/law_icons/no_home_affairs.dds" # Placeholder
+	icon = "gfx/interface/icons/law_icons/unregulated_internet.dds" # Placeholder
 	progressiveness = 10
 	
 	unlocking_technologies = { world_wide_web }
@@ -1977,7 +1977,7 @@ law_unregulated_internet = {
 
 law_state_controlled_internet = {
 	group = lawgroup_internet_governance
-	icon = "gfx/interface/icons/law_icons/outlawed_dissent.dds"
+	icon = "gfx/interface/icons/law_icons/state_controlled_internet.dds"
 	progressiveness = 0
 	
 	unlocking_technologies = { world_wide_web }
@@ -1998,7 +1998,7 @@ law_state_controlled_internet = {
 
 law_net_neutrality = {
 	group = lawgroup_internet_governance
-	icon = "gfx/interface/icons/law_icons/guaranteed_liberties.dds"
+	icon = "gfx/interface/icons/law_icons/net_neutrality.dds"
 	progressiveness = 25
 	
 	unlocking_technologies = { world_wide_web }
@@ -2018,7 +2018,7 @@ law_net_neutrality = {
 
 law_traditional_heredity = {
     group = lawgroup_genetic_rights
-    icon = "gfx/interface/icons/law_icons/traditionalism.dds" # Placeholder
+    icon = "gfx/interface/icons/law_icons/traditional_heredity.dds" # Placeholder
     progressiveness = 0
 
     # This is the default state before genetics are understood.
@@ -2032,7 +2032,7 @@ law_traditional_heredity = {
 
 law_ban_on_genetic_modification = {
 	group = lawgroup_genetic_rights
-	icon = "gfx/interface/icons/law_icons/outlawed_dissent.dds" # Placeholder
+	icon = "gfx/interface/icons/law_icons/ban_on_genetic_modification.dds" # Placeholder
 	progressiveness = 20
 
 	unlocking_technologies = { gene_splicing }
@@ -2046,7 +2046,7 @@ law_ban_on_genetic_modification = {
 
 law_corporate_genetic_licensing = {
 	group = lawgroup_genetic_rights
-	icon = "gfx/interface/icons/law_icons/laissez_faire.dds"
+	icon = "gfx/interface/icons/law_icons/corporate_genetic_licensing.dds"
 	progressiveness = 10
 
 	unlocking_technologies = { biotechnology }
@@ -2059,7 +2059,7 @@ law_corporate_genetic_licensing = {
 
 law_open_source_genetics = {
 	group = lawgroup_genetic_rights
-	icon = "gfx/interface/icons/law_icons/public_schools.dds"
+	icon = "gfx/interface/icons/law_icons/open_source_genetics.dds"
 	progressiveness = 25
 
 	unlocking_technologies = { synthetic_biology }
@@ -2074,7 +2074,7 @@ law_open_source_genetics = {
 
 law_state_eugenics_program = {
 	group = lawgroup_genetic_rights
-	icon = "gfx/interface/icons/law_icons/secret_police.dds"
+	icon = "gfx/interface/icons/law_icons/state_eugenics_program.dds"
 	progressiveness = 0
 
 	unlocking_technologies = { genetic_engineering }
@@ -2094,7 +2094,7 @@ law_state_eugenics_program = {
 # Local Vernacular (premodern default)
 law_local_vernacular = {
     group = lawgroup_language_policy
-    icon = "gfx/interface/icons/law_icons/traditionalism.dds"
+    icon = "gfx/interface/icons/law_icons/local_vernacular.dds"
     progressiveness = 0
 
     # Patchwork practice; no statewide rights/duties
@@ -2114,7 +2114,7 @@ law_local_vernacular = {
 # Civic Monolingualism
 law_civic_monolingualism = {
     group = lawgroup_language_policy
-    icon = "gfx/interface/icons/law_icons/public_schools.dds"
+    icon = "gfx/interface/icons/law_icons/civic_monolingualism.dds"
     progressiveness = 20
 
     unlocking_technologies = { nationalism }
@@ -2152,7 +2152,7 @@ law_civic_monolingualism = {
 # Multilingual Federalism
 law_multilingual_federalism = {
     group = lawgroup_language_policy
-    icon = "gfx/interface/icons/law_icons/census_voting.dds"
+    icon = "gfx/interface/icons/law_icons/multilingual_federalism.dds"
     progressiveness = 30
 
     unlocking_technologies = { human_rights }
@@ -2180,7 +2180,7 @@ law_multilingual_federalism = {
 # Linguistic Purity (coercive suppression)
 law_linguistic_purity = {
     group = lawgroup_language_policy
-    icon = "gfx/interface/icons/law_icons/autocracy.dds"
+    icon = "gfx/interface/icons/law_icons/linguistic_purity.dds"
     progressiveness = 0
 
     unlocking_technologies = { mass_propaganda }
@@ -2207,7 +2207,7 @@ law_linguistic_purity = {
 # State-Led Language Reform (script/orthography/terminology/revival/aux-lang)
 law_state_led_language_reform = {
     group = lawgroup_language_policy
-    icon = "gfx/interface/icons/law_icons/guaranteed_liberties.dds"
+    icon = "gfx/interface/icons/law_icons/state_led_language_reform.dds"
     progressiveness = 50
 
     unlocking_technologies = { mass_media }
@@ -2228,7 +2228,7 @@ law_state_led_language_reform = {
 # Ubiquitous Translation
 law_ubiquitous_translation = {
     group = lawgroup_language_policy
-    icon = "gfx/interface/icons/law_icons/no_home_affairs.dds"
+    icon = "gfx/interface/icons/law_icons/ubiquitous_translation.dds"
     progressiveness = 50
 
     unlocking_technologies = { machine_learning }
@@ -2257,7 +2257,7 @@ law_ubiquitous_translation = {
 # Guilds and Chartered Monopolies (premodern default)
 law_guilds_chartered_monopolies = {
     group = lawgroup_antitrust
-    icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+    icon = "gfx/interface/icons/law_icons/guilds_chartered_monopolies.dds"
     progressiveness = 0
 
 	unlocking_laws = {
@@ -2274,7 +2274,7 @@ law_guilds_chartered_monopolies = {
 # Freedom of Contract (hands-off competition)
 law_freedom_of_contract = {
     group = lawgroup_antitrust
-    icon = "gfx/interface/icons/law_icons/wealth_voting.dds"
+    icon = "gfx/interface/icons/law_icons/freedom_of_contract.dds"
     progressiveness = 10
 
 	unlocking_technologies = { international_trade }
@@ -2297,7 +2297,7 @@ law_freedom_of_contract = {
 # Antitrust / Trust Busting (court-led conduct control)
 law_trust_busting = {
     group = lawgroup_antitrust
-    icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+    icon = "gfx/interface/icons/law_icons/trust_busting.dds"
     progressiveness = 20
 
     unlocking_technologies = { corporate_management }
@@ -2319,7 +2319,7 @@ law_trust_busting = {
 # Regulated Utilities (sectoral regulators + unbundling)
 law_regulated_utilities = {
     group = lawgroup_antitrust
-    icon = "gfx/interface/icons/law_icons/anarchy.dds"
+    icon = "gfx/interface/icons/law_icons/regulated_utilities.dds"
     progressiveness = 30
 
     unlocking_technologies = { central_planning }
@@ -2336,7 +2336,7 @@ law_regulated_utilities = {
 # Dirigiste Policy
 law_dirigisme = {
     group = lawgroup_antitrust
-    icon = "gfx/interface/icons/law_icons/autocracy.dds"
+    icon = "gfx/interface/icons/law_icons/dirigisme.dds"
     progressiveness = 15
 
     unlocking_technologies = { mass_propaganda }
@@ -2358,7 +2358,7 @@ law_dirigisme = {
 # Command/Cooperative Economy
 law_command_cooperative_economy = {
     group = lawgroup_antitrust
-    icon = "gfx/interface/icons/law_icons/command_economy.dds"
+    icon = "gfx/interface/icons/law_icons/command_cooperative_economy.dds"
     progressiveness = 50
 
 	unlocking_laws = {
@@ -2379,7 +2379,7 @@ law_command_cooperative_economy = {
 law_no_ministry_of_foreign_affairs = {
 	group = lawgroup_ministry_of_foreign_affairs
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_foreign_affairs.dds"
 	
 	progressiveness = 0	
 
@@ -2388,7 +2388,7 @@ law_no_ministry_of_foreign_affairs = {
 law_ministry_of_foreign_affairs = {
 	group = lawgroup_ministry_of_foreign_affairs
 	
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_foreign_affairs.dds"
 	
 	progressiveness = 25
 	
@@ -2410,7 +2410,7 @@ law_ministry_of_foreign_affairs = {
 law_no_ministry_of_war = {
 	group = lawgroup_ministry_of_war
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_war.dds"
 	
 	progressiveness = 0	
 
@@ -2419,7 +2419,7 @@ law_no_ministry_of_war = {
 law_ministry_of_war = {
 	group = lawgroup_ministry_of_war
 	
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_war.dds"
 	
 	progressiveness = 25
 	
@@ -2460,7 +2460,7 @@ law_ministry_of_war = {
 law_no_ministry_of_commerce = {
 	group = lawgroup_ministry_of_commerce
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_commerce.dds"
 	
 	progressiveness = 0	
 
@@ -2469,7 +2469,7 @@ law_no_ministry_of_commerce = {
 law_ministry_of_commerce = {
 	group = lawgroup_ministry_of_commerce
 	
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_commerce.dds"
 	
 	progressiveness = 25
 	
@@ -2505,7 +2505,7 @@ law_ministry_of_commerce = {
 law_no_national_bank = {
 	group = lawgroup_national_bank
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_national_bank.dds"
 	
 	progressiveness = 0	
 
@@ -2514,7 +2514,7 @@ law_no_national_bank = {
 law_national_bank = {
 	group = lawgroup_national_bank
 	
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/national_bank.dds"
 	
 	progressiveness = 25
 	
@@ -2552,7 +2552,7 @@ law_national_bank = {
 law_no_ministry_of_culture = {
 	group = lawgroup_ministry_of_culture
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_culture.dds"
 	
 	progressiveness = 0	
 
@@ -2561,7 +2561,7 @@ law_no_ministry_of_culture = {
 law_ministry_of_culture = {
 	group = lawgroup_ministry_of_culture
 	
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_culture.dds"
 	
 	progressiveness = 25
 	
@@ -2597,7 +2597,7 @@ law_ministry_of_culture = {
 law_no_ministry_of_labor = {
 	group = lawgroup_ministry_of_labor
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_labor.dds"
 	
 	progressiveness = 25
 
@@ -2606,7 +2606,7 @@ law_no_ministry_of_labor = {
 law_pro_labor_ministry_of_labor = {
 	group = lawgroup_ministry_of_labor
 	
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/pro_labor_ministry_of_labor.dds"
 	
 	progressiveness = 50
 	
@@ -2629,7 +2629,7 @@ law_pro_labor_ministry_of_labor = {
 law_pro_capital_ministry_of_labor = {
 	group = lawgroup_ministry_of_labor
 	
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/pro_capital_ministry_of_labor.dds"
 	
 	progressiveness = 0	
 	
@@ -2653,7 +2653,7 @@ law_pro_capital_ministry_of_labor = {
 law_no_ministry_of_the_environment = {
 	group = lawgroup_ministry_of_the_environment
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_the_environment.dds"
 	
 	progressiveness = 0	
 
@@ -2662,7 +2662,7 @@ law_no_ministry_of_the_environment = {
 law_ministry_of_the_environment = {
 	group = lawgroup_ministry_of_the_environment
 	
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_the_environment.dds"
 	
 	progressiveness = 25
 	
@@ -2698,7 +2698,7 @@ law_ministry_of_the_environment = {
 law_no_ministry_of_intelligence_and_security = {
 	group = lawgroup_ministry_of_intelligence_and_security
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_intelligence_and_security.dds"
 	
 	progressiveness = 0	
 
@@ -2707,7 +2707,7 @@ law_no_ministry_of_intelligence_and_security = {
 law_ministry_of_intelligence_and_security = {
 	group = lawgroup_ministry_of_intelligence_and_security
 	
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_intelligence_and_security.dds"
 	
 	progressiveness = 25
 	
@@ -2725,7 +2725,7 @@ law_ministry_of_intelligence_and_security = {
 law_no_ministry_of_refugee_affairs = {
 	group = lawgroup_ministry_of_refugee_affairs
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_refugee_affairs.dds"
 	
 	progressiveness = 0	
 
@@ -2734,7 +2734,7 @@ law_no_ministry_of_refugee_affairs = {
 law_ministry_of_refugee_affairs = {
 	group = lawgroup_ministry_of_refugee_affairs
 	
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_refugee_affairs.dds"
 	
 	progressiveness = 25
 	
@@ -2756,7 +2756,7 @@ law_ministry_of_refugee_affairs = {
 law_no_ministry_of_propaganda = {
 	group = lawgroup_ministry_of_propaganda
 	
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_propaganda.dds"
 	
 	progressiveness = 25
 
@@ -2765,7 +2765,7 @@ law_no_ministry_of_propaganda = {
 law_ministry_of_propaganda = {
 	group = lawgroup_ministry_of_propaganda
 	
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_propaganda.dds"
 	
 	progressiveness = 0	
 	
@@ -2805,7 +2805,7 @@ law_ministry_of_propaganda = {
 law_no_ministry_of_science = {
 	group = lawgroup_ministry_of_science
 
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_science.dds"
 
 	progressiveness = 0
 
@@ -2814,7 +2814,7 @@ law_no_ministry_of_science = {
 law_ministry_of_science = {
 	group = lawgroup_ministry_of_science
 
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_science.dds"
 
 	progressiveness = 25
 
@@ -2861,7 +2861,7 @@ law_ministry_of_science = {
 law_no_ministry_of_thought_control = {
 	group = lawgroup_ministry_of_thought_control
 
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_thought_control.dds"
 
 	progressiveness = 25
 
@@ -2870,7 +2870,7 @@ law_no_ministry_of_thought_control = {
 law_ministry_of_thought_control = {
 	group = lawgroup_ministry_of_thought_control
 
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_thought_control.dds"
 
 	progressiveness = 0
 
@@ -2894,7 +2894,7 @@ law_ministry_of_thought_control = {
 law_no_ministry_of_consumer_protection = {
 	group = lawgroup_ministry_of_consumer_protection
 
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_consumer_protection.dds"
 
 	progressiveness = 0
 
@@ -2903,7 +2903,7 @@ law_no_ministry_of_consumer_protection = {
 law_ministry_of_consumer_protection = {
 	group = lawgroup_ministry_of_consumer_protection
 
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_consumer_protection.dds"
 
 	progressiveness = 25
 
@@ -2941,7 +2941,7 @@ law_ministry_of_consumer_protection = {
 law_no_ministry_of_urban_planning = {
 	group = lawgroup_ministry_of_urban_planning
 
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_urban_planning.dds"
 
 	progressiveness = 0
 
@@ -2950,7 +2950,7 @@ law_no_ministry_of_urban_planning = {
 law_ministry_of_urban_planning = {
 	group = lawgroup_ministry_of_urban_planning
 
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_urban_planning.dds"
 
 	progressiveness = 25
 
@@ -2987,7 +2987,7 @@ law_ministry_of_urban_planning = {
 law_no_ministry_of_religion = {
 	group = lawgroup_ministry_of_religion
 
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_religion.dds"
 
 	progressiveness = 10
 
@@ -2996,7 +2996,7 @@ law_no_ministry_of_religion = {
 law_ministry_of_religion = {
 	group = lawgroup_ministry_of_religion
 
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_religion.dds"
 
 	progressiveness = 0
 
@@ -3035,7 +3035,7 @@ law_ministry_of_religion = {
 law_no_ministry_of_international_aid = {
 	group = lawgroup_ministry_of_international_aid
 
-	icon = "gfx/interface/icons/law_icons/no_colonial_affairs.dds"
+	icon = "gfx/interface/icons/law_icons/no_ministry_of_international_aid.dds"
 
 	progressiveness = 0
 
@@ -3044,7 +3044,7 @@ law_no_ministry_of_international_aid = {
 law_ministry_of_international_aid = {
 	group = lawgroup_ministry_of_international_aid
 
-	icon = "gfx/interface/icons/law_icons/colonial_resettlement.dds"
+	icon = "gfx/interface/icons/law_icons/ministry_of_international_aid.dds"
 
 	progressiveness = 10
 
@@ -3061,7 +3061,7 @@ law_ministry_of_international_aid = {
 
 law_protected_class = {
 	group = lawgroup_rights_of_women
-	icon = "gfx/interface/icons/law_icons/womens_suffrage.dds"
+	icon = "gfx/interface/icons/law_icons/protected_class.dds"
 	
 	progressiveness = 60
 	
@@ -3083,7 +3083,7 @@ law_protected_class = {
 
 law_neocameralism = {
 	group = lawgroup_governance_principles
-	icon = "gfx/interface/icons/law_icons/laissez_faire.dds"
+	icon = "gfx/interface/icons/law_icons/neocameralism.dds"
 
 	progressiveness = 0
 
@@ -3164,7 +3164,7 @@ law_neocameralism = {
 
 law_direct_democracy = {
 	group = lawgroup_governance_principles
-	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
+	icon = "gfx/interface/icons/law_icons/direct_democracy.dds"
 	
 	progressiveness = 50
 
@@ -3253,7 +3253,7 @@ law_direct_democracy = {
 law_neocolonialism = {
 	group = lawgroup_colonization
 	
-	icon = "gfx/interface/icons/law_icons/colonial_exploitation.dds"
+	icon = "gfx/interface/icons/law_icons/neocolonialism.dds"
 	
 	progressiveness = -10
 
@@ -3287,7 +3287,7 @@ law_neocolonialism = {
 
 law_algorithmic_governance = {
 	group = lawgroup_distribution_of_power
-	icon = "gfx/interface/icons/law_icons/technocracy.dds"
+	icon = "gfx/interface/icons/law_icons/algorithmic_governance.dds"
 
 	progressiveness = 0
 

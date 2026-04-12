@@ -18852,3 +18852,128 @@ pm_consciousness_network_social_control = {
 		}
 	}
 }
+
+############ MILITARY BASE
+
+pm_military_base = {
+	texture = "gfx/interface/icons/production_method_icons/unused/pm_military_base.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			building_input_small_arms_add = 5
+			building_input_ammunition_add = 5
+		}
+		level_scaled = {
+			building_employment_soldiers_add = 200
+			building_employment_officers_add = 50
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 5
+		}
+	}
+}
+
+pm_earthwork_fortifications = {
+	texture = "gfx/interface/icons/production_method_icons/unused/pm_earthwork_fortifications.dds"
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_fortification_level_add = 1
+			state_blockade_resistance_add = 2
+			state_devastation_decay_mult = 0.1
+		}
+	}
+}
+
+pm_concrete_bunkers = {
+	texture = "gfx/interface/icons/production_method_icons/unused/pm_concrete_bunkers.dds"
+
+	unlocking_technologies = {
+		concrete_fortifications
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			building_input_steel_add = 5
+		}
+		level_scaled = {
+			building_employment_laborers_add = 50
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_fortification_level_add = 2
+			state_blockade_resistance_add = 4
+			state_devastation_decay_mult = 0.2
+		}
+	}
+}
+
+pm_hardened_positions = {
+	texture = "gfx/interface/icons/production_method_icons/unused/pm_hardened_positions.dds"
+
+	unlocking_technologies = {
+		guided_missiles
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			building_input_steel_add = 10
+			building_input_explosives_add = 5
+		}
+		level_scaled = {
+			building_employment_laborers_add = 100
+			building_employment_engineers_add = 25
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_fortification_level_add = 3
+			state_blockade_resistance_add = 6
+			state_devastation_decay_mult = 0.3
+		}
+	}
+}
+
+pm_garrison_duty = {
+	texture = "gfx/interface/icons/production_method_icons/unused/pm_garrison_duty.dds"
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_turmoil_effects_mult = -0.15
+			state_war_support_monthly_add = 0.5
+		}
+	}
+}
+
+pm_territorial_defense = {
+	texture = "gfx/interface/icons/production_method_icons/unused/pm_territorial_defense.dds"
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_fortification_level_add = 1
+			state_war_support_monthly_add = 0.25
+		}
+	}
+}
+
+pm_logistics_hub = {
+	texture = "gfx/interface/icons/production_method_icons/unused/pm_logistics_hub.dds"
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 10
+		}
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			unit_supply_consumption_mult = -0.02
+		}
+	}
+}

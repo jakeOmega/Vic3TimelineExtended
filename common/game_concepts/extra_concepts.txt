@@ -48,6 +48,12 @@ concept_tourism_system = {}
 concept_combined_arms = {}
 concept_rules_of_war_system = {}
 concept_custom_treaty_articles = {}
+concept_fortification_system = {}
+concept_fortification_level = {}
+concept_fortified_position = {}
+concept_fortified_stronghold = {}
+concept_fortified_bastion = {}
+concept_impregnable_fortress = {}
 
 # Soft Power & Cyber Power
 concept_cultural_hegemony_system = {}

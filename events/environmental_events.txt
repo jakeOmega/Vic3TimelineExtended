@@ -258,6 +258,14 @@ environmental_events.3 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_environmental }
+			add_modifier = {
+				name = eco_reform_env_movement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 		add_radicals = {
 			value = very_small_radicals
 			strata = upper

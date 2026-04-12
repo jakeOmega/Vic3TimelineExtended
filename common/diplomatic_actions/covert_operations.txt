@@ -37,6 +37,7 @@ covert_election_interference_action = {
 			text = covert_op_detection_warning_tt
 		}
 		covert_op_refresh_all_targets = yes
+		covert_op_register_new_target = { TYPE = election_interference DEFENSE_MOD = country_covert_defense_ideological_add }
 	}
 
 	potential = {
@@ -207,6 +208,7 @@ covert_financial_subversion_action = {
 			text = covert_op_detection_warning_tt
 		}
 		covert_op_refresh_all_targets = yes
+		covert_op_register_new_target = { TYPE = financial_subversion DEFENSE_MOD = country_covert_defense_economic_add }
 	}
 
 	potential = {
@@ -357,6 +359,7 @@ covert_infrastructure_sabotage_action = {
 			text = covert_op_detection_warning_tt
 		}
 		covert_op_refresh_all_targets = yes
+		covert_op_register_new_target = { TYPE = infrastructure_sabotage DEFENSE_MOD = country_covert_defense_military_add }
 	}
 
 	potential = {
@@ -478,6 +481,7 @@ covert_comms_disruption_action = {
 			text = covert_op_detection_warning_tt
 		}
 		covert_op_refresh_all_targets = yes
+		covert_op_register_new_target = { TYPE = comms_disruption DEFENSE_MOD = country_covert_defense_military_add }
 	}
 
 	potential = {
@@ -604,6 +608,7 @@ covert_industrial_espionage_action = {
 			text = covert_op_detection_warning_tt
 		}
 		covert_op_refresh_all_targets = yes
+		covert_op_register_new_target = { TYPE = industrial_espionage DEFENSE_MOD = country_covert_defense_economic_add }
 	}
 
 	potential = {
@@ -746,6 +751,7 @@ covert_military_espionage_action = {
 			text = covert_op_detection_warning_tt
 		}
 		covert_op_refresh_all_targets = yes
+		covert_op_register_new_target = { TYPE = military_espionage DEFENSE_MOD = country_covert_defense_military_add }
 	}
 
 	potential = {
@@ -878,6 +884,7 @@ covert_influence_campaign_action = {
 			text = covert_op_detection_warning_tt
 		}
 		covert_op_refresh_all_targets = yes
+		covert_op_register_new_target = { TYPE = influence_campaign DEFENSE_MOD = country_covert_defense_ideological_add }
 	}
 
 	potential = {
@@ -1043,6 +1050,7 @@ covert_ideological_subversion_action = {
 			text = covert_op_detection_warning_tt
 		}
 		covert_op_refresh_all_targets = yes
+		covert_op_register_new_target = { TYPE = ideological_subversion DEFENSE_MOD = country_covert_defense_ideological_add }
 	}
 
 	potential = {
@@ -1209,6 +1217,7 @@ covert_destabilization_action = {
 			text = covert_op_detection_warning_tt
 		}
 		covert_op_refresh_all_targets = yes
+		covert_op_register_new_target = { TYPE = destabilization DEFENSE_MOD = country_covert_defense_ideological_add }
 	}
 
 	potential = {

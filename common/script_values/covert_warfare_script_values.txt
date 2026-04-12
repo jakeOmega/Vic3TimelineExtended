@@ -131,16 +131,16 @@ covert_ops_max_per_type = {
 # IMPORTANT: first_country filter ensures we only count ops WE initiated, not ops targeting us
 covert_operations_active = {
 	value = 0
-	if = { limit = { any_scope_diplomatic_pact = { count >= 1 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 2 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 3 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 4 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 5 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 6 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 7 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 8 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 9 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
-	if = { limit = { any_scope_diplomatic_pact = { count >= 10 is_covert_operation_pact = yes first_country = { this = PREV } } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 1 is_covert_operation_pact = yes first_country = prev } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 2 is_covert_operation_pact = yes first_country = prev } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 3 is_covert_operation_pact = yes first_country = prev } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 4 is_covert_operation_pact = yes first_country = prev } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 5 is_covert_operation_pact = yes first_country = prev } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 6 is_covert_operation_pact = yes first_country = prev } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 7 is_covert_operation_pact = yes first_country = prev } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 8 is_covert_operation_pact = yes first_country = prev } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 9 is_covert_operation_pact = yes first_country = prev } } add = 1 }
+	if = { limit = { any_scope_diplomatic_pact = { count >= 10 is_covert_operation_pact = yes first_country = prev } } add = 1 }
 }
 
 covert_operations_available_slots = {

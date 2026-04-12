@@ -1,32 +1,104 @@
 ﻿# Space Race Scripted Effects
 
-# Recalculate consolidated space program cost modifier
+# Recalculate space program cost modifiers on each active JE
 # Called whenever funding/approach changes or a milestone completes
 sr_recalculate_cost = {
-	# Remove old consolidated modifier
-	if = {
-		limit = { has_modifier = sr_space_program_cost }
-		remove_modifier = sr_space_program_cost
+	# Remove per-JE cost modifiers from all JEs
+	je:je_space_race_suborbital ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
 	}
-	# Remove legacy per-modifier costs (migration from shared system)
+	je:je_space_race_orbital ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+	}
+	je:je_space_race_moon_landing ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+	}
+	je:je_space_race_probe ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+	}
+	je:je_space_race_moon_base ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+	}
+	je:je_space_race_mars_landing ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+	}
+	je:je_space_race_interstellar_probe ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+	}
+	je:je_space_race_solar_colonization ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+	}
+	# Apply per-JE cost modifiers for active milestones
 	if = {
-		limit = { has_modifier = sr_space_program_funding }
-		remove_modifier = sr_space_program_funding
+		limit = { has_variable = sr_active_suborbital }
+		je:je_space_race_suborbital = {
+			add_modifier = {
+				name = sr_space_program_cost
+				multiplier = sr_suborbital_cost
+			}
+		}
 	}
 	if = {
-		limit = { has_modifier = sr_safe_approach }
-		remove_modifier = sr_safe_approach
+		limit = { has_variable = sr_active_orbital }
+		je:je_space_race_orbital = {
+			add_modifier = {
+				name = sr_space_program_cost
+				multiplier = sr_orbital_cost
+			}
+		}
 	}
 	if = {
-		limit = { has_modifier = sr_ambitious_approach }
-		remove_modifier = sr_ambitious_approach
+		limit = { has_variable = sr_active_moon_landing }
+		je:je_space_race_moon_landing = {
+			add_modifier = {
+				name = sr_space_program_cost
+				multiplier = sr_moon_landing_cost
+			}
+		}
 	}
-	# Apply consolidated cost if any
 	if = {
-		limit = { sr_total_space_cost > 0 }
-		add_modifier = {
-			name = sr_space_program_cost
-			multiplier = sr_total_space_cost
+		limit = { has_variable = sr_active_probe }
+		je:je_space_race_probe = {
+			add_modifier = {
+				name = sr_space_program_cost
+				multiplier = sr_probe_cost
+			}
+		}
+	}
+	if = {
+		limit = { has_variable = sr_active_moon_base }
+		je:je_space_race_moon_base = {
+			add_modifier = {
+				name = sr_space_program_cost
+				multiplier = sr_moon_base_cost
+			}
+		}
+	}
+	if = {
+		limit = { has_variable = sr_active_mars_landing }
+		je:je_space_race_mars_landing = {
+			add_modifier = {
+				name = sr_space_program_cost
+				multiplier = sr_mars_landing_cost
+			}
+		}
+	}
+	if = {
+		limit = { has_variable = sr_active_interstellar_probe }
+		je:je_space_race_interstellar_probe = {
+			add_modifier = {
+				name = sr_space_program_cost
+				multiplier = sr_interstellar_probe_cost
+			}
+		}
+	}
+	if = {
+		limit = { has_variable = sr_active_solar_colonization }
+		je:je_space_race_solar_colonization = {
+			add_modifier = {
+				name = sr_space_program_cost
+				multiplier = sr_solar_colonization_cost
+			}
 		}
 	}
 }
@@ -127,34 +199,14 @@ sr_boost_active_milestones = {
 	remove_variable = sr_progress_boost
 }
 
-# Called when a milestone is completed - handles first/subsequent rewards and cleanup
+# Called when a milestone is completed - handles cleanup
 sr_complete_milestone_effect = {
-	# Remove legacy shared approach modifiers (migration from old system)
-	if = {
-		limit = { has_modifier = sr_safe_approach }
-		remove_modifier = sr_safe_approach
-	}
-	if = {
-		limit = { has_modifier = sr_ambitious_approach }
-		remove_modifier = sr_ambitious_approach
-	}
-	# Remove legacy shared approach variables
-	if = {
-		limit = { has_variable = sr_approach_safe }
-		remove_variable = sr_approach_safe
-	}
-	if = {
-		limit = { has_variable = sr_approach_ambitious }
-		remove_variable = sr_approach_ambitious
-	}
-	# Reset shared milestone progress (legacy compat)
-	set_variable = { name = sr_milestone_progress value = 0 }
 	# Remove active milestone flag
 	if = {
 		limit = { has_variable = sr_active_milestone }
 		remove_variable = sr_active_milestone
 	}
-	# Recalculate consolidated cost (per-JE vars cleaned in per-milestone effect)
+	# Recalculate JE cost modifiers (per-JE vars cleaned in per-milestone effect)
 	sr_recalculate_cost = yes
 }
 

@@ -125,6 +125,15 @@ legacy_je_modifier_cleanup_effect = {
 	if = { limit = { has_modifier = un_development_contributor_cost } remove_modifier = un_development_contributor_cost }
 	if = { limit = { has_modifier = un_humanitarian_aid_cost } remove_modifier = un_humanitarian_aid_cost }
 
+	# ── Space Race (je:je_space_race_*) ──
+	if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+	if = { limit = { has_modifier = sr_space_program_funding } remove_modifier = sr_space_program_funding }
+	if = { limit = { has_modifier = sr_safe_approach } remove_modifier = sr_safe_approach }
+	if = { limit = { has_modifier = sr_ambitious_approach } remove_modifier = sr_ambitious_approach }
+	# Legacy shared approach variables
+	if = { limit = { has_variable = sr_approach_safe } remove_variable = sr_approach_safe }
+	if = { limit = { has_variable = sr_approach_ambitious } remove_variable = sr_approach_ambitious }
+
 	# ── Colonial Empire (je:je_colonial_empire) ──
 	if = { limit = { has_modifier = colonial_empire_under_pressure_modifier } remove_modifier = colonial_empire_under_pressure_modifier }
 	if = { limit = { has_modifier = colonial_empire_crumbling_modifier } remove_modifier = colonial_empire_crumbling_modifier }

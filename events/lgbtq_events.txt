@@ -47,6 +47,14 @@ lgbtq_events.1 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			add_modifier = {
+				name = pride_march_civil_rights_movement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 		add_loyalists = {
 			value = small_radicals
 			pop_type = academics
@@ -340,6 +348,14 @@ lgbtq_events.4 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			add_modifier = {
+				name = lgbtq_cultural_shift_civil_rights_movement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
@@ -460,6 +476,14 @@ lgbtq_events.5 = {
 			name = lgbtq_reform_leverage_modifier
 			days = normal_modifier_time
 			is_decaying = yes
+		}
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			add_modifier = {
+				name = lgbtq_reform_civil_rights_movement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_radicals = {
 			value = very_small_radicals
