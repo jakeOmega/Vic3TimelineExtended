@@ -15611,7 +15611,6 @@ pm_mars_mission = {
 			# Input goods
 			goods_input_launch_capacity_add = 10000              # Price:  200, Total cost: 2000000.0 (100.00%)
 			# Output goods
-			goods_output_tech_metals_add = 5                     # Price:   80, Total cost:   400.0 (100.00%)
 			# Total input cost: 2000000.0
 			# Total output cost: 400.0
 			# Profit: -1999600.0
@@ -15654,8 +15653,6 @@ pm_solar_exploration = {
 			# Input goods
 			goods_input_launch_capacity_add = 50000              # Price:  200, Total cost: 10000000.0 (100.00%)
 			# Output goods
-			goods_output_tech_metals_add = 15                    # Price:   80, Total cost:  1200.0 (5.66%)
-			goods_output_advanced_materials_add = 5              # Price: 4000, Total cost: 20000.0 (94.34%)
 			# Total input cost: 10000000.0
 			# Total output cost: 21200.0
 			# Profit: -9978800.0
@@ -15699,8 +15696,6 @@ pm_interstellar_mission = {
 			# Input goods
 			goods_input_launch_capacity_add = 100000             # Price:  200, Total cost: 20000000.0 (100.00%)
 			# Output goods
-			goods_output_tech_metals_add = 25                    # Price:   80, Total cost:  2000.0 (4.76%)
-			goods_output_advanced_materials_add = 10             # Price: 4000, Total cost: 40000.0 (95.24%)
 			# Total input cost: 20000000.0
 			# Total output cost: 42000.0
 			# Profit: -19958000.0
@@ -15742,7 +15737,7 @@ pm_national_park = {
 			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
 			goods_output_fine_art_add = 1                        # Price:  200, Total cost:   200.0 (57.14%)
-			goods_output_services_add = 5                        # Price:   30, Total cost:   150.0 (42.86%)
+			goods_output_tourism_add = 1                        # Price:   30, Total cost:   150.0 (42.86%)
 			# Total input cost: 300.0
 			# Total output cost: 350.0
 			# Profit: 50.0
@@ -15762,7 +15757,7 @@ pm_national_park = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = -500
-			state_migration_pull_mult = 0.05
+			state_migration_crowding_density_mult = -0.05
 			state_standard_of_living_add = 0.5
 		}
 	}
@@ -15776,9 +15771,8 @@ pm_national_forest = {
 			# Input goods
 			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_wood_add = 10                           # Price:   20, Total cost:   200.0 (58.82%)
-			goods_output_hardwood_add = 2                        # Price:   40, Total cost:    80.0 (23.53%)
-			goods_output_services_add = 2                        # Price:   30, Total cost:    60.0 (17.65%)
+			goods_output_wood_add = 20                           # Price:   20, Total cost:   200.0 (58.82%)
+			goods_output_hardwood_add = 4                        # Price:   40, Total cost:    80.0 (23.53%)
 			# Total input cost: 300.0
 			# Total output cost: 340.0
 			# Profit: 40.0
@@ -15799,7 +15793,8 @@ pm_national_forest = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = -250
-			building_logging_camp_throughput_add = 0.05
+			state_migration_crowding_density_mult = -0.075
+			building_logging_camp_throughput_add = 0.1
 			state_standard_of_living_add = 0.5
 		}
 	}
@@ -15813,7 +15808,8 @@ pm_national_wildlife_refuge = {
 			# Input goods
 			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_fine_art_add = 1                        # Price:  200, Total cost:   200.0 (57.14%)
+			goods_output_fine_art_add = 2                        # Price:  200, Total cost:   200.0 (57.14%)
+			goods_output_tourism_add = 2                        # Price:   30, Total cost:   60.0 (17.65%)
 			goods_output_meat_add = 5                            # Price:   30, Total cost:   150.0 (42.86%)
 			# Total input cost: 300.0
 			# Total output cost: 350.0
@@ -15834,6 +15830,7 @@ pm_national_wildlife_refuge = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = -500
+			state_migration_crowding_density_mult = -0.10
 			state_standard_of_living_add = 0.5
 		}
 	}

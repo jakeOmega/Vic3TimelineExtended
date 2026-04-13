@@ -215,7 +215,7 @@
  je_mental_health_crisis:0 "Mental Health Crisis"
  je_mental_health_status_crisis:0 "#R The mental health crisis deepens.#! Without rehabilitative justice, society treats symptoms as crimes."
  je_mental_health_status_rehab:0 "#G Rehabilitation-focused justice is in place,#! but comprehensive mental health infrastructure is still needed."
- je_nuclear_powers_header:0 "\n\n#bold Nuclear Powers#!"
+ je_nuclear_powers_header:0 "#bold Nuclear Powers#!"
  je_nuclear_program:0 "Nuclear Program"
  je_nuke_rank_10_entry:0 "\n  #v 10.#! [GetGlobalVariable('nuke_rank_10').GetCountry.GetName] — #v [GetGlobalVariable('nuke_rank_10_stockpile').GetValue|0]#! warheads"
  je_nuke_rank_1_entry:0 "\n  #v 1.#! [GetGlobalVariable('nuke_rank_1').GetCountry.GetName] — #v [GetGlobalVariable('nuke_rank_1_stockpile').GetValue|0]#! warheads"

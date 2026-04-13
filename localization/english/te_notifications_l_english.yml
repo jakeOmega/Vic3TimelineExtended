@@ -546,4 +546,7 @@
  notification_un_trade_deal_received_name:0 "Bilateral Trade Deal"
  notification_un_trade_deal_received_tooltip:0 "#header $notification_un_trade_deal_received_name$#!\n$notification_un_trade_deal_received_desc$"
  notification_violence_against_minorities_desc:0 "Violence has erupted against minorities in [SCOPE.GetRootScope.GetState.GetName]. Some have died and many have fled for [SCOPE.sState('migration_target').GetName]."
+ notification_nationalization_notice_desc:0 "[SCOPE.sCountry('nationalizing_country').GetName] has nationalized foreign-owned assets in their territory, including ours."
+ notification_nationalization_notice_name:0 "Foreign Assets Nationalized"
+ notification_nationalization_notice_tooltip:0 "#header $notification_nationalization_notice_name$#!\n$notification_nationalization_notice_desc$"
  notification_violence_against_minorities_name:0 "Violence Against Minorities"

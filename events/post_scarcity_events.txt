@@ -359,6 +359,10 @@ post_scarcity_events.5 = {
 			value = small_radicals
 			pop_type = academics
 		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig:ig_industrialists
+		}
 	}
 
 	# Let creativity flourish organically
@@ -371,6 +375,10 @@ post_scarcity_events.5 = {
 			name = organic_creativity_modifier
 			days = normal_modifier_time
 			is_decaying = yes
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
 		}
 	}
 

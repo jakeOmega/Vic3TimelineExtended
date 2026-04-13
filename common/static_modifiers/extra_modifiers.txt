@@ -19,6 +19,10 @@
 	country_intelligence_capacity_add = 5
 }
 
+INJECT:private_construction_contracts = {
+	country_private_construction_allocation_mult = 0.10
+}
+
 space_elevator_progress = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_total_space_elevator_progress = 1
@@ -4225,12 +4229,12 @@ lgbtq_censorship_modifier = {
 hate_crime_investigation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_prestige_add = 10
-	country_bureaucracy_mult = -0.01
+	country_bureaucracy_mult = -0.03
 }
 
 lgbtq_reform_leverage_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_add = -5
+	country_prestige_add = 5
 }
 
 # Movement-scoped: applied to civil rights movement via every_political_movement
@@ -4743,8 +4747,8 @@ neo_luddite_suppressed_modifier = {
 # Event 5: Art renaissance
 art_renaissance_funded_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_add = 25
-	country_weekly_innovation_mult = 0.03
+	country_prestige_add = 15
+	country_weekly_innovation_mult = 0.02
 }
 
 organic_creativity_modifier = {

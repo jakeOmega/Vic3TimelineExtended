@@ -114,9 +114,9 @@ je_space_race_suborbital = {
 						NOT = { sr_has_failure_cooldown = yes }
 					}
 					random_list = {
-						90 = { }
-						10 = {
-							change_variable = { name = sr_progress_suborbital multiply = 0.5 }
+						95 = { }
+						5 = {
+							change_variable = { name = sr_progress_suborbital multiply = 0.75 }
 							set_variable = { name = sr_failed_suborbital value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
@@ -265,9 +265,9 @@ je_space_race_orbital = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					random_list = {
-						88 = { }
-						12 = {
-							change_variable = { name = sr_progress_orbital multiply = 0.5 }
+						94 = { }
+						6 = {
+							change_variable = { name = sr_progress_orbital multiply = 0.75 }
 							set_variable = { name = sr_failed_orbital value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
@@ -427,9 +427,9 @@ je_space_race_moon_landing = {
 						has_variable = sr_moon_site_shackleton
 					}
 					random_list = {
-						82 = { }
-						18 = {
-							change_variable = { name = sr_progress_moon_landing multiply = 0.5 }
+						91 = { }
+						9 = {
+							change_variable = { name = sr_progress_moon_landing multiply = 0.75 }
 							set_variable = { name = sr_failed_moon_landing value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
@@ -438,9 +438,9 @@ je_space_race_moon_landing = {
 				else_if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					random_list = {
-						88 = { }
-						12 = {
-							change_variable = { name = sr_progress_moon_landing multiply = 0.5 }
+						94 = { }
+						6 = {
+							change_variable = { name = sr_progress_moon_landing multiply = 0.75 }
 							set_variable = { name = sr_failed_moon_landing value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
@@ -600,9 +600,9 @@ je_space_race_probe = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					random_list = {
-						88 = { }
-						12 = {
-							change_variable = { name = sr_progress_probe multiply = 0.5 }
+						94 = { }
+						6 = {
+							change_variable = { name = sr_progress_probe multiply = 0.75 }
 							set_variable = { name = sr_failed_probe value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
@@ -747,9 +747,9 @@ je_space_race_moon_base = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					random_list = {
-						85 = { }
-						15 = {
-							change_variable = { name = sr_progress_moon_base multiply = 0.5 }
+						92 = { }
+						8 = {
+							change_variable = { name = sr_progress_moon_base multiply = 0.75 }
 							set_variable = { name = sr_failed_moon_base value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
@@ -895,9 +895,9 @@ je_space_race_mars_landing = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					random_list = {
-						83 = { }
-						17 = {
-							change_variable = { name = sr_progress_mars_landing multiply = 0.5 }
+						91 = { }
+						9 = {
+							change_variable = { name = sr_progress_mars_landing multiply = 0.75 }
 							set_variable = { name = sr_failed_mars_landing value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
@@ -1045,9 +1045,9 @@ je_space_race_interstellar_probe = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					random_list = {
-						82 = { }
-						18 = {
-							change_variable = { name = sr_progress_interstellar_probe multiply = 0.5 }
+						91 = { }
+						9 = {
+							change_variable = { name = sr_progress_interstellar_probe multiply = 0.75 }
 							set_variable = { name = sr_failed_interstellar_probe value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}
@@ -1302,9 +1302,9 @@ je_space_race_solar_colonization = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					random_list = {
-						80 = { }
-						20 = {
-							change_variable = { name = sr_progress_solar_colonization multiply = 0.5 }
+						90 = { }
+						10 = {
+							change_variable = { name = sr_progress_solar_colonization multiply = 0.75 }
 							set_variable = { name = sr_failed_solar_colonization value = yes }
 							sr_fire_ambitious_failure_event = yes
 						}

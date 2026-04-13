@@ -413,9 +413,9 @@ secular_events.5 = {
 			value = very_small_radicals
 			interest_group = ig:ig_devout
 		}
-		add_loyalists = {
+		add_radicals = {
 			value = very_small_radicals
-			pop_type = academics
+			interest_group = ig:ig_intelligentsia
 		}
 	}
 
@@ -428,6 +428,10 @@ secular_events.5 = {
 		add_radicals = {
 			value = very_small_radicals
 			interest_group = ig:ig_devout
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			interest_group = ig:ig_intelligentsia
 		}
 	}
 

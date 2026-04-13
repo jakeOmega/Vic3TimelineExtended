@@ -1277,7 +1277,6 @@
  nationalist_appeasement_modifier_desc:0 "Making concessions to nationalist demands has tarnished our international standing."
  nationalist_backlash_modifier:0 "Nationalist Backlash"
  nationalist_backlash_modifier_desc:0 "Minority protection obligations have provoked a nationalist backlash."
- nationalization_notice:0 "[ROOT.GetCountry.GetName] has nationalized foreign-owned assets in their territory, including ours."
  nativist_appeased_modifier:0 "Nativist Appeasement"
  nativist_appeased_modifier_desc:0 "The government has made concessions to anti-immigrant sentiment, reducing immigration but emboldening discriminatory attitudes."
  nativist_countered_modifier:0 "Pro-Diversity Campaign"

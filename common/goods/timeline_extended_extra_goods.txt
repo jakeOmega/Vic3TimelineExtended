@@ -33,11 +33,11 @@ digital_assets = {
 	cost = 100 
 	category = luxury
 	
-	convoy_cost_multiplier = 0.0
+	convoy_cost_multiplier = 0.1
 	
 	obsession_chance = 0
 	prestige_factor = 10
-	traded_quantity = 10
+	traded_quantity = 5
 }
 
 digital_access = {

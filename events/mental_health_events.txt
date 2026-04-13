@@ -379,6 +379,10 @@ mental_health_events.5 = {
 			value = small_radicals
 			pop_type = academics
 		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
 	}
 
 	# Increase oversight and funding
@@ -411,6 +415,10 @@ mental_health_events.5 = {
 		add_radicals = {
 			value = small_radicals
 			strata = lower
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
 		}
 	}
 }

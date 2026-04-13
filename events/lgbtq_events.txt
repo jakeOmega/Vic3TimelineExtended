@@ -464,6 +464,10 @@ lgbtq_events.5 = {
 			value = very_small_radicals
 			strata = lower
 		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig:ig_devout
+		}
 	}
 
 	# Use as political leverage for reform

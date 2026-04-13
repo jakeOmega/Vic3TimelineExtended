@@ -1737,6 +1737,7 @@ decolonization_events.15 = {
 	}
 
 	immediate = {
+		save_scope_as = nationalizing_country
 		# Save the biggest foreign owner for description/effects
 		random_country = {
 			limit = {
