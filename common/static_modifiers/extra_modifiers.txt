@@ -1256,7 +1256,7 @@ ig_approval_very_negative_modifier = {
 
 # Event 1a: Arms Race - match buildup (military boost but expensive)
 arms_race_escalation_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	country_prestige_from_army_power_projection_mult = 0.15
 	country_prestige_from_navy_power_projection_mult = 0.15
 	country_military_goods_cost_mult = 0.10
@@ -3069,7 +3069,7 @@ ww_rising_tensions_modifier = {
 
 # Aggressive rearmament during leadup
 ww_rearmament_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	country_military_goods_cost_mult = 0.15
 	unit_army_offense_mult = 0.1
 	unit_army_defense_mult = 0.1
@@ -3124,7 +3124,7 @@ ww_home_front_strain_modifier = {
 
 # Fresh forces - late entrant has rested, well-supplied troops
 ww_fresh_forces_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	unit_army_offense_mult = 0.2
 	unit_morale_recovery_mult = 0.2
 	unit_army_defense_mult = 0.1
@@ -3237,7 +3237,7 @@ ww_liberation_hero_modifier = {
 
 # Ground offensive focus - committed all resources to the decisive front
 ww_ground_offensive_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	unit_army_offense_mult = 0.15
 	unit_army_defense_mult = 0.05
 	country_war_exhaustion_casualties_mult = -0.1

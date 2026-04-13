@@ -16,7 +16,7 @@ iw_increase_funding_button = {
 			text = iw_funding_not_max_tt
 			OR = {
 				NOT = { has_variable = iw_funding_level }
-				var:iw_funding_level < 3
+				var:iw_funding_level < iw_funding_level_max
 			}
 		}
 	}
@@ -29,7 +29,7 @@ iw_increase_funding_button = {
 			}
 			else = {
 				change_variable = { name = iw_funding_level add = 1 }
-				clamp_variable = { name = iw_funding_level min = 0 max = 3 }
+				clamp_variable = { name = iw_funding_level min = 0 max = iw_funding_level_max }
 			}
 			# Reapply cost modifier immediately
 			if = {
@@ -67,7 +67,7 @@ iw_decrease_funding_button = {
 		custom_tooltip = iw_decrease_funding_effect_tt
 		hidden_effect = {
 			change_variable = { name = iw_funding_level subtract = 1 }
-			clamp_variable = { name = iw_funding_level min = 0 max = 3 }
+			clamp_variable = { name = iw_funding_level min = 0 max = iw_funding_level_max }
 			# Reapply cost modifier immediately
 			if = {
 				limit = {

@@ -115,7 +115,7 @@ wonder_events.3 = {
 
 	event_image = { texture = "gfx/event_pictures/space_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = wonder_events.3.t
 	desc = wonder_events.3.d
@@ -538,7 +538,7 @@ wonder_events.13 = {
 
 	event_image = { texture = "gfx/event_pictures/green_technology.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = wonder_events.13.t
 	desc = wonder_events.13.d

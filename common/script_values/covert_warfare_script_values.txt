@@ -23,9 +23,11 @@ covert_ops_max_slot_cap = 10
 # Detection probability ranges (base % chance per month)
 covert_ops_detection_base = 10
 
-# Funding level detection reductions (cumulative: -3 at level 2, -8 at level 3)
+# Funding level detection reductions (cumulative: -3 at level 2, -8 at level 3, -13 at level 4, -19 at level 5)
 covert_ops_detection_funding_2_reduction = 3
 covert_ops_detection_funding_3_reduction = 5
+covert_ops_detection_funding_4_reduction = 5
+covert_ops_detection_funding_5_reduction = 6
 
 # Counterintelligence IC bonus per funding level above 1 (applied via iw_funding_defense modifier)
 covert_ops_funding_defense_ic_per_level = 5
@@ -36,6 +38,9 @@ covert_ops_target_ic_max = 20
 
 # Infamy on detection
 covert_ops_detected_infamy = 5
+
+# Maximum funding level (0 = dormant, max = deep state)
+iw_funding_level_max = 5
 
 # ============================================================================
 # SECTION 2: INTELLIGENCE CAPACITY
@@ -152,6 +157,11 @@ covert_operations_available_slots = {
 	min = 0
 }
 
+covert_operations_cost_scale = {
+	value = gdp
+	multiply = 0.00001 # small, but multiplied by funding level and number of ops, so it adds up for big economies
+}
+
 # Funding cost: multiplier for the covert_operation_funding_cost modifier
 # Scales with number of active operations + 1 (base maintenance) and funding level
 covert_operation_cost_mult = {
@@ -168,7 +178,7 @@ covert_operation_cost_mult = {
 			}
 		}
 		# Scale with GDP so big economies pay proportionally
-		multiply = banking_event_expense_small
+		multiply = covert_operations_cost_scale
 	}
 	min = 0
 }
@@ -193,6 +203,20 @@ covert_operation_detection_chance = {
 			var:iw_funding_level >= 3
 		}
 		subtract = covert_ops_detection_funding_3_reduction
+	}
+	if = {
+		limit = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 4
+		}
+		subtract = covert_ops_detection_funding_4_reduction
+	}
+	if = {
+		limit = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 5
+		}
+		subtract = covert_ops_detection_funding_5_reduction
 	}
 	# Target's counterintelligence increases detection risk (IC + type defense vs your IC)
 	add = target_counterintelligence_penalty
@@ -350,6 +374,20 @@ covert_detection_efficiency_reduction = {
 			}
 			subtract = covert_ops_detection_funding_3_reduction
 		}
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 4
+			}
+			subtract = covert_ops_detection_funding_4_reduction
+		}
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 5
+			}
+			subtract = covert_ops_detection_funding_5_reduction
+		}
 		add = target_counterintelligence_penalty
 		multiply = modifier:country_covert_operation_efficiency_mult
 		min = 0
@@ -359,7 +397,7 @@ covert_detection_efficiency_reduction = {
 
 # ---- Funding defense multiplier ----
 # For iw_funding_defense static modifier: scales with funding level above 1
-# Level 0-1: 0, Level 2: 1, Level 3: 2
+# Level 0-1: 0, Level 2: 1, Level 3: 2, Level 4: 3, Level 5: 4
 covert_ops_funding_ci_mult = {
 	value = 0
 	owner = {
@@ -389,6 +427,20 @@ covert_ops_funding_detection_reduction_display = {
 				var:iw_funding_level >= 3
 			}
 			add = covert_ops_detection_funding_3_reduction
+		}
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 4
+			}
+			add = covert_ops_detection_funding_4_reduction
+		}
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 5
+			}
+			add = covert_ops_detection_funding_5_reduction
 		}
 	}
 	round = yes
@@ -422,7 +474,7 @@ covert_funding_next_level_up = {
 		}
 		add = 1
 		min = 0
-		max = 3
+		max = iw_funding_level_max
 	}
 	round = yes
 }
@@ -437,7 +489,7 @@ covert_funding_next_level_down = {
 		}
 		subtract = 1
 		min = 0
-		max = 3
+		max = iw_funding_level_max
 	}
 	round = yes
 }
@@ -449,7 +501,7 @@ covert_operation_cost_at_next_up = {
 		add = covert_operations_active
 		add = 1
 		multiply = covert_funding_next_level_up
-		multiply = banking_event_expense_small
+		multiply = covert_operations_cost_scale
 	}
 	min = 0
 	round = yes
@@ -462,7 +514,7 @@ covert_operation_cost_at_next_down = {
 		add = covert_operations_active
 		add = 1
 		multiply = covert_funding_next_level_down
-		multiply = banking_event_expense_small
+		multiply = covert_operations_cost_scale
 	}
 	min = 0
 	round = yes

@@ -26,7 +26,7 @@ ig_trait_custom_religion_traditionalist_unhappy = {
 }
 
 ig_trait_custom_religion_market_liberal_loyal = {
-	icon = "gfx/interface/icons/ig_trait_icons/wealth_of_nations.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/treasury_bonds.dds"
 	min_approval = loyal
 	
 	modifier = {
@@ -35,7 +35,7 @@ ig_trait_custom_religion_market_liberal_loyal = {
 }
 
 ig_trait_custom_religion_market_liberal_happy = {
-	icon = "gfx/interface/icons/ig_trait_icons/wealth_of_nations.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/treasury_bonds.dds"
 	min_approval = happy
 	
 	modifier = {
@@ -44,7 +44,7 @@ ig_trait_custom_religion_market_liberal_happy = {
 }
 
 ig_trait_custom_religion_market_liberal_unhappy = {
-	icon = "gfx/interface/icons/ig_trait_icons/wealth_of_nations.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/treasury_bonds.dds"
 	max_approval = unhappy
 	
 	modifier = {
@@ -53,7 +53,7 @@ ig_trait_custom_religion_market_liberal_unhappy = {
 }
 
 ig_trait_custom_religion_social_democrat_loyal = {
-	icon = "gfx/interface/icons/ig_trait_icons/communism.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/solidarity.dds"
 	min_approval = loyal
 	
 	modifier = {
@@ -63,7 +63,7 @@ ig_trait_custom_religion_social_democrat_loyal = {
 }
 
 ig_trait_custom_religion_social_democrat_happy = {
-	icon = "gfx/interface/icons/ig_trait_icons/communism.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/solidarity.dds"
 	min_approval = happy
 	
 	modifier = {
@@ -72,7 +72,7 @@ ig_trait_custom_religion_social_democrat_happy = {
 }
 
 ig_trait_custom_religion_social_democrat_unhappy = {
-	icon = "gfx/interface/icons/ig_trait_icons/communism.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/solidarity.dds"
 	max_approval = unhappy
 	
 	modifier = {
@@ -81,7 +81,7 @@ ig_trait_custom_religion_social_democrat_unhappy = {
 }
 
 ig_trait_custom_religion_totalitarian_loyal = {
-	icon = "gfx/interface/icons/ig_trait_icons/totalitarianism.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/propagandists.dds"
 	min_approval = loyal
 	
 	modifier = {
@@ -90,7 +90,7 @@ ig_trait_custom_religion_totalitarian_loyal = {
 }
 
 ig_trait_custom_religion_totalitarian_happy = {
-	icon = "gfx/interface/icons/ig_trait_icons/totalitarianism.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/propagandists.dds"
 	min_approval = happy
 	
 	modifier = {
@@ -99,7 +99,7 @@ ig_trait_custom_religion_totalitarian_happy = {
 }
 
 ig_trait_custom_religion_totalitarian_unhappy = {
-	icon = "gfx/interface/icons/ig_trait_icons/totalitarianism.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/propagandists.dds"
 	max_approval = unhappy
 	
 	modifier = {
@@ -108,7 +108,7 @@ ig_trait_custom_religion_totalitarian_unhappy = {
 }
 
 ig_trait_custom_religion_imperial_cult_loyal = {
-	icon = "gfx/interface/icons/ig_trait_icons/imperial_cult.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/divine_right.dds"
 	min_approval = loyal
 	
 	modifier = {
@@ -117,7 +117,7 @@ ig_trait_custom_religion_imperial_cult_loyal = {
 }
 
 ig_trait_custom_religion_imperial_cult_happy = {
-	icon = "gfx/interface/icons/ig_trait_icons/imperial_cult.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/divine_right.dds"
 	min_approval = happy
 	
 	modifier = {
@@ -126,7 +126,7 @@ ig_trait_custom_religion_imperial_cult_happy = {
 }
 
 ig_trait_custom_religion_imperial_cult_unhappy = {
-	icon = "gfx/interface/icons/ig_trait_icons/imperial_cult.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/divine_right.dds"
 	max_approval = unhappy
 	
 	modifier = {
@@ -135,7 +135,7 @@ ig_trait_custom_religion_imperial_cult_unhappy = {
 }
 
 ig_trait_custom_religion_theocratic_loyal = {
-	icon = "gfx/interface/icons/ig_trait_icons/theocracy.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/pious_fiction.dds"
 	min_approval = loyal
 	
 	modifier = {
@@ -144,7 +144,7 @@ ig_trait_custom_religion_theocratic_loyal = {
 }
 
 ig_trait_custom_religion_theocratic_happy = {
-	icon = "gfx/interface/icons/ig_trait_icons/theocracy.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/pious_fiction.dds"
 	min_approval = happy
 	
 	modifier = {
@@ -153,7 +153,7 @@ ig_trait_custom_religion_theocratic_happy = {
 }
 
 ig_trait_custom_religion_theocratic_unhappy = {
-	icon = "gfx/interface/icons/ig_trait_icons/theocracy.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/pious_fiction.dds"
 	max_approval = unhappy
 	
 	modifier = {

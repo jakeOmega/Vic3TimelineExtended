@@ -174,7 +174,7 @@
  je_human_augmentation_status_medical:0 "#Y Augmentation is limited to medical use.#! Many push for broader access."
  je_human_augmentation_status_regulated:0 "#G A regulated augmentation market exists,#! balancing innovation with safety."
  je_human_augmentation_status_unrestricted:0 "#Y Unrestricted augmentation#! is creating a growing divide between enhanced elites and natural citizens."
- je_iw_funding_status:0 "\n#bold Funding Level:#! [ROOT.ScriptValue('covert_funding_level_display')] / 3"
+ je_iw_funding_status:0 "\n#bold Funding Level:#! [ROOT.ScriptValue('covert_funding_level_display')] / [ROOT.ScriptValue('iw_funding_level_max')]"
  je_iw_operations_summary:0 "\n#bold Active Covert Operations:#! [ROOT.ScriptValue('covert_active_display')] / [ROOT.ScriptValue('covert_slots_display')] slots"
  je_iw_slots_breakdown:0 "\n  Sources: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_covert_operation_slot_add')]"
  je_lgbtq_rights_reason:0 "The struggle for LGBTQ+ equality demands a political response. The movement for legal recognition and equal treatment grows stronger with each passing year."

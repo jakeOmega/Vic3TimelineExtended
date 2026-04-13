@@ -1,5 +1,5 @@
 ﻿je_human_augmentation = {
-	icon = "gfx/interface/icons/event_icons/event_science.dds"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
 	group = je_group_internal_affairs
 
 	modifiers_while_active = {

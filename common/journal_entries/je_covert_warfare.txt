@@ -72,6 +72,14 @@ je_covert_warfare = {
 		# ---- Funding & Cost Info ----
 		first_valid = {
 			triggered_desc = {
+				desc = je_iw_funding_5
+				trigger = { has_variable = iw_funding_level var:iw_funding_level >= iw_funding_level_max }
+			}
+			triggered_desc = {
+				desc = je_iw_funding_4
+				trigger = { has_variable = iw_funding_level var:iw_funding_level >= 4 }
+			}
+			triggered_desc = {
 				desc = je_iw_funding_3
 				trigger = { has_variable = iw_funding_level var:iw_funding_level >= 3 }
 			}
@@ -357,10 +365,10 @@ je_covert_warfare = {
 						# Great powers at war: max funding
 						if = {
 							limit = { country_rank = rank_value:great_power }
-							set_variable = { name = iw_funding_level value = 3 }
+							set_variable = { name = iw_funding_level value = iw_funding_level_max }
 						}
 						else = {
-							set_variable = { name = iw_funding_level value = 2 }
+							set_variable = { name = iw_funding_level value = 3 }
 						}
 					}
 					# Peacetime with many active ops (3+): keep funding moderate
@@ -370,7 +378,7 @@ je_covert_warfare = {
 							covert_operations_active >= 3
 							country_rank = rank_value:great_power
 						}
-						set_variable = { name = iw_funding_level value = 2 }
+						set_variable = { name = iw_funding_level value = 3 }
 					}
 					# Great powers with few ops: high funding (better tradecraft)
 					else_if = {
@@ -378,7 +386,7 @@ je_covert_warfare = {
 							country_rank = rank_value:great_power
 							NOT = { in_default = yes }
 						}
-						set_variable = { name = iw_funding_level value = 2 }
+						set_variable = { name = iw_funding_level value = 3 }
 					}
 					# Major powers or cautious rulers: moderate funding
 					else = {

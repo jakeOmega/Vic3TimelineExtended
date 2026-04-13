@@ -1,0 +1,82 @@
+﻿# Nuclear weapon system scripted effects
+
+# Updates global ranking of nuclear powers (top 10 by stockpile)
+# Called from je_nuclear_program on_weekly_pulse
+update_nuclear_powers_ranking = {
+	# Clear stale rank slots
+	remove_global_variable = nuke_rank_1
+	remove_global_variable = nuke_rank_2
+	remove_global_variable = nuke_rank_3
+	remove_global_variable = nuke_rank_4
+	remove_global_variable = nuke_rank_5
+	remove_global_variable = nuke_rank_6
+	remove_global_variable = nuke_rank_7
+	remove_global_variable = nuke_rank_8
+	remove_global_variable = nuke_rank_9
+	remove_global_variable = nuke_rank_10
+
+	# Single ordered pass: top 10 countries by nuclear stockpile
+	set_global_variable = { name = nuke_ldr_idx value = 0 }
+	ordered_country = {
+		limit = {
+			has_modifier = nuclear_power
+			has_variable = nuclear_weapon_stockpile
+			var:nuclear_weapon_stockpile >= 1
+		}
+		order_by = var:nuclear_weapon_stockpile
+		check_range_bounds = no
+
+		if = {
+			limit = { global_var:nuke_ldr_idx < 1 }
+			set_global_variable = { name = nuke_rank_1 value = THIS }
+			set_global_variable = { name = nuke_rank_1_stockpile value = var:nuclear_weapon_stockpile }
+		}
+		else_if = {
+			limit = { global_var:nuke_ldr_idx < 2 }
+			set_global_variable = { name = nuke_rank_2 value = THIS }
+			set_global_variable = { name = nuke_rank_2_stockpile value = var:nuclear_weapon_stockpile }
+		}
+		else_if = {
+			limit = { global_var:nuke_ldr_idx < 3 }
+			set_global_variable = { name = nuke_rank_3 value = THIS }
+			set_global_variable = { name = nuke_rank_3_stockpile value = var:nuclear_weapon_stockpile }
+		}
+		else_if = {
+			limit = { global_var:nuke_ldr_idx < 4 }
+			set_global_variable = { name = nuke_rank_4 value = THIS }
+			set_global_variable = { name = nuke_rank_4_stockpile value = var:nuclear_weapon_stockpile }
+		}
+		else_if = {
+			limit = { global_var:nuke_ldr_idx < 5 }
+			set_global_variable = { name = nuke_rank_5 value = THIS }
+			set_global_variable = { name = nuke_rank_5_stockpile value = var:nuclear_weapon_stockpile }
+		}
+		else_if = {
+			limit = { global_var:nuke_ldr_idx < 6 }
+			set_global_variable = { name = nuke_rank_6 value = THIS }
+			set_global_variable = { name = nuke_rank_6_stockpile value = var:nuclear_weapon_stockpile }
+		}
+		else_if = {
+			limit = { global_var:nuke_ldr_idx < 7 }
+			set_global_variable = { name = nuke_rank_7 value = THIS }
+			set_global_variable = { name = nuke_rank_7_stockpile value = var:nuclear_weapon_stockpile }
+		}
+		else_if = {
+			limit = { global_var:nuke_ldr_idx < 8 }
+			set_global_variable = { name = nuke_rank_8 value = THIS }
+			set_global_variable = { name = nuke_rank_8_stockpile value = var:nuclear_weapon_stockpile }
+		}
+		else_if = {
+			limit = { global_var:nuke_ldr_idx < 9 }
+			set_global_variable = { name = nuke_rank_9 value = THIS }
+			set_global_variable = { name = nuke_rank_9_stockpile value = var:nuclear_weapon_stockpile }
+		}
+		else_if = {
+			limit = { global_var:nuke_ldr_idx < 10 }
+			set_global_variable = { name = nuke_rank_10 value = THIS }
+			set_global_variable = { name = nuke_rank_10_stockpile value = var:nuclear_weapon_stockpile }
+		}
+
+		change_global_variable = { name = nuke_ldr_idx add = 1 }
+	}
+}

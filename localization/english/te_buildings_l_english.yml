@@ -447,7 +447,7 @@
  building_tourism_industry:0 "Tourism Industry"
  building_tourism_industry_desc:0 "A collection of hotels, resorts, and services that cater to visitors, generating [concept_tourism_system] revenue from the state's natural and cultural appeal."
  building_tourism_industry_throughput_add:0 "Tourism Industry Throughput"
- building_tourism_industry_throughput_add_desc:0 "$state_tourism_throughput_breakdown$ A multiplier affecting the efficiency of Tourism Industries in this state.#!"
+ building_tourism_industry_throughput_add_desc:0 "A multiplier affecting the efficiency of Tourism Industries in this state, influenced by ports, transit, art, parks, and monuments."
  building_toyota_kaikan_plant:0 "Toyota Kaikan Museum & Plant"
  building_trubia_cannon_foundry:0 "Trubia Cannon Foundry"
  building_tsmc_fab_18:0 "TSMC Fab 18"

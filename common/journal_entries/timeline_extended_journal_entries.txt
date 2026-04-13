@@ -74,6 +74,9 @@
 
 	on_weekly_pulse = {
 		effect = {
+			# Update global nuclear powers leaderboard
+			update_nuclear_powers_ranking = yes
+
             if = {
                 limit = {
                     modifier:nuclear_disarmament = yes
@@ -183,6 +186,53 @@
 					trigger_event = { id = nuclear_weapon_events.18 days = 7 }
 				}
 			}
+		}
+	}
+	status_desc = {
+		# Nuclear Powers leaderboard
+		triggered_desc = {
+			desc = je_nuclear_powers_header
+			trigger = { has_global_variable = nuke_rank_1 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_1_entry
+			trigger = { has_global_variable = nuke_rank_1 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_2_entry
+			trigger = { has_global_variable = nuke_rank_2 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_3_entry
+			trigger = { has_global_variable = nuke_rank_3 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_4_entry
+			trigger = { has_global_variable = nuke_rank_4 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_5_entry
+			trigger = { has_global_variable = nuke_rank_5 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_6_entry
+			trigger = { has_global_variable = nuke_rank_6 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_7_entry
+			trigger = { has_global_variable = nuke_rank_7 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_8_entry
+			trigger = { has_global_variable = nuke_rank_8 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_9_entry
+			trigger = { has_global_variable = nuke_rank_9 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_10_entry
+			trigger = { has_global_variable = nuke_rank_10 }
 		}
 	}
 	should_be_pinned_by_default = yes

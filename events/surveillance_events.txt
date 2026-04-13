@@ -269,7 +269,7 @@ surveillance_events.4 = {
 	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_science.dds"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
 	title = surveillance_events.4.t
 	desc = surveillance_events.4.d

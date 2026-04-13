@@ -446,7 +446,7 @@ modern_election_events.6 = {
 
 	event_image = { texture = "gfx/event_pictures/espionage.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	duration = 3
 	cooldown = { days = very_long_modifier_time }
@@ -521,7 +521,7 @@ modern_election_events.7 = {
 
 	event_image = { texture = "gfx/event_pictures/corp_office.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	duration = 3
 	cooldown = { days = very_long_modifier_time }

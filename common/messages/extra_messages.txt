@@ -1889,14 +1889,14 @@ headlines_tech_abyssal_plain_mining = {
 # Colonial Collapse notifications
 colonial_territory_absorbed_notice = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
 	notification_type = feed
 	color = neutral
 }
 
 colonial_territory_collapsed_notice = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
 	notification_type = feed
 	color = neutral
 }
@@ -1911,21 +1911,21 @@ nationalization_notice = {
 # Information Warfare notifications
 iw_operation_launched = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
 	notification_type = feed
 	color = good
 }
 
 iw_operation_cancelled = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
 	notification_type = feed
 	color = neutral
 }
 
 iw_election_interference_confidence = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/diplomacy.dds"
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
 	notification_type = feed
 	color = bad
 }

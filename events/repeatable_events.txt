@@ -296,7 +296,7 @@ repeatable_events.50 = {
 
     event_image = { texture = "gfx/event_pictures/cyber_attack.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-    icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+    icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
     duration = 3
     cooldown = { days = long_modifier_time }
@@ -549,7 +549,7 @@ repeatable_events.100 = {
 
     event_image = { texture = "gfx/event_pictures/cyber_attack.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-    icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+    icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
     duration = 3
     cooldown = { days = long_modifier_time }

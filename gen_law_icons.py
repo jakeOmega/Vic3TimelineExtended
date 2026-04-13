@@ -52,15 +52,14 @@ R = 200        # usable radius (larger fill for law icons)
 W = (255, 255, 255, 255)   # white fill
 
 
-# ── color presets for law groups (warm bronze like vanilla) ──────────────
-# Laws use the same warm metallic palette as vanilla:
-# main bronze (default), darker bronze for "no_X" laws, tinted for special groups.
+# ── color presets for law groups (warm gold like vanilla) ─────────────────
+# Vanilla law icons have a uniform warm gold tone with median pixel ≈(186,148,115).
+# Our metallic pipeline multiplies base color by ~0.70 illumination, so we need
+# brighter base values.  Two shades: standard gold and a slightly dimmer variant
+# for "no_ministry" / disabled laws — both clearly read as the same golden family.
 LAW_COLORS: dict[str, tuple[int, int, int]] = {
-    "bronze":      (175, 145, 110),   # standard warm bronze (vanilla default)
-    "dark_bronze": (140, 115,  85),   # darker for "no_ministry" etc.
-    "copper":      (180, 120,  90),   # warm copper for active/aggressive laws
-    "silver":      (155, 155, 160),   # cool silver for tech/modern laws
-    "pale_gold":   (185, 165, 120),   # lighter gold for progressive laws
+    "gold":        (255, 215, 165),   # standard warm gold matching vanilla
+    "dark_gold":   (235, 195, 150),   # slightly dimmer gold for "no_X" laws
 }
 
 
@@ -778,176 +777,176 @@ SHAPES: dict[str, callable] = {
 
 LAW_ICON_MAP: dict[str, tuple[str, str]] = {
     # ── Welfare & Social Systems ──
-    "law_universal_basic_income":         ("umbrella",        "pale_gold"),
-    "law_post-scarcity":                  ("umbrella",        "silver"),
+    "law_universal_basic_income":         ("umbrella",        "gold"),
+    "law_post-scarcity":                  ("umbrella",        "gold"),
 
     # ── Privacy & Surveillance ──
-    "law_intrusive_surveillance":         ("eye",             "copper"),
-    "law_minimal_privacy_protection":     ("lock",            "dark_bronze"),
-    "law_moderate_data_privacy":          ("lock",            "bronze"),
-    "law_strong_privacy_rights":          ("lock",            "pale_gold"),
+    "law_intrusive_surveillance":         ("eye",             "gold"),
+    "law_minimal_privacy_protection":     ("lock",            "dark_gold"),
+    "law_moderate_data_privacy":          ("lock",            "gold"),
+    "law_strong_privacy_rights":          ("lock",            "gold"),
 
     # ── Inheritance ──
-    "law_primogeniture":                  ("scroll",          "bronze"),
-    "law_partible":                       ("scroll",          "pale_gold"),
-    "law_equal_inheritance":              ("scroll",          "silver"),
-    "law_non_inheritable_usage_rights":   ("scroll",          "dark_bronze"),
+    "law_primogeniture":                  ("scroll",          "gold"),
+    "law_partible":                       ("scroll",          "gold"),
+    "law_equal_inheritance":              ("scroll",          "gold"),
+    "law_non_inheritable_usage_rights":   ("scroll",          "dark_gold"),
 
     # ── War & Warfare ──
-    "law_total_war":                      ("sword_crossed",   "copper"),
-    "law_traditional_rules_of_war":       ("shield_cross",    "bronze"),
-    "law_war_crimes_forbidden":           ("dove",            "pale_gold"),
-    "law_humanitarian_regulations":       ("dove",            "silver"),
-    "law_limited_war":                    ("dove",            "bronze"),
+    "law_total_war":                      ("sword_crossed",   "gold"),
+    "law_traditional_rules_of_war":       ("shield_cross",    "gold"),
+    "law_war_crimes_forbidden":           ("dove",            "gold"),
+    "law_humanitarian_regulations":       ("dove",            "gold"),
+    "law_limited_war":                    ("dove",            "gold"),
 
     # ── Intellectual Property ──
-    "law_no_ip_protection":               ("lightbulb",       "dark_bronze"),
-    "law_creative_commons":               ("lightbulb",       "pale_gold"),
-    "law_traditional_ip_protection":      ("lightbulb",       "bronze"),
-    "law_strict_ip_protection":           ("lightbulb",       "copper"),
-    "law_open_source_innovation":         ("lightbulb",       "silver"),
+    "law_no_ip_protection":               ("lightbulb",       "dark_gold"),
+    "law_creative_commons":               ("lightbulb",       "gold"),
+    "law_traditional_ip_protection":      ("lightbulb",       "gold"),
+    "law_strict_ip_protection":           ("lightbulb",       "gold"),
+    "law_open_source_innovation":         ("lightbulb",       "gold"),
 
     # ── Currency & Currency Systems ──
-    "law_commodity_money":                ("coin_stack",       "dark_bronze"),
-    "law_gold_standard":                  ("coin_stack",       "bronze"),
-    "law_fiat_currency":                  ("coin_stack",       "pale_gold"),
-    "law_digital_currency":               ("coin_stack",       "silver"),
-    "law_decentralized_cryptocurrency":   ("circuit_board",    "silver"),
+    "law_commodity_money":                ("coin_stack",       "dark_gold"),
+    "law_gold_standard":                  ("coin_stack",       "gold"),
+    "law_fiat_currency":                  ("coin_stack",       "gold"),
+    "law_digital_currency":               ("coin_stack",       "gold"),
+    "law_decentralized_cryptocurrency":   ("circuit_board",    "gold"),
 
     # ── Government Information & Transparency ──
-    "law_state_secrets":                  ("eye",              "dark_bronze"),
-    "law_informal_government_secrecy":    ("eye",              "bronze"),
-    "law_freedom_of_information":         ("globe_lines",      "pale_gold"),
-    "law_open_government":                ("globe_lines",      "silver"),
+    "law_state_secrets":                  ("eye",              "dark_gold"),
+    "law_informal_government_secrecy":    ("eye",              "gold"),
+    "law_freedom_of_information":         ("globe_lines",      "gold"),
+    "law_open_government":                ("globe_lines",      "gold"),
 
     # ── Criminal Justice ──
-    "law_punishment_focused_criminal_justice":    ("gavel",    "copper"),
-    "law_restorative_justice":                    ("scales",   "pale_gold"),
-    "law_rehabilitation_focused_criminal_justice": ("scales",  "silver"),
+    "law_punishment_focused_criminal_justice":    ("gavel",    "gold"),
+    "law_restorative_justice":                    ("scales",   "gold"),
+    "law_rehabilitation_focused_criminal_justice": ("scales",  "gold"),
 
     # ── Minority Rights (6-tier) ──
-    "law_active_persecution":             ("chains",          "copper"),
-    "law_legal_limbo":                    ("people",          "dark_bronze"),
-    "law_basic_protections":              ("people",          "bronze"),
-    "law_comprehensive_rights":           ("people",          "pale_gold"),
-    "law_full_equality_and_protection":   ("people",          "silver"),
+    "law_active_persecution":             ("chains",          "gold"),
+    "law_legal_limbo":                    ("people",          "dark_gold"),
+    "law_basic_protections":              ("people",          "gold"),
+    "law_comprehensive_rights":           ("people",          "gold"),
+    "law_full_equality_and_protection":   ("people",          "gold"),
 
     # ── Minority Rights (sub-laws) ──
-    "law_minority_rights_violent_hostility":     ("chains",    "copper"),
-    "law_minority_rights_ghettoization":         ("chains",    "dark_bronze"),
-    "law_minority_rights_cultural_assimilation": ("people",    "dark_bronze"),
-    "law_minority_rights_discrimination":        ("people",    "copper"),
-    "law_minority_rights_indifference":          ("people",    "bronze"),
-    "law_minority_rights_protection":            ("people",    "pale_gold"),
-    "law_minority_rights_affirmative_action":    ("people",    "silver"),
+    "law_minority_rights_violent_hostility":     ("chains",    "gold"),
+    "law_minority_rights_ghettoization":         ("chains",    "dark_gold"),
+    "law_minority_rights_cultural_assimilation": ("people",    "dark_gold"),
+    "law_minority_rights_discrimination":        ("people",    "gold"),
+    "law_minority_rights_indifference":          ("people",    "gold"),
+    "law_minority_rights_protection":            ("people",    "gold"),
+    "law_minority_rights_affirmative_action":    ("people",    "gold"),
 
     # ── Human Augmentation ──
-    "law_no_augmentation":                ("robot_head",      "dark_bronze"),
-    "law_unrestricted_augmentation":      ("robot_head",      "copper"),
-    "law_human_purity":                   ("robot_head",      "bronze"),
-    "law_medical_augmentation_only":      ("robot_head",      "pale_gold"),
-    "law_regulated_augmentation_market":  ("robot_head",      "silver"),
-    "law_mandatory_augmentation":         ("robot_head",      "silver"),
+    "law_no_augmentation":                ("robot_head",      "dark_gold"),
+    "law_unrestricted_augmentation":      ("robot_head",      "gold"),
+    "law_human_purity":                   ("robot_head",      "gold"),
+    "law_medical_augmentation_only":      ("robot_head",      "gold"),
+    "law_regulated_augmentation_market":  ("robot_head",      "gold"),
+    "law_mandatory_augmentation":         ("robot_head",      "gold"),
 
     # ── Government Structure & Federalism ──
-    "law_feudal_contracts":               ("crown",           "dark_bronze"),
-    "law_unitary_state":                  ("pillar",          "bronze"),
-    "law_federal_system":                 ("pillar",          "pale_gold"),
-    "law_devolution":                     ("pillar",          "silver"),
+    "law_feudal_contracts":               ("crown",           "dark_gold"),
+    "law_unitary_state":                  ("pillar",          "gold"),
+    "law_federal_system":                 ("pillar",          "gold"),
+    "law_devolution":                     ("pillar",          "gold"),
 
     # ── Campaign Finance ──
-    "law_no_campaign_finance_laws":       ("ballot_box",      "dark_bronze"),
-    "law_unregulated_donations":          ("ballot_box",      "bronze"),
-    "law_donation_limits":                ("ballot_box",      "pale_gold"),
-    "law_publicly_funded_elections":      ("ballot_box",      "silver"),
+    "law_no_campaign_finance_laws":       ("ballot_box",      "dark_gold"),
+    "law_unregulated_donations":          ("ballot_box",      "gold"),
+    "law_donation_limits":                ("ballot_box",      "gold"),
+    "law_publicly_funded_elections":      ("ballot_box",      "gold"),
 
     # ── Family & Population Policy ──
-    "law_traditional_family_structure":   ("family",          "bronze"),
-    "law_pro_natalist_subsidies":         ("family",          "pale_gold"),
-    "law_state_sponsored_family_planning": ("family",         "silver"),
-    "law_population_control_measures":    ("family",          "copper"),
-    "law_communal_child_rearing":         ("family",          "dark_bronze"),
+    "law_traditional_family_structure":   ("family",          "gold"),
+    "law_pro_natalist_subsidies":         ("family",          "gold"),
+    "law_state_sponsored_family_planning": ("family",         "gold"),
+    "law_population_control_measures":    ("family",          "gold"),
+    "law_communal_child_rearing":         ("family",          "dark_gold"),
 
     # ── Banking & Financial Regulation ──
-    "law_unregulated_banking":            ("bank",            "dark_bronze"),
-    "law_free_mutual_banking":            ("bank",            "bronze"),
-    "law_universal_banking_light_prudence": ("bank",          "pale_gold"),
-    "law_prudential_narrow_banking":      ("bank",            "silver"),
-    "law_directed_credit_development_banks": ("bank",         "copper"),
-    "law_central_bank_independence":      ("bank",            "silver"),
+    "law_unregulated_banking":            ("bank",            "dark_gold"),
+    "law_free_mutual_banking":            ("bank",            "gold"),
+    "law_universal_banking_light_prudence": ("bank",          "gold"),
+    "law_prudential_narrow_banking":      ("bank",            "gold"),
+    "law_directed_credit_development_banks": ("bank",         "gold"),
+    "law_central_bank_independence":      ("bank",            "gold"),
 
     # ── Internet & Digital Policy ──
-    "law_no_internet_policy":             ("wifi",            "dark_bronze"),
-    "law_unregulated_internet":           ("wifi",            "bronze"),
-    "law_state_controlled_internet":      ("wifi",            "copper"),
-    "law_net_neutrality":                 ("wifi",            "pale_gold"),
+    "law_no_internet_policy":             ("wifi",            "dark_gold"),
+    "law_unregulated_internet":           ("wifi",            "gold"),
+    "law_state_controlled_internet":      ("wifi",            "gold"),
+    "law_net_neutrality":                 ("wifi",            "gold"),
 
     # ── Genetics & Heredity ──
-    "law_traditional_heredity":           ("dna",             "bronze"),
-    "law_ban_on_genetic_modification":    ("dna",             "dark_bronze"),
-    "law_corporate_genetic_licensing":    ("dna",             "copper"),
-    "law_open_source_genetics":           ("dna",             "pale_gold"),
-    "law_state_eugenics_program":         ("dna",             "copper"),
+    "law_traditional_heredity":           ("dna",             "gold"),
+    "law_ban_on_genetic_modification":    ("dna",             "dark_gold"),
+    "law_corporate_genetic_licensing":    ("dna",             "gold"),
+    "law_open_source_genetics":           ("dna",             "gold"),
+    "law_state_eugenics_program":         ("dna",             "gold"),
 
     # ── Language Policy ──
-    "law_local_vernacular":               ("speech_bubble",   "dark_bronze"),
-    "law_civic_monolingualism":           ("speech_bubble",   "bronze"),
-    "law_multilingual_federalism":        ("speech_bubble",   "pale_gold"),
-    "law_linguistic_purity":              ("speech_bubble",   "copper"),
-    "law_state_led_language_reform":      ("speech_bubble",   "silver"),
-    "law_ubiquitous_translation":         ("speech_bubble",   "silver"),
+    "law_local_vernacular":               ("speech_bubble",   "dark_gold"),
+    "law_civic_monolingualism":           ("speech_bubble",   "gold"),
+    "law_multilingual_federalism":        ("speech_bubble",   "gold"),
+    "law_linguistic_purity":              ("speech_bubble",   "gold"),
+    "law_state_led_language_reform":      ("speech_bubble",   "gold"),
+    "law_ubiquitous_translation":         ("speech_bubble",   "gold"),
 
     # ── Economic Systems & Trade ──
-    "law_guilds_chartered_monopolies":    ("gear_law",        "dark_bronze"),
-    "law_freedom_of_contract":            ("handshake",       "bronze"),
-    "law_trust_busting":                  ("handshake",       "pale_gold"),
-    "law_regulated_utilities":            ("gear_law",        "pale_gold"),
-    "law_dirigisme":                      ("gear_law",        "copper"),
-    "law_command_cooperative_economy":    ("gear_law",        "silver"),
+    "law_guilds_chartered_monopolies":    ("gear_law",        "dark_gold"),
+    "law_freedom_of_contract":            ("handshake",       "gold"),
+    "law_trust_busting":                  ("handshake",       "gold"),
+    "law_regulated_utilities":            ("gear_law",        "gold"),
+    "law_dirigisme":                      ("gear_law",        "gold"),
+    "law_command_cooperative_economy":    ("gear_law",        "gold"),
 
     # ── Advanced Political Systems ──
-    "law_protected_class":                ("people",          "silver"),
-    "law_neocameralism":                  ("crown",           "silver"),
-    "law_direct_democracy":               ("ballot_box",      "silver"),
-    "law_neocolonialism":                 ("globe_lines",     "copper"),
-    "law_algorithmic_governance":         ("circuit_board",    "silver"),
+    "law_protected_class":                ("people",          "gold"),
+    "law_neocameralism":                  ("crown",           "gold"),
+    "law_direct_democracy":               ("ballot_box",      "gold"),
+    "law_neocolonialism":                 ("globe_lines",     "gold"),
+    "law_algorithmic_governance":         ("circuit_board",    "gold"),
 
     # ── Ministries (active) ──
-    "law_ministry_of_foreign_affairs":             ("building_ministry", "bronze"),
-    "law_ministry_of_war":                         ("building_ministry", "copper"),
-    "law_ministry_of_commerce":                    ("building_ministry", "pale_gold"),
-    "law_national_bank":                           ("building_ministry", "bronze"),
-    "law_ministry_of_culture":                     ("building_ministry", "pale_gold"),
-    "law_pro_labor_ministry_of_labor":             ("building_ministry", "pale_gold"),
-    "law_pro_capital_ministry_of_labor":            ("building_ministry", "copper"),
-    "law_ministry_of_the_environment":             ("building_ministry", "pale_gold"),
-    "law_ministry_of_intelligence_and_security":   ("building_ministry", "copper"),
-    "law_ministry_of_refugee_affairs":             ("building_ministry", "pale_gold"),
-    "law_ministry_of_propaganda":                  ("building_ministry", "copper"),
-    "law_ministry_of_science":                     ("building_ministry", "silver"),
-    "law_ministry_of_thought_control":             ("building_ministry", "copper"),
-    "law_ministry_of_consumer_protection":         ("building_ministry", "pale_gold"),
-    "law_ministry_of_urban_planning":              ("building_ministry", "silver"),
-    "law_ministry_of_religion":                    ("building_ministry", "bronze"),
-    "law_ministry_of_international_aid":           ("building_ministry", "pale_gold"),
+    "law_ministry_of_foreign_affairs":             ("building_ministry", "gold"),
+    "law_ministry_of_war":                         ("building_ministry", "gold"),
+    "law_ministry_of_commerce":                    ("building_ministry", "gold"),
+    "law_national_bank":                           ("building_ministry", "gold"),
+    "law_ministry_of_culture":                     ("building_ministry", "gold"),
+    "law_pro_labor_ministry_of_labor":             ("building_ministry", "gold"),
+    "law_pro_capital_ministry_of_labor":            ("building_ministry", "gold"),
+    "law_ministry_of_the_environment":             ("building_ministry", "gold"),
+    "law_ministry_of_intelligence_and_security":   ("building_ministry", "gold"),
+    "law_ministry_of_refugee_affairs":             ("building_ministry", "gold"),
+    "law_ministry_of_propaganda":                  ("building_ministry", "gold"),
+    "law_ministry_of_science":                     ("building_ministry", "gold"),
+    "law_ministry_of_thought_control":             ("building_ministry", "gold"),
+    "law_ministry_of_consumer_protection":         ("building_ministry", "gold"),
+    "law_ministry_of_urban_planning":              ("building_ministry", "gold"),
+    "law_ministry_of_religion":                    ("building_ministry", "gold"),
+    "law_ministry_of_international_aid":           ("building_ministry", "gold"),
 
     # ── Ministries (no ministry) ──
-    "law_no_ministry_of_foreign_affairs":           ("no_building", "dark_bronze"),
-    "law_no_ministry_of_war":                       ("no_building", "dark_bronze"),
-    "law_no_ministry_of_commerce":                  ("no_building", "dark_bronze"),
-    "law_no_national_bank":                         ("no_building", "dark_bronze"),
-    "law_no_ministry_of_culture":                   ("no_building", "dark_bronze"),
-    "law_no_ministry_of_labor":                     ("no_building", "dark_bronze"),
-    "law_no_ministry_of_the_environment":           ("no_building", "dark_bronze"),
-    "law_no_ministry_of_intelligence_and_security": ("no_building", "dark_bronze"),
-    "law_no_ministry_of_refugee_affairs":            ("no_building", "dark_bronze"),
-    "law_no_ministry_of_propaganda":                ("no_building", "dark_bronze"),
-    "law_no_ministry_of_science":                   ("no_building", "dark_bronze"),
-    "law_no_ministry_of_thought_control":           ("no_building", "dark_bronze"),
-    "law_no_ministry_of_consumer_protection":       ("no_building", "dark_bronze"),
-    "law_no_ministry_of_urban_planning":            ("no_building", "dark_bronze"),
-    "law_no_ministry_of_religion":                  ("no_building", "dark_bronze"),
-    "law_no_ministry_of_international_aid":         ("no_building", "dark_bronze"),
+    "law_no_ministry_of_foreign_affairs":           ("no_building", "dark_gold"),
+    "law_no_ministry_of_war":                       ("no_building", "dark_gold"),
+    "law_no_ministry_of_commerce":                  ("no_building", "dark_gold"),
+    "law_no_national_bank":                         ("no_building", "dark_gold"),
+    "law_no_ministry_of_culture":                   ("no_building", "dark_gold"),
+    "law_no_ministry_of_labor":                     ("no_building", "dark_gold"),
+    "law_no_ministry_of_the_environment":           ("no_building", "dark_gold"),
+    "law_no_ministry_of_intelligence_and_security": ("no_building", "dark_gold"),
+    "law_no_ministry_of_refugee_affairs":            ("no_building", "dark_gold"),
+    "law_no_ministry_of_propaganda":                ("no_building", "dark_gold"),
+    "law_no_ministry_of_science":                   ("no_building", "dark_gold"),
+    "law_no_ministry_of_thought_control":           ("no_building", "dark_gold"),
+    "law_no_ministry_of_consumer_protection":       ("no_building", "dark_gold"),
+    "law_no_ministry_of_urban_planning":            ("no_building", "dark_gold"),
+    "law_no_ministry_of_religion":                  ("no_building", "dark_gold"),
+    "law_no_ministry_of_international_aid":         ("no_building", "dark_gold"),
 }
 
 

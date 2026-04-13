@@ -14,7 +14,7 @@ class ParadoxFileParser:
         self.data = {}
 
     def tokenize(self, text):
-        token_pattern = r'hsv\{\s*\d+(?:\.\d+)?\s+\d+(?:\.\d+)?\s+\d+(?:\.\d+)?\s*\}|\{|\}|\s*[><=]+\s*|"[^"]*"|[\w\-\.:\|/]+'
+        token_pattern = r'hsv(?:360)?\{\s*\d+(?:\.\d+)?\s+\d+(?:\.\d+)?\s+\d+(?:\.\d+)?\s*\}|\{|\}|\s*[><=]+\s*|"[^"]*"|[\w\-\.:\|/$@]+'
         text = "\n".join(
             [
                 line.split("#")[0]
