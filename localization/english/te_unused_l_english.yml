@@ -30,6 +30,8 @@
  POP_LOW_GPD_PER_CAPITA_REL:0 "Low State GDP per Capita compared to global average (@money![SCOPE.GetRootScope.ScriptValue('global_gdp_per_capita')|2*])"
  QUALIFICATIONS_INSUFFICIENT_DEMAND_DECAY:0 "Insufficient demand for job"
  SEIZE_COMPANY:0 "Seize"
+ SR_COOLDOWN_12_TT:0 "#Y 12 months#! until [concept_space_race] progress resumes."
+ SR_COOLDOWN_24_TT:0 "#Y 24 months#! until [concept_space_race] progress resumes."
  TEMPERATURE_ANOMALY_1:0 "Global warming has reached 1°C above pre-industrial levels."
  accept_culture_text:"This will change authority cost by @aut! [SCOPE.sCulture('curr_culture').MakeScope.ScriptValue('culture_acceptance_cost_script_value_player')]. Are you sure you want to accept this culture?"
  accept_culture_title:"Accept Culture"

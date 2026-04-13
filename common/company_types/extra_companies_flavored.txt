@@ -2966,7 +2966,7 @@ company_axiom_space = {
 		always = yes
 	}
 	attainable = {
-		has_technology_researched = reusable_rocketry
+		has_technology_researched = directed_energy_weapons
 	}
 	possible = {
 		"goods_production_rank(g:launch_capacity)" <= 5

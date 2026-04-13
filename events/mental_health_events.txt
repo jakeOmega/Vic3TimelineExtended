@@ -474,3 +474,40 @@ mental_health_events.100 = {
 		}
 	}
 }
+
+mental_health_events.200 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/labor_dispute.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = mental_health_events.200.t
+	desc = mental_health_events.200.d
+	flavor = mental_health_events.200.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = mental_health_events.200.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_modifier = {
+			name = mental_health_infrastructure_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}

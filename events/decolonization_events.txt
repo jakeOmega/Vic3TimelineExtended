@@ -2832,3 +2832,111 @@ decolonization_events.21 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }
+
+decolonization_events.200 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colonial_protest.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.200.t
+	desc = decolonization_events.200.d
+	flavor = decolonization_events.200.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = decolonization_events.200.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Permanent solidified modifier
+		add_modifier = {
+			name = colonial_empire_solidified_modifier
+			days = -1
+		}
+		# Grant homeland to colonial states with high acceptance
+		every_scope_state = {
+			limit = {
+				NOT = { is_homeland_of_country_cultures = ROOT }
+				state_population >= 100000
+				is_overseas_from_capital = yes
+				NOT = {
+					any_scope_pop = {
+						pop_acceptance < acceptance_status_4
+					}
+				}
+			}
+			state_region = {
+				save_scope_as = integration_state_region
+				ROOT = {
+					every_primary_culture = {
+						save_scope_as = current_culture
+						scope:integration_state_region = {
+							add_homeland = scope:current_culture
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+decolonization_events.201 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colonial_protest.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.201.t
+	desc = decolonization_events.201.d
+	flavor = decolonization_events.201.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = decolonization_events.201.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		custom_tooltip = {
+			text = je_colonial_empire_fail_tt
+			every_scope_state = {
+				limit = {
+					NOT = { is_homeland_of_country_cultures = ROOT }
+					is_overseas_from_capital = yes
+				}
+				set_variable = decolonization_marker
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			every_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				remove_variable = decolonization_marker
+			}
+		}
+		add_modifier = {
+			name = colonial_empire_collapsed_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}

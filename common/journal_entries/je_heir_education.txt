@@ -80,8 +80,7 @@ je_heir_education = {
 	}
 
 	on_complete = {
-		heir_education_resolve_effect = yes
-		heir_education_cleanup_effect = yes
+		trigger_event = { id = heir_education_events.200 }
 	}
 
 	# If the heir changes (dies, replaced), detect and reset

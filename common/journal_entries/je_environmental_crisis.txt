@@ -61,15 +61,7 @@
 	}
 
 	on_complete = {
-		add_loyalists = {
-			value = small_radicals
-			pop_type = academics
-		}
-		add_modifier = {
-			name = environmental_legislation_triumph_modifier
-			days = long_modifier_time
-			is_decaying = yes
-		}
+		trigger_event = { id = environmental_events.200 }
 	}
 
 	invalid = {

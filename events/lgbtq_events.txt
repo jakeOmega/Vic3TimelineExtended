@@ -575,3 +575,40 @@ lgbtq_events.100 = {
 		}
 	}
 }
+
+lgbtq_events.200 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/pride_march.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = lgbtq_events.200.t
+	desc = lgbtq_events.200.d
+	flavor = lgbtq_events.200.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = lgbtq_events.200.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_loyalists = {
+			value = medium_radicals
+			strata = middle
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = lgbtq_rights_triumph_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}

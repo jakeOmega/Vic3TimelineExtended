@@ -26,6 +26,7 @@ space_race_events.1 = {
 		name = space_race_events.1.a
 		default_option = yes
 		ai_chance = { base = 5 }
+		sr_apply_suborbital_reward = yes
 		# Celebrate the achievement - loyalists
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
@@ -34,6 +35,7 @@ space_race_events.1 = {
 	option = {
 		name = space_race_events.1.b
 		ai_chance = { base = 3 }
+		sr_apply_suborbital_reward = yes
 		# Channel momentum into next milestone - innovation boost
 		add_modifier = {
 			name = sr_suborbital
@@ -65,6 +67,7 @@ space_race_events.2 = {
 		name = space_race_events.2.a
 		default_option = yes
 		ai_chance = { base = 5 }
+		sr_apply_orbital_reward = yes
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals }
 	}
@@ -72,6 +75,7 @@ space_race_events.2 = {
 	option = {
 		name = space_race_events.2.b
 		ai_chance = { base = 4 }
+		sr_apply_orbital_reward = yes
 		# Invest in satellite infrastructure
 		add_modifier = {
 			name = sr_orbital
@@ -83,13 +87,17 @@ space_race_events.2 = {
 	option = {
 		name = space_race_events.2.c
 		ai_chance = { base = 2 }
+		sr_apply_orbital_reward = yes
 		# Military applications - satellite surveillance
 		add_modifier = {
 			name = sr_orbital
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = small_radicals strata = lower }
+		add_radicals = { value = small_radicals pop_type = laborers }
+		add_radicals = { value = small_radicals pop_type = farmers }
+		add_radicals = { value = small_radicals pop_type = peasants }
+		add_radicals = { value = small_radicals pop_type = machinists }
 		add_loyalists = { value = small_radicals pop_type = soldiers }
 		add_loyalists = { value = small_radicals pop_type = officers }
 	}
@@ -119,6 +127,7 @@ space_race_events.3 = {
 		default_option = yes
 		trigger = { has_variable = sr_moon_site_shackleton }
 		ai_chance = { base = 5 }
+		sr_apply_moon_landing_reward = yes
 		# Shackleton Crater - scientific windfall
 		add_modifier = {
 			name = sr_shackleton_crater
@@ -132,6 +141,7 @@ space_race_events.3 = {
 		name = space_race_events.3.b
 		trigger = { has_variable = sr_moon_site_equatorial }
 		ai_chance = { base = 5 }
+		sr_apply_moon_landing_reward = yes
 		# Equatorial Plain - stable foundation
 		add_modifier = {
 			name = sr_equatorial_plain
@@ -150,6 +160,7 @@ space_race_events.3 = {
 		}
 		default_option = yes
 		ai_chance = { base = 5 }
+		sr_apply_moon_landing_reward = yes
 		# No site chosen (shouldn't normally happen) - generic reward
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals }
@@ -178,6 +189,7 @@ space_race_events.4 = {
 		name = space_race_events.4.a
 		default_option = yes
 		ai_chance = { base = 5 }
+		sr_apply_probe_reward = yes
 		# Share data with international community
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		custom_tooltip = {
@@ -196,6 +208,7 @@ space_race_events.4 = {
 	option = {
 		name = space_race_events.4.b
 		ai_chance = { base = 3 }
+		sr_apply_probe_reward = yes
 		# Classify findings for national advantage
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_modifier = {
@@ -300,6 +313,7 @@ space_race_events.6 = {
 		name = space_race_events.6.a
 		default_option = yes
 		ai_chance = { base = 5 }
+		sr_apply_moon_base_reward = yes
 		# Lunar mining operations
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals }
@@ -308,6 +322,7 @@ space_race_events.6 = {
 	option = {
 		name = space_race_events.6.b
 		ai_chance = { base = 4 }
+		sr_apply_moon_base_reward = yes
 		# International lunar research hub
 		custom_tooltip = {
 			text = SR_INTL_COOPERATION_RELATIONS_TT
@@ -326,9 +341,15 @@ space_race_events.6 = {
 	option = {
 		name = space_race_events.6.c
 		ai_chance = { base = 2 }
+		sr_apply_moon_base_reward = yes
 		# Military lunar installation
-		add_loyalists = { value = small_radicals pop_type = academics }
-		add_radicals = { value = small_radicals strata = lower }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+		add_loyalists = { value = medium_radicals pop_type = soldiers }
+		add_radicals = { value = small_radicals pop_type = laborers }
+		add_radicals = { value = small_radicals pop_type = farmers }
+		add_radicals = { value = small_radicals pop_type = peasants }
+		add_radicals = { value = small_radicals pop_type = machinists }
+	}
 	}
 }
 
@@ -354,6 +375,7 @@ space_race_events.7 = {
 		name = space_race_events.7.a
 		default_option = yes
 		ai_chance = { base = 5 }
+		sr_apply_mars_landing_reward = yes
 		# Establish permanent research station
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
@@ -362,6 +384,7 @@ space_race_events.7 = {
 	option = {
 		name = space_race_events.7.b
 		ai_chance = { base = 3 }
+		sr_apply_mars_landing_reward = yes
 		# Begin resource extraction surveys
 		add_modifier = {
 			name = sr_mars_resource_extraction
@@ -374,9 +397,20 @@ space_race_events.7 = {
 	option = {
 		name = space_race_events.7.c
 		ai_chance = { base = 2 }
+		sr_apply_mars_landing_reward = yes
 		# Broadcast the landing globally - maximum prestige play
-		add_loyalists = { value = medium_radicals }
-		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_MARS_BROADCAST_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 20 }
+			}
+		}
 	}
 }
 
@@ -402,6 +436,7 @@ space_race_events.8 = {
 		name = space_race_events.8.a
 		default_option = yes
 		ai_chance = { base = 5 }
+		sr_apply_interstellar_probe_reward = yes
 		# Fusion torch drive - proven technology, reliable thrust
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
@@ -410,14 +445,17 @@ space_race_events.8 = {
 	option = {
 		name = space_race_events.8.b
 		ai_chance = { base = 3 }
+		sr_apply_interstellar_probe_reward = yes
 		# Antimatter catalyzed drive - experimental but faster
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_radicals = { value = small_radicals strata = lower }
 	}
 
 	option = {
 		name = space_race_events.8.c
 		ai_chance = { base = 2 }
+		sr_apply_interstellar_probe_reward = yes
 		# International probe - share costs and data with all spacefaring nations
 		custom_tooltip = {
 			text = SR_INTL_PROBE_RELATIONS_TT
@@ -457,6 +495,10 @@ space_race_events.9 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Celebrate the expansion of our civilization
+		if = {
+			limit = { has_variable = sr_completed_solar_colonization }
+			add_modifier = { name = sr_solar_system_trade }
+		}
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals }
 	}
@@ -637,7 +679,12 @@ space_race_events.30 = {
 		name = space_race_events.30.b
 		ai_chance = { base = 3 }
 		# Publicize the test - prestige play
-		add_loyalists = { value = small_radicals }
+		custom_tooltip = SR_PROGRESS_ADD_3_TT
+		change_variable = {
+			name = sr_progress_suborbital
+			add = 3
+		}
+		add_loyalists = { value = medium_radicals }
 	}
 }
 
@@ -825,6 +872,7 @@ space_race_events.33 = {
 			name = sr_progress_mars_landing
 			add = 5
 		}
+		add_loyalists = { value = medium_radicals }
 	}
 }
 
@@ -1019,7 +1067,7 @@ space_race_events.36 = {
 			name = sr_progress_moon_base
 			add = 5
 		}
-		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
 	}
 
 	option = {
@@ -1356,23 +1404,24 @@ space_race_events.42 = {
 		name = space_race_events.42.b
 		ai_chance = { base = 3 }
 		# Laser relay network - reduce delay with expensive infrastructure
-		custom_tooltip = SR_PROGRESS_ADD_5_TT
+		custom_tooltip = SR_PROGRESS_ADD_6_TT
 		change_variable = {
 			name = sr_progress_mars_landing
-			add = 5
+			add = 6
 		}
+		add_loyalists = { value = small_radicals pop_type = engineers }
 	}
 
 	option = {
 		name = space_race_events.42.c
 		ai_chance = { base = 2 }
 		# Train crew for complete operational independence
-		custom_tooltip = SR_PROGRESS_ADD_6_TT
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		change_variable = {
 			name = sr_progress_mars_landing
-			add = 6
+			add = 5
 		}
-		add_loyalists = { value = small_radicals }
+		add_loyalists = { value = medium_radicals }
 	}
 }
 
@@ -1443,6 +1492,7 @@ space_race_events.43 = {
 			limit = { has_variable = sr_active_mars_landing }
 			change_variable = { name = sr_progress_mars_landing add = 5 }
 		}
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
@@ -1458,6 +1508,7 @@ space_race_events.43 = {
 			limit = { has_variable = sr_active_mars_landing }
 			change_variable = { name = sr_progress_mars_landing add = 3 }
 		}
+		add_loyalists = { value = medium_radicals }
 	}
 }
 
@@ -1646,6 +1697,7 @@ space_race_events.45 = {
 			name = sr_progress_probe
 			add = 8
 		}
+		add_loyalists = { value = small_radicals pop_type = engineers }
 	}
 }
 
@@ -1872,7 +1924,7 @@ space_race_events.48 = {
 			limit = { has_variable = sr_active_solar_colonization }
 			change_variable = { name = sr_progress_solar_colonization add = 4 }
 		}
-		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
 
 	option = {
@@ -1904,7 +1956,7 @@ space_race_events.48 = {
 			limit = { has_variable = sr_active_solar_colonization }
 			change_variable = { name = sr_progress_solar_colonization add = 7 }
 		}
-		add_radicals = { value = very_small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals pop_type = academics }
 	}
 }
 
@@ -2145,7 +2197,12 @@ space_race_events.51 = {
 		# Regulated tourism: limited flights, safety first
 		add_modifier = {
 			name = sr_space_tourism_boost
-			days = normal_modifier_time
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = sr_space_tourism_rejected
+			days = short_modifier_time
 			is_decaying = yes
 		}
 	}
@@ -2502,8 +2559,9 @@ space_race_events.60 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
+		add_modifier = { name = sr_interstellar_data }
 		# Share the data freely - advance all of humanity's knowledge
-		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
 			text = SR_SHARE_FREELY_RELATIONS_TT
@@ -2521,6 +2579,7 @@ space_race_events.60 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
+		add_modifier = { name = sr_interstellar_data }
 		# Classify key findings - national strategic advantage
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
@@ -2529,6 +2588,7 @@ space_race_events.60 = {
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
+		add_modifier = { name = sr_interstellar_data }
 		# Sell data access to other nations - recoup the investment
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
@@ -3083,8 +3143,8 @@ space_race_events.24 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Defend the program before the committee: accept some delays
-		custom_tooltip = SR_COOLDOWN_6_TT
-		set_variable = { name = sr_failure_cooldown value = 6 }
+		custom_tooltip = SR_COOLDOWN_4_TT
+		set_variable = { name = sr_failure_cooldown value = 4 }
 		add_loyalists = { value = small_radicals }
 	}
 
@@ -3101,10 +3161,10 @@ space_race_events.24 = {
 		name = space_race_events.24.c
 		ai_chance = { base = 2 }
 		# Appeal directly to the public: generate grassroots support
-		custom_tooltip = SR_COOLDOWN_4_TT
-		set_variable = { name = sr_failure_cooldown value = 4 }
+		custom_tooltip = SR_COOLDOWN_6_TT
+		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_loyalists = { value = medium_radicals }
-		add_radicals = { value = small_radicals strata = upper }
+		add_radicals = { value = medium_radicals strata = upper }
 	}
 }
 
@@ -3169,26 +3229,26 @@ space_race_events.26 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Absorb the disruption: space transcends politics
-		custom_tooltip = SR_COOLDOWN_6_TT
-		set_variable = { name = sr_failure_cooldown value = 6 }
+		custom_tooltip = SR_COOLDOWN_4_TT
+		set_variable = { name = sr_failure_cooldown value = 4 }
 	}
 
 	option = {
 		name = space_race_events.26.b
 		ai_chance = { base = 3 }
 		# Leverage the crisis: rally national pride but alienate internationalists
-		custom_tooltip = SR_COOLDOWN_4_TT
-		set_variable = { name = sr_failure_cooldown value = 4 }
+		custom_tooltip = SR_COOLDOWN_6_TT
+		set_variable = { name = sr_failure_cooldown value = 6 }
 		add_loyalists = { value = medium_radicals }
-		add_radicals = { value = small_radicals interest_group = ig:ig_intelligentsia }
+		add_radicals = { value = medium_radicals interest_group = ig:ig_intelligentsia }
 	}
 
 	option = {
 		name = space_race_events.26.c
 		ai_chance = { base = 2 }
 		# Use the space program as a diplomatic olive branch
-		custom_tooltip = SR_COOLDOWN_6_TT
-		set_variable = { name = sr_failure_cooldown value = 6 }
+		custom_tooltip = SR_COOLDOWN_8_TT
+		set_variable = { name = sr_failure_cooldown value = 8 }
 		custom_tooltip = {
 			text = SR_OLIVE_BRANCH_RELATIONS_TT
 			every_country = {
@@ -3458,7 +3518,7 @@ space_race_events.74 = {
 			}
 			random_scope_building = {
 				limit = { is_building_type = building_space_program }
-				add_modifier = { name = sr_engineering_breakthrough months = 24 }
+				add_modifier = { name = sr_engineering_breakthrough months = 18 }
 			}
 		}
 		add_loyalists = { value = medium_radicals pop_type = engineers }
@@ -3475,10 +3535,11 @@ space_race_events.74 = {
 			}
 			random_scope_building = {
 				limit = { is_building_type = building_space_program }
-				add_modifier = { name = sr_engineering_breakthrough months = 12 }
+				add_modifier = { name = sr_engineering_breakthrough months = 24 }
 			}
 		}
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_radicals = { value = small_radicals pop_type = academics }
 	}
 }
 
@@ -3543,5 +3604,35 @@ space_race_events.75 = {
 		custom_tooltip = SR_COOLDOWN_8_TT
 		set_variable = { name = sr_failure_cooldown value = 8 }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+}
+
+##############################################
+# PROGRAM CANCELLATION NOTIFICATION
+##############################################
+
+# Event 76: Space Program Cancelled
+# Fires when a JE fails due to losing the space program PM
+space_race_events.76 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = space_race_events.76.t
+	desc = space_race_events.76.d
+	flavor = space_race_events.76.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.76.a
+		default_option = yes
+		ai_chance = { base = 5 }
 	}
 }

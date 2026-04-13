@@ -99,36 +99,7 @@
 	}
 
 	on_complete = {
-		# Permanent solidified modifier - massive acceptance growth to continue integration
-		add_modifier = {
-			name = colonial_empire_solidified_modifier
-			days = -1
-		}
-		# Grant homeland ONLY to colonial states that already achieved high acceptance
-		# (prevents gaming by conquering at 99 stability)
-		every_scope_state = {
-			limit = {
-				NOT = { is_homeland_of_country_cultures = ROOT }
-				state_population >= 100000
-				is_overseas_from_capital = yes
-				NOT = {
-					any_scope_pop = {
-						pop_acceptance < acceptance_status_4
-					}
-				}
-			}
-			state_region = {
-				save_scope_as = integration_state_region
-				ROOT = {
-					every_primary_culture = {
-						save_scope_as = current_culture
-						scope:integration_state_region = {
-							add_homeland = scope:current_culture
-						}
-					}
-				}
-			}
-		}
+		trigger_event = { id = decolonization_events.200 }
 	}
 
 	fail = {
@@ -138,39 +109,7 @@
 	}
 
 	on_fail = {
-		# Colonial empire collapses - forced decolonization of all overseas territories
-		custom_tooltip = {
-			text = je_colonial_empire_fail_tt
-			every_scope_state = {
-				limit = {
-					NOT = { is_homeland_of_country_cultures = ROOT }
-					is_overseas_from_capital = yes
-				}
-				set_variable = decolonization_marker
-			}
-			random_scope_state = {
-				limit = { has_variable = decolonization_marker }
-				form_decolonized_country = yes
-			}
-			random_scope_state = {
-				limit = { has_variable = decolonization_marker }
-				form_decolonized_country = yes
-			}
-			random_scope_state = {
-				limit = { has_variable = decolonization_marker }
-				form_decolonized_country = yes
-			}
-			# Clean up any remaining markers
-			every_scope_state = {
-				limit = { has_variable = decolonization_marker }
-				remove_variable = decolonization_marker
-			}
-		}
-		add_modifier = {
-			name = colonial_empire_collapsed_modifier
-			days = long_modifier_time
-			is_decaying = yes
-		}
+		trigger_event = { id = decolonization_events.201 }
 	}
 
 	on_monthly_pulse = {

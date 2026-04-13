@@ -492,3 +492,36 @@ augmentation_events.100 = {
 		}
 	}
 }
+
+augmentation_events.200 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/neural_interface.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = augmentation_events.200.t
+	desc = augmentation_events.200.d
+	flavor = augmentation_events.200.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = augmentation_events.200.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = augmentation_integrated_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}

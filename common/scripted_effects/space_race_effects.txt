@@ -217,7 +217,6 @@ sr_complete_suborbital_effect = {
 		limit = { NOT = { has_global_variable = sr_global_first_suborbital } }
 		set_global_variable = { name = sr_global_first_suborbital value = yes }
 		set_variable = { name = sr_was_first_suborbital value = yes }
-		add_modifier = { name = sr_first_suborbital }
 		# Notify other countries
 		save_scope_as = sr_achiever
 		every_country = {
@@ -232,16 +231,12 @@ sr_complete_suborbital_effect = {
 			trigger_event = { id = space_race_events.20 days = 14 }
 		}
 	}
-	else = {
-		add_modifier = { name = sr_suborbital }
-	}
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_suborbital } remove_variable = sr_funding_suborbital }
 	if = { limit = { has_variable = sr_safe_suborbital } remove_variable = sr_safe_suborbital }
 	if = { limit = { has_variable = sr_ambitious_suborbital } remove_variable = sr_ambitious_suborbital }
 	if = { limit = { has_variable = sr_progress_suborbital } remove_variable = sr_progress_suborbital }
 	sr_complete_milestone_effect = yes
-	add_loyalists = { value = small_radicals pop_type = academics }
 }
 
 # Orbital completion
@@ -251,7 +246,6 @@ sr_complete_orbital_effect = {
 		limit = { NOT = { has_global_variable = sr_global_first_orbital } }
 		set_global_variable = { name = sr_global_first_orbital value = yes }
 		set_variable = { name = sr_was_first_orbital value = yes }
-		add_modifier = { name = sr_first_orbital }
 		save_scope_as = sr_achiever
 		every_country = {
 			limit = {
@@ -265,16 +259,12 @@ sr_complete_orbital_effect = {
 			trigger_event = { id = space_race_events.20 days = 14 }
 		}
 	}
-	else = {
-		add_modifier = { name = sr_orbital }
-	}
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_orbital } remove_variable = sr_funding_orbital }
 	if = { limit = { has_variable = sr_safe_orbital } remove_variable = sr_safe_orbital }
 	if = { limit = { has_variable = sr_ambitious_orbital } remove_variable = sr_ambitious_orbital }
 	if = { limit = { has_variable = sr_progress_orbital } remove_variable = sr_progress_orbital }
 	sr_complete_milestone_effect = yes
-	add_loyalists = { value = medium_radicals pop_type = academics }
 }
 
 # Moon Landing completion
@@ -284,7 +274,6 @@ sr_complete_moon_landing_effect = {
 		limit = { NOT = { has_global_variable = sr_global_first_moon_landing } }
 		set_global_variable = { name = sr_global_first_moon_landing value = yes }
 		set_variable = { name = sr_was_first_moon_landing value = yes }
-		add_modifier = { name = sr_first_moon_landing }
 		save_scope_as = sr_achiever
 		every_country = {
 			limit = {
@@ -298,17 +287,12 @@ sr_complete_moon_landing_effect = {
 			trigger_event = { id = space_race_events.20 days = 14 }
 		}
 	}
-	else = {
-		add_modifier = { name = sr_moon_landing }
-	}
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_moon_landing } remove_variable = sr_funding_moon_landing }
 	if = { limit = { has_variable = sr_safe_moon_landing } remove_variable = sr_safe_moon_landing }
 	if = { limit = { has_variable = sr_ambitious_moon_landing } remove_variable = sr_ambitious_moon_landing }
 	if = { limit = { has_variable = sr_progress_moon_landing } remove_variable = sr_progress_moon_landing }
 	sr_complete_milestone_effect = yes
-	add_loyalists = { value = large_radicals pop_type = academics }
-	add_loyalists = { value = medium_radicals }
 }
 
 # Probe completion
@@ -318,7 +302,6 @@ sr_complete_probe_effect = {
 		limit = { NOT = { has_global_variable = sr_global_first_probe } }
 		set_global_variable = { name = sr_global_first_probe value = yes }
 		set_variable = { name = sr_was_first_probe value = yes }
-		add_modifier = { name = sr_first_probe }
 		save_scope_as = sr_achiever
 		every_country = {
 			limit = {
@@ -333,16 +316,12 @@ sr_complete_probe_effect = {
 			trigger_event = { id = space_race_events.20 days = 14 }
 		}
 	}
-	else = {
-		add_modifier = { name = sr_probe }
-	}
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_probe } remove_variable = sr_funding_probe }
 	if = { limit = { has_variable = sr_safe_probe } remove_variable = sr_safe_probe }
 	if = { limit = { has_variable = sr_ambitious_probe } remove_variable = sr_ambitious_probe }
 	if = { limit = { has_variable = sr_progress_probe } remove_variable = sr_progress_probe }
 	sr_complete_milestone_effect = yes
-	add_loyalists = { value = medium_radicals pop_type = academics }
 }
 
 # Moon Base completion
@@ -352,7 +331,6 @@ sr_complete_moon_base_effect = {
 		limit = { NOT = { has_global_variable = sr_global_first_moon_base } }
 		set_global_variable = { name = sr_global_first_moon_base value = yes }
 		set_variable = { name = sr_was_first_moon_base value = yes }
-		add_modifier = { name = sr_first_moon_base }
 		save_scope_as = sr_achiever
 		every_country = {
 			limit = {
@@ -367,17 +345,12 @@ sr_complete_moon_base_effect = {
 			trigger_event = { id = space_race_events.20 days = 14 }
 		}
 	}
-	else = {
-		add_modifier = { name = sr_moon_base }
-	}
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_moon_base } remove_variable = sr_funding_moon_base }
 	if = { limit = { has_variable = sr_safe_moon_base } remove_variable = sr_safe_moon_base }
 	if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
 	if = { limit = { has_variable = sr_progress_moon_base } remove_variable = sr_progress_moon_base }
 	sr_complete_milestone_effect = yes
-	add_loyalists = { value = large_radicals pop_type = academics }
-	add_loyalists = { value = medium_radicals }
 }
 
 # Mars Landing completion
@@ -387,7 +360,6 @@ sr_complete_mars_landing_effect = {
 		limit = { NOT = { has_global_variable = sr_global_first_mars_landing } }
 		set_global_variable = { name = sr_global_first_mars_landing value = yes }
 		set_variable = { name = sr_was_first_mars_landing value = yes }
-		add_modifier = { name = sr_first_mars_landing }
 		save_scope_as = sr_achiever
 		every_country = {
 			limit = {
@@ -402,17 +374,12 @@ sr_complete_mars_landing_effect = {
 			trigger_event = { id = space_race_events.20 days = 14 }
 		}
 	}
-	else = {
-		add_modifier = { name = sr_mars_landing }
-	}
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_mars_landing } remove_variable = sr_funding_mars_landing }
 	if = { limit = { has_variable = sr_safe_mars_landing } remove_variable = sr_safe_mars_landing }
 	if = { limit = { has_variable = sr_ambitious_mars_landing } remove_variable = sr_ambitious_mars_landing }
 	if = { limit = { has_variable = sr_progress_mars_landing } remove_variable = sr_progress_mars_landing }
 	sr_complete_milestone_effect = yes
-	add_loyalists = { value = large_radicals pop_type = academics }
-	add_loyalists = { value = large_radicals }
 }
 
 # Interstellar Probe completion
@@ -423,7 +390,6 @@ sr_complete_interstellar_probe_effect = {
 		limit = { NOT = { has_global_variable = sr_global_first_interstellar_probe } }
 		set_global_variable = { name = sr_global_first_interstellar_probe value = yes }
 		set_variable = { name = sr_was_first_interstellar_probe value = yes }
-		add_modifier = { name = sr_first_interstellar_probe }
 		save_scope_as = sr_achiever
 		every_country = {
 			limit = {
@@ -438,17 +404,83 @@ sr_complete_interstellar_probe_effect = {
 			trigger_event = { id = space_race_events.20 days = 14 }
 		}
 	}
-	else = {
-		add_modifier = { name = sr_interstellar_probe }
-	}
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_interstellar_probe } remove_variable = sr_funding_interstellar_probe }
 	if = { limit = { has_variable = sr_safe_interstellar_probe } remove_variable = sr_safe_interstellar_probe }
 	if = { limit = { has_variable = sr_ambitious_interstellar_probe } remove_variable = sr_ambitious_interstellar_probe }
 	if = { limit = { has_variable = sr_progress_interstellar_probe } remove_variable = sr_progress_interstellar_probe }
 	sr_complete_milestone_effect = yes
-	add_loyalists = { value = large_radicals pop_type = academics }
-	add_loyalists = { value = large_radicals }
+}
+
+# Milestone reward effects - called from event options for tooltip visibility
+sr_apply_suborbital_reward = {
+	if = {
+		limit = { has_variable = sr_was_first_suborbital }
+		add_modifier = { name = sr_first_suborbital }
+	}
+	else = {
+		add_modifier = { name = sr_suborbital }
+	}
+}
+
+sr_apply_orbital_reward = {
+	if = {
+		limit = { has_variable = sr_was_first_orbital }
+		add_modifier = { name = sr_first_orbital }
+	}
+	else = {
+		add_modifier = { name = sr_orbital }
+	}
+}
+
+sr_apply_moon_landing_reward = {
+	if = {
+		limit = { has_variable = sr_was_first_moon_landing }
+		add_modifier = { name = sr_first_moon_landing }
+	}
+	else = {
+		add_modifier = { name = sr_moon_landing }
+	}
+}
+
+sr_apply_probe_reward = {
+	if = {
+		limit = { has_variable = sr_was_first_probe }
+		add_modifier = { name = sr_first_probe }
+	}
+	else = {
+		add_modifier = { name = sr_probe }
+	}
+}
+
+sr_apply_moon_base_reward = {
+	if = {
+		limit = { has_variable = sr_was_first_moon_base }
+		add_modifier = { name = sr_first_moon_base }
+	}
+	else = {
+		add_modifier = { name = sr_moon_base }
+	}
+}
+
+sr_apply_mars_landing_reward = {
+	if = {
+		limit = { has_variable = sr_was_first_mars_landing }
+		add_modifier = { name = sr_first_mars_landing }
+	}
+	else = {
+		add_modifier = { name = sr_mars_landing }
+	}
+}
+
+sr_apply_interstellar_probe_reward = {
+	if = {
+		limit = { has_variable = sr_was_first_interstellar_probe }
+		add_modifier = { name = sr_first_interstellar_probe }
+	}
+	else = {
+		add_modifier = { name = sr_interstellar_probe }
+	}
 }
 
 # Solar System Colonization - establish a colony at a random unclaimed location

@@ -68,19 +68,7 @@
 	}
 
 	on_complete = {
-		add_loyalists = {
-			value = large_radicals
-			strata = lower
-		}
-		add_loyalists = {
-			value = medium_radicals
-			strata = middle
-		}
-		add_modifier = {
-			name = post_scarcity_achieved_modifier
-			days = long_modifier_time
-			is_decaying = yes
-		}
+		trigger_event = { id = post_scarcity_events.200 }
 	}
 
 	invalid = {

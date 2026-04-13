@@ -289,3 +289,29 @@ heir_education_events.3 = {
 		ai_chance = { base = 5 }
 	}
 }
+
+heir_education_events.200 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/political_rally.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = heir_education_events.200.t
+	desc = heir_education_events.200.d
+	flavor = heir_education_events.200.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = heir_education_events.200.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		heir_education_resolve_effect = yes
+		heir_education_cleanup_effect = yes
+	}
+}

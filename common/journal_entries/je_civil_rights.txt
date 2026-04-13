@@ -90,19 +90,7 @@
 	}
 
 	on_complete = {
-		add_loyalists = {
-			value = medium_radicals
-			strata = lower
-		}
-		add_loyalists = {
-			value = small_radicals
-			pop_type = academics
-		}
-		add_modifier = {
-			name = civil_rights_triumph_modifier
-			days = long_modifier_time
-			is_decaying = yes
-		}
+		trigger_event = { id = movement_events_te.200 }
 	}
 
 	invalid = {
@@ -127,7 +115,7 @@
 
 	on_fail = {
 		# Fire the oppressive regime outcome event if laws are discriminatory/hostile
-		# Otherwise just a mild penalty: movement fizzled without clear oppressor win
+		# Otherwise a notification that the movement dissolved
 		if = {
 			limit = {
 				has_discriminatory_minority_law = yes
@@ -135,11 +123,7 @@
 			trigger_event = { id = movement_events_te.100 }
 		}
 		else = {
-			# Movement dissolved without oppressive laws: mild consequence
-			add_radicals = {
-				value = small_radicals
-				strata = lower
-			}
+			trigger_event = { id = movement_events_te.201 }
 		}
 	}
 
