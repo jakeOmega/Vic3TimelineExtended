@@ -234,6 +234,7 @@ enforce_emissions_reduction = {
 				}
 				if = {
 					limit = {
+						has_journal_entry = je_global_warming
 						je:je_global_warming = { has_modifier = carbon_tax_modifier }
 						je:je_global_warming = { has_modifier = emission_standards_modifier }
 					}
@@ -299,6 +300,7 @@ enforce_emissions_reduction = {
 				if = {
 					limit = {
 						scope:source_country = {
+							has_journal_entry = je_global_warming
 							je:je_global_warming = { has_modifier = carbon_tax_modifier }
 							je:je_global_warming = { has_modifier = emission_standards_modifier }
 							je:je_global_warming = { has_modifier = renewable_investment_modifier }

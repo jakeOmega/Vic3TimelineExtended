@@ -159,11 +159,28 @@ cultural_pull_from_prestige = {
 }
 
 # Standard of Living: delta from global average, capped
+# Scaled by country rank: GP=full, major=half, minor=quarter, less=none
 cultural_pull_from_sol = {
 	value = average_sol
 	subtract = global_var:ch_cached_sol_avg
 	min = cultural_pull_sol_min
 	max = cultural_pull_sol_max
+	# Scale by country rank
+	if = {
+		limit = { country_rank = rank_value:great_power }
+		# Full value - no change
+	}
+	else_if = {
+		limit = { country_rank = rank_value:major_power }
+		multiply = 0.5
+	}
+	else_if = {
+		limit = { country_rank = rank_value:minor_power }
+		multiply = 0.25
+	}
+	else = {
+		multiply = 0
+	}
 }
 
 # Technology leadership bonus from "world first" achievements
@@ -316,6 +333,13 @@ cultural_hegemony_benchmark_mult = {
 		min = 0
 		max = cultural_hegemony_foreign_benchmark_max
 	}
+}
+
+# Maximum cultural pull share a target can have for the ≥10x hegemony ratio to apply
+# If hegemon has 30% share, this returns 3% — any country with ≤3% share is subject to law pressure
+ch_law_pressure_target_pull_threshold = {
+	value = global_var:ch_top_cultural_pull
+	divide = 10
 }
 
 # ============================================================================

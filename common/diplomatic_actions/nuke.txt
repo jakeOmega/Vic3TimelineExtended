@@ -83,6 +83,7 @@
             }
             if = {
                 limit = {
+                    exists = ruler
                     ruler = { has_trait = ruthless }
                     NOT = { ruler = { has_trait = cautious } }
                 }

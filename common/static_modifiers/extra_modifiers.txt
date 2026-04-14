@@ -4010,6 +4010,16 @@ intelligence_failure_modifier = {
 	country_prestige_add = -10
 }
 
+# Intelligence Sharing Pact - dynamic defense shield
+# Applied via on_yearly_pulse with multiplier = (partner_defense - own_defense) * 0.5
+# Gives the weaker partner a share of the stronger partner's covert defense
+intelligence_sharing_defense_shield_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_covert_defense_economic_add = 1
+	country_covert_defense_military_add = 1
+	country_covert_defense_ideological_add = 1
+}
+
 # Minority Protection - cultural flowering
 cultural_flowering_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -5228,11 +5238,10 @@ cultural_hegemony_effect = {
 	state_assimilation_mult = 0.05
 }
 
-# Applied to foreign countries to shift SoL expectations and reduce legitimacy
+# Applied to foreign countries to reduce legitimacy
 # (ideology pressure from the cultural hegemon)
 cultural_hegemony_foreign_benchmark = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_sol_expectations_target_add = 1
 	country_legitimacy_base_add = -5
 }
 
@@ -5631,6 +5640,19 @@ ch_selective_education = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_tech_research_speed_mult = 0.03
 	country_cultural_pull_mult = 0.02
+}
+
+# Event 16 Option A: Adopted hegemon's law under cultural pressure
+ch_hegemonic_law_adopted = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -10
+}
+
+# Event 16 Option B: Refused hegemonic law pressure
+ch_hegemonic_law_resistance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -5
+	state_turmoil_effects_mult = 0.15
 }
 
 # ============================================================================

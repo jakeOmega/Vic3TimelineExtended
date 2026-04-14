@@ -594,7 +594,7 @@ space_race_events.11 = {
 # NOTIFICATION EVENTS
 ##############################################
 
-# Event 20: Another Nation Achieves a Milestone (notification to rivals)
+# Event 20: Another Nation Achieves a Milestone (notification to all countries)
 space_race_events.20 = {
 	type = country_event
 	placement = root
@@ -604,7 +604,17 @@ space_race_events.20 = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = space_race_events.20.t
-	desc = space_race_events.20.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.20.d_first
+				trigger = {
+					exists = scope:sr_is_first
+				}
+			}
+			desc = space_race_events.20.d
+		}
+	}
 	flavor = space_race_events.20.f
 
 	duration = 3

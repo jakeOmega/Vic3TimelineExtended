@@ -100,56 +100,59 @@ je_space_race_suborbital = {
 
 	on_monthly_pulse = {
 		effect = {
-			# Set funding proxy for script value calculation
-			set_variable = { name = sr_funding_level value = var:sr_funding_suborbital }
-			# Progress based on approach
 			if = {
-				limit = { has_variable = sr_ambitious_suborbital }
-				change_variable = {
-					name = sr_progress_suborbital
-					add = sr_ambitious_progress
-				}
-				# Failure check for ambitious approach
+				limit = { sr_ai_should_participate = yes }
+				# Set funding proxy for script value calculation
+				set_variable = { name = sr_funding_level value = var:sr_funding_suborbital }
+				# Progress based on approach
 				if = {
-					limit = {
-						NOT = { sr_has_failure_cooldown = yes }
+					limit = { has_variable = sr_ambitious_suborbital }
+					change_variable = {
+						name = sr_progress_suborbital
+						add = sr_ambitious_progress
 					}
-					random_list = {
-						95 = { }
-						5 = {
-							change_variable = { name = sr_progress_suborbital multiply = 0.75 }
-							set_variable = { name = sr_failed_suborbital value = yes }
-							sr_fire_ambitious_failure_event = yes
+					# Failure check for ambitious approach
+					if = {
+						limit = {
+							NOT = { sr_has_failure_cooldown = yes }
+						}
+						random_list = {
+							95 = { }
+							5 = {
+								change_variable = { name = sr_progress_suborbital multiply = 0.75 }
+								set_variable = { name = sr_failed_suborbital value = yes }
+								sr_fire_ambitious_failure_event = yes
+							}
 						}
 					}
 				}
-			}
-			else_if = {
-				limit = { has_variable = sr_safe_suborbital }
-				change_variable = {
-					name = sr_progress_suborbital
-					add = sr_safe_progress
-				}
-				# Very small failure chance even for safe
-				if = {
-					limit = {
-						NOT = { sr_has_failure_cooldown = yes }
+				else_if = {
+					limit = { has_variable = sr_safe_suborbital }
+					change_variable = {
+						name = sr_progress_suborbital
+						add = sr_safe_progress
 					}
-					random_list = {
-						98 = { }
-						2 = {
-							change_variable = { name = sr_progress_suborbital multiply = 0.85 }
-							set_variable = { name = sr_failed_suborbital value = yes }
-							sr_fire_safe_setback_event = yes
+					# Very small failure chance even for safe
+					if = {
+						limit = {
+							NOT = { sr_has_failure_cooldown = yes }
+						}
+						random_list = {
+							98 = { }
+							2 = {
+								change_variable = { name = sr_progress_suborbital multiply = 0.85 }
+								set_variable = { name = sr_failed_suborbital value = yes }
+								sr_fire_safe_setback_event = yes
+							}
 						}
 					}
 				}
-			}
-			else = {
-				# Default (no approach selected) - minimal progress
-				change_variable = {
-					name = sr_progress_suborbital
-					add = 0.5
+				else = {
+					# Default (no approach selected) - minimal progress
+					change_variable = {
+						name = sr_progress_suborbital
+						add = 0.5
+					}
 				}
 			}
 		}
@@ -256,6 +259,8 @@ je_space_race_orbital = {
 
 	on_monthly_pulse = {
 		effect = {
+			if = {
+				limit = { sr_ai_should_participate = yes }
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_orbital }
 			if = {
@@ -299,6 +304,7 @@ je_space_race_orbital = {
 					name = sr_progress_orbital
 					add = 0.5
 				}
+			}
 			}
 		}
 	}
@@ -415,6 +421,8 @@ je_space_race_moon_landing = {
 
 	on_monthly_pulse = {
 		effect = {
+			if = {
+				limit = { sr_ai_should_participate = yes }
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_moon_landing }
 			if = {
@@ -487,6 +495,7 @@ je_space_race_moon_landing = {
 					name = sr_progress_moon_landing
 					add = 0.5
 				}
+			}
 			}
 		}
 	}
@@ -593,6 +602,8 @@ je_space_race_probe = {
 
 	on_monthly_pulse = {
 		effect = {
+			if = {
+				limit = { sr_ai_should_participate = yes }
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_probe }
 			if = {
@@ -636,6 +647,7 @@ je_space_race_probe = {
 					name = sr_progress_probe
 					add = 0.5
 				}
+			}
 			}
 		}
 	}
@@ -741,6 +753,8 @@ je_space_race_moon_base = {
 
 	on_monthly_pulse = {
 		effect = {
+			if = {
+				limit = { sr_ai_should_participate = yes }
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_moon_base }
 			if = {
@@ -784,6 +798,7 @@ je_space_race_moon_base = {
 					name = sr_progress_moon_base
 					add = 0.5
 				}
+			}
 			}
 		}
 	}
@@ -890,6 +905,8 @@ je_space_race_mars_landing = {
 
 	on_monthly_pulse = {
 		effect = {
+			if = {
+				limit = { sr_ai_should_participate = yes }
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_mars_landing }
 			if = {
@@ -934,6 +951,7 @@ je_space_race_mars_landing = {
 					add = 0.5
 				}
 			}
+			}
 		}
 	}
 
@@ -945,8 +963,8 @@ je_space_race_mars_landing = {
 
 # ===========================================
 # 7. INTERSTELLAR PROBE
-# Prereq: Outer System Probe + Mars Landing + space_colonization tech
-# Parallel with Solar System Colonization
+# Prereq: Outer System Probe + Mars Landing + compact_fusion_reactors tech + Interstellar Mission PM
+# The culminating probe mission, requires the most advanced space program tier
 # ===========================================
 je_space_race_interstellar_probe = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
@@ -956,14 +974,14 @@ je_space_race_interstellar_probe = {
 		has_game_rule = space_race_enabled
 		has_variable = sr_completed_probe
 		has_variable = sr_completed_mars_landing
-		has_technology_researched = space_colonization
+		has_technology_researched = compact_fusion_reactors
 	}
 
 	possible = {
 		has_variable = sr_completed_probe
 		has_variable = sr_completed_mars_landing
-		has_technology_researched = space_colonization
-		modifier:country_sr_solar_exploration_program_bool = yes
+		has_technology_researched = compact_fusion_reactors
+		modifier:country_sr_interstellar_mission_program_bool = yes
 		NOT = { has_variable = sr_completed_interstellar_probe }
 		OR = {
 			country_rank = rank_value:great_power
@@ -1025,7 +1043,7 @@ je_space_race_interstellar_probe = {
 	fail = {
 		custom_tooltip = {
 			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_solar_exploration_program_bool = yes }
+			NOT = { modifier:country_sr_interstellar_mission_program_bool = yes }
 		}
 	}
 
@@ -1041,6 +1059,8 @@ je_space_race_interstellar_probe = {
 
 	on_monthly_pulse = {
 		effect = {
+			if = {
+				limit = { sr_ai_should_participate = yes }
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_interstellar_probe }
 			if = {
@@ -1084,6 +1104,7 @@ je_space_race_interstellar_probe = {
 					name = sr_progress_interstellar_probe
 					add = 0.5
 				}
+			}
 			}
 		}
 	}
@@ -1162,7 +1183,8 @@ je_space_race_interstellar_results = {
 
 # ===========================================
 # 8. SOLAR SYSTEM COLONIZATION (Staged, Repeatable)
-# Prereq: Moon Base + Mars Landing + space_colonization tech
+# Prereq: Moon Base + Mars Landing + Solar Colonization PM (era 11)
+# Stages 3-5 additionally require Deep Space Exploration PM (era 12)
 # 5 stages of colony establishment across the solar system
 # Stage 1: Mars & Asteroids
 # Stage 2: Jupiter System & Venus
@@ -1178,14 +1200,22 @@ je_space_race_solar_colonization = {
 		has_game_rule = space_race_enabled
 		has_variable = sr_completed_moon_base
 		has_variable = sr_completed_mars_landing
-		has_technology_researched = space_colonization
+		has_technology_researched = directed_energy_weapons
 	}
 
 	possible = {
 		has_variable = sr_completed_moon_base
 		has_variable = sr_completed_mars_landing
-		has_technology_researched = space_colonization
-		modifier:country_sr_interstellar_mission_program_bool = yes
+		modifier:country_sr_solar_colonization_program_bool = yes
+		# Stages 3-5 (outer system) require Deep Space Exploration PM (space_colonization tech, era 12)
+		custom_tooltip = {
+			text = sr_outer_system_requires_deep_space_tt
+			OR = {
+				NOT = { has_global_variable = sr_colonization_stage }
+				global_var:sr_colonization_stage <= 2
+				modifier:country_sr_deep_space_exploration_program_bool = yes
+			}
+		}
 		NOT = { has_global_variable = sr_all_colonies_complete }
 		OR = {
 			country_rank = rank_value:great_power
@@ -1255,33 +1285,22 @@ je_space_race_solar_colonization = {
 	}
 
 	complete = {
-		has_variable = sr_progress_solar_colonization
-		var:sr_progress_solar_colonization >= sr_solar_colonization_goal
+		# Never completes through the bar - completion is handled in on_monthly_pulse
+		# This allows the JE to stay open for repeating colony establishment
+		always = no
 	}
 
 	on_complete = {
-		# Establish a colony at a random unclaimed location in the current stage
-		sr_establish_colony_effect = yes
-		remove_variable = sr_active_solar_colonization
-		# Clean up per-JE variables
-		if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
-		if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
-		if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
-		if = { limit = { has_variable = sr_progress_solar_colonization } remove_variable = sr_progress_solar_colonization }
-		sr_complete_milestone_effect = yes
-		# If all 5 stages exhausted, mark fully complete
-		if = {
-			limit = { has_global_variable = sr_all_colonies_complete }
-			set_variable = { name = sr_completed_solar_colonization value = yes }
+		# Display-only: never fires because complete = always = no
+		custom_tooltip = {
+			text = sr_solar_colony_established_tt
 		}
-		# Notify with generic completion event
-		trigger_event = { id = space_race_events.9 }
 	}
 
 	fail = {
 		custom_tooltip = {
 			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_interstellar_mission_program_bool = yes }
+			NOT = { modifier:country_sr_solar_colonization_program_bool = yes }
 		}
 	}
 
@@ -1297,6 +1316,8 @@ je_space_race_solar_colonization = {
 
 	on_monthly_pulse = {
 		effect = {
+			if = {
+				limit = { sr_ai_should_participate = yes }
 			# Set funding proxy for script value calculation
 			set_variable = { name = sr_funding_level value = var:sr_funding_solar_colonization }
 			if = {
@@ -1340,6 +1361,31 @@ je_space_race_solar_colonization = {
 					name = sr_progress_solar_colonization
 					add = 0.5
 				}
+			}
+			# Bar-fill detection: when progress reaches goal, establish a colony and reset
+			if = {
+				limit = {
+					has_variable = sr_progress_solar_colonization
+					var:sr_progress_solar_colonization >= sr_solar_colonization_goal
+				}
+				# Establish a colony at a random unclaimed location in the current stage
+				sr_establish_colony_effect = yes
+				# Reset progress (preserve overflow)
+				change_variable = { name = sr_progress_solar_colonization subtract = sr_solar_colonization_goal }
+				# Notify with colony completion event
+				trigger_event = { id = space_race_events.9 }
+				# If all stages exhausted, mark fully complete and close the JE
+				if = {
+					limit = { has_global_variable = sr_all_colonies_complete }
+					set_variable = { name = sr_completed_solar_colonization value = yes }
+					remove_variable = sr_active_solar_colonization
+					if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
+					if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
+					if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
+					if = { limit = { has_variable = sr_progress_solar_colonization } remove_variable = sr_progress_solar_colonization }
+					sr_complete_milestone_effect = yes
+				}
+			}
 			}
 		}
 	}

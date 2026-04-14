@@ -997,7 +997,8 @@ REPLACE_OR_CREATE:pmg_base_building_space_program = {
         pm_earth_orbit
         pm_moon_mission
         pm_mars_mission
-        pm_solar_exploration
+        pm_solar_colonization
+        pm_deep_space_exploration
         pm_interstellar_mission
     }
 }

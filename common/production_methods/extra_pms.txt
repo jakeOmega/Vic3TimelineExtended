@@ -15641,7 +15641,7 @@ pm_mars_mission = {
 	}
 }
 
-pm_solar_exploration = {
+pm_solar_colonization = {
 	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p4.dds"
 
 	unlocking_technologies = {
@@ -15679,13 +15679,57 @@ pm_solar_exploration = {
 			country_sr_earth_orbit_program_bool = yes
 			country_sr_moon_mission_program_bool = yes
 			country_sr_mars_mission_program_bool = yes
-			country_sr_solar_exploration_program_bool = yes
+			country_sr_solar_colonization_program_bool = yes
+		}
+	}
+}
+
+pm_deep_space_exploration = {
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p5.dds"
+
+	unlocking_technologies = {
+		space_colonization
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_launch_capacity_add = 75000              # Price:  200, Total cost: 15000000.0 (100.00%)
+			# Output goods
+			# Total input cost: 15000000.0
+			# Total output cost: 31600.0
+			# Profit: -14968400.0
+			# Profit margin: -99.79%
+			# Zero profit price multiplier: 474.68
+			# Employment: 40000
+			# Wage breakeven: -374.21
+		}
+
+		level_scaled = {
+			building_employment_engineers_add = 10000
+			building_employment_academics_add = 10000
+			building_employment_clerks_add = 20000
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_add = 600
+			country_weekly_innovation_max_add = 600
+			country_prestige_add = 7500
+			goods_output_launch_capacity_mult = 0.45
+		}
+		unscaled = {
+			country_sr_earth_orbit_program_bool = yes
+			country_sr_moon_mission_program_bool = yes
+			country_sr_mars_mission_program_bool = yes
+			country_sr_solar_colonization_program_bool = yes
+			country_sr_deep_space_exploration_program_bool = yes
 		}
 	}
 }
 
 pm_interstellar_mission = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p5.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p5.dds" # TODO: needs unique p6 icon
 
 	unlocking_technologies = {
 		compact_fusion_reactors
@@ -15722,7 +15766,8 @@ pm_interstellar_mission = {
 			country_sr_earth_orbit_program_bool = yes
 			country_sr_moon_mission_program_bool = yes
 			country_sr_mars_mission_program_bool = yes
-			country_sr_solar_exploration_program_bool = yes
+			country_sr_solar_colonization_program_bool = yes
+			country_sr_deep_space_exploration_program_bool = yes
 			country_sr_interstellar_mission_program_bool = yes
 		}
 	}

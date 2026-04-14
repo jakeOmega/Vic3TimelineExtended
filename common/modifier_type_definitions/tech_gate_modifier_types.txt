@@ -16,7 +16,11 @@ country_sr_mars_mission_program_bool = {
 	color = good
 	boolean = yes
 }
-country_sr_solar_exploration_program_bool = {
+country_sr_solar_colonization_program_bool = {
+	color = good
+	boolean = yes
+}
+country_sr_deep_space_exploration_program_bool = {
 	color = good
 	boolean = yes
 }

@@ -10,6 +10,15 @@ sr_is_pursuing_milestone = {
 	has_variable = sr_active_milestone
 }
 
+# AI participation gate: only the top ~3 countries by prestige should pursue space race
+# Players can always participate regardless
+sr_ai_should_participate = {
+	OR = {
+		is_player = yes
+		global_country_ranking <= 3
+	}
+}
+
 sr_can_start_space_race = {
 	has_technology_researched = rocketry
 	OR = {

@@ -1634,3 +1634,185 @@ cultural_hegemony.15 = {
 		}
 	}
 }
+
+# ============================================================================
+# EVENT 16: Hegemonic Law Pressure
+# ============================================================================
+# When a cultural hegemon dominates (≥25% global pull, ≥10× target's pull),
+# they exert pressure on weaker nations to adopt their laws. The target
+# must choose: adopt the hegemon's law (governance disruption + nationalist
+# unrest) or refuse (extended legitimacy/turmoil penalty + progressive anger).
+# ============================================================================
+
+cultural_hegemony.16 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.16.t
+	desc = cultural_hegemony.16.d
+	flavor = cultural_hegemony.16.f
+
+	event_image = {
+		video = "europenorthamerica_springtime_of_nations"
+	}
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		has_journal_entry = je_cultural_hegemony
+		has_modifier = cultural_hegemony_foreign_benchmark
+		has_technology_researched = mass_media
+		has_global_variable = ch_top_cultural_pull
+		global_var:ch_top_cultural_pull >= 25
+		has_variable = ch_total
+		var:ch_total <= ch_law_pressure_target_pull_threshold
+		exists = global_var:ch_rank_1
+		NOT = { this = global_var:ch_rank_1 }
+		NOT = { enacting_any_law = yes }
+		NOT = { has_modifier = ch_hegemonic_law_adopted }
+		NOT = { has_modifier = ch_hegemonic_law_resistance }
+		# At least one culturally exportable law group has a mismatch with the hegemon
+		global_var:ch_rank_1 = {
+			any_active_law = {
+				law_type = {
+					OR = {
+						is_same_law_group_as = law_type:law_censorship
+						is_same_law_group_as = law_type:law_no_womens_rights
+						is_same_law_group_as = law_type:law_laissez_faire
+						is_same_law_group_as = law_type:law_free_trade
+						is_same_law_group_as = law_type:law_state_religion
+						is_same_law_group_as = law_type:law_worker_protections
+					}
+				}
+				ROOT = {
+					NOT = { has_law = PREV.law_type }
+				}
+			}
+		}
+	}
+
+	immediate = {
+		save_scope_as = ch_target
+		global_var:ch_rank_1 = {
+			save_scope_as = ch_hegemon
+			# Pick a random mismatched law from culturally exportable groups
+			random_active_law = {
+				limit = {
+					law_type = {
+						OR = {
+							is_same_law_group_as = law_type:law_censorship
+							is_same_law_group_as = law_type:law_no_womens_rights
+							is_same_law_group_as = law_type:law_laissez_faire
+							is_same_law_group_as = law_type:law_free_trade
+							is_same_law_group_as = law_type:law_state_religion
+							is_same_law_group_as = law_type:law_worker_protections
+						}
+					}
+					scope:ch_target = {
+						NOT = { has_law = PREV.law_type }
+					}
+				}
+				save_scope_as = ch_pressure_law
+				law_type = {
+					save_scope_as = ch_pressure_law_type
+				}
+			}
+		}
+	}
+
+	# A: Adopt the hegemon's law — governance disruption + nationalist backlash
+	option = {
+		name = cultural_hegemony.16.a
+		default_option = yes
+
+		trigger = {
+			exists = scope:ch_pressure_law_type
+		}
+
+		activate_law = scope:ch_pressure_law_type
+		je:je_cultural_hegemony ?= { add_modifier = {
+			name = ch_hegemonic_law_adopted
+			days = normal_modifier_time
+			is_decaying = yes
+		} }
+
+		# Traditionalist backlash
+		every_scope_state = {
+			limit = { state_population > 100000 }
+			add_radicals = {
+				interest_group = ig:ig_devout
+				value = medium_radicals
+			}
+			add_radicals = {
+				interest_group = ig:ig_rural_folk
+				value = small_radicals
+			}
+		}
+
+		if = {
+			limit = { exists = scope:ch_hegemon }
+			change_relations = {
+				country = scope:ch_hegemon
+				value = 10
+			}
+		}
+
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { ig:ig_intelligentsia = { is_in_government = yes } }
+				add = 4
+			}
+			modifier = {
+				trigger = { ig:ig_devout = { is_in_government = yes } }
+				add = -3
+			}
+		}
+	}
+
+	# B: Refuse — extended unrest from progressive IGs + legitimacy/turmoil penalty
+	option = {
+		name = cultural_hegemony.16.b
+
+		je:je_cultural_hegemony ?= { add_modifier = {
+			name = ch_hegemonic_law_resistance
+			days = normal_modifier_time
+			is_decaying = yes
+		} }
+
+		# Progressive/cosmopolitan IGs are frustrated by refusal
+		every_scope_state = {
+			limit = { state_population > 100000 }
+			add_radicals = {
+				interest_group = ig:ig_intelligentsia
+				value = medium_radicals
+			}
+			add_radicals = {
+				interest_group = ig:ig_trade_unions
+				value = small_radicals
+			}
+		}
+
+		if = {
+			limit = { exists = scope:ch_hegemon }
+			change_relations = {
+				country = scope:ch_hegemon
+				value = -10
+			}
+		}
+
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { ig:ig_devout = { is_in_government = yes } }
+				add = 3
+			}
+			modifier = {
+				trigger = { ig:ig_intelligentsia = { is_in_government = yes } }
+				add = -2
+			}
+		}
+	}
+}

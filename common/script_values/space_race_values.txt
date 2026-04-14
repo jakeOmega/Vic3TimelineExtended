@@ -316,6 +316,9 @@ sr_total_space_cost = {
 
 # Per-JE cost values for JE-scoped funding modifiers
 # Uses owner = { } wrapper for universal scope compatibility (country scope = no-op, JE scope = owner country)
+# Per-JE innovation cost multipliers (scaling with tech era)
+# Suborbital=1x, Orbital=1.5x, Moon=2x, Probe=2x, Moon Base=5x, Mars=6x, Solar=8x, Interstellar=12x
+
 sr_suborbital_cost = {
 	value = 0
 	owner = {
@@ -323,6 +326,7 @@ sr_suborbital_cost = {
 		if = { limit = { has_variable = sr_safe_suborbital } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_suborbital } add = 2 }
 	}
+	# Era 6 baseline - no multiplier
 }
 sr_orbital_cost = {
 	value = 0
@@ -331,6 +335,7 @@ sr_orbital_cost = {
 		if = { limit = { has_variable = sr_safe_orbital } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_orbital } add = 2 }
 	}
+	multiply = 1.5  # Era 7
 }
 sr_moon_landing_cost = {
 	value = 0
@@ -339,6 +344,7 @@ sr_moon_landing_cost = {
 		if = { limit = { has_variable = sr_safe_moon_landing } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_moon_landing } add = 2 }
 	}
+	multiply = 2  # Era 7
 }
 sr_probe_cost = {
 	value = 0
@@ -347,6 +353,7 @@ sr_probe_cost = {
 		if = { limit = { has_variable = sr_safe_probe } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_probe } add = 2 }
 	}
+	multiply = 2  # Era 7
 }
 sr_moon_base_cost = {
 	value = 0
@@ -355,6 +362,7 @@ sr_moon_base_cost = {
 		if = { limit = { has_variable = sr_safe_moon_base } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_moon_base } add = 2 }
 	}
+	multiply = 5  # Era 10
 }
 sr_mars_landing_cost = {
 	value = 0
@@ -363,6 +371,7 @@ sr_mars_landing_cost = {
 		if = { limit = { has_variable = sr_safe_mars_landing } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_mars_landing } add = 2 }
 	}
+	multiply = 6  # Era 10
 }
 sr_interstellar_probe_cost = {
 	value = 0
@@ -371,6 +380,7 @@ sr_interstellar_probe_cost = {
 		if = { limit = { has_variable = sr_safe_interstellar_probe } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_interstellar_probe } add = 2 }
 	}
+	multiply = 12  # Era 12
 }
 sr_solar_colonization_cost = {
 	value = 0
@@ -379,6 +389,7 @@ sr_solar_colonization_cost = {
 		if = { limit = { has_variable = sr_safe_solar_colonization } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_solar_colonization } add = 2 }
 	}
+	multiply = 8  # Era 11
 }
 
 # Per-JE progress display values (for current_value in each JE)

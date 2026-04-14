@@ -1,0 +1,142 @@
+﻿# Treaty Article Scripted Effects
+
+# Intelligence Sharing Defense Shield
+# Gives the country with lower covert defense a share of the difference
+# between its base defense and its strongest intel-sharing partner's base defense.
+#
+# IMPORTANT: Modifier values are NOT recalculated within a single effect block.
+# remove_modifier / add_modifier changes only take effect after the block completes.
+# Reading modifier:X within the same effect still sees the old values.
+# We use a persistent variable (intel_shield_mult) to track the prior shield
+# multiplier and subtract its contribution from modifier: reads to get base values.
+# This follows the same pattern as prior_pollution_reduction and prior_free_port_import_cap.
+#
+# Country scope. Called from on_yearly_pulse_country.
+update_intel_sharing_defense = {
+	# Only proceed if country has an intel sharing pact
+	if = {
+		limit = {
+			any_scope_diplomatic_pact = {
+				is_diplomatic_action_type = intelligence_sharing_pact
+			}
+		}
+
+		# Read own total covert defense (includes current shield modifier if any)
+		set_variable = { name = _own_def value = modifier:country_covert_defense_economic_add }
+		change_variable = { name = _own_def add = modifier:country_covert_defense_military_add }
+		change_variable = { name = _own_def add = modifier:country_covert_defense_ideological_add }
+
+		# Subtract own shield contribution to get base defense
+		# Shield modifier gives (1 * multiplier) to each of 3 defense types = 3 * multiplier total
+		if = {
+			limit = { has_variable = intel_shield_mult }
+			set_variable = { name = _shield_sub value = var:intel_shield_mult }
+			change_variable = { name = _shield_sub multiply = 3 }
+			change_variable = { name = _own_def subtract = var:_shield_sub }
+			remove_variable = _shield_sub
+		}
+
+		set_variable = { name = _best_boost value = 0 }
+		save_scope_as = _self
+
+		every_scope_diplomatic_pact = {
+			limit = { is_diplomatic_action_type = intelligence_sharing_pact }
+
+			# Determine which country is the partner
+			if = {
+				limit = { first_country = scope:_self }
+				# Partner is second_country
+				second_country = {
+					# Enter ROOT to set variables, PREV = partner country
+					ROOT = {
+						set_variable = { name = _p_def value = PREV.modifier:country_covert_defense_economic_add }
+						change_variable = { name = _p_def add = PREV.modifier:country_covert_defense_military_add }
+						change_variable = { name = _p_def add = PREV.modifier:country_covert_defense_ideological_add }
+
+						# Subtract partner's shield contribution to get their base defense
+						if = {
+							limit = { PREV = { has_variable = intel_shield_mult } }
+							set_variable = { name = _p_shield value = PREV.var:intel_shield_mult }
+							change_variable = { name = _p_shield multiply = 3 }
+							change_variable = { name = _p_def subtract = var:_p_shield }
+							remove_variable = _p_shield
+						}
+
+						# boost = (partner_base - own_base) * 0.5, min 0
+						set_variable = { name = _cand value = var:_p_def }
+						change_variable = { name = _cand subtract = var:_own_def }
+						change_variable = { name = _cand multiply = 0.5 }
+						change_variable = { name = _cand max = 0 }
+
+						if = {
+							limit = { var:_cand > var:_best_boost }
+							set_variable = { name = _best_boost value = var:_cand }
+						}
+						remove_variable = _cand
+						remove_variable = _p_def
+					}
+				}
+			}
+			else = {
+				# Partner is first_country
+				first_country = {
+					ROOT = {
+						set_variable = { name = _p_def value = PREV.modifier:country_covert_defense_economic_add }
+						change_variable = { name = _p_def add = PREV.modifier:country_covert_defense_military_add }
+						change_variable = { name = _p_def add = PREV.modifier:country_covert_defense_ideological_add }
+
+						if = {
+							limit = { PREV = { has_variable = intel_shield_mult } }
+							set_variable = { name = _p_shield value = PREV.var:intel_shield_mult }
+							change_variable = { name = _p_shield multiply = 3 }
+							change_variable = { name = _p_def subtract = var:_p_shield }
+							remove_variable = _p_shield
+						}
+
+						set_variable = { name = _cand value = var:_p_def }
+						change_variable = { name = _cand subtract = var:_own_def }
+						change_variable = { name = _cand multiply = 0.5 }
+						change_variable = { name = _cand max = 0 }
+
+						if = {
+							limit = { var:_cand > var:_best_boost }
+							set_variable = { name = _best_boost value = var:_cand }
+						}
+						remove_variable = _cand
+						remove_variable = _p_def
+					}
+				}
+			}
+		}
+
+		# Remove old modifier, apply new one
+		if = {
+			limit = { has_modifier = intelligence_sharing_defense_shield_modifier }
+			remove_modifier = intelligence_sharing_defense_shield_modifier
+		}
+		if = {
+			limit = { var:_best_boost > 0 }
+			add_modifier = {
+				name = intelligence_sharing_defense_shield_modifier
+				multiplier = var:_best_boost
+			}
+		}
+
+		# Store current shield multiplier for next year's base defense calculation
+		set_variable = { name = intel_shield_mult value = var:_best_boost }
+
+		remove_variable = _own_def
+		remove_variable = _best_boost
+	}
+	else = {
+		# No intel sharing pact — clean up
+		if = {
+			limit = { has_modifier = intelligence_sharing_defense_shield_modifier }
+			remove_modifier = intelligence_sharing_defense_shield_modifier
+		}
+		if = {
+			limit = { has_variable = intel_shield_mult }
+			remove_variable = intel_shield_mult
+		}
+	}
+}

@@ -1578,10 +1578,9 @@ intelligence_sharing_pact = {
         # Direct intelligence capacity boost from shared resources
         country_intelligence_capacity_add = 3
 
-        # Shared counter-intelligence boosts all covert defense categories
-        country_covert_defense_economic_add = 1
-        country_covert_defense_military_add = 1
-        country_covert_defense_ideological_add = 1
+        # Defense boost is applied dynamically via on_yearly_pulse_country
+        # based on the difference between the two countries' covert defense levels.
+        # The weaker country gets a share of the stronger country's defense.
 
         # The trade-off: a 10% increase in Bureaucracy cost.
         country_institution_cost_institution_ministry_of_intelligence_and_security_mult = 0.10
@@ -2332,6 +2331,11 @@ population_transfer = {
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
 		}
+		# Inclusive democracies would not demand forced population transfers
+		custom_tooltip = {
+			text = POPULATION_TRANSFER_BLOCKED_BY_MULTICULTURAL
+			NOT = { has_law = law_type:law_multicultural }
+		}
 		# The proposer must have primary culture pops of the other country
 		# that are NOT also a primary culture of the proposer
 		ROOT = {
@@ -2339,6 +2343,24 @@ population_transfer = {
 				any_scope_pop = {
 					culture = { is_primary_culture_of = scope:other_country }
 					NOT = { culture = { is_primary_culture_of = ROOT } }
+				}
+			}
+		}
+		# Cannot demand transfer of cultures that already have high acceptance in the other country
+		custom_tooltip = {
+			text = POPULATION_TRANSFER_BLOCKED_HIGH_ACCEPTANCE
+			scope:other_country = {
+				any_scope_state = {
+					any_scope_culture = {
+						is_primary_culture_of = ROOT
+						NOT = { is_primary_culture_of = scope:other_country }
+						PREV = {
+							state_average_culture_pop_acceptance = {
+								culture = prev
+								value < acceptance_status_4
+							}
+						}
+					}
 				}
 			}
 		}
@@ -2390,12 +2412,12 @@ population_transfer = {
 						has_attitude = { who = scope:other_country attitude = belligerent }
 					}
 				}
-				add = 0.1
+				add = 0.05
 			}
 			# More likely after wars or with domineering attitude
 			if = {
 				limit = { has_attitude = { who = scope:other_country attitude = domineering } }
-				add = 0.15
+				add = 0.08
 			}
 			# Ethno-nationalists want their people back
 			if = {
@@ -2408,7 +2430,7 @@ population_transfer = {
 						is_in_government = yes
 					}
 				}
-				add = 0.15
+				add = 0.08
 			}
 			# Don't impose on friends
 			if = {
@@ -2420,7 +2442,7 @@ population_transfer = {
 						has_attitude = { who = scope:other_country attitude = loyal }
 					}
 				}
-				add = -0.5
+				add = -0.25
 			}
 		}
 		inherent_accept_score = {

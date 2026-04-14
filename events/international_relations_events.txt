@@ -814,9 +814,8 @@ international_relations_events.8 = {
 
 	immediate = {
 		save_scope_as = nuclear_opponent
-		random_country = {
+		random_rival_country = {
 			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
 				has_modifier = nuclear_power
 			}
 			save_scope_as = nuclear_rival

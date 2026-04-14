@@ -54,6 +54,7 @@ ruler_is_cautious = {
 
 # Country scope: True if this specific enemy (scope:country) previously nuked us
 was_nuked_by_enemy = {
+	exists = scope:country
 	has_variable = nuked_by_country
 	var:nuked_by_country = scope:country
 }

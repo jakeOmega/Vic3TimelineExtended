@@ -148,19 +148,19 @@ free_port_concession = {
 						has_law = law_type:law_free_trade
 					}
 				}
-				add = 0.05
+				add = 0.01
 			}
 			if = {
 				limit = {
 					has_attitude = { who = scope:other_country attitude = domineering }
 				}
-				add = 0.1
+				add = 0.02
 			}
 			if = {
 				limit = {
 					country_rank >= rank_value:great_power
 				}
-				add = 0.05
+				add = 0.01
 			}
 			# Friendly nations don't impose this on friends
 			if = {
@@ -170,7 +170,7 @@ free_port_concession = {
 						has_attitude = { who = scope:other_country attitude = cooperative }
 					}
 				}
-				add = -0.15
+				add = -0.05
 			}
 		}
 
