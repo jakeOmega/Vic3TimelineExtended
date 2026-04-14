@@ -3729,3 +3729,5 @@
  forced_law_through_event_enactment_small_desc:0 "A small enactment boost from forcing a law through by event."
  heir_education_event_cooldown:0 "Education Event Cooldown"
  heir_education_event_cooldown_desc:0 "The heir's education continues without interruption for the time being."
+ nuclear_event_prestige:0 "Nuclear Achievement"
+ nuclear_event_prestige_desc:0 "This country's nuclear capabilities have affected its standing in the eyes of the world."

@@ -621,8 +621,20 @@ cultural_hegemony.7 = {
 			weight = {
 				base = 1
 				modifier = {
-					trigger = { always = yes }
-					add = var:ch_total
+					var:ch_total >= 25
+					add = 10
+				}
+				modifier = {
+					var:ch_total >= 50
+					add = 15
+				}
+				modifier = {
+					var:ch_total >= 75
+					add = 25
+				}
+				modifier = {
+					var:ch_total >= 100
+					add = 50
 				}
 			}
 			save_scope_as = cultural_hegemon
@@ -1340,8 +1352,20 @@ cultural_hegemony.14 = {
 			weight = {
 				base = 1
 				modifier = {
-					trigger = { always = yes }
-					add = var:ch_total
+					var:ch_total >= 25
+					add = 10
+				}
+				modifier = {
+					var:ch_total >= 50
+					add = 15
+				}
+				modifier = {
+					var:ch_total >= 75
+					add = 25
+				}
+				modifier = {
+					var:ch_total >= 100
+					add = 50
 				}
 			}
 			save_scope_as = cultural_hegemon
@@ -1503,8 +1527,20 @@ cultural_hegemony.15 = {
 			weight = {
 				base = 1
 				modifier = {
-					trigger = { always = yes }
-					add = var:ch_total
+					var:ch_total >= 25
+					add = 10
+				}
+				modifier = {
+					var:ch_total >= 50
+					add = 15
+				}
+				modifier = {
+					var:ch_total >= 75
+					add = 25
+				}
+				modifier = {
+					var:ch_total >= 100
+					add = 50
 				}
 			}
 			save_scope_as = cultural_hegemon

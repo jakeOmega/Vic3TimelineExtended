@@ -1591,16 +1591,26 @@ banking_cycle_spread_contagion = {
 
 		random = {
 			chance = 25
-			# GDP weight: larger source economy -> higher contagion chance
+			# GDP weight tiers: larger source -> higher contagion chance (approximates [0,50] range)
+			# origin GDP >= affected GDP (same size or bigger)
 			modifier = {
-				trigger = { always = yes }
-				add = {
-					value = scope:banking_crash_origin_country.gdp
-					divide = { value = gdp min = 1 }
-					min = 0
-					max = 10
-					multiply = 5
-				}
+				trigger = { scope:banking_crash_origin_country.gdp >= gdp }
+				add = 5
+			}
+			# origin GDP >= 2x affected
+			modifier = {
+				trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_2x }
+				add = 10
+			}
+			# origin GDP >= 5x affected
+			modifier = {
+				trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_5x }
+				add = 15
+			}
+			# origin GDP >= 10x affected
+			modifier = {
+				trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_10x }
+				add = 20
 			}
 			# Same market = strongest contagion channel
 			modifier = {

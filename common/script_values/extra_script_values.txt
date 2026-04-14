@@ -1567,6 +1567,8 @@ banking_contagion_min_source_gdp = {
 }
 
 # GDP weight for contagion chance: source GDP / target GDP, clamped [0, 10], * 5
+# NOTE: Cannot be used in random/random_country modifier add = (engine rejects SVs there).
+# Use tiered trigger comparisons in banking_cycle_effects.txt instead.
 banking_contagion_gdp_weight = {
 	value = scope:banking_crash_origin_country.gdp
 	divide = { value = gdp min = 1 }
@@ -1574,6 +1576,11 @@ banking_contagion_gdp_weight = {
 	max = 10
 	multiply = 5
 }
+
+# Tiered GDP thresholds for contagion chance modifiers (used in trigger comparisons)
+banking_contagion_gdp_threshold_2x = { value = gdp multiply = 2 }
+banking_contagion_gdp_threshold_5x = { value = gdp multiply = 5 }
+banking_contagion_gdp_threshold_10x = { value = gdp multiply = 10 }
 
 # Current country's GDP (for crisis wave tracking).
 this_country_gdp_value = {
@@ -1747,17 +1754,42 @@ state_population_density = {
 	}
 }
 
-# Computed migration crowding penalty for current state (state scope).
-# 0 at density floor, max_mult at density ceiling, linear interpolation.
-migration_crowding_mult = {
+# Ratio of how far density is between floor and ceiling (0 to 1, capped).
+# Used as an intermediate value for S-curve scaling.
+migration_crowding_ratio = {
 	value = state_population_density
 	subtract = migration_crowding_density_floor
-	min = 0  # no penalty below floor
+	min = 0
 	divide = {
 		value = migration_crowding_density_ceiling
 		subtract = migration_crowding_density_floor
 		min = 1
 	}
+	min = 0
+	max = 1
+}
+
+# r² intermediate for smoothstep computation
+migration_crowding_ratio_sq = {
+	value = migration_crowding_ratio
+	multiply = migration_crowding_ratio
+}
+
+# Computed migration crowding penalty for current state (state scope).
+# Uses SMOOTHSTEP S-curve: 3r² - 2r³ = r² × (3 - 2r)
+# Gentle at both ends, steep through the middle (inflection at r=0.5).
+#   ratio 0.1 → 2.8% of max,  ratio 0.3 → 21.6%,  ratio 0.5 → 50%,
+#   ratio 0.7 → 78.4%,  ratio 0.9 → 97.2%,  ratio 1.0 → 100%
+migration_crowding_mult = {
+	value = migration_crowding_ratio_sq  # r²
+	multiply = {
+		value = 3
+		subtract = {
+			value = migration_crowding_ratio
+			multiply = 2
+		}
+	}
+	# now r² × (3 - 2r) = smoothstep S-curve [0,1]→[0,1]
 	multiply = migration_crowding_max_mult
 	min = 0
 	max = migration_crowding_max_mult

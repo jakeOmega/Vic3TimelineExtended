@@ -846,9 +846,12 @@ cb_fx_swap_lines = {
                     country = ROOT
                     value = -5
                 }
-                change_variable = {
-                    name = bubble_pressure
-                    add = 1
+                if = {
+                    limit = { has_variable = bubble_pressure }
+                    change_variable = {
+                        name = bubble_pressure
+                        add = 1
+                    }
                 }
             }
         }

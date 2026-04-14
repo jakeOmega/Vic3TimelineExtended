@@ -5693,6 +5693,12 @@ nuclear_safety_review = {
 	country_tech_spread_add = 0.15
 }
 
+# Nuclear events — prestige from nuclear achievements/diplomacy (base 1, use multiplier)
+nuclear_event_prestige = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_add = 1
+}
+
 # Covert warfare: target hardens defenses after detecting an operation
 covert_op_heightened_vigilance_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds

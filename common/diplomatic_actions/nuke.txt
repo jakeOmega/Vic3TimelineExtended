@@ -11,6 +11,7 @@
 
     potential = {
         has_modifier = nuclear_power
+        NOT = { modifier:nuclear_disarmament = yes }
     }
 
 	possible = {
@@ -44,6 +45,7 @@
     }
 
 	second_state_trigger = {
+        exists = scope:country
         owner = {
             has_war_with = scope:country
         }
@@ -51,9 +53,12 @@
     
 	accept_effect = {
         save_scope_as = attacking_country
-        scope:second_state = {
-            save_scope_as = target_state
-            nuclear_first_stike = yes
+        if = {
+            limit = { exists = scope:second_state }
+            scope:second_state = {
+                save_scope_as = target_state
+                nuclear_first_stike = yes
+            }
         }
     }
 
@@ -146,8 +151,14 @@
         }
 
 		propose_score = {
-            scope:second_state = {
-                value = nuclear_industrial_strike_target_score
+            value = 0
+            if = {
+                limit = { exists = scope:second_state }
+                add = {
+                    scope:second_state = {
+                        value = nuclear_industrial_strike_target_score
+                    }
+                }
             }
         }
 	}
@@ -167,6 +178,7 @@ tactical_nuke_diplo_action = {
 
     potential = {
         has_modifier = nuclear_power
+        NOT = { modifier:nuclear_disarmament = yes }
     }
 
 	possible = {
@@ -199,6 +211,7 @@ tactical_nuke_diplo_action = {
     }
 
 	second_state_trigger = {
+        exists = scope:country
         owner = {
             has_war_with = scope:country
         }
@@ -211,31 +224,34 @@ tactical_nuke_diplo_action = {
     
 	accept_effect = {
         save_scope_as = attacking_country
-        change_variable = {
-            name = nuclear_weapon_stockpile
-            subtract = 1
-        }
-        scope:second_state = {
-            save_scope_as = target_state
-        }
-        random_list = {
-            0 = {
-                modifier = nuclear_strike_success_chance
-                change_infamy = 10
-                scope:second_state = {
-                    nuclear_tactical_strike = yes
-                }
+        if = {
+            limit = { exists = scope:second_state }
+            change_variable = {
+                name = nuclear_weapon_stockpile
+                subtract = 1
             }
-            0 = {
-                modifier = nuclear_strike_fail_chance
-                scope:country = {
-                    trigger_event = {id = nuclear_weapon_events.7 popup = yes }
-                    change_relations = {
-                        country = ROOT
-                        value = -5
+            scope:second_state = {
+                save_scope_as = target_state
+            }
+            random_list = {
+                0 = {
+                    modifier = nuclear_strike_success_chance
+                    change_infamy = 10
+                    scope:second_state = {
+                        nuclear_tactical_strike = yes
                     }
                 }
-                trigger_event = {id = nuclear_weapon_events.8 popup = yes }
+                0 = {
+                    modifier = nuclear_strike_fail_chance
+                    scope:country = {
+                        trigger_event = {id = nuclear_weapon_events.7 popup = yes }
+                        change_relations = {
+                            country = ROOT
+                            value = -5
+                        }
+                    }
+                    trigger_event = {id = nuclear_weapon_events.8 popup = yes }
+                }
             }
         }
     }
@@ -333,37 +349,40 @@ tactical_nuke_diplo_action = {
 	
 		propose_score = {
             value = 0
-            scope:second_state = {
-                if = {
-                    limit = {
-                        has_building = building_barrack
+            if = {
+                limit = { exists = scope:second_state }
+                scope:second_state = {
+                    if = {
+                        limit = {
+                            has_building = building_barrack
+                        }
+                        add = {
+                            value = b:building_barrack.level
+                            divide = 100
+                        }
                     }
-                    add = {
-                        value = b:building_barrack.level
-                        divide = 100
+                    if = {
+                        limit = {
+                            has_building = building_naval_base
+                        }
+                        add = {
+                            value = b:building_naval_base.level
+                            divide = 100
+                        }
                     }
-                }
-                if = {
-                    limit = {
-                        has_building = building_naval_base
+                    if = {
+                        limit = {
+                            has_building = building_conscription_center
+                        }
+                        add = {
+                            value = b:building_conscription_center.level
+                            divide = 100
+                        }
                     }
-                    add = {
-                        value = b:building_naval_base.level
-                        divide = 100
+                    if = {
+                        limit = { owner = { has_modifier = nuclear_power }}
+                        divide = 1000 # near-zero priority against nuclear-armed targets
                     }
-                }
-                if = {
-                    limit = {
-                        has_building = building_conscription_center
-                    }
-                    add = {
-                        value = b:building_conscription_center.level
-                        divide = 100
-                    }
-                }
-                if = {
-                    limit = { owner = { has_modifier = nuclear_power }}
-                    divide = 1000 # near-zero priority against nuclear-armed targets
                 }
             }
         }

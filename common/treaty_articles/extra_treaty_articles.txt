@@ -1341,6 +1341,22 @@ nuclear_disarmament = {
 			}
 		}
 	}
+
+	# Immediately disarm on treaty ratification — the JE weekly pulse
+	# cleanup cannot be relied on because the JE deactivates (possible
+	# fails) before the pulse fires.
+	on_entry_into_force = {
+		scope:article_options.target_country = {
+			set_variable = { name = nuclear_weapon_stockpile value = 0 }
+			set_variable = { name = nuclear_weapon_program_progress value = 0 }
+			set_variable = { name = nuclear_weapons_program_funding value = 0 }
+			remove_modifier = nuclear_power
+			if = {
+				limit = { has_modifier = nuclear_weapon_program_funding }
+				remove_modifier = nuclear_weapon_program_funding
+			}
+		}
+	}
 }
 
 # ---------------------------------

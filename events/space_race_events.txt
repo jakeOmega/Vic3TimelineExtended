@@ -350,7 +350,6 @@ space_race_events.6 = {
 		add_radicals = { value = small_radicals pop_type = peasants }
 		add_radicals = { value = small_radicals pop_type = machinists }
 	}
-	}
 }
 
 # Event 7: Mars Landing Achievement

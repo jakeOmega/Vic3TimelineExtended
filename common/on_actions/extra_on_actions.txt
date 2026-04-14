@@ -2047,27 +2047,21 @@ free_port_tariff_update_on_action = {
 # These fire immediately when technologies or laws change, so that
 # migration crowding modifiers respond quickly rather than waiting for
 # the next periodic pulse.
-# NOTE: Pollution and free-port modifiers use has_variable in their
-# script values. The engine traces the parent scope chain, so calling
-# them from law scope (root = law) triggers "has_variable: scope doesn't
-# support variables" errors. Only migration crowding (which has no
-# has_variable) is safe to call from the law hook. The full set of
-# state modifiers is refreshed on the periodic state pulses.
+# NOTE: All state modifier updates (migration crowding, pollution,
+# free-port tariffs) use has_variable in their script values. The engine
+# traces the parent scope chain through these root scopes, which don't
+# support variables or produce type mismatches. All state modifier updates
+# are handled by the periodic state pulses instead (within 1 year).
 # ============================================================================
 
-# Country scope. Updates all states owned by the country when a technology
-# is researched, since techs can unlock production methods that carry
-# modifiers such as state_migration_crowding_density_mult.
-# NOTE: Do NOT call te_update_pollution_modifier here. pollution_generation
-# is state-scoped and the engine traces the on_acquired_technology country
-# root scope, producing hundreds of "Wrong scope: country, expected state"
-# errors. Pollution is caught by the periodic state pulse instead.
+# Country scope. Fires when a technology is researched.
+# NOTE: Migration crowding, pollution, and free-port tariff modifiers all
+# use has_variable in their script values. The engine traces the parent
+# scope chain through the on_acquired_technology root scope, causing
+# "Value of wrong type: none" errors for has_variable checks. All state
+# modifier updates are handled by the periodic state pulses instead.
 te_modifier_update_on_technology_on_action = {
 	effect = {
-		every_scope_state = {
-			te_update_migration_crowding_modifier = yes
-			te_update_free_port_tariff = yes
-		}
 	}
 }
 

@@ -18857,8 +18857,8 @@ pm_military_base = {
 
 	building_modifiers = {
 		workforce_scaled = {
-			building_input_small_arms_add = 5
-			building_input_ammunition_add = 5
+			goods_input_small_arms_add = 5
+			goods_input_ammunition_add = 5
 		}
 		level_scaled = {
 			building_employment_soldiers_add = 200
@@ -18894,7 +18894,7 @@ pm_concrete_bunkers = {
 
 	building_modifiers = {
 		workforce_scaled = {
-			building_input_steel_add = 5
+			goods_input_steel_add = 5
 		}
 		level_scaled = {
 			building_employment_laborers_add = 50
@@ -18919,8 +18919,8 @@ pm_hardened_positions = {
 
 	building_modifiers = {
 		workforce_scaled = {
-			building_input_steel_add = 10
-			building_input_explosives_add = 5
+			goods_input_steel_add = 10
+			goods_input_explosives_add = 5
 		}
 		level_scaled = {
 			building_employment_laborers_add = 100
