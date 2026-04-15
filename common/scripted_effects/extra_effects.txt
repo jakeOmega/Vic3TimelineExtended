@@ -1064,16 +1064,13 @@ te_update_pollution_modifier = {
 			limit = { has_modifier = pollution_generation_mult_effect }
 			remove_modifier = pollution_generation_mult_effect
 		}
-		if = {
-			limit = { institution_ministry_of_the_environment_pollution_generation < 0 }
-			add_modifier = {
-				name = pollution_generation_mult_effect
-				multiplier = institution_ministry_of_the_environment_pollution_generation
-			}
-			set_variable = {
-				name = prior_pollution_reduction
-				value = institution_ministry_of_the_environment_pollution_generation
-			}
+		add_modifier = {
+			name = pollution_generation_mult_effect
+			multiplier = institution_ministry_of_the_environment_pollution_generation
+		}
+		set_variable = {
+			name = prior_pollution_reduction
+			value = institution_ministry_of_the_environment_pollution_generation
 		}
 	}
 }

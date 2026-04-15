@@ -296,16 +296,17 @@ power_bloc_mandate_progress_diplomatic_identity = {
 	}
 }
 
-institution_ministry_of_the_environment_pollution_generation = {
-	value = 0
-	if = {
-		limit = { pollution_generation > 0 }
-		add = pollution_generation
-	}
+# pollution generation without modifier
+raw_pollution_generation = {
+	value = pollution_generation
 	if = {
 		limit = { has_variable = prior_pollution_reduction }
-		subtract = var:prior_pollution_reduction
+		subtract =var:prior_pollution_reduction
 	}
+}
+
+institution_ministry_of_the_environment_pollution_generation = {
+	value = raw_pollution_generation
 	multiply = modifier:state_pollution_generation_mult
 }
 

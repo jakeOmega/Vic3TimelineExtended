@@ -16,6 +16,6 @@
 		3 = cultural_hegemony.13 # Lingua Franca (very high pull, rare)
 		8 = cultural_hegemony.14 # Foreign Entertainment Invasion (low pull, influenced)
 		8 = cultural_hegemony.15 # Foreign Education Model (low pull, influenced)
-		10 = cultural_hegemony.16 # Hegemonic Law Pressure (very low pull, ≥10x ratio)
+		15 = cultural_hegemony.16 # Hegemonic Law Pressure (low pull, ≥10x ratio)
 	}
 }

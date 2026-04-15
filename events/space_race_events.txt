@@ -613,6 +613,7 @@ space_race_events.20 = {
 	immediate = {
 		create_character = {
 			save_scope_as = flavor_speaker
+			on_created = { place_character_in_void = 6 }
 		}
 		# Load achiever from capital variable (save-reload safe, capital chain works for loc display)
 		if = {
@@ -692,7 +693,12 @@ space_race_events.20 = {
 	}
 
 	after = {
-		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+		hidden_effect = {
+			if = {
+				limit = { exists = scope:flavor_speaker }
+				scope:flavor_speaker = { kill_character = { hidden = yes } }
+			}
+		}
 	}
 }
 

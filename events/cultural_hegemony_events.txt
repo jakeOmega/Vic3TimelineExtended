@@ -1678,12 +1678,39 @@ cultural_hegemony.16 = {
 			any_active_law = {
 				law_type = {
 					OR = {
+						# Core cultural values
 						is_same_law_group_as = law_type:law_censorship
 						is_same_law_group_as = law_type:law_no_womens_rights
 						is_same_law_group_as = law_type:law_laissez_faire
 						is_same_law_group_as = law_type:law_free_trade
 						is_same_law_group_as = law_type:law_state_religion
 						is_same_law_group_as = law_type:law_worker_protections
+						# Social & human rights
+						is_same_law_group_as = law_type:law_slavery_banned
+						is_same_law_group_as = law_type:law_subjecthood
+						is_same_law_group_as = law_type:law_active_persecution
+						is_same_law_group_as = law_type:law_minority_rights_violent_hostility
+						is_same_law_group_as = law_type:law_child_labor_allowed
+						is_same_law_group_as = law_type:law_punishment_focused_criminal_justice
+						is_same_law_group_as = law_type:law_hindu_caste_enforced
+						# Political system
+						is_same_law_group_as = law_type:law_autocracy
+						is_same_law_group_as = law_type:law_no_police
+						# Economic & labor
+						is_same_law_group_as = law_type:law_guild_system
+						is_same_law_group_as = law_type:law_serfdom
+						is_same_law_group_as = law_type:law_no_social_security
+						is_same_law_group_as = law_type:law_consumption_based_taxation
+						# Education & health
+						is_same_law_group_as = law_type:law_no_schools
+						is_same_law_group_as = law_type:law_no_health_system
+						# Modern cultural norms
+						is_same_law_group_as = law_type:law_no_migration_controls
+						is_same_law_group_as = law_type:law_intrusive_surveillance
+						is_same_law_group_as = law_type:law_primogeniture
+						is_same_law_group_as = law_type:law_total_war
+						is_same_law_group_as = law_type:law_traditional_family_structure
+						is_same_law_group_as = law_type:law_local_vernacular
 					}
 				}
 				ROOT = {
@@ -1697,32 +1724,154 @@ cultural_hegemony.16 = {
 		save_scope_as = ch_target
 		global_var:ch_rank_1 = {
 			save_scope_as = ch_hegemon
-			# Pick a random mismatched law from culturally exportable groups
-			random_active_law = {
-				limit = {
-					law_type = {
-						OR = {
-							is_same_law_group_as = law_type:law_censorship
-							is_same_law_group_as = law_type:law_no_womens_rights
-							is_same_law_group_as = law_type:law_laissez_faire
-							is_same_law_group_as = law_type:law_free_trade
-							is_same_law_group_as = law_type:law_state_religion
-							is_same_law_group_as = law_type:law_worker_protections
+			# Weighted law group selection — high-profile rights issues most likely
+			random_list = {
+				# Tier 1: Core rights & values (highest weight)
+				50 = {
+					trigger = {
+						any_active_law = {
+							law_type = {
+								OR = {
+									is_same_law_group_as = law_type:law_censorship
+									is_same_law_group_as = law_type:law_no_womens_rights
+									is_same_law_group_as = law_type:law_slavery_banned
+									is_same_law_group_as = law_type:law_autocracy
+									is_same_law_group_as = law_type:law_state_religion
+									is_same_law_group_as = law_type:law_child_labor_allowed
+									is_same_law_group_as = law_type:law_active_persecution
+									is_same_law_group_as = law_type:law_minority_rights_violent_hostility
+								}
+							}
+							scope:ch_target = {
+								NOT = { has_law = PREV.law_type }
+							}
 						}
 					}
-					scope:ch_target = {
-						NOT = { has_law = PREV.law_type }
+					random_active_law = {
+						limit = {
+							law_type = {
+								OR = {
+									is_same_law_group_as = law_type:law_censorship
+									is_same_law_group_as = law_type:law_no_womens_rights
+									is_same_law_group_as = law_type:law_slavery_banned
+									is_same_law_group_as = law_type:law_autocracy
+									is_same_law_group_as = law_type:law_state_religion
+									is_same_law_group_as = law_type:law_child_labor_allowed
+									is_same_law_group_as = law_type:law_active_persecution
+									is_same_law_group_as = law_type:law_minority_rights_violent_hostility
+								}
+							}
+							scope:ch_target = {
+								NOT = { has_law = PREV.law_type }
+							}
+						}
+						save_scope_as = ch_pressure_law
+						law_type = {
+							save_scope_as = ch_pressure_law_type
+						}
 					}
 				}
-				save_scope_as = ch_pressure_law
-				law_type = {
-					save_scope_as = ch_pressure_law_type
+				# Tier 2: Significant economic & social policy
+				35 = {
+					trigger = {
+						any_active_law = {
+							law_type = {
+								OR = {
+									is_same_law_group_as = law_type:law_laissez_faire
+									is_same_law_group_as = law_type:law_free_trade
+									is_same_law_group_as = law_type:law_worker_protections
+									is_same_law_group_as = law_type:law_subjecthood
+									is_same_law_group_as = law_type:law_no_social_security
+									is_same_law_group_as = law_type:law_no_schools
+									is_same_law_group_as = law_type:law_no_health_system
+									is_same_law_group_as = law_type:law_punishment_focused_criminal_justice
+									is_same_law_group_as = law_type:law_guild_system
+								}
+							}
+							scope:ch_target = {
+								NOT = { has_law = PREV.law_type }
+							}
+						}
+					}
+					random_active_law = {
+						limit = {
+							law_type = {
+								OR = {
+									is_same_law_group_as = law_type:law_laissez_faire
+									is_same_law_group_as = law_type:law_free_trade
+									is_same_law_group_as = law_type:law_worker_protections
+									is_same_law_group_as = law_type:law_subjecthood
+									is_same_law_group_as = law_type:law_no_social_security
+									is_same_law_group_as = law_type:law_no_schools
+									is_same_law_group_as = law_type:law_no_health_system
+									is_same_law_group_as = law_type:law_punishment_focused_criminal_justice
+									is_same_law_group_as = law_type:law_guild_system
+								}
+							}
+							scope:ch_target = {
+								NOT = { has_law = PREV.law_type }
+							}
+						}
+						save_scope_as = ch_pressure_law
+						law_type = {
+							save_scope_as = ch_pressure_law_type
+						}
+					}
+				}
+				# Tier 3: Supplementary law groups
+				15 = {
+					trigger = {
+						any_active_law = {
+							law_type = {
+								OR = {
+									is_same_law_group_as = law_type:law_no_police
+									is_same_law_group_as = law_type:law_no_migration_controls
+									is_same_law_group_as = law_type:law_serfdom
+									is_same_law_group_as = law_type:law_consumption_based_taxation
+									is_same_law_group_as = law_type:law_intrusive_surveillance
+									is_same_law_group_as = law_type:law_primogeniture
+									is_same_law_group_as = law_type:law_total_war
+									is_same_law_group_as = law_type:law_traditional_family_structure
+									is_same_law_group_as = law_type:law_local_vernacular
+									is_same_law_group_as = law_type:law_hindu_caste_enforced
+								}
+							}
+							scope:ch_target = {
+								NOT = { has_law = PREV.law_type }
+							}
+						}
+					}
+					random_active_law = {
+						limit = {
+							law_type = {
+								OR = {
+									is_same_law_group_as = law_type:law_no_police
+									is_same_law_group_as = law_type:law_no_migration_controls
+									is_same_law_group_as = law_type:law_serfdom
+									is_same_law_group_as = law_type:law_consumption_based_taxation
+									is_same_law_group_as = law_type:law_intrusive_surveillance
+									is_same_law_group_as = law_type:law_primogeniture
+									is_same_law_group_as = law_type:law_total_war
+									is_same_law_group_as = law_type:law_traditional_family_structure
+									is_same_law_group_as = law_type:law_local_vernacular
+									is_same_law_group_as = law_type:law_hindu_caste_enforced
+								}
+							}
+							scope:ch_target = {
+								NOT = { has_law = PREV.law_type }
+							}
+						}
+						save_scope_as = ch_pressure_law
+						law_type = {
+							save_scope_as = ch_pressure_law_type
+						}
+					}
 				}
 			}
 		}
 	}
 
-	# A: Adopt the hegemon's law — governance disruption + nationalist backlash
+	# A: Adopt the hegemon's law — governance disruption
 	option = {
 		name = cultural_hegemony.16.a
 		default_option = yes
@@ -1738,17 +1887,9 @@ cultural_hegemony.16 = {
 			is_decaying = yes
 		} }
 
-		# Traditionalist backlash
-		every_scope_state = {
-			limit = { state_population > 100000 }
-			add_radicals = {
-				interest_group = ig:ig_devout
-				value = medium_radicals
-			}
-			add_radicals = {
-				interest_group = ig:ig_rural_folk
-				value = small_radicals
-			}
+		# General disruption from externally imposed law change
+		add_radicals = {
+			value = medium_radicals
 		}
 
 		if = {
@@ -1761,18 +1902,39 @@ cultural_hegemony.16 = {
 
 		ai_chance = {
 			base = 3
+			# Government IGs that approve of the hegemon's law favor adoption
 			modifier = {
-				trigger = { ig:ig_intelligentsia = { is_in_government = yes } }
+				trigger = {
+					any_interest_group = {
+						is_in_government = yes
+						law_stance = { target = scope:ch_pressure_law_type value > 0 }
+					}
+				}
 				add = 4
 			}
+			# Government IGs that disapprove resist adoption
 			modifier = {
-				trigger = { ig:ig_devout = { is_in_government = yes } }
+				trigger = {
+					any_interest_group = {
+						is_in_government = yes
+						law_stance = { target = scope:ch_pressure_law_type value < 0 }
+					}
+				}
 				add = -3
+			}
+			# Unstable countries avoid disruptive law changes
+			modifier = {
+				trigger = { government_legitimacy < 30 }
+				add = -3
+			}
+			modifier = {
+				trigger = { country_turmoil > 0.25 }
+				add = -2
 			}
 		}
 	}
 
-	# B: Refuse — extended unrest from progressive IGs + legitimacy/turmoil penalty
+	# B: Refuse — defy hegemonic cultural pressure at diplomatic cost
 	option = {
 		name = cultural_hegemony.16.b
 
@@ -1782,17 +1944,12 @@ cultural_hegemony.16 = {
 			is_decaying = yes
 		} }
 
-		# Progressive/cosmopolitan IGs are frustrated by refusal
-		every_scope_state = {
-			limit = { state_population > 100000 }
-			add_radicals = {
-				interest_group = ig:ig_intelligentsia
-				value = medium_radicals
-			}
-			add_radicals = {
-				interest_group = ig:ig_trade_unions
-				value = small_radicals
-			}
+		# Diplomatic cost of defying the international order
+		change_infamy = 5
+
+		# Minor general unrest from cosmopolitan elements
+		add_radicals = {
+			value = small_radicals
 		}
 
 		if = {
@@ -1805,13 +1962,34 @@ cultural_hegemony.16 = {
 
 		ai_chance = {
 			base = 5
+			# Government IGs that approve of the law don't want to refuse it
 			modifier = {
-				trigger = { ig:ig_devout = { is_in_government = yes } }
+				trigger = {
+					any_interest_group = {
+						is_in_government = yes
+						law_stance = { target = scope:ch_pressure_law_type value > 0 }
+					}
+				}
+				add = -3
+			}
+			# Government IGs that disapprove of the law support refusal
+			modifier = {
+				trigger = {
+					any_interest_group = {
+						is_in_government = yes
+						law_stance = { target = scope:ch_pressure_law_type value < 0 }
+					}
+				}
 				add = 3
 			}
+			# Unstable countries prefer refusing over disruptive law change
 			modifier = {
-				trigger = { ig:ig_intelligentsia = { is_in_government = yes } }
-				add = -2
+				trigger = { government_legitimacy < 30 }
+				add = 2
+			}
+			modifier = {
+				trigger = { country_turmoil > 0.25 }
+				add = 2
 			}
 		}
 	}

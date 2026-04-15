@@ -5660,6 +5660,7 @@ ch_hegemonic_law_resistance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_legitimacy_base_add = -5
 	state_turmoil_effects_mult = 0.15
+	state_trade_advantage_mult = -0.1
 }
 
 # ============================================================================
