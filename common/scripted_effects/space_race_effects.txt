@@ -244,8 +244,8 @@ sr_notify_milestone_achievement = {
 				NOT = { THIS = scope:sr_achiever }
 				is_country_type = recognized
 			}
-			# Store achiever and milestone on each receiver for save-reload safety
-			set_variable = { name = sr_notify_achiever value = scope:sr_achiever }
+			# Store achiever capital on each receiver (capital chain is save-reload safe for loc display)
+			set_variable = { name = sr_notify_achiever_capital value = scope:sr_achiever.capital }
 			set_variable = { name = sr_notify_$MILESTONE$ value = yes }
 			if = {
 				limit = { exists = scope:sr_is_first }

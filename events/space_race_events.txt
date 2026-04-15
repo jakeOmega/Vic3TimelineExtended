@@ -611,11 +611,14 @@ space_race_events.20 = {
 	trigger = { }
 
 	immediate = {
-		# Load achiever from variable (save-reload safe)
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+		# Load achiever from capital variable (save-reload safe, capital chain works for loc display)
 		if = {
-			limit = { has_variable = sr_notify_achiever }
-			var:sr_notify_achiever = { save_scope_as = sr_achiever }
-			remove_variable = sr_notify_achiever
+			limit = { has_variable = sr_notify_achiever_capital }
+			var:sr_notify_achiever_capital = { owner = { save_scope_as = sr_achiever } }
+			remove_variable = sr_notify_achiever_capital
 		}
 		# Check if world first
 		if = {
@@ -686,6 +689,10 @@ space_race_events.20 = {
 			limit = { exists = scope:sr_achiever }
 			change_relations = { country = scope:sr_achiever value = 10 }
 		}
+	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
 	}
 }
 

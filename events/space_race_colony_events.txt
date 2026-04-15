@@ -29,7 +29,11 @@ space_race_colony_events.1 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.1.a
@@ -49,6 +53,10 @@ space_race_colony_events.1 = {
 		add_loyalists = { value = small_radicals }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 2: Mars - Olympus Mons
@@ -66,7 +74,11 @@ space_race_colony_events.2 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.2.a
@@ -86,6 +98,10 @@ space_race_colony_events.2 = {
 		add_loyalists = { value = small_radicals }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 3: Mars - Hellas Planitia
@@ -103,7 +119,11 @@ space_race_colony_events.3 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.3.a
@@ -124,6 +144,10 @@ space_race_colony_events.3 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 4: Mars - Utopia Planitia
@@ -141,7 +165,11 @@ space_race_colony_events.4 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.4.a
@@ -161,6 +189,10 @@ space_race_colony_events.4 = {
 		add_loyalists = { value = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = farmers }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 5: Mars - Arcadia Planitia
@@ -178,7 +210,11 @@ space_race_colony_events.5 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.5.a
@@ -199,6 +235,10 @@ space_race_colony_events.5 = {
 		add_loyalists = { value = small_radicals pop_type = soldiers }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 6: Ceres
@@ -216,7 +256,11 @@ space_race_colony_events.6 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.6.a
@@ -237,6 +281,10 @@ space_race_colony_events.6 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 7: 4 Vesta
@@ -254,7 +302,11 @@ space_race_colony_events.7 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.7.a
@@ -275,6 +327,10 @@ space_race_colony_events.7 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 8: 16 Psyche
@@ -292,7 +348,11 @@ space_race_colony_events.8 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.8.a
@@ -313,6 +373,10 @@ space_race_colony_events.8 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 9: 2 Pallas
@@ -330,7 +394,11 @@ space_race_colony_events.9 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.9.a
@@ -351,6 +419,10 @@ space_race_colony_events.9 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 10: 10 Hygiea
@@ -368,7 +440,11 @@ space_race_colony_events.10 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.10.a
@@ -388,6 +464,10 @@ space_race_colony_events.10 = {
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals pop_type = machinists }
 		add_loyalists = { value = small_radicals }
+	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
 	}
 }
 
@@ -410,7 +490,11 @@ space_race_colony_events.11 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.11.a
@@ -431,6 +515,10 @@ space_race_colony_events.11 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 12: Europa
@@ -448,7 +536,11 @@ space_race_colony_events.12 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.12.a
@@ -468,6 +560,10 @@ space_race_colony_events.12 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 13: Ganymede
@@ -485,7 +581,11 @@ space_race_colony_events.13 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.13.a
@@ -507,6 +607,10 @@ space_race_colony_events.13 = {
 		add_loyalists = { value = small_radicals pop_type = bureaucrats }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 14: Callisto
@@ -524,7 +628,11 @@ space_race_colony_events.14 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.14.a
@@ -545,6 +653,10 @@ space_race_colony_events.14 = {
 		add_loyalists = { value = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = farmers }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 15: Himalia
@@ -562,7 +674,11 @@ space_race_colony_events.15 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.15.a
@@ -583,6 +699,10 @@ space_race_colony_events.15 = {
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 16: Amalthea
@@ -600,7 +720,11 @@ space_race_colony_events.16 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.16.a
@@ -621,6 +745,10 @@ space_race_colony_events.16 = {
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 17: Venus Cloud Colony
@@ -638,7 +766,11 @@ space_race_colony_events.17 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.17.a
@@ -659,6 +791,10 @@ space_race_colony_events.17 = {
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals }
+	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
 	}
 }
 
@@ -681,7 +817,11 @@ space_race_colony_events.18 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.18.a
@@ -702,6 +842,10 @@ space_race_colony_events.18 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 19: Titan
@@ -719,7 +863,11 @@ space_race_colony_events.19 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.19.a
@@ -740,6 +888,10 @@ space_race_colony_events.19 = {
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 20: Enceladus
@@ -757,7 +909,11 @@ space_race_colony_events.20 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.20.a
@@ -777,6 +933,10 @@ space_race_colony_events.20 = {
 		add_loyalists = { value = medium_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 21: Rhea
@@ -794,7 +954,11 @@ space_race_colony_events.21 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.21.a
@@ -815,6 +979,10 @@ space_race_colony_events.21 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 22: Mimas
@@ -832,7 +1000,11 @@ space_race_colony_events.22 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.22.a
@@ -852,6 +1024,10 @@ space_race_colony_events.22 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 23: Iapetus
@@ -869,7 +1045,11 @@ space_race_colony_events.23 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.23.a
@@ -889,6 +1069,10 @@ space_race_colony_events.23 = {
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals }
+	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
 	}
 }
 
@@ -911,7 +1095,11 @@ space_race_colony_events.24 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.24.a
@@ -931,6 +1119,10 @@ space_race_colony_events.24 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 25: Oberon
@@ -948,7 +1140,11 @@ space_race_colony_events.25 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.25.a
@@ -969,6 +1165,10 @@ space_race_colony_events.25 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 26: Miranda
@@ -986,7 +1186,11 @@ space_race_colony_events.26 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.26.a
@@ -1007,6 +1211,10 @@ space_race_colony_events.26 = {
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 27: Ariel
@@ -1024,7 +1232,11 @@ space_race_colony_events.27 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.27.a
@@ -1045,6 +1257,10 @@ space_race_colony_events.27 = {
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 28: Triton
@@ -1062,7 +1278,11 @@ space_race_colony_events.28 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.28.a
@@ -1084,6 +1304,10 @@ space_race_colony_events.28 = {
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 29: Proteus
@@ -1101,7 +1325,11 @@ space_race_colony_events.29 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.29.a
@@ -1122,6 +1350,10 @@ space_race_colony_events.29 = {
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals pop_type = machinists }
 		add_loyalists = { value = small_radicals }
+	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
 	}
 }
 
@@ -1144,7 +1376,11 @@ space_race_colony_events.30 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.30.a
@@ -1166,6 +1402,10 @@ space_race_colony_events.30 = {
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 31: Eris
@@ -1183,7 +1423,11 @@ space_race_colony_events.31 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.31.a
@@ -1204,6 +1448,10 @@ space_race_colony_events.31 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 32: Makemake
@@ -1221,7 +1469,11 @@ space_race_colony_events.32 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.32.a
@@ -1242,6 +1494,10 @@ space_race_colony_events.32 = {
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 33: Haumea
@@ -1259,7 +1515,11 @@ space_race_colony_events.33 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.33.a
@@ -1280,6 +1540,10 @@ space_race_colony_events.33 = {
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals }
 	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
+	}
 }
 
 # Colony 34: Sedna
@@ -1297,7 +1561,11 @@ space_race_colony_events.34 = {
 
 	duration = 3
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+		}
+	}
 
 	option = {
 		name = space_race_colony_events.34.a
@@ -1317,5 +1585,9 @@ space_race_colony_events.34 = {
 		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_sedna_interstellar } }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
+	}
+
+	after = {
+		hidden_effect = { scope:flavor_speaker = { kill_character = { hidden = yes } } }
 	}
 }
