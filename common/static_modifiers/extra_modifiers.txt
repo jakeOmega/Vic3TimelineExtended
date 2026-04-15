@@ -2903,6 +2903,7 @@ un_space_partnership_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_institution_impact_institution_ministry_of_science_mult = 0.05
 	country_prestige_mult = 0.05
+	country_space_race_progress_add = 0.1
 }
 
 un_space_independent_modifier = {
@@ -5155,6 +5156,12 @@ me_cyber_defense_modifier = {
 me_campaign_spending_spree_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_legitimacy_govt_total_clout_add = -5
+}
+
+me_media_savvy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_legitimacy_govt_total_clout_add = 5
+	country_prestige_add = 10
 }
 
 me_anti_communist_campaign_modifier = {

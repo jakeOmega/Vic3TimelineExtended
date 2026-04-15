@@ -230,46 +230,46 @@
 			}
 
             # Radicalism adjustments based on climate policy availability/activation
-            # For each policy: -5 if active, +5 if the matching button is possible but not active
+            # For each policy: -0.1 if active, +0.1 if the matching button is possible but not active
             if = { # Carbon tax
                 limit = { has_journal_entry = je_global_warming je:je_global_warming = { has_modifier = carbon_tax_modifier } }
-                add = { value = -5 desc = "POLICY_ACTIVE_CARBON_TAX" }
+                add = { value = -0.1 desc = "POLICY_ACTIVE_CARBON_TAX" }
             }
             else_if = {
                 limit = {
                     temperature_anomaly_display >= 0.5
                     market_capital.owner = THIS
                 }
-                add = { value = 5 desc = "POLICY_POSSIBLE_CARBON_TAX" }
+                add = { value = 0.1 desc = "POLICY_POSSIBLE_CARBON_TAX" }
             }
 
             if = { # Renewable investment
                 limit = { has_journal_entry = je_global_warming je:je_global_warming = { has_modifier = renewable_investment_modifier } }
-                add = { value = -5 desc = "POLICY_ACTIVE_RENEWABLE_INVESTMENT" }
+                add = { value = -0.1 desc = "POLICY_ACTIVE_RENEWABLE_INVESTMENT" }
             }
             else_if = {
                 limit = {
                     temperature_anomaly_display >= 0.5
                     market_capital.owner = THIS
                 }
-                add = { value = 5 desc = "POLICY_POSSIBLE_RENEWABLE_INVESTMENT" }
+                add = { value = 0.1 desc = "POLICY_POSSIBLE_RENEWABLE_INVESTMENT" }
             }
 
             if = { # Climate adaptation
                 limit = { has_journal_entry = je_global_warming je:je_global_warming = { has_modifier = climate_adaptation_modifier } }
-                add = { value = -5 desc = "POLICY_ACTIVE_CLIMATE_ADAPTATION" }
+                add = { value = -0.1 desc = "POLICY_ACTIVE_CLIMATE_ADAPTATION" }
             }
             else_if = {
                 limit = {
                     adjusted_produced_authority > 250
                     temperature_anomaly_display >= 0.5
                 }
-                add = { value = 5 desc = "POLICY_POSSIBLE_CLIMATE_ADAPTATION" }
+                add = { value = 0.1 desc = "POLICY_POSSIBLE_CLIMATE_ADAPTATION" }
             }
 
             if = { # Emission standards
                 limit = { has_journal_entry = je_global_warming je:je_global_warming = { has_modifier = emission_standards_modifier } }
-                add = { value = -5 desc = "POLICY_ACTIVE_EMISSION_STANDARDS" }
+                add = { value = -0.1 desc = "POLICY_ACTIVE_EMISSION_STANDARDS" }
             }
             else_if = {
                 limit = {
@@ -277,43 +277,43 @@
                     market_capital.owner = THIS
                     adjusted_produced_authority > 200
                 }
-                add = { value = 5 desc = "POLICY_POSSIBLE_EMISSION_STANDARDS" }
+                add = { value = 0.1 desc = "POLICY_POSSIBLE_EMISSION_STANDARDS" }
             }
 
             if = { # Reforestation subsidies
                 limit = { has_journal_entry = je_global_warming je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } }
-                add = { value = -5 desc = "POLICY_ACTIVE_REFORESTATION_SUBSIDIES" }
+                add = { value = -0.1 desc = "POLICY_ACTIVE_REFORESTATION_SUBSIDIES" }
             }
             else_if = {
                 limit = {
                     temperature_anomaly_display >= 0.5
                     adjusted_produced_authority > 100
                 }
-                add = { value = 5 desc = "POLICY_POSSIBLE_REFORESTATION_SUBSIDIES" }
+                add = { value = 0.1 desc = "POLICY_POSSIBLE_REFORESTATION_SUBSIDIES" }
             }
 
             if = { # Public transit
                 limit = { has_journal_entry = je_global_warming je:je_global_warming = { has_modifier = public_transit_modifier } }
-                add = { value = -5 desc = "POLICY_ACTIVE_PUBLIC_TRANSIT" }
+                add = { value = -0.1 desc = "POLICY_ACTIVE_PUBLIC_TRANSIT" }
             }
             else_if = {
                 limit = {
                     temperature_anomaly_display >= 0.5
                     adjusted_produced_authority > 150
                 }
-                add = { value = 5 desc = "POLICY_POSSIBLE_PUBLIC_TRANSIT" }
+                add = { value = 0.1 desc = "POLICY_POSSIBLE_PUBLIC_TRANSIT" }
             }
 
             if = { # Fossil fuel divestment
                 limit = { has_journal_entry = je_global_warming je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } }
-                add = { value = -5 desc = "POLICY_ACTIVE_FOSSIL_FUEL_DIVESTMENT" }
+                add = { value = -0.1 desc = "POLICY_ACTIVE_FOSSIL_FUEL_DIVESTMENT" }
             }
             else_if = {
                 limit = {
                     temperature_anomaly_display >= 1.0
                     adjusted_produced_authority > 200
                 }
-                add = { value = 5 desc = "POLICY_POSSIBLE_FOSSIL_FUEL_DIVESTMENT" }
+                add = { value = 0.1 desc = "POLICY_POSSIBLE_FOSSIL_FUEL_DIVESTMENT" }
             }
 		}
     }

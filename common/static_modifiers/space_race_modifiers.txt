@@ -1,11 +1,16 @@
-﻿# ======= Space Race - Approach Modifiers (applied while approach is active)
+﻿# ======= Space Race - Approach Modifiers (applied per-JE when approach is selected)
 sr_safe_approach = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_weekly_innovation_add = -15
+	country_space_race_risk_mult = -0.5
 }
 sr_ambitious_approach = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_weekly_innovation_add = -30
+	country_space_race_progress_mult = 0.5
+}
+# ======= Space Race - Funding Progress Modifier (applied per-JE, multiplier = funding level)
+sr_funding_progress = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_space_race_progress_add = 0.5
 }
 
 # ======= Space Race - Milestone Achievement Modifiers (First Nation)
@@ -169,12 +174,37 @@ sr_improved_safety_protocols = {
 }
 
 # ======= Space Race - Late-Game Economic Modifiers
-sr_interstellar_data = {
+# Category-specific modifiers based on interstellar probe discovery
+# Cat I: Dead Worlds & Data (common, 40% chance)
+sr_probe_dead_worlds_data = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_prestige_add = 300
+	country_tech_research_speed_mult = 0.05
+	country_weekly_innovation_max_add = 50
+}
+# Cat II: Astrophysical Wonders (uncommon, 30% chance)
+sr_probe_astro_wonders_data = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_prestige_add = 500
-	country_tech_research_speed_mult = 0.10
-	country_weekly_innovation_max_add = 100
-	country_cultural_pull_mult = 0.15
+	country_tech_research_speed_mult = 0.08
+	country_weekly_innovation_max_add = 75
+	country_cultural_pull_mult = 0.10
+}
+# Cat III: Biological Discovery (rare, 20% chance)
+sr_probe_biological_data = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_prestige_add = 750
+	country_tech_research_speed_mult = 0.12
+	country_weekly_innovation_max_add = 125
+	country_cultural_pull_mult = 0.20
+}
+# Cat IV: Intelligence & Tech-signatures (very rare, 10% chance)
+sr_probe_intelligence_data = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_prestige_add = 1000
+	country_tech_research_speed_mult = 0.15
+	country_weekly_innovation_max_add = 200
+	country_cultural_pull_mult = 0.30
 }
 sr_solar_system_trade = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds

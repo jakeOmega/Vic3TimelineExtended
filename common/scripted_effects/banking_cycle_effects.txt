@@ -1451,14 +1451,17 @@ banking_cycle_advance_variables = {
 		25 = {
 			modifier = {
 				value = var:finance_cycle_value
+				subtract = 50
+				divide = 5
 			}
 			change_variable = { name = finance_cycle_momentum add = banking_random_nudge_down_value }
 		}
 		50 = { }
 		25 = {
 			modifier = {
-				value = 100
+				value = 50
 				subtract = var:finance_cycle_value
+				divide = 5
 			}
 			change_variable = { name = finance_cycle_momentum add = banking_random_nudge_up_value }
 		}

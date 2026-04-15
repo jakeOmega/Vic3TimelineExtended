@@ -176,6 +176,7 @@ space_exploration = {
 		country_prestige_mult = 0.2
 		country_weekly_innovation_max_add = 50
 		country_institution_ministry_of_science_max_investment_add = 1
+		country_space_race_max_funding_add = 1
 	}
 	
 	ai_weight = {

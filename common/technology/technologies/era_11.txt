@@ -170,6 +170,7 @@ directed_energy_weapons = {
 
 	modifier = {
 		state_building_naval_base_max_level_add = 40
+		country_space_race_max_funding_add = 1
 	}
 	
 	ai_weight = {
@@ -284,6 +285,10 @@ asteroid_mining = {
 	unlocking_technologies = {	
 		reusable_rocketry
 		directed_energy_weapons
+	}
+
+	modifier = {
+		country_space_race_max_funding_add = 1
 	}
 	
 	ai_weight = {

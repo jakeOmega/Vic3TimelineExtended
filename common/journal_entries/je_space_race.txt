@@ -90,59 +90,46 @@ je_space_race_suborbital = {
 
 	on_fail = {
 		trigger_event = { id = space_race_events.76 }
-		if = { limit = { has_variable = sr_active_suborbital } remove_variable = sr_active_suborbital }
-		if = { limit = { has_variable = sr_progress_suborbital } remove_variable = sr_progress_suborbital }
-		if = { limit = { has_variable = sr_funding_suborbital } remove_variable = sr_funding_suborbital }
-		if = { limit = { has_variable = sr_safe_suborbital } remove_variable = sr_safe_suborbital }
-		if = { limit = { has_variable = sr_ambitious_suborbital } remove_variable = sr_ambitious_suborbital }
-		sr_recalculate_cost = yes
+		custom_tooltip = {
+			text = sr_milestone_fail_cleanup_tt
+			if = { limit = { has_variable = sr_active_suborbital } remove_variable = sr_active_suborbital }
+			if = { limit = { has_variable = sr_progress_suborbital } remove_variable = sr_progress_suborbital }
+			if = { limit = { has_variable = sr_funding_suborbital } remove_variable = sr_funding_suborbital }
+			if = { limit = { has_variable = sr_safe_suborbital } remove_variable = sr_safe_suborbital }
+			if = { limit = { has_variable = sr_ambitious_suborbital } remove_variable = sr_ambitious_suborbital }
+			sr_recalculate_cost = yes
+		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
 			if = {
 				limit = { sr_ai_should_participate = yes }
-				# Set funding proxy for script value calculation
-				set_variable = { name = sr_funding_level value = var:sr_funding_suborbital }
 				# Progress based on approach
 				if = {
-					limit = { has_variable = sr_ambitious_suborbital }
-					change_variable = {
-						name = sr_progress_suborbital
-						add = sr_ambitious_progress
+					limit = {
+						OR = {
+							has_variable = sr_safe_suborbital
+							has_variable = sr_ambitious_suborbital
+						}
 					}
-					# Failure check for ambitious approach
+					change_variable = { name = sr_progress_suborbital add = sr_progress }
 					if = {
-						limit = {
-							NOT = { sr_has_failure_cooldown = yes }
-						}
+						limit = { NOT = { sr_has_failure_cooldown = yes } }
+						set_variable = { name = sr_base_risk value = 5 }
 						random_list = {
-							95 = { }
-							5 = {
-								change_variable = { name = sr_progress_suborbital multiply = 0.75 }
+							sr_success_weight = { }
+							sr_failure_weight = {
 								set_variable = { name = sr_failed_suborbital value = yes }
-								sr_fire_ambitious_failure_event = yes
-							}
-						}
-					}
-				}
-				else_if = {
-					limit = { has_variable = sr_safe_suborbital }
-					change_variable = {
-						name = sr_progress_suborbital
-						add = sr_safe_progress
-					}
-					# Very small failure chance even for safe
-					if = {
-						limit = {
-							NOT = { sr_has_failure_cooldown = yes }
-						}
-						random_list = {
-							98 = { }
-							2 = {
-								change_variable = { name = sr_progress_suborbital multiply = 0.85 }
-								set_variable = { name = sr_failed_suborbital value = yes }
-								sr_fire_safe_setback_event = yes
+								if = {
+									limit = { has_variable = sr_ambitious_suborbital }
+									change_variable = { name = sr_progress_suborbital multiply = 0.75 }
+									sr_fire_ambitious_failure_event = yes
+								}
+								else = {
+									change_variable = { name = sr_progress_suborbital multiply = 0.85 }
+									sr_fire_safe_setback_event = yes
+								}
 							}
 						}
 					}
@@ -249,62 +236,55 @@ je_space_race_orbital = {
 
 	on_fail = {
 		trigger_event = { id = space_race_events.76 }
-		if = { limit = { has_variable = sr_active_orbital } remove_variable = sr_active_orbital }
-		if = { limit = { has_variable = sr_progress_orbital } remove_variable = sr_progress_orbital }
-		if = { limit = { has_variable = sr_funding_orbital } remove_variable = sr_funding_orbital }
-		if = { limit = { has_variable = sr_safe_orbital } remove_variable = sr_safe_orbital }
-		if = { limit = { has_variable = sr_ambitious_orbital } remove_variable = sr_ambitious_orbital }
-		sr_recalculate_cost = yes
+		custom_tooltip = {
+			text = sr_milestone_fail_cleanup_tt
+			if = { limit = { has_variable = sr_active_orbital } remove_variable = sr_active_orbital }
+			if = { limit = { has_variable = sr_progress_orbital } remove_variable = sr_progress_orbital }
+			if = { limit = { has_variable = sr_funding_orbital } remove_variable = sr_funding_orbital }
+			if = { limit = { has_variable = sr_safe_orbital } remove_variable = sr_safe_orbital }
+			if = { limit = { has_variable = sr_ambitious_orbital } remove_variable = sr_ambitious_orbital }
+			sr_recalculate_cost = yes
+		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
 			if = {
 				limit = { sr_ai_should_participate = yes }
-			# Set funding proxy for script value calculation
-			set_variable = { name = sr_funding_level value = var:sr_funding_orbital }
 			if = {
-				limit = { has_variable = sr_ambitious_orbital }
-				change_variable = {
-					name = sr_progress_orbital
-					add = sr_ambitious_progress
+				limit = {
+					OR = {
+						has_variable = sr_safe_orbital
+						has_variable = sr_ambitious_orbital
+					}
 				}
+				change_variable = { name = sr_progress_orbital add = sr_progress }
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					set_variable = { name = sr_base_risk value = 6 }
 					random_list = {
-						94 = { }
-						6 = {
-							change_variable = { name = sr_progress_orbital multiply = 0.75 }
+						sr_success_weight = { }
+						sr_failure_weight = {
 							set_variable = { name = sr_failed_orbital value = yes }
-							sr_fire_ambitious_failure_event = yes
+							if = {
+								limit = { has_variable = sr_ambitious_orbital }
+								change_variable = { name = sr_progress_orbital multiply = 0.75 }
+								sr_fire_ambitious_failure_event = yes
+							}
+							else = {
+								change_variable = { name = sr_progress_orbital multiply = 0.85 }
+								sr_fire_safe_setback_event = yes
+							}
 						}
 					}
 				}
 			}
-			else_if = {
-				limit = { has_variable = sr_safe_orbital }
-				change_variable = {
-					name = sr_progress_orbital
-					add = sr_safe_progress
-				}
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					random_list = {
-						97 = { }
-						3 = {
-							change_variable = { name = sr_progress_orbital multiply = 0.85 }
-							set_variable = { name = sr_failed_orbital value = yes }
-							sr_fire_safe_setback_event = yes
-						}
+				else = {
+					change_variable = {
+						name = sr_progress_orbital
+						add = 0.5
 					}
 				}
-			}
-			else = {
-				change_variable = {
-					name = sr_progress_orbital
-					add = 0.5
-				}
-			}
 			}
 		}
 	}
@@ -411,81 +391,50 @@ je_space_race_moon_landing = {
 
 	on_fail = {
 		trigger_event = { id = space_race_events.76 }
-		if = { limit = { has_variable = sr_active_moon_landing } remove_variable = sr_active_moon_landing }
-		if = { limit = { has_variable = sr_progress_moon_landing } remove_variable = sr_progress_moon_landing }
-		if = { limit = { has_variable = sr_funding_moon_landing } remove_variable = sr_funding_moon_landing }
-		if = { limit = { has_variable = sr_safe_moon_landing } remove_variable = sr_safe_moon_landing }
-		if = { limit = { has_variable = sr_ambitious_moon_landing } remove_variable = sr_ambitious_moon_landing }
-		sr_recalculate_cost = yes
+		custom_tooltip = {
+			text = sr_milestone_fail_cleanup_tt
+			if = { limit = { has_variable = sr_active_moon_landing } remove_variable = sr_active_moon_landing }
+			if = { limit = { has_variable = sr_progress_moon_landing } remove_variable = sr_progress_moon_landing }
+			if = { limit = { has_variable = sr_funding_moon_landing } remove_variable = sr_funding_moon_landing }
+			if = { limit = { has_variable = sr_safe_moon_landing } remove_variable = sr_safe_moon_landing }
+			if = { limit = { has_variable = sr_ambitious_moon_landing } remove_variable = sr_ambitious_moon_landing }
+			sr_recalculate_cost = yes
+		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
 			if = {
 				limit = { sr_ai_should_participate = yes }
-			# Set funding proxy for script value calculation
-			set_variable = { name = sr_funding_level value = var:sr_funding_moon_landing }
 			if = {
-				limit = { has_variable = sr_ambitious_moon_landing }
-				change_variable = {
-					name = sr_progress_moon_landing
-					add = sr_ambitious_progress
+				limit = {
+					OR = {
+						has_variable = sr_safe_moon_landing
+						has_variable = sr_ambitious_moon_landing
+					}
 				}
-				# Shackleton is riskier
+				change_variable = { name = sr_progress_moon_landing add = sr_progress }
 				if = {
-					limit = {
-						NOT = { sr_has_failure_cooldown = yes }
-						has_variable = sr_moon_site_shackleton
-					}
-					random_list = {
-						91 = { }
-						9 = {
-							change_variable = { name = sr_progress_moon_landing multiply = 0.75 }
-							set_variable = { name = sr_failed_moon_landing value = yes }
-							sr_fire_ambitious_failure_event = yes
-						}
-					}
-				}
-				else_if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					random_list = {
-						94 = { }
-						6 = {
-							change_variable = { name = sr_progress_moon_landing multiply = 0.75 }
-							set_variable = { name = sr_failed_moon_landing value = yes }
-							sr_fire_ambitious_failure_event = yes
-						}
-					}
-				}
-			}
-			else_if = {
-				limit = { has_variable = sr_safe_moon_landing }
-				change_variable = {
-					name = sr_progress_moon_landing
-					add = sr_safe_progress
-				}
-				if = {
-					limit = {
-						NOT = { sr_has_failure_cooldown = yes }
-						has_variable = sr_moon_site_shackleton
+					# Shackleton crater is riskier (base 9 vs 6)
+					set_variable = { name = sr_base_risk value = 6 }
+					if = {
+						limit = { has_variable = sr_moon_site_shackleton }
+						set_variable = { name = sr_base_risk value = 9 }
 					}
 					random_list = {
-						94 = { }
-						6 = {
-							change_variable = { name = sr_progress_moon_landing multiply = 0.85 }
+						sr_success_weight = { }
+						sr_failure_weight = {
 							set_variable = { name = sr_failed_moon_landing value = yes }
-							sr_fire_safe_setback_event = yes
-						}
-					}
-				}
-				else_if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					random_list = {
-						97 = { }
-						3 = {
-							change_variable = { name = sr_progress_moon_landing multiply = 0.85 }
-							set_variable = { name = sr_failed_moon_landing value = yes }
-							sr_fire_safe_setback_event = yes
+							if = {
+								limit = { has_variable = sr_ambitious_moon_landing }
+								change_variable = { name = sr_progress_moon_landing multiply = 0.75 }
+								sr_fire_ambitious_failure_event = yes
+							}
+							else = {
+								change_variable = { name = sr_progress_moon_landing multiply = 0.85 }
+								sr_fire_safe_setback_event = yes
+							}
 						}
 					}
 				}
@@ -592,62 +541,55 @@ je_space_race_probe = {
 
 	on_fail = {
 		trigger_event = { id = space_race_events.76 }
-		if = { limit = { has_variable = sr_active_probe } remove_variable = sr_active_probe }
-		if = { limit = { has_variable = sr_progress_probe } remove_variable = sr_progress_probe }
-		if = { limit = { has_variable = sr_funding_probe } remove_variable = sr_funding_probe }
-		if = { limit = { has_variable = sr_safe_probe } remove_variable = sr_safe_probe }
-		if = { limit = { has_variable = sr_ambitious_probe } remove_variable = sr_ambitious_probe }
-		sr_recalculate_cost = yes
+		custom_tooltip = {
+			text = sr_milestone_fail_cleanup_tt
+			if = { limit = { has_variable = sr_active_probe } remove_variable = sr_active_probe }
+			if = { limit = { has_variable = sr_progress_probe } remove_variable = sr_progress_probe }
+			if = { limit = { has_variable = sr_funding_probe } remove_variable = sr_funding_probe }
+			if = { limit = { has_variable = sr_safe_probe } remove_variable = sr_safe_probe }
+			if = { limit = { has_variable = sr_ambitious_probe } remove_variable = sr_ambitious_probe }
+			sr_recalculate_cost = yes
+		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
 			if = {
 				limit = { sr_ai_should_participate = yes }
-			# Set funding proxy for script value calculation
-			set_variable = { name = sr_funding_level value = var:sr_funding_probe }
 			if = {
-				limit = { has_variable = sr_ambitious_probe }
-				change_variable = {
-					name = sr_progress_probe
-					add = sr_ambitious_progress
+				limit = {
+					OR = {
+						has_variable = sr_safe_probe
+						has_variable = sr_ambitious_probe
+					}
 				}
+				change_variable = { name = sr_progress_probe add = sr_progress }
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					set_variable = { name = sr_base_risk value = 6 }
 					random_list = {
-						94 = { }
-						6 = {
-							change_variable = { name = sr_progress_probe multiply = 0.75 }
+						sr_success_weight = { }
+						sr_failure_weight = {
 							set_variable = { name = sr_failed_probe value = yes }
-							sr_fire_ambitious_failure_event = yes
+							if = {
+								limit = { has_variable = sr_ambitious_probe }
+								change_variable = { name = sr_progress_probe multiply = 0.75 }
+								sr_fire_ambitious_failure_event = yes
+							}
+							else = {
+								change_variable = { name = sr_progress_probe multiply = 0.85 }
+								sr_fire_safe_setback_event = yes
+							}
 						}
 					}
 				}
 			}
-			else_if = {
-				limit = { has_variable = sr_safe_probe }
-				change_variable = {
-					name = sr_progress_probe
-					add = sr_safe_progress
-				}
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					random_list = {
-						97 = { }
-						3 = {
-							change_variable = { name = sr_progress_probe multiply = 0.85 }
-							set_variable = { name = sr_failed_probe value = yes }
-							sr_fire_safe_setback_event = yes
-						}
+				else = {
+					change_variable = {
+						name = sr_progress_probe
+						add = 0.5
 					}
 				}
-			}
-			else = {
-				change_variable = {
-					name = sr_progress_probe
-					add = 0.5
-				}
-			}
 			}
 		}
 	}
@@ -743,62 +685,55 @@ je_space_race_moon_base = {
 
 	on_fail = {
 		trigger_event = { id = space_race_events.76 }
-		if = { limit = { has_variable = sr_active_moon_base } remove_variable = sr_active_moon_base }
-		if = { limit = { has_variable = sr_progress_moon_base } remove_variable = sr_progress_moon_base }
-		if = { limit = { has_variable = sr_funding_moon_base } remove_variable = sr_funding_moon_base }
-		if = { limit = { has_variable = sr_safe_moon_base } remove_variable = sr_safe_moon_base }
-		if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
-		sr_recalculate_cost = yes
+		custom_tooltip = {
+			text = sr_milestone_fail_cleanup_tt
+			if = { limit = { has_variable = sr_active_moon_base } remove_variable = sr_active_moon_base }
+			if = { limit = { has_variable = sr_progress_moon_base } remove_variable = sr_progress_moon_base }
+			if = { limit = { has_variable = sr_funding_moon_base } remove_variable = sr_funding_moon_base }
+			if = { limit = { has_variable = sr_safe_moon_base } remove_variable = sr_safe_moon_base }
+			if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
+			sr_recalculate_cost = yes
+		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
 			if = {
 				limit = { sr_ai_should_participate = yes }
-			# Set funding proxy for script value calculation
-			set_variable = { name = sr_funding_level value = var:sr_funding_moon_base }
 			if = {
-				limit = { has_variable = sr_ambitious_moon_base }
-				change_variable = {
-					name = sr_progress_moon_base
-					add = sr_ambitious_progress
+				limit = {
+					OR = {
+						has_variable = sr_safe_moon_base
+						has_variable = sr_ambitious_moon_base
+					}
 				}
+				change_variable = { name = sr_progress_moon_base add = sr_progress }
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					set_variable = { name = sr_base_risk value = 8 }
 					random_list = {
-						92 = { }
-						8 = {
-							change_variable = { name = sr_progress_moon_base multiply = 0.75 }
+						sr_success_weight = { }
+						sr_failure_weight = {
 							set_variable = { name = sr_failed_moon_base value = yes }
-							sr_fire_ambitious_failure_event = yes
+							if = {
+								limit = { has_variable = sr_ambitious_moon_base }
+								change_variable = { name = sr_progress_moon_base multiply = 0.75 }
+								sr_fire_ambitious_failure_event = yes
+							}
+							else = {
+								change_variable = { name = sr_progress_moon_base multiply = 0.85 }
+								sr_fire_safe_setback_event = yes
+							}
 						}
 					}
 				}
 			}
-			else_if = {
-				limit = { has_variable = sr_safe_moon_base }
-				change_variable = {
-					name = sr_progress_moon_base
-					add = sr_safe_progress
-				}
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					random_list = {
-						96 = { }
-						4 = {
-							change_variable = { name = sr_progress_moon_base multiply = 0.85 }
-							set_variable = { name = sr_failed_moon_base value = yes }
-							sr_fire_safe_setback_event = yes
-						}
+				else = {
+					change_variable = {
+						name = sr_progress_moon_base
+						add = 0.5
 					}
 				}
-			}
-			else = {
-				change_variable = {
-					name = sr_progress_moon_base
-					add = 0.5
-				}
-			}
 			}
 		}
 	}
@@ -895,62 +830,55 @@ je_space_race_mars_landing = {
 
 	on_fail = {
 		trigger_event = { id = space_race_events.76 }
-		if = { limit = { has_variable = sr_active_mars_landing } remove_variable = sr_active_mars_landing }
-		if = { limit = { has_variable = sr_progress_mars_landing } remove_variable = sr_progress_mars_landing }
-		if = { limit = { has_variable = sr_funding_mars_landing } remove_variable = sr_funding_mars_landing }
-		if = { limit = { has_variable = sr_safe_mars_landing } remove_variable = sr_safe_mars_landing }
-		if = { limit = { has_variable = sr_ambitious_mars_landing } remove_variable = sr_ambitious_mars_landing }
-		sr_recalculate_cost = yes
+		custom_tooltip = {
+			text = sr_milestone_fail_cleanup_tt
+			if = { limit = { has_variable = sr_active_mars_landing } remove_variable = sr_active_mars_landing }
+			if = { limit = { has_variable = sr_progress_mars_landing } remove_variable = sr_progress_mars_landing }
+			if = { limit = { has_variable = sr_funding_mars_landing } remove_variable = sr_funding_mars_landing }
+			if = { limit = { has_variable = sr_safe_mars_landing } remove_variable = sr_safe_mars_landing }
+			if = { limit = { has_variable = sr_ambitious_mars_landing } remove_variable = sr_ambitious_mars_landing }
+			sr_recalculate_cost = yes
+		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
 			if = {
 				limit = { sr_ai_should_participate = yes }
-			# Set funding proxy for script value calculation
-			set_variable = { name = sr_funding_level value = var:sr_funding_mars_landing }
 			if = {
-				limit = { has_variable = sr_ambitious_mars_landing }
-				change_variable = {
-					name = sr_progress_mars_landing
-					add = sr_ambitious_progress
+				limit = {
+					OR = {
+						has_variable = sr_safe_mars_landing
+						has_variable = sr_ambitious_mars_landing
+					}
 				}
+				change_variable = { name = sr_progress_mars_landing add = sr_progress }
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					set_variable = { name = sr_base_risk value = 9 }
 					random_list = {
-						91 = { }
-						9 = {
-							change_variable = { name = sr_progress_mars_landing multiply = 0.75 }
+						sr_success_weight = { }
+						sr_failure_weight = {
 							set_variable = { name = sr_failed_mars_landing value = yes }
-							sr_fire_ambitious_failure_event = yes
+							if = {
+								limit = { has_variable = sr_ambitious_mars_landing }
+								change_variable = { name = sr_progress_mars_landing multiply = 0.75 }
+								sr_fire_ambitious_failure_event = yes
+							}
+							else = {
+								change_variable = { name = sr_progress_mars_landing multiply = 0.85 }
+								sr_fire_safe_setback_event = yes
+							}
 						}
 					}
 				}
 			}
-			else_if = {
-				limit = { has_variable = sr_safe_mars_landing }
-				change_variable = {
-					name = sr_progress_mars_landing
-					add = sr_safe_progress
-				}
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					random_list = {
-						95 = { }
-						5 = {
-							change_variable = { name = sr_progress_mars_landing multiply = 0.85 }
-							set_variable = { name = sr_failed_mars_landing value = yes }
-							sr_fire_safe_setback_event = yes
-						}
+				else = {
+					change_variable = {
+						name = sr_progress_mars_landing
+						add = 0.5
 					}
 				}
-			}
-			else = {
-				change_variable = {
-					name = sr_progress_mars_landing
-					add = 0.5
-				}
-			}
 			}
 		}
 	}
@@ -1049,62 +977,55 @@ je_space_race_interstellar_probe = {
 
 	on_fail = {
 		trigger_event = { id = space_race_events.76 }
-		if = { limit = { has_variable = sr_active_interstellar_probe } remove_variable = sr_active_interstellar_probe }
-		if = { limit = { has_variable = sr_progress_interstellar_probe } remove_variable = sr_progress_interstellar_probe }
-		if = { limit = { has_variable = sr_funding_interstellar_probe } remove_variable = sr_funding_interstellar_probe }
-		if = { limit = { has_variable = sr_safe_interstellar_probe } remove_variable = sr_safe_interstellar_probe }
-		if = { limit = { has_variable = sr_ambitious_interstellar_probe } remove_variable = sr_ambitious_interstellar_probe }
-		sr_recalculate_cost = yes
+		custom_tooltip = {
+			text = sr_milestone_fail_cleanup_tt
+			if = { limit = { has_variable = sr_active_interstellar_probe } remove_variable = sr_active_interstellar_probe }
+			if = { limit = { has_variable = sr_progress_interstellar_probe } remove_variable = sr_progress_interstellar_probe }
+			if = { limit = { has_variable = sr_funding_interstellar_probe } remove_variable = sr_funding_interstellar_probe }
+			if = { limit = { has_variable = sr_safe_interstellar_probe } remove_variable = sr_safe_interstellar_probe }
+			if = { limit = { has_variable = sr_ambitious_interstellar_probe } remove_variable = sr_ambitious_interstellar_probe }
+			sr_recalculate_cost = yes
+		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
 			if = {
 				limit = { sr_ai_should_participate = yes }
-			# Set funding proxy for script value calculation
-			set_variable = { name = sr_funding_level value = var:sr_funding_interstellar_probe }
 			if = {
-				limit = { has_variable = sr_ambitious_interstellar_probe }
-				change_variable = {
-					name = sr_progress_interstellar_probe
-					add = sr_ambitious_progress
+				limit = {
+					OR = {
+						has_variable = sr_safe_interstellar_probe
+						has_variable = sr_ambitious_interstellar_probe
+					}
 				}
+				change_variable = { name = sr_progress_interstellar_probe add = sr_progress }
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					set_variable = { name = sr_base_risk value = 9 }
 					random_list = {
-						91 = { }
-						9 = {
-							change_variable = { name = sr_progress_interstellar_probe multiply = 0.75 }
+						sr_success_weight = { }
+						sr_failure_weight = {
 							set_variable = { name = sr_failed_interstellar_probe value = yes }
-							sr_fire_ambitious_failure_event = yes
+							if = {
+								limit = { has_variable = sr_ambitious_interstellar_probe }
+								change_variable = { name = sr_progress_interstellar_probe multiply = 0.75 }
+								sr_fire_ambitious_failure_event = yes
+							}
+							else = {
+								change_variable = { name = sr_progress_interstellar_probe multiply = 0.85 }
+								sr_fire_safe_setback_event = yes
+							}
 						}
 					}
 				}
 			}
-			else_if = {
-				limit = { has_variable = sr_safe_interstellar_probe }
-				change_variable = {
-					name = sr_progress_interstellar_probe
-					add = sr_safe_progress
-				}
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					random_list = {
-						94 = { }
-						6 = {
-							change_variable = { name = sr_progress_interstellar_probe multiply = 0.85 }
-							set_variable = { name = sr_failed_interstellar_probe value = yes }
-							sr_fire_safe_setback_event = yes
-						}
+				else = {
+					change_variable = {
+						name = sr_progress_interstellar_probe
+						add = 0.5
 					}
 				}
-			}
-			else = {
-				change_variable = {
-					name = sr_progress_interstellar_probe
-					add = 0.5
-				}
-			}
 			}
 		}
 	}
@@ -1206,20 +1127,31 @@ je_space_race_solar_colonization = {
 	possible = {
 		has_variable = sr_completed_moon_base
 		has_variable = sr_completed_mars_landing
-		modifier:country_sr_solar_colonization_program_bool = yes
-		# Stages 3-5 (outer system) require Deep Space Exploration PM (space_colonization tech, era 12)
-		custom_tooltip = {
-			text = sr_outer_system_requires_deep_space_tt
-			OR = {
-				NOT = { has_global_variable = sr_colonization_stage }
-				global_var:sr_colonization_stage <= 2
-				modifier:country_sr_deep_space_exploration_program_bool = yes
-			}
-		}
-		NOT = { has_global_variable = sr_all_colonies_complete }
 		OR = {
-			country_rank = rank_value:great_power
-			country_rank = rank_value:major_power
+			# Has established colonies — JE stays active to display their modifiers
+			custom_tooltip = {
+				text = sr_has_existing_colonies_tt
+				has_variable = sr_colony_count
+				var:sr_colony_count >= 1
+			}
+			# Can actively colonize (original prerequisites)
+			AND = {
+				modifier:country_sr_solar_colonization_program_bool = yes
+				# Stages 3-5 (outer system) require Deep Space Exploration PM (space_colonization tech, era 12)
+				custom_tooltip = {
+					text = sr_outer_system_requires_deep_space_tt
+					OR = {
+						NOT = { has_global_variable = sr_colonization_stage }
+						global_var:sr_colonization_stage <= 2
+						modifier:country_sr_deep_space_exploration_program_bool = yes
+					}
+				}
+				NOT = { has_global_variable = sr_all_colonies_complete }
+				OR = {
+					country_rank = rank_value:great_power
+					country_rank = rank_value:major_power
+				}
+			}
 		}
 	}
 
@@ -1245,17 +1177,21 @@ je_space_race_solar_colonization = {
 	scripted_button = sr_btn_fund_down_solar_colonization
 
 	current_value = {
-		value = sr_progress_solar_colonization_value
+		value = sr_progress_solar_colonization_percent
 	}
 
 	goal_add_value = {
-		value = sr_solar_colonization_goal
+		value = 100
 	}
 
 	progressbar = yes
 
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_solar_colonization_status_complete
+				trigger = { has_variable = sr_completed_solar_colonization }
+			}
 			triggered_desc = {
 				desc = je_space_race_solar_colonization_status_stage1
 				trigger = {
@@ -1302,56 +1238,63 @@ je_space_race_solar_colonization = {
 			text = sr_space_program_incompatible_tt
 			NOT = { modifier:country_sr_solar_colonization_program_bool = yes }
 		}
+		# Only close if no colonies were established (otherwise JE stays to hold modifiers)
+		custom_tooltip = {
+			text = sr_no_colonies_to_maintain_tt
+			OR = {
+				NOT = { has_variable = sr_colony_count }
+				var:sr_colony_count < 1
+			}
+		}
 	}
 
 	on_fail = {
 		trigger_event = { id = space_race_events.76 }
-		if = { limit = { has_variable = sr_active_solar_colonization } remove_variable = sr_active_solar_colonization }
-		if = { limit = { has_variable = sr_progress_solar_colonization } remove_variable = sr_progress_solar_colonization }
-		if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
-		if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
-		if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
-		sr_recalculate_cost = yes
+		custom_tooltip = {
+			text = sr_milestone_fail_cleanup_tt
+			if = { limit = { has_variable = sr_active_solar_colonization } remove_variable = sr_active_solar_colonization }
+			if = { limit = { has_variable = sr_progress_solar_colonization } remove_variable = sr_progress_solar_colonization }
+			if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
+			if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
+			if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
+			sr_recalculate_cost = yes
+		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
+			# Skip colonization logic if completed or PM disabled (passive mode — JE stays for modifiers)
+			if = {
+				limit = {
+					has_variable = sr_active_solar_colonization
+					modifier:country_sr_solar_colonization_program_bool = yes
+				}
 			if = {
 				limit = { sr_ai_should_participate = yes }
-			# Set funding proxy for script value calculation
-			set_variable = { name = sr_funding_level value = var:sr_funding_solar_colonization }
 			if = {
-				limit = { has_variable = sr_ambitious_solar_colonization }
-				change_variable = {
-					name = sr_progress_solar_colonization
-					add = sr_ambitious_progress
-				}
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					random_list = {
-						90 = { }
-						10 = {
-							change_variable = { name = sr_progress_solar_colonization multiply = 0.75 }
-							set_variable = { name = sr_failed_solar_colonization value = yes }
-							sr_fire_ambitious_failure_event = yes
-						}
+				limit = {
+					OR = {
+						has_variable = sr_safe_solar_colonization
+						has_variable = sr_ambitious_solar_colonization
 					}
 				}
-			}
-			else_if = {
-				limit = { has_variable = sr_safe_solar_colonization }
-				change_variable = {
-					name = sr_progress_solar_colonization
-					add = sr_safe_progress
-				}
+				change_variable = { name = sr_progress_solar_colonization add = sr_progress }
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
+					set_variable = { name = sr_base_risk value = 10 }
 					random_list = {
-						94 = { }
-						6 = {
-							change_variable = { name = sr_progress_solar_colonization multiply = 0.85 }
+						sr_success_weight = { }
+						sr_failure_weight = {
 							set_variable = { name = sr_failed_solar_colonization value = yes }
-							sr_fire_safe_setback_event = yes
+							if = {
+								limit = { has_variable = sr_ambitious_solar_colonization }
+								change_variable = { name = sr_progress_solar_colonization multiply = 0.75 }
+								sr_fire_ambitious_failure_event = yes
+							}
+							else = {
+								change_variable = { name = sr_progress_solar_colonization multiply = 0.85 }
+								sr_fire_safe_setback_event = yes
+							}
 						}
 					}
 				}
@@ -1372,12 +1315,11 @@ je_space_race_solar_colonization = {
 				sr_establish_colony_effect = yes
 				# Reset progress (preserve overflow)
 				change_variable = { name = sr_progress_solar_colonization subtract = sr_solar_colonization_goal }
-				# Notify with colony completion event
-				trigger_event = { id = space_race_events.9 }
-				# If all stages exhausted, mark fully complete and close the JE
+				# If all stages exhausted, mark complete but keep JE alive for modifiers
 				if = {
 					limit = { has_global_variable = sr_all_colonies_complete }
 					set_variable = { name = sr_completed_solar_colonization value = yes }
+					je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
 					remove_variable = sr_active_solar_colonization
 					if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
 					if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
@@ -1385,6 +1327,7 @@ je_space_race_solar_colonization = {
 					if = { limit = { has_variable = sr_progress_solar_colonization } remove_variable = sr_progress_solar_colonization }
 					sr_complete_milestone_effect = yes
 				}
+			}
 			}
 			}
 		}

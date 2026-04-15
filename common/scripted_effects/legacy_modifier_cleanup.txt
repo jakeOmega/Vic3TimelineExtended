@@ -133,6 +133,559 @@ legacy_je_modifier_cleanup_effect = {
 	# Legacy shared approach variables
 	if = { limit = { has_variable = sr_approach_safe } remove_variable = sr_approach_safe }
 	if = { limit = { has_variable = sr_approach_ambitious } remove_variable = sr_approach_ambitious }
+	# Solar Colonization colony modifiers (moved to JE scope)
+	if = {
+		limit = { has_modifier = sr_solar_system_trade }
+		remove_modifier = sr_solar_system_trade
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_amalthea_physics }
+		remove_modifier = sr_colony_amalthea_physics
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_amalthea_physics } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_amalthea_rings }
+		remove_modifier = sr_colony_amalthea_rings
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_amalthea_rings } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_arcadia_civilian }
+		remove_modifier = sr_colony_arcadia_civilian
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_arcadia_civilian } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_arcadia_military }
+		remove_modifier = sr_colony_arcadia_military
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_arcadia_military } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_ariel_cryovolcanic }
+		remove_modifier = sr_colony_ariel_cryovolcanic
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ariel_cryovolcanic } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_ariel_quarrying }
+		remove_modifier = sr_colony_ariel_quarrying
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ariel_quarrying } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_callisto_agricultural }
+		remove_modifier = sr_colony_callisto_agricultural
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_callisto_agricultural } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_callisto_gateway }
+		remove_modifier = sr_colony_callisto_gateway
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_callisto_gateway } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_ceres_observatory }
+		remove_modifier = sr_colony_ceres_observatory
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ceres_observatory } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_ceres_waystation }
+		remove_modifier = sr_colony_ceres_waystation
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ceres_waystation } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_enceladus_astrobiology }
+		remove_modifier = sr_colony_enceladus_astrobiology
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_enceladus_astrobiology } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_enceladus_water }
+		remove_modifier = sr_colony_enceladus_water
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_enceladus_water } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_eris_monitoring }
+		remove_modifier = sr_colony_eris_monitoring
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_eris_monitoring } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_eris_selfsufficiency }
+		remove_modifier = sr_colony_eris_selfsufficiency
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_eris_selfsufficiency } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_europa_drilling }
+		remove_modifier = sr_colony_europa_drilling
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_europa_drilling } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_europa_surface }
+		remove_modifier = sr_colony_europa_surface
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_europa_surface } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_ganymede_command }
+		remove_modifier = sr_colony_ganymede_command
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ganymede_command } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_ganymede_settlement }
+		remove_modifier = sr_colony_ganymede_settlement
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ganymede_settlement } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_haumea_dynamics }
+		remove_modifier = sr_colony_haumea_dynamics
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_haumea_dynamics } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_haumea_rings }
+		remove_modifier = sr_colony_haumea_rings
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_haumea_rings } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_hellas_astrobiology }
+		remove_modifier = sr_colony_hellas_astrobiology
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hellas_astrobiology } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_hellas_settlement }
+		remove_modifier = sr_colony_hellas_settlement
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hellas_settlement } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_himalia_depot }
+		remove_modifier = sr_colony_himalia_depot
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_himalia_depot } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_himalia_telescope }
+		remove_modifier = sr_colony_himalia_telescope
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_himalia_telescope } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_hygiea_automated }
+		remove_modifier = sr_colony_hygiea_automated
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hygiea_automated } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_hygiea_volatiles }
+		remove_modifier = sr_colony_hygiea_volatiles
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hygiea_volatiles } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_iapetus_organics }
+		remove_modifier = sr_colony_iapetus_organics
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_iapetus_organics } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_iapetus_ridge }
+		remove_modifier = sr_colony_iapetus_ridge
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_iapetus_ridge } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_io_mining }
+		remove_modifier = sr_colony_io_mining
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_io_mining } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_io_research }
+		remove_modifier = sr_colony_io_research
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_io_research } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_makemake_chemistry }
+		remove_modifier = sr_colony_makemake_chemistry
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_makemake_chemistry } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_makemake_solarwind }
+		remove_modifier = sr_colony_makemake_solarwind
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_makemake_solarwind } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_mercury_ice }
+		remove_modifier = sr_colony_mercury_ice
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mercury_ice } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_mercury_solar }
+		remove_modifier = sr_colony_mercury_solar
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mercury_solar } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_mimas_gravity }
+		remove_modifier = sr_colony_mimas_gravity
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mimas_gravity } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_mimas_installation }
+		remove_modifier = sr_colony_mimas_installation
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mimas_installation } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_miranda_drilling }
+		remove_modifier = sr_colony_miranda_drilling
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_miranda_drilling } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_miranda_rupes }
+		remove_modifier = sr_colony_miranda_rupes
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_miranda_rupes } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_oberon_relay }
+		remove_modifier = sr_colony_oberon_relay
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_oberon_relay } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_oberon_research }
+		remove_modifier = sr_colony_oberon_research
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_oberon_research } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_olympus_mons_atmospheric }
+		remove_modifier = sr_colony_olympus_mons_atmospheric
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_olympus_mons_atmospheric } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_olympus_mons_geothermal }
+		remove_modifier = sr_colony_olympus_mons_geothermal
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_olympus_mons_geothermal } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_pallas_composites }
+		remove_modifier = sr_colony_pallas_composites
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pallas_composites } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_pallas_observatory }
+		remove_modifier = sr_colony_pallas_observatory
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pallas_observatory } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_pluto_harvesting }
+		remove_modifier = sr_colony_pluto_harvesting
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pluto_harvesting } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_pluto_research }
+		remove_modifier = sr_colony_pluto_research
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pluto_research } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_proteus_extraction }
+		remove_modifier = sr_colony_proteus_extraction
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_proteus_extraction } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_proteus_probe }
+		remove_modifier = sr_colony_proteus_probe
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_proteus_probe } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_psyche_careful }
+		remove_modifier = sr_colony_psyche_careful
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_psyche_careful } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_psyche_industrial }
+		remove_modifier = sr_colony_psyche_industrial
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_psyche_industrial } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_rhea_observation }
+		remove_modifier = sr_colony_rhea_observation
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_rhea_observation } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_rhea_propellant }
+		remove_modifier = sr_colony_rhea_propellant
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_rhea_propellant } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_sedna_interstellar }
+		remove_modifier = sr_colony_sedna_interstellar
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_sedna_interstellar } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_sedna_outpost }
+		remove_modifier = sr_colony_sedna_outpost
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_sedna_outpost } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_titan_hydrocarbons }
+		remove_modifier = sr_colony_titan_hydrocarbons
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titan_hydrocarbons } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_titan_prebiotic }
+		remove_modifier = sr_colony_titan_prebiotic
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titan_prebiotic } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_titania_geophysics }
+		remove_modifier = sr_colony_titania_geophysics
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titania_geophysics } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_titania_mining }
+		remove_modifier = sr_colony_titania_mining
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titania_mining } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_triton_gateway }
+		remove_modifier = sr_colony_triton_gateway
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_triton_gateway } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_triton_geyser }
+		remove_modifier = sr_colony_triton_geyser
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_triton_geyser } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_utopia_agriculture }
+		remove_modifier = sr_colony_utopia_agriculture
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_utopia_agriculture } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_utopia_ice }
+		remove_modifier = sr_colony_utopia_ice
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_utopia_ice } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_valles_marineris_mining }
+		remove_modifier = sr_colony_valles_marineris_mining
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_valles_marineris_mining } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_valles_marineris_research }
+		remove_modifier = sr_colony_valles_marineris_research
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_valles_marineris_research } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_venus_atmospheric }
+		remove_modifier = sr_colony_venus_atmospheric
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_venus_atmospheric } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_venus_extraction }
+		remove_modifier = sr_colony_venus_extraction
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_venus_extraction } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_vesta_mining }
+		remove_modifier = sr_colony_vesta_mining
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_vesta_mining } }
+		}
+	}
+	if = {
+		limit = { has_modifier = sr_colony_vesta_science }
+		remove_modifier = sr_colony_vesta_science
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_vesta_science } }
+		}
+	}
 
 	# ── Colonial Empire (je:je_colonial_empire) ──
 	if = { limit = { has_modifier = colonial_empire_under_pressure_modifier } remove_modifier = colonial_empire_under_pressure_modifier }

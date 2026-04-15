@@ -742,57 +742,66 @@ modern_election_events.9 = {
 	option = { # Capitalize ruthlessly
 		name = modern_election_events.9.a
 		default_option = yes
-		if = {
-			limit = { has_local_variable = govt_gaffe }
-			# Government gaffed - opposition benefits
+		custom_tooltip = {
+			text = modern_election_events.9.a.tt
 			if = {
-				limit = { exists = scope:opp_party }
-				scope:opp_party = { add_momentum = momentum_large }
+				limit = { has_local_variable = govt_gaffe }
+				if = {
+					limit = { exists = scope:opp_party }
+					scope:opp_party = { add_momentum = momentum_large }
+				}
+				if = {
+					limit = { exists = scope:govt_party }
+					scope:govt_party = { add_momentum = momentum_large_decrease }
+				}
 			}
 			if = {
-				limit = { exists = scope:govt_party }
-				scope:govt_party = { add_momentum = momentum_large_decrease }
+				limit = { has_local_variable = opp_gaffe }
+				if = {
+					limit = { exists = scope:govt_party }
+					scope:govt_party = { add_momentum = momentum_large }
+				}
+				if = {
+					limit = { exists = scope:opp_party }
+					scope:opp_party = { add_momentum = momentum_large_decrease }
+				}
 			}
 		}
-		if = {
-			limit = { has_local_variable = opp_gaffe }
-			# Opposition gaffed - government benefits
-			if = {
-				limit = { exists = scope:govt_party }
-				scope:govt_party = { add_momentum = momentum_large }
-			}
-			if = {
-				limit = { exists = scope:opp_party }
-				scope:opp_party = { add_momentum = momentum_large_decrease }
-			}
-		}
+		add_radicals = { value = small_radicals }
 		ai_chance = { base = 5 }
 	}
 
 	option = { # Take the high road
 		name = modern_election_events.9.b
 		add_loyalists = { value = small_radicals }
-		if = {
-			limit = { has_local_variable = govt_gaffe exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small_decrease }
-		}
-		if = {
-			limit = { has_local_variable = opp_gaffe exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small_decrease }
+		custom_tooltip = {
+			text = modern_election_events.9.b.tt
+			if = {
+				limit = { has_local_variable = govt_gaffe exists = scope:govt_party }
+				scope:govt_party = { add_momentum = momentum_small_decrease }
+			}
+			if = {
+				limit = { has_local_variable = opp_gaffe exists = scope:opp_party }
+				scope:opp_party = { add_momentum = momentum_small_decrease }
+			}
 		}
 		ai_chance = { base = 3 }
 	}
 
 	option = { # Spin it into a relatable moment
 		name = modern_election_events.9.c
-		if = {
-			limit = { has_local_variable = govt_gaffe exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+		custom_tooltip = {
+			text = modern_election_events.9.c.tt
+			if = {
+				limit = { has_local_variable = govt_gaffe exists = scope:govt_party }
+				scope:govt_party = { add_momentum = momentum_small }
+			}
+			if = {
+				limit = { has_local_variable = opp_gaffe exists = scope:opp_party }
+				scope:opp_party = { add_momentum = momentum_small }
+			}
 		}
-		if = {
-			limit = { has_local_variable = opp_gaffe exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
-		}
+		add_modifier = { name = me_media_savvy_modifier days = short_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }

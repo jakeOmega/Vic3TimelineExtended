@@ -13996,6 +13996,12 @@ pm_space_elevator = {
 		}
 	}
 
+	country_modifiers = {
+		unscaled = {
+			country_space_race_progress_add = 0.1
+		}
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -15554,6 +15560,7 @@ pm_earth_orbit = {
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
+			country_space_race_progress_add = 1
 		}
 	}
 }
@@ -15595,6 +15602,7 @@ pm_moon_mission = {
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
 			country_sr_moon_mission_program_bool = yes
+			country_space_race_progress_add = 2
 		}
 	}
 }
@@ -15637,6 +15645,7 @@ pm_mars_mission = {
 			country_sr_earth_orbit_program_bool = yes
 			country_sr_moon_mission_program_bool = yes
 			country_sr_mars_mission_program_bool = yes
+			country_space_race_progress_add = 3
 		}
 	}
 }
@@ -15680,6 +15689,7 @@ pm_solar_colonization = {
 			country_sr_moon_mission_program_bool = yes
 			country_sr_mars_mission_program_bool = yes
 			country_sr_solar_colonization_program_bool = yes
+			country_space_race_progress_add = 4
 		}
 	}
 }
@@ -15724,6 +15734,7 @@ pm_deep_space_exploration = {
 			country_sr_mars_mission_program_bool = yes
 			country_sr_solar_colonization_program_bool = yes
 			country_sr_deep_space_exploration_program_bool = yes
+			country_space_race_progress_add = 4
 		}
 	}
 }
@@ -15769,6 +15780,7 @@ pm_interstellar_mission = {
 			country_sr_solar_colonization_program_bool = yes
 			country_sr_deep_space_exploration_program_bool = yes
 			country_sr_interstellar_mission_program_bool = yes
+			country_space_race_progress_add = 5
 		}
 	}
 }

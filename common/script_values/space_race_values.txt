@@ -1,56 +1,58 @@
 ﻿# Space Race Script Values
 # Progress goals for each milestone (higher = takes longer)
+# Goals scale with later PMs providing more base progress
+# PM progression: earth_orbit=1, lunar/probes=2, stations=3, mars=4, interstellar=5
 sr_suborbital_goal = {
 	value = 50
 }
 sr_orbital_goal = {
-	value = 75
-}
-sr_moon_landing_goal = {
-	value = 120
-}
-sr_probe_goal = {
 	value = 100
 }
-sr_moon_base_goal = {
-	value = 150
-}
-sr_mars_landing_goal = {
+sr_moon_landing_goal = {
 	value = 200
 }
+sr_probe_goal = {
+	value = 150
+}
+sr_moon_base_goal = {
+	value = 300
+}
+sr_mars_landing_goal = {
+	value = 450
+}
 sr_interstellar_probe_goal = {
-	value = 250
+	value = 600
 }
 sr_solar_colonization_goal = {
 	# Base goal scales with stage - further out = harder
-	value = 100
+	value = 400
 	if = {
 		limit = {
 			has_global_variable = sr_colonization_stage
 			global_var:sr_colonization_stage >= 2
 		}
-		add = 20
+		add = 50
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_colonization_stage
 			global_var:sr_colonization_stage >= 3
 		}
-		add = 20
+		add = 50
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_colonization_stage
 			global_var:sr_colonization_stage >= 4
 		}
-		add = 20
+		add = 50
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_colonization_stage
 			global_var:sr_colonization_stage >= 5
 		}
-		add = 40
+		add = 100
 	}
 }
 
@@ -59,211 +61,39 @@ sr_interstellar_transit_value = {
 	value = var:sr_interstellar_transit_progress
 }
 
-# Monthly progress values based on approach
-# Safe approach: slower but reliable
-sr_safe_progress = {
-	value = 1
-	# Aerospace industry levels boost progress
-	if = {
-		limit = {
-			any_scope_building = {
-				is_building_type = building_aerospace_industry
-				level >= 3
-			}
-		}
-		add = 0.3
+# Monthly progress value (unified for both approaches)
+# Base progress from space program PM, techs, buildings, companies, partnerships, AND funding
+# All contribute via country_space_race_progress_add modifier (visible in tooltip breakdown)
+# Funding: sr_funding_progress modifier on each JE (0.5 per funding level, stacks across JEs)
+# Approach: ambitious gives country_space_race_progress_mult = 0.5 per JE
+sr_progress = {
+	value = modifier:country_space_race_progress_add
+	# Approach multiplier (ambitious JEs contribute +50% each via modifier)
+	multiply = {
+		value = 1
+		add = modifier:country_space_race_progress_mult
 	}
-	if = {
-		limit = {
-			any_scope_building = {
-				is_building_type = building_aerospace_industry
-				level >= 5
-			}
-		}
-		add = 0.3
-	}
-	# Space elevator significantly boosts later milestones
-	if = {
-		limit = {
-			any_scope_building = {
-				is_building_type = building_space_elevator
-			}
-		}
-		add = 0.4
-	}
-	# Extraplanetary base boosts colonization milestones
-	if = {
-		limit = {
-			any_scope_building = {
-				is_building_type = building_space_mine
-			}
-		}
-		add = 0.2
-	}
-	# UN space cooperation partnership
-	if = {
-		limit = { has_modifier = un_space_partnership_modifier }
-		add = 0.3
-	}
-	# SpaceX or other space company bonus
-	if = {
-		limit = {
-			has_space_company = yes
-		}
-		add = 0.3
-	}
-	# Higher funding level = faster
-	if = {
-		limit = { var:sr_funding_level >= 2 }
-		add = 0.5
-	}
-	if = {
-		limit = { var:sr_funding_level >= 3 }
-		add = 0.5
-	}
-	# Tech bonuses for later milestones
-	if = {
-		limit = { has_technology_researched = reusable_rocketry }
-		add = 0.3
-	}
-	if = {
-		limit = { has_technology_researched = space_colonization }
-		add = 0.5
-	}
+	min = 0.5
 }
 
-# Ambitious approach: faster but risky
-sr_ambitious_progress = {
-	value = 2
-	# Aerospace industry levels boost progress
-	if = {
-		limit = {
-			any_scope_building = {
-				is_building_type = building_aerospace_industry
-				level >= 3
-			}
-		}
-		add = 0.5
+# Failure risk weight for random_list roll
+# Base risk set per-milestone via sr_base_risk proxy variable
+# Safe approach JEs reduce risk via country_space_race_risk_mult = -0.5 each
+sr_failure_weight = {
+	value = var:sr_base_risk
+	multiply = {
+		value = 1
+		add = modifier:country_space_race_risk_mult
 	}
-	if = {
-		limit = {
-			any_scope_building = {
-				is_building_type = building_aerospace_industry
-				level >= 5
-			}
-		}
-		add = 0.5
-	}
-	# Space elevator significantly boosts later milestones
-	if = {
-		limit = {
-			any_scope_building = {
-				is_building_type = building_space_elevator
-			}
-		}
-		add = 0.6
-	}
-	# Extraplanetary base boosts colonization milestones
-	if = {
-		limit = {
-			any_scope_building = {
-				is_building_type = building_space_mine
-			}
-		}
-		add = 0.3
-	}
-	# UN space cooperation partnership
-	if = {
-		limit = { has_modifier = un_space_partnership_modifier }
-		add = 0.4
-	}
-	# SpaceX or other space company bonus
-	if = {
-		limit = {
-			has_space_company = yes
-		}
-		add = 0.4
-	}
-	# Higher funding level = faster
-	if = {
-		limit = { var:sr_funding_level >= 2 }
-		add = 0.75
-	}
-	if = {
-		limit = { var:sr_funding_level >= 3 }
-		add = 0.75
-	}
-	# Tech bonuses
-	if = {
-		limit = { has_technology_researched = reusable_rocketry }
-		add = 0.5
-	}
-	if = {
-		limit = { has_technology_researched = space_colonization }
-		add = 0.75
-	}
+	min = 1
+	max = 50
 }
 
-# Failure chance (per month) for ambitious approach - returns 1 if failure this month
-# We use a random_list in the effect instead, so this is used as the weight base
-sr_ambitious_failure_weight = {
-	value = 10
-	# Early milestones are less dangerous
-	if = {
-		limit = {
-			OR = {
-				has_variable = sr_active_suborbital
-				has_variable = sr_active_orbital
-			}
-		}
-		add = -3
-	}
-	# Late milestones are more dangerous
-	if = {
-		limit = {
-			has_variable = sr_active_solar_colonization
-		}
-		add = 5
-	}
-	# Reusable rocketry makes things safer
-	if = {
-		limit = { has_technology_researched = reusable_rocketry }
-		add = -3
-	}
-	# Existing achievements make you more experienced
-	if = {
-		limit = { has_variable = sr_completed_moon_landing }
-		add = -2
-	}
-	# UN space cooperation reduces risk
-	if = {
-		limit = { has_modifier = un_space_partnership_modifier }
-		add = -2
-	}
-	# SpaceX company bonus reduces risk
-	if = {
-		limit = { has_space_company = yes }
-		add = -2
-	}
-	# Space elevator infrastructure helps
-	if = {
-		limit = {
-			any_scope_building = {
-				is_building_type = building_space_elevator
-			}
-		}
-		add = -2
-	}
-	min = 2
-	max = 20
-}
-
-sr_funding_cost = {
-	value = 0
-	add = {
-		value = var:sr_funding_level
-		multiply = 15
-	}
+# Success weight = 100 - failure weight
+sr_success_weight = {
+	value = 100
+	subtract = sr_failure_weight
+	min = 50
 }
 
 sr_current_milestone_progress = {
@@ -312,6 +142,41 @@ sr_total_space_cost = {
 	if = { limit = { has_variable = sr_ambitious_interstellar_probe } add = 2 }
 	if = { limit = { has_variable = sr_safe_solar_colonization } add = 1 }
 	if = { limit = { has_variable = sr_ambitious_solar_colonization } add = 2 }
+}
+
+# Per-JE funding level values for JE-scoped sr_funding_progress modifier
+# Uses owner = { } wrapper for JE-to-country scope access
+sr_funding_suborbital_level = {
+	value = 0
+	owner = { if = { limit = { has_variable = sr_funding_suborbital } add = var:sr_funding_suborbital } }
+}
+sr_funding_orbital_level = {
+	value = 0
+	owner = { if = { limit = { has_variable = sr_funding_orbital } add = var:sr_funding_orbital } }
+}
+sr_funding_moon_landing_level = {
+	value = 0
+	owner = { if = { limit = { has_variable = sr_funding_moon_landing } add = var:sr_funding_moon_landing } }
+}
+sr_funding_probe_level = {
+	value = 0
+	owner = { if = { limit = { has_variable = sr_funding_probe } add = var:sr_funding_probe } }
+}
+sr_funding_moon_base_level = {
+	value = 0
+	owner = { if = { limit = { has_variable = sr_funding_moon_base } add = var:sr_funding_moon_base } }
+}
+sr_funding_mars_landing_level = {
+	value = 0
+	owner = { if = { limit = { has_variable = sr_funding_mars_landing } add = var:sr_funding_mars_landing } }
+}
+sr_funding_interstellar_probe_level = {
+	value = 0
+	owner = { if = { limit = { has_variable = sr_funding_interstellar_probe } add = var:sr_funding_interstellar_probe } }
+}
+sr_funding_solar_colonization_level = {
+	value = 0
+	owner = { if = { limit = { has_variable = sr_funding_solar_colonization } add = var:sr_funding_solar_colonization } }
 }
 
 # Per-JE cost values for JE-scoped funding modifiers
@@ -424,4 +289,28 @@ sr_progress_interstellar_probe_value = {
 sr_progress_solar_colonization_value = {
 	value = 0
 	if = { limit = { has_variable = sr_progress_solar_colonization } add = var:sr_progress_solar_colonization }
+}
+# Normalized 0-100 percentage for progress bar display
+# goal_add_value is locked at JE activation, so dynamic goals break the bar
+# This SV computes (progress / current_dynamic_goal) * 100
+# Returns 100 when colonization is fully complete
+sr_progress_solar_colonization_percent = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_completed_solar_colonization }
+		add = 100
+	}
+	else = {
+		if = {
+			limit = { has_variable = sr_progress_solar_colonization }
+			add = var:sr_progress_solar_colonization
+		}
+		divide = {
+			value = sr_solar_colonization_goal
+			min = 1
+		}
+		multiply = 100
+		min = 0
+		max = 100
+	}
 }

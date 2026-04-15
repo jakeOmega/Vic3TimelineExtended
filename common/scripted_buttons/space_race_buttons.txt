@@ -35,6 +35,10 @@ sr_btn_safe_suborbital = {
 				limit = { has_variable = sr_ambitious_suborbital }
 				remove_variable = sr_ambitious_suborbital
 			}
+			je:je_space_race_suborbital = {
+				remove_modifier = sr_ambitious_approach
+				add_modifier = sr_safe_approach
+			}
 			sr_recalculate_cost = yes
 		}
 	}
@@ -79,6 +83,10 @@ sr_btn_ambitious_suborbital = {
 			if = {
 				limit = { has_variable = sr_safe_suborbital }
 				remove_variable = sr_safe_suborbital
+			}
+			je:je_space_race_suborbital = {
+				remove_modifier = sr_safe_approach
+				add_modifier = sr_ambitious_approach
 			}
 			sr_recalculate_cost = yes
 		}
@@ -186,6 +194,10 @@ sr_btn_safe_orbital = {
 				limit = { has_variable = sr_ambitious_orbital }
 				remove_variable = sr_ambitious_orbital
 			}
+			je:je_space_race_orbital = {
+				remove_modifier = sr_ambitious_approach
+				add_modifier = sr_safe_approach
+			}
 			sr_recalculate_cost = yes
 		}
 	}
@@ -230,6 +242,10 @@ sr_btn_ambitious_orbital = {
 			if = {
 				limit = { has_variable = sr_safe_orbital }
 				remove_variable = sr_safe_orbital
+			}
+			je:je_space_race_orbital = {
+				remove_modifier = sr_safe_approach
+				add_modifier = sr_ambitious_approach
 			}
 			sr_recalculate_cost = yes
 		}
@@ -337,6 +353,10 @@ sr_btn_safe_moon_landing = {
 				limit = { has_variable = sr_ambitious_moon_landing }
 				remove_variable = sr_ambitious_moon_landing
 			}
+			je:je_space_race_moon_landing = {
+				remove_modifier = sr_ambitious_approach
+				add_modifier = sr_safe_approach
+			}
 			sr_recalculate_cost = yes
 		}
 	}
@@ -381,6 +401,10 @@ sr_btn_ambitious_moon_landing = {
 			if = {
 				limit = { has_variable = sr_safe_moon_landing }
 				remove_variable = sr_safe_moon_landing
+			}
+			je:je_space_race_moon_landing = {
+				remove_modifier = sr_safe_approach
+				add_modifier = sr_ambitious_approach
 			}
 			sr_recalculate_cost = yes
 		}
@@ -488,6 +512,10 @@ sr_btn_safe_probe = {
 				limit = { has_variable = sr_ambitious_probe }
 				remove_variable = sr_ambitious_probe
 			}
+			je:je_space_race_probe = {
+				remove_modifier = sr_ambitious_approach
+				add_modifier = sr_safe_approach
+			}
 			sr_recalculate_cost = yes
 		}
 	}
@@ -532,6 +560,10 @@ sr_btn_ambitious_probe = {
 			if = {
 				limit = { has_variable = sr_safe_probe }
 				remove_variable = sr_safe_probe
+			}
+			je:je_space_race_probe = {
+				remove_modifier = sr_safe_approach
+				add_modifier = sr_ambitious_approach
 			}
 			sr_recalculate_cost = yes
 		}
@@ -639,6 +671,10 @@ sr_btn_safe_moon_base = {
 				limit = { has_variable = sr_ambitious_moon_base }
 				remove_variable = sr_ambitious_moon_base
 			}
+			je:je_space_race_moon_base = {
+				remove_modifier = sr_ambitious_approach
+				add_modifier = sr_safe_approach
+			}
 			sr_recalculate_cost = yes
 		}
 	}
@@ -683,6 +719,10 @@ sr_btn_ambitious_moon_base = {
 			if = {
 				limit = { has_variable = sr_safe_moon_base }
 				remove_variable = sr_safe_moon_base
+			}
+			je:je_space_race_moon_base = {
+				remove_modifier = sr_safe_approach
+				add_modifier = sr_ambitious_approach
 			}
 			sr_recalculate_cost = yes
 		}
@@ -790,6 +830,10 @@ sr_btn_safe_mars_landing = {
 				limit = { has_variable = sr_ambitious_mars_landing }
 				remove_variable = sr_ambitious_mars_landing
 			}
+			je:je_space_race_mars_landing = {
+				remove_modifier = sr_ambitious_approach
+				add_modifier = sr_safe_approach
+			}
 			sr_recalculate_cost = yes
 		}
 	}
@@ -834,6 +878,10 @@ sr_btn_ambitious_mars_landing = {
 			if = {
 				limit = { has_variable = sr_safe_mars_landing }
 				remove_variable = sr_safe_mars_landing
+			}
+			je:je_space_race_mars_landing = {
+				remove_modifier = sr_safe_approach
+				add_modifier = sr_ambitious_approach
 			}
 			sr_recalculate_cost = yes
 		}
@@ -941,6 +989,10 @@ sr_btn_safe_interstellar_probe = {
 				limit = { has_variable = sr_ambitious_interstellar_probe }
 				remove_variable = sr_ambitious_interstellar_probe
 			}
+			je:je_space_race_interstellar_probe = {
+				remove_modifier = sr_ambitious_approach
+				add_modifier = sr_safe_approach
+			}
 			sr_recalculate_cost = yes
 		}
 	}
@@ -985,6 +1037,10 @@ sr_btn_ambitious_interstellar_probe = {
 			if = {
 				limit = { has_variable = sr_safe_interstellar_probe }
 				remove_variable = sr_safe_interstellar_probe
+			}
+			je:je_space_race_interstellar_probe = {
+				remove_modifier = sr_safe_approach
+				add_modifier = sr_ambitious_approach
 			}
 			sr_recalculate_cost = yes
 		}
@@ -1067,6 +1123,8 @@ sr_btn_safe_solar_colonization = {
 
 	visible = {
 		has_variable = sr_active_solar_colonization
+		modifier:country_sr_solar_colonization_program_bool = yes
+		NOT = { has_variable = sr_completed_solar_colonization }
 	}
 
 	ai_chance = {
@@ -1092,6 +1150,10 @@ sr_btn_safe_solar_colonization = {
 				limit = { has_variable = sr_ambitious_solar_colonization }
 				remove_variable = sr_ambitious_solar_colonization
 			}
+			je:je_space_race_solar_colonization = {
+				remove_modifier = sr_ambitious_approach
+				add_modifier = sr_safe_approach
+			}
 			sr_recalculate_cost = yes
 		}
 	}
@@ -1103,6 +1165,8 @@ sr_btn_ambitious_solar_colonization = {
 
 	visible = {
 		has_variable = sr_active_solar_colonization
+		modifier:country_sr_solar_colonization_program_bool = yes
+		NOT = { has_variable = sr_completed_solar_colonization }
 	}
 
 	ai_chance = {
@@ -1137,6 +1201,10 @@ sr_btn_ambitious_solar_colonization = {
 				limit = { has_variable = sr_safe_solar_colonization }
 				remove_variable = sr_safe_solar_colonization
 			}
+			je:je_space_race_solar_colonization = {
+				remove_modifier = sr_safe_approach
+				add_modifier = sr_ambitious_approach
+			}
 			sr_recalculate_cost = yes
 		}
 	}
@@ -1148,6 +1216,8 @@ sr_btn_fund_up_solar_colonization = {
 
 	visible = {
 		has_variable = sr_active_solar_colonization
+		modifier:country_sr_solar_colonization_program_bool = yes
+		NOT = { has_variable = sr_completed_solar_colonization }
 	}
 
 	ai_chance = {
@@ -1184,6 +1254,8 @@ sr_btn_fund_down_solar_colonization = {
 
 	visible = {
 		has_variable = sr_active_solar_colonization
+		modifier:country_sr_solar_colonization_program_bool = yes
+		NOT = { has_variable = sr_completed_solar_colonization }
 	}
 
 	ai_chance = {

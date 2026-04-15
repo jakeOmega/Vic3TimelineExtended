@@ -36,15 +36,16 @@ space_race_colony_events.1 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Geological research base in the canyon
-		add_modifier = { name = sr_colony_valles_marineris_research }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_valles_marineris_research } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.1.b
 		ai_chance = { base = 5 }
 		# Industrial mining of canyon wall minerals
-		add_modifier = { name = sr_colony_valles_marineris_mining }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_valles_marineris_mining } }
 		add_loyalists = { value = small_radicals }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 	}
@@ -72,15 +73,16 @@ space_race_colony_events.2 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# High-altitude atmospheric research station
-		add_modifier = { name = sr_colony_olympus_mons_atmospheric }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_olympus_mons_atmospheric } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.2.b
 		ai_chance = { base = 5 }
 		# Caldera settlement with geothermal potential
-		add_modifier = { name = sr_colony_olympus_mons_geothermal }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_olympus_mons_geothermal } }
 		add_loyalists = { value = small_radicals }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 	}
@@ -108,17 +110,19 @@ space_race_colony_events.3 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Pressurized settlement exploiting the denser atmosphere
-		add_modifier = { name = sr_colony_hellas_settlement }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hellas_settlement } }
 		add_loyalists = { value = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.3.b
 		ai_chance = { base = 4 }
 		# Astrobiology laboratory searching for ancient microbial life
-		add_modifier = { name = sr_colony_hellas_astrobiology }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hellas_astrobiology } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -144,15 +148,16 @@ space_race_colony_events.4 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Ice extraction and water processing facility
-		add_modifier = { name = sr_colony_utopia_ice }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_utopia_ice } }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.4.b
 		ai_chance = { base = 5 }
 		# Agricultural domes - first Martian farmland
-		add_modifier = { name = sr_colony_utopia_agriculture }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_utopia_agriculture } }
 		add_loyalists = { value = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = farmers }
 	}
@@ -180,17 +185,19 @@ space_race_colony_events.5 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Residential colony - first permanent civilian settlement
-		add_modifier = { name = sr_colony_arcadia_civilian }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_arcadia_civilian } }
 		add_loyalists = { value = medium_radicals }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.5.b
 		ai_chance = { base = 4 }
 		# Military-grade outpost securing the northern approach
-		add_modifier = { name = sr_colony_arcadia_military }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_arcadia_military } }
 		add_loyalists = { value = small_radicals pop_type = officers }
 		add_loyalists = { value = small_radicals pop_type = soldiers }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -216,17 +223,19 @@ space_race_colony_events.6 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Deep-space waystation and refueling depot
-		add_modifier = { name = sr_colony_ceres_waystation }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ceres_waystation } }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.6.b
 		ai_chance = { base = 5 }
 		# Scientific observatory studying the outer solar system
-		add_modifier = { name = sr_colony_ceres_observatory }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ceres_observatory } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -252,17 +261,19 @@ space_race_colony_events.7 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Metal extraction from the exposed mantle
-		add_modifier = { name = sr_colony_vesta_mining }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_vesta_mining } }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.7.b
 		ai_chance = { base = 5 }
 		# Planetary science lab studying differentiated body geology
-		add_modifier = { name = sr_colony_vesta_science }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_vesta_science } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -288,17 +299,19 @@ space_race_colony_events.8 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Full-scale industrial mining of iron and nickel
-		add_modifier = { name = sr_colony_psyche_industrial }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_psyche_industrial } }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals pop_type = machinists }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.8.b
 		ai_chance = { base = 4 }
 		# Careful extraction to preserve scientific value
-		add_modifier = { name = sr_colony_psyche_careful }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_psyche_careful } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -324,17 +337,19 @@ space_race_colony_events.9 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Carbon-rich material processing for composite manufacturing
-		add_modifier = { name = sr_colony_pallas_composites }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pallas_composites } }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.9.b
 		ai_chance = { base = 5 }
 		# Astronomical observatory platform on the tilted surface
-		add_modifier = { name = sr_colony_pallas_observatory }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pallas_observatory } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -360,7 +375,7 @@ space_race_colony_events.10 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Volatile extraction - water and organic compounds
-		add_modifier = { name = sr_colony_hygiea_volatiles }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hygiea_volatiles } }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals }
 	}
@@ -369,9 +384,10 @@ space_race_colony_events.10 = {
 		name = space_race_colony_events.10.b
 		ai_chance = { base = 5 }
 		# Automated processing hub supplying the inner system
-		add_modifier = { name = sr_colony_hygiea_automated }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hygiea_automated } }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals pop_type = machinists }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -401,17 +417,19 @@ space_race_colony_events.11 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Sulfur mining and tidal energy harvesting
-		add_modifier = { name = sr_colony_io_mining }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_io_mining } }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.11.b
 		ai_chance = { base = 5 }
 		# Volcanological research station behind radiation shielding
-		add_modifier = { name = sr_colony_io_research }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_io_research } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -437,15 +455,16 @@ space_race_colony_events.12 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Subsurface ocean drilling and astrobiology lab
-		add_modifier = { name = sr_colony_europa_drilling }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_europa_drilling } }
 		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.12.b
 		ai_chance = { base = 4 }
 		# Surface-only habitat to minimize contamination risk
-		add_modifier = { name = sr_colony_europa_surface }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_europa_surface } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
@@ -473,18 +492,20 @@ space_race_colony_events.13 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Major settlement exploiting the magnetosphere for radiation protection
-		add_modifier = { name = sr_colony_ganymede_settlement }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ganymede_settlement } }
 		add_loyalists = { value = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.13.b
 		ai_chance = { base = 5 }
 		# Jovian system command center and logistics hub
-		add_modifier = { name = sr_colony_ganymede_command }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ganymede_command } }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 		add_loyalists = { value = small_radicals pop_type = bureaucrats }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -493,7 +514,7 @@ space_race_colony_events.14 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/callisto.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -510,16 +531,17 @@ space_race_colony_events.14 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Gateway colony - departure point for outer system missions
-		add_modifier = { name = sr_colony_callisto_gateway }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_callisto_gateway } }
 		add_loyalists = { value = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.14.b
 		ai_chance = { base = 5 }
 		# Self-sustaining agricultural settlement on ancient cratered surface
-		add_modifier = { name = sr_colony_callisto_agricultural }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_callisto_agricultural } }
 		add_loyalists = { value = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = farmers }
 	}
@@ -530,7 +552,7 @@ space_race_colony_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/himalia.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -547,17 +569,19 @@ space_race_colony_events.15 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Remote telescope array beyond Jupiter's radiation belts
-		add_modifier = { name = sr_colony_himalia_telescope }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_himalia_telescope } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.15.b
 		ai_chance = { base = 5 }
 		# Fuel depot for trans-Jovian missions
-		add_modifier = { name = sr_colony_himalia_depot }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_himalia_depot } }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -566,7 +590,7 @@ space_race_colony_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/amalthea.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -583,17 +607,19 @@ space_race_colony_events.16 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# High-energy physics platform studying Jupiter's magnetosphere
-		add_modifier = { name = sr_colony_amalthea_physics }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_amalthea_physics } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.16.b
 		ai_chance = { base = 4 }
 		# Ring material collection and analysis
-		add_modifier = { name = sr_colony_amalthea_rings }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_amalthea_rings } }
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -602,7 +628,7 @@ space_race_colony_events.17 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/venus.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -619,18 +645,20 @@ space_race_colony_events.17 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Aerostatic research habitat studying Venus's atmosphere
-		add_modifier = { name = sr_colony_venus_atmospheric }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_venus_atmospheric } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.17.b
 		ai_chance = { base = 5 }
 		# Atmospheric gas extraction and chemical processing
-		add_modifier = { name = sr_colony_venus_extraction }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_venus_extraction } }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -643,7 +671,7 @@ space_race_colony_events.18 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/mercury.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -660,17 +688,19 @@ space_race_colony_events.18 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Solar power megastation beaming energy across the system
-		add_modifier = { name = sr_colony_mercury_solar }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mercury_solar } }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.18.b
 		ai_chance = { base = 5 }
 		# Permanently shadowed crater base with ice mining
-		add_modifier = { name = sr_colony_mercury_ice }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mercury_ice } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -696,17 +726,19 @@ space_race_colony_events.19 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Hydrocarbon harvesting from methane lakes
-		add_modifier = { name = sr_colony_titan_hydrocarbons }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titan_hydrocarbons } }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.19.b
 		ai_chance = { base = 5 }
 		# Prebiotic chemistry research near Kraken Mare
-		add_modifier = { name = sr_colony_titan_prebiotic }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titan_prebiotic } }
 		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -732,16 +764,18 @@ space_race_colony_events.20 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Geyser-adjacent astrobiology lab probing the subsurface ocean
-		add_modifier = { name = sr_colony_enceladus_astrobiology }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_enceladus_astrobiology } }
 		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.20.b
 		ai_chance = { base = 4 }
 		# Clean water extraction and export depot
-		add_modifier = { name = sr_colony_enceladus_water }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_enceladus_water } }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -767,17 +801,19 @@ space_race_colony_events.21 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Ice mining and propellant refinery
-		add_modifier = { name = sr_colony_rhea_propellant }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_rhea_propellant } }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.21.b
 		ai_chance = { base = 5 }
 		# Saturnian ring observation platform
-		add_modifier = { name = sr_colony_rhea_observation }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_rhea_observation } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -803,16 +839,18 @@ space_race_colony_events.22 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Deep installation inside Herschel Crater
-		add_modifier = { name = sr_colony_mimas_installation }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mimas_installation } }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.22.b
 		ai_chance = { base = 5 }
 		# Gravity research facility on the low-mass body
-		add_modifier = { name = sr_colony_mimas_gravity }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mimas_gravity } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -838,17 +876,19 @@ space_race_colony_events.23 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Equatorial ridge survey expedition
-		add_modifier = { name = sr_colony_iapetus_ridge }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_iapetus_ridge } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.23.b
 		ai_chance = { base = 5 }
 		# Dark-side material analysis for organic compound study
-		add_modifier = { name = sr_colony_iapetus_organics }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_iapetus_organics } }
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -878,16 +918,18 @@ space_race_colony_events.24 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Settlement in the great canyon system, mining exposed rock
-		add_modifier = { name = sr_colony_titania_mining }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titania_mining } }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.24.b
 		ai_chance = { base = 5 }
 		# Geophysical station studying past tectonic activity
-		add_modifier = { name = sr_colony_titania_geophysics }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titania_geophysics } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -913,17 +955,19 @@ space_race_colony_events.25 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Deep-space communications relay for outer system
-		add_modifier = { name = sr_colony_oberon_relay }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_oberon_relay } }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.25.b
 		ai_chance = { base = 5 }
 		# Isolated research station embracing the solitude
-		add_modifier = { name = sr_colony_oberon_research }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_oberon_research } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -949,17 +993,19 @@ space_race_colony_events.26 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Verona Rupes base camp - studying the tallest cliff in the solar system
-		add_modifier = { name = sr_colony_miranda_rupes }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_miranda_rupes } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.26.b
 		ai_chance = { base = 5 }
 		# Subsurface drilling exploring the chaotic internal structure
-		add_modifier = { name = sr_colony_miranda_drilling }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_miranda_drilling } }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -985,17 +1031,19 @@ space_race_colony_events.27 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Cryovolcanic sampling station
-		add_modifier = { name = sr_colony_ariel_cryovolcanic }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ariel_cryovolcanic } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.27.b
 		ai_chance = { base = 5 }
 		# Ice quarrying operation for trans-Uranian fuel supply
-		add_modifier = { name = sr_colony_ariel_quarrying }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ariel_quarrying } }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -1021,18 +1069,20 @@ space_race_colony_events.28 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Nitrogen geyser energy capture and research
-		add_modifier = { name = sr_colony_triton_geyser }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_triton_geyser } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.28.b
 		ai_chance = { base = 4 }
 		# Kuiper Belt gateway staging base
-		add_modifier = { name = sr_colony_triton_gateway }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_triton_gateway } }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -1058,18 +1108,20 @@ space_race_colony_events.29 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Neptune atmospheric probe relay station
-		add_modifier = { name = sr_colony_proteus_probe }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_proteus_probe } }
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.29.b
 		ai_chance = { base = 5 }
 		# Automated resource extraction outpost
-		add_modifier = { name = sr_colony_proteus_extraction }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_proteus_extraction } }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals pop_type = machinists }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -1099,18 +1151,20 @@ space_race_colony_events.30 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Dual-body research complex spanning Pluto and Charon
-		add_modifier = { name = sr_colony_pluto_research }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pluto_research } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.30.b
 		ai_chance = { base = 5 }
 		# Nitrogen ice harvesting on Sputnik Planitia
-		add_modifier = { name = sr_colony_pluto_harvesting }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pluto_harvesting } }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -1136,17 +1190,19 @@ space_race_colony_events.31 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Extreme-distance logistics test - proving self-sufficiency
-		add_modifier = { name = sr_colony_eris_selfsufficiency }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_eris_selfsufficiency } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.31.b
 		ai_chance = { base = 4 }
 		# Oort Cloud approach monitoring station
-		add_modifier = { name = sr_colony_eris_monitoring }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_eris_monitoring } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -1172,17 +1228,19 @@ space_race_colony_events.32 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Methane ice chemistry laboratory
-		add_modifier = { name = sr_colony_makemake_chemistry }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_makemake_chemistry } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.32.b
 		ai_chance = { base = 5 }
 		# Solar wind research at the heliopause approach
-		add_modifier = { name = sr_colony_makemake_solarwind }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_makemake_solarwind } }
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -1208,17 +1266,19 @@ space_race_colony_events.33 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Rotational dynamics laboratory on the egg-shaped body
-		add_modifier = { name = sr_colony_haumea_dynamics }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_haumea_dynamics } }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.33.b
 		ai_chance = { base = 5 }
 		# Ring and moon system study from orbital platform
-		add_modifier = { name = sr_colony_haumea_rings }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_haumea_rings } }
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
 	}
 }
 
@@ -1244,16 +1304,18 @@ space_race_colony_events.34 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Humanity's most distant permanent outpost - a monument to ambition
-		add_modifier = { name = sr_colony_sedna_outpost }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_sedna_outpost } }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals }
+		add_loyalists = { value = small_radicals }
 	}
 
 	option = {
 		name = space_race_colony_events.34.b
 		ai_chance = { base = 4 }
 		# Interstellar medium research station at the edge of the heliosphere
-		add_modifier = { name = sr_colony_sedna_interstellar }
+		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_sedna_interstellar } }
 		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
 	}
 }

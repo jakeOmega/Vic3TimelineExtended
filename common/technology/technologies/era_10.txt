@@ -92,6 +92,7 @@ reusable_rocketry = {
 
 	modifier = {
 		country_space_race_max_funding_add = 1
+		country_space_race_progress_add = 0.2
 	}
 	
 	ai_weight = {

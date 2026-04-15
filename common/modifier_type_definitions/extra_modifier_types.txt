@@ -1088,6 +1088,34 @@ country_space_race_max_funding_add = {
 	}
 }
 
+# Space race monthly progress bonus (added to base rate from space program PM)
+country_space_race_progress_add = {
+	color = good
+	percent = no
+	decimals = 1
+	game_data = {
+		ai_value = 5000
+	}
+}
+
+# Space race progress multiplier (ambitious approach: +50% per JE)
+country_space_race_progress_mult = {
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 5000
+	}
+}
+
+# Space race failure risk multiplier (safe approach: -50% per JE)
+country_space_race_risk_mult = {
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = -5000
+	}
+}
+
 # Pop % threshold for creating a new homeland (base 1.0 in base_values)
 # State-level: modified by laws (all states), decrees (per-state), buildings, etc.
 # Lower value = easier to form homelands; higher = harder
