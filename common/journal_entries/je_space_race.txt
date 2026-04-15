@@ -1311,10 +1311,13 @@ je_space_race_solar_colonization = {
 					has_variable = sr_progress_solar_colonization
 					var:sr_progress_solar_colonization >= sr_solar_colonization_goal
 				}
+				# Save pre-stage-change goal before colony effect (which may advance the stage and raise the goal)
+				set_variable = { name = sr_goal_before_colony value = sr_solar_colonization_goal }
 				# Establish a colony at a random unclaimed location in the current stage
 				sr_establish_colony_effect = yes
-				# Reset progress (preserve overflow)
-				change_variable = { name = sr_progress_solar_colonization subtract = sr_solar_colonization_goal }
+				# Reset progress (preserve overflow using the pre-advancement goal)
+				change_variable = { name = sr_progress_solar_colonization subtract = var:sr_goal_before_colony }
+				remove_variable = sr_goal_before_colony
 				# If all stages exhausted, mark complete but keep JE alive for modifiers
 				if = {
 					limit = { has_global_variable = sr_all_colonies_complete }
