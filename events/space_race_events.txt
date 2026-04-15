@@ -572,24 +572,101 @@ space_race_events.20 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
-	title = space_race_events.20.t
-	desc = {
+	title = {
 		first_valid = {
 			triggered_desc = {
-				desc = space_race_events.20.d_first
-				trigger = {
-					exists = scope:sr_is_first
-				}
+				desc = space_race_events.20.t_already
+				trigger = { exists = scope:sr_already_achieved }
 			}
-			desc = space_race_events.20.d
+			desc = space_race_events.20.t
 		}
 	}
-	flavor = space_race_events.20.f
+	desc = {
+		# Part 1: Milestone-specific opening (exactly one matches)
+		first_valid = {
+			triggered_desc = { desc = space_race_events.20.d_suborbital trigger = { exists = scope:sr_milestone_suborbital } }
+			triggered_desc = { desc = space_race_events.20.d_orbital trigger = { exists = scope:sr_milestone_orbital } }
+			triggered_desc = { desc = space_race_events.20.d_moon_landing trigger = { exists = scope:sr_milestone_moon_landing } }
+			triggered_desc = { desc = space_race_events.20.d_probe trigger = { exists = scope:sr_milestone_probe } }
+			triggered_desc = { desc = space_race_events.20.d_moon_base trigger = { exists = scope:sr_milestone_moon_base } }
+			triggered_desc = { desc = space_race_events.20.d_mars_landing trigger = { exists = scope:sr_milestone_mars_landing } }
+			triggered_desc = { desc = space_race_events.20.d_interstellar trigger = { exists = scope:sr_milestone_interstellar_probe } }
+		}
+		# Part 2: Context (first / already achieved / normal)
+		first_valid = {
+			triggered_desc = { desc = space_race_events.20.d_context_first trigger = { exists = scope:sr_is_first } }
+			triggered_desc = { desc = space_race_events.20.d_context_already trigger = { exists = scope:sr_already_achieved } }
+			desc = space_race_events.20.d_context_normal
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = { desc = space_race_events.20.f_already trigger = { exists = scope:sr_already_achieved } }
+			desc = space_race_events.20.f
+		}
+	}
 
 	duration = 3
 
 	trigger = { }
-	immediate = { }
+
+	immediate = {
+		# Load achiever from variable (save-reload safe)
+		if = {
+			limit = { has_variable = sr_notify_achiever }
+			var:sr_notify_achiever = { save_scope_as = sr_achiever }
+			remove_variable = sr_notify_achiever
+		}
+		# Check if world first
+		if = {
+			limit = { has_variable = sr_notify_is_first }
+			save_scope_as = sr_is_first
+			remove_variable = sr_notify_is_first
+		}
+		# Determine milestone type and whether we already achieved it
+		if = {
+			limit = { has_variable = sr_notify_suborbital }
+			save_scope_as = sr_milestone_suborbital
+			if = { limit = { has_variable = sr_completed_suborbital } save_scope_as = sr_already_achieved }
+			remove_variable = sr_notify_suborbital
+		}
+		if = {
+			limit = { has_variable = sr_notify_orbital }
+			save_scope_as = sr_milestone_orbital
+			if = { limit = { has_variable = sr_completed_orbital } save_scope_as = sr_already_achieved }
+			remove_variable = sr_notify_orbital
+		}
+		if = {
+			limit = { has_variable = sr_notify_moon_landing }
+			save_scope_as = sr_milestone_moon_landing
+			if = { limit = { has_variable = sr_completed_moon_landing } save_scope_as = sr_already_achieved }
+			remove_variable = sr_notify_moon_landing
+		}
+		if = {
+			limit = { has_variable = sr_notify_probe }
+			save_scope_as = sr_milestone_probe
+			if = { limit = { has_variable = sr_completed_probe } save_scope_as = sr_already_achieved }
+			remove_variable = sr_notify_probe
+		}
+		if = {
+			limit = { has_variable = sr_notify_moon_base }
+			save_scope_as = sr_milestone_moon_base
+			if = { limit = { has_variable = sr_completed_moon_base } save_scope_as = sr_already_achieved }
+			remove_variable = sr_notify_moon_base
+		}
+		if = {
+			limit = { has_variable = sr_notify_mars_landing }
+			save_scope_as = sr_milestone_mars_landing
+			if = { limit = { has_variable = sr_completed_mars_landing } save_scope_as = sr_already_achieved }
+			remove_variable = sr_notify_mars_landing
+		}
+		if = {
+			limit = { has_variable = sr_notify_interstellar_probe }
+			save_scope_as = sr_milestone_interstellar_probe
+			if = { limit = { has_variable = sr_completed_interstellar_probe } save_scope_as = sr_already_achieved }
+			remove_variable = sr_notify_interstellar_probe
+		}
+	}
 
 	option = {
 		name = space_race_events.20.a

@@ -13,6 +13,7 @@
 		country_weekly_innovation_max_add = 50
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = 1
 		country_satcom_pb_principles_bool = yes
+		country_space_race_max_funding_add = 1
 	}
 	
 	ai_weight = {

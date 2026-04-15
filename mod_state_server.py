@@ -820,6 +820,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "engine-docs": lambda: self._engine_docs(rest, params),
             # Developer reference docs (.md files from base game)
             "dev-docs": lambda: self._dev_docs(rest, params),
+            # Missing localization detection
+            "unlocalized": lambda: self._unlocalized(params),
         }
         handler = dispatch.get(ep)
         if handler is None:
@@ -1877,6 +1879,122 @@ class ModStateHandler(BaseHTTPRequestHandler):
             return {"directory": req_path, "count": len(docs), "docs": docs}
 
         raise KeyError(f"No dev doc found for: {req_path}")
+
+    # ---- unlocalized entity detection -------------------------------------
+
+    # Which entity types need localization and the loc-key pattern:
+    #   "self"        → entity ID is the loc key
+    #   "self+desc"   → entity ID + ID_desc both needed
+    #   "event"       → event-style keys (id.t, id.d, id.a …)
+    _LOC_SPECS: list[tuple[str, str]] = [
+        ("Modifiers",            "self+desc"),
+        ("Modifier Types",       "self+desc"),
+        ("Technologies",         "self"),
+        ("Buildings",            "self"),
+        ("Laws",                 "self"),
+        ("Law Groups",           "self"),
+        ("PMs",                  "self"),
+        ("PM Groups",            "self"),
+        ("Goods",                "self"),
+        ("Institutions",         "self"),
+        ("Interest Groups",      "self"),
+        ("Character Traits",     "self"),
+        ("Decisions",            "self+desc"),
+        ("Decrees",              "self+desc"),
+        ("Journal Entries",      "self"),
+        ("Diplomatic Actions",   "self"),
+        ("Diplomatic Plays",     "self"),
+        ("Subject Types",        "self"),
+        ("Mobilization Options", "self"),
+        ("Company Types",        "self"),
+        ("Building Groups",      "self"),
+        ("Religions",            "self"),
+        ("Combat Unit Types",    "self"),
+        ("Events",               "event"),
+    ]
+
+    def _unlocalized(self, params):
+        """GET /unlocalized?type=<EntityType>&mod_only=true
+        Find entities with missing localization keys.
+        - type:     filter to one entity type (e.g. "Modifiers")
+        - mod_only: if "true" (default), skip entities that exist in vanilla
+        """
+        type_filter = params.get("type", [""])[0]
+        mod_only = params.get("mod_only", ["true"])[0].lower() != "false"
+
+        results: dict[str, list] = {}
+        total = 0
+
+        for etype, pattern in self._LOC_SPECS:
+            if type_filter and etype != type_filter:
+                continue
+            data = ms.get_data(etype)
+            if not data:
+                continue
+
+            base_data = (
+                ms.base_parsers[etype].data
+                if etype in ms.base_parsers
+                else {}
+            )
+
+            missing: list[dict] = []
+            for eid in data:
+                # Skip internal parser artefacts
+                if eid == "namespace":
+                    continue
+                # Skip vanilla entities when mod_only is set
+                if mod_only and eid in base_data:
+                    continue
+
+                missing_keys: list[str] = []
+                if pattern == "event":
+                    # Events need .t (title) and .d (description)
+                    for suffix in [".t", ".d"]:
+                        if not ms.has_localization(eid + suffix):
+                            missing_keys.append(eid + suffix)
+                    # Check options by parsing the event data
+                    ed = get_entity_data(data[eid])
+                    if isinstance(ed, dict):
+                        options = ed.get("option", [])
+                        if isinstance(options, dict):
+                            options = [options]
+                        if isinstance(options, list):
+                            for opt in options:
+                                if isinstance(opt, dict):
+                                    name = get_field(opt, "name")
+                                    if name and not ms.has_localization(name):
+                                        missing_keys.append(name)
+                elif pattern == "self+desc":
+                    if not ms.has_localization(eid):
+                        missing_keys.append(eid)
+                    if not ms.has_localization(eid + "_desc"):
+                        missing_keys.append(eid + "_desc")
+                else:  # "self"
+                    if not ms.has_localization(eid):
+                        missing_keys.append(eid)
+
+                if missing_keys:
+                    missing.append({
+                        "id": eid,
+                        "missing_keys": missing_keys,
+                    })
+
+            if missing:
+                results[etype] = missing
+                total += len(missing)
+
+        return {
+            "mod_only": mod_only,
+            "total_entities_with_missing_loc": total,
+            "total_missing_keys": sum(
+                len(m) for ents in results.values() for m in ents
+                for _ in [None]  # just counting
+            ) if False else sum(
+                len(e["missing_keys"]) for ents in results.values() for e in ents
+            ),
+            "by_type": results,
+        }
 
     # ---- response helpers -------------------------------------------------
     def _respond_json(self, data, status=200):

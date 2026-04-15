@@ -87,6 +87,7 @@ orbital_manufacturing = {
 
 	modifier = {
 		state_building_airport_max_level_add = 2
+		country_space_race_max_funding_add = 2
 	}
 	
 	ai_weight = {
@@ -137,6 +138,7 @@ compact_fusion_reactors = {
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
 		state_building_barrack_max_level_add = 200
+		country_space_race_max_funding_add = 2
 	}
 	
 	ai_weight = {
@@ -162,6 +164,7 @@ fusion_batteries = {
 		military_formation_movement_speed_mult = 1
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
+		country_space_race_max_funding_add = 2
 	}
 	
 	ai_weight = {

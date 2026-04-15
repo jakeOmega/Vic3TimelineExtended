@@ -187,6 +187,10 @@ space_militarization = {
 	unlocking_technologies = {	
 		reusable_rocketry
 	}
+
+	modifier = {
+		country_space_race_max_funding_add = 1
+	}
 	
 	ai_weight = {
 		value = 1
@@ -313,6 +317,7 @@ fusion_power = {
 		state_bureaucracy_population_base_cost_factor_mult = 2
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
+		country_space_race_max_funding_add = 1
 	}
 	
 	ai_weight = {

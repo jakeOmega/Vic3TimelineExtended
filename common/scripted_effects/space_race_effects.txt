@@ -229,6 +229,7 @@ sr_complete_milestone_effect = {
 # Notify all countries about a space race milestone achievement
 # Scope: Country that achieved the milestone
 # Set sr_is_world_first variable to yes before calling if this is a first
+# $MILESTONE$ = suborbital, orbital, moon_landing, probe, moon_base, mars_landing, interstellar_probe
 sr_notify_milestone_achievement = {
 	save_scope_as = sr_achiever
 	if = {
@@ -236,12 +237,22 @@ sr_notify_milestone_achievement = {
 		save_scope_as = sr_is_first
 		remove_variable = sr_is_world_first
 	}
-	every_country = {
-		limit = {
-			NOT = { THIS = scope:sr_achiever }
-			is_country_type = recognized
+	custom_tooltip = {
+		text = sr_notify_achievement_tt
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:sr_achiever }
+				is_country_type = recognized
+			}
+			# Store achiever and milestone on each receiver for save-reload safety
+			set_variable = { name = sr_notify_achiever value = scope:sr_achiever }
+			set_variable = { name = sr_notify_$MILESTONE$ value = yes }
+			if = {
+				limit = { exists = scope:sr_is_first }
+				set_variable = { name = sr_notify_is_first value = yes }
+			}
+			trigger_event = { id = space_race_events.20 days = 14 }
 		}
-		trigger_event = { id = space_race_events.20 days = 14 }
 	}
 }
 
@@ -254,7 +265,7 @@ sr_complete_suborbital_effect = {
 		set_variable = { name = sr_was_first_suborbital value = yes }
 		set_variable = { name = sr_is_world_first value = yes }
 	}
-	sr_notify_milestone_achievement = yes
+	sr_notify_milestone_achievement = { MILESTONE = suborbital }
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_suborbital } remove_variable = sr_funding_suborbital }
 	if = { limit = { has_variable = sr_safe_suborbital } remove_variable = sr_safe_suborbital }
@@ -272,7 +283,7 @@ sr_complete_orbital_effect = {
 		set_variable = { name = sr_was_first_orbital value = yes }
 		set_variable = { name = sr_is_world_first value = yes }
 	}
-	sr_notify_milestone_achievement = yes
+	sr_notify_milestone_achievement = { MILESTONE = orbital }
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_orbital } remove_variable = sr_funding_orbital }
 	if = { limit = { has_variable = sr_safe_orbital } remove_variable = sr_safe_orbital }
@@ -290,7 +301,7 @@ sr_complete_moon_landing_effect = {
 		set_variable = { name = sr_was_first_moon_landing value = yes }
 		set_variable = { name = sr_is_world_first value = yes }
 	}
-	sr_notify_milestone_achievement = yes
+	sr_notify_milestone_achievement = { MILESTONE = moon_landing }
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_moon_landing } remove_variable = sr_funding_moon_landing }
 	if = { limit = { has_variable = sr_safe_moon_landing } remove_variable = sr_safe_moon_landing }
@@ -308,7 +319,7 @@ sr_complete_probe_effect = {
 		set_variable = { name = sr_was_first_probe value = yes }
 		set_variable = { name = sr_is_world_first value = yes }
 	}
-	sr_notify_milestone_achievement = yes
+	sr_notify_milestone_achievement = { MILESTONE = probe }
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_probe } remove_variable = sr_funding_probe }
 	if = { limit = { has_variable = sr_safe_probe } remove_variable = sr_safe_probe }
@@ -326,7 +337,7 @@ sr_complete_moon_base_effect = {
 		set_variable = { name = sr_was_first_moon_base value = yes }
 		set_variable = { name = sr_is_world_first value = yes }
 	}
-	sr_notify_milestone_achievement = yes
+	sr_notify_milestone_achievement = { MILESTONE = moon_base }
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_moon_base } remove_variable = sr_funding_moon_base }
 	if = { limit = { has_variable = sr_safe_moon_base } remove_variable = sr_safe_moon_base }
@@ -344,7 +355,7 @@ sr_complete_mars_landing_effect = {
 		set_variable = { name = sr_was_first_mars_landing value = yes }
 		set_variable = { name = sr_is_world_first value = yes }
 	}
-	sr_notify_milestone_achievement = yes
+	sr_notify_milestone_achievement = { MILESTONE = mars_landing }
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_mars_landing } remove_variable = sr_funding_mars_landing }
 	if = { limit = { has_variable = sr_safe_mars_landing } remove_variable = sr_safe_mars_landing }
@@ -363,7 +374,7 @@ sr_complete_interstellar_probe_effect = {
 		set_variable = { name = sr_was_first_interstellar_probe value = yes }
 		set_variable = { name = sr_is_world_first value = yes }
 	}
-	sr_notify_milestone_achievement = yes
+	sr_notify_milestone_achievement = { MILESTONE = interstellar_probe }
 	# Clean up per-JE variables
 	if = { limit = { has_variable = sr_funding_interstellar_probe } remove_variable = sr_funding_interstellar_probe }
 	if = { limit = { has_variable = sr_safe_interstellar_probe } remove_variable = sr_safe_interstellar_probe }

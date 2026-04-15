@@ -1943,7 +1943,7 @@ society_technology_events_on_action = {
 				trigger = {
 					has_technology_researched = television_broadcasting
 					NOT = { has_modifier = rre_religious_right_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout }
+					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
 				}
 				trigger_event = { id = religious_revival_events.1 }
 			}
@@ -1953,7 +1953,7 @@ society_technology_events_on_action = {
 				trigger = {
 					has_technology_researched = pop_culture
 					NOT = { has_modifier = rre_televangelism_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout }
+					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
 				}
 				trigger_event = { id = religious_revival_events.2 }
 			}
@@ -1963,7 +1963,7 @@ society_technology_events_on_action = {
 				trigger = {
 					has_technology_researched = civil_rights_movement
 					NOT = { has_modifier = rre_liberation_theology_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout }
+					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
 				}
 				trigger_event = { id = religious_revival_events.3 }
 			}
@@ -1973,7 +1973,7 @@ society_technology_events_on_action = {
 				trigger = {
 					has_technology_researched = globalization
 					NOT = { has_modifier = rre_religious_nationalism_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout }
+					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
 				}
 				trigger_event = { id = religious_revival_events.4 }
 			}
@@ -1983,7 +1983,7 @@ society_technology_events_on_action = {
 				trigger = {
 					has_technology_researched = social_media
 					NOT = { has_modifier = rre_digital_faith_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout }
+					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
 				}
 				trigger_event = { id = religious_revival_events.5 }
 			}
@@ -1993,7 +1993,7 @@ society_technology_events_on_action = {
 				trigger = {
 					has_technology_researched = sexual_revolution
 					NOT = { has_modifier = rre_culture_war_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout }
+					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
 				}
 				trigger_event = { id = religious_revival_events.6 }
 			}
@@ -2003,7 +2003,7 @@ society_technology_events_on_action = {
 				trigger = {
 					has_technology_researched = social_justice_movements
 					NOT = { has_modifier = rre_faith_services_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout }
+					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
 				}
 				trigger_event = { id = religious_revival_events.7 }
 			}
