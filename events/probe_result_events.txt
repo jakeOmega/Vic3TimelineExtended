@@ -1,0 +1,1619 @@
+﻿namespace = space_race_events
+
+##############################################
+# INTERSTELLAR PROBE RESULT EVENTS (601-630)
+#
+# Each result is its own event with a unique image.
+# Dispatched from the hidden space_race_events.60.
+#
+# Cat I: Dead Worlds & Data (results 1-8) → events 601-608
+# Cat II: Astrophysical Wonders (results 9-15) → events 609-615
+# Cat III: Biological Discovery (results 16-24) → events 616-624
+# Cat IV: Intelligence & Tech-signatures (results 25-30) → events 625-630
+##############################################
+
+# =================================================================
+# CATEGORY I: DEAD WORLDS & DATA (601-608)
+# =================================================================
+
+# Result 1: Scorched rock orbiting Proxima Centauri
+space_race_events.601 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_scorched_rock.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.601.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.1 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 2: Tidally locked super-Earth at Barnard's Star
+space_race_events.602 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_tidally_locked.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.602.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.2 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 3: Carbon world with graphite plains and diamond conglomerates
+space_race_events.603 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_carbon_world.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.603.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.3 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 4: Iron world - exposed planetary core
+space_race_events.604 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_iron_world.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.604.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.4 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 5: No terrestrial planets - asteroid belt mapping
+space_race_events.605 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_asteroid_belts.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.605.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.5 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 6: Exotic ice world - cryogenic chemistry
+space_race_events.606 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_ice_world.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.606.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.6 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 7: White dwarf graveyard - Sirius B flyby
+space_race_events.607 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_white_dwarf.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.607.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.7 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 8: Superflare observation
+space_race_events.608 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_superflare.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.608.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.8 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_dead_worlds_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# =================================================================
+# CATEGORY II: ASTROPHYSICAL WONDERS (609-615)
+# =================================================================
+
+# Result 9: Ringed rocky planet - destroyed moon debris
+space_race_events.609 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_ringed_planet.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.609.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.9 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat2
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 10: Hyper-active tectonic super-Earth
+space_race_events.610 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_volcanic_world.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.610.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.10 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat2
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 11: Rocky world with powerful magnetic field
+space_race_events.611 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_magnetic_shield.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.611.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.11 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat2
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 12: Planet-wide ocean - deep water world
+space_race_events.612 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_ocean_world.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.612.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.12 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat2
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 13: Icy moon with geysers (Epsilon Eridani)
+space_race_events.613 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_geyser_moon.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.613.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.13 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat2
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 14: Titan-analog with hydrocarbon lakes
+space_race_events.614 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_hydrocarbon_lakes.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.614.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.14 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat2
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 15: Runaway greenhouse Venus-analog
+space_race_events.615 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_greenhouse_world.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.615.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.15 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat2
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_astro_wonders_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# =================================================================
+# CATEGORY III: BIOLOGICAL DISCOVERY (616-624)
+# =================================================================
+
+# Result 16: Atmospheric biosignatures - life confirmed
+space_race_events.616 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_biosignatures.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.616.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.16 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat3
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 17: Photosynthetic vegetation - red edge
+space_race_events.617 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_alien_vegetation.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.617.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.17 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat3
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 18: Bioluminescent terminator band
+space_race_events.618 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_bioluminescence.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.618.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.18 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat3
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 19: Gas giant atmospheric life
+space_race_events.619 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_cloud_life.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.619.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.19 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat3
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 20: Purple sulfur biosphere
+space_race_events.620 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_purple_world.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.620.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.20 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat3
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 21: Non-carbon biochemistry at volcanic vents
+space_race_events.621 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_exotic_life.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.621.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.21 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat3
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 22: Methane-based biosphere (Barnard's Star)
+space_race_events.622 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_methane_life.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.622.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.22 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat3
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 23: Alien reef system - calcium-carbonate megastructures
+space_race_events.623 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_alien_reef.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.623.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.23 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat3
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 24: Planetary-scale mycelial network
+space_race_events.624 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_alien_mycelium.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.624.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.24 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat3
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_biological_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# =================================================================
+# CATEGORY IV: INTELLIGENCE & TECH-SIGNATURES (625-630)
+# =================================================================
+
+# Result 25: Orbital debris field - dead civilization
+space_race_events.625 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_orbital_debris.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.625.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.25 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat4
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 26: Industrial atmosphere - CFC technosignature
+space_race_events.626 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_industrial_atmosphere.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.626.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.26 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat4
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 27: Nuclear-scarred habitable world
+space_race_events.627 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_nuclear_ruins.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.627.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.27 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat4
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 28: Radio emissions from nearby system
+space_race_events.628 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_radio_signal.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.628.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.28 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat4
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 29: Artificial light on night side - active civilization
+space_race_events.629 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_city_lights.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.629.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.29 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat4
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}
+
+# Result 30: Alien probe at Lagrange point
+space_race_events.630 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/probe_alien_artifact.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_events.630.t
+	desc = {
+		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.30 trigger = { always = yes } }
+		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+	}
+	flavor = space_race_events.60.f.cat4
+	duration = 3
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = space_race_events.60.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
+		custom_tooltip = {
+			text = SR_SHARE_FREELY_RELATIONS_TT
+			every_country = {
+				limit = {
+					has_technology_researched = space_colonization
+					NOT = { THIS = ROOT }
+					has_diplomatic_relevance = ROOT
+				}
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+	}
+	option = {
+		name = space_race_events.60.b
+		ai_chance = { base = 4 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+	}
+	option = {
+		name = space_race_events.60.c
+		ai_chance = { base = 2 }
+		add_modifier = { name = sr_probe_intelligence_data }
+		add_loyalists = { value = medium_radicals pop_type = capitalists }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+}

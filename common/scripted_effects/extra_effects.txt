@@ -39,27 +39,81 @@
 		remove_building = building_space_elevator_construction_site
 		if = {
 			limit = { has_building = building_space_elevator }
-			switch = {
-                trigger = b:building_space_elevator.level
-				1 = {create_building = { building = building_space_elevator level = 2}}
-				2 = {create_building = { building = building_space_elevator level = 3}}
-				3 = {create_building = { building = building_space_elevator level = 4}}
-				4 = {create_building = { building = building_space_elevator level = 5}}
-				5 = {create_building = { building = building_space_elevator level = 6}}
-				6 = {create_building = { building = building_space_elevator level = 7}}
-				7 = {create_building = { building = building_space_elevator level = 8}}
-				8 = {create_building = { building = building_space_elevator level = 9}}
-				9 = {create_building = { building = building_space_elevator level = 10}}
-				10 = {create_building = { building = building_space_elevator level = 11}}
-				11 = {create_building = { building = building_space_elevator level = 12}}
-				12 = {create_building = { building = building_space_elevator level = 13}}
-				13 = {create_building = { building = building_space_elevator level = 14}}
-				14 = {create_building = { building = building_space_elevator level = 15}}
-				15 = {create_building = { building = building_space_elevator level = 16}}
-				16 = {create_building = { building = building_space_elevator level = 17}}
-				17 = {create_building = { building = building_space_elevator level = 18}}
-				18 = {create_building = { building = building_space_elevator level = 19}}
-				19 = {create_building = { building = building_space_elevator level = 20}}
+			if = {
+				limit = { b:building_space_elevator.level = 19 }
+				create_building = { building = building_space_elevator level = 20 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 18 }
+				create_building = { building = building_space_elevator level = 19 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 17 }
+				create_building = { building = building_space_elevator level = 18 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 16 }
+				create_building = { building = building_space_elevator level = 17 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 15 }
+				create_building = { building = building_space_elevator level = 16 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 14 }
+				create_building = { building = building_space_elevator level = 15 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 13 }
+				create_building = { building = building_space_elevator level = 14 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 12 }
+				create_building = { building = building_space_elevator level = 13 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 11 }
+				create_building = { building = building_space_elevator level = 12 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 10 }
+				create_building = { building = building_space_elevator level = 11 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 9 }
+				create_building = { building = building_space_elevator level = 10 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 8 }
+				create_building = { building = building_space_elevator level = 9 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 7 }
+				create_building = { building = building_space_elevator level = 8 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 6 }
+				create_building = { building = building_space_elevator level = 7 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 5 }
+				create_building = { building = building_space_elevator level = 6 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 4 }
+				create_building = { building = building_space_elevator level = 5 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 3 }
+				create_building = { building = building_space_elevator level = 4 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 2 }
+				create_building = { building = building_space_elevator level = 3 }
+			}
+			else_if = {
+				limit = { b:building_space_elevator.level = 1 }
+				create_building = { building = building_space_elevator level = 2 }
 			}
 		}
 		else = {
@@ -112,17 +166,41 @@ solar_collector_construction = {
 		remove_building = building_solar_collector_construction_site
 		if = {
 			limit = { has_building = building_solar_collector }
-			switch = {
-				trigger = b:building_solar_collector.level
-				1 = { create_building = { building = building_solar_collector level = 2 } }
-				2 = { create_building = { building = building_solar_collector level = 3 } }
-				3 = { create_building = { building = building_solar_collector level = 4 } }
-				4 = { create_building = { building = building_solar_collector level = 5 } }
-				5 = { create_building = { building = building_solar_collector level = 6 } }
-				6 = { create_building = { building = building_solar_collector level = 7 } }
-				7 = { create_building = { building = building_solar_collector level = 8 } }
-				8 = { create_building = { building = building_solar_collector level = 9 } }
-				9 = { create_building = { building = building_solar_collector level = 10 } }
+			if = {
+				limit = { b:building_solar_collector.level = 9 }
+				create_building = { building = building_solar_collector level = 10 }
+			}
+			else_if = {
+				limit = { b:building_solar_collector.level = 8 }
+				create_building = { building = building_solar_collector level = 9 }
+			}
+			else_if = {
+				limit = { b:building_solar_collector.level = 7 }
+				create_building = { building = building_solar_collector level = 8 }
+			}
+			else_if = {
+				limit = { b:building_solar_collector.level = 6 }
+				create_building = { building = building_solar_collector level = 7 }
+			}
+			else_if = {
+				limit = { b:building_solar_collector.level = 5 }
+				create_building = { building = building_solar_collector level = 6 }
+			}
+			else_if = {
+				limit = { b:building_solar_collector.level = 4 }
+				create_building = { building = building_solar_collector level = 5 }
+			}
+			else_if = {
+				limit = { b:building_solar_collector.level = 3 }
+				create_building = { building = building_solar_collector level = 4 }
+			}
+			else_if = {
+				limit = { b:building_solar_collector.level = 2 }
+				create_building = { building = building_solar_collector level = 3 }
+			}
+			else_if = {
+				limit = { b:building_solar_collector.level = 1 }
+				create_building = { building = building_solar_collector level = 2 }
 			}
 		}
 		else = {
@@ -175,12 +253,21 @@ orbital_battlestation_construction = {
 		remove_building = building_orbital_battlestation_construction_site
 		if = {
 			limit = { has_building = building_orbital_battlestation }
-			switch = {
-				trigger = b:building_orbital_battlestation.level
-				1 = { create_building = { building = building_orbital_battlestation level = 2 } }
-				2 = { create_building = { building = building_orbital_battlestation level = 3 } }
-				3 = { create_building = { building = building_orbital_battlestation level = 4 } }
-				4 = { create_building = { building = building_orbital_battlestation level = 5 } }
+			if = {
+				limit = { b:building_orbital_battlestation.level = 4 }
+				create_building = { building = building_orbital_battlestation level = 5 }
+			}
+			else_if = {
+				limit = { b:building_orbital_battlestation.level = 3 }
+				create_building = { building = building_orbital_battlestation level = 4 }
+			}
+			else_if = {
+				limit = { b:building_orbital_battlestation.level = 2 }
+				create_building = { building = building_orbital_battlestation level = 3 }
+			}
+			else_if = {
+				limit = { b:building_orbital_battlestation.level = 1 }
+				create_building = { building = building_orbital_battlestation level = 2 }
 			}
 		}
 		else = {
@@ -233,12 +320,21 @@ mind_upload_nexus_construction = {
 		remove_building = building_mind_upload_nexus_construction_site
 		if = {
 			limit = { has_building = building_mind_upload_nexus }
-			switch = {
-				trigger = b:building_mind_upload_nexus.level
-				1 = { create_building = { building = building_mind_upload_nexus level = 2 } }
-				2 = { create_building = { building = building_mind_upload_nexus level = 3 } }
-				3 = { create_building = { building = building_mind_upload_nexus level = 4 } }
-				4 = { create_building = { building = building_mind_upload_nexus level = 5 } }
+			if = {
+				limit = { b:building_mind_upload_nexus.level = 4 }
+				create_building = { building = building_mind_upload_nexus level = 5 }
+			}
+			else_if = {
+				limit = { b:building_mind_upload_nexus.level = 3 }
+				create_building = { building = building_mind_upload_nexus level = 4 }
+			}
+			else_if = {
+				limit = { b:building_mind_upload_nexus.level = 2 }
+				create_building = { building = building_mind_upload_nexus level = 3 }
+			}
+			else_if = {
+				limit = { b:building_mind_upload_nexus.level = 1 }
+				create_building = { building = building_mind_upload_nexus level = 2 }
 			}
 		}
 		else = {
@@ -1347,17 +1443,41 @@ antimatter_facility_construction = {
 		remove_building = building_antimatter_facility_construction_site
 		if = {
 			limit = { has_building = building_antimatter_facility }
-			switch = {
-				trigger = b:building_antimatter_facility.level
-				1 = { create_building = { building = building_antimatter_facility level = 2 } }
-				2 = { create_building = { building = building_antimatter_facility level = 3 } }
-				3 = { create_building = { building = building_antimatter_facility level = 4 } }
-				4 = { create_building = { building = building_antimatter_facility level = 5 } }
-				5 = { create_building = { building = building_antimatter_facility level = 6 } }
-				6 = { create_building = { building = building_antimatter_facility level = 7 } }
-				7 = { create_building = { building = building_antimatter_facility level = 8 } }
-				8 = { create_building = { building = building_antimatter_facility level = 9 } }
-				9 = { create_building = { building = building_antimatter_facility level = 10 } }
+			if = {
+				limit = { b:building_antimatter_facility.level = 9 }
+				create_building = { building = building_antimatter_facility level = 10 }
+			}
+			else_if = {
+				limit = { b:building_antimatter_facility.level = 8 }
+				create_building = { building = building_antimatter_facility level = 9 }
+			}
+			else_if = {
+				limit = { b:building_antimatter_facility.level = 7 }
+				create_building = { building = building_antimatter_facility level = 8 }
+			}
+			else_if = {
+				limit = { b:building_antimatter_facility.level = 6 }
+				create_building = { building = building_antimatter_facility level = 7 }
+			}
+			else_if = {
+				limit = { b:building_antimatter_facility.level = 5 }
+				create_building = { building = building_antimatter_facility level = 6 }
+			}
+			else_if = {
+				limit = { b:building_antimatter_facility.level = 4 }
+				create_building = { building = building_antimatter_facility level = 5 }
+			}
+			else_if = {
+				limit = { b:building_antimatter_facility.level = 3 }
+				create_building = { building = building_antimatter_facility level = 4 }
+			}
+			else_if = {
+				limit = { b:building_antimatter_facility.level = 2 }
+				create_building = { building = building_antimatter_facility level = 3 }
+			}
+			else_if = {
+				limit = { b:building_antimatter_facility.level = 1 }
+				create_building = { building = building_antimatter_facility level = 2 }
 			}
 		}
 		else = {
@@ -1554,17 +1674,41 @@ nanofabrication_center_construction = {
 		remove_building = building_nanofabrication_center_construction_site
 		if = {
 			limit = { has_building = building_nanofabrication_center }
-			switch = {
-				trigger = b:building_nanofabrication_center.level
-				1 = { create_building = { building = building_nanofabrication_center level = 2 } }
-				2 = { create_building = { building = building_nanofabrication_center level = 3 } }
-				3 = { create_building = { building = building_nanofabrication_center level = 4 } }
-				4 = { create_building = { building = building_nanofabrication_center level = 5 } }
-				5 = { create_building = { building = building_nanofabrication_center level = 6 } }
-				6 = { create_building = { building = building_nanofabrication_center level = 7 } }
-				7 = { create_building = { building = building_nanofabrication_center level = 8 } }
-				8 = { create_building = { building = building_nanofabrication_center level = 9 } }
-				9 = { create_building = { building = building_nanofabrication_center level = 10 } }
+			if = {
+				limit = { b:building_nanofabrication_center.level = 9 }
+				create_building = { building = building_nanofabrication_center level = 10 }
+			}
+			else_if = {
+				limit = { b:building_nanofabrication_center.level = 8 }
+				create_building = { building = building_nanofabrication_center level = 9 }
+			}
+			else_if = {
+				limit = { b:building_nanofabrication_center.level = 7 }
+				create_building = { building = building_nanofabrication_center level = 8 }
+			}
+			else_if = {
+				limit = { b:building_nanofabrication_center.level = 6 }
+				create_building = { building = building_nanofabrication_center level = 7 }
+			}
+			else_if = {
+				limit = { b:building_nanofabrication_center.level = 5 }
+				create_building = { building = building_nanofabrication_center level = 6 }
+			}
+			else_if = {
+				limit = { b:building_nanofabrication_center.level = 4 }
+				create_building = { building = building_nanofabrication_center level = 5 }
+			}
+			else_if = {
+				limit = { b:building_nanofabrication_center.level = 3 }
+				create_building = { building = building_nanofabrication_center level = 4 }
+			}
+			else_if = {
+				limit = { b:building_nanofabrication_center.level = 2 }
+				create_building = { building = building_nanofabrication_center level = 3 }
+			}
+			else_if = {
+				limit = { b:building_nanofabrication_center.level = 1 }
+				create_building = { building = building_nanofabrication_center level = 2 }
 			}
 		}
 		else = {
@@ -1621,17 +1765,41 @@ consciousness_network_construction = {
 		remove_building = building_consciousness_network_construction_site
 		if = {
 			limit = { has_building = building_consciousness_network }
-			switch = {
-				trigger = b:building_consciousness_network.level
-				1 = { create_building = { building = building_consciousness_network level = 2 } }
-				2 = { create_building = { building = building_consciousness_network level = 3 } }
-				3 = { create_building = { building = building_consciousness_network level = 4 } }
-				4 = { create_building = { building = building_consciousness_network level = 5 } }
-				5 = { create_building = { building = building_consciousness_network level = 6 } }
-				6 = { create_building = { building = building_consciousness_network level = 7 } }
-				7 = { create_building = { building = building_consciousness_network level = 8 } }
-				8 = { create_building = { building = building_consciousness_network level = 9 } }
-				9 = { create_building = { building = building_consciousness_network level = 10 } }
+			if = {
+				limit = { b:building_consciousness_network.level = 9 }
+				create_building = { building = building_consciousness_network level = 10 }
+			}
+			else_if = {
+				limit = { b:building_consciousness_network.level = 8 }
+				create_building = { building = building_consciousness_network level = 9 }
+			}
+			else_if = {
+				limit = { b:building_consciousness_network.level = 7 }
+				create_building = { building = building_consciousness_network level = 8 }
+			}
+			else_if = {
+				limit = { b:building_consciousness_network.level = 6 }
+				create_building = { building = building_consciousness_network level = 7 }
+			}
+			else_if = {
+				limit = { b:building_consciousness_network.level = 5 }
+				create_building = { building = building_consciousness_network level = 6 }
+			}
+			else_if = {
+				limit = { b:building_consciousness_network.level = 4 }
+				create_building = { building = building_consciousness_network level = 5 }
+			}
+			else_if = {
+				limit = { b:building_consciousness_network.level = 3 }
+				create_building = { building = building_consciousness_network level = 4 }
+			}
+			else_if = {
+				limit = { b:building_consciousness_network.level = 2 }
+				create_building = { building = building_consciousness_network level = 3 }
+			}
+			else_if = {
+				limit = { b:building_consciousness_network.level = 1 }
+				create_building = { building = building_consciousness_network level = 2 }
 			}
 		}
 		else = {

@@ -900,10 +900,10 @@ REPLACE_OR_CREATE:building_space_elevator_construction_site = {
 	}
 	
 	possible = {
-		#OR = {
-		#	b:building_space_elevator.level < 20
-		#	NOT = { has_building = building_space_elevator }
-		#}
+		OR = {
+			NOT = { has_building = building_space_elevator }
+			b:building_space_elevator.level < 20
+		}
 		OR = {
 			state_region = s:STATE_RIFT_VALLEY
 			state_region = s:STATE_IVORY_COAST
@@ -1871,6 +1871,13 @@ REPLACE_OR_CREATE:building_solar_collector_construction_site = {
 		owner = { has_technology_researched = space_based_solar_power }
 	}
 	
+	possible = {
+		OR = {
+			NOT = { has_building = building_solar_collector }
+			b:building_solar_collector.level < 10
+		}
+	}
+
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -1960,6 +1967,13 @@ REPLACE_OR_CREATE:building_orbital_battlestation_construction_site = {
 		owner = { has_technology_researched = orbital_weapon_platforms }
 	}
 	
+	possible = {
+		OR = {
+			NOT = { has_building = building_orbital_battlestation }
+			b:building_orbital_battlestation.level < 5
+		}
+	}
+
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -2013,6 +2027,13 @@ REPLACE_OR_CREATE:building_mind_upload_nexus_construction_site = {
 		owner = { has_technology_researched = mind_backups }
 	}
 	
+	possible = {
+		OR = {
+			NOT = { has_building = building_mind_upload_nexus }
+			b:building_mind_upload_nexus.level < 5
+		}
+	}
+
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -2065,6 +2086,13 @@ REPLACE_OR_CREATE:building_antimatter_facility_construction_site = {
 		owner = { has_technology_researched = antimatter_production }
 	}
 	
+	possible = {
+		OR = {
+			NOT = { has_building = building_antimatter_facility }
+			b:building_antimatter_facility.level < 10
+		}
+	}
+
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -2186,6 +2214,13 @@ REPLACE_OR_CREATE:building_nanofabrication_center_construction_site = {
 		owner = { has_technology_researched = molecular_assemblers }
 	}
 	
+	possible = {
+		OR = {
+			NOT = { has_building = building_nanofabrication_center }
+			b:building_nanofabrication_center.level < 10
+		}
+	}
+
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -2239,6 +2274,13 @@ REPLACE_OR_CREATE:building_consciousness_network_construction_site = {
 		owner = { has_technology_researched = telepathic_communities }
 	}
 	
+	possible = {
+		OR = {
+			NOT = { has_building = building_consciousness_network }
+			b:building_consciousness_network.level < 10
+		}
+	}
+
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }

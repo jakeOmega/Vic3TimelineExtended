@@ -2611,336 +2611,71 @@ space_race_events.55 = {
 # Cat II: Astrophysical Wonders (30%) - 7 results
 # Cat III: Biological Discovery (20%) - 9 results
 # Cat IV: Intelligence & Tech-signatures (10%) - 6 results
+# Hidden dispatch event - randomizes category & result, then triggers the specific sub-event
+# Sub-events are in events/probe_result_events.txt (space_race_events.601-630)
 space_race_events.60 = {
 	type = country_event
-	placement = root
-
-	event_image = { texture = "gfx/event_pictures/satellite_dish.dds" }
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_industry.dds"
-
-	title = {
-		first_valid = {
-			triggered_desc = {
-				desc = space_race_events.60.t.cat4
-				trigger = { var:sr_probe_category = 4 }
-			}
-			triggered_desc = {
-				desc = space_race_events.60.t.cat3
-				trigger = { var:sr_probe_category = 3 }
-			}
-			triggered_desc = {
-				desc = space_race_events.60.t.cat2
-				trigger = { var:sr_probe_category = 2 }
-			}
-			triggered_desc = {
-				desc = space_race_events.60.t
-				trigger = { always = yes }
-			}
-		}
-	}
-	desc = {
-		# Common intro
-		triggered_desc = {
-			desc = space_race_events.60.d.intro
-			trigger = { always = yes }
-		}
-		# Cat I: Dead Worlds & Data (results 1-8)
-		triggered_desc = {
-			desc = space_race_events.60.d.1
-			trigger = { var:sr_probe_result = 1 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.2
-			trigger = { var:sr_probe_result = 2 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.3
-			trigger = { var:sr_probe_result = 3 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.4
-			trigger = { var:sr_probe_result = 4 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.5
-			trigger = { var:sr_probe_result = 5 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.6
-			trigger = { var:sr_probe_result = 6 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.7
-			trigger = { var:sr_probe_result = 7 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.8
-			trigger = { var:sr_probe_result = 8 }
-		}
-		# Cat II: Astrophysical Wonders (results 9-15)
-		triggered_desc = {
-			desc = space_race_events.60.d.9
-			trigger = { var:sr_probe_result = 9 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.10
-			trigger = { var:sr_probe_result = 10 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.11
-			trigger = { var:sr_probe_result = 11 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.12
-			trigger = { var:sr_probe_result = 12 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.13
-			trigger = { var:sr_probe_result = 13 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.14
-			trigger = { var:sr_probe_result = 14 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.15
-			trigger = { var:sr_probe_result = 15 }
-		}
-		# Cat III: Biological Discovery (results 16-24)
-		triggered_desc = {
-			desc = space_race_events.60.d.16
-			trigger = { var:sr_probe_result = 16 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.17
-			trigger = { var:sr_probe_result = 17 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.18
-			trigger = { var:sr_probe_result = 18 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.19
-			trigger = { var:sr_probe_result = 19 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.20
-			trigger = { var:sr_probe_result = 20 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.21
-			trigger = { var:sr_probe_result = 21 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.22
-			trigger = { var:sr_probe_result = 22 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.23
-			trigger = { var:sr_probe_result = 23 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.24
-			trigger = { var:sr_probe_result = 24 }
-		}
-		# Cat IV: Intelligence & Tech-signatures (results 25-30)
-		triggered_desc = {
-			desc = space_race_events.60.d.25
-			trigger = { var:sr_probe_result = 25 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.26
-			trigger = { var:sr_probe_result = 26 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.27
-			trigger = { var:sr_probe_result = 27 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.28
-			trigger = { var:sr_probe_result = 28 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.29
-			trigger = { var:sr_probe_result = 29 }
-		}
-		triggered_desc = {
-			desc = space_race_events.60.d.30
-			trigger = { var:sr_probe_result = 30 }
-		}
-		# Common outro
-		triggered_desc = {
-			desc = space_race_events.60.d.outro
-			trigger = { always = yes }
-		}
-	}
-	flavor = {
-		first_valid = {
-			triggered_desc = {
-				desc = space_race_events.60.f.cat4
-				trigger = { var:sr_probe_category = 4 }
-			}
-			triggered_desc = {
-				desc = space_race_events.60.f.cat3
-				trigger = { var:sr_probe_category = 3 }
-			}
-			triggered_desc = {
-				desc = space_race_events.60.f.cat2
-				trigger = { var:sr_probe_category = 2 }
-			}
-			triggered_desc = {
-				desc = space_race_events.60.f
-				trigger = { always = yes }
-			}
-		}
-	}
-
-	duration = 3
+	hidden = yes
 
 	trigger = { }
 	immediate = {
-		# Two-stage random: first pick category, then pick specific result
+		# Two-stage random: first pick category, then pick specific result and fire sub-event
 		random_list = {
 			40 = {
 				# Category I: Dead Worlds & Data
 				set_variable = { name = sr_probe_category value = 1 }
 				random_list = {
-					1 = { set_variable = { name = sr_probe_result value = 1 } }
-					1 = { set_variable = { name = sr_probe_result value = 2 } }
-					1 = { set_variable = { name = sr_probe_result value = 3 } }
-					1 = { set_variable = { name = sr_probe_result value = 4 } }
-					1 = { set_variable = { name = sr_probe_result value = 5 } }
-					1 = { set_variable = { name = sr_probe_result value = 6 } }
-					1 = { set_variable = { name = sr_probe_result value = 7 } }
-					1 = { set_variable = { name = sr_probe_result value = 8 } }
+					1 = { set_variable = { name = sr_probe_result value = 1 } trigger_event = { id = space_race_events.601 } }
+					1 = { set_variable = { name = sr_probe_result value = 2 } trigger_event = { id = space_race_events.602 } }
+					1 = { set_variable = { name = sr_probe_result value = 3 } trigger_event = { id = space_race_events.603 } }
+					1 = { set_variable = { name = sr_probe_result value = 4 } trigger_event = { id = space_race_events.604 } }
+					1 = { set_variable = { name = sr_probe_result value = 5 } trigger_event = { id = space_race_events.605 } }
+					1 = { set_variable = { name = sr_probe_result value = 6 } trigger_event = { id = space_race_events.606 } }
+					1 = { set_variable = { name = sr_probe_result value = 7 } trigger_event = { id = space_race_events.607 } }
+					1 = { set_variable = { name = sr_probe_result value = 8 } trigger_event = { id = space_race_events.608 } }
 				}
 			}
 			30 = {
 				# Category II: Astrophysical Wonders
 				set_variable = { name = sr_probe_category value = 2 }
 				random_list = {
-					1 = { set_variable = { name = sr_probe_result value = 9 } }
-					1 = { set_variable = { name = sr_probe_result value = 10 } }
-					1 = { set_variable = { name = sr_probe_result value = 11 } }
-					1 = { set_variable = { name = sr_probe_result value = 12 } }
-					1 = { set_variable = { name = sr_probe_result value = 13 } }
-					1 = { set_variable = { name = sr_probe_result value = 14 } }
-					1 = { set_variable = { name = sr_probe_result value = 15 } }
+					1 = { set_variable = { name = sr_probe_result value = 9 } trigger_event = { id = space_race_events.609 } }
+					1 = { set_variable = { name = sr_probe_result value = 10 } trigger_event = { id = space_race_events.610 } }
+					1 = { set_variable = { name = sr_probe_result value = 11 } trigger_event = { id = space_race_events.611 } }
+					1 = { set_variable = { name = sr_probe_result value = 12 } trigger_event = { id = space_race_events.612 } }
+					1 = { set_variable = { name = sr_probe_result value = 13 } trigger_event = { id = space_race_events.613 } }
+					1 = { set_variable = { name = sr_probe_result value = 14 } trigger_event = { id = space_race_events.614 } }
+					1 = { set_variable = { name = sr_probe_result value = 15 } trigger_event = { id = space_race_events.615 } }
 				}
 			}
 			20 = {
 				# Category III: Biological Discovery
 				set_variable = { name = sr_probe_category value = 3 }
 				random_list = {
-					1 = { set_variable = { name = sr_probe_result value = 16 } }
-					1 = { set_variable = { name = sr_probe_result value = 17 } }
-					1 = { set_variable = { name = sr_probe_result value = 18 } }
-					1 = { set_variable = { name = sr_probe_result value = 19 } }
-					1 = { set_variable = { name = sr_probe_result value = 20 } }
-					1 = { set_variable = { name = sr_probe_result value = 21 } }
-					1 = { set_variable = { name = sr_probe_result value = 22 } }
-					1 = { set_variable = { name = sr_probe_result value = 23 } }
-					1 = { set_variable = { name = sr_probe_result value = 24 } }
+					1 = { set_variable = { name = sr_probe_result value = 16 } trigger_event = { id = space_race_events.616 } }
+					1 = { set_variable = { name = sr_probe_result value = 17 } trigger_event = { id = space_race_events.617 } }
+					1 = { set_variable = { name = sr_probe_result value = 18 } trigger_event = { id = space_race_events.618 } }
+					1 = { set_variable = { name = sr_probe_result value = 19 } trigger_event = { id = space_race_events.619 } }
+					1 = { set_variable = { name = sr_probe_result value = 20 } trigger_event = { id = space_race_events.620 } }
+					1 = { set_variable = { name = sr_probe_result value = 21 } trigger_event = { id = space_race_events.621 } }
+					1 = { set_variable = { name = sr_probe_result value = 22 } trigger_event = { id = space_race_events.622 } }
+					1 = { set_variable = { name = sr_probe_result value = 23 } trigger_event = { id = space_race_events.623 } }
+					1 = { set_variable = { name = sr_probe_result value = 24 } trigger_event = { id = space_race_events.624 } }
 				}
 			}
 			10 = {
 				# Category IV: Intelligence & Tech-signatures
 				set_variable = { name = sr_probe_category value = 4 }
 				random_list = {
-					1 = { set_variable = { name = sr_probe_result value = 25 } }
-					1 = { set_variable = { name = sr_probe_result value = 26 } }
-					1 = { set_variable = { name = sr_probe_result value = 27 } }
-					1 = { set_variable = { name = sr_probe_result value = 28 } }
-					1 = { set_variable = { name = sr_probe_result value = 29 } }
-					1 = { set_variable = { name = sr_probe_result value = 30 } }
+					1 = { set_variable = { name = sr_probe_result value = 25 } trigger_event = { id = space_race_events.625 } }
+					1 = { set_variable = { name = sr_probe_result value = 26 } trigger_event = { id = space_race_events.626 } }
+					1 = { set_variable = { name = sr_probe_result value = 27 } trigger_event = { id = space_race_events.627 } }
+					1 = { set_variable = { name = sr_probe_result value = 28 } trigger_event = { id = space_race_events.628 } }
+					1 = { set_variable = { name = sr_probe_result value = 29 } trigger_event = { id = space_race_events.629 } }
+					1 = { set_variable = { name = sr_probe_result value = 30 } trigger_event = { id = space_race_events.630 } }
 				}
 			}
 		}
-	}
-
-	option = {
-		name = space_race_events.60.a
-		default_option = yes
-		ai_chance = { base = 5 }
-		# Share the data freely - advance all of humanity's knowledge
-		if = {
-			limit = { var:sr_probe_category = 1 }
-			add_modifier = { name = sr_probe_dead_worlds_data }
-		}
-		else_if = {
-			limit = { var:sr_probe_category = 2 }
-			add_modifier = { name = sr_probe_astro_wonders_data }
-		}
-		else_if = {
-			limit = { var:sr_probe_category = 3 }
-			add_modifier = { name = sr_probe_biological_data }
-		}
-		else_if = {
-			limit = { var:sr_probe_category = 4 }
-			add_modifier = { name = sr_probe_intelligence_data }
-		}
-		add_loyalists = { value = medium_radicals pop_type = academics }
-		add_loyalists = { value = large_radicals }
-		custom_tooltip = {
-			text = SR_SHARE_FREELY_RELATIONS_TT
-			every_country = {
-				limit = {
-					has_technology_researched = space_colonization
-					NOT = { THIS = ROOT }
-					has_diplomatic_relevance = ROOT
-				}
-				change_relations = { country = ROOT value = 30 }
-			}
-		}
-	}
-
-	option = {
-		name = space_race_events.60.b
-		ai_chance = { base = 4 }
-		# Classify key findings - national strategic advantage
-		if = {
-			limit = { var:sr_probe_category = 1 }
-			add_modifier = { name = sr_probe_dead_worlds_data }
-		}
-		else_if = {
-			limit = { var:sr_probe_category = 2 }
-			add_modifier = { name = sr_probe_astro_wonders_data }
-		}
-		else_if = {
-			limit = { var:sr_probe_category = 3 }
-			add_modifier = { name = sr_probe_biological_data }
-		}
-		else_if = {
-			limit = { var:sr_probe_category = 4 }
-			add_modifier = { name = sr_probe_intelligence_data }
-		}
-		add_loyalists = { value = large_radicals pop_type = academics }
-		add_loyalists = { value = medium_radicals pop_type = officers }
-	}
-
-	option = {
-		name = space_race_events.60.c
-		ai_chance = { base = 2 }
-		# Sell data access to other nations - recoup the investment
-		if = {
-			limit = { var:sr_probe_category = 1 }
-			add_modifier = { name = sr_probe_dead_worlds_data }
-		}
-		else_if = {
-			limit = { var:sr_probe_category = 2 }
-			add_modifier = { name = sr_probe_astro_wonders_data }
-		}
-		else_if = {
-			limit = { var:sr_probe_category = 3 }
-			add_modifier = { name = sr_probe_biological_data }
-		}
-		else_if = {
-			limit = { var:sr_probe_category = 4 }
-			add_modifier = { name = sr_probe_intelligence_data }
-		}
-		add_loyalists = { value = medium_radicals pop_type = capitalists }
-		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
 }
 

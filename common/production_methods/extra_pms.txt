@@ -13997,8 +13997,8 @@ pm_space_elevator = {
 	}
 
 	country_modifiers = {
-		unscaled = {
-			country_space_race_progress_add = 0.1
+		workforce_scaled = {
+			country_space_race_progress_add = 1
 		}
 	}
 
@@ -18418,6 +18418,7 @@ pm_antimatter_engine = {
 			country_antimatter_facility_max_level_add = -1
 			military_formation_movement_speed_mult = 0.02
 			country_convoys_capacity_mult = 0.01
+			country_space_race_progress_mult = 0.05
 		}
 	}
 
@@ -18632,6 +18633,12 @@ pm_nanofabrication_center = {
 	state_modifiers = {
 		level_scaled = {
 			state_building_nanofabrication_center_max_level_add = 1
+		}
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_space_race_risk_mult = -0.01
 		}
 	}
 
