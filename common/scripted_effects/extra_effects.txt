@@ -37,6 +37,7 @@
 			value = 0
 		}
 		remove_building = building_space_elevator_construction_site
+		owner = { post_notification = wonder_construction_complete }
 		if = {
 			limit = { has_building = building_space_elevator }
 			if = {
@@ -164,6 +165,7 @@ solar_collector_construction = {
 			value = 0
 		}
 		remove_building = building_solar_collector_construction_site
+		owner = { post_notification = wonder_construction_complete }
 		if = {
 			limit = { has_building = building_solar_collector }
 			if = {
@@ -251,6 +253,7 @@ orbital_battlestation_construction = {
 			value = 0
 		}
 		remove_building = building_orbital_battlestation_construction_site
+		owner = { post_notification = wonder_construction_complete }
 		if = {
 			limit = { has_building = building_orbital_battlestation }
 			if = {
@@ -318,6 +321,7 @@ mind_upload_nexus_construction = {
 			value = 0
 		}
 		remove_building = building_mind_upload_nexus_construction_site
+		owner = { post_notification = wonder_construction_complete }
 		if = {
 			limit = { has_building = building_mind_upload_nexus }
 			if = {
@@ -1441,6 +1445,7 @@ antimatter_facility_construction = {
 			value = 0
 		}
 		remove_building = building_antimatter_facility_construction_site
+		owner = { post_notification = wonder_construction_complete }
 		if = {
 			limit = { has_building = building_antimatter_facility }
 			if = {
@@ -1672,6 +1677,7 @@ nanofabrication_center_construction = {
 			value = 0
 		}
 		remove_building = building_nanofabrication_center_construction_site
+		owner = { post_notification = wonder_construction_complete }
 		if = {
 			limit = { has_building = building_nanofabrication_center }
 			if = {
@@ -1763,6 +1769,7 @@ consciousness_network_construction = {
 			value = 0
 		}
 		remove_building = building_consciousness_network_construction_site
+		owner = { post_notification = wonder_construction_complete }
 		if = {
 			limit = { has_building = building_consciousness_network }
 			if = {

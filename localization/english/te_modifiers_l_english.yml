@@ -945,7 +945,7 @@
  state_min_cultural_acceptance_delta_add:0 "Minimum Local Acceptance"
  state_min_cultural_acceptance_delta_add_desc:0 "A change in the minimum local cultural acceptance that can be applied in a [concept_state]."
  state_pollution_generation_mult:0 "Generated [concept_pollution_system]"
- state_pollution_generation_mult_desc:0 "A percentage change to the amount of [concept_pollution] generated in this state"
+ state_pollution_generation_mult_desc:0 "A percentage change to the amount of [concept_generated_pollution] generated in this state"
  state_resettlement_transfer_add:0 "Resettlement Transfer"
  state_resettlement_transfer_add_desc:0 "The number of people transferred from this state to a resettlement colony each month."
  state_war_support_monthly_add:0 "Monthly [concept_war_support]"

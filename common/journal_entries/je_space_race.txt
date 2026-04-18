@@ -117,19 +117,17 @@ je_space_race_suborbital = {
 					if = {
 						limit = { NOT = { sr_has_failure_cooldown = yes } }
 						set_variable = { name = sr_base_risk value = 5 }
-						random_list = {
-							sr_success_weight = { }
-							sr_failure_weight = {
-								set_variable = { name = sr_failed_suborbital value = yes }
-								if = {
-									limit = { has_variable = sr_ambitious_suborbital }
-									change_variable = { name = sr_progress_suborbital multiply = 0.75 }
-									sr_fire_ambitious_failure_event = yes
-								}
-								else = {
-									change_variable = { name = sr_progress_suborbital multiply = 0.85 }
-									sr_fire_safe_setback_event = yes
-								}
+						random = {
+							chance = sr_failure_weight
+							set_variable = { name = sr_failed_suborbital value = yes }
+							if = {
+								limit = { has_variable = sr_ambitious_suborbital }
+								change_variable = { name = sr_progress_suborbital multiply = 0.75 }
+								sr_fire_ambitious_failure_event = yes
+							}
+							else = {
+								change_variable = { name = sr_progress_suborbital multiply = 0.85 }
+								sr_fire_safe_setback_event = yes
 							}
 						}
 					}
@@ -182,6 +180,8 @@ je_space_race_orbital = {
 		set_variable = { name = sr_progress_orbital value = 0 }
 		set_variable = { name = sr_funding_orbital value = 1 }
 		sr_recalculate_cost = yes
+		# Fire astronaut type choice event
+		trigger_event = { id = space_race_events.80 days = 30 }
 	}
 
 	scripted_button = sr_btn_safe_orbital
@@ -201,6 +201,18 @@ je_space_race_orbital = {
 
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_orbital_status_civilian
+				trigger = { has_variable = sr_orbital_civilian }
+			}
+			triggered_desc = {
+				desc = je_space_race_orbital_status_military
+				trigger = { has_variable = sr_orbital_military }
+			}
+			triggered_desc = {
+				desc = je_space_race_orbital_status_scientist
+				trigger = { has_variable = sr_orbital_scientist }
+			}
 			triggered_desc = {
 				desc = je_space_race_orbital_status_ambitious
 				trigger = { has_variable = sr_ambitious_orbital }
@@ -262,19 +274,17 @@ je_space_race_orbital = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					set_variable = { name = sr_base_risk value = 6 }
-					random_list = {
-						sr_success_weight = { }
-						sr_failure_weight = {
-							set_variable = { name = sr_failed_orbital value = yes }
-							if = {
-								limit = { has_variable = sr_ambitious_orbital }
-								change_variable = { name = sr_progress_orbital multiply = 0.75 }
-								sr_fire_ambitious_failure_event = yes
-							}
-							else = {
-								change_variable = { name = sr_progress_orbital multiply = 0.85 }
-								sr_fire_safe_setback_event = yes
-							}
+					random = {
+						chance = sr_failure_weight
+						set_variable = { name = sr_failed_orbital value = yes }
+						if = {
+							limit = { has_variable = sr_ambitious_orbital }
+							change_variable = { name = sr_progress_orbital multiply = 0.75 }
+							sr_fire_ambitious_failure_event = yes
+						}
+						else = {
+							change_variable = { name = sr_progress_orbital multiply = 0.85 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -357,6 +367,14 @@ je_space_race_moon_landing = {
 				trigger = { has_variable = sr_moon_site_equatorial }
 			}
 			triggered_desc = {
+				desc = je_space_race_moon_landing_status_tranquility
+				trigger = { has_variable = sr_moon_site_tranquility }
+			}
+			triggered_desc = {
+				desc = je_space_race_moon_landing_status_far_side
+				trigger = { has_variable = sr_moon_site_far_side }
+			}
+			triggered_desc = {
 				desc = je_space_race_moon_landing_status_ambitious
 				trigger = { has_variable = sr_ambitious_moon_landing }
 			}
@@ -416,25 +434,19 @@ je_space_race_moon_landing = {
 				change_variable = { name = sr_progress_moon_landing add = sr_progress }
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					# Shackleton crater is riskier (base 9 vs 6)
+					# Site risk is now handled by JE-scoped choice modifiers (sr_choice_site_*)
 					set_variable = { name = sr_base_risk value = 6 }
-					if = {
-						limit = { has_variable = sr_moon_site_shackleton }
-						set_variable = { name = sr_base_risk value = 9 }
-					}
-					random_list = {
-						sr_success_weight = { }
-						sr_failure_weight = {
-							set_variable = { name = sr_failed_moon_landing value = yes }
-							if = {
-								limit = { has_variable = sr_ambitious_moon_landing }
-								change_variable = { name = sr_progress_moon_landing multiply = 0.75 }
-								sr_fire_ambitious_failure_event = yes
-							}
-							else = {
-								change_variable = { name = sr_progress_moon_landing multiply = 0.85 }
-								sr_fire_safe_setback_event = yes
-							}
+					random = {
+						chance = sr_failure_weight
+						set_variable = { name = sr_failed_moon_landing value = yes }
+						if = {
+							limit = { has_variable = sr_ambitious_moon_landing }
+							change_variable = { name = sr_progress_moon_landing multiply = 0.75 }
+							sr_fire_ambitious_failure_event = yes
+						}
+						else = {
+							change_variable = { name = sr_progress_moon_landing multiply = 0.85 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -487,6 +499,8 @@ je_space_race_probe = {
 		set_variable = { name = sr_progress_probe value = 0 }
 		set_variable = { name = sr_funding_probe value = 1 }
 		sr_recalculate_cost = yes
+		# Fire probe target choice event
+		trigger_event = { id = space_race_events.81 days = 30 }
 	}
 
 	scripted_button = sr_btn_safe_probe
@@ -506,6 +520,18 @@ je_space_race_probe = {
 
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_probe_status_venus
+				trigger = { has_variable = sr_probe_target_venus }
+			}
+			triggered_desc = {
+				desc = je_space_race_probe_status_mars
+				trigger = { has_variable = sr_probe_target_mars }
+			}
+			triggered_desc = {
+				desc = je_space_race_probe_status_asteroid
+				trigger = { has_variable = sr_probe_target_asteroid }
+			}
 			triggered_desc = {
 				desc = je_space_race_probe_status_ambitious
 				trigger = { has_variable = sr_ambitious_probe }
@@ -567,19 +593,17 @@ je_space_race_probe = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					set_variable = { name = sr_base_risk value = 6 }
-					random_list = {
-						sr_success_weight = { }
-						sr_failure_weight = {
-							set_variable = { name = sr_failed_probe value = yes }
-							if = {
-								limit = { has_variable = sr_ambitious_probe }
-								change_variable = { name = sr_progress_probe multiply = 0.75 }
-								sr_fire_ambitious_failure_event = yes
-							}
-							else = {
-								change_variable = { name = sr_progress_probe multiply = 0.85 }
-								sr_fire_safe_setback_event = yes
-							}
+					random = {
+						chance = sr_failure_weight
+						set_variable = { name = sr_failed_probe value = yes }
+						if = {
+							limit = { has_variable = sr_ambitious_probe }
+							change_variable = { name = sr_progress_probe multiply = 0.75 }
+							sr_fire_ambitious_failure_event = yes
+						}
+						else = {
+							change_variable = { name = sr_progress_probe multiply = 0.85 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -631,6 +655,8 @@ je_space_race_moon_base = {
 		set_variable = { name = sr_progress_moon_base value = 0 }
 		set_variable = { name = sr_funding_moon_base value = 1 }
 		sr_recalculate_cost = yes
+		# Fire moon base purpose choice event
+		trigger_event = { id = space_race_events.82 days = 30 }
 	}
 
 	scripted_button = sr_btn_safe_moon_base
@@ -650,6 +676,18 @@ je_space_race_moon_base = {
 
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_moon_base_status_scientific
+				trigger = { has_variable = sr_moon_base_scientific }
+			}
+			triggered_desc = {
+				desc = je_space_race_moon_base_status_industrial
+				trigger = { has_variable = sr_moon_base_industrial }
+			}
+			triggered_desc = {
+				desc = je_space_race_moon_base_status_military_purpose
+				trigger = { has_variable = sr_moon_base_military }
+			}
 			triggered_desc = {
 				desc = je_space_race_moon_base_status_ambitious
 				trigger = { has_variable = sr_ambitious_moon_base }
@@ -711,19 +749,17 @@ je_space_race_moon_base = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					set_variable = { name = sr_base_risk value = 8 }
-					random_list = {
-						sr_success_weight = { }
-						sr_failure_weight = {
-							set_variable = { name = sr_failed_moon_base value = yes }
-							if = {
-								limit = { has_variable = sr_ambitious_moon_base }
-								change_variable = { name = sr_progress_moon_base multiply = 0.75 }
-								sr_fire_ambitious_failure_event = yes
-							}
-							else = {
-								change_variable = { name = sr_progress_moon_base multiply = 0.85 }
-								sr_fire_safe_setback_event = yes
-							}
+					random = {
+						chance = sr_failure_weight
+						set_variable = { name = sr_failed_moon_base value = yes }
+						if = {
+							limit = { has_variable = sr_ambitious_moon_base }
+							change_variable = { name = sr_progress_moon_base multiply = 0.75 }
+							sr_fire_ambitious_failure_event = yes
+						}
+						else = {
+							change_variable = { name = sr_progress_moon_base multiply = 0.85 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -776,6 +812,8 @@ je_space_race_mars_landing = {
 		set_variable = { name = sr_progress_mars_landing value = 0 }
 		set_variable = { name = sr_funding_mars_landing value = 1 }
 		sr_recalculate_cost = yes
+		# Fire Mars strategy choice event
+		trigger_event = { id = space_race_events.83 days = 30 }
 	}
 
 	scripted_button = sr_btn_safe_mars_landing
@@ -795,6 +833,18 @@ je_space_race_mars_landing = {
 
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = je_space_race_mars_landing_status_direct
+				trigger = { has_variable = sr_mars_direct }
+			}
+			triggered_desc = {
+				desc = je_space_race_mars_landing_status_orbital_first
+				trigger = { has_variable = sr_mars_orbital_first }
+			}
+			triggered_desc = {
+				desc = je_space_race_mars_landing_status_robotic
+				trigger = { has_variable = sr_mars_robotic }
+			}
 			triggered_desc = {
 				desc = je_space_race_mars_landing_status_ambitious
 				trigger = { has_variable = sr_ambitious_mars_landing }
@@ -856,19 +906,17 @@ je_space_race_mars_landing = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					set_variable = { name = sr_base_risk value = 9 }
-					random_list = {
-						sr_success_weight = { }
-						sr_failure_weight = {
-							set_variable = { name = sr_failed_mars_landing value = yes }
-							if = {
-								limit = { has_variable = sr_ambitious_mars_landing }
-								change_variable = { name = sr_progress_mars_landing multiply = 0.75 }
-								sr_fire_ambitious_failure_event = yes
-							}
-							else = {
-								change_variable = { name = sr_progress_mars_landing multiply = 0.85 }
-								sr_fire_safe_setback_event = yes
-							}
+					random = {
+						chance = sr_failure_weight
+						set_variable = { name = sr_failed_mars_landing value = yes }
+						if = {
+							limit = { has_variable = sr_ambitious_mars_landing }
+							change_variable = { name = sr_progress_mars_landing multiply = 0.75 }
+							sr_fire_ambitious_failure_event = yes
+						}
+						else = {
+							change_variable = { name = sr_progress_mars_landing multiply = 0.85 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -1003,19 +1051,17 @@ je_space_race_interstellar_probe = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					set_variable = { name = sr_base_risk value = 9 }
-					random_list = {
-						sr_success_weight = { }
-						sr_failure_weight = {
-							set_variable = { name = sr_failed_interstellar_probe value = yes }
-							if = {
-								limit = { has_variable = sr_ambitious_interstellar_probe }
-								change_variable = { name = sr_progress_interstellar_probe multiply = 0.75 }
-								sr_fire_ambitious_failure_event = yes
-							}
-							else = {
-								change_variable = { name = sr_progress_interstellar_probe multiply = 0.85 }
-								sr_fire_safe_setback_event = yes
-							}
+					random = {
+						chance = sr_failure_weight
+						set_variable = { name = sr_failed_interstellar_probe value = yes }
+						if = {
+							limit = { has_variable = sr_ambitious_interstellar_probe }
+							change_variable = { name = sr_progress_interstellar_probe multiply = 0.75 }
+							sr_fire_ambitious_failure_event = yes
+						}
+						else = {
+							change_variable = { name = sr_progress_interstellar_probe multiply = 0.85 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}
@@ -1282,19 +1328,17 @@ je_space_race_solar_colonization = {
 				if = {
 					limit = { NOT = { sr_has_failure_cooldown = yes } }
 					set_variable = { name = sr_base_risk value = 10 }
-					random_list = {
-						sr_success_weight = { }
-						sr_failure_weight = {
-							set_variable = { name = sr_failed_solar_colonization value = yes }
-							if = {
-								limit = { has_variable = sr_ambitious_solar_colonization }
-								change_variable = { name = sr_progress_solar_colonization multiply = 0.75 }
-								sr_fire_ambitious_failure_event = yes
-							}
-							else = {
-								change_variable = { name = sr_progress_solar_colonization multiply = 0.85 }
-								sr_fire_safe_setback_event = yes
-							}
+					random = {
+						chance = sr_failure_weight
+						set_variable = { name = sr_failed_solar_colonization value = yes }
+						if = {
+							limit = { has_variable = sr_ambitious_solar_colonization }
+							change_variable = { name = sr_progress_solar_colonization multiply = 0.75 }
+							sr_fire_ambitious_failure_event = yes
+						}
+						else = {
+							change_variable = { name = sr_progress_solar_colonization multiply = 0.85 }
+							sr_fire_safe_setback_event = yes
 						}
 					}
 				}

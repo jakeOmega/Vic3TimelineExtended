@@ -1936,6 +1936,10 @@ REPLACE_OR_CREATE:building_solar_receiver = {
 			}
 		}
 	}
+
+	can_build_private ={
+		always = no # can privatize but not build new ones
+	}
 	
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -2148,6 +2152,10 @@ REPLACE_OR_CREATE:building_antimatter_engine = {
 				}
 			}
 		}
+	}
+
+	can_build_private ={
+		always = no # can privatize but not build new ones
 	}
 	
 	ownership_type = self

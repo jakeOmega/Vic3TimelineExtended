@@ -1,0 +1,12 @@
+﻿colors = {
+	consumer_appliances = hsv360 { 200 65 85 }
+	electronic_components = hsv360 { 260 50 75 }
+	robotics = hsv360 { 210 70 60 }
+	digital_assets = hsv360 { 175 55 80 }
+	digital_access = hsv360 { 190 45 90 }
+	launch_capacity = hsv360 { 15 80 70 }
+	advanced_materials = hsv360 { 310 40 85 }
+	construction = hsv360 { 30 65 70 }
+	tourism = hsv360 { 45 50 85 }
+	tech_metals = hsv360 { 230 55 65 }
+}

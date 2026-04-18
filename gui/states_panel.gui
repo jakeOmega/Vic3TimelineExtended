@@ -1217,6 +1217,7 @@ types state_panel_types
 
 				item = {
 					icon = {
+						# visible = "[Not(EqualTo_string(TimedModifier.GetIcon, 'gfx/interface/icons/timed_modifier_icons/modifier_system.dds'))]"
 						size = { 30 30 }
 						tooltip = "[TimedModifier.GetTooltip]"
 						using = tooltip_se
@@ -2139,6 +2140,75 @@ types state_panel_types
 				}
 			}
 
+			### HOMELAND DYNAMICS
+			state_panel_status_item_small = {
+				visible = "[State.HasHomelands]"
+				tooltip = "TE_STATE_HOMELAND_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/state_status_icons/state_homelands.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_HOMELAND_STATUS"
+				}
+			}
+
+			### ARABLE LAND
+			state_panel_status_item_small = {
+				tooltip = "TE_STATE_ARABLE_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/wheat_farm.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_ARABLE_STATUS"
+				}
+			}
+
+			### MIGRATION CROWDING
+			state_panel_status_item_small = {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('migration_crowding_mult'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_CROWDING_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/generic_icons/population.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_CROWDING_STATUS"
+				}
+			}
+
+			### SOLAR COLLECTOR POINTS
+			state_panel_status_item_small = {
+				visible = "[GreaterThan_CFixedPoint(State.GetOwner.MakeScope.ScriptValue('solar_total_generated_points'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_SOLAR_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/space_elevator.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_SOLAR_STATUS"
+				}
+			}
+
+			### ANTIMATTER FACILITY POINTS
+			state_panel_status_item_small = {
+				visible = "[GreaterThan_CFixedPoint(State.GetOwner.MakeScope.ScriptValue('antimatter_total_generated_points'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_ANTIMATTER_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/power_plant.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_ANTIMATTER_STATUS"
+				}
+			}
+
 			datamodel = "[State.AccessStateRegion.AccessTraits]"
 
 			item = {
@@ -2740,6 +2810,379 @@ types state_panel_types
 			}
 		}
 
+		### ============= EMPLOYMENT =============
+		default_header_2texts = {
+			parentanchor = hcenter
+			blockoverride "text1" {
+				text = "TE_EMPLOYMENT_HEADER"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			direction = vertical
+			spacing = 8
+			minimumsize = { @panel_width -1 }
+			maximumsize = { @panel_width -1 }
+			margin = { 10 0 }
+
+			### Employment by Building Category
+			flowcontainer = {
+				direction = vertical
+				spacing = 3
+
+				textbox = {
+					raw_text = "#title Employment by Building#!"
+					autoresize = yes
+					align = left|nobaseline
+				}
+
+				### Urban (factories, ports, etc.)
+				flowcontainer = {
+					visible = "[Not(IsDataModelEmpty(State.AccessUrbanBuildings))]"
+					direction = vertical
+					spacing = 1
+
+					textbox = {
+						raw_text = "Urban"
+						autoresize = yes
+						align = left|nobaseline
+						fontsize = 13
+					}
+
+					v3_stacked_barchart = {
+						size = { 520 24 }
+
+						blockoverride "barchart_datamodel" {
+							datamodel = "[DataModelFirst(State.AccessUrbanBuildings, '(int32)10')]"
+						}
+
+						blockoverride "barchart_item_stretchfactor" {
+							layoutstretchfactor_horizontal = "[Building.GetNoOfEmployed]"
+						}
+
+						blockoverride "barchart_item_tooltip" {
+							raw_tooltip = "[Building.GetName]: [Building.GetNoOfEmployed|1*v] employed / [Building.GetEmployeeCap|1*v] cap"
+						}
+
+						blockoverride "barchart_item_icon" {
+							icon = {
+								texture = "[Building.GetBuildingType.GetIcon]"
+								size = { 20 20 }
+							}
+						}
+
+						blockoverride "barchart_item_margins" {
+							margin = { 0 0 }
+						}
+
+						blockoverride "barchart_item_background" {
+							background = {
+								texture = "gfx/interface/tooltip/stacked_barchart_small_item.dds"
+								spriteType = Corneredstretched
+								spriteborder = { 3 3 }
+							}
+						}
+
+						blockoverride "barchart_frame" {
+							background = {
+								name = "frame"
+								texture = "gfx/interface/progressbar/progressbar_frame.dds"
+								spriteType = Corneredstretched
+								spriteborder = { 6 6 }
+								texture_density = 2
+								margin = { 3 3 }
+							}
+						}
+					}
+				}
+
+				### Capped Rural (mines, logging, fishing — resource-limited)
+				flowcontainer = {
+					visible = "[Not(IsDataModelEmpty(State.AccessCappedRuralBuildings))]"
+					direction = vertical
+					spacing = 1
+
+					textbox = {
+						raw_text = "Mines & Resources"
+						autoresize = yes
+						align = left|nobaseline
+						fontsize = 13
+					}
+
+					v3_stacked_barchart = {
+						size = { 520 24 }
+
+						blockoverride "barchart_datamodel" {
+							datamodel = "[DataModelFirst(State.AccessCappedRuralBuildings, '(int32)10')]"
+						}
+
+						blockoverride "barchart_item_stretchfactor" {
+							layoutstretchfactor_horizontal = "[Building.GetNoOfEmployed]"
+						}
+
+						blockoverride "barchart_item_tooltip" {
+							raw_tooltip = "[Building.GetName]: [Building.GetNoOfEmployed|1*v] employed / [Building.GetEmployeeCap|1*v] cap"
+						}
+
+						blockoverride "barchart_item_icon" {
+							icon = {
+								texture = "[Building.GetBuildingType.GetIcon]"
+								size = { 20 20 }
+							}
+						}
+
+						blockoverride "barchart_item_margins" {
+							margin = { 0 0 }
+						}
+
+						blockoverride "barchart_item_background" {
+							background = {
+								texture = "gfx/interface/tooltip/stacked_barchart_small_item.dds"
+								spriteType = Corneredstretched
+								spriteborder = { 3 3 }
+							}
+						}
+
+						blockoverride "barchart_frame" {
+							background = {
+								name = "frame"
+								texture = "gfx/interface/progressbar/progressbar_frame.dds"
+								spriteType = Corneredstretched
+								spriteborder = { 6 6 }
+								texture_density = 2
+								margin = { 3 3 }
+							}
+						}
+					}
+				}
+
+				### Uncapped Rural (farms — wheat, cotton, etc.)
+				flowcontainer = {
+					visible = "[Not(IsDataModelEmpty(State.AccessUncappedRuralBuildings))]"
+					direction = vertical
+					spacing = 1
+
+					textbox = {
+						raw_text = "Agriculture"
+						autoresize = yes
+						align = left|nobaseline
+						fontsize = 13
+					}
+
+					v3_stacked_barchart = {
+						size = { 520 24 }
+
+						blockoverride "barchart_datamodel" {
+							datamodel = "[DataModelFirst(State.AccessUncappedRuralBuildings, '(int32)10')]"
+						}
+
+						blockoverride "barchart_item_stretchfactor" {
+							layoutstretchfactor_horizontal = "[Building.GetNoOfEmployed]"
+						}
+
+						blockoverride "barchart_item_tooltip" {
+							raw_tooltip = "[Building.GetName]: [Building.GetNoOfEmployed|1*v] employed / [Building.GetEmployeeCap|1*v] cap"
+						}
+
+						blockoverride "barchart_item_icon" {
+							icon = {
+								texture = "[Building.GetBuildingType.GetIcon]"
+								size = { 20 20 }
+							}
+						}
+
+						blockoverride "barchart_item_margins" {
+							margin = { 0 0 }
+						}
+
+						blockoverride "barchart_item_background" {
+							background = {
+								texture = "gfx/interface/tooltip/stacked_barchart_small_item.dds"
+								spriteType = Corneredstretched
+								spriteborder = { 3 3 }
+							}
+						}
+
+						blockoverride "barchart_frame" {
+							background = {
+								name = "frame"
+								texture = "gfx/interface/progressbar/progressbar_frame.dds"
+								spriteType = Corneredstretched
+								spriteborder = { 6 6 }
+								texture_density = 2
+								margin = { 3 3 }
+							}
+						}
+					}
+				}
+
+				### Development (government, infrastructure)
+				flowcontainer = {
+					visible = "[Not(IsDataModelEmpty(State.AccessDevelopmentBuildings))]"
+					direction = vertical
+					spacing = 1
+
+					textbox = {
+						raw_text = "Government"
+						autoresize = yes
+						align = left|nobaseline
+						fontsize = 13
+					}
+
+					v3_stacked_barchart = {
+						size = { 520 24 }
+
+						blockoverride "barchart_datamodel" {
+							datamodel = "[DataModelFirst(State.AccessDevelopmentBuildings, '(int32)10')]"
+						}
+
+						blockoverride "barchart_item_visibility" {
+							visible = "[GreaterThan_int64(Building.GetNoOfEmployed, '(int64)0')]"
+						}
+
+						blockoverride "barchart_item_stretchfactor" {
+							layoutstretchfactor_horizontal = "[Building.GetNoOfEmployed]"
+						}
+
+						blockoverride "barchart_item_tooltip" {
+							raw_tooltip = "[Building.GetName]: [Building.GetNoOfEmployed|1*v] employed / [Building.GetEmployeeCap|1*v] cap"
+						}
+
+						blockoverride "barchart_item_icon" {
+							icon = {
+								texture = "[Building.GetBuildingType.GetIcon]"
+								size = { 20 20 }
+							}
+						}
+
+						blockoverride "barchart_item_margins" {
+							margin = { 0 0 }
+						}
+
+						blockoverride "barchart_item_background" {
+							background = {
+								texture = "gfx/interface/tooltip/stacked_barchart_small_item.dds"
+								spriteType = Corneredstretched
+								spriteborder = { 3 3 }
+							}
+						}
+
+						blockoverride "barchart_frame" {
+							background = {
+								name = "frame"
+								texture = "gfx/interface/progressbar/progressbar_frame.dds"
+								spriteType = Corneredstretched
+								spriteborder = { 6 6 }
+								texture_density = 2
+								margin = { 3 3 }
+							}
+						}
+					}
+				}
+
+				### Building Levels by Type (aggregated from on_action script values)
+				flowcontainer = {
+					direction = vertical
+					spacing = 1
+					margin_top = 5
+
+					textbox = {
+						raw_text = "Building Levels by Type"
+						autoresize = yes
+						align = left|nobaseline
+						fontsize = 13
+					}
+
+					widget = {
+						size = { 520 22 }
+
+						hbox = {
+							layoutpolicy_horizontal = expanding
+							layoutpolicy_vertical = expanding
+
+							background = {
+								name = "frame"
+								texture = "gfx/interface/progressbar/progressbar_frame.dds"
+								spriteType = Corneredstretched
+								spriteborder = { 6 6 }
+								texture_density = 2
+								margin = { 3 3 }
+							}
+
+							### Urban (manufacturing, service, urban facilities)
+							hbox = {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('gui_urban_levels'), '(CFixedPoint)0')]"
+								layoutpolicy_horizontal = expanding
+								layoutpolicy_vertical = expanding
+								layoutstretchfactor_horizontal = "[FixedPointToInt(State.MakeScope.ScriptValue('gui_urban_levels'))]"
+
+								raw_tooltip = "Urban: [State.MakeScope.ScriptValue('gui_urban_levels')|0] building levels"
+
+								background = {
+									texture = "gfx/interface/tooltip/stacked_barchart_small_item.dds"
+									spriteType = Corneredstretched
+									spriteborder = { 3 3 }
+									color = { 0.2 0.55 0.85 1 }
+								}
+							}
+
+							### Extraction (mines, logging, fishing, oil, rubber, whaling)
+							hbox = {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('gui_extraction_levels'), '(CFixedPoint)0')]"
+								layoutpolicy_horizontal = expanding
+								layoutpolicy_vertical = expanding
+								layoutstretchfactor_horizontal = "[FixedPointToInt(State.MakeScope.ScriptValue('gui_extraction_levels'))]"
+
+								raw_tooltip = "Mines & Resources: [State.MakeScope.ScriptValue('gui_extraction_levels')|0] building levels"
+
+								background = {
+									texture = "gfx/interface/tooltip/stacked_barchart_small_item.dds"
+									spriteType = Corneredstretched
+									spriteborder = { 3 3 }
+									color = { 0.85 0.5 0.15 1 }
+								}
+							}
+
+							### Agriculture (farms, ranching, plantations)
+							hbox = {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('gui_agriculture_levels'), '(CFixedPoint)0')]"
+								layoutpolicy_horizontal = expanding
+								layoutpolicy_vertical = expanding
+								layoutstretchfactor_horizontal = "[FixedPointToInt(State.MakeScope.ScriptValue('gui_agriculture_levels'))]"
+
+								raw_tooltip = "Agriculture: [State.MakeScope.ScriptValue('gui_agriculture_levels')|0] building levels"
+
+								background = {
+									texture = "gfx/interface/tooltip/stacked_barchart_small_item.dds"
+									spriteType = Corneredstretched
+									spriteborder = { 3 3 }
+									color = { 0.15 0.68 0.38 1 }
+								}
+							}
+
+							### Government (power, government, infrastructure, military, parks)
+							hbox = {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('gui_development_levels'), '(CFixedPoint)0')]"
+								layoutpolicy_horizontal = expanding
+								layoutpolicy_vertical = expanding
+								layoutstretchfactor_horizontal = "[FixedPointToInt(State.MakeScope.ScriptValue('gui_development_levels'))]"
+
+								raw_tooltip = "Government: [State.MakeScope.ScriptValue('gui_development_levels')|0] building levels"
+
+								background = {
+									texture = "gfx/interface/tooltip/stacked_barchart_small_item.dds"
+									spriteType = Corneredstretched
+									spriteborder = { 3 3 }
+									color = { 0.56 0.27 0.68 1 }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
 		default_header_2texts = {
 			parentanchor = hcenter
 			blockoverride "text1" {
@@ -3211,10 +3654,14 @@ types state_panel_types
 					using = clickthrough_blocker
 
 					item = {
-						icon = {
-							tooltip = "[TimedModifier.GetTooltip]"
-							texture = "[TimedModifier.GetIcon]"
+						widget = {
+							visible = "[Not(EqualTo_string(TimedModifier.GetIcon, 'gfx/interface/icons/timed_modifier_icons/modifier_system.dds'))]"
 							size = { 30 30 }
+							icon = {
+								tooltip = "[TimedModifier.GetTooltip]"
+								texture = "[TimedModifier.GetIcon]"
+								size = { 30 30 }
+							}
 						}
 					}
 				}

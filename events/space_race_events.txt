@@ -45,7 +45,7 @@ space_race_events.1 = {
 	}
 }
 
-# Event 2: Orbital Flight Achievement
+# Event 2: Orbital Flight Achievement - options depend on astronaut type choice
 space_race_events.2 = {
 	type = country_event
 	placement = root
@@ -63,47 +63,70 @@ space_race_events.2 = {
 	trigger = { }
 	immediate = { }
 
+	# Civilian astronaut - prestige and cultural pull
 	option = {
 		name = space_race_events.2.a
+		default_option = yes
+		trigger = { has_variable = sr_orbital_civilian }
+		ai_chance = { base = 5 }
+		sr_apply_orbital_reward = yes
+		add_modifier = {
+			name = sr_orbital_civilian_astronaut
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
+	}
+
+	# Military pilot - defense and influence
+	option = {
+		name = space_race_events.2.b
+		trigger = { has_variable = sr_orbital_military }
+		ai_chance = { base = 5 }
+		sr_apply_orbital_reward = yes
+		add_modifier = {
+			name = sr_orbital_military_pilot
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals pop_type = soldiers }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+		add_radicals = { value = small_radicals pop_type = laborers }
+	}
+
+	# Scientist astronaut - research and innovation
+	option = {
+		name = space_race_events.2.c
+		trigger = { has_variable = sr_orbital_scientist }
+		ai_chance = { base = 5 }
+		sr_apply_orbital_reward = yes
+		add_modifier = {
+			name = sr_orbital_scientist
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = large_radicals pop_type = academics }
+	}
+
+	# Fallback - no choice made
+	option = {
+		name = space_race_events.2.e
+		trigger = {
+			NOT = { has_variable = sr_orbital_civilian }
+			NOT = { has_variable = sr_orbital_military }
+			NOT = { has_variable = sr_orbital_scientist }
+		}
 		default_option = yes
 		ai_chance = { base = 5 }
 		sr_apply_orbital_reward = yes
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals }
 	}
-
-	option = {
-		name = space_race_events.2.b
-		ai_chance = { base = 4 }
-		sr_apply_orbital_reward = yes
-		# Invest in satellite infrastructure
-		add_modifier = {
-			name = sr_orbital
-			days = short_modifier_time
-			is_decaying = yes
-		}
-	}
-
-	option = {
-		name = space_race_events.2.c
-		ai_chance = { base = 2 }
-		sr_apply_orbital_reward = yes
-		# Military applications - satellite surveillance
-		add_modifier = {
-			name = sr_orbital
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		add_radicals = { value = small_radicals pop_type = laborers }
-		add_radicals = { value = small_radicals pop_type = farmers }
-		add_radicals = { value = small_radicals pop_type = peasants }
-		add_radicals = { value = small_radicals pop_type = machinists }
-		add_loyalists = { value = small_radicals pop_type = soldiers }
-		add_loyalists = { value = small_radicals pop_type = officers }
-	}
 }
 
 # Event 3: Moon Landing Achievement
+# Event 3: Moon Landing Achievement - options depend on landing site choice
 space_race_events.3 = {
 	type = country_event
 	placement = root
@@ -121,14 +144,13 @@ space_race_events.3 = {
 	trigger = { }
 	immediate = { }
 
-	# Different options depending on landing site choice
+	# Shackleton Crater - scientific windfall + progress
 	option = {
 		name = space_race_events.3.a
 		default_option = yes
 		trigger = { has_variable = sr_moon_site_shackleton }
 		ai_chance = { base = 5 }
 		sr_apply_moon_landing_reward = yes
-		# Shackleton Crater - scientific windfall
 		add_modifier = {
 			name = sr_shackleton_crater
 			days = long_modifier_time
@@ -137,12 +159,12 @@ space_race_events.3 = {
 		add_loyalists = { value = large_radicals pop_type = academics }
 	}
 
+	# Equatorial Plain - safe + prestige
 	option = {
 		name = space_race_events.3.b
 		trigger = { has_variable = sr_moon_site_equatorial }
 		ai_chance = { base = 5 }
 		sr_apply_moon_landing_reward = yes
-		# Equatorial Plain - stable foundation
 		add_modifier = {
 			name = sr_equatorial_plain
 			days = long_modifier_time
@@ -152,22 +174,52 @@ space_race_events.3 = {
 		add_loyalists = { value = medium_radicals }
 	}
 
+	# Sea of Tranquility - maximum prestige and cultural impact
+	option = {
+		name = space_race_events.3.e
+		trigger = { has_variable = sr_moon_site_tranquility }
+		ai_chance = { base = 5 }
+		sr_apply_moon_landing_reward = yes
+		add_modifier = {
+			name = sr_sea_of_tranquility
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = large_radicals }
+	}
+
+	# Far Side - cutting-edge science
+	option = {
+		name = space_race_events.3.g
+		trigger = { has_variable = sr_moon_site_far_side }
+		ai_chance = { base = 5 }
+		sr_apply_moon_landing_reward = yes
+		add_modifier = {
+			name = sr_far_side
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = large_radicals pop_type = academics }
+	}
+
+	# Fallback - no site chosen
 	option = {
 		name = space_race_events.3.c
 		trigger = {
 			NOT = { has_variable = sr_moon_site_shackleton }
 			NOT = { has_variable = sr_moon_site_equatorial }
+			NOT = { has_variable = sr_moon_site_tranquility }
+			NOT = { has_variable = sr_moon_site_far_side }
 		}
 		default_option = yes
 		ai_chance = { base = 5 }
 		sr_apply_moon_landing_reward = yes
-		# No site chosen (shouldn't normally happen) - generic reward
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals }
 	}
 }
 
-# Event 4: Outer Solar System Probe Achievement
+# Event 4: Outer Solar System Probe Achievement - options depend on target choice
 space_race_events.4 = {
 	type = country_event
 	placement = root
@@ -185,12 +237,61 @@ space_race_events.4 = {
 	trigger = { }
 	immediate = { }
 
+	# Venus target - atmospheric science
 	option = {
 		name = space_race_events.4.a
 		default_option = yes
+		trigger = { has_variable = sr_probe_target_venus }
 		ai_chance = { base = 5 }
 		sr_apply_probe_reward = yes
-		# Share data with international community
+		add_modifier = {
+			name = sr_probe_target_venus
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = large_radicals pop_type = academics }
+	}
+
+	# Mars target - colonization preparation
+	option = {
+		name = space_race_events.4.b
+		trigger = { has_variable = sr_probe_target_mars }
+		ai_chance = { base = 5 }
+		sr_apply_probe_reward = yes
+		add_modifier = {
+			name = sr_probe_target_mars
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
+	}
+
+	# Asteroid target - mining preparation
+	option = {
+		name = space_race_events.4.c
+		trigger = { has_variable = sr_probe_target_asteroid }
+		ai_chance = { base = 5 }
+		sr_apply_probe_reward = yes
+		add_modifier = {
+			name = sr_probe_target_asteroid
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals pop_type = academics }
+	}
+
+	# Fallback - no target chosen, share data
+	option = {
+		name = space_race_events.4.e
+		trigger = {
+			NOT = { has_variable = sr_probe_target_venus }
+			NOT = { has_variable = sr_probe_target_mars }
+			NOT = { has_variable = sr_probe_target_asteroid }
+		}
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_apply_probe_reward = yes
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		custom_tooltip = {
 			text = SR_SHARE_DATA_RELATIONS_TT
@@ -204,22 +305,10 @@ space_race_events.4 = {
 			}
 		}
 	}
-
-	option = {
-		name = space_race_events.4.b
-		ai_chance = { base = 3 }
-		sr_apply_probe_reward = yes
-		# Classify findings for national advantage
-		add_loyalists = { value = small_radicals pop_type = academics }
-		add_modifier = {
-			name = sr_probe
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-	}
 }
 
 # Event 5: Moon Landing Site Choice (fires at start of Moon Landing JE)
+# Event 5: Moon Landing Site Choice - expanded with 4 landing sites
 space_race_events.5 = {
 	type = country_event
 	placement = root
@@ -237,6 +326,7 @@ space_race_events.5 = {
 	trigger = { }
 	immediate = { }
 
+	# Shackleton Crater - polar ice, science + progress
 	option = {
 		name = space_race_events.5.a
 		ai_chance = {
@@ -246,13 +336,14 @@ space_race_events.5 = {
 				add = 5
 			}
 		}
-		# Shackleton Crater - high risk, scientific windfall
 		set_variable = { name = sr_moon_site_shackleton value = yes }
+		je:je_space_race_moon_landing = { add_modifier = sr_choice_site_shackleton }
 		custom_tooltip = {
 			text = "SR_SHACKLETON_CHOSEN_TT"
 		}
 	}
 
+	# Equatorial Plain - safe + prestige
 	option = {
 		name = space_race_events.5.b
 		default_option = yes
@@ -263,35 +354,45 @@ space_race_events.5 = {
 				add = 3
 			}
 		}
-		# Equatorial Plain - low risk, modest rewards
 		set_variable = { name = sr_moon_site_equatorial value = yes }
+		je:je_space_race_moon_landing = { add_modifier = sr_choice_site_equatorial }
 		custom_tooltip = {
 			text = "SR_EQUATORIAL_CHOSEN_TT"
 		}
 	}
 
+	# Sea of Tranquility - iconic, maximum prestige
 	option = {
 		name = space_race_events.5.c
-		ai_chance = { base = 2 }
-		# Let the scientists decide - random assignment
-		random_list = {
-			50 = {
-				set_variable = { name = sr_moon_site_shackleton value = yes }
-				custom_tooltip = {
-					text = "SR_SHACKLETON_CHOSEN_TT"
-				}
+		ai_chance = {
+			base = 4
+		}
+		set_variable = { name = sr_moon_site_tranquility value = yes }
+		je:je_space_race_moon_landing = { add_modifier = sr_choice_site_tranquility }
+		custom_tooltip = {
+			text = "SR_TRANQUILITY_CHOSEN_TT"
+		}
+	}
+
+	# Far Side - radio-shielded, cutting-edge science
+	option = {
+		name = space_race_events.5.e
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_variable = sr_ambitious_moon_landing }
+				add = 3
 			}
-			50 = {
-				set_variable = { name = sr_moon_site_equatorial value = yes }
-				custom_tooltip = {
-					text = "SR_EQUATORIAL_CHOSEN_TT"
-				}
-			}
+		}
+		set_variable = { name = sr_moon_site_far_side value = yes }
+		je:je_space_race_moon_landing = { add_modifier = sr_choice_site_far_side }
+		custom_tooltip = {
+			text = "SR_FAR_SIDE_CHOSEN_TT"
 		}
 	}
 }
 
-# Event 6: Moon Base Established
+# Event 6: Moon Base Established - options depend on purpose choice
 space_race_events.6 = {
 	type = country_event
 	placement = root
@@ -309,50 +410,69 @@ space_race_events.6 = {
 	trigger = { }
 	immediate = { }
 
+	# Scientific research base
 	option = {
 		name = space_race_events.6.a
 		default_option = yes
+		trigger = { has_variable = sr_moon_base_scientific }
 		ai_chance = { base = 5 }
 		sr_apply_moon_base_reward = yes
-		# Lunar mining operations
+		add_modifier = {
+			name = sr_moon_base_scientific
+			days = long_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = { value = large_radicals pop_type = academics }
+	}
+
+	# Industrial mining base
+	option = {
+		name = space_race_events.6.b
+		trigger = { has_variable = sr_moon_base_industrial }
+		ai_chance = { base = 5 }
+		sr_apply_moon_base_reward = yes
+		add_modifier = {
+			name = sr_moon_base_industrial
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals }
 	}
 
-	option = {
-		name = space_race_events.6.b
-		ai_chance = { base = 4 }
-		sr_apply_moon_base_reward = yes
-		# International lunar research hub
-		custom_tooltip = {
-			text = SR_INTL_COOPERATION_RELATIONS_TT
-			every_country = {
-				limit = {
-					has_technology_researched = space_exploration
-					NOT = { THIS = ROOT }
-					has_diplomatic_relevance = ROOT
-				}
-				change_relations = { country = ROOT value = 15 }
-			}
-		}
-		add_loyalists = { value = medium_radicals pop_type = academics }
-	}
-
+	# Military installation
 	option = {
 		name = space_race_events.6.c
-		ai_chance = { base = 2 }
+		trigger = { has_variable = sr_moon_base_military }
+		ai_chance = { base = 5 }
 		sr_apply_moon_base_reward = yes
-		# Military lunar installation
+		add_modifier = {
+			name = sr_moon_base_military
+			days = long_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = { value = medium_radicals pop_type = officers }
 		add_loyalists = { value = medium_radicals pop_type = soldiers }
 		add_radicals = { value = small_radicals pop_type = laborers }
-		add_radicals = { value = small_radicals pop_type = farmers }
-		add_radicals = { value = small_radicals pop_type = peasants }
-		add_radicals = { value = small_radicals pop_type = machinists }
+	}
+
+	# Fallback - no purpose chosen
+	option = {
+		name = space_race_events.6.e
+		trigger = {
+			NOT = { has_variable = sr_moon_base_scientific }
+			NOT = { has_variable = sr_moon_base_industrial }
+			NOT = { has_variable = sr_moon_base_military }
+		}
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_apply_moon_base_reward = yes
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
 	}
 }
 
-# Event 7: Mars Landing Achievement
+# Event 7: Mars Landing Achievement - options depend on strategy choice
 space_race_events.7 = {
 	type = country_event
 	placement = root
@@ -370,46 +490,63 @@ space_race_events.7 = {
 	trigger = { }
 	immediate = { }
 
+	# Direct landing - maximum prestige
 	option = {
 		name = space_race_events.7.a
 		default_option = yes
+		trigger = { has_variable = sr_mars_direct }
 		ai_chance = { base = 5 }
 		sr_apply_mars_landing_reward = yes
-		# Establish permanent research station
-		add_loyalists = { value = large_radicals pop_type = academics }
+		add_modifier = {
+			name = sr_mars_direct_landing
+			days = long_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = { value = large_radicals }
 	}
 
+	# Orbital first - science and progress
 	option = {
 		name = space_race_events.7.b
-		ai_chance = { base = 3 }
+		trigger = { has_variable = sr_mars_orbital_first }
+		ai_chance = { base = 5 }
 		sr_apply_mars_landing_reward = yes
-		# Begin resource extraction surveys
 		add_modifier = {
-			name = sr_mars_resource_extraction
-			days = normal_modifier_time
+			name = sr_mars_orbital_first
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = large_radicals pop_type = academics }
+	}
+
+	# Robotic precursor - innovation and mining
+	option = {
+		name = space_race_events.7.c
+		trigger = { has_variable = sr_mars_robotic }
+		ai_chance = { base = 5 }
+		sr_apply_mars_landing_reward = yes
+		add_modifier = {
+			name = sr_mars_robotic_precursor
+			days = long_modifier_time
 			is_decaying = yes
 		}
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
 	}
 
+	# Fallback - no strategy chosen
 	option = {
-		name = space_race_events.7.c
-		ai_chance = { base = 2 }
-		sr_apply_mars_landing_reward = yes
-		# Broadcast the landing globally - maximum prestige play
-		add_loyalists = { value = large_radicals }
-		custom_tooltip = {
-			text = SR_MARS_BROADCAST_RELATIONS_TT
-			every_country = {
-				limit = {
-					has_technology_researched = space_colonization
-					NOT = { THIS = ROOT }
-					has_diplomatic_relevance = ROOT
-				}
-				change_relations = { country = ROOT value = 20 }
-			}
+		name = space_race_events.7.e
+		trigger = {
+			NOT = { has_variable = sr_mars_direct }
+			NOT = { has_variable = sr_mars_orbital_first }
+			NOT = { has_variable = sr_mars_robotic }
 		}
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_apply_mars_landing_reward = yes
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals }
 	}
 }
 
@@ -3718,5 +3855,273 @@ space_race_events.76 = {
 		name = space_race_events.76.a
 		default_option = yes
 		ai_chance = { base = 5 }
+	}
+}
+
+##############################################
+# MILESTONE CHOICE EVENTS (80-83)
+##############################################
+
+# Event 80: Orbital Astronaut Type Choice
+space_race_events.80 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.80.t
+	desc = space_race_events.80.d
+	flavor = space_race_events.80.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	# Civilian astronaut - prestige and soft power
+	option = {
+		name = space_race_events.80.a
+		ai_chance = {
+			base = 4
+		}
+		set_variable = { name = sr_orbital_civilian value = yes }
+		je:je_space_race_orbital = { add_modifier = sr_choice_orbital_civilian }
+		custom_tooltip = {
+			text = "SR_ORBITAL_CIVILIAN_CHOSEN_TT"
+		}
+	}
+
+	# Military test pilot - defense applications
+	option = {
+		name = space_race_events.80.b
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_variable = sr_ambitious_orbital }
+				add = 3
+			}
+		}
+		set_variable = { name = sr_orbital_military value = yes }
+		je:je_space_race_orbital = { add_modifier = sr_choice_orbital_military }
+		custom_tooltip = {
+			text = "SR_ORBITAL_MILITARY_CHOSEN_TT"
+		}
+	}
+
+	# Scientist astronaut - research focus
+	option = {
+		name = space_race_events.80.c
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_variable = sr_safe_orbital }
+				add = 3
+			}
+		}
+		set_variable = { name = sr_orbital_scientist value = yes }
+		je:je_space_race_orbital = { add_modifier = sr_choice_orbital_scientist }
+		custom_tooltip = {
+			text = "SR_ORBITAL_SCIENTIST_CHOSEN_TT"
+		}
+	}
+}
+
+# Event 81: Probe Mission Target Choice
+space_race_events.81 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.81.t
+	desc = space_race_events.81.d
+	flavor = space_race_events.81.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	# Venus - atmospheric science
+	option = {
+		name = space_race_events.81.a
+		ai_chance = {
+			base = 3
+		}
+		set_variable = { name = sr_probe_target_venus value = yes }
+		je:je_space_race_probe = { add_modifier = sr_choice_probe_venus }
+		custom_tooltip = {
+			text = "SR_PROBE_VENUS_CHOSEN_TT"
+		}
+	}
+
+	# Mars - colonization preparation
+	option = {
+		name = space_race_events.81.b
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_variable = sr_ambitious_probe }
+				add = 3
+			}
+		}
+		set_variable = { name = sr_probe_target_mars value = yes }
+		je:je_space_race_probe = { add_modifier = sr_choice_probe_mars }
+		custom_tooltip = {
+			text = "SR_PROBE_MARS_CHOSEN_TT"
+		}
+	}
+
+	# Asteroid belt - mining potential
+	option = {
+		name = space_race_events.81.c
+		ai_chance = {
+			base = 3
+		}
+		set_variable = { name = sr_probe_target_asteroid value = yes }
+		je:je_space_race_probe = { add_modifier = sr_choice_probe_asteroid }
+		custom_tooltip = {
+			text = "SR_PROBE_ASTEROID_CHOSEN_TT"
+		}
+	}
+}
+
+# Event 82: Moon Base Purpose Choice
+space_race_events.82 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.82.t
+	desc = space_race_events.82.d
+	flavor = space_race_events.82.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	# Scientific research station
+	option = {
+		name = space_race_events.82.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_variable = sr_safe_moon_base }
+				add = 3
+			}
+		}
+		set_variable = { name = sr_moon_base_scientific value = yes }
+		je:je_space_race_moon_base = { add_modifier = sr_choice_moon_base_scientific }
+		custom_tooltip = {
+			text = "SR_MOON_BASE_SCIENTIFIC_CHOSEN_TT"
+		}
+	}
+
+	# Industrial mining operation
+	option = {
+		name = space_race_events.82.b
+		ai_chance = {
+			base = 4
+		}
+		set_variable = { name = sr_moon_base_industrial value = yes }
+		je:je_space_race_moon_base = { add_modifier = sr_choice_moon_base_industrial }
+		custom_tooltip = {
+			text = "SR_MOON_BASE_INDUSTRIAL_CHOSEN_TT"
+		}
+	}
+
+	# Military installation
+	option = {
+		name = space_race_events.82.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_variable = sr_ambitious_moon_base }
+				add = 3
+			}
+		}
+		set_variable = { name = sr_moon_base_military value = yes }
+		je:je_space_race_moon_base = { add_modifier = sr_choice_moon_base_military }
+		custom_tooltip = {
+			text = "SR_MOON_BASE_MILITARY_CHOSEN_TT"
+		}
+	}
+}
+
+# Event 83: Mars Landing Strategy Choice
+space_race_events.83 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.83.t
+	desc = space_race_events.83.d
+	flavor = space_race_events.83.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	# Direct landing - bold and prestigious
+	option = {
+		name = space_race_events.83.a
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_variable = sr_ambitious_mars_landing }
+				add = 5
+			}
+		}
+		set_variable = { name = sr_mars_direct value = yes }
+		je:je_space_race_mars_landing = { add_modifier = sr_choice_mars_direct }
+		custom_tooltip = {
+			text = "SR_MARS_DIRECT_CHOSEN_TT"
+		}
+	}
+
+	# Orbital-first approach - methodical and scientific
+	option = {
+		name = space_race_events.83.b
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_variable = sr_safe_mars_landing }
+				add = 3
+			}
+		}
+		set_variable = { name = sr_mars_orbital_first value = yes }
+		je:je_space_race_mars_landing = { add_modifier = sr_choice_mars_orbital }
+		custom_tooltip = {
+			text = "SR_MARS_ORBITAL_CHOSEN_TT"
+		}
+	}
+
+	# Robotic precursor - send robots first
+	option = {
+		name = space_race_events.83.c
+		ai_chance = {
+			base = 4
+		}
+		set_variable = { name = sr_mars_robotic value = yes }
+		je:je_space_race_mars_landing = { add_modifier = sr_choice_mars_robotic }
+		custom_tooltip = {
+			text = "SR_MARS_ROBOTIC_CHOSEN_TT"
+		}
 	}
 }

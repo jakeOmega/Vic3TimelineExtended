@@ -17882,7 +17882,7 @@ pm_solar_receiver = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 
 	country_modifiers = {
-		workforce_scaled = {
+		level_scaled = {
 			country_solar_receiver_max_level_add = -1
 		}
 	}

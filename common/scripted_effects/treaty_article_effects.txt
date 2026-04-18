@@ -17,7 +17,7 @@ update_intel_sharing_defense = {
 	if = {
 		limit = {
 			any_scope_diplomatic_pact = {
-				is_diplomatic_action_type = intelligence_sharing_pact
+				any_scope_article = { has_type = intelligence_sharing_pact }
 			}
 		}
 
@@ -40,7 +40,7 @@ update_intel_sharing_defense = {
 		save_scope_as = _self
 
 		every_scope_diplomatic_pact = {
-			limit = { is_diplomatic_action_type = intelligence_sharing_pact }
+			limit = { any_scope_article = { has_type = intelligence_sharing_pact } }
 
 			# Determine which country is the partner
 			if = {

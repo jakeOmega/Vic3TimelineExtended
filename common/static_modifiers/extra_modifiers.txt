@@ -34,7 +34,7 @@ solar_collector_progress = {
 }
 
 pollution_generation_mult_effect = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_pollution_generation_add = 1
 }
 
@@ -285,12 +285,12 @@ REPLACE:pm_retooling = {
 }
 
 tourism_output = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	goods_output_tourism_mult = 1
 }
 
 tourism_throughput = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	building_tourism_industry_throughput_add = 1
 }
 
@@ -3260,7 +3260,7 @@ construction_cost_scaling = {
 }
 
 migration_crowding = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_migration_pull_mult = -0.1
 }
 
@@ -3571,6 +3571,7 @@ langreform_national_focus = {
 # ====================================================================================
 # Applied by the construction system's weekly pulse to invisible construction site buildings.
 
+
 # Throughput modifier for construction site buildings.
 # Applied per-site with multiplier = (target_per_site - 1).
 # Base building_throughput_add = 1 is multiplied by the dynamic multiplier.
@@ -3786,7 +3787,7 @@ minority_protection_state_modifier = {
 }
 
 free_port_state_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_trade_capacity_mult = 0.5
 	state_migration_pull_add = 10
 	state_trade_advantage_mult = 0.25
@@ -3797,12 +3798,12 @@ free_port_state_modifier = {
 # Applied dynamically by te_update_free_port_tariff with multiplier capped
 # at the state's current tariff rate, preventing negative tariffs.
 free_port_tariff_import_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_tariff_import_add = -1
 }
 
 free_port_tariff_export_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_tariff_export_add = -1
 }
 
@@ -5226,6 +5227,16 @@ me_colonial_representation_modifier = {
 me_neural_democracy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_legitimacy_govt_total_clout_add = 10
+}
+
+me_open_borders_campaign_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_migration_restrictiveness_add = -10
+}
+
+me_border_security_campaign_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_migration_restrictiveness_add = 10
 }
 
 # ============================================================================

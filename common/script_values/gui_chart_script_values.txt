@@ -1,0 +1,49 @@
+﻿# Script values for GUI chart visualizations
+# These are read by GUI property expressions via MakeScope.ScriptValue()
+
+# ============================================================================
+# TRADE VALUE (country scope)
+# ============================================================================
+
+# Total world market trade value for a country
+# Used by market panel bar chart: Country.MakeScope.ScriptValue('gui_country_total_trade_value')
+gui_country_total_trade_value = {
+	value = total_trade_value
+}
+
+# ============================================================================
+# EMPLOYMENT LEVELS BY CATEGORY (state scope)
+# Set by gui_state_employment_on_action on monthly pulse
+# ============================================================================
+
+gui_urban_levels = {
+	value = 0
+	if = {
+		limit = { has_variable = gui_urban_levels }
+		add = var:gui_urban_levels
+	}
+}
+
+gui_extraction_levels = {
+	value = 0
+	if = {
+		limit = { has_variable = gui_extraction_levels }
+		add = var:gui_extraction_levels
+	}
+}
+
+gui_agriculture_levels = {
+	value = 0
+	if = {
+		limit = { has_variable = gui_agriculture_levels }
+		add = var:gui_agriculture_levels
+	}
+}
+
+gui_development_levels = {
+	value = 0
+	if = {
+		limit = { has_variable = gui_development_levels }
+		add = var:gui_development_levels
+	}
+}

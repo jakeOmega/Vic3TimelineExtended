@@ -1907,7 +1907,7 @@ cultural_hegemony.16 = {
 				trigger = {
 					any_interest_group = {
 						is_in_government = yes
-						law_stance = { target = scope:ch_pressure_law_type value > 0 }
+						law_stance = { law = scope:ch_pressure_law_type value > neutral }
 					}
 				}
 				add = 4
@@ -1917,7 +1917,7 @@ cultural_hegemony.16 = {
 				trigger = {
 					any_interest_group = {
 						is_in_government = yes
-						law_stance = { target = scope:ch_pressure_law_type value < 0 }
+						law_stance = { law = scope:ch_pressure_law_type value < neutral }
 					}
 				}
 				add = -3
@@ -1967,7 +1967,7 @@ cultural_hegemony.16 = {
 				trigger = {
 					any_interest_group = {
 						is_in_government = yes
-						law_stance = { target = scope:ch_pressure_law_type value > 0 }
+						law_stance = { law = scope:ch_pressure_law_type value > neutral }
 					}
 				}
 				add = -3
@@ -1977,7 +1977,7 @@ cultural_hegemony.16 = {
 				trigger = {
 					any_interest_group = {
 						is_in_government = yes
-						law_stance = { target = scope:ch_pressure_law_type value < 0 }
+						law_stance = { law = scope:ch_pressure_law_type value < neutral }
 					}
 				}
 				add = 3

@@ -11,3 +11,4 @@ path_constants.py
 *.log
 *.log.*
 *.pid
+generated_images/

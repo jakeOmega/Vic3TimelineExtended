@@ -1097,11 +1097,16 @@ global_tech_spread_script_value = {
 
 state_arable_land_add_script_value = {
 	value = arable_land
-	multiply = modifier:state_arable_land_mult
 	if = {
 		limit = { has_variable = arable_land_added }
-		subtract = var:arable_land_added
+		subtract = var:arable_land_added  # isolate the geographic base first
 	}
+	multiply = modifier:state_arable_land_mult  # apply mult only to base
+	if = {
+		limit = { has_variable = arable_land_added }
+		subtract = var:arable_land_added  # subtract what we've already added
+	}
+	min = 0  # never remove land
 	floor = yes
 }
 
@@ -1686,6 +1691,30 @@ construction_cost_scaling_mult = {
 	max = construction_cost_max_mult
 }
 
+# Adjusted construction cost scaling that combines MULTIPLICATIVELY with other
+# goods_input_construction_mult modifiers (ministry of environment, laws, etc.).
+# Without this, other modifiers are just added to the scaling, making their
+# marginal effect negligible when scaling is high (e.g. +20% ministry on top
+# of +500% scaling = only 3% increase in final cost, instead of 20%).
+#
+# Formula: adjusted = base_scaling * (1 + other_construction_mults)
+# where other_mults = total modifier:goods_input_construction_mult minus our
+# own prior contribution (stored in var:prior_construction_scaling).
+# Result: total = adjusted + other_mults = (1 + base_scaling) * (1 + other_mults) - 1
+# which is the correct multiplicative combination.
+construction_cost_scaling_adjusted_mult = {
+	value = construction_cost_scaling_mult
+	multiply = {
+		value = 1
+		add = modifier:goods_input_construction_mult
+		if = {
+			limit = { has_variable = prior_construction_scaling }
+			subtract = var:prior_construction_scaling
+		}
+	}
+	min = 0
+}
+
 # ====================================================================================
 # MIGRATION CROWDING
 # ====================================================================================
@@ -1794,6 +1823,14 @@ migration_crowding_mult = {
 	multiply = migration_crowding_max_mult
 	min = 0
 	max = migration_crowding_max_mult
+}
+
+# Actual migration pull reduction percentage from crowding.
+# migration_crowding_modifier has state_migration_pull_mult = -0.1,
+# so the real penalty = mult × 0.1.  Display with |%0 → e.g. 4.9 mult → "49%".
+migration_crowding_pull_pct = {
+	value = migration_crowding_mult
+	multiply = 0.1
 }
 
 #==================================================
@@ -1908,4 +1945,146 @@ population_transfer_pop_ratio_score = {
 	multiply = 500 # 1% → 0.01 * 500 = 5
 	min = 0
 	max = 50
+}
+
+#==================================================
+# GUI Display Script Values — Mega Project Resource Tracking
+#==================================================
+# All evaluated in COUNTRY scope. Used by state panel GUI via State.GetOwner.MakeScope.ScriptValue().
+
+# Solar Collectors: total capacity generated (before consumer deductions)
+solar_total_generated_points = {
+	value = modifier:country_solar_receiver_max_level_add
+	# modifier already subtracts built receiver levels, so add them back
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_solar_receiver }
+			add = level
+		}
+	}
+}
+
+# Solar Collectors: points consumed by active (built) receivers
+solar_points_consumed = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_solar_receiver }
+			add = level
+		}
+	}
+}
+
+# Solar Collectors: total points reserved (built + under construction)
+solar_points_reserved = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_solar_receiver }
+			add = level_after_queued_constructions
+		}
+	}
+}
+
+# Antimatter Facility: total capacity generated (before consumer deductions)
+antimatter_total_generated_points = {
+	value = modifier:country_antimatter_facility_max_level_add
+	# modifier already subtracts built sub-building levels, so add them back
+	every_scope_state = {
+		every_scope_building = {
+			limit = {
+				OR = {
+					is_building_type = building_antimatter_engine
+					is_building_type = building_antimatter_warhead_plant
+				}
+			}
+			add = level
+		}
+	}
+}
+
+# Antimatter Facility: points consumed by active (built) sub-buildings
+antimatter_points_consumed = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = {
+				OR = {
+					is_building_type = building_antimatter_engine
+					is_building_type = building_antimatter_warhead_plant
+				}
+			}
+			add = level
+		}
+	}
+}
+
+# Antimatter Facility: total points reserved (built + under construction)
+antimatter_points_reserved = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = {
+				OR = {
+					is_building_type = building_antimatter_engine
+					is_building_type = building_antimatter_warhead_plant
+				}
+			}
+			add = level_after_queued_constructions
+		}
+	}
+}
+
+#==================================================
+# GUI Display Script Values — Migration Crowding Threshold
+#==================================================
+# State scope. The population at which crowding starts affecting migration pull.
+# crowding_threshold_pop = density_floor × effective_arable_land × density_mult_factor
+migration_crowding_threshold_pop = {
+	value = migration_crowding_density_floor
+	multiply = {
+		value = arable_land
+		if = {
+			limit = { has_variable = arable_land_added }
+			subtract = var:arable_land_added
+		}
+		min = 1
+	}
+	multiply = {
+		value = 1
+		add = modifier:state_migration_crowding_density_mult
+		min = 0.1
+	}
+}
+
+#==================================================
+# GUI Display Script Values — Arable Land Breakdown
+#==================================================
+# State scope. Total arable land (wraps the trigger for GUI access).
+arable_land_total = {
+	value = arable_land
+}
+
+# State scope. Base arable land before modifiers.
+arable_land_base = {
+	value = arable_land
+	if = {
+		limit = { has_variable = arable_land_added }
+		subtract = var:arable_land_added
+	}
+}
+
+# State scope. Arable land added from modifiers/techs.
+arable_land_from_modifiers = {
+	value = 0
+	if = {
+		limit = { has_variable = arable_land_added }
+		add = var:arable_land_added
+	}
+}
+
+# State scope. Arable land multiplier as percentage (e.g. 1.4 modifier → 140).
+arable_land_mult_pct = {
+	value = modifier:state_arable_land_mult
+	multiply = 100
 }

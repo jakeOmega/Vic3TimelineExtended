@@ -21,6 +21,8 @@ def generate_image(prompt, style, output, model_id, steps, width, height, token)
 
     # Enhance prompt with style
     full_prompt = f"{prompt}, {style}" if style else prompt
+    # Suppress garbled text/writing and common FLUX artifacts
+    full_prompt += ", no text, no writing, no watermarks"
 
     # Generate
     print(f"Generating: '{full_prompt}' ({width}x{height}, {steps} steps)...")

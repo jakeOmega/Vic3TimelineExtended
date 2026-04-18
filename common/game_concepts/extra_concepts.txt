@@ -40,9 +40,52 @@ concept_civil_rights_movement = {}
 
 # Economy & Scaling
 concept_construction_cost_scaling = {}
-concept_migration_crowding = {}
+concept_migration_crowding = {
+	texture = "gfx/interface/icons/generic_icons/population.dds"
+}
+concept_homeland_dynamics = {
+	texture = "gfx/interface/icons/state_status_icons/state_homelands.dds"
+}
+concept_arable_land = {
+	texture = "gfx/interface/icons/building_icons/wheat_farm.dds"
+}
 concept_wonder_building = {}
-concept_tourism_system = {}
+concept_tourism_system = {
+	texture = "gfx/interface/icons/goods_icons/tourism.dds"
+}
+concept_tourism_output = {
+	texture = "gfx/interface/icons/goods_icons/tourism.dds"
+}
+concept_tourism_throughput = {
+	texture = "gfx/interface/icons/goods_icons/tourism.dds"
+}
+concept_tourism_cities = {
+	texture = "gfx/interface/icons/building_icons/urban_center.dds"
+}
+concept_tourism_ports = {
+	texture = "gfx/interface/icons/building_icons/port.dds"
+}
+concept_tourism_transit = {
+	texture = "gfx/interface/icons/state_status_icons/state_infrastructure.dds"
+}
+concept_tourism_art = {
+	texture = "gfx/interface/icons/goods_icons/fine_art.dds"
+}
+concept_tourism_parks = {
+	texture = "gfx/interface/icons/state_status_icons/pollution.dds"
+}
+concept_tourism_monuments = {
+	texture = "gfx/interface/icons/building_icons/monument.dds"
+}
+concept_tourism_base_appeal = {
+	texture = "gfx/interface/icons/goods_icons/tourism.dds"
+}
+concept_solar_collector_array = {
+	texture = "gfx/interface/icons/building_icons/space_elevator.dds"
+}
+concept_antimatter_facility = {
+	texture = "gfx/interface/icons/building_icons/power_plant.dds"
+}
 
 # Military & Diplomacy
 concept_combined_arms = {}

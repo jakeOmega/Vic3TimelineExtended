@@ -108,6 +108,7 @@ on_monthly_pulse_state = {
 		state_yearly_cultural_acceptance_add_on_action
 		tourism_on_action
 		resettlement_transfer_on_action
+		gui_state_employment_on_action
 	}
 }
 
@@ -2012,14 +2013,32 @@ society_technology_events_on_action = {
 }
 
 # ---- Construction Cost Scaling (country scope, yearly) ----
-# Applies country_construction_goods_cost_mult penalty based on GDP per capita.
+# Applies goods_input_construction_mult penalty based on GDP per capita.
+# Uses adjusted multiplier that combines multiplicatively with other
+# sources of goods_input_construction_mult (ministry, laws, etc.).
 # See extra_script_values.txt for tuning constants.
 construction_cost_scaling_on_action = {
 	effect = {
 		remove_modifier = construction_cost_scaling
 		if = {
-			limit = { construction_cost_scaling_mult > 0 }
-			add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_mult }
+			limit = { NOT = { has_variable = prior_construction_scaling } }
+			# First run (new save or pre-adjustment saves) - use raw scaling
+			if = {
+				limit = { construction_cost_scaling_mult > 0 }
+				add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_mult }
+				set_variable = { name = prior_construction_scaling value = construction_cost_scaling_mult }
+			}
+		}
+		else = {
+			# Subsequent runs - use adjusted scaling (multiplicative with other modifiers)
+			if = {
+				limit = { construction_cost_scaling_adjusted_mult > 0 }
+				add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_adjusted_mult }
+				set_variable = { name = prior_construction_scaling value = construction_cost_scaling_adjusted_mult }
+			}
+			else = {
+				set_variable = { name = prior_construction_scaling value = 0 }
+			}
 		}
 	}
 }

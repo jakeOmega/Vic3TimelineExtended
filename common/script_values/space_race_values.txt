@@ -314,3 +314,56 @@ sr_progress_solar_colonization_percent = {
 		max = 100
 	}
 }
+
+# GUI helper: current colonization stage (0 if not started)
+sr_current_colonization_stage = {
+	value = 0
+	if = {
+		limit = { has_global_variable = sr_colonization_stage }
+		add = global_var:sr_colonization_stage
+	}
+}
+
+# GUI helper: total colonies established globally
+sr_total_global_colonies = {
+	value = 0
+	# Stage 1
+	if = { limit = { has_global_variable = sr_colony_valles_marineris } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_olympus_mons } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_hellas_planitia } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_utopia_planitia } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_arcadia_planitia } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_ceres } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_vesta } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_psyche } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_pallas } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_hygiea } add = 1 }
+	# Stage 2
+	if = { limit = { has_global_variable = sr_colony_io } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_europa } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_ganymede } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_callisto } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_himalia } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_amalthea } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_venus } add = 1 }
+	# Stage 3
+	if = { limit = { has_global_variable = sr_colony_mercury } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_titan } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_enceladus } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_rhea } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_mimas } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_iapetus } add = 1 }
+	# Stage 4
+	if = { limit = { has_global_variable = sr_colony_titania } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_oberon } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_miranda } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_ariel } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_triton } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_proteus } add = 1 }
+	# Stage 5
+	if = { limit = { has_global_variable = sr_colony_pluto } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_eris } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_makemake } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_haumea } add = 1 }
+	if = { limit = { has_global_variable = sr_colony_sedna } add = 1 }
+}

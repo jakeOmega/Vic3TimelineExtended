@@ -1,0 +1,60 @@
+﻿# On-actions for GUI chart data computation
+# These pre-compute values that can't be derived from GUI data model accessors alone.
+
+# ============================================================================
+# STATE EMPLOYMENT BY BUILDING CATEGORY
+# Called from on_monthly_pulse_state. ROOT = state.
+# Sums building levels per category so the GUI can display a type breakdown bar.
+# Categories match the Access* iterators:
+#   Urban     = bg_manufacturing, bg_service, bg_urban_facilities
+#   Extraction = bg_extraction (mines, logging, fishing, oil, rubber, whaling)
+#   Agriculture = bg_agriculture, bg_ranching, bg_plantations
+#   Development = bg_power, bg_government, bg_infrastructure, bg_military, bg_parks
+# ============================================================================
+gui_state_employment_on_action = {
+	effect = {
+		set_variable = { name = gui_urban_levels value = 0 }
+		set_variable = { name = gui_extraction_levels value = 0 }
+		set_variable = { name = gui_agriculture_levels value = 0 }
+		set_variable = { name = gui_development_levels value = 0 }
+
+		every_scope_building = {
+			if = {
+				limit = {
+					OR = {
+						is_building_group = bg_manufacturing
+						is_building_group = bg_service
+						is_building_group = bg_urban_facilities
+					}
+				}
+				ROOT = { change_variable = { name = gui_urban_levels add = PREV.level } }
+			}
+			else_if = {
+				limit = { is_building_group = bg_extraction }
+				ROOT = { change_variable = { name = gui_extraction_levels add = PREV.level } }
+			}
+			else_if = {
+				limit = {
+					OR = {
+						is_building_group = bg_agriculture
+						is_building_group = bg_ranching
+						is_building_group = bg_plantations
+					}
+				}
+				ROOT = { change_variable = { name = gui_agriculture_levels add = PREV.level } }
+			}
+			else_if = {
+				limit = {
+					OR = {
+						is_building_group = bg_power
+						is_building_group = bg_government
+						is_building_group = bg_infrastructure
+						is_building_group = bg_military
+						is_building_group = bg_parks
+					}
+				}
+				ROOT = { change_variable = { name = gui_development_levels add = PREV.level } }
+			}
+		}
+	}
+}

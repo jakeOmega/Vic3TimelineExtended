@@ -1,4 +1,12 @@
-﻿# Nukes
+﻿# Wonders / Megastructures
+wonder_construction_complete = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = toast
+	color = good
+}
+
+# Nukes
 industrial_nuke_succeeds_attacker = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/military.dds"
