@@ -51,32 +51,32 @@ IMAGES = {
     # AUGMENTATION EVENTS
     # =========================================================================
     "augmentation_divide": {
-        "prompt": "A split cityscape viewed from above: one half gleaming with chrome and neon where citizens sport visible cybernetic enhancements, the other half decaying and dim where unmodified people crowd narrow streets. Rain-slicked roads reflect the contrast.",
+        "prompt": "A split cityscape showing augmented and unaugmented districts.",
         "style": "digital painting, atmospheric, cyberpunk mood",
         "events": ["augmentation_events.1", "augmentation_events.5"],
     },
     "underground_augmentation_clinic": {
-        "prompt": "A grimy underground surgical clinic with flickering fluorescent lights. A patient lies on a makeshift operating table surrounded by cybernetic implants, improvised medical tools, and tangled cables. A masked surgeon works by lamplight.",
+        "prompt": "An underground surgical clinic with cybernetic implants.",
         "style": "digital painting, atmospheric, cyberpunk mood",
         "events": ["augmentation_events.2"],
     },
     "anti_augmentation_protest": {
-        "prompt": "Religious protesters holding candles and raised fists outside a gleaming augmentation clinic at dusk. Mix of traditional robes and modern clothing. Tension between the warm candlelight and the clinic's cold blue glow. No visible text or writing.",
+        "prompt": "Protesters outside an augmentation clinic at dusk.",
         "style": "oil painting, social realism, dramatic evening light",
         "events": ["augmentation_events.3"],
     },
     "augmented_criminal": {
-        "prompt": "A shadowy figure with a glowing cybernetic eye implant and a mechanical arm crouches on a rain-soaked rooftop, overlooking a neon-lit city at night. Police searchlights sweep the streets below.",
+        "prompt": "A shadowy augmented figure on a rooftop at night.",
         "style": "digital painting, atmospheric, cyberpunk mood",
         "events": ["augmentation_events.4"],
     },
     "unaugmented_underclass": {
-        "prompt": "A group of tired, ordinary-looking workers in worn clothing standing in a long queue outside a factory gate in an industrial district. Through the open gate, gleaming augmented workers with chrome implants on their arms and temples walk past without looking at them. Grey overcast sky, puddles on concrete.",
+        "prompt": "Workers queuing outside a factory.",
         "style": "oil painting, social realism, muted tones",
         "events": ["augmentation_events.100"],
     },
     "augmented_harmony": {
-        "prompt": "A diverse group of people in a bright, modern community workspace. Some have subtle technological enhancements — faint neural implant traces on temples, an elegant prosthetic arm — while others are unmodified.",
+        "prompt": "A community workspace with subtle technological enhancements.",
         "style": "oil painting, impressionist, warm optimistic light",
         "events": ["augmentation_events.200"],
     },
@@ -85,7 +85,7 @@ IMAGES = {
     # BANKING CYCLE EVENTS — MARKET ECONOMY
     # =========================================================================
     "stock_exchange_frenzy": {
-        "prompt": "A bustling 19th-century stock exchange trading floor. Men in top hats and frock coats shout and wave papers frantically. Ticker tape machines whir, spilling ribbon across the floor. An enormous chalkboard displays rapidly changing prices.",
+        "prompt": "A bustling 19th-century stock exchange trading floor.",
         "style": "oil painting, chiaroscuro, 19th-century realism",
         "events": [
             "banking_cycle_events.1", "banking_cycle_events.5",
@@ -96,12 +96,12 @@ IMAGES = {
         ],
     },
     "bank_run_crowd": {
-        "prompt": "A panicked crowd of Victorian-era depositors surging toward the iron-barred doors of a grand stone bank. Women clutch purses, men push forward desperately, a few bank clerks try to maintain order behind the counter.",
+        "prompt": "A panicked crowd at a Victorian bank.",
         "style": "oil painting, chiaroscuro, 19th-century realism",
         "events": ["banking_cycle_events.4", "banking_cycle_events.31"],
     },
     "banking_boardroom": {
-        "prompt": "A mahogany-paneled boardroom with industrial-era bank executives in dark suits seated around a long polished table. Stacks of ledgers, inkwells, and documents. Gas lamps cast warm pools of light.",
+        "prompt": "A mahogany boardroom with bank executives.",
         "style": "oil painting, chiaroscuro, 19th-century realism",
         "events": [
             "banking_cycle_events.7", "banking_cycle_events.21",
@@ -110,7 +110,7 @@ IMAGES = {
         ],
     },
     "central_bank_policy": {
-        "prompt": "An ornate neoclassical government chamber with officials debating around a horseshoe table. Financial charts and gold reserves reports hang on the walls. High ceilings, marble columns, an atmosphere of institutional gravity and monetary power.",
+        "prompt": "Officials debating policy in a neoclassical chamber.",
         "style": "oil painting, academic art, institutional grandeur",
         "events": [
             "banking_cycle_events.8", "banking_cycle_events.10",
@@ -122,7 +122,7 @@ IMAGES = {
         ],
     },
     "financial_distress_street": {
-        "prompt": "A distressed businessman in a bowler hat clutches a crumpled document on a rain-soaked city street, face etched with despair. Other anxious figures hurry past. Horse-drawn carriages and early gas lamps.",
+        "prompt": "A distressed businessman on a rain-soaked street.",
         "style": "oil painting, chiaroscuro, 19th-century realism",
         "events": [
             "banking_cycle_events.3", "banking_cycle_events.6",
@@ -131,7 +131,7 @@ IMAGES = {
         ],
     },
     "trade_commerce_port": {
-        "prompt": "A busy commercial harbor at dawn. Merchant vessels — a mix of sail and steam — cluster at the wharves. Dockworkers unload crates while men with ledgers and top hats oversee operations.",
+        "prompt": "A busy commercial harbor at dawn.",
         "style": "oil painting, chiaroscuro, 19th-century realism",
         "events": [
             "banking_cycle_events.2", "banking_cycle_events.27",
@@ -140,7 +140,7 @@ IMAGES = {
         ],
     },
     "financial_fraud_exposed": {
-        "prompt": "A man hunched over a desk covered in falsified ledgers and dual record books, caught in the act by lamplight. Shadowy figures of investigators appear in the doorway behind him. Stacks of coins, scattered banknotes, an open safe.",
+        "prompt": "A man caught with falsified ledgers by lamplight.",
         "style": "oil painting, chiaroscuro, 19th-century realism",
         "events": [
             "banking_cycle_events.13", "banking_cycle_events.18",
@@ -153,7 +153,7 @@ IMAGES = {
     # BANKING CYCLE EVENTS — PLANNED ECONOMY
     # =========================================================================
     "gosplan_factory_hall": {
-        "prompt": "A vast Soviet-style factory interior with massive industrial machines, propaganda murals on concrete walls, and workers in uniforms operating heavy equipment under harsh fluorescent lights. A socialist realist mural of heroic laborers dominates one wall.",
+        "prompt": "A vast Soviet-style factory interior.",
         "style": "oil painting, socialist realism, harsh light",
         "events": [
             "banking_cycle_events.50", "banking_cycle_events.52",
@@ -162,7 +162,7 @@ IMAGES = {
         ],
     },
     "planning_bureau": {
-        "prompt": "A cramped Soviet-era government office. Bureaucrats in ill-fitting suits sit at wooden desks piled high with production reports and statistical tables. A large wall map bristles with colored pins marking factory locations. Portraits of leaders hang above.",
+        "prompt": "A cramped Soviet-era planning office.",
         "style": "oil painting, socialist realism, harsh light",
         "events": [
             "banking_cycle_events.51", "banking_cycle_events.54",
@@ -171,12 +171,12 @@ IMAGES = {
         ],
     },
     "black_market_underground": {
-        "prompt": "A clandestine market in a dim back alley at night. People exchange goods furtively behind makeshift curtains, a lookout watches the corner. Mix of consumer goods and industrial materials laid out on blankets. Shadows, suspicion, survival.",
+        "prompt": "A clandestine night market in a back alley.",
         "style": "oil painting, socialist realism, harsh light",
         "events": ["banking_cycle_events.53", "banking_cycle_events.120"],
     },
     "state_bank_reserves": {
-        "prompt": "Interior of a state bank vault. Massive vault doors stand open, revealing stacks of gold bars and currency bundles. A uniformed commissar reviews records while guards stand at attention. Cold institutional lighting, concrete and steel.",
+        "prompt": "Interior of a state bank vault with gold stacks.",
         "style": "oil painting, socialist realism, harsh light",
         "events": [
             "banking_cycle_events.55", "banking_cycle_events.110",
@@ -188,7 +188,7 @@ IMAGES = {
     # BANKING CYCLE EVENTS — COOPERATIVE ECONOMY
     # =========================================================================
     "cooperative_assembly_hall": {
-        "prompt": "A large meeting hall filled with worker-owners voting by show of hands. Simple but dignified space with wooden benches. A speaker at a lectern gestures passionately. Raised hands fill the room. Warm community atmosphere, democratic energy.",
+        "prompt": "Workers voting in a large meeting hall.",
         "style": "oil painting, warm light, community realism",
         "events": [
             "banking_cycle_events.60", "banking_cycle_events.62",
@@ -197,7 +197,7 @@ IMAGES = {
         ],
     },
     "cooperative_strain": {
-        "prompt": "Exhausted worker-owners slumped over their workstations in a cooperative workshop at the end of a long shift. Account books and production schedules litter every surface. Late evening light through industrial windows.",
+        "prompt": "Exhausted worker-owners in a cooperative workshop.",
         "style": "oil painting, warm light, community realism",
         "events": [
             "banking_cycle_events.61", "banking_cycle_events.63",
@@ -207,7 +207,7 @@ IMAGES = {
         ],
     },
     "cooperative_market_success": {
-        "prompt": "A busy cooperative marketplace. Producers sell directly from colorful stalls bearing the twin-pines cooperative logo. Worker-members interact with customers warmly. A community bulletin board shows meeting times and dividend announcements. Sunlit, lively.",
+        "prompt": "A busy cooperative marketplace with stalls.",
         "style": "oil painting, warm light, community realism",
         "events": [
             "banking_cycle_events.64", "banking_cycle_events.151",
@@ -219,7 +219,7 @@ IMAGES = {
     # COVERT WARFARE EVENTS
     # =========================================================================
     "espionage_dead_drop": {
-        "prompt": "A lone figure in a trench coat passes a briefcase to another in a dimly lit train station at night. Fog drifts across the platform, distant signal lights glow red. Reflections on wet concrete.",
+        "prompt": "A clandestine briefcase exchange at a train station.",
         "style": "oil painting, chiaroscuro, noir atmosphere",
         "events": ["covert_warfare.1", "covert_warfare.2"],
     },
@@ -228,42 +228,42 @@ IMAGES = {
     # CULTURAL HEGEMONY EVENTS
     # =========================================================================
     "cultural_exhibition_grand": {
-        "prompt": "A grand international cultural exhibition in an elegant gallery. National art, sculptures, and film projections are admired by well-dressed foreign visitors. Crystal chandeliers, polished marble floors, cultural prestige made tangible.",
+        "prompt": "A grand international cultural exhibition in a gallery.",
         "style": "oil painting, impressionist, warm light",
         "events": ["cultural_hegemony.1", "cultural_hegemony.8", "cultural_hegemony.9"],
     },
     "brain_drain_airport": {
-        "prompt": "Talented professionals — scientists in lab coats, engineers with blueprints, artists carrying portfolios — at an airport departure gate, looking back wistfully through terminal windows at the skyline of home receding in the distance.",
+        "prompt": "Professionals at an airport departure gate.",
         "style": "oil painting, social realism, golden hour light",
         "events": ["cultural_hegemony.2"],
     },
     "media_broadcast_global": {
-        "prompt": "A television broadcasting center with cameras, banks of monitors, and a global coverage map glowing on the wall. Screens show programming being beamed to every continent. The control room hums with the machinery of cultural influence.",
+        "prompt": "A television broadcasting control room with monitors.",
         "style": "oil painting, impressionist, warm light",
         "events": ["cultural_hegemony.3", "cultural_hegemony.10"],
     },
     "cultural_classroom_influence": {
-        "prompt": "A classroom in a foreign country where students eagerly study another nation's language and culture. The teaching nation's cultural artifacts — books, films, music CDs — decorate the walls alongside enthusiastic student projects.",
+        "prompt": "A classroom studying a foreign nation's culture.",
         "style": "oil painting, impressionist, warm light",
         "events": ["cultural_hegemony.4", "cultural_hegemony.6"],
     },
     "cultural_backlash_protest": {
-        "prompt": "An angry crowd gathered around a bonfire in a city square at night, throwing imported goods and cultural products into the flames. Fists raised in the firelight. A mix of traditional robes and modern clothing. Tension and defiance on every face.",
+        "prompt": "A crowd burning imported goods at night.",
         "style": "oil painting, social realism, dramatic firelight",
         "events": ["cultural_hegemony.5", "cultural_hegemony.12", "cultural_hegemony.14"],
     },
     "tech_innovation_showcase": {
-        "prompt": "A cutting-edge technology laboratory and demonstration floor. Engineers and scientists work on advanced prototypes — robots, computing systems, medical devices — while international observers take notes. National and corporate flags on display. Innovation as power projection.",
+        "prompt": "A technology lab with engineers and prototypes.",
         "style": "oil painting, contemporary realism, bright clinical light",
         "events": ["cultural_hegemony.7", "cultural_hegemony.16"],
     },
     "fashion_diaspora_influence": {
-        "prompt": "A vibrant expatriate community in a foreign city: ethnic restaurants with steaming cuisine, a bustling cultural center, market stalls with traditional goods and spices. Cultural identity thriving abroad, influencing the host city's character.",
+        "prompt": "An expatriate community market influencing a city.",
         "style": "oil painting, impressionist, warm light",
         "events": ["cultural_hegemony.11", "cultural_hegemony.13"],
     },
     "cultural_debate_panel": {
-        "prompt": "A heated panel discussion in a modern conference hall. Diverse speakers at a long table with microphones, one standing to make a point while others lean in to argue. The packed audience is visibly divided, some applauding, others frowning. Harsh overhead lights.",
+        "prompt": "A heated panel discussion in a conference hall.",
         "style": "oil painting, impressionist, warm light",
         "events": ["cultural_hegemony.15"],
     },
@@ -272,32 +272,32 @@ IMAGES = {
     # DECOLONIZATION EVENTS
     # =========================================================================
     "independence_celebration": {
-        "prompt": "A newly independent nation's flag being raised for the first time at a government palace. Jubilant crowds fill the square, a military honor guard stands at attention, dignitaries in a mix of traditional and Western dress look on.",
+        "prompt": "A flag-raising at a newly independent nation's palace.",
         "style": "oil painting, social realism, warm golden light",
         "events": ["decolonization_events.1", "decolonization_events.5", "decolonization_events.200"],
     },
     "colonial_resistance_fighters": {
-        "prompt": "Independence fighters meeting in secrecy in a jungle camp: maps spread on a rough table, weapons stacked against trees, determined faces lit by a single lantern. The struggle for self-determination in its most urgent form.",
+        "prompt": "Independence fighters in a jungle camp.",
         "style": "oil painting, social realism, warm golden light",
         "events": ["decolonization_events.2", "decolonization_events.7"],
     },
     "colonial_departure": {
-        "prompt": "A colonial governor's household packing steamer trunks on the veranda of a colonial mansion. Local servants watch from the background. A lowered colonial flag lies folded on a chair. An era visibly ending under a tropical sky.",
+        "prompt": "A colonial governor packing steamer trunks on a veranda.",
         "style": "oil painting, social realism, warm golden light",
         "events": ["decolonization_events.3", "decolonization_events.19"],
     },
     "partition_border_drawing": {
-        "prompt": "Officials in a map room drawing borders on a large map of a colonized territory with rulers and pencils. The lines cut through communities and geographic features.",
+        "prompt": "Officials drawing borders on a large map.",
         "style": "oil painting, social realism, warm golden light",
         "events": ["decolonization_events.4", "decolonization_events.16"],
     },
     "post_colonial_strongman": {
-        "prompt": "A military figure in a decorated uniform addressing a crowd from a wrought-iron balcony, flanked by soldiers. A newly independent flag flies overhead. Below, the crowd is a mix of genuine supporters and fearful faces.",
+        "prompt": "A military leader addressing a crowd from a balcony.",
         "style": "oil painting, social realism, warm golden light",
         "events": ["decolonization_events.6", "decolonization_events.14"],
     },
     "post_colonial_nation_building": {
-        "prompt": "The first session of a newly independent parliament. Delegates in a mix of traditional dress and Western suits sit in a grand but slightly worn colonial-era chamber. A new constitution displayed under glass.",
+        "prompt": "Delegates in the first session of a new parliament.",
         "style": "oil painting, social realism, warm golden light",
         "events": [
             "decolonization_events.8", "decolonization_events.9",
@@ -305,7 +305,7 @@ IMAGES = {
         ],
     },
     "neocolonial_dependency": {
-        "prompt": "A newly independent nation's leader signing a trade agreement with the former colonial power in a European capital office.",
+        "prompt": "A leader signing a trade agreement in a European office.",
         "style": "oil painting, social realism, warm golden light",
         "events": [
             "decolonization_events.10", "decolonization_events.15",
@@ -313,12 +313,12 @@ IMAGES = {
         ],
     },
     "cold_war_proxy_competition": {
-        "prompt": "Two superpower representatives visiting a newly independent nation simultaneously — one arriving from the east, one from the west, each with crates of aid and advisors. The small nation's leader stands in the middle, calculating.",
+        "prompt": "Two superpower representatives visiting a new nation.",
         "style": "oil painting, social realism, warm golden light",
         "events": ["decolonization_events.12"],
     },
     "post_colonial_tensions": {
-        "prompt": "A post-colonial city scene showing ethnic tension: overturned market stalls, smoke rising from a distant neighbourhood, soldiers at a checkpoint. The fractured legacy of colonial divide-and-rule policies made visible in urban conflict.",
+        "prompt": "A post-colonial city scene with ethnic tension.",
         "style": "oil painting, social realism, warm golden light",
         "events": [
             "decolonization_events.17", "decolonization_events.20",
@@ -326,7 +326,7 @@ IMAGES = {
         ],
     },
     "failed_state_aftermath": {
-        "prompt": "A struggling post-colonial nation: empty market stalls with rusted corrugated roofs, crumbling concrete buildings with faded independence slogans, a potholed road stretching into the distance.",
+        "prompt": "A struggling post-colonial nation's empty market stalls.",
         "style": "oil painting, social realism, warm golden light",
         "events": ["decolonization_events.201"],
     },
@@ -335,37 +335,37 @@ IMAGES = {
     # ENVIRONMENTAL EVENTS
     # =========================================================================
     "industrial_smog_victorian": {
-        "prompt": "A 19th-century industrial city choked with thick yellow smog pouring from dozens of factory chimneys. Soot-blackened brick buildings, a river running dark with chemical waste. Workers trudge through grimy streets, barely visible through the haze.",
+        "prompt": "A 19th-century industrial city choked with smog.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmental_events.1"],
     },
     "climate_flooding_city": {
-        "prompt": "A modern coastal city partially submerged in grey-brown floodwater. Skyscrapers rise from the murk, boats navigate what were once streets, people wave from rooftops awaiting rescue. A dramatic storm sky overhead.",
+        "prompt": "A coastal city partially submerged in floodwater.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmental_events.2", "environmentalism_events.15"],
     },
     "drought_devastation": {
-        "prompt": "A vast landscape of cracked, parched earth stretching to a shimmering heat-haze horizon under a blazing sun. Skeletal dead trees stand alone. An abandoned stone farmhouse with a collapsed roof. Dust devils swirl in the distance. Everything is bleached and desiccated.",
+        "prompt": "A cracked, parched landscape under a blazing sun.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmental_events.3", "environmentalism_events.14"],
     },
     "climate_refugee_exodus": {
-        "prompt": "A long column of climate refugees walking along a dusty road carrying their possessions — bundles, children, water jugs. Behind them, a devastated landscape: either flooded coastline or scorched farmland. Modern clothing. Exhaustion, desperation, but forward motion.",
+        "prompt": "Climate refugees walking along a dusty road.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmental_events.4", "environmentalism_events.16"],
     },
     "ecological_collapse_panorama": {
-        "prompt": "A panoramic view of ecological collapse: dead fish float in a polluted lake, withered forests stand skeletal against a smoggy sky, industrial facilities loom in the background still pumping smoke. A world choking on its own output.",
+        "prompt": "A panoramic view of ecological collapse.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmental_events.5", "environmentalism_events.19", "environmentalism_events.20"],
     },
     "green_sustainable_city": {
-        "prompt": "A thriving sustainable city of the future: buildings covered in vertical gardens and solar panels, wind turbines spinning on the skyline, clean rivers flowing through parks, electric vehicles and bicycles on tree-lined streets. Blue sky, abundant greenery.",
+        "prompt": "A sustainable city with vertical gardens and solar panels.",
         "style": "oil painting, impressionist, bright natural light",
         "events": ["environmental_events.100", "environmentalism_events.21"],
     },
     "environmental_catastrophe_final": {
-        "prompt": "A devastating panorama showing the end result of unchecked environmental destruction: flooded coastal ruins, scorched inland deserts, abandoned cities overgrown with desperate vegetation. The last light of a polluted sunset over a wounded world.",
+        "prompt": "A panorama of environmental ruin and flooded ruins.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmental_events.200"],
     },
@@ -374,57 +374,57 @@ IMAGES = {
     # ENVIRONMENTALISM EVENTS
     # =========================================================================
     "factory_pollution_protest": {
-        "prompt": "A crowd of environmental activists wearing gas masks and raising fists outside the iron gates of a massive coal-burning power plant. Black smoke billows from smokestacks behind them. Riot police in helmets form a line between the crowd and the gates. Gritty industrial backdrop.",
+        "prompt": "Environmental activists protesting a coal power plant.",
         "style": "oil painting, social realism, industrial backdrop",
         "events": ["environmentalism_events.1", "environmentalism_events.2"],
     },
     "oil_spill_disaster": {
-        "prompt": "A coastline devastated by an oil spill seen from above. Thick black crude oil washes over a sandy beach in dark ribbons, staining the surf line. Orange containment booms snake through the water. An oil tanker lists on the horizon trailing a dark slick. Overcast grey sky.",
+        "prompt": "An oil spill coating a coastline seen from above.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmentalism_events.3"],
     },
     "deforestation_contrast": {
-        "prompt": "An aerial view showing the stark boundary between lush tropical rainforest and freshly cleared, burned land. Logging trucks and heavy equipment carve roads into the devastation. Wisps of smoke rise from smoldering stumps.",
+        "prompt": "An aerial view of rainforest next to cleared land.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmentalism_events.4"],
     },
     "anti_nuclear_energy_march": {
-        "prompt": "A massive anti-nuclear protest march filling city streets. Thousands carry radiation hazard symbols and sunflowers. Families with children march alongside activists. A distant nuclear power plant's cooling towers visible on the horizon.",
+        "prompt": "A massive anti-nuclear protest march.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["environmentalism_events.5"],
     },
     "renewable_energy_installation": {
-        "prompt": "A wide ground-level view of a solar panel farm being constructed on open land. Workers in hard hats and high-visibility vests carry and bolt panels into metal frames. Wind turbines spin on a ridge behind them against a blue sky with scattered clouds. Clean, optimistic, industrial progress.",
+        "prompt": "Workers installing a solar panel farm.",
         "style": "oil painting, impressionist, bright natural light",
         "events": ["environmentalism_events.6", "environmentalism_events.7"],
     },
     "nature_conservation_effort": {
-        "prompt": "Park rangers and volunteers planting trees and marking protected boundaries in a pristine wilderness. Wildlife — deer, birds — visible in the middle distance. A clear river runs through the scene.",
+        "prompt": "Volunteers planting trees in a wilderness.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmentalism_events.8"],
     },
     "environmental_policy_hearing": {
-        "prompt": "A tense legislative hearing on environmental policy. Environmental advocates with charts of rising temperatures face off against industry representatives with economic projections. Committee members behind a raised bench listen gravely.",
+        "prompt": "A legislative hearing on environmental policy.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["environmentalism_events.9", "environmentalism_events.10"],
     },
     "climate_research_station": {
-        "prompt": "Climate scientists in a polar research station examining ice core samples under bright laboratory lights. Screens behind them display alarming temperature trend graphs and satellite imagery of shrinking ice caps. The contrast between clinical precision and existential urgency.",
+        "prompt": "Scientists examining ice cores in a polar research station.",
         "style": "oil painting, cool clinical light, scientific",
         "events": ["environmentalism_events.11", "environmentalism_events.12"],
     },
     "water_scarcity_queue": {
-        "prompt": "A long queue of people with buckets and containers waiting at a municipal water distribution point. Armed guards oversee rationing. An empty reservoir stretches out behind them under a hazy sky. A modern urban setting experiencing resource scarcity.",
+        "prompt": "People queueing for municipal water distribution.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmentalism_events.13"],
     },
     "wildfire_inferno": {
-        "prompt": "A massive wildfire consuming a forested hillside, flames leaping between trees. Nearby suburban homes threatened by the advancing fire. Firefighters in protective gear battle the blaze with hoses. Thick smoke fills an orange-red sky.",
+        "prompt": "A massive wildfire consuming a hillside.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmentalism_events.17"],
     },
     "green_industry_factory": {
-        "prompt": "A modern green factory interior: clean automated production lines, living walls of plants along the corridors, solar panels visible through skylights, electric delivery vehicles loading at the dock. Proof that industry and sustainability coexist.",
+        "prompt": "A modern green factory interior with plants.",
         "style": "oil painting, impressionist, bright natural light",
         "events": ["environmentalism_events.18"],
     },
@@ -433,7 +433,7 @@ IMAGES = {
     # EXTRA LAW EVENTS
     # =========================================================================
     "parliamentary_debate_heated": {
-        "prompt": "A grand parliament chamber in heated session. Representatives stand, gesture passionately, some jeer from their benches. The Speaker pounds a gavel. Gas lamps and early electric lights illuminate oak paneling and green leather benches.",
+        "prompt": "A grand parliament chamber in heated session.",
         "style": "oil painting, academic art, warm interior light",
         "events": [
             "extra_law_events.1", "extra_law_events.2", "extra_law_events.3",
@@ -446,7 +446,7 @@ IMAGES = {
         ],
     },
     "surveillance_cameras_cityscape": {
-        "prompt": "A grey urban street corner with a prominent surveillance camera mounted on a pole in the foreground, its red recording light glowing. Citizens walk past on the sidewalk below, hunched and uneasy. The buildings are concrete and glass, austere. An oppressive, watched atmosphere. Overcast sky.",
+        "prompt": "An urban street corner dominated by a surveillance camera.",
         "style": "oil painting, contemporary realism, desaturated",
         "events": [
             "extra_law_events.6", "extra_law_events.7",
@@ -454,32 +454,32 @@ IMAGES = {
         ],
     },
     "genetics_laboratory": {
-        "prompt": "A state-of-the-art genetics laboratory interior. Scientists in white coats work with pipettes, microscopes, and centrifuges at stainless steel benches. Rows of glass vials and petri dishes glow under cold fluorescent lights. Clinical, sterile, precision-focused.",
+        "prompt": "A state-of-the-art genetics laboratory interior.",
         "style": "oil painting, cool clinical light, scientific",
         "events": ["extra_law_events.8"],
     },
     "automation_robots_factory": {
-        "prompt": "A modern factory floor where robotic arms perform precise assembly work in perfect synchronization. A few human supervisors monitor from behind glass partitions. The contrast between tireless machine efficiency and concerned human redundancy.",
+        "prompt": "A factory floor with synchronized robotic arms.",
         "style": "oil painting, contemporary realism, cool blue light",
         "events": ["extra_law_events.11", "extra_law_events.12"],
     },
     "language_reform_classroom": {
-        "prompt": "A schoolroom in transition: old textbooks piled on the teacher's desk, a teacher gesturing toward a clean chalkboard while children sit attentively at wooden desks. Morning sunlight streaming through tall windows. The quiet moment of cultural change.",
+        "prompt": "A schoolroom in transition with a teacher and students.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["extra_law_events.13"],
     },
     "digital_privacy_screen": {
-        "prompt": "A person at a desk surrounded by multiple computer screens showing encrypted data, VPN connections, digital lock icons, and privacy shields. The blue glow of cybersecurity in a dark room. The tension between digital freedom and digital control.",
+        "prompt": "A person at a desk surrounded by screens showing encrypted data.",
         "style": "oil painting, contemporary realism, cool screen light",
         "events": ["extra_law_events.16", "extra_law_events.17"],
     },
     "immigration_checkpoint": {
-        "prompt": "An immigration checkpoint: families with documents and suitcases wait in long queues while border officers examine papers behind windows. Some applicants turned away, others waved through. Bureaucratic but deeply human.",
+        "prompt": "Families waiting at an immigration checkpoint.",
         "style": "oil painting, social realism, institutional light",
         "events": ["extra_law_events.18", "extra_law_events.19"],
     },
     "labor_strike_picket": {
-        "prompt": "Workers on strike outside a factory gate. Fists raised high in solidarity, faces set with determination. Smoke rises from a brazier where strikers warm their hands. Police watch from across the street. Industrial brickwork background.",
+        "prompt": "Workers striking outside a factory gate.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "extra_law_events.22", "extra_law_events.23",
@@ -487,12 +487,12 @@ IMAGES = {
         ],
     },
     "media_press_freedom": {
-        "prompt": "A printing press being shut down by uniformed authorities. Loose papers scattered across the floor, journalists protesting with raised fists. The stark conflict between press freedom and government censorship. Ink-stained hands and broken machinery.",
+        "prompt": "A printing press being shut down by authorities.",
         "style": "oil painting, dramatic light, press scene",
         "events": ["extra_law_events.24"],
     },
     "drug_policy_hearing": {
-        "prompt": "A public hearing on drug policy: medical experts with charts, law enforcement in uniform, and affected citizens testifying at microphones. Evidence displays, policy documents, a complex and emotionally charged social debate.",
+        "prompt": "A public hearing on drug policy with experts and citizens.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["extra_law_events.33", "extra_law_events.34"],
     },
@@ -501,32 +501,32 @@ IMAGES = {
     # FEMINIST EVENTS
     # =========================================================================
     "feminist_equal_pay_march": {
-        "prompt": "A large group of women marching arm-in-arm through city streets with determination on their faces. A diverse group — factory workers in coveralls, office employees in blouses, professionals in suits — united in solidarity. Bystanders watch from the sidewalks, some cheering, some hostile.",
+        "prompt": "A large group of women marching in solidarity.",
         "style": "oil painting, social realism, warm light",
         "events": ["feminist_events.1", "feminist_events.2"],
     },
     "reproductive_rights_debate": {
-        "prompt": "A tense public forum on reproductive rights. Women testifying at microphones, legislators listening from a raised bench, protesters visible through the committee room windows. Medical charts and legal documents on display.",
+        "prompt": "A public forum on reproductive rights with testimonies.",
         "style": "oil painting, social realism, warm light",
         "events": ["feminist_events.3"],
     },
     "women_in_military": {
-        "prompt": "Women soldiers in uniform standing at attention alongside male colleagues at a military parade ground. Some onlookers approve, others look uncertain. The integration of women into military service made visible.",
+        "prompt": "Women soldiers standing at attention with male colleagues.",
         "style": "oil painting, social realism, warm light",
         "events": ["feminist_events.4"],
     },
     "anti_feminist_backlash": {
-        "prompt": "A counter-protest against feminist reforms: conservative demonstrators confronting feminist marchers, angry faces on both sides. Police form a barrier between the groups. Tension, anger, and the culture war made physical.",
+        "prompt": "A counter-protest confronting feminist marchers.",
         "style": "oil painting, social realism, warm light",
         "events": ["feminist_events.5"],
     },
     "feminist_struggle_continues": {
-        "prompt": "A tired but determined woman at a desk late at night, surrounded by papers and policy documents. Through the window, city lights.",
+        "prompt": "A tired yet determined woman working late at a desk.",
         "style": "oil painting, social realism, warm light",
         "events": ["feminist_events.100"],
     },
     "gender_equality_achieved": {
-        "prompt": "A boardroom meeting with equal representation of men and women in leadership positions. Natural, unremarkable — equality as the new normal. Modern glass-walled office, city view, professional collaboration.",
+        "prompt": "A boardroom meeting with equal gender representation.",
         "style": "oil painting, social realism, warm light",
         "events": ["feminist_events.200"],
     },
@@ -535,7 +535,7 @@ IMAGES = {
     # FMC UPDATE EVENTS (no localization — military/formation updates)
     # =========================================================================
     "military_formation_update": {
-        "prompt": "A military command room with officers gathered around a large tactical map table. Unit markers and formation diagrams spread across the surface. Uniformed staff update positions with pointer sticks. Serious, professional, wartime planning.",
+        "prompt": "A military command room with officers around a tactical map.",
         "style": "oil painting, dramatic shadows, military interior",
         "events": [
             "fmc_update_events.1", "fmc_update_events.2",
@@ -549,7 +549,7 @@ IMAGES = {
     # HEIR EDUCATION EVENTS
     # =========================================================================
     "royal_education_tutoring": {
-        "prompt": "A young royal heir being tutored in a grand palace library. An elderly scholar with spectacles points to a globe while the young student takes notes at an ornate desk.",
+        "prompt": "A young royal heir being tutored in a palace library.",
         "style": "oil painting, academic art, warm golden light",
         "events": [
             "heir_education_events.1", "heir_education_events.2",
@@ -557,7 +557,7 @@ IMAGES = {
         ],
     },
     "heir_education_outcome": {
-        "prompt": "A young ruler taking the throne for the first time, well-prepared by years of education. Courtiers bow, advisors stand ready, the weight of responsibility visible but manageable. Grand throne room, regal but human.",
+        "prompt": "A young ruler taking the throne for the first time.",
         "style": "oil painting, academic art, warm golden light",
         "events": ["heir_education_events.200"],
     },
@@ -566,22 +566,22 @@ IMAGES = {
     # INTERNATIONAL RELATIONS EVENTS
     # =========================================================================
     "arms_race_factories": {
-        "prompt": "A massive military-industrial complex: factories churning out tanks and artillery pieces on parallel assembly lines. Workers and engineers move urgently. Production charts on the walls climb steeply. A nation arming itself at breakneck speed.",
+        "prompt": "A massive military-industrial factory producing tanks.",
         "style": "oil painting, dramatic shadows, industrial military",
         "events": ["international_relations_events.1"],
     },
     "proxy_war_map": {
-        "prompt": "A Cold War era situation room: military advisors lean over a map of a distant country, pushing miniature flags and unit markers. Cables from the field pile up on a desk.",
+        "prompt": "A Cold War situation room with advisors around a map.",
         "style": "oil painting, chiaroscuro, Cold War atmosphere",
         "events": ["international_relations_events.2"],
     },
     "diplomatic_espionage_scandal": {
-        "prompt": "A diplomatic scandal breaking: journalists crowd outside an embassy as a disgraced diplomat is escorted to a waiting car. Flashbulbs pop, reporters shout questions. The carefully maintained facade of international relations cracking in public.",
+        "prompt": "Journalists crowding an embassy during a diplomatic scandal.",
         "style": "oil painting, dramatic light, political tension",
         "events": ["international_relations_events.3", "international_relations_events.103"],
     },
     "nuclear_standoff_tension": {
-        "prompt": "A tense Cold War-era war room: generals and politicians hunched over a glowing strategic map table showing missile trajectories. Red telephones and radar screens cast harsh light on grim faces. The room is underground, concrete walls, a sense of impending doom.",
+        "prompt": "A Cold War war room with a glowing strategic map.",
         "style": "oil painting, chiaroscuro, Cold War atmosphere",
         "events": ["international_relations_events.4"],
     },
@@ -614,7 +614,7 @@ IMAGES = {
     # LGBTQ EVENTS
     # =========================================================================
     "pride_march_colorful": {
-        "prompt": "A vibrant pride march through city streets: rainbow flags, colorful costumes, people of all ages celebrating. Some marchers hold signs demanding rights, others dance. The atmosphere is joyful but purposeful — celebration as protest.",
+        "prompt": "A vibrant pride march through city streets.",
         "style": "oil painting, impressionist, vibrant rainbow light",
         "events": [
             "lgbtq_events.1",
@@ -622,32 +622,32 @@ IMAGES = {
         ],
     },
     "lgbtq_religious_backlash": {
-        "prompt": "Religious leaders in vestments delivering a sermon against social change from an ornate pulpit. The packed congregation below is a mix of fervent agreement and quiet discomfort. Stained glass casts colored light across the scene.",
+        "prompt": "Religious leaders delivering a sermon opposing social change.",
         "style": "oil painting, academic art, dramatic pulpit light",
         "events": ["lgbtq_events.2"],
     },
     "hate_crime_vigil": {
-        "prompt": "A candlelight vigil in a public square at night. Hundreds of people hold candles and flowers, mourning victims of a hate crime. A makeshift memorial of photographs and messages. Grief, solidarity, and quiet determination.",
+        "prompt": "A candlelight vigil mourning victims of a hate crime.",
         "style": "oil painting, social realism, warm light",
         "events": ["lgbtq_events.3"],
     },
     "lgbtq_military_service": {
-        "prompt": "A soldier standing at attention in uniform, their identity visible but their professionalism unquestioned. Fellow service members stand alongside. The tension between institutional conformity and personal identity, resolved in competence.",
+        "prompt": "A soldier standing at attention in uniform.",
         "style": "oil painting, social realism, warm light",
         "events": ["lgbtq_events.4"],
     },
     "lgbtq_marriage_debate": {
-        "prompt": "A packed legislative chamber during a tense vote. Legislators at their desks, some standing to speak, some conferring urgently. The public gallery above is packed shoulder-to-shoulder, faces strained with emotion — hope, anger, anxiety. The weight of history in a wood-paneled room.",
+        "prompt": "A packed legislative chamber during a tense vote.",
         "style": "oil painting, social realism, warm light",
         "events": ["lgbtq_events.5"],
     },
     "lgbtq_persecution_dark": {
-        "prompt": "A person hiding in shadow behind a locked door, listening fearfully to footsteps outside. The door is scratched and battered. A small rainbow pin hidden in a pocket. Persecution and the cost of being forced into hiding.",
+        "prompt": "A person hiding behind a locked door, fearful.",
         "style": "oil painting, social realism, warm light",
         "events": ["lgbtq_events.100"],
     },
     "lgbtq_full_equality": {
-        "prompt": "A same-sex couple signing their marriage certificate at a government office, surrounded by friends and family. No fanfare, no protest — just the quiet normalcy of equal treatment under the law. Warm natural light.",
+        "prompt": "A same-sex couple signing a marriage certificate.",
         "style": "oil painting, social realism, warm light",
         "events": ["lgbtq_events.200"],
     },
@@ -656,37 +656,37 @@ IMAGES = {
     # MENTAL HEALTH EVENTS
     # =========================================================================
     "workplace_burnout": {
-        "prompt": "An office worker slumped at a desk covered in papers at 3 AM, coffee cups stacked, the glow of a computer screen the only light. Their reflection in the dark window shows exhaustion. The modern epidemic of burnout.",
+        "prompt": "An office worker slumped at a desk late at night.",
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.1"],
     },
     "youth_mental_health_crisis": {
-        "prompt": "A teenager sitting alone on a bench in a school corridor, slumped forward with head in hands. Backpack on the floor beside them. The corridor stretches empty in both directions, fluorescent lights humming. A closed office door nearby. Loneliness and isolation in an institutional setting.",
+        "prompt": "A teenager sitting alone on a school corridor bench.",
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.2"],
     },
     "addiction_struggle": {
-        "prompt": "A support group meeting in a community center: people sitting in a circle of folding chairs, one person speaking while others listen with recognition and empathy. Harsh fluorescent lights, institutional room, but genuine human connection.",
+        "prompt": "A support group meeting in a community center.",
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.3"],
     },
     "ptsd_soldier_returning": {
-        "prompt": "A returned soldier sitting on the edge of a bed in a quiet room, staring at nothing. Military uniform draped over a chair. Through the window, a peaceful neighborhood. The invisible wounds that follow warriors home.",
+        "prompt": "A returned soldier sitting on the edge of a bed.",
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.4"],
     },
     "institutional_abuse_exposed": {
-        "prompt": "An investigative journalist spreading documents across a desk, photographs and records exposing institutional abuse. Headlines being written, sources being protected. The machinery of accountability and the courage to reveal.",
+        "prompt": "A journalist spreading documents exposing institutional abuse.",
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.5"],
     },
     "mental_health_stigma": {
-        "prompt": "A person standing at the threshold of a mental health clinic, hesitating to enter. Passersby on the street glance with judgment. The invisible barrier of stigma made visible in body language and architecture.",
+        "prompt": "A person hesitating at the entrance of a mental health clinic.",
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.100"],
     },
     "mental_health_supported": {
-        "prompt": "A bright, modern mental health center: welcoming reception, comfortable therapy rooms visible through open doors, a garden courtyard. People entering without hesitation. Mental healthcare integrated into daily life.",
+        "prompt": "A modern mental health center with open doors.",
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.200"],
     },
@@ -734,12 +734,12 @@ IMAGES = {
     # MINOR EVENTS
     # =========================================================================
     "victorian_gentleman_duel": {
-        "prompt": "Two Victorian gentlemen facing each other at dawn in a misty field, pistols raised. Seconds stand by with cases. A doctor waits with his bag. The anachronistic ritual of honor about to be settled.",
+        "prompt": "Two Victorian gentlemen dueling at dawn.",
         "style": "oil painting, academic art, warm golden light",
         "events": ["minor_events_timelineextended.2"],
     },
     "expedition_explorer": {
-        "prompt": "An adventurous explorer studying a map in a tent on the edge of an uncharted wilderness. Equipment, journals, compass, and a lantern. The tent flap opens onto vast, unknown terrain — mountains, jungle, or steppe.",
+        "prompt": "An explorer studying a map in a tent at the wilderness edge.",
         "style": "oil painting, academic art, warm golden light",
         "events": ["minor_events_timelineextended.3"],
     },
@@ -767,7 +767,7 @@ IMAGES = {
     # MODERN ELECTION EVENTS
     # =========================================================================
     "election_campaign_rally": {
-        "prompt": "A political candidate addressing a large crowd from a stage decorated with bunting and colorful streamers. Supporters pack the venue, hands raised in enthusiasm, confetti drifting down. Bright stage lights cut through the atmosphere. A mix of genuine passion and political theater.",
+        "prompt": "A candidate addressing a large crowd from a decorated stage.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "modern_election_events.1", "modern_election_events.2",
@@ -776,7 +776,7 @@ IMAGES = {
         ],
     },
     "social_media_campaign": {
-        "prompt": "A modern campaign war room: young staffers at laptops, multiple screens showing social media feeds, trending hashtags, and engagement metrics. A whiteboard covered in strategy. Digital campaigning replacing shoe leather.",
+        "prompt": "A campaign war room with staff and social media screens.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "modern_election_events.6", "modern_election_events.7",
@@ -785,7 +785,7 @@ IMAGES = {
         ],
     },
     "election_debate_stage": {
-        "prompt": "Two political candidates at podiums on a televised debate stage. Split-screen monitors, audience in tiered seating, moderator at a central desk. The theatrical confrontation of democratic contest under harsh studio lights.",
+        "prompt": "Two candidates at podiums on a debate stage.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "modern_election_events.11", "modern_election_events.12",
@@ -794,7 +794,7 @@ IMAGES = {
         ],
     },
     "voter_registration_queue": {
-        "prompt": "Citizens queuing outside a polling station on election day. A mix of ages and backgrounds, some with 'I Voted' stickers, others bringing children. Poll workers at tables check IDs. The mundane heroism of participatory democracy.",
+        "prompt": "Citizens queuing outside a polling station.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "modern_election_events.16", "modern_election_events.17",
@@ -802,7 +802,7 @@ IMAGES = {
         ],
     },
     "election_night_results": {
-        "prompt": "An election night campaign headquarters: a large room full of campaign staff clutching phones and drinks, watching a large wall-mounted screen with rapt attention. Some people embrace in celebration, others stare in disbelief. Paper cups and crumpled napkins everywhere. The raw emotion of a political verdict.",
+        "prompt": "Campaign staff watching results on a large screen.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "modern_election_events.19", "modern_election_events.20",
@@ -810,7 +810,7 @@ IMAGES = {
         ],
     },
     "political_scandal_expose": {
-        "prompt": "A press conference in crisis: a politician sweating under camera lights, journalists shouting questions, aides whispering urgently. Documents and photographs displayed on easels. The scandal breaking in real time.",
+        "prompt": "A crisis press conference with journalists questioning a politician.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "modern_election_events.23", "modern_election_events.24",
@@ -818,7 +818,7 @@ IMAGES = {
         ],
     },
     "grassroots_canvassing": {
-        "prompt": "Campaign volunteers going door-to-door in a residential neighborhood: clipboard in hand, campaign literature, earnest conversations on front porches. Lawn signs in competing party colors. Ground-level democracy.",
+        "prompt": "Volunteers canvassing door-to-door in a neighborhood.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "modern_election_events.27", "modern_election_events.28",
@@ -826,7 +826,7 @@ IMAGES = {
         ],
     },
     "election_crisis_contested": {
-        "prompt": "A chaotic scene outside a government vote-counting center at night. Rival groups of citizens confront each other, separated by police in riot gear. Legal officials with briefcases push through the crowd toward the building entrance. Floodlights, tension, democracy under strain.",
+        "prompt": "Crowds confronting outside a vote-counting center at night.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "modern_election_events.30", "modern_election_events.31",
@@ -839,7 +839,7 @@ IMAGES = {
     # MOVEMENT EVENTS
     # =========================================================================
     "civil_rights_peaceful_march": {
-        "prompt": "A massive peaceful civil rights march through a wide city avenue. Tens of thousands of people of diverse backgrounds walk together, arms linked, filling the street from building to building. Determination and solidarity on every face. The sheer scale of collective moral purpose.",
+        "prompt": "A massive peaceful civil rights march.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "movement_events_te.1", "movement_events_te.2",
@@ -847,7 +847,7 @@ IMAGES = {
         ],
     },
     "economic_boycott_action": {
-        "prompt": "A picket line outside a large department store. Determined people stand shoulder to shoulder blocking the entrance, arms linked. Through the shop windows, empty shelves are visible. A few passersby hesitate, some turning away. Tension between economic disruption and moral conviction.",
+        "prompt": "A picket line outside a department store.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "movement_events_te.5", "movement_events_te.6",
@@ -855,7 +855,7 @@ IMAGES = {
         ],
     },
     "draft_resistance_protest": {
-        "prompt": "Young men burning draft cards in a public square while a crowd watches — some cheering, some horrified. Police approach from the edges. A bonfire of conscription notices. The moral crisis of compulsory military service.",
+        "prompt": "Men burning draft cards in a public square.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "movement_events_te.9", "movement_events_te.10",
@@ -863,22 +863,22 @@ IMAGES = {
         ],
     },
     "digital_activism_screens": {
-        "prompt": "Activists coordinating a digital campaign: multiple screens showing social media posts going viral, encrypted messaging apps, real-time protest coordination maps. The revolution will be live-streamed.",
+        "prompt": "Activists coordinating a campaign across multiple screens.",
         "style": "oil painting, contemporary realism, cool screen light",
         "events": ["movement_events_te.13", "movement_events_te.14"],
     },
     "transhumanist_demonstration": {
-        "prompt": "A crowd of people with visible cybernetic enhancements — chrome arms, temple implants, glowing eye augments — marching alongside unmodified allies through a near-future city street. Arms raised in solidarity. Rain-slicked pavement reflects neon shopfronts.",
+        "prompt": "People with visible cybernetic enhancements marching together.",
         "style": "digital painting, atmospheric, near-future protest",
         "events": ["movement_events_te.15", "movement_events_te.16"],
     },
     "movement_triumph_celebration": {
-        "prompt": "A massive celebration after a movement achieves its goals: crowds pouring into a public square, embracing, weeping with joy. A monument or legislative building in the background. The cathartic moment of victory after years of struggle.",
+        "prompt": "A massive public celebration after a movement's victory.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["movement_events_te.100", "movement_events_te.201"],
     },
     "movement_crushed_aftermath": {
-        "prompt": "The aftermath of a crushed social movement: empty rain-soaked streets where marchers once gathered. Scattered debris — shoes, umbrellas, trampled flowers — litters the pavement. A lone figure walks away into the distance past a line of riot police. The silence after suppression.",
+        "prompt": "Empty rain-soaked streets after a suppressed movement.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["movement_events_te.200"],
     },
@@ -887,17 +887,17 @@ IMAGES = {
     # NUCLEAR WEAPON EVENTS
     # =========================================================================
     "nuclear_city_destruction": {
-        "prompt": "A mushroom cloud rising over a city skyline. The shockwave ripples outward, buildings silhouetted against the blinding flash. The most terrifying image in human history rendered in devastating clarity.",
+        "prompt": "A mushroom cloud rising over a city skyline.",
         "style": "oil painting, dramatic light, apocalyptic tone",
         "events": ["nuclear_weapon_events.1"],
     },
     "tactical_nuclear_strike": {
-        "prompt": "A tactical nuclear detonation on a battlefield: a smaller but devastating mushroom cloud rising from a military target. Fortifications vaporized, vehicles overturned by the blast wave. Soldiers in the distance shield their eyes.",
+        "prompt": "A tactical nuclear blast on a battlefield.",
         "style": "oil painting, dramatic light, apocalyptic tone",
         "events": ["nuclear_weapon_events.2", "nuclear_weapon_events.18"],
     },
     "nuclear_fallout_contamination": {
-        "prompt": "A contaminated exclusion zone after nuclear exposure: abandoned rusting vehicles on a cracked road, dead brown vegetation, empty concrete apartment buildings with dark windows. Inspectors in bright yellow hazmat suits walk through the eerie stillness with detection instruments. An invisible poison permeating everything.",
+        "prompt": "An abandoned contaminated exclusion zone with inspectors in hazmat suits.",
         "style": "oil painting, dramatic light, apocalyptic tone",
         "events": [
             "nuclear_weapon_events.3", "nuclear_weapon_events.14",
@@ -905,17 +905,17 @@ IMAGES = {
         ],
     },
     "nuclear_bunker_life": {
-        "prompt": "Families sheltering in a nuclear bunker: bunk beds, canned food supplies, a crackling radio providing updates. Children playing with makeshift toys. The claustrophobic normality of life underground while the world above is poisoned.",
+        "prompt": "Families sheltering in a nuclear bunker.",
         "style": "oil painting, dramatic light, apocalyptic tone",
         "events": ["nuclear_weapon_events.4"],
     },
     "nuclear_test_mushroom": {
-        "prompt": "A nuclear weapons test in a remote desert. A mushroom cloud rises into a clear blue sky, dwarfing the observation bunkers in the foreground. Scientists watch through darkened goggles. The terrible beauty of atomic physics unleashed.",
+        "prompt": "A nuclear test mushroom cloud over a desert.",
         "style": "oil painting, dramatic light, apocalyptic tone",
         "events": ["nuclear_weapon_events.5"],
     },
     "nuclear_proliferation_threat": {
-        "prompt": "A darkened intelligence briefing room: satellite photographs of suspected nuclear facilities spread across a light table. Analysts point to cooling towers and centrifuge halls. The anxious geometry of proliferation detection.",
+        "prompt": "Analysts reviewing satellite photos of suspected nuclear sites.",
         "style": "oil painting, dramatic light, apocalyptic tone",
         "events": [
             "nuclear_weapon_events.6", "nuclear_weapon_events.7",
@@ -923,7 +923,7 @@ IMAGES = {
         ],
     },
     "nuclear_false_alarm_panic": {
-        "prompt": "A missile warning center in crisis: officers rushing to stations, red alert lights flashing, radar screens showing incoming tracks. A commander reaches for the phone to the head of state.",
+        "prompt": "A missile warning center in crisis with red alert lights.",
         "style": "oil painting, dramatic light, apocalyptic tone",
         "events": [
             "nuclear_weapon_events.8", "nuclear_weapon_events.17",
@@ -931,12 +931,12 @@ IMAGES = {
         ],
     },
     "anti_nuclear_movement": {
-        "prompt": "A massive anti-nuclear weapons demonstration filling a city park: hundreds of thousands of people crowded together, some holding sunflowers, others with candles. Speakers on a distant stage address the vast crowd. The sheer scale of collective refusal, a sea of humanity united against annihilation.",
+        "prompt": "A massive anti-nuclear demonstration in a city park.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["nuclear_weapon_events.9", "nuclear_weapon_events.10"],
     },
     "nuclear_diplomacy_talks": {
-        "prompt": "Arms control negotiators seated across a long table in a Geneva-style conference room. Flags of nuclear powers, thick treaty documents, translators with headphones. The painstaking, vital work of preventing extinction through bureaucracy.",
+        "prompt": "Arms control negotiators at a treaty table.",
         "style": "oil painting, academic art, diplomatic interior",
         "events": [
             "nuclear_weapon_events.11", "nuclear_weapon_events.12",
@@ -944,12 +944,12 @@ IMAGES = {
         ],
     },
     "nuclear_defense_shield": {
-        "prompt": "A missile defense installation: radar dishes aimed at the sky, interceptor rockets on launch rails, screens tracking trajectories. The technological promise — or illusion — of a shield against nuclear annihilation.",
+        "prompt": "A missile defense installation with radar dishes and interceptor rockets.",
         "style": "oil painting, dramatic light, apocalyptic tone",
         "events": ["nuclear_weapon_events.13"],
     },
     "nuclear_power_debate": {
-        "prompt": "A tense public hearing in an institutional chamber. On one side of the aisle, nuclear industry executives in hard hats and suits. On the other, anxious citizens and environmental activists. Scientists testify at the front table. The room is packed and divided. Wood paneling, institutional gravitas.",
+        "prompt": "A tense public hearing on nuclear power.",
         "style": "oil painting, academic art, institutional interior",
         "events": ["nuclear_weapon_events.22"],
     },
@@ -958,32 +958,32 @@ IMAGES = {
     # POST-SCARCITY EVENTS
     # =========================================================================
     "post_scarcity_unemployment": {
-        "prompt": "A futuristic unemployment office: sleek architecture, but the faces are desperate. Automated kiosks replace human clerks. Outside the windows, robot-operated factories hum along perfectly without human workers. Abundance without purpose.",
+        "prompt": "A futuristic unemployment office with automated kiosks.",
         "style": "digital painting, clean light, speculative future",
         "events": ["post_scarcity_events.1"],
     },
     "meaning_crisis_abundance": {
-        "prompt": "A person sitting on a designer couch in a luxurious modern apartment filled with every material comfort — gourmet food on a table, entertainment devices, designer furniture — staring out a floor-to-ceiling window at a gleaming perfect city with a hollow, empty expression. Abundance without purpose.",
+        "prompt": "A person in a luxurious apartment staring emptily at a perfect city.",
         "style": "digital painting, clean light, speculative future",
         "events": ["post_scarcity_events.2"],
     },
     "ai_governance_system": {
-        "prompt": "A gleaming government building where AI systems displayed on wall-sized screens process policy decisions. A few human overseers sit at consoles, monitoring but rarely intervening. The question of whether machines can govern better than people.",
+        "prompt": "A government control room where AI systems display policy decisions.",
         "style": "digital painting, clean light, speculative future",
         "events": ["post_scarcity_events.3"],
     },
     "neo_luddite_protest": {
-        "prompt": "Protesters smashing delivery drones and automation equipment in a public square. Traditional tools held as symbols — hammers, brooms, hand tools. A bonfire of circuit boards. The human rebellion against machines that made humans obsolete.",
+        "prompt": "Protesters attacking delivery drones and automation equipment.",
         "style": "oil painting, social realism, dramatic firelight",
         "events": ["post_scarcity_events.4"],
     },
     "art_renaissance_future": {
-        "prompt": "A vibrant future art district: people freed from work creating murals, sculptures, music, and immersive art installations. Studios in converted factories, public galleries, streets alive with creative expression. What happens when everyone has time to create.",
+        "prompt": "A vibrant future art district full of creators and installations.",
         "style": "oil painting, impressionist, vibrant color",
         "events": ["post_scarcity_events.5"],
     },
     "post_scarcity_achieved": {
-        "prompt": "A city of the far future where material needs are fully met: clean energy, automated production, lush public spaces, people engaged in art, science, community, and exploration. Not a utopia without problems, but one without want.",
+        "prompt": "A futuristic city where material needs are fully met.",
         "style": "oil painting, impressionist, bright natural light",
         "events": ["post_scarcity_events.200"],
     },
@@ -992,27 +992,27 @@ IMAGES = {
     # RELIGIOUS REVIVAL EVENTS
     # =========================================================================
     "megachurch_spectacle": {
-        "prompt": "A massive modern megachurch interior: stadium-style seating, LED screens broadcasting the charismatic preacher, a rock-concert worship band on stage. Thousands of congregants, hands raised. Religion as mass entertainment and genuine fervor.",
+        "prompt": "A massive megachurch with a preacher and raised hands.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["religious_revival_events.1", "religious_revival_events.2"],
     },
     "liberation_theology_activists": {
-        "prompt": "A priest in simple vestments organizing community support in a poor neighborhood: distributing food, mediating disputes, teaching children. Religious symbols alongside political pamphlets. Faith as social revolution.",
+        "prompt": "A priest organizing community aid in a poor neighborhood.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["religious_revival_events.3"],
     },
     "religious_culture_war": {
-        "prompt": "A polarized town hall meeting: on one side, conservative citizens in traditional dress standing and gesturing angrily, on the other, progressive activists shouting back. Between them, a bewildered family with children tries to navigate the hostile atmosphere. Wood-paneled community hall, harsh fluorescent lights.",
+        "prompt": "A polarized town hall meeting over religious and cultural issues.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["religious_revival_events.4", "religious_revival_events.5"],
     },
     "digital_pulpit_streaming": {
-        "prompt": "A religious leader preaching via live stream: ring light, webcam, chat scrolling with prayers and emoji. Followers watching on phones and laptops in bedrooms and kitchens. Faith adapting to the digital age.",
+        "prompt": "A religious leader preaching via live stream to viewers on phones.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["religious_revival_events.6"],
     },
     "religious_political_power": {
-        "prompt": "Religious leaders meeting with politicians in a government office. Holy books next to policy documents, clerical vestments next to business suits. The blurred line between spiritual authority and political power.",
+        "prompt": "Religious leaders meeting politicians in a government office.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["religious_revival_events.7"],
     },
@@ -1021,52 +1021,52 @@ IMAGES = {
     # REPEATABLE EVENTS
     # =========================================================================
     "supply_chain_disruption": {
-        "prompt": "A port in chaos: container ships backed up at anchor, empty shelves in a warehouse, frustrated logistics managers studying disrupted shipping routes on a wall map. The fragile web of global supply chains, fraying.",
+        "prompt": "A chaotic port with backed-up container ships and empty warehouses.",
         "style": "oil painting, contemporary realism, industrial crisis",
         "events": ["repeatable_events.10"],
     },
     "automation_displacement": {
-        "prompt": "A factory floor divided: on one side, gleaming new robotic assemblers; on the other, workers in hard hats carrying personal belongings out in cardboard boxes. The human cost of automation displayed without sentiment.",
+        "prompt": "A factory floor where robots replace human workers.",
         "style": "oil painting, social realism, industrial contrast",
         "events": ["repeatable_events.20"],
     },
     "media_moral_panic": {
-        "prompt": "A sensationalist news broadcast: anchors presenting hysteria-inducing graphics, alarmed faces in audience cutaways, scrolling headlines of doom. Behind the scenes, producers checking ratings that spike with fear.",
+        "prompt": "A sensationalist news broadcast stoking public fear.",
         "style": "oil painting, contemporary realism, cool screen light",
         "events": ["repeatable_events.30"],
     },
     "cyber_attack_infrastructure": {
-        "prompt": "A city's infrastructure failing from cyberattack: traffic lights malfunctioning, hospital backup generators kicking in, power grid operators frantically working in a dark control room lit by emergency lighting. Digital warfare hitting physical reality.",
+        "prompt": "City infrastructure failing under a cyberattack in a dark control room.",
         "style": "oil painting, contemporary realism, emergency light",
         "events": ["repeatable_events.40"],
     },
     "space_debris_collision": {
-        "prompt": "A satellite in Earth orbit struck by space debris, fragmenting in a silent, glittering explosion. The debris field expands, threatening other satellites. Below, Earth's surface is oblivious. Kessler syndrome beginning.",
+        "prompt": "A satellite colliding with space debris, fragmenting in orbit.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["repeatable_events.50"],
     },
     "quantum_materials_lab": {
-        "prompt": "A materials science laboratory: researchers examining a small sample suspended in magnetic levitation, quantum interference patterns displayed on screens. The sample glows faintly. A breakthrough in matter itself.",
+        "prompt": "Researchers examining a levitating quantum sample in a lab.",
         "style": "oil painting, cool clinical light, scientific",
         "events": ["repeatable_events.60"],
     },
     "ai_ethics_debate": {
-        "prompt": "A packed auditorium hosting an AI ethics debate. On stage: a humanoid robot sits alongside human panelists. The audience is divided — some fascinated, some afraid, some holding protest signs. The question of machine consciousness.",
+        "prompt": "An auditorium debate on AI ethics with a robot panelist.",
         "style": "oil painting, contemporary realism, conference light",
         "events": ["repeatable_events.70"],
     },
     "gig_economy_protest": {
-        "prompt": "Gig economy workers — delivery riders on battered bicycles, ride-share drivers leaning against worn-out cars — gathered in a crowd outside a sleek glass-and-steel tech company headquarters. Their weathered vehicles and tired faces contrast with the pristine corporate campus behind them. Raised fists, frustration.",
+        "prompt": "Gig economy workers protesting outside a tech company campus.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["repeatable_events.80"],
     },
     "cultural_festival_revival": {
-        "prompt": "A vibrant cultural revival festival: traditional dances, music, crafts, and food from an endangered culture being celebrated and taught to younger generations. Elders and youth together. Colorful costumes, lanterns, community.",
+        "prompt": "A colorful cultural festival reviving traditional arts.",
         "style": "oil painting, impressionist, warm festival light",
         "events": ["repeatable_events.90"],
     },
     "international_development_project": {
-        "prompt": "An international development project underway: engineers from multiple countries collaborating on infrastructure — a bridge, dam, or hospital. Hard hats, blueprints, heavy machinery. Construction as international cooperation.",
+        "prompt": "Engineers from multiple countries collaborating on infrastructure.",
         "style": "oil painting, social realism, warm light",
         "events": ["repeatable_events.100"],
     },
@@ -1075,27 +1075,27 @@ IMAGES = {
     # SECULAR EVENTS
     # =========================================================================
     "religious_scandal_media": {
-        "prompt": "A religious institution's scandal breaking in the media: newspapers and screens showing revelations of corruption or abuse. A grand religious building in the background, its moral authority crumbling. Shocked parishioners reading the news.",
+        "prompt": "A religious scandal breaking across newspapers and screens.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["secular_events.1"],
     },
     "social_moral_panic": {
-        "prompt": "A community meeting erupting over moral issues: conservative citizens waving pamphlets about social decay, others pushing back. A town hall setting with raised voices and pointing fingers. Small-town social conflict over changing times.",
+        "prompt": "A heated community meeting over perceived moral decline.",
         "style": "oil painting, social realism, warm interior light",
         "events": ["secular_events.2", "secular_events.100"],
     },
     "new_age_spirituality_center": {
-        "prompt": "A new age spiritual center: crystals, meditation cushions, yoga mats, incense, eclectic religious symbols from many traditions blended together. Seekers in comfortable clothing exploring personal spirituality. Warm, diffuse lighting.",
+        "prompt": "A new age center with crystals and meditation cushions.",
         "style": "oil painting, impressionist, warm diffuse light",
         "events": ["secular_events.3"],
     },
     "church_state_separation": {
-        "prompt": "A courtroom where a judge rules on church-state separation: religious symbols being removed from a government building visible through windows. Lawyers for both sides, spectators divided. The legal architecture of secularism.",
+        "prompt": "A courtroom ruling removing religious symbols from a government building.",
         "style": "oil painting, academic art, institutional gravitas",
         "events": ["secular_events.4", "secular_events.200"],
     },
     "interfaith_dialogue_table": {
-        "prompt": "Religious leaders from different faiths seated around a round table: a rabbi, imam, priest, Buddhist monk, Hindu pandit, and others. Each in their traditional vestments. Sharing tea, finding common ground despite theological differences.",
+        "prompt": "Religious leaders from different faiths meeting around a table.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["secular_events.5"],
     },
@@ -1104,7 +1104,7 @@ IMAGES = {
     # SOCIAL TENSIONS EVENTS
     # =========================================================================
     "terrorist_attack_aftermath": {
-        "prompt": "The aftermath of a terrorist attack on a city street: emergency responders working amid rubble, ambulances with lights flashing, a shattered storefront. Shocked bystanders, some helping, some frozen. The moment after the blast.",
+        "prompt": "Emergency responders working amid rubble after an attack.",
         "style": "oil painting, chiaroscuro, somber tones",
         "events": [
             "social_tensions_events.1", "social_tensions_events.2",
@@ -1112,7 +1112,7 @@ IMAGES = {
         ],
     },
     "corporate_lobbying_legislature": {
-        "prompt": "Corporate lobbyists in expensive suits walking the corridors of a legislature, briefcases of campaign contributions in hand. Legislators receiving them in offices. The revolving door between corporate money and public policy.",
+        "prompt": "Lobbyists and legislators exchanging briefcases in a legislative corridor.",
         "style": "oil painting, chiaroscuro, institutional power",
         "events": [
             "social_tensions_events.3", "social_tensions_events.9",
@@ -1120,32 +1120,32 @@ IMAGES = {
         ],
     },
     "monopoly_corporate_tower": {
-        "prompt": "A single massive corporate tower dominating a city skyline, casting shadow over smaller buildings. Its logo visible on everything — stores, vehicles, screens. The visual weight of monopoly power crushing competition.",
+        "prompt": "A dominant corporate tower casting a shadow over the city.",
         "style": "oil painting, dramatic shadows, corporate power",
         "events": ["social_tensions_events.4"],
     },
     "police_brutality_protest": {
-        "prompt": "A tense confrontation between riot police with shields and batons and civilian protesters. Tear gas drifts through the scene. Some protesters kneel peacefully, others flee. The fault line between order and justice.",
+        "prompt": "Riot police confronting civilian protesters amid tear gas.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["social_tensions_events.5", "social_tensions_events.6"],
     },
     "wartime_atrocity_evidence": {
-        "prompt": "A war crimes investigation: forensic experts examining evidence in a ruined village. Photographs pinned to a board, witness testimonies recorded, graves marked with flags. The meticulous documentation of horror for future justice.",
+        "prompt": "Forensic investigators documenting wartime atrocities in a ruined village.",
         "style": "oil painting, chiaroscuro, somber tones",
         "events": ["social_tensions_events.7", "social_tensions_events.8"],
     },
     "immigration_wave_crowded": {
-        "prompt": "Immigrants arriving at a crowded reception center: families with suitcases, officials processing documents, children looking around with wide eyes. A mix of hope, exhaustion, and the bureaucracy of displacement.",
+        "prompt": "Immigrants arriving at a crowded reception center.",
         "style": "oil painting, social realism, empathetic light",
         "events": ["social_tensions_events.11", "social_tensions_events.12"],
     },
     "religious_extremism_clash": {
-        "prompt": "A clash between religious fundamentalists and secular counter-protesters. Competing signs and slogans, police separating the groups. A city divided along fault lines of faith, identity, and modernity.",
+        "prompt": "Religious extremists clashing with secular counter-protesters.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["social_tensions_events.13", "social_tensions_events.14"],
     },
     "globalization_protest_march": {
-        "prompt": "An anti-globalization protest outside an international economic summit. Diverse protesters — unions, environmentalists, anarchists — march behind a banner. Riot police guard the conference venue. Broken windows and tear gas in the air.",
+        "prompt": "Protesters demonstrating outside an international summit.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["social_tensions_events.15", "social_tensions_events.16"],
     },
@@ -1154,47 +1154,47 @@ IMAGES = {
     # SOCIETY TECHNOLOGY EVENTS
     # =========================================================================
     "women_workforce_revolution": {
-        "prompt": "Women entering the industrial workforce for the first time: rolling up sleeves in a factory, replacing men gone to war. Determination on their faces, propaganda posters encouraging their work visible on the walls. A revolution born of necessity.",
+        "prompt": "Women entering a factory workforce.",
         "style": "oil painting, social realism, warm light",
         "events": ["society_technology_events.1", "society_technology_events.2"],
     },
     "contraception_revolution": {
-        "prompt": "A 1960s doctor's office: a female patient receiving a prescription while a medical pamphlet about family planning sits on the desk. Outside, society is visibly changing — women in professional attire walking confidently. Medical revolution enabling social revolution.",
+        "prompt": "A 1960s doctor's office: a female patient receiving a prescription.",
         "style": "oil painting, social realism, warm light",
         "events": ["society_technology_events.3"],
     },
     "social_revolution_sixties": {
-        "prompt": "A collage of 1960s social revolution: love-ins, rock concerts, protests, miniskirts, long hair, freedom riders. The explosion of personal liberation and cultural upheaval. Tie-dye meets tear gas.",
+        "prompt": "1960s social movement collage: protests and youth culture.",
         "style": "oil painting, social realism, warm light",
         "events": ["society_technology_events.4"],
     },
     "divorce_reform_court": {
-        "prompt": "A family court proceeding: a couple sitting separately with their lawyers, a judge reviewing papers. Through the courtroom window, the changing world. The legal architecture of personal freedom meeting personal pain.",
+        "prompt": "A family court proceeding with a couple and judge.",
         "style": "oil painting, social realism, warm light",
         "events": ["society_technology_events.5"],
     },
     "gaming_industry_arcade": {
-        "prompt": "A 1980s video game arcade alive with neon: rows of cabinet machines, teenagers with quarters, the glow of CRT screens. Pac-Man, Space Invaders, the birth of a billion-dollar industry in a darkened room full of bleeps and bloops.",
+        "prompt": "A 1980s video game arcade with rows of cabinets.",
         "style": "oil painting, neon glow, pop culture",
         "events": ["society_technology_events.6"],
     },
     "factory_outsourced_closed": {
-        "prompt": "A shuttered factory in a small town: padlocked gates, weeded parking lot, a faded company sign. Workers standing outside, lunch pails in hand, staring at the notice. A community's livelihood shipped overseas.",
+        "prompt": "A shuttered factory with workers outside.",
         "style": "oil painting, social realism, desolate light",
         "events": ["society_technology_events.9"],
     },
     "anti_globalization_riot": {
-        "prompt": "Anti-globalization riots during an international summit: masked protesters hurling objects, police in full riot gear, burning barricades, shattered windows of multinational banks. Raw anger at a system perceived as unjust.",
+        "prompt": "Protesters clashing with police at an international summit.",
         "style": "oil painting, social realism, dramatic firelight",
         "events": ["society_technology_events.10"],
     },
     "misinformation_spreading": {
-        "prompt": "A visualization of misinformation spreading: a person's phone screen showing a fabricated news article going viral, shares multiplying exponentially on a social media feed. Real and fake stories indistinguishable. Truth drowning in noise.",
+        "prompt": "A phone screen showing a viral fabricated news article.",
         "style": "oil painting, contemporary realism, cool screen light",
         "events": ["society_technology_events.13"],
     },
     "election_interference_cyber": {
-        "prompt": "A covert foreign election interference operation: hackers in a state-sponsored facility targeting another nation's election systems. Multiple screens showing voter databases, social media bots, and phishing campaigns. Digital subversion of democracy.",
+        "prompt": "Hackers in a dark room targeting election systems.",
         "style": "oil painting, contemporary realism, dark screen light",
         "events": ["society_technology_events.14"],
     },
@@ -1204,62 +1204,62 @@ IMAGES = {
         "events": ["society_technology_events.15"],
     },
     "neural_interface_consumer": {
-        "prompt": "A person reclining in a sleek medical chair in a clean, minimalist clinic. A technician in white applies a small neural implant device behind the patient's ear. The clinic is bright, sterile, with smooth white surfaces and soft blue accent lighting. Technology merging with the human brain.",
+        "prompt": "A patient receiving a small neural implant in a clinical chair.",
         "style": "digital painting, clean light, near-future",
         "events": ["society_technology_events.16", "society_technology_events.20"],
     },
     "augmented_athlete_arena": {
-        "prompt": "An augmented athlete with visible cybernetic leg enhancements sprinting around a futuristic sports arena track, leaving other runners far behind. The packed crowd in the stadium rises to their feet. Some spectators cheer wildly, others sit with arms crossed in disapproval.",
+        "prompt": "An augmented athlete sprinting in a futuristic arena.",
         "style": "digital painting, cinematic light, near-future",
         "events": ["society_technology_events.17"],
     },
     "space_habitat_future": {
-        "prompt": "A rotating space habitat interior: curved landscape of farmland, buildings, and parks wrapping up and over the viewer's head. Sunlight streams through mirrors. Humanity living permanently among the stars, Earth visible through a viewport.",
+        "prompt": "Interior of a rotating space habitat with parks and farms.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["society_technology_events.18", "society_technology_events.19"],
     },
     "telepathic_diplomacy_link": {
-        "prompt": "Two diplomats seated across a polished table in a futuristic conference room, eyes closed in intense concentration. Glowing neural interface devices on their temples pulse with soft blue light. Faint luminous tendrils of energy arc between them through the air. Aides watch in awe from the edges of the room.",
+        "prompt": "Two diplomats connected by neural interfaces in a negotiation.",
         "style": "digital painting, ethereal light, speculative future",
         "events": ["society_technology_events.21"],
     },
     "nuclear_reactor_leak": {
-        "prompt": "A nuclear power plant incident: warning lights flashing, coolant steam venting from a reactor building, workers in radiation suits rushing to containment. Nearby residents watch anxiously. The terror of invisible danger.",
+        "prompt": "A nuclear plant incident with warning lights and workers responding.",
         "style": "oil painting, dramatic light, industrial crisis",
         "events": ["society_technology_events.22", "society_technology_events.23"],
     },
     "anti_nuclear_energy_protest": {
-        "prompt": "An anti-nuclear energy protest camp outside a power plant: tents, banners, families with children demanding plant closure. The cooling towers loom behind them. A grassroots campaign against institutional power and perceived invisible threat.",
+        "prompt": "An anti-nuclear protest camp outside a power plant.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["society_technology_events.24"],
     },
     "deepfake_crisis_screen": {
-        "prompt": "A crisis room where officials watch a deepfake video of a world leader making inflammatory statements. Analysts try to prove it's fake while the video goes viral on screens behind them. Reality itself becoming unreliable.",
+        "prompt": "Officials in a crisis room examining a viral deepfake video.",
         "style": "oil painting, contemporary realism, cool screen light",
         "events": ["society_technology_events.25"],
     },
     "ai_alignment_failure": {
-        "prompt": "A server room where an AI system has gone off-script: screens displaying unexpected outputs, engineers frantically trying to intervene, warning indicators everywhere. The moment when artificial intelligence stops following its intended purpose.",
+        "prompt": "Engineers scrambling in a server room during an AI failure.",
         "style": "oil painting, contemporary realism, red warning light",
         "events": ["society_technology_events.26"],
     },
     "algorithmic_governance_office": {
-        "prompt": "A government office where algorithms make routine decisions: screens display approval/denial verdicts for benefits, permits, and licenses. A few human operators monitor but rarely override. Citizens receive automated notifications.",
+        "prompt": "A government office where algorithms render routine decisions.",
         "style": "oil painting, contemporary realism, sterile light",
         "events": ["society_technology_events.27"],
     },
     "genetic_designer_baby_clinic": {
-        "prompt": "A fertility clinic of the future: prospective parents reviewing their embryo's genetic profile on a screen, selecting traits from a menu. A clinician explains options. The commodification of human genetics in a sterile, branded environment.",
+        "prompt": "Prospective parents reviewing an embryo's genetic profile in clinic.",
         "style": "oil painting, cool clinical light, near-future",
         "events": ["society_technology_events.28"],
     },
     "synthetic_food_laboratory": {
-        "prompt": "A synthetic food laboratory: bioreactors growing cultured meat, 3D food printers producing meals, taste testers comparing lab-grown products to traditional food. Clean and efficient, but somehow unsettling. The future of eating.",
+        "prompt": "Bioreactors and 3D printers producing synthetic meals.",
         "style": "oil painting, cool clinical light, scientific",
         "events": ["society_technology_events.29"],
     },
     "autonomous_vehicle_street": {
-        "prompt": "A city street navigated entirely by autonomous vehicles: sensor-equipped cars, delivery drones overhead, pedestrians walking confidently through traffic that always stops. A single confused driver in a manual car, an anachronism.",
+        "prompt": "A city street dominated by autonomous vehicles.",
         "style": "oil painting, contemporary realism, urban daylight",
         "events": ["society_technology_events.30", "society_technology_events.31"],
     },
@@ -1268,27 +1268,27 @@ IMAGES = {
     # SPACE RACE COLONY EVENTS — Mars (1-5)
     # =========================================================================
     "colony_valles_marineris": {
-        "prompt": "A colony nestled in the vast Valles Marineris canyon system on Mars. Pressurized habitat domes cling to the rust-red canyon walls, connected by enclosed walkways. The canyon stretches into hazy distance, 7km deep. Rovers traverse the canyon floor.",
+        "prompt": "A Mars colony in the Valles Marineris canyon.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.1"],
     },
     "colony_olympus_mons": {
-        "prompt": "A research station perched on the slopes of Olympus Mons, the tallest volcano in the solar system. The caldera is visible above, shield slopes extend beyond the curved Martian horizon.",
+        "prompt": "A research station on the slopes of Olympus Mons.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.2"],
     },
     "colony_hellas_planitia": {
-        "prompt": "A settlement in the Hellas Planitia impact basin, the lowest point on Mars. Thick atmosphere at the basin floor creates warmer conditions. Greenhouse domes and outdoor-suited workers in ruddy light. Ancient impact walls ring the distant horizon.",
+        "prompt": "A settlement in Hellas Planitia with greenhouse domes.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.3"],
     },
     "colony_utopia_planitia": {
-        "prompt": "A sprawling industrial colony on the flat plains of Utopia Planitia, Mars. Manufacturing domes, landing pads with supply rockets, solar panel fields stretching to the horizon. The workhorse colony — functional, not beautiful. Dust devils in the distance.",
+        "prompt": "An industrial colony on Utopia Planitia with manufacturing domes.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.4"],
     },
     "colony_arcadia_planitia": {
-        "prompt": "An agricultural colony on Arcadia Planitia exploiting subsurface ice. Water extraction towers dot the landscape, feeding massive greenhouse complexes glowing green from within. The breadbasket of Mars, built on frozen water.",
+        "prompt": "An agricultural colony exploiting subsurface ice on Arcadia Planitia.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.5"],
     },

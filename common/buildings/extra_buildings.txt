@@ -2320,7 +2320,7 @@ REPLACE_OR_CREATE:building_consciousness_network = {
 ############ MILITARY BASE
 
 building_military_base = {
-	building_group = bg_army
+	building_group = bg_government
 	icon = "gfx/interface/icons/building_icons/building_barracks.dds"
 	city_type = city
 	levels_per_mesh = -1

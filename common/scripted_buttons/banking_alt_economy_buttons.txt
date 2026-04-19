@@ -13,7 +13,7 @@ ce_plan_revision = {
 	desc = "CE_PLAN_REVISION_DESC"
 	visible = {
 		banking_is_command_economy = yes
-		NOT = { has_modifier = planning_plan_revision }
+		NOT = { je:je_banking_cycle = { has_modifier = planning_plan_revision } }
 	}
 	ai_chance = {
 		value = 0
@@ -37,14 +37,14 @@ ce_plan_revision = {
 		}
 	}
 	effect = {
-		add_modifier = { name = planning_plan_revision }
+		je:je_banking_cycle = { add_modifier = { name = planning_plan_revision } }
 	}
 }
 
 ce_disable_plan_revision = {
 	name = "CE_DISABLE_PLAN_REVISION"
 	desc = "CE_DISABLE_PLAN_REVISION_DESC"
-	visible = { has_modifier = planning_plan_revision }
+	visible = { je:je_banking_cycle = { has_modifier = planning_plan_revision } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 55 }
@@ -52,8 +52,8 @@ ce_disable_plan_revision = {
 		if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 20 }
 		if = { limit = { banking_tool_ce_allocation_active = yes } add = 25 }
 	}
-	possible = { has_modifier = planning_plan_revision }
-	effect = { remove_modifier = planning_plan_revision }
+	possible = { je:je_banking_cycle = { has_modifier = planning_plan_revision } }
+	effect = { je:je_banking_cycle = { remove_modifier = planning_plan_revision } }
 }
 
 # ------ 2. Emergency Resource Allocation ------
@@ -63,7 +63,7 @@ ce_emergency_allocation = {
 	desc = "CE_EMERGENCY_ALLOCATION_DESC"
 	visible = {
 		banking_is_command_economy = yes
-		NOT = { has_modifier = planning_emergency_allocation }
+		NOT = { je:je_banking_cycle = { has_modifier = planning_emergency_allocation } }
 	}
 	ai_chance = {
 		value = 0
@@ -85,14 +85,14 @@ ce_emergency_allocation = {
 		}
 	}
 	effect = {
-		add_modifier = { name = planning_emergency_allocation }
+		je:je_banking_cycle = { add_modifier = { name = planning_emergency_allocation } }
 	}
 }
 
 ce_disable_emergency_allocation = {
 	name = "CE_DISABLE_EMERGENCY_ALLOCATION"
 	desc = "CE_DISABLE_EMERGENCY_ALLOCATION_DESC"
-	visible = { has_modifier = planning_emergency_allocation }
+	visible = { je:je_banking_cycle = { has_modifier = planning_emergency_allocation } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_expansion = yes } add = 20 }
@@ -101,8 +101,8 @@ ce_disable_emergency_allocation = {
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 30 }
 		if = { limit = { var:finance_cycle_momentum > -2 banking_cycle_is_panic = no } add = 15 }
 	}
-	possible = { has_modifier = planning_emergency_allocation }
-	effect = { remove_modifier = planning_emergency_allocation }
+	possible = { je:je_banking_cycle = { has_modifier = planning_emergency_allocation } }
+	effect = { je:je_banking_cycle = { remove_modifier = planning_emergency_allocation } }
 }
 
 # ------ 3. Production Target Reduction ------
@@ -112,7 +112,7 @@ ce_target_reduction = {
 	desc = "CE_TARGET_REDUCTION_DESC"
 	visible = {
 		banking_is_command_economy = yes
-		NOT = { has_modifier = planning_target_reduction }
+		NOT = { je:je_banking_cycle = { has_modifier = planning_target_reduction } }
 	}
 	ai_chance = {
 		value = 0
@@ -134,7 +134,7 @@ ce_target_reduction = {
 		}
 	}
 	effect = {
-		add_modifier = { name = planning_target_reduction }
+		je:je_banking_cycle = { add_modifier = { name = planning_target_reduction } }
 		add_radicals = { value = small_radicals strata = upper }
 	}
 }
@@ -142,7 +142,7 @@ ce_target_reduction = {
 ce_disable_target_reduction = {
 	name = "CE_DISABLE_TARGET_REDUCTION"
 	desc = "CE_DISABLE_TARGET_REDUCTION_DESC"
-	visible = { has_modifier = planning_target_reduction }
+	visible = { je:je_banking_cycle = { has_modifier = planning_target_reduction } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 40 }
@@ -150,9 +150,9 @@ ce_disable_target_reduction = {
 		if = { limit = { banking_cycle_is_stable = yes } add = 20 }
 		if = { limit = { banking_tool_ce_allocation_active = yes } add = 20 }
 	}
-	possible = { has_modifier = planning_target_reduction }
+	possible = { je:je_banking_cycle = { has_modifier = planning_target_reduction } }
 	effect = {
-		remove_modifier = planning_target_reduction
+		je:je_banking_cycle = { remove_modifier = planning_target_reduction }
 		add_loyalists = { value = small_radicals strata = upper }
 	}
 }
@@ -164,7 +164,7 @@ ce_strategic_stockpile = {
 	desc = "CE_STRATEGIC_STOCKPILE_DESC"
 	visible = {
 		banking_is_command_economy = yes
-		NOT = { has_modifier = planning_strategic_stockpile }
+		NOT = { je:je_banking_cycle = { has_modifier = planning_strategic_stockpile } }
 	}
 	ai_chance = {
 		value = 0
@@ -183,13 +183,13 @@ ce_strategic_stockpile = {
 			modifier:country_banking_intervention_max_add >= 2
 		}
 	}
-	effect = { add_modifier = { name = planning_strategic_stockpile } }
+	effect = { je:je_banking_cycle = { add_modifier = { name = planning_strategic_stockpile } } }
 }
 
 ce_disable_strategic_stockpile = {
 	name = "CE_DISABLE_STRATEGIC_STOCKPILE"
 	desc = "CE_DISABLE_STRATEGIC_STOCKPILE_DESC"
-	visible = { has_modifier = planning_strategic_stockpile }
+	visible = { je:je_banking_cycle = { has_modifier = planning_strategic_stockpile } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 40 }
@@ -197,8 +197,8 @@ ce_disable_strategic_stockpile = {
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 35 }
 		if = { limit = { banking_tool_ce_allocation_active = yes } add = 15 }
 	}
-	possible = { has_modifier = planning_strategic_stockpile }
-	effect = { remove_modifier = planning_strategic_stockpile }
+	possible = { je:je_banking_cycle = { has_modifier = planning_strategic_stockpile } }
+	effect = { je:je_banking_cycle = { remove_modifier = planning_strategic_stockpile } }
 }
 
 # ------ 5. Central Distribution Upgrade ------
@@ -208,7 +208,7 @@ ce_distribution_upgrade = {
 	desc = "CE_DISTRIBUTION_UPGRADE_DESC"
 	visible = {
 		banking_is_command_economy = yes
-		NOT = { has_modifier = planning_distribution_upgrade }
+		NOT = { je:je_banking_cycle = { has_modifier = planning_distribution_upgrade } }
 	}
 	ai_chance = {
 		value = 0
@@ -229,13 +229,13 @@ ce_distribution_upgrade = {
 			modifier:country_banking_intervention_max_add >= 4
 		}
 	}
-	effect = { add_modifier = { name = planning_distribution_upgrade } }
+	effect = { je:je_banking_cycle = { add_modifier = { name = planning_distribution_upgrade } } }
 }
 
 ce_disable_distribution_upgrade = {
 	name = "CE_DISABLE_DISTRIBUTION_UPGRADE"
 	desc = "CE_DISABLE_DISTRIBUTION_UPGRADE_DESC"
-	visible = { has_modifier = planning_distribution_upgrade }
+	visible = { je:je_banking_cycle = { has_modifier = planning_distribution_upgrade } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 50 }
@@ -243,8 +243,8 @@ ce_disable_distribution_upgrade = {
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 45 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 25 }
 	}
-	possible = { has_modifier = planning_distribution_upgrade }
-	effect = { remove_modifier = planning_distribution_upgrade }
+	possible = { je:je_banking_cycle = { has_modifier = planning_distribution_upgrade } }
+	effect = { je:je_banking_cycle = { remove_modifier = planning_distribution_upgrade } }
 }
 
 # ------ 6. Administrative Performance Campaign ------
@@ -254,7 +254,7 @@ ce_admin_campaign = {
 	desc = "CE_ADMIN_CAMPAIGN_DESC"
 	visible = {
 		banking_is_command_economy = yes
-		NOT = { has_modifier = planning_admin_campaign }
+		NOT = { je:je_banking_cycle = { has_modifier = planning_admin_campaign } }
 	}
 	ai_chance = {
 		value = 0
@@ -274,7 +274,7 @@ ce_admin_campaign = {
 		}
 	}
 	effect = {
-		add_modifier = { name = planning_admin_campaign }
+		je:je_banking_cycle = { add_modifier = { name = planning_admin_campaign } }
 		add_radicals = { value = medium_radicals strata = upper }
 	}
 }
@@ -282,16 +282,16 @@ ce_admin_campaign = {
 ce_disable_admin_campaign = {
 	name = "CE_DISABLE_ADMIN_CAMPAIGN"
 	desc = "CE_DISABLE_ADMIN_CAMPAIGN_DESC"
-	visible = { has_modifier = planning_admin_campaign }
+	visible = { je:je_banking_cycle = { has_modifier = planning_admin_campaign } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 60 }
 		if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
 		if = { limit = { var:bubble_pressure < 40 banking_cycle_is_panic = no } add = 25 }
 	}
-	possible = { has_modifier = planning_admin_campaign }
+	possible = { je:je_banking_cycle = { has_modifier = planning_admin_campaign } }
 	effect = {
-		remove_modifier = planning_admin_campaign
+		je:je_banking_cycle = { remove_modifier = planning_admin_campaign }
 		add_loyalists = { value = small_radicals strata = upper }
 	}
 }
@@ -303,7 +303,7 @@ ce_coordination_protocol = {
 	desc = "CE_COORDINATION_PROTOCOL_DESC"
 	visible = {
 		banking_is_command_economy = yes
-		NOT = { has_modifier = planning_coordination_protocol }
+		NOT = { je:je_banking_cycle = { has_modifier = planning_coordination_protocol } }
 	}
 	ai_chance = {
 		value = 0
@@ -322,21 +322,21 @@ ce_coordination_protocol = {
 			modifier:country_banking_intervention_max_add >= 1
 		}
 	}
-	effect = { add_modifier = { name = planning_coordination_protocol } }
+	effect = { je:je_banking_cycle = { add_modifier = { name = planning_coordination_protocol } } }
 }
 
 ce_disable_coordination_protocol = {
 	name = "CE_DISABLE_COORDINATION_PROTOCOL"
 	desc = "CE_DISABLE_COORDINATION_PROTOCOL_DESC"
-	visible = { has_modifier = planning_coordination_protocol }
+	visible = { je:je_banking_cycle = { has_modifier = planning_coordination_protocol } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 30 }
 		if = { limit = { var:bubble_pressure < 15 banking_points_low = yes } add = 20 }
 		if = { limit = { banking_cycle_is_frenzy = yes banking_tool_ce_target_cut_active = yes } add = 15 }
 	}
-	possible = { has_modifier = planning_coordination_protocol }
-	effect = { remove_modifier = planning_coordination_protocol }
+	possible = { je:je_banking_cycle = { has_modifier = planning_coordination_protocol } }
+	effect = { je:je_banking_cycle = { remove_modifier = planning_coordination_protocol } }
 }
 
 # ------ 8. Plant Consolidation Order ------
@@ -346,7 +346,7 @@ ce_consolidation_order = {
 	desc = "CE_CONSOLIDATION_ORDER_DESC"
 	visible = {
 		banking_is_command_economy = yes
-		NOT = { has_modifier = planning_consolidation_order }
+		NOT = { je:je_banking_cycle = { has_modifier = planning_consolidation_order } }
 	}
 	ai_chance = {
 		value = 0
@@ -365,13 +365,13 @@ ce_consolidation_order = {
 			modifier:country_banking_intervention_max_add >= 2
 		}
 	}
-	effect = { add_modifier = { name = planning_consolidation_order } }
+	effect = { je:je_banking_cycle = { add_modifier = { name = planning_consolidation_order } } }
 }
 
 ce_disable_consolidation_order = {
 	name = "CE_DISABLE_CONSOLIDATION_ORDER"
 	desc = "CE_DISABLE_CONSOLIDATION_ORDER_DESC"
-	visible = { has_modifier = planning_consolidation_order }
+	visible = { je:je_banking_cycle = { has_modifier = planning_consolidation_order } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 55 }
@@ -379,8 +379,8 @@ ce_disable_consolidation_order = {
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 30 }
 		if = { limit = { banking_tool_ce_allocation_active = yes } add = 15 }
 	}
-	possible = { has_modifier = planning_consolidation_order }
-	effect = { remove_modifier = planning_consolidation_order }
+	possible = { je:je_banking_cycle = { has_modifier = planning_consolidation_order } }
+	effect = { je:je_banking_cycle = { remove_modifier = planning_consolidation_order } }
 }
 
 
@@ -396,7 +396,7 @@ cw_dividend_restraint = {
 	desc = "CW_DIVIDEND_RESTRAINT_DESC"
 	visible = {
 		banking_is_cooperative_economy = yes
-		NOT = { has_modifier = cooperative_dividend_restraint }
+		NOT = { je:je_banking_cycle = { has_modifier = cooperative_dividend_restraint } }
 	}
 	ai_chance = {
 		value = 0
@@ -417,13 +417,13 @@ cw_dividend_restraint = {
 			modifier:country_banking_intervention_max_add >= 2
 		}
 	}
-	effect = { add_modifier = { name = cooperative_dividend_restraint } }
+	effect = { je:je_banking_cycle = { add_modifier = { name = cooperative_dividend_restraint } } }
 }
 
 cw_disable_dividend_restraint = {
 	name = "CW_DISABLE_DIVIDEND_RESTRAINT"
 	desc = "CW_DISABLE_DIVIDEND_RESTRAINT_DESC"
-	visible = { has_modifier = cooperative_dividend_restraint }
+	visible = { je:je_banking_cycle = { has_modifier = cooperative_dividend_restraint } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 50 }
@@ -431,9 +431,9 @@ cw_disable_dividend_restraint = {
 		if = { limit = { var:bubble_pressure < 25 banking_cycle_is_panic = no } add = 20 }
 		if = { limit = { banking_tool_cw_ceiling_active = yes } add = 25 }
 	}
-	possible = { has_modifier = cooperative_dividend_restraint }
+	possible = { je:je_banking_cycle = { has_modifier = cooperative_dividend_restraint } }
 	effect = {
-		remove_modifier = cooperative_dividend_restraint
+		je:je_banking_cycle = { remove_modifier = cooperative_dividend_restraint }
 		add_loyalists = { value = small_radicals strata = middle }
 	}
 }
@@ -445,7 +445,7 @@ cw_mutual_aid_fund = {
 	desc = "CW_MUTUAL_AID_FUND_DESC"
 	visible = {
 		banking_is_cooperative_economy = yes
-		NOT = { has_modifier = cooperative_mutual_aid }
+		NOT = { je:je_banking_cycle = { has_modifier = cooperative_mutual_aid } }
 	}
 	ai_chance = {
 		value = 0
@@ -465,7 +465,7 @@ cw_mutual_aid_fund = {
 		}
 	}
 	effect = {
-		add_modifier = { name = cooperative_mutual_aid }
+		je:je_banking_cycle = { add_modifier = { name = cooperative_mutual_aid } }
 		add_loyalists = { value = small_radicals strata = lower }
 	}
 }
@@ -473,7 +473,7 @@ cw_mutual_aid_fund = {
 cw_disable_mutual_aid_fund = {
 	name = "CW_DISABLE_MUTUAL_AID_FUND"
 	desc = "CW_DISABLE_MUTUAL_AID_FUND_DESC"
-	visible = { has_modifier = cooperative_mutual_aid }
+	visible = { je:je_banking_cycle = { has_modifier = cooperative_mutual_aid } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_stable = yes } add = 25 }
@@ -481,8 +481,8 @@ cw_disable_mutual_aid_fund = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 50 }
 		if = { limit = { var:finance_cycle_momentum > -2 banking_cycle_is_panic = no } add = 15 }
 	}
-	possible = { has_modifier = cooperative_mutual_aid }
-	effect = { remove_modifier = cooperative_mutual_aid }
+	possible = { je:je_banking_cycle = { has_modifier = cooperative_mutual_aid } }
+	effect = { je:je_banking_cycle = { remove_modifier = cooperative_mutual_aid } }
 }
 
 # ------ 3. Collective Capital Investment Plan ------
@@ -492,7 +492,7 @@ cw_capital_plan = {
 	desc = "CW_CAPITAL_PLAN_DESC"
 	visible = {
 		banking_is_cooperative_economy = yes
-		NOT = { has_modifier = cooperative_capital_plan }
+		NOT = { je:je_banking_cycle = { has_modifier = cooperative_capital_plan } }
 	}
 	ai_chance = {
 		value = 0
@@ -512,13 +512,13 @@ cw_capital_plan = {
 			modifier:country_banking_intervention_max_add >= 4
 		}
 	}
-	effect = { add_modifier = { name = cooperative_capital_plan } }
+	effect = { je:je_banking_cycle = { add_modifier = { name = cooperative_capital_plan } } }
 }
 
 cw_disable_capital_plan = {
 	name = "CW_DISABLE_CAPITAL_PLAN"
 	desc = "CW_DISABLE_CAPITAL_PLAN_DESC"
-	visible = { has_modifier = cooperative_capital_plan }
+	visible = { je:je_banking_cycle = { has_modifier = cooperative_capital_plan } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 50 }
@@ -526,8 +526,8 @@ cw_disable_capital_plan = {
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 50 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 25 }
 	}
-	possible = { has_modifier = cooperative_capital_plan }
-	effect = { remove_modifier = cooperative_capital_plan }
+	possible = { je:je_banking_cycle = { has_modifier = cooperative_capital_plan } }
+	effect = { je:je_banking_cycle = { remove_modifier = cooperative_capital_plan } }
 }
 
 # ------ 4. Worker Solidarity Campaign ------
@@ -537,7 +537,7 @@ cw_solidarity_campaign = {
 	desc = "CW_SOLIDARITY_CAMPAIGN_DESC"
 	visible = {
 		banking_is_cooperative_economy = yes
-		NOT = { has_modifier = cooperative_solidarity_campaign }
+		NOT = { je:je_banking_cycle = { has_modifier = cooperative_solidarity_campaign } }
 	}
 	ai_chance = {
 		value = 0
@@ -557,20 +557,20 @@ cw_solidarity_campaign = {
 			modifier:country_banking_intervention_max_add >= 1
 		}
 	}
-	effect = { add_modifier = { name = cooperative_solidarity_campaign } }
+	effect = { je:je_banking_cycle = { add_modifier = { name = cooperative_solidarity_campaign } } }
 }
 
 cw_disable_solidarity_campaign = {
 	name = "CW_DISABLE_SOLIDARITY_CAMPAIGN"
 	desc = "CW_DISABLE_SOLIDARITY_CAMPAIGN_DESC"
-	visible = { has_modifier = cooperative_solidarity_campaign }
+	visible = { je:je_banking_cycle = { has_modifier = cooperative_solidarity_campaign } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 30 }
 		if = { limit = { var:bubble_pressure < 20 banking_points_low = yes } add = 20 }
 	}
-	possible = { has_modifier = cooperative_solidarity_campaign }
-	effect = { remove_modifier = cooperative_solidarity_campaign }
+	possible = { je:je_banking_cycle = { has_modifier = cooperative_solidarity_campaign } }
+	effect = { je:je_banking_cycle = { remove_modifier = cooperative_solidarity_campaign } }
 }
 
 # ------ 5. Cooperative Credit Union Expansion ------
@@ -580,7 +580,7 @@ cw_credit_expansion = {
 	desc = "CW_CREDIT_EXPANSION_DESC"
 	visible = {
 		banking_is_cooperative_economy = yes
-		NOT = { has_modifier = cooperative_credit_expansion }
+		NOT = { je:je_banking_cycle = { has_modifier = cooperative_credit_expansion } }
 	}
 	ai_chance = {
 		value = 0
@@ -603,13 +603,13 @@ cw_credit_expansion = {
 			modifier:country_banking_intervention_max_add >= 3
 		}
 	}
-	effect = { add_modifier = { name = cooperative_credit_expansion } }
+	effect = { je:je_banking_cycle = { add_modifier = { name = cooperative_credit_expansion } } }
 }
 
 cw_disable_credit_expansion = {
 	name = "CW_DISABLE_CREDIT_EXPANSION"
 	desc = "CW_DISABLE_CREDIT_EXPANSION_DESC"
-	visible = { has_modifier = cooperative_credit_expansion }
+	visible = { je:je_banking_cycle = { has_modifier = cooperative_credit_expansion } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_stable = yes } add = 15 }
@@ -618,8 +618,8 @@ cw_disable_credit_expansion = {
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 20 }
 	}
-	possible = { has_modifier = cooperative_credit_expansion }
-	effect = { remove_modifier = cooperative_credit_expansion }
+	possible = { je:je_banking_cycle = { has_modifier = cooperative_credit_expansion } }
+	effect = { je:je_banking_cycle = { remove_modifier = cooperative_credit_expansion } }
 }
 
 # ------ 6. Consumption Ceiling Resolution ------
@@ -629,7 +629,7 @@ cw_consumption_ceiling = {
 	desc = "CW_CONSUMPTION_CEILING_DESC"
 	visible = {
 		banking_is_cooperative_economy = yes
-		NOT = { has_modifier = cooperative_consumption_ceiling }
+		NOT = { je:je_banking_cycle = { has_modifier = cooperative_consumption_ceiling } }
 	}
 	ai_chance = {
 		value = 0
@@ -648,7 +648,7 @@ cw_consumption_ceiling = {
 		}
 	}
 	effect = {
-		add_modifier = { name = cooperative_consumption_ceiling }
+		je:je_banking_cycle = { add_modifier = { name = cooperative_consumption_ceiling } }
 		add_radicals = { value = medium_radicals strata = lower }
 	}
 }
@@ -656,7 +656,7 @@ cw_consumption_ceiling = {
 cw_disable_consumption_ceiling = {
 	name = "CW_DISABLE_CONSUMPTION_CEILING"
 	desc = "CW_DISABLE_CONSUMPTION_CEILING_DESC"
-	visible = { has_modifier = cooperative_consumption_ceiling }
+	visible = { je:je_banking_cycle = { has_modifier = cooperative_consumption_ceiling } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
@@ -664,9 +664,9 @@ cw_disable_consumption_ceiling = {
 		if = { limit = { var:bubble_pressure < 35 banking_cycle_is_panic = no } add = 25 }
 		if = { limit = { banking_tool_cw_dividend_active = yes } add = 20 }
 	}
-	possible = { has_modifier = cooperative_consumption_ceiling }
+	possible = { je:je_banking_cycle = { has_modifier = cooperative_consumption_ceiling } }
 	effect = {
-		remove_modifier = cooperative_consumption_ceiling
+		je:je_banking_cycle = { remove_modifier = cooperative_consumption_ceiling }
 		add_loyalists = { value = small_radicals strata = lower }
 	}
 }
@@ -678,7 +678,7 @@ cw_council_directive = {
 	desc = "CW_COUNCIL_DIRECTIVE_DESC"
 	visible = {
 		banking_is_cooperative_economy = yes
-		NOT = { has_modifier = cooperative_council_directive }
+		NOT = { je:je_banking_cycle = { has_modifier = cooperative_council_directive } }
 	}
 	ai_chance = {
 		value = 0
@@ -698,20 +698,20 @@ cw_council_directive = {
 			modifier:country_banking_intervention_max_add >= 1
 		}
 	}
-	effect = { add_modifier = { name = cooperative_council_directive } }
+	effect = { je:je_banking_cycle = { add_modifier = { name = cooperative_council_directive } } }
 }
 
 cw_disable_council_directive = {
 	name = "CW_DISABLE_COUNCIL_DIRECTIVE"
 	desc = "CW_DISABLE_COUNCIL_DIRECTIVE_DESC"
-	visible = { has_modifier = cooperative_council_directive }
+	visible = { je:je_banking_cycle = { has_modifier = cooperative_council_directive } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 30 }
 		if = { limit = { var:bubble_pressure < 15 banking_points_low = yes } add = 20 }
 	}
-	possible = { has_modifier = cooperative_council_directive }
-	effect = { remove_modifier = cooperative_council_directive }
+	possible = { je:je_banking_cycle = { has_modifier = cooperative_council_directive } }
+	effect = { je:je_banking_cycle = { remove_modifier = cooperative_council_directive } }
 }
 
 # ------ 8. Worker Buyout Facilitation ------
@@ -721,7 +721,7 @@ cw_worker_buyout = {
 	desc = "CW_WORKER_BUYOUT_DESC"
 	visible = {
 		banking_is_cooperative_economy = yes
-		NOT = { has_modifier = cooperative_worker_buyout }
+		NOT = { je:je_banking_cycle = { has_modifier = cooperative_worker_buyout } }
 	}
 	ai_chance = {
 		value = 0
@@ -742,13 +742,13 @@ cw_worker_buyout = {
 			modifier:country_banking_intervention_max_add >= 3
 		}
 	}
-	effect = { add_modifier = { name = cooperative_worker_buyout } }
+	effect = { je:je_banking_cycle = { add_modifier = { name = cooperative_worker_buyout } } }
 }
 
 cw_disable_worker_buyout = {
 	name = "CW_DISABLE_WORKER_BUYOUT"
 	desc = "CW_DISABLE_WORKER_BUYOUT_DESC"
-	visible = { has_modifier = cooperative_worker_buyout }
+	visible = { je:je_banking_cycle = { has_modifier = cooperative_worker_buyout } }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_stable = yes } add = 25 }
@@ -756,6 +756,6 @@ cw_disable_worker_buyout = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 45 }
 		if = { limit = { var:finance_cycle_momentum > -1 banking_cycle_is_panic = no banking_cycle_is_downturn = no } add = 15 }
 	}
-	possible = { has_modifier = cooperative_worker_buyout }
-	effect = { remove_modifier = cooperative_worker_buyout }
+	possible = { je:je_banking_cycle = { has_modifier = cooperative_worker_buyout } }
+	effect = { je:je_banking_cycle = { remove_modifier = cooperative_worker_buyout } }
 }

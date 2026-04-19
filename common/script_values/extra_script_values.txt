@@ -1745,11 +1745,11 @@ migration_crowding_density_reference = 100000
 migration_crowding_floor_ratio = 1  # 1x reference = normal density
 
 # Maximum penalty at this multiple of reference density
-migration_crowding_ceiling_ratio = 20  # 20x reference = extremely overcrowded
+migration_crowding_ceiling_ratio = 100  # 100x reference = extremely overcrowded
 
 # Maximum multiplier applied to migration_crowding modifier
-# With base -0.1 migration pull mult, 20 = -200% pull at ceiling
-migration_crowding_max_mult = 20
+# With base -0.1 migration pull mult, 50 = -500% pull at ceiling
+migration_crowding_max_mult = 50
 
 # Derived thresholds (do not edit - change the ratios above instead)
 migration_crowding_density_floor = {
@@ -1772,7 +1772,7 @@ state_population_density = {
 			value = arable_land
 			if = {
 				limit = { has_variable = arable_land_added }
-				subtract = var:arable_land_added # exclude arable land added by tech, as that effectively double-counts the effect
+				subtract = var:arable_land_added # exclude arable land added by tech, as that effectively double-counts tech effect
 			}
 		}
 		min = 1  # prevent division by zero for states with 0 arable land
