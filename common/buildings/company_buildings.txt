@@ -17,6 +17,9 @@ building_volkswagen_autostadt = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -52,6 +55,9 @@ building_toyota_kaikan_plant = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -87,6 +93,9 @@ building_samsung_digital_city = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -122,6 +131,9 @@ building_hp_labs = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -157,6 +169,9 @@ building_sony_pictures_studios = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -192,6 +207,9 @@ building_ikea_almhult_campus = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -227,6 +245,9 @@ building_intel_ronler_acres = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -262,6 +283,9 @@ building_microsoft_redmond_campus = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -297,6 +321,9 @@ building_apple_park = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -332,6 +359,9 @@ building_tsmc_fab_18 = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -367,6 +397,9 @@ building_huawei_ox_horn_campus = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -402,6 +435,9 @@ building_amazon_fulfillment_center = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -437,6 +473,9 @@ building_nvidia_endeavor_campus = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -472,6 +511,9 @@ building_googleplex = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -507,6 +549,9 @@ building_netflix_animation_studios = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -542,6 +587,9 @@ building_spacex_starbase = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -577,6 +625,9 @@ building_bytedance_data_fortress = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -612,6 +663,9 @@ building_openai_research_lab = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -647,6 +701,9 @@ building_catl_gigafactory = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -682,6 +739,9 @@ building_boston_dynamics_ai_institute = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -717,6 +777,9 @@ building_asml_veldhoven_campus = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -752,6 +815,9 @@ building_lockheed_skunk_works = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -787,6 +853,9 @@ building_bae_samlesbury_aerodrome = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -822,6 +891,9 @@ building_roscosmos_vostochny_cosmodrome = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -857,6 +929,9 @@ building_airbus_lagardere_plant = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -892,6 +967,9 @@ building_dassault_merignac_plant = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -927,6 +1005,9 @@ building_hyundai_ulsan_factory = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -962,6 +1043,9 @@ building_sap_headquarters = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -997,6 +1081,9 @@ building_tencent_seafront_towers = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1032,6 +1119,9 @@ building_alibaba_cainiao_park = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1067,6 +1157,9 @@ building_nintendo_development_center = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1102,6 +1195,9 @@ building_gazprom_lakhta_center = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1137,6 +1233,9 @@ building_saudi_aramco_abqaiq_plant = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1172,6 +1271,9 @@ building_petrobras_cenpes_center = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1207,6 +1309,9 @@ building_rosatom_mayak_association = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1242,6 +1347,9 @@ building_oracle_cloud_data_center = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1277,6 +1385,9 @@ building_softbank_vision_fund_hq = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1312,6 +1423,9 @@ building_roche_tower = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1347,6 +1461,9 @@ building_pfizer_rd_campus = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1382,6 +1499,9 @@ building_vale_carajas_mine = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1417,6 +1537,9 @@ building_disney_world = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1452,6 +1575,9 @@ building_universal_studios_hollywood = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1487,6 +1613,9 @@ building_verizon_building = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1522,6 +1651,9 @@ building_reliance_jamnagar_refinery = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1557,6 +1689,9 @@ building_fanuc_forest = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1592,6 +1727,9 @@ building_eni_palazzo = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1627,6 +1765,9 @@ building_ferrari_maranello_factory = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1662,6 +1803,9 @@ building_blackberry_rim_campus = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1697,6 +1841,9 @@ building_shopify_fulfillment_hub = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1735,6 +1882,9 @@ building_bhp_mount_whaleback_mine = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1770,6 +1920,9 @@ building_cochlear_global_hq = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1807,6 +1960,9 @@ building_infosys_mysore_campus = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1842,6 +1998,9 @@ building_jsw_vijayanagar_works = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1881,6 +2040,9 @@ building_generic_rd_complex = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1918,6 +2080,9 @@ building_generic_logistics_hub = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1955,6 +2120,9 @@ building_generic_hq_skyscraper = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -1992,6 +2160,9 @@ building_generic_industrial_zone = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2029,6 +2200,9 @@ building_generic_mega_factory = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         always = no
@@ -2050,6 +2224,9 @@ building_generic_exhibition_centre = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         always = no
@@ -2071,6 +2248,9 @@ building_generic_shipping_terminal = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         always = no
@@ -2092,6 +2272,9 @@ building_generic_materials_lab = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2129,6 +2312,9 @@ building_generic_robotics_institute = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2166,6 +2352,9 @@ building_generic_corporate_university = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         always = no
@@ -2187,6 +2376,9 @@ building_generic_data_fortress = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2224,6 +2416,9 @@ building_generic_industrial_city = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         always = no
@@ -2245,6 +2440,9 @@ building_generic_media_hq = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2282,6 +2480,9 @@ building_generic_power_hub = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2319,6 +2520,9 @@ building_generic_pipeline_terminus = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         always = no
@@ -2340,6 +2544,9 @@ building_generic_rail_nexus = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         always = no
@@ -2361,6 +2568,9 @@ building_generic_proving_grounds = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2398,6 +2608,9 @@ building_generic_resource_depository = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2435,6 +2648,9 @@ building_generic_financial_center = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         always = no
@@ -2456,6 +2672,9 @@ building_generic_monument_to_industry = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         always = no
@@ -2477,6 +2696,9 @@ building_generic_spaceport = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         always = no
@@ -2502,6 +2724,9 @@ building_krupp_essen_works = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2537,6 +2762,9 @@ building_standard_oil_refinery = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2572,6 +2800,9 @@ building_carnegie_homestead_mill = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2607,6 +2838,9 @@ building_ford_rouge_plant = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2642,6 +2876,9 @@ building_eic_trading_house = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2681,6 +2918,9 @@ building_schneider_le_creusot = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2716,6 +2956,9 @@ building_putilov_works = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2751,6 +2994,9 @@ building_mitsubishi_nagasaki_shipyard = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2786,6 +3032,9 @@ building_tata_jamshedpur_works = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2821,6 +3070,9 @@ building_siemens_erlangen_campus = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2860,6 +3112,9 @@ building_de_beers_sorting_office = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2895,6 +3150,9 @@ building_nobel_baku_refinery = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2930,6 +3188,9 @@ building_ge_schenectady_works = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -2969,6 +3230,9 @@ building_mitsui_trading_house = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3004,6 +3268,9 @@ building_fiat_lingotto_factory = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3043,6 +3310,9 @@ building_generic_granary_complex = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3081,6 +3351,9 @@ building_generic_textile_depot = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3119,6 +3392,9 @@ building_generic_cold_storage = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3156,6 +3432,9 @@ building_generic_foundry_complex = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3193,6 +3472,9 @@ building_generic_machine_shop = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3230,6 +3512,9 @@ building_generic_chem_works = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3267,6 +3552,9 @@ building_generic_tank_farm = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3304,6 +3592,9 @@ building_generic_ordnance_depot = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3341,6 +3632,9 @@ building_generic_motor_works = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3378,6 +3672,9 @@ building_generic_dry_dock = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3415,6 +3712,9 @@ building_generic_arsenal = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3452,6 +3752,9 @@ building_generic_fish_market = {
     }
     required_construction = construction_cost_mega_high
     ownership_type = self
+	can_build_private = {
+		always = no
+	}
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
@@ -3493,6 +3796,9 @@ building_generic_colonial_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3529,6 +3835,9 @@ building_generic_export_warehouse = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3565,6 +3874,9 @@ building_generic_electronics_lab = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3601,6 +3913,9 @@ building_generic_assay_office = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3637,6 +3952,9 @@ building_generic_ore_processing = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3673,6 +3991,9 @@ building_generic_mineral_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3709,6 +4030,9 @@ building_generic_silk_exchange = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3745,6 +4069,9 @@ building_generic_vintner_hall = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3785,6 +4112,9 @@ building_aker_oslo_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3819,6 +4149,9 @@ building_allatini_thessaloniki_flour_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3853,6 +4186,9 @@ building_altos_hornos_baracaldo_furnaces = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3887,6 +4223,9 @@ building_anglo_persian_abadan_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3921,6 +4260,9 @@ building_anglo_sicilian_licata_wharf = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3955,6 +4297,9 @@ building_ansaldo_sestri_ponente_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -3989,6 +4334,9 @@ building_ap_moller_copenhagen_wharf = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4023,6 +4371,9 @@ building_argentinian_wine_mendoza_bodega = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4057,6 +4408,9 @@ building_armstrong_elswick_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4091,6 +4445,9 @@ building_assam_company_nazira_tea_estate = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4125,6 +4482,9 @@ building_b_grimm_bangkok_warehouse = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4159,6 +4519,9 @@ building_bacardi_santiago_distillery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4193,6 +4556,9 @@ building_basf_ludwigshafen_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4227,6 +4593,9 @@ building_basileiades_piraeus_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4261,6 +4630,9 @@ building_bengal_coal_raniganj_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4295,6 +4667,9 @@ building_bolckow_eston_ironworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4329,6 +4704,9 @@ building_bombay_burmah_rangoon_timber_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4363,6 +4741,9 @@ building_bombay_dyeing_spring_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4397,6 +4778,9 @@ building_bunge_born_buenos_aires_grain_silo = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4431,6 +4815,9 @@ building_calcutta_electric_victoria_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4465,6 +4852,9 @@ building_caribbean_petroleum_maracaibo_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4499,6 +4889,9 @@ building_ccci_leopoldville_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4533,6 +4926,9 @@ building_cfr_bucharest_railway_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4567,6 +4963,9 @@ building_cgv_haut_brion_estate = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4601,6 +5000,9 @@ building_chr_hansen_copenhagen_laboratory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4635,6 +5037,9 @@ building_colt_hartford_armory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4669,6 +5074,9 @@ building_sansinena_avellaneda_frigorifico = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4703,6 +5111,9 @@ building_cordoba_railway_alta_gracia_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4737,6 +5148,9 @@ building_csfa_sicilian_sulfur_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4771,6 +5185,9 @@ building_afghan_nassaji_kabul_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4805,6 +5222,9 @@ building_sassoon_bombay_docks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4839,6 +5259,9 @@ building_dmc_mulhouse_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4873,6 +5296,9 @@ building_douro_wine_lodge = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4907,6 +5333,9 @@ building_duro_la_felguera_steelworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4941,6 +5370,9 @@ building_eea_dock_sud_power_station = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -4975,6 +5407,9 @@ building_egyptian_rail_cairo_central = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5009,6 +5444,9 @@ building_el_aguila_tampico_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5043,6 +5481,9 @@ building_electricidad_caracas_power_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5077,6 +5518,9 @@ building_elso_budapesti_steam_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5111,6 +5555,9 @@ building_ericsson_telefonplan = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5145,6 +5592,9 @@ building_erste_brunner_maschinenwerk = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5179,6 +5629,9 @@ building_espana_industrial_sants_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5213,6 +5666,9 @@ building_estaleiro_maua_niteroi_dockyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5247,6 +5703,9 @@ building_estanifera_llallagua_tin_concentrator = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5281,6 +5740,9 @@ building_famae_santiago_arsenal = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5315,6 +5777,9 @@ building_fcm_la_seyne_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5349,6 +5814,9 @@ building_foochow_mawei_dockyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5383,6 +5851,9 @@ building_franco_belge_raismes_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5417,6 +5888,9 @@ building_fundicao_ipanema_sorocaba_foundry = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5451,6 +5925,9 @@ building_fundidora_monterrey_blast_furnace = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5485,6 +5962,9 @@ building_galician_boryslaw_oil_field = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5519,6 +5999,9 @@ building_thonet_bystrice_bentwood_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5553,6 +6036,9 @@ building_getzner_bludenz_textile_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5587,6 +6073,9 @@ building_gotaverken_gothenburg_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5621,6 +6110,9 @@ building_gran_azucarera_aranjuez_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5655,6 +6147,9 @@ building_great_indian_railway_jamalpur_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5689,6 +6184,9 @@ building_guinness_st_james_gate_brewery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5723,6 +6221,9 @@ building_gwr_swindon_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5757,6 +6258,9 @@ building_hanseong_jeongi_gwanghwamun_station = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5791,6 +6295,9 @@ building_hanyang_arsenal_iron_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5825,6 +6332,9 @@ building_hbc_york_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5859,6 +6369,9 @@ building_hispano_suiza_barcelona_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5893,6 +6406,9 @@ building_ilva_bagnoli_steelworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5927,6 +6443,9 @@ building_imperial_arsenal_golden_horn = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5961,6 +6480,9 @@ building_ethiopian_railway_dire_dawa_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -5995,6 +6517,9 @@ building_imperial_tobacco_wills_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6029,6 +6554,9 @@ building_ingolstadt_power_station = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6063,6 +6591,9 @@ building_iranian_state_railway_veresk_station = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6097,6 +6628,9 @@ building_izhevsk_arms_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6131,6 +6665,9 @@ building_coats_ferguslie_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6165,6 +6702,9 @@ building_klein_galician_paper_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6199,6 +6739,9 @@ building_jiangnan_nanjing_brocade_hall = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6233,6 +6776,9 @@ building_jingdezhen_imperial_kiln = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6267,6 +6813,9 @@ building_john_brown_clydebank_yard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6301,6 +6850,9 @@ building_cockerill_seraing_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6335,6 +6887,9 @@ building_john_holt_lagos_trading_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6369,6 +6924,9 @@ building_hughes_yuzovka_steelworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6403,6 +6961,9 @@ building_kablin_zarate_paper_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6437,6 +6998,9 @@ building_kaiping_tangshan_colliery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6471,6 +7035,9 @@ building_kinkozan_kiyomizu_kiln = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6505,6 +7072,9 @@ building_kirgizian_copper_smelter = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6539,6 +7109,9 @@ building_klanicko_belgrade_slaughterhouse = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6573,6 +7146,9 @@ building_meissen_porcelain_manufactory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6607,6 +7183,9 @@ building_kouppas_piraeus_foundry = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6641,6 +7220,9 @@ building_la_rosada_buenos_aires_arsenal = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6675,6 +7257,9 @@ building_lanfang_pontianak_kongsi_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6709,6 +7294,9 @@ building_lee_wilson_plantation_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6743,6 +7331,9 @@ building_lilpop_warsaw_metalworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6777,6 +7368,9 @@ building_lkab_kiruna_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6811,6 +7405,9 @@ building_moser_karlsbad_glass_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6845,6 +7442,9 @@ building_madura_mills_madurai_complex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6879,6 +7479,9 @@ building_worth_rue_de_la_paix_atelier = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6913,6 +7516,9 @@ building_manfred_weiss_csepel_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6947,6 +7553,9 @@ building_mantero_como_silk_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -6981,6 +7590,9 @@ building_mantetsu_dalian_railway_hub = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7015,6 +7627,9 @@ building_maple_tottenham_court_showroom = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7049,6 +7664,9 @@ building_massey_harris_toronto_implement_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7083,6 +7701,9 @@ building_gavrilovic_petrinja_meatworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7117,6 +7738,9 @@ building_mav_budapest_locomotive_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7151,6 +7775,9 @@ building_anzin_colliery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7185,6 +7812,9 @@ building_misr_mahalla_textile_complex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7219,6 +7849,9 @@ building_moscow_irrigation_cotton_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7253,6 +7886,9 @@ building_mozambique_company_beira_concession = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7287,6 +7923,9 @@ building_nam_dinh_textile_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7321,6 +7960,9 @@ building_nioc_masjed_soleyman_field = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7355,6 +7997,9 @@ building_nederlandse_petroleum_pangkalan_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7389,6 +8034,9 @@ building_portalis_lyon_silk_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7423,6 +8071,9 @@ building_nokia_cable_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7457,6 +8108,9 @@ building_norsk_hydro_rjukan_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7491,6 +8145,9 @@ building_alpine_donawitz_steelworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7525,6 +8182,9 @@ building_oevg_steyr_arms_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7559,6 +8219,9 @@ building_ocp_khouribga_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7593,6 +8256,9 @@ building_ong_lung_sheng_tea_warehouse = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7627,6 +8293,9 @@ building_opium_ghazipur_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7661,6 +8330,9 @@ building_orient_express_sirkeci_terminal = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7695,6 +8367,9 @@ building_oriental_dev_kunsan_granary = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7729,6 +8404,9 @@ building_tobacco_regie_cibali_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7763,6 +8441,9 @@ building_panama_company_culebra_cut = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7797,6 +8478,9 @@ building_paradox_kvarnholmen_studio = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7831,6 +8515,9 @@ building_pedro_domecq_jerez_bodega = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7865,6 +8552,9 @@ building_pernambuco_recife_cotton_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7899,6 +8589,9 @@ building_perskhlopok_cotton_combines = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7933,6 +8626,9 @@ building_persshelk_silk_reeling_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -7967,6 +8663,9 @@ building_peruvian_amazon_iquitos_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8001,6 +8700,9 @@ building_philips_eindhoven_natlab = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8035,6 +8737,9 @@ building_prussian_railway_directorate = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8069,6 +8774,9 @@ building_ralli_odessa_grain_elevator = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8103,6 +8811,9 @@ building_rheinmetall_unterluss_proving_ground = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8137,6 +8848,9 @@ building_ricordi_galleria_vittorio_emanuele = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8171,6 +8885,9 @@ building_rodriguez_arguelles_havana_tobacco_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8205,6 +8922,9 @@ building_romanian_star_ploiesti_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8239,6 +8959,9 @@ building_rossi_sao_leopoldo_arms_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8273,6 +8996,9 @@ building_rac_sitka_trading_post = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8307,6 +9033,9 @@ building_saint_etienne_arms_manufactory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8341,6 +9070,9 @@ building_san_miguel_manila_brewery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8375,6 +9107,9 @@ building_sao_paulo_railway_paranapiacaba_workshop = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8409,6 +9144,9 @@ building_morozov_orekhovo_zuevo_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8443,6 +9181,9 @@ building_schichau_elbing_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8477,6 +9218,9 @@ building_secn_ferrol_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8511,6 +9255,9 @@ building_sherkat_shemali_cotton_gin = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8545,6 +9292,9 @@ building_sherkate_eslamiya_isfahan_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8579,6 +9329,9 @@ building_skoda_pilsen_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8613,6 +9366,9 @@ building_mokta_el_hadid_beni_saf_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8647,6 +9403,9 @@ building_stf_fiume_torpedo_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8681,6 +9440,9 @@ building_steel_brothers_syriam_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8715,6 +9477,9 @@ building_stt_haskoy_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8749,6 +9514,9 @@ building_sudamericana_valparaiso_pier = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8783,6 +9551,9 @@ building_suez_company_ismailia_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8817,6 +9588,9 @@ building_sunhwaguk_seoul_tobacco_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8851,6 +9625,9 @@ building_tashkent_railroad_workshops = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8885,6 +9662,9 @@ building_trubia_cannon_foundry = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8919,6 +9699,9 @@ building_turkish_petroleum_kirkuk_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8953,6 +9736,9 @@ building_uniao_fabril_barreiro_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -8987,6 +9773,9 @@ building_united_fruit_great_white_fleet_terminal = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9021,6 +9810,9 @@ building_united_tobacco_moscow_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9055,6 +9847,9 @@ building_ursus_warsaw_tractor_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9089,6 +9884,9 @@ building_vodka_monopoly_warehouse = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9123,6 +9921,9 @@ building_wadia_bombay_dockyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9157,6 +9958,9 @@ building_west_ural_oil_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9191,6 +9995,9 @@ building_cramp_philadelphia_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9225,6 +10032,9 @@ building_sandford_newcastle_natal_ironworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9259,6 +10069,9 @@ building_witkowitzer_ostrava_ironworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9293,6 +10106,9 @@ building_ynchausti_manila_trading_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9327,6 +10143,9 @@ building_zastava_kragujevac_arsenal = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9362,6 +10181,9 @@ building_megastructure_consortium_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9397,6 +10219,9 @@ building_axiom_space_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9432,6 +10257,9 @@ building_neurovault_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9467,6 +10295,9 @@ building_tycho_manufacturing_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9502,6 +10333,9 @@ building_tessier_ashpool_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9537,6 +10371,9 @@ building_hanka_precision_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9572,6 +10409,9 @@ building_yoyodyne_propulsion_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {
@@ -9607,6 +10447,9 @@ building_rekal_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_private = {
+		always = no
+	}
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
 		owner = {

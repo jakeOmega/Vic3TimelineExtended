@@ -65,3 +65,7 @@ REPLACE_OR_CREATE:bg_megastructure_capped_private = {
 
 	foreign_investment_ai_factor = 0
 }
+
+REPLACE_OR_CREATE:bg_biotechnology = {
+	parent_group = bg_heavy_industry
+}

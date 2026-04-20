@@ -383,6 +383,62 @@ ce_disable_consolidation_order = {
 	effect = { je:je_banking_cycle = { remove_modifier = planning_consolidation_order } }
 }
 
+# ------ 9. Capital Injection (Treasury → Investment Pool) ------
+# Redirect state treasury funds into the national investment pool.
+# One-shot effect with a 90-day cooldown. Costs 2% of GDP from treasury.
+ce_invest_pool_inject = {
+	name = "CE_INVEST_POOL_INJECT"
+	desc = "CE_INVEST_POOL_INJECT_DESC"
+	visible = {
+		banking_is_command_economy = yes
+	}
+	ai_chance = {
+		value = 0
+		# AI injects when investment pool is very low and treasury is comfortable
+		if = { limit = { investment_pool < 50000 gold_reserves > 100000 } add = 30 }
+		if = { limit = { investment_pool < 20000 gold_reserves > 50000 } add = 50 }
+		# Don't inject when treasury is tight
+		if = { limit = { gold_reserves < 50000 } add = -50 }
+		if = { limit = { in_default = yes } add = -100 }
+	}
+	possible = {
+		always = yes
+	}
+	effect = {
+		add_treasury = ce_pool_inject_treasury_cost
+		add_investment_pool = ce_pool_transfer_amount
+	}
+}
+
+# ------ 10. Capital Withdrawal (Investment Pool → Treasury) ------
+# Redirect investment pool funds back to the state treasury.
+# One-shot effect with a 90-day cooldown. Withdraws up to 2% of GDP (or all, if pool < 2% GDP).
+ce_invest_pool_withdraw = {
+	name = "CE_INVEST_POOL_WITHDRAW"
+	desc = "CE_INVEST_POOL_WITHDRAW_DESC"
+	visible = {
+		banking_is_command_economy = yes
+	}
+	ai_chance = {
+		value = 0
+		# AI withdraws when treasury is critically low
+		if = { limit = { gold_reserves < 10000 investment_pool > 20000 } add = 60 }
+		if = { limit = { in_default = yes investment_pool > 5000 } add = 80 }
+		# Avoid draining pool when construction is needed
+		if = { limit = { investment_pool < 10000 } add = -30 }
+	}
+	possible = {
+		custom_tooltip = {
+			text = CE_WITHDRAW_POSSIBLE_TT
+			investment_pool > 0
+		}
+	}
+	effect = {
+		add_investment_pool = ce_pool_withdraw_pool_cost
+		add_treasury = ce_pool_withdraw_amount
+	}
+}
+
 
 # ============================================================
 # BANKING CYCLE: COOPERATIVE OWNERSHIP COUNCIL TOOLS

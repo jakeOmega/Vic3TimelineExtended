@@ -1623,6 +1623,38 @@ export_credit_activation_cost = {
 	round = yes
 }
 
+# Transfer amount for command economy treasury <-> investment pool buttons (0.2% GDP)
+ce_pool_transfer_amount = {
+	value = root.gdp
+	multiply = 0.002
+	min = 1000
+	round = yes
+}
+
+# Negative version for deducting from treasury
+ce_pool_inject_treasury_cost = {
+	value = ce_pool_transfer_amount
+	multiply = -1
+}
+
+# Withdraw: min(transfer_amount, current_investment_pool) to avoid overdraft
+ce_pool_withdraw_amount = {
+	value = ce_pool_transfer_amount
+	min = 1 # floor
+	if = {
+		limit = { investment_pool < ce_pool_transfer_amount }
+		# Pool is smaller than transfer amount → withdraw all
+		subtract = ce_pool_transfer_amount
+		add = investment_pool
+	}
+}
+
+# Negative version for deducting from investment pool
+ce_pool_withdraw_pool_cost = {
+	value = ce_pool_withdraw_amount
+	multiply = -1
+}
+
 # ====================================================================================
 # CONSTRUCTION COST SCALING
 # ====================================================================================

@@ -61,6 +61,8 @@
     scripted_button = ce_disable_coordination_protocol
     scripted_button = ce_consolidation_order
     scripted_button = ce_disable_consolidation_order
+    scripted_button = ce_invest_pool_inject
+    scripted_button = ce_invest_pool_withdraw
 
     # Cooperative Ownership council tools (visible only under law_cooperative_ownership)
     scripted_button = cw_dividend_restraint

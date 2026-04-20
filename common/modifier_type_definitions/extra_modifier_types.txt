@@ -1398,6 +1398,11 @@ building_group_bg_construction_throughput_add = {
 	percent = yes
 }
 
+building_group_bg_biotechnology_throughput_add = {
+	color = good
+	percent = yes
+}
+
 building_nuclear_plant_throughput_add = {
 	color = good
 	percent = yes

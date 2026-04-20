@@ -148,7 +148,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_rubber = {
 }
 
 REPLACE_OR_CREATE:building_synthetics_plant_opium = {
-	building_group = bg_heavy_industry
+	building_group = bg_biotechnology
 	icon = "gfx/interface/icons/building_icons/drugs.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -276,7 +276,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_sugar = {
 }
 
 REPLACE_OR_CREATE:building_synthetics_plant_meat = {
-	building_group = bg_heavy_industry	
+	building_group = bg_biotechnology	
 	icon = "gfx/interface/icons/goods_icons/meat.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -308,7 +308,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_meat = {
 }
 
 REPLACE_OR_CREATE:building_synthetics_plant_fruit = {
-	building_group = bg_heavy_industry	
+	building_group = bg_biotechnology	
 	icon = "gfx/interface/icons/goods_icons/fruit.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -372,7 +372,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_drinks = {
 }
 
 REPLACE_OR_CREATE:building_synthetics_plant_biomass = {
-	building_group = bg_heavy_industry	
+	building_group = bg_biotechnology	
 	icon = "gfx/interface/icons/goods_icons/grain.dds"
 	city_type = city
 	levels_per_mesh = -1

@@ -1,0 +1,16 @@
+﻿# On-actions for top trade partner computation (monthly update, player only)
+
+on_monthly_pulse_country = {
+	on_actions = {
+		trade_partner_update_on_action
+	}
+}
+
+trade_partner_update_on_action = {
+	trigger = {
+		is_player = yes
+	}
+	effect = {
+		update_top_trade_partners = yes
+	}
+}

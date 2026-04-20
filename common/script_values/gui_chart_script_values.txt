@@ -47,3 +47,45 @@ gui_development_levels = {
 		add = var:gui_development_levels
 	}
 }
+
+# ============================================================================
+# TOP TRADE PARTNERS (market / country scope)
+# Used by update_market_trade_partners in trade_partner_effects.txt
+# ============================================================================
+
+# Sort value for ordered_market: mutual trade between partner market's owner and our market owner
+# Evaluated in partner market scope (iterated). scope:tp_market_owner must be saved.
+gui_trade_with_market_owner = {
+	value = 0
+	trade_center = {
+		owner = {
+			add = "mutual_trade_value_with_country(scope:tp_market_owner)"
+		}
+	}
+}
+
+# Import reliance on partner as percentage (0-100).
+# market_imports_reliance = fraction of buy orders filled by imports from partner.
+# Evaluated in our market scope. scope:tp_partner_iter = partner market.
+gui_tp_import_reliance = {
+	value = "market_imports_reliance(scope:tp_partner_iter)"
+	multiply = 100
+}
+
+# Export reliance on partner as percentage (0-100).
+# market_exports_reliance = fraction of sell orders filled by exports to partner.
+# Evaluated in our market scope. scope:tp_partner_iter = partner market.
+gui_tp_export_reliance = {
+	value = "market_exports_reliance(scope:tp_partner_iter)"
+	multiply = 100
+}
+
+# Count of trade partners found (for GUI visibility checks)
+# Evaluated in country scope: Market.GetOwner.MakeScope.ScriptValue('gui_tp_count')
+gui_tp_count = {
+	value = 0
+	if = {
+		limit = { has_variable = tp_count }
+		add = var:tp_count
+	}
+}

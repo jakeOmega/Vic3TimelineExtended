@@ -46,6 +46,7 @@ INJECT:law_laissez_faire = {
 INJECT:law_cooperative_ownership = {
 	modifier = {
 		country_private_construction_allocation_mult = -0.35
+		country_banking_random_momentum_mult = -0.25
 	}
 }
 
@@ -54,5 +55,6 @@ INJECT:law_command_economy = {
 		country_private_construction_allocation_mult = -0.10
 		country_building_airport_require_subsidies_bool = yes
 		country_building_highway_require_subsidies_bool = yes
+		country_banking_random_momentum_mult = -0.5
 	}
 }

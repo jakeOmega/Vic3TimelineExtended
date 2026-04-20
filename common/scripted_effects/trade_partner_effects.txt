@@ -1,0 +1,154 @@
+﻿# Scripted effects for computing Top Trade Partners data for GUI display.
+# Uses ordered_market to find the top 5 markets by mutual trade value.
+# Stores results as variables on each market's owner country (1 country = 1 market).
+# GUI reads via Market.GetOwner.MakeScope.Var('tp_X_...').
+#
+# Per-rank variables stored on market owner country:
+#   tp_X_tc      = partner's trade center state (for flag/name display)
+#   tp_X_total   = bilateral trade value (mutual_trade_value_with_country)
+#   tp_X_imp_rel = import reliance % on partner (0-100)
+#   tp_X_exp_rel = export reliance % on partner (0-100)
+#   tp_count     = number of trade partners found (1-5)
+#
+# NOTE: Per-good per-partner trade data is NOT available from the engine.
+# market_imports_reliance(target) in parenthesized form only passes the target
+# parameter, not the goods parameter. All goods evaluate to the same total
+# reliance, making ordered_market_goods sort by default order (not per-good).
+
+# ============================================================================
+# HELPER: store data for one trade partner rank
+# Called from ordered_market body. THIS = partner market.
+# scope:tp_current_market = market being analyzed
+# scope:tp_market_owner = country that owns tp_current_market
+# Params: $RANK$ (1-5)
+# ============================================================================
+store_trade_partner_data = {
+	# THIS = partner market; save for reliance SV evaluation
+	save_scope_as = tp_partner_iter
+
+	# Store partner market's trade center state (for GUI country identity display)
+	trade_center = {
+		scope:tp_market_owner = {
+			set_variable = { name = tp_$RANK$_tc value = PREV }
+		}
+	}
+
+	# Store bilateral trade value
+	trade_center = {
+		owner = {
+			save_scope_as = tp_partner_country
+		}
+	}
+	scope:tp_market_owner = {
+		set_variable = {
+			name = tp_$RANK$_total
+			value = "mutual_trade_value_with_country(scope:tp_partner_country)"
+		}
+	}
+
+	# Store import/export reliance as percentages (0-100)
+	# market_imports_reliance(partner) = fraction of buy orders filled via imports from partner
+	# market_exports_reliance(partner) = fraction of sell orders filled via exports to partner
+	scope:tp_current_market = {
+		set_global_variable = { name = tp_temp_imp value = gui_tp_import_reliance }
+		set_global_variable = { name = tp_temp_exp value = gui_tp_export_reliance }
+	}
+	scope:tp_market_owner = {
+		set_variable = { name = tp_$RANK$_imp_rel value = global_var:tp_temp_imp }
+		set_variable = { name = tp_$RANK$_exp_rel value = global_var:tp_temp_exp }
+	}
+}
+
+# ============================================================================
+# PER-MARKET: update top 5 trade partners for a single market
+# Called in market scope from every_market
+# ============================================================================
+update_market_trade_partners = {
+	save_scope_as = tp_current_market
+	trade_center = {
+		owner = {
+			save_scope_as = tp_market_owner
+		}
+	}
+
+	# Clear previous data on market owner country
+	scope:tp_market_owner = {
+		remove_variable = tp_1_tc
+		remove_variable = tp_1_total
+		remove_variable = tp_1_imp_rel
+		remove_variable = tp_1_exp_rel
+		remove_variable = tp_2_tc
+		remove_variable = tp_2_total
+		remove_variable = tp_2_imp_rel
+		remove_variable = tp_2_exp_rel
+		remove_variable = tp_3_tc
+		remove_variable = tp_3_total
+		remove_variable = tp_3_imp_rel
+		remove_variable = tp_3_exp_rel
+		remove_variable = tp_4_tc
+		remove_variable = tp_4_total
+		remove_variable = tp_4_imp_rel
+		remove_variable = tp_4_exp_rel
+		remove_variable = tp_5_tc
+		remove_variable = tp_5_total
+		remove_variable = tp_5_imp_rel
+		remove_variable = tp_5_exp_rel
+		remove_variable = tp_count
+		set_variable = { name = tp_idx value = 0 }
+	}
+
+	# Find top 5 markets by trade value with this market
+	ordered_market = {
+		limit = {
+			NOT = { this = scope:tp_current_market }
+		}
+		order_by = gui_trade_with_market_owner
+		max = 5
+		check_range_bounds = no
+
+		if = {
+			limit = { scope:tp_market_owner = { var:tp_idx < 1 } }
+			store_trade_partner_data = { RANK = 1 }
+		}
+		else_if = {
+			limit = { scope:tp_market_owner = { var:tp_idx < 2 } }
+			store_trade_partner_data = { RANK = 2 }
+		}
+		else_if = {
+			limit = { scope:tp_market_owner = { var:tp_idx < 3 } }
+			store_trade_partner_data = { RANK = 3 }
+		}
+		else_if = {
+			limit = { scope:tp_market_owner = { var:tp_idx < 4 } }
+			store_trade_partner_data = { RANK = 4 }
+		}
+		else_if = {
+			limit = { scope:tp_market_owner = { var:tp_idx < 5 } }
+			store_trade_partner_data = { RANK = 5 }
+		}
+
+		scope:tp_market_owner = {
+			change_variable = { name = tp_idx add = 1 }
+		}
+	}
+
+	scope:tp_market_owner = {
+		set_variable = { name = tp_count value = var:tp_idx }
+		remove_variable = tp_idx
+	}
+
+	# Clean up temp globals
+	remove_global_variable = tp_temp_imp
+	remove_global_variable = tp_temp_exp
+}
+
+# ============================================================================
+# MAIN: update trade partners for ALL markets
+# Called from on_monthly_pulse_country (player only)
+# ROOT = player country
+# ============================================================================
+update_top_trade_partners = {
+	every_market = {
+		update_market_trade_partners = yes
+	}
+}

@@ -208,6 +208,8 @@
  building_great_indian_railway_jamalpur_works:0 "Great Indian Railway Jamalpur Works"
  building_group_bg_arts_standard_of_living_add:"[concept_sol] in $bg_arts$"
  building_group_bg_arts_standard_of_living_add_desc:"A bonus or penalty to the [concept_sol] of [Concept('concept_pop', '$concept_pops$')] working in $bg_arts$"
+ building_group_bg_biotechnology_throughput_add:0 "Biotechnology Throughput"
+ building_group_bg_biotechnology_throughput_add_desc:0 "A bonus or penalty to both input and output of $bg_biotechnology$ buildings"
  building_group_bg_bureaucracy_throughput_add:0 "Government Administration Throughput Modifier"
  building_group_bg_bureaucracy_throughput_add_desc:0 "A bonus or penalty to both input and output of $bg_bureaucracy$ buildings"
  building_group_bg_construction_throughput_add:0 "Construction Building Throughput"

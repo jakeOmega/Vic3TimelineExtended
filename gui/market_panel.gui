@@ -386,12 +386,13 @@ types market_panel
 					}
 				}
 
-				### TE: World Market Trade by Country (compact_chart, centered)
+				### TE: World Market Trade by Country chart + Top Trade Partners table
 				flowcontainer = {
 					visible = "[And(InformationPanel.IsTabSelected('world_market_trade'), Not(GetVariableSystem.Exists( 'market_world_market_charts' )))]"
 
-					parentanchor = hcenter
+					direction = vertical
 					margin_bottom = 10
+					parentanchor = hcenter
 
 					compact_chart = {
 						blockoverride "datamodel" {
@@ -427,6 +428,352 @@ types market_panel
 						blockoverride "rightside2_info" {
 							visible = no
 							using = elide_fontsize_min
+						}
+					}
+
+					### TE: Top 5 Trade Partners table (below chart)
+					flowcontainer = {
+						direction = vertical
+						visible = "[GreaterThan_CFixedPoint(Market.GetOwner.MakeScope.ScriptValue('gui_tp_count'), '(CFixedPoint)0')]"
+						minimumsize = { 340 -1 }
+						margin_top = 10
+
+						background = {
+							using = entry_bg
+						}
+
+						# Title
+						textbox = {
+							raw_text = "#title Top Trade Partners#!"
+							autoresize = yes
+							align = hcenter|nobaseline
+							minimumsize = { 340 -1 }
+							margin_top = 8
+							margin_bottom = 5
+						}
+
+						# Column headers
+						flowcontainer = {
+							margin = { 10 0 }
+							margin_bottom = 3
+
+							textbox = {
+								raw_text = "#bold Market#!"
+								minimumsize = { 145 -1 }
+								maximumsize = { 145 -1 }
+								autoresize = yes
+								align = left|nobaseline
+								fontsize = 13
+							}
+							textbox = {
+								raw_text = "#bold Trade#!"
+								minimumsize = { 70 -1 }
+								maximumsize = { 70 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								raw_tooltip = "Total bilateral trade value between your market and theirs"
+							}
+							textbox = {
+								raw_text = "#bold Imp%#!"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								raw_tooltip = "Fraction of your buy orders filled by imports from this partner"
+							}
+							textbox = {
+								raw_text = "#bold Exp%#!"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								raw_tooltip = "Fraction of your sell orders filled by exports to this partner"
+							}
+						}
+
+						# Divider line
+						widget = {
+							size = { 320 2 }
+							parentanchor = hcenter
+							divider_decorative = {
+								size = { 100% 100% }
+							}
+						}
+
+						# Row 1
+						flowcontainer = {
+							visible = "[GreaterThan_CFixedPoint(Market.GetOwner.MakeScope.ScriptValue('gui_tp_count'), '(CFixedPoint)0')]"
+							margin = { 10 2 }
+							datacontext = "[Market.GetOwner.MakeScope.Var('tp_1_tc').GetState.GetCountry]"
+
+							widget = {
+								size = { 145 22 }
+
+								button = {
+									using = clean_button
+									size = { 100% 100% }
+									raw_text = "[Country.GetFlagTextIcon] [Country.GetNameNoFormatting]"
+									align = left|vcenter
+									fontsize = 13
+									elide = right
+									onclick = "[InformationPanelBar.OpenCountryPanel(Country.Self)]"
+									onrightclick = "[RightClickMenuManager.ShowForCountry(Country.AccessSelf)]"
+									tooltipwidget = {
+										FancyTooltip_Country = {}
+									}
+								}
+							}
+							textbox = {
+								raw_text = "@money![Market.GetOwner.MakeScope.Var('tp_1_total').GetValue|D]"
+								minimumsize = { 70 -1 }
+								maximumsize = { 70 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								tooltip = "TP_TRADE_TOOLTIP"
+							}
+							textbox = {
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_1_imp_rel').GetValue|1]%"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								tooltip = "TP_IMP_TOOLTIP"
+							}
+							textbox = {
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_1_exp_rel').GetValue|1]%"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								tooltip = "TP_EXP_TOOLTIP"
+							}
+						}
+
+						# Row 2
+						flowcontainer = {
+							visible = "[GreaterThan_CFixedPoint(Market.GetOwner.MakeScope.ScriptValue('gui_tp_count'), '(CFixedPoint)1')]"
+							margin = { 10 2 }
+							datacontext = "[Market.GetOwner.MakeScope.Var('tp_2_tc').GetState.GetCountry]"
+
+							widget = {
+								size = { 145 22 }
+
+								button = {
+									using = clean_button
+									size = { 100% 100% }
+									raw_text = "[Country.GetFlagTextIcon] [Country.GetNameNoFormatting]"
+									align = left|vcenter
+									fontsize = 13
+									elide = right
+									onclick = "[InformationPanelBar.OpenCountryPanel(Country.Self)]"
+									onrightclick = "[RightClickMenuManager.ShowForCountry(Country.AccessSelf)]"
+									tooltipwidget = {
+										FancyTooltip_Country = {}
+									}
+								}
+							}
+							textbox = {
+								raw_text = "@money![Market.GetOwner.MakeScope.Var('tp_2_total').GetValue|D]"
+								minimumsize = { 70 -1 }
+								maximumsize = { 70 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								tooltip = "TP_TRADE_TOOLTIP"
+							}
+							textbox = {
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_2_imp_rel').GetValue|1]%"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								tooltip = "TP_IMP_TOOLTIP"
+							}
+							textbox = {
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_2_exp_rel').GetValue|1]%"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								tooltip = "TP_EXP_TOOLTIP"
+							}
+						}
+
+						# Row 3
+						flowcontainer = {
+							visible = "[GreaterThan_CFixedPoint(Market.GetOwner.MakeScope.ScriptValue('gui_tp_count'), '(CFixedPoint)2')]"
+							margin = { 10 2 }
+							datacontext = "[Market.GetOwner.MakeScope.Var('tp_3_tc').GetState.GetCountry]"
+
+							widget = {
+								size = { 145 22 }
+
+								button = {
+									using = clean_button
+									size = { 100% 100% }
+									raw_text = "[Country.GetFlagTextIcon] [Country.GetNameNoFormatting]"
+									align = left|vcenter
+									fontsize = 13
+									elide = right
+									onclick = "[InformationPanelBar.OpenCountryPanel(Country.Self)]"
+									onrightclick = "[RightClickMenuManager.ShowForCountry(Country.AccessSelf)]"
+									tooltipwidget = {
+										FancyTooltip_Country = {}
+									}
+								}
+							}
+							textbox = {
+								raw_text = "@money![Market.GetOwner.MakeScope.Var('tp_3_total').GetValue|D]"
+								minimumsize = { 70 -1 }
+								maximumsize = { 70 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								tooltip = "TP_TRADE_TOOLTIP"
+							}
+							textbox = {
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_3_imp_rel').GetValue|1]%"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								tooltip = "TP_IMP_TOOLTIP"
+							}
+							textbox = {
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_3_exp_rel').GetValue|1]%"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								tooltip = "TP_EXP_TOOLTIP"
+							}
+						}
+
+						# Row 4
+						flowcontainer = {
+							visible = "[GreaterThan_CFixedPoint(Market.GetOwner.MakeScope.ScriptValue('gui_tp_count'), '(CFixedPoint)3')]"
+							margin = { 10 2 }
+							datacontext = "[Market.GetOwner.MakeScope.Var('tp_4_tc').GetState.GetCountry]"
+
+							widget = {
+								size = { 145 22 }
+
+								button = {
+									using = clean_button
+									size = { 100% 100% }
+									raw_text = "[Country.GetFlagTextIcon] [Country.GetNameNoFormatting]"
+									align = left|vcenter
+									fontsize = 13
+									elide = right
+									onclick = "[InformationPanelBar.OpenCountryPanel(Country.Self)]"
+									onrightclick = "[RightClickMenuManager.ShowForCountry(Country.AccessSelf)]"
+									tooltipwidget = {
+										FancyTooltip_Country = {}
+									}
+								}
+							}
+							textbox = {
+								raw_text = "@money![Market.GetOwner.MakeScope.Var('tp_4_total').GetValue|D]"
+								minimumsize = { 70 -1 }
+								maximumsize = { 70 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								tooltip = "TP_TRADE_TOOLTIP"
+							}
+							textbox = {
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_4_imp_rel').GetValue|1]%"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								tooltip = "TP_IMP_TOOLTIP"
+							}
+							textbox = {
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_4_exp_rel').GetValue|1]%"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								tooltip = "TP_EXP_TOOLTIP"
+							}
+						}
+
+						# Row 5
+						flowcontainer = {
+							visible = "[GreaterThan_CFixedPoint(Market.GetOwner.MakeScope.ScriptValue('gui_tp_count'), '(CFixedPoint)4')]"
+							margin = { 10 2 }
+							margin_bottom = 8
+							datacontext = "[Market.GetOwner.MakeScope.Var('tp_5_tc').GetState.GetCountry]"
+
+							widget = {
+								size = { 145 22 }
+
+								button = {
+									using = clean_button
+									size = { 100% 100% }
+									raw_text = "[Country.GetFlagTextIcon] [Country.GetNameNoFormatting]"
+									align = left|vcenter
+									fontsize = 13
+									elide = right
+									onclick = "[InformationPanelBar.OpenCountryPanel(Country.Self)]"
+									onrightclick = "[RightClickMenuManager.ShowForCountry(Country.AccessSelf)]"
+									tooltipwidget = {
+										FancyTooltip_Country = {}
+									}
+								}
+							}
+							textbox = {
+								raw_text = "@money![Market.GetOwner.MakeScope.Var('tp_5_total').GetValue|D]"
+								minimumsize = { 70 -1 }
+								maximumsize = { 70 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								tooltip = "TP_TRADE_TOOLTIP"
+							}
+							textbox = {
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_5_imp_rel').GetValue|1]%"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								tooltip = "TP_IMP_TOOLTIP"
+							}
+							textbox = {
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_5_exp_rel').GetValue|1]%"
+								minimumsize = { 50 -1 }
+								maximumsize = { 50 -1 }
+								autoresize = yes
+								align = right|nobaseline
+								fontsize = 13
+								margin_left = 5
+								tooltip = "TP_EXP_TOOLTIP"
+							}
 						}
 					}
 				}
