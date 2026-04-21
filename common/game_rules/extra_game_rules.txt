@@ -141,3 +141,17 @@ social_movements_rule = {
         flag = social_movements_disabled
     }
 }
+
+# When enabled, aptitude traits (admin / diplo / military) are assigned to
+# ALL adult characters, not just rulers / politicians / agitators / generals / admirals.
+universal_aptitude_traits_rule = {
+    default = universal_aptitude_traits_disabled
+
+    universal_aptitude_traits_enabled = {
+        flag = universal_aptitude_traits_enabled
+    }
+
+    universal_aptitude_traits_disabled = {
+        flag = universal_aptitude_traits_disabled
+    }
+}

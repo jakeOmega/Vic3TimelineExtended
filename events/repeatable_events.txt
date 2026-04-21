@@ -18,7 +18,7 @@ repeatable_events.10 = {
     }
     flavor = repeatable_events.10.f
 
-    event_image = { texture = "gfx/event_pictures/political_rally.dds" }
+    event_image = { texture = "gfx/event_pictures/supply_chain_disruption.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -105,7 +105,7 @@ repeatable_events.20 = {
     desc  = repeatable_events.20.d
     flavor = repeatable_events.20.f
 
-    event_image = { texture = "gfx/event_pictures/supply_chain.dds" }
+    event_image = { texture = "gfx/event_pictures/automation_displacement.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -162,7 +162,7 @@ repeatable_events.30 = {
     }
     flavor = repeatable_events.30.f
 
-    event_image = { texture = "gfx/event_pictures/automation_factory.dds" }
+    event_image = { texture = "gfx/event_pictures/media_moral_panic.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -222,7 +222,7 @@ repeatable_events.40 = {
     }
     flavor = repeatable_events.40.f
 
-    event_image = { texture = "gfx/event_pictures/propaganda_broadcast.dds" }
+    event_image = { texture = "gfx/event_pictures/cyber_attack_infrastructure.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -294,7 +294,7 @@ repeatable_events.50 = {
     }
     flavor = repeatable_events.50.f
 
-    event_image = { texture = "gfx/event_pictures/cyber_attack.dds" }
+    event_image = { texture = "gfx/event_pictures/space_debris_collision.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -359,7 +359,7 @@ repeatable_events.60 = {
     }
     flavor = repeatable_events.60.f
 
-    event_image = { texture = "gfx/event_pictures/satellite_dish.dds" }
+    event_image = { texture = "gfx/event_pictures/quantum_materials_lab.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -402,7 +402,7 @@ repeatable_events.70 = {
     desc = repeatable_events.70.d
     flavor = repeatable_events.70.f
 
-    event_image = { texture = "gfx/event_pictures/space_station.dds" }
+    event_image = { texture = "gfx/event_pictures/ai_ethics_debate.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -452,7 +452,7 @@ repeatable_events.80 = {
     desc = repeatable_events.80.d
     flavor = repeatable_events.80.f
 
-    event_image = { texture = "gfx/event_pictures/space_station.dds" }
+    event_image = { texture = "gfx/event_pictures/gig_economy_protest.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -496,7 +496,7 @@ repeatable_events.90 = {
     }
     flavor = repeatable_events.90.f
 
-    event_image = { texture = "gfx/event_pictures/medical_breakthrough.dds" }
+    event_image = { texture = "gfx/event_pictures/cultural_festival_revival.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -547,7 +547,7 @@ repeatable_events.100 = {
     }
     flavor = repeatable_events.100.f
 
-    event_image = { texture = "gfx/event_pictures/cyber_attack.dds" }
+    event_image = { texture = "gfx/event_pictures/international_development_project.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_industry.dds"
 

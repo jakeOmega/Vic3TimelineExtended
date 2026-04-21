@@ -911,10 +911,14 @@ heir_education_cleanup_effect = {
 
 assign_aptitude_traits_effect = {
 	# Administrative trait
+	# When universal_aptitude_traits_enabled game rule is active, the role filter is bypassed
+	# and every adult character gets aptitude traits. When disabled (default), only rulers,
+	# politicians, agitators, generals, and admirals qualify.
 	every_scope_character = {
 		limit = {
 			NOT = { age < define:NCharacters|ADULT_AGE }
 			OR = {
+				has_game_rule = universal_aptitude_traits_enabled
 				is_ruler = yes
 				has_role = politician
 				has_role = agitator
@@ -943,6 +947,7 @@ assign_aptitude_traits_effect = {
 		limit = {
 			NOT = { age < define:NCharacters|ADULT_AGE }
 			OR = {
+				has_game_rule = universal_aptitude_traits_enabled
 				is_ruler = yes
 				has_role = politician
 				has_role = agitator
@@ -971,6 +976,7 @@ assign_aptitude_traits_effect = {
 		limit = {
 			NOT = { age < define:NCharacters|ADULT_AGE }
 			OR = {
+				has_game_rule = universal_aptitude_traits_enabled
 				is_ruler = yes
 				has_role = politician
 				has_role = agitator
@@ -1016,6 +1022,7 @@ assign_aptitude_traits_effect = {
 		limit = {
 			NOT = { age < define:NCharacters|ADULT_AGE }
 			OR = {
+				has_game_rule = universal_aptitude_traits_enabled
 				is_ruler = yes
 				has_role = politician
 				has_role = agitator

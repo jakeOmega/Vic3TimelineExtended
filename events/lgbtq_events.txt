@@ -9,9 +9,7 @@ lgbtq_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/pride_march.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/pride_march_colorful.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
@@ -116,9 +114,7 @@ lgbtq_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/parliamentary_debate.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/lgbtq_religious_backlash.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -207,9 +203,7 @@ lgbtq_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/military_parade.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/hate_crime_vigil.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
@@ -304,9 +298,7 @@ lgbtq_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/cultural_renaissance.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/lgbtq_military_service.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
@@ -417,9 +409,7 @@ lgbtq_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/police_brutality.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/lgbtq_marriage_debate.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -521,9 +511,7 @@ lgbtq_events.100 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/police_brutality.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/lgbtq_persecution_dark.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -580,7 +568,7 @@ lgbtq_events.200 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/pride_march.dds" }
+	event_image = { texture = "gfx/event_pictures/lgbtq_full_equality.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 

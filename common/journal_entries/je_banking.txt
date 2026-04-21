@@ -201,6 +201,13 @@
             banking_cycle_apply_phase_modifiers = yes
             banking_cycle_update_progress_bars = yes
             banking_cycle_cleanup_capital_controls = yes
+            banking_cycle_update_ce_pool_balance = yes
+        }
+    }
+
+    on_weekly_pulse = {
+        effect = {
+            banking_cycle_weekly_effects = yes
         }
     }
 }

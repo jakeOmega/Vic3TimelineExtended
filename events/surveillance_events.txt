@@ -9,9 +9,7 @@ surveillance_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/surveillance_debate.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/whistleblower_documents.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -89,9 +87,7 @@ surveillance_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/cyber_attack.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/data_breach_screens.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -170,9 +166,7 @@ surveillance_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/cyber_attack.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/data_breach_screens.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -264,9 +258,7 @@ surveillance_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/surveillance_debate.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/predictive_policing_ai.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
@@ -350,9 +342,7 @@ surveillance_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/espionage.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/cyber_espionage_network.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -436,9 +426,7 @@ surveillance_events.100 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/espionage.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/surveillance_state_complete.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -487,7 +475,7 @@ surveillance_events.200 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/surveillance_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/digital_freedom_secured.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 

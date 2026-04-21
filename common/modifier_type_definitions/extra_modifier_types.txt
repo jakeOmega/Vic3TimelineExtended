@@ -907,14 +907,14 @@ country_finance_value_monthly_add    = {
 	script_only = yes
 }
 
-country_monthly_investment_pool_add = {
+country_weekly_investment_pool_add = {
 	color = good
 	percent = no
 	decimals = 0
 	script_only = yes
 }
 
-country_monthly_investment_pool_mult = {
+country_weekly_investment_pool_mult = {
 	color = good
 	percent = yes
 	decimals = 2

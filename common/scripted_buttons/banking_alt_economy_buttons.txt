@@ -407,6 +407,7 @@ ce_invest_pool_inject = {
 	effect = {
 		add_treasury = ce_pool_inject_treasury_cost
 		add_investment_pool = ce_pool_transfer_amount
+		banking_cycle_update_ce_pool_balance = yes
 	}
 }
 
@@ -436,6 +437,7 @@ ce_invest_pool_withdraw = {
 	effect = {
 		add_investment_pool = ce_pool_withdraw_pool_cost
 		add_treasury = ce_pool_withdraw_amount
+		banking_cycle_update_ce_pool_balance = yes
 	}
 }
 

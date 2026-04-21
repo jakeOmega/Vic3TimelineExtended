@@ -20,7 +20,7 @@ society_technology_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/human_rights.dds" }
+	event_image = { texture = "gfx/event_pictures/women_workforce_revolution.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -97,7 +97,7 @@ society_technology_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/human_rights.dds" }
+	event_image = { texture = "gfx/event_pictures/women_workforce_revolution.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -167,7 +167,7 @@ society_technology_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/medical_breakthrough.dds" }
+	event_image = { texture = "gfx/event_pictures/contraception_revolution.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -268,7 +268,7 @@ society_technology_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/social_revolution.dds" }
+	event_image = { texture = "gfx/event_pictures/social_revolution_sixties.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -341,7 +341,7 @@ society_technology_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/divorce_reform.dds" }
+	event_image = { texture = "gfx/event_pictures/divorce_reform_court.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -410,7 +410,7 @@ society_technology_events.6 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/gaming_industry.dds" }
+	event_image = { texture = "gfx/event_pictures/gaming_industry_arcade.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -491,7 +491,7 @@ society_technology_events.7 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/pride_march.dds" }
+	event_image = { texture = "gfx/event_pictures/pride_march_colorful.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -690,7 +690,7 @@ society_technology_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/pride_march.dds" }
+	event_image = { texture = "gfx/event_pictures/pride_march_colorful.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -876,7 +876,7 @@ society_technology_events.9 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/outsourcing.dds" }
+	event_image = { texture = "gfx/event_pictures/factory_outsourced_closed.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -945,7 +945,7 @@ society_technology_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/globalization_protest.dds" }
+	event_image = { texture = "gfx/event_pictures/anti_globalization_riot.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -1009,7 +1009,7 @@ society_technology_events.11 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/terrorist_attack.dds" }
+	event_image = { texture = "gfx/event_pictures/terrorist_attack_aftermath.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -1100,7 +1100,7 @@ society_technology_events.12 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/surveillance_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/surveillance_cameras_cityscape.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -1188,7 +1188,7 @@ society_technology_events.13 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/social_media_crisis.dds" }
+	event_image = { texture = "gfx/event_pictures/misinformation_spreading.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -1269,7 +1269,7 @@ society_technology_events.14 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/cyber_attack.dds" }
+	event_image = { texture = "gfx/event_pictures/election_interference_cyber.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -1398,7 +1398,7 @@ society_technology_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/campus_protest.dds" }
+	event_image = { texture = "gfx/event_pictures/student_protest_campus.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -1469,7 +1469,7 @@ society_technology_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/neural_interface.dds" }
+	event_image = { texture = "gfx/event_pictures/neural_interface_consumer.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1561,7 +1561,7 @@ society_technology_events.17 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/augmented_athlete.dds" }
+	event_image = { texture = "gfx/event_pictures/augmented_athlete_arena.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1630,7 +1630,7 @@ society_technology_events.18 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/space_habitat_future.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -1697,7 +1697,7 @@ society_technology_events.19 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/space_habitat_future.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -1766,7 +1766,7 @@ society_technology_events.20 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/neural_interface.dds" }
+	event_image = { texture = "gfx/event_pictures/neural_interface_consumer.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1853,7 +1853,7 @@ society_technology_events.21 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
+	event_image = { texture = "gfx/event_pictures/telepathic_diplomacy_link.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -1930,7 +1930,7 @@ society_technology_events.22 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_leak.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_reactor_leak.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -2049,7 +2049,7 @@ society_technology_events.23 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_leak.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_reactor_leak.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -2145,7 +2145,7 @@ society_technology_events.24 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/campus_protest.dds" }
+	event_image = { texture = "gfx/event_pictures/anti_nuclear_energy_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -2224,7 +2224,7 @@ society_technology_events.25 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/deepfake_crisis.dds" }
+	event_image = { texture = "gfx/event_pictures/deepfake_crisis_screen.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -2302,7 +2302,7 @@ society_technology_events.26 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/automation_factory.dds" }
+	event_image = { texture = "gfx/event_pictures/ai_alignment_failure.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2370,7 +2370,7 @@ society_technology_events.27 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/surveillance_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/algorithmic_governance_office.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2436,7 +2436,7 @@ society_technology_events.28 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/genetic_engineering.dds" }
+	event_image = { texture = "gfx/event_pictures/genetic_designer_baby_clinic.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -2559,7 +2559,7 @@ society_technology_events.29 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/synthetic_crops.dds" }
+	event_image = { texture = "gfx/event_pictures/synthetic_food_laboratory.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2631,7 +2631,7 @@ society_technology_events.30 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/self_driving.dds" }
+	event_image = { texture = "gfx/event_pictures/autonomous_vehicle_street.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2730,7 +2730,7 @@ society_technology_events.31 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/self_driving.dds" }
+	event_image = { texture = "gfx/event_pictures/autonomous_vehicle_street.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 

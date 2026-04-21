@@ -415,7 +415,7 @@ financial_cycle_phase_frenzy_cmd = {
 # ----- Cycle phases: Cooperative Ownership variants -----
 financial_cycle_phase_panic_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_monthly_investment_pool_mult = -0.015
+	country_weekly_investment_pool_mult = -0.015
 	goods_output_services_mult = -0.35
 	building_group_bg_manufacturing_throughput_add = -0.2
 	country_bubble_pressure_monthly_add = -7
@@ -424,7 +424,7 @@ financial_cycle_phase_panic_coop = {
 
 financial_cycle_phase_downturn_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_monthly_investment_pool_mult = -0.0075
+	country_weekly_investment_pool_mult = -0.0075
 	goods_output_services_mult = -0.20
 	building_group_bg_manufacturing_throughput_add = -0.1
 	country_bubble_pressure_monthly_add = -3
@@ -433,7 +433,7 @@ financial_cycle_phase_downturn_coop = {
 
 financial_cycle_phase_stagnation_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_monthly_investment_pool_mult = -0.003
+	country_weekly_investment_pool_mult = -0.003
 	goods_output_services_mult = -0.10
 	building_group_bg_manufacturing_throughput_add = -0.05
 	country_bubble_pressure_monthly_add = -1
@@ -442,7 +442,7 @@ financial_cycle_phase_stagnation_coop = {
 
 financial_cycle_phase_expansion_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_monthly_investment_pool_mult = 0.003
+	country_weekly_investment_pool_mult = 0.003
 	goods_output_services_mult = 0.15
 	building_group_bg_manufacturing_throughput_add = 0.05
 	country_bubble_pressure_monthly_add = 1
@@ -451,7 +451,7 @@ financial_cycle_phase_expansion_coop = {
 
 financial_cycle_phase_boom_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_monthly_investment_pool_mult = 0.006
+	country_weekly_investment_pool_mult = 0.006
 	goods_output_services_mult = 0.25
 	building_group_bg_manufacturing_throughput_add = 0.1
 	country_bubble_pressure_monthly_add = 1.5
@@ -460,7 +460,7 @@ financial_cycle_phase_boom_coop = {
 
 financial_cycle_phase_frenzy_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_monthly_investment_pool_mult = 0.01
+	country_weekly_investment_pool_mult = 0.01
 	goods_output_services_mult = 0.35
 	building_group_bg_manufacturing_throughput_add = 0.15
 	country_bubble_pressure_monthly_add = 7
@@ -3900,6 +3900,20 @@ planning_consolidation_order = {
 	# monthly: medium friction reduction, mild long-term coordination gain
 	country_bubble_pressure_monthly_add  = -1.8
 	country_finance_momentum_monthly_add = 0.15
+}
+
+# 9. Treasury → Investment Pool auto-balance (command economy only)
+# Automatically applied and recalibrated each month (and on inject/withdraw button press)
+# by banking_cycle_update_ce_pool_balance. The multiplier is computed so that the
+# investment pool's net monthly income equals zero: the state treasury funds all
+# planned investment directly.
+# Base values:
+#   country_weekly_investment_pool_add = 1  (per week, scaled by multiplier)
+#   country_expenses_add = 1
+planning_treasury_pool_balance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_weekly_investment_pool_add = 1
+	country_expenses_add = 1
 }
 
 # ============================================================

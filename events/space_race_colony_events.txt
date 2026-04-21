@@ -19,7 +19,7 @@ space_race_colony_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/valles_marineris.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_valles_marineris.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -70,7 +70,7 @@ space_race_colony_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/olympus_mons.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_olympus_mons.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -123,7 +123,7 @@ space_race_colony_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/hellas_planitia.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_hellas_planitia.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -175,7 +175,7 @@ space_race_colony_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/utonia_planitia.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_utopia_planitia.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -226,7 +226,7 @@ space_race_colony_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/arcadia_planitia.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_arcadia_planitia.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -278,7 +278,7 @@ space_race_colony_events.6 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/ceres.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_ceres.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -330,7 +330,7 @@ space_race_colony_events.7 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/vesta.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_vesta.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -382,7 +382,7 @@ space_race_colony_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/psyche.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_psyche.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -434,7 +434,7 @@ space_race_colony_events.9 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/pallas.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_pallas.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -486,7 +486,7 @@ space_race_colony_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/hygiea.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_hygiea.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -542,7 +542,7 @@ space_race_colony_events.11 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/io.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_io.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -594,7 +594,7 @@ space_race_colony_events.12 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/europa.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_europa.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -645,7 +645,7 @@ space_race_colony_events.13 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/ganymede.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_ganymede.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -698,7 +698,7 @@ space_race_colony_events.14 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/callisto.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_callisto.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -752,7 +752,7 @@ space_race_colony_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/himalia.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_himalia.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -804,7 +804,7 @@ space_race_colony_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/amalthea.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_amalthea.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -856,7 +856,7 @@ space_race_colony_events.17 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/venus.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_venus_cloud.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -913,7 +913,7 @@ space_race_colony_events.18 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/mercury.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_mercury.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -965,7 +965,7 @@ space_race_colony_events.19 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_titan.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1017,7 +1017,7 @@ space_race_colony_events.20 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_enceladus.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1068,7 +1068,7 @@ space_race_colony_events.21 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_saturn_icy_moon.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1120,7 +1120,7 @@ space_race_colony_events.22 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_saturn_icy_moon.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1171,7 +1171,7 @@ space_race_colony_events.23 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_saturn_icy_moon.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1227,7 +1227,7 @@ space_race_colony_events.24 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_uranus_moon.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1278,7 +1278,7 @@ space_race_colony_events.25 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_uranus_moon.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1330,7 +1330,7 @@ space_race_colony_events.26 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_uranus_moon.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1382,7 +1382,7 @@ space_race_colony_events.27 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_uranus_moon.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1434,7 +1434,7 @@ space_race_colony_events.28 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_triton.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1487,7 +1487,7 @@ space_race_colony_events.29 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_neptune_outpost.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1544,7 +1544,7 @@ space_race_colony_events.30 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_pluto_charon.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1597,7 +1597,7 @@ space_race_colony_events.31 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_deep_kuiper.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1649,7 +1649,7 @@ space_race_colony_events.32 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_deep_kuiper.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1701,7 +1701,7 @@ space_race_colony_events.33 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_deep_kuiper.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1753,7 +1753,7 @@ space_race_colony_events.34 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_sedna.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 

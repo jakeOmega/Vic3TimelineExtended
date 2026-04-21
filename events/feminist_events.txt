@@ -9,9 +9,7 @@ feminist_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/political_rally.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/feminist_equal_pay_march.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
@@ -104,9 +102,7 @@ feminist_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/parliamentary_debate.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/feminist_equal_pay_march.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -199,9 +195,7 @@ feminist_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/parliamentary_debate.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/reproductive_rights_debate.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -304,9 +298,7 @@ feminist_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/military_parade.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/women_in_military.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
@@ -394,9 +386,7 @@ feminist_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/cultural_renaissance.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/anti_feminist_backlash.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
@@ -489,9 +479,7 @@ feminist_events.100 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/social_revolution.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/feminist_struggle_continues.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -552,7 +540,7 @@ feminist_events.200 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/political_rally.dds" }
+	event_image = { texture = "gfx/event_pictures/gender_equality_achieved.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 

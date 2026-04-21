@@ -13,7 +13,7 @@ extra_law_events.1 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -101,7 +101,7 @@ extra_law_events.2 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -170,7 +170,7 @@ extra_law_events.3 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -258,7 +258,7 @@ extra_law_events.4 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -325,7 +325,7 @@ extra_law_events.5 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/surveillance_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -412,7 +412,7 @@ extra_law_events.6 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/surveillance_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/surveillance_cameras_cityscape.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -498,7 +498,7 @@ extra_law_events.7 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/surveillance_cameras_cityscape.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -575,7 +575,7 @@ extra_law_events.8 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/genetics_laboratory.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -654,7 +654,7 @@ extra_law_events.9 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/international_court.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -728,7 +728,7 @@ extra_law_events.10 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/international_court.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -796,7 +796,7 @@ extra_law_events.11 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
+	event_image = { texture = "gfx/event_pictures/automation_robots_factory.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -878,7 +878,7 @@ extra_law_events.12 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/international_court.dds" }
+	event_image = { texture = "gfx/event_pictures/automation_robots_factory.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -947,7 +947,7 @@ extra_law_events.13 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/human_rights.dds" }
+	event_image = { texture = "gfx/event_pictures/language_reform_classroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1036,7 +1036,7 @@ extra_law_events.14 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1103,7 +1103,7 @@ extra_law_events.15 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1170,7 +1170,7 @@ extra_law_events.16 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/digital_privacy_screen.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1245,7 +1245,7 @@ extra_law_events.17 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/digital_privacy_screen.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1323,7 +1323,7 @@ extra_law_events.18 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/pride_march.dds" }
+	event_image = { texture = "gfx/event_pictures/immigration_checkpoint.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1396,7 +1396,7 @@ extra_law_events.19 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/immigration_checkpoint.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1464,7 +1464,7 @@ extra_law_events.20 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/surveillance_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1551,7 +1551,7 @@ extra_law_events.21 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/human_rights.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1621,7 +1621,7 @@ extra_law_events.22 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/social_revolution.dds" }
+	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1706,7 +1706,7 @@ extra_law_events.23 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1774,7 +1774,7 @@ extra_law_events.24 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/media_press_freedom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1993,7 +1993,7 @@ extra_law_events.25 = {
 	}
 	flavor = extra_law_events.25.f
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2532,7 +2532,7 @@ extra_law_events.26 = {
 	desc = extra_law_events.26.d
 	flavor = extra_law_events.26.f
 
-	event_image = { texture = "gfx/event_pictures/international_court.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2615,7 +2615,7 @@ extra_law_events.27 = {
 	desc = extra_law_events.27.d
 	flavor = extra_law_events.27.f
 
-	event_image = { texture = "gfx/event_pictures/bilingual.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2696,7 +2696,7 @@ extra_law_events.28 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2815,7 +2815,7 @@ extra_law_events.29 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2926,7 +2926,7 @@ extra_law_events.30 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/international_court.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -3045,7 +3045,7 @@ extra_law_events.31 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/surveillance_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -3156,7 +3156,7 @@ extra_law_events.32 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/international_court.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -3283,7 +3283,7 @@ extra_law_events.33 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/drug_policy_hearing.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -3366,7 +3366,7 @@ extra_law_events.34 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/pride_march.dds" }
+	event_image = { texture = "gfx/event_pictures/drug_policy_hearing.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -3469,7 +3469,7 @@ extra_law_events.35 = {
 	desc = extra_law_events.35.d
 	flavor = extra_law_events.35.f
 
-	event_image = { texture = "gfx/event_pictures/ministry_building.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -3659,7 +3659,7 @@ extra_law_events.36 = {
 	}
 	flavor = extra_law_events.36.f
 
-	event_image = { texture = "gfx/event_pictures/social_revolution.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 

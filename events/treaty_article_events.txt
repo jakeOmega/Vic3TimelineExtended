@@ -19,7 +19,7 @@ treaty_article_events.1 = {
 	desc = treaty_article_events.1.d
 	flavor = treaty_article_events.1.f
 
-	event_image = { texture = "gfx/event_pictures/espionage.dds" }
+	event_image = { texture = "gfx/event_pictures/intelligence_sharing_success.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -152,7 +152,7 @@ treaty_article_events.2 = {
 	desc = treaty_article_events.2.d
 	flavor = treaty_article_events.2.f
 
-	event_image = { texture = "gfx/event_pictures/espionage.dds" }
+	event_image = { texture = "gfx/event_pictures/intelligence_dead_drop.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -271,7 +271,7 @@ treaty_article_events.3 = {
 	desc = treaty_article_events.3.d
 	flavor = treaty_article_events.3.f
 
-	event_image = { texture = "gfx/event_pictures/cultural_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/cultural_renaissance_shared.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -344,7 +344,7 @@ treaty_article_events.4 = {
 	desc = treaty_article_events.4.d
 	flavor = treaty_article_events.4.f
 
-	event_image = { texture = "gfx/event_pictures/political_rally.dds" }
+	event_image = { texture = "gfx/event_pictures/nationalist_backlash_flags.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -423,7 +423,7 @@ treaty_article_events.5 = {
 	desc = treaty_article_events.5.d
 	flavor = treaty_article_events.5.f
 
-	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
+	event_image = { texture = "gfx/event_pictures/military_disarmament_ceremony.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -518,7 +518,7 @@ treaty_article_events.6 = {
 	desc = treaty_article_events.6.d
 	flavor = treaty_article_events.6.f
 
-	event_image = { texture = "gfx/event_pictures/commando.dds" }
+	event_image = { texture = "gfx/event_pictures/joint_military_exercises.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -597,7 +597,7 @@ treaty_article_events.7 = {
 	desc = treaty_article_events.7.d
 	flavor = treaty_article_events.7.f
 
-	event_image = { texture = "gfx/event_pictures/ministry_building.dds" }
+	event_image = { texture = "gfx/event_pictures/education_initiative_school.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -652,7 +652,7 @@ treaty_article_events.8 = {
 	desc = treaty_article_events.8.d
 	flavor = treaty_article_events.8.f
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/military_disarmament_ceremony.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -715,7 +715,7 @@ treaty_article_events.9 = {
 	desc = treaty_article_events.9.d
 	flavor = treaty_article_events.9.f
 
-	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
+	event_image = { texture = "gfx/event_pictures/foreign_security_advisors.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -797,7 +797,7 @@ treaty_article_events.10 = {
 	desc = treaty_article_events.10.d
 	flavor = treaty_article_events.10.f
 
-	event_image = { texture = "gfx/event_pictures/climate_refugees.dds" }
+	event_image = { texture = "gfx/event_pictures/population_transfer_displacement.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -887,7 +887,7 @@ treaty_article_events.11 = {
 	desc = treaty_article_events.11.d
 	flavor = treaty_article_events.11.f
 
-	event_image = { texture = "gfx/event_pictures/cultural_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/cultural_renaissance_shared.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -978,7 +978,7 @@ treaty_article_events.12 = {
 	desc = treaty_article_events.12.d
 	flavor = treaty_article_events.12.f
 
-	event_image = { texture = "gfx/event_pictures/political_rally.dds" }
+	event_image = { texture = "gfx/event_pictures/nationalist_backlash_flags.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 

@@ -15,9 +15,7 @@ cultural_hegemony.1 = {
 	desc = cultural_hegemony.1.d
 	flavor = cultural_hegemony.1.f
 
-	event_image = {
-		video = "unspecific_world_fair"
-	}
+	event_image = { texture = "gfx/event_pictures/cultural_exhibition_grand.dds" }
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
@@ -111,9 +109,7 @@ cultural_hegemony.2 = {
 	desc = cultural_hegemony.2.d
 	flavor = cultural_hegemony.2.f
 
-	event_image = {
-		video = "europenorthamerica_springtime_of_nations"
-	}
+	event_image = { texture = "gfx/event_pictures/brain_drain_airport.dds" }
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	duration = 3
@@ -238,9 +234,7 @@ cultural_hegemony.3 = {
 	desc = cultural_hegemony.3.d
 	flavor = cultural_hegemony.3.f
 
-	event_image = {
-		video = "event_newspaper"
-	}
+	event_image = { texture = "gfx/event_pictures/media_broadcast_global.dds" }
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	duration = 3
@@ -319,9 +313,7 @@ cultural_hegemony.4 = {
 	desc = cultural_hegemony.4.d
 	flavor = cultural_hegemony.4.f
 
-	event_image = {
-		video = "europenorthamerica_political_extremism"
-	}
+	event_image = { texture = "gfx/event_pictures/cultural_classroom_influence.dds" }
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	duration = 3
@@ -429,9 +421,7 @@ cultural_hegemony.5 = {
 	desc = cultural_hegemony.5.d
 	flavor = cultural_hegemony.5.f
 
-	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
-	}
+	event_image = { texture = "gfx/event_pictures/cultural_backlash_protest.dds" }
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
@@ -496,9 +486,7 @@ cultural_hegemony.6 = {
 	desc = cultural_hegemony.6.d
 	flavor = cultural_hegemony.6.f
 
-	event_image = {
-		video = "unspecific_politicians_arguing"
-	}
+	event_image = { texture = "gfx/event_pictures/cultural_classroom_influence.dds" }
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
 	duration = 3
@@ -588,9 +576,7 @@ cultural_hegemony.7 = {
 	desc = cultural_hegemony.7.desc
 	flavor = cultural_hegemony.7.f
 
-	event_image = {
-		video = "europenorthamerica_springtime_of_nations"
-	}
+	event_image = { texture = "gfx/event_pictures/tech_innovation_showcase.dds" }
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	duration = 3
@@ -894,9 +880,7 @@ cultural_hegemony.8 = {
 	desc = cultural_hegemony.8.d
 	flavor = cultural_hegemony.8.f
 
-	event_image = {
-		video = "event_art_gallery"
-	}
+	event_image = { texture = "gfx/event_pictures/cultural_exhibition_grand.dds" }
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
@@ -959,9 +943,7 @@ cultural_hegemony.9 = {
 	desc = cultural_hegemony.9.d
 	flavor = cultural_hegemony.9.f
 
-	event_image = {
-		video = "event_art_gallery"
-	}
+	event_image = { texture = "gfx/event_pictures/cultural_exhibition_grand.dds" }
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
@@ -1008,9 +990,7 @@ cultural_hegemony.10 = {
 	desc = cultural_hegemony.10.d
 	flavor = cultural_hegemony.10.f
 
-	event_image = {
-		video = "europenorthamerica_art_gallery"
-	}
+	event_image = { texture = "gfx/event_pictures/media_broadcast_global.dds" }
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
@@ -1087,9 +1067,7 @@ cultural_hegemony.11 = {
 	desc = cultural_hegemony.11.d
 	flavor = cultural_hegemony.11.f
 
-	event_image = {
-		video = "unspecific_world_fair"
-	}
+	event_image = { texture = "gfx/event_pictures/fashion_diaspora_influence.dds" }
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
 	duration = 3
@@ -1166,9 +1144,7 @@ cultural_hegemony.12 = {
 	desc = cultural_hegemony.12.d
 	flavor = cultural_hegemony.12.f
 
-	event_image = {
-		image = "gfx/event_pictures/cultural_exchange.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/cultural_backlash_protest.dds" }
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
@@ -1243,9 +1219,7 @@ cultural_hegemony.13 = {
 	desc = cultural_hegemony.13.d
 	flavor = cultural_hegemony.13.f
 
-	event_image = {
-		image = "gfx/event_pictures/diplomatic_meeting.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/fashion_diaspora_influence.dds" }
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
@@ -1320,9 +1294,7 @@ cultural_hegemony.14 = {
 	desc = cultural_hegemony.14.d
 	flavor = cultural_hegemony.14.f
 
-	event_image = {
-		image = "gfx/event_pictures/gaming_industry.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/cultural_backlash_protest.dds" }
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	duration = 3
@@ -1496,9 +1468,7 @@ cultural_hegemony.15 = {
 	desc = cultural_hegemony.15.d
 	flavor = cultural_hegemony.15.f
 
-	event_image = {
-		image = "gfx/event_pictures/campus_protest.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/cultural_debate_panel.dds" }
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	duration = 3
@@ -1652,9 +1622,7 @@ cultural_hegemony.16 = {
 	desc = cultural_hegemony.16.d
 	flavor = cultural_hegemony.16.f
 
-	event_image = {
-		video = "europenorthamerica_springtime_of_nations"
-	}
+	event_image = { texture = "gfx/event_pictures/tech_innovation_showcase.dds" }
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	duration = 3

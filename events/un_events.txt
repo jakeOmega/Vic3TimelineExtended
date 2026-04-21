@@ -11,9 +11,7 @@ un_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_charter.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/un_charter_signing.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -113,9 +111,7 @@ un_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_assembly.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -259,9 +255,7 @@ un_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/human_rights.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/human_rights_declaration.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -390,9 +384,7 @@ un_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_peacekeepers.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/peacekeeping_deployment.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -501,9 +493,7 @@ un_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/trade_embargo.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/sanctions_cargo_inspection.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -598,9 +588,7 @@ un_events.6 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_assembly.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -744,9 +732,7 @@ un_events.7 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/humanitarian_crisis.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/humanitarian_camp_tents.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -931,9 +917,7 @@ un_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/international_court.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/international_court_chamber.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1039,9 +1023,7 @@ un_events.9 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_assembly.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/heritage_site_monument.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1147,9 +1129,7 @@ un_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_assembly.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/un_crisis_empty_seats.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1253,9 +1233,7 @@ un_events.11 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_assembly.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1367,9 +1345,7 @@ un_events.12 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/colonial_protest.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1492,9 +1468,7 @@ un_events.13 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_assembly.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1636,9 +1610,7 @@ un_events.14 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_charter.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1758,9 +1730,7 @@ un_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/development_protest.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/sanctions_cargo_inspection.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1884,9 +1854,7 @@ un_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/medical_breakthrough.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/pandemic_hospital_ward.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1999,9 +1967,7 @@ un_events.17 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/humanitarian_crisis.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/climate_assembly_debate.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2113,9 +2079,7 @@ un_events.18 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/climate_refugees.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/humanitarian_camp_tents.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2268,9 +2232,7 @@ un_events.19 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/space_race.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/space_cooperation_station.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2379,9 +2341,7 @@ un_events.20 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_assembly.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2523,9 +2483,7 @@ un_events.101 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/humanitarian_crisis.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/humanitarian_camp_tents.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2582,9 +2540,7 @@ un_events.102 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_peacekeepers.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/peacekeeping_deployment.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2661,9 +2617,7 @@ un_events.103 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/climate_refugees.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/humanitarian_camp_tents.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2735,9 +2689,7 @@ un_events.21 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/un_assembly.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/law_of_sea_maritime.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2858,9 +2810,7 @@ un_events.22 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/human_rights.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/human_rights_declaration.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

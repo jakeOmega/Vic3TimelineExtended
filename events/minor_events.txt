@@ -35,9 +35,7 @@ minor_events_timelineextended.2 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/ministry_building.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/victorian_gentleman_duel.dds" }
 
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -153,9 +151,7 @@ minor_events_timelineextended.3 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/political_rally.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/expedition_explorer.dds" }
 
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -204,9 +200,7 @@ minor_events_timelineextended.6 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/stock_exchange.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/minor_event_generic.dds" }
 
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -296,9 +290,7 @@ minor_events_timelineextended.7 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/stock_exchange.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/world_exhibition_fair.dds" }
 
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -423,9 +415,7 @@ minor_events_timelineextended.8 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/stock_exchange.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/foreign_investment_opportunity.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

@@ -126,8 +126,8 @@ starting_investment_pool = {
 
 investment_pool_banking_cycle_add = {
 	value = investment_pool
-	multiply = modifier:country_monthly_investment_pool_mult
-	add = modifier:country_monthly_investment_pool_add
+	multiply = modifier:country_weekly_investment_pool_mult
+	add = modifier:country_weekly_investment_pool_add
 }
 
 # Homeland thresholds: read from state modifier system (base values in INJECT:base_values)
@@ -1653,6 +1653,17 @@ ce_pool_withdraw_amount = {
 ce_pool_withdraw_pool_cost = {
 	value = ce_pool_withdraw_amount
 	multiply = -1
+}
+
+# Command economy auto-balance multiplier for planning_treasury_pool_balance.
+# Equals -investment_pool_net_income, which makes the pool's net income zero
+# on the next tick. No prior-multiplier subtraction is needed here because
+# country_weekly_investment_pool_add (our modifier's key) is a mod-created
+# value and is NOT included in the engine's investment_pool_net_income read,
+# so there is no double-counting problem.
+ce_treasury_pool_balance_multiplier = {
+	value = 0
+	subtract = investment_pool_net_income
 }
 
 # ====================================================================================

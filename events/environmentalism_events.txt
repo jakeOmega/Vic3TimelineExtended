@@ -9,7 +9,7 @@ environmentalism_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/climate_awareness.dds" }
+	event_image = { texture = "gfx/event_pictures/factory_pollution_protest.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -66,7 +66,7 @@ environmentalism_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/heatwave.dds" }
+	event_image = { texture = "gfx/event_pictures/factory_pollution_protest.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -154,7 +154,7 @@ environmentalism_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/coastal_flooding.dds" }
+	event_image = { texture = "gfx/event_pictures/oil_spill_disaster.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -219,7 +219,7 @@ environmentalism_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/coastal_flooding.dds" }
+	event_image = { texture = "gfx/event_pictures/deforestation_contrast.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -272,7 +272,7 @@ environmentalism_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/heatwave.dds" }
+	event_image = { texture = "gfx/event_pictures/anti_nuclear_energy_march.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -367,7 +367,7 @@ environmentalism_events.6 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/climate_refugees.dds" }
+	event_image = { texture = "gfx/event_pictures/climate_refugee_exodus.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -513,7 +513,7 @@ environmentalism_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/environmental_movement.dds" }
+	event_image = { texture = "gfx/event_pictures/nature_conservation_effort.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -630,7 +630,7 @@ environmentalism_events.9 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/coastal_flooding.dds" }
+	event_image = { texture = "gfx/event_pictures/environmental_policy_hearing.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -715,7 +715,7 @@ environmentalism_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/coastal_flooding.dds" }
+	event_image = { texture = "gfx/event_pictures/environmental_policy_hearing.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -799,7 +799,7 @@ environmentalism_events.11 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/green_technology.dds" }
+	event_image = { texture = "gfx/event_pictures/climate_research_station.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -871,7 +871,7 @@ environmentalism_events.12 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/industrial_pollution.dds" }
+	event_image = { texture = "gfx/event_pictures/climate_research_station.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -958,7 +958,7 @@ environmentalism_events.13 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/un_assembly.dds" }
+	event_image = { texture = "gfx/event_pictures/water_scarcity_queue.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1075,7 +1075,7 @@ environmentalism_events.14 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/humanitarian_crisis.dds" }
+	event_image = { texture = "gfx/event_pictures/drought_devastation.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1163,7 +1163,7 @@ environmentalism_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/environmental_movement.dds" }
+	event_image = { texture = "gfx/event_pictures/climate_flooding_city.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1267,7 +1267,7 @@ environmentalism_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/melting_iceburg.dds" }
+	event_image = { texture = "gfx/event_pictures/climate_refugee_exodus.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1334,7 +1334,7 @@ environmentalism_events.17 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/climate_awareness.dds" }
+	event_image = { texture = "gfx/event_pictures/wildfire_inferno.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1390,7 +1390,7 @@ environmentalism_events.18 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/green_technology.dds" }
+	event_image = { texture = "gfx/event_pictures/green_industry_factory.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1446,7 +1446,7 @@ environmentalism_events.19 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/environmental_movement.dds" }
+	event_image = { texture = "gfx/event_pictures/ecological_collapse_panorama.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1502,7 +1502,7 @@ environmentalism_events.20 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/climate_awareness.dds" }
+	event_image = { texture = "gfx/event_pictures/ecological_collapse_panorama.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1557,7 +1557,7 @@ environmentalism_events.21 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/green_technology.dds" }
+	event_image = { texture = "gfx/event_pictures/green_sustainable_city.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

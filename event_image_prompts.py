@@ -61,7 +61,7 @@ IMAGES = {
         "events": ["augmentation_events.2"],
     },
     "anti_augmentation_protest": {
-        "prompt": "Protesters outside an augmentation clinic at dusk.",
+        "prompt": "Night street protest outside a neon-lit clinic, raised hands and a police line in rain.",
         "style": "oil painting, social realism, dramatic evening light",
         "events": ["augmentation_events.3"],
     },
@@ -826,7 +826,7 @@ IMAGES = {
         ],
     },
     "election_crisis_contested": {
-        "prompt": "Crowds confronting outside a vote-counting center at night.",
+        "prompt": "Crowd pressing against barricades outside a government counting hall at night.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "modern_election_events.30", "modern_election_events.31",
@@ -1031,7 +1031,7 @@ IMAGES = {
         "events": ["repeatable_events.20"],
     },
     "media_moral_panic": {
-        "prompt": "A sensationalist news broadcast stoking public fear.",
+        "prompt": "Television studio with an agitated anchor and anxious viewers gathered in a dim living room.",
         "style": "oil painting, contemporary realism, cool screen light",
         "events": ["repeatable_events.30"],
     },
@@ -1302,7 +1302,7 @@ IMAGES = {
         "events": ["space_race_colony_events.6"],
     },
     "colony_vesta": {
-        "prompt": "A mining colony carved into the giant asteroid 4 Vesta, nestled in the massive Rheasilvia impact basin. Mining equipment extracts iron and magnesium from exposed mantle material. Sharp cliffs and rubble fields under a black sky.",
+        "prompt": "Mining habitat carved into Vesta crater walls, with excavators and ore haulers under a black sky.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.7"],
     },
@@ -1317,7 +1317,7 @@ IMAGES = {
         "events": ["space_race_colony_events.9"],
     },
     "colony_hygiea": {
-        "prompt": "A fuel depot colony on 10 Hygiea, an icy body in the outer asteroid belt. Water ice is mined and cracked into hydrogen fuel. Tanker ships orbit above. A remote, cold outpost servicing the deep-space trade routes.",
+        "prompt": "Remote icy outpost on Hygiea with fuel tanks, drilling rigs, and docked cargo shuttles.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.10"],
     },
@@ -1425,7 +1425,7 @@ IMAGES = {
     # SPACE RACE COLONY EVENTS — Kuiper Belt & Beyond (30-34)
     # =========================================================================
     "colony_pluto_charon": {
-        "prompt": "A binary colony spanning Pluto and Charon, connected by a space elevator between the tidally locked worlds. Pluto's heart-shaped nitrogen glacier glows faintly. Charon's red polar cap is visible. The sun is just a very bright star.",
+        "prompt": "Twin colonies on Pluto and Charon linked by ship traffic across deep darkness and distant starlight.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.30"],
     },
@@ -1507,12 +1507,12 @@ IMAGES = {
         "events": ["space_race_events.603"],
     },
     "probe_iron_world": {
-        "prompt": "A small, impossibly dense planet of exposed iron-nickel core — the naked heart of a world that lost its mantle in a primordial collision. The surface is metallic, gleaming dull silver under an alien sun.",
+        "prompt": "Bare metallic planet with iron ridges and silver plains reflecting a dim alien star.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.604"],
     },
     "probe_asteroid_belts": {
-        "prompt": "A vast, intricate asteroid belt viewed from within — thousands of tumbling rocks of all sizes, caught in gravitational resonance patterns. No planets, just an endless field of debris orbiting a distant star.",
+        "prompt": "Dense asteroid field of tumbling rocks lit by distant starlight, stretching endlessly in all directions.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.605"],
     },
@@ -1539,7 +1539,7 @@ IMAGES = {
         "events": ["space_race_events.609"],
     },
     "probe_volcanic_world": {
-        "prompt": "A massive tectonically hyperactive super-Earth seen from orbit: continent-sized lava flows, volcanic mountains the height of Olympus Mons erupting simultaneously, tectonic plates visibly shifting. A world of fire and geological fury three times Earth's mass.",
+        "prompt": "Super-Earth seen from orbit with erupting volcanoes and glowing lava rivers crossing continents.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.610"],
     },
@@ -1611,7 +1611,7 @@ IMAGES = {
         "events": ["space_race_events.623"],
     },
     "probe_alien_mycelium": {
-        "prompt": "Aerial probe imagery of a humid, overcast exoplanet where all visible land is covered by a single interconnected mat of non-photosynthetic alien life — one planetary-scale organism, a mycelial network that wraps the entire globe.",
+        "prompt": "Overcast planet surface covered by one continuous pale organic mat like giant fungal tissue.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.624"],
     },
@@ -1623,12 +1623,12 @@ IMAGES = {
         "events": ["space_race_events.625"],
     },
     "probe_industrial_atmosphere": {
-        "prompt": "Spectroscopic data overlays showing artificial gases — chlorofluorocarbons and sulfur hexafluoride — in an alien planet's atmosphere. Gases that do not occur in nature. Industrial civilization confirmed. The smoking gun of alien industry, detected across light-years of space.",
+        "prompt": "Hazy planet wrapped in yellow-gray smog plumes rising from geometric surface industrial complexes.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.626"],
     },
     "probe_nuclear_ruins": {
-        "prompt": "A habitable world — temperate, oceanic, oxygen-rich — but with radiation levels orders of magnitude above natural. A civilization that destroyed itself with nuclear weapons, the scars still glowing in the probe's radiation sensors. Fission products everywhere.",
+        "prompt": "Ruined coastal cities on a temperate planet with scorched zones and a faint blue radiation glow.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.627"],
     },
@@ -1718,7 +1718,7 @@ IMAGES = {
         "events": ["space_race_events.31", "space_race_events.47"],
     },
     "astronaut_candidate_training": {
-        "prompt": "Astronaut candidates in training: centrifuge runs, underwater EVA simulations, classroom sessions on orbital mechanics. Diverse candidates being tested to their physical and mental limits. Only the best will fly.",
+        "prompt": "Astronaut trainees enduring centrifuge and neutral-buoyancy drills in a bright training complex.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.32"],
     },
@@ -1814,7 +1814,7 @@ IMAGES = {
         "events": ["surveillance_events.4"],
     },
     "cyber_espionage_network": {
-        "prompt": "A state-sponsored cyber espionage operation: hackers in a government facility, multiple screens showing infiltrated foreign networks, stolen data flowing in. National flags visible. Espionage without spies, theft without touching.",
+        "prompt": "Dim operations room with analysts at many terminals and a wall of glowing network maps.",
         "style": "oil painting, chiaroscuro, screen glow",
         "events": ["surveillance_events.5"],
     },
@@ -1926,7 +1926,7 @@ IMAGES = {
         "events": ["un_events.9"],
     },
     "un_crisis_empty_seats": {
-        "prompt": "The UN in crisis: a Security Council chamber with several seats conspicuously empty, remaining delegates arguing, the Secretary-General looking grave. The international order fraying when nations refuse to participate.",
+        "prompt": "Grand international chamber with many empty desks while a few delegates argue across the floor.",
         "style": "oil painting, academic art, institutional grandeur",
         "events": ["un_events.10"],
     },
@@ -1970,7 +1970,7 @@ IMAGES = {
         "events": ["wonder_events.2"],
     },
     "space_elevator_complete": {
-        "prompt": "The completed space elevator in full operation: passenger and cargo pods ascending and descending the impossibly long tether. At the top, a orbital station gleams. At the bottom, a new spaceport city has grown around the base.",
+        "prompt": "Fully operational space elevator with multiple climbers moving along a tether above a vast coastal spaceport.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.3", "wonder_events.4"],
     },
@@ -1985,7 +1985,7 @@ IMAGES = {
         "events": ["wonder_events.6"],
     },
     "orbital_sovereignty_dispute": {
-        "prompt": "A diplomatic confrontation over the space elevator: national delegations arguing around a model of the elevator, each claiming regulatory authority. Military vessels orbit nearby. Who owns the road to space?",
+        "prompt": "Tense diplomatic meeting around a large orbital model while military officers watch from the edges.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.7"],
     },
@@ -1994,7 +1994,7 @@ IMAGES = {
     # WONDER EVENTS — Orbital Solar Collector (10-15)
     # =========================================================================
     "orbital_solar_first_light": {
-        "prompt": "An orbital solar collector focusing its first beam of concentrated sunlight toward a ground receiving station. The beam is visible as a pillar of light from space to ground. The moment unlimited clean energy becomes real.",
+        "prompt": "Orbital mirror array casting a bright energy beam onto a desert receiving station.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.10"],
     },
@@ -2004,7 +2004,7 @@ IMAGES = {
         "events": ["wonder_events.11"],
     },
     "solar_power_surplus": {
-        "prompt": "A world transformed by unlimited orbital solar power: electric grids at zero cost, factories running on free energy, desalination plants providing unlimited fresh water. The greatest energy revolution since fire, beamed from space.",
+        "prompt": "Sunlit industrial region powered by giant rectennas, clean factories, and active desalination basins.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.12", "wonder_events.13"],
     },
@@ -2028,7 +2028,7 @@ IMAGES = {
         "events": ["wonder_events.20"],
     },
     "orbital_surveillance_earth": {
-        "prompt": "The view from an orbital battlestation looking down at Earth: high-resolution targeting displays overlaying the surface, individual vehicles and buildings resolvable, military operators monitoring potential targets. God's-eye view weaponized.",
+        "prompt": "Military command deck in orbit viewing Earth below through targeting optics and wide observation windows.",
         "style": "digital painting, cinematic light, military sci-fi",
         "events": ["wonder_events.21"],
     },
@@ -2038,17 +2038,17 @@ IMAGES = {
         "events": ["wonder_events.22", "wonder_events.25"],
     },
     "orbital_misfire_impact": {
-        "prompt": "A kinetic weapon fired from orbit striking the ground: a devastating impact crater where a city block stood. Smoke and debris. An orbital weapons system that 'malfunctioned' — or was it deliberate?",
+        "prompt": "Fresh impact crater in an urban district with smoke columns and shattered streets.",
         "style": "digital painting, dramatic light, destructive impact",
         "events": ["wonder_events.23"],
     },
     "orbital_arms_race": {
-        "prompt": "Multiple nations launching orbital weapons platforms: a visualization of Earth orbit filling with competing military stations, each nation racing to dominate the ultimate high ground. The Cold War's worst nightmare realized in orbit.",
+        "prompt": "Earth orbit crowded with competing armed platforms and launch trails rising from multiple continents.",
         "style": "digital painting, cinematic light, military sci-fi",
         "events": ["wonder_events.24"],
     },
     "asteroid_deflection_heroic": {
-        "prompt": "The orbital battlestation repurposed for asteroid deflection: weapons systems targeting an incoming asteroid, the beam or projectile striking the threat. The weapon of war becoming humanity's shield against cosmic impact. Redemption through service.",
+        "prompt": "Orbital weapon platform firing at an incoming asteroid, fragments veering away from Earth.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.26"],
     },
@@ -2067,7 +2067,7 @@ IMAGES = {
         "events": ["wonder_events.31", "wonder_events.34"],
     },
     "antimatter_weapons_prototype": {
-        "prompt": "Scientists and military officials in a secure facility examining the first antimatter weapon prototype: a small, unassuming device that could destroy a city. The scale of destructive power miniaturized to the absurd. Nuclear weapons made obsolete.",
+        "prompt": "Secure lab where officials inspect a tiny containment device inside heavy shielding.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.32"],
     },
@@ -2091,7 +2091,7 @@ IMAGES = {
         "events": ["world_war_events.1"],
     },
     "border_skirmish_troops": {
-        "prompt": "Soldiers exchanging fire across a disputed border: foxholes, barbed wire, tracers in the dawn light. A contested no-man's-land between opposing trenches. The spark that could ignite a world war, or be forgotten by tomorrow.",
+        "prompt": "Infantry trading fire across trenches and barbed wire in cold dawn haze.",
         "style": "oil painting, dramatic shadows, military painting",
         "events": ["world_war_events.2"],
     },
@@ -2101,12 +2101,12 @@ IMAGES = {
         "events": ["world_war_events.3"],
     },
     "world_war_declaration": {
-        "prompt": "A head of state addressing the nation from behind a desk, declaring war. Radio/television microphones cluster on the desk. The flag behind them. Citizens gathered around radio sets in homes and public squares. The moment everything changes.",
+        "prompt": "Leader delivering a wartime broadcast in a formal office while civilians listen on radios.",
         "style": "oil painting, dramatic shadows, military painting",
         "events": ["world_war_events.5"],
     },
     "home_front_factory": {
-        "prompt": "A wartime home front factory: assembly lines running at full capacity producing munitions, vehicles, and supplies. Posters demanding sacrifice and production. Workers pulling double shifts. Women filling roles vacated by men at the front.",
+        "prompt": "Packed wartime factory with workers assembling shells and engines under bright industrial lamps.",
         "style": "oil painting, dramatic shadows, military painting",
         "events": ["world_war_events.10"],
     },
@@ -2126,7 +2126,7 @@ IMAGES = {
         "events": ["world_war_events.20"],
     },
     "war_weariness_homefront": {
-        "prompt": "A war-weary home front: rationing queues, casualty lists posted on bulletin boards, families reading dreaded telegrams. Gold star mothers. The slow grinding down of civilian morale as the war stretches on year after year.",
+        "prompt": "Long ration lines and grieving families in a worn city square during a prolonged war.",
         "style": "oil painting, dramatic shadows, military painting",
         "events": ["world_war_events.30"],
     },
@@ -2146,7 +2146,7 @@ IMAGES = {
         "events": ["world_war_events.102"],
     },
     "war_crimes_tribunal": {
-        "prompt": "A war crimes tribunal: former leaders in the dock, prosecutors presenting evidence of atrocities, judges in robes. Translators with headphones. The machinery of international justice processing the architects of horror.",
+        "prompt": "Solemn tribunal chamber with defendants in the dock, judges elevated, and observers packed behind.",
         "style": "oil painting, academic art, institutional gravitas",
         "events": ["world_war_events.103"],
     },

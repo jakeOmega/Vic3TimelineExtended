@@ -43,10 +43,13 @@ covert_election_interference_action = {
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		covert_ops_type_below_cap = { TYPE = covert_election_interference_action }
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_election_tt
+			covert_ops_type_below_cap = { TYPE = covert_election_interference_action }
+		}
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
@@ -70,10 +73,7 @@ covert_election_interference_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
-		custom_tooltip = {
-			text = iw_not_at_war_tt
-			NOT = { has_war_with = scope:target_country }
-		}
+
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
 			NOT = {
@@ -122,14 +122,7 @@ covert_election_interference_action = {
 		}
 
 
-		requirement_to_maintain = {
-			trigger = {
-				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
-				}
-			}
-		}
+		# Allow operation to continue during war; do not auto-break on war start
 
 		requirement_to_maintain = {
 			trigger = {
@@ -214,10 +207,13 @@ covert_financial_subversion_action = {
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		covert_ops_type_below_cap = { TYPE = covert_financial_subversion_action }
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_financial_tt
+			covert_ops_type_below_cap = { TYPE = covert_financial_subversion_action }
+		}
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
@@ -230,10 +226,7 @@ covert_financial_subversion_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
-		custom_tooltip = {
-			text = iw_not_at_war_tt
-			NOT = { has_war_with = scope:target_country }
-		}
+		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
 			NOT = {
@@ -270,14 +263,7 @@ covert_financial_subversion_action = {
 		}
 
 
-		requirement_to_maintain = {
-			trigger = {
-				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
-				}
-			}
-		}
+		# Allowed during war: do not auto-break when war starts
 
 		requirement_to_maintain = {
 			trigger = {
@@ -365,10 +351,13 @@ covert_infrastructure_sabotage_action = {
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		covert_ops_type_below_cap = { TYPE = covert_infrastructure_sabotage_action }
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_infrastructure_tt
+			covert_ops_type_below_cap = { TYPE = covert_infrastructure_sabotage_action }
+		}
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
@@ -487,10 +476,13 @@ covert_comms_disruption_action = {
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		covert_ops_type_below_cap = { TYPE = covert_comms_disruption_action }
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_comms_tt
+			covert_ops_type_below_cap = { TYPE = covert_comms_disruption_action }
+		}
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
@@ -614,10 +606,13 @@ covert_industrial_espionage_action = {
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		covert_ops_type_below_cap = { TYPE = covert_industrial_espionage_action }
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_industrial_tt
+			covert_ops_type_below_cap = { TYPE = covert_industrial_espionage_action }
+		}
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
@@ -630,10 +625,7 @@ covert_industrial_espionage_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
-		custom_tooltip = {
-			text = iw_not_at_war_tt
-			NOT = { has_war_with = scope:target_country }
-		}
+		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
 			NOT = {
@@ -672,14 +664,7 @@ covert_industrial_espionage_action = {
 		}
 
 
-		requirement_to_maintain = {
-			trigger = {
-				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
-				}
-			}
-		}
+		# Allowed during war: do not auto-break when war starts
 
 		requirement_to_maintain = {
 			trigger = {
@@ -757,10 +742,13 @@ covert_military_espionage_action = {
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		covert_ops_type_below_cap = { TYPE = covert_military_espionage_action }
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_military_tt
+			covert_ops_type_below_cap = { TYPE = covert_military_espionage_action }
+		}
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
@@ -773,10 +761,7 @@ covert_military_espionage_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
-		custom_tooltip = {
-			text = iw_not_at_war_tt
-			NOT = { has_war_with = scope:target_country }
-		}
+		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
 			NOT = {
@@ -809,14 +794,7 @@ covert_military_espionage_action = {
 		}
 
 
-		requirement_to_maintain = {
-			trigger = {
-				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
-				}
-			}
-		}
+		# Allowed during war: do not auto-break when war starts
 
 		requirement_to_maintain = {
 			trigger = {
@@ -873,7 +851,6 @@ covert_influence_campaign_action = {
 	requires_approval = no
 	show_confirmation_box = yes
 	show_effect_in_tooltip = yes
-	is_hostile = yes
 	should_notify_third_parties = no
 
 	accept_effect = {
@@ -890,11 +867,14 @@ covert_influence_campaign_action = {
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		covert_ops_type_below_cap = { TYPE = covert_influence_campaign_action }
 		is_power_bloc_leader = yes
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_influence_tt
+			covert_ops_type_below_cap = { TYPE = covert_influence_campaign_action }
+		}
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
@@ -907,10 +887,7 @@ covert_influence_campaign_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
-		custom_tooltip = {
-			text = iw_not_at_war_tt
-			NOT = { has_war_with = scope:target_country }
-		}
+		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
 			NOT = {
@@ -919,10 +896,6 @@ covert_influence_campaign_action = {
 					any_scope_article = { has_type = intelligence_sharing_pact }
 				}
 			}
-		}
-		custom_tooltip = {
-			text = iw_no_good_relations_tt
-			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
 			text = iw_target_not_in_bloc_tt
@@ -966,14 +939,7 @@ covert_influence_campaign_action = {
 		}
 
 
-		requirement_to_maintain = {
-			trigger = {
-				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
-				}
-			}
-		}
+		# Allowed during war: do not auto-break when war starts
 
 		requirement_to_maintain = {
 			trigger = {
@@ -1056,10 +1022,13 @@ covert_ideological_subversion_action = {
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		covert_ops_type_below_cap = { TYPE = covert_ideological_subversion_action }
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_ideological_tt
+			covert_ops_type_below_cap = { TYPE = covert_ideological_subversion_action }
+		}
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
@@ -1072,10 +1041,7 @@ covert_ideological_subversion_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
-		custom_tooltip = {
-			text = iw_not_at_war_tt
-			NOT = { has_war_with = scope:target_country }
-		}
+		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
 			NOT = {
@@ -1129,14 +1095,7 @@ covert_ideological_subversion_action = {
 		}
 
 
-		requirement_to_maintain = {
-			trigger = {
-				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
-				}
-			}
-		}
+		# Allowed during war: do not auto-break when war starts
 
 		requirement_to_maintain = {
 			trigger = {
@@ -1223,10 +1182,13 @@ covert_destabilization_action = {
 	potential = {
 		has_game_rule = covert_warfare_enabled
 		has_technology_researched = television
-		covert_ops_type_below_cap = { TYPE = covert_destabilization_action }
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_destabilization_tt
+			covert_ops_type_below_cap = { TYPE = covert_destabilization_action }
+		}
 		custom_tooltip = {
 			text = iw_has_available_slot_tt
 			covert_operations_available_slots >= 1
@@ -1239,10 +1201,7 @@ covert_destabilization_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
-		custom_tooltip = {
-			text = iw_not_at_war_tt
-			NOT = { has_war_with = scope:target_country }
-		}
+		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
 			NOT = {
@@ -1302,14 +1261,7 @@ covert_destabilization_action = {
 		}
 
 
-		requirement_to_maintain = {
-			trigger = {
-				custom_tooltip = {
-					text = iw_not_at_war_tt
-					NOT = { has_war_with = scope:target_country }
-				}
-			}
-		}
+		# Allowed during war: do not auto-break when war starts
 
 		requirement_to_maintain = {
 			trigger = {

@@ -4,9 +4,7 @@ nuclear_weapon_events.1 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_city_destruction.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -96,9 +94,7 @@ nuclear_weapon_events.2 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/tactical_nuclear_strike.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -128,9 +124,7 @@ nuclear_weapon_events.3 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_fallout_contamination.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -160,9 +154,7 @@ nuclear_weapon_events.4 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -192,9 +184,7 @@ nuclear_weapon_events.5 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_test_mushroom.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -224,9 +214,7 @@ nuclear_weapon_events.6 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -256,9 +244,7 @@ nuclear_weapon_events.7 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -288,9 +274,7 @@ nuclear_weapon_events.8 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_false_alarm_panic.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -320,9 +304,7 @@ nuclear_weapon_events.9 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/anti_nuclear_movement.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -397,9 +379,7 @@ nuclear_weapon_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud.dds"
- 	}
+	event_image = { texture = "gfx/event_pictures/anti_nuclear_movement.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -480,9 +460,7 @@ nuclear_weapon_events.11 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -571,9 +549,7 @@ nuclear_weapon_events.12 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -603,9 +579,7 @@ nuclear_weapon_events.13 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_defense_shield.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -635,9 +609,7 @@ nuclear_weapon_events.14 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_fallout_contamination.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -667,9 +639,7 @@ nuclear_weapon_events.15 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_fallout_contamination.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -695,9 +665,7 @@ nuclear_weapon_events.16 = {
     type = country_event
     placement = root
 
-    event_image = {
- 		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
- 	}
+    event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -731,9 +699,7 @@ nuclear_weapon_events.17 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/mushroom_cloud.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/nuclear_false_alarm_panic.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -811,9 +777,7 @@ nuclear_weapon_events.18 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/tactical_nuclear_strike.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -887,9 +851,7 @@ nuclear_weapon_events.19 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		video = "unspecific_fire"
-	}
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -975,9 +937,7 @@ nuclear_weapon_events.20 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		video = "event_power_plant"
-	}
+	event_image = { texture = "gfx/event_pictures/nuclear_false_alarm_panic.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1052,9 +1012,7 @@ nuclear_weapon_events.21 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1119,9 +1077,7 @@ nuclear_weapon_events.22 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		video = "europenorthamerica_political_extremism"
-	}
+	event_image = { texture = "gfx/event_pictures/nuclear_power_debate.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

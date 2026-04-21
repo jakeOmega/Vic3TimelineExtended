@@ -16,9 +16,7 @@ covert_warfare.1 = {
 	desc = covert_warfare.1.d
 	flavor = covert_warfare.1.f
 
-	event_image = {
-		video = "event_newspaper"
-	}
+	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
 	duration = 3
@@ -167,9 +165,7 @@ covert_warfare.2 = {
 	desc = covert_warfare.2.d
 	flavor = covert_warfare.2.f
 
-	event_image = {
-		video = "event_newspaper"
-	}
+	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
 	duration = 3

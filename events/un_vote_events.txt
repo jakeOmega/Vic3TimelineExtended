@@ -39,9 +39,7 @@ un_vote.1 = {
 	type = country_event
 	placement = ROOT
 
-	event_image = {
-		texture = "gfx/event_pictures/un_assembly.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1217,9 +1215,7 @@ un_vote.2 = {
 	type = country_event
 	placement = ROOT
 
-	event_image = {
-		texture = "gfx/event_pictures/un_assembly.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1826,9 +1822,7 @@ un_vote.3 = {
 	type = country_event
 	placement = ROOT
 
-	event_image = {
-		texture = "gfx/event_pictures/un_assembly.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

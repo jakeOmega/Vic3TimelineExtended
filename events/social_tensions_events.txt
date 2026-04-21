@@ -20,7 +20,7 @@ social_tensions_events.1 = {
 	}
 	flavor = social_tensions_events.1.f
 
-	event_image = { texture = "gfx/event_pictures/terrorist_attack.dds" }
+	event_image = { texture = "gfx/event_pictures/terrorist_attack_aftermath.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -122,7 +122,7 @@ social_tensions_events.2 = {
 	desc = social_tensions_events.2.d
 	flavor = social_tensions_events.2.f
 
-	event_image = { texture = "gfx/event_pictures/terrorist_attack.dds" }
+	event_image = { texture = "gfx/event_pictures/terrorist_attack_aftermath.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -217,7 +217,7 @@ social_tensions_events.3 = {
 	}
 	flavor = social_tensions_events.3.f
 
-	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
+	event_image = { texture = "gfx/event_pictures/corporate_lobbying_legislature.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -291,7 +291,7 @@ social_tensions_events.4 = {
 	desc = social_tensions_events.4.d
 	flavor = social_tensions_events.4.f
 
-	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
+	event_image = { texture = "gfx/event_pictures/monopoly_corporate_tower.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -388,7 +388,7 @@ social_tensions_events.5 = {
 	}
 	flavor = social_tensions_events.5.f
 
-	event_image = { texture = "gfx/event_pictures/police_brutality.dds" }
+	event_image = { texture = "gfx/event_pictures/police_brutality_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -499,7 +499,7 @@ social_tensions_events.6 = {
 	}
 	flavor = social_tensions_events.6.f
 
-	event_image = { texture = "gfx/event_pictures/police_brutality.dds" }
+	event_image = { texture = "gfx/event_pictures/police_brutality_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -605,7 +605,7 @@ social_tensions_events.7 = {
 	}
 	flavor = social_tensions_events.7.f
 
-	event_image = { texture = "gfx/event_pictures/war_devastation.dds" }
+	event_image = { texture = "gfx/event_pictures/wartime_atrocity_evidence.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -692,7 +692,7 @@ social_tensions_events.8 = {
 	desc = social_tensions_events.8.d
 	flavor = social_tensions_events.8.f
 
-	event_image = { texture = "gfx/event_pictures/war_devastation.dds" }
+	event_image = { texture = "gfx/event_pictures/wartime_atrocity_evidence.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -748,7 +748,7 @@ social_tensions_events.9 = {
 	}
 	flavor = social_tensions_events.9.f
 
-	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/corporate_lobbying_legislature.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -831,7 +831,7 @@ social_tensions_events.10 = {
 	desc = social_tensions_events.10.d
 	flavor = social_tensions_events.10.f
 
-	event_image = { texture = "gfx/event_pictures/monetary_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/corporate_lobbying_legislature.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -901,7 +901,7 @@ social_tensions_events.11 = {
 	}
 	flavor = social_tensions_events.11.f
 
-	event_image = { texture = "gfx/event_pictures/climate_refugees.dds" }
+	event_image = { texture = "gfx/event_pictures/immigration_wave_crowded.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
@@ -995,7 +995,7 @@ social_tensions_events.12 = {
 	}
 	flavor = social_tensions_events.12.f
 
-	event_image = { texture = "gfx/event_pictures/globalization_protest.dds" }
+	event_image = { texture = "gfx/event_pictures/immigration_wave_crowded.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -1090,7 +1090,7 @@ social_tensions_events.13 = {
 	}
 	flavor = social_tensions_events.13.f
 
-	event_image = { texture = "gfx/event_pictures/cultural_renaissance.dds" }
+	event_image = { texture = "gfx/event_pictures/religious_extremism_clash.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1165,7 +1165,7 @@ social_tensions_events.14 = {
 	desc = social_tensions_events.14.d
 	flavor = social_tensions_events.14.f
 
-	event_image = { texture = "gfx/event_pictures/cultural_renaissance.dds" }
+	event_image = { texture = "gfx/event_pictures/religious_extremism_clash.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1249,7 +1249,7 @@ social_tensions_events.15 = {
 	}
 	flavor = social_tensions_events.15.f
 
-	event_image = { texture = "gfx/event_pictures/globalization_protest.dds" }
+	event_image = { texture = "gfx/event_pictures/globalization_protest_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -1332,7 +1332,7 @@ social_tensions_events.16 = {
 	}
 	flavor = social_tensions_events.16.f
 
-	event_image = { texture = "gfx/event_pictures/cultural_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/globalization_protest_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 

@@ -9,9 +9,7 @@ secular_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/parliamentary_debate.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/religious_scandal_media.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -100,9 +98,7 @@ secular_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/social_revolution.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/social_moral_panic.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -183,9 +179,7 @@ secular_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/cultural_renaissance.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/new_age_spirituality_center.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
@@ -263,9 +257,7 @@ secular_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/parliamentary_debate.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/church_state_separation.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -376,9 +368,7 @@ secular_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/diplomatic_meeting.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/interfaith_dialogue_table.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
@@ -475,9 +465,7 @@ secular_events.100 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/political_rally.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/social_moral_panic.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -534,7 +522,7 @@ secular_events.200 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate.dds" }
+	event_image = { texture = "gfx/event_pictures/church_state_separation.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 

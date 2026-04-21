@@ -15,7 +15,7 @@ wonder_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/space_elevator_tether_descending.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -64,7 +64,7 @@ wonder_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/space_elevator_structural_alarm.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -113,7 +113,7 @@ wonder_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/space_elevator_complete.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -170,7 +170,7 @@ wonder_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/supply_chain.dds" }
+	event_image = { texture = "gfx/event_pictures/space_elevator_complete.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -221,7 +221,7 @@ wonder_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/kessler_syndrome_threat.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -273,7 +273,7 @@ wonder_events.6 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/space_elevator_generation.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
@@ -324,7 +324,7 @@ wonder_events.7 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_sovereignty_dispute.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -386,7 +386,7 @@ wonder_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/green_technology.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_solar_first_light.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -435,7 +435,7 @@ wonder_events.11 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_leak.dds" }
+	event_image = { texture = "gfx/event_pictures/solar_beam_misalignment.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -485,7 +485,7 @@ wonder_events.12 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/green_technology.dds" }
+	event_image = { texture = "gfx/event_pictures/solar_power_surplus.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -536,7 +536,7 @@ wonder_events.13 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/green_technology.dds" }
+	event_image = { texture = "gfx/event_pictures/solar_power_surplus.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -587,7 +587,7 @@ wonder_events.14 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/heatwave.dds" }
+	event_image = { texture = "gfx/event_pictures/solar_storm_orbital_threat.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -638,7 +638,7 @@ wonder_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
+	event_image = { texture = "gfx/event_pictures/solar_monopoly_debate.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -700,7 +700,7 @@ wonder_events.20 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_battlestation_construction.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -751,7 +751,7 @@ wonder_events.21 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/satellite_dish.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_surveillance_earth.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -803,7 +803,7 @@ wonder_events.22 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_peace_deterrence.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -854,7 +854,7 @@ wonder_events.23 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/war_devastation.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_misfire_impact.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -911,7 +911,7 @@ wonder_events.24 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/mushroom_cloud_distant.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_arms_race.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -968,7 +968,7 @@ wonder_events.25 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_peace_deterrence.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -1020,7 +1020,7 @@ wonder_events.26 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/satellite_dish.dds" }
+	event_image = { texture = "gfx/event_pictures/asteroid_deflection_heroic.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -1067,7 +1067,7 @@ wonder_events.30 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/genetic_engineering.dds" }
+	event_image = { texture = "gfx/event_pictures/antimatter_containment_glow.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1117,7 +1117,7 @@ wonder_events.31 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_leak.dds" }
+	event_image = { texture = "gfx/event_pictures/antimatter_containment_breach.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -1168,7 +1168,7 @@ wonder_events.32 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/mushroom_cloud_distant.dds" }
+	event_image = { texture = "gfx/event_pictures/antimatter_weapons_prototype.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -1220,7 +1220,7 @@ wonder_events.33 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
+	event_image = { texture = "gfx/event_pictures/antimatter_diplomacy_power.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -1278,7 +1278,7 @@ wonder_events.34 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_leak.dds" }
+	event_image = { texture = "gfx/event_pictures/antimatter_containment_breach.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -1335,7 +1335,7 @@ wonder_events.35 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/antimatter_propulsion_drive.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 

@@ -24,9 +24,7 @@ religious_revival_events.1 = {
 type = country_event
 placement = root
 
-event_image = {
-texture = "gfx/event_pictures/propaganda_broadcast.dds"
-}
+event_image = { texture = "gfx/event_pictures/megachurch_spectacle.dds" }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -158,9 +156,7 @@ religious_revival_events.2 = {
 type = country_event
 placement = root
 
-event_image = {
-texture = "gfx/event_pictures/propaganda_broadcast.dds"
-}
+event_image = { texture = "gfx/event_pictures/megachurch_spectacle.dds" }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -280,9 +276,7 @@ religious_revival_events.3 = {
 type = country_event
 placement = root
 
-event_image = {
-texture = "gfx/event_pictures/campus_protest.dds"
-}
+event_image = { texture = "gfx/event_pictures/liberation_theology_activists.dds" }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 icon = "gfx/interface/icons/event_icons/event_scales.dds"
@@ -409,9 +403,7 @@ religious_revival_events.4 = {
 type = country_event
 placement = root
 
-event_image = {
-texture = "gfx/event_pictures/political_rally.dds"
-}
+event_image = { texture = "gfx/event_pictures/religious_culture_war.dds" }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 icon = "gfx/interface/icons/event_icons/waving_flag.dds"
@@ -546,9 +538,7 @@ religious_revival_events.5 = {
 type = country_event
 placement = root
 
-event_image = {
-texture = "gfx/event_pictures/social_media_crisis.dds"
-}
+event_image = { texture = "gfx/event_pictures/religious_culture_war.dds" }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -659,9 +649,7 @@ religious_revival_events.6 = {
 type = country_event
 placement = root
 
-event_image = {
-texture = "gfx/event_pictures/campus_protest.dds"
-}
+event_image = { texture = "gfx/event_pictures/digital_pulpit_streaming.dds" }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 icon = "gfx/interface/icons/event_icons/event_protest.dds"
@@ -793,9 +781,7 @@ religious_revival_events.7 = {
 type = country_event
 placement = root
 
-event_image = {
-texture = "gfx/event_pictures/cultural_renaissance.dds"
-}
+event_image = { texture = "gfx/event_pictures/religious_political_power.dds" }
 
 on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 icon = "gfx/interface/icons/event_icons/event_scales.dds"

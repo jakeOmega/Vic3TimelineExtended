@@ -9,7 +9,7 @@ space_race_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/rocket_ascending_sky.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -50,7 +50,7 @@ space_race_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_earth_view.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -131,7 +131,7 @@ space_race_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/moon_landing_footprint.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -224,7 +224,7 @@ space_race_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/deep_space_probe_encounter.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -313,7 +313,7 @@ space_race_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/moon_site_selection.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -397,7 +397,7 @@ space_race_events.6 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/lunar_base_dome.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -477,7 +477,7 @@ space_race_events.7 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/mars_dusty_landing.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -555,7 +555,7 @@ space_race_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/interstellar_probe_departure.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -618,7 +618,7 @@ space_race_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/launch_pad_explosion.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -664,7 +664,7 @@ space_race_events.11 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/mission_delay_hangar.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -705,7 +705,7 @@ space_race_events.20 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/rival_space_achievement.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -848,7 +848,7 @@ space_race_events.30 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/rocket_ascending_sky.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -898,7 +898,7 @@ space_race_events.31 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/kessler_debris_field.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -965,7 +965,7 @@ space_race_events.32 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/astronaut_candidate_training.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
@@ -1036,7 +1036,7 @@ space_race_events.33 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/mars_dusty_landing.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1086,7 +1086,7 @@ space_race_events.34 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/moon_site_selection.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -1158,7 +1158,7 @@ space_race_events.35 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_logistics_planning.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1231,7 +1231,7 @@ space_race_events.36 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/lunar_base_dome.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1293,7 +1293,7 @@ space_race_events.37 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/deep_space_probe_encounter.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1348,7 +1348,7 @@ space_race_events.40 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/radiation_hazard_space.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1451,7 +1451,7 @@ space_race_events.41 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_logistics_planning.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1573,7 +1573,7 @@ space_race_events.42 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/mars_communication_room.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1636,7 +1636,7 @@ space_race_events.43 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/life_support_biosphere.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1723,7 +1723,7 @@ space_race_events.44 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/radiation_hazard_space.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -1850,7 +1850,7 @@ space_race_events.45 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/deep_space_probe_encounter.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1912,7 +1912,7 @@ space_race_events.46 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/lunar_base_dome.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2001,7 +2001,7 @@ space_race_events.47 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/kessler_debris_field.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -2084,7 +2084,7 @@ space_race_events.48 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/crew_psychology_isolation.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
@@ -2171,7 +2171,7 @@ space_race_events.49 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_logistics_planning.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2255,7 +2255,7 @@ space_race_events.50 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/private_rocket_landing.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2349,7 +2349,7 @@ space_race_events.51 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/space_tourism_luxury.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2419,7 +2419,7 @@ space_race_events.52 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/international_station_construction.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -2495,7 +2495,7 @@ space_race_events.53 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/international_station_construction.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2553,7 +2553,7 @@ space_race_events.54 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/reentry_fireball.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2656,7 +2656,7 @@ space_race_events.55 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_logistics_planning.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2826,7 +2826,7 @@ space_race_events.12 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/launch_pad_explosion.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -2871,7 +2871,7 @@ space_race_events.13 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/deep_space_silence.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -2915,7 +2915,7 @@ space_race_events.14 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/habitat_breach_alarm.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -2958,7 +2958,7 @@ space_race_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/computer_error_cockpit.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -3015,7 +3015,7 @@ space_race_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/launch_pad_explosion.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -3059,7 +3059,7 @@ space_race_events.17 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/crew_medical_crisis.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
@@ -3106,7 +3106,7 @@ space_race_events.18 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/program_scandal_newsroom.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -3153,7 +3153,7 @@ space_race_events.19 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/sabotage_investigation.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -3203,7 +3203,7 @@ space_race_events.21 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/mission_delay_hangar.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -3249,7 +3249,7 @@ space_race_events.22 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/mission_delay_hangar.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -3300,7 +3300,7 @@ space_race_events.23 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/computer_error_cockpit.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -3346,7 +3346,7 @@ space_race_events.24 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/budget_hearing_congress.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -3394,7 +3394,7 @@ space_race_events.25 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/mission_delay_hangar.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -3432,7 +3432,7 @@ space_race_events.26 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/budget_hearing_congress.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -3497,7 +3497,7 @@ space_race_events.70 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/launch_pad_explosion.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -3553,7 +3553,7 @@ space_race_events.71 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/capsule_seal_failure.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -3601,7 +3601,7 @@ space_race_events.72 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/assembly_building_fire.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -3657,7 +3657,7 @@ space_race_events.73 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/program_scandal_newsroom.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
 
@@ -3715,7 +3715,7 @@ space_race_events.74 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/engineering_breakthrough_lab.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -3770,7 +3770,7 @@ space_race_events.75 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_station.dds" }
+	event_image = { texture = "gfx/event_pictures/mission_delay_hangar.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -3838,7 +3838,7 @@ space_race_events.76 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/program_cancelled_empty.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 

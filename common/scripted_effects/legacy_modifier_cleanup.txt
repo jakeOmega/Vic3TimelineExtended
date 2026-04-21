@@ -77,6 +77,18 @@ legacy_je_modifier_cleanup_effect = {
 	if = { limit = { has_modifier = bubble_inertia_extreme } remove_modifier = bubble_inertia_extreme }
 	if = { limit = { has_modifier = financial_cycle_government_fiscal_policy_effect } remove_modifier = financial_cycle_government_fiscal_policy_effect }
 
+	# ── Heir Education (je:je_heir_education) ──
+	# Focus modifiers can persist if the JE was invalidated on an older version without
+	# an on_invalid hook (e.g. switching away from monarchy). Remove if the JE isn't active.
+	if = {
+		limit = { NOT = { has_journal_entry = je_heir_education } }
+		if = { limit = { has_modifier = heir_ed_trait_focus_active } remove_modifier = heir_ed_trait_focus_active }
+		if = { limit = { has_modifier = heir_ed_ideology_focus_active } remove_modifier = heir_ed_ideology_focus_active }
+		if = { limit = { has_modifier = heir_ed_ig_focus_active } remove_modifier = heir_ed_ig_focus_active }
+		if = { limit = { has_modifier = heir_education_innovation_cost } remove_modifier = heir_education_innovation_cost }
+		if = { limit = { has_modifier = heir_education_grace_period } remove_modifier = heir_education_grace_period }
+	}
+
 	# ── Global Warming (je:je_global_warming) ──
 	if = { limit = { has_modifier = global_warming } remove_modifier = global_warming }
 	if = { limit = { has_modifier = carbon_tax_modifier } remove_modifier = carbon_tax_modifier }

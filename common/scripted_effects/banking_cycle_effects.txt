@@ -18,7 +18,7 @@ banking_cycle_random_event_effect = {
 			var:crash <= 0  # don't fire events in the same month as a crash
 		}
 		random_list = {
-			120 = { } # no event this month
+			260 = { } # no event this month
 
 			# ---- EARLY ERA (no extra tech gate beyond stock_exchange) ----
 
@@ -41,7 +41,7 @@ banking_cycle_random_event_effect = {
 				else = {
 					trigger_event = { id = banking_cycle_events.1 }
 				}
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 2: Foreign Capital Inflow (stable+, not at war)
 			0 = {
@@ -60,7 +60,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.2 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 3: Credit Crunch Fears (stagnation/downturn)
 			0 = {
@@ -70,7 +70,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_downturn = yes } add = 9 }
 				}
 				trigger_event = { id = banking_cycle_events.3 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 4: Country Bank Run (RARE, HIGH IMPACT - downturn/panic)
 			0 = {
@@ -90,7 +90,7 @@ banking_cycle_random_event_effect = {
 				else = {
 					trigger_event = { id = banking_cycle_events.4 }
 				}
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 5: Railway Bond Fever (expansion+, railroads tech)
 			0 = {
@@ -109,7 +109,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.5 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 6: Harvest Failure & Credit (any phase)
 			0 = {
@@ -127,7 +127,7 @@ banking_cycle_random_event_effect = {
 				else = {
 					trigger_event = { id = banking_cycle_events.6 }
 				}
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 
 			# ---- MID ERA (central_banking / investment_banks / mutual_funds) ----
@@ -145,7 +145,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.7 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 8: Novel Financial Instrument (expansion+, investment_banks)
 			0 = {
@@ -165,7 +165,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.8 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 9: Asset Price Uncertainty (expansion/boom, bubble>=30, central_banking)
 			0 = {
@@ -184,7 +184,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.9 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 10: Sovereign Debt Scare (stagnation/downturn/panic, central_banking)
 			0 = {
@@ -213,7 +213,7 @@ banking_cycle_random_event_effect = {
 				else = {
 					trigger_event = { id = banking_cycle_events.10 }
 				}
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 11: Insurance Sector Wobble (expansion+, mutual_funds)
 			0 = {
@@ -232,7 +232,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.11 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 12: Gold Standard Pressure (any phase, international_exchange_standards, gold standard law)
 			0 = {
@@ -247,7 +247,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.12 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 13: Industrial Overinvestment (boom/frenzy, corporate_management)
 			0 = {
@@ -263,7 +263,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.13 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 
 			# ---- LATE ERA (keynesian_economics / modern_financial_instruments / consumer_credit) ----
@@ -282,7 +282,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.14 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 15: Currency Crisis (downturn/panic, modern_financial_instruments)
 			0 = {
@@ -310,7 +310,7 @@ banking_cycle_random_event_effect = {
 				else = {
 					trigger_event = { id = banking_cycle_events.15 }
 				}
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 16: CB Independence Debate (stable+, keynesian_economics, not unregulated banking)
 			0 = {
@@ -343,7 +343,7 @@ banking_cycle_random_event_effect = {
 				else = {
 					trigger_event = { id = banking_cycle_events.16 }
 				}
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 17: Consumer Credit Boom (expansion+, consumer_credit)
 			0 = {
@@ -371,7 +371,7 @@ banking_cycle_random_event_effect = {
 				else = {
 					trigger_event = { id = banking_cycle_events.17 }
 				}
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 18: Derivatives Scandal (RARE, boom/frenzy, modern_financial_instruments)
 			0 = {
@@ -387,7 +387,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.18 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 19: Sovereign Wealth Fund Proposal (expansion+, keynesian_economics, NOT laissez_faire)
 			0 = {
@@ -405,7 +405,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.19 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 20: Shadow Banking Discovery (RARE, HIGH IMPACT, boom/frenzy, modern_financial_instruments, favors weak regulation)
 			0 = {
@@ -439,7 +439,7 @@ banking_cycle_random_event_effect = {
 				else = {
 					trigger_event = { id = banking_cycle_events.20 }
 				}
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 
 			# ---- NEW EVENTS 21-45 ----
@@ -459,7 +459,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.21 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 22: New Provincial Exchange (expansion+, no extra tech)
 			0 = {
@@ -477,7 +477,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.22 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 23: Banking Scandal (any phase, no extra tech)
 			0 = {
@@ -486,7 +486,7 @@ banking_cycle_random_event_effect = {
 					add = 4
 				}
 				trigger_event = { id = banking_cycle_events.23 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 24: Warehouse Receipts Fraud (expansion+, bubble >= 20)
 			0 = {
@@ -505,7 +505,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.24 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 25: Trade Bill Innovation (stable+, not at war)
 			0 = {
@@ -524,7 +524,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.25 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 
 			# ---- MID ERA NEW EVENTS ----
@@ -546,7 +546,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.26 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 27: Telegraph Banking Revolution (expansion+, central_banking)
 			0 = {
@@ -564,7 +564,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.27 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 28: Interbank Lending Freeze (stagnation/downturn, central_banking)
 			0 = {
@@ -583,7 +583,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_downturn = yes } add = 3 }
 				}
 				trigger_event = { id = banking_cycle_events.28 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 29: Agricultural Cooperative Banking (stable+, central_banking, favors mutual banking law)
 			0 = {
@@ -606,7 +606,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.29 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 30: Foreign Debt Arbitrage (expansion+, investment_banks)
 			0 = {
@@ -626,7 +626,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.30 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 31: Bank Holiday Proposal (downturn/panic, central_banking)
 			0 = {
@@ -645,7 +645,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
 				trigger_event = { id = banking_cycle_events.31 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 32: Trust Company Failure (RARE, boom/frenzy, mutual_funds, bubble >= 30)
 			0 = {
@@ -661,7 +661,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.32 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 33: Commercial Paper Market (stable/expansion, investment_banks)
 			0 = {
@@ -679,7 +679,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.33 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 34: Deposit Insurance Debate (stagnation+, central_banking)
 			0 = {
@@ -698,7 +698,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.34 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 35: Joint-Stock Company Boom (expansion+, corporate_management)
 			0 = {
@@ -717,7 +717,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.35 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 
 			# ---- LATE ERA NEW EVENTS ----
@@ -739,7 +739,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.36 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 37: Mortgage-Backed Securities (boom/frenzy, consumer_credit, favors weak regulation)
 			0 = {
@@ -764,7 +764,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.37 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 38: Microfinance Initiative (stable+, keynesian_economics)
 			0 = {
@@ -783,7 +783,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.38 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 39: Quantitative Easing Debate (downturn/panic, keynesian_economics, requires fiat/digital currency + regulated banking)
 			0 = {
@@ -807,7 +807,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
 				trigger_event = { id = banking_cycle_events.39 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 40: Credit Rating Agency Failure (boom/frenzy, modern_financial_instruments)
 			0 = {
@@ -822,7 +822,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.40 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 41: Student Loan Burden (expansion+, consumer_credit)
 			0 = {
@@ -841,7 +841,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.41 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 42: Green Bond Initiative (stable+, keynesian_economics)
 			0 = {
@@ -861,7 +861,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.42 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 43: Venture Capital Boom (expansion/boom, modern_financial_instruments)
 			0 = {
@@ -879,7 +879,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.43 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 44: Predatory Lending Scandal (boom/frenzy, consumer_credit, blocked by prudential banking, favors weak regulation)
 			0 = {
@@ -904,7 +904,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.44 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 45: International Bailout Request (downturn/panic, keynesian_economics)
 			0 = {
@@ -921,7 +921,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.45 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 
 			# ---- COMMAND ECONOMY EXCLUSIVE EVENTS ----
@@ -934,7 +934,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_downturn = yes } add = 9 }
 				}
 				trigger_event = { id = banking_cycle_events.50 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 51: Factory Director Corruption (expansion+)
 			0 = {
@@ -945,7 +945,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 5 }
 				}
 				trigger_event = { id = banking_cycle_events.51 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 52: Resource Hoarding Crisis (boom/frenzy)
 			0 = {
@@ -955,7 +955,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 8 }
 				}
 				trigger_event = { id = banking_cycle_events.52 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 53: Black Market Emergence (downturn/panic)
 			0 = {
@@ -965,7 +965,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_panic = yes } add = 9 }
 				}
 				trigger_event = { id = banking_cycle_events.53 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 54: Worker Motivation Campaign (stable+)
 			0 = {
@@ -983,7 +983,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.54 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 55: Socialist Fraternal Aid (downturn/panic, keynesian)
 			0 = {
@@ -996,7 +996,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_panic = yes } add = 6 }
 				}
 				trigger_event = { id = banking_cycle_events.55 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 56: Industrial Sabotage Investigation (expansion+, central_banking)
 			0 = {
@@ -1010,7 +1010,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 4 }
 				}
 				trigger_event = { id = banking_cycle_events.56 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 57: Collectivization Efficiency Drive (boom/frenzy, corporate_management)
 			0 = {
@@ -1023,7 +1023,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 6 }
 				}
 				trigger_event = { id = banking_cycle_events.57 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 
 			# ---- COOPERATIVE OWNERSHIP EXCLUSIVE EVENTS ----
@@ -1036,7 +1036,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_downturn = yes } add = 9 }
 				}
 				trigger_event = { id = banking_cycle_events.60 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 61: Free Rider Problem (expansion+)
 			0 = {
@@ -1047,7 +1047,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 5 }
 				}
 				trigger_event = { id = banking_cycle_events.61 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 62: Democratic Investment Gridlock (boom/frenzy)
 			0 = {
@@ -1057,7 +1057,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 8 }
 				}
 				trigger_event = { id = banking_cycle_events.62 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 63: Worker-Owner Burnout (downturn/panic)
 			0 = {
@@ -1067,7 +1067,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_panic = yes } add = 9 }
 				}
 				trigger_event = { id = banking_cycle_events.63 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 64: Cooperative Export Success (stable+)
 			0 = {
@@ -1085,7 +1085,7 @@ banking_cycle_random_event_effect = {
 					}
 				}
 				trigger_event = { id = banking_cycle_events.64 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 65: Mutual Insurance Fund Strain (downturn/panic, keynesian)
 			0 = {
@@ -1098,7 +1098,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_panic = yes } add = 6 }
 				}
 				trigger_event = { id = banking_cycle_events.65 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 66: Innovation Through Collaboration (expansion+, central_banking)
 			0 = {
@@ -1112,7 +1112,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 4 }
 				}
 				trigger_event = { id = banking_cycle_events.66 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 67: Generational Leadership Transition (boom/frenzy, corporate_management)
 			0 = {
@@ -1125,7 +1125,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_frenzy = yes } add = 6 }
 				}
 				trigger_event = { id = banking_cycle_events.67 }
-				set_variable = { name = banking_event_cooldown value = 12 }
+				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 		}
 	}
@@ -1408,6 +1408,11 @@ banking_crisis_wave_check_great_depression = {
 
 # ---- End of crisis wave tracking ----
 
+# 0. Weekly effects
+banking_cycle_weekly_effects = {
+	add_investment_pool = investment_pool_banking_cycle_add
+}
+
 # 1. Fiscal policy modifier: re-apply every month to reflect current deficit/surplus.
 banking_cycle_update_fiscal_policy = {
 	je:je_banking_cycle = { remove_modifier = financial_cycle_government_fiscal_policy_effect }
@@ -1441,9 +1446,6 @@ banking_cycle_advance_variables = {
 		name = finance_cycle_value
 		add = "modifier:country_finance_value_monthly_add"
 	}
-
-	# Investment pool contribution
-	add_investment_pool = investment_pool_banking_cycle_add
 
 	# Random mean-reversion nudge: biased towards equilibrium
 	# Magnitude scales with country_banking_random_momentum_mult modifier
@@ -1792,5 +1794,43 @@ banking_cycle_cleanup_capital_controls = {
 			}
 		}
 		je:je_banking_cycle = { remove_modifier = banking_capital_controls_out }
+	}
+}
+
+# 8. Command economy: keep investment pool net income at zero.
+#    Under law_command_economy the state should be funding all planned investment
+#    directly from the treasury. This effect removes and re-applies the
+#    planning_treasury_pool_balance modifier on the JE with a multiplier chosen
+#    so that investment_pool_net_income + multiplier = 0 next tick.
+#
+#    Note: no prior-multiplier subtraction is needed because
+#    country_weekly_investment_pool_add is a mod-created modifier key that the
+#    engine does not include in investment_pool_net_income, so our contribution
+#    is never double-counted in the read.
+#
+#    Called from:
+#      - je_banking_cycle on_monthly_pulse (monthly recalibration)
+#      - ce_invest_pool_inject / ce_invest_pool_withdraw button effects
+#        (refresh after one-shot treasury<->pool transfers)
+banking_cycle_update_ce_pool_balance = {
+	if = {
+		limit = { has_law = law_type:law_command_economy }
+		je:je_banking_cycle = {
+			if = {
+				limit = { has_modifier = planning_treasury_pool_balance }
+				remove_modifier = planning_treasury_pool_balance
+			}
+			add_modifier = {
+				name = planning_treasury_pool_balance
+				multiplier = ce_treasury_pool_balance_multiplier
+			}
+		}
+	}
+	else = {
+		# Law is no longer command economy — strip the balance modifier.
+		if = {
+			limit = { je:je_banking_cycle ?= { has_modifier = planning_treasury_pool_balance } }
+			je:je_banking_cycle = { remove_modifier = planning_treasury_pool_balance }
+		}
 	}
 }

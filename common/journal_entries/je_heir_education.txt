@@ -273,6 +273,13 @@ je_heir_education = {
 		NOT = { has_law = law_type:law_monarchy }
 	}
 
+	on_invalid = {
+		# Clean up all heir education variables and modifiers when the JE is invalidated
+		# (e.g. government type switched away from monarchy). Without this, authority
+		# cost modifiers like heir_ed_trait_focus_active would persist indefinitely.
+		heir_education_cleanup_effect = yes
+	}
+
 	progressbar = no
 	should_be_pinned_by_default = yes
 

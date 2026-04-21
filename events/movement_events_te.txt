@@ -10,9 +10,7 @@ movement_events_te.1 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/political_rally.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -142,9 +140,7 @@ movement_events_te.2 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/parliamentary_debate.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -239,9 +235,7 @@ movement_events_te.3 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/cultural_renaissance.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -329,9 +323,7 @@ movement_events_te.4 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/human_rights.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -471,9 +463,7 @@ movement_events_te.13 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/political_rally.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/digital_activism_screens.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -581,9 +571,7 @@ movement_events_te.14 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/labor_dispute.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/digital_activism_screens.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -692,9 +680,7 @@ movement_events_te.15 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/political_rally.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/transhumanist_demonstration.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -792,9 +778,7 @@ movement_events_te.16 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/parliamentary_debate.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/transhumanist_demonstration.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -901,9 +885,7 @@ movement_events_te.100 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/parliamentary_debate.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/movement_triumph_celebration.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1017,9 +999,7 @@ movement_events_te.5 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/political_rally.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/economic_boycott_action.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1113,9 +1093,7 @@ movement_events_te.6 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/political_rally.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/economic_boycott_action.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1221,9 +1199,7 @@ movement_events_te.7 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/political_rally.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/economic_boycott_action.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1322,9 +1298,7 @@ movement_events_te.8 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/labor_dispute.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/economic_boycott_action.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1428,9 +1402,7 @@ movement_events_te.9 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/labor_dispute.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/draft_resistance_protest.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1530,9 +1502,7 @@ movement_events_te.10 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/labor_dispute.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/draft_resistance_protest.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1623,9 +1593,7 @@ movement_events_te.11 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/labor_dispute.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/draft_resistance_protest.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1716,9 +1684,7 @@ movement_events_te.12 = {
 	type = country_event
 	placement = root
 
-	event_image = {
-		texture = "gfx/event_pictures/parliamentary_debate.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/draft_resistance_protest.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1809,7 +1775,7 @@ movement_events_te.200 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/political_rally.dds" }
+	event_image = { texture = "gfx/event_pictures/movement_crushed_aftermath.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -1846,7 +1812,7 @@ movement_events_te.201 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/political_rally.dds" }
+	event_image = { texture = "gfx/event_pictures/movement_triumph_celebration.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
