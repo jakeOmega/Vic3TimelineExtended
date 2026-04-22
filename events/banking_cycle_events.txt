@@ -160,7 +160,7 @@ banking_cycle_events.101 = {
 		}
 		add_loyalists = {
 			value = small_radicals
-			strata = upper
+			pop_type = bureaucrats
 		}
 		ai_chance = {
 			base = 40
@@ -199,7 +199,7 @@ banking_cycle_events.101 = {
 		}
 		add_radicals = {
 			value = medium_radicals
-			strata = upper
+			pop_type = bureaucrats
 		}
 		ai_chance = {
 			base = 25
@@ -342,7 +342,7 @@ banking_cycle_events.104 = {
 		add_modifier = { name = banking_event_selective_bailout days = normal_modifier_time is_decaying = yes }
 		add_modifier = { name = banking_event_selective_bailout_cost multiplier = banking_event_expense_medium days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals strata = lower }
-		add_loyalists = { value = small_radicals strata = upper }
+		add_loyalists = { value = small_radicals pop_type = bureaucrats }
 		ai_chance = { base = 40 }
 	}
 
@@ -1314,7 +1314,7 @@ banking_cycle_events.110 = {
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
 		add_modifier = { name = banking_event_austerity days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals strata = lower }
-		add_loyalists = { value = small_radicals strata = upper }
+		add_loyalists = { value = small_radicals pop_type = bureaucrats }
 		ai_chance = { base = 45 }
 	}
 
@@ -1332,7 +1332,7 @@ banking_cycle_events.110 = {
 		custom_tooltip = { text = "CYCLE_VALUE_MINUS_10_DESC" change_variable = { name = finance_cycle_value add = -10 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
 		add_modifier = { name = banking_event_partial_default days = long_modifier_time is_decaying = yes }
-		add_radicals = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals pop_type = bureaucrats }
 		ai_chance = { base = 20 modifier = { add = 20 banking_cycle_is_panic = yes } }
 	}
 
@@ -1912,7 +1912,7 @@ banking_cycle_events.115 = {
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
 		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
 		add_modifier = { name = banking_event_emergency_controls days = normal_modifier_time is_decaying = yes }
-		add_radicals = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals pop_type = bureaucrats }
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
 	}
 
@@ -2107,7 +2107,7 @@ banking_cycle_events.116 = {
 		default_option = yes
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
 		add_modifier = { name = banking_event_cb_independence days = long_modifier_time is_decaying = yes }
-		add_radicals = { value = small_radicals pop_type = capitalists }
+		add_radicals = { value = small_radicals pop_type = academics }
 		ai_chance = { base = 50 }
 	}
 
@@ -2695,7 +2695,7 @@ banking_cycle_events.120 = {
 		custom_tooltip = { text = "MOMENTUM_MINUS_4_DESC" change_variable = { name = finance_cycle_momentum add = -4 } }
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_25_DESC" change_variable = { name = bubble_pressure add = -25 } }
 		add_modifier = { name = banking_event_shadow_regulation days = long_modifier_time is_decaying = yes }
-		add_radicals = { value = large_radicals strata = upper }
+		add_radicals = { value = large_radicals pop_type = bureaucrats }
 		ai_chance = { base = 40 modifier = { add = 20 banking_cycle_bubble_risk_high = yes } }
 	}
 
@@ -5733,6 +5733,429 @@ banking_cycle_events.67 = {
 		ai_chance = {
 			base = 25
 			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
+}
+
+
+# --------------------------------------------------------------------------
+# 46. The Northern Pacific Corner
+# Expansion/boom with high bubble pressure. A cornering attempt on a marquee
+# stock forces shorts to sell everything else to cover — massive sector churn.
+# --------------------------------------------------------------------------
+banking_cycle_events.46 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = banking_cycle_events.46.t
+	desc = banking_cycle_events.46.d
+	flavor = banking_cycle_events.46.f
+
+	duration = 3
+
+	immediate = {}
+
+	# Option A: Let the corner run its course — a spectacular sideshow, but it hollows out the rest of the market
+	option = {
+		name = banking_cycle_events.46.a
+		default_option = yes
+		custom_tooltip = { text = "BUBBLE_PRESSURE_10_DESC" change_variable = { name = bubble_pressure add = 10 } }
+		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = capitalists
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = shopkeepers
+		}
+		ai_chance = {
+			base = 30
+			modifier = { add = -25 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option B: Broker a pooled settlement between the combatants — a costly political favor, but it stabilizes the exchange
+	option = {
+		name = banking_cycle_events.46.b
+		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
+		add_modifier = {
+			name = banking_event_selective_bailout_cost
+			multiplier = banking_event_expense_small
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 40
+			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option C: Order an emergency suspension of trading — crushes the bubble but enrages the financial class
+	option = {
+		name = banking_cycle_events.46.c
+		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
+		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		add_radicals = {
+			value = medium_radicals
+			pop_type = capitalists
+		}
+		ig:ig_industrialists = {
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				months = 36
+			}
+		}
+		ai_chance = {
+			base = 20
+			modifier = { add = 30 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
+}
+
+
+# --------------------------------------------------------------------------
+# 47. Trust Company Failure
+# Downturn/panic phase. An unregulated trust collapses after a failed corner,
+# threatening contagion across the banking system (Knickerbocker 1907).
+# --------------------------------------------------------------------------
+banking_cycle_events.47 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/bank_run_crowd.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = banking_cycle_events.47.t
+	desc = banking_cycle_events.47.d
+	flavor = banking_cycle_events.47.f
+
+	duration = 3
+
+	immediate = {}
+
+	# Option A: Let the trust collapse — the sound institutions will prevail, depositors pay the price
+	option = {
+		name = banking_cycle_events.47.a
+		default_option = yes
+		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_10_DESC" change_variable = { name = bubble_pressure add = -10 } }
+		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 35
+		}
+	}
+
+	# Option B: Organize a private rescue consortium — the bankers bail each other out, at moderate public cost
+	option = {
+		name = banking_cycle_events.47.b
+		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = capitalists
+		}
+		add_modifier = {
+			name = banking_event_selective_bailout
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_event_selective_bailout_cost
+			multiplier = banking_event_expense_medium
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 30
+			modifier = { add = 25 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	# Option C: Commit public treasury funds to guarantee deposits — expensive and politically charged
+	option = {
+		name = banking_cycle_events.47.c
+		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_modifier = {
+			name = banking_event_deposit_guarantee_emergency
+			multiplier = banking_event_expense_large
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 25
+			modifier = { add = 30 banking_cycle_is_panic = yes }
+		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
+}
+
+
+# --------------------------------------------------------------------------
+# 48. The "New Era" Delusion
+# Boom/frenzy with high bubble. Prominent economists declare that the old rules
+# no longer apply and the market has reached a "permanently high plateau."
+# --------------------------------------------------------------------------
+banking_cycle_events.48 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = banking_cycle_events.48.t
+	desc = banking_cycle_events.48.d
+	flavor = banking_cycle_events.48.f
+
+	duration = 3
+
+	immediate = {}
+
+	# Option A: Endorse the new thinking — pour fuel on the frenzy, delight the financial class
+	option = {
+		name = banking_cycle_events.48.a
+		default_option = yes
+		custom_tooltip = { text = "BUBBLE_PRESSURE_15_DESC" change_variable = { name = bubble_pressure add = 15 } }
+		custom_tooltip = { text = "MOMENTUM_3_DESC" change_variable = { name = finance_cycle_momentum add = 3 } }
+		add_loyalists = {
+			value = medium_radicals
+			pop_type = capitalists
+		}
+		ai_chance = {
+			base = 25
+			modifier = { add = -30 banking_cycle_bubble_risk_high = yes }
+			modifier = { add = 15 banking_cycle_is_frenzy = yes }
+		}
+	}
+
+	# Option B: Decline to comment — the state has no business pronouncing on valuations
+	option = {
+		name = banking_cycle_events.48.b
+		custom_tooltip = { text = "BUBBLE_PRESSURE_8_DESC" change_variable = { name = bubble_pressure add = 8 } }
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	# Option C: Publish a Treasury warning that arithmetic still applies — furious capitalists, grateful intelligentsia
+	option = {
+		name = banking_cycle_events.48.c
+		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		add_radicals = {
+			value = medium_radicals
+			pop_type = capitalists
+		}
+		ig:ig_intelligentsia = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				months = 36
+			}
+		}
+		ai_chance = {
+			base = 20
+			modifier = { add = 30 banking_cycle_bubble_risk_high = yes }
+		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
+}
+
+
+# --------------------------------------------------------------------------
+# 58. End the Gold Standard
+# Downturn/panic with modern financial instruments. The fixed-rate convertibility
+# system is collapsing. Abandon the peg in a surprise address, or defend it?
+# --------------------------------------------------------------------------
+banking_cycle_events.58 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = banking_cycle_events.58.t
+	desc = banking_cycle_events.58.d
+	flavor = banking_cycle_events.58.f
+
+	duration = 3
+
+	immediate = {}
+
+	# Option A: Suspend convertibility and float the currency — prestige hit, but the crisis ends
+	option = {
+		name = banking_cycle_events.58.a
+		default_option = yes
+		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
+		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = medium_radicals
+			pop_type = capitalists
+		}
+		add_modifier = {
+			name = banking_event_managed_devaluation
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 35
+			modifier = { add = 20 banking_cycle_is_panic = yes }
+		}
+	}
+
+	# Option B: Defend the peg with emergency spending — ruinously expensive, may not even work
+	option = {
+		name = banking_cycle_events.58.b
+		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		add_modifier = {
+			name = banking_event_gold_defense
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_event_fx_defense
+			multiplier = banking_event_expense_huge
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 30
+			modifier = { add = -20 banking_cycle_is_panic = yes }
+		}
+	}
+
+	# Option C: Convene an international currency conference — slow, modest cost, preserves standing
+	option = {
+		name = banking_cycle_events.58.c
+		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
+		add_modifier = {
+			name = banking_event_fx_defense
+			multiplier = banking_event_expense_small
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 35
+		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
+}
+
+
+# --------------------------------------------------------------------------
+# 59. The Rogue Trader
+# Boom/frenzy with modern instruments. A single trader has hidden catastrophic
+# losses in a private account, now about to surface (Barings/Sumitomo/Kerviel).
+# --------------------------------------------------------------------------
+banking_cycle_events.59 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = banking_cycle_events.59.t
+	desc = banking_cycle_events.59.d
+	flavor = banking_cycle_events.59.f
+
+	duration = 3
+
+	immediate = {}
+
+	# Option A: Let the firm fail — the counterparties knew the risks, the market will learn its lesson
+	option = {
+		name = banking_cycle_events.59.a
+		default_option = yes
+		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
+		custom_tooltip = { text = "MOMENTUM_MINUS_3_DESC" change_variable = { name = finance_cycle_momentum add = -3 } }
+		add_radicals = {
+			value = medium_radicals
+			pop_type = capitalists
+		}
+		ai_chance = {
+			base = 30
+			modifier = { add = 20 banking_cycle_is_frenzy = yes }
+		}
+	}
+
+	# Option B: Arrange a quiet acquisition before the news breaks — the public pays the bill invisibly
+	option = {
+		name = banking_cycle_events.59.b
+		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
+		add_modifier = {
+			name = banking_event_selective_bailout_cost
+			multiplier = banking_event_expense_medium
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	# Option C: Mandate sector-wide public audits — honest money chills the whole market
+	option = {
+		name = banking_cycle_events.59.c
+		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		add_radicals = {
+			value = medium_radicals
+			pop_type = capitalists
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_modifier = {
+			name = banking_event_investigation_chill
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 30
+			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
 		}
 	}
 

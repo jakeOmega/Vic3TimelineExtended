@@ -1141,6 +1141,18 @@ nuclear_disarmament = {
 	possible = {
 		scope:other_country = { has_technology_researched = nuclear_weapons }
 		NOT = { scope:other_country = { modifier:nuclear_disarmament = yes } }
+		# Do not demand disarmament from a country that is receiving (or promised) nuclear aid
+		NOT = { scope:other_country = { modifier:receiving_nuclear_program_aid = yes } }
+		NOT = {
+			scope:source_country = {
+				any_scope_treaty = {
+					any_scope_article = {
+						has_type = nuclear_program_aid
+						target_country = root
+					}
+				}
+			}
+		}
 	}
 
 	can_ratify = {
@@ -1372,6 +1384,7 @@ nuclear_program_aid = {
 
 	target_modifier = {
 		receiving_nuclear_program_aid = yes
+		country_nuclear_program_progress_mult = 1.0
 	}
 
 	usage_limit = once_per_side
@@ -2065,6 +2078,18 @@ nuclear_program_pause = {
 		scope:other_country = { has_technology_researched = nuclear_weapons }
 		NOT = { scope:other_country = { modifier:nuclear_disarmament = yes } }
 		NOT = { scope:other_country = { modifier:nuclear_program_pause = yes } }
+		# Also disallow freezing if the target is receiving (or promised) nuclear aid
+		NOT = { scope:other_country = { modifier:receiving_nuclear_program_aid = yes } }
+		NOT = {
+			scope:source_country = {
+				any_scope_treaty = {
+					any_scope_article = {
+						has_type = nuclear_program_aid
+						target_country = root
+					}
+				}
+			}
+		}
 	}
 
 	can_ratify = {

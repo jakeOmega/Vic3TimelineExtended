@@ -183,6 +183,8 @@
  building_generic_ordnance_depot_desc:0 "A munitions storage and testing facility that keeps the nation's military well-supplied with ammunition."
  building_generic_ore_processing:0 "Ore Processing Plant"
  building_generic_ore_processing_desc:0 "A central facility for crushing, smelting, and refining metallic ores."
+ building_generic_paper_mill_complex:0 "Paper Mill Complex"
+ building_generic_paper_mill_complex_desc:0 "An integrated pulp and paper complex that turns timber into paper stock and the clerical backbone of modern commerce."
  building_generic_pipeline_terminus:0 "Cross-Continental Pipeline Terminus"
  building_generic_power_hub:0 "High-Efficiency Power Hub"
  building_generic_proving_grounds:0 "Strategic Proving Grounds"

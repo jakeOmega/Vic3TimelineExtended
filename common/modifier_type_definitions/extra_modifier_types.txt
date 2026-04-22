@@ -1222,6 +1222,16 @@ nuclear_program_pause = {
 	script_only = yes
 }
 
+country_nuclear_program_progress_mult = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
 un_membership_obligation = {
 	color = neutral
 	boolean = yes
@@ -2251,6 +2261,11 @@ state_building_generic_textile_depot_max_level_add = {
 	decimals = 0
 }
 state_building_generic_cold_storage_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_paper_mill_complex_max_level_add = {
 	color = good
 	percent = no
 	decimals = 0

@@ -3417,6 +3417,46 @@ building_generic_cold_storage = {
     }
 }
 
+# --- Generic Paper Mill Complex (Paper) ---
+building_generic_paper_mill_complex = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_paper_mill_complex
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_paper
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_paper_mill_complex
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_paper_mill_complex
+					}
+				}
+			}
+		}
+	}
+}
+
 # --- Generic Foundry Complex (Steel) ---
 building_generic_foundry_complex = {
     building_group = bg_company_buildings

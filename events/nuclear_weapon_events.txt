@@ -304,7 +304,7 @@ nuclear_weapon_events.9 = {
     type = country_event
     placement = root
 
-    event_image = { texture = "gfx/event_pictures/anti_nuclear_movement.dds" }
+    event_image = { texture = "gfx/event_pictures/nuclear_test_mushroom.dds" }
 
  	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

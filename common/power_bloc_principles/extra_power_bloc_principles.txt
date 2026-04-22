@@ -2254,6 +2254,7 @@ principle_environmental_sustainability_1 = {
 		goods_input_oil_mult = -0.05
 		goods_input_coal_mult = -0.05
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.25
+		country_greenhouse_gas_emissions_mult = -0.05
 	}
 	
 	ai_weight = {
@@ -2286,6 +2287,7 @@ principle_environmental_sustainability_2 = {
 		goods_input_oil_mult = -0.1
 		goods_input_coal_mult = -0.1
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
+		country_greenhouse_gas_emissions_mult = -0.1
 	}
 
 	institution = institution_ministry_of_the_environment
@@ -2312,6 +2314,7 @@ principle_environmental_sustainability_3 = {
 		goods_input_coal_mult = -0.15
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
 		state_pollution_reduction_health_mult = 0.2
+		country_greenhouse_gas_emissions_mult = -0.15
 	}
 
 	institution = institution_ministry_of_the_environment
@@ -2340,6 +2343,7 @@ principle_environmental_sustainability_4 = {
 		goods_input_oil_mult = -0.2
 		goods_input_coal_mult = -0.2
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
+		country_greenhouse_gas_emissions_mult = -0.2
 	}
 
 	institution = institution_ministry_of_the_environment
@@ -2369,6 +2373,7 @@ principle_environmental_sustainability_5 = {
 		goods_input_oil_mult = -0.25
 		goods_input_coal_mult = -0.25
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
+		country_greenhouse_gas_emissions_mult = -0.25
 	}
 
 	institution = institution_ministry_of_the_environment
@@ -2413,11 +2418,12 @@ principle_urban_planning_1 = {
 
 	member_modifier = {
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
+		state_migration_crowding_density_mult = 0.25
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
-		building_group_bg_service_standard_of_living_add = 1
+		state_migration_crowding_density_mult = 0.05
 	}
 	
 	ai_weight = {
@@ -2456,17 +2462,16 @@ principle_urban_planning_2 = {
 	member_modifier = {
 		#Modifiers from previous level(s)	
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
+		state_migration_crowding_density_mult = 0.25
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		building_group_bg_service_standard_of_living_add = 1
+		state_migration_crowding_density_mult = 0.05
 
 		building_urban_center_throughput_add = 0.05
-		building_group_bg_manufacturing_throughput_add = 0.02
-		building_group_bg_agriculture_throughput_add = -0.05
-		building_group_bg_mining_throughput_add = -0.02
+		building_group_bg_service_standard_of_living_add = 1
 	}
 
 	ai_weight = {
@@ -2500,17 +2505,16 @@ principle_urban_planning_3 = {
 		# Modifiers from previous level(s)	
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
 
-		state_trade_capacity_add = 20
+		state_migration_crowding_density_mult = 0.25
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
 		# Modifiers from previous level(s)	
+		state_migration_crowding_density_mult = 0.05
 		building_group_bg_service_standard_of_living_add = 1
 		building_urban_center_throughput_add = 0.05
 		building_group_bg_manufacturing_throughput_add = 0.02
-		building_group_bg_agriculture_throughput_add = -0.05
-		building_group_bg_mining_throughput_add = -0.02
 	}
 
 	ai_weight = {
@@ -2543,17 +2547,16 @@ principle_urban_planning_4 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
-		state_trade_capacity_add = 20
+		state_migration_crowding_density_mult = 0.5
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
 		# Modifiers from previous level(s)	
+		state_migration_crowding_density_mult = 0.1
 		building_group_bg_service_standard_of_living_add = 1
 		building_urban_center_throughput_add = 0.1
 		building_group_bg_manufacturing_throughput_add = 0.02
-		building_group_bg_agriculture_throughput_add = -0.05
-		building_group_bg_mining_throughput_add = -0.02
 	}
 
 	ai_weight = {
@@ -2586,18 +2589,17 @@ principle_urban_planning_5 = {
 	member_modifier = {
 		# Modifiers from previous level(s)	
 		country_institution_cost_institution_ministry_of_urban_planning_mult = -0.25
-		state_trade_capacity_add = 20
 		state_import_advantage_mult = 0.25
+		state_migration_crowding_density_mult = 1
 	}
 
 	institution = institution_ministry_of_urban_planning
 	institution_modifier = {
 		# Modifiers from previous level(s)	
+		state_migration_crowding_density_mult = 0.2
 		building_group_bg_service_standard_of_living_add = 1
-		building_urban_center_throughput_add = 0.2
+		building_urban_center_throughput_add = 0.1
 		building_group_bg_manufacturing_throughput_add = 0.02
-		building_group_bg_agriculture_throughput_add = -0.05
-		building_group_bg_mining_throughput_add = -0.02
 	}
 
 	ai_weight = {
@@ -2633,6 +2635,7 @@ principle_rural_1 = {
 	member_modifier = {
 		# new PM for manor houses
 		building_group_bg_agriculture_infrastructure_usage_mult = -0.5
+		state_arable_land_mult = 0.05
 	}
 	
 	ai_weight = {
@@ -2689,6 +2692,7 @@ principle_rural_2 = {
 		building_group_bg_agriculture_infrastructure_usage_mult = -0.5
 		country_farmers_pol_str_mult = 0.5
 		state_farmers_investment_pool_contribution_add = 0.05
+		state_arable_land_mult = 0.1
 	}
 	
 	ai_weight = {
@@ -2726,6 +2730,7 @@ principle_rural_3 = {
 		building_subsistence_output_mult = 0.1
 		building_group_bg_agriculture_throughput_add = 0.1
 		building_group_bg_ranching_throughput_add = 0.1
+		state_arable_land_mult = 0.15
 	}
 	
 	ai_weight = {
@@ -2765,6 +2770,7 @@ principle_rural_4 = {
 		building_group_bg_ranching_throughput_add = 0.2
 
 		state_farmers_investment_pool_efficiency_mult = 0.5
+		state_arable_land_mult = 0.2
 	}
 	
 	ai_weight = {
@@ -2803,6 +2809,7 @@ principle_rural_5 = {
 		building_group_bg_agriculture_throughput_add = 0.3
 		building_group_bg_ranching_throughput_add = 0.3
 		state_farmers_investment_pool_efficiency_mult = 1.0
+		state_arable_land_mult = 0.25
 	}
 
 	ai_weight = {

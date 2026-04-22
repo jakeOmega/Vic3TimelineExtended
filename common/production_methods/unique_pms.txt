@@ -3862,6 +3862,40 @@ pm_generic_cold_storage = {
 	}
 }
 
+# --- Generic Paper Mill Complex ---
+# Theme: Integrated pulp and paper complex with finishing and clerical services
+pm_generic_paper_mill_complex = {
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_paper_mill_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 50                            # Price:   20, Total cost:  1000.0 (71.43%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (28.57%)
+			# Output goods
+			goods_output_paper_add = 55                          # Price:   30, Total cost:  1650.0 (68.75%)
+			goods_output_services_add = 25                       # Price:   30, Total cost:   750.0 (31.25%)
+			# Total input cost: 1400.0
+			# Total output cost: 2400.0
+			# Profit: 1000.0
+			# Profit margin: 71.43%
+			# Zero profit price multiplier: 0.58
+			# Employment: 10000
+			# Wage breakeven: 0.10
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_machinists_add = 3000
+			building_employment_clerks_add = 2000
+			building_employment_engineers_add = 1000
+		}
+	}
+}
+
 # --- Generic Foundry Complex ---
 # Theme: Steel and iron smelting campus
 pm_generic_foundry_complex = {

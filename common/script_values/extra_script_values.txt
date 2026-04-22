@@ -1095,6 +1095,10 @@ global_tech_spread_script_value = {
 	}
 }
 
+tmp_tst = {
+	value = var:arable_land_added
+}
+
 state_arable_land_add_script_value = {
 	value = arable_land
 	if = {
@@ -1106,7 +1110,7 @@ state_arable_land_add_script_value = {
 		limit = { has_variable = arable_land_added }
 		subtract = var:arable_land_added  # subtract what we've already added
 	}
-	min = 0  # never remove land
+	# min = 0  # never remove land
 	floor = yes
 }
 

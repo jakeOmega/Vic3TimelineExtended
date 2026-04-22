@@ -396,7 +396,7 @@ IMAGES = {
     "renewable_energy_installation": {
         "prompt": "Workers installing a solar panel farm.",
         "style": "oil painting, impressionist, bright natural light",
-        "events": ["environmentalism_events.6", "environmentalism_events.7"],
+        "events": [],
     },
     "nature_conservation_effort": {
         "prompt": "Volunteers planting trees in a wilderness.",

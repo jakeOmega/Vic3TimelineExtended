@@ -90,7 +90,7 @@ green_revolution = {
 	}
 
 	modifier = {
-		state_arable_land_mult = 0.5
+		state_arable_land_mult = 0.65
 		country_green_revolution_pb_principles_bool = yes
 	}
 	

@@ -861,8 +861,14 @@ INJECT:company_basic_food = {
 
 # Generic Paper - adds software industry extension
 INJECT:company_basic_paper = {
+	building_types = {
+		building_generic_paper_mill_complex
+	}
 	extension_building_types = {
 		building_software_industry
+	}
+	prosperity_modifier = {
+		state_building_generic_paper_mill_complex_max_level_add = 1
 	}
 }
 

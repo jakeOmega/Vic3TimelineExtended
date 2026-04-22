@@ -106,9 +106,13 @@
             }
 			change_variable = {
 				name = nuclear_weapon_program_progress
-				add = {
+                add = {
                     value = nuclear_weapon_program_monthly_progress
                     divide = 4
+                    multiply = {
+                        value = 1
+                        add = modifier:country_nuclear_program_progress_mult
+                    }
                 }
 			}
             while = {

@@ -1127,7 +1127,92 @@ banking_cycle_random_event_effect = {
 				trigger_event = { id = banking_cycle_events.67 }
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
-		}
+		
+			# Event 46: Northern Pacific Corner (expansion+, bubble building, market econ)
+			0 = {
+				trigger = {
+					banking_is_market_economy = yes
+					OR = {
+						banking_cycle_is_expansion = yes
+						banking_cycle_is_boom = yes
+						banking_cycle_is_frenzy = yes
+					}
+					var:bubble_pressure >= 15
+				}
+				modifier = {
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 3 }
+					if = { limit = { var:bubble_pressure >= 25 } add = 4 }
+				}
+				trigger_event = { id = banking_cycle_events.46 }
+				set_variable = { name = banking_event_cooldown value = 20 }
+			}
+			# Event 47: Trust Company Failure (downturn/panic, market econ, RARE)
+			0 = {
+				trigger = {
+					banking_is_market_economy = yes
+					OR = {
+						banking_cycle_is_downturn = yes
+						banking_cycle_is_panic = yes
+					}
+				}
+				modifier = {
+					if = { limit = { banking_cycle_is_panic = yes } add = 5 }
+					if = { limit = { var:bubble_pressure >= 25 } add = 3 }
+				}
+				trigger_event = { id = banking_cycle_events.47 }
+				set_variable = { name = banking_event_cooldown value = 24 }
+			}
+			# Event 48: New Era Delusion (boom/frenzy, central_banking, market econ)
+			0 = {
+				trigger = {
+					banking_is_market_economy = yes
+					has_technology_researched = central_banking
+					OR = {
+						banking_cycle_is_boom = yes
+						banking_cycle_is_frenzy = yes
+					}
+					var:bubble_pressure >= 20
+				}
+				modifier = {
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 5 }
+				}
+				trigger_event = { id = banking_cycle_events.48 }
+				set_variable = { name = banking_event_cooldown value = 24 }
+			}
+			# Event 58: End the Gold Standard (downturn/panic, modern instruments)
+			0 = {
+				trigger = {
+					banking_is_market_economy = yes
+					has_technology_researched = modern_financial_instruments
+					OR = {
+						banking_cycle_is_downturn = yes
+						banking_cycle_is_panic = yes
+					}
+				}
+				modifier = {
+					if = { limit = { banking_cycle_is_panic = yes } add = 4 }
+				}
+				trigger_event = { id = banking_cycle_events.58 }
+				set_variable = { name = banking_event_cooldown value = 30 }
+			}
+			# Event 59: Rogue Trader (boom/frenzy, modern instruments, RARE)
+			0 = {
+				trigger = {
+					banking_is_market_economy = yes
+					has_technology_researched = modern_financial_instruments
+					OR = {
+						banking_cycle_is_boom = yes
+						banking_cycle_is_frenzy = yes
+					}
+				}
+				modifier = {
+					if = { limit = { banking_cycle_is_frenzy = yes } add = 3 }
+					if = { limit = { var:bubble_pressure >= 25 } add = 3 }
+				}
+				trigger_event = { id = banking_cycle_events.59 }
+				set_variable = { name = banking_event_cooldown value = 30 }
+			}
+}
 	}
 }
 

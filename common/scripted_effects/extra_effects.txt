@@ -938,12 +938,16 @@ trigger_mass_migration = {
 }
 
 add_arable_land_effect = {
+	set_variable = {
+		name = cached_amount
+		value = $AMOUNT$
+	}
 	state_region = {
 		add_arable_land = PREV.$AMOUNT$
 	}
 	change_variable = {
 		name = arable_land_added
-		add = $AMOUNT$
+		add = var:cached_amount
 	}
 }
 
